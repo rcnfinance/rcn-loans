@@ -2,6 +2,7 @@
   <div class="row">
 
     <div class="col-xs-12">
+      
       <mat-tab-group>
         <mat-tab label="All Loans">
 
@@ -62,7 +63,12 @@
     
     
           </div>
-          
+          <mat-chip-list>
+            <mat-chip class="marginbottom20 marginright15" selected="true" [color]="$primary">{{availableLoans}}</mat-chip>
+            <p *ngIf='cards.length > 3'>Hay muchos prestamos disponibles para tu perfil!</p>
+          </mat-chip-list>
+          <div><h4>El mejor prestamo para ud es LOAN #{{ bestLoan.id }}</h4></div>
+
         </mat-tab>
         <mat-tab label="My Loans">
 
@@ -104,8 +110,6 @@
     </div>
 
     <div class="col-xs-12">
-      <p *ngIf='cards.length > 3'>Hay muchos prestamos disponibles para tu perfil!</p>
-      <p>El mejor prestamo para ud es {{ bestLoan.name }}</p>
     </div>
     
     <!-- <div class="col-xs-12">

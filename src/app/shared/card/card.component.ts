@@ -28,6 +28,7 @@ export class CardComponent implements OnInit {
     new CardItem('initial', 500),
     new CardItem('initial', 200)
   ];
+  availableLoans = this.cards.length;
   bestLoan = this.cards[0]; // best loan suggested
 
   getServerStatus() {
@@ -42,7 +43,7 @@ export class CardComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  
   onCreateContract() {
     this.lendContractCreated = 'Contract was created';
   }

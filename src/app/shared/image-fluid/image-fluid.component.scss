@@ -1,7 +1,7 @@
 @import '../../../scss/_variables.scss'; //variables
 
 .img-fluid{
-  // margin-top: 60px;
+  margin-top: -100px;
   height: 300px;
   background: 
   linear-gradient(
@@ -10,7 +10,6 @@
     rgba(0, 0, 0, 1)
     ),
     url(https://images.unsplash.com/photo-1461611034385-e082102d5c75?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=c1f5af884d233d6ca59767934560d359&auto=format&fit=crop&w=1050&q=80);
-    // background: url(https://images.unsplash.com/photo-1461611034385-e082102d5c75?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=c1f5af884d233d6ca59767934560d359&auto=format&fit=crop&w=1050&q=80);
   background-repeat: no-repeat;
   background-position: center center;
   @include background-size(cover);
