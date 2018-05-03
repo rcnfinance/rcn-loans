@@ -6,7 +6,11 @@
       <mat-tab-group [selectedIndex]="0">
         <mat-tab label="All Loans">
 
-          <div class="row margintop40">
+          <mat-chip-list>
+              <mat-chip class="margintop30 marginright15" selected="true" [color]="$primary">{{availableLoans}} AVAILABLE</mat-chip>
+              <p *ngIf='cards.length > 3'>There are a lot of Loans for your profile!</p>
+            </mat-chip-list>
+          <div class="row">
 
             
             <div class="col-xs-12 col-sm-4 col-lg-3 card-col" *ngFor='let card of cards'>
@@ -63,11 +67,7 @@
     
     
           </div>
-          <mat-chip-list>
-            <mat-chip class="marginbottom20 marginright15" selected="true" [color]="$primary">{{availableLoans}} AVAILABLE</mat-chip>
-            <p *ngIf='cards.length > 3'>There are a lot of Loans for your profile!</p>
-          </mat-chip-list>
-          <div><h4>LOAN #{{ bestLoan.id }} is the best for you</h4></div>
+          <div class="margintop30"><h4>LOAN #{{ bestLoan.id }} is the best for you</h4></div>
 
         </mat-tab>
         <mat-tab label="My Loans">
