@@ -43,7 +43,6 @@ export class CardComponent implements OnInit {
 
   ngOnInit() {
   }
-  
   onCreateContract() {
     this.lendContractCreated = 'Contract was created';
   }
