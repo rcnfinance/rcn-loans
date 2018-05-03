@@ -1,0 +1,35 @@
+// -------------------------
+// HELPERS
+// -------------------------
+
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12{ min-height: 0;}
+a{color: $tertiary; text-decoration: none;   &:hover{ color: #333;}}
+.btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus{outline: none;outline: none;outline-offset: 0px;}
+.btn:active, .btn.active {-webkit-box-shadow: none;box-shadow: none;}
+a, li, button{outline:0;&:hover,&:focus,&:visited{outline:0; text-decoration: none;}}
+a:-webkit-any-link {text-decoration: none;}
+ul, ol{list-style: none; margin: 0;}
+img{display: block; max-width: 100%; height: auto;} 
+img {user-drag: none; user-select: none; -moz-user-select: none; -webkit-user-drag: none; -webkit-user-select: none; -ms-user-select: none;}
+
+.relative {position: relative;}
+.none {display: none !important;} 
+.block {display: block !important;}
+.uppercase {text-transform: uppercase;}
+.inline {display: inline-block;}
+.img-center {margin: 0 auto;}
+.no-limit-fluid {max-width: none;}
+.img-auto {width: auto;}
+.full-width {width: 100%;}
+.width-50 {width: 50%; display: inline-block;}
+.col-sides--0{padding: 0;}
+
+.rotate45{@include transform(rotate(45deg));};
+.rotate90{@include transform(rotate(90deg));};
+.rotate180{@include transform(rotate(180deg));};
+.rotate369{@include transform(rotate(369deg));};
+.white-space{white-space: nowrap;}
+.ellipsis {width: 100%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.center-top-left{ position: absolute; top: 50%; left: 50%; @include transform(translate(-50%, -50%));}
+.center-left{ position: absolute; top: 0; left: 50%; @include transform(translate(-50%, 0));}
+.center-top{ position: absolute; top: 50%; -webkit-transform: translate(0,-50%); transform: translate(0,-50%);}

@@ -1,0 +1,163 @@
+
+// VARIABLES
+// -------------------------
+
+/*COLORS*/
+// -------------------------
+
+$primary: #4155ff;
+$secondary: #ffffff;
+$tertiary: #000000;
+$quaternary: #1d1d1d;
+
+
+// Typography variables
+// --------------------------------------------------
+
+%font-thin{font-weight: 100;}
+%font-extra-light{font-weight: 200;}
+%font-light{font-weight: 300;}
+%font-regular{font-weight: 400;}
+%font-medium{font-weight: 500;}
+%font-semi-bold{font-weight: 600;}
+%font-bold{font-weight: 700;}
+%font-extra-bold{font-weight: 800;}
+%font-black{font-weight: 900;}
+
+
+/*MIXINS*/
+// -------------------------
+
+// Default transition delay
+$default-transition--delay: all 0.3s ease-out;
+
+// Mixins shortcuts
+@mixin transition-delay($delay) {
+  -webkit-transition-delay: $delay;
+     -moz-transition-delay: $delay;
+      -ms-transition-delay: $delay;
+       -o-transition-delay: $delay;
+          transition-delay: $delay;
+}
+@mixin transform($transform) {
+  -webkit-transform: $transform;
+     -moz-transform: $transform;
+      -ms-transform: $transform;
+       -o-transform: $transform;
+          transform: $transform;
+}
+@mixin background-size($background-size) {
+  -webkit-background-size: $background-size;
+     -moz-background-size: $background-size;
+      -ms-background-size: $background-size;
+       -o-background-size: $background-size;
+          background-size: $background-size;
+}
+// Default transition set by viariable
+@mixin transition($transition: $default-transition--delay) {
+  -webkit-transition: $transition;
+     -moz-transition: $transition;
+      -ms-transition: $transition;
+       -o-transition: $transition;
+          transition: $transition;
+}
+@mixin border-radius($border-radius) {
+  -webkit-border-radius: $border-radius;
+     -moz-border-radius: $border-radius;
+      -ms-border-radius: $border-radius;
+       -o-border-radius: $border-radius;
+          border-radius: $border-radius;
+}
+@mixin transform($transform, $moz: true, $webkit: true, $ms: true, $o: true) {
+  @if $webkit { -webkit-transform: $transform; }
+  @if $moz    { -moz-transform:    $transform; }
+  @if $ms     { -ms-transform:     $transform; }
+  @if $o     { -o-transform:     $transform; }
+  transform: $transform;
+}
+
+@mixin box-shadow($top, $left, $blur, $color, $inset: false) {
+  @if $inset {
+    -webkit-box-shadow:inset $top $left $blur $color;
+    -moz-box-shadow:inset $top $left $blur $color;
+    box-shadow:inset $top $left $blur $color;
+  } @else {
+    -webkit-box-shadow: $top $left $blur $color;
+    -moz-box-shadow: $top $left $blur $color;
+    box-shadow: $top $left $blur $color;
+  }
+}
+
+// Includes
+// @include background-size(cover);
+// @include transform(translate(-50%, -50%));
+// @include transform(rotate(360deg));
+// @include transition(all 0.3s ease-out);
+// @include border-radius(5px);
+// @include box-shadow(0, 2px, 0px, rgba(0, 0, 0, 0.14), false);
+
+
+// Animations CSS3
+@mixin animation($name, $duration, $ease, $delay, $direction) {
+  -webkit-animation: $name $duration $ease $delay $direction;
+  -moz-animation: $name $duration $ease $delay $direction;
+  -o-animation: $name $duration $ease $delay $direction;
+  -ms-animation: $name $duration $ease $delay $direction;
+  animation: $name $duration $ease $delay $direction;
+}
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} { @content; }
+  @-moz-keyframes #{$name} { @content; }
+  @-o-keyframes #{$name} { @content; }
+  @-ms-keyframes #{$name} { @content; }
+  @keyframes #{$name} { @content; }
+}
+
+.anm-fadeout{
+  @include animation(fadeout, 2s, ease-in-out, 1s, forwards);
+}
+.anm-rotate{
+  @include animation(rotate, 6s, ease-in-out, 1s, forwards);
+}
+
+@include keyframes(fadeout) {
+  0% {display: block; opacity: 1;}
+  25% {opacity: .75;}
+  50% {opacity: .50;}
+  75% {opacity: .25;}
+  99% {opacity: .01;}
+  100% {opacity: 0; width: 0; height: 0;}
+}
+@include keyframes(rotate) {
+  0% {@include transform(rotate(0deg));}
+  100% {@include transform(rotate(720deg));}
+}
+
+
+// Extends
+%center-top-left{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  @include transform(translate(-50%, -50%));
+}
+%center-top{
+  position: absolute;
+  top: 50%;
+  @include transform(translate(0%, -50%));
+}
+%center-left{
+  position: absolute;
+  left: 50%;
+  @include transform(translate(-50%, 0%));
+}
+%icon {
+  transition: background-color ease .2s;
+  margin: 0 .5em;
+}
+.block-icon {
+  @extend %icon;
+}
+.info-icon {
+  @extend %icon;
+}

@@ -1,0 +1,52 @@
+@import '../../../scss/_variables.scss'; //variables
+
+//CARDS
+.card-col{
+    margin-bottom: 30px;
+  }
+  .card-container{
+    font-family: 'Raleway', sans-serif;
+    border-radius: 2px;
+    background-color: $quaternary;
+    .card-label{
+      height: 60px;
+      border-top-left-radius: 2px;
+      border-top-right-radius: 2px;
+      background-color: $primary;
+      background: 
+      linear-gradient(
+        to bottom,
+        rgba(65, 85, 255, 1),
+        rgba(29, 29, 29, 1)
+      );
+      padding: 15px;
+      .title{
+        color: $secondary;
+        @extend %font-bold;
+      }
+    }
+    .card-img{
+      background-repeat: no-repeat;
+      background-position: center center;
+      @include background-size(cover);
+    }
+    .card-row{
+      color: $secondary;
+      padding: 15px;
+      .card-property{
+        margin-bottom: 10px;
+      }
+      .title{
+        font-size: 11px;
+        text-transform: uppercase;
+        @extend %font-light;
+      }
+      .paragraph{
+        font-size: 15px;
+        @extend %font-medium;
+      }
+      .btn{
+        @include transition(all .3s ease-out);
+      }
+    }
+  }

@@ -1,0 +1,99 @@
+
+/*COLORS*/
+:root{
+  --primary: #4155ff;
+  --secondary: #ffffff;
+  --tertiary: #000000;
+}
+  
+$primary: #4155ff;
+$secondary: #ffffff;
+$tertiary: #000000;
+$quaternary: #232323;
+
+//
+// Colors
+// -------------------------
+
+/* Grays */
+.white      {color: #fff !important;}
+.black      {color: #000 !important;}
+.gray0      {color: #f9f9f9 !important;}
+.gray1      {color: #E9E9E9 !important;}
+.gray2      {color: #C7C7C7 !important;}
+.gray3      {color: #AFAFAF !important;}
+.gray4      {color: #949494 !important;}
+.gray5      {color: #585858 !important;}
+.gray6      {color: #404040 !important;}
+.gray7      {color: #323232 !important;}
+
+/* Colors */
+.orange     {color: #f2851e;}
+.cyan       {color: #5186FB;}
+.darkblue   {color: #031930;}
+.darkblue   {color: #192535;} 
+.green      {color: #30ad23;}
+.blue       {color: #1183c6;}
+.violet     {color: #b977b6;}
+.seagreen   {color: #39B6C1;}
+.red        {color: #c32c36;}
+.turquoise  {color: #00ccbe;}
+.yellow     {color: #f2851e;}
+.c-facebook {color: #426AA9;}
+.c-twitter  {color: #4299FF;}
+.c-google   {color: #CC3B2A;}
+.c-linkedin {color: #0180B3;}
+.c-tumblr   {color: #345270;}
+
+/* Background Grays */
+.bg-white   {background-color: #fff;}
+.bg-black   {background-color: #000;}
+.bg-gray0   {background-color: #f9f9f9;}
+.bg-gray1   {background-color: #ebebeb;}
+.bg-gray2   {background-color: #C7C7C7;}
+.bg-gray3   {background-color: #AFAFAF;}
+.bg-gray4   {background-color: #949494;}
+.bg-gray5   {background-color: #585858;}
+.bg-gray6   {background-color: #404040;}
+.bg-gray7   {background-color: #323232;}
+.bg-gray8   {background-color: #191919;}
+.bg-gray9   {background-color: #0A0A0A;}
+
+/* Background Colors */
+.bg-orange      {background-color: #FF671B;}
+.bg-cyan        {background-color: #9db3ca;}
+.bg-darkblue    {background-color: #031930;}
+.bg-green       {background-color: #81CC47;}
+.bg-blue        {background-color: #3042b3;}
+.bg-violet      {background-color: #b977b6;}
+.bg-seagreen    {background-color: #39B6C1;}
+.bg-red         {background-color: #E61523;}
+.bg-turquoise   {background-color: #00ccbe;}
+.bg-yellow      {background-color: #FFCF11;}
+.bg-violet      {background-color: #b977b6;}
+.bg-facebook    {background-color: #426AA9;}
+.bg-twitter     {background-color: #4299FF;}
+.bg-google      {background-color: #CC3B2A;}
+.bg-linkedin    {background-color: #0180B3;}
+.bg-tumblr      {background-color: #345270;}
+.bg-primary     {background-color: $primary;}
+
+/* Colors Hovers */
+.violet         {&:hover{color: #905D8E;}}
+
+/* Background Hovers */
+/* Background Hovers */
+.bg-facebook    {&:hover{background-color: #324E7B;}}
+.bg-twitter     {&:hover{background-color: #367DD0;}}
+.bg-tumblr      {&:hover{background-color: #213548;}}
+.bg-gray7       {&:hover{background-color: #191919;}}
+
+.whiteshadow {text-shadow:0 1px 0 #fff;}
+.blackshadow {text-shadow:0 1px 0 #000;}
+.box-shadow {
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25);
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,.25);
+    box-shadow: 0 1px 3px rgba(0,0,0,.25); 
+}
+
+
