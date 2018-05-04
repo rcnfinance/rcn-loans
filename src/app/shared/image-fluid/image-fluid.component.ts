@@ -6,10 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./image-fluid.component.scss']
 })
 export class ImageFluidComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
+  innerHeight: any;
+  constructor() {
+    this.innerHeight = (window.screen.height) + 'px';
   }
+
+  ngOnInit() {}
 
 }

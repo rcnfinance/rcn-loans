@@ -8,7 +8,7 @@ a{color: $tertiary; text-decoration: none;   &:hover{ color: #333;}}
 .btn:active, .btn.active {-webkit-box-shadow: none;box-shadow: none;}
 a, li, button{outline:0;&:hover,&:focus,&:visited{outline:0; text-decoration: none;}}
 a:-webkit-any-link {text-decoration: none;}
-ul, ol{list-style: none; margin: 0;}
+ul, ol{list-style: none; margin: 0; -webkit-padding-start: 0px;}
 img{display: block; max-width: 100%; height: auto;} 
 img {user-drag: none; user-select: none; -moz-user-select: none; -webkit-user-drag: none; -webkit-user-select: none; -ms-user-select: none;}
 

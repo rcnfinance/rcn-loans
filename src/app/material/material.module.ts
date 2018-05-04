@@ -49,14 +49,6 @@ import {
 @NgModule({
   imports: [
     CommonModule,
-    BrowserAnimationsModule,
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    HttpClientModule,
-    CdkTableModule,
-    ReactiveFormsModule,
-    CdkTableModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -91,9 +83,41 @@ import {
     MatTooltipModule
   ],
   declarations: [],
-  exports: []
+  exports: [
+    CommonModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule
+  ]
 })
-export class SharedModule { }
-
-
+export class MaterialModule { }
 
