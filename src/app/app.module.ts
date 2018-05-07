@@ -1,6 +1,7 @@
 // Angular Core
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 
 // App Component
 import { AppComponent } from './app.component';
@@ -10,6 +11,9 @@ import { HeaderComponent } from './header/header.component';
 import { CardsComponent } from './cards/cards.component';
 import { CardListComponent } from './cards/card-list/card-list.component';
 import { CardItemComponent } from './cards/card-list/card-item/card-item.component';
+
+// App Services
+import { CardsService } from './cards/cards.service';
 
 
 @NgModule({
@@ -23,12 +27,13 @@ import { CardItemComponent } from './cards/card-list/card-item/card-item.compone
   imports: [
     BrowserModule,
     SharedModule,
-    MaterialModule
+    MaterialModule,
+    HttpModule
   ],
   exports: [
     CardListComponent
   ],
-  providers: [],
+  providers: [CardsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

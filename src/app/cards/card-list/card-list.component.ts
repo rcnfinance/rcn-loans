@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../material/material.module';
 import { Card } from '../card.model';
+import { empty } from 'rxjs/Observer';
 
 @Component({
   selector: 'app-card-list',
@@ -8,17 +9,27 @@ import { Card } from '../card.model';
   styleUrls: ['./card-list.component.scss']
 })
 export class CardListComponent implements OnInit {
-  cards: Card[] = [
+  public cards: Card[] = [
     new Card(1, 'TarjetaNaranja', 'initial', '0xdc...da86', 500, 30, 25, 50),
     new Card(3, 'BankEtiopia', 'blocked', '0xdc...da86', 500, 30, 25, 50),
     new Card(7, 'BorrowerX', 'initial', '0xdc...da86', 500, 30, 25, 50),
     new Card(9, 'BorrowerXX', 'initial', '0xdc...da86', 500, 30, 25, 50)
   ];
-  availableLoans = this.cards.length;
+  allowLendStatus = true; // this tell me if lending fuction is available
+  availableLoans = this.cards.length; // this shows me the number of available contracts
   bestLoan = this.cards[0]; // best loan suggested
   constructor() { }
 
   ngOnInit() {
+    if (this.cards === undefined || this.cards.length === 0) {
+      console.log('cards is empty');
+    } else {
+      console.log('Card[] is full of contracts');
+    }
+  }
+
+  onCreateContract() {
+    console.log('You have created a contract!');
   }
 
 }
