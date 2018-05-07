@@ -14,6 +14,7 @@ import { CardItemComponent } from './cards/card-list/card-item/card-item.compone
 
 // App Services
 import { CardsService } from './cards/cards.service';
+import { DataStorageService } from './shared/data-storage.service';
 
 
 @NgModule({
@@ -33,7 +34,7 @@ import { CardsService } from './cards/cards.service';
   exports: [
     CardListComponent
   ],
-  providers: [CardsService],
+  providers: [CardsService, DataStorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

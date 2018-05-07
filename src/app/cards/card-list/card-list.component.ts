@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../material/material.module';
 import { Card } from '../card.model';
 import { empty } from 'rxjs/Observer';
+import { HttpModule, Response } from '@angular/http';
+
+// App Services
+import { CardsService } from '../cards.service';
+import { DataStorageService } from '../../shared/data-storage.service';
 
 @Component({
   selector: 'app-card-list',
@@ -18,15 +23,36 @@ export class CardListComponent implements OnInit {
   allowLendStatus = true; // this tell me if lending fuction is available
   availableLoans = this.cards.length; // this shows me the number of available contracts
   bestLoan = this.cards[0]; // best loan suggested
-  constructor() { }
+  constructor(
+    private cardsService: CardsService,
+    private dataStorageService: DataStorageService
+  ) {}
 
+  onGet() {
+    this.cardsService.getCards()
+      .subscribe(
+        (cardsData: any[]) => console.log('You have get Cards[] successfully ' + cardsData),
+        (error) => console.log(error)
+      );
+  }
+  onSaveData() {
+    this.dataStorageService.storeCards()
+      .subscribe(
+        (response: Response) => {
+          console.log(response);
+        }
+      );
+  }
   ngOnInit() {
     if (this.cards === undefined || this.cards.length === 0) {
       console.log('cards is empty');
     } else {
       console.log('Card[] is full of contracts');
     }
+    console.log(this.cards);
+    this.onGet();
   }
+
 
   onCreateContract() {
     console.log('You have created a contract!');
