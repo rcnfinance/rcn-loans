@@ -11,7 +11,7 @@ export class CardsService {
   getCards() {
     return this.http.get('https://api.mercadolibre.com/items/MLA698930172')
       .map(
-        (response: Response) => {
+        (response: any) => {
           const data = response.json();
           console.log(data);
           return data;
