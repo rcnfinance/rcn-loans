@@ -36,12 +36,12 @@ export class CardListComponent implements OnInit {
       );
   }
   onSaveData() {
-    this.dataStorageService.storeCards()
-      .subscribe(
-        (response: Response) => {
-          console.log(response);
-        }
-      );
+    // this.dataStorageService.storeCards()
+    //   .subscribe(
+    //     (response: Response) => {
+    //       console.log(response);
+    //     }
+    //   );
   }
   ngOnInit() {
     if (this.cards === undefined || this.cards.length === 0) {

@@ -15,6 +15,7 @@ import { CardItemComponent } from './cards/card-list/card-item/card-item.compone
 // App Services
 import { CardsService } from './cards/cards.service';
 import { DataStorageService } from './shared/data-storage.service';
+import { FadeToggleDirective } from './directives/fade-toggle.directive';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { DataStorageService } from './shared/data-storage.service';
     HeaderComponent,
     CardsComponent,
     CardListComponent,
-    CardItemComponent
+    CardItemComponent,
+    FadeToggleDirective
   ],
   imports: [
     BrowserModule,
