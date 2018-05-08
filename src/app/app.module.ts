@@ -11,6 +11,7 @@ import { HeaderComponent } from './header/header.component';
 import { CardsComponent } from './cards/cards.component';
 import { CardListComponent } from './cards/card-list/card-list.component';
 import { CardItemComponent } from './cards/card-list/card-item/card-item.component';
+import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 
 // App Services
 import { CardsService } from './cards/cards.service';
@@ -18,7 +19,6 @@ import { DataStorageService } from './shared/data-storage.service';
 
 // App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
-import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 import { WindowsHeightDirective } from './directives/windows-height.directive';
 
 
