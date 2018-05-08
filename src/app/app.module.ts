@@ -16,11 +16,11 @@ import { ContentWrapperComponent } from './content-wrapper/content-wrapper.compo
 // App Services
 import { CardsService } from './cards/cards.service';
 import { DataStorageService } from './shared/data-storage.service';
+import { ContractsService } from './contracts.service';
 
 // App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
 import { WindowsHeightDirective } from './directives/windows-height.directive';
-
 
 @NgModule({
   declarations: [
@@ -42,7 +42,7 @@ import { WindowsHeightDirective } from './directives/windows-height.directive';
   exports: [
     CardListComponent
   ],
-  providers: [CardsService, DataStorageService],
+  providers: [CardsService, DataStorageService, ContractsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
