@@ -15,7 +15,11 @@ import { CardItemComponent } from './cards/card-list/card-item/card-item.compone
 // App Services
 import { CardsService } from './cards/cards.service';
 import { DataStorageService } from './shared/data-storage.service';
+
+// App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
+import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
+import { WindowsHeightDirective } from './directives/windows-height.directive';
 
 
 @NgModule({
@@ -25,7 +29,9 @@ import { FadeToggleDirective } from './directives/fade-toggle.directive';
     CardsComponent,
     CardListComponent,
     CardItemComponent,
-    FadeToggleDirective
+    FadeToggleDirective,
+    ContentWrapperComponent,
+    WindowsHeightDirective
   ],
   imports: [
     BrowserModule,
