@@ -7,7 +7,7 @@ export class WindowsHeightDirective {
   screenHeight: any = (document.body.scrollHeight) + 'px';
   constructor() {
     this.screenHeight = (document.body.scrollHeight) + 'px';
-    console.log(this.screenHeight);
+    // console.log(this.screenHeight);
   }
   @HostBinding ('style.height') height: any = this.screenHeight;
   @HostBinding ('style.minHeight') minHeight: any = '900px';

@@ -1,5 +1,5 @@
-function formatAddress(hex : string): string {
-    return hex.replace("0x000000000000000000000000", "0x");
+function formatAddress(hex: string): string {
+    return hex.replace('0x000000000000000000000000', '0x');
 }
 
 export class Loan {
@@ -30,4 +30,3 @@ export class Loan {
         this.annualPunitoryInterest = annualPunitoryInterest;
       }
   }
-  
