@@ -4,9 +4,13 @@ import { Card } from '../card.model';
 import { empty } from 'rxjs/Observer';
 import { HttpModule, Response } from '@angular/http';
 
+import { Loan } from './../../loan.model';
+
 // App Services
 import { CardsService } from '../cards.service';
 import { DataStorageService } from '../../shared/data-storage.service';
+import { ContractsService } from './../../contracts.service';
+
 
 @Component({
   selector: 'app-card-list',
@@ -25,7 +29,8 @@ export class CardListComponent implements OnInit {
   bestLoan = this.cards[0]; // best loan suggested
   constructor(
     private cardsService: CardsService,
-    private dataStorageService: DataStorageService
+    private dataStorageService: DataStorageService,
+    private contractsService: ContractsService
   ) {}
 
   onGet() {
@@ -44,6 +49,9 @@ export class CardListComponent implements OnInit {
     //   );
   }
   ngOnInit() {
+    this.contractsService.getOpenLoans().then(function(result : Loan[]){
+      console.log(result)
+    })
     if (this.cards === undefined || this.cards.length === 0) {
       console.log('cards is empty');
     } else {

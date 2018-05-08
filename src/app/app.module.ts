@@ -16,7 +16,7 @@ import { CardItemComponent } from './cards/card-list/card-item/card-item.compone
 import { CardsService } from './cards/cards.service';
 import { DataStorageService } from './shared/data-storage.service';
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
-
+import { ContractsService } from './contracts.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import { FadeToggleDirective } from './directives/fade-toggle.directive';
   exports: [
     CardListComponent
   ],
-  providers: [CardsService, DataStorageService],
+  providers: [CardsService, DataStorageService, ContractsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
