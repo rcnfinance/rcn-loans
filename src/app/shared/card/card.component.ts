@@ -1,7 +1,6 @@
 import { Component, OnInit, NgModule } from '@angular/core';
 import { SharedModule } from '../shared.module';
 import { Card } from '../models/card';
-import { CardItem } from '../models/card-item';
 
 const isDone = false;
 
@@ -23,10 +22,6 @@ export class CardComponent implements OnInit {
     new Card(3, 'BankEtiopia', 'blocked', '0xdc...da86', 500, 30, 25, 50),
     new Card(7, 'BorrowerX', 'initial', '0xdc...da86', 500, 30, 25, 50),
     new Card(9, 'BorrowerXX', 'initial', '0xdc...da86', 500, 30, 25, 50)
-  ];
-  cardList = [
-    new CardItem('initial', 500),
-    new CardItem('initial', 200)
   ];
   availableLoans = this.cards.length;
   bestLoan = this.cards[0]; // best loan suggested

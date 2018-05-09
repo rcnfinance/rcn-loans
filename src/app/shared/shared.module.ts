@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { ImgFluidComponent } from './img-fluid/img-fluid.component';
+// import { LendButtonComponent } from './lend-button/lend-button.component';
 
 @NgModule({
   imports: [

@@ -10,6 +10,20 @@ const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
 const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 
+function loanFromBytes(id: number, loanBytes: any): Loan {
+  return new Loan(
+    id,
+    parseInt(loanBytes[14], 16),
+    loanBytes[2],
+    loanBytes[2],
+    parseInt(loanBytes[5], 16),
+    parseInt(loanBytes[12], 16),
+    parseInt(loanBytes[9], 16),
+    parseInt(loanBytes[10], 16),
+    loanBytes[16]
+  );
+}
+
 @Injectable()
 export class ContractsService {
     private _account: string = null;
@@ -118,7 +132,7 @@ export class ContractsService {
       
         return new Promise((resolve, reject) => {
           let _web3 = this._web3;
-          this._rcnContract.lend(loan.id, 0x0, 0x0, 0x0, { from: account }, function (err, result) {
+          this._rcnEngine.lend(loan.id, 0x0, 0x0, 0x0, { from: account }, function (err, result) {
             if(err != null) {
               reject(err);
             }
@@ -127,10 +141,18 @@ export class ContractsService {
           });
         }) as Promise<string>;
     }
-
-    public async getOpenLoans() : Promise<Loan[]> {      
+    public async getLoan(id: number): Promise<Loan> {
+      return new Promise((resolve, reject) => {
+        this._rcnExtension.getLoan.call(this._rcnEngineAddress, id, function (err, result){
+          if(err != null) {
+            reject(err);
+          }
+          resolve(loanFromBytes(id, result));
+        })
+      }) as Promise<Loan>;
+    }
+    public async getOpenLoans(): Promise<Loan[]> {      
         return new Promise((resolve, reject) => {
-          let _web3 = this._web3;
           this._rcnExtension.searchOpenLoans.call(this._rcnEngineAddress, 0, 0, function (err, result) {
             if(err != null) {
               reject(err);
@@ -142,16 +164,7 @@ export class ContractsService {
             for (let i = 0; i < total; i++) {
               let id = parseInt(result[(i * 20) + 19], 16);
               let loanBytes = result.slice(i * 20, i * 20 + 20);
-              allLoans.push(new Loan(
-                  id,
-                  parseInt(loanBytes[14], 16),
-                  loanBytes[2],
-                  loanBytes[2],
-                  parseInt(loanBytes[5], 16),
-                  parseInt(loanBytes[12], 16),
-                  parseInt(loanBytes[9], 16),
-                  parseInt(loanBytes[10], 16)
-              ))
+              allLoans.push(loanFromBytes(id, loanBytes));
             }
 
             resolve(allLoans);

@@ -141,6 +141,7 @@
       }
     }
   },
+  "cli": {},
   "defaultProject": "rcn-angular-dapp",
   "schematics": {
     "@schematics/angular:component": {
