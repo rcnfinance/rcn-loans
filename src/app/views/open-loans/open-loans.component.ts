@@ -29,34 +29,7 @@ export class OpenLoansComponent implements OnInit {
       this.loans = result;
     })
   }
-  handleLend(loan:Loan) {
-    this.contractsService.lendLoan(loan).then(tx => {
-      console.log("Lent loan", tx);
-      this.txService.registerLendTx(loan, tx);
-    })
-  }
-  isLendDisabled(loan: Loan): Boolean {
-    // TODO: Enable if lend failed
-    return this.txService.getLastLend(loan) !== undefined;
-  }
-  getLoanTitle(loan: Loan): string {
-    let tx = this.txService.getLastLend(loan);
-    
-    if (tx === undefined) {
-      return "Lend";
-    }
-
-    if (tx.confirmed) {
-      return "Lent";
-    }
-
-    return "Lending...";
-  }
-
   ngOnInit() {
     this.loadLoans();
-  }
-  onCreateContract() {
-    console.log('You have created a contract!');
   }
 }

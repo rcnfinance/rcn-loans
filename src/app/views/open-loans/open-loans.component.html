@@ -40,8 +40,7 @@
             <div class="title">{{ 'Annual Punitory Interest' }}</div>
             <div class="paragraph"> % {{ loan.annualPunitoryInterest }}</div>
           </div>
-
-          <a><button class="btn btn-primary btn-block" (click)='handleLend(loan)' [disabled]="isLendDisabled(loan)">{{ getLoanTitle(loan) }}</button></a>
+          <lend-button [loan]=loan></lend-button>
         </div>
       </div>
     </div>

@@ -11,6 +11,7 @@ import { MaterialModule } from './material/material.module';
 import { HeaderComponent } from './header/header.component';
 import { LoanDetailComponent } from './views/loan-detail/loan-detail.component';
 import { RouterModule, Routes } from '@angular/router';
+import { LendButtonComponent } from './shared/lend-button/lend-button.component';
 
 // App Services
 import { DataStorageService } from './shared/data-storage.service';
@@ -41,7 +42,8 @@ const appRoutes: Routes = [
     ContentWrapperComponent,
     WindowsHeightDirective,
     LoanDetailComponent,
-    OpenLoansComponent
+    OpenLoansComponent,
+    LendButtonComponent
   ],
   imports: [
     BrowserModule,
