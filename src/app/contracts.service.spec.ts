@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { RcnContractsService } from './rcn-contracts.service';
+import { ContractsService } from './contracts.service';
 
-describe('RcnContractsService', () => {
+describe('ContractsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [RcnContractsService]
+      providers: [ContractsService]
     });
   });
 
-  it('should be created', inject([RcnContractsService], (service: RcnContractsService) => {
+  it('should be created', inject([ContractsService], (service: ContractsService) => {
     expect(service).toBeTruthy();
   }));
 });

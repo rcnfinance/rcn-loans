@@ -2,48 +2,58 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { Router } from '@angular/router';
 
 // App Component
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { MaterialModule } from './material/material.module';
 import { HeaderComponent } from './header/header.component';
-import { CardsComponent } from './cards/cards.component';
-import { CardListComponent } from './cards/card-list/card-list.component';
-import { CardItemComponent } from './cards/card-list/card-item/card-item.component';
+import { LoanDetailComponent } from './views/loan-detail/loan-detail.component';
+import { RouterModule, Routes } from '@angular/router';
 
 // App Services
-import { CardsService } from './cards/cards.service';
 import { DataStorageService } from './shared/data-storage.service';
+import { ContractsService } from './contracts.service';
+import { TxService } from './tx.service';
 
 // App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
 
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 import { WindowsHeightDirective } from './directives/windows-height.directive';
-import { ContractsService } from './contracts.service';
+import { OpenLoansComponent } from './views/open-loans/open-loans.component';
+
+const appRoutes: Routes = [
+  { path: 'open', component: OpenLoansComponent },
+  { path: 'detail/:id', component: LoanDetailComponent },
+  { path: '',
+    redirectTo: '/open',
+    pathMatch: 'full'
+  }
+];
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    CardsComponent,
-    CardListComponent,
-    CardItemComponent,
     FadeToggleDirective,
     ContentWrapperComponent,
-    WindowsHeightDirective
+    WindowsHeightDirective,
+    LoanDetailComponent,
+    OpenLoansComponent
   ],
   imports: [
     BrowserModule,
     SharedModule,
     MaterialModule,
-    HttpModule
+    HttpModule,
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: true } // <-- debugging purposes only
+    )
   ],
-  exports: [
-    CardListComponent
-  ],
-  providers: [CardsService, DataStorageService, ContractsService],
+  providers: [DataStorageService, ContractsService, TxService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
