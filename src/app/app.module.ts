@@ -16,7 +16,7 @@ import { ContentWrapperComponent } from './content-wrapper/content-wrapper.compo
 // App Services
 import { CardsService } from './cards/cards.service';
 import { DataStorageService } from './shared/data-storage.service';
-import { ContractsService } from './contracts.service';
+import { ContractsService } from './services/contracts.service';
 
 // App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';

@@ -27,9 +27,10 @@
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",
     "package.json": "^2.0.1",
-    "rxjs": "^5.5.6",
-    "zone.js": "^0.8.19",
-    "web3": "^0.18.4"
+    "rxjs": "^6.1.0",
+    "rxjs-compat": "^6.1.0",
+    "web3": "^0.18.4",
+    "zone.js": "^0.8.19"
   },
   "devDependencies": {
     "@angular/cli": "^6.0.0-rc.4",
@@ -50,6 +51,6 @@
     "ts-node": "~4.1.0",
     "tslint": "~5.9.1",
     "typescript": "~2.5.3",
-    "@angular-devkit/build-angular": "~0.5.0"
+    "@angular-devkit/build-angular": "~0.6.0"
   }
 }

@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/Rx';
-import { Observable } from 'rxjs/Observable';
+import { Subject, Observable, Observer, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class CardsService {
+  createContract = new Subject();
 
   constructor(private http: Http) { }
 
