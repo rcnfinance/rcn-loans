@@ -3,10 +3,10 @@ import { MaterialModule } from '../../material/material.module';
 import { empty } from 'rxjs/Observer';
 import { HttpModule, Response } from '@angular/http';
 
-import { Loan } from './../../loan.model';
+import { Loan } from './../../models/loan.model';
 
 // App Services
-import { ContractsService } from './../../contracts.service';
+import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx } from './../../tx.service';
 
 @Component({
