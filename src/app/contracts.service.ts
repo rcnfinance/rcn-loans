@@ -83,6 +83,51 @@ export class ContractsService {
         }) as Promise<number>;
     }
 
+    public async isEngineApproved() : Promise<boolean> {
+        let account = await this.getAccount();
+      
+        return new Promise((resolve, reject) => {
+          let _web3 = this._web3;
+          this._rcnContract.allowance.call(account, this._rcnEngineAddress, function (err, result) {
+            if(err != null) {
+              reject(err);
+            }
+      
+            resolve(_web3.fromWei(result) >= _web3.toWei(1000000000));
+          });
+        }) as Promise<boolean>;
+    }
+
+    public async approveEngine() : Promise<string> {
+        let account = await this.getAccount();
+      
+        return new Promise((resolve, reject) => {
+          let _web3 = this._web3;
+          this._rcnContract.approve(this._rcnEngineAddress, _web3.toWei(3000000000), { from: account }, function (err, result) {
+            if(err != null) {
+              reject(err);
+            }
+      
+            resolve(result);
+          });
+        }) as Promise<string>;
+    }
+
+    public async lendLoan(loan: Loan) : Promise<string> {
+        let account = await this.getAccount();
+      
+        return new Promise((resolve, reject) => {
+          let _web3 = this._web3;
+          this._rcnContract.lend(loan.id, 0x0, 0x0, 0x0, { from: account }, function (err, result) {
+            if(err != null) {
+              reject(err);
+            }
+      
+            resolve(result);
+          });
+        }) as Promise<string>;
+    }
+
     public async getOpenLoans() : Promise<Loan[]> {      
         return new Promise((resolve, reject) => {
           let _web3 = this._web3;
