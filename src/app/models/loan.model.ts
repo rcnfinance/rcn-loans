@@ -106,4 +106,3 @@ export class Loan {
         return this.formatDelta(this.duration);
     }
   }
-  

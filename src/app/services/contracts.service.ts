@@ -1,14 +1,14 @@
 import * as Web3 from 'web3';
 
-import { Loan } from './loan.model';
+import { Loan } from '../models/loan.model';
 import { Injectable } from '@angular/core';
 
 declare let require: any;
 declare let window: any;
 
-let tokenAbi = require('./contracts/Token.json');
-let engineAbi = require('./contracts/NanoLoanEngine.json');
-let extensionAbi = require('./contracts/NanoLoanEngineExtension.json');
+const tokenAbi = require('../contracts/Token.json');
+const engineAbi = require('../contracts/NanoLoanEngine.json');
+const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 
 function loanFromBytes(id: number, loanBytes: any): Loan {
   return new Loan(
@@ -73,7 +73,7 @@ export class ContractsService {
                 return;
               }
               resolve(accs[0]);
-            })
+            });
           }) as string;
       
           this._web3.eth.defaultAccount = this._account;
@@ -88,7 +88,7 @@ export class ContractsService {
         return new Promise((resolve, reject) => {
           let _web3 = this._web3;
           this._rcnContract.balanceOf.call(account, function (err, result) {
-            if(err != null) {
+            if (err != null) {
               reject(err);
             }
       

@@ -11,9 +11,9 @@ export class AppComponent implements OnInit {
   environmentName: any = environment.envName;
   animal: string = environment.animal;
   constructor() {
-    console.log(this.animal);
+    // console.log(this.animal);
   }
   ngOnInit(): void {
-    if (isDevMode()) {console.log('👋 Development!'); } else {console.log('💪 Production!'); }
+    // if (isDevMode()) {console.log('👋 Development!'); } else {console.log('💪 Production!'); }
   }
 }

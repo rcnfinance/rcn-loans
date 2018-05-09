@@ -1,10 +1,11 @@
 {
-  "$schema": "./node_modules/@angular-devkit/core/src/workspace/workspace-schema.json",
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "rcn-angular-dapp": {
       "root": "",
+      "sourceRoot": "src",
       "projectType": "application",
       "architect": {
         "build": {
@@ -16,16 +17,8 @@
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "src/assets",
-                "output": "/assets"
-              },
-              {
-                "glob": "favicon.ico",
-                "input": "src",
-                "output": "/"
-              }
+              "src/assets",
+              "src/favicon.ico"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -50,6 +43,23 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "staging": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.staging.ts"
+                }
+              ]
             }
           }
         },
@@ -61,6 +71,9 @@
           "configurations": {
             "production": {
               "browserTarget": "rcn-angular-dapp:build:production"
+            },
+            "staging": {
+              "browserTarget": "rcn-angular-dapp:build:staging"
             }
           }
         },
@@ -83,16 +96,8 @@
               "src/styles.scss"
             ],
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "src/assets",
-                "output": "/assets"
-              },
-              {
-                "glob": "favicon.ico",
-                "input": "src",
-                "output": "/"
-              }
+              "src/assets",
+              "src/favicon.ico"
             ]
           }
         },
@@ -112,9 +117,8 @@
     },
     "rcn-angular-dapp-e2e": {
       "root": "",
+      "sourceRoot": "",
       "projectType": "application",
-      "cli": {},
-      "schematics": {},
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
@@ -138,6 +142,7 @@
     }
   },
   "cli": {},
+  "defaultProject": "rcn-angular-dapp",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

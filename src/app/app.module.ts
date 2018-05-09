@@ -15,13 +15,11 @@ import { LendButtonComponent } from './shared/lend-button/lend-button.component'
 
 // App Services
 import { DataStorageService } from './shared/data-storage.service';
-import { ContractsService } from './contracts.service';
+import { ContractsService } from './services/contracts.service';
 import { TxService } from './tx.service';
 
 // App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
-
-import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 import { WindowsHeightDirective } from './directives/windows-height.directive';
 import { OpenLoansComponent } from './views/open-loans/open-loans.component';
 
@@ -39,7 +37,6 @@ const appRoutes: Routes = [
     AppComponent,
     HeaderComponent,
     FadeToggleDirective,
-    ContentWrapperComponent,
     WindowsHeightDirective,
     LoanDetailComponent,
     OpenLoansComponent,
