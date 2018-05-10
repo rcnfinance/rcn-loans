@@ -12,5 +12,4 @@ export class ImageFluidComponent implements OnInit {
   }
 
   ngOnInit() {}
-
 }
