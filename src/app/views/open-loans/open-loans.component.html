@@ -32,14 +32,15 @@
           <!-- <div class="img-item">{{ loan.creator }}</div> -->
           <div class="img-item">{{ 'Ripio' }}</div>
         </div>
+        <div class="main-icon">
+          <div class="icon-container">
+            <i class="material-icons">call_received</i>
+          </div>
+        </div>
         <div class="card-row">
           <div class="card-property">
             <div class="title">{{ 'Borrower' }}</div>
             <div class="paragraph">{{ loan.borrowerShort }}</div>
-          </div>
-          <div class="card-property">
-            <div class="title">{{ 'Amount' }}</div>
-            <div class="paragraph">{{ loan.amount }} {{ loan.currency }}</div>
           </div>
           <div class="card-property">
             <div class="title">{{ 'Durations' }}</div>
@@ -52,6 +53,20 @@
           <div class="card-property">
             <div class="title">{{ 'Annual Punitory Interest' }}</div>
             <div class="paragraph"> % {{ loan.annualPunitoryInterest }}</div>
+          </div>
+          <div class="lend-return--row">
+            <ol>
+              <li class="title">Lend</li>
+              <li class="currency">{{ loan.currency }}</li>
+              <li class="title">Return</li>
+            </ol>
+          </div>
+          <div class="lending-returns--block">
+            <ol>
+              <li class="block-title">{{ loan.amount }}</li>
+              <li class="currency"><i class="material-icons">keyboard_backspace</i></li>
+              <li class="block-title">2500</li>
+            </ol>
           </div>
           <lend-button [loan]=loan></lend-button>
         </div>

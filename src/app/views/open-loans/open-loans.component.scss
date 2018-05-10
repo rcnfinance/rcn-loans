@@ -1,6 +1,8 @@
 @import '../../../scss/_variables.scss'; //variables
 
 //CARDS
+%propiety-title {font-size: 11px; text-transform: uppercase; @extend %font-light;}
+%propiety-paragraph {font-size: 15px; @extend %font-medium;}
 .card-col{
   margin-top: 30px;
 }
@@ -39,13 +41,10 @@
       margin-bottom: 10px;
     }
     .title{
-      font-size: 11px;
-      text-transform: uppercase;
-      @extend %font-light;
+      @extend %propiety-title;
     }
     .paragraph{
-      font-size: 15px;
-      @extend %font-medium;
+      @extend %propiety-paragraph;
     }
     .btn{
       @include transition(all .3s ease-out);
@@ -80,7 +79,6 @@
       width: 50px;
       border-radius: 50%;
       box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
-      -webkit-transition: box-shadow 150ms cubic-bezier(0,0,.2,1);
     }
   }
   .txt-container{
@@ -116,3 +114,99 @@
     @include transform(translate(-50%, -50%));
   }
 }
+
+.lend-return--row{
+  li{
+    width: 32%;
+    display: inline-block;
+    &:nth-child(0){
+      text-align: left;
+    }
+    &:nth-child(2){
+      text-align: center;
+      @extend %propiety-paragraph;
+    }
+    &:nth-child(3){
+      text-align: right;
+    }
+  }
+}
+.lend-return--row{
+  li{
+    width: 32%;
+    display: inline-block;
+    &:nth-child(1){
+      text-align: left;
+    }
+    &:nth-child(2){
+      text-align: center;
+      @extend %propiety-paragraph;
+    }
+    &:nth-child(3){
+      text-align: right;
+    }
+  }
+}
+.lending-returns--block{
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  margin: 5px -15px 15px;
+  padding: 0px 15px;
+  li{
+    height: 52px;
+    width: 32%;
+    display: inline-block;
+    line-height: 1.8;
+    @extend %font-bold;
+    &:nth-child(1){
+      // overflow: hidden;
+      // white-space: nowrap;
+      // text-overflow: ellipsis;
+      text-align: left;
+      font-size: 28px;
+    }
+    &:nth-child(2){
+      line-height: 3;
+      height: 42px;
+      text-align: center;
+      @extend %font-regular;
+      @include transform(rotate(180deg));
+      i{
+        font-size: 50px;
+        height: 100%;
+        vertical-align: bottom;
+      }
+    }
+    &:nth-child(3){
+      color: $primary;
+      text-align: right;
+      font-size: 28px;
+    }
+  }
+}
+
+.main-icon {
+  cursor: pointer;
+  float: right;
+  margin: -25px 15px 0px 0px;
+  .icon-container {
+    position: relative;
+    background-color: $primary;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    @include transition;
+    box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+    &:hover{
+      background-color: #4155ff;
+    }
+    i{
+      // font-size: 28px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      @include transform(translate(-50%, -50%));
+    }
+  }
+}
+  
