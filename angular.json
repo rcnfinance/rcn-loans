@@ -5,7 +5,6 @@
   "projects": {
     "rcn-angular-dapp": {
       "root": "",
-      "sourceRoot": "src",
       "projectType": "application",
       "architect": {
         "build": {
@@ -117,7 +116,6 @@
     },
     "rcn-angular-dapp-e2e": {
       "root": "",
-      "sourceRoot": "",
       "projectType": "application",
       "architect": {
         "e2e": {
@@ -142,7 +140,6 @@
     }
   },
   "cli": {},
-  "defaultProject": "rcn-angular-dapp",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
