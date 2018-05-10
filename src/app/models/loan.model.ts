@@ -59,6 +59,9 @@ export class Loan {
     }
     
     formatDelta(totalSeconds: number): string{
+        const secondsInYear = 86400 * 365;
+        let years = Math.floor(totalSeconds / secondsInYear);
+        totalSeconds %= secondsInYear;
         let days = Math.floor(totalSeconds / 86400);
         totalSeconds %= 86400;
         let hours = Math.floor(totalSeconds / 3600);
@@ -67,6 +70,11 @@ export class Loan {
         let seconds = totalSeconds % 60;
       
         let result = '';
+        
+        if (years != 0) {
+            result += years + ' years, ';
+        }
+
         if (days != 0) {
           result += days + ' days, '
         }
