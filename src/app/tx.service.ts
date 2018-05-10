@@ -29,22 +29,20 @@ export class Tx {
 
 @Injectable()
 export class TxService {
-  private tx_key: string = "tx"; 
+  private tx_key: string = 'tx';
   private tx_memory: Tx[];
 
   private localStorage: any;
   private interval: any;
 
   private _web3: any;
-  
   constructor() {
     if (typeof window.web3 !== 'undefined') {
       // Use Mist/MetaMask's provider
       this._web3 = new Web3(window.web3.currentProvider);
-
       // if (this._web3.version.network !== '3') {
       //   alert('Please connect to the Ropsten network');
-      //}
+      // }
     } else {
       console.warn(
         'Please use a dapp browser like mist or MetaMask plugin for chrome'
@@ -64,17 +62,17 @@ export class TxService {
   }
 
   private checkUpdate() {
-    let pendingTxn = this.tx_memory.filter(tx => !tx.confirmed);
+    const pendingTxn = this.tx_memory.filter(tx => !tx.confirmed);
     this.tx_memory.forEach(tx => {
       if (!tx.confirmed) {
         this._web3.eth.getTransactionReceipt(tx.tx, (err, receipt) => {
-          if(receipt !== null) {
+          if (receipt !== null) {
             tx.confirmed = true;
             this.saveTxs();
           }
-        })
+        });
       }
-    })
+    });
   }
 
   private saveTxs() {

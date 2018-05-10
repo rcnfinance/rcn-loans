@@ -26,7 +26,7 @@ export class OpenLoansComponent implements OnInit {
   loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
-    })
+    });
   }
   ngOnInit() {
     this.loadLoans();
