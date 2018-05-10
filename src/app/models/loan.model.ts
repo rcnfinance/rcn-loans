@@ -32,10 +32,10 @@ export class Loan {
       }
 
     get currency(): string {
-        let targetCurrency = this.hexToAscii(this.currencyRaw.replace(/^[0x]+|[0]+$/g,''));
+        const targetCurrency = this.hexToAscii(this.currencyRaw.replace(/^[0x]+|[0]+$/g,''));
 
         if (targetCurrency == "") {
-            return "RCN";
+            return 'RCN';
         } else {
             return targetCurrency;
         }
@@ -55,7 +55,7 @@ export class Loan {
     }
     
     formatAddress(hex : string): string {
-        return hex.replace("0x000000000000000000000000", "0x");
+        return hex.replace('0x000000000000000000000000', '0x');
     }
     
     formatDelta(totalSeconds: number): string{
@@ -66,23 +66,23 @@ export class Loan {
         let minutes = Math.floor(totalSeconds / 60);
         let seconds = totalSeconds % 60;
       
-        let result = "";
+        let result = '';
         if (days != 0) {
-          result += days + " days, "
+          result += days + ' days, '
         }
       
         if (hours != 0) {
-          result += hours + " hours, "
+          result += hours + ' hours, '
         }
       
         if (minutes != 0) {
-          result += minutes + " minutes, "
+          result += minutes + ' minutes, '
         }
         return result.slice(0, -2)
     }
 
     get borrowerShort(): string {
-        return this.borrower.substr(0, 4) + "..." + this.borrower.substr(-4)
+        return this.borrower.substr(0, 4) + '...' + this.borrower.substr(-4);
     }
 
     get decimals(): number {

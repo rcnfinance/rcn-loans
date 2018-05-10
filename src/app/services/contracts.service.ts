@@ -30,13 +30,13 @@ export class ContractsService {
     private _web3: any;
   
     private _rcnContract: any;
-    private _rcnContractAddress: string = "0x2f45b6fb2f28a73f110400386da31044b2e953d4";
+    private _rcnContractAddress: string = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
   
     private _rcnEngine: any;
-    private _rcnEngineAddress: string = "0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf";
+    private _rcnEngineAddress: string = '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf';
 
     private _rcnExtension: any;
-    private _rcnExtensionAddress: string = "0xd4cd87d5155b83eb9f3cec4c02c32df15bcde6b6";
+    private _rcnExtensionAddress: string = '0xd4cd87d5155b83eb9f3cec4c02c32df15bcde6b6';
 
     constructor() {
       if (typeof window.web3 !== 'undefined') {
@@ -45,7 +45,7 @@ export class ContractsService {
   
         // if (this._web3.version.network !== '3') {
         //   alert('Please connect to the Ropsten network');
-        //}
+        // }
       } else {
         console.warn(
           'Please use a dapp browser like mist or MetaMask plugin for chrome'
