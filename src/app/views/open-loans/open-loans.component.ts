@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../material/material.module';
-import { empty } from 'rxjs/Observer';
 import { HttpModule, Response } from '@angular/http';
 
 import { Loan } from './../../models/loan.model';
@@ -16,7 +15,7 @@ import { TxService, Tx } from './../../tx.service';
 })
 export class OpenLoansComponent implements OnInit {
   loans = [];
-  bestLoan = this.loans[0]; // best loan suggested
+  bestLoan = this.loans[0]; // be dst loan suggested
 
   pendingLend = [];
 

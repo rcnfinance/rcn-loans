@@ -15,7 +15,7 @@ import { LendButtonComponent } from './shared/lend-button/lend-button.component'
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 
 // App Services
-import { DataStorageService } from './shared/data-storage.service';
+// import { from './shared/data-storage.service';
 import { ContractsService } from './services/contracts.service';
 import { TxService } from './tx.service';
 
@@ -54,7 +54,7 @@ const appRoutes: Routes = [
       { enableTracing: true } // <-- debugging purposes only
     )
   ],
-  providers: [DataStorageService, ContractsService, TxService],
+  providers: [ContractsService, TxService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

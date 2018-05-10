@@ -4,7 +4,7 @@ declare let require: any;
 declare let window: any;
 
 import { Injectable } from '@angular/core';
-import { Loan } from './loan.model';
+import { Loan } from './models/loan.model';
 import { TypeCheckCompiler } from '@angular/compiler/src/view_compiler/type_check_compiler';
 
 enum Type { lend }
