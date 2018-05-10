@@ -105,4 +105,8 @@ export class Loan {
     get verboseDuration(): string {
         return this.formatDelta(this.duration);
     }
+
+    get expectedReturn(): number {
+        return ((this.amount * 100000 * this.duration) / this.rawAnnualInterest) + this.amount;
+    }
   }

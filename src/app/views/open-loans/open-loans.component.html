@@ -65,7 +65,7 @@
             <ol>
               <li class="block-title">{{ loan.amount }}</li>
               <li class="currency"><i class="material-icons">keyboard_backspace</i></li>
-              <li class="block-title">{{ 2500 * 1.2 }}</li>
+              <li class="block-title">{{ loan.expectedReturn }}</li>
             </ol>
           </div>
           <lend-button [loan]=loan></lend-button>

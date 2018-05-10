@@ -25,7 +25,7 @@ import { LendButtonComponent } from './shared/lend-button/lend-button.component'
 
 const appRoutes: Routes = [
   { path: 'open', component: OpenLoansComponent },
-  { path: 'detail/:id', component: LoanDetailComponent },
+  { path: 'loan/:id', component: LoanDetailComponent },
   { path: '',
     redirectTo: '/open',
     pathMatch: 'full'
