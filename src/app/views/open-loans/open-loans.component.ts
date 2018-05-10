@@ -17,9 +17,7 @@ import { SharedModule } from './../../shared/shared.module';
 export class OpenLoansComponent implements OnInit {
   loans = [];
   bestLoan = this.loans[0]; // be dst loan suggested
-
   pendingLend = [];
-
   creators: any[] = [
     {title: 'Ripio'},
     {title: 'RCN'},

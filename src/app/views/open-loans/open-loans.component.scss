@@ -110,6 +110,7 @@
     left: 50%;
     color: $fifth;
     font-size: 40px;
+    // text-shadow: 1px 1px 1px #1d1d1d;
     @extend %font-black;
     @include transform(translate(-50%, -50%));
   }
@@ -119,7 +120,7 @@
   li{
     width: 32%;
     display: inline-block;
-    &:nth-child(0){
+    &:nth-child(1){
       text-align: left;
     }
     &:nth-child(2){
@@ -195,10 +196,12 @@
     border-radius: 50%;
     height: 50px;
     width: 50px;
-    @include transition;
     box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+    @include transition;
     &:hover{
-      background-color: #4155ff;
+      background-color: white;
+      color: #000;
+      box-shadow: 0 0 6px rgba(0,0,0,.36), 0 6px 12px rgba(0,0,0,.52);
     }
     i{
       // font-size: 28px;
