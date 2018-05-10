@@ -1,6 +1,11 @@
 import { Component, OnInit, isDevMode} from '@angular/core';
 import { environment } from '../environments/environment';
 
+// App Component
+import { SharedModule } from './shared/shared.module';
+import { MaterialModule } from './material/material.module';
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Loan } from '../../models/loan.model';
 
+// App Component
+import { MaterialModule } from './../../material/material.module';
+
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx } from './../../tx.service';

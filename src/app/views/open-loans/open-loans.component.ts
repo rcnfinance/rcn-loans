@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { MaterialModule } from '../../material/material.module';
 import { HttpModule, Response } from '@angular/http';
-
+// App Models
 import { Loan } from './../../models/loan.model';
-
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx } from './../../tx.service';
+// App Component
+import { SharedModule } from './../../shared/shared.module';
+import { MaterialModule } from './../../material/material.module';
 
 @Component({
   selector: 'app-open-loans',
@@ -18,6 +19,12 @@ export class OpenLoansComponent implements OnInit {
   bestLoan = this.loans[0]; // be dst loan suggested
 
   pendingLend = [];
+
+  creators: any[] = [
+    {title: 'Ripio'},
+    {title: 'RCN'},
+    {title: 'Tarjeta Naranja'}
+  ];
 
   constructor(
     private contractsService: ContractsService,

@@ -7,9 +7,11 @@
 .card-container{
   font-family: 'Raleway', sans-serif;
   border-radius: 2px;
-  background-color: $quaternary;
+  background-color: $fifth;
+  box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+  -webkit-transition: box-shadow 150ms cubic-bezier(0,0,.2,1);
   .card-label{
-    height: 60px;
+    height: 55px;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
     background-color: $primary;
@@ -47,6 +49,70 @@
     }
     .btn{
       @include transition(all .3s ease-out);
+      box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+      -webkit-transition: box-shadow 150ms cubic-bezier(0,0,.2,1);
     }
+  }
+}
+.list-avatar {
+  height: 75px;
+  position: relative;
+  padding-top: 17px;
+  padding-left: 80px;
+  .avatar-container {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    border-radius: 50%;
+    background-color: $primary;
+    .title{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      font-size: 18px;
+      color: $secondary;
+      @extend %font-black;
+      @include transform(translate(-50%, -50%));
+    }
+    img{
+      width: 50px;
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+      -webkit-transition: box-shadow 150ms cubic-bezier(0,0,.2,1);
+    }
+  }
+  .txt-container{
+    .title{
+      line-height: 1.4;
+      font-size: 16px;
+      @extend %font-medium;
+    }
+    .subtitle{
+      line-height: 1.4;
+      font-size: 12px;
+      @extend %font-medium;
+    }
+  }
+}
+
+.img-container {
+  height: 140px;
+  position: relative;
+  padding: 15px;
+  overflow: hidden;
+  background-color: #333333;
+  .img-item{
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: $fifth;
+    font-size: 40px;
+    @extend %font-black;
+    @include transform(translate(-50%, -50%));
   }
 }
