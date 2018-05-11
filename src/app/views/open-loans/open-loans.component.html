@@ -20,8 +20,11 @@
         </div>
         <div class="list-avatar">
           <div class="avatar-container">
-            <!-- <img src="https://source.unsplash.com/random/200x200" alt="RCN Image"> -->
-            <div class="title">R</div>
+            <img src="{{brandingService.getCreatorIcon(loan)}}"
+              ng-hide="hasAvatar(loan)"/>
+            <!-- <div class="title">R</div> -->
+            <angular-blockies [options]="brandingService.getBlockiesOptions(loan)"
+              ng-hide="!hasAvatar(loan)"></angular-blockies>
           </div>
           <div class="txt-container">
             <div class="subtitle">Created by {{ brandingService.getCreatorShortName(loan) }}</div>
@@ -32,7 +35,7 @@
           <!-- <div class="img-item">{{ loan.creator }}</div> -->
           <div class="img-item">{{ brandingService.getBrand(loan) }}</div>
         </div>
-        <app-main-button></app-main-button>
+        <!--<app-main-button></app-main-button>-->
         <div class="card-row">
           <div class="card-property">
             <div class="title">{{ 'Borrower' }}</div>

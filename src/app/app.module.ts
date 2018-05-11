@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { Router, RouterModule, Routes } from '@angular/router';
+import { BlockiesModule } from 'angular-blockies';
 
 // App Services
 import { ContractsService } from './services/contracts.service';
@@ -47,6 +48,7 @@ const appRoutes: Routes = [
     SharedModule,
     MaterialModule,
     HttpModule,
+    BlockiesModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only

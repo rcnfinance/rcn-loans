@@ -34,6 +34,9 @@ export class OpenLoansComponent implements OnInit {
   ngOnInit() {
     this.loadLoans();
   }
+  private hasAvatar(loan: Loan): Boolean {
+    return this.brandingService.getCreatorIcon(loan) !== undefined;
+  }
   private formatInterest(interest: Number): string {
     return Number(interest.toFixed(2)).toString();
   }

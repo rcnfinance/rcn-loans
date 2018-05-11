@@ -32,7 +32,7 @@
     "rxjs-compat": "^6.1.0",
     "web3": "^0.18.4",
     "zone.js": "^0.8.19",
-    "blockies": "^0.0.2"
+    "angular-blockies": "^1.1.0"
   },
   "devDependencies": {
     "@angular/cli": "^6.0.0-rc.4",
