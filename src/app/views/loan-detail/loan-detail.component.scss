@@ -4,20 +4,11 @@
 .loan-detail{
   margin-top: 40px;
 }
-.creator-container {
+.navbar-container {
   height: 100px;
   position: relative;
   overflow: hidden;
   background-color: #333333;
-  .creator-title{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    color: $fifth;
-    font-size: 40px;
-    @extend %font-black;
-    @include transform(translate(-50%, -50%));
-  }
   .button-group{
     height: 100%;
     position: absolute;

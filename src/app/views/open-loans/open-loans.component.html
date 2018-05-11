@@ -31,10 +31,7 @@
             <div class="title">{{ brandingService.getCreatorName(loan, True) }}</div>
           </div>
         </div>
-        <div class="creator-container">
-          <!-- <div class="creator-title">{{ loan.creator }}</div> -->
-          <div class="creator-title">{{ brandingService.getBrand(loan) }}</div>
-        </div>
+        <app-creator-container [loan]=loan></app-creator-container>
         <!--<app-main-button></app-main-button>-->
         <div class="card-row">
           <div class="card-property">
@@ -65,7 +62,7 @@
           </div>
           
           <app-lend-button [loan]=loan></app-lend-button>
-          <app-detail-button></app-detail-button>
+          <app-detail-button [loan]=loan></app-detail-button>
           <app-favorite-button></app-favorite-button>
         </div>
       </div>

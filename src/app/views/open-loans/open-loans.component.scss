@@ -93,28 +93,6 @@
     }
   }
 }
-
-.creator-container {
-  height: 140px;
-  position: relative;
-  padding: 15px;
-  overflow: hidden;
-  background-color: #333333;
-  .creator-title{
-    width: 100%;
-    padding: 15px;
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    color: $fifth;
-    font-size: 40px;
-    // text-shadow: 1px 1px 1px #1d1d1d;
-    @extend %font-black;
-    @include transform(translate(-50%, -50%));
-  }
-}
-
 .lend-return--row{
   li{
     width: 32%;
