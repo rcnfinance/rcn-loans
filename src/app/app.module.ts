@@ -21,13 +21,12 @@ import { ContentWrapperComponent } from './content-wrapper/content-wrapper.compo
 
 import { OpenLoansComponent } from './views/open-loans/open-loans.component';
 import { LoanDetailComponent } from './views/loan-detail/loan-detail.component';
-import { LendButtonComponent } from './shared/lend-button/lend-button.component';
 
 const appRoutes: Routes = [
-  { path: 'open', component: OpenLoansComponent },
+  { path: 'loans', component: OpenLoansComponent },
   { path: 'loan/:id', component: LoanDetailComponent },
   { path: '',
-    redirectTo: '/open',
+    redirectTo: '/loans',
     pathMatch: 'full'
   }
 ];
@@ -40,7 +39,6 @@ const appRoutes: Routes = [
     WindowsHeightDirective,
     LoanDetailComponent,
     OpenLoansComponent,
-    LendButtonComponent,
     ContentWrapperComponent
   ],
   imports: [

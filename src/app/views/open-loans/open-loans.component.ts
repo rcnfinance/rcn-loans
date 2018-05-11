@@ -18,12 +18,6 @@ export class OpenLoansComponent implements OnInit {
   loans = [];
   bestLoan = this.loans[0]; // be dst loan suggested
   pendingLend = [];
-  creators: any[] = [
-    {title: 'Ripio'},
-    {title: 'RCN'},
-    {title: 'Tarjeta Naranja'}
-  ];
-
   constructor(
     private contractsService: ContractsService,
     private txService: TxService
