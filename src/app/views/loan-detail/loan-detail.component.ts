@@ -8,6 +8,8 @@ import { TxService, Tx } from './../../tx.service';
 // App Component
 import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
+// App Utils
+import { Utils } from './../../utils/utils';
 
 @Component({
   selector: 'app-loan-detail',
@@ -30,5 +32,8 @@ export class LoanDetailComponent implements OnInit {
       });
       // In a real app: dispatch action to load the details here.
    });
+  }
+  private formatAmount(amount: number): string {
+    return Utils.formatAmount(amount);
   }
 }

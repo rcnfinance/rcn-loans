@@ -5,7 +5,6 @@ import { environment } from '../environments/environment';
 import { SharedModule } from './shared/shared.module';
 import { MaterialModule } from './material/material.module';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -14,7 +13,6 @@ import { MaterialModule } from './material/material.module';
 export class AppComponent implements OnInit {
   title = 'app';
   environmentName: any = environment.envName;
-  animal: string = environment.animal;
   constructor() {
     // console.log(this.animal);
   }

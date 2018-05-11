@@ -7,6 +7,7 @@ import { Router, RouterModule, Routes } from '@angular/router';
 // App Services
 import { ContractsService } from './services/contracts.service';
 import { TxService } from './tx.service';
+import { BrandingService } from './services/branding.service';
 
 // App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
@@ -51,7 +52,7 @@ const appRoutes: Routes = [
       { enableTracing: true } // <-- debugging purposes only
     )
   ],
-  providers: [ContractsService, TxService],
+  providers: [ContractsService, TxService, BrandingService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
