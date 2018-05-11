@@ -35,19 +35,21 @@
             <thead>
               <tr>
                 <th scope="col">{{ 'Borrower' }}</th>
-                <th scope="col">{{ 'Annual Interest / Punitory' }}</th>
+                <th scope="col">{{ 'Interest / Punitory' }}</th>
                 <th scope="col">{{ 'Durations' }}</th>
+                <th scope="col">{{ 'currency' }}</th>
                 <th scope="col">{{ 'Lend' }}</th>
                 <th scope="col">{{ 'Result' }}</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Data 1</td>
-                <td>Data 2</td>
-                <td>Data 3</td>
-                <td>Data 4</td>
-                <td>Data 5</td>
+                <td>{{ loan.borrowerShort }}</td>
+                <td> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</td>
+                <td>{{ loan.verboseDuration }}</td>
+                <td>{{ loan.currency }}</td>
+                <td>{{ formatAmount(loan.amount) }}</td>
+                <td>{{ formatAmount(loan.expectedReturn) }}</td>
               </tr>
             </tbody>
           </table>

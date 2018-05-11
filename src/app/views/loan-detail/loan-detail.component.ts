@@ -36,4 +36,7 @@ export class LoanDetailComponent implements OnInit {
   private formatAmount(amount: number): string {
     return Utils.formatAmount(amount);
   }
+  private formatInterest(interest: Number): string {
+    return Number(interest.toFixed(2)).toString();
+  }
 }
