@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Loan } from '../../models/loan.model';
-
-// App Component
-import { MaterialModule } from './../../material/material.module';
-
+// App Models
+import { Loan } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx } from './../../tx.service';
+// App Component
+import { MaterialModule } from './../../material/material.module';
+import { SharedModule } from './../../shared/shared.module';
 
 @Component({
   selector: 'app-loan-detail',

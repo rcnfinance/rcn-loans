@@ -1,33 +1,75 @@
 <div class="container margintop100">
-  <div class="col-xs-12 col-sm-4 col-lg-3 card-col">
-      <div class="card-container">
-          <div class="card-label">
-            <div class="title">Loan request #{{ loan.id }}</div>
+  <div class="row">
+    <div class="col-xs-12 loan-detail">
+      <div class="creator-container">
+        <ul class="col-group x3">
+          <li class="col-item">
+            <div class="go-back"><i class="material-icons">keyboard_backspace</i></div>
+          </li>
+          <li class="col-item">
+            <div class="creator-title">{{ 'Ripio' }}</div>
+          </li>
+          <li class="col-item">
+            <div class="button-group">
+              <div class="button-options"><i class="material-icons">more_vert</i></div>
+              <div class="button-options"><i class="material-icons">favorite</i></div>
+              <div class="button-options"><i class="material-icons">swap_horiz</i></div>
+              <div class="button-options"><i class="material-icons">delete</i></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="loan-description left">
+        <div class="list-avatar">
+          <div class="avatar-container">
+            <!-- <img src="https://source.unsplash.com/random/200x200" alt="RCN Image"> -->
+            <div class="title">R</div>
           </div>
-          <div class="card-img"></div>
-          <div class="card-row">
-            <div class="card-property">
-              <div class="title">{{ 'Borrower' }}</div>
-              <div class="paragraph">{{ loan.borrowerShort }}</div>
-            </div>
-            <div class="card-property">
-              <div class="title">{{ 'Amount' }}</div>
-              <div class="paragraph">{{ loan.amount }} {{ loan.currency }}</div>
-            </div>
-            <div class="card-property">
-              <div class="title">{{ 'Durations' }}</div>
-              <div class="paragraph">{{ loan.verboseDuration }}</div>
-            </div>
-            <div class="card-property">
-              <div class="title">{{ 'Annual interest' }}</div>
-              <div class="paragraph"> % {{ loan.annualInterest }}</div>
-            </div>
-            <div class="card-property">
-              <div class="title">{{ 'Annual Punitory Interest' }}</div>
-              <div class="paragraph"> % {{ loan.annualPunitoryInterest }}</div>
-            </div>
-            <app-lend-button [loan]=loan></app-lend-button>
+          <div class="txt-container">
+            <div class="subtitle">Created by</div>
+            <div class="title">Ripio Credit Network</div>
           </div>
         </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">{{ 'Borrower' }}</th>
+                <th scope="col">{{ 'Annual Interest / Punitory' }}</th>
+                <th scope="col">{{ 'Durations' }}</th>
+                <th scope="col">{{ 'Lend' }}</th>
+                <th scope="col">{{ 'Result' }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Data 1</td>
+                <td>Data 2</td>
+                <td>Data 3</td>
+                <td>Data 4</td>
+                <td>Data 5</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="lend-return--row">
+          <ol>
+            <li class="title">Lend</li>
+            <li class="currency">{{ loan.currency }}</li>
+            <li class="title">Return</li>
+          </ol>
+        </div>
+        <div class="lending-returns--block">
+          <ol>
+            <li class="block-title">{{ loan.amount }}</li>
+            <li class="currency"><i class="material-icons">keyboard_backspace</i></li>
+            <li class="block-title">{{ loan.expectedReturn }}</li>
+          </ol>
+        </div>
+      </div>
+      <div class="loan-description right">
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure ipsa tenetur in reiciendis, unde maxime tempore eaque quisquam quas, accusamus, maiores quam. Dolore neque expedita dolorum fuga vel beatae alias!</p>
+      </div>
+    </div>
   </div>
 </div>
