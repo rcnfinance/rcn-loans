@@ -24,6 +24,15 @@ function loanFromBytes(id: number, loanBytes: any): Loan {
   );
 }
 
+function curateLoans(loans: Loan[]): Loan[] {
+  return loans.filter(loan => {
+    return loan.annualInterest < 1000 &&
+      loan.annualPunitoryInterest < 1000 &&
+      loan.amount < 1000000 && 
+      loan.amount > 0.00001
+  })
+}
+
 @Injectable()
 export class ContractsService {
     private _account: string = null;
@@ -167,7 +176,7 @@ export class ContractsService {
               allLoans.push(loanFromBytes(id, loanBytes));
             }
 
-            resolve(allLoans);
+            resolve(curateLoans(allLoans));
           });
         }) as Promise<Loan[]>;
     }
