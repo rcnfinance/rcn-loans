@@ -1,10 +1,10 @@
-<div class="container margintop100">
+<div class="container margintop95">
   <div class="row">
     <div class="col-xs-12 loan-detail">
       <div class="creator-container">
         <ul class="col-group x3">
           <li class="col-item">
-            <div class="go-back"><i class="material-icons">keyboard_backspace</i></div>
+            <div class="go-back" (click)='goHome()'><i class="material-icons">keyboard_backspace</i></div>
           </li>
           <li class="col-item">
             <div class="creator-title">{{ 'Ripio' }}</div>
@@ -44,6 +44,7 @@
             <li class="block-title">{{ formatAmount(loan.expectedReturn) }}</li>
           </ol>
         </div>
+        <div class="margintop20"></div>
         <div class="table-responsive">
           <table class="table">
             <thead>
