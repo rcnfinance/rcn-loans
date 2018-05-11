@@ -13,10 +13,14 @@ export class Utils {
         return strOut;    
     }
     
-    static formatAddress(hex : string): string {
+    static formatAddress(hex: string): string {
         return hex.replace('0x000000000000000000000000', '0x');
     }
     
+    static shortAddress(address: string): string {
+        return address.substr(0, 4) + '...' + address.substr(-4);
+    }
+
     static formatDelta(totalSeconds: number): string{
         const secondsInYear = 86400 * 365;
         const years = Math.floor(totalSeconds / secondsInYear);

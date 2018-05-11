@@ -6,7 +6,7 @@ export class LoanUtils {
           id,
           parseInt(loanBytes[14], 16),
           loanBytes[2],
-          loanBytes[2],
+          loanBytes[4],
           parseInt(loanBytes[5], 16),
           parseInt(loanBytes[12], 16),
           parseInt(loanBytes[9], 16),

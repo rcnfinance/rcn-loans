@@ -3,9 +3,17 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
+export enum Agent {
+  MortgageCreator,
+  RipioCreator
+}
+
 export const environment = {
   production: false,
   url: 'http://localhost:4200/',
   envName: 'dev',
-  animal: '🐊'
+  dir: {
+    "0x0679cde060990fb409cb19b4434714c1e5f2ae6e": Agent.MortgageCreator,
+    "0xc4fbf33f1836b78c69ba748d6e3a6c5ed36bbce0": Agent.RipioCreator
+  }
 };

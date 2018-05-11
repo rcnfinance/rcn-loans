@@ -24,13 +24,13 @@
             <div class="title">R</div>
           </div>
           <div class="txt-container">
-            <div class="subtitle">Created by</div>
-            <div class="title">Ripio Credit Network</div>
+            <div class="subtitle">Created by {{ brandingService.getCreatorShortName(loan) }}</div>
+            <div class="title">{{ brandingService.getCreatorName(loan, True) }}</div>
           </div>
         </div>
         <div class="img-container">
           <!-- <div class="img-item">{{ loan.creator }}</div> -->
-          <div class="img-item">{{ 'Ripio' }}</div>
+          <div class="img-item">{{ brandingService.getBrand(loan) }}</div>
         </div>
         <app-main-button></app-main-button>
         <div class="card-row">
@@ -44,8 +44,8 @@
           </div>
           <div class="card-property">
             <div class="title">{{ 'Annual Interest / Punitory' }}</div>
-            <div class="paragraph"> % {{ loan.annualInterest }}</div>
-            <div class="paragraph"> % {{ loan.annualPunitoryInterest }}</div>
+            <div class="paragraph"> ~ {{ formatInterest(loan.annualInterest) }} %</div>
+            <div class="paragraph"> ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div>
           </div>
           <div class="lend-return--row">
             <ol>
@@ -56,9 +56,9 @@
           </div>
           <div class="lending-returns--block">
             <ol>
-              <li class="block-title">{{ loan.amount }}</li>
+              <li class="block-title">{{ formatAmount(loan.amount) }}</li>
               <li class="currency"><i class="material-icons">keyboard_backspace</i></li>
-              <li class="block-title">{{ loan.expectedReturn }}</li>
+              <li class="block-title">{{ formatAmount(loan.expectedReturn) }}</li>
             </ol>
           </div>
           

@@ -5,9 +5,12 @@ import { Loan } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx } from './../../tx.service';
+import { BrandingService } from './../../services/branding.service';
 // App Component
 import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
+// App Utils
+import { Utils } from './../../utils/utils';
 
 @Component({
   selector: 'app-open-loans',
@@ -20,7 +23,8 @@ export class OpenLoansComponent implements OnInit {
   pendingLend = [];
   constructor(
     private contractsService: ContractsService,
-    private txService: TxService
+    private txService: TxService,
+    private brandingService: BrandingService
   ) {}
   loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
@@ -29,5 +33,21 @@ export class OpenLoansComponent implements OnInit {
   }
   ngOnInit() {
     this.loadLoans();
+  }
+  private formatInterest(interest: Number): string {
+    return Number(interest.toFixed(2)).toString();
+  }
+  private formatAmount(amount: Number): string {
+    const maxDigits = 6;
+    if (amount.toString().length <= maxDigits) {
+      return amount.toString();
+    } else {
+      const intDigits = amount.toFixed(0).toString().length;
+      const decDigits = maxDigits - intDigits;
+
+      let decimals = (decDigits > 0) ? decDigits : 0;
+
+      return Number(amount.toFixed(decimals)).toString();
+    }
   }
 }
