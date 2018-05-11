@@ -2,6 +2,8 @@ import * as Web3 from 'web3';
 
 import { Loan } from '../models/loan.model';
 import { Injectable } from '@angular/core';
+import { LoanCurator } from './../utils/loan-curator';
+import { LoanUtils } from './../utils/loan-utils';
 
 declare let require: any;
 declare let window: any;
@@ -9,29 +11,6 @@ declare let window: any;
 const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
 const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
-
-function loanFromBytes(id: number, loanBytes: any): Loan {
-  return new Loan(
-    id,
-    parseInt(loanBytes[14], 16),
-    loanBytes[2],
-    loanBytes[2],
-    parseInt(loanBytes[5], 16),
-    parseInt(loanBytes[12], 16),
-    parseInt(loanBytes[9], 16),
-    parseInt(loanBytes[10], 16),
-    loanBytes[16]
-  );
-}
-
-function curateLoans(loans: Loan[]): Loan[] {
-  return loans.filter(loan => {
-    return loan.annualInterest < 1000 &&
-      loan.annualPunitoryInterest < 1000 &&
-      loan.amount < 1000000 &&
-      loan.amount > 0.00001;
-  });
-}
 
 @Injectable()
 export class ContractsService {
@@ -156,7 +135,7 @@ export class ContractsService {
           if(err != null) {
             reject(err);
           }
-          resolve(loanFromBytes(id, result));
+          resolve(LoanUtils.loanFromBytes(id, result));
         })
       }) as Promise<Loan>;
     }
@@ -173,10 +152,10 @@ export class ContractsService {
             for (let i = 0; i < total; i++) {
               let id = parseInt(result[(i * 20) + 19], 16);
               let loanBytes = result.slice(i * 20, i * 20 + 20);
-              allLoans.push(loanFromBytes(id, loanBytes));
+              allLoans.push(LoanUtils.loanFromBytes(id, loanBytes));
             }
 
-            resolve(curateLoans(allLoans));
+            resolve(LoanCurator.curateLoans(allLoans));
           });
         }) as Promise<Loan[]>;
     }
