@@ -53,11 +53,9 @@ export class Loan {
             }
         return strOut;    
     }
-    
-    formatAddress(hex : string): string {
+    formatAddress(hex: string): string {
         return hex.replace('0x000000000000000000000000', '0x');
     }
-    
     formatDelta(totalSeconds: number): string{
         const secondsInYear = 86400 * 365;
         let years = Math.floor(totalSeconds / secondsInYear);
