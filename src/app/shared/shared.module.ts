@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
+import { BlockiesModule } from 'angular-blockies';
 
 // App Component
 import { MaterialModule } from '../material/material.module';
@@ -12,27 +13,31 @@ import { DetailButtonComponent } from './detail-button/detail-button.component';
 import { FavoriteButtonComponent } from './favorite-button/favorite-button.component';
 import { MainButtonComponent } from './main-button/main-button.component';
 import { CreatorContainerComponent } from './creator-container/creator-container.component';
+import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
 
 @NgModule({
   imports: [
     CommonModule,
     BrowserModule,
     HttpModule,
-    MaterialModule
+    MaterialModule,
+    BlockiesModule
   ],
   declarations: [
     LendButtonComponent,
     DetailButtonComponent,
     FavoriteButtonComponent,
     MainButtonComponent,
-    CreatorContainerComponent
+    CreatorContainerComponent,
+    LoanAvatarComponent
   ],
   exports: [
     LendButtonComponent,
     DetailButtonComponent,
     FavoriteButtonComponent,
     MainButtonComponent,
-    CreatorContainerComponent
+    CreatorContainerComponent,
+    LoanAvatarComponent
   ]
 })
 export class SharedModule { }
