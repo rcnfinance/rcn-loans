@@ -30,6 +30,20 @@
             <div class="title">Ripio Credit Network</div>
           </div>
         </div>
+        <div class="lend-return--row">
+          <ol>
+            <li class="title">Lend</li>
+            <li class="currency">{{ loan.currency }}</li>
+            <li class="title">Return</li>
+          </ol>
+        </div>
+        <div class="lending-returns--block">
+          <ol>
+            <li class="block-title">{{ loan.amount }}</li>
+            <li class="currency"><i class="material-icons">keyboard_backspace</i></li>
+            <li class="block-title">{{ formatAmount(loan.expectedReturn) }}</li>
+          </ol>
+        </div>
         <div class="table-responsive">
           <table class="table">
             <thead>
@@ -54,19 +68,33 @@
             </tbody>
           </table>
         </div>
-        <div class="lend-return--row">
-          <ol>
-            <li class="title">Lend</li>
-            <li class="currency">{{ loan.currency }}</li>
-            <li class="title">Return</li>
-          </ol>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">{{ 'Identity' }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ loan.borrower }} - Unknown</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="lending-returns--block">
-          <ol>
-            <li class="block-title">{{ loan.amount }}</li>
-            <li class="currency"><i class="material-icons">keyboard_backspace</i></li>
-            <li class="block-title">{{ formatAmount(loan.expectedReturn) }}</li>
-          </ol>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">{{ 'Insurance' }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Decentraland parcel mortgage</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div class="loan-description right">

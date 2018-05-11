@@ -114,18 +114,20 @@
   }
 }
 .table{
-  >tbody{
-    >tr{
-      >td {
-        @extend %propiety-subtitle;
-      }
-    }
-  }
   >thead{
     >tr{
       >th {
         border: 0px;
+        background-color: #333333;
         @extend %propiety-title;
+      }
+    }
+  }
+  >tbody{
+    >tr{
+      >td {
+        border: 0px;
+        @extend %propiety-subtitle;
       }
     }
   }
