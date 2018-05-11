@@ -25,6 +25,9 @@ $fifth: #1d1d1d;
 %font-extra-bold{font-weight: 800;}
 %font-black{font-weight: 900;}
 
+%propiety-title {font-size: 11px; text-transform: uppercase; @extend %font-light;}
+%propiety-subtitle {font-size: 15px; @extend %font-medium;}
+
 
 /*MIXINS*/
 // -------------------------

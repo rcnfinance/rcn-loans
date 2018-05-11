@@ -40,17 +40,7 @@ export class OpenLoansComponent implements OnInit {
   private formatInterest(interest: Number): string {
     return Number(interest.toFixed(2)).toString();
   }
-  private formatAmount(amount: Number): string {
-    const maxDigits = 6;
-    if (amount.toString().length <= maxDigits) {
-      return amount.toString();
-    } else {
-      const intDigits = amount.toFixed(0).toString().length;
-      const decDigits = maxDigits - intDigits;
-
-      let decimals = (decDigits > 0) ? decDigits : 0;
-
-      return Number(amount.toFixed(decimals)).toString();
-    }
+  private formatAmount(amount: number): string {
+    return Utils.formatAmount(amount);
   }
 }

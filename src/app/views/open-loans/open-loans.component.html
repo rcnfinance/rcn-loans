@@ -31,9 +31,9 @@
             <div class="title">{{ brandingService.getCreatorName(loan, True) }}</div>
           </div>
         </div>
-        <div class="img-container">
-          <!-- <div class="img-item">{{ loan.creator }}</div> -->
-          <div class="img-item">{{ brandingService.getBrand(loan) }}</div>
+        <div class="creator-container">
+          <!-- <div class="creator-title">{{ loan.creator }}</div> -->
+          <div class="creator-title">{{ brandingService.getBrand(loan) }}</div>
         </div>
         <!--<app-main-button></app-main-button>-->
         <div class="card-row">
@@ -47,8 +47,7 @@
           </div>
           <div class="card-property">
             <div class="title">{{ 'Annual Interest / Punitory' }}</div>
-            <div class="paragraph"> ~ {{ formatInterest(loan.annualInterest) }} %</div>
-            <div class="paragraph"> ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div>
+            <div class="paragraph"> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div>
           </div>
           <div class="lend-return--row">
             <ol>

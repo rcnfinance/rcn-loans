@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Loan } from './../models/loan.model';
 import { Agent, environment } from '../../environments/environment';
 import { Utils } from './../utils/utils';
-import blockies from 'blockies';
 
 @Injectable()
 export class BrandingService {

@@ -1,8 +1,6 @@
 @import '../../../scss/_variables.scss'; //variables
 
 //CARDS
-%propiety-title {font-size: 11px; text-transform: uppercase; @extend %font-light;}
-%propiety-paragraph {font-size: 15px; @extend %font-medium;}
 .card-col{
   margin-top: 30px;
 }
@@ -44,7 +42,7 @@
       @extend %propiety-title;
     }
     .paragraph{
-      @extend %propiety-paragraph;
+      @extend %propiety-subtitle;
     }
     .btn{
       @include transition(all .3s ease-out);
@@ -96,13 +94,13 @@
   }
 }
 
-.img-container {
+.creator-container {
   height: 140px;
   position: relative;
   padding: 15px;
   overflow: hidden;
   background-color: #333333;
-  .img-item{
+  .creator-title{
     width: 100%;
     padding: 15px;
     text-align: center;
@@ -126,23 +124,7 @@
     }
     &:nth-child(2){
       text-align: center;
-      @extend %propiety-paragraph;
-    }
-    &:nth-child(3){
-      text-align: right;
-    }
-  }
-}
-.lend-return--row{
-  li{
-    width: 32%;
-    display: inline-block;
-    &:nth-child(1){
-      text-align: left;
-    }
-    &:nth-child(2){
-      text-align: center;
-      @extend %propiety-paragraph;
+      @extend %propiety-subtitle;
     }
     &:nth-child(3){
       text-align: right;
@@ -161,9 +143,6 @@
     line-height: 1.8;
     @extend %font-bold;
     &:nth-child(1){
-      // overflow: hidden;
-      // white-space: nowrap;
-      // text-overflow: ellipsis;
       text-align: left;
       font-size: 28px;
     }

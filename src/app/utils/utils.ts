@@ -21,7 +21,7 @@ export class Utils {
         return address.substr(0, 4) + '...' + address.substr(-4);
     }
 
-    static formatDelta(totalSeconds: number): string{
+    static formatDelta(totalSeconds: number): string {
         const secondsInYear = 86400 * 365;
         const years = Math.floor(totalSeconds / secondsInYear);
         totalSeconds %= secondsInYear;
@@ -50,5 +50,19 @@ export class Utils {
           result += minutes + ' minutes, '
         }
         return result.slice(0, -2)
+    }
+
+    static formatAmount(amount: Number): string {
+        const maxDigits = 6;
+        if (amount.toString().length <= maxDigits) {
+        return amount.toString();
+        } else {
+        const intDigits = amount.toFixed(0).toString().length;
+        const decDigits = maxDigits - intDigits;
+
+        let decimals = (decDigits > 0) ? decDigits : 0;
+
+        return Number(amount.toFixed(decimals)).toString();
+        }
     }
 }

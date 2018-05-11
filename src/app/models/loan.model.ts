@@ -43,6 +43,7 @@ export class Loan {
         }
     }
 
+<<<<<<< HEAD
     formatInterest(raw: number): number {
         return 311040000000000 / raw;
     }
@@ -89,6 +90,8 @@ export class Loan {
         return result.slice(0, -2)
     }
 
+=======
+>>>>>>> cc763823f7424a467a40bce96d23dc6fcff5a48b
     get borrowerShort(): string {
         return this.borrower.substr(0, 4) + '...' + this.borrower.substr(-4);
     }

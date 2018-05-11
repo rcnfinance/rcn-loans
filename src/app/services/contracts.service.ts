@@ -12,29 +12,6 @@ const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
 const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 
-function loanFromBytes(id: number, loanBytes: any): Loan {
-  return new Loan(
-    id,
-    parseInt(loanBytes[14], 16),
-    loanBytes[2],
-    loanBytes[2],
-    parseInt(loanBytes[5], 16),
-    parseInt(loanBytes[12], 16),
-    parseInt(loanBytes[9], 16),
-    parseInt(loanBytes[10], 16),
-    loanBytes[16]
-  );
-}
-
-function curateLoans(loans: Loan[]): Loan[] {
-  return loans.filter(loan => {
-    return loan.annualInterest < 1000 &&
-      loan.annualPunitoryInterest < 1000 &&
-      loan.amount < 1000000 &&
-      loan.amount > 0.00001;
-  });
-}
-
 @Injectable()
 export class ContractsService {
     private _account: string = null;
