@@ -11,6 +11,7 @@ import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
 import { FavoriteButtonComponent } from './favorite-button/favorite-button.component';
 import { MainButtonComponent } from './main-button/main-button.component';
+import { CreatorContainerComponent } from './creator-container/creator-container.component';
 
 @NgModule({
   imports: [
@@ -23,13 +24,15 @@ import { MainButtonComponent } from './main-button/main-button.component';
     LendButtonComponent,
     DetailButtonComponent,
     FavoriteButtonComponent,
-    MainButtonComponent
+    MainButtonComponent,
+    CreatorContainerComponent
   ],
   exports: [
     LendButtonComponent,
     DetailButtonComponent,
     FavoriteButtonComponent,
-    MainButtonComponent
+    MainButtonComponent,
+    CreatorContainerComponent
   ]
 })
 export class SharedModule { }

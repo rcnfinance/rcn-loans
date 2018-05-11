@@ -1,19 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MaterialModule } from './../../material/material.module';
 import { Router } from '@angular/router';
+import { Loan } from './../../models/loan.model';
 
 @Component({
   selector: 'app-detail-button',
   templateUrl: './detail-button.component.html',
   styleUrls: ['./detail-button.component.scss']
 })
-export class DetailButtonComponent implements OnInit {
+export class DetailButtonComponent {
+  @Input() loan: Loan
   constructor(private router: Router) { }
-  ngOnInit() {
-  }
   handleDetail() {
-    console.log('You have clicked Detail Button!');
-    this.router.navigate(['loan/1']);
+    this.router.navigate(['loan/' + this.loan.id]);
   }
-
 }

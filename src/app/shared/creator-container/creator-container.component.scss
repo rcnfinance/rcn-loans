@@ -1,0 +1,59 @@
+@import '../../../scss/_variables.scss'; //variables
+
+.creator-container {
+    height: 100px;
+    position: relative;
+    overflow: hidden;
+    background-color: #333333;
+    .creator-title{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      color: $fifth;
+      font-size: 40px;
+      @extend %font-black;
+      @include transform(translate(-50%, -50%));
+    }
+    .button-group{
+      height: 100%;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    .button-options{
+      position: relative;
+      width: 70px;
+      height: 100%;
+      padding: 15px;
+      float: right;
+      color: $secondary;
+      cursor: pointer;
+      @include transition;
+      &:hover{
+        background-color: $fifth;
+      }
+      i{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        @include transform(translate(-50%, -50%));
+      }
+    }
+    .go-back {
+      width: 70px;
+      height: 100%;
+      position: absolute;
+      color: $secondary;
+      cursor: pointer;
+      @include transition;
+      &:hover{
+        background-color: $fifth;
+      }
+      i{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        @include transform(translate(-50%, -50%));
+      }
+    }
+  }
