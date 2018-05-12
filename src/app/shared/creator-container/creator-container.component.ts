@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 import { BrandingService } from './../../services/branding.service';
 import { Loan } from '../../models/loan.model';
@@ -9,7 +9,7 @@ import { Brand } from '../../models/brand.model';
   templateUrl: './creator-container.component.html',
   styleUrls: ['./creator-container.component.scss']
 })
-export class CreatorContainerComponent implements OnInit {
+export class CreatorContainerComponent implements OnChanges {
 
   @Input() loan: Loan;
   brand: Brand;
@@ -18,7 +18,11 @@ export class CreatorContainerComponent implements OnInit {
     private brandingService: BrandingService,
   ) { }
 
-  ngOnInit() {
+  ngOnChanges() {
     this.brand = this.brandingService.getBrand(this.loan);
+  }
+
+  color(): string {
+    return this.brand.color ? this.brand.color : "#333333";
   }
 }

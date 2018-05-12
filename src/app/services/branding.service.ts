@@ -11,6 +11,7 @@ export class BrandingService {
   static_brands = {
     decentraland_mortgage: new Brand(
       "Mortgage creator",
+      "#E59400",
       "https://avatars1.githubusercontent.com/u/12685795?s=400&v=4",
       "",
       "Decentraland",
@@ -18,6 +19,7 @@ export class BrandingService {
     ),
     ripio: new Brand(
       "Ripio",
+      "#009BDE",
       undefined,
       "",
       "Ripio",
@@ -44,7 +46,8 @@ export class BrandingService {
 
     if (loan.borrower === loan.creator) {
       return new Brand(
-        Utils.shortAddress(loan.creator),
+        loan.creator,
+        undefined,
         undefined,
         "borrower",
         "Unknown",
@@ -53,7 +56,8 @@ export class BrandingService {
     }
 
     return new Brand(
-      Utils.shortAddress(loan.creator),
+      loan.creator,
+      undefined,
       undefined,
       "",
       "Unknown",
