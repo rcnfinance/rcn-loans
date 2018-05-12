@@ -56,7 +56,7 @@
             </tbody>
           </table>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" (click)=openIdentity()>
           <table class="table">
             <thead>
               <tr>
@@ -71,15 +71,16 @@
           </table>
         </div>
         <div class="table-responsive">
-          <table class="table">
+          <table class="table" (click)=openCosigner()>
             <thead>
               <tr>
-                <th scope="col">{{ 'Insurance' }}</th>
+                <th scope="col">{{ 'Insurance / Cosigner' }}</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Decentraland parcel mortgage</td>
+                <!-- // TODO Dropdown! -->
+                <td>{{ cosignerOption() }}</td>
               </tr>
             </tbody>
           </table>
@@ -87,7 +88,7 @@
         <app-lend-button [loan]=loan></app-lend-button>
       </div>
       <div class="loan-description right">
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure ipsa tenetur in reiciendis, unde maxime tempore eaque quisquam quas, accusamus, maiores quam. Dolore neque expedita dolorum fuga vel beatae alias!</p>
+        <router-outlet></router-outlet>
       </div>
     </div>
   </div>

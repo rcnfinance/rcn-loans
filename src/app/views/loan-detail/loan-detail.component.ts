@@ -6,6 +6,8 @@ import { Loan } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx } from './../../tx.service';
+import { CosignerService } from './../../services/cosigner.service';
+
 // App Component
 import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
@@ -23,6 +25,7 @@ export class LoanDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private contractsService: ContractsService,
+    private cosignerService: CosignerService,
     private router: Router
   ) {}
 
@@ -37,8 +40,24 @@ export class LoanDetailComponent implements OnInit {
    });
   }
   goHome() {
-    console.log('You have clicked Detail Button!');
     this.router.navigate(['/loans']);
+  }
+  openCosigner() {
+    this.router.navigate(['./cosigner'], {relativeTo: this.route});
+  }
+  openIdentity() {
+    this.router.navigate(['./identity'], {relativeTo: this.route});
+  }
+  componentAdded(event: any) {
+    console.log(event);
+  }
+  cosignerOption(): string {
+    let options = this.cosignerService.getCosignerOptions(this.loan)
+    if (options.length == 0) {
+      return "Not available";
+    } else {
+      return options[0].name;
+    }
   }
   private formatAmount(amount: number): string {
     return Utils.formatAmount(amount);
