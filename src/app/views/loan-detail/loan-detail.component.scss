@@ -64,36 +64,6 @@
 
   }
 }
-
-.list-avatar {
-  height: 75px;
-  position: relative;
-  padding-top: 7px;
-  padding-left: 65px;
-  .avatar-container {
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    border-radius: 50%;
-    background-color: $primary;
-    .title{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      font-size: 18px;
-      color: $secondary;
-      @extend %font-black;
-      @include transform(translate(-50%, -50%));
-    }
-    img{
-      width: 50px;
-      border-radius: 50%;
-      box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
-    }
-  }
-}
 .col-group{
   &.x3{
     .col-item{

@@ -25,7 +25,7 @@ export class BrandingService {
         return "Mortgage creator";
     }
 
-    return short ? loan.creator : Utils.shortAddress(loan.creator);
+    return short ? Utils.shortAddress(loan.creator) : loan.creator;
   }
   getCreatorShortName(loan: Loan): string {
     if (loan.creator === loan.borrower) {

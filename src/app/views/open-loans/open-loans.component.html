@@ -18,19 +18,7 @@
         <div class="card-label">
           <div class="title">Loan request #{{ loan.id }}</div>
         </div>
-        <div class="list-avatar">
-          <div class="avatar-container">
-            <img src="{{brandingService.getCreatorIcon(loan)}}"
-              ng-hide="hasAvatar(loan)"/>
-            <!-- <div class="title">R</div> -->
-            <angular-blockies [options]="brandingService.getBlockiesOptions(loan)"
-              ng-hide="!hasAvatar(loan)"></angular-blockies>
-          </div>
-          <div class="txt-container">
-            <div class="subtitle">Created by {{ brandingService.getCreatorShortName(loan) }}</div>
-            <div class="title">{{ brandingService.getCreatorName(loan, True) }}</div>
-          </div>
-        </div>
+        <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
         <app-creator-container [loan]=loan></app-creator-container>
         <!--<app-main-button></app-main-button>-->
         <div class="card-row">
@@ -56,7 +44,7 @@
           <div class="lending-returns--block">
             <ol>
               <li class="block-title">{{ formatAmount(loan.amount) }}</li>
-              <li class="currency"><i class="material-icons">keyboard_backspace</i></li>
+              <li class="currency"><i class="material-icons" style="font-size: 3em">arrow_left</i></li>
               <li class="block-title">{{ formatAmount(loan.expectedReturn) }}</li>
             </ol>
           </div>

@@ -4,7 +4,7 @@
       <div class="navbar-container">
         <ul class="col-group x3">
           <li class="col-item">
-            <div class="go-back" (click)='goHome()'><i class="material-icons">keyboard_backspace</i></div>
+            <div class="go-back" (click)='goHome()'><i class="material-icons">arrow_back</i></div>
           </li>
           <li class="col-item">
             <app-creator-container [loan]=loan></app-creator-container>
@@ -20,16 +20,7 @@
         </ul>
       </div>
       <div class="loan-description left">
-        <div class="list-avatar">
-          <div class="avatar-container">
-            <!-- <img src="https://source.unsplash.com/random/200x200" alt="RCN Image"> -->
-            <div class="title">R</div>
-          </div>
-          <div class="txt-container">
-            <div class="subtitle">Created by</div>
-            <div class="title">Ripio Credit Network</div>
-          </div>
-        </div>
+        <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
         <div class="lend-return--row">
           <ol>
             <li class="title">Lend</li>
@@ -40,7 +31,7 @@
         <div class="lending-returns--block">
           <ol>
             <li class="block-title">{{ loan.amount }}</li>
-            <li class="currency"><i class="material-icons">keyboard_backspace</i></li>
+            <li class="currency"><i class="material-icons" style="font-size: 3em">arrow_left</i></li>
             <li class="block-title">{{ formatAmount(loan.expectedReturn) }}</li>
           </ol>
         </div>
