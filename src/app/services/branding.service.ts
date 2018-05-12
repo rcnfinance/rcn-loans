@@ -2,48 +2,65 @@ import { Injectable } from '@angular/core';
 import { Loan } from './../models/loan.model';
 import { Agent, environment } from '../../environments/environment';
 import { Utils } from './../utils/utils';
+import { Brand } from './../models/brand.model';
 
 @Injectable()
 export class BrandingService {
   constructor() {}
 
-  getBrand(loan: Loan): string {
+  static_brands = {
+    decentraland_mortgage: new Brand(
+      "Mortgage creator",
+      "https://avatars1.githubusercontent.com/u/12685795?s=400&v=4",
+      "",
+      "Decentraland",
+      undefined 
+    ),
+    ripio: new Brand(
+      "Ripio",
+      undefined,
+      "",
+      "Ripio",
+      { // All options are optional
+        seed: "ripio.com", // seed used to generate icon data, default: random
+        color: '#009BDE', // to manually specify the icon color, default: random
+        bgcolor: '#333333', // choose a different background color, default: random
+        size: 10, // width/height of the icon in blocks, default: 8
+        scale: 5, // width/height of each block in pixels, default: 4
+        spotcolor: '#3444cc' // each pixel has a 13% chance of being of a third color,
+        // default: random. Set to -1 to disable it. These "spots" create structures
+        // that look like eyes, mouths and noses.
+      } 
+    )
+  }
+
+  getBrand(loan: Loan): Brand {
     switch(environment.dir[loan.creator.toLowerCase()]) {
       case Agent.RipioCreator:
-        return "Ripio";
+        return this.static_brands.ripio;
       case Agent.MortgageCreator:
-        return "Decentraland";
+        return this.static_brands.decentraland_mortgage;
     }
 
-    return "Unknown";
-  }
-  getCreatorName(loan: Loan, short: Boolean = false): string {
-    switch(environment.dir[loan.creator.toLowerCase()]) {
-      case Agent.RipioCreator:
-        return "Ripio";
-      case Agent.MortgageCreator:
-        return "Mortgage creator";
+    if (loan.borrower === loan.creator) {
+      return new Brand(
+        Utils.shortAddress(loan.creator),
+        undefined,
+        "borrower",
+        "Unknown",
+        this.getBlockiesOptions(loan)
+      );
     }
 
-    return short ? Utils.shortAddress(loan.creator) : loan.creator;
+    return new Brand(
+      Utils.shortAddress(loan.creator),
+      undefined,
+      "",
+      "Unknown",
+      this.getBlockiesOptions(loan)
+    );
   }
-  getCreatorShortName(loan: Loan): string {
-    if (loan.creator === loan.borrower) {
-      return "borrower";
-    } else {
-      return "";
-    }
-  }
-  getCreatorIcon(loan: Loan): string {
-    switch(environment.dir[loan.creator.toLowerCase()]) {
-      case Agent.RipioCreator:
-        return undefined;
-      case Agent.MortgageCreator:
-        return "https://avatars1.githubusercontent.com/u/12685795?s=400&v=4";
-    }
-    return undefined;
-  }
-  getBlockiesOptions(loan: Loan): Object {
+  private getBlockiesOptions(loan: Loan): Object {
     return { // All options are optional
       seed: loan.creator, // seed used to generate icon data, default: random
       color: '#4155ff', // to manually specify the icon color, default: random

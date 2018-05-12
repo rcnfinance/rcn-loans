@@ -11,16 +11,19 @@ enum Type { lend }
 
 export class Tx {
   tx: string;
+  to: string;
   confirmed: Boolean;
   type: Type;
   loanId: number;
   constructor(
     tx: string,
+    to: string,
     confirmed: Boolean,
     type: Type,
     loanId: number,
   ) {
     this.tx = tx;
+    this.to = to;
     this.confirmed = confirmed;
     this.type = type;
     this.loanId = loanId;
@@ -84,11 +87,11 @@ export class TxService {
   }
 
   public registerLendTx(loan: Loan, tx: string) {
-    this.tx_memory.push(new Tx(tx, false, Type.lend, loan.id));
+    this.tx_memory.push(new Tx(tx, loan.engine, false, Type.lend, loan.id));
     this.saveTxs();
   }
 
   public getLastLend(loan: Loan): Tx {
-    return this.tx_memory.find(tx => tx.loanId === loan.id);
+    return this.tx_memory.find(tx => tx.loanId === loan.id && loan.engine === tx.to);
   }
 }

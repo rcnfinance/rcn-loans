@@ -1,5 +1,6 @@
 
 import { Utils } from './../utils/utils';
+import { Currency } from '../utils/currencies';
 
 export class Loan {
     public id: number;
@@ -11,6 +12,7 @@ export class Loan {
     public rawAnnualInterest: number;
     public rawAnnualPunitoryInterest: number;
     public currencyRaw: string;
+    public engine: string;
 
     constructor(
       id: number,
@@ -21,7 +23,8 @@ export class Loan {
       duration: number,
       rawAnnualInterest: number,
       rawAnnualPunitoryInterest: number,
-      currencyRaw: string) {
+      currencyRaw: string,
+      engine: string) {
         this.id = id;
         this.status = status;
         this.borrower = Utils.formatAddress(borrower);
@@ -31,6 +34,7 @@ export class Loan {
         this.rawAnnualInterest = rawAnnualInterest;
         this.rawAnnualPunitoryInterest = rawAnnualPunitoryInterest;
         this.currencyRaw = currencyRaw;
+        this.engine = engine;
       }
 
     get currency(): string {
@@ -49,7 +53,7 @@ export class Loan {
 
     get decimals(): number {
         // TODO: Detect fiat currency
-        return 18;
+        return Currency.getDecimals(this.currency);
     } 
 
     get amount(): number {

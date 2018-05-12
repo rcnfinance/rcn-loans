@@ -1,23 +1,31 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { BrandingService } from './../../services/branding.service';
 import { Loan } from '../../models/loan.model';
+import { Brand } from '../../models/brand.model';
 
 @Component({
   selector: 'app-loan-avatar',
   templateUrl: './loan-avatar.component.html',
   styleUrls: ['./loan-avatar.component.scss']
 })
-export class LoanAvatarComponent {
+export class LoanAvatarComponent implements OnInit {
 
-  @Input() loan: Loan;
   @Input() short: Boolean;
+  @Input() loan: Loan;
+  brand: Brand;
 
   constructor(
     private brandingService: BrandingService,
   ) { }
 
-  private hasAvatar(loan: Loan): Boolean {
-    return this.brandingService.getCreatorIcon(loan) !== undefined;
+  ngOnInit() {
+    this.brand = this.brandingService.getBrand(this.loan);
+  }
+  get name(): string {
+    return this.short ? this.brand.shortName : this.brand.name;
+  }
+  get hasIcon(): Boolean {
+    return this.brand.icon !== undefined;
   }
 }

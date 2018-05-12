@@ -4,6 +4,7 @@ import { Loan } from '../models/loan.model';
 import { Injectable } from '@angular/core';
 import { LoanCurator } from './../utils/loan-curator';
 import { LoanUtils } from './../utils/loan-utils';
+import { environment } from '../../environments/environment';
 
 declare let require: any;
 declare let window: any;
@@ -18,13 +19,13 @@ export class ContractsService {
     private _web3: any;
   
     private _rcnContract: any;
-    private _rcnContractAddress: string = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
+    private _rcnContractAddress: string = environment.contracts.rcnToken;
   
     private _rcnEngine: any;
-    private _rcnEngineAddress: string = '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf';
+    private _rcnEngineAddress: string = environment.contracts.basaltEngine;
 
     private _rcnExtension: any;
-    private _rcnExtensionAddress: string = '0xd4cd87d5155b83eb9f3cec4c02c32df15bcde6b6';
+    private _rcnExtensionAddress: string = environment.contracts.engineExtension;
 
     constructor() {
       if (typeof window.web3 !== 'undefined') {
@@ -131,17 +132,17 @@ export class ContractsService {
     }
     public async getLoan(id: number): Promise<Loan> {
       return new Promise((resolve, reject) => {
-        this._rcnExtension.getLoan.call(this._rcnEngineAddress, id, function (err, result){
+        this._rcnExtension.getLoan.call(this._rcnEngineAddress, id, (err, result) => {
           if(err != null) {
             reject(err);
           }
-          resolve(LoanUtils.loanFromBytes(id, result));
+          resolve(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, result));
         })
       }) as Promise<Loan>;
     }
     public async getOpenLoans(): Promise<Loan[]> {      
         return new Promise((resolve, reject) => {
-          this._rcnExtension.searchOpenLoans.call(this._rcnEngineAddress, 0, 0, function (err, result) {
+          this._rcnExtension.searchOpenLoans.call(this._rcnEngineAddress, 0, 0, (err, result) => {
             if(err != null) {
               reject(err);
             }
@@ -152,9 +153,9 @@ export class ContractsService {
             for (let i = 0; i < total; i++) {
               let id = parseInt(result[(i * 20) + 19], 16);
               let loanBytes = result.slice(i * 20, i * 20 + 20);
-              allLoans.push(LoanUtils.loanFromBytes(id, loanBytes));
+              allLoans.push(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, loanBytes));
             }
-
+            console.log(LoanCurator.curateLoans(allLoans))
             resolve(LoanCurator.curateLoans(allLoans));
           });
         }) as Promise<Loan[]>;
