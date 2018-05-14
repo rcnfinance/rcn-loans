@@ -26,9 +26,9 @@ export class DecentralandCosignerService {
   private formatData(id: number): string {
     let hex = id.toString(16);
     if (hex.length < 65) {
-      hex = Array(65 - hex.length).join('0') + hex;
+      hex = Array(65 - hex.length).join("0") + hex;
     }
-    return '0x' + hex;
+    return "0x" + hex;
   }
   getDecentralandOption(loan: Loan): Promise<DecentralandCosigner> {
     return new Promise((resolve) => {
@@ -37,7 +37,7 @@ export class DecentralandCosignerService {
         this._mortgageManagerContract.mortgages(mortgageId, (err, result) => {
           resolve(new DecentralandCosigner(
             this.formatData(mortgageId),
-            '0x' + result[4].toString(16),
+            "0x" + result[4].toString(16),
             result[5]
           ))
         })
