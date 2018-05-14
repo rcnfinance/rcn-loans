@@ -69,11 +69,17 @@
     }
   }
 }
+
+.creator-container {
+  box-shadow: 0 0 6px rgba(0,0,0,.15), 0 6px 12px rgba(0,0,0,.35);
+}
+
 .lending-returns--block{
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   margin: 5px -15px 15px;
   padding: 0px 15px;
+  box-shadow: 0 0 6px rgba(0,0,0,.10), 0 6px 12px rgba(0,0,0,.20);
   ol{height: 52px;}
   li{
     width: 42%;

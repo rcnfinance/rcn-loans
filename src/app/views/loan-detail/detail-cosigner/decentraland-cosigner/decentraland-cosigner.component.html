@@ -1,3 +1,50 @@
+<div class="flex-container">
+  <div class="flex-item"><i class="material-icons" style="font-size: 2.5em">place</i></div>
+  <div class="raw-item">{{ cosigner.coordinates }}</div>
+</div>
+
+<div class="parcel-container">
+  <img src="https://source.unsplash.com/random/300x150" alt="rcn-img">
+</div>
+
+<div class="card-row">
+  <div class="card-property">
+    <div class="title">{{ 'Precio' }}</div>
+    <div class="paragraph">{{ '1000' }} MANA</div>
+  </div>
+  <div class="card-property">
+    <div class="title">{{ 'Financiación' }}</div>
+    <div class="paragraph"> ~ {{ '20%' }} MANA</div>
+  </div>
+  <div class="margintop20"></div>
+  <div class="card-property">
+    <div class="title">{{ 'Contexto' }}</div>
+    <div class="list-avatar">
+      <div class="avatar-container">
+        <img src="https://market.decentraland.org/static/media/district-icon.a9852260.svg">
+      </div>
+      <div class="txt-container">
+        <div class="subtitle">{{ 'District' }}</div>
+        <div class="title">{{ '6 parcels away' }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-property">
+    <div class="title">{{ 'Contexto' }}</div>
+    <div class="list-avatar">
+      <div class="avatar-container">
+        <img src="https://market.decentraland.org/static/media/road-icon.1be1f581.svg">
+      </div>
+      <div class="txt-container">
+        <div class="subtitle">{{ 'District' }}</div>
+        <div class="title">{{ '5 parcels away' }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <p>
-  {{ cosigner.coordinates }}
+  This loan is backed by a Decentraland parcel. The tokens involved in the lending will be used to purchase the corresponding parcel linked to this escrow smart contact: 0xceceaa8edc0830c7cec497e33bb3a3c28dd55a32.
+  <br><br>
+  Notice: the ownership of this parcel will be transferred to the lender in case of a default.
 </p>

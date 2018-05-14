@@ -1,90 +1,94 @@
 <div class="container margintop95">
   <div class="row">
     <div class="col-xs-12 loan-detail" *ngIf="loan !== undefined">
-      <div class="navbar-container">
-        <ul class="col-group x3">
-          <li class="col-item">
-            <div class="go-back" (click)='goHome()'><i class="material-icons">arrow_back</i></div>
-          </li>
-          <li class="col-item">
-            <app-creator-container [loan]=loan></app-creator-container>
-          </li>
-          <li class="col-item">
-            <div class="button-group">
-              <div class="button-options"><i class="material-icons">more_vert</i></div>
-              <div class="button-options"><i class="material-icons">favorite</i></div>
-              <div class="button-options"><i class="material-icons">swap_horiz</i></div>
-              <div class="button-options"><i class="material-icons">delete</i></div>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="loan-description left">
-        <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
-        <div class="lend-return--row">
-          <ol>
-            <li class="title">Lend</li>
-            <li class="currency">{{ loan.currency }}</li>
-            <li class="title">Return</li>
-          </ol>
+      <div class="row">
+        <div class="navbar-container">
+          <ul class="col-group x3">
+            <li class="col-item">
+              <div class="go-back" (click)='goHome()'><i class="material-icons">arrow_back</i></div>
+            </li>
+            <li class="col-item">
+              <app-creator-container [loan]=loan></app-creator-container>
+            </li>
+            <li class="col-item">
+              <div class="button-group">
+                <div class="button-options"><i class="material-icons">more_vert</i></div>
+                <div class="button-options"><i class="material-icons">favorite</i></div>
+                <div class="button-options"><i class="material-icons">swap_horiz</i></div>
+                <div class="button-options"><i class="material-icons">delete</i></div>
+              </div>
+            </li>
+          </ul>
         </div>
-        <div class="lending-returns--block">
-          <ol>
-            <li class="block-title">{{ loan.amount }}</li>
-            <li class="currency"><i class="material-icons" style="font-size: 2.5em">arrow_forward</i></li>
-            <li class="block-title">{{ formatAmount(loan.expectedReturn) }}</li>
-          </ol>
+        <div class="col-xs-12 col-md-6 loan-description left">
+          <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
+          <div class="lend-return--row">
+            <ol>
+              <li class="title">Lend</li>
+              <li class="currency">{{ loan.currency }}</li>
+              <li class="title">Return</li>
+            </ol>
+          </div>
+          <div class="lending-returns--block">
+            <ol>
+              <li class="block-title">{{ loan.amount }}</li>
+              <li class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></li>
+              <li class="block-title">{{ formatAmount(loan.expectedReturn) }}</li>
+            </ol>
+          </div>
+          <div class="margintop20"></div>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">{{ 'currency' }}</th>
+                  <th scope="col">{{ 'Interest / Punitory' }}</th>
+                  <th scope="col">{{ 'Duration' }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ loan.currency }}</td>
+                  <td> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</td>
+                  <td>{{ loan.verboseDuration }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-responsive" (click)="openDetail('identity')">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">{{ 'Identity' }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style='cursor: pointer'>{{ loan.borrower }} - Unknown</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-responsive" (click)="openDetail('cosigner')">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">{{ 'Insurance / Cosigner' }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <td style='cursor: pointer'>
+                  <app-cosigner-selector [options]=cosignerOptions (onSelected)=onCosignerSelected></app-cosigner-selector>
+                </td>
+              </tbody>
+            </table>
+          </div>
+          <app-lend-button [loan]=loan></app-lend-button>
         </div>
-        <div class="margintop20"></div>
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">{{ 'currency' }}</th>
-                <th scope="col">{{ 'Interest / Punitory' }}</th>
-                <th scope="col">{{ 'Duration' }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ loan.currency }}</td>
-                <td> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</td>
-                <td>{{ loan.verboseDuration }}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="col-xs-12 col-md-6 loan-description right">
+          <app-detail-cosigner *ngIf="isDetail('cosigner')" [cosigner]="cosigner"></app-detail-cosigner>
+          <app-detail-identity *ngIf="isDetail('identity')"></app-detail-identity>
         </div>
-        <div class="table-responsive" (click)="openDetail('identity')">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">{{ 'Identity' }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style='cursor: pointer'>{{ loan.borrower }} - Unknown</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="table-responsive" (click)="openDetail('cosigner')">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">{{ 'Insurance / Cosigner' }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <td style='cursor: pointer'><app-cosigner-selector [options]=cosignerOptions (onSelected)=onCosignerSelected></app-cosigner-selector></td>
-            </tbody>
-          </table>
-        </div>
-        <app-lend-button [loan]=loan></app-lend-button>
-      </div>
-      <div class="loan-description right">
-        <app-detail-cosigner *ngIf="isDetail('cosigner')" [cosigner]="cosigner"></app-detail-cosigner>
-        <app-detail-identity *ngIf="isDetail('identity')"></app-detail-identity>
       </div>
     </div>
   </div>

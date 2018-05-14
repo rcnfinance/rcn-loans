@@ -1,6 +1,12 @@
-<select class="selector" (change)="onChanged($event.target.value)" *ngIf="hasOptions()">
+<!-- <select class="selector" (change)="onChanged($event.target.value)" *ngIf="hasOptions()">
     <option *ngFor='let option of options' [value]="option.id">{{option.name}}</option>
-</select>
+</select> -->
+
+<button mat-button [matMenuTriggerFor]="menu" (change)="onChanged($event.target.value)" class="selector" *ngIf="hasOptions()">Insurance</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item *ngFor='let option of options' [value]="option.id">{{option.name}}</button>
+</mat-menu>
+
 <div *ngIf="!hasOptions()">
     Not available
 </div>

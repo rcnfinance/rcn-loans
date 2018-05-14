@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Loan } from "./../models/loan.model";
-import { CosignerOption, CosignerDetail, DecentralandCosigner } from "./../models/cosigner.model";
-import { environment, Agent } from "./../../environments/environment";
+import { Loan } from './../models/loan.model';
+import { CosignerOption, CosignerDetail, DecentralandCosigner } from './../models/cosigner.model';
+import { environment, Agent } from './../../environments/environment';
 
 import { DecentralandCosignerService } from './cosigners/decentraland-cosigner.service';
 
@@ -14,10 +14,14 @@ export class CosignerService {
   getCosignerOptions(loan: Loan): CosignerOption[] {
     if (environment.dir[loan.creator] === Agent.MortgageCreator) {
       return [new CosignerOption(
-        loan.id + loan.engine + "mortgage",
-        "Decentraland parcel mortgage",
+        loan.id + loan.engine + 'mortgage',
+        'Decentraland parcel mortgage',
         this.decentralandCosignerService.getDecentralandOption(loan)
-      )];  
+      ), new CosignerOption(
+        loan.id + loan.engine + 'mortgage 2',
+        'Decentraland parcel mortgage 2',
+        this.decentralandCosignerService.getDecentralandOption(loan)
+      )];
     }
     let result = [];
     return result;
