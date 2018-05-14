@@ -40,18 +40,16 @@
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">{{ 'Borrower' }}</th>
+                <th scope="col">{{ 'currency' }}</th>
                 <th scope="col">{{ 'Interest / Punitory' }}</th>
                 <th scope="col">{{ 'Duration' }}</th>
-                <th scope="col">{{ 'currency' }}</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{ loan.borrowerShort }}</td>
+                <td>{{ loan.currency }}</td>
                 <td> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</td>
                 <td>{{ loan.verboseDuration }}</td>
-                <td>{{ loan.currency }}</td>
               </tr>
             </tbody>
           </table>
