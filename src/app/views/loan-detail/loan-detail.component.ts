@@ -14,6 +14,7 @@ import { SharedModule } from './../../shared/shared.module';
 // App Utils
 import { Utils } from './../../utils/utils';
 import { Route } from '@angular/compiler/src/core';
+import { CosignerOption } from '../../models/cosigner.model';
 
 @Component({
   selector: 'app-loan-detail',
@@ -22,6 +23,9 @@ import { Route } from '@angular/compiler/src/core';
 })
 export class LoanDetailComponent implements OnInit {
   loan: Loan;
+  viewDetail: string;
+  cosigner: CosignerOption;
+
   constructor(
     private route: ActivatedRoute,
     private contractsService: ContractsService,
@@ -34,30 +38,35 @@ export class LoanDetailComponent implements OnInit {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
+        this.cosigner = this.cosignerOptions[0];
         console.log(this.loan);
       });
       // In a real app: dispatch action to load the details here.
    });
   }
+  onCosignerSelected(cosigner: CosignerOption) {
+    this.cosigner = cosigner;
+    console.log("Selected cosigner", this.cosigner)
+  }
   goHome() {
     this.router.navigate(['/loans']);
   }
-  openCosigner() {
-    this.router.navigate(['./cosigner'], {relativeTo: this.route});
+  openDetail(view: string) {
+    this.viewDetail = view;
   }
-  openIdentity() {
-    this.router.navigate(['./identity'], {relativeTo: this.route});
-  }
-  componentAdded(event: any) {
-    console.log(event);
-  }
-  cosignerOption(): string {
-    let options = this.cosignerService.getCosignerOptions(this.loan)
-    if (options.length == 0) {
-      return "Not available";
+  get getCosinger(): CosignerOption {
+    console.log("Get cosigner!")
+    if (this.cosigner !== undefined) {
+      return this.cosigner;
     } else {
-      return options[0].name;
+      return this.cosignerOptions[0];
     }
+  }
+  isDetail(view: string): Boolean {
+    return view === this.viewDetail;
+  }
+  get cosignerOptions(): CosignerOption[] {
+    return this.cosignerService.getCosignerOptions(this.loan);
   }
   private formatAmount(amount: number): string {
     return Utils.formatAmount(amount);

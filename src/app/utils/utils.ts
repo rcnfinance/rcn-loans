@@ -3,7 +3,12 @@ export class Utils {
     static formatInterest(raw: number): number {
         return 311040000000000 / raw;
     }
-
+    static newGuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0, v = c === 'x' ? r : ( r & 0x3 | 0x8 );
+            return v.toString(16);
+        });
+    }
     static hexToAscii(str){
         let hexString = str;
         let strOut = '';
@@ -12,15 +17,12 @@ export class Utils {
             }
         return strOut;    
     }
-    
     static formatAddress(hex: string): string {
         return hex.replace('0x000000000000000000000000', '0x');
     }
-    
     static shortAddress(address: string): string {
         return address.substr(0, 4) + '...' + address.substr(-4);
     }
-
     static formatDelta(totalSeconds: number): string {
         const secondsInYear = 86400 * 365;
         const years = Math.floor(totalSeconds / secondsInYear);

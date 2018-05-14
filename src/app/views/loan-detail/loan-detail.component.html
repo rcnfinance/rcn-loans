@@ -1,6 +1,6 @@
 <div class="container margintop95">
   <div class="row">
-    <div class="col-xs-12 loan-detail">
+    <div class="col-xs-12 loan-detail" *ngIf="loan !== undefined">
       <div class="navbar-container">
         <ul class="col-group x3">
           <li class="col-item">
@@ -56,7 +56,7 @@
             </tbody>
           </table>
         </div>
-        <div class="table-responsive" (click)=openIdentity()>
+        <div class="table-responsive" (click)="openDetail('identity')">
           <table class="table">
             <thead>
               <tr>
@@ -70,25 +70,23 @@
             </tbody>
           </table>
         </div>
-        <div class="table-responsive">
-          <table class="table" (click)=openCosigner()>
+        <div class="table-responsive" (click)="openDetail('cosigner')">
+          <table class="table">
             <thead>
               <tr>
                 <th scope="col">{{ 'Insurance / Cosigner' }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <!-- // TODO Dropdown! -->
-                <td>{{ cosignerOption() }}</td>
-              </tr>
+                <td><app-cosigner-selector [options]=cosignerOptions (onSelected)=onCosignerSelected></app-cosigner-selector></td>
             </tbody>
           </table>
         </div>
         <app-lend-button [loan]=loan></app-lend-button>
       </div>
       <div class="loan-description right">
-        <router-outlet></router-outlet>
+        <app-detail-cosigner *ngIf="isDetail('cosigner')" [cosigner]="cosigner"></app-detail-cosigner>
+        <app-detail-identity *ngIf="isDetail('identity')"></app-detail-identity>
       </div>
     </div>
   </div>

@@ -14,6 +14,7 @@ import { FavoriteButtonComponent } from './favorite-button/favorite-button.compo
 import { MainButtonComponent } from './main-button/main-button.component';
 import { CreatorContainerComponent } from './creator-container/creator-container.component';
 import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
+import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
     FavoriteButtonComponent,
     MainButtonComponent,
     CreatorContainerComponent,
-    LoanAvatarComponent
+    LoanAvatarComponent,
+    CosignerSelectorComponent
   ],
   exports: [
     LendButtonComponent,
@@ -37,7 +39,8 @@ import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
     FavoriteButtonComponent,
     MainButtonComponent,
     CreatorContainerComponent,
-    LoanAvatarComponent
+    LoanAvatarComponent,
+    CosignerSelectorComponent
   ]
 })
 export class SharedModule { }

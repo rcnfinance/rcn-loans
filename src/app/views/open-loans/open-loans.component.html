@@ -15,9 +15,11 @@
     *ngFor='let loan of loans; let i of index'>
 
       <div class="card-container">
+        <!--
         <div class="card-label">
           <div class="title">Loan request #{{ loan.id }}</div>
         </div>
+        -->
         <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
         <app-creator-container [loan]=loan></app-creator-container>
         <!--<app-main-button></app-main-button>-->
@@ -27,7 +29,7 @@
             <div class="paragraph">{{ loan.borrowerShort }}</div>
           </div>
           <div class="card-property">
-            <div class="title">{{ 'Durations' }}</div>
+            <div class="title">{{ 'Duration' }}</div>
             <div class="paragraph">{{ loan.verboseDuration }}</div>
           </div>
           <div class="card-property">

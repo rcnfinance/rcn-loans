@@ -3,19 +3,22 @@ import { Loan } from "./../models/loan.model";
 import { CosignerOption, CosignerDetail, DecentralandCosigner } from "./../models/cosigner.model";
 import { environment, Agent } from "./../../environments/environment";
 
+import { DecentralandCosignerService } from './cosigners/decentraland-cosigner.service';
+
 @Injectable()
 export class CosignerService {
-  constructor() { }
+  constructor(
+    private decentralandCosignerService: DecentralandCosignerService
+  ) { }
 
   getCosignerOptions(loan: Loan): CosignerOption[] {
-    console.log(environment.dir[Agent.MortgageCreator], loan.creator)
     if (environment.dir[loan.creator] === Agent.MortgageCreator) {
-      let cosignerDetail = new Promise((resolve, reject) => {
-        resolve(new DecentralandCosigner());
-      }) as Promise<DecentralandCosigner>;
-      return [new CosignerOption("Decentraland parcel mortgage", cosignerDetail)];
+      return [new CosignerOption(
+        loan.id + loan.engine + "mortgage",
+        "Decentraland parcel mortgage",
+        this.decentralandCosignerService.getDecentralandOption(loan)
+      )];  
     }
-
     let result = [];
     return result;
   }

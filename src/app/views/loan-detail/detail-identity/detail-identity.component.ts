@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CosignerDetail } from './../../../models/cosigner.model';
 import { ActivatedRoute } from '@angular/router';
-
 import { Route } from '@angular/compiler/src/core';
 
 @Component({

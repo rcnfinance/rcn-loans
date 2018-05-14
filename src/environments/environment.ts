@@ -14,7 +14,11 @@ export const environment = {
   contracts: {
     rcnToken: "0x2f45b6fb2f28a73f110400386da31044b2e953d4",
     basaltEngine: "0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf",
-    engineExtension: "0xd4cd87d5155b83eb9f3cec4c02c32df15bcde6b6"
+    engineExtension: "0xd4cd87d5155b83eb9f3cec4c02c32df15bcde6b6",
+    decentraland: {
+      mortgageManager: "0x991a784b5b4374761c5d4790c5689ae775c43281",
+      landMarket: "0x80faa2b517b84a5aec1078d3600eab4c0b3aff56"
+    }
   },
   dir: {
     "0x0679cde060990fb409cb19b4434714c1e5f2ae6e": Agent.MortgageCreator,

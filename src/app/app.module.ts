@@ -3,12 +3,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { Router, RouterModule, Routes } from '@angular/router';
-import { BlockiesModule } from 'angular-blockies';
 
 // App Services
 import { ContractsService } from './services/contracts.service';
 import { TxService } from './tx.service';
 import { BrandingService } from './services/branding.service';
+import { CosignerService } from './services/cosigner.service';
+import { Web3Service } from './services/web3.service';
+
+// TODO: Move
+import { DecentralandCosignerService } from './services/cosigners/decentraland-cosigner.service';
 
 // App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
@@ -23,12 +27,14 @@ import { ContentWrapperComponent } from './content-wrapper/content-wrapper.compo
 
 import { OpenLoansComponent } from './views/open-loans/open-loans.component';
 import { LoanDetailComponent } from './views/loan-detail/loan-detail.component';
+import { DetailCosignerComponent } from './views/loan-detail/detail-cosigner/detail-cosigner.component';
+import { DetailIdentityComponent } from './views/loan-detail/detail-identity/detail-identity.component';
 
 const appRoutes: Routes = [
   { path: 'loans', component: OpenLoansComponent },
   { path: 'loan/:id', component: LoanDetailComponent },
   { path: '',
-    redirectTo: '/loan/1',
+    redirectTo: '/loans',
     pathMatch: 'full'
   }
 ];
@@ -41,20 +47,21 @@ const appRoutes: Routes = [
     WindowsHeightDirective,
     LoanDetailComponent,
     OpenLoansComponent,
-    ContentWrapperComponent
+    DetailCosignerComponent,
+    ContentWrapperComponent,
+    DetailIdentityComponent
   ],
   imports: [
     BrowserModule,
     SharedModule,
     MaterialModule,
     HttpModule,
-    BlockiesModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
+      { enableTracing: false } // <-- debugging purposes only
     )
   ],
-  providers: [ContractsService, TxService, BrandingService],
+  providers: [ContractsService, TxService, BrandingService, CosignerService, Web3Service, DecentralandCosignerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

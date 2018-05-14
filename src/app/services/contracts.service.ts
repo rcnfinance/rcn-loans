@@ -1,13 +1,9 @@
-import * as Web3 from 'web3';
-
 import { Loan } from '../models/loan.model';
 import { Injectable } from '@angular/core';
 import { LoanCurator } from './../utils/loan-curator';
 import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
-
-declare let require: any;
-declare let window: any;
+import { Web3Service } from './web3.service';
 
 const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
@@ -15,9 +11,6 @@ const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 
 @Injectable()
 export class ContractsService {
-    private _account: string = null;
-    private _web3: any;
-  
     private _rcnContract: any;
     private _rcnContractAddress: string = environment.contracts.rcnToken;
   
@@ -27,55 +20,17 @@ export class ContractsService {
     private _rcnExtension: any;
     private _rcnExtensionAddress: string = environment.contracts.engineExtension;
 
-    constructor() {
-      if (typeof window.web3 !== 'undefined') {
-        // Use Mist/MetaMask's provider
-        this._web3 = new Web3(window.web3.currentProvider);
-  
-        // if (this._web3.version.network !== '3') {
-        //   alert('Please connect to the Ropsten network');
-        // }
-      } else {
-        console.warn(
-          'Please use a dapp browser like mist or MetaMask plugin for chrome'
-        );
-      }
-  
-      this._rcnContract = this._web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
-      this._rcnEngine = this._web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
-      this._rcnExtension = this._web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-    }
-
-    private async getAccount(): Promise<string> {
-        if (this._account == null) {
-          this._account = await new Promise((resolve, reject) => {
-            this._web3.eth.getAccounts((err, accs) => {
-              if (err != null) {
-                alert('There was an error fetching your accounts.');
-                return;
-              }
-      
-              if (accs.length === 0) {
-                alert(
-                  'Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.'
-                );
-                return;
-              }
-              resolve(accs[0]);
-            });
-          }) as string;
-      
-          this._web3.eth.defaultAccount = this._account;
-        }
-      
-        return Promise.resolve(this._account);
+    constructor(private web3: Web3Service) {
+      this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
+      this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
+      this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     }
 
     public async getUserBalanceRCN(): Promise<number> {
-        let account = await this.getAccount();
+        let account = await this.web3.getAccount();
       
         return new Promise((resolve, reject) => {
-          let _web3 = this._web3;
+          let _web3 = this.web3.web3;
           this._rcnContract.balanceOf.call(account, function (err, result) {
             if (err != null) {
               reject(err);
@@ -87,10 +42,10 @@ export class ContractsService {
     }
 
     public async isEngineApproved() : Promise<boolean> {
-        let account = await this.getAccount();
+        let account = await this.web3.getAccount();
       
         return new Promise((resolve, reject) => {
-          let _web3 = this._web3;
+          let _web3 = this.web3.web3;
           this._rcnContract.allowance.call(account, this._rcnEngineAddress, function (err, result) {
             if(err != null) {
               reject(err);
@@ -102,10 +57,10 @@ export class ContractsService {
     }
 
     public async approveEngine() : Promise<string> {
-        let account = await this.getAccount();
+        let account = await this.web3.getAccount();
       
         return new Promise((resolve, reject) => {
-          let _web3 = this._web3;
+          let _web3 = this.web3.web3;
           this._rcnContract.approve(this._rcnEngineAddress, _web3.toWei(3000000000), { from: account }, function (err, result) {
             if(err != null) {
               reject(err);
@@ -117,10 +72,10 @@ export class ContractsService {
     }
 
     public async lendLoan(loan: Loan) : Promise<string> {
-        let account = await this.getAccount();
+        let account = await this.web3.getAccount();
       
         return new Promise((resolve, reject) => {
-          let _web3 = this._web3;
+          let _web3 = this.web3.web3;
           this._rcnEngine.lend(loan.id, 0x0, 0x0, 0x0, { from: account }, function (err, result) {
             if(err != null) {
               reject(err);
