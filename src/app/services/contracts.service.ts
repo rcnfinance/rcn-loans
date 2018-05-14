@@ -13,10 +13,8 @@ const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 export class ContractsService {
     private _rcnContract: any;
     private _rcnContractAddress: string = environment.contracts.rcnToken;
-  
     private _rcnEngine: any;
     private _rcnEngineAddress: string = environment.contracts.basaltEngine;
-
     private _rcnExtension: any;
     private _rcnExtensionAddress: string = environment.contracts.engineExtension;
 
@@ -27,92 +25,126 @@ export class ContractsService {
     }
 
     public async getUserBalanceRCN(): Promise<number> {
-        let account = await this.web3.getAccount();
-      
+        const account = await this.web3.getAccount();
         return new Promise((resolve, reject) => {
-          let _web3 = this.web3.web3;
+          const _web3 = this.web3.web3;
           this._rcnContract.balanceOf.call(account, function (err, result) {
             if (err != null) {
               reject(err);
             }
-      
             resolve(_web3.fromWei(result));
           });
         }) as Promise<number>;
     }
 
-    public async isEngineApproved() : Promise<boolean> {
-        let account = await this.web3.getAccount();
-      
+    public async isEngineApproved(): Promise<boolean> {
+        const account = await this.web3.getAccount();
         return new Promise((resolve, reject) => {
-          let _web3 = this.web3.web3;
+          const _web3 = this.web3.web3;
           this._rcnContract.allowance.call(account, this._rcnEngineAddress, function (err, result) {
-            if(err != null) {
+            if (err != null) {
               reject(err);
             }
-      
             resolve(_web3.fromWei(result) >= _web3.toWei(1000000000));
           });
         }) as Promise<boolean>;
     }
 
-    public async approveEngine() : Promise<string> {
-        let account = await this.web3.getAccount();
-      
+    public async approveEngine(): Promise<string> {
+        const account = await this.web3.getAccount();
         return new Promise((resolve, reject) => {
-          let _web3 = this.web3.web3;
+          const _web3 = this.web3.web3;
           this._rcnContract.approve(this._rcnEngineAddress, _web3.toWei(3000000000), { from: account }, function (err, result) {
-            if(err != null) {
+            if (err != null) {
               reject(err);
             }
-      
             resolve(result);
           });
         }) as Promise<string>;
     }
 
-    public async lendLoan(loan: Loan) : Promise<string> {
-        let account = await this.web3.getAccount();
-      
+    public async lendLoan(loan: Loan): Promise<string> {
+        const account = await this.web3.getAccount();
         return new Promise((resolve, reject) => {
-          let _web3 = this.web3.web3;
           this._rcnEngine.lend(loan.id, 0x0, 0x0, 0x0, { from: account }, function (err, result) {
-            if(err != null) {
+            if (err != null) {
               reject(err);
             }
-      
             resolve(result);
           });
         }) as Promise<string>;
+    }
+    public async withdrawFunds(loans: number[]): Promise<string> {
+      const account = await this.web3.getAccount();
+      return new Promise((resolve, reject) => {
+        this._rcnEngine.withdrawalList(loans, account, (err, result) => {
+          if (err != null) {
+            reject(err);
+          }
+          resolve(result);
+        });
+      }) as Promise<string>;
     }
     public async getLoan(id: number): Promise<Loan> {
       return new Promise((resolve, reject) => {
         this._rcnExtension.getLoan.call(this._rcnEngineAddress, id, (err, result) => {
-          if(err != null) {
+          if (err != null) {
             reject(err);
           }
           resolve(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, result));
-        })
+        });
       }) as Promise<Loan>;
     }
-    public async getOpenLoans(): Promise<Loan[]> {      
+    public async getOpenLoans(): Promise<Loan[]> {
         return new Promise((resolve, reject) => {
           this._rcnExtension.searchOpenLoans.call(this._rcnEngineAddress, 0, 0, (err, result) => {
-            if(err != null) {
+            if (err != null) {
               reject(err);
             }
-
-            let total = result.length / 20;
-            let allLoans = [];
-
-            for (let i = 0; i < total; i++) {
-              let id = parseInt(result[(i * 20) + 19], 16);
-              let loanBytes = result.slice(i * 20, i * 20 + 20);
-              allLoans.push(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, loanBytes));
-            }
-            console.log(LoanCurator.curateLoans(allLoans))
-            resolve(LoanCurator.curateLoans(allLoans));
+            resolve(LoanCurator.curateLoans(this.parseLoansBytes(result)));
           });
         }) as Promise<Loan[]>;
+    }
+    public async getMyLoans(): Promise<Loan[]> {
+      const account = await this.web3.getAccount();
+      return new Promise((resolve, reject) => {
+        this._rcnExtension.searchLenderLoans.call(this._rcnEngineAddress, account, 0, 0, (err, result) => {
+          if (err != null) {
+            reject(err);
+          }
+          resolve(LoanCurator.curateLoans(this.parseLoansBytes(result)));
+        });
+      }) as Promise<Loan[]>;
+    }
+    public readPendingWithdraws(loans: Loan[]): [number, number[]] {
+      const pendingLoans = [];
+      let total = 0;
+
+      loans.forEach(loan => {
+        if (loan.lenderBalance > 0) {
+          total += loan.lenderBalance;
+          pendingLoans.push(loan.id);
+        }
+      });
+
+      return [total, pendingLoans];
+    }
+    public async getPendingWithdraws(): Promise<[number, number[]]> {
+      const account = await this.web3.getAccount();
+      return new Promise((resolve, reject) => {
+        this.getMyLoans().then((loans: Loan[]) => {
+          resolve(this.readPendingWithdraws(loans));
+        });
+      }) as Promise<[number, number[]]>;
+    }
+    private parseLoansBytes(bytes: any): Loan[] {
+      const loans = [];
+      const total = bytes.length / 20;
+      for (let i = 0; i < total; i++) {
+        const id = parseInt(bytes[(i * 20) + 19], 16);
+        const loanBytes = bytes.slice(i * 20, i * 20 + 20);
+        loans.push(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, loanBytes));
+      }
+      return loans;
     }
 }
