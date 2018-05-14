@@ -9,7 +9,7 @@ export class Utils {
             return v.toString(16);
         });
     }
-    static hexToAscii(str){
+    static hexToAscii(str) {
         let hexString = str;
         let strOut = '';
             for (let x = 0; x < hexString.length; x += 2) {

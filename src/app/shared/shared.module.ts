@@ -15,6 +15,7 @@ import { MainButtonComponent } from './main-button/main-button.component';
 import { CreatorContainerComponent } from './creator-container/creator-container.component';
 import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
 import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector.component';
+import { CloseButtonComponent } from './close-button/close-button.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector
     MainButtonComponent,
     CreatorContainerComponent,
     LoanAvatarComponent,
-    CosignerSelectorComponent
+    CosignerSelectorComponent,
+    CloseButtonComponent
   ],
   exports: [
     LendButtonComponent,
@@ -40,7 +42,8 @@ import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector
     MainButtonComponent,
     CreatorContainerComponent,
     LoanAvatarComponent,
-    CosignerSelectorComponent
+    CosignerSelectorComponent,
+    CloseButtonComponent
   ]
 })
 export class SharedModule { }

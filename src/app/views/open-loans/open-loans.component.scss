@@ -5,6 +5,7 @@
   margin-top: 30px;
 }
 .card-container{
+  position: relative;
   padding: 15px;
   font-family: 'Raleway', sans-serif;
   border-radius: 2px;
@@ -16,14 +17,12 @@
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
     background-color: $primary;
-    /*
     background: 
     linear-gradient(
       to bottom,
       rgba(65, 85, 255, 1),
       rgba(29, 29, 29, 1)
     );
-    */
     padding: 10px;
     .title{
       color: $secondary;
@@ -77,8 +76,8 @@
   padding: 0px 15px;
   ol{height: 52px;}
   li{
+    width: 41%;
     height: 100%;
-    width: 32%;
     display: inline-block;
     line-height: 1.8;
     @extend %font-bold;
@@ -87,13 +86,12 @@
       font-size: 28px;
     }
     &:nth-child(2){
+      width: 15%;
       line-height: 4.2;
       text-align: center;
+      vertical-align: middle;
+      vertical-align: -webkit-baseline-middle;
       @extend %font-regular;
-      i{
-        height: 100%;
-        vertical-align: middle;
-      }
     }
     &:nth-child(3){
       color: $primary;
