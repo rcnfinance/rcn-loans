@@ -11,7 +11,7 @@ import { Loan } from '../../models/loan.model';
 export class CosignerSelectorComponent {
   @Input() options: CosignerOption[];
   @Output() onSelected: EventEmitter<CosignerOption> = new EventEmitter<CosignerOption>();
-  constructor(){}
+  constructor() {}
   hasOptions(): Boolean {
     return this.options.length !== 0;
   }
