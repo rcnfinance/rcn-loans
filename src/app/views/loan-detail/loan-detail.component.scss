@@ -115,8 +115,9 @@
   border-bottom: 1px solid black;
   margin: 5px -15px 15px;
   padding: 0px 15px;
+  ol{height: 52px;}
   li{
-    height: 52px;
+    height: 100%;
     width: 32%;
     display: inline-block;
     line-height: 1.8;
@@ -126,15 +127,12 @@
       font-size: 28px;
     }
     &:nth-child(2){
-      line-height: 3;
-      height: 42px;
+      line-height: 4.2;
       text-align: center;
       @extend %font-regular;
-      @include transform(rotate(180deg));
       i{
-        font-size: 50px;
         height: 100%;
-        vertical-align: bottom;
+        vertical-align: middle;
       }
     }
     &:nth-child(3){
