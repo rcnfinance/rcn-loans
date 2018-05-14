@@ -1,3 +1,1 @@
-<p *ngIf="cosigner !== undefined">
-  Cosigner: {{ cosigner.name }}
-</p>
+<app-decentraland-cosigner [cosigner]=cosignerDetail *ngIf="detailClass() === 'decentraland_mortgage'"></app-decentraland-cosigner>

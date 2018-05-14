@@ -38,23 +38,19 @@ export class Loan {
       }
 
     get currency(): string {
-        const targetCurrency = Utils.hexToAscii(this.currencyRaw.replace(/^[0x]+|[0]+$/g,''));
+        const targetCurrency = Utils.hexToAscii(this.currencyRaw.replace(/^[0x]+|[0]+$/g, ''));
 
-        if (targetCurrency == "") {
+        if (targetCurrency === '') {
             return 'RCN';
         } else {
             return targetCurrency;
         }
     }
 
-    get borrowerShort(): string {
-        return this.borrower.substr(0, 4) + '...' + this.borrower.substr(-4);
-    }
-
     get decimals(): number {
         // TODO: Detect fiat currency
         return Currency.getDecimals(this.currency);
-    } 
+    }
 
     get amount(): number {
         return this.rawAmount / 10 ** this.decimals;

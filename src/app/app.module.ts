@@ -29,6 +29,7 @@ import { OpenLoansComponent } from './views/open-loans/open-loans.component';
 import { LoanDetailComponent } from './views/loan-detail/loan-detail.component';
 import { DetailCosignerComponent } from './views/loan-detail/detail-cosigner/detail-cosigner.component';
 import { DetailIdentityComponent } from './views/loan-detail/detail-identity/detail-identity.component';
+import { DecentralandCosignerComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
 
 const appRoutes: Routes = [
   { path: 'loans', component: OpenLoansComponent },
@@ -49,7 +50,8 @@ const appRoutes: Routes = [
     OpenLoansComponent,
     DetailCosignerComponent,
     ContentWrapperComponent,
-    DetailIdentityComponent
+    DetailIdentityComponent,
+    DecentralandCosignerComponent
   ],
   imports: [
     BrowserModule,

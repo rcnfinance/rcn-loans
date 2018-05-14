@@ -10,7 +10,7 @@ export class CosignerOption {
 
 export class CosignerDetail {
     constructor (
-        public data: string 
+        public data: string
     ) {}
 }
 
@@ -19,7 +19,7 @@ export class DecentralandCosigner implements CosignerDetail {
         public data: string,
         public landId: string,
         public landPrice: number
-        // public landMapSrc: string,        
+        // public landMapSrc: string,
     ) {}
 
     get coordinates(): string {
