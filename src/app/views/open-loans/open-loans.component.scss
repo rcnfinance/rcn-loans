@@ -76,17 +76,17 @@
   padding: 0px 15px;
   ol{height: 52px;}
   li{
-    width: 41%;
+    width: 42%;
     height: 100%;
     display: inline-block;
     line-height: 1.8;
     @extend %font-bold;
     &:nth-child(1){
       text-align: left;
-      font-size: 28px;
+      font-size: 26px;
     }
     &:nth-child(2){
-      width: 15%;
+      width: 12%;
       line-height: 4.2;
       text-align: center;
       vertical-align: middle;
@@ -96,7 +96,7 @@
     &:nth-child(3){
       color: $primary;
       text-align: right;
-      font-size: 28px;
+      font-size: 26px;
     }
   }
 }
