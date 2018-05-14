@@ -31,7 +31,7 @@
         <div class="lending-returns--block">
           <ol>
             <li class="block-title">{{ loan.amount }}</li>
-            <li class="currency"><i class="material-icons" style="font-size: 3em">arrow_forward</i></li>
+            <li class="currency"><i class="material-icons" style="font-size: 2.5em">arrow_forward</i></li>
             <li class="block-title">{{ formatAmount(loan.expectedReturn) }}</li>
           </ol>
         </div>
@@ -63,7 +63,7 @@
             </thead>
             <tbody>
               <tr>
-                <td>{{ loan.borrower }} - Unknown</td>
+                <td style='cursor: pointer'>{{ loan.borrower }} - Unknown</td>
               </tr>
             </tbody>
           </table>
@@ -76,7 +76,7 @@
               </tr>
             </thead>
             <tbody>
-                <td><app-cosigner-selector [options]=cosignerOptions (onSelected)=onCosignerSelected></app-cosigner-selector></td>
+              <td style='cursor: pointer'><app-cosigner-selector [options]=cosignerOptions (onSelected)=onCosignerSelected></app-cosigner-selector></td>
             </tbody>
           </table>
         </div>

@@ -7,12 +7,13 @@
     background-color: #333333;
     margin-left: -15px;
     margin-right: -15px;
+    box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
     .creator-title{
       position: absolute;
       top: 50%;
       left: 50%;
       color: $fifth;
-      font-size: 40px;
+      font-size: 36px;
       @extend %font-black;
       @include transform(translate(-50%, -50%));
     }
