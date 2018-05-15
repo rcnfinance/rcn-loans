@@ -1,18 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import {MatSnackBar} from '@angular/material';
 
 // App Component
-import { MaterialModule } from './../material/material.module';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, AfterViewInit {
+  constructor() {}
 
-  constructor() { }
+  @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
 
+  ngAfterViewInit(): any {
+      console.log(this.tref.nativeElement.textContent);
+  }
   ngOnInit() {
   }
 
 }
+
+

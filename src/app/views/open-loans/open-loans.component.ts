@@ -10,6 +10,7 @@ import { BrandingService } from './../../services/branding.service';
 // App Component
 import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
+import {MatSnackBar} from '@angular/material';
 // App Utils
 import { Utils } from './../../utils/utils';
 
@@ -25,11 +26,17 @@ export class OpenLoansComponent implements OnInit {
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
-    private brandingService: BrandingService
+    private brandingService: BrandingService,
+    public snackBar: MatSnackBar
   ) {}
   loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
+    });
+  }
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
     });
   }
   ngOnInit() {

@@ -1,24 +1,24 @@
 <div id="page-content-wrapper">
-    <nav id="navbar" class="navbar">
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="navbar-header">
-              <a class="button-img" routerLink='../loans'><img src="https://ripiocredit.network/images/logo.png" alt="rcn-image"></a>
-              <ul class="nav">
-                <i mat-raised-button class="material-icons icon-hamburguer" [matMenuTriggerFor]="menu">menu</i>
-                <mat-menu #menu="matMenu">
-                  <button routerLink='../loans' mat-menu-item>Market</button>
-                  <button routerLink='loan/31' mat-menu-item>Loans</button>
-                </mat-menu>
-                <li routerLink='../loans'>Market</li>
-                <li routerLink='loan/31'>Loans</li>
-                <li routerLink='../loans'>Help</li>
-                <li routerLink='../loans'>Terms</li>
-              </ul>
-            </div>
+  <nav id="navbar" class="navbar">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="navbar-header">
+            <a class="button-img" routerLink='../loans'><img src="https://ripiocredit.network/images/logo.png" alt="rcn-image"></a>
+            <ul class="nav">
+              <i mat-raised-button class="material-icons icon-hamburguer" [matMenuTriggerFor]="menu">menu</i>
+              <mat-menu #menu="matMenu">
+                <button routerLink='../loans' mat-menu-item value="Juegueeee!" placeholder="Message" #message>Market</button>
+                <button routerLink='loan/31' mat-menu-item>Loans</button>
+              </mat-menu>
+              <li routerLink='../loans' #tref>Market</li>
+              <li routerLink='loan/31'>Loans</li>
+              <li routerLink='../loans'>Help</li>
+              <li routerLink='../loans'>Terms</li>
+            </ul>
           </div>
         </div>
       </div>
-    </nav>
-  </div>
+    </div>
+  </nav>
+</div>
