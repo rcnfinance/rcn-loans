@@ -155,21 +155,19 @@
 
 @media (min-width: 768px){}
 @media (min-width: 992px){
-  
-.loan-description {
-  width: 50%;
-  &.left{
-    height: auto;
-  }
-  &.right{
-    margin-top: 0px;
-    position: relative;
+  .loan-description {
     width: 50%;
-    margin-left: 50%;
-    background-color: $quaternary;
-
+    &.left{
+      height: auto;
+    }
+    &.right{
+      margin-top: 0px;
+      position: relative;
+      width: 50%;
+      margin-left: 50%;
+      background-color: $quaternary;
+    }
   }
-}
 }
 
 @media screen and (max-width: 767px){
