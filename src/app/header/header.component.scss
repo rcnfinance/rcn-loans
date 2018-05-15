@@ -28,6 +28,7 @@
     padding: 9px 0;
     li{
       cursor: pointer;
+      display: none;
       float: left;
       margin-right: 45px;
       @extend %font-bold;
@@ -49,6 +50,7 @@
     ul.nav{
       padding: 20px 0;
       li{
+        display: block;
         font-size: 16px;
         @include transition;
         &:hover{
