@@ -11,7 +11,6 @@ import { Utils } from '../../utils/utils';
   styleUrls: ['./loan-avatar.component.scss']
 })
 export class LoanAvatarComponent implements OnChanges {
-
   @Input() short: Boolean;
   @Input() loan: Loan;
   brand: Brand;
@@ -24,7 +23,7 @@ export class LoanAvatarComponent implements OnChanges {
     this.brand = this.brandingService.getBrand(this.loan);
   }
   get name(): string {
-    return this.short && this.brand.name.startsWith("0x") ?  Utils.shortAddress(this.brand.name) : this.brand.name;
+    return this.short && this.brand.name.startsWith('0x') ?  Utils.shortAddress(this.brand.name) : this.brand.name;
   }
   get hasIcon(): Boolean {
     return this.brand.icon !== undefined;
