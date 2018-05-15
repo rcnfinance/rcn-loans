@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { Router, RouterModule, Routes } from '@angular/router';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 // App Services
 import { ContractsService } from './services/contracts.service';
@@ -58,6 +59,8 @@ const appRoutes: Routes = [
     SharedModule,
     MaterialModule,
     HttpModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: false } // <-- debugging purposes only

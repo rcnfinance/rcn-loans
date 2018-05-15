@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx } from './../../tx.service';
 import { CosignerService } from './../../services/cosigner.service';
-
 // App Component
 import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
@@ -46,7 +44,7 @@ export class LoanDetailComponent implements OnInit {
   }
   onCosignerSelected(cosigner: CosignerOption) {
     this.cosigner = cosigner;
-    console.log("Selected cosigner", this.cosigner)
+    console.log('Selected cosigner', this.cosigner);
   }
   goHome() {
     this.router.navigate(['/loans']);
@@ -55,7 +53,7 @@ export class LoanDetailComponent implements OnInit {
     this.viewDetail = view;
   }
   get getCosinger(): CosignerOption {
-    console.log("Get cosigner!")
+    console.log('Get cosigner!')
     if (this.cosigner !== undefined) {
       return this.cosigner;
     } else {

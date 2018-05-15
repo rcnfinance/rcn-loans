@@ -27,23 +27,20 @@ export class ContractsService {
     }
 
     public async getUserBalanceRCN(): Promise<number> {
-        let account = await this.web3.getAccount();
-      
+        const account = await this.web3.getAccount();
         return new Promise((resolve, reject) => {
-          let _web3 = this.web3.web3;
+          const _web3 = this.web3.web3;
           this._rcnContract.balanceOf.call(account, function (err, result) {
             if (err != null) {
               reject(err);
             }
-      
             resolve(_web3.fromWei(result));
           });
         }) as Promise<number>;
     }
 
-    public async isEngineApproved() : Promise<boolean> {
-        let account = await this.web3.getAccount();
-      
+    public async isEngineApproved(): Promise<boolean> {
+        const account = await this.web3.getAccount();
         return new Promise((resolve, reject) => {
           let _web3 = this.web3.web3;
           this._rcnContract.allowance.call(account, this._rcnEngineAddress, function (err, result) {
@@ -58,14 +55,12 @@ export class ContractsService {
 
     public async approveEngine() : Promise<string> {
         let account = await this.web3.getAccount();
-      
         return new Promise((resolve, reject) => {
           let _web3 = this.web3.web3;
           this._rcnContract.approve(this._rcnEngineAddress, _web3.toWei(3000000000), { from: account }, function (err, result) {
             if(err != null) {
               reject(err);
             }
-      
             resolve(result);
           });
         }) as Promise<string>;
@@ -73,7 +68,6 @@ export class ContractsService {
 
     public async lendLoan(loan: Loan) : Promise<string> {
         let account = await this.web3.getAccount();
-      
         return new Promise((resolve, reject) => {
           let _web3 = this.web3.web3;
           this._rcnEngine.lend(loan.id, 0x0, 0x0, 0x0, { from: account }, function (err, result) {
@@ -88,17 +82,17 @@ export class ContractsService {
     public async getLoan(id: number): Promise<Loan> {
       return new Promise((resolve, reject) => {
         this._rcnExtension.getLoan.call(this._rcnEngineAddress, id, (err, result) => {
-          if(err != null) {
+          if (err != null) {
             reject(err);
           }
           resolve(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, result));
-        })
+        });
       }) as Promise<Loan>;
     }
-    public async getOpenLoans(): Promise<Loan[]> {      
+    public async getOpenLoans(): Promise<Loan[]> {
         return new Promise((resolve, reject) => {
           this._rcnExtension.searchOpenLoans.call(this._rcnEngineAddress, 0, 0, (err, result) => {
-            if(err != null) {
+            if (err != null) {
               reject(err);
             }
 
@@ -110,7 +104,7 @@ export class ContractsService {
               let loanBytes = result.slice(i * 20, i * 20 + 20);
               allLoans.push(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, loanBytes));
             }
-            console.log(LoanCurator.curateLoans(allLoans))
+            console.log(LoanCurator.curateLoans(allLoans));
             resolve(LoanCurator.curateLoans(allLoans));
           });
         }) as Promise<Loan[]>;

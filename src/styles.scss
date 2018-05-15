@@ -40,3 +40,23 @@ body{
   display: none;
   @include transition;
 }
+
+//Backgrounds
+.cdk-overlay-transparent-backdrop{
+  &.cdk-overlay-backdrop-showing{
+    cursor: pointer;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.4);
+  } 
+}
+
+// Buttons
+.button{
+  &.button-primary{
+    background-color: $primary;
+    &:hover{
+      color: $fifth;
+      background-color: $secondary;
+    }
+  }
+}
