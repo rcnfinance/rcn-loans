@@ -15,26 +15,17 @@ export class BrandingService {
       'https://avatars1.githubusercontent.com/u/12685795?s=400&v=4',
       '',
       'Decentraland',
-      undefined 
+      undefined
     ),
     ripio: new Brand(
       'Ripio',
       '#009BDE',
-      undefined,
+      './assets/ripio.png',
       '',
       'Ripio',
-      { // All options are optional
-        seed: 'ripio.com', // seed used to generate icon data, default: random
-        color: '#009BDE', // to manually specify the icon color, default: random
-        bgcolor: '#333333', // choose a different background color, default: random
-        size: 10, // width/height of the icon in blocks, default: 8
-        scale: 4, // width/height of each block in pixels, default: 4
-        spotcolor: '#3444cc' // each pixel has a 13% chance of being of a third color,
-        // default: random. Set to -1 to disable it. These "spots" create structures
-        // that look like eyes, mouths and noses.
-      } 
+      undefined
     )
-  }
+  };
 
   getBrand(loan: Loan): Brand {
     switch (environment.dir[loan.creator.toLowerCase()]) {
