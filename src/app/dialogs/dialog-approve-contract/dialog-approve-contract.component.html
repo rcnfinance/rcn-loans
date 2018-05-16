@@ -1,25 +1,28 @@
 <h2 mat-dialog-title>Approve Contract</h2>
 <mat-dialog-content>
-  <div class="col-xs-12 col-sm-6">
-    <div class="list-avatar">
-      <div class="avatar-container">
-        <angular-blockies></angular-blockies>
-      </div>
-      <div class="txt-container">
-        <div class="subtitle">Created by {{ 'brand.shortName' }}</div>
-        <div class="title">{{ 'name' }}</div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="title main-title">Account Information</div>
+      <div class="list-avatar">
+        <div class="avatar-container">
+          <angular-blockies></angular-blockies>
+        </div>
+        <div class="txt-container">
+          <div class="subtitle">Account Name</div>
+          <div class="title ellipsis">{{ lender }}</div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="col-xs-12 col-sm-6">
-    <h3>Legal Authorize</h3>
-    <p>Authorize the Loan Engine Contract to operate RCN on your behalf</p>
-    <mat-checkbox>Approve</mat-checkbox>
-    <p>Authorize the Loan Engine Contract to operate RCN on your behalf</p>
-    <mat-checkbox indeterminate="isIndeterminate">Might be</mat-checkbox>
+    <div class="col-xs-12 col-sm-6">
+      <div class="title main-title">Legal Authorize</div>
+      <p>Authorize the Loan Engine Contract to operate RCN on your behalf</p>
+      <mat-checkbox>Approve</mat-checkbox>
+      <!-- <p>Authorize the Loan Engine Contract to operate RCN on your behalf</p> -->
+      <!-- <mat-checkbox indeterminate="isIndeterminate">Might be</mat-checkbox> -->
+    </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-raised-button [mat-dialog-close]="true" class="button button-primary">Approve</button>
-  <button mat-raised-button mat-dialog-close class="button button-secondary">Cancel</button>
+  <button mat-raised-button [mat-dialog-close]='true' class="button button-primary">Approve</button>
+  <button mat-raised-button [mat-dialog-close]='false' class="button button-secondary">Cancel</button>
 </mat-dialog-actions>

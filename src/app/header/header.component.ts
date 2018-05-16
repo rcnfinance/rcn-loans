@@ -30,9 +30,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): any {
     console.log(this.tref.nativeElement.textContent);
   }
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
 
 

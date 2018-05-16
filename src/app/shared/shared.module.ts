@@ -7,7 +7,6 @@ import { BlockiesModule } from 'angular-blockies';
 
 // App Component
 import { MaterialModule } from '../material/material.module';
-import {  } from './header/header.component';
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
 import { FavoriteButtonComponent } from './favorite-button/favorite-button.component';
