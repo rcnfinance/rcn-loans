@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DecentralandCosigner } from '../../../../models/cosigner.model';
+import { DecentralandCosigner, District } from '../../../../models/cosigners/decentraland-cosigner.model';
+import { Loan } from '../../../../models/loan.model';
 
 @Component({
   selector: 'app-decentraland-cosigner',
@@ -10,6 +11,5 @@ export class DecentralandCosignerComponent implements OnInit {
   constructor() { }
   @Input() cosigner: DecentralandCosigner;
   ngOnInit() {
-    
   }
 }
