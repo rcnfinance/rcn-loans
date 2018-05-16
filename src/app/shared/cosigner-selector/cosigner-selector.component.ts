@@ -9,14 +9,16 @@ import { Loan } from '../../models/loan.model';
   styleUrls: ['./cosigner-selector.component.scss']
 })
 export class CosignerSelectorComponent {
-  @Input() options: CosignerOption[];
-  @Output() onSelected: EventEmitter<CosignerOption> = new EventEmitter<CosignerOption>();
+  @Input() option: CosignerOption;
+  // @Output() onSelected: EventEmitter<CosignerOption> = new EventEmitter<CosignerOption>();
   constructor() {}
   hasOptions(): Boolean {
-    return this.options.length !== 0;
+    return this.option !== undefined;
   }
+  /*
   onChanged(option): Boolean {
     this.onSelected.emit(this.options.find(o => o.id === option));
     return true;
   }
+  */
 }

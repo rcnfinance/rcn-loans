@@ -1,7 +1,7 @@
 <!-- <select class="selector" (change)="onChanged($event.target.value)" *ngIf="hasOptions()">
     <option *ngFor='let option of options' [value]="option.id">{{option.name}}</option>
 </select> -->
-
+<!--
 <button mat-raised-button 
   [matMenuTriggerFor]="menu" 
   (change)="onChanged($event.target.value)" 
@@ -13,7 +13,10 @@
 <mat-menu #menu="matMenu">
   <button mat-menu-item *ngFor='let option of options' [value]="option.id">{{option.name}}</button>
 </mat-menu>
-
+-->
+<div *ngIf="hasOptions()">
+  {{ option.name }}
+</div>
 <div *ngIf="!hasOptions()">
   Not available
 </div>

@@ -36,7 +36,7 @@ export class LoanDetailComponent implements OnInit {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
-        this.cosigner = this.cosignerOptions[0];
+        this.cosigner = this.cosignerOption;
         console.log(this.loan);
       });
       // In a real app: dispatch action to load the details here.
@@ -53,17 +53,16 @@ export class LoanDetailComponent implements OnInit {
     this.viewDetail = view;
   }
   get getCosinger(): CosignerOption {
-    console.log('Get cosigner!')
     if (this.cosigner !== undefined) {
       return this.cosigner;
     } else {
-      return this.cosignerOptions[0];
+      return this.cosignerOption;
     }
   }
   isDetail(view: string): Boolean {
     return view === this.viewDetail;
   }
-  get cosignerOptions(): CosignerOption[] {
+  get cosignerOption(): CosignerOption {
     return this.cosignerService.getCosignerOptions(this.loan);
   }
   private formatAmount(amount: number): string {

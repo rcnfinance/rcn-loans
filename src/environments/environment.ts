@@ -21,7 +21,7 @@ export const environment = {
     }
   },
   dir: {
-    "0x0679cde060990fb409cb19b4434714c1e5f2ae6e": Agent.MortgageCreator,
+    "0x2bdf545935d4264cbb7457e97d69b6b86458eb64": Agent.MortgageCreator,
     "0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86": Agent.RipioCreator
   }
 };
