@@ -1,8 +1,11 @@
 import { Component, Input, OnChanges } from '@angular/core';
-
-import { BrandingService } from './../../services/branding.service';
+// App Component
+import { SharedModule } from '../../shared/shared.module';
+// App Models
 import { Loan } from '../../models/loan.model';
 import { Brand } from '../../models/brand.model';
+// App Services
+import { BrandingService } from './../../services/branding.service';
 import { Utils } from '../../utils/utils';
 
 @Component({
@@ -28,7 +31,6 @@ export class AvatarComponent implements OnChanges {
   get hasIcon(): Boolean {
     return this.brand.icon !== undefined;
   }
-
   blockies(): Object {
     return this.brand.blockies;
   }

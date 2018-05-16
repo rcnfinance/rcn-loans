@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // App Component
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Web3Service } from '../../services/web3.service';
 
 @Component({

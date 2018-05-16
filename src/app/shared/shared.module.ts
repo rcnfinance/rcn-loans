@@ -46,7 +46,8 @@ import { CloseButtonComponent } from './close-button/close-button.component';
     AvatarComponent,
     LoanAvatarComponent,
     CosignerSelectorComponent,
-    CloseButtonComponent
+    CloseButtonComponent,
+    BlockiesModule
   ]
 })
 export class SharedModule { }
