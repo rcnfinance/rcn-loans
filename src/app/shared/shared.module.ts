@@ -13,6 +13,7 @@ import { DetailButtonComponent } from './detail-button/detail-button.component';
 import { FavoriteButtonComponent } from './favorite-button/favorite-button.component';
 import { MainButtonComponent } from './main-button/main-button.component';
 import { CreatorContainerComponent } from './creator-container/creator-container.component';
+import { AvatarComponent } from './avatar/avatar.component';
 import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
 import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector.component';
 import { CloseButtonComponent } from './close-button/close-button.component';
@@ -31,9 +32,10 @@ import { CloseButtonComponent } from './close-button/close-button.component';
     FavoriteButtonComponent,
     MainButtonComponent,
     CreatorContainerComponent,
+    AvatarComponent,
     LoanAvatarComponent,
     CosignerSelectorComponent,
-    CloseButtonComponent
+    CloseButtonComponent,
   ],
   exports: [
     LendButtonComponent,
@@ -41,6 +43,7 @@ import { CloseButtonComponent } from './close-button/close-button.component';
     FavoriteButtonComponent,
     MainButtonComponent,
     CreatorContainerComponent,
+    AvatarComponent,
     LoanAvatarComponent,
     CosignerSelectorComponent,
     CloseButtonComponent

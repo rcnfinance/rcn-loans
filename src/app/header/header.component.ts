@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     console.log(this.dialog);
     const dialogRef = this.dialog.open(DialogApproveContractComponent, {
       width: '800px',
-      height: '330px'
+      height: '360px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
