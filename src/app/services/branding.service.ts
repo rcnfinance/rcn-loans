@@ -15,7 +15,7 @@ export class BrandingService {
       'https://avatars1.githubusercontent.com/u/12685795?s=400&v=4',
       '',
       'Decentraland',
-      undefined 
+      undefined
     ),
     ripio: new Brand(
       'Ripio',
@@ -32,9 +32,9 @@ export class BrandingService {
         spotcolor: '#3444cc' // each pixel has a 13% chance of being of a third color,
         // default: random. Set to -1 to disable it. These "spots" create structures
         // that look like eyes, mouths and noses.
-      } 
+      }
     )
-  }
+  };
 
   getBrand(loan: Loan): Brand {
     switch (environment.dir[loan.creator.toLowerCase()]) {

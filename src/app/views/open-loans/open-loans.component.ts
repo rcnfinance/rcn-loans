@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpModule, Response } from '@angular/http';
-import {FormControl} from '@angular/forms';
+import { FormControl } from '@angular/forms';
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
@@ -10,7 +10,6 @@ import { BrandingService } from './../../services/branding.service';
 // App Component
 import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
-import {MatSnackBar} from '@angular/material';
 // App Utils
 import { Utils } from './../../utils/utils';
 
@@ -26,17 +25,11 @@ export class OpenLoansComponent implements OnInit {
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
-    private brandingService: BrandingService,
-    public snackBar: MatSnackBar
+    private brandingService: BrandingService
   ) {}
   loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
-    });
-  }
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000,
     });
   }
   ngOnInit() {

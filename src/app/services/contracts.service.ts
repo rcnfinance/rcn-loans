@@ -74,7 +74,6 @@ export class ContractsService {
             if(err != null) {
               reject(err);
             }
-      
             resolve(result);
           });
         }) as Promise<string>;
@@ -90,23 +89,23 @@ export class ContractsService {
       }) as Promise<Loan>;
     }
     public async getOpenLoans(): Promise<Loan[]> {
-        return new Promise((resolve, reject) => {
-          this._rcnExtension.searchOpenLoans.call(this._rcnEngineAddress, 0, 0, (err, result) => {
-            if (err != null) {
-              reject(err);
-            }
+      return new Promise((resolve, reject) => {
+        this._rcnExtension.searchOpenLoans.call(this._rcnEngineAddress, 0, 0, (err, result) => {
+          if (err != null) {
+            reject(err);
+          }
 
-            let total = result.length / 20;
-            let allLoans = [];
+          let total = result.length / 20;
+          let allLoans = [];
 
-            for (let i = 0; i < total; i++) {
-              let id = parseInt(result[(i * 20) + 19], 16);
-              let loanBytes = result.slice(i * 20, i * 20 + 20);
-              allLoans.push(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, loanBytes));
-            }
-            console.log(LoanCurator.curateLoans(allLoans));
-            resolve(LoanCurator.curateLoans(allLoans));
-          });
-        }) as Promise<Loan[]>;
-    }
+          for (let i = 0; i < total; i++) {
+            let id = parseInt(result[(i * 20) + 19], 16);
+            let loanBytes = result.slice(i * 20, i * 20 + 20);
+            allLoans.push(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, loanBytes));
+          }
+          console.log(LoanCurator.curateLoans(allLoans));
+          resolve(LoanCurator.curateLoans(allLoans));
+      });
+    }) as Promise<Loan[]>;
+  }
 }

@@ -13,6 +13,9 @@ import {MatSnackBar} from '@angular/material';
 export class DetailButtonComponent {
   @Input() loan: Loan;
   constructor(private router: Router, public snackBar: MatSnackBar) { }
+  hello(person: string) {
+    console.log('Hello', + this.loan);
+  }
   handleDetail() {
     this.router.navigate(['loan/' + this.loan.id]);
   }

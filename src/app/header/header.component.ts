@@ -1,5 +1,9 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import {MatSnackBar} from '@angular/material';
+// App Component
+import { MaterialModule } from './../material/material.module';
+import { SharedModule } from './../shared/shared.module';
+import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import {MatDialog, MatSnackBar} from '@angular/material';
 
 // App Component
 
@@ -9,12 +13,22 @@ import {MatSnackBar} from '@angular/material';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
-  constructor() {}
-
+  constructor(public dialog: MatDialog) {}
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
 
+  openDialog() {
+    console.log(this.dialog);
+    const dialogRef = this.dialog.open(DialogApproveContractComponent, {
+      width: '800px',
+      height: '330px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
   ngAfterViewInit(): any {
-      console.log(this.tref.nativeElement.textContent);
+    console.log(this.tref.nativeElement.textContent);
   }
   ngOnInit() {
   }

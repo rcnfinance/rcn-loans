@@ -42,6 +42,7 @@ body{
 }
 
 //Backgrounds
+.cdk-overlay-dark-backdrop {background: rgba(0,0,0,.5);}
 .cdk-overlay-transparent-backdrop{
   &.cdk-overlay-backdrop-showing{
     cursor: pointer;
@@ -49,14 +50,42 @@ body{
     background-color: rgba(0, 0, 0, 0.4);
   } 
 }
+snack-bar-container.mat-snack-bar-container{
+  color: $secondary;
+  button{&.mat-simple-snackbar-action{color: $primary;}
+  }
+}
 
 // Buttons
 .button{
   &.button-primary{
+    color: $secondary;
     background-color: $primary;
-    &:hover{
-      color: $fifth;
-      background-color: $secondary;
+    &:hover, &:active, &:visited, &:focus{
+      color: $secondary;
+      background-color: $hover-primary;
+    }
+  }
+  &.button-secondary{
+    color: $tertiary;
+    background-color: $secondary;
+    &:hover, &:active, &:visited, &:focus{
+      background-color: $gray2;
+    }
+  }
+  &.button-tertiary{
+    color: $tertiary;
+    background-color: $secondary;
+    &:hover, &:active, &:visited, &:focus{
+      color: $secondary;
+      background-color: $fifth;
     }
   }
 }
+
+// Colors
+.primary{color: $primary;}
+.secondary{color: $secondary;}
+.tertiary{color: $tertiary;}
+.quaternary{color: $quaternary;}
+.fifth{color: $fifth;}
