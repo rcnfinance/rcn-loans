@@ -40,6 +40,23 @@
     @include transition;
   }
 }
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  height: auto;
+  align-items: center;
+  > .flex-item {
+    width: 35px;
+    .material-icons{
+      color: $primary;
+      margin-left: -7px;
+    }
+  }
+  > .raw-item {
+    width: 45px;
+    flex: 1;
+  }
+}
 
 
 @media (min-width: 768px){
@@ -55,6 +72,16 @@
         @include transition;
         &:hover{
           color: $primary;
+        }
+        &.separator{
+          font-weight: 300;
+          cursor: default;
+          &:hover{
+            color: $secondary;
+          }
+        }
+        &:last-child{
+          margin-top: -5px;
         }
       }
     }
