@@ -4,6 +4,8 @@ import { environment } from '../../../environments/environment';
 import { DecentralandCosigner } from '../../models/cosigner.model';
 import { Loan } from '../../models/loan.model';
 
+declare let require: any;
+
 const landMarketAbi = require('../../contracts/decentraland/LandMarket.json');
 // const landRegistryAbi = require('../../contracts/decentraland/LandRegistry.json');
 const mHelperAbi = require('../../contracts/decentraland/MHelper.json');
