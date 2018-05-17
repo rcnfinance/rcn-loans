@@ -36,6 +36,7 @@ import { ConversionGraphicComponent } from './conversion-graphic/conversion-grap
     LoanAvatarComponent,
     CosignerSelectorComponent,
     CloseButtonComponent,
+    ConversionGraphicComponent
   ],
   exports: [
     LendButtonComponent,
@@ -47,6 +48,7 @@ import { ConversionGraphicComponent } from './conversion-graphic/conversion-grap
     LoanAvatarComponent,
     CosignerSelectorComponent,
     CloseButtonComponent,
+    ConversionGraphicComponent,
     BlockiesModule
   ]
 })
