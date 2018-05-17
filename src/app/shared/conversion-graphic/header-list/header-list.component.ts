@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-header-list',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header-list.component.scss']
 })
 export class HeaderListComponent implements OnInit {
-
+  @Input() headers: string[];
   constructor() { }
 
   ngOnInit() {
