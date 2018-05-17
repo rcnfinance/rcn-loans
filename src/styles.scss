@@ -34,21 +34,6 @@ body{
   @include transition;
 }
 
-//Backgrounds
-.cdk-overlay-dark-backdrop {background: rgba(0,0,0,.5);}
-.cdk-overlay-transparent-backdrop{
-  &.cdk-overlay-backdrop-showing{
-    cursor: pointer;
-    opacity: 1;
-    background-color: rgba(0, 0, 0, 0.4);
-  } 
-}
-snack-bar-container.mat-snack-bar-container{
-  color: $secondary;
-  button{&.mat-simple-snackbar-action{color: $primary;}
-  }
-}
-
 // Buttons
 .btn{
   border-color: $primary;
@@ -120,3 +105,20 @@ snack-bar-container.mat-snack-bar-container{
   }
 }
 @media screen and (max-width: 767px){.table-responsive {border: 0px;}}
+
+// Material Angular
+  // Backgrounds
+.cdk-overlay-dark-backdrop {background: rgba(0,0,0,.5);}
+.cdk-overlay-transparent-backdrop{
+  &.cdk-overlay-backdrop-showing{
+    cursor: pointer;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.4);
+  } 
+}
+  // Snackbar
+snack-bar-container.mat-snack-bar-container{
+  color: $secondary;
+  button{&.mat-simple-snackbar-action{color: $primary;}
+  }
+}
