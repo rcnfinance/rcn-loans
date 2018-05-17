@@ -4,6 +4,7 @@ import { LoanCurator } from './../utils/loan-curator';
 import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
+import { TxService } from '../tx.service';
 
 declare let require: any;
 
@@ -15,14 +16,14 @@ const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 export class ContractsService {
     private _rcnContract: any;
     private _rcnContractAddress: string = environment.contracts.rcnToken;
-  
+
     private _rcnEngine: any;
     private _rcnEngineAddress: string = environment.contracts.basaltEngine;
 
     private _rcnExtension: any;
     private _rcnExtensionAddress: string = environment.contracts.engineExtension;
 
-    constructor(private web3: Web3Service) {
+    constructor(private web3: Web3Service, private txService: TxService) {
       this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
       this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
       this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
@@ -44,31 +45,51 @@ export class ContractsService {
     public async isEngineApproved(): Promise<boolean> {
         const account = await this.web3.getAccount();
         return new Promise((resolve, reject) => {
-          let _web3 = this.web3.web3;
+          const pending = this.txService.getLastPendingApprove(this._rcnContractAddress, this._rcnEngineAddress);
+          if (pending !== undefined) {
+            resolve(pending);
+          }
+
+          const _web3 = this.web3.web3;
           this._rcnContract.allowance.call(account, this._rcnEngineAddress, function (err, result) {
-            if(err != null) {
+            if (err != null) {
               reject(err);
             }
-      
+
             resolve(_web3.fromWei(result) >= _web3.toWei(1000000000));
           });
         }) as Promise<boolean>;
     }
 
-    public async approveEngine() : Promise<string> {
-        let account = await this.web3.getAccount();
+    public async approveEngine(): Promise<string> {
+        const account = await this.web3.getAccount();
         return new Promise((resolve, reject) => {
-          let _web3 = this.web3.web3;
-          this._rcnContract.approve(this._rcnEngineAddress, _web3.toWei(3000000000), { from: account }, function (err, result) {
-            if(err != null) {
+          const _web3 = this.web3.web3;
+          this._rcnContract.approve(this._rcnEngineAddress, _web3.toWei(10 ** 32), { from: account }, function (err, result) {
+            if (err != null) {
               reject(err);
             }
+            this.txService.registerApproveTx(result, this._rcnContractAddress, this._rcnEngineAddress, true);
             resolve(result);
           });
         }) as Promise<string>;
     }
 
-    public async lendLoan(loan: Loan) : Promise<string> {
+    public async dissaproveEngine(): Promise<string> {
+      const account = await this.web3.getAccount();
+      return new Promise((resolve, reject) => {
+        const _web3 = this.web3.web3;
+        this._rcnContract.approve(this._rcnEngineAddress, 0, { from: account }, function (err, result) {
+          if (err != null) {
+            reject(err);
+          }
+          this.txService.registerApproveTx(result, this._rcnContractAddress, this._rcnEngineAddress, false);
+          resolve(result);
+        });
+      }) as Promise<string>;
+    }
+
+    public async lendLoan(loan: Loan): Promise<string> {
         let account = await this.web3.getAccount();
         return new Promise((resolve, reject) => {
           let _web3 = this.web3.web3;
