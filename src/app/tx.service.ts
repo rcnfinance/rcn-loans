@@ -56,7 +56,7 @@ export class TxService {
 
     this.localStorage = window.localStorage;
     this.tx_memory = this.readTxs();
-    if (this.tx_memory === undefined) {
+    if (this.tx_memory === null) {
       this.tx_memory = [];
     }
 

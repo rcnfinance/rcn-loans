@@ -15,8 +15,9 @@
               <li routerLink='loan/31'>Loans</li>
               <li routerLink='../loans'>Help</li>
               <li class="separator">|</li>
+              <li (click)="openDialog()" *ngIf="!hasAccount">Login</li>
               <li (click)="openDialog()">
-                <div class="flex-container">
+                <div class="flex-container" *ngIf="hasAccount">
                   <div class="flex-item">
                     <div class="list-avatar">
                       <div class="avatar-container">
@@ -24,7 +25,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="raw-item marginleft15">Perfil</div>
+                  <div class="raw-item marginleft15">Profile</div>
                 </div>
               </li>
             </ul>

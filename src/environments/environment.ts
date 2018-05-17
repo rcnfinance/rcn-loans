@@ -11,6 +11,11 @@ export const environment = {
   production: false,
   url: 'http://localhost:4200/',
   envName: 'dev',
+  network: {
+    id: '3',
+    name: 'Ropsten',
+    provider: 'https://ropsten.infura.io/'
+  },
   contracts: {
     rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
