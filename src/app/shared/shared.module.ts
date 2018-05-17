@@ -20,6 +20,7 @@ import { ConversionGraphicComponent } from './conversion-graphic/conversion-grap
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
 import { PayButtonComponent } from './pay-button/pay-button.component';
+import { ForgiveButtonComponent } from './forgive-button/forgive-button.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { PayButtonComponent } from './pay-button/pay-button.component';
     ConversionGraphicComponent,
     HeaderListComponent,
     BodyListComponent,
-    PayButtonComponent
+    PayButtonComponent,
+    ForgiveButtonComponent
   ],
   exports: [
     LendButtonComponent,
