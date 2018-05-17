@@ -10,6 +10,8 @@
   border-radius: 50%;
   background-color: $primary;
   box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+  &.request{background-color: $secondary;}
+  &.ongoing{background-color: $primary;}
   i{
     @extend %position-center;
   }
