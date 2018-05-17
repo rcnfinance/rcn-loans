@@ -1,0 +1,18 @@
+@import '../../../../scss/_variables.scss'; //variables
+
+.properties-block{
+  li{
+    width: 32%;
+    display: inline-block;
+    &:nth-child(1){
+      text-align: left;
+    }
+    &:nth-child(2){
+      text-align: center;
+      @extend %propiety-subtitle;
+    }
+    &:nth-child(3){
+      text-align: right;
+    }
+  }
+}
