@@ -19,6 +19,7 @@ import { CloseButtonComponent } from './close-button/close-button.component';
 import { ConversionGraphicComponent } from './conversion-graphic/conversion-graphic.component';
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
+import { PayButtonComponent } from './pay-button/pay-button.component';
 
 @NgModule({
   imports: [
@@ -40,7 +41,8 @@ import { BodyListComponent } from './conversion-graphic/body-list/body-list.comp
     CloseButtonComponent,
     ConversionGraphicComponent,
     HeaderListComponent,
-    BodyListComponent
+    BodyListComponent,
+    PayButtonComponent
   ],
   exports: [
     LendButtonComponent,
@@ -55,7 +57,8 @@ import { BodyListComponent } from './conversion-graphic/body-list/body-list.comp
     BlockiesModule,
     ConversionGraphicComponent,
     HeaderListComponent,
-    BodyListComponent
+    BodyListComponent,
+    PayButtonComponent
   ]
 })
 export class SharedModule { }
