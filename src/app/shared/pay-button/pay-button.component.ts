@@ -6,10 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pay-button.component.scss']
 })
 export class PayButtonComponent implements OnInit {
-
   constructor() { }
 
-  ngOnInit() {
+  handlePay() {
+    console.log('You are paying');
   }
+  ngOnInit() {}
 
 }
