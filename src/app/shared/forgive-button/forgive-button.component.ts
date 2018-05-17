@@ -7,7 +7,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ForgiveButtonComponent implements OnInit {
   constructor() { }
-  
   handleForgive() {
     console.log('You are forgiving');
   }
