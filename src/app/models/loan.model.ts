@@ -4,40 +4,90 @@ import { Currency } from '../utils/currencies';
 
 export enum Status { Request, Ongoing, Paid, Destroyed }
 
-export class Loan {
-    public id: number;
-    public status: number;
-    public borrower: string;
-    public creator: string;
-    public rawAmount: number;
-    public duration: number;
-    public rawAnnualInterest: number;
-    public rawAnnualPunitoryInterest: number;
-    public currencyRaw: string;
-    public engine: string;
+function timestamp(): number {
+    return (new Date().getTime() / 1000);
+}
 
+function calculateInterest(timeDelta: number, interestRate: number, amount: number): number {
+    if (amount === 0) {
+      return 0;
+    }
+
+    return (amount * 100000 * timeDelta) / interestRate;
+}
+
+export class Loan {
     constructor(
-      id: number,
-      status: Status,
-      borrower: string,
-      creator: string,
-      rawAmount: number,
-      duration: number,
-      rawAnnualInterest: number,
-      rawAnnualPunitoryInterest: number,
-      currencyRaw: string,
-      engine: string) {
-        this.id = id;
-        this.status = status;
-        this.borrower = Utils.formatAddress(borrower);
-        this.creator = Utils.formatAddress(creator);
-        this.rawAmount = rawAmount;
-        this.duration = duration;
-        this.rawAnnualInterest = rawAnnualInterest;
-        this.rawAnnualPunitoryInterest = rawAnnualPunitoryInterest;
-        this.currencyRaw = currencyRaw;
-        this.engine = engine;
-      }
+        public engine: string,
+        public id: number,
+        public status: number,
+        public borrower: string,
+        public creator: string,
+        public rawAmount: number,
+        public duration: number,
+        public rawAnnualInterest: number,
+        public rawAnnualPunitoryInterest: number,
+        public currencyRaw: string,
+        public rawPaid: number,
+        public cumulatedInterest: number,
+        public cumulatedPunnitoryInterest: number,
+        public interestTimestamp: number,
+        public dueTimestamp: number
+    ) { }
+
+    get lentTimestamp(): number {
+        return this.dueTimestamp - this.duration;
+    }
+
+    get remainingTime(): number {
+        return this.dueTimestamp - timestamp();
+    }
+
+    get rawTotal(): number {
+        let newInterest = this.cumulatedInterest;
+        let newPunitoryInterest = this.cumulatedPunnitoryInterest;
+        let pending;
+        let deltaTime;
+
+        const endNonPunitory = Math.min(timestamp(), this.dueTimestamp);
+        if (endNonPunitory > this.interestTimestamp) {
+          deltaTime = endNonPunitory - this.interestTimestamp;
+
+          if (this.rawPaid < this.rawAmount) {
+            pending = this.rawAmount - this.rawPaid;
+          } else {
+            pending = 0;
+          }
+
+          newInterest += calculateInterest(deltaTime, this.rawAnnualInterest, pending);
+        }
+
+        if (timestamp() > this.dueTimestamp) {
+          const startPunitory = Math.max(this.dueTimestamp, this.interestTimestamp);
+          deltaTime = timestamp() - startPunitory;
+          const debt = this.rawAmount + newInterest;
+          pending = Math.min(debt, debt + this.cumulatedPunnitoryInterest - this.rawPaid);
+          newPunitoryInterest += calculateInterest(deltaTime, this.annualPunitoryInterest, pending);
+        }
+
+        return this.rawAmount + newInterest + newPunitoryInterest;
+    }
+
+    get total(): number {
+        return this.rawTotal / 10 ** this.decimals;
+    }
+
+    get rawPendingAmount() {
+        return this.rawTotal - this.rawPaid;
+    }
+
+    get pendingAmount(): number {
+        return this.rawPendingAmount / 10 ** this.decimals;
+    }
+
+    get paid(): number {
+        return this.rawPaid / 10 ** this.decimals;
+    }
 
     get currency(): string {
         const targetCurrency = Utils.hexToAscii(this.currencyRaw.replace(/^[0x]+|[0]+$/g, ''));
