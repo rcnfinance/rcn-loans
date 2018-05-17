@@ -37,6 +37,10 @@ export class Loan {
         this.engine = engine;
       }
 
+    get uid(): string {
+        return this.engine + this.id;
+    }
+
     get currency(): string {
         const targetCurrency = Utils.hexToAscii(this.currencyRaw.replace(/^[0x]+|[0]+$/g, ''));
 

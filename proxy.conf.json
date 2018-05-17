@@ -1,0 +1,9 @@
+{
+  "/proxy_decentraland/*": {
+    "target": "https://api.market.decentraland.today",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {"^/proxy_decentraland" : ""}
+  }
+}

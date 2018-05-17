@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 // App Services
 import { ContractsService } from './services/contracts.service';
@@ -32,6 +33,7 @@ import { DetailCosignerComponent } from './views/loan-detail/detail-cosigner/det
 import { DetailIdentityComponent } from './views/loan-detail/detail-identity/detail-identity.component';
 import { DecentralandCosignerComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DecentralandMapComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 
 const appRoutes: Routes = [
   { path: 'loans', component: OpenLoansComponent },
@@ -54,13 +56,15 @@ const appRoutes: Routes = [
     ContentWrapperComponent,
     DetailIdentityComponent,
     DecentralandCosignerComponent,
-    DialogApproveContractComponent
+    DialogApproveContractComponent,
+    DecentralandMapComponent
   ],
   imports: [
     BrowserModule,
     SharedModule,
     MaterialModule,
     HttpModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(
