@@ -67,9 +67,9 @@
     background-color: $fifth;
   }
   &.right{
+    position: relative;
     min-height: 605px;
     margin-top: 605px;
-    position: relative;
     background-color: $quaternary;
 
   }
@@ -93,11 +93,10 @@
       height: auto;
     }
     &.right{
-      margin-top: 0px;
       position: relative;
+      margin-top: 0px;
       width: 50%;
       margin-left: 50%;
-      background-color: $quaternary;
     }
   }
 }
