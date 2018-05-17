@@ -72,9 +72,10 @@ export class ContractsService {
           this._rcnContract.approve(this._rcnEngineAddress, _web3.toWei(10 ** 32), { from: account }, function (err, result) {
             if (err != null) {
               reject(err);
+            } else {
+              txService.registerApproveTx(result, rcnAddress, engineAddress, true);
+              resolve(result);
             }
-            txService.registerApproveTx(result, rcnAddress, engineAddress, true);
-            resolve(result);
           });
         }) as Promise<string>;
     }
@@ -89,9 +90,10 @@ export class ContractsService {
         this._rcnContract.approve(this._rcnEngineAddress, 0, { from: account }, function (err, result) {
           if (err != null) {
             reject(err);
+          } else {
+            txService.registerApproveTx(result, rcnAddress, engineAddress, false);
+            resolve(result);
           }
-          txService.registerApproveTx(result, rcnAddress, engineAddress, false);
-          resolve(result);
         });
       }) as Promise<string>;
     }
