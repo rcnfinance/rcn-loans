@@ -11,12 +11,18 @@ import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
 import { FavoriteButtonComponent } from './favorite-button/favorite-button.component';
 import { MainButtonComponent } from './main-button/main-button.component';
+import { PayButtonComponent } from './pay-button/pay-button.component';
+import { ForgiveButtonComponent } from './forgive-button/forgive-button.component';
+import { CloseButtonComponent } from './close-button/close-button.component';
 import { CreatorContainerComponent } from './creator-container/creator-container.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
 import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector.component';
-import { CloseButtonComponent } from './close-button/close-button.component';
 import { ConversionGraphicComponent } from './conversion-graphic/conversion-graphic.component';
+import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
+import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
+import { AvatarTitleComponent } from './avatar-title/avatar-title.component';
+import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.component';
 
 @NgModule({
   imports: [
@@ -31,25 +37,37 @@ import { ConversionGraphicComponent } from './conversion-graphic/conversion-grap
     DetailButtonComponent,
     FavoriteButtonComponent,
     MainButtonComponent,
+    PayButtonComponent,
+    ForgiveButtonComponent,
+    CloseButtonComponent,
     CreatorContainerComponent,
     AvatarComponent,
     LoanAvatarComponent,
     CosignerSelectorComponent,
-    CloseButtonComponent,
-    ConversionGraphicComponent
+    ConversionGraphicComponent,
+    HeaderListComponent,
+    BodyListComponent,
+    AvatarTitleComponent,
+    IconAvatarComponent
   ],
   exports: [
     LendButtonComponent,
     DetailButtonComponent,
     FavoriteButtonComponent,
     MainButtonComponent,
+    PayButtonComponent,
+    ForgiveButtonComponent,
+    CloseButtonComponent,
     CreatorContainerComponent,
     AvatarComponent,
     LoanAvatarComponent,
     CosignerSelectorComponent,
-    CloseButtonComponent,
+    BlockiesModule,
     ConversionGraphicComponent,
-    BlockiesModule
+    HeaderListComponent,
+    BodyListComponent,
+    AvatarTitleComponent,
+    IconAvatarComponent
   ]
 })
 export class SharedModule { }

@@ -15,7 +15,6 @@
     top: 0;
     right: 0;
   }
-  
   .button-options{
     position: relative;
     width: 70px;
@@ -59,7 +58,7 @@
   float: left;
   padding: 15px;
   &.left{
-    height: 485px;
+    height: 605px;
     position: absolute;
     top: 100px;
     bottom: 0;
@@ -68,9 +67,9 @@
     background-color: $fifth;
   }
   &.right{
-    min-height: 485px;
-    margin-top: 485px;
     position: relative;
+    min-height: 605px;
+    margin-top: 605px;
     background-color: $quaternary;
 
   }
@@ -85,25 +84,6 @@
     }
   }
 }
-.table{
-  >thead{
-    >tr{
-      >th {
-        border: 0px;
-        background-color: #333333;
-        @extend %propiety-title;
-      }
-    }
-  }
-  >tbody{
-    >tr{
-      >td {
-        border: 0px;
-        @extend %propiety-subtitle;
-      }
-    }
-  }
-}
 
 @media (min-width: 768px){}
 @media (min-width: 992px){
@@ -113,17 +93,10 @@
       height: auto;
     }
     &.right{
-      margin-top: 0px;
       position: relative;
+      margin-top: 0px;
       width: 50%;
       margin-left: 50%;
-      background-color: $quaternary;
     }
-  }
-}
-
-@media screen and (max-width: 767px){
-  .table-responsive {
-    border: 0px;
   }
 }

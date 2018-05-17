@@ -3,7 +3,8 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { MaterialModule } from './../material/material.module';
 import { SharedModule } from './../shared/shared.module';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
+import { Web3Service } from '../services/web3.service';
 
 // App Component
 
@@ -13,23 +14,26 @@ import {MatDialog, MatSnackBar} from '@angular/material';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
-  constructor(public dialog: MatDialog) {}
+  account: string;
+
+  constructor(public dialog: MatDialog, private web3: Web3Service) {}
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
 
   openDialog() {
-    console.log(this.dialog);
-    const dialogRef = this.dialog.open(DialogApproveContractComponent, {
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {
       width: '800px'
     });
-
+    dialogRef.componentInstance.autoClose = false;
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
   }
-  ngAfterViewInit(): any {
-    console.log(this.tref.nativeElement.textContent);
+  ngAfterViewInit(): any {}
+  ngOnInit() {
+    this.web3.getAccount().then((account) => {
+      this.account = account;
+    });
   }
-  ngOnInit() {}
 }
 
 

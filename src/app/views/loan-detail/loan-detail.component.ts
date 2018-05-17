@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Route } from '@angular/compiler/src/core';
 // App Models
 import { Loan } from './../../models/loan.model';
+import { CosignerOption } from '../../models/cosigner.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx } from './../../tx.service';
@@ -11,8 +13,6 @@ import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
 // App Utils
 import { Utils } from './../../utils/utils';
-import { Route } from '@angular/compiler/src/core';
-import { CosignerOption } from '../../models/cosigner.model';
 
 @Component({
   selector: 'app-loan-detail',
@@ -68,9 +68,6 @@ export class LoanDetailComponent implements OnInit {
   }
   get cosignerOption(): CosignerOption {
     return this.cosignerService.getCosignerOptions(this.loan);
-  }
-  private formatAmount(amount: number): string {
-    return Utils.formatAmount(amount);
   }
   private formatInterest(interest: Number): string {
     return Number(interest.toFixed(2)).toString();

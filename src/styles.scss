@@ -9,19 +9,12 @@
         './scss/_helpers.scss', //helpers
         './scss/_fonts.scss'; //fonts
 
+// General
 body{
   position: relative;
   font-family: 'Raleway', sans-serif;
   background-color: $tertiary;
   color: $secondary;
-}
-
-.btn{
-  border-color: $primary;
-  background-color: $primary;
-  border-radius: 2px;
-  text-transform: uppercase;
-  @extend %font-medium;
 }
 
 //TABS
@@ -41,22 +34,14 @@ body{
   @include transition;
 }
 
-//Backgrounds
-.cdk-overlay-dark-backdrop {background: rgba(0,0,0,.5);}
-.cdk-overlay-transparent-backdrop{
-  &.cdk-overlay-backdrop-showing{
-    cursor: pointer;
-    opacity: 1;
-    background-color: rgba(0, 0, 0, 0.4);
-  } 
-}
-snack-bar-container.mat-snack-bar-container{
-  color: $secondary;
-  button{&.mat-simple-snackbar-action{color: $primary;}
-  }
-}
-
 // Buttons
+.btn{
+  border-color: $primary;
+  background-color: $primary;
+  border-radius: 2px;
+  text-transform: uppercase;
+  @extend %font-medium;
+}
 .button{
   &.button-primary{
     color: $secondary;
@@ -98,3 +83,42 @@ snack-bar-container.mat-snack-bar-container{
 .font-regular{@extend %font-regular;}
 .font-bold{@extend %font-bold;}
 .font-black{@extend %font-black;}
+
+// Tables
+.table{
+  >thead{
+    >tr{
+      >th {
+        border: 0px;
+        background-color: #333333;
+        @extend %propiety-title;
+      }
+    }
+  }
+  >tbody{
+    >tr{
+      >td {
+        border: 0px;
+        @extend %propiety-subtitle;
+      }
+    }
+  }
+}
+@media screen and (max-width: 767px){.table-responsive {border: 0px;}}
+
+// Material Angular
+  // Backgrounds
+.cdk-overlay-dark-backdrop {background: rgba(0,0,0,.5);}
+.cdk-overlay-transparent-backdrop{
+  &.cdk-overlay-backdrop-showing{
+    cursor: pointer;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.4);
+  } 
+}
+  // Snackbar
+snack-bar-container.mat-snack-bar-container{
+  color: $secondary;
+  button{&.mat-simple-snackbar-action{color: $primary;}
+  }
+}
