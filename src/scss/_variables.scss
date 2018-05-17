@@ -175,3 +175,7 @@ $default-transition--delay: all 0.3s ease-out;
 .info-icon {
   @extend %icon;
 }
+
+// General variables
+// --------------------------------------------------
+%position-center{position: absolute; top: 50%; left: 50%; @include transform(translate(-50%, -50%));}
