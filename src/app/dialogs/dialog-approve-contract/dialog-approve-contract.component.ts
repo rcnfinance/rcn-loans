@@ -28,6 +28,9 @@ export class DialogApproveContractComponent implements OnInit {
       this.isApproved = approved;
     });
   }
+  get isEnabled(): boolean {
+    return this.isApproved !== undefined;
+  }
   clickCheck() {
     if (this.isApproved) {
       this.contracts.dissaproveEngine().then(() => {

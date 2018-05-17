@@ -72,6 +72,7 @@ export class TxService {
       if (!tx.confirmed) {
         this._web3.eth.getTransactionReceipt(tx.tx, (err, receipt) => {
           if (receipt !== null) {
+            console.log('Found receipt tx', tx, receipt);
             tx.confirmed = true;
             this.saveTxs();
           }
@@ -95,24 +96,27 @@ export class TxService {
 
   public getLastLend(loan: Loan): Tx {
     return this.tx_memory
-      .sort(tx => tx.timestamp)
+      .filter(tx => !tx.confirmed)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
       .find(tx => tx.type === Type.lend && tx.data === loan.id && loan.engine === tx.to);
   }
 
   public registerApproveTx(tx: string, token: string, contract: string, action: boolean) {
-    this.tx_memory.push(new Tx(tx, token, false, Type.approve, { contract: contract, action: action }));
+    const data = { contract: contract, action: action };
+    this.tx_memory.push(new Tx(tx, token, false, Type.approve, data));
     this.saveTxs();
   }
 
   public getLastPendingApprove(token: string, contract: string): boolean {
     const last = this.tx_memory
-      .sort(tx => tx.timestamp)
-      .find(tx => tx.type === Type.approve && tx.data.contract === contract && tx.data.token === token && !tx.confirmed);
+      .filter(tx => !tx.confirmed)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
+      .find(tx => tx.type === Type.approve && tx.data.contract === contract && tx.to === token);
 
-    if (last !== null) {
+    if (last !== undefined) {
       return last.data.action;
     } else {
-      return null;
+      return undefined;
     }
   }
 }
