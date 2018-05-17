@@ -32,6 +32,7 @@ import { DetailCosignerComponent } from './views/loan-detail/detail-cosigner/det
 import { DetailIdentityComponent } from './views/loan-detail/detail-identity/detail-identity.component';
 import { DecentralandCosignerComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DetailTableComponent } from './views/loan-detail/detail-table/detail-table.component';
 
 const appRoutes: Routes = [
   { path: 'loans', component: OpenLoansComponent },
@@ -54,7 +55,8 @@ const appRoutes: Routes = [
     ContentWrapperComponent,
     DetailIdentityComponent,
     DecentralandCosignerComponent,
-    DialogApproveContractComponent
+    DialogApproveContractComponent,
+    DetailTableComponent
   ],
   imports: [
     BrowserModule,

@@ -25,24 +25,7 @@
           <app-conversion-graphic></app-conversion-graphic>
           <app-conversion-graphic></app-conversion-graphic>
           <div class="margintop20"></div>
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">{{ 'currency' }}</th>
-                  <th scope="col">{{ 'Interest / Punitory' }}</th>
-                  <th scope="col">{{ 'Duration' }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{{ loan.currency }}</td>
-                  <td> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</td>
-                  <td>{{ loan.verboseDuration }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <app-detail-table></app-detail-table>
           <div class="table-responsive" (click)="openDetail('identity')">
             <table class="table">
               <thead>
