@@ -85,26 +85,6 @@
   }
 }
 
-.table{
-  >thead{
-    >tr{
-      >th {
-        border: 0px;
-        background-color: #333333;
-        @extend %propiety-title;
-      }
-    }
-  }
-  >tbody{
-    >tr{
-      >td {
-        border: 0px;
-        @extend %propiety-subtitle;
-      }
-    }
-  }
-}
-
 @media (min-width: 768px){}
 @media (min-width: 992px){
   .loan-description {

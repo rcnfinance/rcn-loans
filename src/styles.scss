@@ -9,19 +9,12 @@
         './scss/_helpers.scss', //helpers
         './scss/_fonts.scss'; //fonts
 
+// General
 body{
   position: relative;
   font-family: 'Raleway', sans-serif;
   background-color: $tertiary;
   color: $secondary;
-}
-
-.btn{
-  border-color: $primary;
-  background-color: $primary;
-  border-radius: 2px;
-  text-transform: uppercase;
-  @extend %font-medium;
 }
 
 //TABS
@@ -57,6 +50,13 @@ snack-bar-container.mat-snack-bar-container{
 }
 
 // Buttons
+.btn{
+  border-color: $primary;
+  background-color: $primary;
+  border-radius: 2px;
+  text-transform: uppercase;
+  @extend %font-medium;
+}
 .button{
   &.button-primary{
     color: $secondary;
@@ -98,3 +98,25 @@ snack-bar-container.mat-snack-bar-container{
 .font-regular{@extend %font-regular;}
 .font-bold{@extend %font-bold;}
 .font-black{@extend %font-black;}
+
+// Tables
+.table{
+  >thead{
+    >tr{
+      >th {
+        border: 0px;
+        background-color: #333333;
+        @extend %propiety-title;
+      }
+    }
+  }
+  >tbody{
+    >tr{
+      >td {
+        border: 0px;
+        @extend %propiety-subtitle;
+      }
+    }
+  }
+}
+@media screen and (max-width: 767px){.table-responsive {border: 0px;}}
