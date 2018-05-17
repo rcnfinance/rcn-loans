@@ -21,6 +21,8 @@ import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector
 import { ConversionGraphicComponent } from './conversion-graphic/conversion-graphic.component';
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
+import { AvatarTitleComponent } from './avatar-title/avatar-title.component';
+import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.component';
 
 @NgModule({
   imports: [
@@ -44,7 +46,9 @@ import { BodyListComponent } from './conversion-graphic/body-list/body-list.comp
     CosignerSelectorComponent,
     ConversionGraphicComponent,
     HeaderListComponent,
-    BodyListComponent
+    BodyListComponent,
+    AvatarTitleComponent,
+    IconAvatarComponent
   ],
   exports: [
     LendButtonComponent,
@@ -61,7 +65,9 @@ import { BodyListComponent } from './conversion-graphic/body-list/body-list.comp
     BlockiesModule,
     ConversionGraphicComponent,
     HeaderListComponent,
-    BodyListComponent
+    BodyListComponent,
+    AvatarTitleComponent,
+    IconAvatarComponent
   ]
 })
 export class SharedModule { }

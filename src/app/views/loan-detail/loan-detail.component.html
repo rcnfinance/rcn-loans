@@ -21,7 +21,14 @@
           </ul>
         </div>
         <div class="col-xs-12 col-md-6 loan-description left">
-          <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
+          <div class="row">
+            <div class="col-xs-12 col-sm-6">
+              <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <app-avatar-title></app-avatar-title>
+            </div>
+          </div>
           <app-conversion-graphic></app-conversion-graphic>
           <app-conversion-graphic></app-conversion-graphic>
           <div class="margintop20"></div>

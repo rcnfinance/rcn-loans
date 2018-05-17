@@ -2,12 +2,11 @@
   <div class="avatar-container">
     <img src="{{ brand.icon }}"
       ng-hide="hasAvatar"/>
-    <!-- <div class="title">R</div> -->
     <angular-blockies [options]="blockies()"
       ng-hide="!hasAvatar"></angular-blockies>
   </div>
   <div class="txt-container">
     <div class="subtitle">Created by {{ brand.shortName }}</div>
-    <div class="title">{{ name }}</div>
+    <div class="title ellipsis">{{ name }}</div>
   </div>
 </div>
