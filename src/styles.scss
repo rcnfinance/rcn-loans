@@ -89,3 +89,12 @@ snack-bar-container.mat-snack-bar-container{
 .tertiary{color: $tertiary;}
 .quaternary{color: $quaternary;}
 .fifth{color: $fifth;}
+
+// Typography
+.title{
+  &.main-title{font-size: 24px; text-transform: uppercase; @extend %font-light;} 
+}
+.font-light{@extend %font-light;}
+.font-regular{@extend %font-regular;}
+.font-bold{@extend %font-bold;}
+.font-black{@extend %font-black;}

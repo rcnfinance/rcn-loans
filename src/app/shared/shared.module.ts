@@ -7,12 +7,12 @@ import { BlockiesModule } from 'angular-blockies';
 
 // App Component
 import { MaterialModule } from '../material/material.module';
-import {  } from './header/header.component';
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
 import { FavoriteButtonComponent } from './favorite-button/favorite-button.component';
 import { MainButtonComponent } from './main-button/main-button.component';
 import { CreatorContainerComponent } from './creator-container/creator-container.component';
+import { AvatarComponent } from './avatar/avatar.component';
 import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
 import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector.component';
 import { CloseButtonComponent } from './close-button/close-button.component';
@@ -32,10 +32,10 @@ import { ConversionGraphicComponent } from './conversion-graphic/conversion-grap
     FavoriteButtonComponent,
     MainButtonComponent,
     CreatorContainerComponent,
+    AvatarComponent,
     LoanAvatarComponent,
     CosignerSelectorComponent,
     CloseButtonComponent,
-    ConversionGraphicComponent
   ],
   exports: [
     LendButtonComponent,
@@ -43,10 +43,11 @@ import { ConversionGraphicComponent } from './conversion-graphic/conversion-grap
     FavoriteButtonComponent,
     MainButtonComponent,
     CreatorContainerComponent,
+    AvatarComponent,
     LoanAvatarComponent,
     CosignerSelectorComponent,
     CloseButtonComponent,
-    ConversionGraphicComponent
+    BlockiesModule
   ]
 })
 export class SharedModule { }

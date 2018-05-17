@@ -19,8 +19,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   openDialog() {
     console.log(this.dialog);
     const dialogRef = this.dialog.open(DialogApproveContractComponent, {
-      width: '800px',
-      height: '330px'
+      width: '800px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -30,9 +29,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): any {
     console.log(this.tref.nativeElement.textContent);
   }
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
 
 

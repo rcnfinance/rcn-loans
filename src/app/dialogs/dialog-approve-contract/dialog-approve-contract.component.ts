@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 // App Component
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Web3Service } from '../../services/web3.service';
+import { Utils } from '../../utils/utils';
 
 @Component({
   selector: 'app-dialog-approve-contract',
@@ -18,7 +19,6 @@ export class DialogApproveContractComponent implements OnInit {
   loadLender() {
     this.web3Service.getAccount().then((resolve: string) => {
       this.lender = resolve;
-      console.log(this.lender);
     });
   }
   ngOnInit() {
