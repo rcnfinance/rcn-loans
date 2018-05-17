@@ -18,11 +18,7 @@ export class DialogApproveContractComponent implements OnInit {
 
   loadLender() {
     this.web3Service.getAccount().then((resolve: string) => {
-      console.log(resolve);
       this.lender = resolve;
-      console.log(this.lender);
-      Utils.shortAddress(resolve);
-      console.log(resolve);
     });
   }
   ngOnInit() {
