@@ -30,7 +30,7 @@
             </div>
           </div>
           <app-conversion-graphic [headers]="['Lend', loan.currency, 'Return']" [amountLeft]="loan.amount" [amountRight]="loan.expectedReturn"></app-conversion-graphic>
-          <app-conversion-graphic [headers]="['a', 'b', 'c']" [amountRight]="0" [amountLeft]="0"></app-conversion-graphic>
+          <app-conversion-graphic [headers]="['a', 'b', 'c']" [amountRight]="0" [amountLeft]="0" *ngIf="!isRequest"></app-conversion-graphic>
           <div class="margintop20"></div>
           <app-detail-table></app-detail-table>
           <div class="table-responsive" (click)="openDetail('identity')">

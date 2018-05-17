@@ -2,6 +2,8 @@
 import { Utils } from './../utils/utils';
 import { Currency } from '../utils/currencies';
 
+export enum Status { Request, Ongoing, Paid, Destroyed }
+
 export class Loan {
     public id: number;
     public status: number;
@@ -16,7 +18,7 @@ export class Loan {
 
     constructor(
       id: number,
-      status: number,
+      status: Status,
       borrower: string,
       creator: string,
       rawAmount: number,

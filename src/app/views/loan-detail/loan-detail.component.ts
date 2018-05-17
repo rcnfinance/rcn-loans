@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Route } from '@angular/compiler/src/core';
 // App Models
-import { Loan } from './../../models/loan.model';
+import { Loan, Status } from './../../models/loan.model';
 import { CosignerOption } from '../../models/cosigner.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
@@ -51,6 +51,9 @@ export class LoanDetailComponent implements OnInit {
   }
   openDetail(view: string) {
     this.viewDetail = view;
+  }
+  get isRequest(): boolean {
+    return this.loan.status === Status.Request;
   }
   get getCosinger(): CosignerOption {
     console.log('Get cosigner!');
