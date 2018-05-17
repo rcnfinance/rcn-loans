@@ -17,6 +17,8 @@ import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
 import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector.component';
 import { CloseButtonComponent } from './close-button/close-button.component';
 import { ConversionGraphicComponent } from './conversion-graphic/conversion-graphic.component';
+import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
+import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
 
 @NgModule({
   imports: [
@@ -36,7 +38,9 @@ import { ConversionGraphicComponent } from './conversion-graphic/conversion-grap
     LoanAvatarComponent,
     CosignerSelectorComponent,
     CloseButtonComponent,
-    ConversionGraphicComponent
+    ConversionGraphicComponent,
+    HeaderListComponent,
+    BodyListComponent
   ],
   exports: [
     LendButtonComponent,
@@ -48,8 +52,10 @@ import { ConversionGraphicComponent } from './conversion-graphic/conversion-grap
     LoanAvatarComponent,
     CosignerSelectorComponent,
     CloseButtonComponent,
+    BlockiesModule,
     ConversionGraphicComponent,
-    BlockiesModule
+    HeaderListComponent,
+    BodyListComponent
   ]
 })
 export class SharedModule { }
