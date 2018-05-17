@@ -5,7 +5,7 @@
       <div class="title main-title marginbottom20">Account Information</div>
       <div class="list-avatar">
         <div class="avatar-container">
-          <app-avatar></app-avatar>
+          <app-avatar [seed]=lender></app-avatar>
         </div>
         <div class="txt-container">
           <div class="subtitle">Wallet address</div>
@@ -15,12 +15,13 @@
     </div>
     <div class="col-xs-12 col-sm-6 marginbottom10">
       <div class="title main-title marginbottom20">Authorize</div>
-      <p>Authorize the Loan Engine Contract to operate RCN on your behalf</p>
-      <mat-checkbox>Approve</mat-checkbox>
+      <mat-checkbox></mat-checkbox> Authorize the Loan Engine contract to operate RCN on your behalf
     </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions class="marginbottom-10">
-  <button mat-raised-button [mat-dialog-close]='true' class="button button-primary">Approve</button>
-  <button mat-raised-button [mat-dialog-close]='false' class="button button-secondary">Cancel</button>
+  <!--
+    <button mat-raised-button [mat-dialog-close]='true' class="button button-primary">Approve</button>
+    <button mat-raised-button [mat-dialog-close]='false' class="button button-secondary">Cancel</button>
+  -->
 </mat-dialog-actions>
