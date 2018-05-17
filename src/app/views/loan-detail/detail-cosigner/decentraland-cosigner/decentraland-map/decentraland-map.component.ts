@@ -26,15 +26,16 @@ export class DecentralandMapComponent implements OnInit {
     return this.height / this.sizeBlock;
   }
   ngOnInit() {
+    console.log('Draw map! center:', this.center);
+    const width = this.widthBlocks;
     const coords: [number, number] = [this.center.x, this.center.y];
-    const size: [number, number] = [this.widthBlocks, this.heightBlocks];
+    const size: [number, number] = [width, this.heightBlocks];
     const top = this.center.x + size[0] / 2;
     const start = this.center.y + size[1] / 2;
-
     this.decentralandService.getParcelArea(coords, size).then((parcels: Parcel[]) => {
       const context: CanvasRenderingContext2D = this.canvas.nativeElement.getContext('2d');
       parcels.forEach(parcel => {
-        const absolute_coords = this.absoluteCords(parcel, this.sizeBlock, top, start);
+        const absolute_coords = this.absoluteCords(parcel, this.sizeBlock, width, top, start);
         context.fillStyle = this.getColor(parcel);
         const drawBlock = this.sizeBlock - this.getMargin(parcel);
         context.fillRect(absolute_coords[0], absolute_coords[1], drawBlock, drawBlock);
@@ -61,7 +62,7 @@ export class DecentralandMapComponent implements OnInit {
       return 2;
     }
   }
-  private absoluteCords(parcel: Parcel, size: number, top: number, start: number): [number, number] {
-    return [(top - parcel.x) * size, (start - parcel.y) * size];
+  private absoluteCords(parcel: Parcel, size: number, width: number, top: number, start: number): [number, number] {
+    return [(-1 * (top - parcel.x) + width) * size, (start - parcel.y) * size];
   }
 }

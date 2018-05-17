@@ -36,15 +36,32 @@ export class DecentralandCosigner implements CosignerDetail {
 }
 
 export class Parcel {
-    constructor(
-        public id: string,
-        public x: number,
-        public y: number,
-        public auction_price: number,
-        public owner: string,
-        public district_id: string,
-        public tags: Object
-    ) {}
+   public tags: any;
+   public id: string;
+   public x: number;
+   public y: number;
+   public auction_price: number;
+   public owner: string;
+   public district_id: string;
+
+   constructor(json: any) {
+       this.id = json.id;
+       this.x = json.x;
+       this.y = json.y;
+       this.auction_price = json.auction_price;
+       this.owner = json.owner;
+       this.district_id = json.district_id;
+       this.tags = json.tags;
+   }
+    get highlights(): Tag[] {
+        const result = [];
+        for (const key in (this.tags.proximity as Object)) {
+            if (this.tags.proximity.hasOwnProperty(key)) {
+                result.push(this.tags.proximity[key]);
+            }
+        }
+        return result;
+    }
 }
 
 export class District {
@@ -53,6 +70,13 @@ export class District {
         public name: string,
         public description: string,
         public link: string
+    ) {}
+}
+
+export class Tag {
+    constructor(
+        public district_id: string,
+        public distance: number
     ) {}
 }
 

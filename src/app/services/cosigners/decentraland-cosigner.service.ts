@@ -18,8 +18,9 @@ export class DecentralandCosignerService {
   private _mhelperAddress = '0x5ef16f3412e7c01e5c9803caae1322b28596d0bd';
 
   private _landMarketContract: any;
-  // private _landRegistryContract: any;
   private _mortgageManagerContract: any;
+
+  private _districts: District[];
 
   constructor(private web3: Web3Service, private http: HttpClient) {
     this._mhelper = this.web3.web3.eth.contract(mHelperAbi).at(this._mhelperAddress);
@@ -43,10 +44,24 @@ export class DecentralandCosignerService {
       const limitNw = (x - sx) + ',' + (y - sy);
       const limitSe = (x + sx) + ',' + (y + sy);
       this.http.get('./proxy_decentraland/api/parcels?nw=' + limitNw + '&se=' + limitSe).subscribe((resp: any) => {
-        const parcels = resp.data as Parcel[];
-        resolve(resp.data.parcels);
+        const resultArray = resp.data.parcels as Object[];
+        const parcels: Parcel[] = [];
+        resultArray.forEach(o => parcels.push(new Parcel(o)));
+        resolve(parcels);
       });
     }) as Promise<Parcel[]>;
+  }
+  getDistricts(): Promise<District[]> {
+    return new Promise((resolve) => {
+      if (this._districts !== undefined) {
+        resolve(this._districts);
+      } else {
+        this.http.get('./proxy_decentraland/api/districts').subscribe((resp: any) => {
+          this._districts = resp.data as District[];
+          resolve(this._districts);
+        });
+      }
+    }) as Promise<District[]>;
   }
   getDecentralandOption(loan: Loan): Promise<DecentralandCosigner> {
     return new Promise((resolve) => {
