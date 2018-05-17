@@ -8,7 +8,7 @@ import { SharedModule } from '../../shared/shared.module';
   styleUrls: ['./avatar.component.scss']
 })
 export class AvatarComponent implements OnInit {
-  private getBlockiesOptions(): Object {
+  public getBlockiesOptions(): Object {
     return { // All options are optional
       seed: 'asd', // seed used to generate icon data, default: random
       color: '#4155ff', // to manually specify the icon color, default: random
