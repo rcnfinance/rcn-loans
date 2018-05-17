@@ -15,7 +15,7 @@
     </div>
     <div class="col-xs-12 col-sm-6 marginbottom10">
       <div class="title main-title marginbottom20">Authorize</div>
-      <mat-checkbox [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Loan Engine contract to operate RCN on your behalf
+      <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Loan Engine contract to operate RCN on your behalf
     </div>
   </div>
 </mat-dialog-content>

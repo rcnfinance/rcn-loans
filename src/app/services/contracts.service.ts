@@ -47,29 +47,33 @@ export class ContractsService {
         return new Promise((resolve, reject) => {
           const pending = this.txService.getLastPendingApprove(this._rcnContractAddress, this._rcnEngineAddress);
           if (pending !== undefined) {
+            console.log('Pending engine approved found', pending);
             resolve(pending);
+          } else {
+            const _web3 = this.web3.web3;
+            this._rcnContract.allowance.call(account, this._rcnEngineAddress, function (err, result) {
+              if (err != null) {
+                reject(err);
+              }
+
+              resolve(_web3.fromWei(result) >= _web3.toWei(1000000000));
+            });
           }
-
-          const _web3 = this.web3.web3;
-          this._rcnContract.allowance.call(account, this._rcnEngineAddress, function (err, result) {
-            if (err != null) {
-              reject(err);
-            }
-
-            resolve(_web3.fromWei(result) >= _web3.toWei(1000000000));
-          });
         }) as Promise<boolean>;
     }
 
     public async approveEngine(): Promise<string> {
         const account = await this.web3.getAccount();
+        const txService = this.txService;
+        const rcnAddress = this._rcnContractAddress;
+        const engineAddress = this._rcnEngineAddress;
         return new Promise((resolve, reject) => {
           const _web3 = this.web3.web3;
           this._rcnContract.approve(this._rcnEngineAddress, _web3.toWei(10 ** 32), { from: account }, function (err, result) {
             if (err != null) {
               reject(err);
             }
-            this.txService.registerApproveTx(result, this._rcnContractAddress, this._rcnEngineAddress, true);
+            txService.registerApproveTx(result, rcnAddress, engineAddress, true);
             resolve(result);
           });
         }) as Promise<string>;
@@ -77,13 +81,16 @@ export class ContractsService {
 
     public async dissaproveEngine(): Promise<string> {
       const account = await this.web3.getAccount();
+      const txService = this.txService;
+      const rcnAddress = this._rcnContractAddress;
+      const engineAddress = this._rcnEngineAddress;
       return new Promise((resolve, reject) => {
         const _web3 = this.web3.web3;
         this._rcnContract.approve(this._rcnEngineAddress, 0, { from: account }, function (err, result) {
           if (err != null) {
             reject(err);
           }
-          this.txService.registerApproveTx(result, this._rcnContractAddress, this._rcnEngineAddress, false);
+          txService.registerApproveTx(result, rcnAddress, engineAddress, false);
           resolve(result);
         });
       }) as Promise<string>;
