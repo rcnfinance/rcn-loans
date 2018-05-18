@@ -28,7 +28,7 @@ export class MyLoansComponent implements OnInit {
     private brandingService: BrandingService
   ) {}
   loadLoans() {
-    this.contractsService.getOpenLoans().then((result: Loan[]) => {
+    this.contractsService.getMyLoans().then((result: Loan[]) => {
       this.loans = result;
     });
   }
