@@ -23,6 +23,6 @@ export class CreatorContainerComponent implements OnChanges {
   }
 
   color(): string {
-    return this.brand.color ? this.brand.color : "#333333";
+    return this.brand.color ? this.brand.color : '#333333';
   }
 }
