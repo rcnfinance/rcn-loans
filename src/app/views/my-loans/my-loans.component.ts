@@ -19,7 +19,6 @@ import { Utils } from './../../utils/utils';
   styleUrls: ['./my-loans.component.scss']
 })
 export class MyLoansComponent implements OnInit {
-
   loans = [];
   bestLoan = this.loans[0]; // be dst loan suggested
   pendingLend = [];

@@ -13,6 +13,7 @@ export class Loan {
     public rawAnnualPunitoryInterest: number;
     public currencyRaw: string;
     public engine: string;
+    public lenderBalance: number;
 
     constructor(
       id: number,
@@ -24,7 +25,8 @@ export class Loan {
       rawAnnualInterest: number,
       rawAnnualPunitoryInterest: number,
       currencyRaw: string,
-      engine: string) {
+      engine: string,
+      lenderBalance: number) {
         this.id = id;
         this.status = status;
         this.borrower = Utils.formatAddress(borrower);
@@ -35,6 +37,7 @@ export class Loan {
         this.rawAnnualPunitoryInterest = rawAnnualPunitoryInterest;
         this.currencyRaw = currencyRaw;
         this.engine = engine;
+        this.lenderBalance = lenderBalance;
       }
 
     get uid(): string {
