@@ -12,9 +12,9 @@
             </li>
             <li class="col-item">
               <div class="button-group">
+                <!-- <div class="button-options"><i class="material-icons">favorite</i></div> -->
+                <!-- <div class="button-options"><i class="material-icons">swap_horiz</i></div> -->
                 <div class="button-options"><i class="material-icons">more_vert</i></div>
-                <div class="button-options"><i class="material-icons">favorite</i></div>
-                <div class="button-options"><i class="material-icons">swap_horiz</i></div>
                 <div class="button-options"><i class="material-icons">delete</i></div>
               </div>
             </li>
@@ -22,11 +22,13 @@
         </div>
         <div class="col-xs-12 col-md-6 loan-description left">
           <div class="row">
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-xs-6">
               <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
             </div>
-            <div class="col-xs-12 col-sm-6">
-              <app-avatar-title></app-avatar-title>
+            <div class="col-xs-6">
+              <div [ngClass]="['pull-right']">
+                <app-avatar-title [loan]=loan></app-avatar-title>
+              </div>
             </div>
           </div>
           <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="isRequest ? loan.expectedReturn : loan.total"></app-conversion-graphic>
