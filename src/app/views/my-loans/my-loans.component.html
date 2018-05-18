@@ -2,8 +2,37 @@
   <div class="row">
     <div class="col-xs-12">
       <mat-chip-list>
-        <!-- <mat-chip class="margintop30 marginright15" selected="true" [color]="$primary">{{loans.length}} AVAILABLE</mat-chip> -->
+        <mat-chip class="margintop30 marginright15" selected="true" [color]="$primary">{{loans.length}} LENT</mat-chip>
+        <!-- <p *ngIf='loans.length > 3'>There are a lot of Loans for your profile!</p> -->
       </mat-chip-list>
     </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 card-col" 
+    *ngFor='let loan of loans; let i of index'>
+
+      <div class="card-container">
+        <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
+        <app-close-button></app-close-button>
+        <app-creator-container [loan]=loan></app-creator-container>
+        <!--<app-main-button></app-main-button>-->
+        <div class="card-row">
+          <div class="card-property">
+            <div class="title">{{ 'Borrower' }}</div>
+            <div class="paragraph">{{ loan.borrowerShort }}</div>
+          </div>
+          <div class="card-property">
+            <div class="title">{{ 'Remaining' }}</div>
+            <div class="paragraph">{{ loan.verboseDuration }}</div>
+          </div>
+          <div class="card-property">
+            <div class="title">{{ 'Annual Interest / Punitory' }}</div>
+            <div class="paragraph"> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div>
+          </div>
+          <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="0" [amountLeft]="0"></app-conversion-graphic>
+          
+          <app-detail-button [loan]=loan></app-detail-button>
+        </div>
+      </div>
+    </div>
   </div>
-</div>  
+</div>

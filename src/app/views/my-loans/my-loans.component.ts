@@ -16,7 +16,7 @@ import { Utils } from './../../utils/utils';
 @Component({
   selector: 'app-my-loans',
   templateUrl: './my-loans.component.html',
-  styleUrls: ['./my-loans.component.scss']
+  styleUrls: ['../open-loans/open-loans.component.scss']
 })
 export class MyLoansComponent implements OnInit {
 
