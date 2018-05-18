@@ -53,10 +53,6 @@ export class LoanDetailComponent implements OnInit {
     this.viewDetail = view;
   }
   get getCosinger(): CosignerOption {
-<<<<<<< HEAD
-    console.log('Get cosigner!');
-=======
->>>>>>> 69b2526abe55678225c74caa41481a7eb0122ccf
     if (this.cosigner !== undefined) {
       return this.cosigner;
     } else {
