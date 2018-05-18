@@ -74,9 +74,8 @@ export class LoanDetailComponent implements OnInit {
       ['Remaining', Utils.formatDelta(this.loan.remainingTime, 2)]
     ];
   }
-  get isRequest(): boolean {
-    return this.loan.status === Status.Request;
-  }
+  get isRequest(): boolean { return this.loan.status === Status.Request; }
+  get isOngoing(): boolean { return this.loan.status === Status.Ongoing; }
   get getCosinger(): CosignerOption {
     if (this.cosigner !== undefined) {
       return this.cosigner;
