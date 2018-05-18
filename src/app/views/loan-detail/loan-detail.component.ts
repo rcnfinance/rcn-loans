@@ -46,9 +46,6 @@ export class LoanDetailComponent implements OnInit {
     this.cosigner = cosigner;
     console.log('Selected cosigner', this.cosigner);
   }
-  goHome() {
-    this.router.navigate(['/loans']);
-  }
   openDetail(view: string) {
     this.viewDetail = view;
   }
