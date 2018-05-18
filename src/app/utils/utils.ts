@@ -10,12 +10,12 @@ export class Utils {
         });
     }
     static hexToAscii(str) {
-        let hexString = str;
+        const hexString = str;
         let strOut = '';
             for (let x = 0; x < hexString.length; x += 2) {
                 strOut += String.fromCharCode(parseInt(hexString.substr(x, 2), 16));
             }
-        return strOut;    
+        return strOut;
     }
     static formatAddress(hex: string): string {
         return hex.replace('0x000000000000000000000000', '0x');
@@ -23,7 +23,7 @@ export class Utils {
     static shortAddress(address: string): string {
         return address.substr(0, 4) + '...' + address.substr(-4);
     }
-    static formatDelta(totalSeconds: number): string {
+    static formatDelta(totalSeconds: number, display: number = 5): string {
         const secondsInYear = 86400 * 365;
         const years = Math.floor(totalSeconds / secondsInYear);
         totalSeconds %= secondsInYear;
@@ -33,25 +33,31 @@ export class Utils {
         totalSeconds %= 3600;
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
-      
+
         let result = '';
-        
-        if (years != 0) {
+        let visible = 0;
+
+        if (years !== 0 && visible < display) {
             result += years + ' years, ';
+            visible++;
         }
 
-        if (days != 0) {
-          result += days + ' days, '
+        if (days !== 0 && visible < display) {
+            result += days + ' days, ';
+            visible++;
         }
-      
-        if (hours != 0) {
-          result += hours + ' hours, '
+
+        if (hours !== 0 && visible < display) {
+            result += hours + ' hours, ';
+            visible++;
         }
-      
-        if (minutes != 0) {
-          result += minutes + ' minutes, '
+
+        if (minutes !== 0 && visible < display) {
+            result += minutes + ' minutes, ';
+            visible++;
         }
-        return result.slice(0, -2)
+
+        return result.slice(0, -2);
     }
 
     static formatAmount(amount: Number): string {

@@ -71,7 +71,7 @@ export class LoanDetailComponent implements OnInit {
       ['Lend date', this.formatTimestamp(this.loan.lentTimestamp)],
       ['Due date', this.formatTimestamp(this.loan.dueTimestamp)],
       ['Deadline', this.formatTimestamp(this.loan.dueTimestamp)],
-      ['Remaining', Utils.formatDelta(this.loan.remainingTime)]
+      ['Remaining', Utils.formatDelta(this.loan.remainingTime, 2)]
     ];
   }
   get isRequest(): boolean {
