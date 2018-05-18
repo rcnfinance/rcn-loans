@@ -1,6 +1,7 @@
 import { Component, OnChanges, Input } from '@angular/core';
 import { Loan } from '../../../models/loan.model';
-import { CosignerOption, DecentralandCosigner, CosignerDetail } from './../../../models/cosigner.model';
+import { CosignerOption, CosignerDetail } from './../../../models/cosigner.model';
+import { DecentralandCosigner } from './../../../models/cosigners/decentraland-cosigner.model';
 import { ActivatedRoute } from '@angular/router';
 import { Route } from '@angular/compiler/src/core';
 
@@ -17,7 +18,7 @@ export class DetailCosignerComponent implements OnChanges {
     this.cosigner.detail.then(result => { this.cosignerDetail = result; });
   }
   detailClass(): string {
-    if (this.cosignerDetail === undefined) { return undefined };
+    if (this.cosignerDetail === undefined) { return undefined; }
     switch (this.cosignerDetail.constructor) {
       case DecentralandCosigner:
         return 'decentraland_mortgage';
