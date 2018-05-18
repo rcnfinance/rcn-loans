@@ -16,3 +16,19 @@
     }
   }
 }
+
+@media (min-width: 768px){
+  .properties-block{
+    li{
+      width: 33%;
+    }
+  }
+}
+
+@media (min-width: 992px){
+  .properties-block{
+    li{
+      width: 32.8%;
+    }
+  }
+}
