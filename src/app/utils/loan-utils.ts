@@ -12,7 +12,8 @@ export class LoanUtils {
           parseInt(loanBytes[9], 16),
           parseInt(loanBytes[10], 16),
           loanBytes[16],
+          loanBytes[1],
           engine
         );
-    }  
+    }
 }
