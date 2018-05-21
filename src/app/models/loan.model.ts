@@ -56,7 +56,6 @@ export class Loan {
         let newPunitoryInterest = this.cumulatedPunnitoryInterest;
         let pending;
         let deltaTime;
-
         const endNonPunitory = Math.min(timestamp(), this.dueTimestamp);
         if (endNonPunitory > this.interestTimestamp) {
           deltaTime = endNonPunitory - this.interestTimestamp;
@@ -74,8 +73,8 @@ export class Loan {
           const startPunitory = Math.max(this.dueTimestamp, this.interestTimestamp);
           deltaTime = timestamp() - startPunitory;
           const debt = this.rawAmount + newInterest;
-          pending = Math.min(debt, debt + this.cumulatedPunnitoryInterest - this.rawPaid);
-          newPunitoryInterest += calculateInterest(deltaTime, this.annualPunitoryInterest, pending);
+          pending = Math.min(debt, (debt + newPunitoryInterest) - this.rawPaid);
+          newPunitoryInterest += calculateInterest(deltaTime, this.rawAnnualPunitoryInterest, pending);
         }
 
         return this.rawAmount + newInterest + newPunitoryInterest;

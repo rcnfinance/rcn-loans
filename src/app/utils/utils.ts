@@ -24,6 +24,14 @@ export class Utils {
         return address.substr(0, 4) + '...' + address.substr(-4);
     }
     static formatDelta(totalSeconds: number, display: number = 5): string {
+        let prefix = '';
+
+        if (totalSeconds < 0) {
+            prefix = '- ';
+            totalSeconds *= -1;
+        }
+
+        totalSeconds = Math.abs(totalSeconds);
         const secondsInYear = 86400 * 365;
         const years = Math.floor(totalSeconds / secondsInYear);
         totalSeconds %= secondsInYear;
@@ -57,7 +65,7 @@ export class Utils {
             visible++;
         }
 
-        return result.slice(0, -2);
+        return prefix + result.slice(0, -2);
     }
 
     static formatAmount(amount: Number): string {
