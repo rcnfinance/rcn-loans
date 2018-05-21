@@ -9,6 +9,7 @@ export class ConversionGraphicComponent implements OnInit {
   @Input() headers: string[];
   @Input() amountLeft: number;
   @Input() amountRight: number;
+  @Input() textMiddle: string;
   constructor() { }
 
   ngOnInit() {
