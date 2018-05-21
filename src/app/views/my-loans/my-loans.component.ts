@@ -19,7 +19,6 @@ import { Utils } from './../../utils/utils';
   styleUrls: ['../open-loans/open-loans.component.scss']
 })
 export class MyLoansComponent implements OnInit {
-
   loans = [];
   bestLoan = this.loans[0]; // be dst loan suggested
   pendingLend = [];
@@ -29,7 +28,7 @@ export class MyLoansComponent implements OnInit {
     private brandingService: BrandingService
   ) {}
   loadLoans() {
-    this.contractsService.getOpenLoans().then((result: Loan[]) => {
+    this.contractsService.getMyLoans().then((result: Loan[]) => {
       this.loans = result;
     });
   }
