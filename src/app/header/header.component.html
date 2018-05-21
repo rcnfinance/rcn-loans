@@ -14,9 +14,9 @@
               </mat-menu>
               <li routerLink='/requests' #tref>Requests</li>
               <li routerLink='/my-loans'>Loans</li>
-              <li routerLink='/loan/31'>Help</li>
+              <li routerLink='/loan/39'>Help</li>
               <li class="separator">|</li>
-              <li (click)="openDialog()">
+              <li (click)="openDialog(); makeRotate = !makeRotate;">
                 <div class="flex-container">
                   <div class="flex-item">
                     <div class="list-avatar">
@@ -25,7 +25,8 @@
                       </div>
                     </div>
                   </div>
-                  <div class="raw-item marginleft15">Perfil</div>
+                  <div class="flex-item marginleft15">Perfil</div>
+                  <div class="flex-item marginleft10"><i class="material-icons margintop5" [ngClass]="{'rotate180': makeRotate }">expand_more</i></div>
                 </div>
               </li>
             </ul>

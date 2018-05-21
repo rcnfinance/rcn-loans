@@ -25,6 +25,7 @@ img {user-drag: none; user-select: none; -moz-user-select: none; -webkit-user-dr
 .width-50 {width: 50%; display: inline-block;}
 .col-sides--0{padding: 0;}
 
+.transition{@include transition();};
 .rotate45{@include transform(rotate(45deg));};
 .rotate90{@include transform(rotate(90deg));};
 .rotate180{@include transform(rotate(180deg));};

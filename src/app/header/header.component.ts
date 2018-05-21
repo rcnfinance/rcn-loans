@@ -15,6 +15,7 @@ import { Web3Service } from '../services/web3.service';
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
   account: string;
+  makeRotate = false;
 
   constructor(public dialog: MatDialog, private web3: Web3Service) {}
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
@@ -25,7 +26,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     });
     dialogRef.componentInstance.autoClose = false;
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      console.log('Dialog result: ${result}');
+      this.makeRotate = false;
     });
   }
   ngAfterViewInit(): any {}
