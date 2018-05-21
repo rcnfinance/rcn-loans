@@ -37,28 +37,28 @@
           <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
           <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
           <div class="table-responsive" (click)="openDetail('identity')">
-            <table class="table">
+            <table class="table" (click)="addClass(id=1)">
               <thead>
                 <tr>
-                  <th [ngClass]="{'background-active': id === 1 }"  (click)="addClass(id=1)" scope="col">{{ 'Identity' }}</th>
+                  <th [ngClass]="{'background-active': id === 1 }" scope="col">{{ 'Identity' }}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td (click)='identityActive = ! identityActive' style='cursor: pointer'>{{ loan.borrower }} - Unknown</td>
+                  <td style='cursor: pointer'>{{ loan.borrower }} - Unknown</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="table-responsive" (click)="openDetail('cosigner')">
+          <div class="table-responsive" (click)="openDetail('cosigner'); addClass(id=2)">
             <table class="table">
               <thead>
                 <tr>
-                  <th [ngClass]="{'background-active': id === 2 }"  (click)="addClass(id=2)" scope="col">{{ 'Insurance / Cosigner' }}</th>
+                  <th [ngClass]="{'background-active': id === 2 }" scope="col">{{ 'Insurance / Cosigner' }}</th>
                 </tr>
               </thead>
               <tbody>
-                <td (click)='insuranceActive = ! insuranceActive' style='cursor: pointer'>
+                <td style='cursor: pointer'>
                   <app-cosigner-selector [option]=cosignerOption></app-cosigner-selector>
                 </td>
               </tbody>
