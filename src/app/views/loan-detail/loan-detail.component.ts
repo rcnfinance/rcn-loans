@@ -23,6 +23,9 @@ export class LoanDetailComponent implements OnInit {
   loan: Loan;
   viewDetail: string;
   cosigner: CosignerOption;
+  identityActive: false;
+  insuranceActive: false;
+  id: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,7 +33,7 @@ export class LoanDetailComponent implements OnInit {
     private cosignerService: CosignerService,
     private router: Router
   ) {}
-
+  addClass(id) {this.id = id; }
   ngOnInit() {
     this.route.params.subscribe(params => {
       const id = +params['id']; // (+) converts string 'id' to a number
