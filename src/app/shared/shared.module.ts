@@ -23,6 +23,9 @@ import { HeaderListComponent } from './conversion-graphic/header-list/header-lis
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
 import { AvatarTitleComponent } from './avatar-title/avatar-title.component';
 import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.component';
+import { ButtonGroupComponent } from './button-group/button-group.component';
+import { GobackButtonComponent } from './goback-button/goback-button.component';
+import { WithdrawButtonComponent } from './withdraw-button/withdraw-button.component';
 
 @NgModule({
   imports: [
@@ -48,7 +51,10 @@ import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.comp
     HeaderListComponent,
     BodyListComponent,
     AvatarTitleComponent,
-    IconAvatarComponent
+    IconAvatarComponent,
+    ButtonGroupComponent,
+    GobackButtonComponent,
+    WithdrawButtonComponent
   ],
   exports: [
     LendButtonComponent,
@@ -67,7 +73,10 @@ import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.comp
     HeaderListComponent,
     BodyListComponent,
     AvatarTitleComponent,
-    IconAvatarComponent
+    IconAvatarComponent,
+    ButtonGroupComponent,
+    GobackButtonComponent,
+    WithdrawButtonComponent
   ]
 })
 export class SharedModule { }

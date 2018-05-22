@@ -1,22 +1,17 @@
-<div class="container margintop95">
+<div class="container">
   <div class="row">
     <div class="col-xs-12 loan-detail" *ngIf="loan !== undefined">
       <div class="row">
         <div class="navbar-container">
           <ul class="col-group x3">
             <li class="col-item">
-              <div class="go-back" routerLink='/requests'><i class="material-icons">arrow_back</i></div>
+              <app-goback-button></app-goback-button>
             </li>
             <li class="col-item">
               <app-creator-container [loan]=loan></app-creator-container>
             </li>
             <li class="col-item">
-              <div class="button-group">
-                <!-- <div class="button-options"><i class="material-icons">favorite</i></div> -->
-                <!-- <div class="button-options"><i class="material-icons">swap_horiz</i></div> -->
-                <div class="button-options"><i class="material-icons">more_vert</i></div>
-                <div class="button-options"><i class="material-icons">delete</i></div>
-              </div>
+              <app-button-group></app-button-group>
             </li>
           </ul>
         </div>
@@ -34,8 +29,8 @@
           <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="isRequest ? loan.expectedReturn : loan.total"></app-conversion-graphic>
           <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="loan.pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="loan.paid" *ngIf="!isRequest"></app-conversion-graphic>
           <div class="margintop20"></div>
-          <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
-          <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
+          <!-- <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table> -->
+          <!-- <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table> -->
           <div class="table-responsive" (click)="openDetail('identity')">
             <table class="table" (click)="addClass(id=1)">
               <thead>

@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="title main-h1 marginbottom20">Profile</div>
+    </div>
+    <div class="col-xs-12">
+      <div class="row">
+        <div class="col-xs-12 col-sm-6">
+          <div class="title main-h2 marginbottom20">Account Information</div>
+          <div class="list-avatar">
+            <div class="avatar-container">
+              <app-avatar [seed]=lender></app-avatar>
+            </div>
+            <div class="txt-container">
+              <div class="subtitle">Wallet address</div>
+              <div class="title ellipsis">{{ lender }}</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-6">
+              <div class="list-avatar">
+                <div class="avatar-container request">
+                  <i class="material-icons marginleft1">account_balance</i>
+                </div>
+                <div class="txt-container">
+                  <div class="subtitle">{{ 'Current Money' }}</div>
+                  <div class="title ellipsis">{{ 'RCN' }} {{ '45.657.000' }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <div class="list-avatar">
+                <div class="avatar-container ongoing">
+                  <i class="material-icons marginleft1">add</i>
+                </div>
+                <div class="txt-container">
+                  <div class="subtitle">{{ 'Available Money' }}</div>
+                  <div class="title ellipsis">{{ 'RCN' }} {{ '45.657.000' }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 margintop20">
+              <app-withdraw-button></app-withdraw-button>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <div class="margintop20 visible-xs"></div>
+          <div class="title main-h2 marginbottom20">Authorize</div>
+          <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Loan Engine contract to operate RCN on your behalf
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

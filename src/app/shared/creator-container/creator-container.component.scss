@@ -15,31 +15,6 @@
       @extend %font-black;
       @include transform(translate(-50%, -50%));
     }
-    .button-group{
-      height: 100%;
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
-    .button-options{
-      position: relative;
-      width: 70px;
-      height: 100%;
-      padding: 15px;
-      float: right;
-      color: $secondary;
-      cursor: pointer;
-      @include transition;
-      &:hover{
-        background-color: $fifth;
-      }
-      i{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        @include transform(translate(-50%, -50%));
-      }
-    }
     .go-back {
       width: 70px;
       height: 100%;
