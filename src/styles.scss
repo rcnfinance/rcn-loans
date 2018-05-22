@@ -77,8 +77,10 @@ body{
 
 // Typography
 .title{
-  &.main-title{font-size: 24px; text-transform: uppercase; @extend %font-light;} 
-  &.main-subtitle{font-size: 18px; text-transform: uppercase; @extend %font-light;} 
+  &.main-h1{font-size: 24px; text-transform: uppercase; @extend %font-light;} 
+  &.main-h2{font-size: 18px; text-transform: uppercase; @extend %font-light;} 
+  &.main-title{line-height: 1.4; font-size: 16px; @extend %font-medium;} 
+  &.main-subtitle{line-height: 1.4; font-size: 14px; @extend %font-medium;} 
 }
 .font-light{@extend %font-light;}
 .font-regular{@extend %font-regular;}

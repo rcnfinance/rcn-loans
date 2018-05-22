@@ -25,6 +25,7 @@ import { AvatarTitleComponent } from './avatar-title/avatar-title.component';
 import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
 import { GobackButtonComponent } from './goback-button/goback-button.component';
+import { WithdrawButtonComponent } from './withdraw-button/withdraw-button.component';
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { GobackButtonComponent } from './goback-button/goback-button.component';
     AvatarTitleComponent,
     IconAvatarComponent,
     ButtonGroupComponent,
-    GobackButtonComponent
+    GobackButtonComponent,
+    WithdrawButtonComponent
   ],
   exports: [
     LendButtonComponent,
@@ -73,7 +75,8 @@ import { GobackButtonComponent } from './goback-button/goback-button.component';
     AvatarTitleComponent,
     IconAvatarComponent,
     ButtonGroupComponent,
-    GobackButtonComponent
+    GobackButtonComponent,
+    WithdrawButtonComponent
   ]
 })
 export class SharedModule { }

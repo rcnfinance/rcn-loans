@@ -1,7 +1,7 @@
 <mat-dialog-content>
   <div class="row">
     <div class="col-xs-12 col-sm-6">
-      <div class="title main-title marginbottom20">Account Information</div>
+      <div class="title main-h1 marginbottom20">Account Information</div>
       <div class="list-avatar">
         <div class="avatar-container">
           <app-avatar [seed]=lender></app-avatar>
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="col-xs-12 col-sm-6 marginbottom10">
-      <div class="title main-title marginbottom20">Authorize</div>
+      <div class="title main-h1 marginbottom20">Authorize</div>
       <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Loan Engine contract to operate RCN on your behalf
     </div>
   </div>
