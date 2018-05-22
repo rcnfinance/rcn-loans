@@ -9,6 +9,7 @@ import { Utils } from '../../../utils/utils';
 export class BodyListComponent implements OnInit {
   @Input() amountLeft: number;
   @Input() amountRight: number;
+  @Input() textMiddle: string;
   constructor() { }
 
   ngOnInit() {

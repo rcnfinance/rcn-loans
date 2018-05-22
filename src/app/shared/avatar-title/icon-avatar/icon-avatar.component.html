@@ -1,8 +1,8 @@
 <!-- <div class="avatar-container request">
   <i class="material-icons">call_made</i>
 </div> -->
-<div class="avatar-container ongoing">
-  <i class="material-icons">trending_up</i>
+<div [ngClass]="['avatar-container', class]">
+  <i class="material-icons">{{ icon }}</i>
 </div>
 <!-- <div class="avatar-container indebt">
   <i class="material-icons">error_outline</i>

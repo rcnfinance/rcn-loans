@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Loan, Status } from '../../models/loan.model';
 
 @Component({
   selector: 'app-avatar-title',
@@ -6,10 +7,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./avatar-title.component.scss']
 })
 export class AvatarTitleComponent implements OnInit {
-
+  @Input() loan: Loan;
+  status: string;
   constructor() { }
 
   ngOnInit() {
+    switch (this.loan.status) {
+      case Status.Ongoing:
+        this.status = 'Ongoing';
+        break;
+      case Status.Request:
+        this.status = 'Request';
+        break;
+      case Status.Destroyed:
+        this.status = 'Destroyed';
+        break;
+      case Status.Paid:
+        this.status = 'Paid';
+        break;
+      case Status.Indebt:
+        this.status = 'In debt';
+        break;
+    }
   }
-
 }

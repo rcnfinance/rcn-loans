@@ -1,8 +1,8 @@
 <div class="conversion-block">
   <ol>
     <li class="block-title"><!--<i class="material-icons red">expand_less</i>-->{{ formatAmount(amountLeft) }}</li>
-    <li class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></li>
-    <!-- <li class="currency">~ {{ 'formatInterest(loan.annualInterest)' }} % /  ~ {{ 'formatInterest(loan.annualPunitoryInterest)' }} %</li> -->
+    <li class="currency" *ngIf="textMiddle === undefined"><i class="material-icons" style="font-size: 2em">arrow_forward</i></li>
+    <li *ngIf="textMiddle !== undefined">{{ textMiddle }}</li>
     <li class="block-title"><!--<i class="material-icons green">expand_more</i>-->{{ formatAmount(amountRight) }}</li>
   </ol>
 </div>
