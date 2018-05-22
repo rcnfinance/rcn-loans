@@ -78,6 +78,7 @@ body{
 // Typography
 .title{
   &.main-title{font-size: 24px; text-transform: uppercase; @extend %font-light;} 
+  &.main-subtitle{font-size: 18px; text-transform: uppercase; @extend %font-light;} 
 }
 .font-light{@extend %font-light;}
 .font-regular{@extend %font-regular;}

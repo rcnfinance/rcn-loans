@@ -35,7 +35,6 @@ export class DialogApproveContractComponent implements OnInit {
   }
   clickCheck() {
     let action;
-
     if (this.isApproved) {
       action = this.contracts.dissaproveEngine();
     } else {

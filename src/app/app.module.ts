@@ -42,6 +42,7 @@ const appRoutes: Routes = [
   { path: 'requests', component: OpenLoansComponent },
   { path: 'loan/:id', component: LoanDetailComponent },
   { path: 'my-loans', component: MyLoansComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: '',
     redirectTo: '/requests',
     pathMatch: 'full'

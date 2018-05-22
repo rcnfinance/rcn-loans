@@ -1,9 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { MaterialModule } from './../../material/material.module';
-import { SharedModule } from './../../shared/shared.module';
-
 @Component({
   selector: 'app-goback-button',
   templateUrl: './goback-button.component.html',
