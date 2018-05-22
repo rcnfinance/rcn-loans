@@ -20,8 +20,8 @@ export class DetailButtonComponent {
   handleDetail() {
     this.router.navigate(['loan/' + this.loan.id]);
   }
-  openSnackBar(message: number, action: string) {
-    this.snackBar.open(this.loan.amount , this.loan.borrowerShort {
+  openSnackBar(message: any, action: any) {
+    this.snackBar.open(this.loan.amount , this.loan.borrowerShort, {
       duration: 4000,
     });
   }
