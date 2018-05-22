@@ -22,7 +22,7 @@ export class DetailButtonComponent {
     });
   }
   openSnackBar(message: any, action: any) {
-    // this.snackBar.open(this.loan.amount , this.loan.borrowerShort, {
+    this.snackBar.open(this.loan.amount , this.loan.borrowerShort, {
       duration: 4000,
     });
   }
