@@ -36,6 +36,7 @@ import { DialogApproveContractComponent } from './dialogs/dialog-approve-contrac
 import { DecentralandMapComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DetailTableComponent } from './views/loan-detail/detail-table/detail-table.component';
 import { MyLoansComponent } from './views/my-loans/my-loans.component';
+import { ProfileComponent } from './views/profile/profile.component';
 
 const appRoutes: Routes = [
   { path: 'requests', component: OpenLoansComponent },
@@ -62,7 +63,8 @@ const appRoutes: Routes = [
     DialogApproveContractComponent,
     DecentralandMapComponent,
     DetailTableComponent,
-    MyLoansComponent
+    MyLoansComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

@@ -5,18 +5,13 @@
         <div class="navbar-container">
           <ul class="col-group x3">
             <li class="col-item">
-              <div class="go-back" routerLink='/requests'><i class="material-icons">arrow_back</i></div>
+              <app-goback-button></app-goback-button>
             </li>
             <li class="col-item">
               <app-creator-container [loan]=loan></app-creator-container>
             </li>
             <li class="col-item">
-              <div class="button-group">
-                <!-- <div class="button-options"><i class="material-icons">favorite</i></div> -->
-                <!-- <div class="button-options"><i class="material-icons">swap_horiz</i></div> -->
-                <div class="button-options"><i class="material-icons">more_vert</i></div>
-                <div class="button-options"><i class="material-icons">delete</i></div>
-              </div>
+              <app-button-group></app-button-group>
             </li>
           </ul>
         </div>

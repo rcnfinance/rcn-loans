@@ -13,11 +13,13 @@ import {MatSnackBar} from '@angular/material';
 export class DetailButtonComponent {
   @Input() loan: Loan;
   constructor(private router: Router, public snackBar: MatSnackBar) { }
-  hello(person: string) {
-    console.log('Hello', + this.loan);
-  }
+
   handleDetail() {
-    this.router.navigate(['loan/' + this.loan.id]);
+    this.router.navigate(['/loan/', this.loan.id]).then(nav => {
+      console.log(nav); // true if navigation is successful
+    }, err => {
+      console.log(err); // when there's an error
+    });
   }
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
