@@ -15,6 +15,14 @@
     border-radius: 50%;
     background-color: $primary;
     box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+    &.request{color: $black; background-color: $white;}
+    &.ongoing{background-color: $blue;}
+    &.indebt{background-color: $orange;}
+    &.paid{background-color: $gray7;}
+    &.destroyed{background-color: $red;}
+    i{
+      @extend %position-center;
+    }
     .title{
       position: absolute;
       top: 50%;
