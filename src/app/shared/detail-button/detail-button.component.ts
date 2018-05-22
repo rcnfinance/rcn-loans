@@ -12,16 +12,8 @@ import {MatSnackBar} from '@angular/material';
 })
 export class DetailButtonComponent {
   @Input() loan: Loan;
-<<<<<<< HEAD
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    public snackBar: MatSnackBar
-  ) { }
-=======
   constructor(private router: Router, public snackBar: MatSnackBar) { }
 
->>>>>>> 2e8dc0e860de87f4c7c874a75da670df154d839a
   handleDetail() {
     this.router.navigate(['/loan/', this.loan.id]).then(nav => {
       console.log(nav); // true if navigation is successful
@@ -30,7 +22,7 @@ export class DetailButtonComponent {
     });
   }
   openSnackBar(message: any, action: any) {
-    this.snackBar.open(this.loan.amount , this.loan.borrowerShort, {
+    // this.snackBar.open(this.loan.amount , this.loan.borrowerShort, {
       duration: 4000,
     });
   }
