@@ -107,16 +107,25 @@ export class ContractsService {
     }
     public async lendLoan(loan: Loan): Promise<string> {
         const account = await this.web3.getAccount();
+        const oracleData = await this.getOracleData(loan);
+
+        const cosignerOption = await this.cosignerService.getCosignerOptions(loan);
+
+        let cosigner = '0x0';
+        let cosignerData = '0x0';
+        if (cosignerOption !== undefined) {
+          const cosignerDetail = await cosignerOption.detail;
+          cosigner = cosignerDetail.contract;
+          cosignerData = cosignerDetail.data;
+        }
+
         return new Promise((resolve, reject) => {
           const _web3 = this.web3.web3;
-          this.getOracleData(loan).then((oracleData) => {
-            console.log('Oracle data for this loan', oracleData);
-            this._rcnEngine.lend(loan.id, oracleData, 0x0, 0x0, { from: account }, function (err, result) {
-              if (err != null) {
-                reject(err);
-              }
-              resolve(result);
-            });
+          this._rcnEngine.lend(loan.id, oracleData, cosigner, cosignerData, { from: account }, function(err, result) {
+            if (err != null) {
+              reject(err);
+            }
+            resolve(result);
           });
         }) as Promise<string>;
     }

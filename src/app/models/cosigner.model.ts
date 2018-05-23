@@ -9,6 +9,7 @@ export class CosignerOption {
 
 export class CosignerDetail {
     constructor (
+        public contract: string,
         public data: string
     ) {}
 }

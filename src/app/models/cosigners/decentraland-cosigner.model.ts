@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 
 export class DecentralandCosigner extends CosignerDetail {
     constructor(
+        contract: string,
         data: string,
         public id: number,
         public landId: string,
@@ -11,7 +12,7 @@ export class DecentralandCosigner extends CosignerDetail {
         public financePart: string,
         public parcel: Parcel
     ) {
-        super(data);
+        super(contract, data);
     }
 
     get x(): number {
@@ -31,10 +32,6 @@ export class DecentralandCosigner extends CosignerDetail {
 
     get displayPrice(): string {
         return (this.landPrice / 10 ** 18).toString();
-    }
-
-    get data(): string {
-        return formatData(this.id);
     }
 }
 
