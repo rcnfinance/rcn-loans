@@ -5,6 +5,7 @@ import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
 import { TxService } from '../tx.service';
+import { CosignerService } from './cosigner.service';
 
 declare let require: any;
 
@@ -22,7 +23,7 @@ export class ContractsService {
     private _rcnExtension: any;
     private _rcnExtensionAddress: string = environment.contracts.engineExtension;
 
-    constructor(private web3: Web3Service, private txService: TxService) {
+    constructor(private web3: Web3Service, private txService: TxService, private cosignerService: CosignerService) {
       this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
       this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
       this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);

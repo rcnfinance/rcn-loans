@@ -2,14 +2,17 @@
 import { CosignerDetail } from './../cosigner.model';
 import BigNumber from 'bignumber.js';
 
-export class DecentralandCosigner implements CosignerDetail {
+export class DecentralandCosigner extends CosignerDetail {
     constructor(
+        data: string,
         public id: number,
         public landId: string,
         public landPrice: number,
         public financePart: string,
         public parcel: Parcel
-    ) { }
+    ) {
+        super(data);
+    }
 
     get x(): number {
         const xy = decodeTokenId(this.landId);

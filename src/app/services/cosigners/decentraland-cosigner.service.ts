@@ -70,6 +70,7 @@ export class DecentralandCosignerService {
       this._mhelper.findMortgageId(mortgageManager, engine, loan.id, (errId, mortgageId) => {
         this._mortgageManagerContract.mortgages(mortgageId, (errD, mortgageData) => {
           const decentralandCosigner = new DecentralandCosigner(
+            this.buildData(mortgageId),
             mortgageId, // Mortgage ID
             '0x' + mortgageData[4].toString(16), // Land ID
             mortgageData[5], // Land price
@@ -83,5 +84,9 @@ export class DecentralandCosignerService {
         });
       });
     });
+  }
+  private buildData(index: number): string {
+    const hex = index.toString(16);
+    return '0x' + '0'.repeat(64 - hex.length) + hex;
   }
 }
