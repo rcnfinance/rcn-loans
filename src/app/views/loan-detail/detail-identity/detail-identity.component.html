@@ -1,9 +1,17 @@
-<div class="list-avatar">
+<div class="list-avatar" *ngIf='hasIdentity() == !undefined'>
   <div class="avatar-container">
     <app-avatar [seed]=account></app-avatar>
   </div>
   <div class="txt-container">
-    <div class="subtitle">Created by {{ brand.shortName }}</div>
-    <div class="title ellipsis">{{ name }}</div>
+    <div class="subtitle">Identity {{ 'Unknown' }}</div>
+    <div class="title ellipsis">{{ 'name' }}</div>
+  </div>
+</div>
+
+<div class="empty-container" *ngIf='hasIdentity() == undefined'>
+  <div class="empty-row">
+    <img class="img-center marginbottom20" src="https://ripiocredit.network/images/logo.png" alt="rcn-image">
+    <div class="title main-h1">The {{ 'Identity' }} is empty now</div>
+    <div class="title main-h2">This information will show up here in a few minutes</div>
   </div>
 </div>
