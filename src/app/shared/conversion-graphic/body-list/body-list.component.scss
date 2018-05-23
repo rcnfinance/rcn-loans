@@ -23,6 +23,10 @@
       vertical-align: middle;
       vertical-align: -webkit-baseline-middle;
       @extend %font-regular;
+      &.feature{
+        font-size: 14px;
+        line-height: 2.8;
+      }
     }
     &:nth-child(3){
       color: $primary;
@@ -36,6 +40,12 @@
   .conversion-block{
     li{
       width: 42.8%;
+      &:nth-child(2){
+        &.feature{
+          font-size: 18px;
+          line-height: 2.2;
+        }
+      }
     }
   }
 }
