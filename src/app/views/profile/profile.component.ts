@@ -12,7 +12,7 @@ import { SharedModule } from './../../shared/shared.module';
 export class ProfileComponent implements OnInit {
   lender: string;
   constructor(
-    private web3Service: Web3Service,
+    private web3Service: Web3Service
   ) { }
 
   loadLender() {

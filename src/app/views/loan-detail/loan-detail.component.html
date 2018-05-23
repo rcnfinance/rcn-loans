@@ -22,44 +22,50 @@
             </div>
             <div class="col-xs-6">
               <div [ngClass]="['pull-right']">
-                <app-avatar-title></app-avatar-title>
+                <app-avatar-title [loan]=loan></app-avatar-title>
               </div>
             </div>
           </div>
-          <app-conversion-graphic [headers]="['Lend', loan.currency, 'Return']" [amountLeft]="loan.amount" [amountRight]="loan.expectedReturn"></app-conversion-graphic>
-          <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="0" [amountLeft]="0"></app-conversion-graphic>
+          <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="isRequest ? loan.expectedReturn : loan.total"></app-conversion-graphic>
+          <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="loan.pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="loan.paid" *ngIf="!isRequest"></app-conversion-graphic>
           <div class="margintop20"></div>
-          <app-detail-table></app-detail-table>
+          <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
+          <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
           <div class="table-responsive" (click)="openDetail('identity')">
-            <table class="table">
+            <table class="table" (click)="addClass(id=1)">
               <thead>
                 <tr>
-                  <th [ngClass]="{'background-active': id === 1 }"  (click)="addClass(id=1)" scope="col">{{ 'Identity' }}</th>
+                  <th [ngClass]="{'background-active': id === 1 }" scope="col">{{ 'Identity' }}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td (click)='identityActive = ! identityActive' style='cursor: pointer'>{{ loan.borrower }} - Unknown</td>
+                  <td style='cursor: pointer'>{{ loan.borrower }} - Unknown</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="table-responsive" (click)="openDetail('cosigner')">
+          <div class="table-responsive" (click)="openDetail('cosigner'); addClass(id=2)">
             <table class="table">
               <thead>
                 <tr>
-                  <th [ngClass]="{'background-active': id === 2 }"  (click)="addClass(id=2)" scope="col">{{ 'Insurance / Cosigner' }}</th>
+                  <th [ngClass]="{'background-active': id === 2 }" scope="col">{{ 'Insurance / Cosigner' }}</th>
                 </tr>
               </thead>
               <tbody>
-                <td (click)='insuranceActive = ! insuranceActive' style='cursor: pointer'>
+                <td style='cursor: pointer'>
                   <app-cosigner-selector [option]=cosignerOption></app-cosigner-selector>
                 </td>
               </tbody>
             </table>
           </div>
-          <app-pay-button></app-pay-button>
-          <app-forgive-button></app-forgive-button>
+          <div *ngIf="isRequest">
+            <app-lend-button [loan]=loan></app-lend-button>
+          </div>
+          <div *ngIf="isOngoing">
+            <app-pay-button></app-pay-button>
+            <app-forgive-button></app-forgive-button>
+          </div>
         </div>
         <div class="col-xs-12 col-md-6 loan-description right">
           <app-detail-cosigner *ngIf="isDetail('cosigner')" [cosigner]="cosigner"></app-detail-cosigner>

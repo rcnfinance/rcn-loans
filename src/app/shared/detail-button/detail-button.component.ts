@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Loan } from './../../models/loan.model';
 
 import { MaterialModule } from './../../material/material.module';
@@ -21,11 +21,13 @@ export class DetailButtonComponent {
       console.log(err); // when there's an error
     });
   }
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000,
+  /*
+  openSnackBar(message: any, action: any) {
+    this.snackBar.open(this.loan.amount , this.loan.borrowerShort, {
+      duration: 4000,
     });
   }
+  */
 }
 
 

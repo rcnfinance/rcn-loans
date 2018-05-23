@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-detail-table',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./detail-table.component.scss']
 })
 export class DetailTableComponent implements OnInit {
-
+  @Input() data: [string, string][] = [];
   constructor() { }
 
   ngOnInit() {

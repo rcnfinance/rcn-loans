@@ -30,7 +30,7 @@
             <div class="paragraph"> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div>
           </div>
           
-          <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="0" [amountLeft]="0"></app-conversion-graphic>
+          <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountLeft]="loan.paid" [amountRight]="loan.total"></app-conversion-graphic>
           
           <app-detail-button [loan]=loan></app-detail-button>
         </div>
