@@ -9,12 +9,18 @@ import { Route } from '@angular/compiler/src/core';
   styleUrls: ['./detail-identity.component.scss']
 })
 export class DetailIdentityComponent implements OnInit {
-
   @Input() cosignerDetail: CosignerDetail;
-
+  identity: any;
   constructor(
     private route: ActivatedRoute
   ) { }
+
+  hasIdentity(): any {
+    if (this.identity === undefined) {console.log(this.identity); return undefined; } else {
+      console.log(this.identity);
+      return true;
+    }
+  }
 
   ngOnInit() {
     this.route.parent.params.subscribe(params => {
