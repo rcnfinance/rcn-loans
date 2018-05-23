@@ -20,6 +20,7 @@ export class Loan {
     constructor(
         public engine: string,
         public id: number,
+        public oracle: string,
         public statusFlag: number,
         public borrower: string,
         public creator: string,

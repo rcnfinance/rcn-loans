@@ -6,6 +6,7 @@ export class LoanUtils {
         return new Loan(
           engine,
           id,
+          Utils.formatAddress(loanBytes[1]),
           parseInt(loanBytes[14], 16),
           Utils.formatAddress(loanBytes[2]),
           Utils.formatAddress(loanBytes[4]),
