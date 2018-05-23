@@ -1,0 +1,46 @@
+@import '../../../../scss/_variables.scss'; //variables
+
+.list-avatar {
+  height: 55px;
+  position: relative;
+  padding-top: 3px;
+  padding-left: 55px;
+  .avatar-container {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    overflow: hidden;
+    top: 0px;
+    left: 0px;
+    border-radius: 50%;
+    background-color: $primary;
+    box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+    .title{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      font-size: 18px;
+      color: $secondary;
+      @extend %font-black;
+      @include transform(translate(-50%, -50%));
+    }
+    img,
+    canvas{
+      width: 50px;
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+    }
+  }
+  .txt-container{
+    .title{
+      line-height: 1.4;
+      font-size: 16px;
+      @extend %font-medium;
+    }
+    .subtitle{
+      line-height: 1.4;
+      font-size: 12px;
+      @extend %font-medium;
+    }
+  }
+}

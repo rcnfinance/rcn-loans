@@ -1,3 +1,9 @@
-<p>
-  detail-identity works!
-</p>
+<div class="list-avatar">
+  <div class="avatar-container">
+    <app-avatar [seed]=account></app-avatar>
+  </div>
+  <div class="txt-container">
+    <div class="subtitle">Created by {{ brand.shortName }}</div>
+    <div class="title ellipsis">{{ name }}</div>
+  </div>
+</div>
