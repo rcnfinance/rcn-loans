@@ -1,22 +1,2 @@
-<!-- <select class="selector" (change)="onChanged($event.target.value)" *ngIf="hasOptions()">
-    <option *ngFor='let option of options' [value]="option.id">{{option.name}}</option>
-</select> -->
-<!--
-<button mat-raised-button 
-  [matMenuTriggerFor]="menu" 
-  (change)="onChanged($event.target.value)" 
-  style="background-color: transparent"
-  *ngIf="hasOptions()">
-    Insurance
-    <i class="material-icons" style="font-size: 1.5em">expand_more</i>
-</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item *ngFor='let option of options' [value]="option.id">{{option.name}}</button>
-</mat-menu>
--->
-<div *ngIf="hasOptions()">
-  {{ option.name }}
-</div>
-<div *ngIf="!hasOptions()">
-  Not available
-</div>
+<td *ngIf="hasOptions()" style='cursor: pointer'>{{ option.name }}</td>
+<td *ngIf="!hasOptions()" style='cursor: pointer'>Not available</td>

@@ -1,0 +1,12 @@
+@import '../../../scss/_variables.scss'; //variables
+
+// Tables
+
+td {
+  border: 0px;
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  @extend %propiety-subtitle;
+}
+@media screen and (max-width: 767px){.table-responsive {border: 0px;}}
