@@ -2,7 +2,7 @@
 
 //LOAN DETAIL
 .loan-detail{
-  margin-top: 40px;
+  margin-bottom: 20px;
 }
 .navbar-container {
   height: 100px;
@@ -41,20 +41,19 @@
   float: left;
   padding: 15px;
   &.left{
-    height: 605px;
+    position: relative;
+    height: 475px;
+    background-color: $fifth;
+  }
+  &.right{
     position: absolute;
     top: 100px;
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: $fifth;
-  }
-  &.right{
-    position: relative;
-    min-height: 605px;
-    margin-top: 605px;
+    min-height: 670px;
+    margin-top: 475px;
     background-color: $quaternary;
-
   }
 }
 .col-group{
@@ -75,12 +74,14 @@
   .loan-description {
     width: 50%;
     &.left{
-      height: auto;
-    }
-    &.right{
       position: relative;
       margin-top: 0px;
       width: 50%;
+    }
+    &.right{
+      height: auto;
+      min-height: 475px;
+      margin-top: 0;
       margin-left: 50%;
     }
   }

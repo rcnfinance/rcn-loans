@@ -1,37 +1,48 @@
-<div class="flex-container">
-  <div class="flex-item"><i class="material-icons" style="font-size: 2.5em">place</i></div>
-  <div class="raw-item">{{ cosigner.parcel.id }}</div>
-</div>
-
-<div class="parcel-container">
-  <app-decentraland-map [center]=cosigner.parcel></app-decentraland-map>
-</div>
-
-<div class="card-row">
-  <div class="card-property">
-    <div class="title">{{ 'Precio' }}</div>
-    <div class="paragraph">{{ cosigner.displayPrice }} MANA</div>
+<div class="row">
+  <div class="col-xs-12">
+    <app-decentraland-map [center]=cosigner.parcel></app-decentraland-map>
   </div>
-  <div class="card-property">
-    <div class="title">{{ 'Financiación' }}</div>
-    <div class="paragraph"> ~ {{ cosigner.financePart }} %</div>
-  </div>
-  <div class="card-property">
-    <div class="title margintop20 marginbottom10">{{ 'Contexto' }}</div>
-    <div class="list-avatar marginright15" *ngFor='let highlight of this.cosigner.parcel.highlights; let i of index'>
-      <div class="avatar-container">
-        <img src="{{ highlightIcon(highlight) }}">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4">
+        <div class="icon-container">
+          <div class="icon"><i class="material-icons" style="font-size: 2.5em">place</i></div>
+          <div class="txt">{{ cosigner.parcel.id }}</div>
+        </div>
       </div>
-      <div class="txt-container">
-        <div class="subtitle">{{ highlightTitle(highlight) }}</div>
-        <div class="title">{{ highlightDistance(highlight) }}</div>
+      <div class="col-xs-12 col-sm-4">
+        <div class="margintop20 visible-xs"></div>
+        <div class="title main-subtitle">{{ 'Precio' }}</div>
+        <div class="title main-title">{{ cosigner.displayPrice }} MANA</div>
+      </div>
+      <div class="col-xs-12 col-sm-4">
+        <div class="margintop20 visible-xs"></div>
+        <div class="title main-subtitle">{{ 'Financiación' }}</div>
+        <div class="title main-subtitle"> ~ {{ cosigner.financePart }} %</div>
+      </div>
+      <div class="col-xs-12">
+        <div class="card-property">
+          <div class="title margintop20 marginbottom10">{{ 'Contexto' }}</div>
+          <div class="list-avatar marginright15" *ngFor='let highlight of this.cosigner.parcel.highlights; let i of index'>
+            <div class="avatar-container">
+              <img src="{{ highlightIcon(highlight) }}">
+            </div>
+            <div class="txt-container">
+              <div class="subtitle">{{ highlightTitle(highlight) }}</div>
+              <div class="title">{{ highlightDistance(highlight) }}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+            <div class="legals">
+              <p>
+                This loan is backed by a Decentraland parcel. The tokens involved in the lending will be used to purchase the corresponding parcel linked to this escrow smart contact: 0xceceaa8edc0830c7cec497e33bb3a3c28dd55a32.
+                <br><br>
+                <strong>Notice:</strong> the ownership of this parcel will be transferred to the lender in case of a default.
+              </p>
+            </div>
 
-<p>
-  This loan is backed by a Decentraland parcel. The tokens involved in the lending will be used to purchase the corresponding parcel linked to this escrow smart contact: 0xceceaa8edc0830c7cec497e33bb3a3c28dd55a32.
-  <br><br>
-  <strong>Notice:</strong> the ownership of this parcel will be transferred to the lender in case of a default.
-</p>
+
