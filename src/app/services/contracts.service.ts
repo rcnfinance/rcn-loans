@@ -5,12 +5,16 @@ import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
 import { TxService } from '../tx.service';
+import { CosignerService } from './cosigner.service';
+import { Utils } from '../utils/utils';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
 declare let require: any;
 
 const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
 const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
+const oracleAbi = require('../contracts/Oracle.json');
 
 @Injectable()
 export class ContractsService {
@@ -22,7 +26,12 @@ export class ContractsService {
     private _rcnExtension: any;
     private _rcnExtensionAddress: string = environment.contracts.engineExtension;
 
-    constructor(private web3: Web3Service, private txService: TxService) {
+    constructor(
+      private web3: Web3Service,
+      private txService: TxService,
+      private cosignerService: CosignerService,
+      private http: HttpClient
+    ) {
       this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
       this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
       this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
@@ -98,8 +107,21 @@ export class ContractsService {
     }
     public async lendLoan(loan: Loan): Promise<string> {
         const account = await this.web3.getAccount();
+        const oracleData = await this.getOracleData(loan);
+
+        const cosignerOption = await this.cosignerService.getCosignerOptions(loan);
+
+        let cosigner = '0x0';
+        let cosignerData = '0x0';
+        if (cosignerOption !== undefined) {
+          const cosignerDetail = await cosignerOption.detail;
+          cosigner = cosignerDetail.contract;
+          cosignerData = cosignerDetail.data;
+        }
+
         return new Promise((resolve, reject) => {
-          this._rcnEngine.lend(loan.id, 0x0, 0x0, 0x0, { from: account }, function (err, result) {
+          const _web3 = this.web3.web3;
+          this._rcnEngine.lend(loan.id, oracleData, cosigner, cosignerData, { from: account }, function(err, result) {
             if (err != null) {
               reject(err);
             }
@@ -111,11 +133,39 @@ export class ContractsService {
       const account = await this.web3.getAccount();
       return new Promise((resolve, reject) => {
         this._rcnEngine.withdrawalList(loans, account, (err, result) => {
-          if (err != null) {
-            reject(err);
-          }
-          resolve(result);
-        });
+            if (err != null) {
+              reject(err);
+            }
+            resolve(result);
+          });
+        }) as Promise<string>;
+    }
+    public async getOracleData(loan: Loan): Promise<string> {
+      return new Promise((resolve) => {
+        if (loan.oracle === Utils.address_0) {
+          console.log('Loan has no oracle');
+          resolve('0x');
+        } else {
+          const web3 = this.web3.web3;
+          const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
+          oracle.url.call((err, url) => {
+            if (url === '') {
+              console.log('Oracle does not require data');
+              resolve('0x');
+            } else {
+              this.http.get(url).subscribe((resp: any) => {
+                resp.forEach(e => {
+                  if (e.currency === loan.currencyRaw) {
+                    resolve(e.data);
+                    return;
+                  }
+                });
+                console.log('Oracle did not provide data', resp);
+                resolve('0x');
+              });
+            }
+          });
+        }
       }) as Promise<string>;
     }
     public async getLoan(id: number): Promise<Loan> {

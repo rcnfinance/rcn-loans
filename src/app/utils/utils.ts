@@ -1,5 +1,6 @@
 
 export class Utils {
+    static address_0 = '0x0000000000000000000000000000000000000000';
     static formatInterest(raw: number): number {
         return 311040000000000 / raw;
     }
