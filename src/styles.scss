@@ -79,6 +79,8 @@ body{
 .title{
   &.main-h1{font-size: 24px; text-transform: uppercase; @extend %font-light;} 
   &.main-h2{font-size: 18px; text-transform: uppercase; @extend %font-light;} 
+  &.main-h3{font-size: 18px; @extend %font-bold;} 
+  &.main-h4{font-size: 16px; @extend %font-regular;} 
   &.main-title{line-height: 1.4; font-size: 16px; @extend %font-medium;} 
   &.main-subtitle{line-height: 1.4; font-size: 14px; @extend %font-medium;} 
 }
