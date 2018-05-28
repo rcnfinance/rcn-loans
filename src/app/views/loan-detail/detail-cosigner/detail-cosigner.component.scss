@@ -1,0 +1,13 @@
+@import '../../../../scss/_variables.scss'; //variables
+
+.empty-container{
+  position: relative;
+  min-height: 400px;
+  -webkit-filter: grayscale(1);
+  filter: grayscale(1);
+  .empty-row{
+    width: 100%;
+    text-align: center;
+    @extend %position-center;
+  }
+}
