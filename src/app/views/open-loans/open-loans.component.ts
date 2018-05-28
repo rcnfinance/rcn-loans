@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { HttpModule, Response } from '@angular/http';
 import { FormControl } from '@angular/forms';
 // App Models
@@ -22,6 +22,7 @@ export class OpenLoansComponent implements OnInit {
   loans = [];
   bestLoan = this.loans[0]; // be dst loan suggested
   pendingLend = [];
+  @Input() loading;
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
@@ -34,7 +35,7 @@ export class OpenLoansComponent implements OnInit {
   }
   ngOnInit() {
     this.loadLoans();
-    this.loading = false;
+    console.log(this.loading);
   }
   private formatInterest(interest: Number): string {
     return Number(interest.toFixed(2)).toString();
