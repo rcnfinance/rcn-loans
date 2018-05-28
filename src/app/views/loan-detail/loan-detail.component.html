@@ -35,7 +35,7 @@
             <table class="table" (click)="addClass(id=1)">
               <thead>
                 <tr>
-                  <th [ngClass]="{'background-active': id === 1 }" scope="col">{{ 'Identity' }}</th>
+                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 1 }" scope="col">{{ 'Identity' }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -49,7 +49,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th [ngClass]="{'background-active': id === 2 }" scope="col">{{ 'Insurance / Cosigner' }}</th>
+                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 2 }" scope="col">{{ 'Insurance / Cosigner' }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -66,8 +66,8 @@
           </div>
         </div>
         <div class="col-xs-12 col-md-6 loan-description right">
-          <app-detail-cosigner *ngIf="isDetail('cosigner')" [cosigner]="cosigner"></app-detail-cosigner>
           <app-detail-identity *ngIf="isDetail('identity')"></app-detail-identity>
+          <app-detail-cosigner *ngIf="isDetail('cosigner')" [cosigner]="cosigner"></app-detail-cosigner>
         </div>
       </div>
     </div>
