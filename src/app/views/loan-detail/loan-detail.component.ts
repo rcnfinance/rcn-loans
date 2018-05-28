@@ -22,7 +22,7 @@ import { DatePipe } from '@angular/common';
 })
 export class LoanDetailComponent implements OnInit {
   loan: Loan;
-  viewDetail: string;
+  viewDetail = 'identity';
   cosigner: CosignerOption;
   identityActive: false;
   insuranceActive: false;
@@ -49,9 +49,6 @@ export class LoanDetailComponent implements OnInit {
   onCosignerSelected(cosigner: CosignerOption) {
     this.cosigner = cosigner;
     console.log('Selected cosigner', this.cosigner);
-  }
-  openDetail(view: string) {
-    this.viewDetail = view;
   }
   get interestMiddleText(): string {
     // ~ {{ 'formatInterest(loan.annualInterest)' }} % /  ~ {{ 'formatInterest(loan.annualPunitoryInterest)' }} %
@@ -82,6 +79,9 @@ export class LoanDetailComponent implements OnInit {
     } else {
       return this.cosignerOption;
     }
+  }
+  openDetail(view: string) {
+    this.viewDetail = view;
   }
   isDetail(view: string): Boolean {
     return view === this.viewDetail;
