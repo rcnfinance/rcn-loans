@@ -23,8 +23,8 @@
                   <i class="material-icons marginleft1">account_balance</i>
                 </div>
                 <div class="txt-container">
-                  <div class="subtitle">{{ 'Current Money' }}</div>
-                  <div class="title ellipsis">{{ 'RCN' }} {{ '45.657.000' }}</div>
+                  <div class="subtitle">{{ 'Account balance' }}</div>
+                  <div class="title ellipsis">{{ 'RCN' }} {{ balance }}</div>
                 </div>
               </div>
             </div>
@@ -34,8 +34,8 @@
                   <i class="material-icons marginleft1">add</i>
                 </div>
                 <div class="txt-container">
-                  <div class="subtitle">{{ 'Available Money' }}</div>
-                  <div class="title ellipsis">{{ 'RCN' }} {{ '45.657.000' }}</div>
+                  <div class="subtitle">{{ 'Available to withdraw' }}</div>
+                  <div class="title ellipsis">{{ 'RCN' }} {{ available }}</div>
                 </div>
               </div>
             </div>
@@ -44,11 +44,13 @@
             </div>
           </div>
         </div>
+        <!-- // TODO Add this again and connect to contract
         <div class="col-xs-12 col-sm-6">
           <div class="margintop20 visible-xs"></div>
           <div class="title main-h2 marginbottom20">Authorize</div>
           <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Loan Engine contract to operate RCN on your behalf
         </div>
+        -->
       </div>
     </div>
   </div>
