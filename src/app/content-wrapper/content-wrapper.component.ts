@@ -16,7 +16,10 @@ export class ContentWrapperComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loading = false;
+    this.loading = true;
+    setTimeout(function() {
+      this.loading = false;
+    }, 2000);
   }
 
 }
