@@ -26,7 +26,7 @@ export class LoanDetailComponent implements OnInit {
   cosigner: CosignerOption;
   identityActive: false;
   insuranceActive: false;
-  id: any;
+  id: any = 1;
 
   constructor(
     private route: ActivatedRoute,
