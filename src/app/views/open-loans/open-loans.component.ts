@@ -34,6 +34,7 @@ export class OpenLoansComponent implements OnInit {
   }
   ngOnInit() {
     this.loadLoans();
+    this.loading = false;
   }
   private formatInterest(interest: Number): string {
     return Number(interest.toFixed(2)).toString();
