@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { HttpModule, Response } from '@angular/http';
 import { FormControl } from '@angular/forms';
 // App Models
@@ -18,25 +18,31 @@ import { Utils } from './../../utils/utils';
   templateUrl: './open-loans.component.html',
   styleUrls: ['./open-loans.component.scss']
 })
-export class OpenLoansComponent implements OnInit {
+export class OpenLoansComponent implements OnInit, OnDestroy {
+  public loading: boolean;
   loans = [];
   bestLoan = this.loans[0]; // be dst loan suggested
   pendingLend = [];
-  @Input() loading;
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
     private brandingService: BrandingService
-  ) {}
+  ) {
+    this.loading = true;
+    console.log(this.loading);
+  }
   loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
+      console.log(this.loading);
+      this.loading = false;
+      console.log(this.loading);
     });
   }
   ngOnInit() {
     this.loadLoans();
-    console.log(this.loading);
   }
+  ngOnDestroy() {}
   private formatInterest(interest: Number): string {
     return Number(interest.toFixed(2)).toString();
   }

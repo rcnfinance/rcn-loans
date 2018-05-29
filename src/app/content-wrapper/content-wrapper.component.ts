@@ -1,8 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
-
-// App Component
-import { SharedModule } from '../shared/shared.module';
-import { MaterialModule } from '../material/material.module';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-content-wrapper',
@@ -10,16 +6,9 @@ import { MaterialModule } from '../material/material.module';
   styleUrls: ['./content-wrapper.component.scss']
 })
 export class ContentWrapperComponent implements OnInit {
-  public loading: boolean;
-  constructor() {
-    this.loading = true;
-  }
+  constructor() { }
 
   ngOnInit() {
-    this.loading = true;
-    setTimeout(function() {
-      this.loading = false;
-    }, 2000);
   }
 
 }
