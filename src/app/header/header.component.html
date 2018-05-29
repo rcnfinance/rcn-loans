@@ -10,14 +10,14 @@
               <mat-menu #menu="matMenu">
                 <button routerLink='/requests' mat-menu-item>Requests</button>
                 <button routerLink='/my-loans' mat-menu-item>Loans</button>
-                <button routerLink='/profile' mat-menu-item>Help</button>
-                <button mat-menu-item (click)='openDialog();'>Profile</button>
+                <button (click)='openDialog();' mat-menu-item>Help</button>
+                <button mat-menu-item routerLink='/profile'>Profile</button>
               </mat-menu>
               <li routerLink='/requests' #tref>Requests</li>
               <li routerLink='/my-loans'>Loans</li>
-              <li routerLink='/profile'>Help</li>
+              <li (click)="openDialog()">Help</li>
               <li class="separator">|</li>
-              <li (click)="openDialog(); makeRotate = !makeRotate;">
+              <li (click)="handleProfile(); makeRotate = !makeRotate;">
                 <div class="flex-container">
                   <div class="flex-item">
                     <div class="list-avatar">
