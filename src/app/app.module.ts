@@ -40,6 +40,7 @@ import { ProfileComponent } from './views/profile/profile.component';
 
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgProgressModule, NgProgressBrowserXhr } from 'ngx-progressbar';
 
 const appRoutes: Routes = [
   { path: 'requests', component: OpenLoansComponent },
