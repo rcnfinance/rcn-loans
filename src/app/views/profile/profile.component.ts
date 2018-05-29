@@ -15,7 +15,7 @@ import BigNumber from 'bignumber.js';
 export class ProfileComponent implements OnInit {
   private ethWei = new BigNumber(10).pow(new BigNumber(18));
   lender: string;
-  weiBalance: BigNumber;
+  rcnBalance: BigNumber;
   weiAvailable: BigNumber;
   loansWithBalance: number[];
   constructor(
@@ -24,12 +24,30 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   get balance(): string {
-    if (this.weiBalance   )
-    return this.weiBalance.div(this.ethWei);
+    if (this.rcnBalance === undefined) {
+      return '...';
+    }
+    return this.removeTrailingZeros(this.rcnBalance.toFixed(18));
   }
 
   get available(): string {
-    return this.weiAvailable.div(this.ethWei);
+    if (this.weiAvailable === undefined) {
+      return '...';
+    }
+    return this.removeTrailingZeros(this.weiAvailable.div(this.ethWei).toFixed(18));
+  }
+
+  private removeTrailingZeros(value) {
+    value = value.toString();
+
+    if (value.indexOf('.') === -1) {
+        return value;
+    }
+
+    while ((value.slice(-1) === '0' || value.slice(-1) === '.') && value.indexOf('.') !== -1) {
+        value = value.substr(0, value.length - 1);
+    }
+    return value;
   }
 
   loadLender() {
@@ -40,7 +58,7 @@ export class ProfileComponent implements OnInit {
 
   loadRcnBalance() {
     this.contractService.getUserBalanceRCN().then((balance: number) => {
-      this.weiBalance = balance;
+      this.rcnBalance = balance;
     });
   }
 

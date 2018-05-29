@@ -206,12 +206,12 @@ export class ContractsService {
 
       loans.forEach(loan => {
         if (loan.lenderBalance > 0) {
-          total = total.add(loan.lenderBalance);
+          total += loan.lenderBalance;
           pendingLoans.push(loan.id);
         }
       });
 
-      return [total, pendingLoans];
+      return [new BigNumber(total), pendingLoans];
     }
     public async getPendingWithdraws(): Promise<[number, number[]]> {
       const account = await this.web3.getAccount();
