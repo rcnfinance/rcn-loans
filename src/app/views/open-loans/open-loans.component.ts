@@ -12,7 +12,7 @@ import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
 // App Utils
 import { Utils } from './../../utils/utils';
-// import { NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-open-loans',
@@ -24,30 +24,26 @@ export class OpenLoansComponent implements OnInit, OnDestroy {
   loans = [];
   bestLoan = this.loans[0]; // be dst loan suggested
   pendingLend = [];
+  loader = true;
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
     private brandingService: BrandingService,
-    // private spinner: NgxSpinnerService,
+    private spinner: NgxSpinnerService,
   ) {
-    this.loading = true;
-    console.log(this.loading);
   }
   loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
-      console.log(this.loading);
-      this.loading = false;
-      console.log(this.loading);
     });
   }
   ngOnInit() {
     this.loadLoans();
-    // this.spinner.show();
- 
-    // setTimeout(() => {
-    //     this.spinner.hide();
-    // }, 5000);
+    this.spinner.show();
+    setTimeout(() => {
+        this.spinner.hide();
+        this.loader = false;
+    }, 2000);
   }
   ngOnDestroy() {}
   private formatInterest(interest: Number): string {

@@ -1,4 +1,5 @@
-<div class="container">
+<ngx-spinner></ngx-spinner>
+<div class="container" *ngIf='!loader'>
   <div class="row">
     <div class="col-xs-12">
       <div class="title main-h1">Requests</div>
@@ -7,9 +8,6 @@
         <!-- <p *ngIf='loans.length > 3'>There are a lot of Loans for your profile!</p> -->
       </mat-chip-list>
     </div>
-
-    <!-- <app-spinner></app-spinner> -->
-    <ngx-spinner></ngx-spinner>
 
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 card-col" 
     *ngFor='let loan of loans; let i of index'>
