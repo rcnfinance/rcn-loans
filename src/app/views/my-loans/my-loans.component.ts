@@ -12,6 +12,8 @@ import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
 // App Utils
 import { Utils } from './../../utils/utils';
+// App Spinner
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-my-loans',
@@ -25,14 +27,17 @@ export class MyLoansComponent implements OnInit {
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
-    private brandingService: BrandingService
+    private brandingService: BrandingService,
+    private spinner: NgxSpinnerService,
   ) {}
   loadLoans() {
     this.contractsService.getMyLoans().then((result: Loan[]) => {
       this.loans = result;
+      this.spinner.hide();
     });
   }
   ngOnInit() {
+    this.spinner.show();
     this.loadLoans();
   }
   private formatInterest(interest: Number): string {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import { Route } from '@angular/compiler/src/core';
 // App Models
 import { Loan, Status } from './../../models/loan.model';
@@ -13,7 +14,8 @@ import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
 // App Utils
 import { Utils } from './../../utils/utils';
-import { DatePipe } from '@angular/common';
+// App Spinner
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-loan-detail',
@@ -32,16 +34,19 @@ export class LoanDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private contractsService: ContractsService,
     private cosignerService: CosignerService,
-    private router: Router
+    private router: Router,
+    private spinner: NgxSpinnerService,
   ) {}
   addClass(id) {this.id = id; }
   ngOnInit() {
+    this.spinner.show();
     this.route.params.subscribe(params => {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
         this.cosigner = this.cosignerOption;
         console.log(this.loan);
+        this.spinner.hide();
       });
       // In a real app: dispatch action to load the details here.
    });
