@@ -26,7 +26,7 @@ export class OpenLoansComponent implements OnInit, OnDestroy {
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
-    private brandingService: BrandingService
+    private brandingService: BrandingService,
   ) {
     this.loading = true;
     console.log(this.loading);
