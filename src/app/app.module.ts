@@ -40,7 +40,6 @@ import { ProfileComponent } from './views/profile/profile.component';
 
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { NgProgressModule, NgProgressBrowserXhr } from 'ngx-progressbar';
 
 const appRoutes: Routes = [
   { path: 'requests', component: OpenLoansComponent },
@@ -88,7 +87,14 @@ const appRoutes: Routes = [
   entryComponents: [
     DialogApproveContractComponent
   ],
-  providers: [ContractsService, TxService, BrandingService, CosignerService, Web3Service, DecentralandCosignerService],
+  providers: [
+    ContractsService,
+    TxService,
+    BrandingService,
+    CosignerService,
+    Web3Service,
+    DecentralandCosignerService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
