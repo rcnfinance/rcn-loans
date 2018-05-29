@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, AfterViewInit } from '@angular/core';
 import { HttpModule, Response } from '@angular/http';
 import { FormControl } from '@angular/forms';
 // App Models
@@ -20,7 +20,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   templateUrl: './open-loans.component.html',
   styleUrls: ['./open-loans.component.scss']
 })
-export class OpenLoansComponent implements OnInit, OnDestroy {
+export class OpenLoansComponent implements OnInit, OnDestroy, AfterViewInit {
   public loading: boolean;
   loans = [];
   bestLoan = this.loans[0]; // be dst loan suggested
@@ -41,6 +41,7 @@ export class OpenLoansComponent implements OnInit, OnDestroy {
     this.spinner.show();
     this.loadLoans();
   }
+  ngAfterViewInit() {}
   ngOnDestroy() {}
   private formatInterest(interest: Number): string {
     return Number(interest.toFixed(2)).toString();

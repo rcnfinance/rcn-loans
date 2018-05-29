@@ -42,6 +42,15 @@ body{
   text-transform: uppercase;
   @extend %font-medium;
 }
+.mat-fab.mat-accent[disabled], .mat-fab.mat-primary[disabled], .mat-fab.mat-warn[disabled], .mat-fab[disabled][disabled], .mat-mini-fab.mat-accent[disabled], .mat-mini-fab.mat-primary[disabled], .mat-mini-fab.mat-warn[disabled], .mat-mini-fab[disabled][disabled], .mat-raised-button.mat-accent[disabled], .mat-raised-button.mat-primary[disabled], .mat-raised-button.mat-warn[disabled], .mat-raised-button[disabled][disabled]{
+  color: $secondary;
+  // background-color: rgba(65, 85, 255,.9);
+  background-color: rgba(51, 51, 51,.7);
+  &:hover, &:active, &:visited, &:focus{
+    cursor: not-allowed;
+    background-color: rgba(51, 51, 51,.7);
+  }
+}
 .button{
   &.button-primary{
     color: $secondary;
