@@ -12,6 +12,7 @@ import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
 // App Utils
 import { Utils } from './../../utils/utils';
+// import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-open-loans',
@@ -27,6 +28,7 @@ export class OpenLoansComponent implements OnInit, OnDestroy {
     private contractsService: ContractsService,
     private txService: TxService,
     private brandingService: BrandingService,
+    // private spinner: NgxSpinnerService,
   ) {
     this.loading = true;
     console.log(this.loading);
@@ -41,6 +43,11 @@ export class OpenLoansComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.loadLoans();
+    // this.spinner.show();
+ 
+    // setTimeout(() => {
+    //     this.spinner.hide();
+    // }, 5000);
   }
   ngOnDestroy() {}
   private formatInterest(interest: Number): string {

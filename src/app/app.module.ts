@@ -38,6 +38,9 @@ import { DetailTableComponent } from './views/loan-detail/detail-table/detail-ta
 import { MyLoansComponent } from './views/my-loans/my-loans.component';
 import { ProfileComponent } from './views/profile/profile.component';
 
+// App Plugins
+import { NgxSpinnerModule } from 'ngx-spinner';
+
 const appRoutes: Routes = [
   { path: 'requests', component: OpenLoansComponent },
   { path: 'loan/:id', component: LoanDetailComponent },
@@ -75,6 +78,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxSpinnerModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: false } // <-- debugging purposes only
