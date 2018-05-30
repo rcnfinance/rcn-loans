@@ -11,8 +11,8 @@ export class DecentralandMapComponent implements OnInit {
   @ViewChild('mapCanvas') canvas: ElementRef;
   @Input() center: Parcel;
 
-  public width = 340;
-  public height = 200;
+  @Input() public width;
+  @Input() public height;
   public sizeBlock = 10;
   public margin = 2;
 
@@ -26,7 +26,7 @@ export class DecentralandMapComponent implements OnInit {
     return this.height / this.sizeBlock;
   }
   ngOnInit() {
-    console.log('Draw map! center:', this.center);
+    console.log('Draw map! center:', this.center, this.width, this.height);
     const width = this.widthBlocks;
     const coords: [number, number] = [this.center.x, this.center.y];
     const size: [number, number] = [width, this.heightBlocks];
@@ -34,12 +34,10 @@ export class DecentralandMapComponent implements OnInit {
     const start = this.center.y + size[1] / 2;
     this.decentralandService.getParcelArea(coords, size).then((parcels: Parcel[]) => {
       const context: CanvasRenderingContext2D = this.canvas.nativeElement.getContext('2d');
-      console.log('Parcels', parcels);
       parcels.forEach(parcel => {
         const absolute_coords = this.absoluteCords(parcel, this.sizeBlock, width, top, start);
         context.fillStyle = this.getColor(parcel);
         const drawBlock = this.sizeBlock - this.getMargin(parcel);
-        console.log('Draw', parcel, absolute_coords);
         context.fillRect(absolute_coords[0], absolute_coords[1], drawBlock, drawBlock);
       });
     });

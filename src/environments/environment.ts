@@ -10,8 +10,12 @@ export enum Agent {
 export const environment = {
   production: false,
   url: 'http://localhost:4200/',
-  readerNode: 'http://ec2-18-231-100-127.sa-east-1.compute.amazonaws.com:8544/',
   envName: 'dev',
+  network: {
+    id: '3',
+    name: 'Ropsten',
+    provider: 'http://ec2-18-221-133-10.us-east-2.compute.amazonaws.com:8545/'
+  },
   contracts: {
     rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
