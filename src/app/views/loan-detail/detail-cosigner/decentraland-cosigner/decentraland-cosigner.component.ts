@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { DecentralandCosigner, District, Tag } from '../../../../models/cosigners/decentraland-cosigner.model';
 import { Loan } from '../../../../models/loan.model';
 import { DecentralandCosignerService } from '../../../../services/cosigners/decentraland-cosigner.service';

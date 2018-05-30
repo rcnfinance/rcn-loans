@@ -36,8 +36,8 @@ export class DecentralandCosignerService {
       const sx = size[0] / 2;
       const sy = size[1] / 2;
       console.log(size, sx, sy);
-      const limitNw = (x - sx) + ',' + (y - sy);
-      const limitSe = (x + sx) + ',' + (y + sy);
+      const limitNw = (x - sx) + ',' + (y + sy);
+      const limitSe = (x + sx) + ',' + (y - sy);
       this.http.get('./proxy_decentraland/api/parcels?nw=' + limitNw + '&se=' + limitSe).subscribe((resp: any) => {
         const resultArray = resp.data.parcels as Object[];
         const parcels: Parcel[] = [];
