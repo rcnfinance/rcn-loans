@@ -58,3 +58,7 @@
   margin-right: 5px;
   margin-left: 10px;
 }
+.half-logo{
+  position: relative; left: 50%; @include transform(translate(-50%, 0%));
+  max-width: 200px;
+}
