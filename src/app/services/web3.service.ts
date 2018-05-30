@@ -5,31 +5,39 @@ import { environment } from '../../environments/environment';
 declare let require: any;
 declare let window: any;
 
+export enum Type { Injected, Provided }
+
 @Injectable()
 export class Web3Service {
   private _web3: any;
   private _web3reader: any;
   private _account: string = null;
 
+  public web3Type: Type;
+
   constructor() {
+    this._web3reader = this.buildWeb3();
+    this._web3 = this._web3reader;
+
     if (typeof window.web3 !== 'undefined') {
       // Use Mist/MetaMask's provider
+      console.log('Web3 provider detected');
       this._web3 = new Web3(window.web3.currentProvider);
+      this.web3Type = Type.Provided;
 
-      // if (this._web3.version.network !== '3') {
-      //   alert('Please connect to the Ropsten network');
-      // }
-    } else {
-      console.warn(
-        'Please use a dapp browser like mist or MetaMask plugin for chrome'
-      );
+      if (this._web3.version.network !== environment.network.id) {
+        console.log('Mismatch provider network ID', this._web3.version.network, environment.network.id);
+        this.web3Type = Type.Injected;
+      }
     }
-
-    this._web3reader = new Web3(new Web3.providers.HttpProvider(environment.readerNode));
   }
 
   get web3reader(): any {
     return this._web3reader;
+  }
+
+  private buildWeb3(): any {
+    return new Web3(new Web3.providers.HttpProvider(environment.readerNode));
   }
 
   get web3(): any {
@@ -41,13 +49,16 @@ export class Web3Service {
       this._account = await new Promise((resolve, reject) => {
         this._web3.eth.getAccounts((err, accs) => {
           if (err != null) {
-            alert('There was an error fetching your accounts.');
+            resolve(undefined);
+            return;
+          }
+          console.log(this._web3.version.network, environment.network.id);
+          if (this._web3.version.network !== environment.network.id) {
+            resolve(undefined);
             return;
           }
           if (accs.length === 0) {
-            alert(
-              'Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.'
-            );
+            resolve(undefined);
             return;
           }
           resolve(accs[0]);

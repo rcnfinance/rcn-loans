@@ -17,8 +17,9 @@
               <li routerLink='/my-loans'>Loans</li>
               <li routerLink='/profile'>Balance</li>
               <li class="separator">|</li>
+              <li (click)="openDialog()" *ngIf="!hasAccount">Login</li>
               <li (click)="openDialog(); makeRotate = !makeRotate;">
-                <div class="flex-container">
+                <div class="flex-container" *ngIf="hasAccount">
                   <div class="flex-item">
                     <div class="list-avatar">
                       <div class="avatar-container">
