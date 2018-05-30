@@ -43,7 +43,7 @@ export class LendButtonComponent {
   }
 
   get enabled(): Boolean {
-    return this.txService.getLastLend(this.loan) !== undefined;
+    return this.txService.getLastLend(this.loan) === undefined;
   }
 
   get buttonText(): string {

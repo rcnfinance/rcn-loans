@@ -68,7 +68,6 @@ export class Utils {
 
         return prefix + result.slice(0, -2);
     }
-
     static formatAmount(amount: Number): string {
         const maxDigits = 6;
         if (amount.toString().length <= maxDigits) {

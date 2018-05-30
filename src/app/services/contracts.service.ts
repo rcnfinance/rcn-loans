@@ -8,6 +8,7 @@ import { TxService } from '../tx.service';
 import { CosignerService } from './cosigner.service';
 import { Utils } from '../utils/utils';
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import BigNumber from 'bignumber.js';
 
 declare let require: any;
 
@@ -210,9 +211,9 @@ export class ContractsService {
         });
       }) as Promise<Loan[]>;
     }
-    public readPendingWithdraws(loans: Loan[]): [number, number[]] {
+    public readPendingWithdraws(loans: Loan[]): [BigNumber, number[]] {
       const pendingLoans = [];
-      let total = 0;
+      let total = new BigNumber(0);
 
       loans.forEach(loan => {
         if (loan.lenderBalance > 0) {
@@ -221,7 +222,7 @@ export class ContractsService {
         }
       });
 
-      return [total, pendingLoans];
+      return [new BigNumber(total), pendingLoans];
     }
     public async getPendingWithdraws(): Promise<[number, number[]]> {
       const account = await this.web3.getAccount();
