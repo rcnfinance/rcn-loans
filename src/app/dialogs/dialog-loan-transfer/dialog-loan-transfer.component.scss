@@ -1,0 +1,21 @@
+@import '../../../scss/_variables.scss'; //variables
+
+.currency-logo{
+  width: 35px;
+  display: inline-block;
+  margin-right: 5px;
+  margin-left: 10px;
+  margin-top: -5px;
+}
+.rcn-balance{
+  font-size: 22px;
+  @extend %font-bold;
+}
+.half-logo{
+  position: relative; left: 50%; @include transform(translate(-50%, 0%));
+  max-width: 200px;
+}
+
+.sticky-center-top{
+  position: sticky; top: 50%; @include transform(translate(0%, -50%));
+}
