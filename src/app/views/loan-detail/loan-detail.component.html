@@ -47,8 +47,8 @@
             </table>
           </div>
           <div class="table-responsive">
-            <table class="table" (click)="addClass(id=1)">
-              <thead *ngIf="!isRequest">
+            <table class="table" (click)="addClass(id=1)" *ngIf="!isRequest">
+              <thead>
                 <tr>
                   <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
                 </tr>
