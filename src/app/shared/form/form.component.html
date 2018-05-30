@@ -1,35 +1,20 @@
 <div class="row">
-  <div class="col-xs-12 col-sm-4">
-    <!-- <form class="example-container" [formGroup]="options" [style.fontSize.px]="getFontSize()">
-      <mat-form-field [color]="options.value.color">
-        <mat-select placeholder="Color" formControlName="color">
-          <mat-option value="primary">RCN</mat-option>
-          <mat-option value="accent">MANA</mat-option>
-          <mat-option value="warn">ETH</mat-option>
-        </mat-select>
-      </mat-form-field>
-    
-      <mat-form-field [color]="options.value.color">
-        <input matInput type="number" placeholder="Font size (px)" formControlName="fontSize" min="10">
-        <mat-error *ngIf="options.get('fontSize')?.invalid">Min size: 10px</mat-error>
-      </mat-form-field>
-    </form> -->
-  </div>
-  <div class="col-xs-12 col-sm-6">
+  <div class="col-xs-12">
     <div class="margintop10"></div>
     <mat-form-field>
       <input matInput type="number" placeholder="Amount" min="10">
       <mat-hint>You're paying with RCN</mat-hint>
     </mat-form-field>
   </div>
-  <div class="col-xs-12 col-sm-6">
+  <div class="col-xs-12">
     <div class="margintop10"></div>
     <mat-form-field>
       <input matInput placeholder="Recipient address">
+      <mat-hint>Remember that transferring LAON is an irreversible operation. Please check the address carefully</mat-hint>
     </mat-form-field>
   </div>
   <div class="col-xs-12 margintop20">
-    <a mat-raised-button class="button button-primary">{{ 'Submit' }}</a>
-    <a mat-raised-button class="button button-secondary">{{ 'Cancel' }}</a>
+    <button mat-raised-button class="button button-primary" [mat-dialog-close]='true'>{{ 'Submit' }}</button>
+    <button mat-raised-button class="button button-secondary" [mat-dialog-close]='true'>{{ 'Cancel' }}</button>
   </div>
 </div>

@@ -33,6 +33,7 @@ import { DetailCosignerComponent } from './views/loan-detail/detail-cosigner/det
 import { DetailIdentityComponent } from './views/loan-detail/detail-identity/detail-identity.component';
 import { DecentralandCosignerComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DialogLoanTransferComponent } from './dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 import { DecentralandMapComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DetailTableComponent } from './views/loan-detail/detail-table/detail-table.component';
 import { MyLoansComponent } from './views/my-loans/my-loans.component';
@@ -65,10 +66,11 @@ const appRoutes: Routes = [
     DetailIdentityComponent,
     DecentralandCosignerComponent,
     DialogApproveContractComponent,
+    DialogLoanTransferComponent,
     DecentralandMapComponent,
     DetailTableComponent,
     MyLoansComponent,
-    ProfileComponent
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,7 +87,8 @@ const appRoutes: Routes = [
     )
   ],
   entryComponents: [
-    DialogApproveContractComponent
+    DialogApproveContractComponent,
+    DialogLoanTransferComponent,
   ],
   providers: [
     ContractsService,

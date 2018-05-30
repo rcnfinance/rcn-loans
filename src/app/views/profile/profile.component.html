@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12">
-      <div class="title main-h1 marginbottom20">Profile</div>
+      <div class="title main-h1 marginbottom20" (click)='loanTransfer()'>Profile</div>
     </div>
     <div class="col-xs-12">
       <div class="row">
@@ -51,27 +51,6 @@
           <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Loan Engine contract to operate RCN on your behalf
         </div>
         -->
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="container margintop60">
-  <div class="row">
-    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
-      <div class="row">
-        <div class="col-xs-12 col-sm-3">
-          <img src="../../../assets/rcn-logo.png" class="half-logo" alt="rcn-image">
-        </div>
-        <div class="col-xs-12 col-sm-9">
-          <div class="title main-h2">Pay a Loan</div>
-          <div class="current-balance">
-            <span class="title">Your current balance is </span>
-            <img src="../../../assets/rcn-logo.png" class="currency-logo" alt="rcn-image">
-            <span class="rcn-balance">2000</span>
-          </div>
-          <app-form></app-form>
-        </div>
       </div>
     </div>
   </div>
