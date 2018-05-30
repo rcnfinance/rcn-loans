@@ -97,6 +97,11 @@ body{
 .font-bold{@extend %font-bold;}
 .font-black{@extend %font-black;}
 
+// Loader
+ngx-spinner .black-overlay.ng-star-inserted {
+  z-index: 9 !important;
+}
+
 // Tables
 .table{
   >thead{
@@ -140,5 +145,25 @@ body{
 snack-bar-container.mat-snack-bar-container{
   color: $secondary;
   button{&.mat-simple-snackbar-action{color: $primary;}
+  }
+}
+
+  //Forms
+mat-form-field{
+  .mat-input-infix{
+    width: auto;
+    color: $secondary;
+  }
+  .mat-form-field-label{
+    color: $secondary;
+  }
+  .mat-form-field-underline {
+    background-color: rgba(255,255,255,.4);
+  }
+  .mat-select-arrow {
+    color: rgba(255,255,255,.5);
+  }
+  .mat-hint {
+    color: rgba(255,255,255,.5);
   }
 }
