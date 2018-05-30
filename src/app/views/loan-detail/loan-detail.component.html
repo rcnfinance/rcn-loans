@@ -46,6 +46,20 @@
               </tbody>
             </table>
           </div>
+          <div class="table-responsive">
+            <table class="table" (click)="addClass(id=1)">
+              <thead>
+                <tr>
+                  <th style='cursor: pointer' *ngIf="!isRequest" scope="col">{{ 'Lender' }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style='cursor: pointer'>{{ loan.owner }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div class="table-responsive" (click)="openDetail('cosigner'); addClass(id=2)">
             <table class="table">
               <thead>
