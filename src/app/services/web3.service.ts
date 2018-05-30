@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as Web3 from 'web3';
+import { environment } from '../../environments/environment';
 
 declare let require: any;
 declare let window: any;
@@ -7,6 +8,7 @@ declare let window: any;
 @Injectable()
 export class Web3Service {
   private _web3: any;
+  private _web3reader: any;
   private _account: string = null;
 
   constructor() {
@@ -22,6 +24,12 @@ export class Web3Service {
         'Please use a dapp browser like mist or MetaMask plugin for chrome'
       );
     }
+
+    this._web3reader = new Web3(new Web3.providers.HttpProvider(environment.readerNode));
+  }
+
+  get web3reader(): any {
+    return this._web3reader;
   }
 
   get web3(): any {

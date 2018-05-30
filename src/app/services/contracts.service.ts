@@ -34,7 +34,7 @@ export class ContractsService {
     ) {
       this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
       this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
-      this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
+      this._rcnExtension = this.web3.web3reader.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     }
 
     public async getUserBalanceRCN(): Promise<number> {
@@ -180,7 +180,15 @@ export class ContractsService {
     }
     public async getOpenLoans(): Promise<Loan[]> {
         return new Promise((resolve, reject) => {
-          this._rcnExtension.searchOpenLoans.call(this._rcnEngineAddress, 0, 0, (err, result) => {
+          // Filter open loans, non expired loand and valid mortgage
+          const filters = [
+            '0x3e703de416a62525c8653be11d71486550618ec8',
+            '0xe084b7cf7f6869a96cd72962047bf65e6d55e1e1',
+            '0x0bc0ac0f08235979951bb155d15f1a08dd7dcb2a'
+          ];
+
+          const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
+          this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
             if (err != null) {
               reject(err);
             }
@@ -191,7 +199,10 @@ export class ContractsService {
     public async getMyLoans(): Promise<Loan[]> {
       const account = await this.web3.getAccount();
       return new Promise((resolve, reject) => {
-        this._rcnExtension.searchLenderLoans.call(this._rcnEngineAddress, account, 0, 0, (err, result) => {
+        const filters = ['0xe52eac8af912b8b3196b2921f12b66c91b39e025'];
+        const params = [this.addressToBytes32(account)];
+        this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
+          console.log(err, result);
           if (err != null) {
             reject(err);
           }
@@ -229,5 +240,8 @@ export class ContractsService {
         loans.push(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, loanBytes));
       }
       return loans;
+    }
+    private addressToBytes32(address: string): string {
+      return '0x000000000000000000000000' + address.replace('0x', '');
     }
 }

@@ -10,12 +10,14 @@ export enum Agent {
 export const environment = {
   production: false,
   url: 'http://localhost:4200/',
+  readerNode: 'http://ec2-18-231-100-127.sa-east-1.compute.amazonaws.com:8544/',
   envName: 'dev',
   contracts: {
     rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
-    engineExtension: '0xd4cd87d5155b83eb9f3cec4c02c32df15bcde6b6',
+    engineExtension: '0x9a2fded5ab51458c203ef5747b9a88d33fc1f032',
     decentraland: {
+      mortgageCreator: '0x2bdf545935d4264cbb7457e97d69b6b86458eb64',
       mortgageManager: '0xea06746f1bd82412f9f243f6bee0b8194d67a67d',
       landMarket: '0x80faa2b517b84a5aec1078d3600eab4c0b3aff56'
     }
