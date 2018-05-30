@@ -37,7 +37,7 @@ export class Web3Service {
   }
 
   private buildWeb3(): any {
-    return new Web3(new Web3.providers.HttpProvider(environment.readerNode));
+    return new Web3(new Web3.providers.HttpProvider(environment.network.provider));
   }
 
   get web3(): any {
