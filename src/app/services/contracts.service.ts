@@ -203,7 +203,6 @@ export class ContractsService {
         const filters = ['0xe52eac8af912b8b3196b2921f12b66c91b39e025'];
         const params = [this.addressToBytes32(account)];
         this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
-          console.log(err, result);
           if (err != null) {
             reject(err);
           }
@@ -217,12 +216,13 @@ export class ContractsService {
 
       loans.forEach(loan => {
         if (loan.lenderBalance > 0) {
+          console.log(loan.lenderBalance);
           total += loan.lenderBalance;
           pendingLoans.push(loan.id);
         }
       });
 
-      return [new BigNumber(total), pendingLoans];
+      return [total, pendingLoans];
     }
     public async getPendingWithdraws(): Promise<[number, number[]]> {
       const account = await this.web3.getAccount();

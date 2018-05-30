@@ -34,7 +34,7 @@ export class ProfileComponent implements OnInit {
     if (this.weiAvailable === undefined) {
       return '...';
     }
-    return this.removeTrailingZeros(this.weiAvailable.div(this.ethWei).toFixed(18));
+    return this.removeTrailingZeros((this.weiAvailable / this.ethWei).toFixed(18));
   }
 
   private removeTrailingZeros(value) {

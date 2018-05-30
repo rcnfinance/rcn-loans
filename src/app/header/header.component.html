@@ -17,7 +17,7 @@
               <li routerLink='/my-loans'>Loans</li>
               <li routerLink='/profile'>Balance</li>
               <li class="separator">|</li>
-              <li (click)="handleProfile(); makeRotate = !makeRotate;">
+              <li (click)="openDialog(); makeRotate = !makeRotate;">
                 <div class="flex-container">
                   <div class="flex-item">
                     <div class="list-avatar">
@@ -26,7 +26,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="flex-item marginleft15">Perfil</div>
+                  <div class="flex-item marginleft15">Profile</div>
                   <div class="flex-item marginleft10"><i class="material-icons margintop5" [ngClass]="{'rotate180': makeRotate }">expand_more</i></div>
                 </div>
               </li>
