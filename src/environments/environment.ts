@@ -14,6 +14,9 @@ export const environment = {
   network: {
     id: '3',
     name: 'Ropsten',
+    explorer: {
+      address: 'https://ropsten.etherscan.io/address/${address}'
+    },
     provider: 'http://ec2-18-221-133-10.us-east-2.compute.amazonaws.com:8545/'
   },
   contracts: {

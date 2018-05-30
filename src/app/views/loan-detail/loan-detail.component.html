@@ -81,7 +81,7 @@
           </div>
         </div>
         <div class="col-xs-12 col-md-6 loan-description right">
-          <app-detail-identity *ngIf="isDetail('identity')"></app-detail-identity>
+          <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan" ></app-detail-identity>
           <app-detail-cosigner *ngIf="isDetail('cosigner')" [cosigner]="cosigner"></app-detail-cosigner>
         </div>
       </div>
