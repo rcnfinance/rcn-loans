@@ -34,7 +34,8 @@ export class Loan {
         public cumulatedPunnitoryInterest: number,
         public interestTimestamp: number,
         public dueTimestamp: number,
-        public lenderBalance: number
+        public lenderBalance: number,
+        public owner: string
     ) { }
 
     get status(): Status {
