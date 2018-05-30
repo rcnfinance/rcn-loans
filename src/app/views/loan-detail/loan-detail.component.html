@@ -48,9 +48,9 @@
           </div>
           <div class="table-responsive">
             <table class="table" (click)="addClass(id=1)">
-              <thead>
+              <thead *ngIf="!isRequest">
                 <tr>
-                  <th style='cursor: pointer' *ngIf="!isRequest" scope="col">{{ 'Lender' }}</th>
+                  <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
                 </tr>
               </thead>
               <tbody>
