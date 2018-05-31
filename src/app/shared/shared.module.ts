@@ -26,6 +26,7 @@ import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.comp
 import { ButtonGroupComponent } from './button-group/button-group.component';
 import { GobackButtonComponent } from './goback-button/goback-button.component';
 import { WithdrawButtonComponent } from './withdraw-button/withdraw-button.component';
+import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { WithdrawButtonComponent } from './withdraw-button/withdraw-button.compo
     ButtonGroupComponent,
     GobackButtonComponent,
     WithdrawButtonComponent,
+    RiskIndicatorComponent,
   ],
   exports: [
     LendButtonComponent,
@@ -77,6 +79,7 @@ import { WithdrawButtonComponent } from './withdraw-button/withdraw-button.compo
     ButtonGroupComponent,
     GobackButtonComponent,
     WithdrawButtonComponent,
+    RiskIndicatorComponent
   ]
 })
 export class SharedModule { }

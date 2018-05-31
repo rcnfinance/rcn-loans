@@ -41,6 +41,7 @@ import { ProfileComponent } from './views/profile/profile.component';
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { IdentityService } from './services/identity.service';
+import { RiskService } from './services/risk.service';
 
 const appRoutes: Routes = [
   { path: 'requests', component: OpenLoansComponent },
@@ -95,7 +96,8 @@ const appRoutes: Routes = [
     CosignerService,
     Web3Service,
     DecentralandCosignerService,
-    IdentityService
+    IdentityService,
+    RiskService
   ],
   bootstrap: [AppComponent]
 })
