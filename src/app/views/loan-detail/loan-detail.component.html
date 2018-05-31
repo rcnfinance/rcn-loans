@@ -41,7 +41,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td style='cursor: pointer'>{{ loan.borrower }} - Unknown</td>
+                  <td style='cursor: pointer'>{{ loan.borrower }} - <b>{{ identityName }}</b></td>
                 </tr>
               </tbody>
             </table>
@@ -74,6 +74,7 @@
           </div>
           <div *ngIf="isRequest">
             <app-lend-button [loan]=loan></app-lend-button>
+            <app-risk-indicator class='risk-indicator' [loan]=loan [color]='white'></app-risk-indicator>
           </div>
           
           <div *ngIf="isOngoing">

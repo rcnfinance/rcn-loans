@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Route } from '@angular/compiler/src/core';
 import { Loan } from '../../../models/loan.model';
 import { environment } from '../../../../environments/environment';
+import { IdentityService } from '../../../services/identity.service';
+import { Identity, CompanyIdentity } from '../../../models/identity.model';
 
 @Component({
   selector: 'app-detail-identity',
@@ -11,22 +13,32 @@ import { environment } from '../../../../environments/environment';
 })
 export class DetailIdentityComponent implements OnInit {
   @Input() loan: Loan;
-  identity: any;
+  identity: Identity;
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private identityService: IdentityService
   ) { }
 
-  hasIdentity(): any {
+  get class(): string {
+    if (this.identity === undefined) { return undefined; }
+    switch (this.identity.constructor) {
+      case CompanyIdentity:
+        return 'company';
+      default:
+        return undefined;
+    }
+  }
+
+  hasIdentity(): boolean {
     if (this.identity === undefined) { return undefined; } else {
       return true;
     }
   }
 
   ngOnInit() {
-    this.route.parent.params.subscribe(params => {
-      const id = +params['id']; // (+) converts string 'id' to a number
-      console.log(id);
-   });
+    this.identityService.getIdentity(this.loan).then((identity) => {
+      this.identity = identity;
+    });
   }
 
   get borrowerLinkExplorer(): string {

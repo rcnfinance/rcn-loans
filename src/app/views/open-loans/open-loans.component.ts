@@ -29,7 +29,7 @@ export class OpenLoansComponent implements OnInit, OnDestroy, AfterViewInit {
     private contractsService: ContractsService,
     private txService: TxService,
     private brandingService: BrandingService,
-    private spinner: NgxSpinnerService,
+    private spinner: NgxSpinnerService
   ) {}
   loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {

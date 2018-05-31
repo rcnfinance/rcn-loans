@@ -28,6 +28,7 @@ import { GobackButtonComponent } from './goback-button/goback-button.component';
 import { WithdrawButtonComponent } from './withdraw-button/withdraw-button.component';
 import { TransferFormComponent } from './transfer-form/transfer-form.component';
 import { TransferButtonComponent } from './transfer-button/transfer-button.component';
+import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 
 @NgModule({
   imports: [
@@ -59,6 +60,7 @@ import { TransferButtonComponent } from './transfer-button/transfer-button.compo
     WithdrawButtonComponent,
     TransferFormComponent,
     TransferButtonComponent,
+    RiskIndicatorComponent,
   ],
   exports: [
     LendButtonComponent,
@@ -83,6 +85,7 @@ import { TransferButtonComponent } from './transfer-button/transfer-button.compo
     WithdrawButtonComponent,
     TransferFormComponent,
     TransferButtonComponent,
+    RiskIndicatorComponent,
   ]
 })
 export class SharedModule { }

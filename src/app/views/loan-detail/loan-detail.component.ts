@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material';
 import { Utils } from './../../utils/utils';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
+import { IdentityService } from '../../services/identity.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -24,15 +25,22 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class LoanDetailComponent implements OnInit {
   loan: Loan;
+  identityName = '...';
   viewDetail = 'identity';
   id = 1;
   constructor(
+    private identityService: IdentityService,
     private route: ActivatedRoute,
     private contractsService: ContractsService,
     private router: Router,
     private spinner: NgxSpinnerService,
   ) {}
   addClass(id) {this.id = id; }
+  private loadIdentity() {
+    this.identityService.getIdentity(this.loan).then((identity) => {
+      this.identityName = identity !== undefined ? identity.short : 'Unknown';
+    });
+  }
   get interestMiddleText(): string {
     // ~ {{ 'formatInterest(loan.annualInterest)' }} % /  ~ {{ 'formatInterest(loan.annualPunitoryInterest)' }} %
     return '~ ' + this.formatInterest(this.loan.annualInterest) + ' %';
@@ -70,12 +78,12 @@ export class LoanDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.spinner.show(); // Initialize spinner
+    this.spinner.show();
     this.route.params.subscribe(params => {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
-        console.log(this.loan);
+        this.loadIdentity();
         this.spinner.hide();
       });
       // In a real app: dispatch action to load the details here.

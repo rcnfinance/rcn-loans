@@ -1,4 +1,4 @@
-<div class="list-avatar" *ngIf='hasIdentity() == !undefined'>
+<!-- <div class="list-avatar" *ngIf='hasIdentity() == !undefined'>
   <div class="avatar-container">
     <app-avatar [seed]=account></app-avatar>
   </div>
@@ -6,8 +6,14 @@
     <div class="subtitle">Identity {{ 'Unknown' }}</div>
     <div class="title ellipsis">{{ 'name' }}</div>
   </div>
+</div> -->
+<div *ngIf="class === 'company'">
+  <!-- TODO: Design! -->
+  <img [src]="identity.logo"/>
+  <div class="title main-h3">Company: {{ identity.name }}</div><br/>
+  <div class="title main-h6">{{ identity.description }}</div><br/>
+  <div class="title main-h6">Foundation: {{ identity.foundation }}</div>
 </div>
-
 <div class="empty-container" *ngIf="hasIdentity() == undefined">
   <div class="empty-row">
     <i class="material-icons gray7 font120">person_outline</i>
