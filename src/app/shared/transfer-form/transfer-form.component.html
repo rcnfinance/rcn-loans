@@ -1,12 +1,12 @@
 <div class="row">
   <form (ngSubmit)='onSubmit(f)' #f>
-    <div class="col-xs-12">
+    <!-- <div class="col-xs-12">
       <div class="margintop10"></div>
       <mat-form-field>
         <input type="number" name="amount" placeholder="Amount" min="10" ngModel matInput>
         <mat-hint>You're paying with RCN</mat-hint>
       </mat-form-field>
-    </div>
+    </div> -->
     <div class="col-xs-12">
       <div class="margintop10"></div>
       <mat-form-field>
@@ -15,6 +15,7 @@
       </mat-form-field>
     </div>
     <div class="col-xs-12 margintop20">
+      <div class="margintop10"></div>
       <button type="submit" mat-raised-button class="button button-primary" ngModel>{{ 'Submit' }}</button>
       <button mat-raised-button class="button button-secondary" [mat-dialog-close]='true'>{{ 'Cancel' }}</button>
     </div>

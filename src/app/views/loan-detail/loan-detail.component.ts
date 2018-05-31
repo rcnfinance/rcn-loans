@@ -92,7 +92,7 @@ export class LoanDetailComponent implements OnInit {
   }
   loanTransfer() {
     const dialogRef = this.dialog.open(DialogLoanTransferComponent, {
-      height: '300px'
+      height: '240px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
