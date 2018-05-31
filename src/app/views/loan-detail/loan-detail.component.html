@@ -33,7 +33,7 @@
           <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
           <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
           <div class="table-responsive" (click)="openDetail('identity')">
-            <table class="table" (click)="addClass(id=1)">
+            <table class="table table-clickable" (click)="addClass(id=1)">
               <thead>
                 <tr>
                   <th style='cursor: pointer' [ngClass]="{'background-active': id === 1 }" scope="col">{{ 'Identity' }}</th>
@@ -61,7 +61,7 @@
             </table>
           </div>
           <div class="table-responsive" (click)="openDetail('cosigner'); addClass(id=3)">
-            <table class="table">
+            <table class="table table-clickable">
               <thead>
                 <tr>
                   <th style='cursor: pointer' [ngClass]="{'background-active': id === 3 }" scope="col">{{ 'Insurance / Cosigner' }}</th>
