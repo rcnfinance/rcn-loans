@@ -12,7 +12,6 @@ import { CosignerService } from './../../services/cosigner.service';
 import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
 import { MatDialog } from '@angular/material';
-import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Spinner
@@ -31,7 +30,6 @@ export class LoanDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private contractsService: ContractsService,
     private router: Router,
-    public dialog: MatDialog,
     private spinner: NgxSpinnerService,
   ) {}
   addClass(id) {this.id = id; }
@@ -70,15 +68,6 @@ export class LoanDetailComponent implements OnInit {
   private formatTimestamp(timestamp: number): string {
     return new DatePipe('en-US').transform(timestamp * 1000, 'dd.mm.yyyy');
   }
-  loanTransfer() {
-    const dialogRef = this.dialog.open(DialogLoanTransferComponent, {
-      height: '240px',
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
 
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
@@ -91,6 +80,5 @@ export class LoanDetailComponent implements OnInit {
       });
       // In a real app: dispatch action to load the details here.
    });
-   this.loanTransfer();
   }
 }
