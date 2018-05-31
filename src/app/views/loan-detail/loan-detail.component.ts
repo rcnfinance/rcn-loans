@@ -81,7 +81,7 @@ export class LoanDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.spinner.show();
+    this.spinner.show(); // Initialize spinner
     this.route.params.subscribe(params => {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
