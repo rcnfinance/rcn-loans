@@ -11,6 +11,7 @@ export class RiskIndicatorComponent implements OnInit {
   @Input() loan: Loan;
 
   icon: string;
+  tooltip: string;
   visible: boolean;
 
   constructor(
@@ -21,6 +22,24 @@ export class RiskIndicatorComponent implements OnInit {
     this.riskService.estimateRisk(this.loan).then((risk: Level) => {
       this.visible = risk === Level.high || risk === Level.low;
       this.icon = risk === Level.high ? 'warning' : risk === Level.low ? 'check' : '';
+      switch (risk) {
+        case Level.high:
+          this.icon = 'warning';
+          this.tooltip = 'Warning! This may be a high risk loan';
+          this.visible = true;
+          break;
+        case Level.low:
+          this.icon = 'check';
+          this.tooltip = 'This is a low risk loan';
+          this.visible = true;
+          break;
+        default:
+        case Level.normal:
+          this.icon = '';
+          this.tooltip = '';
+          this.visible = false;
+          break;
+      }
     });
   }
 }
