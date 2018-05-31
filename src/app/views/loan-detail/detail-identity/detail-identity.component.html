@@ -7,14 +7,17 @@
     <div class="title ellipsis">{{ 'name' }}</div>
   </div>
 </div> -->
-<div *ngIf="class === 'company'">
-  <!-- TODO: Design! -->
-  <img [src]="identity.logo"/>
-  <div class="title main-h3">Company: {{ identity.name }}</div><br/>
-  <div class="title main-h6">{{ identity.description }}</div><br/>
-  <div class="title main-h6">Foundation: {{ identity.foundation }}</div>
+<div class="empty-container" *ngIf="class === 'company'">
+  <div class="empty-row">
+    <div class="title main-h3">Company: {{ identity.name }}</div>
+    <img [src]="identity.logo" class="img-responsive img-center margintop20 marginbottom20">
+    <div class="title main-h4">{{ identity.description }}</div><br/>
+    <div class="title main-h6">Foundation: {{ identity.foundation }}</div>
+  </div>
 </div>
-<div class="empty-container" *ngIf="hasIdentity() == undefined">
+
+
+<div class="empty-container filter" *ngIf="hasIdentity() == undefined">
   <div class="empty-row">
     <i class="material-icons gray7 font120">person_outline</i>
     <div class="title main-h3">The borrower of this loan is anonymous</div><br/>
