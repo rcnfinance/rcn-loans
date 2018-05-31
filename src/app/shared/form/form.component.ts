@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import {FormGroup, FormBuilder, FormControl, Validators, NgForm } from '@angular/forms';
+// App Component
 import { MaterialModule } from './../../material/material.module';
+import { SharedModule } from './../../shared/shared.module';
 
 @Component({
   selector: 'app-form',
@@ -8,8 +11,10 @@ import { MaterialModule } from './../../material/material.module';
   styleUrls: ['./form.component.scss']
 })
 export class FormComponent implements OnInit {
-  options: FormGroup;
   constructor() {}
+  onSubmit(form: NgForm) {
+    console.log(form);
+  }
   ngOnInit() {
   }
 

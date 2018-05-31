@@ -16,6 +16,6 @@
   max-width: 200px;
 }
 
-.sticky-center-top{
+.-center-top{
   position: sticky; top: 50%; @include transform(translate(0%, -50%));
 }
