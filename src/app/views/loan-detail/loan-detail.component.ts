@@ -15,6 +15,7 @@ import { SharedModule } from './../../shared/shared.module';
 import { Utils } from './../../utils/utils';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
+import { IdentityService } from '../../services/identity.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -23,9 +24,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class LoanDetailComponent implements OnInit {
   loan: Loan;
+  identityName = '...';
   viewDetail = 'identity';
   id = 1;
   constructor(
+    private identityService: IdentityService,
     private route: ActivatedRoute,
     private contractsService: ContractsService,
     private router: Router,
@@ -38,11 +41,16 @@ export class LoanDetailComponent implements OnInit {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
-        console.log(this.loan);
+        this.loadIdentity();
         this.spinner.hide();
       });
       // In a real app: dispatch action to load the details here.
    });
+  }
+  private loadIdentity() {
+    this.identityService.getIdentity(this.loan).then((identity) => {
+      this.identityName = identity !== undefined ? identity.short : 'Unknown';
+    });
   }
   get interestMiddleText(): string {
     // ~ {{ 'formatInterest(loan.annualInterest)' }} % /  ~ {{ 'formatInterest(loan.annualPunitoryInterest)' }} %
