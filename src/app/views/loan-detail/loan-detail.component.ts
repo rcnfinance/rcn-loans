@@ -12,6 +12,8 @@ import { CosignerService } from './../../services/cosigner.service';
 // App Component
 import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
+import { MatDialog } from '@angular/material';
+import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Spinner
@@ -35,22 +37,10 @@ export class LoanDetailComponent implements OnInit {
     private contractsService: ContractsService,
     private cosignerService: CosignerService,
     private router: Router,
+    public dialog: MatDialog,
     private spinner: NgxSpinnerService,
   ) {}
   addClass(id) {this.id = id; }
-  ngOnInit() {
-    this.spinner.show();
-    this.route.params.subscribe(params => {
-      const id = +params['id']; // (+) converts string 'id' to a number
-      this.contractsService.getLoan(id).then(loan => {
-        this.loan = loan;
-        this.cosigner = this.cosignerOption;
-        console.log(this.loan);
-        this.spinner.hide();
-      });
-      // In a real app: dispatch action to load the details here.
-   });
-  }
   onCosignerSelected(cosigner: CosignerOption) {
     this.cosigner = cosigner;
     console.log('Selected cosigner', this.cosigner);
@@ -99,5 +89,29 @@ export class LoanDetailComponent implements OnInit {
   }
   private formatTimestamp(timestamp: number): string {
     return new DatePipe('en-US').transform(timestamp * 1000, 'dd.mm.yyyy');
+  }
+  loanTransfer() {
+    const dialogRef = this.dialog.open(DialogLoanTransferComponent, {
+      height: '300px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  ngOnInit() {
+    this.spinner.show();
+    this.route.params.subscribe(params => {
+      const id = +params['id']; // (+) converts string 'id' to a number
+      this.contractsService.getLoan(id).then(loan => {
+        this.loan = loan;
+        this.cosigner = this.cosignerOption;
+        console.log(this.loan);
+        this.spinner.hide();
+      });
+      // In a real app: dispatch action to load the details here.
+      this.loanTransfer();
+   });
   }
 }

@@ -3,11 +3,11 @@ import { Web3Service } from '../../services/web3.service';
 // App Component
 import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
+// App Services
 import { ContractsService } from '../../services/contracts.service';
+// App Utils
 import { Utils } from '../../utils/utils';
 import BigNumber from 'bignumber.js';
-import { MatDialog } from '@angular/material';
-import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 
 @Component({
   selector: 'app-profile',
@@ -23,7 +23,6 @@ export class ProfileComponent implements OnInit {
   constructor(
     private web3Service: Web3Service,
     private contractService: ContractsService,
-    public dialog: MatDialog,
   ) { }
 
   get balance(): string {
@@ -53,16 +52,6 @@ export class ProfileComponent implements OnInit {
     return value;
   }
 
-  loanTransfer() {
-    const dialogRef = this.dialog.open(DialogLoanTransferComponent, {
-      height: '300px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-
   loadLender() {
     this.web3Service.getAccount().then((resolve: string) => {
       this.lender = resolve;
@@ -87,7 +76,6 @@ export class ProfileComponent implements OnInit {
     this.loadLender();
     this.loadRcnBalance();
     this.loadWithdrawBalance();
-    this.loanTransfer();
   }
 
 }
