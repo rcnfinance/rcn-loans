@@ -35,7 +35,8 @@ export class Loan {
         public interestTimestamp: number,
         public dueTimestamp: number,
         public lenderBalance: number,
-        public owner: string
+        public owner: string,
+        public cosigner: string
     ) { }
 
     get status(): Status {
