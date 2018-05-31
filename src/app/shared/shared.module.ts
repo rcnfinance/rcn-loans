@@ -27,6 +27,7 @@ import { ButtonGroupComponent } from './button-group/button-group.component';
 import { GobackButtonComponent } from './goback-button/goback-button.component';
 import { WithdrawButtonComponent } from './withdraw-button/withdraw-button.component';
 import { TransferFormComponent } from './transfer-form/transfer-form.component';
+import { TransferButtonComponent } from './transfer-button/transfer-button.component';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { TransferFormComponent } from './transfer-form/transfer-form.component';
     GobackButtonComponent,
     WithdrawButtonComponent,
     TransferFormComponent,
+    TransferButtonComponent,
   ],
   exports: [
     LendButtonComponent,
@@ -80,6 +82,7 @@ import { TransferFormComponent } from './transfer-form/transfer-form.component';
     GobackButtonComponent,
     WithdrawButtonComponent,
     TransferFormComponent,
+    TransferButtonComponent,
   ]
 })
 export class SharedModule { }

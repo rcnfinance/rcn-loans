@@ -17,8 +17,7 @@ export class DetailIdentityComponent implements OnInit {
   ) { }
 
   hasIdentity(): any {
-    if (this.identity === undefined) {console.log(this.identity); return undefined; } else {
-      console.log(this.identity);
+    if (this.identity === undefined) { return undefined; } else {
       return true;
     }
   }

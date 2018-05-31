@@ -93,5 +93,4 @@ export class LoanDetailComponent implements OnInit {
    });
    this.loanTransfer();
   }
-  
 }

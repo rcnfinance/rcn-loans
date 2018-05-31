@@ -37,7 +37,7 @@ export class MyLoansComponent implements OnInit {
     });
   }
   ngOnInit() {
-    this.spinner.show();
+    this.spinner.show(); // Initialize spinner
     this.loadLoans();
   }
   private formatInterest(interest: Number): string {
