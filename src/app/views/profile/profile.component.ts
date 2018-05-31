@@ -3,7 +3,9 @@ import { Web3Service } from '../../services/web3.service';
 // App Component
 import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
+// App Services
 import { ContractsService } from '../../services/contracts.service';
+// App Utils
 import { Utils } from '../../utils/utils';
 import BigNumber from 'bignumber.js';
 
@@ -20,7 +22,7 @@ export class ProfileComponent implements OnInit {
   loansWithBalance: number[];
   constructor(
     private web3Service: Web3Service,
-    private contractService: ContractsService
+    private contractService: ContractsService,
   ) { }
 
   get balance(): string {

@@ -11,6 +11,7 @@ import { CosignerService } from './../../services/cosigner.service';
 // App Component
 import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
+import { MatDialog } from '@angular/material';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Spinner
@@ -35,18 +36,6 @@ export class LoanDetailComponent implements OnInit {
     private spinner: NgxSpinnerService,
   ) {}
   addClass(id) {this.id = id; }
-  ngOnInit() {
-    this.spinner.show();
-    this.route.params.subscribe(params => {
-      const id = +params['id']; // (+) converts string 'id' to a number
-      this.contractsService.getLoan(id).then(loan => {
-        this.loan = loan;
-        this.loadIdentity();
-        this.spinner.hide();
-      });
-      // In a real app: dispatch action to load the details here.
-   });
-  }
   private loadIdentity() {
     this.identityService.getIdentity(this.loan).then((identity) => {
       this.identityName = identity !== undefined ? identity.short : 'Unknown';
@@ -86,5 +75,18 @@ export class LoanDetailComponent implements OnInit {
   }
   private formatTimestamp(timestamp: number): string {
     return new DatePipe('en-US').transform(timestamp * 1000, 'dd.mm.yyyy');
+  }
+
+  ngOnInit() {
+    this.spinner.show();
+    this.route.params.subscribe(params => {
+      const id = +params['id']; // (+) converts string 'id' to a number
+      this.contractsService.getLoan(id).then(loan => {
+        this.loan = loan;
+        this.loadIdentity();
+        this.spinner.hide();
+      });
+      // In a real app: dispatch action to load the details here.
+   });
   }
 }

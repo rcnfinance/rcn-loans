@@ -20,11 +20,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   profile: boolean;
   constructor(
     public dialog: MatDialog,
-    private web3: Web3Service,
+    private web3Service: Web3Service,
     private router: Router,
-  ) {
-    console.log(this.profile);
-  }
+  ) {}
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
 
   handleProfile() {
@@ -53,7 +51,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         console.log(`Dialog result: ${result}`);
       });
     } else {
-      if (this.web3.web3Type === Type.Injected) {
+      if (this.web3Service.web3Type === Type.Injected) {
         window.open('https://metamask.io/', '_blank');
       } else {
         alert(
@@ -64,9 +62,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): any {}
   ngOnInit() {
-    this.web3.getAccount().then((account) => {
+    this.web3Service.getAccount().then((account) => {
       this.account = account;
-      console.log(this.account);
     });
   }
   get hasAccount(): boolean {

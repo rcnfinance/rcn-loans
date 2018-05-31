@@ -38,7 +38,7 @@ export class OpenLoansComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
   ngOnInit() {
-    this.spinner.show();
+    this.spinner.show(); // Initialize spinner
     this.loadLoans();
   }
   ngAfterViewInit() {}

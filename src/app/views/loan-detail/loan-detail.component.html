@@ -80,7 +80,9 @@
             <app-lend-button [loan]=loan></app-lend-button>
             <app-risk-indicator class='risk-indicator' [loan]=loan [color]='white'></app-risk-indicator>
           </div>
+          
           <div *ngIf="isOngoing">
+            <app-transfer-button></app-transfer-button>
             <app-pay-button></app-pay-button>
             <app-forgive-button></app-forgive-button>
           </div>

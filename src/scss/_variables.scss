@@ -187,3 +187,6 @@ $default-transition--delay: all 0.3s ease-out;
 // General variables
 // --------------------------------------------------
 %position-center{position: absolute; top: 50%; left: 50%; @include transform(translate(-50%, -50%));}
+%absolute-center{position: absolute; top: 50%; left: 50%; @include transform(translate(-50%, -50%));}
+%relative-center{position: relative; top: 50%; left: 50%; @include transform(translate(-50%, -50%));}
+%relative-center-top{position: relative; top: 50%; @include transform(translate(0%, -50%));}
