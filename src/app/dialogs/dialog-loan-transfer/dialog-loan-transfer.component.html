@@ -13,8 +13,6 @@
         <img src="../../../assets/rcn-logo.png" class="currency-logo" alt="rcn-image">
         <span class="rcn-balance">{{ '2000' }}</span>
       </div>
-      <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="isRequest ? loan.expectedReturn : loan.total"></app-conversion-graphic>
-      <!-- <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="loan.pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="loan.paid" *ngIf="!isRequest"></app-conversion-graphic> -->
       <app-transfer-form></app-transfer-form>
     </div>
   </div>
