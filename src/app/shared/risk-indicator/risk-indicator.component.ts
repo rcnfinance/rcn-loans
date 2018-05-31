@@ -9,6 +9,7 @@ import { RiskService, Level } from '../../services/risk.service';
 })
 export class RiskIndicatorComponent implements OnInit {
   @Input() loan: Loan;
+  @Input() color = 'gray7';
 
   icon: string;
   tooltip: string;
