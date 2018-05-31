@@ -26,7 +26,7 @@ import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.comp
 import { ButtonGroupComponent } from './button-group/button-group.component';
 import { GobackButtonComponent } from './goback-button/goback-button.component';
 import { WithdrawButtonComponent } from './withdraw-button/withdraw-button.component';
-import { FormComponent } from './form/form.component';
+import { TransferFormComponent } from './transfer-form/transfer-form.component';
 
 @NgModule({
   imports: [
@@ -56,7 +56,7 @@ import { FormComponent } from './form/form.component';
     ButtonGroupComponent,
     GobackButtonComponent,
     WithdrawButtonComponent,
-    FormComponent,
+    TransferFormComponent,
   ],
   exports: [
     LendButtonComponent,
@@ -79,7 +79,7 @@ import { FormComponent } from './form/form.component';
     ButtonGroupComponent,
     GobackButtonComponent,
     WithdrawButtonComponent,
-    FormComponent,
+    TransferFormComponent,
   ]
 })
 export class SharedModule { }
