@@ -47,10 +47,10 @@
             </table>
           </div>
           <div class="table-responsive">
-            <table class="table" (click)="addClass(id=1)" *ngIf="!isRequest">
+            <table class="table" (click)="addClass(id=2)" *ngIf="!isRequest">
               <thead>
                 <tr>
-                  <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
+                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 2 }" scope="col">{{ 'Lender' }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -60,11 +60,11 @@
               </tbody>
             </table>
           </div>
-          <div class="table-responsive" (click)="openDetail('cosigner'); addClass(id=2)">
+          <div class="table-responsive" (click)="openDetail('cosigner'); addClass(id=3)">
             <table class="table">
               <thead>
                 <tr>
-                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 2 }" scope="col">{{ 'Insurance / Cosigner' }}</th>
+                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 3 }" scope="col">{{ 'Insurance / Cosigner' }}</th>
                 </tr>
               </thead>
               <tbody>
