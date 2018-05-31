@@ -11,9 +11,9 @@
             <li class="col-item">
               <app-creator-container [loan]=loan></app-creator-container>
             </li>
-            <li class="col-item">
+            <!-- <li class="col-item">
               <app-button-group></app-button-group>
-            </li>
+            </li> -->
           </ul>
         </div>
         <div class="col-xs-12 col-md-6 loan-description left">
@@ -46,11 +46,25 @@
               </tbody>
             </table>
           </div>
-          <div class="table-responsive" (click)="openDetail('cosigner'); addClass(id=2)">
+          <div class="table-responsive">
+            <table class="table" (click)="addClass(id=2)" *ngIf="!isRequest">
+              <thead>
+                <tr>
+                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 2 }" scope="col">{{ 'Lender' }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style='cursor: pointer'>{{ loan.owner }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-responsive" (click)="openDetail('cosigner'); addClass(id=3)">
             <table class="table">
               <thead>
                 <tr>
-                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 2 }" scope="col">{{ 'Insurance / Cosigner' }}</th>
+                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 3 }" scope="col">{{ 'Insurance / Cosigner' }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -67,8 +81,8 @@
           </div>
         </div>
         <div class="col-xs-12 col-md-6 loan-description right">
-          <app-detail-identity *ngIf="isDetail('identity')"></app-detail-identity>
-          <app-detail-cosigner *ngIf="isDetail('cosigner')" [cosigner]="cosigner"></app-detail-cosigner>
+          <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan" ></app-detail-identity>
+          <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
         </div>
       </div>
     </div>

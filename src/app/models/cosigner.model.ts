@@ -13,3 +13,11 @@ export class CosignerDetail {
         public data: string
     ) {}
 }
+
+export class UnknownCosigner extends CosignerDetail {
+    constructor (
+        public contract: string
+    ) {
+        super(contract, '0x0');
+    }
+}

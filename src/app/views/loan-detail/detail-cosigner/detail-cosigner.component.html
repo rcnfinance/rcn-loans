@@ -1,17 +1,17 @@
-<app-decentraland-cosigner [cosigner]=cosignerDetail *ngIf="detailClass() === 'decentraland_mortgage'"></app-decentraland-cosigner>
+<app-decentraland-cosigner [cosigner]=cosignerDetail *ngIf="detailClass === 'decentraland_mortgage'"></app-decentraland-cosigner>
 
-<div class="empty-container" *ngIf="detailClass() === undefined">
+<div class="empty-container" *ngIf="detailClass === 'unknown'">
   <div class="empty-row">
-    <i class="material-icons gray7 font110">link_off</i>
-    <div class="title main-h3">The {{ 'insurance / cosigner' }} is not available</div>
-    <div class="title main-h4">This information will show up here soon</div>
+    <i class="material-icons gray7 font110">error_outline</i>
+    <div class="title main-h3">The cosigner of this loan is unknown</div>
+    <div class="title main-h4">The address {{ cosignerDetail.contract }} is the designated cosigner of this loan, the terms of the insurance are unknown.</div>
   </div>
 </div>
 
-<div class="empty-container" *ngIf="detailClass() === 'unknown'">
+<div class="empty-container" *ngIf="detailClass === 'not_available'">
   <div class="empty-row">
-    <i class="material-icons gray7 font110">link_off</i>
-    <div class="title main-h3">{{ 'unknown' }} is not available</div>
-    <div class="title main-h4">This information will show up here soon</div>
+    <i class="material-icons gray7 font110">error_outline</i>
+    <div class="title main-h3">There is no cosigner available</div>
+    <div class="title main-h4"></div>
   </div>
 </div>
