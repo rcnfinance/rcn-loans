@@ -1,17 +1,21 @@
-<div class="row">
-  <div class="col-xs-12 col-sm-4">
-    <img src="../../../assets/rcn-logo.png" class="img-responsive half-logo" alt="rcn-image">
-  </div>
-  <div class="col-xs-12 col-sm-8">
-    <div class="title main-h2">
-      <!-- <i mat-raised-button class="material-icons">repeat</i> -->
-      Loan Transfer
+<mat-dialog-content>
+  <div class="row">
+    <div class="col-xs-12 col-sm-4">
+      <img src="../../../assets/rcn-logo.png" class="img-responsive half-logo" alt="rcn-image">
     </div>
-    <div class="current-balance">
-      <span class="title">Your current balance is </span>
-      <img src="../../../assets/rcn-logo.png" class="currency-logo" alt="rcn-image">
-      <span class="rcn-balance">{{ '2000' }}</span>
+    <div class="col-xs-12 col-sm-8">
+      <div class="title main-h2">
+        <!-- <i mat-raised-button class="material-icons">repeat</i> -->
+        Loan Transfer
+      </div>
+      <div class="current-balance">
+        <span class="title">Your current balance is </span>
+        <img src="../../../assets/rcn-logo.png" class="currency-logo" alt="rcn-image">
+        <span class="rcn-balance">{{ '2000' }}</span>
+      </div>
+      <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="isRequest ? loan.expectedReturn : loan.total"></app-conversion-graphic>
+      <!-- <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="loan.pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="loan.paid" *ngIf="!isRequest"></app-conversion-graphic> -->
+      <app-transfer-form></app-transfer-form>
     </div>
-    <app-transfer-form></app-transfer-form>
   </div>
-</div>
+</mat-dialog-content>
