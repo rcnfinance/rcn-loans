@@ -36,7 +36,9 @@
             <table class="table table-clickable" (click)="addClass(id=1)">
               <thead>
                 <tr>
-                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 1 }" scope="col">{{ 'Identity' }}</th>
+                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 1 }" scope="col">
+                    Identity<i class="material-icons white more-indicator">{{ id === 1 ? '' : 'unfold_more' }}</i>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -64,7 +66,9 @@
             <table class="table table-clickable">
               <thead>
                 <tr>
-                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 3 }" scope="col">{{ 'Insurance / Cosigner' }}</th>
+                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 3 }" scope="col">
+                      Insurance / Cosigner<i class="material-icons white more-indicator">{{ id === 3 ? '' : 'unfold_more' }}</i>
+                  </th>
                 </tr>
               </thead>
               <tbody>
