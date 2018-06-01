@@ -61,7 +61,27 @@
   }
 }
 
+.more-indicator {
+  font-size: 15px;
+  float: right;
+}
 
+.table-clickable {
+  cursor: pointer;
+  >thead{
+    >tr{
+      >th {
+        @include transition;
+        &:active{
+          background-color: $primary;
+        }
+        &.background-active{
+          background-color: $primary;
+        }
+      }
+    }
+  }
+}
 
 @media (min-width: 768px){}
 @media (min-width: 992px){

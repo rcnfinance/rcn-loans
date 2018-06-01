@@ -110,13 +110,6 @@ ngx-spinner .black-overlay.ng-star-inserted {
         border: 0px;
         background-color: #333333;
         @extend %propiety-title;
-        @include transition;
-        &:active{
-          background-color: $primary;
-        }
-        &.background-active{
-          background-color: $primary;
-        }
       }
     }
   }
