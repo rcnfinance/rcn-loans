@@ -23,6 +23,7 @@
     "@angular/platform-browser": "^5.2.0",
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/router": "^5.2.0",
+    "@fortawesome/fontawesome-free-brands": "^5.0.13",
     "angular": "^1.6.10",
     "angular-blockies": "^1.1.0",
     "bootstrap": "^3.3.7",
