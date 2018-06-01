@@ -39,6 +39,9 @@ import { DetailTableComponent } from './views/loan-detail/detail-table/detail-ta
 import { MyLoansComponent } from './views/my-loans/my-loans.component';
 import { ProfileComponent } from './views/profile/profile.component';
 
+// App Modules
+import { CoreModule } from './core/core.module';
+
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { IdentityService } from './services/identity.service';
