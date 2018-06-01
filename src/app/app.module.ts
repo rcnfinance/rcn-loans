@@ -85,6 +85,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    CoreModule,
     NgxSpinnerModule,
     RouterModule.forRoot(
       appRoutes,
