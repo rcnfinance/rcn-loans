@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import {
   FormsModule,
   FormGroup,
@@ -13,6 +13,7 @@ import { HttpModule } from '@angular/http';
 // App Component
 import { MaterialModule } from './../../material/material.module';
 import { SharedModule } from './../../shared/shared.module';
+import { Web3Service } from '../../services/web3.service';
 
 
 @Component({
@@ -21,9 +22,13 @@ import { SharedModule } from './../../shared/shared.module';
   styleUrls: ['./transfer-form.component.scss']
 })
 export class TransferFormComponent implements OnInit {
-  constructor() { }
-  onSubmit(form: NgForm) {
-    console.log(form);
+  @Output() submit = new EventEmitter<any>();
+  constructor(
+    private web3Service: Web3Service,
+  ) { }
+  onSubmit(event: any, form: NgForm) {
+    console.log(form.value);
+    this.submit.emit(event);
     event.preventDefault();
   }
   ngOnInit() {
