@@ -7,6 +7,7 @@ import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx } from './../../tx.service';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-lend-button',
@@ -48,12 +49,16 @@ export class LendButtonComponent implements OnInit {
     });
   }
 
-  retrievePendingTx() {
-    this.pendingTx = this.txService.getLastLend(this.loan);
+  clickLend() {
+    if (this.pendingTx === undefined) {
+      this.handleLend();
+    } else {
+      window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
+    }
   }
 
-  get enabled(): Boolean {
-    return this.pendingTx === undefined;
+  retrievePendingTx() {
+    this.pendingTx = this.txService.getLastLend(this.loan);
   }
 
   get buttonText(): string {
