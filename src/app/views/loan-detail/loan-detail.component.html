@@ -82,7 +82,7 @@
           </div>
           
           <div *ngIf="isOngoing">
-            <app-transfer-button></app-transfer-button>
+            <app-transfer-button *ngIf="loan.owner === userAccount"></app-transfer-button>
             <app-pay-button></app-pay-button>
             <app-forgive-button></app-forgive-button>
           </div>

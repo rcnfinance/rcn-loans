@@ -17,6 +17,7 @@ import { Utils } from './../../utils/utils';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 import { IdentityService } from '../../services/identity.service';
+import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -28,11 +29,13 @@ export class LoanDetailComponent implements OnInit {
   identityName = '...';
   viewDetail = 'identity';
   id = 1;
+  userAccount: string;
   constructor(
     private identityService: IdentityService,
     private route: ActivatedRoute,
     private contractsService: ContractsService,
     private router: Router,
+    private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
   ) {}
   addClass(id) {this.id = id; }
@@ -79,6 +82,9 @@ export class LoanDetailComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.show();
+    this.web3Service.getAccount().then((account) => {
+      this.userAccount = account;
+    });
     this.route.params.subscribe(params => {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
