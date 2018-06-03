@@ -36,6 +36,7 @@ export class LoanDetailComponent implements OnInit {
   isRequest: boolean;
   isOngoing: boolean;
   totalDebt: number;
+  pendingAmount: number;
 
   constructor(
     private identityService: IdentityService,
@@ -78,6 +79,7 @@ export class LoanDetailComponent implements OnInit {
     this.isRequest = this.loan.status === Status.Request;
     this.isOngoing = this.loan.status === Status.Ongoing;
     this.totalDebt = this.loan.total;
+    this.pendingAmount = this.loan.pendingAmount;
   }
 
   openDetail(view: string) {
