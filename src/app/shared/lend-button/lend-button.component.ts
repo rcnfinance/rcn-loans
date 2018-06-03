@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MaterialModule } from './../../material/material.module';
 import { Loan } from './../../models/loan.model';
 import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
@@ -13,8 +13,9 @@ import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-con
   templateUrl: './lend-button.component.html',
   styleUrls: ['./lend-button.component.scss']
 })
-export class LendButtonComponent {
+export class LendButtonComponent implements OnInit {
   @Input() loan: Loan;
+  pendingTx: Tx = undefined;
 
   constructor(
     private contractsService: ContractsService,
@@ -22,11 +23,16 @@ export class LendButtonComponent {
     public dialog: MatDialog
   ) {}
 
+  ngOnInit() {
+    this.retrievePendingTx();
+  }
+
   handleLend() {
     this.contractsService.isEngineApproved().then((approved) => {
       if (approved) {
         this.contractsService.lendLoan(this.loan).then(tx => {
           this.txService.registerLendTx(this.loan, tx);
+          this.retrievePendingTx();
         });
       } else {
         const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {
@@ -42,12 +48,16 @@ export class LendButtonComponent {
     });
   }
 
+  retrievePendingTx() {
+    this.pendingTx = this.txService.getLastLend(this.loan);
+  }
+
   get enabled(): Boolean {
-    return this.txService.getLastLend(this.loan) === undefined;
+    return this.pendingTx === undefined;
   }
 
   get buttonText(): string {
-    const tx = this.txService.getLastLend(this.loan);
+    const tx = this.pendingTx;
     if (tx === undefined) {
       return 'Lend';
     }
