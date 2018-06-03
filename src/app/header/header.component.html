@@ -9,12 +9,12 @@
               <i mat-raised-button class="material-icons icon-hamburguer" [matMenuTriggerFor]="menu">menu</i>
               <mat-menu #menu="matMenu">
                 <button routerLink='/requests' mat-menu-item>Requests</button>
-                <button routerLink='/my-loans' mat-menu-item>Loans</button>
+                <button routerLink='/address/{{ account }}/' mat-menu-item>Loans</button>
                 <button (click)='openDialog();' mat-menu-item>Help</button>
                 <button mat-menu-item routerLink='/profile'>Profile</button>
               </mat-menu>
               <li routerLink='/requests' #tref>Requests</li>
-              <li routerLink='/my-loans'>Loans</li>
+              <li routerLink='/address/{{ account }}/'>Loans</li>
               <li routerLink='/profile'>Balance</li>
               <li class="separator">|</li>
               <li (click)="openDialog()" *ngIf="!hasAccount">Login</li>
