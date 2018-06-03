@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 import { Loan } from './models/loan.model';
 import { TypeCheckCompiler } from '@angular/compiler/src/view_compiler/type_check_compiler';
 
-enum Type { lend, approve, withdraw }
+enum Type { lend, approve, withdraw, transfer }
 
 export class Tx {
   tx: string;
@@ -122,7 +122,6 @@ export class TxService {
   }
 
   public registerWithdrawTx(tx: string, engine: string, loans: number[]) {
-    const data = loans;
     this.tx_memory.push(new Tx(tx, engine, false, Type.withdraw, loans));
     this.saveTxs();
   }
@@ -132,5 +131,21 @@ export class TxService {
       .filter(tx => !tx.confirmed && tx.type === Type.withdraw)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
       .find(tx => tx.to === engine && tx.data === loans);
+  }
+
+  public registerTransferTx(tx: string, engine: string, loan: Loan, to: string) {
+    const data = {
+      id: loan.id,
+      to: to
+    };
+    this.tx_memory.push(new Tx(tx, engine, false, Type.transfer, data));
+    this.saveTxs();
+  }
+
+  public getLastPendingTransfer(engine: string, loan: Loan): Tx {
+    return this.tx_memory
+      .filter(tx => !tx.confirmed && tx.type === Type.transfer && tx.to === engine)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
+      .find(tx => tx.data.id === loan.id);
   }
 }

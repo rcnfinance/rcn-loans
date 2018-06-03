@@ -23,6 +23,6 @@ export class DialogLoanTransferComponent implements OnInit {
 
   submit(address: any) {
     console.log('Transfer loan to ', address);
-    this.dialogRef.close();
+    this.dialogRef.close(address);
   }
 }

@@ -121,7 +121,6 @@ export class ContractsService {
         }
 
         return new Promise((resolve, reject) => {
-          const _web3 = this.web3.web3;
           this._rcnEngine.lend(loan.id, oracleData, cosigner, cosignerData, { from: account }, function(err, result) {
             if (err != null) {
               reject(err);
@@ -129,6 +128,17 @@ export class ContractsService {
             resolve(result);
           });
         }) as Promise<string>;
+    }
+    public async transferLoan(loan: Loan, to: string): Promise<string> {
+      const account = await this.web3.getAccount();
+      return new Promise((resolve, reject) => {
+        this._rcnEngine.transfer(to, loan.id, { from: account }, function(err, result){
+          if (err != null) {
+            reject(err);
+          }
+          resolve(result);
+        });
+      }) as Promise<string>;
     }
     public async withdrawFunds(loans: number[]): Promise<string> {
       const account = await this.web3.getAccount();
