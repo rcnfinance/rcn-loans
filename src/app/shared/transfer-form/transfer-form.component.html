@@ -4,8 +4,9 @@
       <div class="margintop10"></div>
       <mat-form-field>
         <input type="text" name="eth_address" placeholder="Recipient address" ngModel matInput #address>
-        <mat-hint>Remember that transferring LAON is an irreversible operation. Please check the address carefully</mat-hint>
+        <mat-hint>Remember that transferring a Loan is an irreversible operation. Please check the address carefully</mat-hint>
       </mat-form-field>
+      <div class="error" *ngIf="invalidAddress">This is not a valid address</div>
     </div>
     <div class="col-xs-12 margintop20">
       <div class="margintop10"></div>

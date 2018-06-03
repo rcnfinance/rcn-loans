@@ -21,7 +21,8 @@ export class DialogLoanTransferComponent implements OnInit {
     this.dialogRef.updateSize('auto', 'auto');
   }
 
-  submit(address: string) {
+  submit(address: any) {
     console.log('Transfer loan to ', address);
+    this.dialogRef.close();
   }
 }
