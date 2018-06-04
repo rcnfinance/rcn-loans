@@ -41,7 +41,7 @@ import {
   MatTableModule,
   MatStepperModule,
   MatTooltipModule,
-  MatFormFieldModule
+  MatFormFieldModule,
 } from '@angular/material';
 
 @NgModule({

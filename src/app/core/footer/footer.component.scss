@@ -22,11 +22,12 @@ a{
 }
 .button-group{
   line-height: 1.9;
-  .icon{
-    cursor: pointer;
-    padding-right: 15px;
-    display: inline-block;
-  }
+}
+.icon{
+  line-height: 1.9;
+  cursor: pointer;
+  padding-right: 15px;
+  display: inline-block;
 }
 .left,
 .center,

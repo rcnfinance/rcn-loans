@@ -4,9 +4,17 @@
       <div class="col-xs-12 col-sm-4 left">
         <div class="txt">© 2018 Ripio Credit Network</div>
       </div>
+
       <div class="col-xs-12 col-sm-4 center">
-        <div class="txt">Lorem ipsum dolor sit amet.</div>
+        <div class="icon"
+          (mouseenter)="tooltip.toggle()"
+          #tooltip="matTooltip"
+          matTooltip="0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf"
+          matTooltipPosition="above">
+          <i class="fas fa-link fa-lg"></i>
+        </div>
       </div>
+
       <div class="col-xs-12 col-sm-4 right">
         <div class="button-group">
           <div class="icon"><a href="https://www.facebook.com/ripiocredit.network/" target="_blank"><i class="fab fa-facebook-f fa-lg"></i></a></div>

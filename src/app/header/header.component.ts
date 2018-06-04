@@ -5,6 +5,7 @@ import { SharedModule } from './../shared/shared.module';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
+// App Service
 import { Web3Service, Type } from '../services/web3.service';
 
 // App Component

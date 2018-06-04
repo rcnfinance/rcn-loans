@@ -31,13 +31,6 @@ import { TransferButtonComponent } from './transfer-button/transfer-button.compo
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    BrowserModule,
-    HttpModule,
-    MaterialModule,
-    BlockiesModule
-  ],
   declarations: [
     LendButtonComponent,
     DetailButtonComponent,
@@ -61,6 +54,13 @@ import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.componen
     TransferFormComponent,
     TransferButtonComponent,
     RiskIndicatorComponent,
+  ],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    HttpModule,
+    MaterialModule,
+    BlockiesModule,
   ],
   exports: [
     LendButtonComponent,

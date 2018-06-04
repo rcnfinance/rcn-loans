@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+// App Component
 
 @Component({
   selector: 'app-footer',
