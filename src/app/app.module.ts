@@ -12,6 +12,8 @@ import { TxService } from './tx.service';
 import { BrandingService } from './services/branding.service';
 import { CosignerService } from './services/cosigner.service';
 import { Web3Service } from './services/web3.service';
+import { IdentityService } from './services/identity.service';
+import { RiskService } from './services/risk.service';
 
 // TODO: Move
 import { DecentralandCosignerService } from './services/cosigners/decentraland-cosigner.service';
@@ -28,21 +30,21 @@ import { HeaderComponent } from './header/header.component';
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 
 import { OpenLoansComponent } from './views/open-loans/open-loans.component';
+
 import { LoanDetailComponent } from './views/loan-detail/loan-detail.component';
 import { DetailCosignerComponent } from './views/loan-detail/detail-cosigner/detail-cosigner.component';
 import { DetailIdentityComponent } from './views/loan-detail/detail-identity/detail-identity.component';
-import { DecentralandCosignerComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
-import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogLoanTransferComponent } from './dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
-import { DecentralandMapComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DetailTableComponent } from './views/loan-detail/detail-table/detail-table.component';
+import { DialogLoanTransferComponent } from './dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
+import { DecentralandCosignerComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
+import { DecentralandMapComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
+import { AddressComponent } from './views/address/address.component';
+
 import { ProfileComponent } from './views/profile/profile.component';
+import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
 
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { IdentityService } from './services/identity.service';
-import { RiskService } from './services/risk.service';
-import { AddressComponent } from './views/address/address.component';
 
 const appRoutes: Routes = [
   { path: 'requests', component: OpenLoansComponent },
