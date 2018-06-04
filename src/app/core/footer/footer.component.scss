@@ -1,7 +1,7 @@
 @import '../../../scss/_variables.scss'; //variables
 
 footer {
-  position: relative;
+  position: absolute;
   bottom: 0;
   right: 0;
   left: 0;
@@ -27,12 +27,28 @@ a{
     display: inline-block;
   }
 }
-.left{
-  text-align: left;
-}
-.center{
+.left,
+.center,
+.right{
   text-align: center;
 }
-.right{
-  text-align: right;
+.button-group{
+  text-align: center;
+  padding-left: 15px;
+}
+
+@media (min-height: '768px'){
+  .left{
+    text-align: left;
+  }
+  .center{
+    text-align: center;
+  }
+  .right{
+    text-align: right;
+  } 
+  .button-group{
+    text-align: right;
+    padding-left: 0;
+  }
 }

@@ -12,6 +12,7 @@ $material-icons-font-path: '~material-icons/iconfont/'; // Material Icons
         './scss/_fonts.scss'; //fonts
 
 // General
+html {height: 0;}
 body{
   position: relative;
   font-family: 'Raleway', sans-serif;
