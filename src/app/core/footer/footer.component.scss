@@ -1,0 +1,38 @@
+@import '../../../scss/_variables.scss'; //variables
+
+footer {
+  position: relative;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  min-height: 0px;
+  background-color: #121212;
+  padding: 15px 30px;
+}
+.txt{
+  line-height: 1.9;
+}
+a{
+  color: #fff;
+  @include transition();
+  &:hover{
+    color: $primary;
+  }
+}
+.button-group{
+  line-height: 1.9;
+  .icon{
+    cursor: pointer;
+    padding-right: 15px;
+    display: inline-block;
+  }
+}
+.left{
+  text-align: left;
+}
+.center{
+  text-align: center;
+}
+.right{
+  text-align: right;
+}
