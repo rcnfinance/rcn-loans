@@ -17,6 +17,7 @@ import { Utils } from './../../utils/utils';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 import { IdentityService } from '../../services/identity.service';
+import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -28,65 +29,91 @@ export class LoanDetailComponent implements OnInit {
   identityName = '...';
   viewDetail = 'identity';
   id = 1;
+  userAccount: string;
+
+  // Loan detail
+  loanConfigData = [];
+  loanStatusData = [];
+  interestMiddleText: string;
+  isRequest: boolean;
+  isOngoing: boolean;
+  totalDebt: number;
+  pendingAmount: number;
+
   constructor(
     private identityService: IdentityService,
     private route: ActivatedRoute,
     private contractsService: ContractsService,
     private router: Router,
+    private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
   ) {}
+
   addClass(id) {this.id = id; }
+
   private loadIdentity() {
     this.identityService.getIdentity(this.loan).then((identity) => {
       this.identityName = identity !== undefined ? identity.short : 'Unknown';
     });
   }
-  get interestMiddleText(): string {
-    // ~ {{ 'formatInterest(loan.annualInterest)' }} % /  ~ {{ 'formatInterest(loan.annualPunitoryInterest)' }} %
-    return '~ ' + this.formatInterest(this.loan.annualInterest) + ' %';
-  }
-  get loanConfigData(): [string, string][] {
+
+  private loadDetail() {
+    // Load config data
     const interest = this.formatInterest(this.loan.annualInterest);
     const interestPunnitory = this.formatInterest(this.loan.annualPunitoryInterest);
-    return [
+    this.loanConfigData = [
       ['Currency', this.loan.currency],
       ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
       ['Duration', Utils.formatDelta(this.loan.duration)]
     ];
-  }
-  get loanStatusData(): [string, string][] {
-    return [
+
+    // Interest middle text
+    this.interestMiddleText =
+      '~ ' + this.formatInterest(this.loan.status === Status.Indebt ? this.loan.annualPunitoryInterest : this.loan.annualInterest) + ' %';
+
+    // Load status data
+    this.loanStatusData = [
       ['Lend date', this.formatTimestamp(this.loan.lentTimestamp)],
       ['Due date', this.formatTimestamp(this.loan.dueTimestamp)],
       ['Deadline', this.formatTimestamp(this.loan.dueTimestamp)],
       ['Remaining', Utils.formatDelta(this.loan.remainingTime, 2)]
     ];
+
+    this.isRequest = this.loan.status === Status.Request;
+    this.isOngoing = this.loan.status === Status.Ongoing;
+    this.totalDebt = this.loan.total;
+    this.pendingAmount = this.loan.pendingAmount;
   }
-  get isRequest(): boolean { return this.loan.status === Status.Request; }
-  get isOngoing(): boolean { return this.loan.status === Status.Ongoing; }
+
   openDetail(view: string) {
     this.viewDetail = view;
   }
+
   isDetail(view: string): Boolean {
     return view === this.viewDetail;
   }
+
   private formatInterest(interest: number): string {
     return Number(interest.toFixed(2)).toString();
   }
+
   private formatTimestamp(timestamp: number): string {
     return new DatePipe('en-US').transform(timestamp * 1000, 'dd.mm.yyyy');
   }
 
   ngOnInit() {
     this.spinner.show();
+    this.web3Service.getAccount().then((account) => {
+      this.userAccount = account;
+    });
     this.route.params.subscribe(params => {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
+        this.loadDetail();
         this.loadIdentity();
         this.spinner.hide();
       });
-      // In a real app: dispatch action to load the details here.
    });
   }
 }

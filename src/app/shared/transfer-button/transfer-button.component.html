@@ -1,1 +1,1 @@
-<a mat-raised-button (click)='handleTransfer(); loanTransfer()' class="button button-primary">{{ 'Transfer' }}</a>
+<a mat-raised-button (click)='handleTransfer(); clickTransfer()' class="button button-primary">{{ pendingTx === undefined ? 'Transfer' : 'Transfer pending ...' }}</a>
