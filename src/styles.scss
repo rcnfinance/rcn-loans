@@ -19,6 +19,10 @@ body{
   background-color: $tertiary;
   color: $secondary;
 }
+.highlight-layer{
+  position: relative;
+  z-index: 1000;
+}
 
 //TABS
 .mat-tab-label-container{
