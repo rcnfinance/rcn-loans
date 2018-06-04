@@ -48,6 +48,7 @@ import { CoreModule } from './core/core.module';
 
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { CivicService } from './services/civic.service';
 
 const appRoutes: Routes = [
   { path: 'requests', component: OpenLoansComponent },
@@ -106,7 +107,8 @@ const appRoutes: Routes = [
     Web3Service,
     DecentralandCosignerService,
     IdentityService,
-    RiskService
+    RiskService,
+    CivicService
   ],
   bootstrap: [AppComponent]
 })

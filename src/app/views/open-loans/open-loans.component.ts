@@ -14,6 +14,7 @@ import { SharedModule } from './../../shared/shared.module';
 import { Utils } from './../../utils/utils';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CivicService } from '../../services/civic.service';
 
 @Component({
   selector: 'app-open-loans',
@@ -29,7 +30,8 @@ export class OpenLoansComponent implements OnInit, OnDestroy, AfterViewInit {
     private contractsService: ContractsService,
     private txService: TxService,
     private brandingService: BrandingService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private civicService: CivicService
   ) {}
   loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
@@ -40,6 +42,10 @@ export class OpenLoansComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
     this.loadLoans();
+    // TODO: Remove this testing
+    this.civicService.signup().then((token) => {
+      console.log(token);
+    });
   }
   ngAfterViewInit() {}
   ngOnDestroy() {}
