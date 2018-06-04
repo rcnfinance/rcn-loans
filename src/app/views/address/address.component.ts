@@ -14,31 +14,36 @@ import { SharedModule } from './../../shared/shared.module';
 import { Utils } from './../../utils/utils';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-my-loans',
-  templateUrl: './my-loans.component.html',
-  styleUrls: ['../open-loans/open-loans.component.scss']
+  selector: 'app-address',
+  templateUrl: './address.component.html',
+  styleUrls: ['./address.component.scss']
 })
-export class MyLoansComponent implements OnInit {
+export class AddressComponent implements OnInit {
+  address: string;
   loans = [];
-  bestLoan = this.loans[0]; // be dst loan suggested
-  pendingLend = [];
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private contractsService: ContractsService,
     private txService: TxService,
     private brandingService: BrandingService,
     private spinner: NgxSpinnerService,
   ) {}
   loadLoans() {
-    this.contractsService.getMyLoans().then((result: Loan[]) => {
+    this.contractsService.getLoansOfLender(this.address).then((result: Loan[]) => {
       this.loans = result;
       this.spinner.hide();
     });
   }
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
-    this.loadLoans();
+    this.route.params.subscribe(params => {
+      this.address = params['address'];
+      this.loadLoans();
+    });
   }
   private formatInterest(interest: Number): string {
     return Number(interest.toFixed(2)).toString();
