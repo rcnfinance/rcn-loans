@@ -18,7 +18,7 @@ export const environment = {
       address: 'https://ropsten.etherscan.io/address/${address}',
       tx: 'https://ropsten.etherscan.io/tx/${tx}'
     },
-    provider: 'http://ec2-18-221-133-10.us-east-2.compute.amazonaws.com:8545/'
+    provider: 'https://ropsten.node.rcn.loans:8545/'
   },
   contracts: {
     rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
