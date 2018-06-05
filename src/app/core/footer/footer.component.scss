@@ -43,7 +43,8 @@ a{
   padding-left: 15px;
 }
 
-@media (min-height: '992px'){
+
+@media (min-width: 992px){
   .left{
     text-align: left;
   }
