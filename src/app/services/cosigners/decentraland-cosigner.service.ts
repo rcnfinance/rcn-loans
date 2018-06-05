@@ -38,7 +38,7 @@ export class DecentralandCosignerService {
       console.log(size, sx, sy);
       const limitNw = (x - sx) + ',' + (y + sy);
       const limitSe = (x + sx) + ',' + (y - sy);
-      this.http.get('./proxy_decentraland/api/parcels?nw=' + limitNw + '&se=' + limitSe).subscribe((resp: any) => {
+      this.http.get(environment.decentralandUrl + 'api/parcels?nw=' + limitNw + '&se=' + limitSe).subscribe((resp: any) => {
         const resultArray = resp.data.parcels as Object[];
         const parcels: Parcel[] = [];
         resultArray.forEach(o => parcels.push(new Parcel(o)));
@@ -51,7 +51,7 @@ export class DecentralandCosignerService {
       if (this._districts !== undefined) {
         resolve(this._districts);
       } else {
-        this.http.get('./proxy_decentraland/api/districts').subscribe((resp: any) => {
+        this.http.get(environment.decentralandUrl + 'api/districts').subscribe((resp: any) => {
           this._districts = resp.data as District[];
           resolve(this._districts);
         });

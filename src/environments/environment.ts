@@ -14,9 +14,10 @@ export const environment = {
   version_name: require('../../package.json').version_name,
   build: '0x5b169b9b',
   production: false,
-  url: 'http://localhost:4200/',
+  url: 'https://testnet.rcn.loans/',
   envName: 'dev',
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
+  decentralandUrl: './proxy_decentraland/',
   network: {
     id: '3',
     name: 'Ropsten',
