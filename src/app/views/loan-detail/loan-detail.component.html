@@ -81,10 +81,10 @@
             <app-risk-indicator class='risk-indicator' [loan]=loan [color]='white'></app-risk-indicator>
           </div>
           
-          <div *ngIf="isOngoing">
-            <app-transfer-button [loan]="loan" *ngIf="loan.owner === userAccount"></app-transfer-button>
-            <app-pay-button></app-pay-button>
-            <app-forgive-button></app-forgive-button>
+          <div>
+            <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
+            <!-- <app-pay-button></app-pay-button>
+            <app-forgive-button></app-forgive-button> -->
           </div>
         </div>
         <div class="col-xs-12 col-md-6 loan-description right">
