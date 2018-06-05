@@ -7,7 +7,12 @@ export enum Agent {
   RipioCreator
 }
 
+declare let require: any;
+
 export const environment = {
+  version: require('../../package.json').version,
+  version_name: require('../../package.json').version_name,
+  build: '0x5b169b9b',
   production: false,
   url: 'http://localhost:4200/',
   envName: 'dev',
