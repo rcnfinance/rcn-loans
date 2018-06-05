@@ -59,7 +59,7 @@ export class ContractsService {
             console.log('Pending engine approved found', pending);
             resolve(pending);
           } else {
-            const _web3 = this.web3.web3;
+            const _web3 = this.web3.web3reader;
             this._rcnContract.allowance.call(account, this._rcnEngineAddress, function (err, result) {
               if (err != null) {
                 reject(err);
