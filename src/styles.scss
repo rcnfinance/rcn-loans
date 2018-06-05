@@ -67,10 +67,10 @@ body{
     }
   }
   &.button-secondary{
-    color: $tertiary;
-    background-color: $secondary;
+    color: $secondary;
+    background-color: $gray7;
     &:hover, &:active, &:visited, &:focus{
-      background-color: $gray2;
+      background-color: #292929;
     }
   }
   &.button-tertiary{
