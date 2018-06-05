@@ -146,6 +146,13 @@ ngx-spinner .black-overlay.ng-star-inserted {
     color: $secondary;
     background-color: $gray7;
   }
+  //Menu
+  .mat-menu-panel {
+    background-color: $gray7;
+    button {
+      color: $secondary;
+    }
+  }
   // Snackbar
 snack-bar-container.mat-snack-bar-container{
   color: $secondary;
