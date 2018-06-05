@@ -1,6 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,400i,500,600,700,800,900');
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+// Custom Custom Style
+@import url('https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,400i,500,600,700,800,900'); // Google Fonts
+$material-icons-font-path: '~material-icons/iconfont/'; // Material Icons
+@import '~material-icons/iconfont/material-icons.scss'; // Material Icons
+@import "~@angular/material/prebuilt-themes/indigo-pink.css"; // Material Custom Theme
 @import './scss/_spaces.scss', //spaces
         './scss/_variables.scss', //variables
         './scss/_type.scss', //type
@@ -10,11 +12,16 @@
         './scss/_fonts.scss'; //fonts
 
 // General
+html {height: 0;}
 body{
   position: relative;
   font-family: 'Raleway', sans-serif;
   background-color: $tertiary;
   color: $secondary;
+}
+.highlight-layer{
+  position: relative;
+  z-index: 1000;
 }
 
 //TABS

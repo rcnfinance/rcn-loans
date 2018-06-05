@@ -121,7 +121,6 @@ export class ContractsService {
         }
 
         return new Promise((resolve, reject) => {
-          const _web3 = this.web3.web3;
           this._rcnEngine.lend(loan.id, oracleData, cosigner, cosignerData, { from: account }, function(err, result) {
             if (err != null) {
               reject(err);
@@ -129,6 +128,17 @@ export class ContractsService {
             resolve(result);
           });
         }) as Promise<string>;
+    }
+    public async transferLoan(loan: Loan, to: string): Promise<string> {
+      const account = await this.web3.getAccount();
+      return new Promise((resolve, reject) => {
+        this._rcnEngine.transfer(to, loan.id, { from: account }, function(err, result) {
+          if (err != null) {
+            reject(err);
+          }
+          resolve(result);
+        });
+      }) as Promise<string>;
     }
     public async withdrawFunds(loans: number[]): Promise<string> {
       const account = await this.web3.getAccount();
@@ -197,15 +207,16 @@ export class ContractsService {
           });
         }) as Promise<Loan[]>;
     }
-    public async getMyLoans(): Promise<Loan[]> {
-      const account = await this.web3.getAccount();
+    public getLoansOfLender(lender: string): Promise<Loan[]> {
       return new Promise((resolve, reject) => {
+        // Filter [lenderIn]
         const filters = ['0xe52eac8af912b8b3196b2921f12b66c91b39e025'];
-        const params = [this.addressToBytes32(account)];
+        const params = [this.addressToBytes32(lender)];
         this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
           if (err != null) {
             reject(err);
           }
+          console.log(result);
           resolve(LoanCurator.curateLoans(this.parseLoansBytes(result)));
         });
       }) as Promise<Loan[]>;
@@ -227,7 +238,7 @@ export class ContractsService {
     public async getPendingWithdraws(): Promise<[number, number[]]> {
       const account = await this.web3.getAccount();
       return new Promise((resolve, reject) => {
-        this.getMyLoans().then((loans: Loan[]) => {
+        this.getLoansOfLender(account).then((loans: Loan[]) => {
           resolve(this.readPendingWithdraws(loans));
         });
       }) as Promise<[number, number[]]>;

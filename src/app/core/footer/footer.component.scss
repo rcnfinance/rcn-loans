@@ -1,0 +1,56 @@
+@import '../../../scss/_variables.scss'; //variables
+
+footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 1000;
+  min-height: 0px;
+  background-color: #121212;
+  padding: 15px 30px;
+}
+.txt{
+  line-height: 1.9;
+}
+a{
+  color: #fff;
+  @include transition();
+  &:hover{
+    color: $primary;
+  }
+}
+.button-group{
+  line-height: 1.9;
+}
+.icon{
+  line-height: 1.9;
+  cursor: pointer;
+  padding-right: 15px;
+  display: inline-block;
+}
+.left,
+.center,
+.right{
+  text-align: center;
+}
+.button-group{
+  text-align: center;
+  padding-left: 15px;
+}
+
+@media (min-height: '768px'){
+  .left{
+    text-align: left;
+  }
+  .center{
+    text-align: center;
+  }
+  .right{
+    text-align: right;
+  } 
+  .button-group{
+    text-align: right;
+    padding-left: 0;
+  }
+}

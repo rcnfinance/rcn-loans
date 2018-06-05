@@ -14,6 +14,8 @@ import { SharedModule } from './../../shared/shared.module';
 import { Utils } from './../../utils/utils';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CivicService } from '../../services/civic.service';
+import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-open-loans',
@@ -29,7 +31,9 @@ export class OpenLoansComponent implements OnInit, OnDestroy, AfterViewInit {
     private contractsService: ContractsService,
     private txService: TxService,
     private brandingService: BrandingService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private civicService: CivicService,
+    private web3Service: Web3Service
   ) {}
   loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {

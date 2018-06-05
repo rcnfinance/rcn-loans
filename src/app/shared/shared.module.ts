@@ -29,15 +29,9 @@ import { WithdrawButtonComponent } from './withdraw-button/withdraw-button.compo
 import { TransferFormComponent } from './transfer-form/transfer-form.component';
 import { TransferButtonComponent } from './transfer-button/transfer-button.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
+import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    BrowserModule,
-    HttpModule,
-    MaterialModule,
-    BlockiesModule
-  ],
   declarations: [
     LendButtonComponent,
     DetailButtonComponent,
@@ -61,6 +55,14 @@ import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.componen
     TransferFormComponent,
     TransferButtonComponent,
     RiskIndicatorComponent,
+    CivicAuthComponent,
+  ],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    HttpModule,
+    MaterialModule,
+    BlockiesModule,
   ],
   exports: [
     LendButtonComponent,
@@ -86,6 +88,10 @@ import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.componen
     TransferFormComponent,
     TransferButtonComponent,
     RiskIndicatorComponent,
+    CivicAuthComponent
+  ],
+  entryComponents: [
+    CivicAuthComponent
   ]
 })
 export class SharedModule { }

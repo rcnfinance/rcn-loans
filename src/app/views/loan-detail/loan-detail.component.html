@@ -27,8 +27,8 @@
               </div>
             </div>
           </div>
-          <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="isRequest ? loan.expectedReturn : loan.total"></app-conversion-graphic>
-          <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="loan.pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="loan.paid" *ngIf="!isRequest"></app-conversion-graphic>
+          <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="isRequest ? loan.expectedReturn : totalDebt"></app-conversion-graphic>
+          <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="loan.paid" *ngIf="!isRequest"></app-conversion-graphic>
           <div class="margintop20"></div>
           <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
           <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
@@ -82,16 +82,18 @@
           </div>
           
           <div *ngIf="isOngoing">
-            <app-transfer-button></app-transfer-button>
+            <app-transfer-button [loan]="loan" *ngIf="loan.owner === userAccount"></app-transfer-button>
             <app-pay-button></app-pay-button>
             <app-forgive-button></app-forgive-button>
           </div>
         </div>
         <div class="col-xs-12 col-md-6 loan-description right">
-          <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan" ></app-detail-identity>
+          <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
           <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
         </div>
       </div>
     </div>
   </div>
+  <div class="margintop130 visible-xs"></div>
+  <div class="margintop90 hidden-xs"></div>
 </div>
