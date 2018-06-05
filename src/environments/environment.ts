@@ -11,6 +11,7 @@ export const environment = {
   production: false,
   url: 'http://localhost:4200/',
   envName: 'dev',
+  identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
   network: {
     id: '3',
     name: 'Ropsten',
