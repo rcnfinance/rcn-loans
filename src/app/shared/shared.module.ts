@@ -29,6 +29,7 @@ import { WithdrawButtonComponent } from './withdraw-button/withdraw-button.compo
 import { TransferFormComponent } from './transfer-form/transfer-form.component';
 import { TransferButtonComponent } from './transfer-button/transfer-button.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
+import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.componen
     TransferFormComponent,
     TransferButtonComponent,
     RiskIndicatorComponent,
+    CivicAuthComponent,
   ],
   imports: [
     CommonModule,
@@ -86,6 +88,10 @@ import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.componen
     TransferFormComponent,
     TransferButtonComponent,
     RiskIndicatorComponent,
+    CivicAuthComponent
+  ],
+  entryComponents: [
+    CivicAuthComponent
   ]
 })
 export class SharedModule { }
