@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {SidebarService} from '../services/sidebar.service';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-content-wrapper',
@@ -16,7 +17,7 @@ export class ContentWrapperComponent implements OnInit {
   constructor(
     private sidebarService: SidebarService
   ) {}
-  
+
   ngOnInit(): void {
     this.isOpen$ = this.sidebarService.isOpen$;
   }

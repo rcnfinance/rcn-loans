@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   account: string;
   makeRotate = false;
   profile: boolean;
+  sidebarToggled: boolean = true;
 
   constructor(
     public dialog: MatDialog,
@@ -34,6 +35,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.sidebarService.isOpen$.next(
       !this.sidebarService.isOpen$.value
     )
+  }
+
+  clickEvent(){
+    this.sidebarToggled = !this.sidebarToggled;
+    console.log(this.sidebarToggled);
   }
 
   handleProfile() {
