@@ -8,7 +8,7 @@
       
       <div class="col-xs-12 col-md-6 right">
         <a class="icon hidden-xs inline marginright15"
-          matTooltip="0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf"
+          matTooltip="Basalt engine contract {{contract}}"
           matTooltipPosition="above"
           href="{{linkContract}}"
           target="_blank">
@@ -24,18 +24,19 @@
           <div class="icon"><a href="https://twitter.com/rcn_token?lang=en" matTooltip="Twitter" matTooltipPosition="above" target="_blank"><i class="fab fa-twitter fa-lg"></i></a></div>
           <div class="icon"><a href="https://t.me/RCNtalk" matTooltip="Telegram" matTooltipPosition="above" target="_blank"><i class="fab fa-telegram-plane fa-lg"></i></a></div>
           <div class="icon"><a href="https://www.linkedin.com/company/ripio-credit-network/" matTooltip="Linkedin" matTooltipPosition="above" target="_blank"><i class="fab fa-linkedin-in fa-lg"></i></a></div>
+          <div class="icon"><a href="https://www.reddit.com/r/rcn_token/" matTooltip="Reddit" matTooltipPosition="above" target="_blank"><i class="fab fa-reddit fa-lg"></i></a></div>
           <div class="icon"><a href="https://github.com/ripio/rcn.loans" matTooltip="Github" matTooltipPosition="above" target="_blank"><i class="fab fa-github fa-lg"></i></a></div>
           <div class="icon version">
-            <div [matMenuTriggerFor]="menu" matTooltip="Version 0.0.3" matTooltipPosition="above" target="_blank">
+            <div [matMenuTriggerFor]="menu" matTooltip="Version {{versionString}}" matTooltipPosition="above" target="_blank">
               <i class="fas fa-code-branch fa-lg"></i>
               0.0.3
-              <i class="fas fa-caret-down"></i>
+              <!-- <i class="fas fa-caret-down"></i> -->
             </div>
           </div>
-          <mat-menu #menu="matMenu">
+          <!-- <mat-menu #menu="matMenu">
             <button mat-menu-item>Version {{ versionString }}</button>
-            <!-- <button mat-menu-item>Version {{ versionString }}</button> -->
-          </mat-menu>
+            <button mat-menu-item>Version {{ versionString }}</button>
+          </mat-menu> -->
         </div>
       </div>
     </div>
