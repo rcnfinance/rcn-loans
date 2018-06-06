@@ -27,11 +27,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private router: Router,
     private sidebarService: SidebarService,
   ) {}
-  
+
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
 
-  callService() {    
-    this.sidebarService.isOpen$.next(!this.sidebarService.isOpen$.value)
+  callSidebarService() {    
+    this.sidebarService.isOpen$.next(
+      !this.sidebarService.isOpen$.value
+    )
   }
 
   handleProfile() {

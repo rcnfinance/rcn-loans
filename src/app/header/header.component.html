@@ -4,6 +4,16 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="navbar-header">
+
+            <button type="button" 
+              class="sidebar-toggle" 
+              (click)="callSidebarService()">
+              <!-- <span class="sr-only">Toggle navigation</span> -->
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
             <a class="button-img" routerLink='/requests'><img src="https://ripiocredit.network/images/logo.png" alt="rcn-image"></a>
             <ul class="nav">
               <i mat-raised-button class="material-icons icon-hamburguer" [matMenuTriggerFor]="menu">menu</i>
@@ -13,9 +23,6 @@
                 <button routerLink='/profile' mat-menu-item *ngIf='hasAccount'>Balance</button>
                 <button (click)='openDialog();' mat-menu-item>Profile</button>
               </mat-menu>
-
-              <li (click)=callService()>sidenav</li>
-
               <li routerLink='/requests' #tref>Requests</li>
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>
               <li routerLink='/profile' *ngIf='hasAccount'>Balance</li>
