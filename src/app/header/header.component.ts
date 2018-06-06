@@ -7,7 +7,7 @@ import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
 // App Service
 import { Web3Service, Type } from '../services/web3.service';
-import { ContentWrapperComponent } from '../content-wrapper/content-wrapper.component';
+import {SidebarService} from '../services/sidebar.service';
 
 // App Component
 
@@ -21,19 +21,18 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   makeRotate = false;
   profile: boolean;
 
-  @Input() sideBar: ContentWrapperComponent;
-
-  @HostListener('click')
-  click() {
-    this.sideBar.toggle();
-  }
-
   constructor(
     public dialog: MatDialog,
     private web3Service: Web3Service,
     private router: Router,
+    private sidebarService: SidebarService,
   ) {}
+  
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
+
+  callService() {    
+    this.sidebarService.isOpen$.next(!this.sidebarService.isOpen$.value)
+  }
 
   handleProfile() {
     this.profile = !this.profile;

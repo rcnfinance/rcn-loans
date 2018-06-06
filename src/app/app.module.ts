@@ -14,6 +14,8 @@ import { CosignerService } from './services/cosigner.service';
 import { Web3Service } from './services/web3.service';
 import { IdentityService } from './services/identity.service';
 import { RiskService } from './services/risk.service';
+import { CivicService } from './services/civic.service';
+import { SidebarService } from './services/sidebar.service';
 
 // TODO: Move
 import { DecentralandCosignerService } from './services/cosigners/decentraland-cosigner.service';
@@ -48,7 +50,6 @@ import { CoreModule } from './core/core.module';
 
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { CivicService } from './services/civic.service';
 
 const appRoutes: Routes = [
   { path: 'requests', component: OpenLoansComponent },
@@ -109,7 +110,8 @@ const appRoutes: Routes = [
     DecentralandCosignerService,
     IdentityService,
     RiskService,
-    CivicService
+    CivicService,
+    SidebarService,
   ],
   bootstrap: [AppComponent]
 })

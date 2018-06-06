@@ -14,7 +14,7 @@
                 <button (click)='openDialog();' mat-menu-item>Profile</button>
               </mat-menu>
 
-              <li (click)="sidenav.toggle()">sidenav</li>
+              <li (click)=callService()>sidenav</li>
 
               <li routerLink='/requests' #tref>Requests</li>
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>

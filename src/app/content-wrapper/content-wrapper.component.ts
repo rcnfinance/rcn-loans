@@ -1,5 +1,6 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
+import { Component, OnInit } from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {SidebarService} from '../services/sidebar.service';
 
 @Component({
   selector: 'app-content-wrapper',
@@ -10,15 +11,14 @@ export class ContentWrapperComponent implements OnInit {
   winHeight: any = window.innerHeight - 121;
   events: string[] = [];
   opened: boolean;
+  isOpen$: BehaviorSubject<boolean>;
 
-  @HostBinding('class.is-open')
-  isOpen = false;
-
-  toggle() {
-    this.isOpen = !this.isOpen;
+  constructor(
+    private sidebarService: SidebarService
+  ) {}
+  
+  ngOnInit(): void {
+    this.isOpen$ = this.sidebarService.isOpen$;
   }
-
-  constructor() {}
-  ngOnInit() {}
 
 }

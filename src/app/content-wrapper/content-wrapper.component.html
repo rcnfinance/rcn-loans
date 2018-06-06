@@ -4,6 +4,7 @@
   <app-header></app-header>
   <mat-sidenav-container class="example-container" #sidebar>
       <mat-sidenav mode="side" #sidenav
+        [opened]="isOpen$ | async"
         (opened)="events.push('open!')"
         (closed)="events.push('close!')">
         <ul>
