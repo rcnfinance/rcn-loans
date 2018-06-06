@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'app-content-wrapper',
@@ -9,11 +9,15 @@ export class ContentWrapperComponent implements OnInit {
   winHeight: any = window.innerHeight - 121;
   events: string[] = [];
   opened: boolean;
-  
-  constructor() {}
-  ngOnInit() {
-    console.log(this.winHeight);
-    console.log(this.events);
+
+  @HostBinding('class.is-open')
+  isOpen = false;
+
+  toggle() {
+    this.isOpen = !this.isOpen;
   }
+
+  constructor() {}
+  ngOnInit() {}
 
 }

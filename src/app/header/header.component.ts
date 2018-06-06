@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Input, HostListener } from '@angular/core';
 // App Component
 import { MaterialModule } from './../material/material.module';
 import { SharedModule } from './../shared/shared.module';
@@ -7,6 +7,7 @@ import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
 // App Service
 import { Web3Service, Type } from '../services/web3.service';
+import { ContentWrapperComponent } from '../content-wrapper/content-wrapper.component';
 
 // App Component
 
@@ -19,7 +20,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   account: string;
   makeRotate = false;
   profile: boolean;
-  
+
+  @Input() sidenav: ContentWrapperComponent;
+
+  @HostListener('click')
+  click() {
+    this.sidenav.toggle();
+  }
+
   constructor(
     public dialog: MatDialog,
     private web3Service: Web3Service,

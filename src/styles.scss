@@ -141,27 +141,36 @@ ngx-spinner .black-overlay.ng-star-inserted {
     background-color: rgba(0, 0, 0, 0.4);
   } 
 }
+  //Sidebar
+.mat-drawer-container {
+  color: inherit;
+  background-color: transparent;
+}
+.mat-drawer {
+  color: inherit;
+  background-color: transparent;
+}
   //Dialog
-  .mat-dialog-container{
-    color: $secondary;
-    background-color: $gray7;
-  }
+.mat-dialog-container{
+  color: $secondary;
+  background-color: $gray7;
+}
   //Menu
-  .mat-menu-panel {
-    background-color: $gray7;
-    .mat-menu-content {
-      padding-top: 2px;
-      padding-bottom: 2px;
-      .mat-menu-item{
-        height: 40px;
-        font-size: 14px;
-        line-height: 40px;
-      }
-      button {
-        color: $secondary;
-      }
+.mat-menu-panel {
+  background-color: $gray7;
+  .mat-menu-content {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    .mat-menu-item{
+      height: 40px;
+      font-size: 14px;
+      line-height: 40px;
+    }
+    button {
+      color: $secondary;
     }
   }
+}
   // Snackbar
 snack-bar-container.mat-snack-bar-container{
   color: $secondary;
