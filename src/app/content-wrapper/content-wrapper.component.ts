@@ -7,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContentWrapperComponent implements OnInit {
   winHeight: any = window.innerHeight - 121;
+  events: string[] = [];
+  opened: boolean;
+  
   constructor() {}
   ngOnInit() {
     console.log(this.winHeight);
+    console.log(this.events);
   }
 
 }

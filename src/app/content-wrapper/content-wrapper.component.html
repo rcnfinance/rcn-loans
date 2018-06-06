@@ -2,6 +2,25 @@
   <div class="margintop120 visible-xs"></div>
   <div class="margintop120 hidden-xs"></div>
   <app-header></app-header>
-  <router-outlet></router-outlet>
+
+  <mat-sidenav-container class="example-container">
+      <mat-sidenav mode="side" #sidenav  
+        [sideBar]="sideBar" 
+        (opened)="events.push('open!')"
+        (closed)="events.push('close!')">
+        <ul>
+          <li>Asd 1</li>
+          <li *ngFor="let e of events">{{ e }}</li>
+        </ul>
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <a><i mat-raised-button class="material-icons" (click)="sidenav.toggle()">menu</i></a>
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+
+    
   <app-footer></app-footer>
 </div>
+
+

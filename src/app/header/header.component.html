@@ -13,6 +13,9 @@
                 <button routerLink='/profile' mat-menu-item *ngIf='hasAccount'>Balance</button>
                 <button (click)='openDialog();' mat-menu-item>Profile</button>
               </mat-menu>
+
+              <li (click)="sidenav.toggle();">Sidebar</li>
+
               <li routerLink='/requests' #tref>Requests</li>
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>
               <li routerLink='/profile' *ngIf='hasAccount'>Balance</li>

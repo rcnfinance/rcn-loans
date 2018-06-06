@@ -19,6 +19,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   account: string;
   makeRotate = false;
   profile: boolean;
+  
   constructor(
     public dialog: MatDialog,
     private web3Service: Web3Service,
