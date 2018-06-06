@@ -21,11 +21,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   makeRotate = false;
   profile: boolean;
 
-  @Input() sidenav: ContentWrapperComponent;
+  @Input() sideBar: ContentWrapperComponent;
 
   @HostListener('click')
   click() {
-    this.sidenav.toggle();
+    this.sideBar.toggle();
   }
 
   constructor(

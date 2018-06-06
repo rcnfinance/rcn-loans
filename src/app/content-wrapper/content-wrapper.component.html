@@ -1,7 +1,8 @@
 <div class="relative" [style.min-height.px]="winHeight">
   <div class="margintop120 visible-xs"></div>
   <div class="margintop120 hidden-xs"></div>
-  <mat-sidenav-container class="example-container">
+  <app-header></app-header>
+  <mat-sidenav-container class="example-container" #sidebar>
       <mat-sidenav mode="side" #sidenav
         (opened)="events.push('open!')"
         (closed)="events.push('close!')">
@@ -11,14 +12,11 @@
         </ul>
       </mat-sidenav>
       <mat-sidenav-content>
-        <app-header [sidenav]="sidenav"></app-header>
         <a><i mat-raised-button class="material-icons white" (click)="sidenav.toggle()">menu</i></a>
         <router-outlet></router-outlet>
       </mat-sidenav-content>
     </mat-sidenav-container>
-
-    
-  <app-footer></app-footer>
+    <app-footer></app-footer>
 </div>
 
 

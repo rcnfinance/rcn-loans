@@ -95,6 +95,7 @@ const appRoutes: Routes = [
       { enableTracing: false } // <-- debugging purposes only
     )
   ],
+  exports: [],
   entryComponents: [
     DialogApproveContractComponent,
     DialogLoanTransferComponent,
