@@ -18,6 +18,7 @@ import { Utils } from './../../utils/utils';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
+import { CosignerOption } from '../../models/cosigner.model';
 
 @Component({
   selector: 'app-loan-detail',
@@ -30,6 +31,7 @@ export class LoanDetailComponent implements OnInit {
   viewDetail = 'identity';
   id = 1;
   userAccount: string;
+  cosignerOption: CosignerOption;
 
   // Loan detail
   loanConfigData = [];
@@ -44,6 +46,7 @@ export class LoanDetailComponent implements OnInit {
   constructor(
     private identityService: IdentityService,
     private route: ActivatedRoute,
+    private cosignerService: CosignerService,
     private contractsService: ContractsService,
     private router: Router,
     private web3Service: Web3Service,
@@ -56,6 +59,10 @@ export class LoanDetailComponent implements OnInit {
     this.identityService.getIdentity(this.loan).then((identity) => {
       this.identityName = identity !== undefined ? identity.short : 'Unknown';
     });
+  }
+
+  private loadCosignerOption() {
+    this.cosignerOption = this.cosignerService.getCosignerOptions(this.loan);
   }
 
   private loadDetail() {
@@ -114,6 +121,7 @@ export class LoanDetailComponent implements OnInit {
         this.loan = loan;
         this.loadDetail();
         this.loadIdentity();
+        this.loadCosignerOption();
         this.spinner.hide();
       });
    });
