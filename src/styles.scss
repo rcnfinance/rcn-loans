@@ -149,8 +149,17 @@ ngx-spinner .black-overlay.ng-star-inserted {
   //Menu
   .mat-menu-panel {
     background-color: $gray7;
-    button {
-      color: $secondary;
+    .mat-menu-content {
+      padding-top: 2px;
+      padding-bottom: 2px;
+      .mat-menu-item{
+        height: 40px;
+        font-size: 14px;
+        line-height: 40px;
+      }
+      button {
+        color: $secondary;
+      }
     }
   }
   // Snackbar
@@ -178,5 +187,21 @@ mat-form-field{
   }
   .mat-hint {
     color: rgba(255,255,255,.5);
+  }
+}
+
+@media (min-width: 768px){
+//Material
+  //Menu
+  .mat-menu-panel {
+    .mat-menu-content {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      .mat-menu-item{
+        height: 42px;
+        font-size: 14px;
+        line-height: 42px;
+      }
+    }
   }
 }
