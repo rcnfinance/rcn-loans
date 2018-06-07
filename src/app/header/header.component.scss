@@ -1,6 +1,6 @@
 @import '../../scss/_variables.scss'; //variables
 .navbar{
-  position: fixed;
+  position: relative;
   left: 0px;
   top: 0px;
   right: 0px;
@@ -48,6 +48,13 @@
   > .flex-item {
     width: 35px;
   }
+}
+.navbar-extension {
+  height: 50px;
+  position: relative;
+  top: 0;
+  left: 0;
+  background-color: red;
 }
 
 
