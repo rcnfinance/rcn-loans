@@ -24,6 +24,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AddressComponent implements OnInit {
   address: string;
   loans = [];
+  availableLoans: boolean = true;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -36,6 +37,11 @@ export class AddressComponent implements OnInit {
     this.contractsService.getLoansOfLender(this.address).then((result: Loan[]) => {
       this.loans = result;
       this.spinner.hide();
+      console.log(this.loans);
+      if(this.loans.length <= 0) {
+        this.availableLoans = false;
+        console.log('No Loans');
+      }
     });
   }
   ngOnInit() {
