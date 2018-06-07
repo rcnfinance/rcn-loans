@@ -28,6 +28,10 @@ a{
   cursor: pointer;
   padding-right: 15px;
   display: inline-block;
+  margin-top: 5px;
+  &.version{
+    margin-left: 15px;    
+  }
 }
 .left,
 .center,
@@ -39,7 +43,8 @@ a{
   padding-left: 15px;
 }
 
-@media (min-height: '768px'){
+
+@media (min-width: 992px){
   .left{
     text-align: left;
   }
@@ -52,5 +57,8 @@ a{
   .button-group{
     text-align: right;
     padding-left: 0;
+  }
+  .icon{
+    margin-top: 0;
   }
 }

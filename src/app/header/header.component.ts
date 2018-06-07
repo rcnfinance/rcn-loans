@@ -19,12 +19,18 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   account: string;
   makeRotate = false;
   profile: boolean;
+  extensionToggled: boolean = false;
   constructor(
     public dialog: MatDialog,
     private web3Service: Web3Service,
     private router: Router,
   ) {}
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
+
+  extensionToggle(){
+    this.extensionToggled = !this.extensionToggled;
+  }
+
 
   handleProfile() {
     this.profile = !this.profile;

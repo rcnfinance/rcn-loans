@@ -19,8 +19,8 @@ export class DecentralandCosignerService {
   private _districts: District[];
 
   constructor(private web3: Web3Service, private http: HttpClient) {
-    this._landMarketContract = this.web3.web3.eth.contract(landMarketAbi).at(environment.contracts.decentraland.landMarket);
-    this._mortgageManagerContract = this.web3.web3.eth.contract(mortgageManagerAbi).at(environment.contracts.decentraland.mortgageManager);
+    this._landMarketContract = this.web3.web3reader.eth.contract(landMarketAbi).at(environment.contracts.decentraland.landMarket);
+    this._mortgageManagerContract = this.web3.web3reader.eth.contract(mortgageManagerAbi).at(environment.contracts.decentraland.mortgageManager);
   }
   getParcelInfo(x: number, y: number): Promise<Parcel> {
     return new Promise(resolve => {
@@ -33,12 +33,12 @@ export class DecentralandCosignerService {
     return new Promise(resolve => {
       const x = parseInt(center[0].toString(), 10);
       const y = parseInt(center[1].toString(), 10);
-      const sx = size[0] / 2;
-      const sy = size[1] / 2;
+      const sx = Math.ceil((size[0] / 2));
+      const sy = Math.ceil((size[1] / 2));
       console.log(size, sx, sy);
       const limitNw = (x - sx) + ',' + (y + sy);
       const limitSe = (x + sx) + ',' + (y - sy);
-      this.http.get('./proxy_decentraland/api/parcels?nw=' + limitNw + '&se=' + limitSe).subscribe((resp: any) => {
+      this.http.get(environment.decentralandUrl + 'api/parcels?nw=' + limitNw + '&se=' + limitSe).subscribe((resp: any) => {
         const resultArray = resp.data.parcels as Object[];
         const parcels: Parcel[] = [];
         resultArray.forEach(o => parcels.push(new Parcel(o)));
@@ -51,7 +51,7 @@ export class DecentralandCosignerService {
       if (this._districts !== undefined) {
         resolve(this._districts);
       } else {
-        this.http.get('./proxy_decentraland/api/districts').subscribe((resp: any) => {
+        this.http.get(environment.decentralandUrl + 'api/districts').subscribe((resp: any) => {
           this._districts = resp.data as District[];
           resolve(this._districts);
         });

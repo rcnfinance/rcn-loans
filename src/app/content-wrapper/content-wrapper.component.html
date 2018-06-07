@@ -1,7 +1,8 @@
 <div class="relative" [style.min-height.px]="winHeight">
-  <div class="margintop120 visible-xs"></div>
-  <div class="margintop120 hidden-xs"></div>
+  <a class="extension-closebox" *ngIf='extensionToggled' (click)='extensionToggle()'></a>
   <app-header></app-header>
+  <div class="margintop20 visible-xs"></div>
+  <div class="margintop55 hidden-xs"></div>
   <router-outlet></router-outlet>
   <app-footer></app-footer>
 </div>

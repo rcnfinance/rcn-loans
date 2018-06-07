@@ -6,6 +6,7 @@ declare let window: any;
 import { Injectable } from '@angular/core';
 import { Loan } from './models/loan.model';
 import { TypeCheckCompiler } from '@angular/compiler/src/view_compiler/type_check_compiler';
+import { Web3Service } from './services/web3.service';
 
 enum Type { lend, approve, withdraw, transfer }
 
@@ -41,20 +42,9 @@ export class TxService {
   private localStorage: any;
   private interval: any;
 
-  private _web3: any;
-  constructor() {
-    if (typeof window.web3 !== 'undefined') {
-      // Use Mist/MetaMask's provider
-      this._web3 = new Web3(window.web3.currentProvider);
-      // if (this._web3.version.network !== '3') {
-      //   alert('Please connect to the Ropsten network');
-      // }
-    } else {
-      console.warn(
-        'Please use a dapp browser like mist or MetaMask plugin for chrome'
-      );
-    }
-
+  constructor(
+    private web3service: Web3Service
+  ) {
     this.localStorage = window.localStorage;
     this.tx_memory = this.readTxs();
     if (this.tx_memory === null) {
@@ -71,7 +61,7 @@ export class TxService {
     const pendingTxn = this.tx_memory.filter(tx => !tx.confirmed);
     this.tx_memory.forEach(tx => {
       if (!tx.confirmed) {
-        this._web3.eth.getTransactionReceipt(tx.tx, (err, receipt) => {
+        this.web3service.web3reader.eth.getTransactionReceipt(tx.tx, (err, receipt) => {
           if (receipt !== null) {
             console.log('Found receipt tx', tx, receipt);
             tx.confirmed = true;

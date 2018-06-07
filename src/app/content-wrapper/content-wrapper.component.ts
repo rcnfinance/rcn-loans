@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./content-wrapper.component.scss']
 })
 export class ContentWrapperComponent implements OnInit {
-  winHeight: any = window.innerHeight - 121;
+  winHeight: any = window.innerHeight;
   constructor() {}
   ngOnInit() {
     console.log(this.winHeight);

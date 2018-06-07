@@ -59,7 +59,7 @@ export class ContractsService {
             console.log('Pending engine approved found', pending);
             resolve(pending);
           } else {
-            const _web3 = this.web3.web3;
+            const _web3 = this.web3.web3reader;
             this._rcnContract.allowance.call(account, this._rcnEngineAddress, function (err, result) {
               if (err != null) {
                 reject(err);
@@ -158,7 +158,7 @@ export class ContractsService {
           resolve('0x');
         } else {
           const web3 = this.web3.web3;
-          const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
+          const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
           oracle.url.call((err, url) => {
             if (url === '') {
               console.log('Oracle does not require data');

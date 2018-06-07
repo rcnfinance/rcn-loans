@@ -7,11 +7,17 @@ export enum Agent {
   RipioCreator
 }
 
+declare let require: any;
+
 export const environment = {
+  version: require('../../package.json').version,
+  version_name: require('../../package.json').version_name,
+  build: '0x5b1959b9',
   production: false,
-  url: 'http://localhost:4200/',
+  url: 'https://testnet.rcn.loans/',
   envName: 'dev',
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
+  decentralandUrl: './proxy_decentraland/',
   network: {
     id: '3',
     name: 'Ropsten',

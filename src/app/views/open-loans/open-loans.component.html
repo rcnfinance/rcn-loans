@@ -11,6 +11,12 @@
   </div>
   <div class="row">
 
+    <div class="col-xs-12 text-center" *ngIf='!availableLoans'>
+      <div class="margintop60 visible-xs"></div>
+      <div class="margintop100 hidden-xs"></div>
+      <div class="title main-h1">There are no available Loans</div>
+    </div>
+
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 card-col" 
     *ngFor='let loan of loans; let i of index'>
 
@@ -54,6 +60,6 @@
       </div>
     </div>
   </div>
-  <div class="margintop130 visible-xs"></div>
-  <div class="margintop90 hidden-xs"></div>
+  <div class="margintop160 visible-xs"></div>
+  <div class="margintop130 hidden-xs"></div>
 </div>

@@ -25,8 +25,8 @@ import { Web3Service } from '../../services/web3.service';
 export class OpenLoansComponent implements OnInit, OnDestroy, AfterViewInit {
   public loading: boolean;
   loans = [];
-  bestLoan = this.loans[0]; // be dst loan suggested
   pendingLend = [];
+  availableLoans: boolean = true;
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
@@ -39,6 +39,9 @@ export class OpenLoansComponent implements OnInit, OnDestroy, AfterViewInit {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
       this.spinner.hide();
+      if(this.loans.length <= 0) {
+        this.availableLoans = false;
+      }
     });
   }
   ngOnInit() {

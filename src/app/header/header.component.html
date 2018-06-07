@@ -1,4 +1,4 @@
-<div id="page-content-wrapper">
+<div id="page-content-wrapper" [ngClass]="{'extension-toggled': extensionToggled}">
   <nav id="navbar" class="navbar">
     <div class="container">
       <div class="row">
@@ -16,6 +16,9 @@
               <li routerLink='/requests' #tref>Requests</li>
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>
               <li routerLink='/profile' *ngIf='hasAccount'>Balance</li>
+              <li *ngIf='hasAccount' (click)='extensionToggle()'>
+                <i class="material-icons transition" [ngClass]="{'rotate45': extensionToggled}">add</i>
+              </li>
               <li class="separator">|</li>
               <li (click)="openDialog()" *ngIf="!hasAccount">Login</li>
               <li (click)="openDialog(); makeRotate = !makeRotate;">
@@ -37,4 +40,24 @@
       </div>
     </div>
   </nav>
+  <div class="navbar-extension">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <ul>
+            <li class="title main-h1">Account balance</li>
+            <li class="title main-h2"><span>RCN</span> 690.80</li>
+            <span class="marginleft5"></span>
+            <span class="marginleft60"></span>
+            <li class="title main-h1">Available to withdraw</li>
+            <li class="title main-h2"><span>RCN</span> 360.80</li>
+            <span class="marginleft5"></span>
+            <span class="marginleft60"></span>
+            <li><app-withdraw-button></app-withdraw-button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a class="extension-closebox" *ngIf='extensionToggled' (click)='extensionToggle()'></a>
 </div>
