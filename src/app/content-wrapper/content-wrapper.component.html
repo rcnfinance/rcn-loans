@@ -2,8 +2,9 @@
   <div class="margintop120 visible-xs"></div>
   <div class="margintop120 hidden-xs"></div>
   <app-header></app-header>
-  <mat-sidenav-container class="example-container" #sidebar>
-      <mat-sidenav mode="side" #sidenav
+  <mat-sidenav-container class="example-container" 
+    #sidebar>
+      <mat-sidenav mode="over" #sidenav
         [opened]="isOpen$ | async"
         (opened)="events.push('open!')"
         (closed)="events.push('close!')">
