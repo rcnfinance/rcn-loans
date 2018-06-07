@@ -19,6 +19,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { CosignerOption } from '../../models/cosigner.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-loan-detail',
@@ -100,6 +101,10 @@ export class LoanDetailComponent implements OnInit {
 
   isDetail(view: string): Boolean {
     return view === this.viewDetail;
+  }
+
+  openLender(address: string) {
+    window.open('/address/' + address, '_blank');
   }
 
   private formatInterest(interest: number): string {
