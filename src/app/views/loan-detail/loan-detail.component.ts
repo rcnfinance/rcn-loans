@@ -107,7 +107,7 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private formatTimestamp(timestamp: number): string {
-    return new DatePipe('en-US').transform(timestamp * 1000, 'dd.mm.yyyy');
+    return new DatePipe('en-US').transform(timestamp * 1000, 'dd.MM.yyyy');
   }
 
   ngOnInit() {
