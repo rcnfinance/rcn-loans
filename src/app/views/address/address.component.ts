@@ -37,10 +37,8 @@ export class AddressComponent implements OnInit {
     this.contractsService.getLoansOfLender(this.address).then((result: Loan[]) => {
       this.loans = result;
       this.spinner.hide();
-      console.log(this.loans);
       if(this.loans.length <= 0) {
         this.availableLoans = false;
-        console.log('No Loans');
       }
     });
   }
