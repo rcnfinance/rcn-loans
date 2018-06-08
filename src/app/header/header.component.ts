@@ -1,9 +1,10 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 // App Component
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
-import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
-import { Router } from '@angular/router';
+import { DialogLoanTransferComponent } from '../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 // App Service
 import { Web3Service, Type } from '../services/web3.service';
 
@@ -47,19 +48,27 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       });
     }
   }
-  openDialogClient(){
-    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {
-      width: '800px'
+  openDialogApprove(){
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
     });
+  }
+  openDialogTransfer(){
+    const dialogRef: MatDialogRef<DialogLoanTransferComponent> = this.dialog.open(DialogLoanTransferComponent, {});
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+  openDialogClient(){
+    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
   }
   openDialog() {
     if (this.hasAccount) {
-      const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {
-        width: '800px'
-      });
+      const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
       dialogRef.componentInstance.autoClose = false;
       dialogRef.afterClosed().subscribe(result => {
         console.log(`Dialog result: ${result}`);
@@ -69,15 +78,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         window.open('https://metamask.io/', '_blank');
       } else {
         this.openDialogClient();
-        // alert(
-        //   'Couldn\'t get any accounts! Make sure your Ethereum client is unlocked and configured correctly.'
-        // );
       }
     }
   }
   ngAfterViewInit(): any {}
   ngOnInit() {
-    // this.openDialogClient();
+    this.openDialogTransfer();
+    this.openDialogClient();
+    this.openDialogApprove();
     this.web3Service.getAccount().then((account) => {
       this.account = account;
     });

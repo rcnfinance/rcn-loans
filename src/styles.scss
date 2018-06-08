@@ -212,4 +212,20 @@ mat-form-field{
       }
     }
   }
+  //Dialog
+  .mat-dialog-content{
+    min-width: 550px;
+  }
+}
+
+@media (min-width: 992px){
+  .mat-dialog-content {
+    min-width: 750px;
+  }
+}
+
+@media (min-width: 1200px){
+  .mat-dialog-content {
+    min-width: 850px;
+  }
 }
