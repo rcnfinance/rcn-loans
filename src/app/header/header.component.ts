@@ -68,15 +68,16 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       if (this.web3Service.web3Type === Type.Injected) {
         window.open('https://metamask.io/', '_blank');
       } else {
-        alert(
-          'Couldn\'t get any accounts! Make sure your Ethereum client is unlocked and configured correctly.'
-        );
+        this.openDialogClient();
+        // alert(
+        //   'Couldn\'t get any accounts! Make sure your Ethereum client is unlocked and configured correctly.'
+        // );
       }
     }
   }
   ngAfterViewInit(): any {}
   ngOnInit() {
-    this.openDialogClient();
+    // this.openDialogClient();
     this.web3Service.getAccount().then((account) => {
       this.account = account;
     });
