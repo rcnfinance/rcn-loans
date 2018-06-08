@@ -4,26 +4,25 @@
       <div class="creator-title">Approve Contract</div>
     </div>
   </div>
-  <div class="dialog-padding">
-    <div class="col-xs-12 col-sm-6">
-      <div class="title main-h1 marginbottom20">Account Information</div>
-      <div class="list-avatar">
-        <div class="avatar-container">
-          <app-avatar [seed]=lender></app-avatar>
-        </div>
-        <div class="txt-container">
-          <div class="subtitle">Wallet address</div>
-          <div class="title ellipsis">{{ lender }}</div>
+  <div class="col-xs-12 dialog-padding">
+    <div class="row">
+      <div class="col-xs-12 col-sm-6">
+        <div class="title main-h1 marginbottom20">Account Information</div>
+        <div class="list-avatar">
+          <div class="avatar-container">
+            <app-avatar [seed]=lender></app-avatar>
+          </div>
+          <div class="txt-container">
+            <div class="subtitle">Wallet address</div>
+            <div class="title ellipsis">{{ lender }}</div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-xs-12 col-sm-6 marginbottom10">
-      <div class="title main-h1 marginbottom20">Authorize</div>
-      <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Loan Engine contract to operate RCN on your behalf
+      <div class="col-xs-12 col-sm-6">
+        <div class="margintop20 visible-xs"></div>
+        <div class="title main-h1 marginbottom20">Authorize</div>
+        <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Loan Engine contract to operate RCN on your behalf
+      </div>
     </div>
   </div>
 </mat-dialog-content>
-<mat-dialog-actions class="marginbottom-10">
-  <!-- <button mat-raised-button [mat-dialog-close]='true' class="button button-primary">Approve</button> -->
-  <!-- <button mat-raised-button [mat-dialog-close]='false' class="button button-secondary">Cancel</button> -->
-</mat-dialog-actions>
