@@ -9,12 +9,14 @@ import { environment } from '../../../environments/environment';
 })
 export class FooterComponent implements OnInit {
   constructor() {}
+  version: string;
   versionString: string;
   linkContract: string;
   contract: string;
   ngOnInit() {
     const env = environment;
     this.contract = env.contracts.basaltEngine;
+    this.version = env.version;
     this.versionString = env.version + '-' + env.build + ' - ' + env.version_name;
     this.linkContract = env.network.explorer.address.replace('${address}', env.contracts.basaltEngine);
   }
