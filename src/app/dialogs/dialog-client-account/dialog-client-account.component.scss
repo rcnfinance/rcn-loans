@@ -1,0 +1,22 @@
+@import '../../../scss/_variables.scss'; //variables
+
+//Dialog Client
+.navbar-container {
+  height: 100px;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #333333;
+  .creator-container {
+      .creator-title{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        color: $fifth;
+        font-size: 36px;
+        @extend %font-black;
+        @include transform(translate(-50%, -50%));
+      }
+    }
+}

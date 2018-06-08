@@ -19,7 +19,7 @@
               <li *ngIf='hasAccount' (click)='extensionToggle()'>
                 <i class="material-icons transition" [ngClass]="{'rotate45': extensionToggled}">add</i>
               </li>
-              <li class="separator">|</li>
+              <li (click)='openDialogClient()' class="separator">|</li>
               <li (click)="openDialog()" *ngIf="!hasAccount">Login</li>
               <li (click)="openDialog(); makeRotate = !makeRotate;">
                 <div class="flex-container" *ngIf="hasAccount">

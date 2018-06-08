@@ -49,6 +49,7 @@ import { CoreModule } from './core/core.module';
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { CivicService } from './services/civic.service';
+import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 
 const appRoutes: Routes = [
   { path: 'requests', component: OpenLoansComponent },
@@ -79,6 +80,7 @@ const appRoutes: Routes = [
     DetailTableComponent,
     ProfileComponent,
     AddressComponent,
+    DialogClientAccountComponent,
   ],
   imports: [
     BrowserModule,
@@ -98,6 +100,7 @@ const appRoutes: Routes = [
   entryComponents: [
     DialogApproveContractComponent,
     DialogLoanTransferComponent,
+    DialogClientAccountComponent,
   ],
   providers: [
     ContractsService,

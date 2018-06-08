@@ -96,6 +96,7 @@ body{
   &.main-h2{font-size: 18px; text-transform: uppercase; @extend %font-light;} 
   &.main-h3{font-size: 18px; @extend %font-bold;} 
   &.main-h4{font-size: 16px; @extend %font-regular;} 
+  &.main-h5{font-size: 14px; @extend %font-thin;} 
   &.main-title{line-height: 1.4; font-size: 16px; @extend %font-medium;} 
   &.main-subtitle{line-height: 1.4; font-size: 14px; @extend %font-medium;} 
 }
@@ -142,9 +143,17 @@ ngx-spinner .black-overlay.ng-star-inserted {
   } 
 }
   //Dialog
-  .mat-dialog-container{
-    color: $secondary;
-    background-color: $gray7;
+  .cdk-global-overlay-wrapper{
+    .mat-dialog-container{
+      color: $secondary;
+      padding: 0px;
+      background-color: $fifth;
+    }
+    .mat-dialog-content{
+      position: relative;
+      margin: 0;
+      padding: 0;
+    }
   }
   //Menu
   .mat-menu-panel {
@@ -199,7 +208,6 @@ mat-form-field{
       padding-bottom: 5px;
       .mat-menu-item{
         height: 42px;
-        font-size: 14px;
         line-height: 42px;
       }
     }

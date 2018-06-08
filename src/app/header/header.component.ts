@@ -1,8 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 // App Component
-import { MaterialModule } from './../material/material.module';
-import { SharedModule } from './../shared/shared.module';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
 // App Service
@@ -48,6 +47,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       });
     }
   }
+  openDialogClient(){
+    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {
+      width: '800px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
   openDialog() {
     if (this.hasAccount) {
       const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {
@@ -69,6 +76,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): any {}
   ngOnInit() {
+    this.openDialogClient();
     this.web3Service.getAccount().then((account) => {
       this.account = account;
     });
