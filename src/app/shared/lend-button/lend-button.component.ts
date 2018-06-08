@@ -7,6 +7,7 @@ import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx } from './../../tx.service';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { environment } from '../../../environments/environment';
 import { Web3Service } from '../../services/web3.service';
 import { CivicService } from '../../services/civic.service';
 import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
@@ -18,6 +19,7 @@ import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 })
 export class LendButtonComponent implements OnInit {
   @Input() loan: Loan;
+  pendingTx: Tx = undefined;
   account: string;
 
   constructor(
@@ -28,6 +30,13 @@ export class LendButtonComponent implements OnInit {
     public dialog: MatDialog
   ) {}
 
+  ngOnInit() {
+    this.retrievePendingTx();
+    this.web3Service.getAccount().then((account) => {
+      this.account = account;
+    });
+  }
+
   handleLend() {
     if (this.account === undefined) { return; }
 
@@ -37,6 +46,7 @@ export class LendButtonComponent implements OnInit {
           if (status) {
             this.contractsService.lendLoan(this.loan).then(tx => {
               this.txService.registerLendTx(this.loan, tx);
+              this.retrievePendingTx();
             });
           } else {
             this.showCivicDialog();
@@ -60,6 +70,18 @@ export class LendButtonComponent implements OnInit {
     });
   }
 
+  clickLend() {
+    if (this.pendingTx === undefined) {
+      this.handleLend();
+    } else {
+      window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
+    }
+  }
+
+  retrievePendingTx() {
+    this.pendingTx = this.txService.getLastLend(this.loan);
+  }
+
   showCivicDialog() {
     const dialogRef: MatDialogRef<CivicAuthComponent> = this.dialog.open(CivicAuthComponent, {
       width: '800px'
@@ -71,18 +93,12 @@ export class LendButtonComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.web3Service.getAccount().then((account) => {
-      this.account = account;
-    });
-  }
-
   get enabled(): Boolean {
     return this.txService.getLastLend(this.loan) === undefined;
   }
 
   get buttonText(): string {
-    const tx = this.txService.getLastLend(this.loan);
+    const tx = this.pendingTx;
     if (tx === undefined) {
       return 'Lend';
     }

@@ -19,6 +19,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { CosignerOption } from '../../models/cosigner.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-loan-detail',
@@ -102,12 +103,16 @@ export class LoanDetailComponent implements OnInit {
     return view === this.viewDetail;
   }
 
+  openLender(address: string) {
+    window.open('/address/' + address, '_blank');
+  }
+
   private formatInterest(interest: number): string {
     return Number(interest.toFixed(2)).toString();
   }
 
   private formatTimestamp(timestamp: number): string {
-    return new DatePipe('en-US').transform(timestamp * 1000, 'dd.mm.yyyy');
+    return new DatePipe('en-US').transform(timestamp * 1000, 'dd.MM.yyyy');
   }
 
   ngOnInit() {
