@@ -1,10 +1,9 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 // App Component
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
-import { DialogLoanTransferComponent } from '../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 // App Service
 import { Web3Service, Type } from '../services/web3.service';
 
@@ -31,7 +30,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.extensionToggled = !this.extensionToggled;
   }
 
-
   handleProfile() {
     this.profile = !this.profile;
     if (this.profile) {
@@ -50,12 +48,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
   openDialogApprove(){
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-  openDialogTransfer(){
-    const dialogRef: MatDialogRef<DialogLoanTransferComponent> = this.dialog.open(DialogLoanTransferComponent, {});
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
@@ -83,9 +75,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): any {}
   ngOnInit() {
-    this.openDialogTransfer();
-    this.openDialogClient();
-    this.openDialogApprove();
     this.web3Service.getAccount().then((account) => {
       this.account = account;
     });
