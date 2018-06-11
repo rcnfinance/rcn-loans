@@ -10,15 +10,15 @@
               <mat-menu #menu="matMenu">
                 <button routerLink='/requests' mat-menu-item>Requests</button>
                 <button routerLink='/address/{{ account }}/' mat-menu-item *ngIf='hasAccount'>Loans</button>
-                <button routerLink='/profile' mat-menu-item *ngIf='hasAccount'>Balance</button>
+                <button (click)='extensionToggle()' mat-menu-item *ngIf='hasAccount'>Balance</button>
                 <button (click)='openDialog();' mat-menu-item>Profile</button>
               </mat-menu>
               <li routerLink='/requests' #tref>Requests</li>
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>
-              <li routerLink='/profile' *ngIf='hasAccount'>Balance</li>
-              <li *ngIf='hasAccount' (click)='extensionToggle()'>
+              <li (click)='extensionToggle()' *ngIf='hasAccount'>Balance</li>
+              <!-- <li *ngIf='hasAccount' (click)='extensionToggle()'>
                 <i class="material-icons transition" [ngClass]="{'rotate45': extensionToggled}">add</i>
-              </li>
+              </li> -->
               <li (click)='openDialogClient()' class="separator">|</li>
               <li (click)="openDialog()" *ngIf="!hasAccount">Login</li>
               <li (click)="openDialog(); makeRotate = !makeRotate;">
