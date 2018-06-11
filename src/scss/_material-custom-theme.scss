@@ -6,19 +6,19 @@
 
 @import '../scss/_variables.scss'; //variables
 
-$my-app-primary: mat-palette($mat-blue-grey);
-$my-app-accent:  mat-palette($mat-pink, 500, 900, A100);
-$my-app-warn:    mat-palette($mat-deep-orange);
+// $my-app-primary: mat-palette($mat-blue-grey);
+// $my-app-accent:  mat-palette($mat-pink, 500, 900, A100);
+// $my-app-warn:    mat-palette($mat-deep-orange);
 
-$my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
+// $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 
-@include angular-material-theme($my-app-theme);
+// @include angular-material-theme($my-app-theme);
 
-.alternate-theme {
-  $alternate-primary: mat-palette($mat-light-blue);
-  $alternate-accent:  mat-palette($mat-yellow, 400);
+// .alternate-theme {
+//   $alternate-primary: mat-palette($mat-light-blue);
+//   $alternate-accent:  mat-palette($mat-yellow, 400);
 
-  $alternate-theme: mat-light-theme($alternate-primary, $alternate-accent);
+//   $alternate-theme: mat-light-theme($alternate-primary, $alternate-accent);
 
-  @include angular-material-theme($alternate-theme);
-}
+//   @include angular-material-theme($alternate-theme);
+// }
