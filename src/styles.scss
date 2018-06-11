@@ -9,7 +9,8 @@ $material-icons-font-path: '~material-icons/iconfont/'; // Material Icons
         './scss/_mixins.scss', //mixins
         './scss/_colors.scss', //colors
         './scss/_helpers.scss', //helpers
-        './scss/_fonts.scss'; //fonts
+        './scss/_fonts.scss', //fonts
+        './scss/_material-custom-theme.scss'; //material-custom-theme
 
 // General
 html {height: 0;}

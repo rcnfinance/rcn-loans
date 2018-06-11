@@ -6,6 +6,9 @@ import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contra
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
 import { Web3Service, Type } from '../services/web3.service';
+import BigNumber from 'bignumber.js';
+import { ContractsService } from '../services/contracts.service';
+import { Utils } from '../utils/utils';
 
 // App Component
 
@@ -18,15 +21,20 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   account: string;
   makeRotate = false;
   profile: boolean;
-  extensionToggled: boolean = false;
+  extensionToggled = false;
+  // Balance bar
+  rcnBalance = '...';
+  rcnAvailable = '...';
+  loansWithBalance: number[];
   constructor(
     public dialog: MatDialog,
     private web3Service: Web3Service,
     private router: Router,
+    private contractService: ContractsService
   ) {}
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
 
-  extensionToggle(){
+  extensionToggle() {
     this.extensionToggled = !this.extensionToggled;
   }
 
@@ -46,13 +54,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       });
     }
   }
-  openDialogApprove(){
+  openDialogApprove() {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
   }
-  openDialogClient(){
+  openDialogClient() {
     const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
@@ -74,9 +82,26 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
   }
   ngAfterViewInit(): any {}
+
+  loadRcnBalance() {
+    this.contractService.getUserBalanceRCN().then((balance: number) => {
+      this.rcnBalance = Utils.formatAmount(balance);
+    });
+  }
+
+  loadWithdrawBalance() {
+    this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
+      console.log(result);
+      this.rcnAvailable = Utils.formatAmount(result[0] / 10 ** 18);
+      this.loansWithBalance = result[1];
+    });
+  }
+
   ngOnInit() {
     this.web3Service.getAccount().then((account) => {
       this.account = account;
+      this.loadRcnBalance();
+      this.loadWithdrawBalance();
     });
   }
   get hasAccount(): boolean {

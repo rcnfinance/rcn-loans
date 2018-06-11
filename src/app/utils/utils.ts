@@ -71,14 +71,27 @@ export class Utils {
     static formatAmount(amount: Number): string {
         const maxDigits = 6;
         if (amount.toString().length <= maxDigits) {
-        return amount.toString();
+            return amount.toString();
         } else {
-        const intDigits = amount.toFixed(0).toString().length;
-        const decDigits = maxDigits - intDigits;
+            const intDigits = amount.toFixed(0).toString().length;
+            const decDigits = maxDigits - intDigits;
 
-        let decimals = (decDigits > 0) ? decDigits : 0;
+            let decimals = (decDigits > 0) ? decDigits : 0;
 
-        return Number(amount.toFixed(decimals)).toString();
+            return Number(amount.toFixed(decimals)).toString();
         }
+    }
+    static removeTrailingZeros(value: string): string {
+        value = value.toString();
+
+        if (value.indexOf('.') === -1) {
+            return value;
+        }
+
+        while ((value.slice(-1) === '0' || value.slice(-1) === '.') && value.indexOf('.') !== -1) {
+            value = value.substr(0, value.length - 1);
+        }
+        return value;
+      }
     }
 }
