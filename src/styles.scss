@@ -144,13 +144,46 @@ ngx-spinner .black-overlay.ng-star-inserted {
   } 
 }
   //Sidebar
-.mat-drawer-container {
+.mat-sidenav-container {
   color: inherit;
   background-color: transparent;
 }
-.mat-drawer {
+.mat-sidenav {
+  width: 350px;
   color: inherit;
-  background-color: transparent;
+  background-color: $gray7;
+  ul{
+    li{
+      cursor: pointer;
+      position: relative;
+      @for $i from 1 through 16 {
+        &:nth-child(#{$i}) { 
+         @include transition-delay(0.06s * $i); 
+        }
+      }
+      .li-container{
+        text-indent: 20px;
+        padding: 12px 0px 10px 15px;
+        @include transition();
+        &:hover {
+          background: rgba(0, 0, 0, 1);
+        }
+      }
+      .txt{
+        display: inline-block;
+      }
+    }
+  }
+}
+.sidebar-toggled{
+  .mat-sidenav {
+    ul{
+      li{
+        left: 0px;
+        opacity: 1;
+      }
+    }
+  }
 }
   //Dialog
 .mat-dialog-container{

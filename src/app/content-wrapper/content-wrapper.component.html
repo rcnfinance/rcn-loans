@@ -7,11 +7,36 @@
       (opened)="events.push('open!')"
       (closed)="events.push('close!')">
       <ul>
-        <li>Requests</li>
-        <li>Loans</li>
-        <li>Balance</li>
-        <li>Profile</li>
-        <li>Version</li>
+        <li>
+          <div class="li-container">
+            <i class="fas fa-tag"></i>
+            <div class="txt">Requests</div>
+          </div>
+        </li>
+        <li>
+          <div class="li-container">
+            <i class="fas fa-box-open"></i>
+            <div class="txt">Loans</div>
+          </div>
+        </li>
+        <li>
+          <div class="li-container">
+            <i class="fas fa-chart-bar"></i>
+            <div class="txt">Balance</div>
+          </div>
+        </li>
+        <li>
+          <div class="li-container">
+            <i class="fas fa-user-circle"></i>
+            <div class="txt">Profile</div>
+          </div>
+        </li>
+        <li>
+          <div class="li-container">
+            <i class="fas fa-code-branch"></i>
+            <div class="txt">Version</div>
+          </div>
+        </li>
         <li *ngFor="let e of events">{{ e }}</li>
       </ul>
     </mat-sidenav>

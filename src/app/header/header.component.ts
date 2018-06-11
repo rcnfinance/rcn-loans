@@ -43,6 +43,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.sidebarService.isOpen$.next(
       !this.sidebarService.isOpen$.value
     )
+    this.sidebarToggled = !this.sidebarToggled;
   }
   clickEvent(){
     this.sidebarToggled = !this.sidebarToggled;
