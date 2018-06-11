@@ -46,14 +46,14 @@
         <div class="col-xs-12">
           <ul>
             <li class="title main-h1">Account balance:</li>
-            <li class="title main-h2"><span>RCN</span> 690.80</li>
+            <li class="title main-h2"><span>RCN</span> RCN {{rcnBalance}}</li>
             <span class="marginleft5"></span>
             <span class="marginleft60"></span>
             <li class="title main-h1">Available to withdraw:</li>
-            <li class="title main-h2"><span>RCN</span> 360.80</li>
+            <li class="title main-h2"><span>RCN</span> RCN {{rcnAvailable}}</li>
             <span class="marginleft5"></span>
             <span class="marginleft60"></span>
-            <li><app-withdraw-button></app-withdraw-button></li>
+            <li><app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button></li>
           </ul>
         </div>
       </div>
