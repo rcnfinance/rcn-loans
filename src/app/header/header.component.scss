@@ -168,6 +168,11 @@
       display: none;
     }
   }
+  .navbar-extension {
+    display: block;
+  }
+  .navbar-extension{ul{span.marginleft30{display:inline-block;}}}
+  .navbar-extension{ul{span.marginleft60{display:none;}}}
 }
 
 .nav-toggle{
