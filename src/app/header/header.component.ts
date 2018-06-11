@@ -1,10 +1,9 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-// App Component
-import { MaterialModule } from './../material/material.module';
-import { SharedModule } from './../shared/shared.module';
-import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
+import { MatDialog, MatDialogRef } from '@angular/material';
+// App Component
+import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
 import { Web3Service, Type } from '../services/web3.service';
 import BigNumber from 'bignumber.js';
@@ -38,7 +37,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.extensionToggled = !this.extensionToggled;
   }
 
-
   handleProfile() {
     this.profile = !this.profile;
     if (this.profile) {
@@ -55,11 +53,21 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       });
     }
   }
+  openDialogApprove(){
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+  openDialogClient(){
+    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
   openDialog() {
     if (this.hasAccount) {
-      const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {
-        width: '800px'
-      });
+      const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
       dialogRef.componentInstance.autoClose = false;
       dialogRef.afterClosed().subscribe(result => {
         console.log(`Dialog result: ${result}`);
@@ -68,9 +76,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       if (this.web3Service.web3Type === Type.Injected) {
         window.open('https://metamask.io/', '_blank');
       } else {
-        alert(
-          'Couldn\'t get any accounts! Make sure your Ethereum client is unlocked and configured correctly.'
-        );
+        this.openDialogClient();
       }
     }
   }
