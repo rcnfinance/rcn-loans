@@ -144,11 +144,11 @@ ngx-spinner .black-overlay.ng-star-inserted {
   } 
 }
   //Sidebar
-.mat-sidenav-container {
+.mat-drawer-container {
   color: inherit;
   background-color: transparent;
 }
-.mat-sidenav {
+.mat-drawer {
   width: 350px;
   color: inherit;
   background-color: $gray7;
@@ -156,15 +156,11 @@ ngx-spinner .black-overlay.ng-star-inserted {
     li{
       cursor: pointer;
       position: relative;
-      @for $i from 1 through 16 {
-        &:nth-child(#{$i}) { 
-         @include transition-delay(0.06s * $i); 
-        }
-      }
+      left: -300px;
+      opacity: 0;
       .li-container{
         text-indent: 20px;
         padding: 12px 0px 10px 15px;
-        @include transition();
         &:hover {
           background: rgba(0, 0, 0, 1);
         }
@@ -175,12 +171,18 @@ ngx-spinner .black-overlay.ng-star-inserted {
     }
   }
 }
-.sidebar-toggled{
-  .mat-sidenav {
+.mat-drawer-opened{
+  .mat-drawer {
     ul{
       li{
         left: 0px;
         opacity: 1;
+        @include transition();
+        @for $i from 1 through 16 {
+          &:nth-child(#{$i}) { 
+           @include transition-delay(0.06s * $i); 
+          }
+        }
       }
     }
   }
