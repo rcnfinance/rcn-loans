@@ -7,6 +7,8 @@ import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
 // App Service
 import { Web3Service, Type } from '../services/web3.service';
+import BigNumber from 'bignumber.js';
+import { ContractsService } from '../services/contracts.service';
 
 // App Component
 
@@ -19,15 +21,20 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   account: string;
   makeRotate = false;
   profile: boolean;
-  extensionToggled: boolean = false;
+  extensionToggled = false;
+  // Balance bar
+  rcnBalance: BigNumber;
+  weiAvailable: BigNumber;
+  loansWithBalance: number[];
   constructor(
     public dialog: MatDialog,
     private web3Service: Web3Service,
     private router: Router,
+    private contractService: ContractsService
   ) {}
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
 
-  extensionToggle(){
+  extensionToggle() {
     this.extensionToggled = !this.extensionToggled;
   }
 
@@ -68,9 +75,25 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
   }
   ngAfterViewInit(): any {}
+
+  loadRcnBalance() {
+    this.contractService.getUserBalanceRCN().then((balance: number) => {
+      this.rcnBalance = balance;
+    });
+  }
+
+  loadWithdrawBalance() {
+    this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
+      console.log(result);
+      this.weiAvailable = result[0];
+      this.loansWithBalance = result[1];
+    });
+  }
   ngOnInit() {
     this.web3Service.getAccount().then((account) => {
       this.account = account;
+      this.loadRcnBalance();
+      this.loadWithdrawBalance();
     });
   }
   get hasAccount(): boolean {
