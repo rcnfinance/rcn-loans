@@ -2,22 +2,25 @@
   <div class="margintop120 visible-xs"></div>
   <div class="margintop120 hidden-xs"></div>
   <app-header></app-header>
-  <mat-sidenav-container class="example-container" 
-    #sidebar>
-      <mat-sidenav mode="over" #sidenav
-        [opened]="isOpen$ | async"
-        (opened)="events.push('open!')"
-        (closed)="events.push('close!')">
-        <ul>
-          <li>Asd 1</li>
-          <li *ngFor="let e of events">{{ e }}</li>
-        </ul>
-      </mat-sidenav>
-      <mat-sidenav-content>
-        <router-outlet></router-outlet>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
-    <app-footer></app-footer>
+  <mat-sidenav-container class="example-container">
+    <mat-sidenav mode="over" #sidenav
+      [opened]="isOpen$ | async"
+      (opened)="events.push('open!')"
+      (closed)="events.push('close!')">
+      <ul>
+        <li>Requests</li>
+        <li>Loans</li>
+        <li>Balance</li>
+        <li>Profile</li>
+        <li>Version</li>
+        <li *ngFor="let e of events">{{ e }}</li>
+      </ul>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <app-footer></app-footer>
 </div>
 
 
