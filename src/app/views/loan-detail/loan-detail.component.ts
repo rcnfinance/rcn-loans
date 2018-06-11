@@ -18,6 +18,8 @@ import { Utils } from './../../utils/utils';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
+import { CosignerOption } from '../../models/cosigner.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-loan-detail',
@@ -30,6 +32,7 @@ export class LoanDetailComponent implements OnInit {
   viewDetail = 'identity';
   id = 1;
   userAccount: string;
+  cosignerOption: CosignerOption;
 
   // Loan detail
   loanConfigData = [];
@@ -44,6 +47,7 @@ export class LoanDetailComponent implements OnInit {
   constructor(
     private identityService: IdentityService,
     private route: ActivatedRoute,
+    private cosignerService: CosignerService,
     private contractsService: ContractsService,
     private router: Router,
     private web3Service: Web3Service,
@@ -56,6 +60,10 @@ export class LoanDetailComponent implements OnInit {
     this.identityService.getIdentity(this.loan).then((identity) => {
       this.identityName = identity !== undefined ? identity.short : 'Unknown';
     });
+  }
+
+  private loadCosignerOption() {
+    this.cosignerOption = this.cosignerService.getCosignerOptions(this.loan);
   }
 
   private loadDetail() {
@@ -95,12 +103,16 @@ export class LoanDetailComponent implements OnInit {
     return view === this.viewDetail;
   }
 
+  openLender(address: string) {
+    window.open('/address/' + address, '_blank');
+  }
+
   private formatInterest(interest: number): string {
     return Number(interest.toFixed(2)).toString();
   }
 
   private formatTimestamp(timestamp: number): string {
-    return new DatePipe('en-US').transform(timestamp * 1000, 'dd.mm.yyyy');
+    return new DatePipe('en-US').transform(timestamp * 1000, 'dd.MM.yyyy');
   }
 
   ngOnInit() {
@@ -114,6 +126,7 @@ export class LoanDetailComponent implements OnInit {
         this.loan = loan;
         this.loadDetail();
         this.loadIdentity();
+        this.loadCosignerOption();
         this.spinner.hide();
       });
    });

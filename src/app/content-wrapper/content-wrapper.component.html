@@ -1,6 +1,5 @@
 <div class="wrapper" [ngClass]="{'sidebar-toggled': !opened}" [style.min-height.px]="winHeight">
-  <div class="margintop120 visible-xs"></div>
-  <div class="margintop120 hidden-xs"></div>
+  <a class="extension-closebox" *ngIf='extensionToggled' (click)='extensionToggle()'></a>
   <app-header></app-header>
   <mat-sidenav-container class="example-container">
     <mat-sidenav mode="over" #sidenav
@@ -17,6 +16,8 @@
       </ul>
     </mat-sidenav>
     <mat-sidenav-content>
+      <div class="margintop20 visible-xs"></div>
+      <div class="margintop55 hidden-xs"></div>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

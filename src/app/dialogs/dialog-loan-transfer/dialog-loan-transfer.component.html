@@ -1,11 +1,11 @@
 <mat-dialog-content>
-  <div class="row transfer-width">
-    <div class="col-xs-12 col-sm-8">
-      <div class="title main-h2">
-        <!-- <i mat-raised-button class="material-icons">repeat</i> -->
-        Loan Transfer
-      </div>
-      <app-transfer-form (submitTransfer)='submit($event)'></app-transfer-form>
+  <div class="navbar-container">
+    <div class="creator-container">
+      <div class="creator-title">Loan Transfer</div>
     </div>
+  </div>
+  <div class="col-xs-12 dialog-padding">
+    <div class="title main-h2">You're transfering a Loan</div>
+    <app-transfer-form (submitTransfer)='submit($event)'></app-transfer-form>
   </div>
 </mat-dialog-content>

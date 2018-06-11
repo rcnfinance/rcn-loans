@@ -9,7 +9,7 @@ import { HeaderComponent } from '../header/header.component';
   styleUrls: ['./content-wrapper.component.scss']
 })
 export class ContentWrapperComponent implements OnInit {
-  winHeight: any = window.innerHeight - 121;
+  winHeight: any = window.innerHeight;
   events: string[] = [];
   opened: boolean;
   isOpen$: BehaviorSubject<boolean>;

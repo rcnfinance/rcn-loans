@@ -44,6 +44,7 @@ import { AddressComponent } from './views/address/address.component';
 
 import { ProfileComponent } from './views/profile/profile.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 
 // App Modules
 import { CoreModule } from './core/core.module';
@@ -80,6 +81,7 @@ const appRoutes: Routes = [
     DetailTableComponent,
     ProfileComponent,
     AddressComponent,
+    DialogClientAccountComponent,
   ],
   imports: [
     BrowserModule,
@@ -100,6 +102,7 @@ const appRoutes: Routes = [
   entryComponents: [
     DialogApproveContractComponent,
     DialogLoanTransferComponent,
+    DialogClientAccountComponent,
   ],
   providers: [
     ContractsService,

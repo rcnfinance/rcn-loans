@@ -1,6 +1,7 @@
 @import '../../scss/_variables.scss'; //variables
+
 .navbar{
-  position: fixed;
+  position: relative;
   left: 0px;
   top: 0px;
   right: 0px;
@@ -50,6 +51,92 @@
   }
 }
 
+.navbar-extension {
+  display: none;
+  height: 0px;
+  position: absolute;
+  top: 85px;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  padding: 0;
+  background-color: $gray7;
+  @include transition(all 0.2s ease);
+  ul{
+    li{
+      position: relative;
+      display: inline-block;
+      margin: 6px;
+      opacity: 0;
+      top: -15px;
+      margin-right: 15px;
+      &:last-child{
+        margin-right: 0px;
+      }
+      span{
+        display: none;
+        font-size: 12px;
+        @extend %font-light;
+      }
+    }
+  }
+  .title.main-h1{font-size: 16px; padding: 9px 0;}
+  .title.main-h2{font-size: 16px; padding: 9px 0; @extend %font-bold;}
+  .title.main-h2 {
+    font-family: 'Roboto', sans-serif;
+  }
+}
+
+.extension-closebox{
+  position: absolute;
+  top: 135px;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  opacity: 0;
+  cursor: pointer;
+  background-color: transparent;
+  background-color: rgba(0,0,0,0.8);
+  display: none;
+  z-index: 170;
+}
+
+#page-content-wrapper{
+  &.extension-toggled{
+    .navbar-extension{
+      height: 50px;
+      @include transition(all 0.5s ease);
+      ul{
+        li{
+          @include transition();
+          @for $i from 1 through 12 {
+            &:nth-child(#{$i}) { 
+              @include transition-delay(0.06s * $i); 
+            }
+          }
+          opacity: 1;
+          top: 0px;
+          &:last-child{
+            top: -2px;
+          }
+        }
+      }
+    }
+    .extension-closebox{
+      display: block;
+      opacity: 1;
+      z-index: 9999;
+    }
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 992px)  {
+  .navbar{
+    .container{
+      width: 820px;
+    }
+  }
+}
 
 @media (min-width: 768px){
   .navbar{
@@ -75,11 +162,6 @@
         &:last-child{
           margin-top: -10px;
         }
-      }
-    }
-    .button-img{
-      img{
-        // height: auto;
       }
     }
     .icon-hamburguer{
@@ -109,4 +191,14 @@
   .icon-bar + .icon-bar {
     margin-top: 4px;
   }
+  .navbar-extension {
+    display: block;
+  }
+  .navbar-extension{ul{span.marginleft30{display:inline-block;}}}
+  .navbar-extension{ul{span.marginleft60{display:none;}}}
+}
+
+@media (min-width: 992px){
+  .navbar-extension{ul{span.marginleft30{display:none;}}}
+  .navbar-extension{ul{span.marginleft60{display:inline-block;}}}
 }

@@ -16,18 +16,21 @@ export class WithdrawButtonComponent implements OnInit {
       this.contractsService.withdrawFunds(this.loansWithBalance).then(tx => {
         this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.loansWithBalance);
       });
+    } else if (this.pendingTx !== undefined) {
+      window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx), '_blank');
     }
   }
-  get hasPendingTx(): boolean {
-    return this.txService.getLastWithdraw(environment.contracts.basaltEngine, this.loansWithBalance) !== undefined;
+  get pendingTx(): string {
+    const tx = this.txService.getLastWithdraw(environment.contracts.basaltEngine, this.loansWithBalance);
+    return tx !== undefined ? tx.tx : undefined;
   }
   get enabled(): boolean {
     return this.loansWithBalance !== undefined
       && this.loansWithBalance.length !== 0
-      && !this.hasPendingTx;
+      && this.pendingTx === undefined;
   }
   get text(): string {
-    return this.hasPendingTx ? 'Pending withdraw ...' : 'Withdraw';
+    return this.pendingTx !== undefined ? 'Pending withdraw ...' : 'Withdraw';
   }
   ngOnInit() {
   }
