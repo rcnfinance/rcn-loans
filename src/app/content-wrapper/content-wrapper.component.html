@@ -15,19 +15,19 @@
             <div class="txt">Requests</div>
           </div>
         </li>
-        <li routerLink='/address/{{ account }}/' (click)='callSidebarService()'>
+        <li routerLink='/address/{{ account }}/' (click)='callSidebarService()' *ngIf='hasAccount'>
           <div class="li-container">
             <i class="fas fa-box-open"></i>
             <div class="txt">Loans</div>
           </div>
         </li>
-        <li>
+        <li (click)='callSidebarService(); extensionToggle()' *ngIf='hasAccount'>
           <div class="li-container">
             <i class="fas fa-chart-bar"></i>
             <div class="txt">Balance</div>
           </div>
         </li>
-        <li>
+        <li (click)='callSidebarService(); openDialog()'>
           <div class="li-container">
             <i class="fas fa-user-circle"></i>
             <div class="txt">Profile</div>
@@ -37,6 +37,12 @@
           <div class="li-container">
             <i class="fas fa-code-branch"></i>
             <div class="txt">Version</div>
+          </div>
+        </li>
+        <li (click)="openDialog()" *ngIf="!hasAccount">
+          <div class="li-container">
+            <i class="fas fa-user-circle"></i>
+            <div class="txt">Login</div>
           </div>
         </li>
       </ul>

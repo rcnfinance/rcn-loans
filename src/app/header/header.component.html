@@ -25,10 +25,7 @@
               <li routerLink='/requests' #tref>Requests</li>
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>
               <li (click)='extensionToggle()' *ngIf='hasAccount'>Balance</li>
-              <!-- <li *ngIf='hasAccount' (click)='extensionToggle()'>
-                <i class="material-icons transition" [ngClass]="{'rotate45': extensionToggled}">add</i>
-              </li> -->
-              <li (click)='openDialogClient()' class="separator">|</li>
+              <li class="separator">|</li>
               <li (click)="openDialog()" *ngIf="!hasAccount">Login</li>
               <li (click)="openDialog(); makeRotate = !makeRotate;">
                 <div class="flex-container" *ngIf="hasAccount">

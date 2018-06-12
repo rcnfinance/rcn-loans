@@ -1,7 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
+import { MatDialog, MatDialogRef } from '@angular/material';
 // App Component
+import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
 import { Web3Service, Type } from '../services/web3.service';
 import {SidebarService} from '../services/sidebar.service';
@@ -16,6 +19,7 @@ export class ContentWrapperComponent implements OnInit {
   events: string[] = [];
   isOpen$: BehaviorSubject<boolean>;
   navToggle: boolean;
+  extensionToggled = false; // Balance extension toggled
   account: string;
 
   // Toggle Sidebar Service
@@ -31,12 +35,52 @@ export class ContentWrapperComponent implements OnInit {
   onOpen(){
     this.navToggle = true;
   }
+  // Open Balance Extension
+  extensionToggle() {
+    this.extensionToggled = !this.extensionToggled;
+  }
+
+  // Open Approve Dialog
+  openDialogApprove() {
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+  // Open Client Dialog
+  openDialogClient() {
+    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+  // Open Approve Dialog
+  openDialog() {
+    if (this.hasAccount) {
+      const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
+      dialogRef.componentInstance.autoClose = false;
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+      });
+    } else {
+      if (this.web3Service.web3Type === Type.Injected) {
+        window.open('https://metamask.io/', '_blank');
+      } else {
+        this.openDialogClient();
+      }
+    }
+  }
 
   constructor(
     private sidebarService: SidebarService,
     private router: Router,
     private web3Service: Web3Service,
+    public dialog: MatDialog,
   ) {}
+
+  get hasAccount(): boolean {
+    return this.account !== undefined;
+  }
 
   ngOnInit(): void {
     this.navToggle = this.sidebarService.navToggle;

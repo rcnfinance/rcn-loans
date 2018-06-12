@@ -20,8 +20,6 @@ body{
   background-color: $tertiary;
   color: $secondary;
 }
-.highlight-layer{
-}
 
 //TABS
 .mat-tab-label-container{
@@ -137,7 +135,6 @@ ngx-spinner .black-overlay.ng-star-inserted {
 .cdk-overlay-transparent-backdrop{
   &.cdk-overlay-backdrop-showing{
     cursor: pointer;
-    opacity: 1;
     background-color: rgba(0, 0, 0, 0.4);
   } 
 }
