@@ -15,13 +15,6 @@
 
             <a class="button-img" routerLink='/requests'><img src="https://ripiocredit.network/images/logo.png" alt="rcn-image"></a>
             <ul class="nav">
-              <i mat-raised-button class="material-icons icon-hamburguer" [matMenuTriggerFor]="menu">menu</i>
-              <mat-menu #menu="matMenu">
-                <button routerLink='/requests' mat-menu-item>Requests</button>
-                <button routerLink='/address/{{ account }}/' mat-menu-item *ngIf='hasAccount'>Loans</button>
-                <button (click)='extensionToggle()' mat-menu-item *ngIf='hasAccount'>Balance</button>
-                <button (click)='openDialog();' mat-menu-item>Profile</button>
-              </mat-menu>
               <li routerLink='/requests' #tref>Requests</li>
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>
               <li (click)='extensionToggle()' *ngIf='hasAccount'>Balance</li>
@@ -53,12 +46,10 @@
           <ul>
             <li class="title main-h1">Account balance:</li>
             <li class="title main-h2"><span>RCN</span> RCN {{rcnBalance}}</li>
-            <span class="marginleft5"></span>
-            <span class="marginleft60"></span>
+            <span class="marginleft60 hidden-xs"></span>
             <li class="title main-h1">Available to withdraw:</li>
             <li class="title main-h2"><span>RCN</span> RCN {{rcnAvailable}}</li>
-            <span class="marginleft5"></span>
-            <span class="marginleft60"></span>
+            <span class="marginleft60 hidden-xs"></span>
             <li><app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button></li>
           </ul>
         </div>

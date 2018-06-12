@@ -163,6 +163,7 @@ mat-sidenav-container.mat-drawer-container {
       .li-container{
         padding: 12px 0px 10px 15px;
         @include transition();
+        svg{font-size: 1.2em;}
         &:hover {
           background: rgba(0, 0, 0, 1);
         }

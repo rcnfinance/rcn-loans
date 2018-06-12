@@ -54,12 +54,12 @@
 }
 
 .navbar-extension {
-  display: none;
   height: 0px;
   position: absolute;
   top: 85px;
   left: 0;
   right: 0;
+  z-index: 9;
   overflow: hidden;
   padding: 0;
   background-color: $gray7;
@@ -68,7 +68,6 @@
     li{
       position: relative;
       display: inline-block;
-      margin: 6px;
       opacity: 0;
       top: -15px;
       margin-right: 15px;
@@ -82,8 +81,8 @@
       }
     }
   }
-  .title.main-h1{font-size: 16px; padding: 9px 0;}
-  .title.main-h2{font-size: 16px; padding: 9px 0; @extend %font-bold;}
+  .title.main-h1{font-size: 16px; padding: 10px 0;}
+  .title.main-h2{font-size: 16px; padding: 10px 0; @extend %font-bold;}
   .title.main-h2 {
     font-family: 'Roboto', sans-serif;
   }
@@ -91,7 +90,7 @@
 
 .extension-closebox{
   position: absolute;
-  top: 135px;
+  top: 215px;
   bottom: 0px;
   right: 0px;
   left: 0px;
@@ -105,7 +104,7 @@
 
 .extension-toggled{
   .navbar-extension{
-    height: 50px;
+    height: 130px;
     @include transition(all 0.5s ease);
     ul{
       li{
@@ -170,9 +169,21 @@
   }
   .navbar-extension {
     display: block;
+    .title.main-h1{padding: 15px 0;}
+    .title.main-h2{padding: 15px 0;}
   }
   .navbar-extension{ul{span.marginleft30{display:inline-block;}}}
   .navbar-extension{ul{span.marginleft60{display:none;}}}
+  
+  .extension-toggled{
+    .navbar-extension {
+      height: 50px;
+      top: 85px;
+    }
+    .extension-closebox{
+      top: 135px;
+    }
+  }
 }
 
 .nav-toggle{
