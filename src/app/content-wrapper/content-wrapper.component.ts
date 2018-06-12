@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
+// App Component
+// App Service
 import {SidebarService} from '../services/sidebar.service';
-import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-content-wrapper',
@@ -11,15 +12,25 @@ import { HeaderComponent } from '../header/header.component';
 export class ContentWrapperComponent implements OnInit {
   winHeight: any = window.innerHeight;
   events: string[] = [];
-  opened: boolean;
   isOpen$: BehaviorSubject<boolean>;
+  navToggle: boolean;
+
+  onClose(){
+    this.navToggle = false;
+  }
+  onOpen(){
+    this.navToggle = true;
+  }
 
   constructor(
     private sidebarService: SidebarService
   ) {}
 
   ngOnInit(): void {
+    this.navToggle = this.sidebarService.navToggle;
     this.isOpen$ = this.sidebarService.isOpen$;
+    console.log(this.sidebarService.navToggle);
+    console.log(this.sidebarService.isOpen$);
   }
 
 }

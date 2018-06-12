@@ -1,10 +1,13 @@
-<div class="wrapper" [ngClass]="{'sidebar-toggled': !opened}" [style.min-height.px]="winHeight">
+<div class="wrapper" [ngClass]="{'sidebar-toggled': navToggle}" [style.min-height.px]="winHeight">
   <app-header></app-header>
   <mat-sidenav-container class="example-container">
-    <mat-sidenav mode="over" #sidenav
+    <mat-sidenav #sidenav
+      mode="over"
+      autoFocus='true'
+      openedChange='navToggle'
       [opened]="isOpen$ | async"
-      (opened)="events.push('open!')"
-      (closed)="events.push('close!')">
+      (close)="onClose()"
+      (open)="onOpen()">
       <ul>
         <li>
           <div class="li-container">
@@ -36,14 +39,15 @@
             <div class="txt">Version</div>
           </div>
         </li>
-        <!-- <li *ngFor="let e of events">{{ e }}</li> -->
       </ul>
     </mat-sidenav>
     <mat-sidenav-content [style.min-height.px]="winHeight">
-      <div class="margintop100 visible-xs"></div>
-      <div class="margintop140 hidden-xs"></div>
-      <router-outlet></router-outlet>
-      <app-footer></app-footer>
+      <div id="page-content-wrapper">
+        <div class="margintop100 visible-xs"></div>
+        <div class="margintop140 hidden-xs"></div>
+        <router-outlet></router-outlet>
+        <app-footer></app-footer>
+      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

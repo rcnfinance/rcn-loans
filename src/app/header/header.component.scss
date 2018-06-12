@@ -13,7 +13,7 @@
   margin-right: auto;
   margin-bottom: 0px;
   margin-left: auto;
-  padding: 15px 0px;
+  padding: 15px;
   background-color: transparent;
   background-image: -webkit-linear-gradient(270deg, rgba(0, 0, 0, .77), transparent);
   background-image: linear-gradient(180deg, rgba(0, 0, 0, .77), transparent);
@@ -101,32 +101,30 @@
   z-index: 170;
 }
 
-#page-content-wrapper{
-  &.extension-toggled{
-    .navbar-extension{
-      height: 50px;
-      @include transition(all 0.5s ease);
-      ul{
-        li{
-          @include transition();
-          @for $i from 1 through 12 {
-            &:nth-child(#{$i}) { 
-              @include transition-delay(0.06s * $i); 
-            }
+.extension-toggled{
+  .navbar-extension{
+    height: 50px;
+    @include transition(all 0.5s ease);
+    ul{
+      li{
+        @include transition();
+        @for $i from 1 through 12 {
+          &:nth-child(#{$i}) { 
+            @include transition-delay(0.06s * $i); 
           }
-          opacity: 1;
-          top: 0px;
-          &:last-child{
-            top: -2px;
-          }
+        }
+        opacity: 1;
+        top: 0px;
+        &:last-child{
+          top: -2px;
         }
       }
     }
-    .extension-closebox{
-      display: block;
-      opacity: 1;
-      z-index: 9991;
-    }
+  }
+  .extension-closebox{
+    display: block;
+    opacity: 1;
+    z-index: 999;
   }
 }
 
@@ -201,6 +199,29 @@
   }
   .navbar-extension{ul{span.marginleft30{display:inline-block;}}}
   .navbar-extension{ul{span.marginleft60{display:none;}}}
+}
+
+.sidebar-toggled{
+  .nav-toggle{
+    .icon-bar{
+      height: 2px;
+      &:nth-child(1){
+        -webkit-transform: rotate(-45deg) translate(0px, 0px);
+        transform: rotate(-45deg) translate(0px, 0px);
+      }
+      &:nth-child(2){
+        opacity: 0;
+        display: none;
+      }
+      &:nth-child(3){
+        -webkit-transform: rotate(45deg) translate(-15px, -15px);
+        transform: rotate(45deg) translate(0px, 0px);
+      }
+    }    
+    .icon-bar + .icon-bar {
+      margin-top: 0;
+    }
+  }
 }
 
 @media (min-width: 992px){

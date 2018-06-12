@@ -22,13 +22,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   account: string;
   makeRotate = false;
   profile: boolean;
-  sidebarToggled: boolean = true;
+  extensionToggled = false; // Balance extension toggled
+  rcnBalance = '...'; // Balance bar
+  rcnAvailable = '...'; // Balance bar 
+  loansWithBalance: number[]; // Balance bar
 
-  extensionToggled = false;
-  // Balance bar
-  rcnBalance = '...';
-  rcnAvailable = '...';
-  loansWithBalance: number[];
   constructor(
     public dialog: MatDialog,
     private web3Service: Web3Service,
@@ -39,16 +37,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
 
-  callSidebarService() {    
+  // Open Sidebar Service
+  callSidebarService() {
     this.sidebarService.isOpen$.next(
       !this.sidebarService.isOpen$.value
     )
-    this.sidebarToggled = !this.sidebarToggled;
   }
-  clickEvent(){
-    this.sidebarToggled = !this.sidebarToggled;
-    console.log(this.sidebarToggled);
-  }
+
+  // Open Balance Extension
   extensionToggle() {
     this.extensionToggled = !this.extensionToggled;
   }
@@ -69,18 +65,22 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       });
     }
   }
+
+  // Open Approve Dialog
   openDialogApprove() {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
   }
+  // Open Client Dialog
   openDialogClient() {
     const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
   }
+  // Open Approve Dialog
   openDialog() {
     if (this.hasAccount) {
       const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
@@ -104,6 +104,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     });
   }
 
+// Withdraw button
   loadWithdrawBalance() {
     this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
       console.log(result);

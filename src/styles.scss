@@ -153,10 +153,10 @@ mat-sidenav-container.mat-drawer-container {
   background-color: transparent;
 }
 .mat-drawer {
-  z-index: 999;
   width: 350px;
   padding-top: 90px;
   color: inherit;
+  z-index: 999;
   background-color: $gray7;
   ul{
     li{
@@ -174,6 +174,7 @@ mat-sidenav-container.mat-drawer-container {
       }
       .txt{
         display: inline-block;
+        font-size: 16px;
       }
     }
   }
@@ -201,6 +202,15 @@ mat-sidenav-container.mat-drawer-container {
   cursor: pointer;
   z-index: 999;
 }
+.sidebar-toggled{
+  .extension-toggled{
+    .extension-closebox{
+      left: 350px;
+      z-index: 1;
+    }
+  }
+}
+
   //Dialog
 .mat-dialog-container{
   color: $secondary;
