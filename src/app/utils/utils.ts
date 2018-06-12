@@ -92,6 +92,5 @@ export class Utils {
             value = value.substr(0, value.length - 1);
         }
         return value;
-      }
     }
 }
