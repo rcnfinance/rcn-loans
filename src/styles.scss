@@ -21,8 +21,6 @@ body{
   color: $secondary;
 }
 .highlight-layer{
-  position: relative;
-  z-index: 1000;
 }
 
 //TABS
@@ -153,7 +151,7 @@ mat-sidenav-container.mat-drawer-container {
   background-color: transparent;
 }
 .mat-drawer {
-  width: 350px;
+  width: 260px;
   padding-top: 90px;
   color: inherit;
   z-index: 999;
@@ -203,6 +201,27 @@ mat-sidenav-container.mat-drawer-container {
   z-index: 999;
 }
 .sidebar-toggled{
+  .nav-toggle{
+    span.icon-bar{
+      height: 2px !important;
+      &:nth-child(1){
+        -webkit-transform: rotate(-45deg) translate(0px, 0px);
+        transform: rotate(-45deg) translate(0px, 0px);
+      }
+      &:nth-child(2){
+        opacity: 0;
+        display: none;
+      }
+      &:nth-child(3){
+        -webkit-transform: rotate(45deg) translate(-15px, -15px);
+        transform: rotate(45deg) translate(0px, 0px);
+      }
+    }
+    span.icon-bar + span.icon-bar {
+      margin-top: 0 !important;
+    }
+  }
+
   .extension-toggled{
     .extension-closebox{
       left: 350px;
@@ -292,6 +311,9 @@ mat-form-field{
   //Sidebar
   mat-sidenav-container.mat-drawer-container {
     background-color: transparent;
+    .mat-drawer {
+      width: 350px;
+    }
   }
 }
 

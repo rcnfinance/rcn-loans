@@ -1,7 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 // App Component
 // App Service
+import { Web3Service, Type } from '../services/web3.service';
 import {SidebarService} from '../services/sidebar.service';
 
 @Component({
@@ -14,7 +16,15 @@ export class ContentWrapperComponent implements OnInit {
   events: string[] = [];
   isOpen$: BehaviorSubject<boolean>;
   navToggle: boolean;
+  account: string;
 
+  // Toggle Sidebar Service
+  callSidebarService() {
+    this.sidebarService.isOpen$.next(
+      !this.sidebarService.isOpen$.value
+    )
+  }
+  // Toggle Sidebar Class
   onClose(){
     this.navToggle = false;
   }
@@ -23,14 +33,18 @@ export class ContentWrapperComponent implements OnInit {
   }
 
   constructor(
-    private sidebarService: SidebarService
+    private sidebarService: SidebarService,
+    private router: Router,
+    private web3Service: Web3Service,
   ) {}
 
   ngOnInit(): void {
     this.navToggle = this.sidebarService.navToggle;
     this.isOpen$ = this.sidebarService.isOpen$;
-    console.log(this.sidebarService.navToggle);
-    console.log(this.sidebarService.isOpen$);
+    
+    this.web3Service.getAccount().then((account) => {
+      this.account = account;
+    });
   }
 
 }
