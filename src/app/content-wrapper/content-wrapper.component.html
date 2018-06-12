@@ -27,22 +27,22 @@
             <div class="txt">Balance</div>
           </div>
         </li>
-        <li (click)='callSidebarService(); openDialog()'>
+        <li (click)='callSidebarService(); openDialog()' *ngIf='hasAccount'>
           <div class="li-container">
             <i class="fas fa-user-circle"></i>
             <div class="txt">Profile</div>
           </div>
         </li>
-        <li>
-          <div class="li-container">
-            <i class="fas fa-code-branch"></i>
-            <div class="txt">Version</div>
-          </div>
-        </li>
-        <li (click)="openDialog()" *ngIf="!hasAccount">
+        <li (click)="callSidebarService(); openDialog()" *ngIf="!hasAccount">
           <div class="li-container">
             <i class="fas fa-user-circle"></i>
             <div class="txt">Login</div>
+          </div>
+        </li>
+        <li>
+          <div class="li-container">
+            <i class="fas fa-code-branch"></i>
+            <div class="txt">Version {{ version }}</div>
           </div>
         </li>
       </ul>

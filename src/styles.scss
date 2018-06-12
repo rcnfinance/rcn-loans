@@ -131,10 +131,10 @@ ngx-spinner .black-overlay.ng-star-inserted {
 
 // Material Angular
   // Backgrounds
-.cdk-overlay-dark-backdrop {background: rgba(0,0,0,.5);}
+.cdk-overlay-dark-backdrop {cursor: pointer; background: rgba(0,0,0,.5);}
 .cdk-overlay-transparent-backdrop{
+  cursor: pointer;
   &.cdk-overlay-backdrop-showing{
-    cursor: pointer;
     background-color: rgba(0, 0, 0, 0.4);
   } 
 }

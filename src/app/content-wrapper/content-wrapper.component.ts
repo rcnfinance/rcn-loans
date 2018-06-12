@@ -5,6 +5,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 // App Component
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
+import { environment } from '../../environments/environment';
 // App Service
 import { Web3Service, Type } from '../services/web3.service';
 import {SidebarService} from '../services/sidebar.service';
@@ -21,6 +22,7 @@ export class ContentWrapperComponent implements OnInit {
   navToggle: boolean;
   extensionToggled = false; // Balance extension toggled
   account: string;
+  version: string = environment.version;
 
   // Toggle Sidebar Service
   callSidebarService() {
