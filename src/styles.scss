@@ -144,12 +144,18 @@ ngx-spinner .black-overlay.ng-star-inserted {
   } 
 }
   //Sidebar
-.mat-drawer-container {
+mat-sidenav-container.mat-drawer-container {
+  padding-top: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   color: inherit;
   background-color: transparent;
 }
 .mat-drawer {
   width: 350px;
+  padding-top: 90px;
   color: inherit;
   background-color: $gray7;
   ul{
@@ -158,9 +164,10 @@ ngx-spinner .black-overlay.ng-star-inserted {
       position: relative;
       left: -300px;
       opacity: 0;
+      text-indent: 20px;
       .li-container{
-        text-indent: 20px;
         padding: 12px 0px 10px 15px;
+        @include transition();
         &:hover {
           background: rgba(0, 0, 0, 1);
         }
@@ -172,6 +179,9 @@ ngx-spinner .black-overlay.ng-star-inserted {
   }
 }
 .mat-drawer-opened{
+  &.mat-drawer-container {
+    position: absolute;
+  }
   .mat-drawer {
     ul{
       li{
@@ -264,6 +274,11 @@ mat-form-field{
   //Dialog
   .mat-dialog-content{
     min-width: 550px;
+  }
+  //Sidebar
+  mat-sidenav-container.mat-drawer-container {
+    padding-top: 140px;
+    background-color: transparent;
   }
 }
 
