@@ -24,9 +24,11 @@
     }
   }
   ul.nav{
-    float: right;
     height: 50px;
+    opacity: 1;
+    float: right;
     padding: 9px 0;
+    @include transition;
     li{
       cursor: pointer;
       display: none;
