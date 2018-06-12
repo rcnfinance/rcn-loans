@@ -1,5 +1,4 @@
 <div class="wrapper" [ngClass]="{'sidebar-toggled': !opened}" [style.min-height.px]="winHeight">
-  <a class="extension-closebox" *ngIf='extensionToggled' (click)='extensionToggle()'></a>
   <app-header></app-header>
   <mat-sidenav-container class="example-container">
     <mat-sidenav mode="over" #sidenav
@@ -40,7 +39,9 @@
         <!-- <li *ngFor="let e of events">{{ e }}</li> -->
       </ul>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav-content [style.min-height.px]="winHeight">
+      <div class="margintop100 visible-xs"></div>
+      <div class="margintop140 hidden-xs"></div>
       <router-outlet></router-outlet>
       <app-footer></app-footer>
     </mat-sidenav-content>

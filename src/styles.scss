@@ -145,7 +145,6 @@ ngx-spinner .black-overlay.ng-star-inserted {
 }
   //Sidebar
 mat-sidenav-container.mat-drawer-container {
-  padding-top: 100px;
   position: absolute;
   top: 0;
   left: 0;
@@ -154,6 +153,7 @@ mat-sidenav-container.mat-drawer-container {
   background-color: transparent;
 }
 .mat-drawer {
+  z-index: 999;
   width: 350px;
   padding-top: 90px;
   color: inherit;
@@ -196,6 +196,10 @@ mat-sidenav-container.mat-drawer-container {
       }
     }
   }
+}
+.mat-drawer-backdrop{
+  cursor: pointer;
+  z-index: 999;
 }
   //Dialog
 .mat-dialog-container{
@@ -277,7 +281,6 @@ mat-form-field{
   }
   //Sidebar
   mat-sidenav-container.mat-drawer-container {
-    padding-top: 140px;
     background-color: transparent;
   }
 }
