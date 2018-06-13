@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Input, HostListener, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 // App Component
@@ -10,6 +10,8 @@ import {SidebarService} from '../services/sidebar.service';
 import { ContractsService } from '../services/contracts.service';
 import { Utils } from '../utils/utils';
 import BigNumber from 'bignumber.js';
+import { ContentWrapperComponent } from '../content-wrapper/content-wrapper.component';
+import { EventEmitter } from 'protractor';
 
 // App Component
 
@@ -24,7 +26,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   profile: boolean;
   extensionToggled = false; // Balance extension toggled
   rcnBalance = '...'; // Balance bar
-  rcnAvailable = '...'; // Balance bar 
+  rcnAvailable = '...'; // Balance bar
   loansWithBalance: number[]; // Balance bar
 
   constructor(
@@ -37,7 +39,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
 
-  // Open Sidebar Service
+  @Input() sidenav: ContentWrapperComponent;
+  @HostListener('click')
+  click() {
+    this.sidenav.toggle();
+  }
+
+  // Toggle Sidebar Service
   callSidebarService() {
     this.sidebarService.isOpen$.next(
       !this.sidebarService.isOpen$.value

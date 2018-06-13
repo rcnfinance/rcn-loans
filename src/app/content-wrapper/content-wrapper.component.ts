@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -23,6 +23,13 @@ export class ContentWrapperComponent implements OnInit {
   extensionToggled = false; // Balance extension toggled
   account: string;
   version: string = environment.version;
+
+  @HostBinding('class.is-open')
+  testOpen = false;
+  toggle() {
+    this.testOpen = !this.testOpen;
+    console.log(this.testOpen);
+  }
 
   // Toggle Sidebar Service
   callSidebarService() {

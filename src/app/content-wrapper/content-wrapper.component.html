@@ -1,5 +1,5 @@
 <div class="wrapper" [ngClass]="{'sidebar-toggled': navToggle}" [style.min-height.px]="winHeight">
-  <app-header></app-header>
+  <app-header [sidenav]="sidenav"></app-header>
   <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav
       mode="over"
