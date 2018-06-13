@@ -24,6 +24,11 @@ export class ContentWrapperComponent implements OnInit {
   account: string;
   version: string = environment.version;
 
+  toggle: boolean;
+  messageSubscribe(){
+    this.sidebarService.currentToggle.subscribe(toggle => this.toggle = toggle);
+  }
+
   // Toggle Sidebar Service
   callSidebarService() {
     this.sidebarService.isOpen$.next(
@@ -75,7 +80,6 @@ export class ContentWrapperComponent implements OnInit {
 
   constructor(
     private sidebarService: SidebarService,
-    private router: Router,
     private web3Service: Web3Service,
     public dialog: MatDialog,
   ) {}
@@ -85,6 +89,7 @@ export class ContentWrapperComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.sidebarService.currentMessage.subscribe(message => this.message = message);
     this.navToggle = this.sidebarService.navToggle;
     this.isOpen$ = this.sidebarService.isOpen$;
     

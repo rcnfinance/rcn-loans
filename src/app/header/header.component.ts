@@ -36,6 +36,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
 
+  toggle: boolean;
+
+  newMessage(){
+    this.sidebarService.changeMessage(this.toggle=!this.toggle);
+  }
+
   // Toggle Sidebar Service
   callSidebarService() {
     this.sidebarService.isOpen$.next(
@@ -113,6 +119,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.sidebarService.currentMessage.subscribe(message => this.message = message);
+
     this.web3Service.getAccount().then((account) => {
       this.account = account;
       this.loadRcnBalance();
