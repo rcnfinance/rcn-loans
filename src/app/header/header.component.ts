@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Input, HostListener, Output } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 // App Component
@@ -9,9 +9,6 @@ import { Web3Service, Type } from '../services/web3.service';
 import {SidebarService} from '../services/sidebar.service';
 import { ContractsService } from '../services/contracts.service';
 import { Utils } from '../utils/utils';
-import BigNumber from 'bignumber.js';
-import { ContentWrapperComponent } from '../content-wrapper/content-wrapper.component';
-import { EventEmitter } from 'protractor';
 
 // App Component
 
@@ -38,12 +35,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   ) {}
 
   @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
-
-  @Input() sidenav: ContentWrapperComponent;
-  @HostListener('click')
-  click() {
-    this.sidenav.toggle();
-  }
 
   // Toggle Sidebar Service
   callSidebarService() {

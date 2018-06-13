@@ -24,13 +24,6 @@ export class ContentWrapperComponent implements OnInit {
   account: string;
   version: string = environment.version;
 
-  @HostBinding('class.is-open')
-  testOpen = false;
-  toggle() {
-    this.testOpen = !this.testOpen;
-    console.log(this.testOpen);
-  }
-
   // Toggle Sidebar Service
   callSidebarService() {
     this.sidebarService.isOpen$.next(
