@@ -10,7 +10,7 @@
         <li routerLink='/requests' (click)='sidebarToggle()'>
           <div class="li-container">
             <i class="fas fa-tag"></i>
-            <div class="txt">Requests {{navToggle}}</div>
+            <div class="txt">Requests</div>
           </div>
         </li>
         <li routerLink='/address/{{ account }}/' (click)='sidebarToggle()' *ngIf='hasAccount'>

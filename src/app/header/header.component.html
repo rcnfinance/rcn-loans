@@ -15,7 +15,7 @@
 
             <a class="button-img" routerLink='/requests'><img src="https://ripiocredit.network/images/logo.png" alt="rcn-image"></a>
             <ul class="nav">
-              <li routerLink='/requests' #tref>Requests {{navToggle}}</li>
+              <li routerLink='/requests' #tref>Requests</li>
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>
               <li (click)='extensionToggle()' *ngIf='hasAccount'>Balance</li>
               <li class="separator">|</li>

@@ -20,7 +20,6 @@ export class ContentWrapperComponent implements OnInit {
   account: string;
   version: string = environment.version;
 
-  isOpen$: BehaviorSubject<boolean>;
   navToggle: boolean; // Navbar toggled
   extensionToggled = false; // Balance extension toggled
 
@@ -28,24 +27,17 @@ export class ContentWrapperComponent implements OnInit {
   sidebarToggle(){
     this.sidebarService.toggleService(this.navToggle=!this.navToggle);
   }
-
-  // Toggle Sidebar Class
-  onClose(){
-    this.sidebarService.toggleService(this.navToggle = false);
-    
-    // this.sidebarService.toggleService(this.extensionToggled=true);
-    // this.sidebarService.isOpen$.next(false);
-  }
-  onOpen(){
-    this.sidebarService.toggleService(this.navToggle = true);
-
-    // this.sidebarService.toggleService(this.extensionToggled=false);
-    // this.sidebarService.isOpen$.next(true);
-  }
-
   // Open Balance Extension
   extensionToggle() {
     this.sidebarService.extensionService(this.extensionToggled=!this.extensionToggled);
+  }
+  // Toggle Sidebar Class
+  onClose(){
+    this.sidebarService.toggleService(this.navToggle = false);
+  }
+  onOpen(){
+    this.sidebarService.toggleService(this.navToggle = true);
+    this.sidebarService.extensionService(this.extensionToggled=false);
   }
 
   // Open Approve Dialog
@@ -93,9 +85,6 @@ export class ContentWrapperComponent implements OnInit {
      // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentExtension.subscribe(extensionToggled => this.extensionToggled = extensionToggled);
-    this.isOpen$ = this.sidebarService.isOpen$;
-
-    this.sidebarService.currentIsOpen.subscribe(navIsOpen => this.navIsOpen = navIsOpen);
     
     this.web3Service.getAccount().then((account) => {
       this.account = account;
