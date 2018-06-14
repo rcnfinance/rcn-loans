@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class SidebarService {
   isOpen$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
+  
   private toggleSource = new BehaviorSubject<boolean>(false);
   currentToggle = this.toggleSource.asObservable();
   toggleService(navToggle: boolean){

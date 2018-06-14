@@ -17,31 +17,35 @@ import {SidebarService} from '../services/sidebar.service';
 export class ContentWrapperComponent implements OnInit {
   winHeight: any = window.innerHeight;
   events: string[] = [];
-  isOpen$: BehaviorSubject<boolean>;
   account: string;
   version: string = environment.version;
+
+  isOpen$: BehaviorSubject<boolean>;
   navToggle: boolean; // Navbar toggled
   extensionToggled = false; // Balance extension toggled
 
-  // Toggle Sidebar Service
-  callSidebarService() {
-    this.sidebarService.isOpen$.next(
-      !this.sidebarService.isOpen$.value
-    )
+  // Toggle Navbar
+  sidebarToggle(){
+    this.sidebarService.toggleService(this.navToggle=!this.navToggle);
   }
+
   // Toggle Sidebar Class
   onClose(){
     this.sidebarService.toggleService(this.navToggle = false);
+    
     // this.sidebarService.toggleService(this.extensionToggled=true);
+    // this.sidebarService.isOpen$.next(false);
   }
   onOpen(){
     this.sidebarService.toggleService(this.navToggle = true);
+
     // this.sidebarService.toggleService(this.extensionToggled=false);
+    // this.sidebarService.isOpen$.next(true);
   }
 
   // Open Balance Extension
   extensionToggle() {
-    this.extensionToggled = !this.extensionToggled;
+    this.sidebarService.extensionService(this.extensionToggled=!this.extensionToggled);
   }
 
   // Open Approve Dialog
@@ -90,6 +94,8 @@ export class ContentWrapperComponent implements OnInit {
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentExtension.subscribe(extensionToggled => this.extensionToggled = extensionToggled);
     this.isOpen$ = this.sidebarService.isOpen$;
+
+    this.sidebarService.currentIsOpen.subscribe(navIsOpen => this.navIsOpen = navIsOpen);
     
     this.web3Service.getAccount().then((account) => {
       this.account = account;

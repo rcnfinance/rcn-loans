@@ -3,35 +3,35 @@
   <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav
       mode="over"
-      [opened]="isOpen$ | async"
+      [opened]="navToggle"
       (close)="onClose()"
       (open)="onOpen()">
       <ul>
-        <li routerLink='/requests' (click)='callSidebarService()'>
+        <li routerLink='/requests' (click)='sidebarToggle()'>
           <div class="li-container">
             <i class="fas fa-tag"></i>
             <div class="txt">Requests {{navToggle}}</div>
           </div>
         </li>
-        <li routerLink='/address/{{ account }}/' (click)='callSidebarService()' *ngIf='hasAccount'>
+        <li routerLink='/address/{{ account }}/' (click)='sidebarToggle()' *ngIf='hasAccount'>
           <div class="li-container">
             <i class="fas fa-box-open"></i>
             <div class="txt">Loans</div>
           </div>
         </li>
-        <li (click)='callSidebarService(); extensionToggle()' *ngIf='hasAccount'>
+        <li (click)='sidebarToggle(); extensionToggle()' *ngIf='hasAccount'>
           <div class="li-container">
             <i class="fas fa-chart-bar"></i>
             <div class="txt">Balance</div>
           </div>
         </li>
-        <li (click)='callSidebarService(); openDialog()' *ngIf='hasAccount'>
+        <li (click)='sidebarToggle(); openDialog()' *ngIf='hasAccount'>
           <div class="li-container">
             <i class="fas fa-user-circle"></i>
             <div class="txt">Profile</div>
           </div>
         </li>
-        <li (click)="callSidebarService(); openDialog()" *ngIf="!hasAccount">
+        <li (click)="sidebarToggle(); openDialog()" *ngIf="!hasAccount">
           <div class="li-container">
             <i class="fas fa-user-circle"></i>
             <div class="txt">Login</div>

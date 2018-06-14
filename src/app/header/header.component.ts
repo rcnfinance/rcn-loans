@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import {BehaviorSubject} from 'rxjs';
 // App Component
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
@@ -9,8 +10,6 @@ import { Web3Service, Type } from '../services/web3.service';
 import { SidebarService } from '../services/sidebar.service';
 import { ContractsService } from '../services/contracts.service';
 import { Utils } from '../utils/utils';
-
-// App Component
 
 @Component({
   selector: 'app-header',
@@ -24,6 +23,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   rcnBalance = '...'; // Balance bar
   rcnAvailable = '...'; // Balance bar
   loansWithBalance: number[]; // Balance bar
+  
+  isOpen$: BehaviorSubject<boolean>;
   navToggle: boolean; // Navbar toggled
   extensionToggled = false; // Balance extension toggled
 
@@ -42,14 +43,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   // Open Balance Extension
   extensionToggle() {
-    this.extensionToggled = !this.extensionToggled;
-  }
-
-  // Toggle Sidebar Service
-  callSidebarService() {
-    this.sidebarService.isOpen$.next(
-      !this.sidebarService.isOpen$.value
-    )
+    this.sidebarService.extensionService(this.extensionToggled=!this.extensionToggled);
   }
 
   handleProfile() {
