@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, HostBinding } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material';
 // App Component
@@ -19,15 +18,10 @@ export class ContentWrapperComponent implements OnInit {
   winHeight: any = window.innerHeight;
   events: string[] = [];
   isOpen$: BehaviorSubject<boolean>;
-  navToggle: boolean;
-  extensionToggled = false; // Balance extension toggled
   account: string;
   version: string = environment.version;
-
-  toggle: boolean;
-  messageSubscribe(){
-    this.sidebarService.currentToggle.subscribe(toggle => this.toggle = toggle);
-  }
+  navToggle: boolean; // Navbar toggled
+  extensionToggled = false; // Balance extension toggled
 
   // Toggle Sidebar Service
   callSidebarService() {
@@ -37,11 +31,14 @@ export class ContentWrapperComponent implements OnInit {
   }
   // Toggle Sidebar Class
   onClose(){
-    this.navToggle = false;
+    this.sidebarService.toggleService(this.navToggle = false);
+    // this.sidebarService.toggleService(this.extensionToggled=true);
   }
   onOpen(){
-    this.navToggle = true;
+    this.sidebarService.toggleService(this.navToggle = true);
+    // this.sidebarService.toggleService(this.extensionToggled=false);
   }
+
   // Open Balance Extension
   extensionToggle() {
     this.extensionToggled = !this.extensionToggled;
@@ -79,7 +76,7 @@ export class ContentWrapperComponent implements OnInit {
   }
 
   constructor(
-    private sidebarService: SidebarService,
+    private sidebarService: SidebarService, // Navbar Service
     private web3Service: Web3Service,
     public dialog: MatDialog,
   ) {}
@@ -89,13 +86,13 @@ export class ContentWrapperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sidebarService.currentMessage.subscribe(message => this.message = message);
-    this.navToggle = this.sidebarService.navToggle;
+     // Navbar toggled
+    this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
+    this.sidebarService.currentExtension.subscribe(extensionToggled => this.extensionToggled = extensionToggled);
     this.isOpen$ = this.sidebarService.isOpen$;
     
     this.web3Service.getAccount().then((account) => {
       this.account = account;
     });
   }
-
 }

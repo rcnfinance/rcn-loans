@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 // App Component
@@ -6,7 +6,7 @@ import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contra
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
 import { Web3Service, Type } from '../services/web3.service';
-import {SidebarService} from '../services/sidebar.service';
+import { SidebarService } from '../services/sidebar.service';
 import { ContractsService } from '../services/contracts.service';
 import { Utils } from '../utils/utils';
 
@@ -21,10 +21,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   account: string;
   makeRotate = false;
   profile: boolean;
-  extensionToggled = false; // Balance extension toggled
   rcnBalance = '...'; // Balance bar
   rcnAvailable = '...'; // Balance bar
   loansWithBalance: number[]; // Balance bar
+  navToggle: boolean; // Navbar toggled
+  extensionToggled = false; // Balance extension toggled
 
   constructor(
     public dialog: MatDialog,
@@ -34,12 +35,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private contractService: ContractsService,
   ) {}
 
-  @ViewChild('tref', {read: ElementRef}) tref: ElementRef;
+  // Open Navbar
+  sidebarToggle(){
+    this.sidebarService.toggleService(this.navToggle=!this.navToggle);
+  }
 
-  toggle: boolean;
-
-  newMessage(){
-    this.sidebarService.changeMessage(this.toggle=!this.toggle);
+  // Open Balance Extension
+  extensionToggle() {
+    this.extensionToggled = !this.extensionToggled;
   }
 
   // Toggle Sidebar Service
@@ -47,11 +50,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.sidebarService.isOpen$.next(
       !this.sidebarService.isOpen$.value
     )
-  }
-
-  // Open Balance Extension
-  extensionToggle() {
-    this.extensionToggled = !this.extensionToggled;
   }
 
   handleProfile() {
@@ -119,7 +117,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.sidebarService.currentMessage.subscribe(message => this.message = message);
+    this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
+    this.sidebarService.currentExtension.subscribe(extensionToggled => this.extensionToggled = extensionToggled);
 
     this.web3Service.getAccount().then((account) => {
       this.account = account;
