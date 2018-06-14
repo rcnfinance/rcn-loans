@@ -18,7 +18,7 @@
   background-image: -webkit-linear-gradient(270deg, rgba(0, 0, 0, .77), transparent);
   background-image: linear-gradient(180deg, rgba(0, 0, 0, .77), transparent);
   .button-img{
-    display: inline-block;
+    @extend %center-left;
     img{
       height: 50px;
     }
@@ -143,6 +143,13 @@
   .navbar{
     .navbar-header{
       width: 100%;
+    }
+    .button-img{
+      position: relative;
+      left: 0;
+      display: inline-block;
+      -webkit-transform: translate(0%, 0%);
+      transform: translate(0%, 0%);
     }
     ul.nav{
       padding: 15px 0;

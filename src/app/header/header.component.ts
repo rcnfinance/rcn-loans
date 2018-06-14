@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private contractService: ContractsService,
   ) {}
 
-  // Open Navbar
+  // Toggle Navbar
   sidebarToggle(){
     this.sidebarService.toggleService(this.navToggle=!this.navToggle);
   }
