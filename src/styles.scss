@@ -222,11 +222,20 @@ mat-sidenav-container.mat-drawer-container {
 
   ul.nav{
     opacity: 0 !important;
+    top: -25px !important;
   }
-
+  .navbar-extension,
+  .extension-closebox{
+    opacity: 0 !important;
+    left: 330px !important;
+    @include transition(all 0.2s ease !important);
+  }
   .extension-toggled{
+    .navbar-extension,
     .extension-closebox{
-      left: 350px;
+      @include transition(all 0.3s ease !important);
+    }
+    .extension-closebox{
       z-index: 1;
     }
   }

@@ -39,7 +39,7 @@
       </div>
     </div>
   </nav>
-  <div class="navbar-extension" *ngIf='!navToggle'>
+  <div class="navbar-extension">
     <div class="container">
       <div class="row">
         <div class="col-xs-12">
@@ -56,5 +56,5 @@
       </div>
     </div>
   </div>
-  <a class="extension-closebox" *ngIf='extensionToggled && !navToggle' (click)='extensionToggle()'></a>
+  <a class="extension-closebox" *ngIf='extensionToggled' (click)='extensionToggle()'></a>
 </div>
