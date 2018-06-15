@@ -33,6 +33,8 @@ import { ContentWrapperComponent } from './content-wrapper/content-wrapper.compo
 
 import { OpenLoansComponent } from './views/open-loans/open-loans.component';
 
+import { ActiveLoansComponent } from './active-loans/active-loans.component';
+
 import { LoanDetailComponent } from './views/loan-detail/loan-detail.component';
 import { DetailCosignerComponent } from './views/loan-detail/detail-cosigner/detail-cosigner.component';
 import { DetailIdentityComponent } from './views/loan-detail/detail-identity/detail-identity.component';
@@ -53,14 +55,12 @@ import { CoreModule } from './core/core.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
 const appRoutes: Routes = [
+  { path: '', redirectTo: '/requests', pathMatch: 'full'},
   { path: 'requests', component: OpenLoansComponent },
+  { path: 'activity', component: ActiveLoansComponent },
   { path: 'loan/:id', component: LoanDetailComponent },
   { path: 'address/:address', component: AddressComponent },
   { path: 'profile', component: ProfileComponent },
-  { path: '',
-    redirectTo: '/requests',
-    pathMatch: 'full'
-  }
 ];
 
 @NgModule({
@@ -81,6 +81,7 @@ const appRoutes: Routes = [
     DetailTableComponent,
     ProfileComponent,
     AddressComponent,
+    ActiveLoansComponent,
     DialogClientAccountComponent,
   ],
   imports: [
