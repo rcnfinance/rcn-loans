@@ -32,10 +32,10 @@
           </div>
           <div class="card-property">
             <div class="title">{{ 'Annual Interest / Punitory' }}</div>
-            <!-- <div class="paragraph"> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div> -->
+            <div class="paragraph"> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div>
           </div>
-          <!-- <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountLeft]="loan.paid" [amountRight]="loan.total"></app-conversion-graphic> -->
-          <!-- <app-detail-button [loan]=loan></app-detail-button> -->
+          <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountLeft]="loan.paid" [amountRight]="loan.total"></app-conversion-graphic>
+          <app-detail-button [loan]=loan></app-detail-button>
         </div>
       </div>
     </div>

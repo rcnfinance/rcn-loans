@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 // App Services
 import { ContractsService } from './../services/contracts.service';
+import { Utils } from './../utils/utils';
 // App Models
 import { Loan } from './../models/loan.model';
 // App Spinner
@@ -28,6 +29,13 @@ export class ActiveLoansComponent implements OnInit {
         this.availableLoans = false;
       }
     });
+  }
+
+  private formatInterest(interest: Number): string {
+    return Number(interest.toFixed(2)).toString();
+  }
+  private formatAmount(amount: number): string {
+    return Utils.formatAmount(amount);
   }
 
   ngOnInit() {
