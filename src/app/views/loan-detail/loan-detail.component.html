@@ -32,12 +32,12 @@
           <div class="margintop20"></div>
           <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
           <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
-          <div class="table-responsive" (click)="openDetail('identity')">
-            <table class="table table-clickable" (click)="addClass(id=1)">
+          <div class="table-responsive" (click)="openDetail('identity');">
+            <table class="table table-clickable">
               <thead>
                 <tr>
-                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 1 }" scope="col">
-                    Identity<i class="material-icons white more-indicator">{{ id === 1 ? '' : 'unfold_more' }}</i>
+                  <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('identity') }" scope="col">
+                    Identity<i class="material-icons white more-indicator">{{ isDetail('identity') ? '' : 'unfold_more' }}</i>
                   </th>
                 </tr>
               </thead>
@@ -62,12 +62,12 @@
               </tbody>
             </table>
           </div>
-          <div class="table-responsive" (click)="openDetail('cosigner'); addClass(id=3)">
+          <div class="table-responsive" (click)="openDetail('cosigner');">
             <table class="table table-clickable">
               <thead>
                 <tr>
-                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 3 }" scope="col">
-                      Insurance / Cosigner<i class="material-icons white more-indicator">{{ id === 3 ? '' : 'unfold_more' }}</i>
+                  <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
+                      Insurance / Cosigner<i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
                   </th>
                 </tr>
               </thead>

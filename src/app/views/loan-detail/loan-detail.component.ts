@@ -29,8 +29,7 @@ import { environment } from '../../../environments/environment';
 export class LoanDetailComponent implements OnInit {
   loan: Loan;
   identityName = '...';
-  viewDetail = 'identity';
-  id = 1;
+  viewDetail = undefined;
   userAccount: string;
   cosignerOption: CosignerOption;
 
@@ -54,12 +53,18 @@ export class LoanDetailComponent implements OnInit {
     private spinner: NgxSpinnerService,
   ) {}
 
-  addClass(id) {this.id = id; }
-
   private loadIdentity() {
     this.identityService.getIdentity(this.loan).then((identity) => {
       this.identityName = identity !== undefined ? identity.short : 'Unknown';
     });
+  }
+
+  private defaultDetail(): string {
+    if (this.cosignerOption !== undefined) {
+      return 'cosigner';
+    } else {
+      return 'identity';
+    }
   }
 
   private loadCosignerOption() {
@@ -127,6 +132,7 @@ export class LoanDetailComponent implements OnInit {
         this.loadDetail();
         this.loadIdentity();
         this.loadCosignerOption();
+        this.viewDetail = this.defaultDetail();
         this.spinner.hide();
       });
    });
