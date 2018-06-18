@@ -9,13 +9,19 @@
       <ul>
         <li routerLink='/requests' (click)='sidebarToggle()'>
           <div class="li-container">
-            <i class="fas fa-tag"></i>
+            <i class="fas fa-coins"></i>
             <div class="txt">Requests</div>
+          </div>
+        </li>
+        <li routerLink='/activity' (click)='sidebarToggle()'>
+          <div class="li-container">
+            <i class="fas fa-exchange-alt"></i>
+            <div class="txt">Activity</div>
           </div>
         </li>
         <li routerLink='/address/{{ account }}/' (click)='sidebarToggle()' *ngIf='hasAccount'>
           <div class="li-container">
-            <i class="fas fa-box-open"></i>
+            <i class="fas fa-wallet"></i>
             <div class="txt">Loans</div>
           </div>
         </li>
