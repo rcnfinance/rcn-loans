@@ -13,20 +13,24 @@
   margin-right: auto;
   margin-bottom: 0px;
   margin-left: auto;
-  padding: 15px 0px;
+  padding: 15px;
   background-color: transparent;
   background-image: -webkit-linear-gradient(270deg, rgba(0, 0, 0, .77), transparent);
   background-image: linear-gradient(180deg, rgba(0, 0, 0, .77), transparent);
   .button-img{
-    display: inline-block;
+    @extend %center-left;
     img{
       height: 50px;
     }
   }
   ul.nav{
-    float: right;
+    position: relative;
+    top: 0;
     height: 50px;
+    opacity: 1;
+    float: right;
     padding: 9px 0;
+    @include transition;
     li{
       cursor: pointer;
       display: none;
@@ -52,12 +56,12 @@
 }
 
 .navbar-extension {
-  display: none;
   height: 0px;
   position: absolute;
   top: 85px;
   left: 0;
   right: 0;
+  z-index: 9;
   overflow: hidden;
   padding: 0;
   background-color: $gray7;
@@ -66,7 +70,6 @@
     li{
       position: relative;
       display: inline-block;
-      margin: 6px;
       opacity: 0;
       top: -15px;
       margin-right: 15px;
@@ -80,8 +83,8 @@
       }
     }
   }
-  .title.main-h1{font-size: 16px; padding: 9px 0;}
-  .title.main-h2{font-size: 16px; padding: 9px 0; @extend %font-bold;}
+  .title.main-h1{font-size: 16px; padding: 10px 0;}
+  .title.main-h2{font-size: 16px; padding: 10px 0; @extend %font-bold;}
   .title.main-h2 {
     font-family: 'Roboto', sans-serif;
   }
@@ -89,7 +92,7 @@
 
 .extension-closebox{
   position: absolute;
-  top: 135px;
+  top: 215px;
   bottom: 0px;
   right: 0px;
   left: 0px;
@@ -101,32 +104,30 @@
   z-index: 170;
 }
 
-#page-content-wrapper{
-  &.extension-toggled{
-    .navbar-extension{
-      height: 50px;
-      @include transition(all 0.5s ease);
-      ul{
-        li{
-          @include transition();
-          @for $i from 1 through 12 {
-            &:nth-child(#{$i}) { 
-              @include transition-delay(0.06s * $i); 
-            }
+.extension-toggled{
+  .navbar-extension{
+    height: 130px;
+    @include transition(all 0.5s ease);
+    ul{
+      li{
+        @include transition();
+        @for $i from 1 through 12 {
+          &:nth-child(#{$i}) { 
+            @include transition-delay(0.06s * $i); 
           }
-          opacity: 1;
-          top: 0px;
-          &:last-child{
-            top: -2px;
-          }
+        }
+        opacity: 1;
+        top: 0px;
+        &:last-child{
+          top: -2px;
         }
       }
     }
-    .extension-closebox{
-      display: block;
-      opacity: 1;
-      z-index: 9999;
-    }
+  }
+  .extension-closebox{
+    display: block;
+    opacity: 1;
+    z-index: 999;
   }
 }
 
@@ -142,6 +143,13 @@
   .navbar{
     .navbar-header{
       width: 100%;
+    }
+    .button-img{
+      position: relative;
+      left: 0;
+      display: inline-block;
+      -webkit-transform: translate(0%, 0%);
+      transform: translate(0%, 0%);
     }
     ul.nav{
       padding: 15px 0;
@@ -170,10 +178,52 @@
   }
   .navbar-extension {
     display: block;
+    .title.main-h1{padding: 15px 0;}
+    .title.main-h2{padding: 15px 0;}
+  }
+  .navbar-extension{ul{span.marginleft30{display:inline-block;}}}
+  .navbar-extension{ul{span.marginleft60{display:none;}}}
+  
+  .extension-toggled{
+    .navbar-extension {
+      height: 50px;
+      top: 85px;
+    }
+    .extension-closebox{
+      top: 135px;
+    }
+  }
+}
+
+.nav-toggle{
+  border-radius: 0;
+  padding: 10px 0;
+  margin-right: 35px;
+  min-height: 50px;
+
+  float: left;
+  background-color: transparent;
+  border: 1px solid transparent;
+  span{
+    background-color: #fff;
+    height: 1px;
+    width: 23px;
+  }
+  .icon-bar {
+    display: block;
+    border-radius: 1px;
+    @include transition;
+  }
+  .icon-bar + .icon-bar {
+    margin-top: 4px;
+  }
+  .navbar-extension {
+    display: block;
   }
   .navbar-extension{ul{span.marginleft30{display:inline-block;}}}
   .navbar-extension{ul{span.marginleft60{display:none;}}}
 }
+
 
 @media (min-width: 992px){
   .navbar-extension{ul{span.marginleft30{display:none;}}}

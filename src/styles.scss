@@ -20,10 +20,6 @@ body{
   background-color: $tertiary;
   color: $secondary;
 }
-.highlight-layer{
-  position: relative;
-  z-index: 1000;
-}
 
 //TABS
 .mat-tab-label-container{
@@ -135,43 +131,149 @@ ngx-spinner .black-overlay.ng-star-inserted {
 
 // Material Angular
   // Backgrounds
-.cdk-overlay-dark-backdrop {background: rgba(0,0,0,.5);}
+.cdk-overlay-dark-backdrop {cursor: pointer; background: rgba(0,0,0,.5);}
 .cdk-overlay-transparent-backdrop{
+  cursor: pointer;
   &.cdk-overlay-backdrop-showing{
-    cursor: pointer;
-    opacity: 1;
     background-color: rgba(0, 0, 0, 0.4);
   } 
 }
-  //Dialog
-  .cdk-global-overlay-wrapper{
-    .mat-dialog-container{
-      color: $secondary;
-      padding: 0px;
-      background-color: $fifth;
-    }
-    .mat-dialog-content{
+  //Sidebar
+mat-sidenav-container.mat-drawer-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  color: inherit;
+  background-color: transparent;
+}
+.mat-drawer {
+  width: 300px;
+  padding-top: 90px;
+  color: inherit;
+  z-index: 999;
+  background-color: $gray7;
+  ul{
+    li{
+      cursor: pointer;
       position: relative;
-      margin: 0;
-      padding: 0;
+      left: -300px;
+      opacity: 0;
+      text-indent: 20px;
+      .li-container{
+        padding: 12px 0px 10px 15px;
+        @include transition();
+        svg{font-size: 1.2em;}
+        &:hover {
+          background: rgba(0, 0, 0, 1);
+        }
+      }
+      .txt{
+        display: inline-block;
+        font-size: 16px;
+      }
     }
   }
+}
+.mat-drawer-opened{
+  &.mat-drawer-container {
+    position: absolute;
+  }
+  .mat-drawer {
+    ul{
+      li{
+        left: 0px;
+        opacity: 1;
+        @include transition();
+        @for $i from 1 through 16 {
+          &:nth-child(#{$i}) { 
+           @include transition-delay(0.06s * $i); 
+          }
+        }
+      }
+    }
+  }
+}
+.mat-drawer-backdrop{
+  cursor: pointer;
+  z-index: 999;
+}
+.sidebar-toggled{
+  .nav-toggle{
+    span.icon-bar{
+      height: 2px !important;
+      &:nth-child(1){
+        -webkit-transform: rotate(-45deg) translate(0px, 0px);
+        transform: rotate(-45deg) translate(0px, 0px);
+      }
+      &:nth-child(2){
+        opacity: 0;
+        display: none;
+      }
+      &:nth-child(3){
+        -webkit-transform: rotate(45deg) translate(-15px, -15px);
+        transform: rotate(45deg) translate(0px, 0px);
+      }
+    }
+    span.icon-bar + span.icon-bar {
+      margin-top: 0 !important;
+    }
+  }
+
+  ul.nav{
+    opacity: 0 !important;
+    top: -25px !important;
+  }
+  .navbar-extension,
+  .extension-closebox{
+    opacity: 0 !important;
+    left: 330px !important;
+    @include transition(all 0.2s ease !important);
+  }
+  .extension-toggled{
+    .navbar-extension,
+    .extension-closebox{
+      @include transition(all 0.3s ease !important);
+    }
+    .extension-closebox{
+      z-index: 1;
+    }
+  }
+}
+
+  //Dialog
+.mat-dialog-container{
+  color: $secondary;
+  background-color: $gray7;
+}
+.cdk-global-overlay-wrapper{
+  .mat-dialog-container{
+    color: $secondary;
+    padding: 0px;
+    background-color: $fifth;
+  }
+  .mat-dialog-content{
+    position: relative;
+    margin: 0;
+    padding: 0;
+  }
+}
   //Menu
-  .mat-menu-panel {
-    background-color: $gray7;
-    .mat-menu-content {
-      padding-top: 2px;
-      padding-bottom: 2px;
-      .mat-menu-item{
-        height: 40px;
-        font-size: 14px;
-        line-height: 40px;
-      }
-      button {
-        color: $secondary;
-      }
+.mat-menu-panel {
+  background-color: $gray7;
+  .mat-menu-content {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    .mat-menu-item{
+      height: 40px;
+      font-size: 14px;
+      line-height: 40px;
+    }
+    button {
+      color: $secondary;
     }
   }
+}
   // Snackbar
 snack-bar-container.mat-snack-bar-container{
   color: $secondary;
@@ -216,6 +318,13 @@ mat-form-field{
   //Dialog
   .mat-dialog-content{
     min-width: 550px;
+  }
+  //Sidebar
+  mat-sidenav-container.mat-drawer-container {
+    background-color: transparent;
+    .mat-drawer {
+      width: 350px;
+    }
   }
 }
 

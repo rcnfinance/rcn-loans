@@ -1,8 +1,57 @@
-<div class="relative" [style.min-height.px]="winHeight">
-  <a class="extension-closebox" *ngIf='extensionToggled' (click)='extensionToggle()'></a>
+<div class="wrapper" [ngClass]="{'sidebar-toggled': navToggle}" [style.min-height.px]="winHeight">
   <app-header></app-header>
-  <div class="margintop20 visible-xs"></div>
-  <div class="margintop55 hidden-xs"></div>
-  <router-outlet></router-outlet>
-  <app-footer></app-footer>
+  <mat-sidenav-container class="example-container">
+    <mat-sidenav #sidenav
+      mode="over"
+      [opened]="navToggle"
+      (close)="onClose()"
+      (open)="onOpen()">
+      <ul>
+        <li routerLink='/requests' (click)='sidebarToggle()'>
+          <div class="li-container">
+            <i class="fas fa-tag"></i>
+            <div class="txt">Requests</div>
+          </div>
+        </li>
+        <li routerLink='/address/{{ account }}/' (click)='sidebarToggle()' *ngIf='hasAccount'>
+          <div class="li-container">
+            <i class="fas fa-box-open"></i>
+            <div class="txt">Loans</div>
+          </div>
+        </li>
+        <li (click)='sidebarToggle(); extensionToggle()' *ngIf='hasAccount'>
+          <div class="li-container">
+            <i class="fas fa-chart-bar"></i>
+            <div class="txt">Balance</div>
+          </div>
+        </li>
+        <li (click)='sidebarToggle(); openDialog()' *ngIf='hasAccount'>
+          <div class="li-container">
+            <i class="fas fa-user-circle"></i>
+            <div class="txt">Profile</div>
+          </div>
+        </li>
+        <li (click)="sidebarToggle(); openDialog()" *ngIf="!hasAccount">
+          <div class="li-container">
+            <i class="fas fa-user-circle"></i>
+            <div class="txt">Login</div>
+          </div>
+        </li>
+        <li>
+          <div class="li-container">
+            <i class="fas fa-code-branch"></i>
+            <div class="txt">Version {{ version }}</div>
+          </div>
+        </li>
+      </ul>
+    </mat-sidenav>
+    <mat-sidenav-content [style.min-height.px]="winHeight">
+      <div id="page-content-wrapper">
+        <router-outlet></router-outlet>
+        <app-footer></app-footer>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>
+
+

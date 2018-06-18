@@ -14,6 +14,8 @@ import { CosignerService } from './services/cosigner.service';
 import { Web3Service } from './services/web3.service';
 import { IdentityService } from './services/identity.service';
 import { RiskService } from './services/risk.service';
+import { CivicService } from './services/civic.service';
+import { SidebarService } from './services/sidebar.service';
 
 // TODO: Move
 import { DecentralandCosignerService } from './services/cosigners/decentraland-cosigner.service';
@@ -42,14 +44,13 @@ import { AddressComponent } from './views/address/address.component';
 
 import { ProfileComponent } from './views/profile/profile.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 
 // App Modules
 import { CoreModule } from './core/core.module';
 
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { CivicService } from './services/civic.service';
-import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 
 const appRoutes: Routes = [
   { path: 'requests', component: OpenLoansComponent },
@@ -97,6 +98,7 @@ const appRoutes: Routes = [
       { enableTracing: false } // <-- debugging purposes only
     )
   ],
+  exports: [],
   entryComponents: [
     DialogApproveContractComponent,
     DialogLoanTransferComponent,
@@ -111,7 +113,8 @@ const appRoutes: Routes = [
     DecentralandCosignerService,
     IdentityService,
     RiskService,
-    CivicService
+    CivicService,
+    SidebarService,
   ],
   bootstrap: [AppComponent]
 })

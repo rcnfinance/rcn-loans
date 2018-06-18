@@ -1,6 +1,6 @@
 <ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
 <div class="container">
-  <div class="row highlight-layer">
+  <div class="row">
     <div class="col-xs-12">
       <div class="title main-h1">lent by</div>
       <div class="title main-h5">{{address}}</div>
@@ -12,8 +12,6 @@
   <div class="row">
 
     <div class="col-xs-12 text-center" *ngIf='!availableLoans'>
-      <div class="margintop60 visible-xs"></div>
-      <div class="margintop100 hidden-xs"></div>
       <div class="title main-h1">This address is not a lender</div>
     </div>
 
@@ -46,6 +44,4 @@
       </div>
     </div>
   </div>
-  <div class="margintop160 visible-xs"></div>
-  <div class="margintop130 hidden-xs"></div>
 </div>

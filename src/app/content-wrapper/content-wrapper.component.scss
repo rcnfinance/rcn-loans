@@ -1,0 +1,12 @@
+.wrapper{
+  position: relative;
+}
+#page-content-wrapper{
+  padding: 100px 0px 160px;
+}
+
+@media (min-width: 768px){
+  #page-content-wrapper{
+    padding: 140px 0px 130px;
+  }
+}

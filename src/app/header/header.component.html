@@ -1,25 +1,24 @@
-<div id="page-content-wrapper" [ngClass]="{'extension-toggled': extensionToggled}">
+<div [ngClass]="{'extension-toggled': extensionToggled}">
   <nav id="navbar" class="navbar">
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12">
           <div class="navbar-header">
+
+            <button type="button"
+              class="nav-toggle" 
+              (click)="sidebarToggle()">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
             <a class="button-img" routerLink='/requests'><img src="https://ripiocredit.network/images/logo.png" alt="rcn-image"></a>
             <ul class="nav">
-              <i mat-raised-button class="material-icons icon-hamburguer" [matMenuTriggerFor]="menu">menu</i>
-              <mat-menu #menu="matMenu">
-                <button routerLink='/requests' mat-menu-item>Requests</button>
-                <button routerLink='/address/{{ account }}/' mat-menu-item *ngIf='hasAccount'>Loans</button>
-                <button (click)='extensionToggle()' mat-menu-item *ngIf='hasAccount'>Balance</button>
-                <button (click)='openDialog();' mat-menu-item>Profile</button>
-              </mat-menu>
               <li routerLink='/requests' #tref>Requests</li>
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>
               <li (click)='extensionToggle()' *ngIf='hasAccount'>Balance</li>
-              <!-- <li *ngIf='hasAccount' (click)='extensionToggle()'>
-                <i class="material-icons transition" [ngClass]="{'rotate45': extensionToggled}">add</i>
-              </li> -->
-              <li (click)='openDialogClient()' class="separator">|</li>
+              <li class="separator">|</li>
               <li (click)="openDialog()" *ngIf="!hasAccount">Login</li>
               <li (click)="openDialog(); makeRotate = !makeRotate;">
                 <div class="flex-container" *ngIf="hasAccount">
@@ -47,12 +46,10 @@
           <ul>
             <li class="title main-h1">Account balance:</li>
             <li class="title main-h2"><span>RCN</span> RCN {{rcnBalance}}</li>
-            <span class="marginleft5"></span>
-            <span class="marginleft60"></span>
+            <span class="marginleft60 hidden-xs"></span>
             <li class="title main-h1">Available to withdraw:</li>
             <li class="title main-h2"><span>RCN</span> RCN {{rcnAvailable}}</li>
-            <span class="marginleft5"></span>
-            <span class="marginleft60"></span>
+            <span class="marginleft60 hidden-xs"></span>
             <li><app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button></li>
           </ul>
         </div>
