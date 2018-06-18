@@ -26,6 +26,7 @@ export class OpenLoansComponent implements OnInit, OnDestroy, AfterViewInit {
   public loading: boolean;
   loans = [];
   pendingLend = [];
+  availableLoans = true;
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
@@ -38,6 +39,9 @@ export class OpenLoansComponent implements OnInit, OnDestroy, AfterViewInit {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
       this.spinner.hide();
+      if (this.loans.length === 0) {
+        this.availableLoans = false;
+      }
     });
   }
   ngOnInit() {

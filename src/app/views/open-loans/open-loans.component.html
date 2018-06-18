@@ -13,6 +13,7 @@
   <div class="row">
 
     <div class="col-xs-12 text-center" *ngIf='!availableLoans'>
+      <br/>
       <div class="title main-h1">There are no available Loans</div>
     </div>
 
@@ -60,4 +61,4 @@
     </div>
   </div>
 </div>
-<app-active-loans *ngIf="loans.length === 0"></app-active-loans>
+<app-active-loans *ngIf="!availableLoans"></app-active-loans>
