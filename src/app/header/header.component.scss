@@ -15,8 +15,6 @@
   margin-bottom: 0px;
   margin-left: auto;
   padding: 10px 0px;
-  background-image: -webkit-linear-gradient(270deg, rgba(0, 0, 0, .77), transparent);
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, .77), transparent);
   background-color: black;
   -webkit-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
   -moz-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
@@ -158,7 +156,14 @@
 
 @media (min-width: 768px){
   .navbar{
+    height: 80px;
     padding: 15px;
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    background-image: -webkit-linear-gradient(270deg, rgba(0, 0, 0, .77), transparent);
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, .77), transparent);
     .navbar-header{
       width: 100%;
       .button-img{
