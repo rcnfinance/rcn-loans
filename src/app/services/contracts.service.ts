@@ -189,6 +189,22 @@ export class ContractsService {
         });
       }) as Promise<Loan>;
     }
+    public async getActiveLoans(): Promise<Loan[]> {
+      return new Promise((resolve, reject) => {
+        // Filter ongoing loans
+        const filters = [
+          '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3'
+        ];
+
+        const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
+        this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
+          if (err != null) {
+            reject(err);
+          }
+          resolve(this.parseLoansBytes(result));
+        });
+      }) as Promise<Loan[]>;
+    }
     public async getOpenLoans(): Promise<Loan[]> {
         return new Promise((resolve, reject) => {
           // Filter open loans, non expired loand and valid mortgage

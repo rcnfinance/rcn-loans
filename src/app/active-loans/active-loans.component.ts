@@ -13,7 +13,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./active-loans.component.scss']
 })
 export class ActiveLoansComponent implements OnInit {
-  availableLoans: boolean = true;
+  availableLoans = true;
   loans = [];
 
   constructor(
@@ -22,10 +22,10 @@ export class ActiveLoansComponent implements OnInit {
   ) { }
 
   loadLoans() {
-    this.contractsService.getOpenLoans().then((result: Loan[]) => {
+    this.contractsService.getActiveLoans().then((result: Loan[]) => {
       this.loans = result;
       this.spinner.hide();
-      if(this.loans.length <= 0) {
+      if (this.loans.length <= 0) {
         this.availableLoans = false;
       }
     });
