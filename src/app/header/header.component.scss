@@ -1,7 +1,8 @@
 @import '../../scss/_variables.scss'; //variables
 
 .navbar{
-  position: relative;
+  height: 60px;
+  position: fixed;
   left: 0px;
   top: 0px;
   right: 0px;
@@ -13,36 +14,52 @@
   margin-right: auto;
   margin-bottom: 0px;
   margin-left: auto;
-  padding: 15px;
-  background-color: transparent;
+  padding: 10px 0px;
   background-image: -webkit-linear-gradient(270deg, rgba(0, 0, 0, .77), transparent);
   background-image: linear-gradient(180deg, rgba(0, 0, 0, .77), transparent);
-  .button-img{
-    @extend %center-left;
-    img{
-      height: 50px;
+  background-color: black;
+  -webkit-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
+  -moz-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
+  box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
+  .navbar-header{
+    .button-img{
+      display: inline-block;
+      img{
+        height: 40px;
+      }
+      img:nth-child(1){display: inline-block;}
+      img:nth-child(2){display: none;}
     }
-  }
-  ul.nav{
-    position: relative;
-    top: 0;
-    height: 50px;
-    opacity: 1;
-    float: right;
-    padding: 9px 0;
-    @include transition;
-    li{
-      cursor: pointer;
-      display: none;
-      float: left;
-      margin-right: 45px;
+    .header-title {
+      display: inline-block;
+      font-size: 18px;
+      padding: 5px 15px;
+      text-transform: uppercase;
       @extend %font-bold;
+      @extend %absolute-center-top;
     }
-  }
-  .icon-hamburguer{
-    cursor: pointer;
-    font-size: 32px;
-    @include transition;
+    ul.nav{
+      display: none;
+      position: relative;
+      top: 0;
+      height: 40px;
+      opacity: 1;
+      float: right;
+      padding: 9px 0;
+      @include transition;
+      li{
+        cursor: pointer;
+        display: none;
+        float: left;
+        margin-right: 45px;
+        @extend %font-bold;
+      }
+    }
+    .icon-hamburguer{
+      cursor: pointer;
+      font-size: 32px;
+      @include transition;
+    }
   }
 }
 .flex-container {
@@ -141,39 +158,45 @@
 
 @media (min-width: 768px){
   .navbar{
+    padding: 15px;
     .navbar-header{
       width: 100%;
-    }
-    .button-img{
-      position: relative;
-      left: 0;
-      display: inline-block;
-      -webkit-transform: translate(0%, 0%);
-      transform: translate(0%, 0%);
-    }
-    ul.nav{
-      padding: 15px 0;
-      li{
-        display: block;
-        font-size: 16px;
-        @include transition;
-        &:hover{
-          color: $primary;
+      .button-img{
+        img{
+          height: 50px;
         }
-        &.separator{
-          font-weight: 300;
-          cursor: default;
+        img:nth-child(1){display: none;}
+        img:nth-child(2){display: inline-block;}
+      }
+      .header-title {
+        display: none;
+      }
+      ul.nav{
+        height: 50px;
+        display: block;
+        padding: 15px 0;
+        li{
+          display: block;
+          font-size: 16px;
+          @include transition;
           &:hover{
-            color: $secondary;
+            color: $primary;
+          }
+          &.separator{
+            font-weight: 300;
+            cursor: default;
+            &:hover{
+              color: $secondary;
+            }
+          }
+          &:last-child{
+            margin-top: -10px;
           }
         }
-        &:last-child{
-          margin-top: -10px;
-        }
       }
-    }
-    .icon-hamburguer{
-      display: none;
+      .icon-hamburguer{
+        display: none;
+      }
     }
   }
   .navbar-extension {

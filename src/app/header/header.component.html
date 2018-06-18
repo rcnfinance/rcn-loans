@@ -6,14 +6,19 @@
           <div class="navbar-header">
 
             <button type="button"
-              class="nav-toggle" 
+              class="nav-toggle hidden-xs" 
               (click)="sidebarToggle()">
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
 
-            <a class="button-img" routerLink='/requests'><img src="https://ripiocredit.network/images/logo.png" alt="rcn-image"></a>
+            <a class="button-img" routerLink='/requests'>
+              <img src="../../assets/isologo.svg" alt="rcn-image">
+              <img src="https://ripiocredit.network/images/logo.png" alt="rcn-image">
+            </a>
+            <!-- <div class="header-title">{{ 'Title' }}</div> -->
+            <div class="header-title">{{ 'Requests' }}</div>
             <ul class="nav">
               <li routerLink='/requests'>Requests</li>
               <li routerLink='/activity'>Activity</li>
