@@ -13,14 +13,38 @@ footer {
 }
 .nav-mobile{
   ul{
+    margin: 0 auto;
     max-width: 672px;
     li{
       width: 24.2%;
       text-align: center;
       display: inline-block;
-      svg{font-size: 1.5em; color: $gray4}
+      svg{font-size: 1.5em; color: $gray4; @include transition();}
       &.active{
         svg{color: $secondary;}
+        .nav-toggle{
+          span{
+            background-color: $secondary;
+          }
+          span.icon-bar{
+            height: 2px !important;
+            &:nth-child(1){
+              -webkit-transform: rotate(-45deg) translate(0px, 0px);
+              transform: rotate(-45deg) translate(-1px, 1px);
+            }
+            &:nth-child(2){
+              opacity: 0;
+              display: none;
+            }
+            &:nth-child(3){
+              -webkit-transform: rotate(45deg) translate(-15px, -15px);
+              transform: rotate(45deg) translate(0px, 0px);
+            }
+          }
+          span.icon-bar + span.icon-bar {
+            margin-top: 0 !important;
+          }
+        }
       }
       .nav-toggle {
         padding: 0;
@@ -29,17 +53,6 @@ footer {
         float: inherit;
         span{
           background-color: $gray4;
-        }
-      }
-    }
-  }
-  &.navmobile-toggled{
-    ul{
-      li{
-        .nav-toggle {
-          span{
-            background-color: $secondary;
-          }
         }
       }
     }

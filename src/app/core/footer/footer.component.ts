@@ -15,6 +15,7 @@ export class FooterComponent implements OnInit {
   contract: string;
   activeButton = true;
   navmobileToggled = false; // Nav Mobile toggled
+  id: number = 0;
 
   constructor(
     private sidebarService: SidebarService,
@@ -24,6 +25,7 @@ export class FooterComponent implements OnInit {
   navmobileToggle(){
     this.sidebarService.navmobileService(this.navmobileToggled=!this.navmobileToggled);
   }
+  addClass(id){this.id = id;}
 
   ngOnInit() {
     const env = environment;
