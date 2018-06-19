@@ -198,13 +198,44 @@ mat-sidenav-container.mat-drawer-container {
   cursor: pointer;
   z-index: 999;
 }
-.sidebar-toggled{
+
+.nav-toggle{
+  border-radius: 0;
+  padding: 10px 0;
+  margin-right: 35px;
+  min-height: 50px;
+
+  float: left;
+  background-color: transparent;
+  border: 1px solid transparent;
+  span{
+    background-color: #fff;
+    height: 1px;
+    width: 23px;
+  }
+  .icon-bar {
+    display: block;
+    border-radius: 1px;
+    @include transition;
+  }
+  .icon-bar + .icon-bar {
+    margin-top: 4px;
+  }
+  .navbar-extension {
+    display: block;
+  }
+  .navbar-extension{ul{span.marginleft30{display:inline-block;}}}
+  .navbar-extension{ul{span.marginleft60{display:none;}}}
+}
+
+.sidebar-toggled,
+.navmobile-toggled{
   .nav-toggle{
     span.icon-bar{
       height: 2px !important;
       &:nth-child(1){
         -webkit-transform: rotate(-45deg) translate(0px, 0px);
-        transform: rotate(-45deg) translate(0px, 0px);
+        transform: rotate(-45deg) translate(-1px, 1px);
       }
       &:nth-child(2){
         opacity: 0;
@@ -219,7 +250,8 @@ mat-sidenav-container.mat-drawer-container {
       margin-top: 0 !important;
     }
   }
-
+}
+.sidebar-toggled{
   ul.nav{
     opacity: 0 !important;
     top: -25px !important;

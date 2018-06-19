@@ -223,36 +223,6 @@
   }
 }
 
-.nav-toggle{
-  border-radius: 0;
-  padding: 10px 0;
-  margin-right: 35px;
-  min-height: 50px;
-
-  float: left;
-  background-color: transparent;
-  border: 1px solid transparent;
-  span{
-    background-color: #fff;
-    height: 1px;
-    width: 23px;
-  }
-  .icon-bar {
-    display: block;
-    border-radius: 1px;
-    @include transition;
-  }
-  .icon-bar + .icon-bar {
-    margin-top: 4px;
-  }
-  .navbar-extension {
-    display: block;
-  }
-  .navbar-extension{ul{span.marginleft30{display:inline-block;}}}
-  .navbar-extension{ul{span.marginleft60{display:none;}}}
-}
-
-
 @media (min-width: 992px){
   .navbar-extension{ul{span.marginleft30{display:none;}}}
   .navbar-extension{ul{span.marginleft60{display:inline-block;}}}

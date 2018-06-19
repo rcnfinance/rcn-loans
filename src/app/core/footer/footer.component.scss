@@ -1,50 +1,79 @@
 @import '../../../scss/_variables.scss'; //variables
 
 footer {
-  position: absolute;
+  height: 50px;
+  position: fixed;
   bottom: 0;
   right: 0;
   left: 0;
   z-index: 1000;
   min-height: 0px;
   background-color: #121212;
-  padding: 15px 30px;
+  padding: 15px 0;
 }
-.txt{
-  line-height: 1.9;
-}
-a{
-  color: #fff;
-  @include transition();
-  &:hover{
-    color: $primary;
+.nav-mobile{
+  ul{
+    max-width: 672px;
+    li{
+      width: 24.2%;
+      text-align: center;
+      display: inline-block;
+      svg{font-size: 1.5em; color: $gray4}
+      &.active{
+        svg{color: $secondary;}
+      }
+      .nav-toggle {
+        padding: 0;
+        margin-right: 0;
+        min-height: 18px;
+        float: inherit;
+        span{
+          background-color: $gray4;
+        }
+      }
+    }
   }
-}
-.button-group{
-  line-height: 1.9;
-}
-.icon{
-  line-height: 1.9;
-  cursor: pointer;
-  padding-right: 15px;
-  display: inline-block;
-  margin-top: 5px;
-  &.version{
-    margin-left: 15px;    
+  &.navmobile-toggled{
+    ul{
+      li{
+        .nav-toggle {
+          span{
+            background-color: $secondary;
+          }
+        }
+      }
+    }
   }
-}
-.left,
-.center,
-.right{
-  text-align: center;
-}
-.button-group{
-  text-align: center;
-  padding-left: 15px;
 }
 
 
 @media (min-width: 992px){
+  footer {
+    height: inherit;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 1000;
+    min-height: 0px;
+    background-color: #121212;
+    padding: 15px 30px;
+  }
+  .nav-mobile{
+    display: none;
+  }
+  a{
+    color: #fff;
+    @include transition();
+    &:hover{
+      color: $primary;
+    }
+  }
+  .left,
+  .center,
+  .right{
+    text-align: center;
+  }
   .left{
     text-align: left;
   }
@@ -54,11 +83,21 @@ a{
   .right{
     text-align: right;
   } 
+  .txt{
+    line-height: 1.9;
+  }
   .button-group{
+    line-height: 1.9;
     text-align: right;
-    padding-left: 0;
   }
   .icon{
     margin-top: 0;
+    line-height: 1.9;
+    cursor: pointer;
+    padding-right: 15px;
+    display: inline-block;
+    &.version{
+      margin-left: 15px;    
+    }
   }
 }
