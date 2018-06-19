@@ -1,18 +1,18 @@
 <footer>
   <div class="container-fluid">
     <div class="row">
-      <div class="nav-mobile" [ngClass]="{'navmobile-toggled': navmobileToggled}">
+      <div class="nav-mobile">
         <ul>
-          <li [ngClass]="{'active': id === 0 }" (click)='addClass(id=0)'>
+          <li [ngClass]="{'active': id === 0 }" (click)='addClass(clickedId=0)'>
             <i class="fas fa-coins"></i>
           </li>
-          <li [ngClass]="{'active': id === 1 }" (click)='addClass(id=1)'>
+          <li [ngClass]="{'active': id === 1 }" (click)='addClass(clickedId=1)'>
             <i class="fas fa-wallet"></i>
           </li>
-          <li [ngClass]="{'active': id === 2 }" (click)='addClass(id=2)'>
+          <li [ngClass]="{'active': id === 2 }" (click)='addClass(clickedId=2)'>
             <i class="fas fa-exchange-alt"></i>
           </li>
-          <li [ngClass]="{'active': id === 3 }" (click)='addClass(id=3)'>
+          <li [ngClass]="{'active': id === 3 }" (click)='addClass(clickedId=3)'>
             <button type="button"
               class="nav-toggle"
               (click)="navmobileToggle()">

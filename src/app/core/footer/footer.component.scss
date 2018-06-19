@@ -19,7 +19,16 @@ footer {
       width: 24.2%;
       text-align: center;
       display: inline-block;
-      svg{font-size: 1.5em; color: $gray4; @include transition();}
+      svg{font-size: 1.5em; color: $gray6; @include transition();}
+      .nav-toggle {
+        padding: 0;
+        margin-right: 0;
+        min-height: 18px;
+        float: inherit;
+        span{
+          background-color: $gray6;
+        }
+      }
       &.active{
         svg{color: $secondary;}
         .nav-toggle{
@@ -44,15 +53,6 @@ footer {
           span.icon-bar + span.icon-bar {
             margin-top: 0 !important;
           }
-        }
-      }
-      .nav-toggle {
-        padding: 0;
-        margin-right: 0;
-        min-height: 18px;
-        float: inherit;
-        span{
-          background-color: $gray4;
         }
       }
     }

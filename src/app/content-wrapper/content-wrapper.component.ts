@@ -22,6 +22,7 @@ export class ContentWrapperComponent implements OnInit {
 
   navToggle: boolean; // Navbar toggled
   extensionToggled = false; // Balance extension toggled
+  navmobileToggled = false; // Nav Mobile toggled
 
   // Toggle Navbar
   sidebarToggle(){
@@ -85,6 +86,7 @@ export class ContentWrapperComponent implements OnInit {
      // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentExtension.subscribe(extensionToggled => this.extensionToggled = extensionToggled);
+    this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
     
     this.web3Service.getAccount().then((account) => {
       this.account = account;

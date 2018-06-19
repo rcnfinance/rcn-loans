@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 // App Service
 import { SidebarService } from '../../services/sidebar.service';
+import { last } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-footer',
@@ -16,6 +17,8 @@ export class FooterComponent implements OnInit {
   activeButton = true;
   navmobileToggled = false; // Nav Mobile toggled
   id: number = 0;
+  lastId: number = 0;
+  previousLast: number;
 
   constructor(
     private sidebarService: SidebarService,
@@ -25,7 +28,15 @@ export class FooterComponent implements OnInit {
   navmobileToggle(){
     this.sidebarService.navmobileService(this.navmobileToggled=!this.navmobileToggled);
   }
-  addClass(id){this.id = id;}
+  addClass(clickedId){
+    this.lastId = this.id;
+    this.id = clickedId;
+    if(clickedId !== 3 || this.lastId !== 3){
+      this.previousLast = this.lastId;
+    } else {
+      this.id = this.previousLast;
+    }
+  }
 
   ngOnInit() {
     const env = environment;
