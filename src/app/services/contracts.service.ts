@@ -110,12 +110,12 @@ export class ContractsService {
         const account = await this.web3.getAccount();
         const oracleData = await this.getOracleData(loan);
 
-        const cosignerOption = await this.cosignerService.getCosignerOptions(loan);
+        const cosignerOption = await this.cosignerService.getCosignerOption(loan);
 
         let cosigner = '0x0';
         let cosignerData = '0x0';
         if (cosignerOption !== undefined) {
-          const cosignerDetail = await cosignerOption.detail;
+          const cosignerDetail = await cosignerOption.provider.getDetail(loan);
           cosigner = cosignerDetail.contract;
           cosignerData = cosignerDetail.data;
         }
