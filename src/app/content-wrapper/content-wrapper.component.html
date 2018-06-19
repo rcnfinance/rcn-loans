@@ -1,5 +1,17 @@
 <div class="wrapper" [ngClass]="{'sidebar-toggled': navToggle , 'navmobile-toggled': navmobileToggled}" [style.min-height.px]="winHeight">
   <app-header></app-header>
+  <div class="navmobile-menu">
+    <div class="balance-container">
+      <div class="balance-row bg-primary">
+        <div class="title">Account Balance</div>
+        <div class="value"><span class="currency">RCN</span> 690.80</div>
+      </div>
+      <div class="balance-row">
+        <div class="title">Account Balance</div>
+        <div class="value"><span class="currency">RCN</span> 690.80</div>
+      </div>
+    </div>
+  </div>
   <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav
       mode="over"

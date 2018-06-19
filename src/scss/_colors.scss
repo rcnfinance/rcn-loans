@@ -97,7 +97,7 @@
 .bg-google      {background-color: #CC3B2A;}
 .bg-linkedin    {background-color: #0180B3;}
 .bg-tumblr      {background-color: #345270;}
-.bg-primary     {background-color: $primary;}
+.bg-primary     {background-color: $primary !important;}
 
 /* Colors Hovers */
 .violet         {&:hover{color: #905D8E;}}

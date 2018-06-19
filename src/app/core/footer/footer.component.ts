@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
-// App Service
+// App Services
 import { SidebarService } from '../../services/sidebar.service';
-import { last } from '@angular/router/src/utils/collection';
+import { Web3Service } from './../../services/web3.service';
 
 @Component({
   selector: 'app-footer',
@@ -10,17 +10,21 @@ import { last } from '@angular/router/src/utils/collection';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
+  account: string;
   version: string;
   versionString: string;
   linkContract: string;
   contract: string;
   activeButton = true;
-  navmobileToggled = false; // Nav Mobile toggled
+
+  // Nav Mobile toggled
+  navmobileToggled = false; 
   id: number = 0;
   lastId: number = 0;
   previousLast: number;
 
   constructor(
+    private web3Service: Web3Service,
     private sidebarService: SidebarService,
   ) {}
 
@@ -28,13 +32,21 @@ export class FooterComponent implements OnInit {
   navmobileToggle(){
     this.sidebarService.navmobileService(this.navmobileToggled=!this.navmobileToggled);
   }
+  navmobileClose(){
+    this.sidebarService.navmobileService(this.navmobileToggled=false);
+  }
+  navmobileOpen(){
+    this.sidebarService.navmobileService(this.navmobileToggled=true);
+  }
+
   addClass(clickedId){
     this.lastId = this.id;
     this.id = clickedId;
-    if(clickedId !== 3 || this.lastId !== 3){
+    if(clickedId !== 3 || this.lastId !== 3){ // If i dont click on menu & dont click it twice
       this.previousLast = this.lastId;
-    } else {
+    } else { // I click on menu & click it twice
       this.id = this.previousLast;
+      this.sidebarService.navmobileService(this.navmobileToggled=true);
     }
   }
 
@@ -46,5 +58,10 @@ export class FooterComponent implements OnInit {
     this.linkContract = env.network.explorer.address.replace('${address}', env.contracts.basaltEngine);
 
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
+
+
+    this.web3Service.getAccount().then((account) => {
+      this.account = account;
+    });
   }
 }

@@ -249,8 +249,6 @@ mat-sidenav-container.mat-drawer-container {
       margin-top: 0 !important;
     }
   }
-}
-.sidebar-toggled{
   ul.nav{
     opacity: 0 !important;
     top: -25px !important;
@@ -269,6 +267,43 @@ mat-sidenav-container.mat-drawer-container {
     .extension-closebox{
       z-index: 1;
     }
+  }
+}
+
+.navmobile-menu{
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 50px;
+  z-index: -1;
+  opacity: 0;
+  background-color: $fifth;
+  @include transition();
+  .balance-container{
+    .title{
+      font-size: 14px;
+      @extend %font-light;
+    }
+    .value{
+      font-size: 34px;
+      font-family: 'Roboto', sans-serif;
+      @extend %font-bold;
+      .currency{
+        font-size: 18px;
+        @extend %font-regular;
+      }
+    }
+    .balance-row {
+      background-color: $tertiary;
+      padding: 15px;
+    }
+  }
+}
+.navmobile-toggled{
+  .navmobile-menu{
+    opacity: 1;
+    z-index: 9999;
   }
 }
 

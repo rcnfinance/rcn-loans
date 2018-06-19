@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
+import { RouterModule }  from "@angular/router";
 import { CommonModule } from '@angular/common';
-import { FooterComponent } from './footer/footer.component';
 
 // App Component
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { MaterialModule } from '../material/material.module';
     CommonModule,
     SharedModule,
     MaterialModule,
+    RouterModule,
   ],
   exports: [
     FooterComponent,
