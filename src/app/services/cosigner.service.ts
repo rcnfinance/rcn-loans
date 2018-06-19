@@ -13,7 +13,7 @@ export class CosignerService {
   constructor(
     private decentralandCosignerService: DecentralandCosignerService
   ) { }
-  getCosignerOptions(loan: Loan): CosignerOption {
+  getCosignerOption(loan: Loan): CosignerOption {
     if (this.loadedOption[loan.uid] !== undefined) {
       return this.loadedOption[loan.uid];
     }
@@ -23,12 +23,12 @@ export class CosignerService {
   }
   getCosigner(loan: Loan): Promise<CosignerDetail> {
     return new Promise((resolve) => {
-      const detectedOption = this.getCosignerOptions(loan);
+      const detectedOption = this.getCosignerOption(loan);
       if (loan.cosigner === Utils.address_0) {
         resolve(undefined);
       } else {
         if (detectedOption !== undefined) {
-          detectedOption.detail.then((cdetail: CosignerDetail) => {
+          detectedOption.provider.getDetail(loan).then((cdetail: CosignerDetail) => {
             if (cdetail.contract === loan.cosigner) {
               resolve(cdetail);
             } else {
@@ -48,7 +48,7 @@ export class CosignerService {
       return new CosignerOption(
         loan.id + loan.engine + 'mortgage',
         'Decentraland parcel mortgage',
-        this.decentralandCosignerService.getDecentralandOption(loan)
+        this.decentralandCosignerService
       );
     }
     // There is no cosigner option

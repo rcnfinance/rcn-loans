@@ -68,7 +68,7 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private loadCosignerOption() {
-    this.cosignerOption = this.cosignerService.getCosignerOptions(this.loan);
+    this.cosignerOption = this.cosignerService.getCosignerOption(this.loan);
   }
 
   private loadDetail() {

@@ -32,9 +32,9 @@ export class DetailCosignerComponent implements OnInit {
   ngOnInit() {
     if (this.loan.status === Status.Request) {
       // Should listen cosigner selector service
-      const cosignerOptions = this.cosignerService.getCosignerOptions(this.loan);
+      const cosignerOptions = this.cosignerService.getCosignerOption(this.loan);
       if (cosignerOptions) {
-        cosignerOptions.detail.then((detail) => {
+        cosignerOptions.provider.getDetail(this.loan).then((detail) => {
           this.cosignerDetail = detail;
           this.detailClass = this.buildDetailClass();
         });

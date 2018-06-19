@@ -1,10 +1,15 @@
+import { Loan } from './loan.model';
 
 export class CosignerOption {
     constructor(
         public id: string,
         public name: string,
-        public detail: Promise<CosignerDetail>
+        public provider: DetailProvider
     ) {}
+}
+
+export interface DetailProvider {
+    getDetail(loan: Loan): Promise<CosignerDetail>;
 }
 
 export class CosignerDetail {

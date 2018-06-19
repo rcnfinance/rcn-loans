@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment';
 import { DecentralandCosigner, Parcel, District } from '../../models/cosigners/decentraland-cosigner.model';
 import { Loan } from '../../models/loan.model';
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { DetailProvider, CosignerDetail } from '../../models/cosigner.model';
 
 declare let require: any;
 
@@ -12,7 +13,7 @@ const landMarketAbi = require('../../contracts/decentraland/LandMarket.json');
 const mortgageManagerAbi = require('../../contracts/decentraland/MortgageManager.json');
 
 @Injectable()
-export class DecentralandCosignerService {
+export class DecentralandCosignerService implements DetailProvider {
   private _landMarketContract: any;
   private _mortgageManagerContract: any;
 
@@ -21,6 +22,31 @@ export class DecentralandCosignerService {
   constructor(private web3: Web3Service, private http: HttpClient) {
     this._landMarketContract = this.web3.web3reader.eth.contract(landMarketAbi).at(environment.contracts.decentraland.landMarket);
     this._mortgageManagerContract = this.web3.web3reader.eth.contract(mortgageManagerAbi).at(environment.contracts.decentraland.mortgageManager);
+  }
+  getDetail(loan: Loan): Promise<DecentralandCosigner> {
+    return new Promise((resolve, err) => {
+      const engine = environment.contracts.basaltEngine;
+      const mortgageManager = environment.contracts.decentraland.mortgageManager;
+      this._mortgageManagerContract.loanToLiability(engine, loan.id, (errId, mortgageId) => {
+        console.log(mortgageId);
+        this._mortgageManagerContract.mortgages(mortgageId, (errD, mortgageData) => {
+          console.log(mortgageData);
+          const decentralandCosigner = new DecentralandCosigner(
+            mortgageManager,
+            this.buildData(mortgageId),
+            mortgageId, // Mortgage ID
+            '0x' + mortgageData[4].toString(16), // Land ID
+            mortgageData[5], // Land price
+            ((loan.rawAmount / mortgageData[5]) * 100).toFixed(2), // Financed amount
+            undefined // Parcel data
+          );
+          this.getParcelInfo(decentralandCosigner.x, decentralandCosigner.y).then((parcel) => {
+            decentralandCosigner.parcel = parcel;
+            resolve(decentralandCosigner);
+          });
+        });
+      });
+    });
   }
   getParcelInfo(x: number, y: number): Promise<Parcel> {
     return new Promise(resolve => {
@@ -57,31 +83,6 @@ export class DecentralandCosignerService {
         });
       }
     }) as Promise<District[]>;
-  }
-  getDecentralandOption(loan: Loan): Promise<DecentralandCosigner> {
-    return new Promise((resolve) => {
-      const engine = environment.contracts.basaltEngine;
-      const mortgageManager = environment.contracts.decentraland.mortgageManager;
-      this._mortgageManagerContract.loanToLiability(engine, loan.id, (errId, mortgageId) => {
-        console.log(mortgageId);
-        this._mortgageManagerContract.mortgages(mortgageId, (errD, mortgageData) => {
-          console.log(mortgageData);
-          const decentralandCosigner = new DecentralandCosigner(
-            mortgageManager,
-            this.buildData(mortgageId),
-            mortgageId, // Mortgage ID
-            '0x' + mortgageData[4].toString(16), // Land ID
-            mortgageData[5], // Land price
-            ((loan.rawAmount / mortgageData[5]) * 100).toFixed(2), // Financed amount
-            undefined // Parcel data
-          );
-          this.getParcelInfo(decentralandCosigner.x, decentralandCosigner.y).then((parcel) => {
-            decentralandCosigner.parcel = parcel;
-            resolve(decentralandCosigner);
-          });
-        });
-      });
-    });
   }
   private buildData(index: number): string {
     const hex = index.toString(16);
