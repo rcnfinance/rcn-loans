@@ -1,25 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { Route } from '@angular/compiler/src/core';
 // App Models
 import { Loan, Status } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
-import { TxService, Tx } from './../../tx.service';
 import { CosignerService } from './../../services/cosigner.service';
-// App Component
-import { MaterialModule } from './../../material/material.module';
-import { SharedModule } from './../../shared/shared.module';
-import { MatDialog } from '@angular/material';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
-import { CosignerOption } from '../../models/cosigner.model';
-import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-loan-detail',
@@ -31,7 +23,6 @@ export class LoanDetailComponent implements OnInit {
   identityName = '...';
   viewDetail = undefined;
   userAccount: string;
-  cosignerOption: CosignerOption;
 
   // Loan detail
   loanConfigData = [];
@@ -60,15 +51,11 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private defaultDetail(): string {
-    if (this.cosignerOption !== undefined) {
+    if (this.cosignerService.getCosigner(this.loan) !== undefined) {
       return 'cosigner';
     } else {
       return 'identity';
     }
-  }
-
-  private loadCosignerOption() {
-    this.cosignerOption = this.cosignerService.getCosignerOption(this.loan);
   }
 
   private loadDetail() {
@@ -131,7 +118,6 @@ export class LoanDetailComponent implements OnInit {
         this.loan = loan;
         this.loadDetail();
         this.loadIdentity();
-        this.loadCosignerOption();
         this.viewDetail = this.defaultDetail();
         this.spinner.hide();
       });

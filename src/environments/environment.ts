@@ -4,6 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 export enum Agent {
   MortgageCreator,
+  MortgageManager,
   RipioCreator
 }
 
@@ -17,7 +18,6 @@ export const environment = {
   url: 'https://testnet.rcn.loans/',
   envName: 'dev',
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
-  decentralandUrl: './proxy_decentraland/',
   network: {
     id: '3',
     name: 'Ropsten',
@@ -38,7 +38,6 @@ export const environment = {
     }
   },
   dir: {
-    '0x2bdf545935d4264cbb7457e97d69b6b86458eb64': Agent.MortgageCreator,
-    '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioCreator
+    '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioCreator,
   }
 };

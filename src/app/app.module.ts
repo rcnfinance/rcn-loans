@@ -17,9 +17,6 @@ import { RiskService } from './services/risk.service';
 import { CivicService } from './services/civic.service';
 import { SidebarService } from './services/sidebar.service';
 
-// TODO: Move
-import { DecentralandCosignerService } from './services/cosigners/decentraland-cosigner.service';
-
 // App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
 import { WindowsHeightDirective } from './directives/windows-height.directive';
@@ -111,7 +108,6 @@ const appRoutes: Routes = [
     BrandingService,
     CosignerService,
     Web3Service,
-    DecentralandCosignerService,
     IdentityService,
     RiskService,
     CivicService,

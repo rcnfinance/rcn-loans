@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Loan, Status } from '../../../models/loan.model';
-import { CosignerOption, CosignerDetail, UnknownCosigner } from './../../../models/cosigner.model';
+import { UnknownCosigner } from './../../../models/cosigner.model';
 import { DecentralandCosigner } from './../../../models/cosigners/decentraland-cosigner.model';
-import { ActivatedRoute } from '@angular/router';
-import { Route } from '@angular/compiler/src/core';
 import { CosignerService } from '../../../services/cosigner.service';
+import { CosignerProvider } from '../../../providers/cosigner-provider';
+import { DecentralandCosignerProvider } from '../../../providers/cosigners/decentraland-cosigner-provider';
 
 @Component({
   selector: 'app-detail-cosigner',
@@ -13,39 +13,25 @@ import { CosignerService } from '../../../services/cosigner.service';
 })
 export class DetailCosignerComponent implements OnInit {
   @Input() loan: Loan;
-  cosignerDetail: CosignerDetail;
+  cosignerProvider: CosignerProvider;
   detailClass: string;
   constructor(
     private cosignerService: CosignerService
   ) {}
   private buildDetailClass(): string {
-    if (this.cosignerDetail === undefined) { return 'not_available'; }
-    switch (this.cosignerDetail.constructor) {
-      case DecentralandCosigner:
+    if (this.cosignerProvider === undefined) { return 'not_available'; }
+    switch (this.cosignerProvider.constructor) {
+      case DecentralandCosignerProvider:
         return 'decentraland_mortgage';
       default:
       case UnknownCosigner:
-        console.warn('Unknown cosigner retrieved', this.cosignerDetail);
+        console.warn('Unknown cosigner retrieved', this.cosignerProvider);
         return 'unknown';
     }
   }
   ngOnInit() {
-    if (this.loan.status === Status.Request) {
-      // Should listen cosigner selector service
-      const cosignerOptions = this.cosignerService.getCosignerOption(this.loan);
-      if (cosignerOptions) {
-        cosignerOptions.provider.getDetail(this.loan).then((detail) => {
-          this.cosignerDetail = detail;
-          this.detailClass = this.buildDetailClass();
-        });
-      } else {
-        this.detailClass = 'not_available';
-      }
-    } else {
-      this.cosignerService.getCosigner(this.loan).then((detail) => {
-        this.cosignerDetail = detail;
-        this.detailClass = this.buildDetailClass();
-      });
-    }
+    this.cosignerProvider = this.cosignerService.getCosigner(this.loan);
+    this.detailClass = this.buildDetailClass();
+    console.log(this.detailClass);
   }
 }

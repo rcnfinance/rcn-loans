@@ -1,28 +1,36 @@
 import { Loan } from './loan.model';
 
-export class CosignerOption {
-    constructor(
-        public id: string,
-        public name: string,
-        public provider: DetailProvider
-    ) {}
-}
+export class CosignerDetail {}
 
-export interface DetailProvider {
-    getDetail(loan: Loan): Promise<CosignerDetail>;
-}
-
-export class CosignerDetail {
+export class Cosigner {
     constructor (
         public contract: string,
-        public data: string
+        public cosignerDetail: CosignerDetail
     ) {}
+}
+
+export class CosignerOffer extends Cosigner {
+    constructor (
+        public contract: string,
+        public cosignerDetail: CosignerDetail,
+        public lendData: string
+    ) {
+        super(contract, cosignerDetail);
+    }
+}
+
+export class CosignerLiability extends Cosigner {
+    constructor (
+        public contract: string,
+        public cosignerDetail: CosignerDetail,
+        public canClaim: Boolean,
+    ) {
+        super(contract, cosignerDetail);
+    }
 }
 
 export class UnknownCosigner extends CosignerDetail {
-    constructor (
-        public contract: string
-    ) {
-        super(contract, '0x0');
+    constructor () {
+        super();
     }
 }

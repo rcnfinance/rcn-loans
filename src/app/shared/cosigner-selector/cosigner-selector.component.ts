@@ -1,24 +1,24 @@
-import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
-
-import { CosignerOption } from './../../models/cosigner.model';
+import { Component, Input, OnInit } from '@angular/core';
 import { Loan } from '../../models/loan.model';
+import { CosignerService } from '../../services/cosigner.service';
 
 @Component({
   selector: 'app-cosigner-selector',
   templateUrl: './cosigner-selector.component.html',
   styleUrls: ['./cosigner-selector.component.scss']
 })
-export class CosignerSelectorComponent {
-  @Input() option: CosignerOption;
-  // @Output() onSelected: EventEmitter<CosignerOption> = new EventEmitter<CosignerOption>();
-  constructor() {}
-  hasOptions(): Boolean {
-    return this.option !== undefined;
+export class CosignerSelectorComponent implements OnInit {
+  @Input() loan: Loan;
+  text: string;
+  hasOptions: boolean;
+  constructor(
+    private cosignerService: CosignerService
+  ) {}
+  ngOnInit(): void {
+    const cosigner = this.cosignerService.getCosigner(this.loan);
+    this.hasOptions = cosigner !== undefined;
+    if (cosigner) {
+      this.text = cosigner.title(this.loan);
+    }
   }
-  /*
-  onChanged(option): Boolean {
-    this.onSelected.emit(this.options.find(o => o.id === option));
-    return true;
-  }
-  */
 }

@@ -14,7 +14,7 @@ export class RiskService {
   ) { }
   public estimateRisk(loan: Loan): Promise<Level> {
     return new Promise((resolve) => {
-      if (this.cosignerService.getCosignerOption(loan) !== undefined) {
+      if (this.cosignerService.getCosigner(loan) !== undefined) {
         resolve(Level.normal);
       } else {
         this.identityService.getIdentity(loan).then((identity) => {
