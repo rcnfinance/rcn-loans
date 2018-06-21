@@ -16,6 +16,7 @@ footer {
     margin: 0 auto;
     max-width: 672px;
     li{
+      position: relative;
       width: 24%;
       text-align: center;
       display: inline-block;
@@ -29,8 +30,21 @@ footer {
           background-color: $gray6;
         }
       }
+      .loans-lenght {
+        display: none;
+        width: 30px;
+        height: 22px;
+        border-radius: 30px;
+        margin-left: 20px;
+        margin-top: -10px;
+        background-color: $red;
+        @extend %absolute-center;
+      }
       &.active{
         svg{color: $secondary;}
+        .loans-lenght {
+          display: block;
+        }
         .nav-toggle{
           span{
             background-color: $secondary;
