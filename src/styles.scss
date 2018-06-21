@@ -330,8 +330,9 @@ mat-sidenav-container.mat-drawer-container {
       ul{
         margin: 0 auto;
         max-width: 672px;
+        a{color: $secondary;}
         li{
-          width: 15%;
+          width: 13%;
           padding: 15px;
           text-align: center;
           display: inline-block;
@@ -341,6 +342,8 @@ mat-sidenav-container.mat-drawer-container {
   }
   .version-container{
     padding: 10px 15px;
+    margin-top: 15px;
+    color: $gray4;
   }
 }
 .navmobile-toggled{
