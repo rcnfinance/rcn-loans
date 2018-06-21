@@ -5,6 +5,7 @@ import { CosignerProvider } from '../providers/cosigner-provider';
 import { HttpClient } from '@angular/common/http';
 import { Utils } from '../utils/utils';
 import { Web3Service } from './web3.service';
+import { UnknownCosignerProvider } from '../providers/cosigners/unknown-cosigner-provider';
 
 @Injectable()
 export class CosignerService {
@@ -28,7 +29,7 @@ export class CosignerService {
       const cosigner = cosignerOptions.find(cp => cp.isCurrent(loan));
 
       if (loan.statusFlag !== Status.Request && loan.cosigner !== Utils.address_0 && cosigner === undefined) {
-        // TODO: Return unknown cosigner
+        return new UnknownCosignerProvider();
       }
 
       if (cosigner !== undefined) {
