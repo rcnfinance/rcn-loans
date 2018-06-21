@@ -24,6 +24,7 @@ export class CosignerLiability extends Cosigner {
         public contract: string,
         public cosignerDetail: CosignerDetail,
         public canClaim: Boolean,
+        public claim: () => Promise<string>
     ) {
         super(contract, cosignerDetail);
     }

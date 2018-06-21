@@ -58,7 +58,6 @@ export class TxService {
   }
 
   private checkUpdate() {
-    const pendingTxn = this.tx_memory.filter(tx => !tx.confirmed);
     this.tx_memory.forEach(tx => {
       if (!tx.confirmed) {
         this.web3service.web3reader.eth.getTransactionReceipt(tx.tx, (err, receipt) => {
