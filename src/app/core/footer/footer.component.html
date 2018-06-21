@@ -1,27 +1,27 @@
 <footer>
+  <div class="nav-mobile">
+    <ul>
+      <li routerLink='/requests' [ngClass]="{'active': id === 0 }" (click)='addClass(clickedId=0); navmobileClose()'>
+        <i class="fas fa-coins"></i>
+      </li>
+      <li routerLink='/activity' [ngClass]="{'active': id === 1 }" (click)='addClass(clickedId=1); navmobileClose()'>
+        <i class="fas fa-wallet"></i>
+      </li>
+      <li routerLink='/address/{{ account }}/' [ngClass]="{'active': id === 2 }" (click)='addClass(clickedId=2); navmobileClose()'>
+        <i class="fas fa-exchange-alt"></i>
+      </li>
+      <li [ngClass]="{'active': id === 3 }" (click)='addClass(clickedId=3); navmobileToggle()'>
+        <button type="button"
+          class="nav-toggle">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </li>
+    </ul>
+  </div>
   <div class="container-fluid">
     <div class="row">
-      <div class="nav-mobile">
-        <ul>
-          <li routerLink='/requests' [ngClass]="{'active': id === 0 }" (click)='addClass(clickedId=0); navmobileClose()'>
-            <i class="fas fa-coins"></i>
-          </li>
-          <li routerLink='/activity' [ngClass]="{'active': id === 1 }" (click)='addClass(clickedId=1); navmobileClose()'>
-            <i class="fas fa-wallet"></i>
-          </li>
-          <li routerLink='/address/{{ account }}/' [ngClass]="{'active': id === 2 }" (click)='addClass(clickedId=2); navmobileClose()'>
-            <i class="fas fa-exchange-alt"></i>
-          </li>
-          <li [ngClass]="{'active': id === 3 }" (click)='addClass(clickedId=3); navmobileToggle()'>
-            <button type="button"
-              class="nav-toggle">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </li>
-        </ul>
-      </div>
     </div>
     <div class="row hidden-xs hidden-sm">
       <div class="col-xs-12 col-md-6 left">

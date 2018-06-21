@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material';
 // App Component
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
-import { environment } from '../../environments/environment';
 // App Service
+import { environment } from '../../environments/environment';
+import { SidebarService } from '../services/sidebar.service';
 import { Web3Service, Type } from '../services/web3.service';
-import {SidebarService} from '../services/sidebar.service';
+import { ContractsService } from '../services/contracts.service';
+import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'app-content-wrapper',
@@ -19,10 +20,26 @@ export class ContentWrapperComponent implements OnInit {
   events: string[] = [];
   account: string;
   version: string = environment.version;
+  lender: string;
+
+  private ethWei = new BigNumber(10).pow(new BigNumber(18));
+  rcnBalance: BigNumber;
+  weiAvailable: BigNumber;
+  loansWithBalance: number[];
+
+  autoClose: boolean;
+  isApproved: boolean;
 
   navToggle: boolean; // Navbar toggled
   extensionToggled = false; // Balance extension toggled
   navmobileToggled = false; // Nav Mobile toggled
+
+  constructor(
+    private sidebarService: SidebarService, // Navbar Service
+    private web3Service: Web3Service,
+    private contractService: ContractsService,
+    public dialog: MatDialog,
+  ) {}
 
   // Toggle Navbar
   sidebarToggle(){
@@ -72,14 +89,70 @@ export class ContentWrapperComponent implements OnInit {
     }
   }
 
-  constructor(
-    private sidebarService: SidebarService, // Navbar Service
-    private web3Service: Web3Service,
-    public dialog: MatDialog,
-  ) {}
-
+// Get Balance
   get hasAccount(): boolean {
     return this.account !== undefined;
+  }
+  get balance(): string {
+    if (this.rcnBalance === undefined) {
+      return '...';
+    }
+    return this.removeTrailingZeros(this.rcnBalance.toFixed(18));
+  }
+  get available(): string {
+    if (this.weiAvailable === undefined) {
+      return '...';
+    }
+    return this.removeTrailingZeros((this.weiAvailable / this.ethWei).toFixed(18));
+  }
+  private removeTrailingZeros(value) {
+    value = value.toString();
+    if (value.indexOf('.') === -1) {
+      return value;
+    }
+    while ((value.slice(-1) === '0' || value.slice(-1) === '.') && value.indexOf('.') !== -1) {
+      value = value.substr(0, value.length - 1);
+    }
+    return value;
+  }
+  loadLender() {
+    this.web3Service.getAccount().then((resolve: string) => {
+      this.lender = resolve;
+    });
+  }
+  loadRcnBalance() {
+    this.contractService.getUserBalanceRCN().then((balance: number) => {
+      this.rcnBalance = balance;
+    });
+  }
+  loadWithdrawBalance() {
+    this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
+      console.log(result);
+      this.weiAvailable = result[0];
+      this.loansWithBalance = result[1];
+    });
+  }
+
+// Approve Loan Engine
+  loadApproved(): Promise<any> {
+    return this.contractService.isEngineApproved().then((approved) => {
+      this.isApproved = approved;
+    });
+  }
+  get isEnabled(): boolean {
+    return this.isApproved !== undefined;
+  }
+  clickCheck() {
+    let action;
+    if (this.isApproved) {
+      action = this.contractService.dissaproveEngine();
+    } else {
+      action = this.contractService.approveEngine();
+    }
+    action.then(() => {
+      this.loadApproved().then(() => {
+      });
+    });
   }
 
   ngOnInit(): void {
@@ -88,6 +161,11 @@ export class ContentWrapperComponent implements OnInit {
     this.sidebarService.currentExtension.subscribe(extensionToggled => this.extensionToggled = extensionToggled);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
     
+    this.loadApproved();
+
+    this.loadLender();
+    this.loadRcnBalance();
+    this.loadWithdrawBalance();
     this.web3Service.getAccount().then((account) => {
       this.account = account;
     });

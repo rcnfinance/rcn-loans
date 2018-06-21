@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Web3Service } from '../../services/web3.service';
 // App Component
-import { MaterialModule } from './../../material/material.module';
-import { SharedModule } from './../../shared/shared.module';
+// import { MaterialModule } from './../../material/material.module';
+// import { SharedModule } from './../../shared/shared.module';
 // App Services
+import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 // App Utils
-import { Utils } from '../../utils/utils';
+// import { Utils } from '../../utils/utils';
 import BigNumber from 'bignumber.js';
 
 @Component({

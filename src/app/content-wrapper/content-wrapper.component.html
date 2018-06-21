@@ -3,12 +3,45 @@
   <div class="navmobile-menu">
     <div class="balance-container">
       <div class="balance-row bg-primary">
-        <div class="title">Account Balance</div>
-        <div class="value"><span class="currency">RCN</span> 690.80</div>
+        <div class="title">Available to Withdraw</div>
+        <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
       </div>
       <div class="balance-row">
         <div class="title">Account Balance</div>
-        <div class="value"><span class="currency">RCN</span> 690.80</div>
+        <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
+      </div>
+      <app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button>
+    </div>
+    <div class="profile-container">
+      <div class="profile-row">
+        <app-avatar [seed]=lender></app-avatar>
+        <div class="title title-centered">Wallet address</div>
+      </div>
+      <div class="profile-row">
+        <div class="title margintop5 ellipsis">{{ lender }}</div>
+      </div>
+      <div class="profile-row">
+        <div class="title margintop20">
+          <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> 
+          Authorize the Loan Engine contract to operate RCN on your behalf
+        </div>
+      </div>
+    </div>
+    <div class="social-container">
+      <div class="social-row">
+        <ul>
+          <li><i class="fab fa-facebook-f fa-lg"></i></li>
+          <li><i class="fab fa-telegram-plane fa-lg"></i></li>
+          <li><i class="fab fa-linkedin-in fa-lg"></i></li>
+          <li><i class="fab fa-reddit fa-lg"></i></li>
+          <li><i class="fab fa-github fa-lg"></i></li>
+          <li><i class="fas fa-link fa-lg"></i></li>
+        </ul>
+      </div>
+    </div>
+    <div class="version-container">
+      <div class="version-row">
+        <i class="fas fa-code-branch fa-lg"></i>
       </div>
     </div>
   </div>
