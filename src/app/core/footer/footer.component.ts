@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 // App Services
 import { SidebarService } from '../../services/sidebar.service';
 import { Web3Service } from './../../services/web3.service';
+import { TitleService } from '../../services/title.service';
 
 @Component({
   selector: 'app-footer',
@@ -15,9 +16,13 @@ export class FooterComponent implements OnInit {
   versionString: string;
   linkContract: string;
   contract: string;
-  activeButton = true;
-
+  title:string;
+  lastTitle: string;
+  previousTitle: string;
+  titles = ['Requests', 'Activity', 'Loans', 'Menu'];
+  
   // Nav Mobile toggled
+  activeButton = true;
   navmobileToggled = false; 
   id: number = 0;
   lastId: number = 0;
@@ -26,6 +31,7 @@ export class FooterComponent implements OnInit {
   constructor(
     private web3Service: Web3Service,
     private sidebarService: SidebarService,
+    private titleService: TitleService,
   ) {}
 
   // Toggle Menu
@@ -49,6 +55,18 @@ export class FooterComponent implements OnInit {
       this.sidebarService.navmobileService(this.navmobileToggled=true);
     }
   }
+  
+  newTitle(clickedTitle) {
+    this.lastTitle = this.title;
+    this.title = clickedTitle;
+    if(clickedTitle !== 3 || this.lastTitle !== 'Menu'){ // If i dont click on menu & dont click it twice
+      this.previousTitle = this.lastTitle;
+      this.titleService.changeTitle(this.titles[clickedTitle]);
+    } else { // I click on menu & click it twice
+      this.title = this.previousTitle;
+      this.titleService.changeTitle(this.title);
+    }
+  }
 
   ngOnInit() {
     const env = environment;
@@ -57,9 +75,11 @@ export class FooterComponent implements OnInit {
     this.versionString = env.version + '-' + env.build + ' - ' + env.version_name;
     this.linkContract = env.network.explorer.address.replace('${address}', env.contracts.basaltEngine);
 
+    // Service subscriber
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
+    this.titleService.currentTitle.subscribe(title => this.title = title);
 
-
+    // Account info
     this.web3Service.getAccount().then((account) => {
       this.account = account;
     });

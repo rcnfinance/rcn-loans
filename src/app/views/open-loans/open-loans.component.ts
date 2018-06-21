@@ -1,18 +1,12 @@
-import { Component, OnInit, OnChanges, OnDestroy, AfterViewInit } from '@angular/core';
-import { HttpModule, Response } from '@angular/http';
-import { FormControl } from '@angular/forms';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx } from './../../tx.service';
 import { BrandingService } from './../../services/branding.service';
-// App Component
-import { MaterialModule } from './../../material/material.module';
-import { SharedModule } from './../../shared/shared.module';
-// App Utils
-import { Utils } from './../../utils/utils';
 // App Spinner
+import { Utils } from './../../utils/utils';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CivicService } from '../../services/civic.service';
 import { Web3Service } from '../../services/web3.service';
@@ -22,19 +16,28 @@ import { Web3Service } from '../../services/web3.service';
   templateUrl: './open-loans.component.html',
   styleUrls: ['./open-loans.component.scss']
 })
-export class OpenLoansComponent implements OnInit, OnDestroy, AfterViewInit {
+export class OpenLoansComponent implements OnInit{
   public loading: boolean;
   loans = [];
   pendingLend = [];
   availableLoans = true;
+
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
     private brandingService: BrandingService,
     private spinner: NgxSpinnerService,
     private civicService: CivicService,
-    private web3Service: Web3Service
+    private web3Service: Web3Service,
   ) {}
+
+  private formatAmount(amount: number): string {
+    return Utils.formatAmount(amount);
+  }
+  private formatInterest(interest: Number): string {
+    return Number(interest.toFixed(2)).toString();
+  }
+
   loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
@@ -44,16 +47,9 @@ export class OpenLoansComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
   }
+
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
     this.loadLoans();
-  }
-  ngAfterViewInit() {}
-  ngOnDestroy() {}
-  private formatInterest(interest: Number): string {
-    return Number(interest.toFixed(2)).toString();
-  }
-  private formatAmount(amount: number): string {
-    return Utils.formatAmount(amount);
   }
 }

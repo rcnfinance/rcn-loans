@@ -9,6 +9,8 @@ import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/d
 import { Web3Service, Type } from '../services/web3.service';
 import { SidebarService } from '../services/sidebar.service';
 import { ContractsService } from '../services/contracts.service';
+import { TitleService } from '../services/title.service';
+
 import { Utils } from '../utils/utils';
 
 @Component({
@@ -20,10 +22,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   account: string;
   makeRotate = false;
   profile: boolean;
+  title:string;
+
   rcnBalance = '...'; // Balance bar
   rcnAvailable = '...'; // Balance bar
   loansWithBalance: number[]; // Balance bar
-  
+
   isOpen$: BehaviorSubject<boolean>;
   navToggle: boolean; // Navbar toggled
   extensionToggled = false; // Balance extension toggled
@@ -34,6 +38,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private router: Router,
     private sidebarService: SidebarService,
     private contractService: ContractsService,
+    private titleService: TitleService,
   ) {}
 
   // Toggle Navbar
@@ -113,6 +118,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentExtension.subscribe(extensionToggled => this.extensionToggled = extensionToggled);
+    this.titleService.currentTitle.subscribe(title => this.title = title);
 
     this.web3Service.getAccount().then((account) => {
       this.account = account;

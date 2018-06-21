@@ -1,16 +1,16 @@
 <footer>
   <div class="nav-mobile">
     <ul>
-      <li routerLink='/requests' [ngClass]="{'active': id === 0 }" (click)='addClass(clickedId=0); navmobileClose()'>
+      <li routerLink='/requests' [ngClass]="{'active': id === 0 }" (click)='addClass(clickedId=0); navmobileClose(); newTitle(clickedTitle=0)'>
         <i class="fas fa-coins"></i>
       </li>
-      <li routerLink='/activity' [ngClass]="{'active': id === 1 }" (click)='addClass(clickedId=1); navmobileClose()'>
+      <li routerLink='/activity' [ngClass]="{'active': id === 1 }" (click)='addClass(clickedId=1); navmobileClose(); newTitle(clickedTitle=1)'>
         <i class="fas fa-wallet"></i>
       </li>
-      <li routerLink='/address/{{ account }}/' [ngClass]="{'active': id === 2 }" (click)='addClass(clickedId=2); navmobileClose()'>
+      <li routerLink='/address/{{ account }}/' [ngClass]="{'active': id === 2 }" (click)='addClass(clickedId=2); navmobileClose(); newTitle(clickedTitle=2)'>
         <i class="fas fa-exchange-alt"></i>
       </li>
-      <li [ngClass]="{'active': id === 3 }" (click)='addClass(clickedId=3); navmobileToggle()'>
+      <li [ngClass]="{'active': id === 3 }" (click)='addClass(clickedId=3); navmobileToggle(); newTitle(clickedTitle=3)'>
         <button type="button"
           class="nav-toggle">
           <span class="icon-bar"></span>

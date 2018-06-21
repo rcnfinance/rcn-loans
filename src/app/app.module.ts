@@ -16,6 +16,7 @@ import { IdentityService } from './services/identity.service';
 import { RiskService } from './services/risk.service';
 import { CivicService } from './services/civic.service';
 import { SidebarService } from './services/sidebar.service';
+import { TitleService } from './services/title.service';
 
 // TODO: Move
 import { DecentralandCosignerService } from './services/cosigners/decentraland-cosigner.service';
@@ -116,6 +117,7 @@ const appRoutes: Routes = [
     RiskService,
     CivicService,
     SidebarService,
+    TitleService,
   ],
   bootstrap: [AppComponent]
 })
