@@ -60,7 +60,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     liability(loan: Loan): Promise<CosignerLiability> {
         return new Promise((resolve, err) => {
             this.detail(loan).then((detail: DecentralandCosigner) => {
-                this.managerContract.isDefaulted(detail.id).then((defaulted) => {
+                this.managerContract.isDefaulted(this.engine, detail.id).then((defaulted) => {
                     resolve(new CosignerLiability(
                         this.manager,
                         detail,
