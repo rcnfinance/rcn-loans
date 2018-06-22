@@ -64,11 +64,21 @@ export class DecentralandCosignerProvider implements CosignerProvider {
                     resolve(new CosignerLiability(
                         this.manager,
                         detail,
-                        defaulted
+                        defaulted,
+                        this.buildClaim(loan)
                     ));
                 });
             });
         }) as Promise<CosignerLiability>;
+    }
+    private buildClaim(loan: Loan): () => Promise<string> {
+        return () => {
+            return new Promise((resolve) => {
+                this.managerContract.claim(this.engine, loan.id, '0x0').then((tx) => {
+                    resolve(tx);
+                });
+            });
+        };
     }
     private detail(loan: Loan): Promise<CosignerDetail> {
         return new Promise((resolve, err) => {
