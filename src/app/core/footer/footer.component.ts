@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment';
 import { SidebarService } from '../../services/sidebar.service';
 import { Web3Service } from './../../services/web3.service';
 import { TitleService } from '../../services/title.service';
+import { AvailableLoansService } from '../../services/available-loans.service';
 
 @Component({
   selector: 'app-footer',
@@ -21,6 +22,8 @@ export class FooterComponent implements OnInit {
   previousTitle: string;
   titles = ['Requests', 'Activity', 'Loans', 'Menu'];
   
+  available: any;
+  
   // Nav Mobile toggled
   activeButton = true;
   navmobileToggled = false; 
@@ -32,6 +35,7 @@ export class FooterComponent implements OnInit {
     private web3Service: Web3Service,
     private sidebarService: SidebarService,
     private titleService: TitleService,
+    private availableLoansService: AvailableLoansService,
   ) {}
 
   // Toggle Menu
@@ -78,6 +82,9 @@ export class FooterComponent implements OnInit {
     // Service subscriber
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
     this.titleService.currentTitle.subscribe(title => this.title = title);
+
+    // Available Loans service
+    this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
 
     // Account info
     this.web3Service.getAccount().then((account) => {

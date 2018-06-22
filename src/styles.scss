@@ -516,6 +516,7 @@ footer {
         svg{color: $secondary;}
         .available-loans {
           opacity: 1;
+          @include transition-delay(.5s);
         }
         .nav-toggle{
           span{

@@ -1,15 +1,16 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 // App Models
 import { Loan } from './../../models/loan.model';
-// App Services
-import { ContractsService } from './../../services/contracts.service';
-import { TxService, Tx } from './../../tx.service';
-import { BrandingService } from './../../services/branding.service';
 // App Spinner
-import { Utils } from './../../utils/utils';
 import { NgxSpinnerService } from 'ngx-spinner';
+// App Services
+import { Utils } from './../../utils/utils';
+import { TxService, Tx } from './../../tx.service';
+import { ContractsService } from './../../services/contracts.service';
+import { BrandingService } from './../../services/branding.service';
 import { CivicService } from '../../services/civic.service';
 import { Web3Service } from '../../services/web3.service';
+import { AvailableLoansService } from '../../services/available-loans.service';
 
 @Component({
   selector: 'app-open-loans',
@@ -18,9 +19,11 @@ import { Web3Service } from '../../services/web3.service';
 })
 export class OpenLoansComponent implements OnInit{
   public loading: boolean;
+  available: any;
   loans = [];
-  pendingLend = [];
   availableLoans = true;
+  pendingLend = [];
+
 
   constructor(
     private contractsService: ContractsService,
@@ -29,6 +32,7 @@ export class OpenLoansComponent implements OnInit{
     private spinner: NgxSpinnerService,
     private civicService: CivicService,
     private web3Service: Web3Service,
+    private availableLoansService: AvailableLoansService,
   ) {}
 
   private formatAmount(amount: number): string {
@@ -38,9 +42,15 @@ export class OpenLoansComponent implements OnInit{
     return Number(interest.toFixed(2)).toString();
   }
 
+  // Available Loans service
+  upgradeAvaiblable(){
+    this.availableLoansService.updateAvailable(this.loans.length);
+  }
+
   loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
+      this.upgradeAvaiblable();
       this.spinner.hide();
       if (this.loans.length === 0) {
         this.availableLoans = false;
@@ -51,5 +61,8 @@ export class OpenLoansComponent implements OnInit{
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
     this.loadLoans();
+
+    // Available Loans service
+    this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
   }
 }

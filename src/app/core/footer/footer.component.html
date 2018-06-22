@@ -3,15 +3,15 @@
     <ul>
       <li routerLink='/requests' [ngClass]="{'active': id === 0 }" (click)='addClass(clickedId=0); navmobileClose(); newTitle(clickedTitle=0)'>
         <i class="fas fa-coins"></i>
-        <div class="available-loans">+99</div>
+        <div class="available-loans">{{ available }}</div>
       </li>
       <li routerLink='/activity' [ngClass]="{'active': id === 1 }" (click)='addClass(clickedId=1); navmobileClose(); newTitle(clickedTitle=1)'>
         <i class="fas fa-wallet"></i>
-        <div class="available-loans">99</div>
+        <div class="available-loans">{{ available }}</div>
       </li>
       <li routerLink='/address/{{ account }}/' [ngClass]="{'active': id === 2 }" (click)='addClass(clickedId=2); navmobileClose(); newTitle(clickedTitle=2)'>
         <i class="fas fa-exchange-alt"></i>
-        <div class="available-loans">69</div>
+        <div class="available-loans">{{ available }}</div>
       </li>
       <li [ngClass]="{'active': id === 3 }" (click)='addClass(clickedId=3); navmobileToggle(); newTitle(clickedTitle=3)'>
         <button type="button"

@@ -9,5 +9,4 @@ export class TitleService {
   changeTitle(title: string) {
     this.titleSource.next(title);
   }
-
 }
