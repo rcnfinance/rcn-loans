@@ -36,6 +36,7 @@ import { ContentWrapperComponent } from './content-wrapper/content-wrapper.compo
 import { OpenLoansComponent } from './views/open-loans/open-loans.component';
 
 import { ActiveLoansComponent } from './active-loans/active-loans.component';
+import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
 import { LoanDetailComponent } from './views/loan-detail/loan-detail.component';
 import { DetailCosignerComponent } from './views/loan-detail/detail-cosigner/detail-cosigner.component';
@@ -55,7 +56,6 @@ import { CoreModule } from './core/core.module';
 
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/requests', pathMatch: 'full'},
@@ -87,6 +87,7 @@ const appRoutes: Routes = [
     ActiveLoansComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
+    DialogInsufficientFoundsComponent,
   ],
   imports: [
     BrowserModule,
@@ -108,6 +109,7 @@ const appRoutes: Routes = [
     DialogApproveContractComponent,
     DialogLoanTransferComponent,
     DialogClientAccountComponent,
+    DialogInsufficientFoundsComponent,
   ],
   providers: [
     ContractsService,

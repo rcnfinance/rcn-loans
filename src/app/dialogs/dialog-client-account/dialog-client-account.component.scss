@@ -2,7 +2,8 @@
 
 //Dialog Client
 .dialog-padding{
-  padding: 30px;
+  padding: 30px 15px;
+  text-align: center;
 }
 .navbar-container {
   height: 70px;
@@ -36,6 +37,9 @@
 }
 
 @media (min-width: 768px){
+  .dialog-padding{
+    padding: 30px;
+  }
   .navbar-container {
     height: 100px;
     .creator-container {

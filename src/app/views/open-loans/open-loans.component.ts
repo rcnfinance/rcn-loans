@@ -1,8 +1,11 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material';
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
+// App Components
+import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 // App Services
 import { Utils } from './../../utils/utils';
 import { TxService, Tx } from './../../tx.service';
@@ -24,7 +27,6 @@ export class OpenLoansComponent implements OnInit{
   availableLoans = true;
   pendingLend = [];
 
-
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
@@ -33,6 +35,7 @@ export class OpenLoansComponent implements OnInit{
     private civicService: CivicService,
     private web3Service: Web3Service,
     private availableLoansService: AvailableLoansService,
+    public dialog: MatDialog,
   ) {}
 
   private formatAmount(amount: number): string {
@@ -55,6 +58,14 @@ export class OpenLoansComponent implements OnInit{
       if (this.loans.length === 0) {
         this.availableLoans = false;
       }
+    });
+  }
+
+  // Open Insufficient Founds Dialog
+  openDialogFounds() {
+    const dialogRef: MatDialogRef<DialogInsufficientFoundsComponent> = this.dialog.open(DialogInsufficientFoundsComponent, {});
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
     });
   }
 

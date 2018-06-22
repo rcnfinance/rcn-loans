@@ -138,6 +138,8 @@ ngx-spinner .black-overlay.ng-star-inserted {
     background-color: rgba(0, 0, 0, 0.4);
   } 
 }
+@media (max-width: 768px){.cdk-overlay-pane{max-width: 90vw !important;}}
+
   //Sidebar
 mat-sidenav-container.mat-drawer-container {
   position: absolute;

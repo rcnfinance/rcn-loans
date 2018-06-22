@@ -14,12 +14,14 @@ export class DialogApproveContractComponent implements OnInit {
   autoClose: boolean;
   lender: string;
   isApproved: boolean;
+
   constructor(
     private web3Service: Web3Service,
     private contracts: ContractsService,
     public dialog: MatDialog,
     private dialogRef: MatDialogRef<DialogApproveContractComponent>
   ) { }
+
   loadLender() {
     this.web3Service.getAccount().then((resolve: string) => {
       this.lender = resolve;
@@ -49,6 +51,7 @@ export class DialogApproveContractComponent implements OnInit {
       });
     });
   }
+  
   ngOnInit() {
     this.loadLender();
     this.loadApproved();
