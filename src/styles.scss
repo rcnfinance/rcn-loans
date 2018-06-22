@@ -466,9 +466,14 @@ mat-form-field{
       padding: 15px 15px;
     }
   }
-  .version-container{
+  .version-container,
+  .social-container{
     display: none;
   }
+}
+
+@media (min-width: 992px){
+  .navmobile-menu{display: none;}  
 }
 
 // Footer
