@@ -451,6 +451,7 @@ mat-form-field{
   }
 }
 .navmobile-toggled{
+  margin: 0; height: 100%; overflow: hidden; // Prevent default scroll on menu open
   .navmobile-menu{
     opacity: 1;
     z-index: 9999;
