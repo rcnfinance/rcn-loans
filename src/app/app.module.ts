@@ -55,6 +55,7 @@ import { CoreModule } from './core/core.module';
 
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/requests', pathMatch: 'full'},
@@ -85,6 +86,7 @@ const appRoutes: Routes = [
     AddressComponent,
     ActiveLoansComponent,
     DialogClientAccountComponent,
+    DialogInsufficientFoundsComponent,
   ],
   imports: [
     BrowserModule,
