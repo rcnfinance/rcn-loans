@@ -500,13 +500,13 @@ footer {
           background-color: $gray6;
         }
       }
-      .loans-lenght {
-        width: 30px;
+      .available-loans {
+        width: 22px;
         height: 18px;
         opacity: 0;
         font-size: 12px;
         border-radius: 30px;
-        margin-left: 24px;
+        margin-left: 18px;
         margin-top: -10px;
         background-color: $red;
         @include transition(all 0.1s ease-out);
@@ -514,7 +514,7 @@ footer {
       }
       &.active{
         svg{color: $secondary;}
-        .loans-lenght {
+        .available-loans {
           opacity: 1;
         }
         .nav-toggle{
