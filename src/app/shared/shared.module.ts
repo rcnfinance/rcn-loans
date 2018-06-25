@@ -90,7 +90,8 @@ import { ClaimButtonComponent } from './claim-button/claim-button.component';
     TransferFormComponent,
     TransferButtonComponent,
     RiskIndicatorComponent,
-    CivicAuthComponent
+    CivicAuthComponent,
+    ClaimButtonComponent
   ],
   entryComponents: [
     CivicAuthComponent

@@ -1,1 +1,1 @@
-<a mat-raised-button (click)='claim()' class="button button-primary">{{ buttonText }}</a>
+<a mat-raised-button (click)='claim()' class="button button-primary">{{ pendingTx === undefined ? 'Claim' : 'Pending...'}}</a>

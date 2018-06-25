@@ -60,22 +60,32 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     liability(loan: Loan): Promise<CosignerLiability> {
         return new Promise((resolve, err) => {
             this.detail(loan).then((detail: DecentralandCosigner) => {
-                this.managerContract.isDefaulted(this.engine, detail.id).then((defaulted) => {
-                    resolve(new CosignerLiability(
-                        this.manager,
-                        detail,
-                        defaulted,
-                        this.buildClaim(loan)
-                    ));
-                });
+                resolve(new CosignerLiability(
+                    this.manager,
+                    detail,
+                    this.isDefaulted(loan, detail),
+                    this.buildClaim(loan)
+                ));
             });
         }) as Promise<CosignerLiability>;
     }
+    private isDefaulted(loan: Loan, detail: DecentralandCosigner): boolean {
+        return (loan.status === Status.Ongoing || loan.status === Status.Indebt) // The loan should not be in debt
+            && loan.dueTimestamp + (7 * 24 * 60 * 60) > (Date.now() / 1000) // Due time must be pased by 1 week
+            && detail.status === 1; // Detail should be ongoing
+    }
     private buildClaim(loan: Loan): () => Promise<string> {
         return () => {
-            return new Promise((resolve) => {
-                this.managerContract.claim(this.engine, loan.id, '0x0').then((tx) => {
-                    resolve(tx);
+            return new Promise((resolve, reject) => {
+                const managerContract = this.web3.web3.eth.contract(mortgageManagerAbi).at(this.manager);
+                this.web3.getAccount().then((account) => {
+                    managerContract.claim(this.engine, loan.id, '0x0', {from: account}, (err, result) => {
+                        if (err === undefined) {
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
+                    });
                 });
             });
         };
@@ -90,7 +100,8 @@ export class DecentralandCosignerProvider implements CosignerProvider {
                   '0x' + mortgageData[4].toString(16), // Land ID
                   mortgageData[5], // Land price
                   ((loan.rawAmount / mortgageData[5]) * 100).toFixed(2), // Financed amount
-                  undefined // Parcel data
+                  undefined, // Parcel data
+                  mortgageData[6] // Mortgage status
                 );
                 this.getParcelInfo(decentralandCosigner.x, decentralandCosigner.y).then((parcel) => {
                   decentralandCosigner.parcel = parcel;

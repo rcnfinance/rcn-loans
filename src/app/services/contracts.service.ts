@@ -111,7 +111,6 @@ export class ContractsService {
         const oracleData = await this.getOracleData(loan);
 
         const cosigner = this.cosignerService.getCosigner(loan);
-;
         let cosignerAddr = '0x0';
         let cosignerData = '0x0';
         if (cosigner !== undefined) {
@@ -232,7 +231,6 @@ export class ContractsService {
           if (err != null) {
             reject(err);
           }
-          console.log(result);
           resolve(LoanCurator.curateLoans(this.parseLoansBytes(result)));
         });
       }) as Promise<Loan[]>;

@@ -8,7 +8,8 @@ export class DecentralandCosigner extends CosignerDetail {
         public landId: string,
         public landPrice: number,
         public financePart: string,
-        public parcel: Parcel
+        public parcel: Parcel,
+        public status: number
     ) {
         super();
     }
