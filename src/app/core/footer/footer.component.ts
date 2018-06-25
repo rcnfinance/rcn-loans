@@ -23,6 +23,7 @@ export class FooterComponent implements OnInit {
   title:string;
   lastTitle: string;
   previousTitle: string;
+  oldestTitle: string;  // Defines oldest for profile unlogged case
   titles = ['Requests', 'Activity', 'Loans', 'Menu', 'Profile'];
   
   available: any;
@@ -33,6 +34,7 @@ export class FooterComponent implements OnInit {
   id: number = 0;
   lastId: number = 0;
   previousLast: number;
+  oldestId: number;  // Defines oldest for profile unlogged case
 
   constructor(
     public dialog: MatDialog,
@@ -57,6 +59,7 @@ export class FooterComponent implements OnInit {
     this.lastId = this.id;
     this.id = clickedId;
     if(clickedId !== 3 || this.lastId !== 3){ // If i dont click on menu & dont click it twice
+      this.oldestId = this.previousLast; // Defines oldest for profile unlogged case
       this.previousLast = this.lastId;
     } else { // I click on menu & click it twice
       this.id = this.previousLast;
@@ -68,6 +71,7 @@ export class FooterComponent implements OnInit {
     this.lastTitle = this.title;
     this.title = clickedTitle;
     if(clickedTitle !== 3 || this.lastTitle !== 'Menu'){ // If i dont click on menu & dont click it twice
+      this.oldestTitle = this.previousTitle; // Defines oldest for profile unlogged case
       this.previousTitle = this.lastTitle;
       this.titleService.changeTitle(this.titles[clickedTitle]);
     } else { // I click on menu & click it twice
@@ -81,16 +85,17 @@ export class FooterComponent implements OnInit {
     const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
-      console.log(this.previousLast);
+      console.log(this.title);
       console.log(this.previousTitle);
-      console.log(this.lastId);
-      console.log(this.lastTitle);
+      console.log(this.oldestTitle);
       if(this.lastId !== 3 || this.lastTitle !== 'Menu'){ // If i dont click on menu & dont click it twice
+        console.log('CASE ONE');
         this.addClass(this.lastId);
         this.titleService.changeTitle(this.lastTitle);
       } else{
-        this.addClass(this.previousLast);
-        this.titleService.changeTitle(this.previousTitle);
+        console.log('CASE ELSE');
+        this.addClass(this.oldestId);
+        this.titleService.changeTitle(this.oldestTitle);
       }
     });
   }
