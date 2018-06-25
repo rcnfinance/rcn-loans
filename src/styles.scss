@@ -390,9 +390,17 @@ mat-form-field{
   background-color: $fifth;
   @include transition();
 }
-.balance-container{
+.spacing-container-top{
+  padding-top: 15px;
+  border-top: 1px solid $tertiary;
+  margin: 0 -15px;
+}
+.spacing-container-bottom{
   padding-bottom: 15px;
   border-bottom: 1px solid $tertiary;
+  margin: 0 -15px;
+}
+.balance-container{
   .balance-row {
     padding: 10px 15px;
     .title{
