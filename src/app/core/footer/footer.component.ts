@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { MatDialog, MatDialogRef } from '@angular/material';
+// App Components
+import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Services
+import { environment } from '../../../environments/environment';
 import { SidebarService } from '../../services/sidebar.service';
 import { Web3Service } from './../../services/web3.service';
 import { TitleService } from '../../services/title.service';
@@ -20,7 +23,7 @@ export class FooterComponent implements OnInit {
   title:string;
   lastTitle: string;
   previousTitle: string;
-  titles = ['Requests', 'Activity', 'Loans', 'Menu'];
+  titles = ['Requests', 'Activity', 'Loans', 'Menu', 'Profile'];
   
   available: any;
   
@@ -32,6 +35,7 @@ export class FooterComponent implements OnInit {
   previousLast: number;
 
   constructor(
+    public dialog: MatDialog,
     private web3Service: Web3Service,
     private sidebarService: SidebarService,
     private titleService: TitleService,
@@ -71,6 +75,29 @@ export class FooterComponent implements OnInit {
       this.titleService.changeTitle(this.title);
     }
   }
+
+  // Open Client Dialog
+  openDialogClient() {
+    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+      console.log(this.previousLast);
+      console.log(this.previousTitle);
+      console.log(this.lastId);
+      console.log(this.lastTitle);
+      if(this.lastId !== 3 || this.lastTitle !== 'Menu'){ // If i dont click on menu & dont click it twice
+        this.addClass(this.lastId);
+        this.titleService.changeTitle(this.lastTitle);
+      } else{
+        this.addClass(this.previousLast);
+        this.titleService.changeTitle(this.previousTitle);
+      }
+    });
+  }
+  get hasAccount(): boolean {
+    return this.account !== undefined;
+  }
+
 
   ngOnInit() {
     const env = environment;

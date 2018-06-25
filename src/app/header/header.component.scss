@@ -73,7 +73,7 @@
 .navbar-extension {
   height: 0px;
   position: absolute;
-  top: 85px;
+  top: 60px;
   left: 0;
   right: 0;
   z-index: 9;
@@ -214,10 +214,10 @@
   .extension-toggled{
     .navbar-extension {
       height: 50px;
-      top: 85px;
+      top: 60px;
     }
     .extension-closebox{
-      top: 135px;
+      top: 110px;
     }
   }
 }
