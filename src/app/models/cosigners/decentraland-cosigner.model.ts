@@ -1,18 +1,17 @@
 
-import { CosignerDetail } from './../cosigner.model';
+import { CosignerDetail, CosignerLiability } from './../cosigner.model';
 import BigNumber from 'bignumber.js';
 
 export class DecentralandCosigner extends CosignerDetail {
     constructor(
-        contract: string,
-        data: string,
         public id: number,
         public landId: string,
         public landPrice: number,
         public financePart: string,
-        public parcel: Parcel
+        public parcel: Parcel,
+        public status: number
     ) {
-        super(contract, data);
+        super();
     }
 
     get x(): number {
@@ -95,12 +94,4 @@ function fixNegative(value: BigNumber): number {
     } else {
         return value;
     }
-}
-
-function formatData(id: number): string {
-    let hex = id.toString(16);
-    if (hex.length < 65) {
-      hex = Array(65 - hex.length).join('0') + hex;
-    }
-    return '0x' + hex;
 }
