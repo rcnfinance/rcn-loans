@@ -13,7 +13,7 @@ declare let require: any;
 export const environment = {
   version: require('../../package.json').version,
   version_name: require('../../package.json').version_name,
-  build: '51812618',
+  build: '61825618',
   production: false,
   url: 'https://testnet.rcn.loans/',
   envName: 'dev',
