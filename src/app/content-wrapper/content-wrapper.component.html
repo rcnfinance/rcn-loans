@@ -30,19 +30,7 @@
       </div>
       <div class="spacing-container-bottom" *ngIf='!hasAccount'></div>
     </div>
-    <div class="social-container">
-      <div class="social-row">
-        <ul>
-          <li><a href="https://www.facebook.com/ripiocredit.network/" target="_blank"><i class="fab fa-facebook-f fa-lg"></i></a></li>
-          <li><a href="https://twitter.com/rcn_token?lang=en" target="_blank"><i class="fab fa-twitter fa-lg"></i></a></li>
-          <li><a href="https://t.me/RCNtalk" target="_blank"><i class="fab fa-telegram-plane fa-lg"></i></a></li>
-          <li><a href="https://www.linkedin.com/company/ripio-credit-network/" target="_blank"><i class="fab fa-linkedin-in fa-lg"></i></a></li>
-          <li><a href="https://www.reddit.com/r/rcn_token/" target="_blank"><i class="fab fa-reddit fa-lg"></i></a></li>
-          <li><a href="https://github.com/ripio/rcn.loans" target="_blank"><i class="fab fa-github fa-lg"></i></a></li>
-          <li><a href="{{ linkContract }}"><i class="fas fa-link fa-lg"></i></a></li>
-        </ul>
-      </div>
-    </div>
+    <app-social-container></app-social-container>
     <div class="version-container">
       <div class="version-row">
         <i class="fas fa-code-branch fa-lg"></i>
@@ -56,63 +44,70 @@
       [opened]="navToggle"
       (close)="onClose()"
       (open)="onOpen()">
+      <div class="relative" [style.height.px]="winHeight - 60">
 
-      <div class="balance-container">
-        <div class="balance-row bg-primary">
-          <div class="title">Available to Withdraw</div>
-          <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
+        <div class="balance-container" *ngIf='hasAccount'>
+          <div class="balance-row bg-gray7">
+            <div class="title">Available to Withdraw</div>
+            <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
+          </div>
+          <div class="balance-row">
+            <div class="title">Account Balance</div>
+            <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
+          </div>
+          <app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button>
+          <div class="spacing-container-bottom"></div>
         </div>
-        <div class="balance-row">
-          <div class="title">Account Balance</div>
-          <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
+
+        <ul>
+          <li routerLink='/requests' (click)='sidebarToggle()'>
+            <div class="li-container">
+              <i class="fas fa-coins"></i>
+              <div class="txt">Requests</div>
+            </div>
+          </li>
+          <li routerLink='/activity' (click)='sidebarToggle()'>
+            <div class="li-container">
+              <i class="fas fa-exchange-alt"></i>
+              <div class="txt">Activity</div>
+            </div>
+          </li>
+          <li routerLink='/address/{{ account }}/' (click)='sidebarToggle()' *ngIf='hasAccount'>
+            <div class="li-container">
+              <i class="fas fa-wallet"></i>
+              <div class="txt">Loans</div>
+            </div>
+          </li>
+          <li (click)='sidebarToggle(); extensionToggle()' *ngIf='hasAccount'>
+            <div class="li-container">
+              <i class="fas fa-chart-bar"></i>
+              <div class="txt">Balance</div>
+            </div>
+          </li>
+          <li (click)='sidebarToggle(); openDialog()' *ngIf='hasAccount'>
+            <div class="li-container">
+              <i class="fas fa-user-circle"></i>
+              <div class="txt">Profile</div>
+            </div>
+          </li>
+          <li (click)="sidebarToggle(); openDialog()" *ngIf="!hasAccount">
+            <div class="li-container">
+              <i class="fas fa-user-circle"></i>
+              <div class="txt">Login</div>
+            </div>
+          </li>
+          <li>
+            <div class="li-container">
+              <i class="fas fa-code-branch"></i>
+              <div class="txt">Version {{ version }}</div>
+            </div>
+          </li>
+        </ul>
+        
+        <div class="social-component">
+          <app-social-container></app-social-container>
         </div>
-        <app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button>
       </div>
-
-      <ul>
-        <li routerLink='/requests' (click)='sidebarToggle()'>
-          <div class="li-container">
-            <i class="fas fa-coins"></i>
-            <div class="txt">Requests</div>
-          </div>
-        </li>
-        <li routerLink='/activity' (click)='sidebarToggle()'>
-          <div class="li-container">
-            <i class="fas fa-exchange-alt"></i>
-            <div class="txt">Activity</div>
-          </div>
-        </li>
-        <li routerLink='/address/{{ account }}/' (click)='sidebarToggle()' *ngIf='hasAccount'>
-          <div class="li-container">
-            <i class="fas fa-wallet"></i>
-            <div class="txt">Loans</div>
-          </div>
-        </li>
-        <li (click)='sidebarToggle(); extensionToggle()' *ngIf='hasAccount'>
-          <div class="li-container">
-            <i class="fas fa-chart-bar"></i>
-            <div class="txt">Balance</div>
-          </div>
-        </li>
-        <li (click)='sidebarToggle(); openDialog()' *ngIf='hasAccount'>
-          <div class="li-container">
-            <i class="fas fa-user-circle"></i>
-            <div class="txt">Profile</div>
-          </div>
-        </li>
-        <li (click)="sidebarToggle(); openDialog()" *ngIf="!hasAccount">
-          <div class="li-container">
-            <i class="fas fa-user-circle"></i>
-            <div class="txt">Login</div>
-          </div>
-        </li>
-        <li>
-          <div class="li-container">
-            <i class="fas fa-code-branch"></i>
-            <div class="txt">Version {{ version }}</div>
-          </div>
-        </li>
-      </ul>
     </mat-sidenav>
     <mat-sidenav-content [style.min-height.px]="winHeight">
       <div id="page-content-wrapper">
