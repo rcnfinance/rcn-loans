@@ -151,7 +151,7 @@ mat-sidenav-container.mat-drawer-container {
 }
 .mat-drawer {
   width: 300px;
-  padding-top: 90px;
+  padding-top: 70px;
   color: inherit;
   z-index: 999;
   background-color: $gray7;
@@ -305,10 +305,9 @@ mat-form-field{
 // Header
 .nav-toggle{
   border-radius: 0;
-  padding: 10px 0;
+  padding: 0;
   margin-right: 35px;
-  min-height: 50px;
-
+  min-height: 45px;
   float: left;
   background-color: transparent;
   border: 1px solid transparent;
