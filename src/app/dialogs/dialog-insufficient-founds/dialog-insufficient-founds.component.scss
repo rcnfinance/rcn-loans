@@ -5,6 +5,18 @@
   padding: 30px 15px;
   text-align: center;
 }
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
+a {
+  color: white;
+  text-decoration: underline;
+}
+.icon {
+  font-size: 1.5pc;
+  color: gray;
+}
 .navbar-container {
   height: 70px;
   position: relative;
