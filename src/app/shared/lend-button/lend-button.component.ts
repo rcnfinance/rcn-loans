@@ -11,6 +11,7 @@ import { environment } from '../../../environments/environment';
 import { Web3Service } from '../../services/web3.service';
 import { CivicService } from '../../services/civic.service';
 import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
+import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
 @Component({
   selector: 'app-lend-button',
@@ -37,31 +38,34 @@ export class LendButtonComponent implements OnInit {
     });
   }
 
-  handleLend() {
+  async handleLend() {
+    // TODO Handle user not logged in
     if (this.account === undefined) { return; }
 
-    this.contractsService.isEngineApproved().then((approved) => {
-      if (approved) {
-        this.civicService.status().then((status) => {
-          if (status) {
-            this.contractsService.lendLoan(this.loan).then(tx => {
-              this.txService.registerLendTx(this.loan, tx);
-              this.retrievePendingTx();
-            });
-          } else {
-            this.showCivicDialog();
-          }
-        });
-      } else {
-        this.showApproveDialog();
-      }
-    });
+    const engineApproved = this.contractsService.isEngineApproved();
+    const civicApproved = this.civicService.status();
+    const balance = this.contractsService.getUserBalanceRCNWei();
+    const required = this.contractsService.estimateRequiredAmount(this.loan);
+
+    if (!await engineApproved) {
+      this.showApproveDialog();
+      return;
+    }
+
+    console.log('Try lend', await required, await balance);
+    if (await balance < await required) {
+      this.showInsufficientFundsDialog(await required, await balance);
+      return;
+    }
+
+    if (!await civicApproved) {
+      this.showCivicDialog();
+      return;
+    }
   }
 
   showApproveDialog() {
-    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {
-      width: '800px'
-    });
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
     dialogRef.componentInstance.autoClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -86,6 +90,15 @@ export class LendButtonComponent implements OnInit {
     const dialogRef: MatDialogRef<CivicAuthComponent> = this.dialog.open(CivicAuthComponent, {
       width: '800px'
     });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.handleLend();
+      }
+    });
+  }
+
+  showInsufficientFundsDialog(required: number, funds: number) {
+    const dialogRef = this.dialog.open(DialogInsufficientFoundsComponent);
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.handleLend();
