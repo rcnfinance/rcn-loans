@@ -78,12 +78,12 @@
               <div class="txt">Loans</div>
             </div>
           </li>
-          <li (click)='sidebarToggle(); extensionToggle()' *ngIf='hasAccount' class='animation-left'>
+          <!-- <li (click)='sidebarToggle(); extensionToggle()' *ngIf='hasAccount' class='animation-left'>
             <div class="li-container">
               <i class="fas fa-chart-bar"></i>
               <div class="txt">Balance</div>
             </div>
-          </li>
+          </li> -->
           <!-- <li (click)='sidebarToggle(); openDialog()' *ngIf='hasAccount' class='animation-left'>
             <div class="li-container">
               <i class="fas fa-user-circle"></i>
@@ -102,7 +102,7 @@
               <div class="txt">Version {{ version }}</div>
             </div>
           </li>
-          <div class="spacing-container-bottom" *ngIf='hasAccount'></div>
+          <div class="border-bottom" *ngIf='hasAccount'></div>
         </ul>
 
         <div class="profile-container animation-opacity" *ngIf='hasAccount'>
