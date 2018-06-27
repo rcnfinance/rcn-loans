@@ -11,12 +11,6 @@ export class SidebarService {
     this.toggleSource.next(navToggle);
   }
 
-  private extensionSource = new BehaviorSubject<boolean>(false);
-  currentExtension = this.extensionSource.asObservable();
-  extensionService(extensionToggled: boolean){
-    this.extensionSource.next(extensionToggled);
-  }
-
   private navmobileSource = new BehaviorSubject<boolean>(false);
   currentNavmobile = this.navmobileSource.asObservable();
   navmobileService(navmobileToggled: boolean){
