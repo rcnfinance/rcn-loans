@@ -12,15 +12,15 @@
       </div>
     </div>
     <div class="balance-container" *ngIf='hasAccount'>
-      <div class="balance-row bg-gray7">
-        <div class="title">Available to Withdraw</div>
-        <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
-      </div>
       <div class="balance-row">
         <div class="title">Account Balance</div>
         <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
       </div>
-      <app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button>
+      <div class="balance-row bg-gray7">
+          <div class="title">Available to Withdraw</div>
+          <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
+        </div>
+      <!-- <app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button> -->
       <div class="spacing-container-bottom"></div>
     </div>
     <app-social-container></app-social-container>
@@ -49,15 +49,15 @@
           </div>
         </div>   
         <div class="balance-container animation-opacity" *ngIf='hasAccount'>
-          <div class="balance-row bg-gray7">
-            <div class="title">Available to Withdraw</div>
-            <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
-          </div>
           <div class="balance-row">
             <div class="title">Account Balance</div>
             <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
           </div>
-          <app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button>
+          <div class="balance-row bg-gray7">
+              <div class="title">Available to Withdraw</div>
+              <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
+            </div>
+          <!-- <app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button> -->
           <div class="spacing-container-bottom"></div>
         </div>
         <ul>
