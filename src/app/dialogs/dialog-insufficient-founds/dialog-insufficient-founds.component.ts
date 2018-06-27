@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-dialog-insufficient-founds',
@@ -10,6 +11,7 @@ export class DialogInsufficientFoundsComponent implements OnInit {
 
   required: number;
   balance: number;
+  link: string;
 
   constructor(
     public dialogRef: MatDialogRef<DialogInsufficientFoundsComponent>,
@@ -19,5 +21,6 @@ export class DialogInsufficientFoundsComponent implements OnInit {
   ngOnInit() {
     this.required = this.data.required;
     this.balance = this.data.balance;
+    this.link = environment.buyLink;
   }
 }

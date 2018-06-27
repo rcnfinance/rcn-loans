@@ -18,6 +18,7 @@ export const environment = {
   url: 'https://testnet.rcn.loans/',
   envName: 'dev',
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
+  buyLink: 'https://www.bancor.network/communities/5a92b438583f4a0001f75f42/about',
   network: {
     id: '3',
     name: 'Ropsten',
