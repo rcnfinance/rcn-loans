@@ -42,20 +42,20 @@ export class ContentWrapperComponent implements OnInit {
   ) {}
 
   // Toggle Navbar
-  sidebarToggle(){
-    this.sidebarService.toggleService(this.navToggle=!this.navToggle);
+  sidebarToggle() {
+    this.sidebarService.toggleService(this.navToggle = !this.navToggle);
   }
   // Open Balance Extension
   extensionToggle() {
-    this.sidebarService.extensionService(this.extensionToggled=!this.extensionToggled);
+    this.sidebarService.extensionService(this.extensionToggled = !this.extensionToggled);
   }
   // Toggle Sidebar Class
-  onClose(){
+  onClose() {
     this.sidebarService.toggleService(this.navToggle = false);
   }
-  onOpen(){
+  onOpen() {
     this.sidebarService.toggleService(this.navToggle = true);
-    this.sidebarService.extensionService(this.extensionToggled=false);
+    this.sidebarService.extensionService(this.extensionToggled = false);
   }
 
   // Open Approve Dialog
@@ -160,7 +160,7 @@ export class ContentWrapperComponent implements OnInit {
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentExtension.subscribe(extensionToggled => this.extensionToggled = extensionToggled);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
-    
+
     this.loadApproved();
 
     this.loadLender();
