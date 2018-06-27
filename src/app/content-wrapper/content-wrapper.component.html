@@ -16,11 +16,10 @@
         <div class="title">Account Balance</div>
         <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
       </div>
-      <div class="balance-row bg-gray7">
+      <div class="balance-row bg-gray7" *ngIf='weiAvailable > 0'>
           <div class="title">Available to Withdraw</div>
           <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
         </div>
-      <!-- <app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button> -->
       <div class="spacing-container-bottom"></div>
     </div>
     <app-social-container></app-social-container>
@@ -53,11 +52,10 @@
             <div class="title">Account Balance</div>
             <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
           </div>
-          <div class="balance-row bg-gray7">
+          <div class="balance-row bg-gray7" *ngIf='weiAvailable > 0'>
               <div class="title">Available to Withdraw</div>
               <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
             </div>
-          <!-- <app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button> -->
           <div class="spacing-container-bottom"></div>
         </div>
         <ul>
