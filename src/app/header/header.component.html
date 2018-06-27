@@ -1,4 +1,4 @@
-<div [ngClass]="{'extension-toggled': extensionToggled}">
+<div>
   <nav id="navbar" class="navbar">
     <div class="container-fluid">
       <div class="row">
@@ -23,7 +23,6 @@
               <li routerLink='/requests'>Requests</li>
               <li routerLink='/activity'>Activity</li>
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>
-              <!-- <li (click)='extensionToggle()' *ngIf='hasAccount'>Balance</li> -->
               <li (click)="openDialog()" *ngIf="!hasAccount">Login</li>
               <li class="separator">|</li>
               <li (click)="openDialog(); makeRotate = !makeRotate;">
@@ -45,21 +44,4 @@
       </div>
     </div>
   </nav>
-  <div class="navbar-extension">
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12">
-          <ul>
-            <li class="title main-h1">Account balance:</li>
-            <li class="title main-h2"><span>RCN</span> RCN {{rcnBalance}}</li>
-            <span class="marginleft60 hidden-xs"></span>
-            <li class="title main-h1">Available to withdraw:</li>
-            <li class="title main-h2"><span>RCN</span> RCN {{rcnAvailable}}</li>
-            <span class="marginleft60 hidden-xs"></span>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-  <a class="extension-closebox" *ngIf='extensionToggled' (click)='extensionToggle()'></a>
 </div>
