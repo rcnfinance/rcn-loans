@@ -31,6 +31,7 @@ import { TransferButtonComponent } from './transfer-button/transfer-button.compo
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
+import { ClaimButtonComponent } from './claim-button/claim-button.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { SocialContainerComponent } from './social-container/social-container.co
     RiskIndicatorComponent,
     CivicAuthComponent,
     SocialContainerComponent,
+    ClaimButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -92,6 +94,7 @@ import { SocialContainerComponent } from './social-container/social-container.co
     RiskIndicatorComponent,
     CivicAuthComponent,
     SocialContainerComponent,
+    ClaimButtonComponent
   ],
   entryComponents: [
     CivicAuthComponent

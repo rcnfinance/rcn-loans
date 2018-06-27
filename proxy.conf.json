@@ -1,6 +1,6 @@
 {
   "/proxy_decentraland/*": {
-    "target": "https://api.market.decentraland.today",
+    "target": "https://api.market.decentraland.zone",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",

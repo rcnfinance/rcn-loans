@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
-import { DecentralandCosigner, District, Tag } from '../../../../models/cosigners/decentraland-cosigner.model';
-import { Loan } from '../../../../models/loan.model';
-import { DecentralandCosignerService } from '../../../../services/cosigners/decentraland-cosigner.service';
+import { District, Tag, DecentralandCosigner, Parcel } from '../../../../models/cosigners/decentraland-cosigner.model';
+import { Loan, Status } from '../../../../models/loan.model';
+import { DecentralandCosignerProvider } from '../../../../providers/cosigners/decentraland-cosigner-provider';
+import { CosignerDetail, Cosigner } from '../../../../models/cosigner.model';
 
 @Component({
   selector: 'app-decentraland-cosigner',
@@ -9,16 +10,44 @@ import { DecentralandCosignerService } from '../../../../services/cosigners/dece
   styleUrls: ['./decentraland-cosigner.component.scss']
 })
 export class DecentralandCosignerComponent implements OnInit {
-  constructor(
-    private decentraland: DecentralandCosignerService
-  ) { }
-
-  @Input() cosigner: DecentralandCosigner;
+  @Input() loan: Loan;
+  @Input() cosignerProvider: DecentralandCosignerProvider;
+  detail: DecentralandCosigner;
   districtsData: District[];
+  // View data
+  parcel: Parcel = undefined;
+  parcelId: string = undefined;
+  displayPrice = '...';
+  financiation = '...';
+  highlights = [];
+  constructor() { }
   ngOnInit() {
-    this.decentraland.getDistricts().then((districts) => {
+    this.cosignerProvider.getDistricts().then((districts) => {
       this.districtsData = districts;
     });
+
+    if (this.loan.status === Status.Request) {
+      this.cosignerProvider.offer(this.loan).then((cosigner) => {
+        if (cosigner.cosignerDetail instanceof DecentralandCosigner) {
+          this.detail = cosigner.cosignerDetail;
+          this.renderDetail();
+        }
+      });
+    } else {
+      this.cosignerProvider.liability(this.loan).then((cosigner) => {
+        if (cosigner.cosignerDetail instanceof DecentralandCosigner) {
+          this.detail = cosigner.cosignerDetail;
+          this.renderDetail();
+        }
+      });
+    }
+  }
+  private renderDetail() {
+    this.parcel = this.detail.parcel;
+    this.parcelId = this.parcel.id;
+    this.displayPrice = this.detail.displayPrice;
+    this.financiation = this.detail.financePart;
+    this.highlights = this.parcel.highlights;
   }
   highlightTitle(tag: Tag): string {
     if (this.districtsData === undefined) {
