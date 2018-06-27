@@ -98,7 +98,10 @@ export class LendButtonComponent implements OnInit {
   }
 
   showInsufficientFundsDialog(required: number, funds: number) {
-    const dialogRef = this.dialog.open(DialogInsufficientFoundsComponent);
+    const dialogRef = this.dialog.open(DialogInsufficientFoundsComponent, { data: {
+      required: required,
+      balance: funds
+    }});
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.handleLend();
