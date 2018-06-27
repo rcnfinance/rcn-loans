@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
+// App Components
+import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
 import { environment } from '../../environments/environment';
 import { SidebarService } from '../services/sidebar.service';
@@ -49,6 +51,12 @@ export class ContentWrapperComponent implements OnInit {
   onClose() {
     this.sidebarService.toggleService(this.navToggle = false);
   }
+
+  // Open Client Dialog
+  openDialogClient() {
+    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
+  }
+
   onOpen() {
     this.sidebarService.toggleService(this.navToggle = true);
   }
