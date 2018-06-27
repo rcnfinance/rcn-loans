@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import {BehaviorSubject} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 // App Component
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
@@ -98,8 +98,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       }
     }
   }
-  ngAfterViewInit(): any {}
 
+  get hasAccount(): boolean {
+    return this.account !== undefined;
+  }
   loadRcnBalance() {
     this.contractService.getUserBalanceRCN().then((balance: number) => {
       this.rcnBalance = Utils.formatAmount(balance);
@@ -126,9 +128,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       this.loadWithdrawBalance();
     });
   }
-  get hasAccount(): boolean {
-    return this.account !== undefined;
-  }
+
+  ngAfterViewInit(): any {}
 }
 
 

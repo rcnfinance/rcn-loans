@@ -19,11 +19,9 @@ img {user-drag: none; user-select: none; -moz-user-select: none; -webkit-user-dr
 .inline {display: inline-block;}
 .img-center {margin: 0 auto;}
 .overflow{overflow: hidden;}
-.no-limit-fluid {max-width: none;}
 .img-auto {width: auto;}
 .full-width {width: 100%;}
 .width-50 {width: 50%; display: inline-block;}
-.col-sides--0{padding: 0;}
 
 .transition{@include transition();};
 .rotate45{@include transform(rotate(45deg));};

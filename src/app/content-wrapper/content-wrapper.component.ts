@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
-// App Component
-import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
+import { MatDialog } from '@angular/material';
 // App Service
 import { environment } from '../../environments/environment';
 import { SidebarService } from '../services/sidebar.service';
 import { Web3Service, Type } from '../services/web3.service';
 import { ContractsService } from '../services/contracts.service';
 import BigNumber from 'bignumber.js';
+import { Tx, TxService } from '../tx.service';
 
 @Component({
   selector: 'app-content-wrapper',
@@ -34,62 +32,42 @@ export class ContentWrapperComponent implements OnInit {
   extensionToggled = false; // Balance extension toggled
   navmobileToggled = false; // Nav Mobile toggled
 
+  pendingWithdraw: Tx;
+
   constructor(
     private sidebarService: SidebarService, // Navbar Service
     private web3Service: Web3Service,
     private contractService: ContractsService,
+    private txService: TxService,
     public dialog: MatDialog,
   ) {}
 
   // Toggle Navbar
-  sidebarToggle(){
-    this.sidebarService.toggleService(this.navToggle=!this.navToggle);
+  sidebarToggle() {
+    this.sidebarService.toggleService(this.navToggle = !this.navToggle);
   }
   // Open Balance Extension
   extensionToggle() {
-    this.sidebarService.extensionService(this.extensionToggled=!this.extensionToggled);
+    this.sidebarService.extensionService(this.extensionToggled = !this.extensionToggled);
   }
   // Toggle Sidebar Class
-  onClose(){
+  onClose() {
     this.sidebarService.toggleService(this.navToggle = false);
   }
-  onOpen(){
+  onOpen() {
     this.sidebarService.toggleService(this.navToggle = true);
-    this.sidebarService.extensionService(this.extensionToggled=false);
+    this.sidebarService.extensionService(this.extensionToggled = false);
   }
-
-  // Open Approve Dialog
-  openDialogApprove() {
-    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-  // Open Client Dialog
-  openDialogClient() {
-    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-  // Open Approve Dialog
-  openDialog() {
-    if (this.hasAccount) {
-      const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-      dialogRef.componentInstance.autoClose = false;
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(`Dialog result: ${result}`);
-      });
+  async clickWithdraw() {
+    if (!this.withdrawEnabled) {
+      window.open(environment.network.explorer.tx.replace('${tx}', this.pendingWithdraw.tx));
     } else {
-      if (this.web3Service.web3Type === Type.Injected) {
-        window.open('https://metamask.io/', '_blank');
-      } else {
-        this.openDialogClient();
-      }
+      const tx = await this.contractService.withdrawFunds(this.loansWithBalance);
+      this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.loansWithBalance);
+      this.loadPendingWithdraw();
     }
   }
-
-// Get Balance
+  // Get Balance
   get hasAccount(): boolean {
     return this.account !== undefined;
   }
@@ -105,6 +83,11 @@ export class ContentWrapperComponent implements OnInit {
     }
     return this.removeTrailingZeros((this.weiAvailable / this.ethWei).toFixed(18));
   }
+  get withdrawEnabled(): boolean {
+    return this.loansWithBalance !== undefined
+      && this.loansWithBalance.length !== 0
+      && this.pendingWithdraw === undefined;
+  }
   private removeTrailingZeros(value) {
     value = value.toString();
     if (value.indexOf('.') === -1) {
@@ -115,53 +98,31 @@ export class ContentWrapperComponent implements OnInit {
     }
     return value;
   }
-  loadLender() {
+  private loadPendingWithdraw() {
+    this.pendingWithdraw = this.txService.getLastWithdraw(environment.contracts.basaltEngine, this.loansWithBalance);
+  }
+  private loadLender() {
     this.web3Service.getAccount().then((resolve: string) => {
       this.lender = resolve;
     });
   }
-  loadRcnBalance() {
+  private loadRcnBalance() {
     this.contractService.getUserBalanceRCN().then((balance: number) => {
       this.rcnBalance = balance;
     });
   }
-  loadWithdrawBalance() {
+  private loadWithdrawBalance() {
     this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
-      console.log(result);
       this.weiAvailable = result[0];
       this.loansWithBalance = result[1];
+      this.loadPendingWithdraw();
     });
   }
-
-// Approve Loan Engine
-  loadApproved(): Promise<any> {
-    return this.contractService.isEngineApproved().then((approved) => {
-      this.isApproved = approved;
-    });
-  }
-  get isEnabled(): boolean {
-    return this.isApproved !== undefined;
-  }
-  clickCheck() {
-    let action;
-    if (this.isApproved) {
-      action = this.contractService.dissaproveEngine();
-    } else {
-      action = this.contractService.approveEngine();
-    }
-    action.then(() => {
-      this.loadApproved().then(() => {
-      });
-    });
-  }
-
-  ngOnInit(): void {
+  ngOnInit() {
      // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentExtension.subscribe(extensionToggled => this.extensionToggled = extensionToggled);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
-    
-    this.loadApproved();
 
     this.loadLender();
     this.loadRcnBalance();

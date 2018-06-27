@@ -151,24 +151,33 @@ mat-sidenav-container.mat-drawer-container {
 }
 .mat-drawer {
   width: 300px;
-  padding-top: 90px;
+  padding-top: 60px;
   color: inherit;
   z-index: 999;
-  background-color: $gray7;
+  background-color: $fifth;
+
+  .animation-opacity{
+    opacity: 0;
+  }
+
+  .animation-left{
+    position: relative;
+    left: -300px;
+    opacity: 0;
+  }
+
   ul{
     li{
       cursor: pointer;
       position: relative;
-      left: -300px;
-      opacity: 0;
       text-indent: 20px;
       .li-container{
-        padding: 12px 0px 10px 15px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        // padding-left: 10px;
         @include transition();
         svg{font-size: 1.2em;}
-        &:hover {
-          background: rgba(0, 0, 0, 1);
-        }
+        &:hover {background-color: $gray7;}
       }
       .txt{
         display: inline-block;
@@ -182,15 +191,22 @@ mat-sidenav-container.mat-drawer-container {
     position: absolute;
   }
   .mat-drawer {
-    ul{
-      li{
-        left: 0px;
-        opacity: 1;
-        @include transition();
-        @for $i from 1 through 16 {
-          &:nth-child(#{$i}) { 
-           @include transition-delay(0.06s * $i); 
-          }
+    .animation-opacity{
+      opacity: 1;
+      @include transition();
+      @for $i from 0 through 6 {
+        &:nth-child(#{$i}) {
+         @include transition-delay(0.12s * $i); 
+        }
+      }
+    }
+    .animation-left{
+      left: 0px;
+      opacity: 1;
+      @include transition();
+      @for $i from 0 through 6 {
+        &:nth-child(#{$i}) {
+         @include transition-delay(0.03s * $i); 
         }
       }
     }
@@ -283,7 +299,7 @@ mat-form-field{
   mat-sidenav-container.mat-drawer-container {
     background-color: transparent;
     .mat-drawer {
-      width: 350px;
+      width: 370px;
     }
   }
 }
@@ -305,10 +321,9 @@ mat-form-field{
 // Header
 .nav-toggle{
   border-radius: 0;
-  padding: 10px 0;
+  padding: 0;
   margin-right: 35px;
-  min-height: 50px;
-
+  min-height: 45px;
   float: left;
   background-color: transparent;
   border: 1px solid transparent;
@@ -386,71 +401,83 @@ mat-form-field{
   opacity: 0;
   background-color: $fifth;
   @include transition();
-  .balance-container{
-    padding-bottom: 15px;
-    border-bottom: 1px solid $tertiary;
-    .balance-row {
-      padding: 10px 15px;
-      .title{
-        font-size: 14px;
-        @extend %font-light;
-      }
-      .value{
-        font-size: 30px;
-        font-family: 'Roboto', sans-serif;
-        @extend %font-bold;
-        .currency{
-          font-size: 18px;
-          @extend %font-regular;
-        }
-      }
-    }
-    .button{
-      display: block;
-      margin: 0 15px;
-    }
-  }
-  .profile-container{
-    padding: 30px 15px;
-    border-bottom: 1px solid $tertiary;
-    .profile-row{
-      position: relative;
-      .avatar-container{
-        display: inline-block;
-      }
-      .title,
-      .title-centered{
-        display: inline-block;
-        @extend %font-bold;
-      }
-      .title-centered{
-        margin-left: 15px;
-        @extend %absolute-center-top;
-      }
-    }
-  }
-  .social-container{
-    text-align: center;
-    border-bottom: 1px solid $tertiary;
-    .social-row{
-      ul{
-        margin: 0 auto;
-        max-width: 672px;
-        a{color: $secondary;}
-        li{
-          width: 13%;
-          padding: 15px;
-          text-align: center;
-          display: inline-block;
-        }
-      }
-    }
-  }
-  .version-container{
+}
+.spacing-container-top{
+  padding-top: 15px;
+  border-top: 1px solid $tertiary;
+  margin: 0 -15px;
+}
+.spacing-container-bottom{
+  padding-bottom: 15px;
+  border-bottom: 1px solid $tertiary;
+  margin: 0 -15px;
+}
+.border-bottom{
+  border-bottom: 1px solid $tertiary;
+}
+.balance-container{
+  .balance-row {
     padding: 10px 15px;
-    margin-top: 15px;
-    color: $gray4;
+    .title{
+      font-size: 14px;
+      @extend %font-light;
+    }
+    .value{
+      font-size: 30px;
+      font-family: 'Roboto', sans-serif;
+      @extend %font-bold;
+      .currency{
+        font-size: 18px;
+        @extend %font-regular;
+      }
+    }
   }
+  .button{
+    display: block;
+    margin: 0 15px;
+  }
+}
+.profile-container{
+  padding: 30px 15px;
+  border-bottom: 1px solid $tertiary;
+  .profile-row{
+    position: relative;
+    .avatar-container{
+      display: inline-block;
+    }
+    .title,
+    .title-centered{
+      display: inline-block;
+      @extend %font-bold;
+    }
+    .title-centered{
+      margin-left: 15px;
+      @extend %absolute-center-top;
+    }
+  }
+}
+.social-component{position: absolute; bottom: 0; width: 100%;}
+.social-container{
+  text-align: center;
+  border-bottom: 1px solid $tertiary;
+  .social-row{
+    ul{
+      margin: 0 auto;
+      max-width: 672px;
+      a{color: $secondary;&:hover{color: $primary;}}
+      li{
+        width: 13%;
+        padding: 15px;
+        text-align: center;
+        display: inline-block;
+      }
+    }
+  }
+}
+.version-container{
+  padding: 10px 15px;
+  margin-top: 15px;
+  color: $gray4;
 }
 .navmobile-toggled{
   margin: 0; height: 100%; overflow: hidden; // Prevent default scroll on menu open
@@ -466,9 +493,14 @@ mat-form-field{
       padding: 15px 15px;
     }
   }
-  .version-container{
+  .version-container,
+  .social-container{
     display: none;
   }
+}
+
+@media (min-width: 992px){
+  .navmobile-menu{display: none;}  
 }
 
 // Footer
