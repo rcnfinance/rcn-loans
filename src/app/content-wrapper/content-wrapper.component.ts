@@ -58,38 +58,7 @@ export class ContentWrapperComponent implements OnInit {
     this.sidebarService.extensionService(this.extensionToggled = false);
   }
 
-  // Open Approve Dialog
-  openDialogApprove() {
-    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-  // Open Client Dialog
-  openDialogClient() {
-    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-  // Open Approve Dialog
-  openDialog() {
-    if (this.hasAccount) {
-      const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-      dialogRef.componentInstance.autoClose = false;
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(`Dialog result: ${result}`);
-      });
-    } else {
-      if (this.web3Service.web3Type === Type.Injected) {
-        window.open('https://metamask.io/', '_blank');
-      } else {
-        this.openDialogClient();
-      }
-    }
-  }
-
-// Get Balance
+  // Get Balance
   get hasAccount(): boolean {
     return this.account !== undefined;
   }
