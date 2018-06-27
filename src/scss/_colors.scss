@@ -76,7 +76,7 @@
 .bg-gray4   {background-color: #949494;}
 .bg-gray5   {background-color: #585858;}
 .bg-gray6   {background-color: #404040;}
-.bg-gray7   {background-color: #323232;}
+.bg-gray7   {background-color: #333333 !important;}
 .bg-gray8   {background-color: #191919;}
 .bg-gray9   {background-color: #0A0A0A;}
 
@@ -98,7 +98,6 @@
 .bg-linkedin    {background-color: #0180B3;}
 .bg-tumblr      {background-color: #345270;}
 .bg-primary     {background-color: $primary !important;}
-.bg-gray7       {background-color: $gray7 !important;}
 
 /* Colors Hovers */
 .violet         {&:hover{color: #905D8E;}}
@@ -108,7 +107,6 @@
 .bg-facebook    {&:hover{background-color: #324E7B;}}
 .bg-twitter     {&:hover{background-color: #367DD0;}}
 .bg-tumblr      {&:hover{background-color: #213548;}}
-.bg-gray7       {&:hover{background-color: #191919;}}
 
 .whiteshadow {text-shadow:0 1px 0 #fff;}
 .blackshadow {text-shadow:0 1px 0 #000;}

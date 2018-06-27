@@ -17,18 +17,19 @@
         <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
       </div>
       <div class="balance-row bg-gray7 clickeable" (click)="clickWithdraw()" *ngIf='weiAvailable > 0'>
-          <div class="title">{{ withdrawEnabled ? 'Click here to claim' : 'Claim pending...' }}</div>
-          <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
-        </div>
-      <div class="spacing-container-bottom"></div>
+        <div class="title">{{ withdrawEnabled ? 'Click here to claim' : 'Claim pending...' }}</div>
+        <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
+      </div>
     </div>
-    <app-social-container></app-social-container>
     <div class="version-container">
       <div class="version-row">
         <i class="fas fa-code-branch fa-lg"></i>
         <div class="inline marginleft15">Version {{version}}</div>
       </div>
     </div>
+    <div class="border-top"></div>
+    <app-social-container></app-social-container>
+    <div class="border-bottom"></div>
   </div>
   <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav
@@ -53,12 +54,11 @@
             <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
           </div>
           <div class="balance-row bg-gray7 clickeable" (click)="clickWithdraw()" *ngIf='weiAvailable > 0'>
-              <div class="title">{{ withdrawEnabled ? 'Click here to claim' : 'Claim pending...' }}</div>
-              <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
-            </div>
-          <div class="spacing-container-bottom"></div>
+            <div class="title">{{ withdrawEnabled ? 'Click here to claim' : 'Claim pending...' }}</div>
+            <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
+          </div>
         </div>
-        <ul>
+        <ul class="border-top-bottom">
           <li routerLink='/requests' (click)='sidebarToggle()' class='animation-left'>
             <div class="li-container">
               <i class="fas fa-coins"></i>
@@ -83,7 +83,6 @@
               <div class="txt">Login</div>
             </div>
           </li>
-          <div class="border-bottom"></div>
         </ul>
         <div class="social-component animation-opacity">
           <app-social-container></app-social-container>
