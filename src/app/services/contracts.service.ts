@@ -280,8 +280,7 @@ export class ContractsService {
 
       loans.forEach(loan => {
         if (loan.lenderBalance > 0) {
-          console.log(loan.lenderBalance);
-          total += loan.lenderBalance;
+          total = total.add(new BigNumber(loan.lenderBalance));
           pendingLoans.push(loan.id);
         }
       });

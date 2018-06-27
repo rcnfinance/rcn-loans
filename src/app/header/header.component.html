@@ -15,7 +15,7 @@
 
             <a class="button-img" routerLink='/requests' (click)="this.titleService.changeTitle('Requests')">
               <img src="../../assets/isologo.svg" alt="rcn-image">
-              <img src="https://ripiocredit.network/images/logo.png" alt="rcn-image">
+              <img src="../../assets/isologotypo.svg" alt="rcn-image">
             </a>
             <div class="header-title">{{ title }}</div>
 
@@ -23,9 +23,9 @@
               <li routerLink='/requests'>Requests</li>
               <li routerLink='/activity'>Activity</li>
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>
-              <li (click)='extensionToggle()' *ngIf='hasAccount'>Balance</li>
-              <li class="separator">|</li>
+              <!-- <li (click)='extensionToggle()' *ngIf='hasAccount'>Balance</li> -->
               <li (click)="openDialog()" *ngIf="!hasAccount">Login</li>
+              <li class="separator">|</li>
               <li (click)="openDialog(); makeRotate = !makeRotate;">
                 <div class="flex-container" *ngIf="hasAccount">
                   <div class="flex-item">
@@ -56,7 +56,6 @@
             <li class="title main-h1">Available to withdraw:</li>
             <li class="title main-h2"><span>RCN</span> RCN {{rcnAvailable}}</li>
             <span class="marginleft60 hidden-xs"></span>
-            <li><app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button></li>
           </ul>
         </div>
       </div>
