@@ -1,18 +1,6 @@
 <div class="wrapper" [ngClass]="{'sidebar-toggled': navToggle , 'navmobile-toggled': navmobileToggled}" [style.min-height.px]="winHeight">
   <app-header></app-header>
   <div class="navmobile-menu">
-    <div class="balance-container" *ngIf='hasAccount'>
-      <div class="balance-row bg-gray7">
-        <div class="title">Available to Withdraw</div>
-        <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
-      </div>
-      <div class="balance-row">
-        <div class="title">Account Balance</div>
-        <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
-      </div>
-      <app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button>
-      <div class="spacing-container-bottom"></div>
-    </div>
     <div class="profile-container" *ngIf='hasAccount'>
       <div class="spacing-container-top" *ngIf='!hasAccount'></div>
       <div class="profile-row">
@@ -30,6 +18,18 @@
       </div>
       <div class="spacing-container-bottom" *ngIf='!hasAccount'></div>
     </div>
+    <div class="balance-container" *ngIf='hasAccount'>
+      <div class="balance-row bg-gray7">
+        <div class="title">Available to Withdraw</div>
+        <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
+      </div>
+      <div class="balance-row">
+        <div class="title">Account Balance</div>
+        <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
+      </div>
+      <app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button>
+      <div class="spacing-container-bottom"></div>
+    </div>
     <app-social-container></app-social-container>
     <div class="version-container">
       <div class="version-row">
@@ -45,7 +45,23 @@
       (close)="onClose()"
       (open)="onOpen()">
       <div class="relative" [style.height.px]="winHeight - 60">
-
+        <div class="profile-container animation-opacity" *ngIf='hasAccount'>
+          <div class="spacing-container-top" *ngIf='!hasAccount'></div>
+          <div class="profile-row">
+            <app-avatar [seed]=lender></app-avatar>
+            <div class="title title-centered">Wallet address</div>
+          </div>
+          <div class="profile-row">
+            <div class="title margintop5 ellipsis">{{ lender }}</div>
+          </div>
+          <div class="profile-row">
+            <div class="title margintop20">
+              <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> 
+              Authorize the Loan Engine contract to operate RCN on your behalf
+            </div>
+          </div>
+          <div class="spacing-container-bottom" *ngIf='!hasAccount'></div>
+        </div>   
         <div class="balance-container animation-opacity" *ngIf='hasAccount'>
           <div class="balance-row bg-gray7">
             <div class="title">Available to Withdraw</div>
@@ -104,25 +120,6 @@
           </li>
           <div class="border-bottom" *ngIf='hasAccount'></div>
         </ul>
-
-        <div class="profile-container animation-opacity" *ngIf='hasAccount'>
-          <div class="spacing-container-top" *ngIf='!hasAccount'></div>
-          <div class="profile-row">
-            <app-avatar [seed]=lender></app-avatar>
-            <div class="title title-centered">Wallet address</div>
-          </div>
-          <div class="profile-row">
-            <div class="title margintop5 ellipsis">{{ lender }}</div>
-          </div>
-          <div class="profile-row">
-            <div class="title margintop20">
-              <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> 
-              Authorize the Loan Engine contract to operate RCN on your behalf
-            </div>
-          </div>
-          <div class="spacing-container-bottom" *ngIf='!hasAccount'></div>
-        </div>        
-        
         <div class="social-component animation-opacity">
           <app-social-container></app-social-container>
         </div>
