@@ -25,7 +25,6 @@ import { AvatarTitleComponent } from './avatar-title/avatar-title.component';
 import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
 import { GobackButtonComponent } from './goback-button/goback-button.component';
-import { WithdrawButtonComponent } from './withdraw-button/withdraw-button.component';
 import { TransferFormComponent } from './transfer-form/transfer-form.component';
 import { TransferButtonComponent } from './transfer-button/transfer-button.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
@@ -53,7 +52,6 @@ import { ClaimButtonComponent } from './claim-button/claim-button.component';
     IconAvatarComponent,
     ButtonGroupComponent,
     GobackButtonComponent,
-    WithdrawButtonComponent,
     TransferFormComponent,
     TransferButtonComponent,
     RiskIndicatorComponent,
@@ -88,7 +86,6 @@ import { ClaimButtonComponent } from './claim-button/claim-button.component';
     IconAvatarComponent,
     ButtonGroupComponent,
     GobackButtonComponent,
-    WithdrawButtonComponent,
     TransferFormComponent,
     TransferButtonComponent,
     RiskIndicatorComponent,

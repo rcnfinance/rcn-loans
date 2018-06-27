@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
-// App Component
-import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
+import { MatDialog } from '@angular/material';
 // App Service
 import { environment } from '../../environments/environment';
 import { SidebarService } from '../services/sidebar.service';
