@@ -196,7 +196,7 @@ mat-sidenav-container.mat-drawer-container {
       @include transition();
       @for $i from 0 through 6 {
         &:nth-child(#{$i}) {
-         @include transition-delay(0.12s * $i); 
+         @include transition-delay(0.09s * $i); 
         }
       }
     }
@@ -392,7 +392,14 @@ mat-form-field{
   border-bottom: 1px solid $tertiary;
   margin: 0 -15px;
 }
+.border-top{
+  border-bottom: 1px solid $tertiary;
+}
 .border-bottom{
+  border-bottom: 1px solid $tertiary;
+}
+.border-top-bottom{
+  border-top: 1px solid $tertiary;
   border-bottom: 1px solid $tertiary;
 }
 .balance-container{
@@ -418,7 +425,8 @@ mat-form-field{
   }
 }
 .profile-container{
-  padding: 30px 15px;
+  padding: 20px 15px;
+  border-top: 1px solid $tertiary;
   border-bottom: 1px solid $tertiary;
   .profile-row{
     position: relative;
@@ -439,7 +447,6 @@ mat-form-field{
 .social-component{position: absolute; bottom: 0; width: 100%;}
 .social-container{
   text-align: center;
-  border-bottom: 1px solid $tertiary;
   .social-row{
     ul{
       margin: 0 auto;
@@ -455,8 +462,7 @@ mat-form-field{
   }
 }
 .version-container{
-  padding: 10px 15px;
-  margin-top: 15px;
+  padding: 15px;
   color: $gray4;
 }
 .navmobile-toggled{
