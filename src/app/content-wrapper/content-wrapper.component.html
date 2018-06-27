@@ -10,12 +10,6 @@
       <div class="profile-row">
         <div class="title margintop5 ellipsis">{{ lender }}</div>
       </div>
-      <div class="profile-row">
-        <div class="title margintop20">
-          <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> 
-          Authorize the Loan Engine contract to operate RCN on your behalf
-        </div>
-      </div>
       <div class="spacing-container-bottom" *ngIf='!hasAccount'></div>
     </div>
     <div class="balance-container" *ngIf='hasAccount'>
@@ -53,12 +47,6 @@
           </div>
           <div class="profile-row">
             <div class="title margintop5 ellipsis">{{ lender }}</div>
-          </div>
-          <div class="profile-row">
-            <div class="title margintop20">
-              <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> 
-              Authorize the Loan Engine contract to operate RCN on your behalf
-            </div>
           </div>
           <div class="spacing-container-bottom" *ngIf='!hasAccount'></div>
         </div>   

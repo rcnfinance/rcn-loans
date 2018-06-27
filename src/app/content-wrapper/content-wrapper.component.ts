@@ -133,35 +133,11 @@ export class ContentWrapperComponent implements OnInit {
     });
   }
 
-// Approve Loan Engine
-  loadApproved(): Promise<any> {
-    return this.contractService.isEngineApproved().then((approved) => {
-      this.isApproved = approved;
-    });
-  }
-  get isEnabled(): boolean {
-    return this.isApproved !== undefined;
-  }
-  clickCheck() {
-    let action;
-    if (this.isApproved) {
-      action = this.contractService.dissaproveEngine();
-    } else {
-      action = this.contractService.approveEngine();
-    }
-    action.then(() => {
-      this.loadApproved().then(() => {
-      });
-    });
-  }
-
   ngOnInit(): void {
      // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentExtension.subscribe(extensionToggled => this.extensionToggled = extensionToggled);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
-
-    this.loadApproved();
 
     this.loadLender();
     this.loadRcnBalance();
