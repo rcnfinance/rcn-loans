@@ -10,7 +10,6 @@
       <div class="profile-row">
         <div class="title margintop5 ellipsis">{{ lender }}</div>
       </div>
-      <div class="spacing-container-bottom" *ngIf='!hasAccount'></div>
     </div>
     <div class="balance-container" *ngIf='hasAccount'>
       <div class="balance-row bg-gray7">
@@ -48,7 +47,6 @@
           <div class="profile-row">
             <div class="title margintop5 ellipsis">{{ lender }}</div>
           </div>
-          <div class="spacing-container-bottom" *ngIf='!hasAccount'></div>
         </div>   
         <div class="balance-container animation-opacity" *ngIf='hasAccount'>
           <div class="balance-row bg-gray7">
@@ -62,7 +60,6 @@
           <app-withdraw-button [loansWithBalance]="loansWithBalance" *ngIf="rcnAvailable !== '0'"></app-withdraw-button>
           <div class="spacing-container-bottom"></div>
         </div>
-
         <ul>
           <li routerLink='/requests' (click)='sidebarToggle()' class='animation-left'>
             <div class="li-container">
@@ -82,18 +79,6 @@
               <div class="txt">Loans</div>
             </div>
           </li>
-          <!-- <li (click)='sidebarToggle(); extensionToggle()' *ngIf='hasAccount' class='animation-left'>
-            <div class="li-container">
-              <i class="fas fa-chart-bar"></i>
-              <div class="txt">Balance</div>
-            </div>
-          </li> -->
-          <!-- <li (click)='sidebarToggle(); openDialog()' *ngIf='hasAccount' class='animation-left'>
-            <div class="li-container">
-              <i class="fas fa-user-circle"></i>
-              <div class="txt">Profile</div>
-            </div>
-          </li> -->
           <li (click)="sidebarToggle(); openDialog()" *ngIf="!hasAccount" class='animation-left'>
             <div class="li-container">
               <i class="fas fa-user-circle"></i>
