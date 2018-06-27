@@ -155,24 +155,29 @@ mat-sidenav-container.mat-drawer-container {
   color: inherit;
   z-index: 999;
   background-color: $fifth;
+
+  .animation-opacity{
+    opacity: 0;
+  }
+
+  .animation-left{
+    position: relative;
+    left: -300px;
+    opacity: 0;
+  }
+
   ul{
     li{
       cursor: pointer;
       position: relative;
-      left: -300px;
-      opacity: 0;
       text-indent: 20px;
       .li-container{
         padding-top: 8px;
         padding-bottom: 8px;
-        padding-left: 10px;
+        // padding-left: 10px;
         @include transition();
         svg{font-size: 1.2em;}
-        &:hover {
-          // background: rgba(0, 0, 0, 1);
-          // color: $primary;
-          background-color: $gray7;
-        }
+        &:hover {background-color: $gray7;}
       }
       .txt{
         display: inline-block;
@@ -186,15 +191,22 @@ mat-sidenav-container.mat-drawer-container {
     position: absolute;
   }
   .mat-drawer {
-    ul{
-      li{
-        left: 0px;
-        opacity: 1;
-        @include transition();
-        @for $i from 1 through 16 {
-          &:nth-child(#{$i}) { 
-           @include transition-delay(0.06s * $i); 
-          }
+    .animation-opacity{
+      opacity: 1;
+      @include transition();
+      @for $i from 0 through 6 {
+        &:nth-child(#{$i}) {
+         @include transition-delay(0.12s * $i); 
+        }
+      }
+    }
+    .animation-left{
+      left: 0px;
+      opacity: 1;
+      @include transition();
+      @for $i from 0 through 6 {
+        &:nth-child(#{$i}) {
+         @include transition-delay(0.03s * $i); 
         }
       }
     }
@@ -287,7 +299,7 @@ mat-form-field{
   mat-sidenav-container.mat-drawer-container {
     background-color: transparent;
     .mat-drawer {
-      width: 350px;
+      width: 370px;
     }
   }
 }
@@ -400,6 +412,9 @@ mat-form-field{
   border-bottom: 1px solid $tertiary;
   margin: 0 -15px;
 }
+.border-bottom{
+  border-bottom: 1px solid $tertiary;
+}
 .balance-container{
   .balance-row {
     padding: 10px 15px;
@@ -441,7 +456,7 @@ mat-form-field{
     }
   }
 }
-.social-component{position: absolute; bottom: 0;}
+.social-component{position: absolute; bottom: 0; width: 100%;}
 .social-container{
   text-align: center;
   border-bottom: 1px solid $tertiary;
@@ -449,7 +464,7 @@ mat-form-field{
     ul{
       margin: 0 auto;
       max-width: 672px;
-      a{color: $secondary;}
+      a{color: $secondary;&:hover{color: $primary;}}
       li{
         width: 13%;
         padding: 15px;
