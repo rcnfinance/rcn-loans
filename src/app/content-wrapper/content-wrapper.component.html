@@ -16,7 +16,7 @@
         <div class="title">Account Balance</div>
         <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
       </div>
-      <div class="balance-row bg-gray7 clickeable" (click)="clickWithdraw()" *ngIf='weiAvailable > 0'>
+      <div class="balance-row bg-gray7 clickeable" (click)="clickWithdraw()">
           <div class="title">{{ withdrawEnabled ? 'Click here to claim' : 'Claim pending...' }}</div>
           <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
         </div>
