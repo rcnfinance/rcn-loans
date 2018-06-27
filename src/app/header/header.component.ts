@@ -30,7 +30,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   isOpen$: BehaviorSubject<boolean>;
   navToggle: boolean; // Navbar toggled
-  extensionToggled = false; // Balance extension toggled
 
   constructor(
     public dialog: MatDialog,
@@ -44,11 +43,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   // Toggle Navbar
   sidebarToggle(){
     this.sidebarService.toggleService(this.navToggle=!this.navToggle);
-  }
-
-  // Open Balance Extension
-  extensionToggle() {
-    this.sidebarService.extensionService(this.extensionToggled=!this.extensionToggled);
   }
 
   handleProfile() {
@@ -119,7 +113,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
-    this.sidebarService.currentExtension.subscribe(extensionToggled => this.extensionToggled = extensionToggled);
     this.titleService.currentTitle.subscribe(title => this.title = title);
 
     this.web3Service.getAccount().then((account) => {

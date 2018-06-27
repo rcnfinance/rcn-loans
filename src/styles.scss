@@ -340,11 +340,6 @@ mat-form-field{
   .icon-bar + .icon-bar {
     margin-top: 4px;
   }
-  .navbar-extension {
-    display: block;
-  }
-  .navbar-extension{ul{span.marginleft30{display:inline-block;}}}
-  .navbar-extension{ul{span.marginleft60{display:none;}}}
 }
 
 // Toggled
@@ -372,21 +367,6 @@ mat-form-field{
   ul.nav{
     opacity: 0 !important;
     top: -25px !important;
-  }
-  .navbar-extension,
-  .extension-closebox{
-    opacity: 0 !important;
-    left: 330px !important;
-    @include transition(all 0.2s ease !important);
-  }
-  .extension-toggled{
-    .navbar-extension,
-    .extension-closebox{
-      @include transition(all 0.3s ease !important);
-    }
-    .extension-closebox{
-      z-index: 1;
-    }
   }
 }
 

@@ -29,7 +29,6 @@ export class ContentWrapperComponent implements OnInit {
   isApproved: boolean;
 
   navToggle: boolean; // Navbar toggled
-  extensionToggled = false; // Balance extension toggled
   navmobileToggled = false; // Nav Mobile toggled
 
   pendingWithdraw: Tx;
@@ -46,17 +45,12 @@ export class ContentWrapperComponent implements OnInit {
   sidebarToggle() {
     this.sidebarService.toggleService(this.navToggle = !this.navToggle);
   }
-  // Open Balance Extension
-  extensionToggle() {
-    this.sidebarService.extensionService(this.extensionToggled = !this.extensionToggled);
-  }
   // Toggle Sidebar Class
   onClose() {
     this.sidebarService.toggleService(this.navToggle = false);
   }
   onOpen() {
     this.sidebarService.toggleService(this.navToggle = true);
-    this.sidebarService.extensionService(this.extensionToggled = false);
   }
   async clickWithdraw() {
     if (!this.withdrawEnabled) {
@@ -121,7 +115,6 @@ export class ContentWrapperComponent implements OnInit {
   ngOnInit() {
      // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
-    this.sidebarService.currentExtension.subscribe(extensionToggled => this.extensionToggled = extensionToggled);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
 
     this.loadLender();
