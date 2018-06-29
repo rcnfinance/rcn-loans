@@ -64,8 +64,6 @@ const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: '404', component: NotFoundModule },
   { path: '**',  redirectTo: '/404' },
-  // { path: 'not-found', loadChildren: './not-found/not-found.module#NotFoundModule'},
-  // { path: '**',  redirectTo: '/not-found' },
 ];
 
 @NgModule({
