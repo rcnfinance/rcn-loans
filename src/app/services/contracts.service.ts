@@ -128,13 +128,13 @@ export class ContractsService {
             const rate = result[0];
             const decimals = result[1];
             console.log('Oracle rate obtained', rate, decimals);
-            const required = (rate * loan.amount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+            const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
             console.log('Estimated required rcn is', required);
             resolve(required);
           });
         } else {
-          console.log('Loan has no oracle, the required is the raw amount', loan.amount);
-          resolve(loan.amount);
+          console.log('Loan has no oracle, the required is the raw amount', loan.rawAmount);
+          resolve(loan.rawAmount);
         }
       }) as Promise<number>;
     }
