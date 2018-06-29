@@ -62,6 +62,10 @@ export class LendButtonComponent implements OnInit {
       this.showCivicDialog();
       return;
     }
+
+    const tx = await this.contractsService.lendLoan(this.loan);
+    this.txService.registerLendTx(this.loan, tx);
+    this.pendingTx = this.txService.getLastLend(this.loan);
   }
 
   showApproveDialog() {
