@@ -129,9 +129,7 @@ export class LoanDetailComponent implements OnInit {
         this.viewDetail = this.defaultDetail();
 
         this.spinner.hide();
-        this.router.navigate(['/404/']);
       }).catch(() => 
-        // console.log('Doesnt Exist')
         this.router.navigate(['/404/'])
       );
     });

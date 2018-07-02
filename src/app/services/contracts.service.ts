@@ -183,8 +183,11 @@ export class ContractsService {
         this._rcnExtension.getLoan.call(this._rcnEngineAddress, id, (err, result) => {
           if (err != null) {
             reject(err);
+          } else if (result.length === 0) {
+            reject(new Error('Loan does not exist'));
+          } else {
+            resolve(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, result));
           }
-          resolve(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, result));
         });
       }) as Promise<Loan>;
     }
