@@ -112,15 +112,28 @@ export class LoanDetailComponent implements OnInit {
     this.web3Service.getAccount().then((account) => {
       this.userAccount = account;
     });
+
     this.route.params.subscribe(params => {
       const id = +params['id']; // (+) converts string 'id' to a number
+
       this.contractsService.getLoan(id).then(loan => {
+        if (loan) {
+          console.log('Exist');
+        } else{
+          console.log('Doesnt Exist');
+        }
+
         this.loan = loan;
         this.loadDetail();
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
+
         this.spinner.hide();
-      });
-   });
+        this.router.navigate(['/404/']);
+      }).catch(() => 
+        // console.log('Doesnt Exist')
+        this.router.navigate(['/404/'])
+      );
+    });
   }
 }
