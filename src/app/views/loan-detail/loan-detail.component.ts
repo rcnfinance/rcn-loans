@@ -120,7 +120,9 @@ export class LoanDetailComponent implements OnInit {
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
         this.spinner.hide();
+      }).catch((err) => {
+        // TODO: Loan not found, redirect to 404
       });
-   });
+    });
   }
 }
