@@ -112,6 +112,7 @@ export class LoanDetailComponent implements OnInit {
     this.web3Service.getAccount().then((account) => {
       this.userAccount = account;
     });
+
     this.route.params.subscribe(params => {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
@@ -119,8 +120,11 @@ export class LoanDetailComponent implements OnInit {
         this.loadDetail();
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
+
         this.spinner.hide();
-      });
-   });
+      }).catch(() => 
+        this.router.navigate(['/404/'])
+      );
+    });
   }
 }

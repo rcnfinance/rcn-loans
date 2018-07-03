@@ -50,6 +50,7 @@ import { DialogClientAccountComponent } from './dialogs/dialog-client-account/di
 
 // App Modules
 import { CoreModule } from './core/core.module';
+import { NotFoundModule } from './not-found/not-found.module';
 
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -61,6 +62,8 @@ const appRoutes: Routes = [
   { path: 'loan/:id', component: LoanDetailComponent },
   { path: 'address/:address', component: AddressComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: '404', component: NotFoundModule },
+  { path: '**',  redirectTo: '/404' },
 ];
 
 @NgModule({
@@ -96,6 +99,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     CoreModule,
     NgxSpinnerModule,
+    NotFoundModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: false } // <-- debugging purposes only
