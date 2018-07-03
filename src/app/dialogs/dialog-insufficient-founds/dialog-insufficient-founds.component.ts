@@ -16,7 +16,7 @@ export class DialogInsufficientFoundsComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DialogInsufficientFoundsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
 
   ngOnInit() {

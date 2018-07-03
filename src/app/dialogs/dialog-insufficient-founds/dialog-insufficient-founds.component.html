@@ -4,16 +4,20 @@
       <div class="creator-title">Insufficient Funds</div>
     </div>
   </div>
-  <div class="vertical-align">
-    <div class="col-xs-12 col-md-4 dialog-padding">
-        <div class="icon"><i class="fas fa-exclamation-triangle" style="cursor: auto;"></i></div>
-    </div>
-    <div class="col-xs-12 col-md-8 dialog-padding">
-      <div class="title main-h3">Your balance is {{ balance }} RCN</div>
-      <div class="margintop15"></div>
-      <div class="title main-h4">
-        You need at least {{ required }} RCN to lend this loan.
-        <a href="{{link}}" target="_blank">Adquire RCN</a>.
+  <div class="col-xs-12 dialog-padding">
+    <div class="row">
+      <div class="col-xs-12 col-md-4">
+        <div class="icon cursor-none"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="margintop25 visible-xs"></div>
+      </div>
+      <div class="col-xs-12 col-md-8">
+        <div class="title main-h3">Your balance is {{ balance }} RCN</div>
+        <div class="margintop5"></div>
+        <div class="title main-h4">
+          You need at least {{ required }} RCN to make this loan. 
+          To adquire RCN
+        </div>
+        <a mat-raised-button class="button button-primary margintop15" href="{{link}}" target="_blank">Click here</a>
       </div>
     </div>
   </div>
