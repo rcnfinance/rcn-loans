@@ -33,14 +33,14 @@
     "material-icons": "^0.2.3",
     "ngx-spinner": "^6.0.0",
     "package.json": "^2.0.1",
-    "rxjs": "^6.1.0",
+    "rxjs": "^5.5.11",
     "rxjs-compat": "^6.1.0",
     "web3": "^0.18.4",
     "zone.js": "^0.8.19"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.6.0",
-    "@angular/cli": "^6.0.0-rc.4",
+    "@angular/cli": "^1.7.2",
     "@angular/compiler-cli": "^5.2.0",
     "@angular/language-service": "^5.2.0",
     "@types/jasmine": "~2.8.3",
