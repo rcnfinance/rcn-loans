@@ -5,12 +5,19 @@
     </div>
   </div>
   <div class="col-xs-12 dialog-padding">
-    <div class="icon"><i class="fas fa-exclamation-triangle yellow"></i></div>
-    <div class="margintop20"></div>
-    <div class="title main-h2">Your balance is 0 RCN</div>
-    <div class="margintop10 visible-xs"></div>
-    <div class="title main-h2">You need at least 5000 RCN to make this loan.</div>
-    <div class="margintop20"></div>
-    <a href="#" mat-raised-button class="button button-primary" target="_blank">{{ 'Buy' }}</a>
+    <div class="row">
+      <div class="col-xs-12 col-md-4">
+        <div class="icon cursor-none"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="margintop25 visible-xs"></div>
+      </div>
+      <div class="col-xs-12 col-md-8">
+        <div class="title main-h3">Your balance is {{ balance }} RCN</div>
+        <div class="margintop5"></div>
+        <div class="title main-h4">
+          You need at least {{ required }} RCN to make this loan. 
+        </div>
+        <a mat-raised-button class="button button-primary margintop15" href="{{link}}" target="_blank">Adquire RCN</a>
+      </div>
+    </div>
   </div>
 </mat-dialog-content>

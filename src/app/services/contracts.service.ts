@@ -38,15 +38,21 @@ export class ContractsService {
       this._rcnExtension = this.web3.web3reader.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     }
 
+    public async getUserBalanceRCNWei(): Promise<number> {
+      const account = await this.web3.getAccount();
+      return new Promise((resolve, reject) => {
+        this._rcnContract.balanceOf.call(account, function (err, result) {
+          if (err != null) {
+            reject(err);
+          }
+          resolve(result);
+        });
+      }) as Promise<number>;
+    }
     public async getUserBalanceRCN(): Promise<number> {
-        const account = await this.web3.getAccount();
         return new Promise((resolve, reject) => {
-          const _web3 = this.web3.web3;
-          this._rcnContract.balanceOf.call(account, function (err, result) {
-            if (err != null) {
-              reject(err);
-            }
-            resolve(_web3.fromWei(result));
+          this.getUserBalanceRCNWei().then((balance) => {
+            resolve(this.web3.web3reader.fromWei(balance));
           });
         }) as Promise<number>;
     }
@@ -106,6 +112,33 @@ export class ContractsService {
         });
       }) as Promise<string>;
     }
+
+    public async estimateRequiredAmount(loan: Loan): Promise<number> {
+      let oracleData;
+      if (loan.oracle !== undefined) {
+        oracleData = await this.getOracleData(loan);
+      }
+
+      // TODO: Calculate and add cost of the cosigner
+
+      return new Promise((resolve) => {
+        if (loan.oracle !== undefined) {
+          const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
+          oracle.getRate(loan.currency, oracleData, (err, result) => {
+            const rate = result[0];
+            const decimals = result[1];
+            console.log('Oracle rate obtained', rate, decimals);
+            const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+            console.log('Estimated required rcn is', required);
+            resolve(required);
+          });
+        } else {
+          console.log('Loan has no oracle, the required is the raw amount', loan.rawAmount);
+          resolve(loan.rawAmount);
+        }
+      }) as Promise<number>;
+    }
+
     public async lendLoan(loan: Loan): Promise<string> {
         const account = await this.web3.getAccount();
         const oracleData = await this.getOracleData(loan);
@@ -156,22 +189,28 @@ export class ContractsService {
           console.log('Loan has no oracle');
           resolve('0x');
         } else {
-          const web3 = this.web3.web3;
           const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
           oracle.url.call((err, url) => {
             if (url === '') {
               console.log('Oracle does not require data');
               resolve('0x');
             } else {
+              console.log('Oracle requires data from url', url);
               this.http.get(url).subscribe((resp: any) => {
+                console.log('Searching currency', loan.currencyRaw);
+                let data;
                 resp.forEach(e => {
                   if (e.currency === loan.currencyRaw) {
-                    resolve(e.data);
+                    console.log('Oracle data found', e.data);
+                    data = e.data;
+                    resolve(data);
                     return;
                   }
                 });
-                console.log('Oracle did not provide data', resp);
-                resolve('0x');
+                if (data === undefined) {
+                  console.log('Oracle did not provide data', resp);
+                  resolve('0x');
+                }
               });
             }
           });
