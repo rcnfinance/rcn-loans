@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { DatePipe, getLocaleCurrencyName } from '@angular/common';
 // App Models
 import { Loan, Status } from './../../models/loan.model';
 // App Services
@@ -34,6 +34,15 @@ export class LoanDetailComponent implements OnInit {
   totalDebt: number;
   pendingAmount: number;
 
+  // Loan Oracle
+  oracle: string;
+  availableOracle:boolean;
+  currency: any;
+  currencyName = [
+    {name: 'Rcn', address: '0xdddddddddd'},
+    {name: 'Mana', address: '0x4d414e4100000000000000000000000000000000000000000000000000000000'},
+  ];
+
   constructor(
     private identityService: IdentityService,
     private route: ActivatedRoute,
@@ -43,6 +52,25 @@ export class LoanDetailComponent implements OnInit {
     private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
   ) {}
+  
+  // Loan Oracle
+  private loanOracle(){
+    this.oracle = this.loan.oracle;
+
+    if(this.oracle == '0x0000000000000000000000000000000000000000'){
+      this.availableOracle = false;
+      console.log('availableOracle ' + this.availableOracle);
+    } else{
+      this.availableOracle = true;
+      console.log('availableOracle ' + this.availableOracle);
+      
+      for(let i = 0; i < this.currencyName.length; i++){
+        if(this.currencyName[i].address == this.loan.currencyRaw){
+          this.currency = this.currencyName[i].name;
+        }
+      }
+    }
+  }
 
   private loadIdentity() {
     this.identityService.getIdentity(this.loan).then((identity) => {
@@ -118,6 +146,7 @@ export class LoanDetailComponent implements OnInit {
         this.loan = loan;
         this.loadDetail();
         this.loadIdentity();
+        this.loanOracle();
         this.viewDetail = this.defaultDetail();
         this.spinner.hide();
       });

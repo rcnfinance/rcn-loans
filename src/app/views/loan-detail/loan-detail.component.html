@@ -11,9 +11,6 @@
             <li class="col-item">
               <app-creator-container [loan]=loan></app-creator-container>
             </li>
-            <!-- <li class="col-item">
-              <app-button-group></app-button-group>
-            </li> -->
           </ul>
         </div>
         <div class="col-xs-12 col-md-6 loan-description left">
@@ -32,6 +29,22 @@
           <div class="margintop20"></div>
           <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
           <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
+
+          <div class="table-responsive" *ngIf='availableOracle'>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Oracle</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ loan.oracle }} - <b>{{ currency }}</b></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
           <div class="table-responsive" (click)="openDetail('identity');">
             <table class="table table-clickable">
               <thead>
