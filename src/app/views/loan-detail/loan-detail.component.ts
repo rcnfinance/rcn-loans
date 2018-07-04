@@ -39,7 +39,7 @@ export class LoanDetailComponent implements OnInit {
   availableOracle:boolean;
   currency: any;
   currencyName = [
-    {name: 'Rcn', address: '0xdddddddddd'},
+    {name: 'Rcn', address: '0x2f45b6Fb2F28A73f110400386da31044b2e953D4'},
     {name: 'Mana', address: '0x4d414e4100000000000000000000000000000000000000000000000000000000'},
   ];
 
@@ -52,7 +52,7 @@ export class LoanDetailComponent implements OnInit {
     private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
   ) {}
-  
+
   // Loan Oracle
   private loanOracle(){
     this.oracle = this.loan.oracle;
