@@ -37,11 +37,7 @@ export class LoanDetailComponent implements OnInit {
   // Loan Oracle
   oracle: string;
   availableOracle:boolean;
-  currency: any;
-  currencyName = [
-    {name: 'Rcn', address: '0x2f45b6Fb2F28A73f110400386da31044b2e953D4'},
-    {name: 'Mana', address: '0x4d414e4100000000000000000000000000000000000000000000000000000000'},
-  ];
+  currency: string;
 
   constructor(
     private identityService: IdentityService,
@@ -52,25 +48,6 @@ export class LoanDetailComponent implements OnInit {
     private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
   ) {}
-
-  // Loan Oracle
-  private loanOracle(){
-    this.oracle = this.loan.oracle;
-
-    if(this.oracle == '0x0000000000000000000000000000000000000000'){
-      this.availableOracle = false;
-      console.log('availableOracle ' + this.availableOracle);
-    } else{
-      this.availableOracle = true;
-      console.log('availableOracle ' + this.availableOracle);
-      
-      for(let i = 0; i < this.currencyName.length; i++){
-        if(this.currencyName[i].address == this.loan.currencyRaw){
-          this.currency = this.currencyName[i].name;
-        }
-      }
-    }
-  }
 
   private loadIdentity() {
     this.identityService.getIdentity(this.loan).then((identity) => {
@@ -144,9 +121,15 @@ export class LoanDetailComponent implements OnInit {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
+        this.oracle = this.loan.oracle;
+        this.currency = this.loan.currency;
+        if(this.currency == 'RCN'){
+          this.availableOracle = false;
+        } else{
+          this.availableOracle = true;
+        }
         this.loadDetail();
         this.loadIdentity();
-        this.loanOracle();
         this.viewDetail = this.defaultDetail();
         this.spinner.hide();
       });
