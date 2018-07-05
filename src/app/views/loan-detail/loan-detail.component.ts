@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { DatePipe, getLocaleCurrencyName } from '@angular/common';
 // App Models
 import { Loan, Status } from './../../models/loan.model';
 // App Services
@@ -33,6 +33,11 @@ export class LoanDetailComponent implements OnInit {
   canTransfer: boolean;
   totalDebt: number;
   pendingAmount: number;
+
+  // Loan Oracle
+  oracle: string;
+  availableOracle: boolean;
+  currency: string;
 
   constructor(
     private identityService: IdentityService,
@@ -117,6 +122,9 @@ export class LoanDetailComponent implements OnInit {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
+        this.oracle = this.loan.oracle;
+        this.currency = this.loan.currency;
+        this.availableOracle = this.loan.oracle !== Utils.address_0;
         this.loadDetail();
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
