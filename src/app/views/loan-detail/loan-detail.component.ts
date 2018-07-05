@@ -36,7 +36,7 @@ export class LoanDetailComponent implements OnInit {
 
   // Loan Oracle
   oracle: string;
-  availableOracle:boolean;
+  availableOracle: boolean;
   currency: string;
 
   constructor(
@@ -123,11 +123,7 @@ export class LoanDetailComponent implements OnInit {
         this.loan = loan;
         this.oracle = this.loan.oracle;
         this.currency = this.loan.currency;
-        if(this.currency == 'RCN'){
-          this.availableOracle = false;
-        } else{
-          this.availableOracle = true;
-        }
+        this.availableOracle = this.loan.oracle !== Utils.address_0;
         this.loadDetail();
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
