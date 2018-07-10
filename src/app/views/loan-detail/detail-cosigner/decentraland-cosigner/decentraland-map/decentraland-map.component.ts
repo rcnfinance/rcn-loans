@@ -18,10 +18,9 @@ export class DecentralandMapComponent {
   constructor() { }
 
   resource(): string {
-    return this.decentralandProvider.dataUrl + 'map.png?publications=true' +
-      '&width=' + this.width +
-      '&height=' + this.height +
-      '&center=' + this.center.x + ',' + this.center.y +
-      '&selected=' + this.center.x + ',' + this.center.y;
+    return this.decentralandProvider.dataUrl + 'parcels/' +
+      + this.center.x + '/' + this.center.y + '/map.png?' +
+      'width=' + this.width +
+      '&height=' + this.height;
   }
 }
