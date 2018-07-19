@@ -31,8 +31,17 @@
 
   <link rel="preload" href="https://hosted-sip.civic.com/css/civic-modal.min.css" as="style">
   <script rel="preload" src="https://hosted-sip.civic.com/js/civic.sip.min.js" as="script"></script>
+
 </head>
 <body>
   <app-root></app-root>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXX-X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-XXXXXXXX-X');
+  </script>
 </body>
 </html>
