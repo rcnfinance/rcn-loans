@@ -49,22 +49,12 @@ import { DialogApproveContractComponent } from './dialogs/dialog-approve-contrac
 import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 
 // App Modules
+import { AppRoutingModule } from './app-routing/app-routing.module';
 import { CoreModule } from './core/core.module';
 import { NotFoundModule } from './not-found/not-found.module';
 
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
-
-const appRoutes: Routes = [
-  { path: '', redirectTo: '/requests', pathMatch: 'full'},
-  { path: 'requests', component: OpenLoansComponent },
-  { path: 'activity', component: ActiveLoansComponent },
-  { path: 'loan/:id', component: LoanDetailComponent },
-  { path: 'address/:address', component: AddressComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: '404', component: NotFoundModule },
-  { path: '**',  redirectTo: '/404' },
-];
 
 @NgModule({
   declarations: [
@@ -91,6 +81,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     SharedModule,
     MaterialModule,
     HttpModule,
@@ -100,10 +91,6 @@ const appRoutes: Routes = [
     CoreModule,
     NgxSpinnerModule,
     NotFoundModule,
-    RouterModule.forRoot(
-      appRoutes,
-      { enableTracing: false } // <-- debugging purposes only
-    )
   ],
   exports: [],
   entryComponents: [
