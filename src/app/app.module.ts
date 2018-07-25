@@ -18,6 +18,7 @@ import { CivicService } from './services/civic.service';
 import { SidebarService } from './services/sidebar.service';
 import { TitleService } from './services/title.service';
 import { AvailableLoansService } from './services/available-loans.service';
+import { AssetsService } from './services/assets.service';
 
 // App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
@@ -55,6 +56,8 @@ import { NotFoundModule } from './not-found/not-found.module';
 
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { RequestLoanComponent } from './views/request-loan/request-loan.component';
+import { CollateralSelectorComponent } from './views/request-loan/collateral-selector/collateral-selector.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +81,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
     DialogInsufficientFoundsComponent,
+    RequestLoanComponent,
+    CollateralSelectorComponent,
   ],
   imports: [
     BrowserModule,
@@ -98,6 +103,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     DialogLoanTransferComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
+    CollateralSelectorComponent
   ],
   providers: [
     ContractsService,
@@ -111,6 +117,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     SidebarService,
     TitleService,
     AvailableLoansService,
+    AssetsService,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,15 @@
+@import '../../../scss/_variables.scss'; //variables
+
+.form-table {
+    ol{height: 52px;}
+    li{
+      width: 25%;
+      height: 100%;
+      display: inline-block;
+    //   line-height: 1.8;
+      @extend %font-bold;
+    //   text-align: left;
+    //   font-size: 26px;
+      margin: 10px;
+    }
+}

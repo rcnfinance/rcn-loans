@@ -6,9 +6,10 @@ import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
 import { TxService } from '../tx.service';
 import { CosignerService } from './cosigner.service';
-import { Utils } from '../utils/utils';
+import { Utils, promisify } from '../utils/utils';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import BigNumber from 'bignumber.js';
+import { AssetItem } from '../models/asset.model';
 
 declare let require: any;
 
@@ -16,6 +17,7 @@ const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
 const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const oracleAbi = require('../contracts/Oracle.json');
+const pawnAbi = require('../contracts/PawnManager.json');
 
 @Injectable()
 export class ContractsService {
@@ -216,6 +218,102 @@ export class ContractsService {
           });
         }
       }) as Promise<string>;
+    }
+    public async requestLoan(
+      amount: number,
+      duration: number,
+      firstPayment: number,
+      annualInterest: number,
+      metadata: string
+    ): Promise<string> {
+      const account = await this.web3.getAccount();
+      const currencyCode = '0x0000000000000000000000000000000000000000000000000000000000000000';
+      return await promisify(c => this._rcnEngine.createLoan(
+        Utils.address_0,
+        account,
+        currencyCode,
+        amount,
+        annualInterest,
+        annualInterest / 2,
+        duration,
+        firstPayment,
+        Math.floor(Date.now() / 1000) + (31 * 24 * 60 * 60), // 31 days
+        metadata,
+        c
+      )) as string;
+    }
+    public async requestPawnLoan(
+      _amount: number,
+      _duration: number,
+      _firstPayment: number,
+      _interestRate: number,
+      metadata: string,
+      erc721Tokens: AssetItem[]
+    ): Promise<string> {
+      const pInterestRate = (_interestRate / 2).toFixed(0);
+      const interestRate = _interestRate.toFixed(0);
+      const amount = _amount.toFixed(0);
+      const duration = _duration.toFixed(0);
+      const firstPayment = _firstPayment.toFixed(0);
+      const expirationRequest = Math.floor(Date.now() / 1000) + (31 * 24 * 60 * 60); // 31 days;
+
+      // Sign the loan request
+      const borrower = await this.web3.getAccount();
+      metadata += ' #required-cosigner:' + environment.contracts.pawnManager;
+
+      // Retrieve the loan signature
+      const loanIdentifier = await promisify(c => this._rcnEngine.buildIdentifier(
+        0x0,                  // Contract of the oracle
+        borrower,             // Borrower of the loan (caller of this method)
+        environment.contracts.pawnManager,  // Creator of the loan, the pawn creator
+        0x0,                  // Currency of the loan, RCN
+        amount,        // Request amount
+        interestRate,        // Interest rate, 20% anual
+        pInterestRate,        // Punnitory interest rate, 30% anual
+        duration,        // Duration of the loan, 6 months
+        firstPayment,        // Borrower can pay the loan at 5 months
+        expirationRequest,        // Pawn request expires in 1 month
+        metadata,          // Metadata
+        c
+      )) as string;
+
+      const sgn = (await this.web3.sign(loanIdentifier)).slice(2);
+      const r = `0x${sgn.slice(0, 64)}`;
+      const s = `0x${sgn.slice(64, 128)}`;
+      const v = parseInt(sgn.slice(128, 130), 16);
+
+      console.log(loanIdentifier, r, s, v, sgn);
+
+      const contractsErc721 = [];
+      const idsErc721 = [];
+
+      erc721Tokens.forEach(token => {
+        contractsErc721.push(token.asset.contract);
+        idsErc721.push(token.id);
+      });
+
+      const pawnContract = this.web3.web3.eth.contract(pawnAbi.abi).at(environment.contracts.pawnManager);
+      return await promisify(c => pawnContract.requestPawn(
+        Utils.address_0, // Oracle
+        '0x0000000000000000000000000000000000000000000000000000000000000000', // Currency
+        [ // Loan parameters
+          amount,
+          interestRate,
+          pInterestRate,
+          duration,
+          firstPayment,
+          expirationRequest
+        ],
+        metadata,
+        v,
+        r,
+        s,
+        [],
+        [],
+        contractsErc721,
+        idsErc721,
+        c
+      )) as string;
     }
     public async getLoan(id: number): Promise<Loan> {
       return new Promise((resolve, reject) => {

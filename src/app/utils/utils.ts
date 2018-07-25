@@ -94,3 +94,15 @@ export class Utils {
         return value;
     }
 }
+
+export function promisify(inner) {
+    return new Promise((resolve, reject) =>
+        inner((err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(res);
+            }
+        })
+    );
+}

@@ -20,6 +20,7 @@
             <div class="header-title">{{ title }}</div>
 
             <ul class="nav">
+              <li routerLink='/request'>Request</li>
               <li routerLink='/requests'>Requests</li>
               <li routerLink='/activity'>Activity</li>
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>

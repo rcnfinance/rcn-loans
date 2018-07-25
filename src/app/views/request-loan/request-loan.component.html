@@ -1,0 +1,73 @@
+<div class="container">
+    <div class="row">
+      <form class="form-table" (submit)="onSubmit($event, amount, duration, firstpayment, interestrate, metadata)">
+          <ol>
+              <li>
+                  <mat-form-field>
+                      <input type="number" name="loan_amount" placeholder="RCN to request" ngModel matInput #amount>
+                      <!-- <mat-hint>Remember that transferring a Loan is an irreversible operation. Please check the address carefully</mat-hint>
+                      <mat-error *ngIf="invalidAddress">This is not a valid address</mat-error> -->
+                    </mat-form-field>
+                    <!-- <div class="error" *ngIf="invalidAddress">This is not a valid address</div> -->
+              </li>
+              <!-- <li>
+                  <mat-form-field>
+                      <mat-select placeholder="Currency" name="currency" [(ngModel)]="select" required>
+                          <mat-option [value]="RCN" >
+                            RCN
+                          </mat-option>
+                          <mat-option [value]="ARS" >
+                            ARS
+                          </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+              </li> -->
+              <li>
+                  <mat-form-field>
+                      <input type="number" name="duration" placeholder="Duration in days" ngModel matInput #duration>
+                      <!-- <mat-hint>Remember that transferring a Loan is an irreversible operation. Please check the address carefully</mat-hint>
+                      <mat-error *ngIf="invalidAddress">This is not a valid address</mat-error> -->
+                  </mat-form-field>
+                  <!-- <div class="error" *ngIf="invalidAddress">This is not a valid address</div> -->
+              </li>
+              <li>
+                  <mat-form-field>
+                      <input type="number" name="first_payment" placeholder="First payment day" ngModel matInput #firstpayment>
+                      <!-- <mat-hint>Remember that transferring a Loan is an irreversible operation. Please check the address carefully</mat-hint>
+                      <mat-error *ngIf="invalidAddress">This is not a valid address</mat-error> -->
+                  </mat-form-field>
+                  <!-- <div class="error" *ngIf="invalidAddress">This is not a valid address</div> -->
+              </li>
+              <li>
+                  <mat-form-field>
+                      <input type="number" name="intrest_rate" placeholder="Annual interest rate" ngModel matInput #interestrate>
+                      <!-- <mat-hint>Remember that transferring a Loan is an irreversible operation. Please check the address carefully</mat-hint>
+                      <mat-error *ngIf="invalidAddress">This is not a valid address</mat-error> -->
+                  </mat-form-field>
+                  <!-- <div class="error" *ngIf="invalidAddress">This is not a valid address</div> -->
+              </li>
+              <li>
+                    <mat-form-field>
+                        <input type="string" name="metadata" placeholder="Description of the request" ngModel matInput #metadata>
+                        <!-- <mat-hint>Remember that transferring a Loan is an irreversible operation. Please check the address carefully</mat-hint>
+                        <mat-error *ngIf="invalidAddress">This is not a valid address</mat-error> -->
+                    </mat-form-field>
+                    <!-- <div class="error" *ngIf="invalidAddress">This is not a valid address</div> -->
+                </li>
+              <li>
+                <a (click)="openCollateralSelector()">{{ selectedCollateral.length !== 0 ? verboseSelectedCollateral() : 'Add collateral' }}</a>
+              </li>
+          </ol>
+        <div class="col-xs-12">
+          <div class="margintop10"></div>
+        </div>
+        <div class="col-xs-12">
+        </div>
+        <div class="col-xs-12 margintop80">
+          <div class="margintop10"></div>
+          <button type="submit" mat-raised-button class="button button-primary" ngModel>{{ 'Submit' }}</button>
+          <button mat-raised-button class="button button-secondary" [mat-dialog-close]='true'>{{ 'Cancel' }}</button>
+        </div>
+      </form>
+    </div>
+</div>

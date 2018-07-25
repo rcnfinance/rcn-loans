@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as Web3 from 'web3';
 import { environment } from '../../environments/environment';
+import { promisify } from '../utils/utils';
 
 declare let require: any;
 declare let window: any;
@@ -67,5 +68,16 @@ export class Web3Service {
       this._web3.eth.defaultAccount = this._account;
     }
     return Promise.resolve(this._account);
+  }
+
+  public async sign(message: string): Promise<string> {
+    const signer = await this.getAccount();
+
+    if (window.web3.personal.sign !== undefined) {
+      const result =  await promisify(c => window.web3.personal.sign(message, signer, c)) as any;
+      return result as string;
+    } else {
+      // TODO: Handle other cases
+    }
   }
 }

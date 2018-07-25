@@ -79,7 +79,7 @@ export class Tag {
     ) {}
 }
 
-function decodeTokenId(value: string): [number, number] {
+export function decodeTokenId(value: string): [number, number] {
     value = value.slice(2);
     const x = value.slice(0, 32);
     const y = value.slice(32);
