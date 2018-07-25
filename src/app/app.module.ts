@@ -52,9 +52,11 @@ import { DialogClientAccountComponent } from './dialogs/dialog-client-account/di
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { CoreModule } from './core/core.module';
 import { NotFoundModule } from './not-found/not-found.module';
+import { TransactionHistoryModule } from './transaction-history/transaction-history.module';
 
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { TransactionHistoryComponent } from './views/loan-detail/transaction-history/transaction-history.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +80,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
     DialogInsufficientFoundsComponent,
+    TransactionHistoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -91,6 +94,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     CoreModule,
     NgxSpinnerModule,
     NotFoundModule,
+    TransactionHistoryModule,
   ],
   exports: [],
   entryComponents: [
