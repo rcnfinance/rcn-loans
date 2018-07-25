@@ -32,17 +32,18 @@ import { ContentWrapperComponent } from './content-wrapper/content-wrapper.compo
 
 import { OpenLoansComponent } from './views/open-loans/open-loans.component';
 
+import { AddressComponent } from './views/address/address.component';
+
 import { ActiveLoansComponent } from './active-loans/active-loans.component';
 import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
-import { LoanDetailComponent } from './views/loan-detail/loan-detail.component';
-import { DetailCosignerComponent } from './views/loan-detail/detail-cosigner/detail-cosigner.component';
-import { DetailIdentityComponent } from './views/loan-detail/detail-identity/detail-identity.component';
-import { DetailTableComponent } from './views/loan-detail/detail-table/detail-table.component';
+// import { DetailCosignerComponent } from './views/loan-detail/detail-cosigner/detail-cosigner.component';
+// import { DetailIdentityComponent } from './views/loan-detail/detail-identity/detail-identity.component';
+// import { DetailTableComponent } from './views/loan-detail/detail-table/detail-table.component';
 import { DialogLoanTransferComponent } from './dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
-import { DecentralandCosignerComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
-import { DecentralandMapComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
-import { AddressComponent } from './views/address/address.component';
+// import { DecentralandCosignerComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
+// import { DecentralandMapComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
+// import { TransactionHistoryComponent } from './views/loan-detail/transaction-history/transaction-history.component';
 
 import { ProfileComponent } from './views/profile/profile.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -54,7 +55,6 @@ import { CoreModule } from './core/core.module';
 import { NotFoundModule } from './not-found/not-found.module';
 import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
 
-
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
 
@@ -64,22 +64,22 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     HeaderComponent,
     FadeToggleDirective,
     WindowsHeightDirective,
-    LoanDetailComponent,
     OpenLoansComponent,
-    DetailCosignerComponent,
+    // DetailCosignerComponent,
     ContentWrapperComponent,
-    DetailIdentityComponent,
-    DecentralandCosignerComponent,
+    // DetailIdentityComponent,
+    // DecentralandCosignerComponent,
     DialogApproveContractComponent,
     DialogLoanTransferComponent,
-    DecentralandMapComponent,
-    DetailTableComponent,
+    // DecentralandMapComponent,
+    // DetailTableComponent,
     ProfileComponent,
     AddressComponent,
     ActiveLoansComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
     DialogInsufficientFoundsComponent,
+    // TransactionHistoryComponent,
   ],
   imports: [
     BrowserModule,
