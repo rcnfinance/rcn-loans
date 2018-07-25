@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoanDetailComponent } from './loan-detail.component';
 
 const routes: Routes = [
+  // TODO: review app-routing-module with this routing-module
   { path: 'loan/:id', component: LoanDetailComponent }
 ];
 
