@@ -3,15 +3,12 @@
 
     <div class="time-event {{ event.inserted }}" *ngFor='let event of timeline; index as i; first as isFirst; last as isLast'>
       <div class="icon-event bg-{{ event.color }}">
-        <i class="material-icons">{{ event.icon }}</i>
+        <i class="{{ event.materialClass }} {{ event.awesomeClass }}">{{ event.icon }}</i>
       </div>
       <div class="line" *ngIf="!isLast"></div>
-      <div class="circle"></div>
+      <div class="circle" [ngStyle]="{'border': '4px solid ' + event.hexa }"></div>
       <div class="title">{{ event.title }} {{ i }}</div>
-      <!-- <div class="title">{{i}}/{{event.title}}. {{event.length}} <span *ngIf="isFirst">default</span></div> -->
     </div>
-
-
 
   </div>
 </div>
