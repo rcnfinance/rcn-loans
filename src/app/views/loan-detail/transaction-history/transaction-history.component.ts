@@ -24,10 +24,18 @@ export class TransactionHistoryComponent implements OnInit {
     },
     {
       'materialClass': 'material-icons',
-      'icon': 'trending_up',
-      'title': 'Lent',
+      'icon': 'call_made',
+      'title': 'Withdraw',
       'color': 'white',
       'hexa': '#ffffff',
+      'inserted': true
+    },
+    {
+      'materialClass': 'material-icons',
+      'icon': 'swap_horiz',
+      'title': 'Transfer',
+      'color': 'orange',
+      'hexa': '#da7d3a',
       'inserted': true
     },
     {
@@ -35,6 +43,7 @@ export class TransactionHistoryComponent implements OnInit {
       'icon': 'delete',
       'title': 'Destroyed',
       'color': 'red',
+      'disableHexa': '#333',
       'inserted': false
     }
   ];
