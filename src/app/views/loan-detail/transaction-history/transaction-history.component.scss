@@ -5,6 +5,7 @@
     margin-left: -15px;
     margin-right: -15px;
     .time-event{
+      width: 100%;
       cursor: pointer;
       position: relative;
       height: 70px;
@@ -14,12 +15,12 @@
         font-size: 18px;
         color: $secondary;
         display: inline-block;
-        padding-left: 15px;
-        @extend %font-black;
+        left: 110px;
+        @extend %font-bold;
         @extend %absolute-center-top;
       }
       .icon-event {
-        position: relative;
+        position: absolute;
         width: 40px;
         height: 40px;
         z-index: 99;
@@ -27,6 +28,7 @@
         border-radius: 50%;
         margin-left: -10px;
         display: inline-block;
+        left: 70px;
         top: 50%; @include transform(translate(0%, -50%));
         i{
           @extend %absolute-center;
@@ -40,14 +42,22 @@
           color: #000;
         }
       }
+      .fa-chevron-right {
+        display: none;
+        position: absolute;
+        right: 30px;
+        @include transition();
+        top: 50%; @include transform(translate(0%, -50%));
+      }
       .circle{
-        position: relative;
+        position: absolute;
+        left: 70px;
         width: 20px;
         height: 20px;
         display: none;
-        z-index: 99;
         border-radius: 50%;
-        background-color: $tertiary;
+        border: 4px solid #333;
+        background-color: #0f0f0f;
       }
       .line{
         height: 50px;
@@ -57,9 +67,15 @@
         z-index: 9;
         border-right: 4px solid $primary;
       }
+      &.disabled{
+        .icon-event {
+          background-color: #333;
+        }
+      }
       &.true{
         .circle{display: inline-block;}
         .icon-event{position: absolute; left: 25px;}
+        .fa-chevron-right{display: block;}
       }
       &:first-child,
       &:last-child{
@@ -70,18 +86,16 @@
   }
 }
 
-@media (min-width: 768px){
+@media (min-width: 992px){
   .transaction-component{
     .timeline{
       .time-event{
         cursor: pointer;
-        width: 90px;
-        .title{
-          width: 200px;
-          text-align: left;
-        }
         &:hover{
           background-color: $tertiary;
+          .fa-chevron-right {
+            right: 15px;
+          }
         }
       }
     }
