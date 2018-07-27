@@ -67,6 +67,12 @@
         z-index: 9;
         border-right: 4px solid $primary;
       }
+      &.background-active{
+        background-color: $tertiary;
+        .fa-chevron-right {
+          right: 15px;
+        }
+      }
       &.disabled{
         .icon-event {
           background-color: #333;

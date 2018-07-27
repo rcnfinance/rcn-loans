@@ -54,9 +54,18 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': false
     }
   ];
-  constructor() { }
-
+  
+  constructor() {
+    console.log(this.timeline);
+  }
+  
+  activateClass(event){
+    event.active = !event.active;
+    console.log(event);
+  }
+  
   ngOnInit() {
+    console.log(this.timeline);
   }
 
 }
