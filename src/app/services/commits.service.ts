@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, Response } from '@angular/http';
+import { 
+  Http, 
+  Response,
+  RequestOptions,
+  Headers,
+  HttpModule,
+  URLSearchParams,
+} from '@angular/http';
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
 import { Commit } from '../models/commit.model';
 
 @Injectable()
 export class CommitsService {
-  configUrl: string = 'https://api.mercadolibre.com/items/MLA698930172';
-  // configUrl = 'http://192.168.0.249:8000/v1/loans/1';
+  // configUrl = 'https://testnet.rnode.rcn.loans/v1/loans/1';
+  configUrl = 'http://192.168.0.249:8000/v1/loans/1';
 
   constructor(private http: Http) {}
 
@@ -16,6 +23,8 @@ export class CommitsService {
       .map(response => {
         const data = response.json();
         console.log(data);
+        console.log(data.content);
+        console.log(data.content.commits);
         return data;
       })
       .catch(

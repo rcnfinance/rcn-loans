@@ -14,6 +14,7 @@ export class TransactionHistoryComponent implements OnInit {
   id: number;
   name: string;
 
+  commit: Commit;
   commits;
 
   icon: string = 'trending_up';
@@ -72,15 +73,15 @@ export class TransactionHistoryComponent implements OnInit {
   onGet() {
     this.commitsService.getCommits()
       .subscribe(
-        data => { this.commits = data},
+        (data) => { this.commits = data},
         err => console.error(err),
         () => console.log('done loading commits')
       );
+    console.log(this.commits);
   }
 
   ngOnInit() {
     this.onGet();
-    console.log(this.commits);
   }
 
 }
