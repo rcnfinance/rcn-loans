@@ -23,8 +23,6 @@ export class CommitsService {
       .map((response: Response) => {
         const data = response.json();
         console.log(data);
-        console.log(data.content);
-        console.log(data.content.commits);
         return data;
       })
       .catch(

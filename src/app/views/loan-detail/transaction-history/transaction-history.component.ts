@@ -70,19 +70,17 @@ export class TransactionHistoryComponent implements OnInit {
   ) { }
 
 
-  onGet() {
+  loadCommits() {
     this.commitsService.getCommits()
       .subscribe(
-        (data) => { this.commits = data},
+        (data) => { this.commits = data.content.commits },
         err => console.error(err),
-        () => console.log('done loading commits')
+        () => console.log('Response(202): Commits have been Loaded Successfully!', this.commits)
       );
-    console.log('Messege');
   }
 
   ngOnInit() {
-    this.onGet();
-    console.log(this.commits);
+    this.loadCommits();
   }
 
 }
