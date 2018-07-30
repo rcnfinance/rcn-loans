@@ -20,7 +20,7 @@ export class CommitsService {
 
   getCommits() {
     return this.http.get(this.configUrl)
-      .map(response => {
+      .map((response: Response) => {
         const data = response.json();
         console.log(data);
         console.log(data.content);

@@ -105,7 +105,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 // Withdraw button
   loadWithdrawBalance() {
     this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
-      console.log(result);
+      // console.log(result);
       this.rcnAvailable = Utils.formatAmount(result[0] / 10 ** 18);
       this.loansWithBalance = result[1];
     });

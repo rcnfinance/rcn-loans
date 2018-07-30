@@ -54,7 +54,7 @@ export class OpenLoansComponent implements OnInit{
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
 
-    console.log(result);
+    // console.log(result);
       this.upgradeAvaiblable();
       this.spinner.hide();
       if (this.loans.length === 0) {

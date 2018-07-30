@@ -77,11 +77,12 @@ export class TransactionHistoryComponent implements OnInit {
         err => console.error(err),
         () => console.log('done loading commits')
       );
-    console.log(this.commits);
+    console.log('Messege');
   }
 
   ngOnInit() {
     this.onGet();
+    console.log(this.commits);
   }
 
 }

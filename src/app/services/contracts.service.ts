@@ -309,6 +309,6 @@ export class ContractsService {
       return loans;
     }
     private addressToBytes32(address: string): string {
-      return '0x000000000000000000000000' + address.replace('0x', '');
+      // return '0x000000000000000000000000' + address.replace('0x', '');
     }
 }
