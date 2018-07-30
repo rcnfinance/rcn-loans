@@ -20,10 +20,21 @@ export class CommitsService {
 
   getCommits() {
     return this.http.get(this.configUrl)
-      .map((response: Response) => {
-        const data = response.json();
-        console.log(data);
-        return data;
+      // .map((response: Response) => {
+      //   const data = response.json();
+      //   console.log(data);
+      //   return data;
+      // })
+      .map(response => {
+        const results = response.json().results.map( commit => {
+          return new Commit( 
+            commit.opcode,
+            commit.timestamp,
+            commit.order,
+            commit.proof,
+            commit.data
+          );
+        })
       })
       .catch(
         (error: Response) => {

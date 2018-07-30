@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // App Models
-import { Commit } from '../../../models/commit.model';
+import { Commit, Lent } from '../../../models/commit.model';
 // App Services
 import { CommitsService } from '../../../services/commits.service';
 
@@ -13,8 +13,9 @@ import { CommitsService } from '../../../services/commits.service';
 export class TransactionHistoryComponent implements OnInit {
   id: number;
   name: string;
+  lends: Lent[];
 
-  commit: Commit;
+  commit: Commit[];
   commits;
 
   icon: string = 'trending_up';
@@ -67,7 +68,12 @@ export class TransactionHistoryComponent implements OnInit {
   ];
   constructor(
     private commitsService: CommitsService
-  ) { }
+  ) { 
+    this.lends = [
+      new Lent( 'active', 'material-icons', 'trending_up', 'Lent', 'blue', 'Lent'),
+      new Lent( 'inactive', 'material-icons', 'up', 'Lent', 'blue', 'Lent'),
+    ]
+  }
 
   activateClass(event){
     event.active = !event.active;
@@ -85,6 +91,7 @@ export class TransactionHistoryComponent implements OnInit {
 
   ngOnInit() {
     this.loadCommits();
+    console.log(this.lends);
   }
 
 }

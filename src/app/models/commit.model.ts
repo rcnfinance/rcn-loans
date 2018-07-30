@@ -40,6 +40,26 @@ export class Commit {
 
 };
 
+export class Lent{
+  status: string;
+  materialClass: string;
+  icon: string;
+  title: string;
+  color: string;
+  messege: string;
+  inserted: boolean;
+
+  constructor(status: string, materialClass: string, icon: string, title: string, color: string, messege: string){
+    this.status = status;
+    this.materialClass = materialClass;
+    this.icon = icon;
+    this.title = title;
+    this.color = color;
+    this.messege = messege;
+    this.inserted = true;
+  }
+}
+
 class TransferCommit extends Commit {
   style_properties: {
       status: "active",
@@ -410,10 +430,10 @@ let loan_1 = {
 
 function build_timeline(loan: Loan): Array<Commit> {
   let timeline: Array<Commit> = [];
-  console.log(timeline);
+  // console.log(timeline);
   for (let commit of loan.commits) {
-      console.log(commit.opcode);
-      array = commit.export_to_object();
+      // console.log(commit.opcode);
+      // array = commit.export_to_object();
       switch (commit.opcode) {
           case "approved_loan": {
               let c = new ApprovedLoanCommit(commit.opcode, commit.timestamp, commit.order, commit.proof, commit.data);
@@ -465,7 +485,7 @@ function parse_response(json: any): Loan {
   let commits: Array<Commit> = [];
   let loan: Loan;
   for (let commit of json.commits) {
-      console.log(commit.opcode);
+      // console.log(commit.opcode);
       switch (commit.opcode) {
           case "approved_loan": {
               let c = new ApprovedLoanCommit(commit.opcode, commit.timestamp, commit.order, commit.proof, commit.data);
@@ -547,9 +567,9 @@ function parse_loans(json: any): Loan[] {
 
 
 let loan = parse_response(loan_1);
-console.log(loan);
+// console.log(loan);
 let timeline = build_timeline(loan);
-console.log(timeline);
+// console.log(timeline);
 
 
 // #1 get response endpoint
