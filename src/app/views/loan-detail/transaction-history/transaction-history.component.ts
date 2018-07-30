@@ -69,6 +69,10 @@ export class TransactionHistoryComponent implements OnInit {
     private commitsService: CommitsService
   ) { }
 
+  activateClass(event){
+    event.active = !event.active;
+    console.log(event);
+  }
 
   loadCommits() {
     this.commitsService.getCommits()
