@@ -80,7 +80,7 @@ export class TransactionHistoryComponent implements OnInit {
     console.log(event);
   }
 
-  loadCommits() {
+  getLoanData() {
     this.commitsService.getCommits()
       .subscribe(
         (data) => { this.commits = data.content.commits },
@@ -89,7 +89,17 @@ export class TransactionHistoryComponent implements OnInit {
       );
   }
 
+  loadCommits() {
+    this.commitsService.getCommits()
+      .subscribe(
+        (commits) => { this.commits = commits },
+        err => console.error(err),
+        () => console.log('Response(202): Commits have been Loaded Successfully!', this.commits)
+      );
+  }
+
   ngOnInit() {
+    this.getLoanData();
     this.loadCommits();
     console.log(this.lends);
   }

@@ -18,15 +18,24 @@ export class CommitsService {
 
   constructor(private http: Http) {}
 
+  getLoanData() {
+    return this.http.get(this.configUrl)
+      .map((response: Response) => {
+        const data = response.json();
+        console.log(data);
+        return data;
+      })
+      .catch(
+        (error: Response) => {
+          return Observable.throw('Something went wrong: We couldnt get your Loan data');
+        }
+      );
+  }
+
   getCommits() {
     return this.http.get(this.configUrl)
-      // .map((response: Response) => {
-      //   const data = response.json();
-      //   console.log(data);
-      //   return data;
-      // })
       .map(response => {
-        const results = response.json().results.map( commit => {
+        const commits = response.json().commits.map( commit => {
           return new Commit( 
             commit.opcode,
             commit.timestamp,
@@ -35,10 +44,11 @@ export class CommitsService {
             commit.data
           );
         })
+        return commits;
       })
       .catch(
         (error: Response) => {
-          return Observable.throw('Something went wrong');
+          return Observable.throw('Something went wrong: We couldnt get your Commit[] events');
         }
       );
   }
