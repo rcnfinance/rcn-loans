@@ -1,13 +1,19 @@
 <div class="transaction-component">
   <div class="timeline">
 
-    <div class="time-event {{ event.inserted }}" *ngFor='let event of timeline; index as i; first as isFirst; last as isLast'>
-      <div class="icon-event bg-{{ event.color }}">
+    <div class="time-event {{ event.inserted }} {{ event.status }}"
+      *ngFor='let event of timeline; index as i; first as isFirst; last as isLast'
+      [ngClass]="{'background-active': event.active}"
+      (click)="activateClass(event)">
+      <div class="icon-event bg-{{ event.color }}"
+        matTooltip="{{ event.messege }}" matTooltipPosition="above">
         <i class="{{ event.materialClass }} {{ event.awesomeClass }}">{{ event.icon }}</i>
       </div>
-      <div class="line" *ngIf="!isLast"></div>
-      <div class="circle" [ngStyle]="{'border': '4px solid ' + event.hexa }"></div>
-      <div class="title">{{ event.title }} {{ i }}</div>
+      
+      <div class="line" [ngStyle]="{'border-right': '4px solid ' + event.hexa }" *ngIf="!isFirst"></div>
+      <div class="circle"></div>
+      <div class="title">{{ event.title }}</div>
+      <i class="fas fa-chevron-right"></i>
     </div>
 
   </div>

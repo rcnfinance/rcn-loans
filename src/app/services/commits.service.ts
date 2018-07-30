@@ -6,7 +6,7 @@ import { Commit } from '../models/commit.model';
 
 @Injectable()
 export class CommitsService {
-  configUrl = 'https://api.mercadolibre.com/items/MLA698930172';
+  configUrl: string = 'https://api.mercadolibre.com/items/MLA698930172';
   // configUrl = 'http://192.168.0.249:8000/v1/loans/1';
 
   constructor(private http: Http) {}

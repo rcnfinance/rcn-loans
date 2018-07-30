@@ -65,7 +65,7 @@
             <table class="table" (click)="openLender(loan.owner)" *ngIf="!isRequest">
               <thead>
                 <tr>
-                  <th style='cursor: pointer' [ngClass]="{'background-active': id === 2 }" scope="col">{{ 'Lender' }}</th>
+                  <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -103,7 +103,7 @@
         <div class="col-xs-12 col-md-6 loan-description right">
           <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
           <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
-          <app-transaction-history></app-transaction-history>
+          <app-transaction-history *ngIf="isDetail('transaction')"></app-transaction-history>
         </div>
       </div>
     </div>

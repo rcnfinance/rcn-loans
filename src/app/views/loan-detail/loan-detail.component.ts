@@ -59,7 +59,7 @@ export class LoanDetailComponent implements OnInit {
     if (this.cosignerService.getCosigner(this.loan) !== undefined) {
       return 'cosigner';
     } else {
-      return 'identity';
+      return 'transaction';
     }
   }
 

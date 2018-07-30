@@ -19,32 +19,48 @@ export class TransactionHistoryComponent implements OnInit {
   icon: string = 'trending_up';
   timeline: any[] = [
     {
+      'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'trending_up',
       'title': 'Lent',
       'color': 'blue',
+      'messege': 'Lent',
       'inserted': false
     },
     {
+      'status': 'active',
       'awesomeClass': 'fas fa-coins',
       'title': 'Pay',
       'color': 'green',
-      'hexa': '#71b464',
+      'messege': 'Pay',
       'inserted': true
     },
     {
+      'status': 'active',
       'materialClass': 'material-icons',
-      'icon': 'trending_up',
-      'title': 'Lent',
+      'icon': 'call_made',
+      'title': 'Withdraw',
       'color': 'white',
-      'hexa': '#ffffff',
+      'messege': 'Withdraw',
       'inserted': true
     },
     {
+      'status': 'active',
+      'materialClass': 'material-icons',
+      'icon': 'swap_horiz',
+      'title': 'Transfer',
+      'color': 'orange',
+      'messege': 'Transfer',
+      'inserted': true
+    },
+    {
+      'status': 'disabled',
       'materialClass': 'material-icons',
       'icon': 'delete',
       'title': 'Destroyed',
       'color': 'red',
+      'hexa': '#333',
+      'messege': 'Destroyed',
       'inserted': false
     }
   ];

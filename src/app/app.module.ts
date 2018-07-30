@@ -2,7 +2,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -50,7 +49,7 @@ import { DialogApproveContractComponent } from './dialogs/dialog-approve-contrac
 import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 
 // App Plugins
-import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxSpinnerModule } from 'ngx-spinner'; 
 
 @NgModule({
   declarations: [
