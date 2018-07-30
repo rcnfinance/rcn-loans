@@ -1,0 +1,26 @@
+<mat-dialog-content>
+    <div class="navbar-container">
+      <div class="creator-container">
+        <div class="creator-title">Loan Payment</div>
+      </div>
+    </div>
+  <div class="col-xs-12 dialog-padding">
+    <div class="row">
+      <form (submit)="onSubmit($event, amount)">
+        <div class="col-xs-12">
+          <div class="margintop10"></div>
+          <mat-form-field>
+            <input type="number" name="amount" placeholder="{{ 'Amount to pay in ' + loan.currency }}" ngModel matInput #amount>
+            <!-- <mat-hint>Amount to pay</mat-hint> -->
+            <!-- <mat-error *ngIf="invalidAddress">This is not a valid address</mat-error> -->
+          </mat-form-field>
+          <!-- <div class="error" *ngIf="invalidAddress">This is not a valid address</div> -->
+        </div>
+        <div class="col-xs-12 margintop10">
+          <button type="submit" mat-raised-button class="button button-primary" ngModel>{{ 'Pay' }}</button>
+          <button mat-raised-button class="button button-secondary" [mat-dialog-close]='true'>{{ 'Cancel' }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</mat-dialog-content>  

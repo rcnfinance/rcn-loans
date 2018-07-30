@@ -94,10 +94,11 @@
             <app-risk-indicator class='risk-indicator' [loan]=loan [color]='white'></app-risk-indicator>
           </div>
           
-          <div>
+          <div style="display:inline-block;">
             <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
-            <!-- <app-pay-button></app-pay-button>
-            <app-forgive-button></app-forgive-button> -->
+            <app-cancel-button [loan]="loan" *ngIf="canCancel"></app-cancel-button>
+            <app-pay-button [loan]="loan" *ngIf="canPay"></app-pay-button>
+            <!-- <app-forgive-button></app-forgive-button> -->
           </div>
         </div>
         <div class="col-xs-12 col-md-6 loan-description right">

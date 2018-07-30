@@ -31,6 +31,8 @@ export class LoanDetailComponent implements OnInit {
   isRequest: boolean;
   isOngoing: boolean;
   canTransfer: boolean;
+  canCancel: boolean;
+  canPay: boolean;
   totalDebt: number;
   pendingAmount: number;
 
@@ -90,6 +92,8 @@ export class LoanDetailComponent implements OnInit {
     this.totalDebt = this.loan.total;
     this.pendingAmount = this.loan.pendingAmount;
     this.canTransfer = this.loan.owner === this.userAccount && this.loan.status !== Status.Request;
+    this.canCancel = this.loan.borrower === this.userAccount && this.loan.status === Status.Request;
+    this.canPay = this.loan.owner !== this.userAccount && (this.loan.status === Status.Ongoing || this.loan.status === Status.Indebt);
   }
 
   openDetail(view: string) {
@@ -116,23 +120,22 @@ export class LoanDetailComponent implements OnInit {
     this.spinner.show();
     this.web3Service.getAccount().then((account) => {
       this.userAccount = account;
-    });
 
-    this.route.params.subscribe(params => {
-      const id = +params['id']; // (+) converts string 'id' to a number
-      this.contractsService.getLoan(id).then(loan => {
-        this.loan = loan;
-        this.oracle = this.loan.oracle;
-        this.currency = this.loan.currency;
-        this.availableOracle = this.loan.oracle !== Utils.address_0;
-        this.loadDetail();
-        this.loadIdentity();
-        this.viewDetail = this.defaultDetail();
-
-        this.spinner.hide();
-      }).catch(() => 
-        this.router.navigate(['/404/'])
-      );
+      this.route.params.subscribe(params => {
+        const id = +params['id']; // (+) converts string 'id' to a number
+        this.contractsService.getLoan(id).then(loan => {
+          this.loan = loan;
+          this.oracle = this.loan.oracle;
+          this.currency = this.loan.currency;
+          this.availableOracle = this.loan.oracle !== Utils.address_0;
+          this.loadDetail();
+          this.loadIdentity();
+          this.viewDetail = this.defaultDetail();
+          this.spinner.hide();
+        }).catch(() =>
+          this.router.navigate(['/404/'])
+        );
+      });
     });
   }
 }

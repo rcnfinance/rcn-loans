@@ -5,6 +5,7 @@ import { DecentralandCosigner } from './../../../models/cosigners/decentraland-c
 import { CosignerService } from '../../../services/cosigner.service';
 import { CosignerProvider } from '../../../providers/cosigner-provider';
 import { DecentralandCosignerProvider } from '../../../providers/cosigners/decentraland-cosigner-provider';
+import { PawnCosignerProvider } from '../../../providers/cosigners/pawn-cosigner-provider';
 
 @Component({
   selector: 'app-detail-cosigner',
@@ -23,6 +24,8 @@ export class DetailCosignerComponent implements OnInit {
     switch (this.cosignerProvider.constructor) {
       case DecentralandCosignerProvider:
         return 'decentraland_mortgage';
+      case PawnCosignerProvider:
+        return 'pawn';
       default:
       case UnknownCosigner:
         console.warn('Unknown cosigner retrieved', this.cosignerProvider);

@@ -1,3 +1,4 @@
+import { Currency } from "./currencies";
 
 export class Utils {
     static address_0 = '0x0000000000000000000000000000000000000000';
@@ -93,6 +94,10 @@ export class Utils {
         }
         return value;
     }
+}
+
+export function toMinUnit(amount: number, curreny: string): number {
+    return amount * 10 ** Currency.getDecimals(curreny);
 }
 
 export function promisify(inner) {

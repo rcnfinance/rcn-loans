@@ -58,6 +58,8 @@ import { NotFoundModule } from './not-found/not-found.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { RequestLoanComponent } from './views/request-loan/request-loan.component';
 import { CollateralSelectorComponent } from './views/request-loan/collateral-selector/collateral-selector.component';
+import { PawnCosignerComponent } from './views/loan-detail/detail-cosigner/pawn-cosigner/pawn-cosigner.component';
+import { DialogPayComponent } from './dialogs/dialog-pay/dialog-pay.component';
 
 @NgModule({
   declarations: [
@@ -80,9 +82,10 @@ import { CollateralSelectorComponent } from './views/request-loan/collateral-sel
     ActiveLoansComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
-    DialogInsufficientFoundsComponent,
     RequestLoanComponent,
     CollateralSelectorComponent,
+    PawnCosignerComponent,
+    DialogPayComponent,
   ],
   imports: [
     BrowserModule,
@@ -103,7 +106,8 @@ import { CollateralSelectorComponent } from './views/request-loan/collateral-sel
     DialogLoanTransferComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
-    CollateralSelectorComponent
+    DialogPayComponent,
+    CollateralSelectorComponent,
   ],
   providers: [
     ContractsService,

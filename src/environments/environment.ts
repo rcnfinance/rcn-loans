@@ -34,7 +34,7 @@ export const environment = {
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
     pawnManager: '0x9c1de14b327c5d621dda08e43d5f450dd1288094',
-    poach: '0xc0df961fbce5948be26189f5a3a8cfae4905c137',
+    pouch: '0xc0df961fbce5948be26189f5a3a8cfae4905c137',
     bundle: '0xa5b849c9b234968695714442f69250497dc48fe7',
     decentraland: {
       mortgageCreator: '0x2bdf545935d4264cbb7457e97d69b6b86458eb64',

@@ -6,13 +6,15 @@ import { HttpClient } from '@angular/common/http';
 import { Utils } from '../utils/utils';
 import { Web3Service } from './web3.service';
 import { UnknownCosignerProvider } from '../providers/cosigners/unknown-cosigner-provider';
+import { AssetsService } from './assets.service';
 
 @Injectable()
 export class CosignerService {
   loadedOption = {};
   constructor(
     private http: HttpClient,
-    private web3: Web3Service
+    private web3: Web3Service,
+    private assets: AssetsService,
   ) { }
   getCosigner(loan: Loan): CosignerProvider {
     if (loan.status === Status.Request) {
@@ -22,6 +24,7 @@ export class CosignerService {
       if (cosignerOption !== undefined) {
         cosignerOption.injectHttp(this.http);
         cosignerOption.injectWeb3(this.web3);
+        cosignerOption.injectAssets(this.assets);
       }
 
       return cosignerOption;
@@ -35,6 +38,7 @@ export class CosignerService {
       if (cosigner !== undefined) {
         cosigner.injectHttp(this.http);
         cosigner.injectWeb3(this.web3);
+        cosigner.injectAssets(this.assets);
       }
 
       return cosigner;

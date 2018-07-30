@@ -10,6 +10,7 @@ import { Utils, promisify } from '../utils/utils';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import BigNumber from 'bignumber.js';
 import { AssetItem } from '../models/asset.model';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 declare let require: any;
 
@@ -140,7 +141,9 @@ export class ContractsService {
         }
       }) as Promise<number>;
     }
-
+    public async cancelLoan(loan: Loan): Promise<string> {
+      return await promisify(c => this._rcnEngine.destroy(loan.id, c)) as string;
+    }
     public async lendLoan(loan: Loan): Promise<string> {
         const account = await this.web3.getAccount();
         const oracleData = await this.getOracleData(loan);
@@ -162,6 +165,13 @@ export class ContractsService {
             resolve(result);
           });
         }) as Promise<string>;
+    }
+    public async payLoan(loan: Loan, amount: number): Promise<string> {
+      const pAccount = this.web3.getAccount();
+      const pOracleData = this.getOracleData(loan);
+      const account = await pAccount;
+      const oracleData = await pOracleData;
+      return await promisify(c => this._rcnEngine.pay(loan.id, amount, account, oracleData, c)) as string;
     }
     public async transferLoan(loan: Loan, to: string): Promise<string> {
       const account = await this.web3.getAccount();
@@ -348,12 +358,19 @@ export class ContractsService {
         return new Promise((resolve, reject) => {
           // Filter open loans, non expired loand and valid mortgage
           const filters = [
-            '0x3e703de416a62525c8653be11d71486550618ec8',
-            '0xe084b7cf7f6869a96cd72962047bf65e6d55e1e1',
-            '0x0bc0ac0f08235979951bb155d15f1a08dd7dcb2a'
+            '0x3e703de416a62525c8653be11d71486550618ec8', // Open loans filter
+            '0xe084b7cf7f6869a96cd72962047bf65e6d55e1e1', // Non-expired filter
+            '0x0bc0ac0f08235979951bb155d15f1a08dd7dcb2a', // Decentraland mortgage filter
+            '0x19488cea2dd0522ebe334e70ae7561bfb787de94', // Pawn loan filter
           ];
 
-          const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
+          const params = [
+            '0x0',
+            '0x0',
+            this.addressToBytes32(environment.contracts.decentraland.mortgageCreator),
+            this.addressToBytes32(environment.contracts.pawnManager),
+          ];
+
           this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
             if (err != null) {
               reject(err);
@@ -374,6 +391,13 @@ export class ContractsService {
           resolve(LoanCurator.curateLoans(this.parseLoansBytes(result)));
         });
       }) as Promise<Loan[]>;
+    }
+    public async getLoansOfBorrower(borrower: string): Promise<Loan[]> {
+      // Filter [isBorrower]
+      const filters = ['0x65a7c81b32cafa705fca74514de60809006f2c0d'];
+      const params = [this.addressToBytes32(borrower)];
+      const result = await promisify(c => this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, c));
+      return this.parseLoansBytes(result);
     }
     public readPendingWithdraws(loans: Loan[]): [BigNumber, number[]] {
       const pendingLoans = [];

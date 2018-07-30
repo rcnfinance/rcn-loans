@@ -8,7 +8,7 @@ import { Loan } from './models/loan.model';
 import { TypeCheckCompiler } from '@angular/compiler/src/view_compiler/type_check_compiler';
 import { Web3Service } from './services/web3.service';
 
-enum Type { lend, approve, withdraw, transfer, claim }
+enum Type { lend, approve, withdraw, transfer, claim, pay }
 
 export class Tx {
   tx: string;
@@ -152,6 +152,24 @@ export class TxService {
     return this.tx_memory
       .filter(tx => !tx.confirmed && tx.type === Type.claim && tx.to === cosigner)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
+      .find(tx => tx.data.id === loan.id && tx.data.engine === loan.engine);
+  }
+
+  public registerPayTx(tx: string, loan: Loan, amount: number) {
+    const data = {
+      engine: loan.engine,
+      id: loan.id,
+      amount: amount
+    };
+
+    this.tx_memory.push(new Tx(tx, loan.engine, false, Type.pay, data));
+    this.saveTxs();
+  }
+
+  public getLastPendingPay(loan: Loan): Tx {
+    return this.tx_memory
+      .filter(tx => !tx.confirmed && tx.type === Type.pay && tx.to === loan.engine)
+      .sort((tx1, tx2) => tx2.timestamp = tx1.timestamp)
       .find(tx => tx.data.id === loan.id && tx.data.engine === loan.engine);
   }
 }

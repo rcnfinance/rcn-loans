@@ -3,9 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Web3Service } from '../../services/web3.service';
 import { Loan } from '../../models/loan.model';
 import { CosignerOffer, CosignerLiability } from '../../models/cosigner.model';
+import { AssetsService } from '../../services/assets.service';
 
 export class UnknownCosignerProvider implements CosignerProvider {
     injectHttp(_http: HttpClient) {}
+    injectAssets(assets: AssetsService) {}
     injectWeb3(_web3: Web3Service) {}
     title(_loan: Loan): string {
         return 'Unknown cosigner';

@@ -17,8 +17,9 @@ import { AvailableLoansService } from '../../services/available-loans.service';
 export class AddressComponent implements OnInit {
   address: string;
   available: any;
-  loans = [];
-  availableLoans: boolean = true;
+  lentLoans = [];
+  requestedLoans = [];
+
   constructor(
     private route: ActivatedRoute,
     private contractsService: ContractsService,
@@ -34,19 +35,17 @@ export class AddressComponent implements OnInit {
   }
 
   // Available Loans service
-  upgradeAvaiblable(){
-    this.availableLoansService.updateAvailable(this.loans.length);
+  upgradeAvaiblable() {
+    this.availableLoansService.updateAvailable(this.lentLoans.length);
   }
 
-  loadLoans() {
-    this.contractsService.getLoansOfLender(this.address).then((result: Loan[]) => {
-      this.loans = result;
-      this.upgradeAvaiblable();
-      this.spinner.hide();
-      if (this.loans.length <= 0) {
-        this.availableLoans = false;
-      }
-    });
+  async loadLoans() {
+    const pLoansOfLender = this.contractsService.getLoansOfLender(this.address);
+    const pLoansOfBorrower = this.contractsService.getLoansOfBorrower(this.address);
+    this.lentLoans = await pLoansOfLender;
+    this.requestedLoans = await pLoansOfBorrower;
+    this.upgradeAvaiblable();
+    this.spinner.hide();
   }
 
   ngOnInit() {

@@ -1,22 +1,69 @@
 <ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
 <div class="container">
-  <div class="row">
-    <div class="col-xs-12 hidden-xs hidden-sm">
-      <div class="title main-h1">lent by</div>
-      <div class="title main-h5 ellipsis">{{address}}</div>
-      <mat-chip-list>
-        <mat-chip class="margintop30 marginright15" selected="true" [color]="$primary">{{loans.length}} LENT</mat-chip>
-      </mat-chip-list>
+    <!-- Borrower block -->
+    <div class="row">
+        <div class="col-xs-12 hidden-xs hidden-sm">
+          <div class="title main-h1">Borrower in</div>
+          <div class="title main-h5 ellipsis">{{address}}</div>
+          <mat-chip-list>
+            <mat-chip class="margintop30 marginright15" selected="true" [color]="$primary">{{requestedLoans.length}} REQUEST</mat-chip>
+          </mat-chip-list>
+        </div>
+      </div>
+      <div class="row">
+  
+      <div class="col-xs-12 text-center" *ngIf='requestedLoans.length === 0'>
+        <div class="title main-h1">This address is not a lender</div>
+      </div>
+  
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 card-col" 
+      *ngFor='let loan of requestedLoans; let i of index'>
+  
+        <div class="card-container">
+          <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
+          <app-close-button></app-close-button>
+          <app-creator-container [loan]=loan></app-creator-container>
+          <!--<app-main-button></app-main-button>-->
+          <div class="card-row">
+            <div class="card-property">
+              <div class="title">{{ 'Borrower' }}</div>
+              <div class="paragraph">{{ loan.borrowerShort }}</div>
+            </div>
+            <div class="card-property">
+              <div class="title">{{ 'Remaining' }}</div>
+              <div class="paragraph">{{ loan.verboseDuration }}</div>
+            </div>
+            <div class="card-property">
+              <div class="title">{{ 'Annual Interest / Punitory' }}</div>
+              <div class="paragraph"> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div>
+            </div>
+            
+            <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountLeft]="loan.paid" [amountRight]="loan.total"></app-conversion-graphic>
+            
+            <app-detail-button [loan]=loan></app-detail-button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="row">
+    <br/>
+    <!-- Lender block -->
+    <div class="row">
+      <div class="col-xs-12 hidden-xs hidden-sm">
+        <div class="title main-h1">lent by</div>
+        <div class="title main-h5 ellipsis">{{address}}</div>
+        <mat-chip-list>
+          <mat-chip class="margintop30 marginright15" selected="true" [color]="$primary">{{lentLoans.length}} LENT</mat-chip>
+        </mat-chip-list>
+      </div>
+    </div>
+    <div class="row">
 
-    <div class="col-xs-12 text-center" *ngIf='!availableLoans'>
+    <div class="col-xs-12 text-center" *ngIf='lentLoans.length === 0'>
       <div class="title main-h1">This address is not a lender</div>
     </div>
 
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 card-col" 
-    *ngFor='let loan of loans; let i of index'>
+    *ngFor='let loan of lentLoans; let i of index'>
 
       <div class="card-container">
         <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>

@@ -5,6 +5,7 @@ import { Loan, Status } from '../../models/loan.model';
 import { HttpClient } from '@angular/common/http';
 import { Parcel, District, DecentralandCosigner } from '../../models/cosigners/decentraland-cosigner.model';
 import { Web3Service } from '../../services/web3.service';
+import { AssetsService } from '../../services/assets.service';
 
 declare let require: any;
 
@@ -28,6 +29,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     injectWeb3(web3: Web3Service) {
         this.web3 = web3;
     }
+    injectAssets(assets: AssetsService) {}
     private setupContracts() {
         if (this.managerContract === undefined) {
             this.managerContract = this.web3.web3reader.eth.contract(mortgageManagerAbi).at(this.manager);
@@ -52,7 +54,8 @@ export class DecentralandCosignerProvider implements CosignerProvider {
                 resolve(new CosignerOffer(
                     this.manager,
                     detail,
-                    this.buildData(detail.id)
+                    this.buildData(detail.id),
+                    undefined
                 ));
             });
         }) as Promise<CosignerOffer>;
