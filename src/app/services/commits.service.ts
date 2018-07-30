@@ -6,16 +6,18 @@ import { Commit } from '../models/commit.model';
 
 @Injectable()
 export class CommitsService {
+  configUrl = 'https://api.mercadolibre.com/items/MLA698930172';
+  // configUrl = 'http://192.168.0.249:8000/v1/loans/1';
 
   constructor(private http: Http) {}
+
   getCommits() {
-    return this.http.get('https://api.mercadolibre.com/items/MLA698930172')
-      .map(
-        (response: Response) => {
-          const commit: Commit[] = response.json();
-          return commit;
-        }
-      )
+    return this.http.get(this.configUrl)
+      .map(response => {
+        const data = response.json();
+        console.log(data);
+        return data;
+      })
       .catch(
         (error: Response) => {
           return Observable.throw('Something went wrong');

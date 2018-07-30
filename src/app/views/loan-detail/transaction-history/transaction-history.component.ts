@@ -14,10 +14,7 @@ export class TransactionHistoryComponent implements OnInit {
   id: number;
   name: string;
 
-  response = this.commitsService.getCommits();
-
-  commit: Commit;
-  commits: Commit[];
+  commits;
 
   icon: string = 'trending_up';
   timeline: any[] = [
@@ -59,15 +56,14 @@ export class TransactionHistoryComponent implements OnInit {
   onGet() {
     this.commitsService.getCommits()
       .subscribe(
-        (response: Response) => {
-          console.log(response);
-        }
+        data => { this.commits = data},
+        err => console.error(err),
+        () => console.log('done loading commits')
       );
   }
 
   ngOnInit() {
     this.onGet();
-    this.commits = this.commitsService.getCommits();
     console.log(this.commits);
   }
 
