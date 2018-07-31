@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 // App Models
-import { LoanApi ,Commit, Lent, Pay } from '../../../models/commit.model';
+import { LoanApi } from '../../../models/loanapi.model';
+import { Commit} from '../../../models/commit.model';
 // App Services
 import { CommitsService } from '../../../services/commits.service';
 
@@ -13,15 +14,12 @@ import { CommitsService } from '../../../services/commits.service';
 export class TransactionHistoryComponent implements OnInit {
   id: number;
   name: string;
-  timeEvents: any[];
 
   loans;
   loanData;
 
-  commit: Commit[];
-  commits;
+  commits: Commit[];
 
-  icon: string = 'trending_up';
   timeline: any[] = [
     {
       'status': 'active',
@@ -71,12 +69,7 @@ export class TransactionHistoryComponent implements OnInit {
   ];
   constructor(
     private commitsService: CommitsService
-  ) { 
-    this.timeEvents = [
-      new Lent( 'active', 'material-icons', 'trending_up', 'Lent', 'blue', 'Lent'),
-      new Pay( 'active', 'material-icons', 'trending_up', 'Lent', 'blue', 'Lent'),
-    ]
-  }
+  ) { }
 
   activateClass(event){
     event.active = !event.active;
@@ -91,6 +84,7 @@ export class TransactionHistoryComponent implements OnInit {
         () => console.log('SUCCESS: Commits have been Loaded!', this.loans)
       );
   }
+  
 
   loadCommits() {
     this.commitsService.getCommits()
@@ -104,7 +98,6 @@ export class TransactionHistoryComponent implements OnInit {
   ngOnInit() {
     this.loadLoanData();
     this.loadCommits();
-    console.log(this.timeEvents);
   }
 
 }

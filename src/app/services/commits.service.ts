@@ -9,7 +9,8 @@ import {
 } from '@angular/http';
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
-import { LoanApi ,Commit, Lent, Pay } from '../models/commit.model';
+import { LoanApi } from '../models/loanapi.model';
+import { Commit} from '../models/commit.model';
 
 @Injectable()
 export class CommitsService {
