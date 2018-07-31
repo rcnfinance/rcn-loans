@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Web3Service } from './web3.service';
 import { AssetClass, AssetItem, AssetMetadata, AssetType } from '../models/asset.model';
-import { promisify } from '../utils/utils';
+import { promisify, Utils } from '../utils/utils';
 import { environment } from '../../environments/environment';
 import { CosignerService } from './cosigner.service';
 import { decodeTokenId } from '../models/cosigners/decentraland-cosigner.model';
+import { utils } from 'protractor';
 
 declare let require: any;
 
@@ -107,7 +108,7 @@ export class AssetsService {
     const token = web3.eth.contract(erc721LegacyAbi.abi).at(manager.asset.contract);
     const allTokens = await promisify(c => token.tokensOfOwner(owner, c)) as Array<number>;
     const result = [];
-    allTokens.forEach(item => { result.push(manager.build(item, owner)); });
+    allTokens.forEach(item => { if (item.toFixed(0) !== '0') { result.push(manager.build(item, owner)); } });
     return result;
   }
 
