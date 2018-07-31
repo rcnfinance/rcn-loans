@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // App Models
-import { Commit, Lent } from '../../../models/commit.model';
+import { Commit, Lent, Pay } from '../../../models/commit.model';
 // App Services
 import { CommitsService } from '../../../services/commits.service';
 
@@ -13,7 +13,9 @@ import { CommitsService } from '../../../services/commits.service';
 export class TransactionHistoryComponent implements OnInit {
   id: number;
   name: string;
-  lends: Lent[];
+  timeEvents: any[];
+
+  loanData;
 
   commit: Commit[];
   commits;
@@ -69,9 +71,9 @@ export class TransactionHistoryComponent implements OnInit {
   constructor(
     private commitsService: CommitsService
   ) { 
-    this.lends = [
+    this.timeEvents = [
       new Lent( 'active', 'material-icons', 'trending_up', 'Lent', 'blue', 'Lent'),
-      new Lent( 'inactive', 'material-icons', 'up', 'Lent', 'blue', 'Lent'),
+      new Pay( 'active', 'material-icons', 'trending_up', 'Lent', 'blue', 'Lent'),
     ]
   }
 
@@ -80,12 +82,12 @@ export class TransactionHistoryComponent implements OnInit {
     console.log(event);
   }
 
-  getLoanData() {
-    this.commitsService.getCommits()
+  loadLoanData() {
+    this.commitsService.getLoanData()
       .subscribe(
-        (data) => { this.commits = data.content.commits },
+        (data) => { this.loanData = data},
         err => console.error(err),
-        () => console.log('Response(202): Commits have been Loaded Successfully!', this.commits)
+        () => console.log('Response(202): Commits have been Loaded Successfully!', this.loanData)
       );
   }
 
@@ -99,9 +101,9 @@ export class TransactionHistoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getLoanData();
+    this.loadLoanData();
     this.loadCommits();
-    console.log(this.lends);
+    console.log(this.timeEvents);
   }
 
 }

@@ -60,13 +60,33 @@ export class Lent{
   }
 }
 
+export class Pay{
+  status: string;
+  materialClass: string;
+  icon: string;
+  title: string;
+  color: string;
+  messege: string;
+  inserted: boolean;
+
+  constructor(status: string, materialClass: string, icon: string, title: string, color: string, messege: string){
+    this.status = status;
+    this.materialClass = materialClass;
+    this.icon = icon;
+    this.title = title;
+    this.color = color;
+    this.messege = messege;
+    this.inserted = true;
+  }
+}
+
 class TransferCommit extends Commit {
-  style_properties: {
+  style_properties = {
       status: "active",
       materialClass: "material-icons",
       icon: "swap_horiz",
       title: "Transfer",
-      color: "orange"
+      color: "orange",
       message: "Transfer",
       inserted: true
   }
@@ -79,12 +99,12 @@ class TransferCommit extends Commit {
 
 }
 class DestroyedCommit extends Commit {
-  style_properties: {
+  style_properties = {
       status: "disabled",
       materialClass: "material-icons",
       icon: "delete",
       title: "Destroyed",
-      color: "red"
+      color: "red",
       hexa: "#333",
       message: "Destroyed",
       inserted: false
@@ -97,7 +117,7 @@ class DestroyedCommit extends Commit {
 }
 
 class LentCommit extends Commit {
-  style_properties: {
+  style_properties = {
       status: "active",
       materialClass: "material-icons",
       icon: "trending_up",
@@ -114,7 +134,7 @@ class LentCommit extends Commit {
 }
 
 class LoanRequestCommit extends Commit {
-  style_properties: {
+  style_properties = {
       status: "active",
       materialClass: "material-icons",
       icon: "trending_up",
@@ -141,7 +161,7 @@ class LoanRequestCommit extends Commit {
 }
 
 class PartialPaymentCommit extends Commit {
-  style_properties: {
+  style_properties = {
       status: "active",
       awesomeClass: "fas fa-coins",
       title: "Partial Payment",
@@ -159,7 +179,7 @@ class PartialPaymentCommit extends Commit {
 }
 
 class ApprovedLoanCommit extends Commit {
-  style_properties: {
+  style_properties = {
       status: "active",
       awesomeClass: "fas fa-coins",
       title: "Approved Loan",
@@ -175,7 +195,7 @@ class ApprovedLoanCommit extends Commit {
 }
 
 class TotalPaymentCommit extends Commit {
-  style_properties: {
+  style_properties = {
       status: "active",
       awesomeClass: "fas fa-coins",
       title: "Total Payment",
@@ -190,7 +210,7 @@ class TotalPaymentCommit extends Commit {
 }
 
 class LoanExpiredCommit extends Commit {
-  style_properties: {
+  style_properties = {
       status: "active",
       awesomeClass: "fas fa-coins",
       title: "Loan ",
@@ -425,58 +445,12 @@ let loan_1 = {
       "0x35d803f11e900fb6300946b525f0d08d1ffd4bed"
   ]
 }
-// let commit_object = loan_1.commits[0];
-// let commit = new TransferCommit(commit_object.opcode, commit_object.timestamp, commit_object.order, commit_object.proof, commit_object.data);
 
-function build_timeline(loan: Loan): Array<Commit> {
-  let timeline: Array<Commit> = [];
-  // console.log(timeline);
+function build_timeline(loan: Loan): object[] {
+  let timeline: object[] = [];
   for (let commit of loan.commits) {
-      // console.log(commit.opcode);
-      // array = commit.export_to_object();
-      switch (commit.opcode) {
-          case "approved_loan": {
-              let c = new ApprovedLoanCommit(commit.opcode, commit.timestamp, commit.order, commit.proof, commit.data);
-              timeline.push(c);
-              break;
-          }
-          case "loan_request": {
-              let c = new LoanRequestCommit(commit.opcode, commit.timestamp, commit.order, commit.proof, commit.data);
-              timeline.push(c);
-              break;
-          }
-          case "destroyed_loan": {
-              let c = new DestroyedCommit(commit.opcode, commit.timestamp, commit.order, commit.proof, commit.data);
-              timeline.push(c);
-              break;
-          }
-          case "approved_loan": {
-              let c = new ApprovedLoanCommit(commit.opcode, commit.timestamp, commit.order, commit.proof, commit.data);
-              timeline.push(c);
-              break;
-          }
-          case "lent": {
-              let c = new LentCommit(commit.opcode, commit.timestamp, commit.order, commit.proof, commit.data);
-              timeline.push(c);
-              break;
-          }
-          case "partial_payment": {
-              let c = new PartialPaymentCommit(commit.opcode, commit.timestamp, commit.order, commit.proof, commit.data);
-              timeline.push(c);
-              break;
-          }
-          case "total_payment": {
-              let c = new TotalPaymentCommit(commit.opcode, commit.timestamp, commit.order, commit.proof, commit.data);
-              timeline.push(c);
-              break;
-          }
-          case "transfer": {
-              let c = new TransferCommit(commit.opcode, commit.timestamp, commit.order, commit.proof, commit.data);
-              timeline.push(c);
-              break;
-          }
-      }
-  };
+      timeline.push(commit.export_to_object());
+  }
   return timeline;
 
 }
@@ -485,7 +459,6 @@ function parse_response(json: any): Loan {
   let commits: Array<Commit> = [];
   let loan: Loan;
   for (let commit of json.commits) {
-      // console.log(commit.opcode);
       switch (commit.opcode) {
           case "approved_loan": {
               let c = new ApprovedLoanCommit(commit.opcode, commit.timestamp, commit.order, commit.proof, commit.data);
@@ -570,8 +543,3 @@ let loan = parse_response(loan_1);
 // console.log(loan);
 let timeline = build_timeline(loan);
 // console.log(timeline);
-
-
-// #1 get response endpoint
-// #2 parsear json (parse_response | parse_loans)
-// #3 armar timeline parse x --> build_timeline(loan)

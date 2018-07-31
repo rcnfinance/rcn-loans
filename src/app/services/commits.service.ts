@@ -34,8 +34,9 @@ export class CommitsService {
 
   getCommits() {
     return this.http.get(this.configUrl)
-      .map(response => {
-        const commits = response.json().commits.map( commit => {
+      .map((response: Response) => {
+        const commits = response.json().commits
+        .map( commit => {
           return new Commit( 
             commit.opcode,
             commit.timestamp,
@@ -44,6 +45,7 @@ export class CommitsService {
             commit.data
           );
         })
+        console.log(commits);
         return commits;
       })
       .catch(
