@@ -5,37 +5,37 @@ export class Commit {
   proof: string;
   data: object;
   style_properties: {
-      status: string,
-      inserted: Boolean
+    status: string,
+    inserted: Boolean
   }
 
   constructor(opcode: string, timestamp: number, order: number, proof: string, data: object) {
-      this.opcode = opcode;
-      this.timestamp = timestamp;
-      this.order = order;
-      this.proof = proof;
-      this.data = data;
+    this.opcode = opcode;
+    this.timestamp = timestamp;
+    this.order = order;
+    this.proof = proof;
+    this.data = data;
   }
 
   set_active(active: Boolean): void {
-      status = active ? "active" : "disabled";
-      this.style_properties.status = status;
+    status = active ? "active" : "disabled";
+    this.style_properties.status = status;
   };
 
   is_active(): Boolean {
-      return this.style_properties.status == "active";
+    return this.style_properties.status == "active";
   };
 
   set_inserted(inserted: Boolean): void {
-      this.style_properties.inserted = inserted;
+    this.style_properties.inserted = inserted;
   };
 
   get_inserted(): Boolean {
-      return this.style_properties.inserted;
+    return this.style_properties.inserted;
   }
 
   export_to_object(): object {
-      return this.style_properties;
+    return this.style_properties;
   }
 
 };
@@ -82,149 +82,149 @@ export class Pay{
 
 class TransferCommit extends Commit {
   style_properties = {
-      status: "active",
-      materialClass: "material-icons",
-      icon: "swap_horiz",
-      title: "Transfer",
-      color: "orange",
-      message: "Transfer",
-      inserted: true
+    status: "active",
+    materialClass: "material-icons",
+    icon: "swap_horiz",
+    title: "Transfer",
+    color: "orange",
+    message: "Transfer",
+    inserted: true
   }
   data: {
-      loan: number,
-      from: string,
-      to: string
+    loan: number,
+    from: string,
+    to: string
   };
 
 
 }
 class DestroyedCommit extends Commit {
   style_properties = {
-      status: "disabled",
-      materialClass: "material-icons",
-      icon: "delete",
-      title: "Destroyed",
-      color: "red",
-      hexa: "#333",
-      message: "Destroyed",
-      inserted: false
+    status: "disabled",
+    materialClass: "material-icons",
+    icon: "delete",
+    title: "Destroyed",
+    color: "red",
+    hexa: "#333",
+    message: "Destroyed",
+    inserted: false
   }
 
   data: {
-      loan: number,
-      destroyed_by: string
+    loan: number,
+    destroyed_by: string
   }
 }
 
 class LentCommit extends Commit {
   style_properties = {
-      status: "active",
-      materialClass: "material-icons",
-      icon: "trending_up",
-      title: "Lent",
-      color: "blue",
-      message: "Lent",
-      inserted: false
+    status: "active",
+    materialClass: "material-icons",
+    icon: "trending_up",
+    title: "Lent",
+    color: "blue",
+    message: "Lent",
+    inserted: false
   }
 
   data: {
-      lender: string,
-      loan: 1
+    lender: string,
+    loan: 1
   }
 }
 
 class LoanRequestCommit extends Commit {
   style_properties = {
-      status: "active",
-      materialClass: "material-icons",
-      icon: "trending_up",
-      title: "Request Loan",
-      color: "blue",
-      message: "Lent",
-      inserted: false
+    status: "active",
+    materialClass: "material-icons",
+    icon: "trending_up",
+    title: "Request Loan",
+    color: "blue",
+    message: "Lent",
+    inserted: false
   }
 
   data: {
-      cancelable_at: string,
-      created: string,
-      amount: string,
-      creator: string,
-      currency: string,
-      interest_rate: string,
-      interest_rate_punitory: string,
-      borrower: string,
-      oracle: string,
-      index: number,
-      expiration_requests: string,
-      dues_in: string
+    cancelable_at: string,
+    created: string,
+    amount: string,
+    creator: string,
+    currency: string,
+    interest_rate: string,
+    interest_rate_punitory: string,
+    borrower: string,
+    oracle: string,
+    index: number,
+    expiration_requests: string,
+    dues_in: string
   }
 }
 
 class PartialPaymentCommit extends Commit {
   style_properties = {
-      status: "active",
-      awesomeClass: "fas fa-coins",
-      title: "Partial Payment",
-      color: "green",
-      message: "Pay",
-      inserted: true
+    status: "active",
+    awesomeClass: "fas fa-coins",
+    title: "Partial Payment",
+    color: "green",
+    message: "Pay",
+    inserted: true
   }
 
   data: {
-      sender: string,
-      amount: string,
-      from: string,
-      loan: number
+    sender: string,
+    amount: string,
+    from: string,
+    loan: number
   }
 }
 
 class ApprovedLoanCommit extends Commit {
   style_properties = {
-      status: "active",
-      awesomeClass: "fas fa-coins",
-      title: "Approved Loan",
-      color: "green",
-      message: "Pay",
-      inserted: true
+    status: "active",
+    awesomeClass: "fas fa-coins",
+    title: "Approved Loan",
+    color: "green",
+    message: "Pay",
+    inserted: true
   }
 
   data: {
-      approved_by: string,
-      loan: number
+    approved_by: string,
+    loan: number
   }
 }
 
 class TotalPaymentCommit extends Commit {
   style_properties = {
-      status: "active",
-      awesomeClass: "fas fa-coins",
-      title: "Total Payment",
-      color: "green",
-      message: "Pay",
-      inserted: true
+    status: "active",
+    awesomeClass: "fas fa-coins",
+    title: "Total Payment",
+    color: "green",
+    message: "Pay",
+    inserted: true
   }
 
   data: {
-      loan: number
+    loan: number
   }
 }
 
 class LoanExpiredCommit extends Commit {
   style_properties = {
-      status: "active",
-      awesomeClass: "fas fa-coins",
-      title: "Loan ",
-      color: "green",
-      message: "Pay",
-      inserted: true
+    status: "active",
+    awesomeClass: "fas fa-coins",
+    title: "Loan ",
+    color: "green",
+    message: "Pay",
+    inserted: true
   }
 
   data: {
-      loan: number
+    loan: number
   }
 }
 
-class Loan {
+export class LoanApi {
   index: number;
   created: number;
   status: number;
@@ -250,63 +250,63 @@ class Loan {
   commits: Array<Commit>;
 
   constructor(
-      index: number,
-      created: number,
-      status: number,
-      oracle: string,
-      borrower: string,
-      lender: string,
-      creator: string,
-      cosigner: string,
-      amount: string,
-      interest: string,
-      punitory_interest: string,
-      interest_timestamp: string,
-      paid: string,
-      interest_rate: string,
-      interest_rate_punitory: string,
-      due_time: string,
-      dues_in: string,
-      currency: string,
-      cancelable_at: string,
-      lender_balance: string,
-      expiration_requests: string,
-      approved_transfer: string,
-      commits: Array<Commit>
+    index: number,
+    created: number,
+    status: number,
+    oracle: string,
+    borrower: string,
+    lender: string,
+    creator: string,
+    cosigner: string,
+    amount: string,
+    interest: string,
+    punitory_interest: string,
+    interest_timestamp: string,
+    paid: string,
+    interest_rate: string,
+    interest_rate_punitory: string,
+    due_time: string,
+    dues_in: string,
+    currency: string,
+    cancelable_at: string,
+    lender_balance: string,
+    expiration_requests: string,
+    approved_transfer: string,
+    commits: Array<Commit>
   ) {
-      this.index = index;
-      this.created = created;
-      this.status = status;
-      this.oracle = oracle;
-      this.borrower = borrower;
-      this.lender = lender;
-      this.creator = creator;
-      this.cosigner = cosigner;
-      this.amount = amount;
-      this.interest = interest;
-      this.punitory_interest = punitory_interest;
-      this.interest_timestamp = interest_timestamp;
-      this.paid = paid;
-      this.interest_rate = interest_rate;
-      this.interest_rate_punitory = interest_rate_punitory;
-      this.due_time = due_time;
-      this.dues_in = dues_in;
-      this.currency = currency;
-      this.cancelable_at = cancelable_at;
-      this.lender_balance = lender_balance;
-      this.expiration_requests = expiration_requests;
-      this.approved_transfer = approved_transfer;
-      this.commits = commits;
+    this.index = index;
+    this.created = created;
+    this.status = status;
+    this.oracle = oracle;
+    this.borrower = borrower;
+    this.lender = lender;
+    this.creator = creator;
+    this.cosigner = cosigner;
+    this.amount = amount;
+    this.interest = interest;
+    this.punitory_interest = punitory_interest;
+    this.interest_timestamp = interest_timestamp;
+    this.paid = paid;
+    this.interest_rate = interest_rate;
+    this.interest_rate_punitory = interest_rate_punitory;
+    this.due_time = due_time;
+    this.dues_in = dues_in;
+    this.currency = currency;
+    this.cancelable_at = cancelable_at;
+    this.lender_balance = lender_balance;
+    this.expiration_requests = expiration_requests;
+    this.approved_transfer = approved_transfer;
+    this.commits = commits;
   };
 
   add_commit(commit: Commit): void {
-      this.commits.push(commit);
+    this.commits.push(commit);
   };
 
   disable_last_commit(): void {
-      let last_index = this.commits.length - 1;
-      let last_commit = this.commits[last_index];
-      last_commit.set_inserted(false);
+    let last_index = this.commits.length - 1;
+    let last_commit = this.commits[last_index];
+    last_commit.set_inserted(false);
   };
 };
 
@@ -446,7 +446,7 @@ let loan_1 = {
   ]
 }
 
-function build_timeline(loan: Loan): object[] {
+function build_timeline(loan: LoanApi): object[] {
   let timeline: object[] = [];
   for (let commit of loan.commits) {
       timeline.push(commit.export_to_object());
@@ -455,9 +455,9 @@ function build_timeline(loan: Loan): object[] {
 
 }
 
-function parse_response(json: any): Loan {
+function parse_loan(json: any): LoanApi {
   let commits: Array<Commit> = [];
-  let loan: Loan;
+  let loan: LoanApi;
   for (let commit of json.commits) {
       switch (commit.opcode) {
           case "approved_loan": {
@@ -502,7 +502,7 @@ function parse_response(json: any): Loan {
           }
       }
   };
-  loan = new Loan(
+  loan = new LoanApi(
       json.index,
       json.created,
       json.status,
@@ -526,20 +526,20 @@ function parse_response(json: any): Loan {
       json.expiration_requests,
       json.approved_transfer,
       commits);
-  return loan
+  return loan;
 }
 
-function parse_loans(json: any): Loan[] {
-  let loans: Loan[] = [];
+function parse_loans(json: any): LoanApi[] {
+  let loans: LoanApi[] = [];
   for (loan of json.content) {
-      loans.push(parse_response(loan));
+      loans.push(parse_loan(loan));
   }
 
   return loans;
 }
 
 
-let loan = parse_response(loan_1);
+let loan = parse_loan(loan_1);
 // console.log(loan);
 let timeline = build_timeline(loan);
 // console.log(timeline);

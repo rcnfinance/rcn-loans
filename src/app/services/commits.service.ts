@@ -9,7 +9,7 @@ import {
 } from '@angular/http';
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
-import { Commit } from '../models/commit.model';
+import { LoanApi ,Commit, Lent, Pay } from '../models/commit.model';
 
 @Injectable()
 export class CommitsService {
@@ -22,8 +22,39 @@ export class CommitsService {
     return this.http.get(this.configUrl)
       .map((response: Response) => {
         const data = response.json();
+
         console.log(data);
-        return data;
+        const loans = (typeof data.content === 'object') ? [data.content] : data.content
+          .map( loans => {
+            return new LoanApi(
+              loans.index,
+              loans.created,
+              loans.status,
+              loans.oracle,
+              loans.borrower,
+              loans.lender,
+              loans.creator,
+              loans.cosigner,
+              loans.amount,
+              loans.interest,
+              loans.punitory_interest,
+              loans.interest_timestamp,
+              loans.paid,
+              loans.interest_rate,
+              loans.interest_rate_punitory,
+              loans.due_time,
+              loans.dues_in,
+              loans.currency,
+              loans.cancelable_at,
+              loans.lender_balance,
+              loans.expiration_requests,
+              loans.approved_transfer,
+              loans.commits
+            );
+        })
+        console.log(loans);
+        return loans;
+
       })
       .catch(
         (error: Response) => {
@@ -35,7 +66,8 @@ export class CommitsService {
   getCommits() {
     return this.http.get(this.configUrl)
       .map((response: Response) => {
-        const commits = response.json().commits
+        const data = response.json();
+        const commits = data.content.commits
         .map( commit => {
           return new Commit( 
             commit.opcode,
