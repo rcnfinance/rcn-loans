@@ -29,24 +29,13 @@ export class OpenLoansComponent implements OnInit{
 
   constructor(
     private contractsService: ContractsService,
-    private txService: TxService,
-    private brandingService: BrandingService,
     private spinner: NgxSpinnerService,
-    private civicService: CivicService,
-    private web3Service: Web3Service,
     private availableLoansService: AvailableLoansService,
     public dialog: MatDialog,
   ) {}
 
-  private formatAmount(amount: number): string {
-    return Utils.formatAmount(amount);
-  }
-  private formatInterest(interest: Number): string {
-    return Number(interest.toFixed(2)).toString();
-  }
-
   // Available Loans service
-  upgradeAvaiblable(){
+  upgradeAvaiblable() {
     this.availableLoansService.updateAvailable(this.loans.length);
   }
 
