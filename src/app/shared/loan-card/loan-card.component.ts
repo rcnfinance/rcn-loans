@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Loan } from '../../models/loan.model';
+import { Loan, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 
 @Component({
@@ -10,9 +10,31 @@ import { Utils } from '../../utils/utils';
 export class LoanCardComponent implements OnInit {
   @Input() loan: Loan;
 
+  private leftLabel: string;
+  private leftValue: string;
+  private rightLabel: string;
+  private rightValue: string;
+  private durationLabel: string;
+  private durationValue: string;
+
   constructor() { }
 
   ngOnInit() {
+    if (this.loan.status === Status.Request) {
+      this.leftLabel = 'Lend';
+      this.leftValue = this.formatAmount(this.loan.amount);
+      this.rightLabel = 'Return';
+      this.rightValue = this.formatAmount(this.loan.expectedReturn);
+      this.durationLabel = 'Duration';
+      this.durationValue = this.loan.verboseDuration;
+    } else {
+      this.leftLabel = 'Paid';
+      this.leftValue = this.formatAmount(this.loan.paid);
+      this.rightLabel = 'Pending';
+      this.rightValue = this.formatAmount(this.loan.pendingAmount);
+      this.durationLabel = 'Remaining';
+      this.durationValue = Utils.formatDelta(this.loan.remainingTime);
+    }
   }
 
   private formatAmount(amount: number): string {

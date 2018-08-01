@@ -10,8 +10,8 @@
         <div class="paragraph">{{ loan.borrowerShort }}</div>
       </div>
       <div class="card-property">
-        <div class="title">{{ 'Duration' }}</div>
-        <div class="paragraph">{{ loan.verboseDuration }}</div>
+        <div class="title">{{ durationLabel }}</div>
+        <div class="paragraph">{{ durationValue }}</div>
       </div>
       <div class="card-property">
         <div class="title">{{ 'Annual Interest / Punitory' }}</div>
@@ -19,19 +19,18 @@
       </div>
       <div class="lend-return--row">
         <ol>
-          <li class="title">Lend</li>
+          <li class="title">{{ leftLabel }}</li>
           <li class="currency">{{ loan.currency }}</li>
-          <li class="title">Return</li>
+          <li class="title">{{ rightLabel }}</li>
         </ol>
       </div>
       <div class="lending-returns--block">
         <ol>
-          <li class="block-title">{{ formatAmount(loan.amount) }}</li>
+          <li class="block-title">{{ leftValue }}</li>
           <li class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></li>
-          <li class="block-title">{{ formatAmount(loan.expectedReturn) }}</li>
+          <li class="block-title">{{ rightValue }}</li>
         </ol>
       </div>
-      
       <app-lend-button [loan]=loan></app-lend-button>
       <app-detail-button [loan]=loan></app-detail-button>
     </div>
