@@ -20,7 +20,7 @@ export class TransactionHistoryComponent implements OnInit {
 
   loans;
 
-  commit;
+  commit: Commit[];
   commits$: Commit[];
 
   timelines_properties: object = {
@@ -95,7 +95,7 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': true
     },
     "loan_expired": {
-      'status': 'disabled',
+      'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'delete',
       'title': 'Destroyed',
@@ -105,7 +105,7 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': false
     },
     "destroyed_loan": {
-      'status': 'disabled',
+      'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'delete',
       'title': 'Destroyed',
@@ -140,28 +140,44 @@ export class TransactionHistoryComponent implements OnInit {
     return this.timelines_properties[opcode];
   }
 
+  timeline_has(timeEvents, opcode){
+    let result$: object[] = [];
+    result$ = timeEvents.filter(
+      (event) => { return event.title == opcode }
+    )
+    return result$.length > 0;
+  }
+
   build_timeline(commits: Commit[]): object[] {
     let timeEvents: object[] = [];
     let inDebt: boolean = false;
 
     for (let commit of commits) {
+      let oCurrentTimestamp = commit.timestamp;
+
       if(commit.opcode == 'approved_loan' || commit.opcode == 'transfer' ){ continue; }
-      if(commit.timestamp > this.loan.dueTimestamp && !inDebt) { 
+      if(oCurrentTimestamp > this.loan.dueTimestamp && this.loan.dueTimestamp > 0 && !inDebt) {
         timeEvents.push(this.get_properties_by_opcode('in_debt'));
         inDebt = true;
-        console.log('This is in debt');
       }
-      let oCurrentProperty = this.get_properties_by_opcode(commit.opcode);
-      let oCurrentTimestamp = commit.timestamp;
-      console.log(oCurrentProperty);
-      console.log(oCurrentTimestamp);
+
+      let oCurrentProperty: any = this.get_properties_by_opcode(commit.opcode);
+      if(inDebt = true){oCurrentProperty.hexa = '#f44136';}
+
       timeEvents.push(oCurrentProperty);
     }
+
+    if (!this.timeline_has(timeEvents, 'Destroyed')) {
+      let disabledEvent: any = this.get_properties_by_opcode('destroyed_loan');
+      disabledEvent.status = 'disabled';
+      timeEvents.push(disabledEvent);
+    }
+
     return timeEvents;
   }
 
-  private loadCommits() {
-    this.commitsService.getCommits()
+  private loadCommits(id:number) {
+    this.commitsService.getCommits(id)
       .subscribe(
         (commits) => { this.commits$ = commits; },
         err => console.error(err),
@@ -174,10 +190,9 @@ export class TransactionHistoryComponent implements OnInit {
   
   ngOnInit() {
     // this.loadLoanData();
-    let response$ = this.loadCommits();
+    let response$ = this.loadCommits(this.loan.id);
     console.log(this.loan);
-    console.log(this.loan.status);
-    console.log(this.loan.dueTimestamp);
+    console.log('This is Loan N ' + this.loan.id);
   }
   
 }

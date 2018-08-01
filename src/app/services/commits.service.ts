@@ -6,8 +6,8 @@ import { Commit} from '../models/commit.model';
 
 @Injectable()
 export class CommitsService {
-  // configUrl = 'https://testnet.rnode.rcn.loans/v1/loans/';
-  configUrl = 'http://192.168.0.249:8000/v1/loans/1';
+  configUrl = 'https://testnet.rnode.rcn.loans/v1/loans/';
+  // configUrl = 'http://192.168.0.249:8000/v1/loans/1';
 
   constructor(private http: Http) {}
 
@@ -25,8 +25,8 @@ export class CommitsService {
       );
   }
 
-  getCommits() {
-    return this.http.get(this.configUrl)
+  getCommits(id) {
+    return this.http.get(this.configUrl + id)
       .map((response: Response) => {
         const data = response.json();
         const commits$ = data.content.commits
