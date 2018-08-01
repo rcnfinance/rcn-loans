@@ -1,0 +1,38 @@
+<div class="card-container">
+    <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
+    <!-- <app-close-button></app-close-button> -->
+    <app-risk-indicator class="risk-indicator" [loan]=loan></app-risk-indicator>
+    <app-creator-container [loan]=loan></app-creator-container>
+    <!--<app-main-button></app-main-button>-->
+    <div class="card-row">
+      <div class="card-property">
+        <div class="title">{{ 'Borrower' }}</div>
+        <div class="paragraph">{{ loan.borrowerShort }}</div>
+      </div>
+      <div class="card-property">
+        <div class="title">{{ 'Duration' }}</div>
+        <div class="paragraph">{{ loan.verboseDuration }}</div>
+      </div>
+      <div class="card-property">
+        <div class="title">{{ 'Annual Interest / Punitory' }}</div>
+        <div class="paragraph"> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div>
+      </div>
+      <div class="lend-return--row">
+        <ol>
+          <li class="title">Lend</li>
+          <li class="currency">{{ loan.currency }}</li>
+          <li class="title">Return</li>
+        </ol>
+      </div>
+      <div class="lending-returns--block">
+        <ol>
+          <li class="block-title">{{ formatAmount(loan.amount) }}</li>
+          <li class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></li>
+          <li class="block-title">{{ formatAmount(loan.expectedReturn) }}</li>
+        </ol>
+      </div>
+      
+      <app-lend-button [loan]=loan></app-lend-button>
+      <app-detail-button [loan]=loan></app-detail-button>
+    </div>
+  </div>
