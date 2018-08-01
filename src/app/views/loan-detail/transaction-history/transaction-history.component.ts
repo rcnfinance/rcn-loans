@@ -27,9 +27,9 @@ export class TransactionHistoryComponent implements OnInit {
     "loan_request": {
       'status': 'active',
       'materialClass': 'material-icons',
-      'icon': 'trending_up',
+      'icon': 'code',
       'title': 'Requested',
-      'color': 'blue',
+      'color': 'white',
       'messege': 'Requested',
       'inserted': false
     },
@@ -61,18 +61,18 @@ export class TransactionHistoryComponent implements OnInit {
     },
     "total_payment": {
       'status': 'active',
-      'awesomeClass': 'fas fa-coins',
-      'title': 'Total payment',
-      'color': 'green',
-      'messege': 'Pay',
+      'awesomeClass': 'fas fa-check',
+      'title': 'Completed',
+      'color': 'gray7',
+      'messege': 'Completed',
       'inserted': true
     },
     "in_debt": {
       'status': 'active',
       'materialClass': 'material-icons',
-      'icon': 'call_made',
+      'icon': 'error_outline',
       'title': 'In Debt',
-      'color': 'white',
+      'color': 'red',
       'messege': 'In Debt',
       'inserted': true
     },
@@ -148,7 +148,7 @@ export class TransactionHistoryComponent implements OnInit {
     return result$.length > 0;
   }
 
-  build_timeline(commits: Commit[]): object[] {
+  private build_timeline(commits: Commit[]): object[] {
     let timeEvents: object[] = [];
     let inDebt: boolean = false;
 
@@ -156,13 +156,13 @@ export class TransactionHistoryComponent implements OnInit {
       let oCurrentTimestamp = commit.timestamp;
 
       if(commit.opcode == 'approved_loan' || commit.opcode == 'transfer' ){ continue; }
-      if(oCurrentTimestamp > this.loan.dueTimestamp && this.loan.dueTimestamp > 0 && !inDebt) {
+      if(oCurrentTimestamp > this.loan.dueTimestamp && this.loan.dueTimestamp != 0 && !inDebt) {
         timeEvents.push(this.get_properties_by_opcode('in_debt'));
         inDebt = true;
       }
 
       let oCurrentProperty: any = this.get_properties_by_opcode(commit.opcode);
-      if(inDebt = true){oCurrentProperty.hexa = '#f44136';}
+      if(inDebt){oCurrentProperty.hexa = '#f44136';}
 
       timeEvents.push(oCurrentProperty);
     }
