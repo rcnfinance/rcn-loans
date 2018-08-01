@@ -32,6 +32,7 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { CancelButtonComponent } from './cancel-button/cancel-button.component';
+import { LoanCardComponent } from './loan-card/loan-card.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { CancelButtonComponent } from './cancel-button/cancel-button.component';
     SocialContainerComponent,
     ClaimButtonComponent,
     CancelButtonComponent,
+    LoanCardComponent,
   ],
   imports: [
     CommonModule,
@@ -95,6 +97,7 @@ import { CancelButtonComponent } from './cancel-button/cancel-button.component';
     SocialContainerComponent,
     ClaimButtonComponent,
     CancelButtonComponent,
+    LoanCardComponent
   ],
   entryComponents: [
     CivicAuthComponent

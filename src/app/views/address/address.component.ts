@@ -27,13 +27,6 @@ export class AddressComponent implements OnInit {
     private availableLoansService: AvailableLoansService,
   ) {}
 
-  private formatInterest(interest: Number): string {
-    return Number(interest.toFixed(2)).toString();
-  }
-  private formatAmount(amount: number): string {
-    return Utils.formatAmount(amount);
-  }
-
   // Available Loans service
   upgradeAvaiblable() {
     this.availableLoansService.updateAvailable(this.lentLoans.length);
