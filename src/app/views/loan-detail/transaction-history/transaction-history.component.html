@@ -4,7 +4,7 @@
     <div class="time-event {{ event.inserted }} {{ event.status }}"
       *ngFor='let event of timeline; index as i; first as isFirst; last as isLast'
       [ngClass]="{'background-active': event.active}"
-      (click)="getLoanData(); activateClass(event)">
+      (click)="activateClass(event)">
       <div class="icon-event bg-{{ event.color }}"
         matTooltip="{{ event.messege }}" matTooltipPosition="above">
         <i class="{{ event.materialClass }} {{ event.awesomeClass }}">{{ event.icon }}</i>
@@ -12,7 +12,7 @@
       
       <div class="line" [ngStyle]="{'border-right': '4px solid ' + event.hexa }" *ngIf="!isFirst"></div>
       <div class="circle"></div>
-      <div class="title">{{ event.title }}</div
+      <div class="title">{{ event.title }}</div>
       <i class="fas fa-chevron-right"></i>
     </div>
 
