@@ -1,1 +1,1 @@
-<a mat-raised-button (click)='clickCancel()' class="button button-primary">{{ buttonText }}</a>
+<a mat-raised-button (click)='clickCancel()' class="button button-primary">{{ pending !== undefined ? 'Canceling...' : 'Cancel' }}</a>

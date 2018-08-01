@@ -53,9 +53,9 @@ export class PawnCosignerProvider implements CosignerProvider {
         detail,
         this.buildData(detail.id),
         async (): Promise<string> => {
-          const pawnContract = this.web3.web3.eth.contract(pawnManagerAbi.abi).at(this.pawnManager);
+          const pawnContract = this.web3.web3.eth.contract(pawnManagerAbi).at(this.pawnManager);
           const account = await this.web3.getAccount();
-          const p1 = promisify(c => pawnContract.cancelPawn(detail.id, account, true, c));
+          const p1 = promisify(c => pawnContract.cancelPawn(detail.id, account, false, c));
           return await p1 as string;
         }
       );
@@ -65,23 +65,30 @@ export class PawnCosignerProvider implements CosignerProvider {
         return new CosignerLiability(
             this.pawnManager,
             detail,
-            this.isDefaulted(loan, detail),
+            (user: string): boolean => this.isDefaulted(loan, detail, user) || this.canDestroy(loan, detail, user),
             async(): Promise<string> => {
-                const pawnContract = this.web3.web3.eth.contract(pawnManagerAbi.abi).at(this.pawnManager);
+                const pawnContract = this.web3.web3.eth.contract(pawnManagerAbi).at(this.pawnManager);
                 return await promisify(c => pawnContract.claimWithdraw(loan.engine, loan.id, c)) as string;
             }
         );
     }
-    private isDefaulted(loan: Loan, detail: PawnCosigner): boolean {
+    private isDefaulted(loan: Loan, detail: PawnCosigner, user: string): boolean {
         return (loan.status === Status.Ongoing || loan.status === Status.Indebt) // The loan should not be in debt
-            && loan.dueTimestamp + (7 * 24 * 60 * 60) > (Date.now() / 1000) // Due time must be pased by 1 week
-            && detail.status === 1; // Detail should be ongoing
+            && loan.dueTimestamp < (Date.now() / 1000) // Due time must be pased by 1 week
+            && detail.status.toString() === '1'
+            && loan.owner === user;
+    }
+    private canDestroy(loan: Loan, detail: PawnCosigner, user: string): boolean {
+        return (loan.status === Status.Paid || loan.status === Status.Destroyed)
+            && detail.status.toString() === '1'
+            && detail.owner === user;
     }
     private async detail(loan: Loan): Promise<CosignerDetail> {
-      const pawnContract = this.web3.web3reader.eth.contract(pawnManagerAbi.abi).at(this.pawnManager);
+      const pawnContract = this.web3.web3reader.eth.contract(pawnManagerAbi).at(this.pawnManager);
       const bundleContract = this.web3.web3reader.eth.contract(bundleAbi).at(this.bundle);
       const pPawnId = await pawnContract.getLiability(this.engine, loan.id);
       const pStatus = pawnContract.getPawnStatus(await pPawnId);
+      const pOwner = pawnContract.ownerOf(await pPawnId);
       const bundleId = await pawnContract.getPawnPackageId(await pPawnId);
       const bundleContentRaw = await bundleContract.content(bundleId);
       const bundleContent: AssetItem[] = [];
@@ -90,7 +97,7 @@ export class PawnCosignerProvider implements CosignerProvider {
           this.assets.parse(bundleContentRaw[0][i], bundleContentRaw[1][i], this.pawnManager)
         );
       }
-      return new PawnCosigner(await pPawnId, bundleId, bundleContent, await pStatus);
+      return new PawnCosigner(await pPawnId, bundleId, bundleContent, await pStatus, await pOwner);
     }
     private buildData(index: number): string {
       const hex = index.toString(16);

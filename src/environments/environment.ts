@@ -33,9 +33,9 @@ export const environment = {
     rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
-    pawnManager: '0x9c1de14b327c5d621dda08e43d5f450dd1288094',
-    pouch: '0xc0df961fbce5948be26189f5a3a8cfae4905c137',
-    bundle: '0xa5b849c9b234968695714442f69250497dc48fe7',
+    pawnManager: '0x25fd4f5460053fa8e5d7d48360292577c9cd6f42',
+    pouch: '0x326C67B9E8a74e5977811151E9429DB21F7773EB',
+    bundle: '0x51B5E223042c7E44736661E7f496e8CF7a879A5D',
     decentraland: {
       mortgageCreator: '0x2bdf545935d4264cbb7457e97d69b6b86458eb64',
       mortgageManager: '0xea06746f1bd82412f9f243f6bee0b8194d67a67d',

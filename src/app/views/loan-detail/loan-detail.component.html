@@ -89,14 +89,11 @@
               </tbody>
             </table>
           </div>
-          <div *ngIf="isRequest">
-            <app-lend-button [loan]=loan></app-lend-button>
-            <app-risk-indicator class='risk-indicator' [loan]=loan [color]='white'></app-risk-indicator>
-          </div>
-          
           <div style="display:inline-block;">
+              <app-lend-button [loan]=loan *ngIf="isRequest"></app-lend-button>
+              <app-risk-indicator class='risk-indicator' [loan]=loan [color]='white' *ngIf="isRequest"></app-risk-indicator>
+              <app-cancel-button [loan]="loan" *ngIf="canCancel"></app-cancel-button>
             <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
-            <app-cancel-button [loan]="loan" *ngIf="canCancel"></app-cancel-button>
             <app-pay-button [loan]="loan" *ngIf="canPay"></app-pay-button>
             <!-- <app-forgive-button></app-forgive-button> -->
           </div>

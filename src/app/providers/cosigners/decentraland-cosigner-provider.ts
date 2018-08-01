@@ -66,16 +66,22 @@ export class DecentralandCosignerProvider implements CosignerProvider {
                 resolve(new CosignerLiability(
                     this.manager,
                     detail,
-                    this.isDefaulted(loan, detail),
+                    (user: string): boolean => this.isDefaulted(loan, detail, user) || this.canDestroy(loan, detail, user),
                     this.buildClaim(loan)
                 ));
             });
         }) as Promise<CosignerLiability>;
     }
-    private isDefaulted(loan: Loan, detail: DecentralandCosigner): boolean {
+    private isDefaulted(loan: Loan, detail: DecentralandCosigner, user: string): boolean {
         return (loan.status === Status.Ongoing || loan.status === Status.Indebt) // The loan should not be in debt
-            && loan.dueTimestamp + (7 * 24 * 60 * 60) > (Date.now() / 1000) // Due time must be pased by 1 week
-            && detail.status === 1; // Detail should be ongoing
+            && loan.dueTimestamp + (7 * 24 * 60 * 60) < (Date.now() / 1000) // Due time must be pased by 1 week
+            && detail.status.toString() === '1' // Detail should be ongoing
+            && loan.owner === user;
+    }
+    private canDestroy(loan: Loan, detail: DecentralandCosigner, user: string): boolean {
+        return (loan.status === Status.Paid || loan.status === Status.Destroyed)
+            && detail.status.toString() === '1'
+            && detail.owner === user;
     }
     private buildClaim(loan: Loan): () => Promise<string> {
         return () => {
@@ -104,7 +110,8 @@ export class DecentralandCosignerProvider implements CosignerProvider {
                   mortgageData[5], // Land price
                   ((loan.rawAmount / mortgageData[5]) * 100).toFixed(2), // Financed amount
                   undefined, // Parcel data
-                  mortgageData[6] // Mortgage status
+                  mortgageData[6], // Mortgage status
+                  mortgageData[0]  // Mortgage owner
                 );
                 this.getParcelInfo(decentralandCosigner.x, decentralandCosigner.y).then((parcel) => {
                   decentralandCosigner.parcel = parcel;

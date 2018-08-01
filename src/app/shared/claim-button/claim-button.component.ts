@@ -4,6 +4,7 @@ import { CosignerLiability } from '../../models/cosigner.model';
 import { TxService } from '../../tx.service';
 import { CosignerProvider } from '../../providers/cosigner-provider';
 import { environment } from '../../../environments/environment';
+import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-claim-button',
@@ -15,15 +16,18 @@ export class ClaimButtonComponent implements OnInit {
   @Input() provider: CosignerProvider;
   liability: Promise<CosignerLiability>;
   pendingTx: string = undefined;
+  canClaim = false;
   constructor(
-    private txService: TxService
+    private txService: TxService,
+    private web3service: Web3Service
   ) { }
-  ngOnInit() {
+  async ngOnInit() {
     this.liability = this.provider.liability(this.loan);
-    this.liability.then((liability) => {
-      const tx = this.txService.getLastPendingClaim(liability.contract, this.loan);
-      if (tx !== undefined) { this.pendingTx = tx.tx; }
-    });
+    const liability = await this.liability;
+    const paccount = this.web3service.getAccount();
+    const tx = this.txService.getLastPendingClaim(liability.contract, this.loan);
+    if (tx !== undefined) { this.pendingTx = tx.tx; }
+    this.canClaim = liability.canClaim(await paccount);
   }
   claim() {
     if (this.pendingTx === undefined) {

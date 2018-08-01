@@ -4,6 +4,8 @@ import { ContractsService } from '../../services/contracts.service';
 import { CosignerService } from '../../services/cosigner.service';
 import { CosignerProvider } from '../../providers/cosigner-provider';
 import { CosignerOffer } from '../../models/cosigner.model';
+import { TxService, Tx } from '../../tx.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cancel-button',
@@ -12,15 +14,19 @@ import { CosignerOffer } from '../../models/cosigner.model';
 })
 export class CancelButtonComponent implements OnInit {
   @Input() loan: Loan;
-
-  buttonText = 'Cancel';
+  pending: Tx = undefined;
 
   private cosignerPromise: Promise<CosignerOffer>;
 
   constructor(
     private contractService: ContractsService,
-    private cosignerService: CosignerService
+    private cosignerService: CosignerService,
+    private txService: TxService
   ) { }
+
+  loadPendingTx() {
+    this.pending = this.txService.getCancelTx(this.loan);
+  }
 
   ngOnInit() {
     const cosignerProvider = this.cosignerService.getCosigner(this.loan);
@@ -30,11 +36,17 @@ export class CancelButtonComponent implements OnInit {
   }
 
   async clickCancel() {
-    const cosigner = this.cosignerPromise !== undefined ? await this.cosignerPromise : undefined;
-    if (cosigner !== undefined) {
-      await cosigner.cancel();
-    }
+    if (this.pending !== undefined) {
+      window.open(environment.network.explorer.tx.replace('${tx}', this.pending.tx), '_blank');
+    } else {
+      const cosigner = this.cosignerPromise !== undefined ? await this.cosignerPromise : undefined;
+      if (cosigner !== undefined) {
+        await cosigner.cancel();
+      }
 
-    await this.contractService.cancelLoan(this.loan);
+      const tx = await this.contractService.cancelLoan(this.loan);
+      this.txService.registerCancelTx(tx, this.loan);
+      this.loadPendingTx();
+    }
   }
 }

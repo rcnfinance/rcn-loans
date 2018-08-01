@@ -29,7 +29,7 @@ export class UnknownCosignerProvider implements CosignerProvider {
             resolve(new CosignerLiability(
                 loan.cosigner,
                 undefined,
-                false,
+                undefined,
                 undefined
             ));
         }) as Promise<CosignerLiability>;

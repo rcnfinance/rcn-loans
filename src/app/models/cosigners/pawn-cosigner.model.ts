@@ -7,6 +7,7 @@ export class PawnCosigner extends CosignerDetail {
     public bundle: number,
     public assets: AssetItem[],
     public status: number,
+    public owner: string,
   ) {
     super();
   }

@@ -302,7 +302,7 @@ export class ContractsService {
         idsErc721.push(token.id);
       });
 
-      const pawnContract = this.web3.web3.eth.contract(pawnAbi.abi).at(environment.contracts.pawnManager);
+      const pawnContract = this.web3.web3.eth.contract(pawnAbi).at(environment.contracts.pawnManager);
       return await promisify(c => pawnContract.requestPawn(
         Utils.address_0, // Oracle
         '0x0000000000000000000000000000000000000000000000000000000000000000', // Currency
