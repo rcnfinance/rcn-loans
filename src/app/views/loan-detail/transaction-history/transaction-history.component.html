@@ -5,17 +5,17 @@
       <app-detail-table [data]="loanTimelineData"></app-detail-table>
     </div>
 
-    <div class="time-event {{ event.inserted }} {{ event.status }}"
-      *ngFor='let event of timeline; index as i; first as isFirst; last as isLast'
-      [ngClass]="{'background-active': event.active}"
-      (click)="activateClass(event); change_table_content(i)">
+    <div *ngFor='let event of timeline; index as i; first as isFirst; last as isLast'
+      (click)="change_table_content(i); onSelectEvent(i)"
+      class="time-event {{ event.inserted }} {{ event.status }}"
+      [ngClass]="{'background-active': i === selectedEvent}">
       <div class="icon-event bg-{{ event.color }}"
         matTooltip="{{ event.messege }}" matTooltipPosition="above">
         <i class="{{ event.materialClass }} {{ event.awesomeClass }}">{{ event.icon }}</i>
       </div>
       
-      <div class="line" [ngStyle]="{'border-right': '4px solid ' + event.hexa }" *ngIf="!isFirst"></div>
-      <div class="circle"></div>
+      <div class="line" [ngStyle]="{'border-right': '4px solid' + event.hexa }" *ngIf="!isFirst"></div>
+      <div class="circle" [ngClass]="{'background-active': i === selectedEvent}"></div>
       <div class="title">{{ event.title }}</div>
       <i class="fas fa-chevron-right"></i>
     </div>

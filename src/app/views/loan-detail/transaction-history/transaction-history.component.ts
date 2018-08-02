@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 // App Models
-import { Commit } from '../../../models/commit.model';
 import { Loan } from '../../../models/loan.model';
+import { Commit } from '../../../models/commit.model';
 // App Services
 import { CommitsService } from '../../../services/commits.service';
 
@@ -13,7 +13,7 @@ import { CommitsService } from '../../../services/commits.service';
 export class TransactionHistoryComponent implements OnInit {
   @Input() loan: Loan;
   status: string;
-
+  selectedEvent: number;
   id: number = 0;
 
   loans: object[];
@@ -23,6 +23,7 @@ export class TransactionHistoryComponent implements OnInit {
   allLoanTimelineData = [];
   loanTimelineData = [];
 
+  timeline: object[] = [];
   timelines_properties: object = {
     "loan_request": {
       'status': 'active',
@@ -116,16 +117,9 @@ export class TransactionHistoryComponent implements OnInit {
     }
   }
 
-  timeline: object[] = [];
-
   constructor(
     private commitsService: CommitsService
   ) { }
-
-  activateClass(event){ 
-    event.active = !event.active;
-    console.log(event);
-  }
 
   loadLoanData() {
     this.commitsService.getLoanData()
@@ -203,8 +197,13 @@ export class TransactionHistoryComponent implements OnInit {
     return this.allLoanTimelineData[id];
   }
 
-  change_table_content(i){ // Change Table Component by timeEvent id
+  change_table_content(i){ // Change Table Component by click timeEvent id
     this.loanTimelineData = this.populate_table_data(i);
+    console.log('Table is RENDERING ARRAY ' + i + ' ' + this.loanTimelineData);
+  }
+
+  onSelectEvent(i: number) { // Activate animation on timeEvent selected
+    this.selectedEvent = i;
   }
 
   private loadCommits(id:number) { // Load get() API commits from the DB by id
@@ -218,8 +217,6 @@ export class TransactionHistoryComponent implements OnInit {
 
           this.allLoanTimelineData = this.populate_loan_data(this.commits$); // Populates LoanTimelineData[] with Commit Events
           this.loanTimelineData = this.populate_table_data(this.id); // Render TableComponent Data by id
-
-          console.log('Table is RENDERING ARRAY ' + id + ' ' + this.loanTimelineData);
         }
       );
   }
