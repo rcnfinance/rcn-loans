@@ -134,7 +134,7 @@ export class TransactionHistoryComponent implements OnInit {
       );
   }
 
-  get_properties_by_opcode(opcode: string): object[] {
+  get_properties_by_opcode(opcode: string): object[] { // Get the timeline event properties from timelines_properties[]
     return this.timelines_properties[opcode];
   }
 

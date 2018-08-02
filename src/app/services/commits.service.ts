@@ -11,7 +11,7 @@ export class CommitsService {
 
   constructor(private http: Http) {}
 
-  getLoanData() {
+  getLoanData() { // Get() all Loans[] from API
     return this.http.get(this.configUrl)
       .map((response: Response) => {
         const data = response.json();
@@ -25,7 +25,7 @@ export class CommitsService {
       );
   }
 
-  getCommits(id) {
+  getCommits(id) { // Get() all Commits[] from API by :id
     return this.http.get(this.configUrl + id)
       .map((response: Response) => {
         const data = response.json();
