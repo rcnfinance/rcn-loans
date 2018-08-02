@@ -4,10 +4,7 @@ import { Commit } from '../../../models/commit.model';
 import { Loan, Status } from '../../../models/loan.model';
 // App Services
 import { CommitsService } from '../../../services/commits.service';
-
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { element } from '../../../../../node_modules/protractor';
+import { LoanDetailModule } from '../loan-detail.module';
 
 @Component({
   selector: 'app-transaction-history',
@@ -18,10 +15,11 @@ export class TransactionHistoryComponent implements OnInit {
   @Input() loan: Loan;
   status: string;
 
-  loans;
-
+  loans: object[];
   commit: Commit[];
   commits$: Commit[];
+
+  loanTimelineData = [];
 
   timelines_properties: object = {
     "loan_request": {
@@ -148,23 +146,31 @@ export class TransactionHistoryComponent implements OnInit {
     return result$.length > 0;
   }
 
-  private build_timeline(commits: Commit[]): object[] {
+  sort_by_timestamp(commits): object[] {
+    return commits.sort( (objA, objB) => { return objA.timestamp - objB.timestamp; } ); // Sort/Order by timestamp
+  }
+
+  private build_timeline(commits: Commit[]): object[] { // Build timeline with every commit event of the Loan
     let timeEvents: object[] = [];
     let inDebt: boolean = false;
 
+    this.sort_by_timestamp(commits); // Order commits by timestamp
+    
     for (let commit of commits) {
       let oCurrentTimestamp = commit.timestamp;
+      // console.log(oCurrentTimestamp);
 
-      if(commit.opcode == 'approved_loan' || commit.opcode == 'transfer' ){ continue; }
+      if(commit.opcode == 'approved_loan' || commit.opcode == 'transfer' ){ continue; } 
       if(oCurrentTimestamp > this.loan.dueTimestamp && this.loan.dueTimestamp != 0 && !inDebt) {
         timeEvents.push(this.get_properties_by_opcode('in_debt'));
         inDebt = true;
       }
 
-      let oCurrentProperty: any = this.get_properties_by_opcode(commit.opcode);
-      if(inDebt){oCurrentProperty.hexa = '#f44136';}
+      let oCurrentProperty: any = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
 
-      timeEvents.push(oCurrentProperty);
+      if(inDebt){oCurrentProperty.hexa = '#f44136';} // Change to red the timeline when its in debt
+
+      timeEvents.push(oCurrentProperty); // Push to timeEvents[] every commit with style properties
     }
 
     if (!this.timeline_has(timeEvents, 'Destroyed')) {
@@ -176,6 +182,26 @@ export class TransactionHistoryComponent implements OnInit {
     return timeEvents;
   }
 
+  populate_table_data(commits: Commit[]): object[]{
+    let loanTimelineData: object[] = [];
+    // console.log(this.commits$);
+    for (let commit of commits) {
+      let oCommitData = commit.data;
+      console.log(commit);
+      // console.log(commit.data);
+      // console.log(oCommitData['amount']);
+      
+      this.loanTimelineData = [
+        ['Event', commit.opcode],
+        ['Amount', commit.data['amount']],
+        ['Timestamp', commit.timestamp]
+      ];
+    }
+
+    // console.log(loanTimelineData)
+    return loanTimelineData;
+  }
+
   private loadCommits(id:number) {
     this.commitsService.getCommits(id)
       .subscribe(
@@ -184,6 +210,10 @@ export class TransactionHistoryComponent implements OnInit {
         () => { 
           console.log('SUCCESS: Commits[] have been Loaded!', this.commits$);
           this.timeline = this.build_timeline(this.commits$);
+
+          this.populate_table_data(this.commits$);
+
+          console.log(this.loanTimelineData);
         }
       );
   }
@@ -192,7 +222,5 @@ export class TransactionHistoryComponent implements OnInit {
     // this.loadLoanData();
     let response$ = this.loadCommits(this.loan.id);
     console.log(this.loan);
-    console.log('This is Loan N ' + this.loan.id);
   }
-  
 }

@@ -1,6 +1,10 @@
 <div class="transaction-component">
   <div class="timeline">
 
+    <div class="paddingleft15 paddingright15">
+      <app-detail-table [data]="loanTimelineData"></app-detail-table>
+    </div>
+
     <div class="time-event {{ event.inserted }} {{ event.status }}"
       *ngFor='let event of timeline; index as i; first as isFirst; last as isLast'
       [ngClass]="{'background-active': event.active}"
