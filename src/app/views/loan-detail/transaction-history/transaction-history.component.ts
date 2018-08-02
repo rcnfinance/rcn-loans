@@ -15,10 +15,13 @@ export class TransactionHistoryComponent implements OnInit {
   @Input() loan: Loan;
   status: string;
 
+  id: number = 0;
+
   loans: object[];
   commit: Commit[];
   commits$: Commit[];
 
+  allLoanTimelineData = [];
   loanTimelineData = [];
 
   timelines_properties: object = {
@@ -138,7 +141,7 @@ export class TransactionHistoryComponent implements OnInit {
     return this.timelines_properties[opcode];
   }
 
-  timeline_has(timeEvents, opcode){
+  timeline_has(timeEvents, opcode){ // Filters the commits that timeline not use
     let result$: object[] = [];
     result$ = timeEvents.filter(
       (event) => { return event.title == opcode }
@@ -146,8 +149,8 @@ export class TransactionHistoryComponent implements OnInit {
     return result$.length > 0;
   }
 
-  sort_by_timestamp(commits): object[] {
-    return commits.sort( (objA, objB) => { return objA.timestamp - objB.timestamp; } ); // Sort/Order by timestamp
+  sort_by_timestamp(commits): object[] { // Sort/Order by timestamp
+    return commits.sort( (objA, objB) => { return objA.timestamp - objB.timestamp; } ); 
   }
 
   private build_timeline(commits: Commit[]): object[] { // Build timeline with every commit event of the Loan
@@ -173,7 +176,7 @@ export class TransactionHistoryComponent implements OnInit {
       timeEvents.push(oCurrentProperty); // Push to timeEvents[] every commit with style properties
     }
 
-    if (!this.timeline_has(timeEvents, 'Destroyed')) {
+    if (!this.timeline_has(timeEvents, 'Destroyed')) { // Push the last timeEvent as disabled when the Loan hasn't been destroyed
       let disabledEvent: any = this.get_properties_by_opcode('destroyed_loan');
       disabledEvent.status = 'disabled';
       timeEvents.push(disabledEvent);
@@ -182,27 +185,29 @@ export class TransactionHistoryComponent implements OnInit {
     return timeEvents;
   }
 
-  populate_table_data(commits: Commit[]): object[]{
-    let loanTimelineData: object[] = [];
-    // console.log(this.commits$);
+  populate_loan_data(commits: Commit[]): object[]{ // Generates Loan timeline table []
+    let allLoanTimelineData: object[] = [];
+
     for (let commit of commits) {
-      let oCommitData = commit.data;
-      console.log(commit);
-      // console.log(commit.data);
-      // console.log(oCommitData['amount']);
-      
-      this.loanTimelineData = [
+      let oCommitData: any[] = [
         ['Event', commit.opcode],
         ['Amount', commit.data['amount']],
         ['Timestamp', commit.timestamp]
       ];
-    }
 
-    // console.log(loanTimelineData)
-    return loanTimelineData;
+      allLoanTimelineData.push(oCommitData);
+      console.log(allLoanTimelineData);
+    }
+    
+    return allLoanTimelineData;
+  }
+  
+  populate_table_data(id: number){
+    console.log(this.allLoanTimelineData[id]);
+    return this.allLoanTimelineData[id];
   }
 
-  private loadCommits(id:number) {
+  private loadCommits(id:number) { // Load get() API commits from the DB by id
     this.commitsService.getCommits(id)
       .subscribe(
         (commits) => { this.commits$ = commits; },
@@ -211,16 +216,17 @@ export class TransactionHistoryComponent implements OnInit {
           console.log('SUCCESS: Commits[] have been Loaded!', this.commits$);
           this.timeline = this.build_timeline(this.commits$);
 
-          this.populate_table_data(this.commits$);
+          this.allLoanTimelineData = this.populate_loan_data(this.commits$);
+          this.loanTimelineData = this.populate_table_data(this.id);
 
-          console.log(this.loanTimelineData);
+          console.log(this.loanTimelineData[0]);
         }
       );
   }
   
   ngOnInit() {
     // this.loadLoanData();
-    let response$ = this.loadCommits(this.loan.id);
+    const response$ = this.loadCommits(this.loan.id);
     console.log(this.loan);
   }
 }
