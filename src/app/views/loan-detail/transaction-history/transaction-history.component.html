@@ -8,7 +8,7 @@
     <div class="time-event {{ event.inserted }} {{ event.status }}"
       *ngFor='let event of timeline; index as i; first as isFirst; last as isLast'
       [ngClass]="{'background-active': event.active}"
-      (click)="activateClass(event); id == 3">
+      (click)="activateClass(event); change_table_content(i)">
       <div class="icon-event bg-{{ event.color }}"
         matTooltip="{{ event.messege }}" matTooltipPosition="above">
         <i class="{{ event.materialClass }} {{ event.awesomeClass }}">{{ event.icon }}</i>

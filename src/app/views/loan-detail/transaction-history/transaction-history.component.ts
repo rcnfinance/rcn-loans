@@ -14,7 +14,7 @@ export class TransactionHistoryComponent implements OnInit {
   @Input() loan: Loan;
   status: string;
 
-  id: number = 1;
+  id: number = 0;
 
   loans: object[];
   commit: Commit[];
@@ -201,6 +201,10 @@ export class TransactionHistoryComponent implements OnInit {
   
   populate_table_data(id: number){ // Render Table Component by id
     return this.allLoanTimelineData[id];
+  }
+
+  change_table_content(i){ // Change Table Component by timeEvent id
+    this.loanTimelineData = this.populate_table_data(i);
   }
 
   private loadCommits(id:number) { // Load get() API commits from the DB by id
