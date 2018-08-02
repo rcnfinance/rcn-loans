@@ -1,10 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 // App Models
 import { Commit } from '../../../models/commit.model';
-import { Loan, Status } from '../../../models/loan.model';
+import { Loan } from '../../../models/loan.model';
 // App Services
 import { CommitsService } from '../../../services/commits.service';
-import { LoanDetailModule } from '../loan-detail.module';
 
 @Component({
   selector: 'app-transaction-history',
@@ -15,7 +14,7 @@ export class TransactionHistoryComponent implements OnInit {
   @Input() loan: Loan;
   status: string;
 
-  id: number = 0;
+  id: number = 1;
 
   loans: object[];
   commit: Commit[];
@@ -161,7 +160,6 @@ export class TransactionHistoryComponent implements OnInit {
     
     for (let commit of commits) {
       let oCurrentTimestamp = commit.timestamp;
-      // console.log(oCurrentTimestamp);
 
       if(commit.opcode == 'approved_loan' || commit.opcode == 'transfer' ){ continue; } 
       if(oCurrentTimestamp > this.loan.dueTimestamp && this.loan.dueTimestamp != 0 && !inDebt) {
@@ -196,14 +194,12 @@ export class TransactionHistoryComponent implements OnInit {
       ];
 
       allLoanTimelineData.push(oCommitData);
-      console.log(allLoanTimelineData);
     }
     
     return allLoanTimelineData;
   }
   
-  populate_table_data(id: number){
-    console.log(this.allLoanTimelineData[id]);
+  populate_table_data(id: number){ // Render Table Component by id
     return this.allLoanTimelineData[id];
   }
 
@@ -214,12 +210,12 @@ export class TransactionHistoryComponent implements OnInit {
         err => console.error(err),
         () => { 
           console.log('SUCCESS: Commits[] have been Loaded!', this.commits$);
-          this.timeline = this.build_timeline(this.commits$);
+          this.timeline = this.build_timeline(this.commits$); // Build timeline with every commit event of the Loan
 
-          this.allLoanTimelineData = this.populate_loan_data(this.commits$);
-          this.loanTimelineData = this.populate_table_data(this.id);
+          this.allLoanTimelineData = this.populate_loan_data(this.commits$); // Populates LoanTimelineData[] with Commit Events
+          this.loanTimelineData = this.populate_table_data(this.id); // Render TableComponent Data by id
 
-          console.log(this.loanTimelineData[0]);
+          console.log('Table is RENDERING ARRAY ' + id + ' ' + this.loanTimelineData);
         }
       );
   }
