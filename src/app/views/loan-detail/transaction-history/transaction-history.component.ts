@@ -121,13 +121,49 @@ export class TransactionHistoryComponent implements OnInit {
     private commitsService: CommitsService
   ) { }
 
-  loadLoanData() {
+  private loadLoanData() {
     this.commitsService.getLoanData()
       .subscribe(
         (loans) => { this.loans = loans},
         err => console.error(err),
         () => console.log('SUCCESS: Loans[] have been Loaded!', this.loans)
       );
+  }
+
+  private load_timeEvents(commits: Commit[]): object[] { // Build every timeEvents with commit event of the Loan
+    let timeEvents: object[] = [];
+    let inDebt: boolean = false;
+
+    this.sort_by_timestamp(commits); // Order commits by timestamp
+    
+    for (let commit of commits) {
+      let oCurrentCommit: Commit = commit;
+      let oCurrentTimestamp: number = commit.timestamp;
+      
+      if(commit.opcode == 'approved_loan' || commit.opcode == 'transfer' ){ continue; } // Omit if not interested on that event
+
+      if(oCurrentTimestamp > this.loan.dueTimestamp && this.loan.dueTimestamp != 0 && !inDebt) { // Indebt added!
+        timeEvents.push(this.get_properties_by_opcode('in_debt'));
+        inDebt = true;
+      }
+
+      let oCurrentProperty: any = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
+      
+      if(inDebt){oCurrentProperty.hexa = '#f44136';} // Change to red the timeline when its in debt
+      
+      oCurrentProperty.commit = oCurrentCommit; // Add commit to timeEvent
+      timeEvents.push(oCurrentProperty); // Push to timeEvents[] every commit style properties
+    }
+
+    console.log(timeEvents);
+
+    if (!this.timeline_has(timeEvents, 'Destroyed')) { // Push the last timeEvent as disabled when the Loan hasn't been destroyed
+      let disabledEvent: any = this.get_properties_by_opcode('destroyed_loan');
+      disabledEvent.status = 'disabled';
+      timeEvents.push(disabledEvent);
+    }
+
+    return timeEvents;
   }
 
   get_properties_by_opcode(opcode: string): object[] { // Get the timeline event properties from timelines_properties[]
@@ -144,37 +180,6 @@ export class TransactionHistoryComponent implements OnInit {
 
   sort_by_timestamp(commits): object[] { // Sort/Order by timestamp
     return commits.sort( (objA, objB) => { return objA.timestamp - objB.timestamp; } ); 
-  }
-
-  private build_timeline(commits: Commit[]): object[] { // Build timeline with every commit event of the Loan
-    let timeEvents: object[] = [];
-    let inDebt: boolean = false;
-
-    this.sort_by_timestamp(commits); // Order commits by timestamp
-    
-    for (let commit of commits) {
-      let oCurrentTimestamp = commit.timestamp;
-
-      if(commit.opcode == 'approved_loan' || commit.opcode == 'transfer' ){ continue; } 
-      if(oCurrentTimestamp > this.loan.dueTimestamp && this.loan.dueTimestamp != 0 && !inDebt) {
-        timeEvents.push(this.get_properties_by_opcode('in_debt'));
-        inDebt = true;
-      }
-
-      let oCurrentProperty: any = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
-
-      if(inDebt){oCurrentProperty.hexa = '#f44136';} // Change to red the timeline when its in debt
-
-      timeEvents.push(oCurrentProperty); // Push to timeEvents[] every commit with style properties
-    }
-
-    if (!this.timeline_has(timeEvents, 'Destroyed')) { // Push the last timeEvent as disabled when the Loan hasn't been destroyed
-      let disabledEvent: any = this.get_properties_by_opcode('destroyed_loan');
-      disabledEvent.status = 'disabled';
-      timeEvents.push(disabledEvent);
-    }
-
-    return timeEvents;
   }
 
   populate_loan_data(commits: Commit[]): object[]{ // Generates Loan timeline table []
@@ -213,13 +218,14 @@ export class TransactionHistoryComponent implements OnInit {
         err => console.error(err),
         () => { 
           console.log('SUCCESS: Commits[] have been Loaded!', this.commits$);
-          this.timeline = this.build_timeline(this.commits$); // Build timeline with every commit event of the Loan
+          this.timeline = this.load_timeEvents(this.commits$); // Build timeline with every commit event of the Loan
 
           this.allLoanTimelineData = this.populate_loan_data(this.commits$); // Populates LoanTimelineData[] with Commit Events
           this.loanTimelineData = this.populate_table_data(this.id); // Render TableComponent Data by id
         }
       );
   }
+
   
   ngOnInit() {
     // this.loadLoanData();
