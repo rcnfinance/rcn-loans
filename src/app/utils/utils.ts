@@ -29,54 +29,24 @@ export class Utils {
         return address.substr(0, 4) + '...' + address.substr(-4);
     }
 
-    static formatDelta(totalSeconds: number, display: number = 2): string {
-        let prefix = '';
+    totalSeconds = Math.abs(totalSeconds);
+    const secondsInYear = 86400 * 365;
+    const years = Math.floor(totalSeconds / secondsInYear);
+    timeToStr(years, ' years, ');
+    totalSeconds %= secondsInYear;
+    const days = Math.floor(totalSeconds / 86400);
+    timeToStr(days, ' days, ');
+    totalSeconds %= 86400;
+    const hours = Math.floor(totalSeconds / 3600);
+    timeToStr(hours, ' hours, ');
+    totalSeconds %= 3600;
+    const minutes = Math.floor(totalSeconds / 60);
+    timeToStr(minutes, ' minutes, ');
+    const seconds = totalSeconds % 60;
+    timeToStr(seconds, ' seconds, ');
 
-        if (totalSeconds < 0) {
-            prefix = '- ';
-            totalSeconds *= -1;
-        }
-
-        totalSeconds = Math.abs(totalSeconds);
-        const secondsInYear = 86400 * 365;
-        const years = Math.floor(totalSeconds / secondsInYear);
-        totalSeconds %= secondsInYear;
-        const days = Math.floor(totalSeconds / 86400);
-        totalSeconds %= 86400;
-        const hours = Math.floor(totalSeconds / 3600);
-        totalSeconds %= 3600;
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-
-        let result = '';
-        let visible = 0;
-
-        if (years !== 0 && visible < display) {
-            result += years + ' years, ';
-            visible++;
-        }
-
-        if (days !== 0 && visible < display) {
-            result += days + ' days, ';
-            visible++;
-        }
-
-        if (hours !== 0 && visible < display) {
-            result += hours + ' hours, ';
-            visible++;
-        }
-
-        if (minutes !== 0 && visible < display) {
-            result += minutes + ' minutes, ';
-            visible++;
-        }
-
-        if (seconds !== 0 && visible < display) {
-            result += seconds + ' seconds, ';
-            visible++;
-        }
-
-        return prefix + result.slice(0, -2);
+    return prefix + result.slice(0, -2);
+  }
     }
 
     static formatAmount(amount: Number): string {
