@@ -5,7 +5,7 @@
       <app-detail-table [data]="loanTimelineData"></app-detail-table>
     </div>
 
-    <div *ngFor='let event of timeline; index as i; first as isFirst; last as isLast'
+    <div *ngFor='let event of oTimeline; index as i; first as isFirst; last as isLast'
       (click)="change_table_content(i); onSelectEvent(i)"
       class="time-event {{ event.inserted }} {{ event.status }}"
       [ngClass]="{'background-active': i === selectedEvent}">

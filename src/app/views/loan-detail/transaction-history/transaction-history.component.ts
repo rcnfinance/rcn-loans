@@ -23,97 +23,147 @@ export class TransactionHistoryComponent implements OnInit {
   allLoanTimelineData = [];
   loanTimelineData = [];
 
-  timeline: object[] = [];
+  oTimeline: object[] = [];
   timelines_properties: object = {
     "loan_request": {
+      'title': 'Requested',
+      'messege': 'Requested',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'code',
-      'title': 'Requested',
       'color': 'white',
-      'messege': 'Requested',
-      'inserted': false
+      'inserted': false,
+      'oTableData': [
+        {'event': 'asd'},
+        {'amount': 'asd'},
+        {'timestamp': 'asd'},
+      ]
     },
     "approved_loan": {
+      'title': 'Loan Approved',
+      'messege': 'Loan Approved',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'trending_up',
-      'title': 'Loan Approved',
       'color': 'blue',
-      'messege': 'Loan Approved',
-      'inserted': true
+      'inserted': true,
+      'oTableData': [
+        {'event': 'asd'},
+        {'amount': 'asd'},
+        {'timestamp': 'asd'},
+      ]
     },
     "lent": {
+      'title': 'Lent',
+      'messege': 'Lent',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'trending_up',
-      'title': 'Lent',
       'color': 'blue',
-      'messege': 'Lent',
-      'inserted': true
+      'inserted': true,
+      'oTableData': [
+        {'event': 'asd'},
+        {'amount': 'asd'},
+        {'timestamp': 'asd'},
+      ]
     },
     "partial_payment": {
+      'title': 'Pay',
+      'messege': 'Pay',
       'status': 'active',
       'awesomeClass': 'fas fa-coins',
-      'title': 'Pay',
       'color': 'green',
-      'messege': 'Pay',
-      'inserted': true
+      'inserted': true,
+      'oTableData': [
+        {'event': 'asd'},
+        {'amount': 'asd'},
+        {'timestamp': 'asd'},
+      ]
     },
     "total_payment": {
+      'title': 'Completed',
+      'messege': 'Completed',
       'status': 'active',
       'awesomeClass': 'fas fa-check',
-      'title': 'Completed',
       'color': 'gray7',
-      'messege': 'Completed',
-      'inserted': true
+      'inserted': true,
+      'oTableData': [
+        {'event': 'asd'},
+        {'amount': 'asd'},
+        {'timestamp': 'asd'},
+      ]
     },
     "in_debt": {
+      'title': 'In Debt',
+      'messege': 'In Debt',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'error_outline',
-      'title': 'In Debt',
       'color': 'red',
-      'messege': 'In Debt',
-      'inserted': true
+      'inserted': true,
+      'oTableData': [
+        {'event': 'asd'},
+        {'amount': 'asd'},
+        {'timestamp': 'asd'},
+      ]
     },
     "withdraw": {
+      'title': 'Withdraw',
+      'messege': 'Withdraw',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'call_made',
-      'title': 'Withdraw',
       'color': 'white',
-      'messege': 'Withdraw',
-      'inserted': true
+      'inserted': true,
+      'oTableData': [
+        {'event': 'asd'},
+        {'amount': 'asd'},
+        {'timestamp': 'asd'},
+      ]
     },
     "transfer": {
+      'title': 'Transfer',
+      'messege': 'Transfer',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'swap_horiz',
-      'title': 'Transfer',
       'color': 'orange',
-      'messege': 'Transfer',
-      'inserted': true
+      'inserted': true,
+      'oTableData': [
+        {'event': 'asd'},
+        {'amount': 'asd'},
+        {'timestamp': 'asd'},
+      ]
     },
     "loan_expired": {
+      'title': 'Destroyed',
+      'messege': 'Destroyed',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'delete',
-      'title': 'Destroyed',
       'color': 'red',
       'hexa': '#333',
-      'messege': 'Destroyed',
-      'inserted': false
+      'inserted': false,
+      'oTableData': [
+        {'event': 'asd'},
+        {'amount': 'asd'},
+        {'timestamp': 'asd'},
+      ]
     },
     "destroyed_loan": {
+      'title': 'Destroyed',
+      'messege': 'Destroyed',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'delete',
-      'title': 'Destroyed',
       'color': 'red',
       'hexa': '#333',
-      'messege': 'Destroyed',
-      'inserted': false
+      'inserted': false,
+      'oTableData': [
+        {'event': 'asd'},
+        {'amount': 'asd'},
+        {'timestamp': 'asd'},
+      ]
     }
   }
 
@@ -182,17 +232,17 @@ export class TransactionHistoryComponent implements OnInit {
     return commits.sort( (objA, objB) => { return objA.timestamp - objB.timestamp; } ); 
   }
 
-  populate_loan_data(commits: Commit[]): object[]{ // Generates Loan timeline table []
+  populate_loan_data(oTimeline: object[]): object[]{ // Generates Loan timeline table []
     let allLoanTimelineData: object[] = [];
 
-    for (let commit of commits) {
-      let oCommitData: any[] = [
-        ['Event', commit.opcode],
-        ['Amount', commit.data['amount']],
-        ['Timestamp', commit.timestamp]
+    for (let event of oTimeline) {
+      let oTableData: any[] = [
+        ['Event', '1 asd'],
+        ['Amount', '2 asd'],
+        ['Timestamp', '3 asd']
       ];
 
-      allLoanTimelineData.push(oCommitData);
+      allLoanTimelineData.push(oTableData);
     }
     
     return allLoanTimelineData;
@@ -218,9 +268,9 @@ export class TransactionHistoryComponent implements OnInit {
         err => console.error(err),
         () => { 
           console.log('SUCCESS: Commits[] have been Loaded!', this.commits$);
-          this.timeline = this.load_timeEvents(this.commits$); // Build timeline with every commit event of the Loan
+          this.oTimeline = this.load_timeEvents(this.commits$); // Build timeline with every commit event of the Loan
 
-          this.allLoanTimelineData = this.populate_loan_data(this.commits$); // Populates LoanTimelineData[] with Commit Events
+          this.allLoanTimelineData = this.populate_loan_data(this.oTimeline); // Populates LoanTimelineData[] with Commit Events
           this.loanTimelineData = this.populate_table_data(this.id); // Render TableComponent Data by id
         }
       );
