@@ -25,7 +25,7 @@ export class ActiveLoansComponent implements OnInit {
   ) { }
 
   // Available Loans service
-  upgradeAvaiblable(){
+  upgradeAvaiblable() {
     this.availableLoansService.updateAvailable(this.loans.length);
   }
 
@@ -38,13 +38,6 @@ export class ActiveLoansComponent implements OnInit {
         this.availableLoans = false;
       }
     });
-  }
-
-  private formatInterest(interest: Number): string {
-    return Number(interest.toFixed(2)).toString();
-  }
-  private formatAmount(amount: number): string {
-    return Utils.formatAmount(amount);
   }
 
   ngOnInit() {

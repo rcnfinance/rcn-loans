@@ -6,6 +6,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
+// App Modules
+import { MaterialModule } from './material/material.module';
+import { SharedModule } from './shared/shared.module';
+import { AppRoutingModule } from './app-routing/app-routing.module';
+import { CoreModule } from './core/core.module';
+import { NotFoundModule } from './not-found/not-found.module';
+import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
+
 // App Services
 import { ContractsService } from './services/contracts.service';
 import { TxService } from './tx.service';
@@ -25,46 +33,24 @@ import { WindowsHeightDirective } from './directives/windows-height.directive';
 
 // App Component
 import { AppComponent } from './app.component';
-import { SharedModule } from './shared/shared.module';
-import { MaterialModule } from './material/material.module';
 import { HeaderComponent } from './header/header.component';
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 
 import { OpenLoansComponent } from './views/open-loans/open-loans.component';
 
+import { AddressComponent } from './views/address/address.component';
+
 import { ActiveLoansComponent } from './active-loans/active-loans.component';
 import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
-import { LoanDetailComponent } from './views/loan-detail/loan-detail.component';
-import { DetailCosignerComponent } from './views/loan-detail/detail-cosigner/detail-cosigner.component';
-import { DetailIdentityComponent } from './views/loan-detail/detail-identity/detail-identity.component';
-import { DetailTableComponent } from './views/loan-detail/detail-table/detail-table.component';
 import { DialogLoanTransferComponent } from './dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
-import { DecentralandCosignerComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
-import { DecentralandMapComponent } from './views/loan-detail/detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
-import { AddressComponent } from './views/address/address.component';
 
 import { ProfileComponent } from './views/profile/profile.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 
-// App Modules
-import { CoreModule } from './core/core.module';
-import { NotFoundModule } from './not-found/not-found.module';
-
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
-
-const appRoutes: Routes = [
-  { path: '', redirectTo: '/requests', pathMatch: 'full'},
-  { path: 'requests', component: OpenLoansComponent },
-  { path: 'activity', component: ActiveLoansComponent },
-  { path: 'loan/:id', component: LoanDetailComponent },
-  { path: 'address/:address', component: AddressComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: '404', component: NotFoundModule },
-  { path: '**',  redirectTo: '/404' },
-];
 
 @NgModule({
   declarations: [
@@ -72,16 +58,10 @@ const appRoutes: Routes = [
     HeaderComponent,
     FadeToggleDirective,
     WindowsHeightDirective,
-    LoanDetailComponent,
     OpenLoansComponent,
-    DetailCosignerComponent,
     ContentWrapperComponent,
-    DetailIdentityComponent,
-    DecentralandCosignerComponent,
     DialogApproveContractComponent,
     DialogLoanTransferComponent,
-    DecentralandMapComponent,
-    DetailTableComponent,
     ProfileComponent,
     AddressComponent,
     ActiveLoansComponent,
@@ -91,6 +71,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     SharedModule,
     MaterialModule,
     HttpModule,
@@ -100,10 +81,7 @@ const appRoutes: Routes = [
     CoreModule,
     NgxSpinnerModule,
     NotFoundModule,
-    RouterModule.forRoot(
-      appRoutes,
-      { enableTracing: false } // <-- debugging purposes only
-    )
+    LoanDetailModule,
   ],
   exports: [],
   entryComponents: [

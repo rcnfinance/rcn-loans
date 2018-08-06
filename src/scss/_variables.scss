@@ -11,8 +11,9 @@ $black: #000000;
 $gray7: #333333;
 $gray8: #101010;
 $gray9: #0c0c0c;
-$orange: #da7d3a;
 $red: #f44136;
+$green: #71b464;
+$orange: #da7d3a;
 $primary: #4155ff;
 $hover-primary: #3444cc;
 $secondary: #ffffff;
@@ -189,6 +190,7 @@ $default-transition--delay: all 0.3s ease-out;
 %position-center{position: absolute; top: 50%; left: 50%; @include transform(translate(-50%, -50%));}
 %absolute-center{position: absolute; top: 50%; left: 50%; @include transform(translate(-50%, -50%));}
 %absolute-center-top{position: absolute; top: 50%; @include transform(translate(0%, -50%));}
+%absolute-center-left{position: absolute; left: 50%; @include transform(translate(-50%, 0%));}
 
 %relative-center{position: relative; top: 50%; left: 50%; @include transform(translate(-50%, -50%));}
 %relative-center-top{position: relative; top: 50%; @include transform(translate(0%, -50%));}
