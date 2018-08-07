@@ -1,4 +1,3 @@
-Currency
 export class Currency {
   static getDecimals(currency: string): number {
     switch (currency.toUpperCase()) {
