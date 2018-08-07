@@ -39,6 +39,13 @@ export const environment = {
       landMarket: '0x80faa2b517b84a5aec1078d3600eab4c0b3aff56'
     }
   },
+  filters: {
+    openLoans: '0x3e703de416a62525c8653be11d71486550618ec8',
+    nonExpired: '0xe084b7cf7f6869a96cd72962047bf65e6d55e1e1',
+    validMortgage: '0x0bc0ac0f08235979951bb155d15f1a08dd7dcb2a',
+    lenderIn: '0xe52eac8af912b8b3196b2921f12b66c91b39e025',
+    ongoing: '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3',
+  },
   dir: {
     '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioCreator,
   }
