@@ -1,10 +1,23 @@
 import { Currency } from "./currencies";
 
 export class Utils {
+
   static address_0 = '0x0000000000000000000000000000000000000000';
 
   static formatInterest(raw: number): number {
-    return 311040000000000 / raw;
+    return Math.floor(311040000000000 / raw);
+  }
+
+  static dayToSecond(days: number): number {
+    return Math.floor(days * 24 * 60);
+  }
+
+  static nowInSeconds(): number {
+    return Math.floor(Date.now() / 1000);
+  }
+
+  static toMinUnit(amount: number, currency: string): number {
+    return amount * 10 ** Currency.getDecimals(currency);
   }
 
   static newGuid() {
@@ -95,10 +108,6 @@ export class Utils {
 
     return value;
   }
-}
-
-export function toMinUnit(amount: number, curreny: string): number {
-  return amount * 10 ** Currency.getDecimals(curreny);
 }
 
 export function promisify(inner) {

@@ -45,13 +45,14 @@ export class RequestLoanComponent implements OnInit {
     });
   }
 
-  async onSubmit(event: any, _amount, _duration, _firstpayment, _interestrate, _description) {
+  async onSubmit(event: any, _amount, _duration, _firstPayment, _interestRate, _description) {
     event.preventDefault();
-    const amount = _amount.value * 10 ** 18;
-    const duration = _duration.value * 24 * 60 * 60;
-    const firstPayment = _firstpayment.value * 24 * 60 * 60;
-    const interestRate = 311040000000000 / _interestrate.value;
-    const expirationRequest = Math.floor(Date.now() / 1000) + (31 * 24 * 60 * 60); // 31 days
+    const amount = Utils.toMinUnit(_amount.value, "RCN");
+    const duration = Utils.dayToSecond(_duration.value);
+    const firstPayment = Utils.dayToSecond(_firstPayment.value);
+    const interestRate = Utils.formatInterest(_interestRate.value);
+
+    const expirationRequest = Utils.nowInSeconds() + Utils.dayToSecond(31); // 31 days
     const description = _description.value;
 
     if (this.selectedCollateral.length === 0) {
