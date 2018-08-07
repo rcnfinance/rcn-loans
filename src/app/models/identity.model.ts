@@ -10,7 +10,7 @@ export class CompanyIdentity extends Identity {
         public name: string,
         public description: string,
         public logo: string,
-        public foundation: Date
+        public foundation: string
     ) {
         super(name);
     }
