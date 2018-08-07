@@ -98,17 +98,17 @@ export class Utils {
 }
 
 export function toMinUnit(amount: number, curreny: string): number {
-    return amount * 10 ** Currency.getDecimals(curreny);
+  return amount * 10 ** Currency.getDecimals(curreny);
 }
 
 export function promisify(inner) {
-    return new Promise((resolve, reject) =>
-        inner((err, res) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(res);
-            }
-        })
-    );
+  return new Promise((resolve, reject) =>
+    inner((err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    })
+  );
 }

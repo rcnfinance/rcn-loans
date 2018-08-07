@@ -1,21 +1,21 @@
-
+Currency
 export class Currency {
-    static getDecimals(currency: string): number {
-        switch (currency.toUpperCase()) {
-            case 'ARS':
-                return 2;
+  static getDecimals(currency: string): number {
+    switch (currency.toUpperCase()) {
+      case 'ARS':
+        return 2;
 
-            case 'MANA':
-            case 'ETH':
-            case 'RCN':
-                return 18;
+      case 'MANA':
+      case 'ETH':
+      case 'RCN':
+        return 18;
 
-            case 'BTC':
-            case 'BCH':
-                return 8;
+      case 'BTC':
+      case 'BCH':
+        return 8;
 
-            default:
-                return 0;
-        }
+      default:
+        return 0;
     }
+  }
 }
