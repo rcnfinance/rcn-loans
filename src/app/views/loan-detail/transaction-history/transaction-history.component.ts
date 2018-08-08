@@ -16,12 +16,16 @@ export class TransactionHistoryComponent implements OnInit {
   selectedEvent: number;
   id: number = 0;
 
-  loans: object[];
-  commit: Commit[];
-  commits$: Commit[];
+  now: any = new Date();
+  timestamp: any = 1525462875;
+  date = new Date(this.timestamp);
 
-  allLoanTimelineData = [];
-  loanTimelineData = [];
+  loans: object[];
+  commits$: Commit[];
+  oDefaultCommit: Commit = new Commit( 'Destroyed', 0, 0, 'Destroyed', { 'loan': 'Destroyed' } );
+
+  oDataTable: object[] = [];
+  oDefaultDataTable: object[] = [['Event'],['Destroyed']];
 
   oTimeline: object[] = [];
   timelines_properties: object = {
@@ -32,12 +36,7 @@ export class TransactionHistoryComponent implements OnInit {
       'materialClass': 'material-icons',
       'icon': 'code',
       'color': 'white',
-      'inserted': false,
-      'oTableData': [
-        {'event': 'asd'},
-        {'amount': 'asd'},
-        {'timestamp': 'asd'},
-      ]
+      'inserted': false
     },
     "approved_loan": {
       'title': 'Loan Approved',
@@ -46,12 +45,7 @@ export class TransactionHistoryComponent implements OnInit {
       'materialClass': 'material-icons',
       'icon': 'trending_up',
       'color': 'blue',
-      'inserted': true,
-      'oTableData': [
-        {'event': 'asd'},
-        {'amount': 'asd'},
-        {'timestamp': 'asd'},
-      ]
+      'inserted': true
     },
     "lent": {
       'title': 'Lent',
@@ -60,12 +54,7 @@ export class TransactionHistoryComponent implements OnInit {
       'materialClass': 'material-icons',
       'icon': 'trending_up',
       'color': 'blue',
-      'inserted': true,
-      'oTableData': [
-        {'event': 'asd'},
-        {'amount': 'asd'},
-        {'timestamp': 'asd'},
-      ]
+      'inserted': true
     },
     "partial_payment": {
       'title': 'Pay',
@@ -73,12 +62,7 @@ export class TransactionHistoryComponent implements OnInit {
       'status': 'active',
       'awesomeClass': 'fas fa-coins',
       'color': 'green',
-      'inserted': true,
-      'oTableData': [
-        {'event': 'asd'},
-        {'amount': 'asd'},
-        {'timestamp': 'asd'},
-      ]
+      'inserted': true
     },
     "total_payment": {
       'title': 'Completed',
@@ -86,12 +70,7 @@ export class TransactionHistoryComponent implements OnInit {
       'status': 'active',
       'awesomeClass': 'fas fa-check',
       'color': 'gray7',
-      'inserted': true,
-      'oTableData': [
-        {'event': 'asd'},
-        {'amount': 'asd'},
-        {'timestamp': 'asd'},
-      ]
+      'inserted': true
     },
     "in_debt": {
       'title': 'In Debt',
@@ -100,12 +79,7 @@ export class TransactionHistoryComponent implements OnInit {
       'materialClass': 'material-icons',
       'icon': 'error_outline',
       'color': 'red',
-      'inserted': true,
-      'oTableData': [
-        {'event': 'asd'},
-        {'amount': 'asd'},
-        {'timestamp': 'asd'},
-      ]
+      'inserted': true
     },
     "withdraw": {
       'title': 'Withdraw',
@@ -114,12 +88,7 @@ export class TransactionHistoryComponent implements OnInit {
       'materialClass': 'material-icons',
       'icon': 'call_made',
       'color': 'white',
-      'inserted': true,
-      'oTableData': [
-        {'event': 'asd'},
-        {'amount': 'asd'},
-        {'timestamp': 'asd'},
-      ]
+      'inserted': true
     },
     "transfer": {
       'title': 'Transfer',
@@ -128,12 +97,7 @@ export class TransactionHistoryComponent implements OnInit {
       'materialClass': 'material-icons',
       'icon': 'swap_horiz',
       'color': 'orange',
-      'inserted': true,
-      'oTableData': [
-        {'event': 'asd'},
-        {'amount': 'asd'},
-        {'timestamp': 'asd'},
-      ]
+      'inserted': true
     },
     "loan_expired": {
       'title': 'Destroyed',
@@ -143,12 +107,7 @@ export class TransactionHistoryComponent implements OnInit {
       'icon': 'delete',
       'color': 'red',
       'hexa': '#333',
-      'inserted': false,
-      'oTableData': [
-        {'event': 'asd'},
-        {'amount': 'asd'},
-        {'timestamp': 'asd'},
-      ]
+      'inserted': false
     },
     "destroyed_loan": {
       'title': 'Destroyed',
@@ -158,12 +117,7 @@ export class TransactionHistoryComponent implements OnInit {
       'icon': 'delete',
       'color': 'red',
       'hexa': '#333',
-      'inserted': false,
-      'oTableData': [
-        {'event': 'asd'},
-        {'amount': 'asd'},
-        {'timestamp': 'asd'},
-      ]
+      'inserted': false
     }
   }
 
@@ -187,30 +141,47 @@ export class TransactionHistoryComponent implements OnInit {
     this.sort_by_timestamp(commits); // Order commits by timestamp
     
     for (let commit of commits) {
+      let oCurrentEvent: any = {};
+
       let oCurrentCommit: Commit = commit;
+      let oCurrentdata: object = commit.data;
       let oCurrentTimestamp: number = commit.timestamp;
+
+      let oProperties: object[] = [];
+
+      let oTableData: object[] = [];
+      let oTableTitles: object;
+      let oTableValues: object;
+
       
       if(commit.opcode == 'approved_loan' || commit.opcode == 'transfer' ){ continue; } // Omit if not interested on that event
 
       if(oCurrentTimestamp > this.loan.dueTimestamp && this.loan.dueTimestamp != 0 && !inDebt) { // Indebt added!
-        timeEvents.push(this.get_properties_by_opcode('in_debt'));
+        oCurrentEvent.oProperties = this.get_properties_by_opcode('in_debt');
+        timeEvents.push(oCurrentEvent)
         inDebt = true;
       }
 
-      let oCurrentProperty: any = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
+      oCurrentEvent.oProperties = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
       
-      if(inDebt){oCurrentProperty.hexa = '#f44136';} // Change to red the timeline when its in debt
+      if(inDebt){oCurrentEvent.oProperties.hexa = '#f44136';} // Change to red the timeline when its in debt
       
-      oCurrentProperty.commit = oCurrentCommit; // Add commit to timeEvent
-      timeEvents.push(oCurrentProperty); // Push to timeEvents[] every commit style properties
+      oTableTitles = this.load_table_titles(oCurrentdata); // Generates oTableData[] Titles
+      oTableValues = this.load_table_values(oCurrentdata); // Generates oTableData[] Value
+      oTableData.push(oTableTitles, oTableValues); // Push to timeEvents[] every oTableTitles & oTableValues
+      
+      oCurrentEvent.commit = oCurrentCommit; // Add commit{} to timeEvent
+      oCurrentEvent.oTableData = oTableData; // Add oTableData[] to timeEvent
+      timeEvents.push(oCurrentEvent); // Push to timeEvents[] with commit{} + oProperties{} + oTableData[]
     }
-
-    console.log(timeEvents);
-
+    
     if (!this.timeline_has(timeEvents, 'Destroyed')) { // Push the last timeEvent as disabled when the Loan hasn't been destroyed
-      let disabledEvent: any = this.get_properties_by_opcode('destroyed_loan');
-      disabledEvent.status = 'disabled';
-      timeEvents.push(disabledEvent);
+      let oCurrentEvent: any = {};
+      oCurrentEvent.oProperties = this.get_properties_by_opcode('destroyed_loan');
+      oCurrentEvent.oProperties.status = 'disabled';
+      oCurrentEvent.commit = this.oDefaultCommit; // Add commit{} to timeEvent
+      oCurrentEvent.oTableData = this.oDefaultDataTable; // Add commit{} to timeEvent
+      timeEvents.push(oCurrentEvent);
     }
 
     return timeEvents;
@@ -232,29 +203,28 @@ export class TransactionHistoryComponent implements OnInit {
     return commits.sort( (objA, objB) => { return objA.timestamp - objB.timestamp; } ); 
   }
 
-  populate_loan_data(oTimeline: object[]): object[]{ // Generates Loan timeline table []
-    let allLoanTimelineData: object[] = [];
-
-    for (let event of oTimeline) {
-      let oTableData: any[] = [
-        ['Event', '1 asd'],
-        ['Amount', '2 asd'],
-        ['Timestamp', '3 asd']
-      ];
-
-      allLoanTimelineData.push(oTableData);
+  load_table_titles(oCurrentdata: object){ // Generates oTimeline[] timeEvent[] oTableData[] Titles
+    let oTableTitles: string[] = [];
+    for (let title in oCurrentdata){
+      oTableTitles.push(title);
     }
-    
-    return allLoanTimelineData;
+    return oTableTitles;
+  }
+
+  load_table_values(oCurrentdata: object){ // Generates oTimeline[] timeEvent[] oTableData[] Titles
+    let oTableValues: string[] = [];
+    for (let value in oCurrentdata){
+      oTableValues.push(oCurrentdata[value]);
+    }
+    return oTableValues;
   }
   
   populate_table_data(id: number){ // Render Table Component by id
-    return this.allLoanTimelineData[id];
+    return this.oTimeline[id]['oTableData'];
   }
 
   change_table_content(i){ // Change Table Component by click timeEvent id
-    this.loanTimelineData = this.populate_table_data(i);
-    console.log('Table is RENDERING ARRAY ' + i + ' ' + this.loanTimelineData);
+    this.oDataTable = this.populate_table_data(i);
   }
 
   onSelectEvent(i: number) { // Activate animation on timeEvent selected
@@ -269,17 +239,22 @@ export class TransactionHistoryComponent implements OnInit {
         () => { 
           console.log('SUCCESS: Commits[] have been Loaded!', this.commits$);
           this.oTimeline = this.load_timeEvents(this.commits$); // Build timeline with every commit event of the Loan
-
-          this.allLoanTimelineData = this.populate_loan_data(this.oTimeline); // Populates LoanTimelineData[] with Commit Events
-          this.loanTimelineData = this.populate_table_data(this.id); // Render TableComponent Data by id
+          
+          this.oDataTable = this.populate_table_data(this.id); // Render TableComponent Data by id
+          console.log(this.oTimeline);
         }
       );
   }
 
+  get_time(timestamp: number){
+    console.log(this.now);
+    console.log(this.timestamp);
+    console.log(this.date);
+  }
+
   
   ngOnInit() {
-    // this.loadLoanData();
     const response$ = this.loadCommits(this.loan.id);
-    console.log(this.loan);
+    this.get_time(this.now);
   }
 }

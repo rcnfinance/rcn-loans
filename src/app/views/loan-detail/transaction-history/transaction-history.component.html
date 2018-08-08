@@ -1,23 +1,25 @@
 <div class="transaction-component">
   <div class="timeline">
 
-    <div class="paddingleft15 paddingright15">
-      <app-detail-table [data]="loanTimelineData"></app-detail-table>
+    <div class="timeline-table">
+      <app-detail-table [data]="oDataTable"></app-detail-table>
     </div>
 
-    <div *ngFor='let event of oTimeline; index as i; first as isFirst; last as isLast'
-      (click)="change_table_content(i); onSelectEvent(i)"
-      class="time-event {{ event.inserted }} {{ event.status }}"
-      [ngClass]="{'background-active': i === selectedEvent}">
-      <div class="icon-event bg-{{ event.color }}"
-        matTooltip="{{ event.messege }}" matTooltipPosition="above">
-        <i class="{{ event.materialClass }} {{ event.awesomeClass }}">{{ event.icon }}</i>
+    <div class="timeline-structure">
+      <div *ngFor='let event of oTimeline; index as i; first as isFirst; last as isLast'
+        (click)="change_table_content(i); onSelectEvent(i)"
+        class="time-event {{ event.oProperties.inserted }} {{ event.oProperties.status }}"
+        [ngClass]="{'background-active': i === selectedEvent}">
+        <div class="icon-event bg-{{ event.oProperties.color }}"
+          matTooltip="{{ event.oProperties.messege }}" matTooltipPosition="above">
+          <i class="{{ event.oProperties.materialClass }} {{ event.oProperties.awesomeClass }}">{{ event.oProperties.icon }}</i>
+        </div>
+        
+        <div class="line" [ngStyle]="{'border-right': '4px solid' + event.oProperties.hexa }" *ngIf="!isFirst"></div>
+        <div class="circle" [ngClass]="{'background-active': i === selectedEvent}"></div>
+        <div class="title">{{ event.oProperties.title }}</div>
+        <i class="fas fa-chevron-right"></i>
       </div>
-      
-      <div class="line" [ngStyle]="{'border-right': '4px solid' + event.hexa }" *ngIf="!isFirst"></div>
-      <div class="circle" [ngClass]="{'background-active': i === selectedEvent}"></div>
-      <div class="title">{{ event.title }}</div>
-      <i class="fas fa-chevron-right"></i>
     </div>
 
   </div>
