@@ -112,6 +112,10 @@ export class LoanDetailComponent implements OnInit {
     return new DatePipe('en-US').transform(timestamp * 1000, 'dd.MM.yyyy');
   }
 
+  someMethod(event) {
+    console.log('PASO PASDO');
+  }
+
   ngOnInit() {
     this.spinner.show();
     this.web3Service.getAccount().then((account) => {

@@ -66,7 +66,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     ActiveLoansComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
-    DialogInsufficientFoundsComponent,
   ],
   imports: [
     BrowserModule,

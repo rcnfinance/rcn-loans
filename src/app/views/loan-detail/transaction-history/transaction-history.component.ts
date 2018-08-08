@@ -17,7 +17,7 @@ export class TransactionHistoryComponent implements OnInit {
   id: number = 0;
 
   now: any = new Date();
-  timestamp: any = 1525462875;
+  timestamp: number = 1525462875;
   date = new Date(this.timestamp);
 
   loans: object[];
@@ -247,9 +247,9 @@ export class TransactionHistoryComponent implements OnInit {
   }
 
   get_time(timestamp: number){
-    console.log(this.now);
-    console.log(this.timestamp);
-    console.log(this.date);
+    // console.log(this.now);
+    // console.log(this.timestamp);
+    // console.log(this.date);
   }
 
   
