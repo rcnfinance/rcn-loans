@@ -59,7 +59,7 @@ export class LoanDetailComponent implements OnInit {
     if (this.cosignerService.getCosigner(this.loan) !== undefined) {
       return 'cosigner';
     } else {
-      return 'transaction';
+      return 'transaction_history';
     }
   }
 
@@ -94,6 +94,8 @@ export class LoanDetailComponent implements OnInit {
 
   openDetail(view: string) {
     this.viewDetail = view;
+    console.log('PASO PASDO', view);
+    console.log('PASO PASDO', this.viewDetail);
   }
 
   isDetail(view: string): Boolean {
@@ -110,10 +112,6 @@ export class LoanDetailComponent implements OnInit {
 
   private formatTimestamp(timestamp: number): string {
     return new DatePipe('en-US').transform(timestamp * 1000, 'dd.MM.yyyy');
-  }
-
-  someMethod(event) {
-    console.log('PASO PASDO');
   }
 
   ngOnInit() {

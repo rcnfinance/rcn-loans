@@ -3,10 +3,13 @@
   <!-- <div class="button-options"><i class="material-icons">swap_horiz</i></div> -->
   <!-- <div class="button-options"><i class="material-icons">delete</i></div> -->
   <!-- <div class="button-options"><i class="material-icons">more_vert</i></div> -->
-  <div class="button-options">
+  <div class="button-options" (click)="openDetail('transaction_history')">
+    <i class="fas fa-chart-line" matTooltip="Transaction History" matTooltipPosition="below"></i>
+  </div>
+  <div class="button-options" (click)="openDetail('cosigner')">
     <i class="fas fa-shield-alt" matTooltip="Cosigner" matTooltipPosition="below"></i>
   </div>
-  <div class="button-options">
-    <i class="fas fa-chart-line" matTooltip="Transaction History" matTooltipPosition="below"></i>
+  <div class="button-options" (click)="openDetail('identity')">
+    <i class="fas fa-id-card-alt" matTooltip="Identity" matTooltipPosition="below"></i>
   </div>
 </div>
