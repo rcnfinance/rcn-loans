@@ -15,11 +15,14 @@
   color: $secondary;
   cursor: pointer;
   @include transition;
-  &.background-active{
-    background-color: $fifth;
-  }
   &:hover{
-    background-color: $fifth;
+    background-color: $tertiary;
+  }
+  &.active{
+    color: $primary;
+    &:hover{
+      background-color: transparent;
+    }
   }
   i{
     position: absolute;
