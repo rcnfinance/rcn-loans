@@ -94,8 +94,6 @@ export class LoanDetailComponent implements OnInit {
 
   openDetail(view: string) {
     this.viewDetail = view;
-    console.log('PASO PASDO', view);
-    console.log('PASO PASDO', this.viewDetail);
   }
 
   isDetail(view: string): Boolean {

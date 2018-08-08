@@ -1,11 +1,17 @@
 <div class="button-group">
-  <div class="button-options" (click)="openDetail('transaction_history')">
+  <div class="button-options"
+    (click)="openDetail('transaction_history')"
+    [ngClass]="{'background-active': viewDetail === 'transaction_history' ? true : false }">
     <i class="fas fa-chart-line" matTooltip="Transactions" matTooltipPosition="below"></i>
   </div>
-  <div class="button-options" (click)="openDetail('cosigner')">
+  <div class="button-options"
+    (click)="openDetail('cosigner')"
+    [ngClass]="{'background-active': viewDetail === 'cosigner' ? true : false }">
     <i class="fas fa-shield-alt" matTooltip="Cosigner" matTooltipPosition="below"></i>
   </div>
-  <div class="button-options" (click)="openDetail('identity')">
+  <div class="button-options"
+    (click)="openDetail('identity')"
+    [ngClass]="{'background-active': viewDetail === 'identity' ? true : false }">
     <i class="fas fa-id-badge" matTooltip="Identity" matTooltipPosition="below"></i>
   </div>
 </div>

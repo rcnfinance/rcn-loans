@@ -15,6 +15,9 @@
   color: $secondary;
   cursor: pointer;
   @include transition;
+  &.background-active{
+    background-color: $fifth;
+  }
   &:hover{
     background-color: $fifth;
   }
