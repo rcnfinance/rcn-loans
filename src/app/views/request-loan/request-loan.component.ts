@@ -42,7 +42,10 @@ export class RequestLoanComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(selected => {
       console.log('Selected', selected);
-      this.selectedCollateral = selected;
+      if(selected === undefined)
+        this.selectedCollateral = [];
+      else
+        this.selectedCollateral = selected;
     });
   }
 
