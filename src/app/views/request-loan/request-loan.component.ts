@@ -48,7 +48,9 @@ export class RequestLoanComponent implements OnInit {
 
   async onSubmit(event: any, _amount, _duration, _firstPayment, _interestRate, _description) {
     event.preventDefault();
-    Validate.loanParameters(_amount, _duration, _firstPayment, _interestRate);
+
+    if(! Validate.loanParameters(_amount, _duration, _firstPayment, _interestRate))
+      return;
 
     const amount = Utils.toMinUnit(_amount.value, "RCN");
     const duration = Utils.dayToSecond(_duration.value);
