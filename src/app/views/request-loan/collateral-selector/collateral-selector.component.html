@@ -7,7 +7,7 @@
             <mat-list-option style="height: 25px;" *ngFor='let item of available721' checkboxPosition="before" value="{{item.uuid}}">{{ item.metadata.name }}</mat-list-option>
           </mat-selection-list>
           <button type="submit" mat-raised-button class="button button-primary" ngModel>Submit</button>
-          <button mat-raised-button class="button button-secondary" [mat-dialog-close]='true'>Cancel</button>
+          <button mat-raised-button class="button button-secondary" [mat-dialog-close]=[]>Cancel</button>
       </form>
     </div>
 </div>
