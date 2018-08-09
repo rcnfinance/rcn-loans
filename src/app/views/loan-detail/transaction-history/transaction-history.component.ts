@@ -239,20 +239,13 @@ export class TransactionHistoryComponent implements OnInit {
           this.oTimeline = this.load_timeEvents(this.commits$); // Build timeline with every commit event of the Loan
           
           this.oDataTable = this.populate_table_data(this.id); // Render TableComponent Data by id
-          console.log(this.oTimeline);
         }
       );
   }
 
-  get_time(timestamp: number){
-    // console.log(this.now);
-    // console.log(this.timestamp);
-    // console.log(this.date);
-  }
-
+  get_time(timestamp: number){}
   
   ngOnInit() {
     const response$ = this.loadCommits(this.loan.id);
-    this.get_time(this.now);
   }
 }
