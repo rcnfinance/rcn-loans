@@ -16,10 +16,6 @@ export class TransactionHistoryComponent implements OnInit {
   selectedEvent: number;
   id: number = 0;
 
-  now: any = new Date();
-  timestamp: number = 1525462875;
-  date = new Date(this.timestamp);
-
   loans: object[];
   commits$: Commit[];
   oDefaultCommit: Commit = new Commit( 'Destroyed', 0, 0, 'Destroyed', { 'loan': 'Destroyed' } );
@@ -124,15 +120,6 @@ export class TransactionHistoryComponent implements OnInit {
   constructor(
     private commitsService: CommitsService
   ) { }
-
-  private loadLoanData() {
-    this.commitsService.getLoanData()
-      .subscribe(
-        (loans) => { this.loans = loans},
-        err => console.error(err),
-        () => console.log('SUCCESS: Loans[] have been Loaded!', this.loans)
-      );
-  }
 
   private load_timeEvents(commits: Commit[]): object[] { // Build every timeEvents with commit event of the Loan
     let timeEvents: object[] = [];
@@ -243,8 +230,6 @@ export class TransactionHistoryComponent implements OnInit {
       );
   }
 
-  get_time(timestamp: number){}
-  
   ngOnInit() {
     const response$ = this.loadCommits(this.loan.id);
   }
