@@ -1,10 +1,5 @@
 <div class="transaction-component">
   <div class="timeline">
-
-    <div class="timeline-table">
-      <app-detail-table [data]="oDataTable"></app-detail-table>
-    </div>
-
     <div class="timeline-structure">
       <div *ngFor='let event of oTimeline; index as i; first as isFirst; last as isLast'
         (click)="change_table_content(i); onSelectEvent(i)"
@@ -15,10 +10,19 @@
           <i class="{{ event.oProperties.materialClass }} {{ event.oProperties.awesomeClass }}">{{ event.oProperties.icon }}</i>
         </div>
         
-        <div class="line" [ngStyle]="{'border-right': '4px solid' + event.oProperties.hexa }" *ngIf="!isFirst"></div>
+        <div class="line-top" [ngStyle]="{'border-right': '4px solid' + event.oProperties.hexa }" *ngIf="!isFirst"></div>
+        <div class="line-bottom" [ngStyle]="{'border-right': '4px solid' + event.oProperties.hexa }" *ngIf="!isLast"></div>
         <div class="circle" [ngClass]="{'background-active': i === selectedEvent}"></div>
-        <div class="title">{{ event.oProperties.title }}</div>
-        <i class="fas fa-chevron-right"></i>
+        <div class="entry" style="display: inline-block;">
+            <div class="title">{{ event.oProperties.title }}</div>
+            <div class="date">09/09/2018</div>
+            <br/>
+            <div *ngFor='let datapoint of event.data'>
+              {{ datapoint.title }} {{ datapoint.value }} <br/>
+            </div>
+            <br/>
+            Transaction: {{ event.commit.proof }}
+        </div>
       </div>
     </div>
 

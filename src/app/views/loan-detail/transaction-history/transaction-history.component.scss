@@ -11,21 +11,30 @@
     .timeline-structure{
       // height: 400px;
       // overflow: auto;
+      .col{
+        display: inline-block;
+      }
     }
     .time-event{
       width: 100%;
       cursor: pointer;
       position: relative;
-      height: 70px;
+      height: auto;
       padding: 25px 0 25px 70px;
       @include transition();
-      .title{
-        font-size: 18px;
+      .entry{
+        .title{
+          font-size: 18px;
+          @extend %font-bold;
+        }
+        background-color: #0c0c0c;
+        padding: 16px;
         color: $secondary;
         display: inline-block;
-        left: 110px;
-        @extend %font-bold;
-        @extend %absolute-center-top;
+        position: relative;
+        left: 50px;
+        // height: 200px;
+        // @extend %absolute-center-top;
       }
       .icon-event {
         position: absolute;
@@ -67,16 +76,25 @@
         border: 4px solid #333;
         background-color: #0f0f0f;
         z-index: 9;
+        top: 50%; @include transform(translate(0%, -50%));
         @include transition();
         &.background-active{
           background-color: $primary;
         }
       }
-      .line{
-        height: 50px;
+      .line-top{
+        height: 50%;
         width: 12px;
         position: absolute;
-        top: -25px;
+        bottom: 50%;
+        z-index: 9;
+        border-right: 4px solid $primary;
+      }
+      .line-bottom{
+        height: 50%;
+        width: 12px;
+        position: absolute;
+        top: 50%;
         z-index: 9;
         border-right: 4px solid $primary;
       }
