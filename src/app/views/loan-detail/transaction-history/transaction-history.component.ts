@@ -72,7 +72,7 @@ export class TransactionHistoryComponent implements OnInit {
       'color': 'gray7',
       'inserted': true
     },
-    "in_debt": {
+    "loan_in_debt": {
       'title': 'In Debt',
       'messege': 'In Debt',
       'status': 'active',
@@ -157,8 +157,6 @@ export class TransactionHistoryComponent implements OnInit {
       if(commit.opcode == 'approved_loan' || commit.opcode == 'transfer' ){ continue; } // Omit if not interested on that event
 
       if(oCurrentTimestamp > this.loan.dueTimestamp && this.loan.dueTimestamp != 0 && !inDebt) { // Indebt added!
-        oCurrentEvent.oProperties = this.get_properties_by_opcode('in_debt');
-        timeEvents.push(oCurrentEvent)
         inDebt = true;
       }
 

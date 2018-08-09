@@ -6,8 +6,8 @@ import { Commit} from '../models/commit.model';
 
 @Injectable()
 export class CommitsService {
-  configUrl = 'https://testnet.rnode.rcn.loans/v1/loans/';
-  // configUrl = 'http://192.168.0.249:8000/v1/loans/';
+  // configUrl = 'https://testnet.rnode.rcn.loans/v1/loans/';
+  configUrl = 'http://192.168.0.249:8000/v1/loans/';
 
   constructor(private http: Http) {}
 
