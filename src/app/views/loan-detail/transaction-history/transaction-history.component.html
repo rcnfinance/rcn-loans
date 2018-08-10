@@ -10,8 +10,8 @@
           <i class="{{ event.oProperties.materialClass }} {{ event.oProperties.awesomeClass }}">{{ event.oProperties.icon }}</i>
         </div>
         
-        <div class="line-top" [ngStyle]="{'border-right': '4px solid' + event.oProperties.hexa }" *ngIf="!isFirst"></div>
-        <div class="line-bottom" [ngStyle]="{'border-right': '4px solid' + event.oProperties.hexa }" *ngIf="!isLast"></div>
+        <div class="line-top" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf="!isFirst"></div>
+        <div class="line-bottom" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf="!isLast"></div>
         <div class="circle" [ngClass]="{'background-active': i === selectedEvent}"></div>
         <div class="entry" style="display: inline-block;">
             <div class="title">{{ event.oProperties.title }}</div>
@@ -25,6 +25,5 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>

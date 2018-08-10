@@ -4,6 +4,8 @@ import { Loan } from '../../../models/loan.model';
 import { Commit } from '../../../models/commit.model';
 // App Services
 import { CommitsService } from '../../../services/commits.service';
+import { environment } from '../../../../environments/environment';
+import { Utils } from '../../../utils/utils';
 
 class DataEntry {
   constructor(
@@ -51,8 +53,8 @@ export class TransactionHistoryComponent implements OnInit {
       'messege': 'Loan Approved',
       'status': 'active',
       'materialClass': 'material-icons',
-      'icon': 'trending_up',
-      'color': 'blue',
+      'icon': 'done',
+      'color': 'white',
       'inserted': true,
       'display': []
     },
@@ -112,7 +114,8 @@ export class TransactionHistoryComponent implements OnInit {
       'icon': 'swap_horiz',
       'color': 'orange',
       'inserted': true,
-      'display': []
+      'hexa': '#333',
+      'display': ['from', 'to']
     },
     "loan_expired": {
       'title': 'Destroyed',
@@ -151,49 +154,27 @@ export class TransactionHistoryComponent implements OnInit {
       );
   }
 
+  private filterCommit(commit: Commit): boolean {
+    return commit.opcode !== 'transfer' || commit.data['from'] !== Utils.address_0;
+  }
+
   private load_timeEvents(commits: Commit[]): object[] { // Build every timeEvents with commit event of the Loan
-    let timeEvents: object[] = [];
-    let inDebt: boolean = false;
+    const timeEvents: object[] = [];
 
     this.sort_by_timestamp(commits); // Order commits by timestamp
-    
-    for (let commit of commits) {
-      let oCurrentEvent: any = {};
 
-      let oCurrentCommit: Commit = commit;
-      let oCurrentdata: object = commit.data;
-      let oCurrentTimestamp: number = commit.timestamp;
+    for (const commit of commits) {
+      if (this.filterCommit(commit)) {
+        const oCurrentEvent: any = {};
+        const oCurrentCommit: Commit = commit;
 
-      let oProperties: object[] = [];
+        oCurrentEvent.oProperties = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
 
-      let oTableData: object[] = [];
-      let oTableTitles: object;
-      let oTableValues: object;
-
-      
-      if(commit.opcode == 'approved_loan' || commit.opcode == 'transfer' ){ continue; } // Omit if not interested on that event
-
-      if(oCurrentTimestamp > this.loan.dueTimestamp && this.loan.dueTimestamp != 0 && !inDebt) { // Indebt added!
-        inDebt = true;
+        oCurrentEvent.commit = oCurrentCommit; // Add commit{} to timeEvent
+        oCurrentEvent.data = this.buildDataEntries(commit);
+        timeEvents.push(oCurrentEvent); // Push to timeEvents[] with commit{} + oProperties{} + oTableData[]
       }
-
-      oCurrentEvent.oProperties = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
-      
-      if(inDebt){oCurrentEvent.oProperties.hexa = '#f44136';} // Change to red the timeline when its in debt
-
-      oCurrentEvent.commit = oCurrentCommit; // Add commit{} to timeEvent
-      oCurrentEvent.data = this.buildDataEntries(commit);
-      timeEvents.push(oCurrentEvent); // Push to timeEvents[] with commit{} + oProperties{} + oTableData[]
     }
-
-    // if (!this.timeline_has(timeEvents, 'Destroyed')) { // Push the last timeEvent as disabled when the Loan hasn't been destroyed
-    //   let oCurrentEvent: any = {};
-    //   oCurrentEvent.oProperties = this.get_properties_by_opcode('destroyed_loan');
-    //   oCurrentEvent.oProperties.status = 'disabled';
-    //   // oCurrentEvent.commit = this.oDefaultCommit; // Add commit{} to timeEvent
-    //   oCurrentEvent.oTableData = this.oDefaultDataTable; // Add commit{} to timeEvent
-    //   timeEvents.push(oCurrentEvent);
-    // }
 
     return timeEvents;
   }
@@ -211,7 +192,7 @@ export class TransactionHistoryComponent implements OnInit {
   }
 
   sort_by_timestamp(commits): object[] { // Sort/Order by timestamp
-    return commits.sort( (objA, objB) => { return objA.timestamp - objB.timestamp; } ); 
+    return commits.sort( (objA, objB) => { return objA.timestamp - objB.timestamp; } );
   }
 
   buildDataEntries(commit): DataEntry[] {
@@ -221,6 +202,7 @@ export class TransactionHistoryComponent implements OnInit {
     const properties = this.get_properties_by_opcode(commit.opcode);
     const result: DataEntry[] = [];
     Object.entries(commit.data).forEach(([key, value]) => {
+      // Aditional filters
       if (properties['display'].indexOf(key) > -1) {
         result.push(new DataEntry(capitalize(key.replace('_', '')), value as string));
       }
@@ -237,7 +219,7 @@ export class TransactionHistoryComponent implements OnInit {
   }
 
   onSelectEvent(i: number) { // Activate animation on timeEvent selected
-    this.selectedEvent = i;
+    window.open(environment.network.explorer.tx.replace('${tx}', this.oTimeline[i]['commit'].proof), '_blank');
   }
 
   private loadCommits(id:number) { // Load get() API commits from the DB by id

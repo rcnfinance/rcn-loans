@@ -134,5 +134,7 @@ export class LoanDetailComponent implements OnInit {
         this.router.navigate(['/404/'])
       );
     });
+
+    
   }
 }
