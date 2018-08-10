@@ -122,6 +122,7 @@ ngx-spinner .black-overlay.ng-star-inserted {
   >tbody{
     >tr{
       >td {
+        text-align: left;
         border: 0px;
         @extend %propiety-subtitle;
       }

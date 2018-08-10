@@ -16,12 +16,21 @@
   cursor: pointer;
   @include transition;
   &:hover{
-    background-color: $fifth;
+    background-color: $tertiary;
+  }
+  &.active{
+    color: $primary;
+    &:hover{
+      background-color: transparent;
+    }
   }
   i{
     position: absolute;
     top: 50%;
     left: 50%;
     @include transform(translate(-50%, -50%));
+  }
+  .fas{
+    font-size: 1.5em;
   }
 }

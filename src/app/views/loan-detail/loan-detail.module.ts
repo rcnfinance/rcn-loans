@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
+import { CommitsService } from './../../services/commits.service';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Modules
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
+import { MaterialModule } from '../../material/material.module';
 import { LoanDetailRoutingModule } from './loan-detail-routing.module';
 // App Component
 import { LoanDetailComponent } from './loan-detail.component';
@@ -26,18 +28,20 @@ import { TransactionHistoryComponent } from './transaction-history/transaction-h
     NgxSpinnerModule,
     SharedModule,
     LoanDetailRoutingModule,
+    MaterialModule,
   ],
   providers: [
     ContractsService,
     CosignerService,
     NgxSpinnerService,
+    CommitsService,
   ],
   declarations: [
     LoanDetailComponent,
     DetailTableComponent,
     DetailIdentityComponent,
     DetailCosignerComponent,
-    //
+
     DecentralandMapComponent,
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
