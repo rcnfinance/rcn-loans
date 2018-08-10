@@ -9,8 +9,6 @@
       padding-right: 15px;
     }
     .timeline-structure{
-      // height: 400px;
-      // overflow: auto;
       .col{
         display: inline-block;
       }
@@ -117,7 +115,7 @@
       &:first-child,
       &:last-child{
         cursor: default;
-        background-color: transparent !important;
+        // background-color: transparent !important;
       }
     }
   }
