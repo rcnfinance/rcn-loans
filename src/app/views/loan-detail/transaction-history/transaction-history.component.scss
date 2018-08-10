@@ -20,13 +20,13 @@
         .flex-content{
           position: relative;
           &:nth-child(1){
-            flex: 2;
+            flex-basis: 20%;
           }
           &:nth-child(2){
-            flex-basis: 40px;
+            flex-basis: 10%;
           }
           &:nth-child(3){
-            flex: 7;
+            flex: 1;
           }
         }
         .event-title{
@@ -50,6 +50,7 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
+        margin: 0 auto;
         i{
           @extend %absolute-center;
         }
@@ -63,9 +64,7 @@
         }
       }
       .circle{
-        position: absolute;
         top: 10px;
-        left: 10px;
         width: 20px;
         height: 20px;
         display: none;
@@ -73,6 +72,7 @@
         border: 4px solid #333;
         background-color: #0f0f0f;
         z-index: 9;
+        @extend %center-left;
         @include transition();
         &.background-active{
           background-color: $primary;
@@ -80,9 +80,10 @@
       }
       .line{
         position: absolute;
-        width: 22px;
+        width: 4px;
         height: 250px;
         border-right: 4px solid $primary;
+        @extend %center-left;
       }
       .content-wraper{
         position: relative;
@@ -98,16 +99,16 @@
             padding-bottom: 10px;
           }
           .property{
-            flex: 2;
+            flex-basis: 20%;
             white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
             font-size: 13px;
             color: #b2b2b2;
             text-align: center;
             @extend %font-thin;
           }
-          .space{flex-basis: 40px;}
+          .space{flex-basis: 10%;}
           .value{
-            flex: 7;
+            flex: 1;
             white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
             font-size: 14px;
             padding-left: 15px;
@@ -128,7 +129,7 @@
       }
       &.true{
         .circle{display: inline-block;}
-        .icon-event{position: absolute; left: -55px;}
+        .icon-event{position: absolute; left: -160%;}
         .fa-chevron-right{display: block;}
       }
       &:first-child,
@@ -140,12 +141,42 @@
   }
 }
 
+@media (min-width: 768px){
+  .transaction-component{
+    .timeline{
+      .time-event{
+        &.true{
+          .icon-event{left: -125%;}
+        }
+      }
+    }
+  }
+}
+
 @media (min-width: 992px){
   .transaction-component{
     .timeline{
-      .timeline-structure{ height: auto; }
       .time-event{
         cursor: pointer;
+        .header-wrapper{
+          .flex-content{
+            &:nth-child(1){
+              flex-basis: 100px;
+            }
+            &:nth-child(2){
+              flex-basis: 50px;
+            }
+          }
+        }
+        .content-wraper{
+          .content{
+            .property{flex-basis: 100px;}
+            .space{flex-basis: 50px;}
+          }
+        }
+        &.true{
+          .icon-event{left: -70px;}
+        }
         &:hover{
           .fa-chevron-right { right: 15px; }
         }
@@ -153,3 +184,4 @@
     }
   }
 }
+
