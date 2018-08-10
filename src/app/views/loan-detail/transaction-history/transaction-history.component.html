@@ -14,16 +14,21 @@
         <div class="line-top" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf="!isFirst"></div>
         <div class="line-bottom" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf="!isLast"></div>
         <div class="circle" [ngClass]="{'background-active': i === selectedEvent}"></div>
-        <div class="entry">
 
-          <div class="title">{{ event.oProperties.title }}</div>
-          <div class="date">09/09/2018</div>
-          <div *ngFor='let datapoint of event.data'>
-            {{ datapoint.title }} {{ datapoint.value }} 
+        <div class="content-wraper">
+          <div class="event-title">
+            <div class="title">{{ event.oProperties.title }}</div>
           </div>
-          <div class="proof">Transaction: {{ event.commit.proof }}</div>
-          
+  
+          <div class="content">
+            <div class="date">09/09/2018</div>
+            <div *ngFor='let datapoint of event.data'>
+              {{ datapoint.title }} {{ datapoint.value }} 
+            </div>
+            <div class="proof">Transaction: {{ event.commit.proof }}</div>
+          </div>
         </div>
+
       </div>
     </div>
   </div>

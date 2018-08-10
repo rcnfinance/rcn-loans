@@ -15,17 +15,21 @@
       padding: 38px 0 0px 70px;
       background-color: #0c0c0c;
       @include transition();
-      .entry{
+      .content-wraper{
         position: relative;
-        height: 200px;
-        color: $secondary;
+        min-height: 150px;
         padding-left: 50px;
-        display: inline-block;
       }
-      .title{
-        font-size: 18px;
+      .event-title{
+        .title{
+          font-size: 18px;
+          color: $secondary;
+          @extend %font-bold;
+        }
+      }
+      .content{
         color: $secondary;
-        @extend %font-bold;
+        display: inline-block;
       }
       .icon-event {
         position: absolute;
