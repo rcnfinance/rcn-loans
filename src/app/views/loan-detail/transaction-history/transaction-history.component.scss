@@ -110,7 +110,7 @@
           .value{
             flex: 1;
             white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
-            font-size: 14px;
+            font-size: 13px;
             padding-left: 15px;
             @extend %font-bold;
           }
@@ -161,7 +161,7 @@
         .header-wrapper{
           .flex-content{
             &:nth-child(1){
-              flex-basis: 100px;
+              flex-basis: 90px;
             }
             &:nth-child(2){
               flex-basis: 50px;
@@ -170,12 +170,12 @@
         }
         .content-wraper{
           .content{
-            .property{flex-basis: 100px;}
-            .space{flex-basis: 50px;}
+            .property{flex-basis: 90px; font-size: 14px;}
+            .space{flex-basis: 50px; font-size: 14px;}
           }
         }
         &.true{
-          .icon-event{left: -70px;}
+          .icon-event{left: -65px;}
         }
         &:hover{
           .fa-chevron-right { right: 15px; }
