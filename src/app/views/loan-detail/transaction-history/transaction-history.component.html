@@ -1,5 +1,6 @@
 <div class="transaction-component">
   <div class="timeline">
+
     <div class="timeline-structure">
       <div *ngFor='let event of oTimeline; index as i; first as isFirst; last as isLast'
         (click)="change_table_content(i); onSelectEvent(i)"
@@ -13,7 +14,7 @@
         <div class="line-top" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf="!isFirst"></div>
         <div class="line-bottom" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf="!isLast"></div>
         <div class="circle" [ngClass]="{'background-active': i === selectedEvent}"></div>
-        <div class="entry" style="display: inline-block;">
+        <div class="entry">
 
           <div class="title">{{ event.oProperties.title }}</div>
           <div class="date">09/09/2018</div>

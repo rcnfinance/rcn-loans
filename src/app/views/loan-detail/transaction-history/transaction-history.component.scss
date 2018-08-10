@@ -8,31 +8,24 @@
       padding-left: 15px;
       padding-right: 15px;
     }
-    .timeline-structure{
-      .col{
-        display: inline-block;
-      }
-    }
     .time-event{
-      width: 100%;
-      cursor: pointer;
       position: relative;
-      height: auto;
-      padding: 25px 0 25px 70px;
+      width: 100%;
+      height: 200px;
+      padding: 38px 0 0px 70px;
+      background-color: #0c0c0c;
       @include transition();
       .entry{
-        .title{
-          font-size: 18px;
-          @extend %font-bold;
-        }
-        background-color: #0c0c0c;
-        padding: 16px;
-        color: $secondary;
-        display: inline-block;
         position: relative;
-        left: 50px;
-        // height: 200px;
-        // @extend %absolute-center-top;
+        height: 200px;
+        color: $secondary;
+        padding-left: 50px;
+        display: inline-block;
+      }
+      .title{
+        font-size: 18px;
+        color: $secondary;
+        @extend %font-bold;
       }
       .icon-event {
         position: absolute;
@@ -44,7 +37,7 @@
         margin-left: -10px;
         display: inline-block;
         left: 70px;
-        top: 50%; @include transform(translate(0%, -50%));
+        top: 50px; @include transform(translate(0%, -50%));
         i{
           @extend %absolute-center;
         }
@@ -66,7 +59,7 @@
       }
       .circle{
         position: absolute;
-        left: 70px;
+        top: 40px;
         width: 20px;
         height: 20px;
         display: none;
@@ -74,25 +67,32 @@
         border: 4px solid #333;
         background-color: #0f0f0f;
         z-index: 9;
-        top: 50%; @include transform(translate(0%, -50%));
         @include transition();
         &.background-active{
           background-color: $primary;
         }
       }
-      .line-top{
-        height: 50%;
-        width: 12px;
+      .line{
         position: absolute;
-        bottom: 50%;
+        top: -25px;
+        height: 50px;
+        width: 12px;
+        z-index: 9;
+        border-right: 4px solid $primary;
+      }
+      .line-top{
+        position: absolute;
+        top: -50px;
+        width: 12px;
+        height: 50%;
         z-index: 9;
         border-right: 4px solid $primary;
       }
       .line-bottom{
-        height: 50%;
-        width: 12px;
         position: absolute;
-        top: 50%;
+        top: 50px;
+        width: 12px;
+        height: 50%;
         z-index: 9;
         border-right: 4px solid $primary;
       }
@@ -115,7 +115,7 @@
       &:first-child,
       &:last-child{
         cursor: default;
-        // background-color: transparent !important;
+        background-color: transparent !important;
       }
     }
   }
