@@ -6,7 +6,7 @@ import { Tx } from '../../tx.service';
 import { ContractsService } from '../../services/contracts.service';
 import { environment } from '../../../environments/environment';
 import { Utils } from '../../utils/utils';
-import { Validate } from '../../utils/validate';
+import { loanParameters } from '../../utils/validate';
 import { Web3Service } from '../../services/web3.service';
 
 @Component({
@@ -52,7 +52,7 @@ export class RequestLoanComponent implements OnInit {
   async onSubmit(event: any, _amount, _duration, _firstPayment, _interestRate, _description) {
     event.preventDefault();
 
-    if(! Validate.loanParameters(_amount, _duration, _firstPayment, _interestRate))
+    if(! loanParameters(_amount, _duration, _firstPayment, _interestRate))
       return;
 
     const amount = Utils.toMinUnit(_amount.value, "RCN");
