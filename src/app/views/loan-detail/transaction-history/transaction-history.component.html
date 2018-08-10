@@ -6,30 +6,50 @@
         (click)="change_table_content(i); onSelectEvent(i)"
         class="time-event {{ event.oProperties.inserted }} {{ event.oProperties.status }}"
         [ngClass]="{'background-active': i === selectedEvent}">
-        <div class="icon-event bg-{{ event.oProperties.color }}"
-          matTooltip="{{ event.oProperties.messege }}" matTooltipPosition="above">
-          <i class="{{ event.oProperties.materialClass }} {{ event.oProperties.awesomeClass }}">{{ event.oProperties.icon }}</i>
+
+        <div class="header-wrapper">
+          <div class="flex-content"></div>
+
+          <div class="flex-content">
+            <div class="icon-event bg-{{ event.oProperties.color }}"
+              matTooltip="{{ event.oProperties.messege }}" matTooltipPosition="above">
+              <i class="{{ event.oProperties.materialClass }} {{ event.oProperties.awesomeClass }}">{{ event.oProperties.icon }}</i>
+            </div>
+            <div class="line" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf="!isLast"></div>
+            <div class="circle" [ngClass]="{'background-active': i === selectedEvent}"></div>
+          </div>
+
+          <div class="flex-content">
+            <div class="event-title">
+              <div class="title">{{ event.oProperties.title }}</div>
+              <i class="fas fa-chevron-right"></i>
+            </div>
+          </div>
         </div>
         
-        <div class="line-top" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf="!isFirst"></div>
-        <div class="line-bottom" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf="!isLast"></div>
-        <div class="circle" [ngClass]="{'background-active': i === selectedEvent}"></div>
-
+        
         <div class="content-wraper">
-          <div class="event-title">
-            <div class="title">{{ event.oProperties.title }}</div>
-          </div>
-  
           <div class="content">
-            <div class="date">09/09/2018</div>
-            <div *ngFor='let datapoint of event.data'>
-              {{ datapoint.title }} {{ datapoint.value }} 
-            </div>
-            <div class="proof">Transaction: {{ event.commit.proof }}</div>
+            <div class="property">Property</div>
+            <div class="space"></div>
+            <div class="value">09/09/2018</div>
+          </div>
+
+          <div class="content" *ngFor='let datapoint of event.data'>
+            <div class="property">{{ datapoint.title }}</div>
+            <div class="space"></div>
+            <div class="value">{{ datapoint.value }}</div>
+          </div>
+
+          <div class="content">
+            <div class="property">Transaction</div>
+            <div class="space"></div>
+            <div class="value">{{ event.commit.proof }}</div>
           </div>
         </div>
 
       </div>
     </div>
+    
   </div>
 </div>

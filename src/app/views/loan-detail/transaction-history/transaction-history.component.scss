@@ -10,38 +10,46 @@
     }
     .time-event{
       position: relative;
-      width: 100%;
-      height: 200px;
-      padding: 38px 0 0px 70px;
-      background-color: #0c0c0c;
-      @include transition();
-      .content-wraper{
-        position: relative;
-        min-height: 150px;
-        padding-left: 50px;
-      }
-      .event-title{
-        .title{
-          font-size: 18px;
-          color: $secondary;
-          @extend %font-bold;
+      // background-color: #0c0c0c;
+      color: $secondary;
+      .header-wrapper{
+        display: flex;
+        flex-flow: row wrap;
+        margin: 35px 0 20px 0px;
+        padding: 0 15px;
+        .flex-content{
+          position: relative;
+          &:nth-child(1){
+            flex: 2;
+          }
+          &:nth-child(2){
+            flex-basis: 40px;
+          }
+          &:nth-child(3){
+            flex: 7;
+          }
+        }
+        .event-title{
+          line-height: 2.2;
+          .title{
+            font-size: 18px;
+            padding-left: 15px;
+            @extend %font-bold;
+          }
+        }
+        .fa-chevron-right {
+          display: none;
+          position: absolute;
+          right: 30px;
+          @include transition();
+          top: 50%; @include transform(translate(0%, -50%));
         }
       }
-      .content{
-        color: $secondary;
-        display: inline-block;
-      }
       .icon-event {
-        position: absolute;
+        position: relative;
         width: 40px;
         height: 40px;
-        z-index: 99;
-        margin: 0 auto;
         border-radius: 50%;
-        margin-left: -10px;
-        display: inline-block;
-        left: 70px;
-        top: 50px; @include transform(translate(0%, -50%));
         i{
           @extend %absolute-center;
         }
@@ -54,16 +62,10 @@
           color: #000;
         }
       }
-      .fa-chevron-right {
-        display: none;
-        position: absolute;
-        right: 30px;
-        @include transition();
-        top: 50%; @include transform(translate(0%, -50%));
-      }
       .circle{
         position: absolute;
-        top: 40px;
+        top: 10px;
+        left: 10px;
         width: 20px;
         height: 20px;
         display: none;
@@ -78,27 +80,40 @@
       }
       .line{
         position: absolute;
-        top: -25px;
-        height: 50px;
-        width: 12px;
-        z-index: 9;
+        width: 22px;
+        height: 250px;
         border-right: 4px solid $primary;
       }
-      .line-top{
-        position: absolute;
-        top: -50px;
-        width: 12px;
-        height: 50%;
-        z-index: 9;
-        border-right: 4px solid $primary;
-      }
-      .line-bottom{
-        position: absolute;
-        top: 50px;
-        width: 12px;
-        height: 50%;
-        z-index: 9;
-        border-right: 4px solid $primary;
+      .content-wraper{
+        position: relative;
+        padding-bottom: 10px;
+        .content{
+          display: flex;
+          flex-flow: row wrap;
+          padding: 0 15px;
+          .property,
+          .value{
+            display: inline-block;
+            padding-top: 10px;
+            padding-bottom: 10px;
+          }
+          .property{
+            flex: 2;
+            white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
+            font-size: 13px;
+            color: #b2b2b2;
+            text-align: center;
+            @extend %font-thin;
+          }
+          .space{flex-basis: 40px;}
+          .value{
+            flex: 7;
+            white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
+            font-size: 14px;
+            padding-left: 15px;
+            @extend %font-bold;
+          }
+        }
       }
       &.background-active{
         background-color: $tertiary;
@@ -113,7 +128,7 @@
       }
       &.true{
         .circle{display: inline-block;}
-        .icon-event{position: absolute; left: 25px;}
+        .icon-event{position: absolute; left: -55px;}
         .fa-chevron-right{display: block;}
       }
       &:first-child,
