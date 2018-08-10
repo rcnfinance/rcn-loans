@@ -16,7 +16,6 @@
             </li>
           </ul>
         </div>
-        <div style="display: flex; flex-wrap: wrap;">
         <div class="col-xs-12 col-md-6 loan-description left">
           <div class="row">
             <div class="col-xs-6">
@@ -109,12 +108,10 @@
           <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
         </div>
       </div>
-    </div>
-      <div class="h2 marginleft30">History</div>
-      <div class="row col-xs-12 margintop15">
+      <div class="row">
+        <div class="title main-h1 marginbottom30">History</div>
         <app-transaction-history [loan]=loan></app-transaction-history>
       </div>
     </div>
   </div>
-
 </div>
