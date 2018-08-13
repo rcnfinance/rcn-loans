@@ -279,11 +279,11 @@ export class ContractsService {
     }
     public readPendingWithdraws(loans: Loan[]): [BigNumber, number[]] {
       const pendingLoans = [];
-      let total = new BigNumber(0);
+      let total = 0;
 
       loans.forEach(loan => {
         if (loan.lenderBalance > 0) {
-          total = total.add(new BigNumber(loan.lenderBalance));
+          total += loan.lenderBalance;
           pendingLoans.push(loan.id);
         }
       });
