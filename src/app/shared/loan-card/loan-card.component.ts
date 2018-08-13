@@ -16,6 +16,7 @@ export class LoanCardComponent implements OnInit {
   private rightValue: string;
   private durationLabel: string;
   private durationValue: string;
+  private canLend: boolean;
 
   constructor() { }
 
@@ -27,6 +28,7 @@ export class LoanCardComponent implements OnInit {
       this.rightValue = this.formatAmount(this.loan.expectedReturn);
       this.durationLabel = 'Duration';
       this.durationValue = this.loan.verboseDuration;
+      this.canLend = true;
     } else {
       this.leftLabel = 'Paid';
       this.leftValue = this.formatAmount(this.loan.paid);
@@ -34,6 +36,7 @@ export class LoanCardComponent implements OnInit {
       this.rightValue = this.formatAmount(this.loan.pendingAmount);
       this.durationLabel = 'Remaining';
       this.durationValue = Utils.formatDelta(this.loan.remainingTime);
+      this.canLend = false;
     }
   }
 
