@@ -1,3 +1,5 @@
+import { BUILD } from './build';
+
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
@@ -13,7 +15,7 @@ declare let require: any;
 export const environment = {
   version: require('../../package.json').version,
   version_name: require('../../package.json').version_name,
-  build: '183810718',
+  build: BUILD['suffix'],
   production: false,
   url: 'https://mainnet.rcn.loans/',
   envName: 'main',
