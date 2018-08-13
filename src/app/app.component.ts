@@ -1,3 +1,5 @@
+import * as Raven from 'raven-js';
+
 import { Component, OnInit, isDevMode} from '@angular/core';
 import { environment } from '../environments/environment';
 
