@@ -56,7 +56,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { environment } from '../environments/environment';
 
 Raven
-  .config('https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533')
+  .config(environment.sentry)
   .install();
 
 export class RavenErrorHandler implements ErrorHandler {

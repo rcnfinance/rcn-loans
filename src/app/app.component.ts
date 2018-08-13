@@ -1,3 +1,5 @@
+import * as Raven from 'raven-js';
+
 import { Component, OnInit, isDevMode} from '@angular/core';
 import { environment } from '../environments/environment';
 
@@ -18,5 +20,8 @@ export class AppComponent implements OnInit {
   }
   ngOnInit(): void {
     // if (isDevMode()) {console.log('👋 Development!'); } else {console.log('💪 Production!'); }
+    Raven.config(environment.sentry, {
+      release: environment.version_verbose
+    }).install();
   }
 }

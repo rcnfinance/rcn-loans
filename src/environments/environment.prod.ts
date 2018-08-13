@@ -21,6 +21,8 @@ export const environment = {
   envName: 'main',
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
   buyLink: 'https://www.bancor.network/communities/5a92b438583f4a0001f75f42/about',
+  version_verbose: this.version + '@' + this.build + ' - ' + this.version_name,
+  sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   network: {
     id: '1',
     name: 'Main',
