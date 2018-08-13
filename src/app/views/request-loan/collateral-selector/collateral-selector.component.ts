@@ -36,7 +36,8 @@ export class CollateralSelectorComponent implements OnInit {
     const result721 = [];
     for (const item of selected721) {
       const assetItem = this.available721.find(a => a.uuid === item.value) as AssetItem;
-      pendingTx.push(this.assetsService.sendApprove(assetItem, this.data.pawnManager));
+      if(!(await this.assetsService.isApproved(assetItem, this.data.pawnManager)))
+        pendingTx.push(this.assetsService.sendApprove(assetItem, this.data.pawnManager));
       result721.push(assetItem);
     }
     for (const ptx of pendingTx) {
@@ -45,4 +46,3 @@ export class CollateralSelectorComponent implements OnInit {
     this.dialogRef.close(result721);
   }
 }
-

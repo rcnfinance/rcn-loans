@@ -112,6 +112,15 @@ export class AssetsService {
     return result;
   }
 
+  async isApproved(assetItem: AssetItem, target: string): Promise<boolean> {
+    const web3 = this.web3Service.web3reader;
+    const contract = web3.eth.contract(erc721LegacyAbi.abi).at(assetItem.asset.contract);
+    const account = await this.web3Service.getAccount();
+
+    const tx = await promisify(c => contract.getApproved(assetItem.id, {from: account}, c));
+    return tx == target;
+  }
+
   parse(contract: string, id: number, owner: string): AssetItem {
     return this.managers.find(c => c.asset.contract === contract).build(id, owner);
   }
