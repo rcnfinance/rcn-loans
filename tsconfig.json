@@ -1,1 +1,20 @@
-{ "compilerOptions": { "baseUrl": "", "allowSyntheticDefaultImports": true, "declaration": false, "emitDecoratorMetadata": true, "experimentalDecorators": true, "lib": [ "dom", "es2015" ], "module": "es2015", "moduleResolution": "node", "sourceMap": true, "target": "es5", "paths": { "@angular/*": ["node_modules/@angular/*"] } }, "include": [ "src/**/*.ts", "node_modules/ng4-fittext/*.d.ts" ], "exclude": [ ], "compileOnSave": false, "atom": { "rewriteTsconfig": false } }
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es5",
+    "types": [ "node" ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ]
+  }
+}
