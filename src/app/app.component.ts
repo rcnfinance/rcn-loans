@@ -20,8 +20,5 @@ export class AppComponent implements OnInit {
   }
   ngOnInit(): void {
     // if (isDevMode()) {console.log('👋 Development!'); } else {console.log('💪 Production!'); }
-    Raven.config(environment.sentry, {
-      release: environment.version_verbose
-    }).install();
   }
 }
