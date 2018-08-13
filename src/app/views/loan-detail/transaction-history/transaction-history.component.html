@@ -7,45 +7,50 @@
         class="time-event {{ event.oProperties.inserted }} {{ event.oProperties.status }}"
         [ngClass]="{'background-active': i === selectedEvent}">
 
-        <div class="header-wrapper">
-          <div class="flex-content"></div>
-
-          <div class="flex-content">
+        <!-- *ngIf="!isLast" -->
+        <div class="line-wrapper flex-row">
+          <div class="flex-col"></div>
+          <div class="flex-col">
+            <div class="line" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }"></div> 
+          </div>
+          <div class="flex-col"></div>
+        </div>
+        
+        <div class="header-wrapper flex-row">
+          <div class="flex-col"></div>
+          
+          <div class="flex-col">
             <div class="icon-event bg-{{ event.oProperties.color }}"
               matTooltip="{{ event.oProperties.messege }}" matTooltipPosition="above">
               <i class="{{ event.oProperties.materialClass }} {{ event.oProperties.awesomeClass }}">{{ event.oProperties.icon }}</i>
             </div>
-            <div class="line" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf="!isLast"></div>
             <div class="circle" [ngClass]="{'background-active': i === selectedEvent}"></div>
           </div>
 
-          <div class="flex-content">
+          <div class="flex-col">
             <div class="event-title">
               <div class="title">{{ event.oProperties.title }}</div>
               <i class="fas fa-chevron-right"></i>
             </div>
           </div>
         </div>
-        
-        
-        <div class="content-wraper">
-          <div class="content">
-            <div class="property">Property</div>
-            <div class="space"></div>
-            <div class="value">09/09/2018</div>
-          </div>
 
-          <div class="content" *ngFor='let datapoint of event.data'>
-            <div class="property">{{ datapoint.title }}</div>
-            <div class="space"></div>
-            <div class="value">{{ datapoint.value }}</div>
-          </div>
+        <div class="property-wrapper flex-row">
+          <div class="property flex-col">Property</div>
+          <div class="space flex-col"></div>
+          <div class="value flex-col">09/09/2018</div>
+        </div>
 
-          <div class="content">
-            <div class="property">Transaction</div>
-            <div class="space"></div>
-            <div class="value">{{ event.commit.proof }}</div>
-          </div>
+        <div class="property-wrapper flex-row" *ngFor='let datapoint of event.data'>
+          <div class="property flex-col">{{ datapoint.title }}</div>
+          <div class="space flex-col"></div>
+          <div class="value flex-col">{{ datapoint.value }}</div>
+        </div>
+
+        <div class="property-wrapper flex-row">
+          <div class="property flex-col">Transaction</div>
+          <div class="space flex-col"></div>
+          <div class="value flex-col">{{ event.commit.proof }}</div>
         </div>
 
       </div>

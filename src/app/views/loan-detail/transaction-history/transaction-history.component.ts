@@ -221,13 +221,11 @@ export class TransactionHistoryComponent implements OnInit {
           this.oTimeline = this.load_timeEvents(this.commits$); // Build timeline with every commit event of the Loan
           
           this.oDataTable = this.populate_table_data(this.id); // Render TableComponent Data by id
-          console.log(this.oTimeline);
         }
       );
   }
   
   ngOnInit() {
     const response$ = this.loadCommits(this.loan.id);
-    console.log(this.winHeight);
   }
 }

@@ -10,45 +10,72 @@
     }
     .time-event{
       position: relative;
-      // background-color: #0c0c0c;
+      padding-top: 35px;
       color: $secondary;
-      .header-wrapper{
+      .flex-row{
         display: flex;
         flex-flow: row wrap;
-        margin: 35px 0 20px 0px;
-        padding: 0 15px;
-        .flex-content{
-          position: relative;
+        padding: 0px 15px;
+        .flex-col{
           &:nth-child(1){
             flex-basis: 20%;
+            // background: green;
           }
           &:nth-child(2){
             flex-basis: 10%;
+            // background: white;
           }
           &:nth-child(3){
             flex: 1;
+            // background: red;
           }
-        }
-        .event-title{
-          line-height: 2.2;
-          .title{
-            font-size: 18px;
-            padding-left: 15px;
-            @extend %font-bold;
-          }
-        }
-        .fa-chevron-right {
-          display: none;
-          position: absolute;
-          right: 30px;
-          @include transition();
-          top: 50%; @include transform(translate(0%, -50%));
         }
       }
+
+      .flex-row{
+        &.header-wrapper{
+          &:nth-child(2){
+            text-align: center;
+          }
+        }
+  
+        &.property-wrapper{
+          &:last-child{
+            padding-bottom: 10px;
+          }
+        }
+      }
+      
+      .line{
+        position: absolute;
+        top: 0;
+        height: 100%;
+        margin: 4px auto;
+        padding-right: 4%;
+        border-right: 4px solid #4155ff;
+      }
+
+      .event-title{
+        line-height: 2.2;
+        .title{
+          font-size: 18px;
+          text-align: left;
+          padding-left: 15px;
+          @extend %font-bold;
+        }
+      }
+      .fa-chevron-right {
+        display: none;
+        position: absolute;
+        right: 30px;
+        @include transition();
+        top: 50%; @include transform(translate(0%, -50%));
+      }
+
       .icon-event {
         position: relative;
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
         margin: 0 auto;
         i{
@@ -64,7 +91,7 @@
         }
       }
       .circle{
-        top: 10px;
+        position: relative;
         width: 20px;
         height: 20px;
         display: none;
@@ -72,50 +99,33 @@
         border: 4px solid #333;
         background-color: #0f0f0f;
         z-index: 9;
-        @extend %center-left;
         @include transition();
         &.background-active{
           background-color: $primary;
         }
       }
-      .line{
-        position: absolute;
-        width: 4px;
-        height: 250px;
-        border-right: 4px solid $primary;
-        @extend %center-left;
-      }
-      .content-wraper{
-        position: relative;
+
+      .property,
+      .value{
+        display: inline-block;
+        padding-top: 10px;
         padding-bottom: 10px;
-        .content{
-          display: flex;
-          flex-flow: row wrap;
-          padding: 0 15px;
-          .property,
-          .value{
-            display: inline-block;
-            padding-top: 10px;
-            padding-bottom: 10px;
-          }
-          .property{
-            flex-basis: 20%;
-            white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
-            font-size: 13px;
-            color: #b2b2b2;
-            text-align: center;
-            @extend %font-thin;
-          }
-          .space{flex-basis: 10%;}
-          .value{
-            flex: 1;
-            white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
-            font-size: 13px;
-            padding-left: 15px;
-            @extend %font-bold;
-          }
-        }
       }
+      .property{
+        white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
+        font-size: 13px;
+        color: #b2b2b2;
+        text-align: center;
+        @extend %font-thin;
+      }
+      .value{
+        flex: 1;
+        white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
+        font-size: 13px;
+        padding-left: 15px;
+        @extend %font-bold;
+      }
+
       &.background-active{
         background-color: $tertiary;
         .fa-chevron-right {
@@ -129,13 +139,17 @@
       }
       &.true{
         .circle{display: inline-block;}
-        .icon-event{position: absolute; left: -160%;}
+        .icon-event{position: absolute; left: 8%;}
         .fa-chevron-right{display: block;}
       }
       &:first-child,
       &:last-child{
         cursor: default;
+        padding-top: 0;
         background-color: transparent !important;
+      }
+      &:first-child{
+        margin-top: 35px;
       }
     }
   }
@@ -145,8 +159,15 @@
   .transaction-component{
     .timeline{
       .time-event{
+        .flex-row{
+          .flex-col{
+            .line{
+              padding-right: 4.5%;
+            }
+          }
+        }
         &.true{
-          .icon-event{left: -125%;}
+          .icon-event{left: 70px;}
         }
       }
     }
@@ -158,24 +179,26 @@
     .timeline{
       .time-event{
         cursor: pointer;
-        .header-wrapper{
-          .flex-content{
+        .flex-row{
+          .flex-col{
+            .line{
+              padding-right: 0%;
+              margin-left: 23px;
+            }
+            .property,
+            .space{ font-size: 14px; }
+
             &:nth-child(1){
               flex-basis: 90px;
             }
             &:nth-child(2){
               flex-basis: 50px;
             }
-          }
-        }
-        .content-wraper{
-          .content{
-            .property{flex-basis: 90px; font-size: 14px;}
-            .space{flex-basis: 50px; font-size: 14px;}
+
           }
         }
         &.true{
-          .icon-event{left: -65px;}
+          .icon-event{left: 40px;}
         }
         &:hover{
           .fa-chevron-right { right: 15px; }
