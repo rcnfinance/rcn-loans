@@ -10,7 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prebuild": "node version.js"
+    "prebuild": "node version.js",
+    "prestart": "node version.js"
   },
   "private": true,
   "dependencies": {
