@@ -28,6 +28,7 @@ import { CivicService } from './services/civic.service';
 import { SidebarService } from './services/sidebar.service';
 import { TitleService } from './services/title.service';
 import { AvailableLoansService } from './services/available-loans.service';
+import { CountriesService } from './services/countries.service';
 
 // App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
@@ -117,6 +118,7 @@ export class RavenErrorHandler implements ErrorHandler {
     SidebarService,
     TitleService,
     AvailableLoansService,
+    CountriesService,
   ],
   bootstrap: [AppComponent]
 })
