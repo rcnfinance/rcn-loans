@@ -15,10 +15,8 @@ import { MaterialModule } from './material/material.module';
 export class AppComponent implements OnInit {
   title = 'app';
   environmentName: any = environment.envName;
-  constructor() {
-    // console.log(this.animal);
-  }
+  constructor() {}
   ngOnInit(): void {
-    // if (isDevMode()) {console.log('👋 Development!'); } else {console.log('💪 Production!'); }
+    console.log('Welcome to the RCN dApp!', environment.version_verbose);
   }
 }
