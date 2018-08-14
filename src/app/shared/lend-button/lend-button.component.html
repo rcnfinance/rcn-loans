@@ -1,1 +1,1 @@
-<a mat-raised-button (click)='clickLend()' class="button button-primary">{{ buttonText }}</a>
+<a mat-raised-button (click)='clickLend()' class="button button-primary" [matTooltip]="this.lendEnabled ? '' : 'This feature is not enabled in your country'" matTooltipPosition="above">{{ buttonText }}</a>
