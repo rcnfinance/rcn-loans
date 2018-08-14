@@ -18,7 +18,7 @@ export class AddressComponent implements OnInit {
   address: string;
   available: any;
   loans = [];
-  availableLoans: boolean = true;
+  availableLoans = true;
   constructor(
     private route: ActivatedRoute,
     private contractsService: ContractsService,
@@ -26,15 +26,8 @@ export class AddressComponent implements OnInit {
     private availableLoansService: AvailableLoansService,
   ) {}
 
-  private formatInterest(interest: Number): string {
-    return Number(interest.toFixed(2)).toString();
-  }
-  private formatAmount(amount: number): string {
-    return Utils.formatAmount(amount);
-  }
-
   // Available Loans service
-  upgradeAvaiblable(){
+  upgradeAvaiblable() {
     this.availableLoansService.updateAvailable(this.loans.length);
   }
 

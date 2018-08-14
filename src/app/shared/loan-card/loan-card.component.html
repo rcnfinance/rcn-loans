@@ -1,0 +1,35 @@
+<div class="card-container">
+  <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
+  <app-risk-indicator class="risk-indicator" [loan]=loan></app-risk-indicator>
+  <app-creator-container [loan]=loan></app-creator-container>
+  <div class="card-row">
+    <div class="card-property">
+      <div class="title">{{ 'Borrower' }}</div>
+      <div class="paragraph">{{ loan.borrowerShort }}</div>
+    </div>
+    <div class="card-property">
+      <div class="title">{{ durationLabel }}</div>
+      <div class="paragraph">{{ durationValue }}</div>
+    </div>
+    <div class="card-property">
+      <div class="title">{{ 'Annual Interest / Punitory' }}</div>
+      <div class="paragraph"> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div>
+    </div>
+    <div class="lend-return--row">
+      <ol>
+        <li class="title">{{ leftLabel }}</li>
+        <li class="currency">{{ loan.currency }}</li>
+        <li class="title">{{ rightLabel }}</li>
+      </ol>
+    </div>
+    <div class="lending-returns--block">
+      <ol>
+        <li class="block-title">{{ leftValue }}</li>
+        <li class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></li>
+        <li class="block-title">{{ rightValue }}</li>
+      </ol>
+    </div>
+    <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
+    <app-detail-button [loan]=loan></app-detail-button>
+  </div>
+</div>

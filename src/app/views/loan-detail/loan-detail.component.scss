@@ -5,7 +5,7 @@
   margin-bottom: 20px;
 }
 .navbar-container {
-  height: 100px;
+  height: 70px;
   position: relative;
   overflow: hidden;
   background-color: #333333;
@@ -55,7 +55,7 @@
     .col-item{
       position: relative;
       width: 33.3%;
-      height: 100px;
+      height: 70px;
       float: left;
     }
   }
@@ -83,7 +83,16 @@
   }
 }
 
-@media (min-width: 768px){}
+@media (min-width: 768px){
+  .navbar-container { height: 100px; }
+  .col-group{
+    &.x3{
+      .col-item{
+        height: 100px;
+      }
+    }
+  }
+}
 @media (min-width: 992px){
   .loan-description {
     width: 50%;

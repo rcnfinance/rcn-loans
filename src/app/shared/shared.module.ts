@@ -31,6 +31,7 @@ import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.componen
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
+import { LoanCardComponent } from './loan-card/loan-card.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { ClaimButtonComponent } from './claim-button/claim-button.component';
     CivicAuthComponent,
     SocialContainerComponent,
     ClaimButtonComponent,
+    LoanCardComponent,
   ],
   imports: [
     CommonModule,
@@ -91,7 +93,8 @@ import { ClaimButtonComponent } from './claim-button/claim-button.component';
     RiskIndicatorComponent,
     CivicAuthComponent,
     SocialContainerComponent,
-    ClaimButtonComponent
+    ClaimButtonComponent,
+    LoanCardComponent
   ],
   entryComponents: [
     CivicAuthComponent

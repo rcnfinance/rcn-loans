@@ -1,6 +1,8 @@
+import * as Raven from 'raven-js';
+
 // Angular Core
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -25,6 +27,7 @@ import { CivicService } from './services/civic.service';
 import { SidebarService } from './services/sidebar.service';
 import { TitleService } from './services/title.service';
 import { AvailableLoansService } from './services/available-loans.service';
+import { CountriesService } from './services/countries.service';
 
 // App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
@@ -49,7 +52,20 @@ import { DialogApproveContractComponent } from './dialogs/dialog-approve-contrac
 import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 
 // App Plugins
-import { NgxSpinnerModule } from 'ngx-spinner'; 
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { environment } from '../environments/environment';
+
+Raven
+  .config(environment.sentry, {
+    release: environment.version_verbose
+  })
+  .install();
+
+export class RavenErrorHandler implements ErrorHandler {
+  handleError(err: any): void {
+    Raven.captureException(err);
+  }
+}
 
 @NgModule({
   declarations: [
@@ -100,6 +116,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     SidebarService,
     TitleService,
     AvailableLoansService,
+    CountriesService,
   ],
   bootstrap: [AppComponent]
 })
