@@ -59,6 +59,7 @@ body{
   &.button-primary{
     color: $secondary;
     background-color: $primary;
+    margin-right: 8px;
     &:hover, &:active, &:visited, &:focus{
       color: $secondary;
       background-color: $hover-primary;
