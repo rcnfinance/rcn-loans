@@ -1,7 +1,7 @@
 @import '../../../scss/_variables.scss'; //variables
 
 .creator-container {
-    height: 100px;
+    height: 70px;
     position: relative;
     background-color: #333333;
     margin-left: -15px;
@@ -33,3 +33,10 @@
       }
     }
   }
+
+
+@media (min-width: 768px){
+  .creator-container {
+    height: 100px;    
+  }
+}
