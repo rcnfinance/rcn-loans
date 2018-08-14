@@ -48,7 +48,7 @@ export const environment = {
     openLoans: '0xb18aa197fdb7d20c695dac42da71eb55883fb253',
     nonExpired: '0x56a65418a09aa5cd0cb79d437cb1d318037817d7',
     validMortgage: '0xc7fb7d6fb0c787d5454cbd1b8140ec9624519668',
-    lenderIn: '0x5ef16f3412e7c01e5c9803caae1322b28596d0bdo',
+    lenderIn: '0x5ef16f3412e7c01e5c9803caae1322b28596d0bd',
     ongoing: '0x3b80f3028af6ab654b6b0188e651667ade313e1b',
     stub: '0xc7fb7d6fb0c787d5454cbd1b8140ec9624519668'
   },
