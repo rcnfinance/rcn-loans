@@ -1,5 +1,5 @@
 const { gitDescribeSync } = require('git-describe');
-const { version } = require('../package.json');
+const { version } = require('./package.json');
 const { resolve, relative } = require('path');
 const { writeFileSync } = require('fs-extra');
 
