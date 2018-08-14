@@ -70,7 +70,9 @@
     }
   }
 }
-
+::ng-deep .mat-checkbox .mat-checkbox-frame {
+  border-color: gray;
+}
 @media (min-width: 768px){
   .navbar-container {
     height: 100px;

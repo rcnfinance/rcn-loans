@@ -7,6 +7,7 @@
 .card-container{
   position: relative;
   padding: 15px;
+  margin-top: 15px;
   font-family: 'Raleway', sans-serif;
   border-radius: 2px;
   background-color: $fifth;
@@ -28,6 +29,11 @@
       color: $secondary;
       @extend %font-bold;
     }
+  }
+  .risk-indicator {
+    position: absolute;
+    top: 25px;
+    right: 25px;
   }
   .card-img{
     background-repeat: no-repeat;
@@ -111,10 +117,7 @@
   .card-col{
     margin-top: 30px;
   }
-}
-
-.risk-indicator {
-  position: absolute;
-  top: 25px;
-  right: 25px;
+  .card-container{
+    margin-top: 30px;
+  }
 }

@@ -59,6 +59,7 @@ body{
   &.button-primary{
     color: $secondary;
     background-color: $primary;
+    margin-right: 8px;
     &:hover, &:active, &:visited, &:focus{
       color: $secondary;
       background-color: $hover-primary;
@@ -261,7 +262,7 @@ snack-bar-container.mat-snack-bar-container{
   //Forms
 mat-form-field{
   width: 100%;
-  .mat-input-infix{
+  .mat-form-field-infix{
     width: auto;
     color: $secondary;
   }

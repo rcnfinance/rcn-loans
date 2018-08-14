@@ -1,3 +1,5 @@
+import * as Raven from 'raven-js';
+
 import { Component, OnInit, isDevMode} from '@angular/core';
 import { Router, NavigationEnd } from '../../node_modules/@angular/router';
 import { environment } from '../environments/environment';
