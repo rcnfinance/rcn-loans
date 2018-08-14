@@ -78,6 +78,7 @@
         height: 35px;
         border-radius: 50%;
         margin: 0 auto;
+        @include transition();
         i{
           @extend %absolute-center;
         }
@@ -99,10 +100,9 @@
         border: 4px solid #333;
         background-color: #0f0f0f;
         z-index: 9;
+        margin-top: 8px;
         @include transition();
-        &.background-active{
-          background-color: $primary;
-        }
+        transition-delay: .15s;
       }
 
       .property,
@@ -180,13 +180,15 @@
       .time-event{
         cursor: pointer;
         .flex-row{
+          padding: 0px;
           .flex-col{
             .line{
               padding-right: 0%;
               margin-left: 23px;
             }
-            .property,
-            .space{ font-size: 14px; }
+
+            &.property,
+            &.space{ font-size: 14px; }
 
             &:nth-child(1){
               flex-basis: 90px;
@@ -198,10 +200,14 @@
           }
         }
         &.true{
-          .icon-event{left: 40px;}
+          .icon-event{left: 97px; z-index: 99;}
         }
         &:hover{
           .fa-chevron-right { right: 15px; }
+          .circle{ background-color: $primary; }
+          &.true{
+            .icon-event{left: 28px;}
+          }
         }
       }
     }
