@@ -12,7 +12,7 @@ import { environment } from '../environments/environment';
 export class AppComponent implements OnInit {
   title = 'app';
   environmentName: any = environment.envName;
-  
+
   constructor(private router: Router) {
     this.router.events.subscribe(event => {
      if (event instanceof NavigationEnd) {
@@ -21,5 +21,7 @@ export class AppComponent implements OnInit {
      }
    });
  }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    (<any>window).gtag('config', environment.gaTracking);
+  }
 }
