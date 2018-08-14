@@ -10,13 +10,13 @@ import { Utils } from '../../utils/utils';
 export class LoanCardComponent implements OnInit {
   @Input() loan: Loan;
 
-  private leftLabel: string;
-  private leftValue: string;
-  private rightLabel: string;
-  private rightValue: string;
-  private durationLabel: string;
-  private durationValue: string;
-  private canLend: boolean;
+  leftLabel: string;
+  leftValue: string;
+  rightLabel: string;
+  rightValue: string;
+  durationLabel: string;
+  durationValue: string;
+  canLend: boolean;
 
   constructor() { }
 
@@ -40,10 +40,10 @@ export class LoanCardComponent implements OnInit {
     }
   }
 
-  private formatAmount(amount: number): string {
+  formatAmount(amount: number): string {
     return Utils.formatAmount(amount);
   }
-  private formatInterest(interest: Number): string {
+  formatInterest(interest: Number): string {
     return Number(interest.toFixed(2)).toString();
   }
 }
