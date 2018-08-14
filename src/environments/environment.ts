@@ -1,4 +1,4 @@
-import { BUILD } from './build';
+import { getBuild } from './build';
 
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
@@ -17,13 +17,13 @@ declare let require: any;
 export const environment = {
   version: p.version,
   version_name: p.version_name,
-  build: BUILD['suffix'],
+  build: getBuild(),
   production: false,
   url: 'https://testnet.rcn.loans/',
   envName: 'dev',
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
   buyLink: 'https://www.bancor.network/communities/5a92b438583f4a0001f75f42/about',
-  version_verbose: p.version + '@' + BUILD['suffix'] + ' - ' + p.version_name,
+  version_verbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   network: {
     id: '3',
