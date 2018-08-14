@@ -1,29 +1,60 @@
 <div class="transaction-component">
   <div class="timeline">
+
     <div class="timeline-structure">
       <div *ngFor='let event of oTimeline; index as i; first as isFirst; last as isLast'
         (click)="change_table_content(i); onSelectEvent(i)"
         class="time-event {{ event.oProperties.inserted }} {{ event.oProperties.status }}"
         [ngClass]="{'background-active': i === selectedEvent}">
-        <div class="icon-event bg-{{ event.oProperties.color }}"
-          matTooltip="{{ event.oProperties.messege }}" matTooltipPosition="above">
-          <i class="{{ event.oProperties.materialClass }} {{ event.oProperties.awesomeClass }}">{{ event.oProperties.icon }}</i>
+
+        <!-- *ngIf="!isLast" -->
+        <div class="line-wrapper flex-row">
+          <div class="flex-col"></div>
+          <div class="flex-col">
+            <div class="line" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }"></div> 
+          </div>
+          <div class="flex-col"></div>
         </div>
         
-        <div class="line-top" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf="!isFirst"></div>
-        <div class="line-bottom" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf="!isLast"></div>
-        <div class="circle" [ngClass]="{'background-active': i === selectedEvent}"></div>
-        <div class="entry" style="display: inline-block;">
-            <div class="title">{{ event.oProperties.title }}</div>
-            <div class="date">09/09/2018</div>
-            <br/>
-            <div *ngFor='let datapoint of event.data'>
-              {{ datapoint.title }} {{ datapoint.value }} <br/>
+        <div class="header-wrapper flex-row">
+          <div class="flex-col"></div>
+          
+          <div class="flex-col">
+            <div class="icon-event bg-{{ event.oProperties.color }}"
+              matTooltip="{{ event.oProperties.messege }}" matTooltipPosition="above">
+              <i class="{{ event.oProperties.materialClass }} {{ event.oProperties.awesomeClass }}">{{ event.oProperties.icon }}</i>
             </div>
-            <br/>
-            Transaction: {{ event.commit.proof }}
+            <div class="circle" [ngClass]="{'background-active': i === selectedEvent}"></div>
+          </div>
+
+          <div class="flex-col">
+            <div class="event-title">
+              <div class="title">{{ event.oProperties.title }}</div>
+              <i class="fas fa-chevron-right"></i>
+            </div>
+          </div>
         </div>
+
+        <div class="property-wrapper flex-row">
+          <div class="property flex-col">Property</div>
+          <div class="space flex-col"></div>
+          <div class="value flex-col">09/09/2018</div>
+        </div>
+
+        <div class="property-wrapper flex-row" *ngFor='let datapoint of event.data'>
+          <div class="property flex-col">{{ datapoint.title }}</div>
+          <div class="space flex-col"></div>
+          <div class="value flex-col">{{ datapoint.value }}</div>
+        </div>
+
+        <div class="property-wrapper flex-row">
+          <div class="property flex-col">Transaction</div>
+          <div class="space flex-col"></div>
+          <div class="value flex-col">{{ event.commit.proof }}</div>
+        </div>
+
       </div>
     </div>
+    
   </div>
 </div>

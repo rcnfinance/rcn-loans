@@ -10,20 +10,6 @@ export class CommitsService {
 
   constructor(private http: Http) {}
 
-  getLoanData() { // Get() all Loans[] from API
-    return this.http.get(this.configUrl)
-      .map((response: Response) => {
-        const data = response.json();
-        const loans = (typeof data.content === 'object') ? [data.content] : data.content;
-        return loans;
-      })
-      .catch(
-        (error: Response) => {
-          return Observable.throw('Something went wrong: We couldnt get your Loan data');
-        }
-      );
-  }
-
   getCommits(id) { // Get() all Commits[] from API by :id
     return this.http.get(this.configUrl + id)
       .map((response: Response) => {

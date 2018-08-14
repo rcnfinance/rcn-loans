@@ -25,9 +25,7 @@ export class TransactionHistoryComponent implements OnInit {
   selectedEvent: number;
   id: number = 0;
 
-  now: any = new Date();
-  timestamp: number = 1525462875;
-  date = new Date(this.timestamp);
+  winHeight: any = window.innerWidth;
 
   loans: object[];
   commits$: Commit[];
@@ -145,15 +143,6 @@ export class TransactionHistoryComponent implements OnInit {
     private commitsService: CommitsService
   ) { }
 
-  private loadLoanData() {
-    this.commitsService.getLoanData()
-      .subscribe(
-        (loans) => { this.loans = loans},
-        err => console.error(err),
-        () => console.log('SUCCESS: Loans[] have been Loaded!', this.loans)
-      );
-  }
-
   private filterCommit(commit: Commit): boolean {
     return commit.opcode !== 'transfer' || commit.data['from'] !== Utils.address_0;
   }
@@ -232,20 +221,11 @@ export class TransactionHistoryComponent implements OnInit {
           this.oTimeline = this.load_timeEvents(this.commits$); // Build timeline with every commit event of the Loan
           
           this.oDataTable = this.populate_table_data(this.id); // Render TableComponent Data by id
-          console.log(this.oTimeline);
         }
       );
   }
-
-  get_time(timestamp: number){
-    // console.log(this.now);
-    // console.log(this.timestamp);
-    // console.log(this.date);
-  }
-
   
   ngOnInit() {
     const response$ = this.loadCommits(this.loan.id);
-    this.get_time(this.now);
   }
 }
