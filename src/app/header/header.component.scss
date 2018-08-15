@@ -68,13 +68,13 @@
   align-items: center;
   > .flex-item {
     &:nth-child(1){
-      flex: 2;
+      flex: 10px;
     }
     &:nth-child(2){
-      flex: 6;
+      flex: 2;
     }
     &:nth-child(3){
-      flex: 2;
+      flex: 1;
     }
   }
 }
