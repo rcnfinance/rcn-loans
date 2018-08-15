@@ -142,10 +142,10 @@ export class ContractsService {
     }
 
     public async getGasPriceAvg(): Promise<number> {
-      return new Promise((resolve) => {
-        this.http.get('https://ethgasstation.info/json/ethgasAPI.json').subscribe((resp: any) => {
-          resolve(resp['average']);
-        });
+      return await new Promise((resolve) => {
+        this.http.get(environment.gasPriceAPIs.gasStation).subscribe((resp: any) => {
+          resolve(resp['average'] * 1000000000);
+        }
       }) as Promise<number>;
     }
 
