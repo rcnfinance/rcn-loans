@@ -38,6 +38,10 @@ export class TransactionHistoryComponent implements OnInit {
 
   oTimeline: object[] = [];
 
+  data_types: object = {
+    'amount': 'currency'
+  };
+
   timelines_properties: object = {
     'loan_request': {
       'title': 'Requested',
@@ -195,7 +199,12 @@ export class TransactionHistoryComponent implements OnInit {
     dataEntries.forEach(([key, value]) => {
       // Aditional filters
       if (showOrder.indexOf(key) > -1) {
-        result.push(new DataEntry(capitalize(key.replace('_', '')), value as string));
+        const name = capitalize(key.replace('_', ''));
+        let content = value as string;
+        if (this.data_types[key] === 'currency') {
+          content = this.loan.currency + ' ' + (Number(content) / 10 ** this.loan.decimals).toString();
+        }
+        result.push(new DataEntry(name, content));
       }
     });
     return result;
