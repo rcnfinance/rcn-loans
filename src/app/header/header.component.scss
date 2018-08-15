@@ -63,10 +63,19 @@
 .flex-container {
   display: flex;
   flex-direction: row;
-  height: auto;
+  width: 130px;
+  height: 42px;
   align-items: center;
   > .flex-item {
-    // width: 35px;
+    &:nth-child(1){
+      flex: 2;
+    }
+    &:nth-child(2){
+      flex: 6;
+    }
+    &:nth-child(3){
+      flex: 2;
+    }
   }
 }
 
