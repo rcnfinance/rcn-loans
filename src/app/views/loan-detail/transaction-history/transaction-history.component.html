@@ -50,7 +50,7 @@
         <div class="property-wrapper flex-row">
           <div class="property flex-col">Transaction</div>
           <div class="space flex-col"></div>
-          <div class="value flex-col"><a [href]="explorerTx.replace('${tx}', event.commit.proof)" target="_blank">{{ event.commit.proof }}</a></div>
+          <a class="value flex-col" [href]="explorerTx.replace('${tx}', event.commit.proof)" target="_blank">{{ event.commit.proof }}</a>
         </div>
 
       </div>

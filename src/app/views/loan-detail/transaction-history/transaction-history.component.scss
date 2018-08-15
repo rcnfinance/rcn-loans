@@ -65,7 +65,7 @@
       .fa-chevron-right {
         display: none;
         position: absolute;
-        top: 55px; 
+        top: 40px; 
         right: 30px;
         @include transition();
         @include transform(translate(0%, -50%));
@@ -109,6 +109,7 @@
         display: inline-block;
         padding-top: 10px;
         padding-bottom: 10px;
+        color: #fff;
       }
       .property{
         white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
@@ -165,6 +166,10 @@
             .line{
               padding-right: 4.5%;
             }
+          }
+          a.value{
+            @include transition();
+            &:hover{ color: $primary !important; }
           }
         }
         &.true{
