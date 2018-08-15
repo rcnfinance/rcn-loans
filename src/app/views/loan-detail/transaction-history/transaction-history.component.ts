@@ -24,6 +24,7 @@ export class TransactionHistoryComponent implements OnInit {
   status: string;
   selectedEvent: number;
   id = 0;
+  explorerTx = environment.network.explorer.tx;
 
   winHeight: any = window.innerWidth;
 
@@ -205,11 +206,7 @@ export class TransactionHistoryComponent implements OnInit {
     this.oDataTable = this.populate_table_data(i);
   }
 
-  onSelectEvent(i: number) { // Activate animation on timeEvent selected
-    window.open(environment.network.explorer.tx.replace('${tx}', this.oTimeline[i]['commit'].proof), '_blank');
-  }
-
-  private loadCommits(id:number) { // Load get() API commits from the DB by id
+  private loadCommits(id: number) { // Load get() API commits from the DB by id
     this.commitsService.getCommits(id)
       .subscribe(
         (commits) => { this.commits$ = commits; },

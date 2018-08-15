@@ -3,7 +3,7 @@
 
     <div class="timeline-structure">
       <div *ngFor='let event of oTimeline; index as i; first as isFirst; last as isLast'
-        (click)="change_table_content(i); onSelectEvent(i)"
+        (click)="change_table_content(i);"
         class="time-event {{ event.oProperties.inserted }} {{ event.oProperties.status }}"
         [ngClass]="{'background-active': i === selectedEvent}">
 
@@ -50,7 +50,7 @@
         <div class="property-wrapper flex-row">
           <div class="property flex-col">Transaction</div>
           <div class="space flex-col"></div>
-          <div class="value flex-col">{{ event.commit.proof }}</div>
+          <div class="value flex-col"><a [href]="explorerTx.replace('${tx}', event.commit.proof)" target="_blank">{{ event.commit.proof }}</a></div>
         </div>
 
       </div>
