@@ -38,6 +38,10 @@ export class TransactionHistoryComponent implements OnInit {
 
   oTimeline: object[] = [];
 
+  data_types: object = {
+    'amount': 'currency'
+  };
+
   timelines_properties: object = {
     'loan_request': {
       'title': 'Requested',
@@ -57,7 +61,7 @@ export class TransactionHistoryComponent implements OnInit {
       'icon': 'done',
       'color': 'white',
       'inserted': true,
-      'display': []
+      'display': ['approved_by']
     },
     'lent': {
       'title': 'Lent',
@@ -76,7 +80,7 @@ export class TransactionHistoryComponent implements OnInit {
       'awesomeClass': 'fas fa-coins',
       'color': 'green',
       'inserted': true,
-      'display': ['sender', 'amount']
+      'display': ['sender', 'from', 'amount']
     },
     'total_payment': {
       'title': 'Completed',
@@ -194,11 +198,20 @@ export class TransactionHistoryComponent implements OnInit {
     const result: DataEntry[] = [];
     dataEntries.forEach(([key, value]) => {
       // Aditional filters
-      if (showOrder.indexOf(key) > -1) {
-        result.push(new DataEntry(capitalize(key.replace('_', '')), value as string));
+      if (showOrder.indexOf(key) > -1 && this.filterDataEntry(commit, key, value)) {
+        const name = capitalize(key.replace('_', ' '));
+        let content = value as string;
+        if (this.data_types[key] === 'currency') {
+          content = this.loan.currency + ' ' + (Number(content) / 10 ** this.loan.decimals).toString();
+        }
+        result.push(new DataEntry(name, content));
       }
     });
     return result;
+  }
+
+  filterDataEntry(commit, key, value): boolean {
+    return commit.opcode !== 'partial_payment' || key !== 'from' || value !== Utils.address_0; // Filter empty from
   }
 
   populate_table_data(id: number){ // Render Table Component by id
