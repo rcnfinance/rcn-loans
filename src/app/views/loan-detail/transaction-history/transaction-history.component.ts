@@ -137,14 +137,14 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': false,
       'display': []
     }
-  }
+  };
 
   constructor(
     private commitsService: CommitsService
   ) { }
 
   private filterCommit(commit: Commit): boolean {
-    return commit.opcode !== 'transfer' || commit.data['from'] !== Utils.address_0;
+    return commit.opcode !== 'transfer' || (commit.data['from'] !== Utils.address_0 && commit.data['to'] !== Utils.address_0);
   }
 
   private load_timeEvents(commits: Commit[]): object[] { // Build every timeEvents with commit event of the Loan
