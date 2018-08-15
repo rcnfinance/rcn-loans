@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   account: string;
   makeRotate = false;
   profile: boolean;
-  title:string;
+  title: string;
 
   rcnBalance = '...'; // Balance bar
   rcnAvailable = '...'; // Balance bar
@@ -41,8 +41,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   ) {}
 
   // Toggle Navbar
-  sidebarToggle(){
-    this.sidebarService.toggleService(this.navToggle=!this.navToggle);
+  sidebarToggle() {
+    this.sidebarService.toggleService(this.navToggle = !this.navToggle);
   }
 
   handleProfile() {
@@ -80,9 +80,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   openDialog() {
     if (this.hasAccount) {
       const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
+      this.makeRotate = true;
       dialogRef.componentInstance.autoClose = false;
       dialogRef.afterClosed().subscribe(result => {
         console.log(`Dialog result: ${result}`);
+        this.makeRotate = false;
       });
     } else {
       if (this.web3Service.web3Type === Type.Injected) {

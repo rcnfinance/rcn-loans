@@ -25,7 +25,7 @@
               <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>
               <li (click)="openDialog()" *ngIf="!hasAccount">Login</li>
               <li class="separator">|</li>
-              <li (click)="openDialog(); makeRotate = !makeRotate;">
+              <li (click)="openDialog();">
                 <div class="flex-container" *ngIf="hasAccount">
                   <div class="flex-item">
                     <div class="list-avatar">
@@ -35,7 +35,7 @@
                     </div>
                   </div>
                   <div class="flex-item">Profile</div>
-                  <div class="flex-item"><i class="material-icons margintop5" [ngClass]="{'rotate180': makeRotate }">expand_more</i></div>
+                  <div class="flex-item"><i class="material-icons margintop5 transition" [ngClass]="{'rotate180': makeRotate }">expand_more</i></div>
                 </div>
               </li>
             </ul>
