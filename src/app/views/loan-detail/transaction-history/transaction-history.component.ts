@@ -80,7 +80,7 @@ export class TransactionHistoryComponent implements OnInit {
       'awesomeClass': 'fas fa-coins',
       'color': 'green',
       'inserted': true,
-      'display': ['sender', 'amount']
+      'display': ['sender', 'from', 'amount']
     },
     'total_payment': {
       'title': 'Completed',
@@ -198,7 +198,7 @@ export class TransactionHistoryComponent implements OnInit {
     const result: DataEntry[] = [];
     dataEntries.forEach(([key, value]) => {
       // Aditional filters
-      if (showOrder.indexOf(key) > -1) {
+      if (showOrder.indexOf(key) > -1 && this.filterDataEntry(commit, key, value)) {
         const name = capitalize(key.replace('_', ''));
         let content = value as string;
         if (this.data_types[key] === 'currency') {
@@ -208,6 +208,10 @@ export class TransactionHistoryComponent implements OnInit {
       }
     });
     return result;
+  }
+
+  filterDataEntry(commit, key, value): boolean {
+    return commit.opcode !== 'partial_payment' || key !== 'from' || value !== Utils.address_0; // Filter empty from
   }
 
   populate_table_data(id: number){ // Render Table Component by id
