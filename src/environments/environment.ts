@@ -42,6 +42,6 @@ export const environment = {
     '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioCreator,
   },
   gasPriceAPIs: {
-    gasStation: 'https://ethgasstation.info/jso2n/ethgasAPI.json'
+    gasStation: 'https://ethgasstation.info/json/ethgasAPI.json'
   }
 };
