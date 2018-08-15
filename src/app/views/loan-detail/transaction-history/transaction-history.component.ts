@@ -180,18 +180,19 @@ export class TransactionHistoryComponent implements OnInit {
   }
 
   sort_by_timestamp(commits): object[] { // Sort/Order by timestamp
-    return commits.sort( (objA, objB) => objA.timestamp - objB.timestamp);
+    return commits.sort((objA, objB) => objA.timestamp - objB.timestamp);
   }
 
   buildDataEntries(commit): DataEntry[] {
     const capitalize = (string) => {
       return string.charAt(0).toUpperCase() + string.substr(1);
     };
-    const properties = this.get_properties_by_opcode(commit.opcode);
+    const showOrder = this.get_properties_by_opcode(commit.opcode)['display'];
+    const dataEntries = Object.entries(commit.data).sort(([key1, _1], [key2, _2]) => showOrder.indexOf(key1) - showOrder.indexOf(key2));
     const result: DataEntry[] = [];
-    Object.entries(commit.data).forEach(([key, value]) => {
+    dataEntries.forEach(([key, value]) => {
       // Aditional filters
-      if (properties['display'].indexOf(key) > -1) {
+      if (showOrder.indexOf(key) > -1) {
         result.push(new DataEntry(capitalize(key.replace('_', '')), value as string));
       }
     });
