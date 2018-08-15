@@ -23,7 +23,7 @@ export class TransactionHistoryComponent implements OnInit {
   @Input() loan: Loan;
   status: string;
   selectedEvent: number;
-  id: number = 0;
+  id = 0;
 
   winHeight: any = window.innerWidth;
 
@@ -36,7 +36,7 @@ export class TransactionHistoryComponent implements OnInit {
   oTimeline: object[] = [];
 
   timelines_properties: object = {
-    "loan_request": {
+    'loan_request': {
       'title': 'Requested',
       'messege': 'Requested',
       'status': 'active',
@@ -46,7 +46,7 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': false,
       'display': ['creator']
     },
-    "approved_loan": {
+    'approved_loan': {
       'title': 'Loan Approved',
       'messege': 'Loan Approved',
       'status': 'active',
@@ -56,7 +56,7 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': true,
       'display': []
     },
-    "lent": {
+    'lent': {
       'title': 'Lent',
       'messege': 'Lent',
       'status': 'active',
@@ -66,7 +66,7 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': true,
       'display': ['lender']
     },
-    "partial_payment": {
+    'partial_payment': {
       'title': 'Pay',
       'messege': 'Pay',
       'status': 'active',
@@ -75,7 +75,7 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': true,
       'display': ['sender', 'amount']
     },
-    "total_payment": {
+    'total_payment': {
       'title': 'Completed',
       'messege': 'Completed',
       'status': 'active',
@@ -84,7 +84,7 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': true,
       'display': []
     },
-    "loan_in_debt": {
+    'loan_in_debt': {
       'title': 'In Debt',
       'messege': 'In Debt',
       'status': 'active',
@@ -94,7 +94,7 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': true,
       'display': []
     },
-    "withdraw": {
+    'withdraw': {
       'title': 'Withdraw',
       'messege': 'Withdraw',
       'status': 'active',
@@ -104,7 +104,7 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': true,
       'display': []
     },
-    "transfer": {
+    'transfer': {
       'title': 'Transfer',
       'messege': 'Transfer',
       'status': 'active',
@@ -115,7 +115,7 @@ export class TransactionHistoryComponent implements OnInit {
       'hexa': '#333',
       'display': ['from', 'to']
     },
-    "loan_expired": {
+    'loan_expired': {
       'title': 'Destroyed',
       'messege': 'Destroyed',
       'status': 'active',
@@ -126,7 +126,7 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': false,
       'display': []
     },
-    "destroyed_loan": {
+    'destroyed_loan': {
       'title': 'Destroyed',
       'messege': 'Destroyed',
       'status': 'active',
@@ -172,16 +172,14 @@ export class TransactionHistoryComponent implements OnInit {
     return this.timelines_properties[opcode];
   }
 
-  timeline_has(timeEvents, opcode){ // Filters the commits that timeline not use
+  timeline_has(timeEvents, opcode) { // Filters the commits that timeline not use
     let result$: object[] = [];
-    result$ = timeEvents.filter(
-      (event) => { return event.title == opcode }
-    )
+    result$ = timeEvents.filter((event) => event.title === opcode);
     return result$.length > 0;
   }
 
   sort_by_timestamp(commits): object[] { // Sort/Order by timestamp
-    return commits.sort( (objA, objB) => { return objA.timestamp - objB.timestamp; } );
+    return commits.sort( (objA, objB) => objA.timestamp - objB.timestamp);
   }
 
   buildDataEntries(commit): DataEntry[] {
@@ -216,15 +214,15 @@ export class TransactionHistoryComponent implements OnInit {
       .subscribe(
         (commits) => { this.commits$ = commits; },
         err => console.error(err),
-        () => { 
+        () => {
           console.log('SUCCESS: Commits[] have been Loaded!', this.commits$);
           this.oTimeline = this.load_timeEvents(this.commits$); // Build timeline with every commit event of the Loan
-          
+
           this.oDataTable = this.populate_table_data(this.id); // Render TableComponent Data by id
         }
       );
   }
-  
+
   ngOnInit() {
     const response$ = this.loadCommits(this.loan.id);
   }
