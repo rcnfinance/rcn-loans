@@ -1,10 +1,5 @@
 <div class="button-group">
   <div class="button-options"
-    (click)="openDetail('transaction_history')"
-    [ngClass]="{'active': viewDetail === 'transaction_history' ? true : false }">
-    <i class="fas fa-chart-line" matTooltip="Transactions" matTooltipPosition="below"></i>
-  </div>
-  <div class="button-options"
     (click)="openDetail('cosigner')"
     [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }">
     <i class="fas fa-shield-alt" matTooltip="Cosigner" matTooltipPosition="below"></i>
