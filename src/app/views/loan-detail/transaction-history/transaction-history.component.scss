@@ -67,9 +67,10 @@
       .fa-chevron-right {
         display: none;
         position: absolute;
+        top: 55px; 
         right: 30px;
         @include transition();
-        top: 50%; @include transform(translate(0%, -50%));
+        @include transform(translate(0%, -50%));
       }
 
       .icon-event {
@@ -140,7 +141,7 @@
       &.true{
         .circle{display: inline-block;}
         .icon-event{position: absolute; left: 8%;}
-        .fa-chevron-right{display: block;}
+        .fa-chevron-right{display: inline-block;}
       }
       &:first-child,
       &:last-child{
@@ -150,6 +151,12 @@
       }
       &:first-child{
         margin-top: 35px;
+      }
+      &:last-child{
+        margin-top: 35px;
+        .fa-chevron-right{
+          top: 20px;
+        }
       }
     }
   }
