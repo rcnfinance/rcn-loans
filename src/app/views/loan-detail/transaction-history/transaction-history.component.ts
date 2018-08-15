@@ -61,7 +61,7 @@ export class TransactionHistoryComponent implements OnInit {
       'icon': 'done',
       'color': 'white',
       'inserted': true,
-      'display': []
+      'display': ['approved_by']
     },
     'lent': {
       'title': 'Lent',
@@ -199,7 +199,7 @@ export class TransactionHistoryComponent implements OnInit {
     dataEntries.forEach(([key, value]) => {
       // Aditional filters
       if (showOrder.indexOf(key) > -1 && this.filterDataEntry(commit, key, value)) {
-        const name = capitalize(key.replace('_', ''));
+        const name = capitalize(key.replace('_', ' '));
         let content = value as string;
         if (this.data_types[key] === 'currency') {
           content = this.loan.currency + ' ' + (Number(content) / 10 ** this.loan.decimals).toString();
