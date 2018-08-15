@@ -2,6 +2,7 @@
 
 .transaction-component{
   .timeline{
+    margin-top: 30px;
     margin-left: -15px;
     margin-right: -15px;
     .timeline-table{
@@ -10,7 +11,7 @@
     }
     .time-event{
       position: relative;
-      padding-top: 35px;
+      padding: 20px 0;
       color: $secondary;
       .flex-row{
         display: flex;
@@ -19,15 +20,12 @@
         .flex-col{
           &:nth-child(1){
             flex-basis: 20%;
-            // background: green;
           }
           &:nth-child(2){
             flex-basis: 10%;
-            // background: white;
           }
           &:nth-child(3){
             flex: 1;
-            // background: red;
           }
         }
       }
@@ -48,7 +46,7 @@
       
       .line{
         position: absolute;
-        top: 0;
+        top: 4px;
         height: 100%;
         margin: 4px auto;
         padding-right: 4%;
@@ -149,11 +147,7 @@
         padding-top: 0;
         background-color: transparent !important;
       }
-      &:first-child{
-        margin-top: 35px;
-      }
       &:last-child{
-        margin-top: 35px;
         .fa-chevron-right{
           top: 20px;
         }
