@@ -7,6 +7,8 @@ import { CommitsService } from '../../../services/commits.service';
 import { environment } from '../../../../environments/environment';
 import { Utils } from '../../../utils/utils';
 
+import { DatePipe } from '@angular/common';
+
 class DataEntry {
   constructor(
     public title: string,

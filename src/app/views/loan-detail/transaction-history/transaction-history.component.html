@@ -36,9 +36,9 @@
         </div>
 
         <div class="property-wrapper flex-row">
-          <div class="property flex-col">Property</div>
+          <div class="property flex-col">Date</div>
           <div class="space flex-col"></div>
-          <div class="value flex-col">09/09/2018</div>
+          <div class="value flex-col">{{ event.commit.timestamp * 1000 | date: 'dd/MM/yyyy HH:m' }}</div>
         </div>
 
         <div class="property-wrapper flex-row" *ngFor='let datapoint of event.data'>
