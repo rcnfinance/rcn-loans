@@ -63,10 +63,19 @@
 .flex-container {
   display: flex;
   flex-direction: row;
-  height: auto;
+  width: 130px;
+  height: 42px;
   align-items: center;
   > .flex-item {
-    width: 35px;
+    &:nth-child(1){
+      flex: 10px;
+    }
+    &:nth-child(2){
+      flex: 2;
+    }
+    &:nth-child(3){
+      flex: 1;
+    }
   }
 }
 
@@ -176,13 +185,16 @@
         display: none;
       }
       ul.nav{
-        height: 50px;
+        height: 45px;
         display: block;
         padding: 12px 0;
         li{
           display: block;
           font-size: 16px;
           @include transition;
+          i{
+            color: #fff;
+          }
           &:hover{
             color: $primary;
           }
@@ -195,6 +207,7 @@
           }
           &:last-child{
             margin-top: -10px;
+            margin-right: 0;
           }
         }
       }
