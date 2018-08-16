@@ -144,8 +144,11 @@ export class ContractsService {
     public async getGasPriceAvg(): Promise<number> {
       return await new Promise((resolve) => {
         this.http.get(environment.gasPriceAPIs.gasStation).subscribe((resp: any) => {
-          resolve(resp['average'] * 1000000000);
-        }
+          resolve(resp['average'] * 100000000); // Gwei to wei
+        },
+        (err: any) => {
+          resolve(0);
+        })
       }) as Promise<number>;
     }
 
