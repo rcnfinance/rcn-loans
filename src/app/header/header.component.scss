@@ -192,6 +192,9 @@
           display: block;
           font-size: 16px;
           @include transition;
+          i{
+            color: #fff;
+          }
           &:hover{
             color: $primary;
           }
@@ -204,6 +207,7 @@
           }
           &:last-child{
             margin-top: -10px;
+            margin-right: 0;
           }
         }
       }
