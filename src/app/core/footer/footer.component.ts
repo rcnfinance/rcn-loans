@@ -38,7 +38,7 @@ export class FooterComponent implements OnInit {
     public dialog: MatDialog,
     private web3Service: Web3Service,
     private sidebarService: SidebarService,
-    private titleService: TitleService,
+    public titleService: TitleService,
     private availableLoansService: AvailableLoansService,
   ) {}
 
