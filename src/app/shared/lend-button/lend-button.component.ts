@@ -12,6 +12,7 @@ import { Web3Service } from '../../services/web3.service';
 import { CivicService } from '../../services/civic.service';
 import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
+import { CountriesService } from '../../services/countries.service';
 
 @Component({
   selector: 'app-lend-button',
@@ -22,12 +23,13 @@ export class LendButtonComponent implements OnInit {
   @Input() loan: Loan;
   pendingTx: Tx = undefined;
   account: string;
-
+  lendEnabled: Boolean;
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
     private web3Service: Web3Service,
     private civicService: CivicService,
+    private countriesService: CountriesService,
     public dialog: MatDialog
   ) {}
 
@@ -36,11 +38,14 @@ export class LendButtonComponent implements OnInit {
     this.web3Service.getAccount().then((account) => {
       this.account = account;
     });
+    this.countriesService.lendEnabled().then((lendEnabled) => {
+      this.lendEnabled = lendEnabled;
+    });
   }
 
   async handleLend() {
     // TODO Handle user not logged in
-    if (this.account === undefined) { return; }
+    if (this.account === undefined || !this.lendEnabled) { return; }
 
     const engineApproved = this.contractsService.isEngineApproved();
     const civicApproved = this.civicService.status();
@@ -84,6 +89,16 @@ export class LendButtonComponent implements OnInit {
     } else {
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }
+  }
+
+  sendEvent = () => {
+    (<any>window).ga('send', {
+      hitType: 'event',
+      eventCategory: 'Transaction',
+      eventAction: 'lend',
+      eventLabel: this.loan.currency,
+      eventValue: this.loan.amount
+    });
   }
 
   retrievePendingTx() {

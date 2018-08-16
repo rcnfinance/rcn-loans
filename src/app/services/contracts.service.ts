@@ -248,7 +248,7 @@ export class ContractsService {
       return new Promise((resolve, reject) => {
         // Filter ongoing loans
         const filters = [
-          '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3'
+          environment.filters.ongoing
         ];
 
         const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
@@ -264,9 +264,9 @@ export class ContractsService {
         return new Promise((resolve, reject) => {
           // Filter open loans, non expired loand and valid mortgage
           const filters = [
-            '0x3e703de416a62525c8653be11d71486550618ec8',
-            '0xe084b7cf7f6869a96cd72962047bf65e6d55e1e1',
-            '0x0bc0ac0f08235979951bb155d15f1a08dd7dcb2a'
+            environment.filters.openLoans,
+            environment.filters.nonExpired,
+            environment.filters.validMortgage
           ];
 
           const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
@@ -281,7 +281,7 @@ export class ContractsService {
     public getLoansOfLender(lender: string): Promise<Loan[]> {
       return new Promise((resolve, reject) => {
         // Filter [lenderIn]
-        const filters = ['0xe52eac8af912b8b3196b2921f12b66c91b39e025'];
+        const filters = [environment.filters.lenderIn];
         const params = [this.addressToBytes32(lender)];
         this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
           if (err != null) {
@@ -293,11 +293,11 @@ export class ContractsService {
     }
     public readPendingWithdraws(loans: Loan[]): [BigNumber, number[]] {
       const pendingLoans = [];
-      let total = new BigNumber(0);
+      let total = 0;
 
       loans.forEach(loan => {
         if (loan.lenderBalance > 0) {
-          total = total.add(new BigNumber(loan.lenderBalance));
+          total += loan.lenderBalance;
           pendingLoans.push(loan.id);
         }
       });
