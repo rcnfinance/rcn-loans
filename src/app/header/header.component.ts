@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private router: Router,
     private sidebarService: SidebarService,
     private contractService: ContractsService,
-    private titleService: TitleService,
+    public titleService: TitleService,
   ) {}
 
   // Toggle Navbar
