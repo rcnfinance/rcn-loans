@@ -16,7 +16,7 @@ import { Tx, TxService } from '../tx.service';
   styleUrls: ['./content-wrapper.component.scss']
 })
 export class ContentWrapperComponent implements OnInit {
-  winHeight: any = window.innerHeight;
+  winHeight: any = window.innerHeight - 60;
   events: string[] = [];
   account: string;
   version: string = environment.version;
