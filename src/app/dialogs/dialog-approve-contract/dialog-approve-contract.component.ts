@@ -42,8 +42,8 @@ export class DialogApproveContractComponent implements OnInit {
     let actionCode;
 
     if (this.isApproved) {
-      actionCode = 'dissaprove';
-      action = this.contracts.dissaproveEngine();
+      actionCode = 'disapprove';
+      action = this.contracts.disapproveEngine();
     } else {
       actionCode = 'approve';
       action = this.contracts.approveEngine();
