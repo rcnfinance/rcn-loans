@@ -36,23 +36,7 @@
       @extend %font-bold;
       @extend %absolute-center-top;
     }
-    ul.nav{
-      display: none;
-      position: relative;
-      top: 0;
-      height: 40px;
-      opacity: 1;
-      float: right;
-      padding: 9px 0;
-      @include transition;
-      li{
-        cursor: pointer;
-        display: none;
-        float: left;
-        margin-right: 45px;
-        @extend %font-bold;
-      }
-    }
+    ul.nav{ li{ @extend %font-bold; } }
     .icon-hamburguer{
       cursor: pointer;
       font-size: 32px;
@@ -62,11 +46,27 @@
 }
 .flex-container {
   display: flex;
-  flex-direction: row;
-  height: auto;
-  align-items: center;
+  flex-direction: row; // Defines the direction items are placed in the container
+  flex-wrap: wrap; // Items wrap around to additional lines.
+  flex-flow: row wrap; // The two properties flex-direction and flex-wrap are used so often together that the shorthand property flex-flow was created to combine them. This shorthand property accepts the value of one of the two properties separated by a space.
+  justify-content: space-between; // Aligns items horizontally and accepts the following values:
+  align-items: center; // Aligns items vertically and Determines how the items as a whole are aligned within the container
+  align-content: flex-end; // Determines the spacing between lines. When there is only one line, align-content has no effect.
+  width: 130px;
+  height: 42px;
   > .flex-item {
-    width: 35px;
+    // align-self: flex-end; //  This property accepts the same values as align-items and its value for the specific item.
+    // align-self: flex-end; order: 1; // Combine order with align-self to help the frogs to their destinations.
+    &:nth-child(1){
+      order: 1; // By default, items have a value of 0, but we can use this property to set it to a positive or negative integer value.
+    }
+    &:nth-child(2){
+      order: 2;
+    }
+    &:nth-child(3){
+      display: flex;
+      order: 3;
+    }
   }
 }
 
@@ -176,13 +176,22 @@
         display: none;
       }
       ul.nav{
-        height: 50px;
-        display: block;
-        padding: 12px 0;
+        width: 550px;
+        height: 45px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        float: right;
+        @include transition;
         li{
           display: block;
           font-size: 16px;
+          cursor: pointer;
           @include transition;
+          i{
+            color: #fff;
+          }
           &:hover{
             color: $primary;
           }
@@ -194,7 +203,7 @@
             }
           }
           &:last-child{
-            margin-top: -10px;
+            margin-right: 0;
           }
         }
       }

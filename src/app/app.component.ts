@@ -1,11 +1,8 @@
 import * as Raven from 'raven-js';
 
 import { Component, OnInit, isDevMode} from '@angular/core';
+import { Router, NavigationEnd } from '../../node_modules/@angular/router';
 import { environment } from '../environments/environment';
-
-// App Component
-import { SharedModule } from './shared/shared.module';
-import { MaterialModule } from './material/material.module';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +12,16 @@ import { MaterialModule } from './material/material.module';
 export class AppComponent implements OnInit {
   title = 'app';
   environmentName: any = environment.envName;
-  constructor() {}
+
+  constructor(private router: Router) {
+    this.router.events.subscribe(event => {
+     if (event instanceof NavigationEnd) {
+       (<any>window).ga('set', 'page', event.urlAfterRedirects);
+       (<any>window).ga('send', 'pageview');
+     }
+   });
+ }
   ngOnInit(): void {
-    console.log('Welcome to the RCN dApp!', environment.version_verbose);
+    (<any>window).gtag('config', environment.gaTracking);
   }
 }

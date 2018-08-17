@@ -91,6 +91,16 @@ export class LendButtonComponent implements OnInit {
     }
   }
 
+  sendEvent = () => {
+    (<any>window).ga('send', {
+      hitType: 'event',
+      eventCategory: 'Transaction',
+      eventAction: 'lend',
+      eventLabel: this.loan.currency,
+      eventValue: this.loan.amount
+    });
+  }
+
   retrievePendingTx() {
     this.pendingTx = this.txService.getLastLend(this.loan);
   }

@@ -59,6 +59,7 @@ body{
   &.button-primary{
     color: $secondary;
     background-color: $primary;
+    margin-right: 8px;
     &:hover, &:active, &:visited, &:focus{
       color: $secondary;
       background-color: $hover-primary;
@@ -189,7 +190,9 @@ mat-sidenav-container.mat-drawer-container {
 }
 .mat-drawer-opened{
   &.mat-drawer-container {
-    position: absolute;
+    // position: absolute;
+    position: fixed;
+    overflow: hidden;
   }
   .mat-drawer {
     .animation-opacity{
