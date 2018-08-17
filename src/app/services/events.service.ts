@@ -1,4 +1,6 @@
 
+import * as Raven from 'raven-js';
+
 import { Injectable } from '@angular/core';
 
 export enum Category {
@@ -16,6 +18,17 @@ export class EventsService {
     value: number = 0,
     nonInteraction: boolean = false,
   ) {
+    // Sentry tracking
+    Raven.captureBreadcrumb({
+      message: action,
+      category: category,
+      data: {
+         label: label,
+         value: value,
+         nonInteraction: nonInteraction
+      }
+    });
+
     // GA Tracking
     (<any>window).ga('send', 'event', {
       eventCategory: category,
