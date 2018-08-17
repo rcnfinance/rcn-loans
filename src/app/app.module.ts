@@ -55,6 +55,7 @@ import { DialogClientAccountComponent } from './dialogs/dialog-client-account/di
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { environment } from '../environments/environment';
+import { EventsService } from './services/events.service';
 
 Raven
   .config(environment.sentry, {
@@ -119,6 +120,7 @@ export class RavenErrorHandler implements ErrorHandler {
     TitleService,
     AvailableLoansService,
     CountriesService,
+    EventsService,
   ],
   bootstrap: [AppComponent]
 })
