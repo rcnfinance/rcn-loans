@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export enum Category {
   Loan = 'loan',
   Account = 'account',
+  Transaction = 'transaction',
 }
 
 @Injectable()

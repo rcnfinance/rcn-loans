@@ -95,7 +95,7 @@ export class ContractsService {
         }) as Promise<string>;
     }
 
-    public async dissaproveEngine(): Promise<string> {
+    public async disapproveEngine(): Promise<string> {
       const account = await this.web3.getAccount();
       const txService = this.txService;
       const rcnAddress = this._rcnContractAddress;
