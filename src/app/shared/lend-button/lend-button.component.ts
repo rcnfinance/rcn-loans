@@ -13,6 +13,7 @@ import { CivicService } from '../../services/civic.service';
 import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 import { CountriesService } from '../../services/countries.service';
+import { EventsService, Category } from '../../services/events.service';
 
 @Component({
   selector: 'app-lend-button',
@@ -30,6 +31,7 @@ export class LendButtonComponent implements OnInit {
     private web3Service: Web3Service,
     private civicService: CivicService,
     private countriesService: CountriesService,
+    private eventsService: EventsService,
     public dialog: MatDialog
   ) {}
 
@@ -59,6 +61,14 @@ export class LendButtonComponent implements OnInit {
 
     console.log('Try lend', await required, await balance);
     if (await balance < await required) {
+
+      this.eventsService.trackEvent(
+        'show-insufficient-funds-lend',
+        Category.Account,
+        'loan #' + this.loan.id,
+        await required
+      );
+
       this.showInsufficientFundsDialog(await required, await balance);
       return;
     }
@@ -69,6 +79,13 @@ export class LendButtonComponent implements OnInit {
     }
 
     const tx = await this.contractsService.lendLoan(this.loan);
+
+    this.eventsService.trackEvent(
+      'lend',
+      Category.Account,
+      'loan #' + this.loan.id
+    );
+
     this.txService.registerLendTx(this.loan, tx);
     this.pendingTx = this.txService.getLastLend(this.loan);
   }
@@ -85,20 +102,16 @@ export class LendButtonComponent implements OnInit {
 
   clickLend() {
     if (this.pendingTx === undefined) {
+      this.eventsService.trackEvent(
+        'click-lend',
+        Category.Loan,
+        'loan #' + this.loan.id
+      );
+
       this.handleLend();
     } else {
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }
-  }
-
-  sendEvent = () => {
-    (<any>window).ga('send', {
-      hitType: 'event',
-      eventCategory: 'Transaction',
-      eventAction: 'lend',
-      eventLabel: this.loan.currency,
-      eventValue: this.loan.amount
-    });
   }
 
   retrievePendingTx() {
