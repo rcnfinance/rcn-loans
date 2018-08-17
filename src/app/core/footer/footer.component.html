@@ -3,29 +3,29 @@
     <ul>
       <li routerLink='/requests'
         [ngClass]="{'active': id === 0 }"
-        (click)='addClass(clickedId=0); newTitle(clickedTitle=0); navmobileClose();'>
+        (click)='addClass(0); newTitle(0); navmobileClose();'>
         <i class="fas fa-coins"></i>
         <div class="available-loans">{{ available }}</div>
       </li>
       <li routerLink='/activity'
         [ngClass]="{'active': id === 1 }"
-        (click)='addClass(clickedId=1); newTitle(clickedTitle=1); navmobileClose();'>
+        (click)='addClass(1); newTitle(1); navmobileClose();'>
         <i class="fas fa-wallet"></i>
         <div class="available-loans">{{ available }}</div>
       </li>
       <li routerLink='/address/{{ account }}/'
         [ngClass]="{'active': id === 2 }"
-        (click)='addClass(clickedId=2); newTitle(clickedTitle=2); navmobileClose();'
+        (click)='addClass(2); newTitle(2); navmobileClose();'
         *ngIf="hasAccount">
         <i class="fas fa-exchange-alt"></i>
         <div class="available-loans">{{ available }}</div>
       </li>
       <li [ngClass]="{'active': id === 4 }"
-        (click)='addClass(clickedId=4); newTitle(clickedTitle=4); navmobileClose(); openDialogClient()'
+        (click)='addClass(4); newTitle(4); navmobileClose(); openDialogClient()'
         *ngIf="!hasAccount">
         <i class="fas fa-user-circle"></i>
       </li>
-      <li [ngClass]="{'active': id === 3 }" (click)='addClass(clickedId=3); newTitle(clickedTitle=3); navmobileToggle()'>
+      <li [ngClass]="{'active': id === 3 }" (click)='addClass(3); newTitle(3); navmobileToggle()'>
         <button type="button"
           class="nav-toggle">
           <span class="icon-bar"></span>
