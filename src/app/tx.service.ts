@@ -7,8 +7,9 @@ import { Injectable } from '@angular/core';
 import { Loan } from './models/loan.model';
 import { TypeCheckCompiler } from '@angular/compiler/src/view_compiler/type_check_compiler';
 import { Web3Service } from './services/web3.service';
+import { EventsService, Category } from './services/events.service';
 
-enum Type { lend, approve, withdraw, transfer, claim }
+enum Type { lend = 'lend', approve = 'approve', withdraw = 'withdraw', transfer = 'transfer', claim = 'claim' }
 
 export class Tx {
   tx: string;
@@ -43,7 +44,8 @@ export class TxService {
   private interval: any;
 
   constructor(
-    private web3service: Web3Service
+    private web3service: Web3Service,
+    private eventsService: EventsService
   ) {
     this.localStorage = window.localStorage;
     this.tx_memory = this.readTxs();
@@ -63,6 +65,12 @@ export class TxService {
         this.web3service.web3reader.eth.getTransactionReceipt(tx.tx, (err, receipt) => {
           if (receipt !== null) {
             console.log('Found receipt tx', tx, receipt);
+            this.eventsService.trackEvent(
+              'confirmed-transaction-' + tx.type,
+              Category.Transaction,
+              tx.tx,
+              0, true
+            );
             tx.confirmed = true;
             this.saveTxs();
           }
