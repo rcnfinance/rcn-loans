@@ -36,7 +36,7 @@
       @extend %font-bold;
       @extend %absolute-center-top;
     }
-    ul.nav{ li{ @extend %font-bold; } }
+    ul.nav{ display: none; li{ @extend %font-bold; } }
     .icon-hamburguer{
       cursor: pointer;
       font-size: 32px;
