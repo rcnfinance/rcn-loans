@@ -16,12 +16,12 @@ export class EventsService {
     nonInteraction: boolean = false,
   ) {
     // GA Tracking
-    console.log('Sent event', category, label, action, value, nonInteraction);
-    (<any>window).ga('send', {
-      hitType: 'event',
+    (<any>window).ga('send', 'event', {
       eventCategory: category,
       eventLabel: label,
-      eventAction: action
+      eventAction: action,
+      eventValue: value,
+      nonInteraction: nonInteraction
     });
   }
 }
