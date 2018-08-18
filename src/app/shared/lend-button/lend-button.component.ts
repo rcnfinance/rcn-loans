@@ -25,6 +25,7 @@ export class LendButtonComponent implements OnInit {
   pendingTx: Tx = undefined;
   account: string;
   lendEnabled: Boolean;
+  opPending = false;
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
@@ -45,9 +46,11 @@ export class LendButtonComponent implements OnInit {
     });
   }
 
-  async handleLend() {
+  async handleLend(forze = false) {
     // TODO Handle user not logged in
+    if (this.opPending && !forze) { return; }
     if (this.account === undefined || !this.lendEnabled) { return; }
+    this.startOperation();
 
     const engineApproved = this.contractsService.isEngineApproved();
     const civicApproved = this.civicService.status();
@@ -88,6 +91,22 @@ export class LendButtonComponent implements OnInit {
 
     this.txService.registerLendTx(this.loan, tx);
     this.pendingTx = this.txService.getLastLend(this.loan);
+    this.finishOperation();
+  }
+
+  finishOperation() {
+    console.log('Lend finished');
+    this.opPending = false;
+  }
+
+  startOperation() {
+    console.log('Started lending');
+    this.opPending = true;
+  }
+
+  cancelOperation() {
+    console.log('Cancel lend');
+    this.opPending = false;
   }
 
   showApproveDialog() {
@@ -95,7 +114,9 @@ export class LendButtonComponent implements OnInit {
     dialogRef.componentInstance.autoClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.handleLend();
+        this.handleLend(true);
+      } else {
+        this.cancelOperation();
       }
     });
   }
@@ -124,7 +145,9 @@ export class LendButtonComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.handleLend();
+        this.handleLend(true);
+      } else {
+        this.cancelOperation();
       }
     });
   }
@@ -134,11 +157,7 @@ export class LendButtonComponent implements OnInit {
       required: required,
       balance: funds
     }});
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.handleLend();
-      }
-    });
+    this.cancelOperation();
   }
 
   get enabled(): Boolean {
