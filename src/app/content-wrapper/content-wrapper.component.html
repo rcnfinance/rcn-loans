@@ -1,4 +1,4 @@
-<div class="wrapper" [ngClass]="{'sidebar-toggled': navToggle , 'navmobile-toggled': navmobileToggled}" [style.min-height.px]="winHeight">
+<div class="wrapper" [ngClass]="{'sidebar-toggled': navToggle , 'navmobile-toggled': navmobileToggled}" [style.min-height.px]="winHeight - 56">
   <app-header></app-header>
   <div class="navmobile-menu">
     <div class="profile-container" *ngIf='hasAccount'>
@@ -37,7 +37,7 @@
       [opened]="navToggle"
       (closed)="onClose()"
       (opened)="onOpen()">
-      <div class="relative" [style.height.px]="winHeight">
+      <div class="relative" [style.height.px]="winHeight - 60">
         <div class="profile-container animation-opacity" *ngIf='hasAccount'>
           <div class="spacing-container-top" *ngIf='!hasAccount'></div>
           <div class="profile-row">

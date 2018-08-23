@@ -10,7 +10,7 @@ import { SharedModule } from '../../shared/shared.module';
 export class AvatarComponent {
   @Input() seed: string;
   @Input() size = 10;
-  @Input() scale = 4;
+  @Input() scale = 3;
   public getBlockiesOptions(): Object {
     return { // All options are optional
       seed: this.seed, // seed used to generate icon data, default: random

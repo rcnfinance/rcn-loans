@@ -15,6 +15,7 @@ export class ClaimButtonComponent implements OnInit {
   @Input() provider: CosignerProvider;
   liability: Promise<CosignerLiability>;
   pendingTx: string = undefined;
+  canClaim: Boolean;
   constructor(
     private txService: TxService
   ) { }
@@ -23,6 +24,7 @@ export class ClaimButtonComponent implements OnInit {
     this.liability.then((liability) => {
       const tx = this.txService.getLastPendingClaim(liability.contract, this.loan);
       if (tx !== undefined) { this.pendingTx = tx.tx; }
+      this.canClaim = liability.canClaim;
     });
   }
   claim() {
