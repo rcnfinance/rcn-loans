@@ -38,4 +38,11 @@ export class EventsService {
       nonInteraction: nonInteraction
     });
   }
+
+  public trackError(
+    error: Error
+  ) {
+    Raven.captureException(error);
+    console.log(error);
+  }
 }
