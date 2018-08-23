@@ -14,6 +14,7 @@ import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
+import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 
 @Component({
   selector: 'app-lend-button',
@@ -91,6 +92,15 @@ export class LendButtonComponent implements OnInit {
       this.txService.registerLendTx(this.loan, tx);
       this.pendingTx = this.txService.getLastLend(this.loan);
     } catch (e) {
+      // Don't show 'User denied transaction signature' error
+      if (e.message.indexOf('User denied transaction signature') < 0) {
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: {
+            title: 'Ups! Something went wrong',
+            content: e.message
+          }
+        });
+      }
       console.log(e);
     } finally {
       this.finishOperation();
