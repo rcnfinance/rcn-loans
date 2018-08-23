@@ -47,7 +47,7 @@
           <div class="value flex-col">{{ datapoint.value }}</div>
         </div>
 
-        <div class="property-wrapper flex-row">
+        <div class="property-wrapper flex-row" *ngIf="event.commit.proof !== null">
           <div class="property flex-col">Transaction</div>
           <div class="space flex-col"></div>
           <a class="value flex-col" [href]="explorerTx.replace('${tx}', event.commit.proof)" target="_blank">{{ event.commit.proof }}</a>
