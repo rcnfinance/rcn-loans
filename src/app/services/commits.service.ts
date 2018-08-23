@@ -3,15 +3,15 @@ import { Http, Response } from '@angular/http';
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
 import { Commit} from '../models/commit.model';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class CommitsService {
-  configUrl = 'https://testnet.rnode.rcn.loans/v1/loans/';
 
   constructor(private http: Http) {}
 
   getCommits(id) { // Get() all Commits[] from API by :id
-    return this.http.get(this.configUrl + id)
+    return this.http.get(environment.rcn_node.loan.replace('$id', id))
       .map((response: Response) => {
         const data = response.json();
         const commits$ = data.content.commits
