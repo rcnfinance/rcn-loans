@@ -95,10 +95,7 @@ export class LendButtonComponent implements OnInit {
       // Don't show 'User denied transaction signature' error
       if (e.message.indexOf('User denied transaction signature') < 0) {
         this.dialog.open(DialogGenericErrorComponent, {
-          data: {
-            title: 'Ups! Something went wrong',
-            content: e.message
-          }
+          data: { error: e }
         });
       }
       console.log(e);

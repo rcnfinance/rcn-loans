@@ -11,15 +11,13 @@ import { Web3Service } from '../../services/web3.service';
 })
 export class DialogGenericErrorComponent implements OnInit {
 
-  title: string;
-  content: string;
+  error: Error;
 
   constructor(
     public dialogRef: MatDialogRef<DialogGenericErrorComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
-    this.title = data.title;
-    this.content = data.content;
+    this.error = data.error;
   }
 
   ngOnInit() {
