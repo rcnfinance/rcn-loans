@@ -8,6 +8,7 @@ import { environment } from '../../../../environments/environment';
 import { Utils } from '../../../utils/utils';
 
 import { DatePipe } from '@angular/common';
+import { EventsService } from '../../../services/events.service';
 
 class DataEntry {
   constructor(
@@ -147,7 +148,8 @@ export class TransactionHistoryComponent implements OnInit {
   };
 
   constructor(
-    private commitsService: CommitsService
+    private commitsService: CommitsService,
+    private eventsService: EventsService
   ) { }
 
   private filterCommit(commit: Commit): boolean {
@@ -222,21 +224,17 @@ export class TransactionHistoryComponent implements OnInit {
     this.oDataTable = this.populate_table_data(i);
   }
 
-  private loadCommits(id: number) { // Load get() API commits from the DB by id
-    this.commitsService.getCommits(id)
-      .subscribe(
-        (commits) => { this.commits$ = commits; },
-        err => console.error(err),
-        () => {
-          console.log('SUCCESS: Commits[] have been Loaded!', this.commits$);
-          this.oTimeline = this.load_timeEvents(this.commits$); // Build timeline with every commit event of the Loan
-
-          this.oDataTable = this.populate_table_data(this.id); // Render TableComponent Data by id
-        }
-      );
+  async loadCommits(id: number) { // Load get() API commits from the DB by id
+    try {
+      const commits = await this.commitsService.getCommits(id);
+      this.oTimeline = this.load_timeEvents(commits);
+      this.oDataTable = this.populate_table_data(this.id);
+    } catch (e) {
+      this.eventsService.trackError(e);
+    }
   }
 
   ngOnInit() {
-    const response$ = this.loadCommits(this.loan.id);
+    this.loadCommits(this.loan.id);
   }
 }
