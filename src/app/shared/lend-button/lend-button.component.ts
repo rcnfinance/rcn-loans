@@ -52,20 +52,18 @@ export class LendButtonComponent implements OnInit {
     if (this.account === undefined || !this.lendEnabled) { return; }
     this.startOperation();
 
-    const engineApproved = this.contractsService.isEngineApproved();
-    const civicApproved = this.civicService.status();
-    const balance = this.contractsService.getUserBalanceRCNWei();
-    const required = this.contractsService.estimateRequiredAmount(this.loan);
-
-    if (!await engineApproved) {
-      this.showApproveDialog();
-      return;
-    }
-
-    console.log('Try lend', await required, await balance);
     try {
-      if (await balance < await required) {
+      const engineApproved = this.contractsService.isEngineApproved();
+      const civicApproved = this.civicService.status();
+      const balance = this.contractsService.getUserBalanceRCNWei();
+      const required = this.contractsService.estimateRequiredAmount(this.loan);
+      if (!await engineApproved) {
+        this.showApproveDialog();
+        return;
+      }
 
+      console.log('Try lend', await required, await balance);
+      if (await balance < await required) {
         this.eventsService.trackEvent(
           'show-insufficient-funds-lend',
           Category.Account,
