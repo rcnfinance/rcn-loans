@@ -15,6 +15,7 @@ import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insuffic
 import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
+import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 
 @Component({
   selector: 'app-lend-button',
@@ -48,9 +49,20 @@ export class LendButtonComponent implements OnInit {
   }
 
   async handleLend(forze = false) {
-    // TODO Handle user not logged in
     if (this.opPending && !forze) { return; }
-    if (this.account === undefined || !this.lendEnabled) { return; }
+
+    if (this.account === undefined) {
+      this.dialog.open(DialogClientAccountComponent);
+      return;
+    }
+
+    if (!this.lendEnabled) {
+      this.dialog.open(DialogGenericErrorComponent, { data: {
+        error: new Error('Lending is not enabled in this region')
+      }});
+      return;
+    }
+
     this.startOperation();
 
     try {
