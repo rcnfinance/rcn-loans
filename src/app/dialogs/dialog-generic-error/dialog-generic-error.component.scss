@@ -1,0 +1,69 @@
+@import '../../../scss/_variables.scss'; //variables
+
+//Dialog Client
+.dialog-padding{
+  padding: 30px 15px;
+  text-align: center;
+}
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
+a {
+  color: white;
+  text-decoration: underline;
+}
+.icon {
+  font-size: 1.3em;
+  color: gray;
+}
+.navbar-container {
+  height: 70px;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #333333;
+  .creator-container {
+    .creator-title{
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      color: $fifth;
+      font-size: 22px;
+      text-align: center;
+      padding: 0 15px;
+      @extend %font-black;
+      @include transform(translate(-50%, -50%));
+    }
+  }
+}
+.img-container{
+  text-align: center;
+  margin-top: 20px;
+  img{
+    height: 150px;
+    margin: 0 auto;
+  }
+}
+svg{
+  font-size: 3.5em;
+}
+
+@media (min-width: 768px){
+  svg{
+    font-size: 5em;
+  }
+  .dialog-padding{
+    padding: 30px;
+  }
+  .navbar-container {
+    height: 100px;
+    .creator-container {
+      .creator-title{
+        font-size: 36px;
+      }
+    }
+  }
+}

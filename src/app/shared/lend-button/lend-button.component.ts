@@ -14,6 +14,8 @@ import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
+import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
+import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 
 @Component({
   selector: 'app-lend-button',
@@ -25,6 +27,7 @@ export class LendButtonComponent implements OnInit {
   pendingTx: Tx = undefined;
   account: string;
   lendEnabled: Boolean;
+  opPending = false;
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
@@ -45,49 +48,87 @@ export class LendButtonComponent implements OnInit {
     });
   }
 
-  async handleLend() {
-    // TODO Handle user not logged in
-    if (this.account === undefined || !this.lendEnabled) { return; }
+  async handleLend(forze = false) {
+    if (this.opPending && !forze) { return; }
 
-    const engineApproved = this.contractsService.isEngineApproved();
-    const civicApproved = this.civicService.status();
-    const balance = this.contractsService.getUserBalanceRCNWei();
-    const required = this.contractsService.estimateRequiredAmount(this.loan);
-
-    if (!await engineApproved) {
-      this.showApproveDialog();
+    if (this.account === undefined) {
+      this.dialog.open(DialogClientAccountComponent);
       return;
     }
 
-    console.log('Try lend', await required, await balance);
-    if (await balance < await required) {
+    if (!this.lendEnabled) {
+      this.dialog.open(DialogGenericErrorComponent, { data: {
+        error: new Error('Lending is not enabled in this region')
+      }});
+      return;
+    }
+
+    this.startOperation();
+
+    try {
+      const engineApproved = this.contractsService.isEngineApproved();
+      const civicApproved = this.civicService.status();
+      const balance = this.contractsService.getUserBalanceRCNWei();
+      const required = this.contractsService.estimateRequiredAmount(this.loan);
+      if (!await engineApproved) {
+        this.showApproveDialog();
+        return;
+      }
+
+      console.log('Try lend', await required, await balance);
+      if (await balance < await required) {
+        this.eventsService.trackEvent(
+          'show-insufficient-funds-lend',
+          Category.Account,
+          'loan #' + this.loan.id,
+          await required
+        );
+
+        this.showInsufficientFundsDialog(await required, await balance);
+        return;
+      }
+
+      if (!await civicApproved) {
+        this.showCivicDialog();
+        return;
+      }
+
+      const tx = await this.contractsService.lendLoan(this.loan);
 
       this.eventsService.trackEvent(
-        'show-insufficient-funds-lend',
+        'lend',
         Category.Account,
-        'loan #' + this.loan.id,
-        await required
+        'loan #' + this.loan.id
       );
 
-      this.showInsufficientFundsDialog(await required, await balance);
-      return;
+      this.txService.registerLendTx(this.loan, tx);
+      this.pendingTx = this.txService.getLastLend(this.loan);
+    } catch (e) {
+      // Don't show 'User denied transaction signature' error
+      if (e.message.indexOf('User denied transaction signature') < 0) {
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: { error: e }
+        });
+      }
+      console.log(e);
+    } finally {
+      this.finishOperation();
     }
+  }
 
-    if (!await civicApproved) {
-      this.showCivicDialog();
-      return;
-    }
+  finishOperation() {
+    console.log('Lend finished');
+    this.opPending = false;
+  }
 
-    const tx = await this.contractsService.lendLoan(this.loan);
+  startOperation() {
+    console.log('Started lending');
+    this.opPending = true;
+  }
 
-    this.eventsService.trackEvent(
-      'lend',
-      Category.Account,
-      'loan #' + this.loan.id
-    );
-
-    this.txService.registerLendTx(this.loan, tx);
-    this.pendingTx = this.txService.getLastLend(this.loan);
+  cancelOperation() {
+    console.log('Cancel lend');
+    this.opPending = false;
   }
 
   showApproveDialog() {
@@ -95,7 +136,9 @@ export class LendButtonComponent implements OnInit {
     dialogRef.componentInstance.autoClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.handleLend();
+        this.handleLend(true);
+      } else {
+        this.cancelOperation();
       }
     });
   }
@@ -124,7 +167,9 @@ export class LendButtonComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.handleLend();
+        this.handleLend(true);
+      } else {
+        this.cancelOperation();
       }
     });
   }
@@ -134,11 +179,7 @@ export class LendButtonComponent implements OnInit {
       required: required,
       balance: funds
     }});
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.handleLend();
-      }
-    });
+    this.cancelOperation();
   }
 
   get enabled(): Boolean {
