@@ -63,35 +63,40 @@ export class LendButtonComponent implements OnInit {
     }
 
     console.log('Try lend', await required, await balance);
-    if (await balance < await required) {
+    try {
+      if (await balance < await required) {
+
+        this.eventsService.trackEvent(
+          'show-insufficient-funds-lend',
+          Category.Account,
+          'loan #' + this.loan.id,
+          await required
+        );
+
+        this.showInsufficientFundsDialog(await required, await balance);
+        return;
+      }
+
+      if (!await civicApproved) {
+        this.showCivicDialog();
+        return;
+      }
+
+      const tx = await this.contractsService.lendLoan(this.loan);
 
       this.eventsService.trackEvent(
-        'show-insufficient-funds-lend',
+        'lend',
         Category.Account,
-        'loan #' + this.loan.id,
-        await required
+        'loan #' + this.loan.id
       );
 
-      this.showInsufficientFundsDialog(await required, await balance);
-      return;
+      this.txService.registerLendTx(this.loan, tx);
+      this.pendingTx = this.txService.getLastLend(this.loan);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.finishOperation();
     }
-
-    if (!await civicApproved) {
-      this.showCivicDialog();
-      return;
-    }
-
-    const tx = await this.contractsService.lendLoan(this.loan);
-
-    this.eventsService.trackEvent(
-      'lend',
-      Category.Account,
-      'loan #' + this.loan.id
-    );
-
-    this.txService.registerLendTx(this.loan, tx);
-    this.pendingTx = this.txService.getLastLend(this.loan);
-    this.finishOperation();
   }
 
   finishOperation() {
