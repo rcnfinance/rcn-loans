@@ -12,8 +12,7 @@ import { EventsService, Category } from '../../services/events.service';
 
 @Component({
   selector: 'app-transfer-button',
-  templateUrl: './transfer-button.component.html',
-  styleUrls: ['./transfer-button.component.scss']
+  templateUrl: './transfer-button.component.html'
 })
 export class TransferButtonComponent implements OnInit {
   @Input() loan: Loan;

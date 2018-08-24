@@ -2,12 +2,12 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col" *ngFor='let item of data;'>{{ item[0] }}</th>
+        <th scope="col" *ngFor='let title of data[0]'>{{ title }}</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td *ngFor='let item of data;'>{{ item[1] }}</td>
+        <td *ngFor='let value of data[1]'>{{ value }}</td>
       </tr>
     </tbody>
   </table>
