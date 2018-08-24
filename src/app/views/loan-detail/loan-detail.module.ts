@@ -41,7 +41,6 @@ import { TransactionHistoryComponent } from './transaction-history/transaction-h
     DetailTableComponent,
     DetailIdentityComponent,
     DetailCosignerComponent,
-
     DecentralandMapComponent,
     DecentralandCosignerComponent,
     TransactionHistoryComponent,

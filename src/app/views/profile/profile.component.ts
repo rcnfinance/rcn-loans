@@ -66,7 +66,7 @@ export class ProfileComponent implements OnInit {
 
   loadWithdrawBalance() {
     this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
-      // console.log(result);
+      console.log(result);
       this.weiAvailable = result[0];
       this.loansWithBalance = result[1];
     });
