@@ -100,7 +100,7 @@ export class RavenErrorHandler implements ErrorHandler {
     NotFoundModule,
     LoanDetailModule,
   ],
-  exports: [],
+  exports: [NotFoundModule],
   entryComponents: [
     DialogApproveContractComponent,
     DialogLoanTransferComponent,
