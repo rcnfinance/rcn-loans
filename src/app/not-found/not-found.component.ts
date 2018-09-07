@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./not-found.component.scss']
 })
 export class NotFoundComponent implements OnInit {
-  winHeight: any = window.innerHeight - 111;
+  winHeight: any = window.innerHeight - 118;
 
   constructor() { }
 
