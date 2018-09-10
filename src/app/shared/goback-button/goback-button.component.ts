@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 @Component({
@@ -10,7 +9,6 @@ import { Location } from '@angular/common';
 export class GobackButtonComponent {
 
   constructor(
-    private router: Router,
     private location: Location
   ) {}
 
