@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-goback-button',
@@ -10,13 +11,10 @@ export class GobackButtonComponent {
 
   constructor(
     private router: Router,
+    private location: Location
   ) {}
 
   handleGoback() {
-    this.router.navigate(['/', 'requests']).then(nav => {
-      console.log(nav); // true if navigation is successful
-    }, err => {
-      console.log(err); // when there's an error
-    });
+    this.location.back();
   }
 }
