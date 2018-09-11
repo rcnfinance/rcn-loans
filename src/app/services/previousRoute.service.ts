@@ -23,14 +23,9 @@ export class PreviousRouteService {
 
   public redirectHandler() {
     const previousUrl: string = this.getPreviousUrl();
-    if (previousUrl.includes('rcn.loans')) {
-      this.location.back();
-      console.log('You came from local testnet or mainnet' + previousUrl);
-
-    } else if (previousUrl.includes('localhost')) {
+    if (previousUrl.includes('rcn.loans') || previousUrl.includes('localhost')) {
       this.location.back();
       console.log('You came from local ' + previousUrl);
-
     } else {
       console.log('You came from external ' + previousUrl);
       this.router.navigate(['/', 'requests']).then(err => {
