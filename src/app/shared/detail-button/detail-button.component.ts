@@ -15,9 +15,7 @@ export class DetailButtonComponent {
   constructor(private router: Router, public snackBar: MatSnackBar) { }
 
   handleDetail() {
-    this.router.navigate(['/loan/', this.loan.id]).then(nav => {
-      // console.log(nav); // true if navigation is successful
-    }, err => {
+    this.router.navigate(['/loan/', this.loan.id]).then(err => {
       console.log(err); // when there's an error
     });
   }
