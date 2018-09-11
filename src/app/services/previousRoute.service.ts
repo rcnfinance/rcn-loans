@@ -23,14 +23,17 @@ export class PreviousRouteService {
 
   public redirectHandler() {
     const previousUrl: string = this.getPreviousUrl();
-    if (previousUrl.includes('rcn.loans') || previousUrl.includes('localhost')) {
-      this.location.back();
-      console.log('You came from local ' + previousUrl);
-    } else {
+    if (!previousUrl) {
       console.log('You came from external ' + previousUrl);
       this.router.navigate(['/', 'requests']).then(err => {
         console.log(err); // when there's an error
       });
+    } else if (previousUrl && previousUrl.includes('rcn.loans') || previousUrl.includes('localhost')) {
+      this.location.back();
+      console.log('You came from local ' + previousUrl);
+    } else {
+      console.log(previousUrl);
+      console.log('not exist' + previousUrl);
     }
   }
 
