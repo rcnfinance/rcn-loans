@@ -10,6 +10,7 @@ import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
+import { PreviousRouteService } from '../../services/previousRoute.service';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -47,6 +48,7 @@ export class LoanDetailComponent implements OnInit {
     private router: Router,
     private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
+    private previousRouteService: PreviousRouteService
   ) {}
 
   private loadIdentity() {
@@ -134,5 +136,6 @@ export class LoanDetailComponent implements OnInit {
         this.router.navigate(['/404/'])
       );
     });
+
   }
 }

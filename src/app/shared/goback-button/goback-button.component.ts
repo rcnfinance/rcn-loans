@@ -1,18 +1,21 @@
-import { Component, Input } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { PreviousRouteService } from '../../services/previousRoute.service';
 
 @Component({
   selector: 'app-goback-button',
   templateUrl: './goback-button.component.html',
   styleUrls: ['./goback-button.component.scss']
 })
-export class GobackButtonComponent {
 
+export class GobackButtonComponent implements OnInit {
   constructor(
-    private location: Location
+    private previousRouteService: PreviousRouteService
   ) {}
 
-  handleGoback() {
-    this.location.back();
+  public handleGoback() {
+    this.previousRouteService.redirectHandler();
   }
+
+  ngOnInit() {}
+
 }
