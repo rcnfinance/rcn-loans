@@ -5,7 +5,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { CommitsService } from './../../services/commits.service';
-import { PreviousRouteService } from './../../services/previousRoute.service';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Modules
@@ -36,7 +35,6 @@ import { TransactionHistoryComponent } from './transaction-history/transaction-h
     CosignerService,
     NgxSpinnerService,
     CommitsService,
-    PreviousRouteService
   ],
   declarations: [
     LoanDetailComponent,
