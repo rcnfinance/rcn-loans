@@ -115,7 +115,8 @@ export class LendButtonComponent implements OnInit {
 
   finishOperation() {
     console.log('Lend finished');
-    this.openSnackBar('Your transaction has finnished', '');
+    // this.openSnackBar('Your transaction has finnished', '');
+    this.openSnackBar('Your transaction has finnished', 'asd');
     this.opPending = false;
   }
 
@@ -199,7 +200,7 @@ export class LendButtonComponent implements OnInit {
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message , action, {
-      duration: 4000,
+      duration: 40000,
       horizontalPosition: this.horizontalPosition,
     });
   }
