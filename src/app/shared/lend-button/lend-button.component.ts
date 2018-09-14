@@ -46,7 +46,7 @@ export class LendButtonComponent implements OnInit {
     private countriesService: CountriesService,
     private eventsService: EventsService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,
+    public snackBar: MatSnackBar
   ) {}
 
   async handleLend(forze = false) {
@@ -119,13 +119,12 @@ export class LendButtonComponent implements OnInit {
 
   finishOperation() {
     console.log('Lend finished');
-    this.openSnackBar('Your transaction has finnished', '');
     this.opPending = false;
   }
 
   startOperation() {
     console.log('Started lending');
-    this.openSnackBar('Your transaction is being processed', '');
+    this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
     this.opPending = true;
   }
 
