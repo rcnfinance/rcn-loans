@@ -1,11 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Loan } from './../../models/loan.model';
+import {
+  Component,
+  Input,
+  OnInit
+} from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
   MatSnackBar,
   MatSnackBarHorizontalPosition,
 } from '@angular/material';
+import { Loan } from './../../models/loan.model';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
@@ -42,7 +46,7 @@ export class LendButtonComponent implements OnInit {
     private countriesService: CountriesService,
     private eventsService: EventsService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
   ) {}
 
   async handleLend(forze = false) {
@@ -115,8 +119,7 @@ export class LendButtonComponent implements OnInit {
 
   finishOperation() {
     console.log('Lend finished');
-    // this.openSnackBar('Your transaction has finnished', '');
-    this.openSnackBar('Your transaction has finnished', 'asd');
+    this.openSnackBar('Your transaction has finnished', '');
     this.opPending = false;
   }
 
@@ -200,7 +203,7 @@ export class LendButtonComponent implements OnInit {
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message , action, {
-      duration: 40000,
+      duration: 4000,
       horizontalPosition: this.horizontalPosition,
     });
   }
