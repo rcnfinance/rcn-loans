@@ -1,6 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Loan } from './../../models/loan.model';
-import { MatDialog, MatDialogRef, MatSnackBar, MatSnackBarRef } from '@angular/material';
+import {
+  MatDialog,
+  MatDialogRef,
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+} from '@angular/material';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
@@ -27,6 +32,8 @@ export class LendButtonComponent implements OnInit {
   account: string;
   lendEnabled: Boolean;
   opPending = false;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
@@ -108,17 +115,19 @@ export class LendButtonComponent implements OnInit {
 
   finishOperation() {
     console.log('Lend finished');
+    this.openSnackBar('Your transaction has finnished', '');
     this.opPending = false;
-    this.openSnackBar('Lend finished', 'ACTION');
   }
 
   startOperation() {
     console.log('Started lending');
+    this.openSnackBar('Your transaction is being processed', '');
     this.opPending = true;
   }
 
   cancelOperation() {
     console.log('Cancel lend');
+    this.openSnackBar('Your transaction has failed', '');
     this.opPending = false;
   }
 
@@ -191,6 +200,7 @@ export class LendButtonComponent implements OnInit {
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message , action, {
       duration: 4000,
+      horizontalPosition: this.horizontalPosition,
     });
   }
 
