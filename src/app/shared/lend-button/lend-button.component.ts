@@ -1,7 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MaterialModule } from './../../material/material.module';
+import {
+  Component,
+  Input,
+  OnInit
+} from '@angular/core';
+import {
+  MatDialog,
+  MatDialogRef,
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+} from '@angular/material';
 import { Loan } from './../../models/loan.model';
-import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
@@ -28,6 +36,8 @@ export class LendButtonComponent implements OnInit {
   account: string;
   lendEnabled: Boolean;
   opPending = false;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
@@ -35,18 +45,9 @@ export class LendButtonComponent implements OnInit {
     private civicService: CivicService,
     private countriesService: CountriesService,
     private eventsService: EventsService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar
   ) {}
-
-  ngOnInit() {
-    this.retrievePendingTx();
-    this.web3Service.getAccount().then((account) => {
-      this.account = account;
-    });
-    this.countriesService.lendEnabled().then((lendEnabled) => {
-      this.lendEnabled = lendEnabled;
-    });
-  }
 
   async handleLend(forze = false) {
     if (this.opPending && !forze) { return; }
@@ -123,11 +124,13 @@ export class LendButtonComponent implements OnInit {
 
   startOperation() {
     console.log('Started lending');
+    this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
     this.opPending = true;
   }
 
   cancelOperation() {
     console.log('Cancel lend');
+    this.openSnackBar('Your transaction has failed', '');
     this.opPending = false;
   }
 
@@ -196,5 +199,24 @@ export class LendButtonComponent implements OnInit {
     }
     return 'Lending...';
   }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message , action, {
+      duration: 4000,
+      horizontalPosition: this.horizontalPosition,
+    });
+  }
+
+  ngOnInit() {
+    this.retrievePendingTx();
+    this.web3Service.getAccount().then((account) => {
+      this.account = account;
+    });
+    this.countriesService.lendEnabled().then((lendEnabled) => {
+      this.lendEnabled = lendEnabled;
+    });
+
+  }
+
 }
 

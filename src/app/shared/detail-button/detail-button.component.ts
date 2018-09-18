@@ -22,13 +22,6 @@ export class DetailButtonComponent {
       console.log(err); // when there's an error
     });
   }
-  /*
-  openSnackBar(message: any, action: any) {
-    this.snackBar.open(this.loan.amount , this.loan.borrowerShort, {
-      duration: 4000,
-    });
-  }
-  */
 }
 
 

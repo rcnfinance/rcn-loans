@@ -64,7 +64,7 @@ export class FooterComponent implements OnInit {
       this.sidebarService.navmobileService(this.navmobileToggled = true);
     }
   }
-  
+
   newTitle(clickedTitle) {
     this.lastTitle = this.title;
     this.title = clickedTitle;
