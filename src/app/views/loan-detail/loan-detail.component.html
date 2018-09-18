@@ -2,7 +2,7 @@
 
 <div class="container" *ngIf="loan !== undefined">
   <div class="row">
-    <div class="col-xs-12 loan-detail">
+    <div class="col-sm-12 loan-detail">
       <div class="row">
         <div class="navbar-container">
           <ul class="col-group x3">
@@ -17,12 +17,12 @@
             </li>
           </ul>
         </div>
-        <div class="col-xs-12 col-md-6 loan-description left">
+        <div class="col-sm-12 col-lg-6 loan-description left">
           <div class="row">
-            <div class="col-xs-6">
+            <div class="col-sm-6">
               <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
             </div>
-            <div class="col-xs-6">
+            <div class="col-sm-6">
               <div [ngClass]="['pull-right']">
                 <app-avatar-title [loan]=loan></app-avatar-title>
               </div>
@@ -98,7 +98,7 @@
             <app-risk-indicator class='risk-indicator' [loan]=loan [color]='white'></app-risk-indicator>
           </div>
         </div>
-        <div class="col-xs-12 col-md-6 loan-description right">
+        <div class="col-sm-12 col-lg-6 loan-description right">
           <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
           <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
         </div>
@@ -106,7 +106,7 @@
       
     </div>
 
-    <div class="col-xs-12">
+    <div class="col-sm-12">
       <div class="margintop40"></div>
       <div class="title main-h1">History</div>
       <app-transaction-history [loan]=loan></app-transaction-history>
