@@ -16,9 +16,11 @@ $material-icons-font-path: '~material-icons/iconfont/'; // Material Icons
 html {height: 0;}
 body{
   position: relative;
+  font-size: 14px;
+  line-height: 1.42857143;
   font-family: 'Raleway', sans-serif;
-  background-color: $tertiary;
   color: $secondary;
+  background-color: $tertiary;
 }
 
 //TABS
