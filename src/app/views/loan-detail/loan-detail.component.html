@@ -1,7 +1,8 @@
 <ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
-<div class="container">
+
+<div class="container" *ngIf="loan !== undefined">
   <div class="row">
-    <div class="col-xs-12 loan-detail" *ngIf="loan !== undefined">
+    <div class="col-xs-12 loan-detail">
       <div class="row">
         <div class="navbar-container">
           <ul class="col-group x3">
@@ -10,6 +11,9 @@
             </li>
             <li class="col-item">
               <app-creator-container [loan]=loan></app-creator-container>
+            </li>
+            <li class="col-item">
+              <app-button-group (view)="openDetail($event)" [viewDetail]=viewDetail></app-button-group>
             </li>
           </ul>
         </div>
@@ -93,21 +97,19 @@
             <app-lend-button [loan]=loan></app-lend-button>
             <app-risk-indicator class='risk-indicator' [loan]=loan [color]='white'></app-risk-indicator>
           </div>
-          
-          <div>
-            <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
-            <!-- <app-pay-button></app-pay-button>
-            <app-forgive-button></app-forgive-button> -->
-          </div>
         </div>
         <div class="col-xs-12 col-md-6 loan-description right">
           <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
           <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
-          <app-transaction-history *ngIf="isDetail('transaction')"></app-transaction-history>
         </div>
       </div>
+      
+    </div>
+
+    <div class="col-xs-12">
+      <div class="margintop40"></div>
+      <div class="title main-h1">History</div>
+      <app-transaction-history [loan]=loan></app-transaction-history>
     </div>
   </div>
-  <div class="margintop160 visible-xs"></div>
-  <div class="margintop130 hidden-xs"></div>
 </div>

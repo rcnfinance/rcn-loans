@@ -1,9 +1,8 @@
-import { Component, OnInit, isDevMode} from '@angular/core';
-import { environment } from '../environments/environment';
+import * as Raven from 'raven-js';
 
-// App Component
-import { SharedModule } from './shared/shared.module';
-import { MaterialModule } from './material/material.module';
+import { Component, OnInit, isDevMode} from '@angular/core';
+import { Router, NavigationEnd } from '../../node_modules/@angular/router';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +12,18 @@ import { MaterialModule } from './material/material.module';
 export class AppComponent implements OnInit {
   title = 'app';
   environmentName: any = environment.envName;
-  constructor() {
-    // console.log(this.animal);
-  }
+  constructor(private router: Router) {}
   ngOnInit(): void {
-    // if (isDevMode()) {console.log('👋 Development!'); } else {console.log('💪 Production!'); }
+    (<any>window).ga('create', environment.gaTracking, 'auto');
+    this.router.events.subscribe(event => {
+      try {
+        if (event instanceof NavigationEnd) {
+          (<any>window).ga('set', 'page', event.urlAfterRedirects);
+          (<any>window).ga('send', 'pageview');
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    });
   }
 }

@@ -15,7 +15,7 @@ export class CivicService {
 
   signupCivic(): Promise<string> {
     return new Promise((resolve) => {
-      this.civicSip.signup({ style: 'popup', scopeRequest: this.civicSip.ScopeRequests.BASIC_SIGNUP });
+      this.civicSip.signup({scopeRequest: this.civicSip.ScopeRequests.BASIC_SIGNUP });
       this.civicSip.on('auth-code-received', function (event) {
         const jwtToken = event.response;
         resolve(jwtToken);

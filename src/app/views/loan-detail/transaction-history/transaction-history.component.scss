@@ -2,34 +2,82 @@
 
 .transaction-component{
   .timeline{
+    margin-top: 30px;
     margin-left: -15px;
     margin-right: -15px;
+    .timeline-table{
+      padding-left: 15px;
+      padding-right: 15px;
+    }
     .time-event{
-      width: 100%;
-      cursor: pointer;
       position: relative;
-      height: 70px;
-      padding: 25px 0 25px 70px;
-      @include transition();
-      .title{
-        font-size: 18px;
-        color: $secondary;
-        display: inline-block;
-        left: 110px;
-        @extend %font-bold;
-        @extend %absolute-center-top;
+      padding: 20px 0;
+      color: $secondary;
+      .flex-row{
+        display: flex;
+        flex-flow: row wrap;
+        padding: 0px 15px;
+        .flex-col{
+          &:nth-child(1){
+            flex-basis: 20%;
+          }
+          &:nth-child(2){
+            flex-basis: 10%;
+          }
+          &:nth-child(3){
+            flex: 1;
+          }
+        }
       }
-      .icon-event {
+
+      .flex-row{
+        &.header-wrapper{
+          &:nth-child(2){
+            text-align: center;
+          }
+        }
+  
+        &.property-wrapper{
+          &:last-child{
+            padding-bottom: 10px;
+          }
+        }
+      }
+      
+      .line{
         position: absolute;
-        width: 40px;
-        height: 40px;
-        z-index: 99;
-        margin: 0 auto;
+        top: 4px;
+        height: 100%;
+        margin: 4px auto;
+        padding-right: 4%;
+        border-right: 4px solid #4155ff;
+      }
+
+      .event-title{
+        line-height: 2.2;
+        .title{
+          font-size: 18px;
+          text-align: left;
+          padding-left: 15px;
+          @extend %font-bold;
+        }
+      }
+      .fa-chevron-right {
+        display: none;
+        position: absolute;
+        top: 40px; 
+        right: 30px;
+        @include transition();
+        @include transform(translate(0%, -50%));
+      }
+
+      .icon-event {
+        position: relative;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
-        margin-left: -10px;
-        display: inline-block;
-        left: 70px;
-        top: 50%; @include transform(translate(0%, -50%));
+        margin: 0 auto;
+        @include transition();
         i{
           @extend %absolute-center;
         }
@@ -42,31 +90,42 @@
           color: #000;
         }
       }
-      .fa-chevron-right {
-        display: none;
-        position: absolute;
-        right: 30px;
-        @include transition();
-        top: 50%; @include transform(translate(0%, -50%));
-      }
       .circle{
-        position: absolute;
-        left: 70px;
+        position: relative;
         width: 20px;
         height: 20px;
         display: none;
         border-radius: 50%;
         border: 4px solid #333;
         background-color: #0f0f0f;
-      }
-      .line{
-        height: 50px;
-        width: 12px;
-        position: absolute;
-        top: -25px;
         z-index: 9;
-        border-right: 4px solid $primary;
+        margin-top: 8px;
+        @include transition();
+        transition-delay: .15s;
       }
+
+      .property,
+      .value{
+        display: inline-block;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        color: #fff;
+      }
+      .property{
+        white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
+        font-size: 13px;
+        color: #ffffff;
+        text-align: center;
+        @extend %font-thin;
+      }
+      .value{
+        flex: 1;
+        white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
+        font-size: 13px;
+        padding-left: 15px;
+        @extend %font-bold;
+      }
+
       &.background-active{
         background-color: $tertiary;
         .fa-chevron-right {
@@ -80,13 +139,42 @@
       }
       &.true{
         .circle{display: inline-block;}
-        .icon-event{position: absolute; left: 25px;}
-        .fa-chevron-right{display: block;}
+        .icon-event{position: absolute; left: 8%;}
+        .fa-chevron-right{display: inline-block;}
       }
       &:first-child,
       &:last-child{
         cursor: default;
+        padding-top: 0;
         background-color: transparent !important;
+      }
+      &:last-child{
+        .fa-chevron-right{
+          top: 20px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 768px){
+  .transaction-component{
+    .timeline{
+      .time-event{
+        .flex-row{
+          .flex-col{
+            .line{
+              padding-right: 4.5%;
+            }
+          }
+          a.value{
+            @include transition();
+            &:hover{ color: $primary !important; }
+          }
+        }
+        &.true{
+          .icon-event{left: 70px;}
+        }
       }
     }
   }
@@ -96,14 +184,38 @@
   .transaction-component{
     .timeline{
       .time-event{
-        cursor: pointer;
+        .flex-row{
+          padding: 0px;
+          .flex-col{
+            .line{
+              padding-right: 0%;
+              margin-left: 23px;
+            }
+
+            &.property,
+            &.space{ font-size: 14px; }
+
+            &:nth-child(1){
+              flex-basis: 90px;
+            }
+            &:nth-child(2){
+              flex-basis: 50px;
+            }
+
+          }
+        }
+        &.true{
+          .icon-event{left: 97px; z-index: 99;}
+        }
         &:hover{
-          background-color: $tertiary;
-          .fa-chevron-right {
-            right: 15px;
+          .fa-chevron-right { right: 15px; }
+          .circle{ background-color: $primary; }
+          &.true{
+            .icon-event{left: 28px;}
           }
         }
       }
     }
   }
 }
+

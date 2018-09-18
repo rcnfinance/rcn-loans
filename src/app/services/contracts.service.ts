@@ -9,6 +9,7 @@ import { CosignerService } from './cosigner.service';
 import { Utils } from '../utils/utils';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import BigNumber from 'bignumber.js';
+import { promisify } from './../utils/utils';
 
 declare let require: any;
 
@@ -95,7 +96,7 @@ export class ContractsService {
         }) as Promise<string>;
     }
 
-    public async dissaproveEngine(): Promise<string> {
+    public async disapproveEngine(): Promise<string> {
       const account = await this.web3.getAccount();
       const txService = this.txService;
       const rcnAddress = this._rcnContractAddress;
@@ -114,34 +115,25 @@ export class ContractsService {
     }
 
     public async estimateRequiredAmount(loan: Loan): Promise<number> {
-      let oracleData;
-      if (loan.oracle !== undefined) {
-        oracleData = await this.getOracleData(loan);
-      }
-
       // TODO: Calculate and add cost of the cosigner
-
-      return new Promise((resolve) => {
-        if (loan.oracle !== undefined) {
-          const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
-          oracle.getRate(loan.currency, oracleData, (err, result) => {
-            const rate = result[0];
-            const decimals = result[1];
-            console.log('Oracle rate obtained', rate, decimals);
-            const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
-            console.log('Estimated required rcn is', required);
-            resolve(required);
-          });
-        } else {
-          console.log('Loan has no oracle, the required is the raw amount', loan.rawAmount);
-          resolve(loan.rawAmount);
-        }
-      }) as Promise<number>;
+      if (loan.oracle === undefined) {
+        return loan.rawAmount;
+      } else {
+        const oracleData = await this.getOracleData(loan);
+        const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
+        const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
+        const rate = oracleRate[0];
+        const decimals = oracleRate[1];
+        console.log('Oracle rate obtained', rate, decimals);
+        const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+        console.log('Estimated required rcn is', required);
+        return required;
+      }
     }
 
     public async lendLoan(loan: Loan): Promise<string> {
         const account = await this.web3.getAccount();
-        const oracleData = await this.getOracleData(loan);
+        const pOracleData = this.getOracleData(loan);
 
         const cosigner = this.cosignerService.getCosigner(loan);
         let cosignerAddr = '0x0';
@@ -151,13 +143,15 @@ export class ContractsService {
           cosignerAddr = cosignerOffer.contract;
           cosignerData = cosignerOffer.lendData;
         }
-
+        const oracleData = await pOracleData;
+        console.log(oracleData, cosignerData, cosignerAddr);
         return new Promise((resolve, reject) => {
           this._rcnEngine.lend(loan.id, oracleData, cosignerAddr, cosignerData, { from: account }, function(err, result) {
             if (err != null) {
               reject(err);
+            } else {
+              resolve(result);
             }
-            resolve(result);
           });
         }) as Promise<string>;
     }
@@ -184,38 +178,28 @@ export class ContractsService {
         }) as Promise<string>;
     }
     public async getOracleData(loan: Loan): Promise<string> {
-      return new Promise((resolve) => {
-        if (loan.oracle === Utils.address_0) {
-          console.log('Loan has no oracle');
-          resolve('0x');
+      if (loan.oracle === Utils.address_0) {
+        return '0x';
+      } else {
+        const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
+        const url = await promisify(oracle.url.call, []);
+        if (url === '') { return '0x'; }
+        const oracleResponse = <any[]> await this.http.get(url).toPromise();
+        console.log('Searching currency', loan.currencyRaw, oracleResponse);
+        let data;
+        oracleResponse.forEach(e => {
+          console.log(e);
+          if (e.currency === loan.currencyRaw) {
+            data = e.data;
+            console.log('Oracle data found', data);
+          }
+        });
+        if (data === undefined) {
+          throw new Error('Oracle did not provide data');
         } else {
-          const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
-          oracle.url.call((err, url) => {
-            if (url === '') {
-              console.log('Oracle does not require data');
-              resolve('0x');
-            } else {
-              console.log('Oracle requires data from url', url);
-              this.http.get(url).subscribe((resp: any) => {
-                console.log('Searching currency', loan.currencyRaw);
-                let data;
-                resp.forEach(e => {
-                  if (e.currency === loan.currencyRaw) {
-                    console.log('Oracle data found', e.data);
-                    data = e.data;
-                    resolve(data);
-                    return;
-                  }
-                });
-                if (data === undefined) {
-                  console.log('Oracle did not provide data', resp);
-                  resolve('0x');
-                }
-              });
-            }
-          });
+          return data;
         }
-      }) as Promise<string>;
+      }
     }
     public async getLoan(id: number): Promise<Loan> {
       return new Promise((resolve, reject) => {
@@ -279,11 +263,11 @@ export class ContractsService {
     }
     public readPendingWithdraws(loans: Loan[]): [BigNumber, number[]] {
       const pendingLoans = [];
-      let total = new BigNumber(0);
+      let total = 0;
 
       loans.forEach(loan => {
         if (loan.lenderBalance > 0) {
-          total = total.add(new BigNumber(loan.lenderBalance));
+          total += loan.lenderBalance;
           pendingLoans.push(loan.id);
         }
       });

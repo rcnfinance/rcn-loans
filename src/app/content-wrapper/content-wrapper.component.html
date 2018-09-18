@@ -35,9 +35,9 @@
     <mat-sidenav #sidenav
       mode="over"
       [opened]="navToggle"
-      (close)="onClose()"
-      (open)="onOpen()">
-      <div class="relative" [style.height.px]="winHeight">
+      (closed)="onClose()"
+      (opened)="onOpen()">
+      <div class="relative" [style.height.px]="winHeight - 60">
         <div class="profile-container animation-opacity" *ngIf='hasAccount'>
           <div class="spacing-container-top" *ngIf='!hasAccount'></div>
           <div class="profile-row">

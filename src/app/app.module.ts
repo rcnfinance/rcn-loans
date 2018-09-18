@@ -1,6 +1,8 @@
+import * as Raven from 'raven-js';
+
 // Angular Core
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -25,6 +27,7 @@ import { CivicService } from './services/civic.service';
 import { SidebarService } from './services/sidebar.service';
 import { TitleService } from './services/title.service';
 import { AvailableLoansService } from './services/available-loans.service';
+import { CountriesService } from './services/countries.service';
 
 // App Directives
 import { FadeToggleDirective } from './directives/fade-toggle.directive';
@@ -43,13 +46,28 @@ import { ActiveLoansComponent } from './active-loans/active-loans.component';
 import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
 import { DialogLoanTransferComponent } from './dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
+import { DialogGenericErrorComponent } from './dialogs/dialog-generic-error/dialog-generic-error.component';
 
 import { ProfileComponent } from './views/profile/profile.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 
 // App Plugins
-import { NgxSpinnerModule } from 'ngx-spinner'; 
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { environment } from '../environments/environment';
+import { EventsService } from './services/events.service';
+
+Raven
+  .config(environment.sentry, {
+    release: environment.version_verbose
+  })
+  .install();
+
+export class RavenErrorHandler implements ErrorHandler {
+  handleError(err: any): void {
+    Raven.captureException(err);
+  }
+}
 
 @NgModule({
   declarations: [
@@ -66,7 +84,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     ActiveLoansComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
-    DialogInsufficientFoundsComponent,
+    DialogGenericErrorComponent,
   ],
   imports: [
     BrowserModule,
@@ -88,6 +106,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     DialogLoanTransferComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
+    DialogGenericErrorComponent
   ],
   providers: [
     ContractsService,
@@ -101,6 +120,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     SidebarService,
     TitleService,
     AvailableLoansService,
+    CountriesService,
+    EventsService,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,1 +1,1 @@
-<a mat-raised-button (click)='claim()' class="button button-primary" *ngIf='liability.canClaim'>{{ pendingTx === undefined ? 'Claim' : 'Pending...'}}</a>
+<a mat-raised-button (click)='claim()' class="button button-primary" *ngIf='canClaim'>{{ pendingTx === undefined ? 'Claim' : 'Pending...'}}</a>

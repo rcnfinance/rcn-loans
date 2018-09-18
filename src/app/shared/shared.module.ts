@@ -24,7 +24,6 @@ import { BodyListComponent } from './conversion-graphic/body-list/body-list.comp
 import { AvatarTitleComponent } from './avatar-title/avatar-title.component';
 import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
-import { GobackButtonComponent } from './goback-button/goback-button.component';
 import { TransferFormComponent } from './transfer-form/transfer-form.component';
 import { TransferButtonComponent } from './transfer-button/transfer-button.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
@@ -52,7 +51,6 @@ import { LoanCardComponent } from './loan-card/loan-card.component';
     AvatarTitleComponent,
     IconAvatarComponent,
     ButtonGroupComponent,
-    GobackButtonComponent,
     TransferFormComponent,
     TransferButtonComponent,
     RiskIndicatorComponent,
@@ -87,7 +85,6 @@ import { LoanCardComponent } from './loan-card/loan-card.component';
     AvatarTitleComponent,
     IconAvatarComponent,
     ButtonGroupComponent,
-    GobackButtonComponent,
     TransferFormComponent,
     TransferButtonComponent,
     RiskIndicatorComponent,
