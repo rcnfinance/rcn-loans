@@ -505,7 +505,8 @@ footer {
       width: 24%;
       text-align: center;
       display: inline-block;
-      svg{font-size: 1.5em; color: $gray6; @include transition();}
+      svg,
+      .fas{font-size: 1.4em; color: $gray6; @include transition();}
       .nav-toggle {
         padding: 0;
         margin-right: 0;
@@ -528,7 +529,8 @@ footer {
         @extend %absolute-center;
       }
       &.active{
-        svg{color: $secondary;}
+        svg,
+        .fas{color: $secondary;}
         .available-loans {
           opacity: 1;
           @include transition-delay(1s);
