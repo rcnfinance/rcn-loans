@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 // App Models
 import { Loan, Status } from './../../models/loan.model';
+import { Brand } from '../../models/brand.model';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Services
@@ -10,6 +11,7 @@ import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
+import { BrandingService } from './../../services/branding.service';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -24,7 +26,8 @@ export class LoanDetailComponent implements OnInit {
   viewDetail = undefined;
   userAccount: string;
 
-  // Loan detail
+  brand: Brand;
+
   loanConfigData = [];
   loanStatusData = [];
   interestMiddleText: string;
@@ -47,6 +50,7 @@ export class LoanDetailComponent implements OnInit {
     private router: Router,
     private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
+    private brandingService: BrandingService
   ) {}
 
   private loadIdentity() {
@@ -122,6 +126,7 @@ export class LoanDetailComponent implements OnInit {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
+        this.brand = this.brandingService.getBrand(this.loan);
         this.oracle = this.loan.oracle;
         this.currency = this.loan.currency;
         this.availableOracle = this.loan.oracle !== Utils.address_0;
@@ -134,6 +139,5 @@ export class LoanDetailComponent implements OnInit {
         this.router.navigate(['/404/'])
       );
     });
-
   }
 }

@@ -4,35 +4,11 @@
 .loan-detail{
   margin-bottom: 20px;
 }
-.navbar-container {
-  height: 70px;
-  position: relative;
-  overflow: hidden;
-  background-color: #333333;
-  .button-group{
-    height: 100%;
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-  .button-options{
-    position: relative;
-    width: 70px;
-    height: 100%;
-    padding: 15px;
-    float: right;
-    color: $secondary;
-    cursor: pointer;
-    @include transition;
-    &:hover{
-      background-color: $fifth;
-    }
-    i{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      @include transform(translate(-50%, -50%));
-    }
+.creator-container {
+  .creator-title{
+    color: $fifth;
+    font-size: 36px;
+    @extend %font-black;
   }
 }
 .loan-description {
@@ -48,16 +24,6 @@
   &.right{
     min-height: 670px;
     background-color: $quaternary;
-  }
-}
-.col-group{
-  &.x3{
-    .col-item{
-      position: relative;
-      width: 33.3%;
-      height: 70px;
-      float: left;
-    }
   }
 }
 
@@ -83,16 +49,6 @@
   }
 }
 
-@media (min-width: 768px){
-  .navbar-container { height: 100px; }
-  .col-group{
-    &.x3{
-      .col-item{
-        height: 100px;
-      }
-    }
-  }
-}
 @media (min-width: 992px){
   .loan-description {
     width: 50%;
@@ -116,4 +72,40 @@
   padding-top: 4px;
   padding-left: 16px;
   position: absolute;
+}
+
+///////////////@new
+
+
+.header-container{
+  height: 70px;
+  max-height: 70px;
+  background-color: $gray7;
+}
+.flex-container {
+  // width: 130px;
+  // height: 42px;
+  display: flex;
+  flex-direction: row; // Defines the direction items are placed in the container
+  flex-wrap: wrap; // Items wrap around to additional lines.
+  flex-flow: row wrap; // The two properties flex-direction and flex-wrap are used so often together that the shorthand property flex-flow was created to combine them. This shorthand property accepts the value of one of the two properties separated by a space.
+  justify-content: space-between; // Aligns items horizontally and accepts the following values:
+  align-items: center; // Aligns items vertically and Determines how the items as a whole are aligned within the container
+  align-content: flex-end; // Determines the spacing between lines. When there is only one line, align-content has no effect.
+  > .flex-item {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    // align-self: flex-end; //  This property accepts the same values as align-items and its value for the specific item.
+    // align-self: flex-end; order: 1; // Combine order with align-self to help the frogs to their destinations.
+    &:nth-child(1){
+      order: 1; // By default, items have a value of 0, but we can use this property to set it to a positive or negative integer value.
+    }
+    &:nth-child(2){
+      order: 2;
+    }
+    &:nth-child(3){
+      order: 3;
+    }
+  }
 }

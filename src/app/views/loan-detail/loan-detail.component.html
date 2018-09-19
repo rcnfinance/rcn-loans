@@ -1,6 +1,22 @@
 <ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
 
-<div class="container" *ngIf="loan !== undefined">
+<div class="loan-detail" *ngIf="loan !== undefined">
+  <div class="header-container flex-container">
+    <div class="flex-item">
+      <app-goback-button></app-goback-button>
+    </div>
+    <div class="flex-item">
+      <div class="creator-container">
+        <div class="creator-title">{{ brand.header }}</div>
+      </div>
+    </div>
+    <div class="flex-item">
+      <app-button-group (view)="openDetail($event)" [viewDetail]=viewDetail></app-button-group>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="container" *ngIf="loan !== undefined">
   <div class="row">
     <div class="col-sm-12 loan-detail">
       <div class="row">
@@ -95,7 +111,7 @@
           </div>
           <div *ngIf="isRequest">
             <app-lend-button [loan]=loan></app-lend-button>
-            <app-risk-indicator class='risk-indicator' [loan]=loan [color]='white'></app-risk-indicator>
+            <app-risk-indicator class='risk-indicator' [loan]=loan></app-risk-indicator>
           </div>
         </div>
         <div class="col-sm-12 col-lg-6 loan-description right">
@@ -112,4 +128,4 @@
       <app-transaction-history [loan]=loan></app-transaction-history>
     </div>
   </div>
-</div>
+</div> -->
