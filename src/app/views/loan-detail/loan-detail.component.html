@@ -14,13 +14,30 @@
       <app-button-group (view)="openDetail($event)" [viewDetail]=viewDetail></app-button-group>
     </div>
   </div>
+
   <div class="loan-description flex-container">
-    <div class="avatar-information flex-item">
-      <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
+
+
+    <div class="bg-black left">
+      <div class="avatar-information">
+        <div class="flex-item">
+          <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
+        </div>
+        <div class="flex-item">
+          <app-avatar-title [loan]=loan></app-avatar-title>
+        </div>
+      </div>
+      <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="isRequest ? loan.expectedReturn : totalDebt"></app-conversion-graphic>
+      <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="loan.paid" *ngIf="!isRequest"></app-conversion-graphic>
+      <div class="margintop20"></div>
+      <div class="bg-yellow">asd</div>
     </div>
-    <div class="avatar-information flex-item">
-      <app-avatar-title [loan]=loan></app-avatar-title>
+
+    <div class="bg-red right">
+      .asdasdad
     </div>
+
+
   </div>
 </div>
 

@@ -3,10 +3,9 @@
 .avatar-container {
   width: 40px;
   height: 40px;
-  position: absolute;
+  display: flex;
+  align-items: center;
   overflow: hidden;
-  top: 0px;
-  left: 0px;
   border-radius: 50%;
   background-color: $primary;
   box-shadow: 0 0 6px #00000029, 0 6px 12px rgba(0,0,0,.32);
@@ -16,16 +15,12 @@
   &.paid{background-color: $gray7;}
   &.destroyed{background-color: $red;}
   i{
-    @extend %position-center;
+    margin: 0 auto;
   }
   .title{
-    position: absolute;
-    top: 50%;
-    left: 50%;
     font-size: 18px;
     color: $secondary;
     @extend %font-black;
-    @include transform(translate(-50%, -50%));
   }
   img{
     width: 50px;

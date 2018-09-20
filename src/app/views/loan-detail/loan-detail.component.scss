@@ -1,7 +1,12 @@
 @import '../../../scss/_variables.scss'; //variables
 
 //LOAN DETAIL
-
+.loan-detail{
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
 
 .flex-container{
   &.header-container{
@@ -11,7 +16,7 @@
       align-items: center;
       cursor: pointer;
       height: 100%;
-      min-width: 70px;
+      min-width: 60px;
       @include transition;
       // align-self: flex-end; //  This property accepts the same values as align-items and its value for the specific item.
       // align-self: flex-end; order: 1; // Combine order with align-self to help the frogs to their destinations.
@@ -27,26 +32,30 @@
   }
 }
 
-.flex-container{
-  @extend %flex-display;
-  .avatar-information{
-    flex: 1;
-    width: 50%;
-    &:nth-child(1){ padding: 15px 8px 0 15px}
-    &:nth-child(2){ padding: 15px 15px 0 8px}
-    > .flex-item {
-      @extend %flex-display;
-      &:nth-child(1){ width: 50%; }
-      &:nth-child(2){ width: 50%; }
-    }
-  }
-}
+.loan-description{
+  &.flex-container{
+    @extend %flex-display;
+    flex-direction: column;
 
-.loan-detail{
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 20px;
+    .left{
+      width: 100%;
+      flex: 1;
+      .avatar-information{
+        @extend %flex-display;
+        justify-content: space-around;
+        .flex-item{
+          &:nth-child(1){ width: 50%; padding: 15px 8px 0 15px; }
+          &:nth-child(2){ width: 50%; padding: 15px 15px 0 8px; display: flex; align-items: flex-end; flex-direction: column; }
+        }
+      }
+    } 
+
+    .right{
+      width: 100%;
+      flex: 1;
+    }
+
+  }
 }
 
 // .loan-description {
@@ -113,6 +122,7 @@
 .header-container{
   height: 70px;
   background-color: $gray7;
+  > .flex-item { min-width: 70px; }
 }
 .creator-container {
   .creator-title{
@@ -138,6 +148,20 @@
   }
   .header-container{
     height: 100px;
+  }
+
+  .loan-description{
+    &.flex-container{
+      flex-direction: row;
+      .left{
+        width: 50%;
+        flex: 1;
+      } 
+      .right{
+        width: 50%;
+        flex: 1;
+      }
+    }
   }
 }
 
