@@ -18,7 +18,7 @@
   <div class="loan-description flex-container">
 
 
-    <div class="bg-black left">
+    <div class="left">
       <div class="avatar-information">
         <div class="flex-item">
           <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
@@ -98,7 +98,7 @@
         </table>
       </div>
 
-      <div *ngIf="isRequest">
+      <div class="paddingleft15 paddingright15" *ngIf="isRequest">
         <app-lend-button [loan]=loan></app-lend-button>
         <app-risk-indicator class='risk-indicator' [loan]=loan></app-risk-indicator>
       </div>
@@ -106,8 +106,9 @@
       <div class="margintop15"></div>
     </div>
 
-    <div class="bg-red right">
-      <div class="margintop60">asd</div>
+    <div class="right">
+      <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
+      <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
     </div>
 
 
