@@ -194,3 +194,28 @@ $default-transition--delay: all 0.3s ease-out;
 
 %relative-center{position: relative; top: 50%; left: 50%; @include transform(translate(-50%, -50%));}
 %relative-center-top{position: relative; top: 50%; @include transform(translate(0%, -50%));}
+
+
+// Flexbox variables
+// --------------------------------------------------
+%flex-display{display: flex;}
+%flex-container{
+  display: flex;
+  flex-direction: row; // Defines the direction items are placed in the container
+  flex-flow: row; // The two properties flex-direction and flex-wrap are used so often together that the shorthand property flex-flow was created to combine them. This shorthand property accepts the value of one of the two properties separated by a space.
+  flex-wrap: nowrap; // Items wrap around to additional lines.
+  justify-content: space-between; // Aligns items horizontally and accepts the following values:
+  align-items: center; // Aligns items vertically and Determines how the items as a whole are aligned within the container
+  align-content: flex-end; // Determines the spacing between lines. When there is only one line, align-content has no effect.
+}
+%flex-item-01{
+  &:nth-child(1){ 
+    order: 1; // By default, items have a value of 0, but we can use this property to set it to a positive or negative integer value.
+  }
+}
+%flex-item-02{
+  &:nth-child(2){ order: 2; }
+}
+%flex-item-03{
+  &:nth-child(3){ order: 3; }
+}

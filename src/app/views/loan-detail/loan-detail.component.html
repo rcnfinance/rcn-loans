@@ -1,6 +1,6 @@
 <ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
 
-<div class="loan-detail" *ngIf="loan !== undefined">
+<div class="loan-detail" *ngIf="loan !== undefined" [style.width.px]="winWidth">
   <div class="header-container flex-container">
     <div class="flex-item">
       <app-goback-button></app-goback-button>
@@ -12,6 +12,14 @@
     </div>
     <div class="flex-item">
       <app-button-group (view)="openDetail($event)" [viewDetail]=viewDetail></app-button-group>
+    </div>
+  </div>
+  <div class="loan-description flex-container">
+    <div class="avatar-information flex-item">
+      <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
+    </div>
+    <div class="avatar-information flex-item">
+      <app-avatar-title [loan]=loan></app-avatar-title>
     </div>
   </div>
 </div>

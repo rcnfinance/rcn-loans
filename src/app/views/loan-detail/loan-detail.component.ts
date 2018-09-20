@@ -42,6 +42,9 @@ export class LoanDetailComponent implements OnInit {
   availableOracle: boolean;
   currency: string;
 
+
+  winWidth: any = window.innerWidth;
+
   constructor(
     private identityService: IdentityService,
     private route: ActivatedRoute,
@@ -117,6 +120,7 @@ export class LoanDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.winWidth);
     this.spinner.show();
     this.web3Service.getAccount().then((account) => {
       this.userAccount = account;
