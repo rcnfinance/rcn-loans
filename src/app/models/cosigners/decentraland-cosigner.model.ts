@@ -81,16 +81,18 @@ export class Tag {
 
 function decodeTokenId(value: string): [number, number] {
     value = value.slice(2);
-    const x = value.slice(0, 32);
+    const x = value.slice(0, 31);
     const y = value.slice(32);
+    console.log(x, y);
+    console.log(new BigNumber(x, 16).toNumber());
+    console.log([fixNegative(new BigNumber(x, 16)).toString(), fixNegative(new BigNumber(y, 16)).toString()]);
     return [fixNegative(new BigNumber(x, 16)), fixNegative(new BigNumber(y, 16))];
 }
 
 function fixNegative(value: BigNumber): number {
-    const mid = (new BigNumber(2).pow(new BigNumber(127)));
-    const max = (new BigNumber(2).pow(new BigNumber(128)));
-    if (value > mid) {
-        return value.minus(max);
+    const mid = (new BigNumber(2).pow(new BigNumber(63)));
+    if (mid.minus(value).toNumber() <= 0) {
+        return value.minus(new BigNumber('fffffffffffffffffffffffffffffff', 16));
     } else {
         return value;
     }
