@@ -25,6 +25,10 @@ export class Utils {
     return hex.replace('0x000000000000000000000000', '0x');
   }
 
+  static toBytes32(hex: string): string {
+    return hex.replace('0x', '0x' + '0'.repeat(65 - hex.length));
+  }
+
   static shortAddress(address: string): string {
     return address.substr(0, 4) + '...' + address.substr(-4);
   }
