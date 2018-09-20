@@ -15,19 +15,15 @@
       <div class="title">{{ 'Annual Interest / Punitory' }}</div>
       <div class="paragraph"> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div>
     </div>
-    <div class="lend-return--row">
-      <ol>
-        <li class="title">{{ leftLabel }}</li>
-        <li class="currency">{{ loan.currency }}</li>
-        <li class="title">{{ rightLabel }}</li>
-      </ol>
+    <div class="properties-block">
+      <div class="title">{{ leftLabel }}</div>
+      <div class="currency">{{ loan.currency }}</div>
+      <div class="title">{{ rightLabel }}</div>
     </div>
-    <div class="lending-returns--block">
-      <ol>
-        <li class="block-title">{{ leftValue }}</li>
-        <li class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></li>
-        <li class="block-title">{{ rightValue }}</li>
-      </ol>
+    <div class="conversion-block">
+      <div class="block-title">{{ leftValue }}</div>
+      <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
+      <div class="block-title">{{ rightValue }}</div>
     </div>
     <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
     <app-detail-button [loan]=loan></app-detail-button>

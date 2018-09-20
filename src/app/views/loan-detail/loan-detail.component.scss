@@ -10,7 +10,9 @@
 
 .flex-container{
   &.header-container{
+    height: 70px;
     @extend %flex-container;
+    background-color: $gray7;
     > .flex-item {
       display: flex;
       align-items: center;
@@ -18,15 +20,13 @@
       height: 100%;
       min-width: 60px;
       @include transition;
-      // align-self: flex-end; //  This property accepts the same values as align-items and its value for the specific item.
-      // align-self: flex-end; order: 1; // Combine order with align-self to help the frogs to their destinations.
       &:nth-child(1){
-        order: 1; // By default, items have a value of 0, but we can use this property to set it to a positive or negative integer value.
+        order: 1;
         &:hover{
           background-color: $fifth;
         }
       }
-      &:nth-child(2){ order: 2; }
+      &:nth-child(2){ order: 2; cursor: default; }
       &:nth-child(3){ order: 3; }
     }
   }
@@ -58,21 +58,6 @@
   }
 }
 
-// .loan-description {
-//   position: relative;
-//   width: 100%;
-//   float: left;
-//   padding: 15px;
-//   &.left{
-//     position: relative;
-//     height: auto;
-//     background-color: $fifth;
-//   }
-//   &.right{
-//     min-height: 670px;
-//     background-color: $quaternary;
-//   }
-// }
 
 .more-indicator {
   font-size: 15px;
@@ -96,34 +81,7 @@
   }
 }
 
-@media (min-width: 992px){
-  // .loan-description {
-  //   width: 50%;
-  //   &.left{
-  //     width: 50%;
-  //   }
-  //   &.right{
-  //     height: auto;
-  //     min-height: 468px;
-  //     position: absolute;
-  //     top: 100px;
-  //     bottom: 0;
-  //     left: 0;
-  //     right: 0;
-  //     margin-left: 50%;
-  //   }
-  // }
-}
 
-
-///////////////@new
-
-
-.header-container{
-  height: 70px;
-  background-color: $gray7;
-  > .flex-item { min-width: 70px; }
-}
 .creator-container {
   .creator-title{
     color: $fifth;
@@ -146,8 +104,12 @@
     margin-left: auto;
     margin-right: auto;
   }
+
   .header-container{
-    height: 100px;
+    &.flex-container{
+      height: 100px;
+      > .flex-item { min-width: 70px; }
+    }
   }
 
   .loan-description{
