@@ -12,16 +12,18 @@ import { environment } from '../environments/environment';
 export class AppComponent implements OnInit {
   title = 'app';
   environmentName: any = environment.envName;
-
-  constructor(private router: Router) {
-    this.router.events.subscribe(event => {
-     if (event instanceof NavigationEnd) {
-       (<any>window).ga('set', 'page', event.urlAfterRedirects);
-       (<any>window).ga('send', 'pageview');
-     }
-   });
- }
+  constructor(private router: Router) {}
   ngOnInit(): void {
-    (<any>window).gtag('config', environment.gaTracking);
+    (<any>window).ga('create', environment.gaTracking, 'auto');
+    this.router.events.subscribe(event => {
+      try {
+        if (event instanceof NavigationEnd) {
+          (<any>window).ga('set', 'page', event.urlAfterRedirects);
+          (<any>window).ga('send', 'pageview');
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    });
   }
 }

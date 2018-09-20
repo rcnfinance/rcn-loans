@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Loan } from './../../models/loan.model';
 
-import { MaterialModule } from './../../material/material.module';
 import {MatSnackBar} from '@angular/material';
 
 @Component({
@@ -12,22 +11,17 @@ import {MatSnackBar} from '@angular/material';
 })
 export class DetailButtonComponent {
   @Input() loan: Loan;
-  constructor(private router: Router, public snackBar: MatSnackBar) { }
+
+  constructor(
+    private router: Router,
+    public snackBar: MatSnackBar
+  ) {}
 
   handleDetail() {
-    this.router.navigate(['/loan/', this.loan.id]).then(nav => {
-      console.log(nav); // true if navigation is successful
-    }, err => {
+    this.router.navigate(['/loan/', this.loan.id]).then(err => {
       console.log(err); // when there's an error
     });
   }
-  /*
-  openSnackBar(message: any, action: any) {
-    this.snackBar.open(this.loan.amount , this.loan.borrowerShort, {
-      duration: 4000,
-    });
-  }
-  */
 }
 
 

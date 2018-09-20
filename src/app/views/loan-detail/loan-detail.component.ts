@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe, getLocaleCurrencyName } from '@angular/common';
+import { DatePipe } from '@angular/common';
 // App Models
 import { Loan, Status } from './../../models/loan.model';
 // App Utils
@@ -134,5 +134,6 @@ export class LoanDetailComponent implements OnInit {
         this.router.navigate(['/404/'])
       );
     });
+
   }
 }

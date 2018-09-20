@@ -27,7 +27,7 @@
 
   <!-- Preload -->
   <link rel="preload" onload="this.rel = 'stylesheet'" as="style" href='https://fonts.googleapis.com/css?family=Raleway:300,400,500,700,900|Material+Icons'>
-  <script defer rel="preload" src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous" as="script"></script>
+  <link rel="preload" onload="this.rel = 'stylesheet'" as="style" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 
   <link rel="preload" onload="this.rel = 'stylesheet'" as="style" href="https://hosted-sip.civic.com/css/civic-modal.min.css">
   <script rel="preload" as="script" src="https://hosted-sip.civic.com/js/civic.sip.min.js"></script>
@@ -36,11 +36,19 @@
   <app-root></app-root>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122615331-2"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+    (function(i, s, o, g, r, a, m) {
+              i['GoogleAnalyticsObject'] = r;
+              i[r] = i[r] || function() {
+                  (i[r].q = i[r].q || []).push(arguments)
+              }, i[r].l = 1 * new Date();
+              a = s.createElement(o),
+                  m = s.getElementsByTagName(o)[0];
+              a.async = 1;
+              a.src = g;
+              m.parentNode.insertBefore(a, m)
+          })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+  ga('send', 'pageview');
   </script>
 </body>
 </html>

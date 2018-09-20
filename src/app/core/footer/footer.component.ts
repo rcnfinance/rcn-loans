@@ -20,17 +20,15 @@ export class FooterComponent implements OnInit {
   versionString: string;
   linkContract: string;
   contract: string;
-  title:string;
+  title: string;
   lastTitle: string;
   previousTitle: string;
   oldestTitle: string;  // Defines oldest for profile unlogged case
   titles = ['Requests', 'Activity', 'Loans', 'Menu', 'Profile'];
-  
   available: any;
-  
   // Nav Mobile toggled
   activeButton = true;
-  navmobileToggled = false; 
+  navmobileToggled = false;
   id: number = 0;
   lastId: number = 0;
   previousLast: number;
@@ -40,37 +38,37 @@ export class FooterComponent implements OnInit {
     public dialog: MatDialog,
     private web3Service: Web3Service,
     private sidebarService: SidebarService,
-    private titleService: TitleService,
+    public titleService: TitleService,
     private availableLoansService: AvailableLoansService,
   ) {}
 
   // Toggle Menu
-  navmobileToggle(){
-    this.sidebarService.navmobileService(this.navmobileToggled=!this.navmobileToggled);
+  navmobileToggle() {
+    this.sidebarService.navmobileService(this.navmobileToggled = !this.navmobileToggled);
   }
-  navmobileClose(){
-    this.sidebarService.navmobileService(this.navmobileToggled=false);
+  navmobileClose() {
+    this.sidebarService.navmobileService(this.navmobileToggled = false);
   }
-  navmobileOpen(){
-    this.sidebarService.navmobileService(this.navmobileToggled=true);
+  navmobileOpen() {
+    this.sidebarService.navmobileService(this.navmobileToggled = true);
   }
 
-  addClass(clickedId){
+  addClass(clickedId) {
     this.lastId = this.id;
     this.id = clickedId;
-    if(clickedId !== 3 || this.lastId !== 3){ // If i dont click on menu & dont click it twice
+    if (clickedId !== 3 || this.lastId !== 3) { // If i dont click on menu & dont click it twice
       this.oldestId = this.previousLast; // Defines oldest for profile unlogged case
       this.previousLast = this.lastId;
     } else { // I click on menu & click it twice
       this.id = this.previousLast;
-      this.sidebarService.navmobileService(this.navmobileToggled=true);
+      this.sidebarService.navmobileService(this.navmobileToggled = true);
     }
   }
-  
+
   newTitle(clickedTitle) {
     this.lastTitle = this.title;
     this.title = clickedTitle;
-    if(clickedTitle !== 3 || this.lastTitle !== 'Menu'){ // If i dont click on menu & dont click it twice
+    if (clickedTitle !== 3 || this.lastTitle !== 'Menu') { // If i dont click on menu & dont click it twice
       this.oldestTitle = this.previousTitle; // Defines oldest for profile unlogged case
       this.previousTitle = this.lastTitle;
       this.titleService.changeTitle(this.titles[clickedTitle]);
@@ -85,14 +83,11 @@ export class FooterComponent implements OnInit {
     const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
-      console.log(this.title);
-      console.log(this.previousTitle);
-      console.log(this.oldestTitle);
-      if(this.lastId !== 3 || this.lastTitle !== 'Menu'){ // If i dont click on menu & dont click it twice
+      if (this.lastId !== 3 || this.lastTitle !== 'Menu') { // If i dont click on menu & dont click it twice
         console.log('CASE ONE');
         this.addClass(this.lastId);
         this.titleService.changeTitle(this.lastTitle);
-      } else{
+      } else {
         console.log('CASE ELSE');
         this.addClass(this.oldestId);
         this.titleService.changeTitle(this.oldestTitle);

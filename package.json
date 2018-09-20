@@ -1,6 +1,6 @@
 {
   "name": "rcn-angular-dapp",
-  "version": "0.0.7",
+  "version": "0.0.9-B",
   "version_name": "Avocados",
   "license": "MIT",
   "scripts": {
@@ -11,7 +11,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prebuild": "node version.js",
-    "prestart": "node version.js"
+    "prestart": "node version.js",
+    "postinstall": "node patch-crypto.js"
   },
   "private": true,
   "dependencies": {

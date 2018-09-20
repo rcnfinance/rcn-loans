@@ -8,11 +8,11 @@ import { ContractsService } from '../../services/contracts.service';
 import { TxService, Tx } from '../../tx.service';
 import { environment } from '../../../environments/environment';
 import { Loan } from '../../models/loan.model';
+import { EventsService, Category } from '../../services/events.service';
 
 @Component({
   selector: 'app-transfer-button',
-  templateUrl: './transfer-button.component.html',
-  styleUrls: ['./transfer-button.component.scss']
+  templateUrl: './transfer-button.component.html'
 })
 export class TransferButtonComponent implements OnInit {
   @Input() loan: Loan;
@@ -20,6 +20,7 @@ export class TransferButtonComponent implements OnInit {
   constructor(
     private contractService: ContractsService,
     private txService: TxService,
+    private eventsService: EventsService,
     public dialog: MatDialog
   ) { }
 
@@ -29,7 +30,17 @@ export class TransferButtonComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogLoanTransferComponent);
 
     dialogRef.afterClosed().subscribe(to => {
+      this.eventsService.trackEvent(
+        'set-to-transfer-loan',
+        Category.Loan,
+        'loan #' + this.loan.id + ' to ' + to
+      );
       this.contractService.transferLoan(this.loan, to).then((tx) => {
+        this.eventsService.trackEvent(
+          'transfer-loan',
+          Category.Loan,
+          'loan #' + this.loan.id + ' to ' + to
+        );
         this.txService.registerTransferTx(tx, environment.contracts.basaltEngine, this.loan, to);
         this.retrievePendingTx();
       });
@@ -38,6 +49,12 @@ export class TransferButtonComponent implements OnInit {
 
   clickTransfer() {
     if (this.pendingTx === undefined) {
+      this.eventsService.trackEvent(
+        'click-transfer-loan',
+        Category.Loan,
+        'loan #' + this.loan.id
+      );
+
       this.loanTransfer();
     } else {
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');

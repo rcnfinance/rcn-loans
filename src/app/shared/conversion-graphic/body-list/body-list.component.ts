@@ -14,7 +14,8 @@ export class BodyListComponent implements OnInit {
 
   ngOnInit() {
   }
-  private formatAmount(amount: number): string {
+
+  formatAmount(amount: number): string {
     return Utils.formatAmount(amount);
   }
 }

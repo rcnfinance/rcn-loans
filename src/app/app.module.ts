@@ -4,7 +4,6 @@ import * as Raven from 'raven-js';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -47,6 +46,7 @@ import { ActiveLoansComponent } from './active-loans/active-loans.component';
 import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
 import { DialogLoanTransferComponent } from './dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
+import { DialogGenericErrorComponent } from './dialogs/dialog-generic-error/dialog-generic-error.component';
 
 import { ProfileComponent } from './views/profile/profile.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -55,6 +55,7 @@ import { DialogClientAccountComponent } from './dialogs/dialog-client-account/di
 // App Plugins
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { environment } from '../environments/environment';
+import { EventsService } from './services/events.service';
 
 Raven
   .config(environment.sentry, {
@@ -83,7 +84,7 @@ export class RavenErrorHandler implements ErrorHandler {
     ActiveLoansComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
-    DialogInsufficientFoundsComponent,
+    DialogGenericErrorComponent,
   ],
   imports: [
     BrowserModule,
@@ -105,6 +106,7 @@ export class RavenErrorHandler implements ErrorHandler {
     DialogLoanTransferComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
+    DialogGenericErrorComponent
   ],
   providers: [
     ContractsService,
@@ -119,6 +121,7 @@ export class RavenErrorHandler implements ErrorHandler {
     TitleService,
     AvailableLoansService,
     CountriesService,
+    EventsService,
   ],
   bootstrap: [AppComponent]
 })

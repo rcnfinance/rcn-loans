@@ -4,11 +4,13 @@ declare let require: any;
 declare let window: any;
 
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { Loan } from './models/loan.model';
 import { TypeCheckCompiler } from '@angular/compiler/src/view_compiler/type_check_compiler';
 import { Web3Service } from './services/web3.service';
+import { EventsService, Category } from './services/events.service';
 
-enum Type { lend, approve, withdraw, transfer, claim }
+enum Type { lend = 'lend', approve = 'approve', withdraw = 'withdraw', transfer = 'transfer', claim = 'claim' }
 
 export class Tx {
   tx: string;
@@ -43,7 +45,9 @@ export class TxService {
   private interval: any;
 
   constructor(
-    private web3service: Web3Service
+    private web3service: Web3Service,
+    private eventsService: EventsService,
+    public snackBar: MatSnackBar
   ) {
     this.localStorage = window.localStorage;
     this.tx_memory = this.readTxs();
@@ -63,6 +67,13 @@ export class TxService {
         this.web3service.web3reader.eth.getTransactionReceipt(tx.tx, (err, receipt) => {
           if (receipt !== null) {
             console.log('Found receipt tx', tx, receipt);
+            this.openSnackBar('Lent Successfully', '');
+            this.eventsService.trackEvent(
+              'confirmed-transaction-' + tx.type,
+              Category.Transaction,
+              tx.tx,
+              0, true
+            );
             tx.confirmed = true;
             this.saveTxs();
           }
@@ -153,5 +164,11 @@ export class TxService {
       .filter(tx => !tx.confirmed && tx.type === Type.claim && tx.to === cosigner)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
       .find(tx => tx.data.id === loan.id && tx.data.engine === loan.engine);
+  }
+
+  public openSnackBar(message: string, action: string) {
+    this.snackBar.open(message , action, {
+      duration: 4000,
+    });
   }
 }

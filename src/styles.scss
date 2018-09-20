@@ -123,6 +123,7 @@ ngx-spinner .black-overlay.ng-star-inserted {
   >tbody{
     >tr{
       >td {
+        text-align: left;
         border: 0px;
         @extend %propiety-subtitle;
       }
@@ -190,7 +191,8 @@ mat-sidenav-container.mat-drawer-container {
 }
 .mat-drawer-opened{
   &.mat-drawer-container {
-    position: absolute;
+    position: fixed;
+    overflow: hidden;
   }
   .mat-drawer {
     .animation-opacity{
@@ -254,9 +256,9 @@ mat-sidenav-container.mat-drawer-container {
 }
   // Snackbar
 snack-bar-container.mat-snack-bar-container{
+  margin: 15px;
   color: $secondary;
-  button{&.mat-simple-snackbar-action{color: $primary;}
-  }
+  button{ &.mat-button{ color: $primary; text-transform: uppercase } }
 }
 
   //Forms
@@ -606,7 +608,7 @@ footer {
     padding-right: 15px;
     display: inline-block;
     &.version{
-      margin-left: 15px;    
+      margin-right: 15px;    
     }
   }
 }
