@@ -3,6 +3,7 @@ import { District, Tag, DecentralandCosigner, Parcel } from '../../../../models/
 import { Loan, Status } from '../../../../models/loan.model';
 import { DecentralandCosignerProvider } from '../../../../providers/cosigners/decentraland-cosigner-provider';
 import { CosignerDetail, Cosigner } from '../../../../models/cosigner.model';
+import { Utils } from '../../../../utils/utils';
 
 @Component({
   selector: 'app-decentraland-cosigner',
@@ -45,7 +46,7 @@ export class DecentralandCosignerComponent implements OnInit {
   private renderDetail() {
     this.parcel = this.detail.parcel;
     this.parcelId = this.parcel.id;
-    this.displayPrice = this.detail.displayPrice;
+    this.displayPrice = Utils.formatAmount(Number(this.detail.displayPrice));
     this.financiation = this.detail.financePart;
     this.highlights = this.parcel.highlights;
   }
