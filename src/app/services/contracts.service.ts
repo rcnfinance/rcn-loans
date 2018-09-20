@@ -80,12 +80,13 @@ export class ContractsService {
 
     public async approveEngine(): Promise<string> {
         const account = await this.web3.getAccount();
+        const gasPriceAvg = await this.getGasPriceAvg();
         const txService = this.txService;
         const rcnAddress = this._rcnContractAddress;
         const engineAddress = this._rcnEngineAddress;
         return new Promise((resolve, reject) => {
           const _web3 = this.web3.web3;
-          this._rcnContract.approve(this._rcnEngineAddress, _web3.toWei(10 ** 32), { from: account }, function (err, result) {
+          this._rcnContract.approve(this._rcnEngineAddress, _web3.toWei(10 ** 32), { from: account, gasPrice: gasPriceAvg }, function (err, result) {
             if (err != null) {
               reject(err);
             } else {
@@ -98,12 +99,13 @@ export class ContractsService {
 
     public async disapproveEngine(): Promise<string> {
       const account = await this.web3.getAccount();
+      const gasPriceAvg = await this.getGasPriceAvg();
       const txService = this.txService;
       const rcnAddress = this._rcnContractAddress;
       const engineAddress = this._rcnEngineAddress;
       return new Promise((resolve, reject) => {
         const _web3 = this.web3.web3;
-        this._rcnContract.approve(this._rcnEngineAddress, 0, { from: account }, function (err, result) {
+        this._rcnContract.approve(this._rcnEngineAddress, 0, { from: account, gasPrice: gasPriceAvg }, function (err, result) {
           if (err != null) {
             reject(err);
           } else {
@@ -131,8 +133,20 @@ export class ContractsService {
       }
     }
 
+    public async getGasPriceAvg(): Promise<number> {
+      return await new Promise((resolve) => {
+        this.http.get(environment.gasPriceAPIs.gasStation).subscribe((resp: any) => {
+          resolve(resp['average'] * 100000000); // Gwei to wei
+        },
+        (err: any) => {
+          resolve(0);
+        })
+      }) as Promise<number>;
+    }
+
     public async lendLoan(loan: Loan): Promise<string> {
         const account = await this.web3.getAccount();
+        const gasPriceAvg = await this.getGasPriceAvg();
         const pOracleData = this.getOracleData(loan);
 
         const cosigner = this.cosignerService.getCosigner(loan);
@@ -146,7 +160,7 @@ export class ContractsService {
         const oracleData = await pOracleData;
         console.log(oracleData, cosignerData, cosignerAddr);
         return new Promise((resolve, reject) => {
-          this._rcnEngine.lend(loan.id, oracleData, cosignerAddr, cosignerData, { from: account }, function(err, result) {
+          this._rcnEngine.lend(loan.id, oracleData, cosignerAddr, cosignerData, { from: account, gasPrice: gasPriceAvg }, function(err, result) {
             if (err != null) {
               reject(err);
             } else {
@@ -157,8 +171,10 @@ export class ContractsService {
     }
     public async transferLoan(loan: Loan, to: string): Promise<string> {
       const account = await this.web3.getAccount();
+      const gasPriceAvg = await this.getGasPriceAvg();
+
       return new Promise((resolve, reject) => {
-        this._rcnEngine.transfer(to, loan.id, { from: account }, function(err, result) {
+        this._rcnEngine.transfer(to, loan.id, { from: account, gasPrice:gasPriceAvg}, function(err, result) {
           if (err != null) {
             reject(err);
           }
@@ -177,6 +193,7 @@ export class ContractsService {
           });
         }) as Promise<string>;
     }
+
     public async getOracleData(loan: Loan): Promise<string> {
       if (loan.oracle === Utils.address_0) {
         return '0x';
