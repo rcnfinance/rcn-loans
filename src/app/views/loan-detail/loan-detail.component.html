@@ -18,7 +18,7 @@
   <div class="loan-description flex-container">
 
 
-    <div class="bg-gray7 left">
+    <div class="bg-black left">
       <div class="avatar-information">
         <div class="flex-item">
           <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
@@ -33,12 +33,88 @@
       <div class="paddingleft15 paddingright15">
         <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="loan.paid" *ngIf="!isRequest"></app-conversion-graphic>
       </div>
+
       <div class="margintop20"></div>
-      <div class="bg-yellow">asd</div>
+      <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
+      <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
+
+
+      <div class="table-responsive" *ngIf='availableOracle'>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Oracle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ loan.oracle }} - <b>{{ currency }}</b></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-responsive" (click)="openDetail('identity');">
+        <table class="table table-clickable">
+          <thead>
+            <tr>
+              <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('identity') }" scope="col">
+                Identity<i class="material-icons white more-indicator">{{ isDetail('identity') ? '' : 'unfold_more' }}</i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style='cursor: pointer'>{{ loan.borrower }} - <b>{{ identityName }}</b></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table" (click)="openLender(loan.owner)" *ngIf="!isRequest">
+          <thead>
+            <tr>
+              <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style='cursor: pointer'>{{ loan.owner }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-responsive" (click)="openDetail('cosigner');">
+        <table class="table table-clickable">
+          <thead>
+            <tr>
+              <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
+                  Insurance / Cosigner<i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <app-cosigner-selector [loan]=loan></app-cosigner-selector>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="isRequest">
+        <app-lend-button [loan]=loan></app-lend-button>
+        <app-risk-indicator class='risk-indicator' [loan]=loan></app-risk-indicator>
+      </div>
+
+    
+      <div class="margintop20"></div>
+      <div class="bg-yellow">
+        <div class="margintop60">asd</div>
+      </div>
     </div>
 
     <div class="bg-red right">
-      .asdasdad
+      <div class="margintop60">asd</div>
     </div>
 
 
