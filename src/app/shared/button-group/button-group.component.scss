@@ -2,13 +2,11 @@
 
 .button-group{
   height: 70px;
-  max-width: 100px;
-  display: flex;
-  overflow: hidden;
+  display: none;
 }
 .button-options{
   cursor: pointer;
-  width: 50px;
+  width: 70px;
   display: flex;
   align-items: center;
   color: $secondary;
@@ -27,5 +25,12 @@
     &.fas{
       font-size: 1.5em;
     }
+  }
+}
+
+@media (min-width: 992px) { 
+  .button-group{
+    height: 100px;
+    display: flex;
   }
 }

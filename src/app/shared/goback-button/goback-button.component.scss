@@ -4,10 +4,7 @@
   width: 70px;
   display: flex;
   color: $secondary;
-  padding-left: 10px;
+  padding-left: 20px;
   cursor: pointer;
   @include transition;
-  &:hover{
-    background-color: $fifth;
-  }
 }

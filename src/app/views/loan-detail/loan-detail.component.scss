@@ -2,14 +2,9 @@
 
 //LOAN DETAIL
 .loan-detail{
+  width: 100%;
+  position: relative;
   margin-bottom: 20px;
-}
-.creator-container {
-  .creator-title{
-    color: $fifth;
-    font-size: 36px;
-    @extend %font-black;
-  }
 }
 .loan-description {
   position: relative;
@@ -76,30 +71,30 @@
 
 ///////////////@new
 
-
-.header-container{
-  height: 70px;
-  max-height: 70px;
-  background-color: $gray7;
-}
 .flex-container {
   // width: 130px;
   // height: 42px;
   display: flex;
   flex-direction: row; // Defines the direction items are placed in the container
-  flex-wrap: wrap; // Items wrap around to additional lines.
-  flex-flow: row wrap; // The two properties flex-direction and flex-wrap are used so often together that the shorthand property flex-flow was created to combine them. This shorthand property accepts the value of one of the two properties separated by a space.
+  flex-flow: row; // The two properties flex-direction and flex-wrap are used so often together that the shorthand property flex-flow was created to combine them. This shorthand property accepts the value of one of the two properties separated by a space.
+  flex-wrap: nowrap; // Items wrap around to additional lines.
   justify-content: space-between; // Aligns items horizontally and accepts the following values:
   align-items: center; // Aligns items vertically and Determines how the items as a whole are aligned within the container
   align-content: flex-end; // Determines the spacing between lines. When there is only one line, align-content has no effect.
   > .flex-item {
-    height: 70px;
+    cursor: pointer;
+    height: 100%;
+    min-width: 70px;
     display: flex;
     align-items: center;
+    @include transition;
     // align-self: flex-end; //  This property accepts the same values as align-items and its value for the specific item.
     // align-self: flex-end; order: 1; // Combine order with align-self to help the frogs to their destinations.
     &:nth-child(1){
       order: 1; // By default, items have a value of 0, but we can use this property to set it to a positive or negative integer value.
+      &:hover{
+        background-color: $fifth;
+      }
     }
     &:nth-child(2){
       order: 2;
@@ -107,5 +102,36 @@
     &:nth-child(3){
       order: 3;
     }
+  }
+}
+
+.header-container{
+  height: 70px;
+  background-color: $gray7;
+}
+.creator-container {
+  .creator-title{
+    color: $fifth;
+    font-size: 36px;
+    @extend %font-black;
+  }
+}
+
+@media (min-width: 992px) { 
+  .loan-detail{
+    width: 970px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .header-container{
+    height: 100px;
+  }
+}
+
+@media (min-width: 1200px) { 
+  .loan-detail{
+    width: 1170px;
   }
 }
