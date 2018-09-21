@@ -99,6 +99,9 @@
   padding-left: 16px;
   position: absolute;
 }
+.feature-padding{
+  padding: 0 15px;
+}
 
 @media (min-width: 992px) { 
   .loan-detail{
@@ -128,6 +131,9 @@
         flex: 1;
       }
     }
+  }
+  .feature-padding{
+    padding: 0;
   }
 }
 

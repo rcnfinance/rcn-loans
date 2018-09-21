@@ -1,6 +1,6 @@
 <ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
 
-<div class="loan-detail" *ngIf="loan !== undefined" [style.width.px]="winWidth">
+<div class="loan-detail" *ngIf="loan !== undefined">
   <div class="header-container flex-container">
     <div class="flex-item">
       <app-goback-button></app-goback-button>
@@ -16,7 +16,6 @@
   </div>
 
   <div class="loan-description flex-container">
-
 
     <div class="left">
       <div class="avatar-information">
@@ -37,7 +36,6 @@
       <div class="margintop20"></div>
       <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
       <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
-
 
       <div class="table-responsive" *ngIf='availableOracle'>
         <table class="table">
@@ -111,120 +109,11 @@
       <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
     </div>
 
+  </div>
 
+  <div class="margintop40"></div>
+  <div class="title main-h1 feature-padding">History</div>
+  <div class="paddingleft15 paddingright15">
+    <app-transaction-history [loan]=loan></app-transaction-history>
   </div>
 </div>
-
-<!-- <div class="container" *ngIf="loan !== undefined">
-  <div class="row">
-    <div class="col-sm-12 loan-detail">
-      <div class="row">
-        <div class="navbar-container">
-          <ul class="col-group x3">
-            <li class="col-item">
-              <app-goback-button></app-goback-button>
-            </li>
-            <li class="col-item">
-              <app-creator-container [loan]=loan></app-creator-container>
-            </li>
-            <li class="col-item">
-              <app-button-group (view)="openDetail($event)" [viewDetail]=viewDetail></app-button-group>
-            </li>
-          </ul>
-        </div>
-        <div class="col-sm-12 col-lg-6 loan-description left">
-          <div class="row">
-            <div class="col-sm-6">
-              <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
-            </div>
-            <div class="col-sm-6">
-              <div [ngClass]="['pull-right']">
-                <app-avatar-title [loan]=loan></app-avatar-title>
-              </div>
-            </div>
-          </div>
-          <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="isRequest ? loan.expectedReturn : totalDebt"></app-conversion-graphic>
-          <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="loan.paid" *ngIf="!isRequest"></app-conversion-graphic>
-          <div class="margintop20"></div>
-          <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
-          <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
-
-          <div class="table-responsive" *ngIf='availableOracle'>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Oracle</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{{ loan.oracle }} - <b>{{ currency }}</b></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="table-responsive" (click)="openDetail('identity');">
-            <table class="table table-clickable">
-              <thead>
-                <tr>
-                  <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('identity') }" scope="col">
-                    Identity<i class="material-icons white more-indicator">{{ isDetail('identity') ? '' : 'unfold_more' }}</i>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style='cursor: pointer'>{{ loan.borrower }} - <b>{{ identityName }}</b></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="table-responsive">
-            <table class="table" (click)="openLender(loan.owner)" *ngIf="!isRequest">
-              <thead>
-                <tr>
-                  <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style='cursor: pointer'>{{ loan.owner }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="table-responsive" (click)="openDetail('cosigner');">
-            <table class="table table-clickable">
-              <thead>
-                <tr>
-                  <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
-                      Insurance / Cosigner<i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <app-cosigner-selector [loan]=loan></app-cosigner-selector>
-              </tbody>
-            </table>
-          </div>
-          <div *ngIf="isRequest">
-            <app-lend-button [loan]=loan></app-lend-button>
-            <app-risk-indicator class='risk-indicator' [loan]=loan></app-risk-indicator>
-          </div>
-        </div>
-        <div class="col-sm-12 col-lg-6 loan-description right">
-          <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
-          <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
-        </div>
-      </div>
-      
-    </div>
-
-    <div class="col-sm-12">
-      <div class="margintop40"></div>
-      <div class="title main-h1">History</div>
-      <app-transaction-history [loan]=loan></app-transaction-history>
-    </div>
-  </div>
-</div> -->
