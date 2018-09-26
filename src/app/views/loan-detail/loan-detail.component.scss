@@ -106,8 +106,8 @@
 @media (min-width: 992px) { 
   .loan-detail{
     width: 970px;
-    padding-right: 15px;
-    padding-left: 15px;
+    // padding-right: 15px;
+    // padding-left: 15px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -128,7 +128,7 @@
       } 
       .right{
         width: 50%;
-        flex: 1;
+        display: initial;
       }
     }
   }

@@ -2,12 +2,11 @@
 
 .button-group{
   height: 70px;
-  display: none;
 }
 .button-options{
+  display: none;
   cursor: pointer;
   width: 70px;
-  display: flex;
   align-items: center;
   color: $secondary;
   @include transition;
@@ -27,10 +26,20 @@
     }
   }
 }
+button.mat-icon-button {
+  width: 70px;
+  height: 70px;
+}
 
 @media (min-width: 992px) { 
   .button-group{
     height: 100px;
     display: flex;
+    .button-options{
+      display: flex;
+    }
+  }
+  button.mat-icon-button {
+    display: none;
   }
 }
