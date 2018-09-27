@@ -10,25 +10,36 @@
   align-items: center;
   color: $secondary;
   @include transition;
-  &:hover{
-    background-color: $tertiary;
-  }
-  &.active{
-    color: $primary;
-    &:hover{
-      background-color: transparent;
-    }
-  }
   i{
     margin: 0 auto;
     &.fas{
       font-size: 1.5em;
     }
   }
+  &:hover{
+    background-color: $tertiary;
+  }
 }
-button.mat-icon-button {
-  width: 70px;
-  height: 70px;
+button{
+  &.mat-icon-button {
+    width: 70px;
+    height: 70px;
+  }
+  &.mat-menu-item {
+    i{
+      margin-right: 15px;
+    }
+  }
+}
+
+.button-options,
+.mat-menu-item{
+  &.active{
+    color: $primary;
+    &:hover{
+      background-color: transparent;
+    }
+  }
 }
 
 @media (min-width: 992px) { 
@@ -39,7 +50,9 @@ button.mat-icon-button {
       display: flex;
     }
   }
-  button.mat-icon-button {
-    display: none;
+  button{
+    &.mat-icon-button {
+      display: none;
+    }
   }
 }

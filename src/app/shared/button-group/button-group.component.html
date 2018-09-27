@@ -9,9 +9,20 @@
     [ngClass]="{'active': viewDetail === 'identity' ? true : false }">
     <i class="fas fa-id-badge" matTooltip="Identity" matTooltipPosition="below"></i>
   </div>
-  <mat-menu #appMenu="matMenu" yPosition="above">
-    <button mat-menu-item>Settings</button>
-    <button mat-menu-item>Help</button>
+
+  <mat-menu #appMenu="matMenu">
+    <button mat-menu-item
+      (click)="openDetail('identity')"
+      [ngClass]="{'active': viewDetail === 'identity' ? true : false }">
+      <i class="fas fa-id-badge"></i>
+      <span>Identity</span>
+    </button>
+    <button mat-menu-item
+      (click)="openDetail('cosigner')"
+      [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }">
+      <i class="fas fa-shield-alt"></i>
+      <span>Cosigner</span>
+    </button>
   </mat-menu>
   
   <button mat-icon-button [matMenuTriggerFor]="appMenu">

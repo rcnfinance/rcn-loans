@@ -11,6 +11,8 @@ export class ButtonGroupComponent implements OnInit {
 
   openDetail(view: string) {
     this.view.emit(view);
+    console.log(this.view);
+    console.log(view);
     this.viewDetail = view;
   }
 

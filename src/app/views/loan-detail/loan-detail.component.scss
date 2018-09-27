@@ -61,11 +61,12 @@
 
     .right{
       width: 100%;
-      min-height: 400px;
+      min-height: 500px;
       flex: 1;
       display: flex;
-      padding: 15px;
       text-align: center;
+      justify-content: center;
+      padding: 15px;
       background-color: #101010;
     }
 
