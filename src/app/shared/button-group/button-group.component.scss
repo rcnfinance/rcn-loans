@@ -28,6 +28,8 @@ button{
   &.mat-menu-item {
     i{
       margin-right: 15px;
+      min-width: 15px;
+      text-align: center;
     }
   }
 }
