@@ -92,7 +92,7 @@ function decodeTokenId(value: string): [number, number] {
 function fixNegative(value: BigNumber): number {
     const mid = (new BigNumber(2).pow(new BigNumber(63)));
     if (mid.minus(value).toNumber() <= 0) {
-        return value.minus(new BigNumber('fffffffffffffffffffffffffffffff', 16));
+        return value.minus(new BigNumber('0x10000000000000000000000000000000', 16));
     } else {
         return value;
     }
