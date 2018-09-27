@@ -243,6 +243,9 @@ mat-sidenav-container.mat-drawer-container {
 }
   //Menu
 .mat-menu-panel {
+  margin-top: 70px;
+  border-top-right-radius: 0px !important;
+  border-top-left-radius: 0px !important;
   background-color: $gray7;
   .mat-menu-content {
     padding-top: 2px;
