@@ -289,3 +289,13 @@ td {
 }
 
 /*# sourceMappingURL=output.css.map */
+
+// Custom Styles
+
+th{position: relative;}
+th{
+  i{
+    position: absolute;
+    right: 10px;
+  }
+}
