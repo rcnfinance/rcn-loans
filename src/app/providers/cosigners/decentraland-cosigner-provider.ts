@@ -72,8 +72,8 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     }
     private isDefaulted(loan: Loan, detail: DecentralandCosigner): boolean {
         return (loan.status === Status.Ongoing || loan.status === Status.Indebt) // The loan should not be in debt
-            && loan.dueTimestamp + (7 * 24 * 60 * 60) > (Date.now() / 1000) // Due time must be pased by 1 week
-            && detail.status === 1; // Detail should be ongoing
+            && loan.dueTimestamp + (7 * 24 * 60 * 60) < Math.floor(Date.now() / 1000) // Due time must be pased by 1 week
+            && detail.status == 1; // Detail should be ongoing
     }
     private buildClaim(loan: Loan): () => Promise<string> {
         return () => {
