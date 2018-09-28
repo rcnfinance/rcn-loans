@@ -1,9 +1,11 @@
 @import '../../../../../scss/_variables.scss'; //variables
 
+.map-container{ text-align: left; }
+
 .icon-container {
   display: flex;
   flex-direction: row;
-  padding: 15px 0;
+  padding-top: 15px;
   .icon {
     i,
     svg{
@@ -18,6 +20,18 @@
     @extend %roboto-bold;
   }
 }
+
+.text-container {
+  padding-top: 15px;
+  .title{
+    @extend %roboto-light;
+  }
+  .txt {
+    font-size: 1.5em;
+    @extend %roboto-bold;
+  }
+}
+
 .parcel-container{
   position: absolute;
   top: 15px;

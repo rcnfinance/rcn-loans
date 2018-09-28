@@ -1,30 +1,35 @@
-<app-decentraland-map [decentralandProvider]='cosignerProvider' [height]='mapHeight' [width]='mapWidth' [center]=parcel></app-decentraland-map>
+<div class="map-container">
 
-<div class="icon-container">
-  <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
-  <div class="txt">{{ parcelId }}</div>
-</div>
+  <app-decentraland-map [decentralandProvider]='cosignerProvider' [height]='mapHeight' [width]='mapWidth' [center]=parcel></app-decentraland-map>
+  
+  <div class="icon-container">
+    <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+    <div class="txt">{{ parcelId }}</div>
+  </div>
+  
+  <div class="text-container">
+    <div class="title main-subtitle">{{ 'Parcel cost' }}</div>
+    <div class="txt">MANA {{ displayPrice }} </div>
+  </div>
+  
+  <div class="text-container">
+    <div class="title main-subtitle">{{ 'Financing' }}</div>
+    <div class="txt">~ {{ financiation }} </div>
+  </div>
 
-          <div class="title main-subtitle">{{ 'Parcel cost' }}</div>
-          <div class="title main-title">{{ displayPrice }} MANA</div>
+  <div class="card-property">
+    <div class="title margintop20 marginbottom10">{{ 'Context' }}</div>
+    <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>
+      <div class="avatar-container">
+        <img src="{{ highlightIcon(highlight) }}">
+      </div>
+      <div class="txt-container">
+        <div class="subtitle">{{ highlightTitle(highlight) }}</div>
+        <div class="title">{{ highlightDistance(highlight) }}</div>
+      </div>
+    </div>
+  </div>
 
-          <!-- <div class="title main-subtitle">{{ 'Financing' }}</div>
-          <div class="title main-subtitle"> ~ {{ financiation }} %</div> -->
-
-          <!-- <div class="card-property">
-            <div class="title margintop20 marginbottom10">{{ 'Context' }}</div>
-            <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>
-              <div class="avatar-container">
-                <img src="{{ highlightIcon(highlight) }}">
-              </div>
-              <div class="txt-container">
-                <div class="subtitle">{{ highlightTitle(highlight) }}</div>
-                <div class="title">{{ highlightDistance(highlight) }}</div>
-              </div>
-            </div>
-          </div> -->
-
-    
   <div class="legals">
     <p>
       This loan is backed by a Decentraland parcel. The tokens involved in the lending will be used to purchase the corresponding parcel linked to this escrow smart contact: 0xceceaa8edc0830c7cec497e33bb3a3c28dd55a32.
@@ -33,6 +38,11 @@
     </p>
     <app-claim-button [loan]='loan' [provider]='cosignerProvider'></app-claim-button>
   </div>
+  
+</div>
+
+
+    
   
   
   
