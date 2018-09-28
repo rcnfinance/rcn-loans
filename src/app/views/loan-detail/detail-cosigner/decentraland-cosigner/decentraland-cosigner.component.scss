@@ -2,7 +2,7 @@
 .icon-container {
   position: relative;
   min-height: 40px;
-  padding: 7px 0 0 40px;
+  padding: 0 0 0 35px;
   .icon {
     position: absolute;
     top: 0;
@@ -10,6 +10,11 @@
     i{
       color: $primary;
     }
+  }
+  .txt {
+    font-size: 22px;
+    line-height: 1;
+    text-align: left;
   }
 }
 .parcel-container{

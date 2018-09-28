@@ -79,18 +79,17 @@ export class Tag {
     ) {}
 }
 
-function decodeTokenId(value: string): [number, number] {
-    value = value.slice(2);
+function decodeTokenId(_value: string): [number, number] {
+    const value = _value.replace('0x', '');
     const x = value.slice(0, 32);
     const y = value.slice(32);
     return [fixNegative(new BigNumber(x, 16)), fixNegative(new BigNumber(y, 16))];
 }
 
 function fixNegative(value: BigNumber): number {
-    const mid = (new BigNumber(2).pow(new BigNumber(127)));
-    const max = (new BigNumber(2).pow(new BigNumber(128)));
-    if (value > mid) {
-        return value.minus(max);
+    const mid = new BigNumber(2).pow(new BigNumber(64));
+    if (mid.minus(value).toNumber() <= 0) {
+        return value.minus(new BigNumber(2).pow(new BigNumber(128)));
     } else {
         return value;
     }

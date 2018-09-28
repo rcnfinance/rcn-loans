@@ -5,6 +5,7 @@ import { Loan, Status } from '../../models/loan.model';
 import { HttpClient } from '@angular/common/http';
 import { Parcel, District, DecentralandCosigner } from '../../models/cosigners/decentraland-cosigner.model';
 import { Web3Service } from '../../services/web3.service';
+import { Utils } from '../../utils/utils';
 
 declare let require: any;
 
@@ -71,8 +72,8 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     }
     private isDefaulted(loan: Loan, detail: DecentralandCosigner): boolean {
         return (loan.status === Status.Ongoing || loan.status === Status.Indebt) // The loan should not be in debt
-            && loan.dueTimestamp + (7 * 24 * 60 * 60) > (Date.now() / 1000) // Due time must be pased by 1 week
-            && detail.status === 1; // Detail should be ongoing
+            && loan.dueTimestamp + (7 * 24 * 60 * 60) < Math.floor(Date.now() / 1000) // Due time must be pased by 1 week
+            && detail.status == 1; // Detail should be ongoing
     }
     private buildClaim(loan: Loan): () => Promise<string> {
         return () => {
@@ -97,7 +98,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
               this.managerContract.mortgages(mortgageId, (errD, mortgageData) => {
                 const decentralandCosigner = new DecentralandCosigner(
                   mortgageId, // Mortgage ID
-                  '0x' + mortgageData[4].toString(16), // Land ID
+                  Utils.toBytes32(this.web3.web3.toHex(mortgageData[4])), // Land ID
                   mortgageData[5], // Land price
                   ((loan.rawAmount / mortgageData[5]) * 100).toFixed(2), // Financed amount
                   undefined, // Parcel data

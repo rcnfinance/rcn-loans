@@ -43,8 +43,8 @@ export const environment = {
     basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
     decentraland: {
-      mortgageCreator: '0xb3d9444f88dc1c30f18c69ebd8ec6f1fa2706376',
-      mortgageManager: '0x0bdaf0d7eb72cac0e0c8defcbe83ccc06c66a602',
+      mortgageCreator: '0xb1b95ee112302b5fcde22fa4a6b1131ff228fa2b',
+      mortgageManager: '0x74ce62f642d491f87c2c6119dd6cc12a05434c87',
       landMarket: '0xb3bca6f5052c7e24726b44da7403b56a8a1b98f8'
     }
   },
