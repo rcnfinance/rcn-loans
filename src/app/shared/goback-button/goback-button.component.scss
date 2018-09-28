@@ -1,18 +1,15 @@
 @import '../../../scss/_variables.scss'; //variables
+
 .go-back {
   width: 70px;
-  height: 100%;
-  position: absolute;
+  display: flex;
+  align-items: center;
   color: $secondary;
+  padding-left: 20px;
   cursor: pointer;
   @include transition;
-  &:hover{
-    background-color: $fifth;
-  }
-  i{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    @include transform(translate(-50%, -50%));
-  }
+}
+
+@media (min-width: 992px){
+  .go-back { height: 100px; }
 }

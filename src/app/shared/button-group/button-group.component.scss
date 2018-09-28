@@ -1,36 +1,63 @@
 @import '../../../scss/_variables.scss'; //variables
 
 .button-group{
-  height: 100%;
-  position: absolute;
-  top: 0;
-  right: 0;
+  height: 70px;
 }
 .button-options{
-  position: relative;
-  width: 70px;
-  height: 100%;
-  padding: 15px;
-  float: right;
-  color: $secondary;
+  display: none;
   cursor: pointer;
+  width: 70px;
+  align-items: center;
+  color: $secondary;
   @include transition;
+  i, 
+  svg{
+    margin: 0 auto;
+    &.fas,
+    &.svg-inline--fa{
+      font-size: 1.4em;
+    }
+  }
   &:hover{
     background-color: $tertiary;
   }
+}
+button{
+  &.mat-icon-button {
+    width: 70px;
+    height: 70px;
+  }
+  &.mat-menu-item {
+    i, 
+    svg{
+      margin-right: 15px;
+      min-width: 15px;
+      text-align: center;
+    }
+  }
+}
+
+.button-options,
+.mat-menu-item{
   &.active{
     color: $primary;
     &:hover{
       background-color: transparent;
     }
   }
-  i{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    @include transform(translate(-50%, -50%));
+}
+
+@media (min-width: 992px) { 
+  .button-group{
+    height: 100px;
+    display: flex;
+    .button-options{
+      display: flex;
+    }
   }
-  .fas{
-    font-size: 1.5em;
+  button{
+    &.mat-icon-button {
+      display: none;
+    }
   }
 }

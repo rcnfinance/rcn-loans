@@ -1,10 +1,11 @@
 @import '../../../scss/_variables.scss'; //variables
 
 .list-avatar {
-  height: 55px;
+  height: 40px;
   position: relative;
   padding-top: 3px;
   padding-left: 55px;
+  margin-bottom: 15px;
   .avatar-container {
     width: 40px;
     height: 40px;

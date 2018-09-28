@@ -1,63 +1,76 @@
 @import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/_tables.scss'; //tables
 
 //LOAN DETAIL
 .loan-detail{
+  width: 100%;
+  position: relative;
   margin-bottom: 20px;
 }
-.navbar-container {
-  height: 70px;
+
+.header-container{
   position: relative;
-  overflow: hidden;
-  background-color: #333333;
-  .button-group{
-    height: 100%;
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-  .button-options{
-    position: relative;
-    width: 70px;
-    height: 100%;
-    padding: 15px;
-    float: right;
-    color: $secondary;
-    cursor: pointer;
-    @include transition;
-    &:hover{
-      background-color: $fifth;
+  .creator-container {
+    .creator-title{
+      color: $fifth;
+      font-size: 36px;
+      @extend %font-black;
     }
-    i{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      @include transform(translate(-50%, -50%));
+  }
+  &.flex-container{
+    height: 70px;
+    @extend %flex-container;
+    background-color: $gray7;
+    > .flex-item {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      height: 100%;
+      min-width: 60px;
+      @include transition;
+      &:nth-child(1){
+        order: 1;
+        &:hover{
+          background-color: $fifth;
+        }
+      }
+      &:nth-child(2){ order: 2; cursor: default; @extend %position-center; }
+      &:nth-child(3){ order: 3; }
     }
   }
 }
-.loan-description {
-  position: relative;
-  width: 100%;
-  float: left;
-  padding: 15px;
-  &.left{
-    position: relative;
-    height: auto;
-    background-color: $fifth;
-  }
-  &.right{
-    min-height: 670px;
-    background-color: $quaternary;
-  }
-}
-.col-group{
-  &.x3{
-    .col-item{
-      position: relative;
-      width: 33.3%;
-      height: 70px;
-      float: left;
+
+.loan-description{
+  &.flex-container{
+    @extend %flex-display;
+    flex-direction: column;
+
+    .left{
+      width: 100%;
+      flex: 1;
+      background-color: #0c0c0c;
+      .avatar-information{
+        @extend %flex-display;
+        justify-content: space-around;
+        .flex-item{
+          &:nth-child(1){ width: 50%; padding: 15px 8px 0 15px; }
+          &:nth-child(2){ width: 50%; padding: 15px 15px 0 8px; display: flex; align-items: flex-end; flex-direction: column; }
+        }
+      }
     }
+
+    .right{
+      width: 100%;
+      min-height: 400px;
+      position: relative; // TODO Remove relative position after refactor & redesign decentraland
+      flex: 1;
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      padding: 15px;
+      background-color: #101010;
+    }
+
   }
 }
 
@@ -83,37 +96,52 @@
   }
 }
 
-@media (min-width: 768px){
-  .navbar-container { height: 100px; }
-  .col-group{
-    &.x3{
-      .col-item{
-        height: 100px;
-      }
-    }
-  }
-}
-@media (min-width: 992px){
-  .loan-description {
-    width: 50%;
-    &.left{
-      width: 50%;
-    }
-    &.right{
-      height: auto;
-      min-height: 468px;
-      position: absolute;
-      top: 100px;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin-left: 50%;
-    }
-  }
-}
-
 .risk-indicator {
   padding-top: 4px;
   padding-left: 16px;
   position: absolute;
 }
+.feature-padding{
+  padding: 0 15px;
+}
+
+@media (min-width: 992px) { 
+  .loan-detail{
+    width: 970px;
+    // padding-right: 15px;
+    // padding-left: 15px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .header-container{
+    &.flex-container{
+      height: 100px;
+      > .flex-item { min-width: 70px; }
+    }
+  }
+
+  .loan-description{
+    &.flex-container{
+      flex-direction: row;
+      .left{
+        width: 50%;
+        flex: 1;
+      } 
+      .right{
+        width: 50%;
+        display: initial;
+      }
+    }
+  }
+  .feature-padding{
+    padding: 0;
+  }
+}
+
+@media (min-width: 1200px) { 
+  .loan-detail{
+    width: 1170px;
+  }
+}
+

@@ -1,11 +1,13 @@
 @import '../../../scss/_variables.scss'; //variables
 
 .list-avatar {
-  height: 55px;
+  height: 40px;
   position: relative;
-  padding-top: 6px;
-  padding-left: 55px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   .txt-container{
+    padding-left: 15px;
     .title{
       line-height: 1.2;
       font-size: 16px;

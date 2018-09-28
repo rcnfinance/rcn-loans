@@ -16,9 +16,12 @@ $material-icons-font-path: '~material-icons/iconfont/'; // Material Icons
 html {height: 0;}
 body{
   position: relative;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.42857143;
   font-family: 'Raleway', sans-serif;
-  background-color: $tertiary;
   color: $secondary;
+  background-color: $tertiary;
 }
 
 //TABS
@@ -240,6 +243,9 @@ mat-sidenav-container.mat-drawer-container {
 }
   //Menu
 .mat-menu-panel {
+  margin-top: 70px;
+  border-top-right-radius: 0px !important;
+  border-top-left-radius: 0px !important;
   background-color: $gray7;
   .mat-menu-content {
     padding-top: 2px;
@@ -324,6 +330,7 @@ mat-form-field{
 
 // Header
 .nav-toggle{
+  cursor: pointer;
   border-radius: 0;
   padding: 0;
   margin-right: 35px;
@@ -502,7 +509,8 @@ footer {
       width: 24%;
       text-align: center;
       display: inline-block;
-      svg{font-size: 1.5em; color: $gray6; @include transition();}
+      svg,
+      .fas{font-size: 1.4em; color: $gray6; @include transition();}
       .nav-toggle {
         padding: 0;
         margin-right: 0;
@@ -525,7 +533,8 @@ footer {
         @extend %absolute-center;
       }
       &.active{
-        svg{color: $secondary;}
+        svg,
+        .fas{color: $secondary;}
         .available-loans {
           opacity: 1;
           @include transition-delay(1s);
@@ -612,3 +621,4 @@ footer {
     }
   }
 }
+

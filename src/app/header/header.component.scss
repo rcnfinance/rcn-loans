@@ -16,10 +16,11 @@
   margin-left: auto;
   padding: 10px 0px;
   background-color: black;
-  -webkit-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
-  -moz-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
-  box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
+  // -webkit-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
+  // -moz-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
+  // box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
   .navbar-header{
+    height: 40px;
     .button-img{
       display: inline-block;
       img{
@@ -36,7 +37,7 @@
       @extend %font-bold;
       @extend %absolute-center-top;
     }
-    ul.nav{ display: none; li{ @extend %font-bold; } }
+    .nav{ display: none; > div{ @extend %font-bold; } }
     .icon-hamburguer{
       cursor: pointer;
       font-size: 32px;
@@ -55,8 +56,6 @@
   width: 130px;
   height: 42px;
   > .flex-item {
-    // align-self: flex-end; //  This property accepts the same values as align-items and its value for the specific item.
-    // align-self: flex-end; order: 1; // Combine order with align-self to help the frogs to their destinations.
     &:nth-child(1){
       order: 1; // By default, items have a value of 0, but we can use this property to set it to a positive or negative integer value.
     }
@@ -174,8 +173,9 @@
       .header-title {
         display: none;
       }
-      ul.nav{
-        width: 550px;
+      .nav{
+        &.hasAccount{width: 480px;}
+        width: 380px;
         height: 45px;
         display: flex;
         flex-direction: row;
@@ -183,7 +183,8 @@
         align-items: center;
         float: right;
         @include transition;
-        li{
+        > div{
+          // max-width: 40px;
           display: block;
           font-size: 16px;
           cursor: pointer;

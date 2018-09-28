@@ -1,26 +1,26 @@
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-sm-12">
     <app-decentraland-map [decentralandProvider]='cosignerProvider' [height]='140' [width]='720' [center]=parcel></app-decentraland-map><br/>
   </div>
-  <div class="col-xs-12">
+  <div class="col-sm-12">
     <div class="row">
-      <div class="col-xs-12 col-sm-4">
+      <div class="col-sm-12 col-md-4">
         <div class="icon-container">
           <div class="icon"><i class="material-icons">place</i></div>
           <div class="txt">{{ parcelId }}</div>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-4">
-        <div class="margintop20 visible-xs"></div>
+      <div class="col-sm-12 col-md-4">
+        <div class="margintop20 d-none d-md-none"></div>
         <div class="title main-subtitle">{{ 'Parcel cost' }}</div>
         <div class="title main-title">{{ displayPrice }} MANA</div>
       </div>
-      <div class="col-xs-12 col-sm-4">
-        <div class="margintop20 visible-xs"></div>
+      <div class="col-sm-12 col-md-4">
+        <div class="margintop20 d-none d-md-none"></div>
         <div class="title main-subtitle">{{ 'Financing' }}</div>
         <div class="title main-subtitle"> ~ {{ financiation }} %</div>
       </div>
-      <div class="col-xs-12">
+      <div class="col-sm-12">
         <div class="card-property">
           <div class="title margintop20 marginbottom10">{{ 'Context' }}</div>
           <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>

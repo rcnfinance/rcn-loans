@@ -1,8 +1,11 @@
 <div class="empty-container" *ngIf="class === 'company'">
   <div class="empty-row">
     <div class="title main-h3">Company: {{ identity.name }}</div>
-    <img [src]="identity.logo" class="img-responsive img-center margintop20 marginbottom20">
-    <div class="title main-h4">{{ identity.description }}</div><br/>
+    <div class="margintop20"></div>
+    <img [src]="identity.logo" class="img-responsive img-center">
+    <div class="marginbottom20"></div>
+    <div class="title main-h4">{{ identity.description }}</div>
+    <div class="margintop10"></div>
     <div class="title main-h6">Foundation: {{ identity.foundation }}</div>
   </div>
 </div>
@@ -10,8 +13,10 @@
 
 <div class="empty-container filter" *ngIf="hasIdentity() == undefined">
   <div class="empty-row">
-    <i class="fas fa-id-badge gray7 font90 marginbottom20"></i>
-    <div class="title main-h3">The borrower of this loan is anonymous</div><br/>
+    <i class="fas fa-id-badge gray7 font90"></i>
+    <div class="margintop20"></div>
+    <div class="title main-h3">The borrower of this loan is anonymous</div>
+    <div class="margintop10"></div>
     <div class="title main-h4">
       The address is 
       <a target="_blank" href="{{ borrowerLinkExplorer }}">{{ loan.borrower }}</a>

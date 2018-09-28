@@ -2,11 +2,11 @@
   <nav id="navbar" class="navbar">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-sm-12">
           <div class="navbar-header">
 
             <button type="button"
-              class="nav-toggle hidden-xs hidden-sm" 
+              class="nav-toggle d-none d-lg-block" 
               (click)="sidebarToggle()">
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
@@ -19,13 +19,13 @@
             </a>
             <div class="header-title">{{ title }}</div>
 
-            <ul class="nav">
-              <li routerLink='/requests'>Requests</li>
-              <li routerLink='/activity'>Activity</li>
-              <li routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</li>
-              <li (click)="openDialog()" *ngIf="!hasAccount">Login</li>
-              <li class="separator">|</li>
-              <li (click)="openDialog();">
+            <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
+              <div routerLink='/requests'>Requests</div>
+              <div routerLink='/activity'>Activity</div>
+              <div routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</div>
+              <div (click)="openDialog()" *ngIf="!hasAccount">Login</div>
+              <div class="separator">|</div>
+              <div (click)="openDialog();">
                 <div class="flex-container" *ngIf="hasAccount">
                   <div class="flex-item">
                     <div class="list-avatar">
@@ -37,8 +37,8 @@
                   <div class="flex-item">Profile</div>
                   <div class="flex-item"><i class="material-icons transition" [ngClass]="{'rotate180': makeRotate }">expand_more</i></div>
                 </div>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>

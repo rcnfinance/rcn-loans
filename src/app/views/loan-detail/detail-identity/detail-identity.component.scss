@@ -1,16 +1,17 @@
 @import '../../../../scss/_variables.scss'; //variables
 
 .empty-container{
-  position: relative;
-  min-height: 400px;
-  &.filter{
-    -webkit-filter: grayscale(1);
-    filter: grayscale(1);
-  }
+  height: 100%;
   .empty-row{
-    width: 100%;
-    text-align: center;
-    @extend %position-center;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
   }
 }
 
