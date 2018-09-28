@@ -21,8 +21,30 @@ export class DecentralandCosignerComponent implements OnInit {
   displayPrice = '...';
   financiation = '...';
   highlights = [];
+
+  // Decentraland Map DATA
+  winWidth: number = window.innerWidth;
+  mapWidth: number = undefined;
+  mapHeight: number = undefined;
+
+  public winSize() {
+    if (this.winWidth < 550) {
+      this.mapWidth = 400;
+      this.mapHeight = 250;
+    } else if (this.winWidth > 550 && this.winWidth < 992) {
+      this.mapWidth = 960;
+      this.mapHeight = 250;
+    } else {
+      this.mapWidth = 500;
+      this.mapHeight = 200;
+    }
+  }
+
   constructor() { }
+
   ngOnInit() {
+    this.winSize();
+
     this.cosignerProvider.getDistricts().then((districts) => {
       this.districtsData = districts;
     });

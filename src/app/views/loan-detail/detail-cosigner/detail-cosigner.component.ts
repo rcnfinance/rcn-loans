@@ -15,9 +15,11 @@ export class DetailCosignerComponent implements OnInit {
   @Input() loan: Loan;
   cosignerProvider: CosignerProvider;
   detailClass: string;
+
   constructor(
     private cosignerService: CosignerService
   ) {}
+
   private buildDetailClass(): string {
     if (this.cosignerProvider === undefined) { return 'not_available'; }
     switch (this.cosignerProvider.constructor) {

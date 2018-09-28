@@ -1,20 +1,21 @@
 @import '../../../../../scss/_variables.scss'; //variables
+
 .icon-container {
-  position: relative;
-  min-height: 40px;
-  padding: 0 0 0 35px;
+  display: flex;
+  flex-direction: row;
+  padding: 15px 0;
   .icon {
-    position: absolute;
-    top: 0;
-    left: 0;
-    i{
+    i,
+    svg{
+      font-size: 2em;
       color: $primary;
     }
   }
   .txt {
     font-size: 22px;
-    line-height: 1;
-    text-align: left;
+    margin-left: 15px;
+    font-size: 1.5em;
+    @extend %roboto-bold;
   }
 }
 .parcel-container{
@@ -30,8 +31,6 @@
 }
 
 .legals {
-  position: absolute;
-  bottom: 0;
   margin-bottom: 16px;
   margin-right: 16px;
   p{
