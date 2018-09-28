@@ -578,46 +578,37 @@ footer {
     min-height: 0px;
     background-color: #121212;
     padding: 15px 30px;
-  }
-  .nav-mobile{
-    display: none;
-  }
-  a{
-    color: #fff;
-    @include transition();
-    &:hover{
-      color: $primary;
+    .icon{
+      margin-top: 0;
+      line-height: 1.9;
+      cursor: pointer;
+      padding-right: 15px;
+      display: inline-block;
+      &.version{
+        margin-right: 15px;    
+      }
     }
-  }
-  .left,
-  .center,
-  .right{
-    text-align: center;
-  }
-  .left{
-    text-align: left;
-  }
-  .center{
-    text-align: center;
-  }
-  .right{
-    text-align: right;
-  } 
-  .txt{
-    line-height: 1.9;
-  }
-  .button-group{
-    line-height: 1.9;
-    text-align: right;
-  }
-  .icon{
-    margin-top: 0;
-    line-height: 1.9;
-    cursor: pointer;
-    padding-right: 15px;
-    display: inline-block;
-    &.version{
-      margin-right: 15px;    
+    .nav-mobile{
+      display: none;
+    }
+    a{
+      color: #fff;
+      @include transition();
+      &:hover{
+        color: $primary;
+      }
+    }
+    .left{
+      text-align: left;
+    }
+    .center{
+      text-align: center;
+    }
+    .right{
+      text-align: right;
+    } 
+    .txt{
+      line-height: 1.9;
     }
   }
 }

@@ -42,29 +42,6 @@ export class DecentralandCosignerComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    this.winSize();
-
-    this.cosignerProvider.getDistricts().then((districts) => {
-      this.districtsData = districts;
-    });
-
-    if (this.loan.status === Status.Request) {
-      this.cosignerProvider.offer(this.loan).then((cosigner) => {
-        if (cosigner.cosignerDetail instanceof DecentralandCosigner) {
-          this.detail = cosigner.cosignerDetail;
-          this.renderDetail();
-        }
-      });
-    } else {
-      this.cosignerProvider.liability(this.loan).then((cosigner) => {
-        if (cosigner.cosignerDetail instanceof DecentralandCosigner) {
-          this.detail = cosigner.cosignerDetail;
-          this.renderDetail();
-        }
-      });
-    }
-  }
   private renderDetail() {
     this.parcel = this.detail.parcel;
     this.parcelId = this.parcel.id;
@@ -99,6 +76,31 @@ export class DecentralandCosignerComponent implements OnInit {
       return tag.distance + ' parcel away';
     } else {
       return tag.distance + ' parcels away';
+    }
+  }
+
+  ngOnInit() {
+    this.winSize();
+    console.log(this.highlights);
+
+    this.cosignerProvider.getDistricts().then((districts) => {
+      this.districtsData = districts;
+    });
+
+    if (this.loan.status === Status.Request) {
+      this.cosignerProvider.offer(this.loan).then((cosigner) => {
+        if (cosigner.cosignerDetail instanceof DecentralandCosigner) {
+          this.detail = cosigner.cosignerDetail;
+          this.renderDetail();
+        }
+      });
+    } else {
+      this.cosignerProvider.liability(this.loan).then((cosigner) => {
+        if (cosigner.cosignerDetail instanceof DecentralandCosigner) {
+          this.detail = cosigner.cosignerDetail;
+          this.renderDetail();
+        }
+      });
     }
   }
 }

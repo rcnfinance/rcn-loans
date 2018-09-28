@@ -22,7 +22,7 @@
 }
 
 .text-container {
-  padding-top: 15px;
+  padding-top: 10px;
   .title{
     @extend %roboto-light;
   }
@@ -32,25 +32,10 @@
   }
 }
 
-.parcel-container{
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
-
-.btn{
-  @include transition(all .3s ease-out);
-  box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
-  -webkit-transition: box-shadow 150ms cubic-bezier(0,0,.2,1);
-}
-
-.legals {
-  margin-bottom: 16px;
-  margin-right: 16px;
-  p{
-    @extend %propiety-title;
-    text-transform: inherit;
-  }
+.legals{
+  margin-top: 30px;
+  font-size: 11px;
+  text-align: right;
 }
 
 
@@ -96,5 +81,11 @@
       line-height: 1.4;
       @extend %font-medium;
     }
+  }
+}
+
+@media (min-width: 992px){
+  .map-space{
+    height: 250px;
   }
 }
