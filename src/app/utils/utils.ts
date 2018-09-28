@@ -26,7 +26,9 @@ export class Utils {
   }
 
   static toBytes32(hex: string): string {
-    return hex.replace('0x', '0x' + '0'.repeat(65 - hex.length));
+    const raw = hex.replace('0x', '');
+    const result =  hex.replace('0x', '0x' + '0'.repeat(64 - raw.length));
+    return result;
   }
 
   static shortAddress(address: string): string {
