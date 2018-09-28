@@ -120,7 +120,6 @@ export class LoanDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.winWidth);
     this.spinner.show();
     this.web3Service.getAccount().then((account) => {
       this.userAccount = account;
