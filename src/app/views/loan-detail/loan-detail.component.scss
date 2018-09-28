@@ -60,10 +60,9 @@
     }
 
     .right{
-
       width: 100%;
       min-height: 400px;
-      position: relative; // TODO Remove this after refactor & redesign decentraland
+      position: relative; // TODO Remove relative position after refactor & redesign decentraland
       flex: 1;
       display: flex;
       text-align: center;
