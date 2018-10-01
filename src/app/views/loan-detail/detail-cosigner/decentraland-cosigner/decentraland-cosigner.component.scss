@@ -24,7 +24,7 @@
 .text-container {
   padding-top: 10px;
   .title{
-    @extend %roboto-light;
+    @extend %propiety-title;
   }
   .txt {
     font-size: 1.5em;
@@ -33,9 +33,12 @@
 }
 
 .legals{
-  margin-top: 30px;
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
   font-size: 11px;
   text-align: right;
+  // margin-top: 30px;
 }
 
 
@@ -73,10 +76,10 @@
     }
   }
   .txt-container{
-    .title{
-      line-height: 1.4;
-      @extend %font-medium;
-    }
+    // .title{
+    //   line-height: 1.4;
+    //   @extend %font-medium;
+    // }
     .subtitle{
       line-height: 1.4;
       @extend %font-medium;

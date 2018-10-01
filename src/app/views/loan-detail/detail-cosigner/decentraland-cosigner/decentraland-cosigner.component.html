@@ -8,17 +8,19 @@
   </div>
   
   <div class="text-container">
-    <div class="title main-subtitle">{{ 'Parcel cost' }}</div>
+    <div class="title">{{ 'Parcel cost' }}</div>
     <div class="txt">MANA {{ displayPrice }} </div>
   </div>
   
   <div class="text-container">
-    <div class="title main-subtitle">{{ 'Financing' }}</div>
+    <div class="title">{{ 'Financing' }}</div>
     <div class="txt">~ {{ financiation }} </div>
   </div>
-
+  
   <div class="card-property">
-    <div class="title margintop20 marginbottom10">{{ 'Context' }}</div>
+    <div class="text-container">
+      <div class="title">Context</div>
+    </div>
     <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>
       <div class="avatar-container">
         <img src="{{ highlightIcon(highlight) }}">
