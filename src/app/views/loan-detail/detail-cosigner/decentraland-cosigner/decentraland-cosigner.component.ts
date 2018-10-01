@@ -48,6 +48,10 @@ export class DecentralandCosignerComponent implements OnInit {
     this.displayPrice = Utils.formatAmount(Number(this.detail.displayPrice));
     this.financiation = this.detail.financePart;
     this.highlights = this.parcel.highlights;
+
+    const json = JSON.stringify(this.detail);
+    console.log(json + ' JSON!!!!');
+    console.log(this.parcel.highlights + ' highlights!!!!');
   }
   highlightTitle(tag: Tag): string {
     if (this.districtsData === undefined) {
@@ -81,7 +85,6 @@ export class DecentralandCosignerComponent implements OnInit {
 
   ngOnInit() {
     this.winSize();
-    console.log(this.highlights);
 
     this.cosignerProvider.getDistricts().then((districts) => {
       this.districtsData = districts;
