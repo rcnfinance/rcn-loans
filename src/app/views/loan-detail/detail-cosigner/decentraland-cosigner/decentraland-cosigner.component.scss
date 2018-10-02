@@ -30,6 +30,10 @@
     font-size: 1.5em;
     @extend %roboto-bold;
   }
+  .subtitle{
+    text-transform: uppercase;
+    @extend %roboto-bold;
+  }
 }
 
 .legals{
@@ -40,49 +44,27 @@
   text-align: left;
 }
 
-
+.flex-container{ display: flex; flex-wrap: wrap; }
 .list-avatar {
-  height: 55px;
-  position: relative;
-  display: inline-block;
-  padding-top: 3px;
-  padding-left: 55px;
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
   .avatar-container {
     width: 40px;
     height: 40px;
-    position: absolute;
-    overflow: hidden;
-    top: 0px;
-    left: 0px;
+    display: flex;
     border-radius: 6px;
     background-color: #838aa3;
     box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
-    .title{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      font-size: 18px;
-      color: $secondary;
-      @extend %font-black;
-      @include transform(translate(-50%, -50%));
-    }
     img{
       width: 20px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      @include transform(translate(-50%, -50%));
+      margin: 0 auto;
     }
   }
-  .txt-container{
-    // .title{
-    //   line-height: 1.4;
-    //   @extend %font-medium;
-    // }
-    .subtitle{
-      line-height: 1.4;
-      @extend %font-medium;
-    }
+  .text-container {
+    padding-top: 0px;
+    padding-left: 10px;
+    line-height: 1.2;
   }
 }
 

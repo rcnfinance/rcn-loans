@@ -21,13 +21,51 @@
     <div class="text-container">
       <div class="title">Context</div>
     </div>
-    <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>
-      <div class="avatar-container">
-        <img src="{{ highlightIcon(highlight) }}">
+    <div class="flex-container">
+      <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>
+        <div class="avatar-container">
+          <img src="{{ highlightIcon(highlight) }}">
+        </div>
+        <div class="text-container">
+          <div class="title">{{ highlightTitle(highlight) }}</div>
+          <div class="subtitle">{{ highlightDistance(highlight) }}</div>
+        </div>
       </div>
-      <div class="txt-container">
-        <div class="subtitle">{{ highlightTitle(highlight) }}</div>
-        <div class="title">{{ highlightDistance(highlight) }}</div>
+      <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>
+        <div class="avatar-container">
+          <img src="{{ highlightIcon(highlight) }}">
+        </div>
+        <div class="text-container">
+          <div class="title">{{ highlightTitle(highlight) }}</div>
+          <div class="subtitle">{{ highlightDistance(highlight) }}</div>
+        </div>
+      </div>
+      <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>
+        <div class="avatar-container">
+          <img src="{{ highlightIcon(highlight) }}">
+        </div>
+        <div class="text-container">
+          <div class="title">{{ highlightTitle(highlight) }}</div>
+          <div class="subtitle">{{ highlightDistance(highlight) }}</div>
+        </div>
+      </div>
+      <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>
+        <div class="avatar-container">
+          <img src="{{ highlightIcon(highlight) }}">
+        </div>
+        <div class="text-container">
+          <div class="title">{{ highlightTitle(highlight) }}</div>
+          <div class="subtitle">{{ highlightDistance(highlight) }}</div>
+        </div>
+      </div>
+      <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>
+        <div class="avatar-container">
+          <img src="{{ highlightIcon(highlight) }}">
+        </div>
+        <div class="text-container">
+          <div class="title">{{ highlightTitle(highlight) }}</div>
+          <div class="subtitle">{{ highlightDistance(highlight) }}</div>
+        </div>
       </div>
     </div>
   </div>
