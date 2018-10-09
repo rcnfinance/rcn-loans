@@ -23,6 +23,7 @@ body{
   color: $secondary;
   background-color: $tertiary;
 }
+p{ margin-block-start: 0em; margin-block-end: 0em; }
 
 //TABS
 .mat-tab-label-container{

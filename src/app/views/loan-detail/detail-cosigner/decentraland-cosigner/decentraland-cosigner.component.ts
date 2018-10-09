@@ -4,6 +4,7 @@ import { Loan, Status } from '../../../../models/loan.model';
 import { DecentralandCosignerProvider } from '../../../../providers/cosigners/decentraland-cosigner-provider';
 import { CosignerDetail, Cosigner } from '../../../../models/cosigner.model';
 import { Utils } from '../../../../utils/utils';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-decentraland-cosigner',
@@ -21,6 +22,7 @@ export class DecentralandCosignerComponent implements OnInit {
   displayPrice = '...';
   financiation = '...';
   highlights = [];
+  mortgageManager: string = environment.contracts.decentraland.mortgageManager;
 
   // Decentraland Map DATA
   winWidth: number = window.innerWidth;
@@ -48,10 +50,6 @@ export class DecentralandCosignerComponent implements OnInit {
     this.displayPrice = Utils.formatAmount(Number(this.detail.displayPrice));
     this.financiation = this.detail.financePart;
     this.highlights = this.parcel.highlights;
-
-    const json = JSON.stringify(this.detail);
-    console.log(json + ' JSON!!!!');
-    console.log(this.parcel.highlights + ' highlights!!!!');
   }
   highlightTitle(tag: Tag): string {
     if (this.districtsData === undefined) {
@@ -85,6 +83,8 @@ export class DecentralandCosignerComponent implements OnInit {
 
   ngOnInit() {
     this.winSize();
+    console.log(environment.contracts.decentraland.mortgageManager);
+    console.log(this.mortgageManager);
 
     this.cosignerProvider.getDistricts().then((districts) => {
       this.districtsData = districts;
