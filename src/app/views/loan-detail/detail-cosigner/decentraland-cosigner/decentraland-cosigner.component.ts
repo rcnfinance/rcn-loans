@@ -16,9 +16,12 @@ export class DecentralandCosignerComponent implements OnInit {
   @Input() cosignerProvider: DecentralandCosignerProvider;
   detail: DecentralandCosigner;
   districtsData: District[];
+
   // View data
   parcel: Parcel = undefined;
   parcelId: string = undefined;
+  firstCoordenate: string = undefined;
+  lastCoordenate: string = undefined;
   displayPrice = '...';
   financiation = '...';
   highlights = [];
@@ -50,6 +53,10 @@ export class DecentralandCosignerComponent implements OnInit {
     this.displayPrice = Utils.formatAmount(Number(this.detail.displayPrice));
     this.financiation = this.detail.financePart;
     this.highlights = this.parcel.highlights;
+
+    const coordenate = this.parcelId.split(',');
+    this.firstCoordenate = coordenate[0];
+    this.lastCoordenate = coordenate[1];
   }
   highlightTitle(tag: Tag): string {
     if (this.districtsData === undefined) {

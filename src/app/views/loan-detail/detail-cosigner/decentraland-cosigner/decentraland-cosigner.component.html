@@ -1,7 +1,9 @@
 <div class="map-container">
   <app-decentraland-map [decentralandProvider]='cosignerProvider' [height]='mapHeight' [width]='mapWidth' [center]=parcel></app-decentraland-map>
 
-  <a href='https://market.decentraland.org/parcels/-16/-3/detail' class='avatar-container' target="_blank">
+  <a href='https://market.decentraland.org/parcels/{{ firstCoordenate }}/{{ lastCoordenate }}/detail' 
+  class='icon-circle' target="_blank" 
+  matTooltip="Parcel Detail" matTooltipPosition="below">
     <i class="material-icons">link</i>
   </a>
 
