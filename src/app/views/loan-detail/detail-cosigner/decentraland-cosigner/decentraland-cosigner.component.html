@@ -1,17 +1,18 @@
 <div class="map-container">
-
   <app-decentraland-map [decentralandProvider]='cosignerProvider' [height]='mapHeight' [width]='mapWidth' [center]=parcel></app-decentraland-map>
-  
+
+  <a href='https://market.decentraland.org/parcels/-16/-3/detail' class='avatar-container' target="_blank">
+    <i class="material-icons">link</i>
+  </a>
+
   <div class="icon-container">
     <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
     <div class="txt">{{ parcelId }}</div>
   </div>
-  
   <div class="text-container">
     <div class="title">{{ 'Parcel cost' }}</div>
     <div class="txt">MANA {{ displayPrice }} </div>
   </div>
-  
   <div class="text-container">
     <div class="title">{{ 'Financing' }}</div>
     <div class="txt">~ {{ financiation }} </div>
@@ -37,7 +38,8 @@
   <div class="legals">
     <p>
       This loan is backed by a Decentraland parcel. The tokens involved in the lending will be used to purchase the 
-      corresponding parcel linked to this escrow smart contact: <a href="#">{{ mortgageManager }}.</a>
+      corresponding parcel linked to this escrow smart contact: 
+      <a href="https://etherscan.io/address/{{ mortgageManager }}" target='_blank'>{{ mortgageManager }}.</a>
     </p>
     <div class="text-container">
       <div class="title">{{ 'Notice:' }}</div>
@@ -45,11 +47,9 @@
     <p>The ownership of this parcel will be transferred to the lender in case of a default.</p> 
     <app-claim-button [loan]='loan' [provider]='cosignerProvider'></app-claim-button>
   </div>
-
 </div>
 
 
-    
   
   
   

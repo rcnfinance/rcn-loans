@@ -83,8 +83,6 @@ export class DecentralandCosignerComponent implements OnInit {
 
   ngOnInit() {
     this.winSize();
-    console.log(environment.contracts.decentraland.mortgageManager);
-    console.log(this.mortgageManager);
 
     this.cosignerProvider.getDistricts().then((districts) => {
       this.districtsData = districts;
