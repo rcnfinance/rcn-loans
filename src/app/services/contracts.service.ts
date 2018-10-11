@@ -116,7 +116,9 @@ export class ContractsService {
 
     public async estimateRequiredAmount(loan: Loan): Promise<number> {
       // TODO: Calculate and add cost of the cosigner
-      if (loan.oracle === undefined) {
+      console.log('loan.oracle is ' + loan.oracle);
+      if (loan.oracle === Utils.address_0) {
+        console.log('loan.oracle is ' + Utils.address_0);
         return loan.rawAmount;
       } else {
         const oracleData = await this.getOracleData(loan);
