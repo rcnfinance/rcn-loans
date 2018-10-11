@@ -3,7 +3,6 @@ import { Component, OnInit, Input } from '@angular/core';
 // App Component
 import { MatDialog } from '@angular/material';
 import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
-import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { TxService, Tx } from '../../tx.service';
 import { environment } from '../../../environments/environment';
@@ -12,7 +11,8 @@ import { EventsService, Category } from '../../services/events.service';
 
 @Component({
   selector: 'app-transfer-button',
-  templateUrl: './transfer-button.component.html'
+  templateUrl: './transfer-button.component.html',
+  styleUrls: ['./transfer-button.component.scss']
 })
 export class TransferButtonComponent implements OnInit {
   @Input() loan: Loan;
@@ -23,8 +23,6 @@ export class TransferButtonComponent implements OnInit {
     private eventsService: EventsService,
     public dialog: MatDialog
   ) { }
-
-  handleTransfer() {}
 
   loanTransfer() {
     const dialogRef = this.dialog.open(DialogLoanTransferComponent);
