@@ -5,6 +5,7 @@
   "projects": {
     "rcn-angular-dapp": {
       "root": "src",
+      "sourceRoot": "e2e",
       "projectType": "application",
       "architect": {
         "build": {
