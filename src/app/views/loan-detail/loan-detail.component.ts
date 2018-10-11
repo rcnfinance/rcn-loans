@@ -34,7 +34,7 @@ export class LoanDetailComponent implements OnInit {
   isRequest: boolean;
   isOngoing: boolean;
 
-  canTransfer: boolean;
+  canTransfer: boolean = true;
   canCancel: boolean;
   canPay: boolean;
   canLend: boolean;
@@ -149,6 +149,6 @@ export class LoanDetailComponent implements OnInit {
         this.router.navigate(['/404/'])
       );
     });
- 
+
   }
 }
