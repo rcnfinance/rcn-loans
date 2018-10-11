@@ -32,6 +32,13 @@ import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { LoanCardComponent } from './loan-card/loan-card.component';
 
 @NgModule({
+  imports: [
+    CommonModule,
+    BrowserModule,
+    HttpModule,
+    MaterialModule,
+    BlockiesModule
+  ],
   declarations: [
     LendButtonComponent,
     DetailButtonComponent,
@@ -57,12 +64,8 @@ import { LoanCardComponent } from './loan-card/loan-card.component';
     ClaimButtonComponent,
     LoanCardComponent,
   ],
-  imports: [
-    CommonModule,
-    BrowserModule,
-    HttpModule,
-    MaterialModule,
-    BlockiesModule,
+  entryComponents: [
+    CivicAuthComponent
   ],
   exports: [
     LendButtonComponent,
@@ -89,9 +92,6 @@ import { LoanCardComponent } from './loan-card/loan-card.component';
     SocialContainerComponent,
     ClaimButtonComponent,
     LoanCardComponent
-  ],
-  entryComponents: [
-    CivicAuthComponent
   ]
 })
 export class SharedModule { }
