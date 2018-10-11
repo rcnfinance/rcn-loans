@@ -4,7 +4,7 @@
   "newProjectRoot": "projects",
   "projects": {
     "rcn-angular-dapp": {
-      "root": "",
+      "root": "src",
       "projectType": "application",
       "architect": {
         "build": {
@@ -115,7 +115,7 @@
       }
     },
     "rcn-angular-dapp-e2e": {
-      "root": "",
+      "root": "src",
       "projectType": "application",
       "architect": {
         "e2e": {
