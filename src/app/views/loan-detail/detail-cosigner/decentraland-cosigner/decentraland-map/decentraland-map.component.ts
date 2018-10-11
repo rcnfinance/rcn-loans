@@ -7,6 +7,7 @@ import { DecentralandCosignerProvider } from '../../../../../providers/cosigners
   templateUrl: './decentraland-map.component.html',
   styleUrls: ['./decentraland-map.component.scss']
 })
+
 export class DecentralandMapComponent {
   @Input() decentralandProvider: DecentralandCosignerProvider;
   @Input() center: Parcel;

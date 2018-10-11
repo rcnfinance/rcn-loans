@@ -4,6 +4,7 @@ import { Loan, Status } from '../../../../models/loan.model';
 import { DecentralandCosignerProvider } from '../../../../providers/cosigners/decentraland-cosigner-provider';
 import { CosignerDetail, Cosigner } from '../../../../models/cosigner.model';
 import { Utils } from '../../../../utils/utils';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-decentraland-cosigner',
@@ -15,40 +16,47 @@ export class DecentralandCosignerComponent implements OnInit {
   @Input() cosignerProvider: DecentralandCosignerProvider;
   detail: DecentralandCosigner;
   districtsData: District[];
+
   // View data
   parcel: Parcel = undefined;
   parcelId: string = undefined;
+  firstCoordenate: string = undefined;
+  lastCoordenate: string = undefined;
   displayPrice = '...';
   financiation = '...';
   highlights = [];
-  constructor() { }
-  ngOnInit() {
-    this.cosignerProvider.getDistricts().then((districts) => {
-      this.districtsData = districts;
-    });
+  mortgageManager: string = environment.contracts.decentraland.mortgageManager;
 
-    if (this.loan.status === Status.Request) {
-      this.cosignerProvider.offer(this.loan).then((cosigner) => {
-        if (cosigner.cosignerDetail instanceof DecentralandCosigner) {
-          this.detail = cosigner.cosignerDetail;
-          this.renderDetail();
-        }
-      });
+  // Decentraland Map DATA
+  winWidth: number = window.innerWidth;
+  mapWidth: number = undefined;
+  mapHeight: number = undefined;
+
+  public winSize() {
+    if (this.winWidth < 550) {
+      this.mapWidth = 400;
+      this.mapHeight = 250;
+    } else if (this.winWidth > 550 && this.winWidth < 992) {
+      this.mapWidth = 960;
+      this.mapHeight = 250;
     } else {
-      this.cosignerProvider.liability(this.loan).then((cosigner) => {
-        if (cosigner.cosignerDetail instanceof DecentralandCosigner) {
-          this.detail = cosigner.cosignerDetail;
-          this.renderDetail();
-        }
-      });
+      this.mapWidth = 500;
+      this.mapHeight = 200;
     }
   }
+
+  constructor() { }
+
   private renderDetail() {
     this.parcel = this.detail.parcel;
     this.parcelId = this.parcel.id;
     this.displayPrice = Utils.formatAmount(Number(this.detail.displayPrice));
     this.financiation = this.detail.financePart;
     this.highlights = this.parcel.highlights;
+
+    const coordenate = this.parcelId.split(',');
+    this.firstCoordenate = coordenate[0];
+    this.lastCoordenate = coordenate[1];
   }
   highlightTitle(tag: Tag): string {
     if (this.districtsData === undefined) {
@@ -77,6 +85,30 @@ export class DecentralandCosignerComponent implements OnInit {
       return tag.distance + ' parcel away';
     } else {
       return tag.distance + ' parcels away';
+    }
+  }
+
+  ngOnInit() {
+    this.winSize();
+
+    this.cosignerProvider.getDistricts().then((districts) => {
+      this.districtsData = districts;
+    });
+
+    if (this.loan.status === Status.Request) {
+      this.cosignerProvider.offer(this.loan).then((cosigner) => {
+        if (cosigner.cosignerDetail instanceof DecentralandCosigner) {
+          this.detail = cosigner.cosignerDetail;
+          this.renderDetail();
+        }
+      });
+    } else {
+      this.cosignerProvider.liability(this.loan).then((cosigner) => {
+        if (cosigner.cosignerDetail instanceof DecentralandCosigner) {
+          this.detail = cosigner.cosignerDetail;
+          this.renderDetail();
+        }
+      });
     }
   }
 }

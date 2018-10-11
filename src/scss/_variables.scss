@@ -45,6 +45,16 @@ $gray9: #0c0c0c;
 %font-extra-bold{font-weight: 800;}
 %font-black{font-weight: 900;}
 
+%roboto-thin{font-weight: 100; font-family: 'Roboto', sans-serif}
+%roboto-extra-light{font-weight: 200; font-family: 'Roboto', sans-serif}
+%roboto-light{font-weight: 300; font-family: 'Roboto', sans-serif}
+%roboto-regular{font-weight: 400; font-family: 'Roboto', sans-serif}
+%roboto-medium{font-weight: 500; font-family: 'Roboto', sans-serif}
+%roboto-semi-bold{font-weight: 600; font-family: 'Roboto', sans-serif}
+%roboto-bold{font-weight: 700; font-family: 'Roboto', sans-serif}
+%roboto-extra-bold{font-weight: 800; font-family: 'Roboto', sans-serif}
+%roboto-black{font-weight: 900; font-family: 'Roboto', sans-serif}
+
 %propiety-title {font-size: 11px; text-transform: uppercase; @extend %font-light;}
 %propiety-subtitle {font-size: 15px; @extend %font-medium;}
 

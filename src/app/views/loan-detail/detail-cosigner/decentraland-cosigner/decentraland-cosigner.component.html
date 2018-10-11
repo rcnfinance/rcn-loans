@@ -1,50 +1,58 @@
-<div class="row">
-  <div class="col-sm-12">
-    <app-decentraland-map [decentralandProvider]='cosignerProvider' [height]='140' [width]='720' [center]=parcel></app-decentraland-map><br/>
+<div class="map-container">
+  <app-decentraland-map [decentralandProvider]='cosignerProvider' [height]='mapHeight' [width]='mapWidth' [center]=parcel></app-decentraland-map>
+
+  <a href='https://market.decentraland.org/parcels/{{ firstCoordenate }}/{{ lastCoordenate }}/detail' 
+  class='icon-circle' target="_blank" 
+  matTooltip="Parcel Detail" matTooltipPosition="below">
+    <i class="material-icons">link</i>
+  </a>
+
+  <div class="icon-container">
+    <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+    <div class="txt">{{ parcelId }}</div>
   </div>
-  <div class="col-sm-12">
-    <div class="row">
-      <div class="col-sm-12 col-md-4">
-        <div class="icon-container">
-          <div class="icon"><i class="material-icons">place</i></div>
-          <div class="txt">{{ parcelId }}</div>
+  <div class="text-container">
+    <div class="title">{{ 'Parcel cost' }}</div>
+    <div class="txt">MANA {{ displayPrice }} </div>
+  </div>
+  <div class="text-container">
+    <div class="title">{{ 'Financing' }}</div>
+    <div class="txt">~ {{ financiation }} </div>
+  </div>
+  
+  <div class="card-property">
+    <div class="text-container">
+      <div class="title">Context</div>
+    </div>
+    <div class="flex-container">
+      <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>
+        <div class="avatar-container">
+          <img src="{{ highlightIcon(highlight) }}">
         </div>
-      </div>
-      <div class="col-sm-12 col-md-4">
-        <div class="margintop20 d-none d-md-none"></div>
-        <div class="title main-subtitle">{{ 'Parcel cost' }}</div>
-        <div class="title main-title">{{ displayPrice }} MANA</div>
-      </div>
-      <div class="col-sm-12 col-md-4">
-        <div class="margintop20 d-none d-md-none"></div>
-        <div class="title main-subtitle">{{ 'Financing' }}</div>
-        <div class="title main-subtitle"> ~ {{ financiation }} %</div>
-      </div>
-      <div class="col-sm-12">
-        <div class="card-property">
-          <div class="title margintop20 marginbottom10">{{ 'Context' }}</div>
-          <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>
-            <div class="avatar-container">
-              <img src="{{ highlightIcon(highlight) }}">
-            </div>
-            <div class="txt-container">
-              <div class="subtitle">{{ highlightTitle(highlight) }}</div>
-              <div class="title">{{ highlightDistance(highlight) }}</div>
-            </div>
-          </div>
+        <div class="text-container">
+          <div class="title">{{ highlightTitle(highlight) }}</div>
+          <div class="subtitle">{{ highlightDistance(highlight) }}</div>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="legals">
+    <p>
+      This loan is backed by a Decentraland parcel. The tokens involved in the lending will be used to purchase the 
+      corresponding parcel linked to this escrow smart contact: 
+      <a href="https://etherscan.io/address/{{ mortgageManager }}" target='_blank'>{{ mortgageManager }}.</a>
+    </p>
+    <div class="text-container">
+      <div class="title">{{ 'Notice:' }}</div>
+    </div>
+    <p>The ownership of this parcel will be transferred to the lender in case of a default.</p> 
+    <app-claim-button [loan]='loan' [provider]='cosignerProvider'></app-claim-button>
+  </div>
 </div>
-<div class="legals">
-  <p>
-    This loan is backed by a Decentraland parcel. The tokens involved in the lending will be used to purchase the corresponding parcel linked to this escrow smart contact: 0xceceaa8edc0830c7cec497e33bb3a3c28dd55a32.
-    <br><br>
-    <strong>Notice:</strong> the ownership of this parcel will be transferred to the lender in case of a default.
-  </p>
-  <app-claim-button [loan]='loan' [provider]='cosignerProvider'></app-claim-button>
-</div>
 
 
-
+  
+  
+  
+  
