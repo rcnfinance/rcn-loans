@@ -25,7 +25,6 @@ import { AvatarTitleComponent } from './avatar-title/avatar-title.component';
 import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
 import { TransferFormComponent } from './transfer-form/transfer-form.component';
-import { TransferButtonComponent } from './transfer-button/transfer-button.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
@@ -52,7 +51,6 @@ import { LoanCardComponent } from './loan-card/loan-card.component';
     IconAvatarComponent,
     ButtonGroupComponent,
     TransferFormComponent,
-    TransferButtonComponent,
     RiskIndicatorComponent,
     CivicAuthComponent,
     SocialContainerComponent,
@@ -86,7 +84,6 @@ import { LoanCardComponent } from './loan-card/loan-card.component';
     IconAvatarComponent,
     ButtonGroupComponent,
     TransferFormComponent,
-    TransferButtonComponent,
     RiskIndicatorComponent,
     CivicAuthComponent,
     SocialContainerComponent,
