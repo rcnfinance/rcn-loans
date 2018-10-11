@@ -25,6 +25,8 @@ import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-co
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 import { TransferButtonComponent } from './../../shared/transfer-button/transfer-button.component';
 
+import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -49,7 +51,11 @@ import { TransferButtonComponent } from './../../shared/transfer-button/transfer
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
     GobackButtonComponent,
-    TransferButtonComponent
+    TransferButtonComponent,
+    DialogLoanTransferComponent
   ],
+  entryComponents: [
+    DialogLoanTransferComponent
+  ]
 })
 export class LoanDetailModule { }

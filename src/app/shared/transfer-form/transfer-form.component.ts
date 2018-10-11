@@ -1,18 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import {
-  FormsModule,
-  FormGroup,
-  FormBuilder,
-  FormControl,
-  Validators,
-  NgForm,
-} from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { NgForm } from '@angular/forms';
 // App Component
-import { MaterialModule } from './../../material/material.module';
-import { SharedModule } from './../../shared/shared.module';
 import { Web3Service } from '../../services/web3.service';
 
 @Component({

@@ -1,4 +1,13 @@
-.error {
-    color: #FF0909;
-    font-size: 1em;
+.mat-form-field-appearance-legacy{
+  .mat-hint,
+  .mat-form-field-label{
+    color: #fff !important;
+  }
 }
+.error {
+  color: #FF0909;
+  font-size: 1em;
+}
+.mat-form-field-appearance-legacy .mat-form-field-label{
+  color: #fff !important;
+} 	

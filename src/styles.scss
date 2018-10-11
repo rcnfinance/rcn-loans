@@ -285,14 +285,19 @@ mat-form-field{
   .mat-form-field-label{
     color: $secondary;
   }
-  .mat-form-field-underline {
-    background-color: rgba(255,255,255,.4);
-  }
   .mat-select-arrow {
     color: rgba(255,255,255,.5);
   }
   .mat-hint {
     color: rgba(255,255,255,.5);
+  }
+  .mat-form-field-appearance-legacy{
+    .mat-form-field-underline {
+      background-color: rgba(255,255,255,.4);
+    }
+    .mat-form-field-label{
+      color: $secondary;
+    }
   }
 }
 

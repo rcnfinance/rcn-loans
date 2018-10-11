@@ -45,7 +45,6 @@ import { AddressComponent } from './views/address/address.component';
 import { ActiveLoansComponent } from './active-loans/active-loans.component';
 import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
-import { DialogLoanTransferComponent } from './dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 import { DialogGenericErrorComponent } from './dialogs/dialog-generic-error/dialog-generic-error.component';
 
 import { ProfileComponent } from './views/profile/profile.component';
@@ -70,22 +69,6 @@ export class RavenErrorHandler implements ErrorHandler {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FadeToggleDirective,
-    WindowsHeightDirective,
-    OpenLoansComponent,
-    ContentWrapperComponent,
-    DialogApproveContractComponent,
-    DialogLoanTransferComponent,
-    ProfileComponent,
-    AddressComponent,
-    ActiveLoansComponent,
-    DialogClientAccountComponent,
-    DialogInsufficientFoundsComponent,
-    DialogGenericErrorComponent,
-  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -99,14 +82,6 @@ export class RavenErrorHandler implements ErrorHandler {
     NgxSpinnerModule,
     NotFoundModule,
     LoanDetailModule,
-  ],
-  exports: [],
-  entryComponents: [
-    DialogApproveContractComponent,
-    DialogLoanTransferComponent,
-    DialogClientAccountComponent,
-    DialogInsufficientFoundsComponent,
-    DialogGenericErrorComponent
   ],
   providers: [
     ContractsService,
@@ -122,6 +97,27 @@ export class RavenErrorHandler implements ErrorHandler {
     AvailableLoansService,
     CountriesService,
     EventsService,
+  ],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    FadeToggleDirective,
+    WindowsHeightDirective,
+    OpenLoansComponent,
+    ContentWrapperComponent,
+    DialogApproveContractComponent,
+    ProfileComponent,
+    AddressComponent,
+    ActiveLoansComponent,
+    DialogClientAccountComponent,
+    DialogInsufficientFoundsComponent,
+    DialogGenericErrorComponent,
+  ],
+  entryComponents: [
+    DialogApproveContractComponent,
+    DialogClientAccountComponent,
+    DialogInsufficientFoundsComponent,
+    DialogGenericErrorComponent
   ],
   bootstrap: [AppComponent]
 })
