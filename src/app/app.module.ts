@@ -14,6 +14,7 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 import { CoreModule } from './core/core.module';
 import { NotFoundModule } from './not-found/not-found.module';
 import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
+import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
 
 // App Services
 import { ContractsService } from './services/contracts.service';
@@ -37,9 +38,6 @@ import { WindowsHeightDirective } from './directives/windows-height.directive';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
-
-import { OpenLoansComponent } from './views/open-loans/open-loans.component'; // DELETE
-import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
 
 import { AddressComponent } from './views/address/address.component';
 
@@ -76,7 +74,6 @@ export class RavenErrorHandler implements ErrorHandler {
     HeaderComponent,
     FadeToggleDirective,
     WindowsHeightDirective,
-    OpenLoansComponent,
     ContentWrapperComponent,
     DialogApproveContractComponent,
     DialogLoanTransferComponent,
