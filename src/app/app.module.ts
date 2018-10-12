@@ -17,6 +17,7 @@ import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
 import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
 
 // App Services
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { ContractsService } from './services/contracts.service';
 import { TxService } from './tx.service';
 import { BrandingService } from './services/branding.service';
@@ -29,10 +30,8 @@ import { SidebarService } from './services/sidebar.service';
 import { TitleService } from './services/title.service';
 import { AvailableLoansService } from './services/available-loans.service';
 import { CountriesService } from './services/countries.service';
-
-// App Directives
-import { FadeToggleDirective } from './directives/fade-toggle.directive';
-import { WindowsHeightDirective } from './directives/windows-height.directive';
+import { environment } from '../environments/environment';
+import { EventsService } from './services/events.service';
 
 // App Component
 import { AppComponent } from './app.component';
@@ -51,11 +50,6 @@ import { ProfileComponent } from './views/profile/profile.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 
-// App Plugins
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { environment } from '../environments/environment';
-import { EventsService } from './services/events.service';
-
 Raven
   .config(environment.sentry, {
     release: environment.version_verbose
@@ -72,8 +66,6 @@ export class RavenErrorHandler implements ErrorHandler {
   declarations: [
     AppComponent,
     HeaderComponent,
-    FadeToggleDirective,
-    WindowsHeightDirective,
     ContentWrapperComponent,
     DialogApproveContractComponent,
     DialogLoanTransferComponent,
@@ -82,19 +74,21 @@ export class RavenErrorHandler implements ErrorHandler {
     ActiveLoansComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
-    DialogGenericErrorComponent,
+    DialogGenericErrorComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    SharedModule,
-    MaterialModule,
     HttpModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    CoreModule,
+    AppRoutingModule,
+
     NgxSpinnerModule,
+    MaterialModule,
+    SharedModule,
+    CoreModule,
+
     NotFoundModule,
     LoanDetailModule,
     RequestedLoanModule
@@ -120,7 +114,7 @@ export class RavenErrorHandler implements ErrorHandler {
     TitleService,
     AvailableLoansService,
     CountriesService,
-    EventsService,
+    EventsService
   ],
   bootstrap: [AppComponent]
 })
