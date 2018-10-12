@@ -38,7 +38,8 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 
-import { OpenLoansComponent } from './views/open-loans/open-loans.component';
+import { OpenLoansComponent } from './views/open-loans/open-loans.component'; // DELETE
+import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
 
 import { AddressComponent } from './views/address/address.component';
 
@@ -99,6 +100,7 @@ export class RavenErrorHandler implements ErrorHandler {
     NgxSpinnerModule,
     NotFoundModule,
     LoanDetailModule,
+    RequestedLoanModule
   ],
   exports: [],
   entryComponents: [
