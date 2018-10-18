@@ -2,6 +2,8 @@
   <div class="timeline">
 
     <div class="timeline-structure">
+      <app-loading-history *ngIf="showSpinner"></app-loading-history>
+      <h2 *ngIf="noMatch" class="title main-h1" style="text-transform: initial; text-align: center; font-weight: 700;"> History is not available </h2>
       <div *ngFor='let event of oTimeline; index as i; first as isFirst; last as isLast'
         (click)="change_table_content(i);"
         class="time-event {{ event.oProperties.inserted }} {{ event.oProperties.status }}"
@@ -17,7 +19,6 @@
         
         <div class="header-wrapper flex-row">
           <div class="flex-col"></div>
-          
           <div class="flex-col">
             <div class="icon-event bg-{{ event.oProperties.color }}"
               matTooltip="{{ event.oProperties.messege }}" matTooltipPosition="above">
@@ -52,7 +53,6 @@
         </div>
 
       </div>
-    </div>
-    
+    </div> 
   </div>
 </div>

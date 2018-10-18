@@ -43,6 +43,9 @@ export class TransactionHistoryComponent implements OnInit {
     'amount': 'currency'
   };
 
+  showSpinner: boolean = true;
+  noMatch: boolean = false;
+
   timelines_properties: object = {
     'loan_request': {
       'title': 'Requested',
@@ -227,9 +230,12 @@ export class TransactionHistoryComponent implements OnInit {
   async loadCommits(id: number) { // Load get() API commits from the DB by id
     try {
       const commits = await this.commitsService.getCommits(id);
-      this.oTimeline = this.load_timeEvents(commits);
-      this.oDataTable = this.populate_table_data(this.id);
-    } catch (e) {
+      //this.oTimeline = this.load_timeEvents(commits);
+      //this.oDataTable = this.populate_table_data(this.id);
+      this.showSpinner = false;
+      if(this.oTimeline.length === 0)
+        this.noMatch = true;
+    } catch (e) {    
       this.eventsService.trackError(e);
     }
   }
