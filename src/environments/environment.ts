@@ -42,6 +42,11 @@ export const environment = {
     rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
+    diaspore: {
+      debtEngine: '0x2a878750a122ec3d6a193a4c6003ecd8e98feb17',
+      loanManager: '0xa6e4b95a0d1be10e886317fe711a4515544c578a',
+      viewRequets: '0x6fd6fcee7718ab8b1f2d80987620293e43fa9df0'
+    },
     decentraland: {
       mortgageCreator: '0x2bdf545935d4264cbb7457e97d69b6b86458eb64',
       mortgageManager: '0xea06746f1bd82412f9f243f6bee0b8194d67a67d',
