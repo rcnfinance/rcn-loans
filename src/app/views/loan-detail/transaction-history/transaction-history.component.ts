@@ -9,6 +9,7 @@ import { Utils } from '../../../utils/utils';
 
 import { DatePipe } from '@angular/common';
 import { EventsService } from '../../../services/events.service';
+import { Currency } from '../../../utils/currencies';
 
 class DataEntry {
   constructor(
@@ -204,7 +205,8 @@ export class TransactionHistoryComponent implements OnInit {
         const name = capitalize(key.replace('_', ' '));
         let content = value as string;
         if (this.data_types[key] === 'currency') {
-          content = this.loan.currency + ' ' + (Number(content) / 10 ** this.loan.decimals).toString();
+          const currency = this.loan.readCurrency();
+          content = currency + ' ' + new Currency(currency).fromUnit(Number(content)).toString();
         }
         result.push(new DataEntry(name, content));
       }
@@ -224,7 +226,7 @@ export class TransactionHistoryComponent implements OnInit {
     this.oDataTable = this.populate_table_data(i);
   }
 
-  async loadCommits(id: number) { // Load get() API commits from the DB by id
+  async loadCommits(id: string) { // Load get() API commits from the DB by id
     try {
       const commits = await this.commitsService.getCommits(id);
       this.oTimeline = this.load_timeEvents(commits);

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Loan, Status } from '../../models/loan.model';
+import { Loan, Status, Request } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
+import { Currency } from '../../utils/currencies';
 
 @Component({
   selector: 'app-loan-card',
@@ -8,7 +9,7 @@ import { Utils } from '../../utils/utils';
   styleUrls: ['./loan-card.component.scss']
 })
 export class LoanCardComponent implements OnInit {
-  @Input() loan: Loan;
+  @Input() loan: Request;
 
   leftLabel: string;
   leftValue: string;
@@ -18,32 +19,44 @@ export class LoanCardComponent implements OnInit {
   durationValue: string;
   canLend: boolean;
 
+  shortAddress = Utils.shortAddress;
+
   constructor() { }
 
   ngOnInit() {
-    if (this.loan.status === Status.Request) {
+    if (this.loan.isRequest) {
+      const currency = new Currency(this.loan.readCurrency());
       this.leftLabel = 'Lend';
-      this.leftValue = this.formatAmount(this.loan.amount);
-      this.rightLabel = 'Return';
-      this.rightValue = this.formatAmount(this.loan.expectedReturn);
+      this.leftValue = Utils.formatAmount(currency.fromUnit(this.loan.amount));
       this.durationLabel = 'Duration';
-      this.durationValue = this.loan.verboseDuration;
+      this.rightLabel = 'Return';
+      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.getEstimatedReturn()));
       this.canLend = true;
-    } else {
+    } else if(this.loan instanceof Loan) {
+      const currency = new Currency(this.loan.readCurrency());
       this.leftLabel = 'Paid';
-      this.leftValue = this.formatAmount(this.loan.paid);
-      this.rightLabel = 'Pending';
-      this.rightValue = this.formatAmount(this.loan.pendingAmount);
+      this.leftValue = Utils.formatAmount(currency.fromUnit(this.loan.paid));
       this.durationLabel = 'Remaining';
       this.durationValue = Utils.formatDelta(this.loan.remainingTime);
+      this.rightLabel = 'Pending';
+      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.estimated));
       this.canLend = false;
     }
   }
 
-  formatAmount(amount: number): string {
-    return Utils.formatAmount(amount);
+  getInterestRate(): string {
+    if (this.loan.isRequest) {
+      return this.loan.descriptor.getInterestRate(this.loan.amount);
+    } else if (this.loan instanceof Loan) {
+      return Utils.formatInterest(this.loan.interestRate).toFixed(0);
+    }
   }
-  formatInterest(interest: Number): string {
-    return Number(interest.toFixed(2)).toString();
+
+  getPunitiveInterestRate(): string {
+    if (this.loan.isRequest) {
+      return this.loan.descriptor.getPunitiveInterestRate();
+    } else if (this.loan instanceof Loan) {
+      return Utils.formatInterest(this.loan.punitiveInterestRate).toFixed(0);
+    }
   }
 }

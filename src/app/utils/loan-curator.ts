@@ -1,12 +1,13 @@
-import { Loan } from '../models/loan.model';
+import { Loan, BasaltLoan } from '../models/loan.model';
 
 export class LoanCurator {
-    static curateLoans(loans: Loan[]): Loan[] {
+    static curateBasaltRequests(loans: BasaltLoan[]): BasaltLoan[] {
         return loans.filter(loan => {
-          return loan.annualInterest < 1000 &&
-            loan.annualPunitoryInterest < 1000 &&
-            loan.amount < 1000000 &&
-            loan.amount > 0.00001;
+            const amount = loan.readAmount();
+            return loan.annualInterest < 1000 &&
+                loan.annualPunitoryInterest < 1000 &&
+                amount < 1000000 &&
+                amount > 0.00001;
         });
     }
 }

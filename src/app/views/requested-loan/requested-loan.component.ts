@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // App Models
-import { Loan } from './../../models/loan.model';
+import { Loan, Request } from './../../models/loan.model';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 // App Services
@@ -16,7 +16,7 @@ import { AvailableLoansService } from '../../services/available-loans.service';
 export class RequestedLoanComponent implements OnInit {
   public loading: boolean;
   available: any;
-  loans = [];
+  loans: Request[] = [];
   availableLoans = true;
   pendingLend = [];
 
@@ -32,7 +32,7 @@ export class RequestedLoanComponent implements OnInit {
   }
 
   loadLoans() {
-    this.contractsService.getOpenLoans().then((result: Loan[]) => {
+    this.contractsService.getRequests().then((result: Request[]) => {
       this.loans = result;
       this.upgradeAvaiblable();
       this.spinner.hide();

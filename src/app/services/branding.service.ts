@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Loan } from './../models/loan.model';
+import { Loan, Request } from './../models/loan.model';
 import { Agent, environment } from '../../environments/environment';
 import { Brand } from './../models/brand.model';
 import { CosignerService } from './cosigner.service';
@@ -30,7 +30,7 @@ export class BrandingService {
     )
   };
 
-  getBrand(loan: Loan): Brand {
+  getBrand(loan: Request): Brand {
     if (this.cosignerService.getCosigner(loan) instanceof DecentralandCosignerProvider) {
       return this.static_brands.decentraland_mortgage;
     }
@@ -59,7 +59,7 @@ export class BrandingService {
       this.getBlockiesOptions(loan)
     );
   }
-  private getBlockiesOptions(loan: Loan): Object {
+  private getBlockiesOptions(loan: Request): Object {
     return { // All options are optional
       seed: loan.creator, // seed used to generate icon data, default: random
       color: '#4155ff', // to manually specify the icon color, default: random

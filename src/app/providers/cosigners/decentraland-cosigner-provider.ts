@@ -1,7 +1,7 @@
 
 import { CosignerDetail, CosignerOffer, CosignerLiability } from '../../models/cosigner.model';
 import { CosignerProvider } from '../cosigner-provider';
-import { Loan, Status } from '../../models/loan.model';
+import { Loan, Status, Request } from '../../models/loan.model';
 import { HttpClient } from '@angular/common/http';
 import { Parcel, District, DecentralandCosigner } from '../../models/cosigners/decentraland-cosigner.model';
 import { Web3Service } from '../../services/web3.service';
@@ -40,14 +40,13 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     contract(loan: Loan): string {
         return this.manager;
     }
-    isValid(loan: Loan): boolean {
+    isValid(loan: Request): boolean {
         return loan.creator === this.creator;
     }
-    isCurrent(loan: Loan): boolean {
-        return loan.status !== Status.Request
-            && loan.cosigner === this.manager;
+    isCurrent(loan: Request): boolean {
+        return !loan.isRequest && (loan as Loan).cosigner === this.manager;
     }
-    offer(loan: Loan): Promise<CosignerOffer> {
+    offer(loan: Request): Promise<CosignerOffer> {
         return new Promise((resolve, err) => {
             this.detail(loan).then((detail: DecentralandCosigner) => {
                 resolve(new CosignerOffer(
@@ -72,7 +71,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     }
     private isDefaulted(loan: Loan, detail: DecentralandCosigner): boolean {
         return (loan.status === Status.Ongoing || loan.status === Status.Indebt) // The loan should not be in debt
-            && loan.dueTimestamp + (7 * 24 * 60 * 60) < Math.floor(Date.now() / 1000) // Due time must be pased by 1 week
+            && loan.dueTime + (7 * 24 * 60 * 60) < Math.floor(Date.now() / 1000) // Due time must be pased by 1 week
             && detail.status == 1; // Detail should be ongoing
     }
     private buildClaim(loan: Loan): () => Promise<string> {
@@ -91,7 +90,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
             });
         };
     }
-    private detail(loan: Loan): Promise<CosignerDetail> {
+    private detail(loan: Request): Promise<CosignerDetail> {
         return new Promise((resolve, err) => {
             this.setupContracts();
             this.managerContract.loanToLiability(this.engine, loan.id, (errId, mortgageId) => {
@@ -100,7 +99,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
                   mortgageId, // Mortgage ID
                   Utils.toBytes32(this.web3.web3.toHex(mortgageData[4])), // Land ID
                   mortgageData[5], // Land price
-                  ((loan.rawAmount / mortgageData[5]) * 100).toFixed(2), // Financed amount
+                  ((loan.amount / mortgageData[5]) * 100).toFixed(2), // Financed amount
                   undefined, // Parcel data
                   mortgageData[6] // Mortgage status
                 );

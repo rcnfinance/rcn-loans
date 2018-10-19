@@ -1,7 +1,7 @@
 import { CosignerProvider } from '../cosigner-provider';
 import { HttpClient } from '@angular/common/http';
 import { Web3Service } from '../../services/web3.service';
-import { Loan } from '../../models/loan.model';
+import { Loan, Request } from '../../models/loan.model';
 import { CosignerOffer, CosignerLiability } from '../../models/cosigner.model';
 
 export class UnknownCosignerProvider implements CosignerProvider {
@@ -13,10 +13,10 @@ export class UnknownCosignerProvider implements CosignerProvider {
     contract(loan: Loan): string {
         return loan.cosigner;
     }
-    isValid(_loan: Loan): boolean {
+    isValid(_loan: Request): boolean {
         return false;
     }
-    isCurrent(_loan: Loan): boolean {
+    isCurrent(_loan: Request): boolean {
         return true;
     }
     offer(_loan: Loan): Promise<CosignerOffer> {

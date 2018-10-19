@@ -2,24 +2,98 @@
 import { Utils } from './../utils/utils';
 import { Currency } from '../utils/currencies';
 
-export enum Status { Request, Ongoing, Paid, Destroyed, Indebt }
-
-function timestamp(): number {
-    return (new Date().getTime() / 1000);
+ export enum Status { 
+    Request,
+    Ongoing,
+    Paid,
+    Destroyed,
+    Indebt
 }
 
-function calculateInterest(timeDelta: number, interestRate: number, amount: number): number {
-    if (amount === 0) {
-      return 0;
-    }
-
-    return (amount * 100000 * timeDelta) / interestRate;
+export interface Descriptor {
+    getInterestRate(amount: number): string;
+    getPunitiveInterestRate(): string;
+    getEstimatedReturn(): number;
+    getDuration(): number;
 }
 
-export class Loan {
+export class Request {
     constructor(
         public engine: string,
-        public id: number,
+        public id: string,
+        public borrower: string,
+        public creator: string,
+        public amount: number,
+        public currency: string,
+        public oracle: string,
+        public expiration: number,
+        public model: string,
+        public descriptor: Descriptor
+    ) { }
+
+    get isRequest() { return true; }
+
+    public decimals(): number {
+        return Currency.getDecimals(this.readCurrency());
+    }
+
+    public readCurrency(): string {
+        const targetCurrency = Utils.hexToAscii(this.currency.replace(/^[0x]+|[0]+$/g, ''));
+        return targetCurrency === '' ? 'RCN' : targetCurrency;
+    }
+
+    public readAmount(): number {
+        return this.amount / 10 ** this.decimals();
+    }
+}
+
+export class Loan extends Request {
+    constructor(
+        public engine: string,
+        public id: string,
+        public borrower: string,
+        public owner: string,
+        public creator: string,
+        public amount: number,
+        public currency: string,
+        public oracle: string,
+        public expiration: number,
+        public model: string,
+        public status: Status,
+        public lentTime: number,
+        public lenderBalance: number,
+        // To review
+        public cosigner: string,
+        // Model
+        public dueTime: number,
+        public paid: number,
+        public estimated: number,
+        public interestRate: number,
+        public punitiveInterestRate: number
+    ) {
+        super(
+            engine,
+            id,
+            borrower,
+            creator,
+            amount,
+            currency,
+            oracle,
+            expiration,
+            model,
+            undefined
+        )
+    }
+
+    get isRequest() { return false; }
+
+    get remainingTime() { return this.dueTime - (new Date().getTime() / 1000); }
+}
+
+export class BasaltLoan extends Loan {
+    constructor(
+        public engine: string,
+        public idNumber: number,
         public oracle: string,
         public statusFlag: number,
         public borrower: string,
@@ -37,25 +111,52 @@ export class Loan {
         public lenderBalance: number,
         public owner: string,
         public cosigner: string
-    ) { }
+    ) {
+        super(
+            engine,
+            idNumber.toString(),
+            borrower,
+            owner,
+            creator,
+            rawAmount,
+            currencyRaw,
+            oracle,
+            0,
+            Utils.address_0,
+            statusFlag === Status.Ongoing && (new Date().getTime() / 1000) > dueTimestamp ? Status.Indebt : statusFlag,
+            dueTimestamp - duration,
+            lenderBalance,
+            cosigner,
+            dueTimestamp,
+            rawPaid,
+            0,
+            rawAnnualInterest,
+            rawAnnualPunitoryInterest
+        );
+        this.descriptor = new BasaltDescriptor(
+            rawAnnualInterest,
+            rawAnnualPunitoryInterest,
+            rawAmount,
+            duration
+        );
+        this.estimated = this.total - this.paid;
+    }
 
-    get status(): Status {
-        if (this.statusFlag === Status.Ongoing && timestamp() > this.dueTimestamp) {
-            return Status.Indebt;
+    get isRequest() { return this.statusFlag === Status.Request; }
+
+    get annualInterest(): number {
+        return Utils.formatInterest(this.rawAnnualInterest);
+    }
+
+    get annualPunitoryInterest(): number {
+        return Utils.formatInterest(this.rawAnnualPunitoryInterest);
+    }
+
+    get total(): number {
+        function timestamp() { return (new Date().getTime() / 1000); }
+        function calculateInterest(timeDelta: number, interestRate: number, amount: number): number {
+            return (amount * 100000 * timeDelta) / interestRate;
         }
-
-        return this.statusFlag;
-    }
-
-    get lentTimestamp(): number {
-        return this.dueTimestamp - this.duration;
-    }
-
-    get remainingTime(): number {
-        return this.dueTimestamp - timestamp();
-    }
-
-    get rawTotal(): number {
         let newInterest = this.cumulatedInterest;
         let newPunitoryInterest = this.cumulatedPunnitoryInterest;
         let pending;
@@ -83,63 +184,25 @@ export class Loan {
 
         return this.rawAmount + newInterest + newPunitoryInterest;
     }
+}
 
-    get total(): number {
-        return this.rawTotal / 10 ** this.decimals;
+export class BasaltDescriptor implements Descriptor {
+    constructor(
+        private interestRate: number,
+        private punitiveInterestRate: number,
+        private amount: number,
+        private duration: number
+    ) { }
+    getPunitiveInterestRate(): string {
+        return Utils.formatInterest(this.interestRate).toPrecision(2)
     }
-
-    get rawPendingAmount() {
-        return this.rawTotal - this.rawPaid;
+    getInterestRate(_amount: number): string {
+        return Utils.formatInterest(this.punitiveInterestRate).toPrecision(2)
     }
-
-    get pendingAmount(): number {
-        return this.rawPendingAmount / 10 ** this.decimals;
+    getEstimatedReturn(): number {
+        return ((this.amount * 100000 * this.duration) / this.interestRate) + this.amount;
     }
-
-    get paid(): number {
-        return this.rawPaid / 10 ** this.decimals;
+    getDuration(): number {
+        return this.duration;
     }
-
-    get uid(): string {
-        return this.engine + this.id;
-    }
-
-    get currency(): string {
-        const targetCurrency = Utils.hexToAscii(this.currencyRaw.replace(/^[0x]+|[0]+$/g, ''));
-
-        if (targetCurrency === '') {
-            return 'RCN';
-        } else {
-            return targetCurrency;
-        }
-    }
-
-    get decimals(): number {
-        // TODO: Detect fiat currency
-        return Currency.getDecimals(this.currency);
-    }
-
-    get amount(): number {
-        return this.rawAmount / 10 ** this.decimals;
-    }
-
-    get annualInterest(): number {
-        return Utils.formatInterest(this.rawAnnualInterest);
-    }
-
-    get annualPunitoryInterest(): number {
-        return Utils.formatInterest(this.rawAnnualPunitoryInterest);
-    }
-
-    get verboseDuration(): string {
-        return Utils.formatDelta(this.duration);
-    }
-
-    get expectedReturn(): number {
-        return ((this.amount * 100000 * this.duration) / this.rawAnnualInterest) + this.amount;
-    }
-
-    get borrowerShort(): string {
-        return Utils.shortAddress(this.borrower);
-    }
-  }
+}

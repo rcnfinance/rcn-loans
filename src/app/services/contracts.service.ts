@@ -1,4 +1,4 @@
-import { Loan } from '../models/loan.model';
+import { Request, Loan, BasaltLoan } from '../models/loan.model';
 import { Injectable } from '@angular/core';
 import { LoanCurator } from './../utils/loan-curator';
 import { LoanUtils } from './../utils/loan-utils';
@@ -115,9 +115,8 @@ export class ContractsService {
     }
 
     public async estimateRequiredAmount(loan: Loan): Promise<number> {
-      // TODO: Calculate and add cost of the cosigner
       if (loan.oracle === Utils.address_0) {
-        return loan.rawAmount;
+        return loan.amount;
       } else {
         const oracleData = await this.getOracleData(loan);
         const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
@@ -125,28 +124,27 @@ export class ContractsService {
         const rate = oracleRate[0];
         const decimals = oracleRate[1];
         console.log('Oracle rate obtained', rate, decimals);
-        const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+        const required = (rate * loan.amount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
         console.log('Estimated required rcn is', required);
         return required;
       }
     }
 
-    public async lendLoan(loan: Loan): Promise<string> {
+    public async lendLoan(request: Request): Promise<string> {
         const account = await this.web3.getAccount();
-        const pOracleData = this.getOracleData(loan);
-
-        const cosigner = this.cosignerService.getCosigner(loan);
+        const pOracleData = this.getOracleData(request);
+        const cosigner = this.cosignerService.getCosigner(request);
         let cosignerAddr = '0x0';
         let cosignerData = '0x0';
         if (cosigner !== undefined) {
-          const cosignerOffer = await cosigner.offer(loan);
+          const cosignerOffer = await cosigner.offer(request);
           cosignerAddr = cosignerOffer.contract;
           cosignerData = cosignerOffer.lendData;
         }
         const oracleData = await pOracleData;
         console.log(oracleData, cosignerData, cosignerAddr);
         return new Promise((resolve, reject) => {
-          this._rcnEngine.lend(loan.id, oracleData, cosignerAddr, cosignerData, { from: account }, function(err, result) {
+          this._rcnEngine.lend(request.id, oracleData, cosignerAddr, cosignerData, { from: account }, function(err, result) {
             if (err != null) {
               reject(err);
             } else {
@@ -177,7 +175,7 @@ export class ContractsService {
           });
         }) as Promise<string>;
     }
-    public async getOracleData(loan: Loan): Promise<string> {
+    public async getOracleData(loan: Request): Promise<string> {
       if (loan.oracle === Utils.address_0) {
         return '0x';
       } else {
@@ -185,11 +183,11 @@ export class ContractsService {
         const url = await promisify(oracle.url.call, []);
         if (url === '') { return '0x'; }
         const oracleResponse = <any[]> await this.http.get(url).toPromise();
-        console.log('Searching currency', loan.currencyRaw, oracleResponse);
+        console.log('Searching currency', loan.currency, oracleResponse);
         let data;
         oracleResponse.forEach(e => {
           console.log(e);
-          if (e.currency === loan.currencyRaw) {
+          if (e.currency === loan.currency) {
             data = e.data;
             console.log('Oracle data found', data);
           }
@@ -201,7 +199,7 @@ export class ContractsService {
         }
       }
     }
-    public async getLoan(id: number): Promise<Loan> {
+    public async getLoan(id: number): Promise<Request> {
       return new Promise((resolve, reject) => {
         this._rcnExtension.getLoan.call(this._rcnEngineAddress, id, (err, result) => {
           if (err != null) {
@@ -209,10 +207,10 @@ export class ContractsService {
           } else if (result.length === 0) {
             reject(new Error('Loan does not exist'));
           } else {
-            resolve(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, result));
+            resolve(LoanUtils.parseBasaltLoan(this._rcnEngineAddress, id, result));
           }
         });
-      }) as Promise<Loan>;
+      }) as Promise<Request>;
     }
     public async getActiveLoans(): Promise<Loan[]> {
       return new Promise((resolve, reject) => {
@@ -230,7 +228,7 @@ export class ContractsService {
         });
       }) as Promise<Loan[]>;
     }
-    public async getOpenLoans(): Promise<Loan[]> {
+    public async getRequests(): Promise<Request[]> {
         return new Promise((resolve, reject) => {
           // Filter open loans, non expired loand and valid mortgage
           const filters = [
@@ -244,7 +242,7 @@ export class ContractsService {
             if (err != null) {
               reject(err);
             }
-            resolve(LoanCurator.curateLoans(this.parseLoansBytes(result)));
+            resolve(LoanCurator.curateBasaltRequests(this.parseLoansBytes(result)));
           });
         }) as Promise<Loan[]>;
     }
@@ -257,7 +255,7 @@ export class ContractsService {
           if (err != null) {
             reject(err);
           }
-          resolve(LoanCurator.curateLoans(this.parseLoansBytes(result)));
+          resolve(LoanCurator.curateBasaltRequests(this.parseLoansBytes(result)));
         });
       }) as Promise<Loan[]>;
     }
@@ -282,13 +280,13 @@ export class ContractsService {
         });
       }) as Promise<[number, number[]]>;
     }
-    private parseLoansBytes(bytes: any): Loan[] {
+    private parseLoansBytes(bytes: any): BasaltLoan[] {
       const loans = [];
       const total = bytes.length / 20;
       for (let i = 0; i < total; i++) {
         const id = parseInt(bytes[(i * 20) + 19], 16);
         const loanBytes = bytes.slice(i * 20, i * 20 + 20);
-        loans.push(LoanUtils.loanFromBytes(this._rcnEngineAddress, id, loanBytes));
+        loans.push(LoanUtils.parseBasaltLoan(this._rcnEngineAddress, id, loanBytes));
       }
       return loans;
     }

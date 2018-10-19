@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 // App Models
-import { Loan, Status } from './../../models/loan.model';
+import { Loan, Status, Request } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
 // App Utils
 import { Utils } from './../../utils/utils';
@@ -14,6 +14,7 @@ import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Currency } from '../../utils/currencies';
 
 @Component({
   selector: 'app-loan-detail',
@@ -21,7 +22,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./loan-detail.component.scss']
 })
 export class LoanDetailComponent implements OnInit {
-  loan: Loan;
+  loan: Request;
   identityName = '...';
   viewDetail = undefined;
   userAccount: string;
@@ -36,12 +37,13 @@ export class LoanDetailComponent implements OnInit {
   canTransfer: boolean;
   totalDebt: number;
   pendingAmount: number;
+  expectedReturn: number;
+  paid: string;
 
   // Loan Oracle
   oracle: string;
   availableOracle: boolean;
   currency: string;
-
 
   winWidth: any = window.innerWidth;
 
@@ -60,6 +62,7 @@ export class LoanDetailComponent implements OnInit {
     this.identityService.getIdentity(this.loan).then((identity) => {
       this.identityName = identity !== undefined ? identity.short : 'Unknown';
     });
+    return 'Unknown';
   }
 
   private defaultDetail(): string {
@@ -71,32 +74,41 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private loadDetail() {
-    // Load config data
-    const interest = this.formatInterest(this.loan.annualInterest);
-    const interestPunnitory = this.formatInterest(this.loan.annualPunitoryInterest);
-    this.loanConfigData = [
-      ['Currency', this.loan.currency],
-      ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
-      ['Duration', Utils.formatDelta(this.loan.duration)]
-    ];
+    if (this.loan.isRequest) {
+      // Show request detail
+      // Load config data
+      const interest = this.loan.descriptor.getInterestRate(this.loan.amount);
+      const interestPunnitory = this.loan.descriptor.getPunitiveInterestRate();
+      this.loanConfigData = [
+        ['Currency', this.loan.readCurrency()],
+        ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
+        ['Duration', Utils.formatDelta(this.loan.descriptor.getDuration())]
+      ];
 
-    // Interest middle text
-    this.interestMiddleText =
-      '~ ' + this.formatInterest(this.loan.status === Status.Indebt ? this.loan.annualPunitoryInterest : this.loan.annualInterest) + ' %';
+      this.expectedReturn = new Currency(this.loan.readCurrency()).fromUnit(this.loan.descriptor.getEstimatedReturn());
+      this.isRequest = this.loan.isRequest;
+    } else if (this.loan instanceof Loan) {
+      const currency = new Currency(this.loan.readCurrency());
 
-    // Load status data
-    this.loanStatusData = [
-      ['Lend date', this.formatTimestamp(this.loan.lentTimestamp)],
-      ['Due date', this.formatTimestamp(this.loan.dueTimestamp)],
-      ['Deadline', this.formatTimestamp(this.loan.dueTimestamp)],
-      ['Remaining', Utils.formatDelta(this.loan.remainingTime, 2)]
-    ];
+      // Show ongoing loan detail
+      this.loanStatusData = [
+        ['Lend date', this.formatTimestamp(this.loan.lentTime)],
+        ['Due date', this.formatTimestamp(this.loan.dueTime)],
+        ['Deadline', this.formatTimestamp(this.loan.dueTime)],
+        ['Remaining', Utils.formatDelta(this.loan.remainingTime, 2)]
+      ];
 
-    this.isRequest = this.loan.status === Status.Request;
-    this.isOngoing = this.loan.status === Status.Ongoing;
-    this.totalDebt = this.loan.total;
-    this.pendingAmount = this.loan.pendingAmount;
-    this.canTransfer = this.loan.owner === this.userAccount && this.loan.status !== Status.Request;
+      // Interest middle text
+      const displayInterest = this.loan.status !== Status.Indebt ? this.loan.interestRate : this.loan.punitiveInterestRate;
+      this.interestMiddleText = '~ ' + Utils.formatInterest(displayInterest).toFixed(0);
+
+      // Load status data
+      this.isOngoing = this.loan.status === Status.Ongoing;
+      this.totalDebt = currency.fromUnit(this.loan.estimated + this.loan.paid);
+      this.pendingAmount = currency.fromUnit(this.loan.estimated);
+      this.canTransfer = this.loan.owner === this.userAccount && this.loan.status !== Status.Request;
+      this.paid = Utils.formatAmount(this.loan.paid);
+    }
   }
 
   openDetail(view: string) {
@@ -109,10 +121,6 @@ export class LoanDetailComponent implements OnInit {
 
   openLender(address: string) {
     window.open('/address/' + address, '_blank');
-  }
-
-  private formatInterest(interest: number): string {
-    return Number(interest.toFixed(2)).toString();
   }
 
   private formatTimestamp(timestamp: number): string {
@@ -131,7 +139,7 @@ export class LoanDetailComponent implements OnInit {
         this.loan = loan;
         this.brand = this.brandingService.getBrand(this.loan);
         this.oracle = this.loan.oracle;
-        this.currency = this.loan.currency;
+        this.currency = this.loan.readCurrency();
         this.availableOracle = this.loan.oracle !== Utils.address_0;
         this.loadDetail();
         this.loadIdentity();

@@ -1,5 +1,9 @@
 
 export class Currency {
+    public decimals;
+    constructor(currency: string) {
+        this.decimals = Currency.getDecimals(currency);
+    }
     static getDecimals(currency: string): number{
         switch (currency.toUpperCase()) {
             case "ARS":
@@ -17,5 +21,8 @@ export class Currency {
             default:
                 return 0;
         }
-    }    
+    }
+    fromUnit(n: number): number {
+        return n / 10 ** this.decimals;
+    }
 }
