@@ -1,8 +1,8 @@
+<ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" class="overlay-setup" type="ball-clip-rotate-multiple" id ="spinner" #spinner></ngx-spinner>
 <div class="transaction-component">
   <div class="timeline">
 
     <div class="timeline-structure">
-      <app-loading-history *ngIf="showSpinner"></app-loading-history>
       <h2 *ngIf="noMatch" class="title main-h1" style="text-transform: initial; text-align: center; font-weight: 700;"> History is not available </h2>
       <div *ngFor='let event of oTimeline; index as i; first as isFirst; last as isLast'
         (click)="change_table_content(i);"

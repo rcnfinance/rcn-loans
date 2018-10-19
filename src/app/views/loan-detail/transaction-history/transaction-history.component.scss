@@ -1,4 +1,9 @@
 @import '../../../../scss/_variables.scss'; //variables
+      
+.overlay-setup{
+  position: relative;
+  left: 50%;
+}
 
 .transaction-component{
   .timeline{

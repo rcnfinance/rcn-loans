@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit  } from '@angular/core';
+
 // App Models
 import { Loan } from '../../../models/loan.model';
 import { Commit } from '../../../models/commit.model';
@@ -9,6 +10,8 @@ import { Utils } from '../../../utils/utils';
 
 import { DatePipe } from '@angular/common';
 import { EventsService } from '../../../services/events.service';
+// App Spinner
+import { NgxSpinnerService } from 'ngx-spinner';
 
 class DataEntry {
   constructor(
@@ -22,12 +25,14 @@ class DataEntry {
   templateUrl: './transaction-history.component.html',
   styleUrls: ['./transaction-history.component.scss']
 })
+
 export class TransactionHistoryComponent implements OnInit {
   @Input() loan: Loan;
   status: string;
   selectedEvent: number;
   id = 0;
   explorerTx = environment.network.explorer.tx;
+  @ViewChild('spinner') myId: any;
 
   winHeight: any = window.innerWidth;
 
@@ -42,9 +47,9 @@ export class TransactionHistoryComponent implements OnInit {
   data_types: object = {
     'amount': 'currency'
   };
-
-  showSpinner: boolean = true;
+  
   noMatch: boolean = false;
+
 
   timelines_properties: object = {
     'loan_request': {
@@ -151,6 +156,7 @@ export class TransactionHistoryComponent implements OnInit {
   };
 
   constructor(
+    private spinner: NgxSpinnerService,
     private commitsService: CommitsService,
     private eventsService: EventsService
   ) { }
@@ -232,15 +238,18 @@ export class TransactionHistoryComponent implements OnInit {
       const commits = await this.commitsService.getCommits(id);
       this.oTimeline = this.load_timeEvents(commits);
       this.oDataTable = this.populate_table_data(this.id);
-      this.showSpinner = false;
-      if(this.oTimeline.length === 0)
+      this.myId.showSpinner = false;
+      if(this.oTimeline.length <= 0){
         this.noMatch = true;
+      }
     } catch (e) {    
       this.eventsService.trackError(e);
     }
   }
 
   ngOnInit() {
+    console.log(this.myId)
+    this.myId.showSpinner = true;
     this.loadCommits(this.loan.id);
   }
 }
