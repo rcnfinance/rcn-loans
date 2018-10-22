@@ -53,7 +53,6 @@ import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfe
     GobackButtonComponent,
     TransferButtonComponent,
 
-
     DialogLoanTransferComponent
   ],
   entryComponents: [
