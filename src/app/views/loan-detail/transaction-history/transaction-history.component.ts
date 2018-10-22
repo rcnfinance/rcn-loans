@@ -248,7 +248,6 @@ export class TransactionHistoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.myId)
     this.myId.showSpinner = true;
     this.loadCommits(this.loan.id);
   }
