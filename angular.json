@@ -116,7 +116,7 @@
       }
     },
     "rcn-angular-dapp-e2e": {
-      "root": "",
+      "root": "e2e",
       "projectType": "application",
       "architect": {
         "e2e": {
