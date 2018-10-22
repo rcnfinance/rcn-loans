@@ -8,12 +8,11 @@ import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
 
 @Component({
-  selector: 'app-requested-loan',
-  templateUrl: './requested-loan.component.html',
-  styleUrls: ['./requested-loan.component.scss']
+  selector: 'app-open-loans',
+  templateUrl: './open-loans.component.html',
+  styleUrls: ['./open-loans.component.scss']
 })
-
-export class RequestedLoanComponent implements OnInit {
+export class OpenLoansComponent implements OnInit {
   public loading: boolean;
   available: any;
   loans = [];

@@ -14,10 +14,8 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 import { CoreModule } from './core/core.module';
 import { NotFoundModule } from './not-found/not-found.module';
 import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
-import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
 
 // App Services
-import { NgxSpinnerModule } from 'ngx-spinner';
 import { ContractsService } from './services/contracts.service';
 import { TxService } from './tx.service';
 import { BrandingService } from './services/branding.service';
@@ -30,13 +28,17 @@ import { SidebarService } from './services/sidebar.service';
 import { TitleService } from './services/title.service';
 import { AvailableLoansService } from './services/available-loans.service';
 import { CountriesService } from './services/countries.service';
-import { environment } from '../environments/environment';
-import { EventsService } from './services/events.service';
+
+// App Directives
+import { FadeToggleDirective } from './directives/fade-toggle.directive';
+import { WindowsHeightDirective } from './directives/windows-height.directive';
 
 // App Component
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
+
+import { OpenLoansComponent } from './views/open-loans/open-loans.component';
 
 import { AddressComponent } from './views/address/address.component';
 
@@ -48,6 +50,11 @@ import { DialogGenericErrorComponent } from './dialogs/dialog-generic-error/dial
 import { ProfileComponent } from './views/profile/profile.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
+
+// App Plugins
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { environment } from '../environments/environment';
+import { EventsService } from './services/events.service';
 
 Raven
   .config(environment.sentry, {
@@ -64,20 +71,17 @@ export class RavenErrorHandler implements ErrorHandler {
 @NgModule({
   imports: [
     BrowserModule,
+    AppRoutingModule,
+    SharedModule,
+    MaterialModule,
     HttpModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule,
-
-    NgxSpinnerModule,
-    MaterialModule,
-    SharedModule,
     CoreModule,
-
+    NgxSpinnerModule,
     NotFoundModule,
     LoanDetailModule,
-    RequestedLoanModule
   ],
   providers: [
     ContractsService,
@@ -92,11 +96,14 @@ export class RavenErrorHandler implements ErrorHandler {
     TitleService,
     AvailableLoansService,
     CountriesService,
-    EventsService
+    EventsService,
   ],
   declarations: [
     AppComponent,
     HeaderComponent,
+    FadeToggleDirective,
+    WindowsHeightDirective,
+    OpenLoansComponent,
     ContentWrapperComponent,
     DialogApproveContractComponent,
     ProfileComponent,

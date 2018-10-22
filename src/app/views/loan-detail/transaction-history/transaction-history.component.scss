@@ -78,14 +78,13 @@
         border-radius: 50%;
         margin: 0 auto;
         @include transition();
-        i,
-        svg{
+        i{
           @extend %absolute-center;
         }
         .svg-inline--fa {
-          width: 1.2em;
+          width: 2.8em;
           height: 1.2em;
-          // vertical-align: -0.9em;
+          vertical-align: -0.9em;
         }
         &.bg-white{
           color: #000;
