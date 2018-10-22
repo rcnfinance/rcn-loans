@@ -11,7 +11,7 @@ import { Currency } from '../utils/currencies';
 }
 
 export interface Descriptor {
-    getInterestRate(amount: number): string;
+    getInterestRate(): string;
     getPunitiveInterestRate(): string;
     getEstimatedReturn(): number;
     getDuration(): number;
@@ -32,6 +32,8 @@ export class Request {
     ) { }
 
     get isRequest() { return true; }
+
+    get status() { return Status.Request; }
 
     public decimals(): number {
         return Currency.getDecimals(this.readCurrency());
@@ -59,7 +61,7 @@ export class Loan extends Request {
         public oracle: string,
         public expiration: number,
         public model: string,
-        public status: Status,
+        public _status: Status,
         public lentTime: number,
         public lenderBalance: number,
         // To review
@@ -85,6 +87,7 @@ export class Loan extends Request {
         )
     }
 
+    get status() { return this._status; }
     get isRequest() { return false; }
 
     get remainingTime() { return this.dueTime - (new Date().getTime() / 1000); }
@@ -194,15 +197,38 @@ export class BasaltDescriptor implements Descriptor {
         private duration: number
     ) { }
     getPunitiveInterestRate(): string {
-        return Utils.formatInterest(this.interestRate).toPrecision(2)
-    }
-    getInterestRate(_amount: number): string {
         return Utils.formatInterest(this.punitiveInterestRate).toPrecision(2)
+    }
+    getInterestRate(): string {
+        return Utils.formatInterest(this.interestRate).toPrecision(2)
     }
     getEstimatedReturn(): number {
         return ((this.amount * 100000 * this.duration) / this.interestRate) + this.amount;
     }
     getDuration(): number {
         return this.duration;
+    }
+}
+
+export class DiasporeDescriptor implements Descriptor {
+    constructor(
+        private requested: number,
+        private punitiveInterestRate: number,
+        private estimated: number,
+        private duration: number
+    ) {}
+    getInterestRate(): string {
+        const a = (this.estimated - this.requested) / this.estimated * 100;
+        const i = (a / this.duration) * 31104000;
+        return i.toPrecision(2);
+    }
+    getPunitiveInterestRate(): string {
+        return Utils.formatInterest(this.punitiveInterestRate).toPrecision(2);
+    }
+    getEstimatedReturn(): number {
+        return this.estimated;
+    }
+    getDuration(): number {
+        return this.duration
     }
 }

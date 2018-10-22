@@ -17,6 +17,7 @@ const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
 const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const oracleAbi = require('../contracts/Oracle.json');
+const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
 export class ContractsService {
@@ -27,6 +28,7 @@ export class ContractsService {
     private _rcnEngineAddress: string = environment.contracts.basaltEngine;
     private _rcnExtension: any;
     private _rcnExtensionAddress: string = environment.contracts.engineExtension;
+    private _requestsView: any;
 
     constructor(
       private web3: Web3Service,
@@ -37,6 +39,8 @@ export class ContractsService {
       this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
       this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
       this._rcnExtension = this.web3.web3reader.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
+      // TODO: Fix not working with web3reader
+      this._requestsView = this.web3.web3reader.eth.contract(requestsAbi).at(environment.contracts.diaspore.viewRequets);
     }
 
     public async getUserBalanceRCNWei(): Promise<number> {
@@ -199,18 +203,33 @@ export class ContractsService {
         }
       }
     }
-    public async getLoan(id: number): Promise<Request> {
-      return new Promise((resolve, reject) => {
-        this._rcnExtension.getLoan.call(this._rcnEngineAddress, id, (err, result) => {
-          if (err != null) {
-            reject(err);
-          } else if (result.length === 0) {
-            reject(new Error('Loan does not exist'));
-          } else {
-            resolve(LoanUtils.parseBasaltLoan(this._rcnEngineAddress, id, result));
-          }
-        });
-      }) as Promise<Request>;
+    public async getLoan(id: string): Promise<Request> {
+      if (id.startsWith("0x")) {
+        // Load Diaspore loan
+        return new Promise((resolve, reject) => {
+          this._requestsView.getRequest.call(environment.contracts.diaspore.loanManager, id, (err, result) => {
+            if (err != null) {
+              reject(err);
+            } else if (result.length === 0) {
+              reject(new Error("Loan does not exist"));
+            } else {
+              resolve(LoanUtils.parseRequest(environment.contracts.diaspore.loanManager, result));
+            }
+          });
+        }) as Promise<Request>;
+      } else {
+        return new Promise((resolve, reject) => {
+          this._rcnExtension.getLoan.call(this._rcnEngineAddress, id, (err, result) => {
+            if (err != null) {
+              reject(err);
+            } else if (result.length === 0) {
+              reject(new Error('Loan does not exist'));
+            } else {
+              resolve(LoanUtils.parseBasaltLoan(this._rcnEngineAddress, +id, result));
+            }
+          });
+        }) as Promise<Request>;
+      }
     }
     public async getActiveLoans(): Promise<Loan[]> {
       return new Promise((resolve, reject) => {
@@ -224,12 +243,12 @@ export class ContractsService {
           if (err != null) {
             reject(err);
           }
-          resolve(this.parseLoansBytes(result));
+          resolve(this.parseBasaltBytes(result));
         });
       }) as Promise<Loan[]>;
     }
     public async getRequests(): Promise<Request[]> {
-        return new Promise((resolve, reject) => {
+        const basalt = new Promise((resolve, reject) => {
           // Filter open loans, non expired loand and valid mortgage
           const filters = [
             environment.filters.openLoans,
@@ -242,9 +261,19 @@ export class ContractsService {
             if (err != null) {
               reject(err);
             }
-            resolve(LoanCurator.curateBasaltRequests(this.parseLoansBytes(result)));
+            resolve(LoanCurator.curateBasaltRequests(this.parseBasaltBytes(result)));
           });
         }) as Promise<Loan[]>;
+        const diaspore = new Promise((resolve, reject) => {
+          this._requestsView.getRequests(environment.contracts.diaspore.loanManager, 0, 2, (err, result) => {
+            if (err != null) {
+              reject(err);
+              console.log(err);
+            }
+            resolve(this.parseRequestBytes(result));
+          });
+        }) as Promise<Request[]>;
+        return (await diaspore).concat(await basalt);
     }
     public getLoansOfLender(lender: string): Promise<Loan[]> {
       return new Promise((resolve, reject) => {
@@ -255,7 +284,7 @@ export class ContractsService {
           if (err != null) {
             reject(err);
           }
-          resolve(LoanCurator.curateBasaltRequests(this.parseLoansBytes(result)));
+          resolve(LoanCurator.curateBasaltRequests(this.parseBasaltBytes(result)));
         });
       }) as Promise<Loan[]>;
     }
@@ -280,7 +309,7 @@ export class ContractsService {
         });
       }) as Promise<[number, number[]]>;
     }
-    private parseLoansBytes(bytes: any): BasaltLoan[] {
+    private parseBasaltBytes(bytes: any): BasaltLoan[] {
       const loans = [];
       const total = bytes.length / 20;
       for (let i = 0; i < total; i++) {
@@ -289,6 +318,15 @@ export class ContractsService {
         loans.push(LoanUtils.parseBasaltLoan(this._rcnEngineAddress, id, loanBytes));
       }
       return loans;
+    }
+    private parseRequestBytes(bytes:any): Request[] {
+      const requests = [];
+      const total = bytes.length / 16;
+      for (let i = 0; i < total; i++) {
+        const loanBytes = bytes.slice(i * 16, i * 16 + 16);
+        requests.push(LoanUtils.parseRequest(environment.contracts.diaspore.loanManager, loanBytes));
+      }
+      return requests;
     }
     private addressToBytes32(address: string): string {
       return '0x000000000000000000000000' + address.replace('0x', '');
