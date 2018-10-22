@@ -17,6 +17,7 @@ import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
 import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
 
 // App Services
+import { environment } from '../environments/environment';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ContractsService } from './services/contracts.service';
 import { TxService } from './tx.service';
@@ -30,7 +31,6 @@ import { SidebarService } from './services/sidebar.service';
 import { TitleService } from './services/title.service';
 import { AvailableLoansService } from './services/available-loans.service';
 import { CountriesService } from './services/countries.service';
-import { environment } from '../environments/environment';
 import { EventsService } from './services/events.service';
 
 // App Component

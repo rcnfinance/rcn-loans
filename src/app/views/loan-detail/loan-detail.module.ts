@@ -33,7 +33,7 @@ import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfe
     NgxSpinnerModule,
     SharedModule,
     LoanDetailRoutingModule,
-    MaterialModule,
+    MaterialModule
   ],
   providers: [
     ContractsService,
