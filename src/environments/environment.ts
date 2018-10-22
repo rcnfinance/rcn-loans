@@ -45,7 +45,7 @@ export const environment = {
     diaspore: {
       debtEngine: '0x2a878750a122ec3d6a193a4c6003ecd8e98feb17',
       loanManager: '0xa6e4b95a0d1be10e886317fe711a4515544c578a',
-      viewRequets: '0x6fd6fcee7718ab8b1f2d80987620293e43fa9df0'
+      viewRequets: '0xe018de95842700ad46cdd83a3ce19407b1b55ab2'
     },
     decentraland: {
       mortgageCreator: '0x2bdf545935d4264cbb7457e97d69b6b86458eb64',
