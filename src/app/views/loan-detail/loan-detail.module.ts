@@ -51,12 +51,11 @@ import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfe
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
     GobackButtonComponent,
-    TransferButtonComponent,
-    DialogLoanTransferComponent
+    TransferButtonComponent
   ],
-  exports: [],
   entryComponents: [
     DialogLoanTransferComponent
-  ]
+  ],
+  exports: []
 })
 export class LoanDetailModule { }
