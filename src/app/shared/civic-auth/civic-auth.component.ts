@@ -9,8 +9,8 @@ import { Web3Service } from '../../services/web3.service';
   templateUrl: './civic-auth.component.html',
   styleUrls: ['./civic-auth.component.scss']
 })
-export class CivicAuthComponent implements OnInit {
 
+export class CivicAuthComponent implements OnInit {
   constructor(
     private civicService: CivicService,
     public dialogRef: MatDialogRef<any>,

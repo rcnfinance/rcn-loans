@@ -14,6 +14,7 @@ import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/
   templateUrl: './transfer-button.component.html',
   styleUrls: ['./transfer-button.component.scss']
 })
+
 export class TransferButtonComponent implements OnInit {
   @Input() loan: Loan;
   pendingTx: Tx = undefined;

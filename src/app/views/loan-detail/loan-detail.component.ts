@@ -20,6 +20,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   templateUrl: './loan-detail.component.html',
   styleUrls: ['./loan-detail.component.scss']
 })
+
 export class LoanDetailComponent implements OnInit {
   loan: Loan;
   identityName = '...';
@@ -34,7 +35,7 @@ export class LoanDetailComponent implements OnInit {
   isRequest: boolean;
   isOngoing: boolean;
 
-  canTransfer: boolean = true;
+  canTransfer: boolean;
   canCancel: boolean;
   canPay: boolean;
   canLend: boolean;
