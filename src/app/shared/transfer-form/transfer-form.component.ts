@@ -8,7 +8,6 @@ import { Web3Service } from '../../services/web3.service';
   templateUrl: './transfer-form.component.html',
   styleUrls: ['./transfer-form.component.scss']
 })
-
 export class TransferFormComponent implements OnInit {
   @Output() submitTransfer = new EventEmitter<any>();
   invalidAddress = false;

@@ -8,7 +8,6 @@ import { Loan } from '../../models/loan.model';
   styleUrls: ['./dialog-loan-transfer.component.scss']
 })
 export class DialogLoanTransferComponent implements OnInit {
-
   @Input() loan: Loan;
 
   constructor(
