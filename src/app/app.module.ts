@@ -11,10 +11,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material/material.module';
 import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing/app-routing.module';
+
 import { CoreModule } from './core/core.module';
 import { NotFoundModule } from './not-found/not-found.module';
-import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
+
 import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
+import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
 
 // App Services
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -76,8 +78,8 @@ export class RavenErrorHandler implements ErrorHandler {
     CoreModule,
 
     NotFoundModule,
-    LoanDetailModule,
-    RequestedLoanModule
+    RequestedLoanModule,
+    LoanDetailModule
   ],
   providers: [
     ContractsService,
@@ -98,13 +100,13 @@ export class RavenErrorHandler implements ErrorHandler {
     AppComponent,
     HeaderComponent,
     ContentWrapperComponent,
-    DialogApproveContractComponent,
     ProfileComponent,
     AddressComponent,
     ActiveLoansComponent,
+    DialogApproveContractComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
-    DialogGenericErrorComponent,
+    DialogGenericErrorComponent
   ],
   entryComponents: [
     DialogApproveContractComponent,
