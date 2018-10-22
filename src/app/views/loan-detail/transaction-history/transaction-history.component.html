@@ -3,7 +3,7 @@
   <div class="timeline">
 
     <div class="timeline-structure">
-      <h2 *ngIf="noMatch" class="title main-h1" style="text-transform: initial; text-align: center; font-weight: 700;"> History is not available </h2>
+      <h2 *ngIf="noMatch" class="title main-h1 text-center"> History is not available </h2>
       <div *ngFor='let event of oTimeline; index as i; first as isFirst; last as isLast'
         (click)="change_table_content(i);"
         class="time-event {{ event.oProperties.inserted }} {{ event.oProperties.status }}"

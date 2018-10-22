@@ -1,8 +1,9 @@
 @import '../../../../scss/_variables.scss'; //variables
       
 .overlay-setup{
-  position: relative;
+  position: absolute;
   left: 50%;
+  @include transform(translate(-50%, 0%));
 }
 
 .transaction-component{

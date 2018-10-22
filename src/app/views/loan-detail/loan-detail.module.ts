@@ -23,7 +23,6 @@ import { GobackButtonComponent } from '../../shared/goback-button/goback-button.
 import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
-import { LoadingHistoryComponent } from './loading-history/loading-history.component';
 
 @NgModule({
   imports: [
@@ -48,8 +47,7 @@ import { LoadingHistoryComponent } from './loading-history/loading-history.compo
     DecentralandMapComponent,
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
-    GobackButtonComponent,
-    LoadingHistoryComponent
+    GobackButtonComponent
   ],
 })
 export class LoanDetailModule { }
