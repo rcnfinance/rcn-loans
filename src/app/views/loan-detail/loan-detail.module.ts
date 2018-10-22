@@ -51,7 +51,10 @@ import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfe
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
     GobackButtonComponent,
-    TransferButtonComponent
+    TransferButtonComponent,
+
+
+    DialogLoanTransferComponent
   ],
   entryComponents: [
     DialogLoanTransferComponent
