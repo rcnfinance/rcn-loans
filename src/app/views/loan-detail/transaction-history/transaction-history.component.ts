@@ -47,7 +47,7 @@ export class TransactionHistoryComponent implements OnInit {
   data_types: object = {
     'amount': 'currency'
   };
-  
+
   noMatch: boolean = false;
 
 
@@ -225,11 +225,11 @@ export class TransactionHistoryComponent implements OnInit {
     return commit.opcode !== 'partial_payment' || key !== 'from' || value !== Utils.address_0; // Filter empty from
   }
 
-  populate_table_data(id: number){ // Render Table Component by id
+  populate_table_data(id: number) { // Render Table Component by id
     return this.oTimeline[id]['oTableData'];
   }
 
-  change_table_content(i){ // Change Table Component by click timeEvent id
+  change_table_content(i) { // Change Table Component by click timeEvent id
     this.oDataTable = this.populate_table_data(i);
   }
 
@@ -239,10 +239,10 @@ export class TransactionHistoryComponent implements OnInit {
       this.oTimeline = this.load_timeEvents(commits);
       this.oDataTable = this.populate_table_data(this.id);
       this.myId.showSpinner = false;
-      if(this.oTimeline.length <= 0){
+      if (this.oTimeline.length <= 0) {
         this.noMatch = true;
       }
-    } catch (e) {    
+    } catch (e) {
       this.eventsService.trackError(e);
     }
   }
