@@ -43,7 +43,6 @@ import { AddressComponent } from './views/address/address.component';
 import { ActiveLoansComponent } from './active-loans/active-loans.component';
 import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
-import { DialogLoanTransferComponent } from './dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 import { DialogGenericErrorComponent } from './dialogs/dialog-generic-error/dialog-generic-error.component';
 
 import { ProfileComponent } from './views/profile/profile.component';
@@ -63,19 +62,6 @@ export class RavenErrorHandler implements ErrorHandler {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    ContentWrapperComponent,
-    DialogApproveContractComponent,
-    DialogLoanTransferComponent,
-    ProfileComponent,
-    AddressComponent,
-    ActiveLoansComponent,
-    DialogClientAccountComponent,
-    DialogInsufficientFoundsComponent,
-    DialogGenericErrorComponent
-  ],
   imports: [
     BrowserModule,
     HttpModule,
@@ -93,10 +79,20 @@ export class RavenErrorHandler implements ErrorHandler {
     LoanDetailModule,
     RequestedLoanModule
   ],
-  exports: [],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    ContentWrapperComponent,
+    ProfileComponent,
+    AddressComponent,
+    ActiveLoansComponent,
+    DialogApproveContractComponent,
+    DialogClientAccountComponent,
+    DialogInsufficientFoundsComponent,
+    DialogGenericErrorComponent
+  ],
   entryComponents: [
     DialogApproveContractComponent,
-    DialogLoanTransferComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
     DialogGenericErrorComponent
@@ -116,6 +112,7 @@ export class RavenErrorHandler implements ErrorHandler {
     CountriesService,
     EventsService
   ],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

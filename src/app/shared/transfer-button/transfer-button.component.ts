@@ -1,19 +1,20 @@
 import { Component, OnInit, Input } from '@angular/core';
-
-// App Component
 import { MatDialog } from '@angular/material';
-import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
-import { Web3Service } from '../../services/web3.service';
+// App Service
+import { EventsService, Category } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
 import { TxService, Tx } from '../../tx.service';
+// App Component
 import { environment } from '../../../environments/environment';
 import { Loan } from '../../models/loan.model';
-import { EventsService, Category } from '../../services/events.service';
+import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 
 @Component({
   selector: 'app-transfer-button',
-  templateUrl: './transfer-button.component.html'
+  templateUrl: './transfer-button.component.html',
+  styleUrls: ['./transfer-button.component.scss']
 })
+
 export class TransferButtonComponent implements OnInit {
   @Input() loan: Loan;
   pendingTx: Tx = undefined;

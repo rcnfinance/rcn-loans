@@ -84,6 +84,13 @@ p{ margin-block-start: 0em; margin-block-end: 0em; }
       background-color: $fifth;
     }
   }
+  &.button-transfer{
+    color: $secondary;
+    background-color: $orange;
+    &:hover, &:active, &:visited, &:focus{
+      background-color: $orange-hover;
+    }
+  }
 }
 
 // Colors
@@ -275,18 +282,16 @@ mat-form-field{
     width: auto;
     color: $secondary;
   }
-  .mat-form-field-label{
-    color: $secondary;
-  }
-  .mat-form-field-underline {
-    background-color: rgba(255,255,255,.4);
-  }
+  .mat-form-field-label{ color: $secondary; }
+  .mat-hint,
   .mat-select-arrow {
     color: rgba(255,255,255,.5);
   }
-  .mat-hint {
-    color: rgba(255,255,255,.5);
-  }
+}
+.mat-form-field-appearance-legacy{
+  .mat-hint{ color: $secondary; }
+  .mat-form-field-label{ color: rgba(255,255,255,.5); }
+  .mat-form-field-underline { background-color: rgba(255,255,255,.5); }
 }
 
 @media (min-width: 768px){
