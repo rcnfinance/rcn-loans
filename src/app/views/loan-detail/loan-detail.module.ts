@@ -24,6 +24,7 @@ import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigne
 import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 import { TransferButtonComponent } from './../../shared/transfer-button/transfer-button.component';
+import { TransferFormComponent } from './../../shared/transfer-form/transfer-form.component';
 
 import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 
@@ -52,6 +53,7 @@ import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfe
     TransactionHistoryComponent,
     GobackButtonComponent,
     TransferButtonComponent,
+    TransferFormComponent,
 
     DialogLoanTransferComponent
   ],
