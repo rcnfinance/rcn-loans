@@ -54,9 +54,7 @@ import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfe
     TransferButtonComponent,
     DialogLoanTransferComponent
   ],
-  exports: [
-    TransferButtonComponent
-  ],
+  exports: [],
   entryComponents: [
     DialogLoanTransferComponent
   ]
