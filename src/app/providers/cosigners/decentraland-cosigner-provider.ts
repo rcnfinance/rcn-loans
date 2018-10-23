@@ -98,11 +98,11 @@ export class DecentralandCosignerProvider implements CosignerProvider {
               this.managerContract.mortgages(mortgageId, (errD, mortgageData) => {
                 const decentralandCosigner = new DecentralandCosigner(
                   mortgageId, // Mortgage ID
-                  Utils.toBytes32(this.web3.web3.toHex(mortgageData[4])), // Land ID
-                  mortgageData[5], // Land price
+                  Utils.toBytes32(this.web3.web3.toHex(mortgageData[5])), // Land ID
+                  mortgageData[6], // Land price
                   ((loan.rawAmount / mortgageData[5]) * 100).toFixed(2), // Financed amount
                   undefined, // Parcel data
-                  mortgageData[6] // Mortgage status
+                  mortgageData[7] // Mortgage status
                 );
                 this.getParcelInfo(decentralandCosigner.x, decentralandCosigner.y).then((parcel) => {
                   decentralandCosigner.parcel = parcel;

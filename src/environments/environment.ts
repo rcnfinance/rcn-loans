@@ -43,9 +43,9 @@ export const environment = {
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
     decentraland: {
-      mortgageCreator: '0x2bdf545935d4264cbb7457e97d69b6b86458eb64',
-      mortgageManager: '0xea06746f1bd82412f9f243f6bee0b8194d67a67d',
-      landMarket: '0x80faa2b517b84a5aec1078d3600eab4c0b3aff56'
+      mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
+      mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1',
+      landMarket: '0x5424912699dabaa5f2998750c1c66e73d67ad219'
     }
   },
   filters: {

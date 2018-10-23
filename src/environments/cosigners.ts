@@ -19,9 +19,9 @@ export const cosignerOptions: CosignerProvider[] = [
     ),
     new DecentralandCosignerProvider(
         environment.contracts.basaltEngine,
-        '0x74ce62f642d491f87c2c6119dd6cc12a05434c87',
-        '0xb1b95ee112302b5fcde22fa4a6b1131ff228fa2b',
-        '0x80faa2b517b84a5aec1078d3600eab4c0b3aff56',
+        '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1',
+        '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
+        '0x5424912699dabaa5f2998750c1c66e73d67ad219',
         'https://api.decentraland.org/v1/'
     )
 ];
