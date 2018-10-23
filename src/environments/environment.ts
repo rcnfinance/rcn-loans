@@ -51,7 +51,7 @@ export const environment = {
   filters: {
     openLoans: '0x3e703de416a62525c8653be11d71486550618ec8',
     nonExpired: '0xe084b7cf7f6869a96cd72962047bf65e6d55e1e1',
-    validMortgage: '0x0bc0ac0f08235979951bb155d15f1a08dd7dcb2a',
+    validMortgage: '0x93b08a8a3cf148d62c20d3daa0b1bdf813bb7a21',
     lenderIn: '0xe52eac8af912b8b3196b2921f12b66c91b39e025',
     ongoing: '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3',
   },

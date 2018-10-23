@@ -233,13 +233,13 @@ export class ContractsService {
     public async getOpenLoans(): Promise<Loan[]> {
         return new Promise((resolve, reject) => {
           // Filter open loans, non expired loand and valid mortgage
-          // TODO: Add environment.filters.validMortgage filter
           const filters = [
             environment.filters.openLoans,
             environment.filters.nonExpired,
+            environment.filters.validMortgage
           ];
 
-          const params = ['0x0', '0x0'];
+          const params = ['0x0', '0x0', environment.contracts.decentraland.mortgageManager];
           this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
             if (err != null) {
               reject(err);
