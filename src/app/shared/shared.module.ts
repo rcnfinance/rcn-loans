@@ -28,17 +28,23 @@ import { MainButtonComponent } from './main-button/main-button.component';
 import { PayButtonComponent } from './pay-button/pay-button.component';
 import { ForgiveButtonComponent } from './forgive-button/forgive-button.component';
 import { CloseButtonComponent } from './close-button/close-button.component';
-import { TransferButtonComponent } from './transfer-button/transfer-button.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
 
 import { SocialContainerComponent } from './social-container/social-container.component';
-import { TransferFormComponent } from './transfer-form/transfer-form.component';
 
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 
 @NgModule({
+  imports: [
+    CommonModule,
+    BrowserModule,
+    HttpModule,
+
+    MaterialModule,
+    BlockiesModule
+  ],
   declarations: [
     LoanCardComponent,
 
@@ -61,23 +67,16 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
     PayButtonComponent,
     ForgiveButtonComponent,
     CloseButtonComponent,
-    TransferButtonComponent,
     ClaimButtonComponent,
     ButtonGroupComponent,
 
     SocialContainerComponent,
-    TransferFormComponent,
 
     RiskIndicatorComponent,
     CivicAuthComponent
   ],
-  imports: [
-    CommonModule,
-    BrowserModule,
-    HttpModule,
-
-    MaterialModule,
-    BlockiesModule
+  entryComponents: [
+    CivicAuthComponent
   ],
   exports: [
     LoanCardComponent,
@@ -101,17 +100,12 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
     PayButtonComponent,
     ForgiveButtonComponent,
     CloseButtonComponent,
-    TransferButtonComponent,
     ClaimButtonComponent,
     ButtonGroupComponent,
 
     SocialContainerComponent,
-    TransferFormComponent,
 
     RiskIndicatorComponent,
-    CivicAuthComponent
-  ],
-  entryComponents: [
     CivicAuthComponent
   ]
 })

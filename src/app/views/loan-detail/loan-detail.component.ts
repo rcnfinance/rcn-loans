@@ -33,7 +33,12 @@ export class LoanDetailComponent implements OnInit {
   interestMiddleText: string;
   isRequest: boolean;
   isOngoing: boolean;
-  canTransfer: boolean;
+
+  canTransfer: boolean = true;
+  canCancel: boolean;
+  canPay: boolean;
+  canLend: boolean;
+
   totalDebt: number;
   pendingAmount: number;
 
@@ -97,6 +102,9 @@ export class LoanDetailComponent implements OnInit {
     this.totalDebt = this.loan.total;
     this.pendingAmount = this.loan.pendingAmount;
     this.canTransfer = this.loan.owner === this.userAccount && this.loan.status !== Status.Request;
+    this.canCancel = this.loan.borrower === this.userAccount && this.loan.status === Status.Request;
+    this.canPay = this.loan.owner !== this.userAccount && (this.loan.status === Status.Ongoing || this.loan.status === Status.Indebt);
+    this.canLend = this.loan.borrower !== this.userAccount && this.isRequest;
   }
 
   openDetail(view: string) {
@@ -136,11 +144,11 @@ export class LoanDetailComponent implements OnInit {
         this.loadDetail();
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
-
         this.spinner.hide();
       }).catch(() =>
         this.router.navigate(['/404/'])
       );
     });
+
   }
 }
