@@ -215,7 +215,6 @@ export class LendButtonComponent implements OnInit {
     this.countriesService.lendEnabled().then((lendEnabled) => {
       this.lendEnabled = lendEnabled;
     });
-
   }
 
 }

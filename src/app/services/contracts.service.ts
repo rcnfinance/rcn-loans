@@ -130,12 +130,12 @@ export class ContractsService {
         return required;
       }
     }
-    public async payLoan(loan: Loan, amount: Number): Promise<string> {
+    public async payLoan(loan: Loan, amount: number): Promise<string> {
         const account = await this.web3.getAccount();
         const pOracleData = this.getOracleData(loan);
 
         const oracleData = await pOracleData;
-        console.log(oracleData);
+        console.log(account);
         return new Promise((resolve, reject) => {
           this._rcnEngine.pay(loan.id, amount, account, oracleData, { from: account }, function(err, result) {
             if (err != null) {
