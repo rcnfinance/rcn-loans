@@ -37,6 +37,7 @@ import { TransferFormComponent } from './transfer-form/transfer-form.component';
 
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
+import { PayFormComponent } from './pay-form/pay-form.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
     TransferFormComponent,
 
     RiskIndicatorComponent,
-    CivicAuthComponent
+    CivicAuthComponent,
+    PayFormComponent
   ],
   imports: [
     CommonModule,
@@ -109,7 +111,8 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
     TransferFormComponent,
 
     RiskIndicatorComponent,
-    CivicAuthComponent
+    CivicAuthComponent,
+    PayFormComponent
   ],
   entryComponents: [
     CivicAuthComponent
