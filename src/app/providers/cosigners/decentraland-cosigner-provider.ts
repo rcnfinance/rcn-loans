@@ -100,7 +100,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
                   mortgageId, // Mortgage ID
                   Utils.toBytes32(this.web3.web3.toHex(mortgageData[5])), // Land ID
                   mortgageData[6], // Land price
-                  ((loan.rawAmount / mortgageData[5]) * 100).toFixed(2), // Financed amount
+                  ((loan.rawAmount / mortgageData[6]) * 100).toPrecision(2), // Financed amount
                   undefined, // Parcel data
                   mortgageData[7] // Mortgage status
                 );
