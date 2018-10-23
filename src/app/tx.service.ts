@@ -66,8 +66,8 @@ export class TxService {
       if (!tx.confirmed) {
         this.web3service.web3reader.eth.getTransactionReceipt(tx.tx, (err, receipt) => {
           if (receipt !== null) {
+            if (tx.type == Type.lend) this.openSnackBar('Lent Successfully', '');
             console.log('Found receipt tx', tx, receipt);
-            this.openSnackBar('Lent Successfully', '');
             this.eventsService.trackEvent(
               'confirmed-transaction-' + tx.type,
               Category.Transaction,
