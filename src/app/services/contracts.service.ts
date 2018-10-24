@@ -232,6 +232,7 @@ export class ContractsService {
       }
     }
     public async getActiveLoans(): Promise<Loan[]> {
+      // TODO: Add Diaspore, currently not supported
       return new Promise((resolve, reject) => {
         // Filter ongoing loans
         const filters = [
