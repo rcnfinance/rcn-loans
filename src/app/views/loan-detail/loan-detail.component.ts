@@ -77,7 +77,7 @@ export class LoanDetailComponent implements OnInit {
     if (this.loan.isRequest) {
       // Show request detail
       // Load config data
-      const interest = this.loan.descriptor.getInterestRate(this.loan.amount);
+      const interest = this.loan.descriptor.getInterestRate();
       const interestPunnitory = this.loan.descriptor.getPunitiveInterestRate();
       this.loanConfigData = [
         ['Currency', this.loan.readCurrency()],

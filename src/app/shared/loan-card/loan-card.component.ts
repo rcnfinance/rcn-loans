@@ -46,7 +46,7 @@ export class LoanCardComponent implements OnInit {
 
   getInterestRate(): string {
     if (this.loan.isRequest) {
-      return this.loan.descriptor.getInterestRate(this.loan.amount);
+      return this.loan.descriptor.getInterestRate();
     } else if (this.loan instanceof Loan) {
       return Utils.formatInterest(this.loan.interestRate).toFixed(0);
     }
