@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // App Modules
 import { MaterialModule } from '../material/material.module';
 import { BlockiesModule } from 'angular-blockies';
@@ -41,6 +42,8 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
     CommonModule,
     BrowserModule,
     HttpModule,
+    FormsModule,
+    ReactiveFormsModule,
 
     MaterialModule,
     BlockiesModule
@@ -79,8 +82,10 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
     CivicAuthComponent
   ],
   exports: [
-    LoanCardComponent,
+    FormsModule,
+    ReactiveFormsModule,
 
+    LoanCardComponent,
     CreatorContainerComponent,
     AvatarComponent,
     LoanAvatarComponent,
@@ -106,7 +111,7 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
     SocialContainerComponent,
 
     RiskIndicatorComponent,
-    CivicAuthComponent
+    CivicAuthComponent,
   ]
 })
 export class SharedModule { }

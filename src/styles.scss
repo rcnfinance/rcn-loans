@@ -295,6 +295,23 @@ mat-form-field{
   .mat-form-field-underline { background-color: rgba(255,255,255,.5); }
 }
 
+  //Stepper
+.mat-stepper-horizontal, .mat-stepper-vertical{
+  // font-family: 'Raleway', sans-serif;
+  background-color: transparent;
+  .mat-stepper-vertical-line::before {
+    border-left-color: rgba(255, 255, 255, 0.5);
+  }
+  .mat-step-header{
+    .mat-step-label.mat-step-label-active {
+      color: inherit;
+    }
+    .mat-step-icon-not-touched {
+      background-color: #333333;
+    }
+  }
+}
+
 @media (min-width: 768px){
 //Material
   //Menu
