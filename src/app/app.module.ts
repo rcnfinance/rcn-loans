@@ -15,6 +15,7 @@ import { CoreModule } from './core/core.module';
 import { NotFoundModule } from './not-found/not-found.module';
 import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
 import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
+import { CreateLoanModule } from './views/create-loan/create-loan.module';
 
 // App Services
 import { environment } from '../environments/environment';
@@ -77,7 +78,8 @@ export class RavenErrorHandler implements ErrorHandler {
 
     NotFoundModule,
     LoanDetailModule,
-    RequestedLoanModule
+    RequestedLoanModule,
+    CreateLoanModule
   ],
   declarations: [
     AppComponent,

@@ -8,9 +8,11 @@ import { LoanDetailComponent } from '../views/loan-detail/loan-detail.component'
 import { AddressComponent } from '../views/address/address.component';
 import { ProfileComponent } from '../views/profile/profile.component';
 import { NotFoundModule } from '../not-found/not-found.module';
+import { CreateLoanComponent } from '../views/create-loan/create-loan.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/requests', pathMatch: 'full'},
+  { path: 'create', component: CreateLoanComponent },
   { path: 'requests', component: RequestedLoanComponent },
   { path: 'activity', component: ActiveLoansComponent },
   { path: 'loan/:id', component: LoanDetailComponent },

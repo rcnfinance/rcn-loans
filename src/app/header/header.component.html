@@ -20,6 +20,7 @@
             <div class="header-title">{{ title }}</div>
 
             <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
+              <div routerLink='/create'>Create</div>
               <div routerLink='/requests'>Requests</div>
               <div routerLink='/activity'>Activity</div>
               <div routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</div>
