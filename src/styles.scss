@@ -299,6 +299,18 @@ mat-form-field{
 .mat-stepper-horizontal, .mat-stepper-vertical{
   // font-family: 'Raleway', sans-serif;
   background-color: transparent;
+  .mat-vertical-stepper-header {
+    padding: 25px 17px;
+    max-height: 50px;
+  }
+  .mat-step-icon,
+  .mat-step-icon-not-touched {
+    height: 40px;
+    width: 40px;
+    .mat-step-icon-content{
+      font-weight: 900;
+    }
+  }
   .mat-stepper-vertical-line::before {
     border-left-color: rgba(255, 255, 255, 0.5);
   }
