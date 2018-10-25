@@ -25,33 +25,33 @@
               <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
             </mat-form-field>
             <div>
-              <a mat-raised-button class='button button-primary' matStepperNext>Next</a>
+              <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
             </div>
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="formGroup2" [optional]="isOptional" [editable]='!isEditable'>
+        <mat-step [stepControl]="formGroup2" [optional]="isOptional" [editable]='isEditable'>
           <form [formGroup]="formGroup2">
             <ng-template matStepLabel>Complete your identity with Bloom</ng-template>
             <mat-form-field>
               <input matInput placeholder="Address" formControlName="secondCtrl" required>
             </mat-form-field>
             <div>
-              <a mat-raised-button class='button button-secondary' matStepperPrevious>Back</a>
-              <a mat-raised-button class='button button-primary' matStepperNext>Next</a>
+              <button mat-raised-button class='button button-secondary marginright8' (click)="stepper.reset()">Reset</button>
+              <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
             </div>
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="formGroup3" [optional]="isOptional" [editable]='!isEditable'>
+        <mat-step [stepControl]="formGroup3" [optional]="isOptional" [editable]='isEditable'>
           <form [formGroup]="formGroup3">
             <ng-template matStepLabel>Scan your QR</ng-template>
             <mat-form-field>
               <input matInput placeholder="Address" formControlName="thirdCtrl" required>
             </mat-form-field>
             <div>
-              <a mat-raised-button class='button button-secondary' matStepperPrevious>Back</a>
-              <a mat-raised-button class='button button-primary' matStepperNext>Next</a>
+              <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
+              <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
             </div>
           </form>
         </mat-step>
@@ -60,8 +60,8 @@
           <ng-template matStepLabel>Finnish</ng-template>
           You are now done.
           <div>
-            <a mat-raised-button class='button button-secondary' matStepperPrevious>Back</a>
-            <a mat-raised-button class='button button-primary' (click)="stepper.reset()">Reset</a>
+            <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
+            <button mat-raised-button class='button button-primary' (click)="stepper.reset()">Reset</button>
           </div>
         </mat-step>
 
