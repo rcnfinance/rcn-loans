@@ -16,42 +16,42 @@
     <div class="col-sm-12">
 
 
-      <mat-vertical-stepper #stepper>
+      <mat-vertical-stepper linear #stepper>
         
-        <mat-step [stepControl]="firstFormGroup">
-          <form [formGroup]="firstFormGroup">
+        <mat-step [stepControl]="formGroup1" [optional]="!isOptional" [editable]='!isEditable'>
+          <form [formGroup]="formGroup1">
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
             <mat-form-field>
               <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
             </mat-form-field>
             <div>
-              <button mat-button matStepperNext>Next</button>
+              <a mat-raised-button class='button button-primary' matStepperNext>Next</a>
             </div>
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="secondFormGroup">
-          <form [formGroup]="secondFormGroup">
+        <mat-step [stepControl]="formGroup2" [optional]="isOptional" [editable]='!isEditable'>
+          <form [formGroup]="formGroup2">
             <ng-template matStepLabel>Complete your identity with Bloom</ng-template>
             <mat-form-field>
               <input matInput placeholder="Address" formControlName="secondCtrl" required>
             </mat-form-field>
             <div>
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
+              <a mat-raised-button class='button button-secondary' matStepperPrevious>Back</a>
+              <a mat-raised-button class='button button-primary' matStepperNext>Next</a>
             </div>
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="thirdFormGroup">
-          <form [formGroup]="thirdFormGroup">
+        <mat-step [stepControl]="formGroup3" [optional]="isOptional" [editable]='!isEditable'>
+          <form [formGroup]="formGroup3">
             <ng-template matStepLabel>Scan your QR</ng-template>
             <mat-form-field>
               <input matInput placeholder="Address" formControlName="thirdCtrl" required>
             </mat-form-field>
             <div>
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button matStepperNext>Next</button>
+              <a mat-raised-button class='button button-secondary' matStepperPrevious>Back</a>
+              <a mat-raised-button class='button button-primary' matStepperNext>Next</a>
             </div>
           </form>
         </mat-step>
@@ -60,8 +60,8 @@
           <ng-template matStepLabel>Finnish</ng-template>
           You are now done.
           <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button (click)="stepper.reset()">Reset</button>
+            <a mat-raised-button class='button button-secondary' matStepperPrevious>Back</a>
+            <a mat-raised-button class='button button-primary' (click)="stepper.reset()">Reset</a>
           </div>
         </mat-step>
 
