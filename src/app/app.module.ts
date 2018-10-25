@@ -42,11 +42,11 @@ import { ContentWrapperComponent } from './content-wrapper/content-wrapper.compo
 import { AddressComponent } from './views/address/address.component';
 
 import { ActiveLoansComponent } from './active-loans/active-loans.component';
-import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
-
-import { DialogGenericErrorComponent } from './dialogs/dialog-generic-error/dialog-generic-error.component';
 
 import { ProfileComponent } from './views/profile/profile.component';
+
+import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
+import { DialogGenericErrorComponent } from './dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 

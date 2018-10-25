@@ -9,9 +9,13 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class CreateLoanComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private spinner: NgxSpinnerService
+  ) { }
 
   ngOnInit() {
+    // this.spinner.show(); // Initialize spinner
+    // this.spinner.hide(); // Stop spinner
   }
 
 }

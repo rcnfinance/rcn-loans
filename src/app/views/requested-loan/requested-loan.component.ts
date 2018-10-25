@@ -15,10 +15,10 @@ import { AvailableLoansService } from '../../services/available-loans.service';
 
 export class RequestedLoanComponent implements OnInit {
   public loading: boolean;
-  available: any;
-  loans = [];
-  availableLoans = true;
-  pendingLend = [];
+  public available: any;
+  public loans = [];
+  public availableLoans = true;
+  public pendingLend = [];
 
   constructor(
     private contractsService: ContractsService,
@@ -27,11 +27,11 @@ export class RequestedLoanComponent implements OnInit {
   ) {}
 
   // Available Loans service
-  upgradeAvaiblable() {
+  public upgradeAvaiblable() {
     this.availableLoansService.updateAvailable(this.loans.length);
   }
 
-  loadLoans() {
+  public loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
       this.upgradeAvaiblable();
