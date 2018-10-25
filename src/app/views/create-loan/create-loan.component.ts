@@ -14,8 +14,8 @@ export class CreateLoanComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.spinner.show(); // Initialize spinner
-    // this.spinner.hide(); // Stop spinner
+    this.spinner.show(); // Initialize spinner
+    this.spinner.hide(); // Stop spinner
   }
 
 }

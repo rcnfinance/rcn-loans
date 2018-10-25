@@ -107,6 +107,7 @@ p{ margin-block-start: 0em; margin-block-end: 0em; }
   &.main-h3{font-size: 18px; @extend %font-bold;} 
   &.main-h4{font-size: 16px; @extend %font-regular;} 
   &.main-h5{font-size: 14px; @extend %font-thin;} 
+  &.main-p1{font-size: 14px; @extend %font-regular;} 
   &.main-title{line-height: 1.4; font-size: 16px; @extend %font-medium;} 
   &.main-subtitle{line-height: 1.4; font-size: 14px; @extend %font-medium;} 
 }
