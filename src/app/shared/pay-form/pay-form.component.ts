@@ -1,12 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import {
-  FormsModule,
-  FormGroup,
-  FormBuilder,
-  FormControl,
-  Validators,
-  NgForm,
-} from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { Web3Service } from '../../services/web3.service';
 
 @Component({

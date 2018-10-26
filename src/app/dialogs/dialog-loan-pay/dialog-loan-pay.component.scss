@@ -1,8 +1,5 @@
 @import '../../../scss/_variables.scss'; //variables
 
-.mat-dialog-container {
-  height: 210px;
-}
 .dialog-padding{
   padding: 30px;
 }
@@ -28,29 +25,6 @@
     }
   }
 }
-.currency-logo{
-  width: 35px;
-  display: inline-block;
-  margin-right: 5px;
-  margin-left: 10px;
-  margin-top: -5px;
-}
-.rcn-balance{
-  font-size: 22px;
-  @extend %font-bold;
-}
-.half-logo{
-  position: relative; left: 50%; @include transform(translate(-50%, 0%));
-  max-width: 200px;
-}
-
-.-center-top{
-  position: sticky; top: 50%; @include transform(translate(0%, -50%));
-}
-
-.transfer-width{
-  min-width: 0px;
-}
 
 @media (min-width: 768px){
   .navbar-container {
@@ -61,13 +35,4 @@
       }
     }
   }
-  .transfer-width{min-width: 600px;}
-}
-
-@media (min-width: 992px){
-  .transfer-width{min-width: 750px;}
-}
-
-@media (min-width: 1200px){
-  .transfer-width{min-width: 900px;}
 }

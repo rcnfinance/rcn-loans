@@ -3,8 +3,7 @@ import {
   MatDialog,
   MatDialogRef,
   MatSnackBar,
-  MAT_DIALOG_DATA,
-  MatSnackBarHorizontalPosition,
+  MatSnackBarHorizontalPosition
 } from '@angular/material';
 // App Services
 import { environment } from '../../../environments/environment';
@@ -18,7 +17,6 @@ import { CountriesService } from '../../services/countries.service';
 import { CivicService } from '../../services/civic.service';
 import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -78,10 +76,10 @@ export class PayButtonComponent implements OnInit {
         return;
       }
 
-      if (!await civicApproved) {     
+      /*if (!await civicApproved) {     
         this.showCivicDialog();
         return;
-      }
+      }*/
 
       const dialogRef = this.dialog.open(DialogLoanPayComponent);
       dialogRef.afterClosed().subscribe(amount => {

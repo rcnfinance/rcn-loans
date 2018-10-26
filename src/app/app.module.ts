@@ -49,7 +49,6 @@ import { DialogGenericErrorComponent } from './dialogs/dialog-generic-error/dial
 import { ProfileComponent } from './views/profile/profile.component';
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
-import { DialogLoanPayComponent } from './dialogs/dialog-loan-pay/dialog-loan-pay.component';
 
 Raven
   .config(environment.sentry, {
@@ -76,7 +75,6 @@ export class RavenErrorHandler implements ErrorHandler {
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
     DialogGenericErrorComponent,
-    DialogLoanPayComponent,
   ],
   imports: [
     BrowserModule,
@@ -102,7 +100,6 @@ export class RavenErrorHandler implements ErrorHandler {
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
     DialogGenericErrorComponent,
-    DialogLoanPayComponent
   ],
   providers: [
     ContractsService,
