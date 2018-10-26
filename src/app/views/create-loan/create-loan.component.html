@@ -74,7 +74,15 @@
                   <div class="col-xs-12 col-lg-6 margintop30">
                     <div class="properties-block">
                       <div class="title">{{ 'Request' }}</div>
-                      <div class="currency">{{ 'RCN' }}</div>
+                      <div class="currency">
+                        <!-- {{ 'RCN' }} -->
+                        <mat-select placeholder="Currency" required>
+                          <mat-option>--</mat-option>
+                          <mat-option *ngFor="let currency of currencies" [value]="currency">
+                            {{ currency }}
+                          </mat-option>
+                        </mat-select>
+                      </div>
                       <div class="title">{{ 'Return' }}</div>
                     </div>
                     <div class="conversion-block">

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 // App Services
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -9,11 +9,12 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./create-loan.component.scss']
 })
 export class CreateLoanComponent implements OnInit {
-  isOptional = true;
-  isEditable = true;
-  formGroup1: FormGroup;
-  formGroup2: FormGroup;
-  formGroup3: FormGroup;
+  public isOptional = true;
+  public isEditable = true;
+  public formGroup1: FormGroup;
+  public formGroup2: FormGroup;
+  public formGroup3: FormGroup;
+  public currencies: object = ['rcn', 'mana', 'ars'];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -34,6 +35,7 @@ export class CreateLoanComponent implements OnInit {
     this.formGroup3 = this._formBuilder.group({
       thirdCtrl: ['', Validators.required]
     });
+    animalControl = new FormControl('', [Validators.required]);
   }
 
 

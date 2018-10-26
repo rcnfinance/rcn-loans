@@ -287,7 +287,7 @@ mat-form-field{
   .mat-form-field-label{ color: $secondary; }
   .mat-hint,
   .mat-select-arrow {
-    color: rgba(255,255,255,.5);
+    color: rgba(124, 81, 81, 0.5);
   }
 }
 .mat-form-field-appearance-legacy{
@@ -302,6 +302,25 @@ mat-form-field{
     }
   }
 }
+.mat-select-trigger {
+  border-bottom: 1px solid #808080;
+}
+
+.mat-form-field-underline{ color: $secondary; }
+.mat-select-arrow{ color: $secondary; }
+.mat-select-placeholder, .mat-select-value-text { color: $secondary; text-transform: uppercase; }
+.mat-select-content{
+  background-color: $tertiary;
+  .mat-option{
+    color: $secondary;
+    text-transform: uppercase;
+    @include transition;
+    &:hover{
+      background-color: #404040;
+    }
+  }
+}
+
 
   //Stepper
 .mat-stepper-horizontal, 
@@ -384,7 +403,7 @@ mat-form-field{
   background-color: transparent;
   border: 1px solid transparent;
   span{
-    background-color: #fff;
+    background-color: $secondary;
     height: 1px;
     width: 23px;
   }
@@ -637,7 +656,7 @@ footer {
       display: none;
     }
     a{
-      color: #fff;
+      color: $secondary;
       @include transition();
       &:hover{
         color: $primary;

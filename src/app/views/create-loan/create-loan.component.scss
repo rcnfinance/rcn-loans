@@ -5,6 +5,9 @@
   @extend %flex-container;
   div{
     flex: 1;
+    font-size: 11px;
+    text-transform: uppercase;
+    @extend %font-light;
     &:nth-child(1){
       text-align: left;
     }
