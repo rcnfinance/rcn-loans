@@ -295,14 +295,21 @@ mat-form-field{
   .mat-form-field-label{ color: rgba(255,255,255,.5); }
   .mat-form-field-underline { background-color: rgba(255,255,255,.5); }
 }
+.conversion-block{
+  .mat-form-field-appearance-legacy{ 
+    .mat-form-field-infix{
+      padding: 0.4375em 0 0 0 !important;
+    }
+  }
+}
 
   //Stepper
 .mat-stepper-horizontal, 
 .mat-stepper-vertical{
   background-color: transparent;
-  .mat-stepper-vertical-line::before { border-left-color: rgba(255, 255, 255, 0.5); }
   .mat-vertical-content { padding: 0 24px 24px 34px; }
   .mat-vertical-content-container { margin-left: 20px; }
+  .mat-stepper-vertical-line::before { border-left-color: rgba(255, 255, 255, 0.5); }
   .mat-step-header {
     padding: 25px 0px;
     max-height: 50px;
@@ -650,4 +657,3 @@ footer {
     }
   }
 }
-

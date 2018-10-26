@@ -28,26 +28,26 @@
                   <div class="col-6 d-none d-lg-block"><div class="title property marginbottom10">Cancelable At</div></div>
                   <div class="col-xs-12 col-lg-2">
                     <mat-form-field>
-                      <input matInput type='number' value="0" formControlName="ctrl1">
+                      <input matInput type='number' value="0">
                       <mat-hint>Set the Days</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-xs-12 col-lg-2">
                     <mat-form-field>
-                      <input matInput type='number' value="0" formControlName="ctrl2">
+                      <input matInput type='number' value="0">
                       <mat-hint>Set the Mounths</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-xs-12 col-lg-2">
                     <mat-form-field>
-                      <input matInput type='number' value="0" formControlName="ctrl3">
+                      <input matInput type='number' value="0">
                       <mat-hint>Set the Years</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-6 d-block d-lg-none"><div class="title property margintop20 marginbottom10">Cancelable At</div></div>
                   <div class="col-xs-12 col-lg-6">
                     <mat-form-field>
-                      <input matInput type='number' value="0" formControlName="ctrl4">
+                      <input matInput type='number' value="0">
                       <span matSuffix>Days</span>
                       <mat-hint>Set the minimum time the loan</mat-hint>
                     </mat-form-field>
@@ -57,30 +57,34 @@
                   <div class="col col-lg-12"><div class="title property margintop30 marginbottom10">ANNUAL INTEREST / PUNITORY</div></div>
                   <div class="col-xs-12 col-lg-3">
                     <mat-form-field>
-                      <input matInput type='number' value="0" max='100' formControlName="ctrl4">
+                      <input matInput type='number' value="40" max='200'>
                       <mat-hint>Annual Interest rate</mat-hint>
                       <span matSuffix>%</span>
                     </mat-form-field>
                   </div>
                   <div class="col-xs-12 col-lg-3">
                     <mat-form-field>
-                      <input matInput type='number' value="0" max='100' formControlName="ctrl4">
+                      <input matInput type='number' value="60" max='200'>
                       <mat-hint>Annual Interest rate</mat-hint>
                       <span matSuffix>%</span>
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col">
+                  <div class="col-xs-12 col-lg-6 margintop30">
                     <div class="properties-block">
-                      <div class="title">{{ 'leftLabel' }}</div>
-                      <div class="currency">{{ 'loan.currency' }}</div>
-                      <div class="title">{{ 'rightLabel' }}</div>
+                      <div class="title">{{ 'Request' }}</div>
+                      <div class="currency">{{ 'RCN' }}</div>
+                      <div class="title">{{ 'Return' }}</div>
                     </div>
                     <div class="conversion-block">
-                      <div class="block-title">{{ 'leftValue' }}</div>
+                      <div class="block-title">
+                        <mat-form-field>
+                          <input matInput type='number' value="0">
+                        </mat-form-field>
+                      </div>
                       <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
-                      <div class="block-title">{{ 'rightValue' }}</div>
+                      <div class="block-title">{{ '1000' }}</div>
                     </div>
                   </div>
                 </div>

@@ -43,13 +43,7 @@
       font-size: 26px;
     }
   }
-}
-
-@media (min-width: 768px){
-  .card-col{
-    margin-top: 30px;
-  }
-  .card-container{
-    margin-top: 30px;
+  mat-form-field{
+    font-weight: 700 !important;
   }
 }
