@@ -13,7 +13,7 @@ $material-icons-font-path: '~material-icons/iconfont/'; // Material Icons
         './scss/_material-custom-theme.scss'; //material-custom-theme
 
 // General
-html {height: 0;}
+html { height: 0; }
 body{
   position: relative;
   margin: 0;
@@ -110,6 +110,7 @@ p{ margin-block-start: 0em; margin-block-end: 0em; }
   &.main-p1{font-size: 14px; @extend %font-regular;} 
   &.main-title{line-height: 1.4; font-size: 16px; @extend %font-medium;} 
   &.main-subtitle{line-height: 1.4; font-size: 14px; @extend %font-medium;} 
+  &.property{font-size: 11px; text-transform: uppercase; @extend %font-light;} 
 }
 .font-light{@extend %font-light;}
 .font-regular{@extend %font-regular;}
@@ -296,13 +297,14 @@ mat-form-field{
 }
 
   //Stepper
-.mat-stepper-horizontal, .mat-stepper-vertical{
+.mat-stepper-horizontal, 
+.mat-stepper-vertical{
   background-color: transparent;
-  .mat-stepper-vertical-line::before {
-    border-left-color: rgba(255, 255, 255, 0.5);
-  }
+  .mat-stepper-vertical-line::before { border-left-color: rgba(255, 255, 255, 0.5); }
+  .mat-vertical-content { padding: 0 24px 24px 34px; }
+  .mat-vertical-content-container { margin-left: 20px; }
   .mat-step-header {
-    padding: 25px 17px;
+    padding: 25px 0px;
     max-height: 50px;
     .mat-step-label {
       color: inherit;
@@ -316,15 +318,13 @@ mat-form-field{
     .mat-step-icon-not-touched {
       height: 40px;
       width: 40px;
-      .mat-step-icon-content{
-        font-weight: 900;
-      }
+      .mat-step-icon-content{ font-weight: 900; }
     }
-    .mat-step-icon{
-      background-color: $primary;
-    }
+    .mat-step-icon{ background-color: $primary; }
   }
 }
+
+@media (min-width: 768px){}
 
 @media (min-width: 768px){
 //Material

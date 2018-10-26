@@ -18,13 +18,61 @@
 
       <mat-vertical-stepper linear #stepper>
         
-        <mat-step [stepControl]="formGroup1" [optional]="!isOptional" [editable]='!isEditable'>
+        <mat-step [stepControl]="formGroup1" [optional]="isOptional" [editable]='!isEditable' errorMessage="This is required.">
           <form [formGroup]="formGroup1">
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
-            <mat-form-field>
-              <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
-            </mat-form-field>
-            <div>
+
+              <div class="container-fluid paddingleft0 paddingright0">
+                <div class="row">
+                  <div class="col col-lg-6"><div class="title property marginbottom10">Duration</div></div>
+                  <div class="col-6 d-none d-lg-block"><div class="title property marginbottom10">Cancelable At</div></div>
+                  <div class="col-xs-12 col-lg-2">
+                    <mat-form-field>
+                      <input matInput type='number' value="0" formControlName="ctrl1">
+                      <mat-hint>Set the Days</mat-hint>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xs-12 col-lg-2">
+                    <mat-form-field>
+                      <input matInput type='number' value="0" formControlName="ctrl2">
+                      <mat-hint>Set the Mounths</mat-hint>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xs-12 col-lg-2">
+                    <mat-form-field>
+                      <input matInput type='number' value="0" formControlName="ctrl3">
+                      <mat-hint>Set the Years</mat-hint>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-6 d-block d-lg-none"><div class="title property margintop20 marginbottom10">Cancelable At</div></div>
+                  <div class="col-xs-12 col-lg-6">
+                    <mat-form-field>
+                      <input matInput type='number' value="0" formControlName="ctrl4">
+                      <span matSuffix>Days</span>
+                      <mat-hint>Set the minimum time the loan</mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col col-lg-12"><div class="title property margintop30 marginbottom10">ANNUAL INTEREST / PUNITORY</div></div>
+                  <div class="col-xs-12 col-lg-3">
+                    <mat-form-field>
+                      <input matInput type='number' value="0" max='100' formControlName="ctrl4">
+                      <mat-hint>Annual Interest rate</mat-hint>
+                      <span matSuffix>%</span>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xs-12 col-lg-3">
+                    <mat-form-field>
+                      <input matInput type='number' value="0" max='100' formControlName="ctrl4">
+                      <mat-hint>Annual Interest rate</mat-hint>
+                      <span matSuffix>%</span>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+            <div class='margintop20'>
               <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
             </div>
           </form>
@@ -36,6 +84,11 @@
             <mat-form-field>
               <input matInput placeholder="Address" formControlName="secondCtrl" required>
             </mat-form-field>
+            <div class="margintop30">
+              <mat-slide-toggle>Slide me!</mat-slide-toggle>
+              <mat-slide-toggle>Slide me!</mat-slide-toggle>
+              <mat-slide-toggle>Slide me!</mat-slide-toggle>
+            </div>
             <div>
               <button mat-raised-button class='button button-secondary marginright8' (click)="stepper.reset()">Reset</button>
               <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
