@@ -22,9 +22,7 @@ export class DialogLoanPayComponent implements OnInit {
   }
 
   submit(amount: any) {
-    console.log('Pay loan to ', amount);
-    console.log(this.loan);
-    this.dialogRef.close(amount);
+    this.dialogRef.close(amount); //If press Cancel, amount is false
   }
 
 }

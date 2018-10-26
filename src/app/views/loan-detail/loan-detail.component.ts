@@ -33,6 +33,7 @@ export class LoanDetailComponent implements OnInit {
   interestMiddleText: string;
   isRequest: boolean;
   isOngoing: boolean;
+  isInDebt: boolean;
   canTransfer: boolean;
   totalDebt: number;
   pendingAmount: number;
@@ -97,6 +98,7 @@ export class LoanDetailComponent implements OnInit {
     this.totalDebt = this.loan.total;
     this.pendingAmount = this.loan.pendingAmount;
     this.canTransfer = this.loan.owner === this.userAccount && this.loan.status !== Status.Request;
+    this.isInDebt = this.loan.status === 4;
   }
 
   openDetail(view: string) {

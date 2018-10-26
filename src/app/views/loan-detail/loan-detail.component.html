@@ -94,15 +94,14 @@
             <app-cosigner-selector [loan]=loan></app-cosigner-selector>
           </tbody>
         </table>
-        <app-pay-button [loan]=loan></app-pay-button>
       </div>
 
-      <div class="paddingleft15 paddingright15" *ngIf="isRequest">
-        <!-- <app-pay-button></app-pay-button> -->
-        <app-lend-button [loan]=loan></app-lend-button>
-        <app-risk-indicator class='risk-indicator' [loan]=loan></app-risk-indicator>
-      </div>
-    
+      <div class="paddingleft15 paddingright15">
+        <app-pay-button [loan]=loan *ngIf="isOngoing || isInDebt"></app-pay-button>
+        <app-lend-button [loan]=loan *ngIf="isRequest"></app-lend-button>
+        <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="isRequest"></app-risk-indicator>
+      </div>      
+
       <div class="margintop15"></div>
     </div>
 

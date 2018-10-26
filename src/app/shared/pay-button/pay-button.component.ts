@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import {
   MatDialog,
   MatDialogRef,
@@ -12,6 +11,7 @@ import { environment } from '../../../environments/environment';
 import { TxService, Tx } from '../../tx.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Loan } from '../../models/loan.model';
+import { Currency } from '../../utils/currencies';
 import { EventsService, Category } from '../../services/events.service';
 import { Web3Service } from '../../services/web3.service';
 import { CountriesService } from '../../services/countries.service';
@@ -21,6 +21,7 @@ import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loa
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
+import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 
 
 
@@ -32,7 +33,7 @@ import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insuffic
 export class PayButtonComponent implements OnInit {
 
 	@Input() loan: Loan;
-	id: number;
+  @Input() isOngoing: boolean;
   account: string;
 	pendingTx: Tx = undefined;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -47,94 +48,62 @@ export class PayButtonComponent implements OnInit {
     public snackBar: MatSnackBar,
     private civicService: CivicService,
     private countriesService: CountriesService,
-    private router: Router, //DAAVID
     public dialog: MatDialog	
   ) {}
 
-  /*handlePay() {
-    const dialogRef = this.dialog.open(DialogLoanPayComponent);
-		dialogRef.afterClosed().subscribe(to => {
-      /*this.eventsService.trackEvent(
-        'set-to-pay-loan',
-        Category.Loan,
-        'loan #' + this.loan.id + ' to ' + to
-      ); 
+  handlePay() {}
 
-      this.contractService.getLoan(this.id).then((loan) => {
-      	console.log(loan);
-	      this.contractService.payLoan(loan, to).then((tx) => {
-	        this.eventsService.trackEvent(
-	          'pay-loan',
-	          Category.Loan,
-	          'loan #' + this.loan.id + ' to ' + to
-	        );
-	        this.txService.registerTransferTx(tx, environment.contracts.basaltEngine, this.loan, to);
-	        this.retrievePendingTx();
-	      });
-      })
-    });   
-  }*/
-
-  async handlePay(forze = false) {
+  async loadPay(forze = false) {
     if (this.opPending && !forze) { return; }
 
-    //this.startOperation();
-
     try {
-      const engineApproved = this.contractsService.isEngineApproved();
+      const engineApproved = await this.contractsService.isEngineApproved();
       const civicApproved = this.civicService.status();
-      const balance = this.contractsService.getUserBalanceRCNWei();
-      const required = this.contractsService.estimateRequiredAmount(this.loan);
-      if (!await engineApproved) {
+      const balance = await this.contractsService.getUserBalanceRCNWei();
+      const required = await this.contractsService.estimateRequiredAmount(this.loan);
+      
+      if (! engineApproved) {
         this.showApproveDialog();
         return;
       }
 
-      console.log('Try lend', await required, await balance);
-      if (await balance < await required) {
+      if ( balance <  required) {
         this.eventsService.trackEvent(
           'show-insufficient-funds-lend',
           Category.Account,
           'loan #' + this.loan.id,
-          await required
+           required
         );
-        this.showInsufficientFundsDialog(await required, await balance);
+        this.showInsufficientFundsDialog( required,  balance);
         return;
       }
 
-      /*(if (!await civicApproved) {     
+      if (!await civicApproved) {     
         this.showCivicDialog();
         return;
-      }*/
+      }
 
       const dialogRef = this.dialog.open(DialogLoanPayComponent);
       dialogRef.afterClosed().subscribe(amount => {
-        this.eventsService.trackEvent(
-          'set-to-pay-loan',
-          Category.Loan,
-          'loan #' + this.loan.id + ' of ' + amount
-        ); 
-
-        this.contractsService.payLoan(this.loan, amount).then((tx) => {
+        if(amount){ 
+          amount = amount * 10 ** Currency.getDecimals("RCN");
           this.eventsService.trackEvent(
-            'pay-loan',
+            'set-to-pay-loan',
             Category.Loan,
             'loan #' + this.loan.id + ' of ' + amount
-          );
-          this.txService.registerTransferTx(tx, environment.contracts.basaltEngine, this.loan, amount);
-          this.retrievePendingTx();
-        });
+          ); 
+
+          this.contractsService.payLoan(this.loan, amount).then((tx) => {
+            this.eventsService.trackEvent(
+              'pay-loan',
+              Category.Loan,
+              'loan #' + this.loan.id + ' of ' + amount
+            );
+            this.txService.registerTransferTx(tx, environment.contracts.basaltEngine, this.loan, amount);  
+            this.retrievePendingTx();
+          });
+        }
       });         
-      /*const tx = await this.contractsService.lendLoan(this.loan);
-
-      this.eventsService.trackEvent(
-        'pay',
-        Category.Account,
-        'loan #' + this.loan.id
-      );
-
-      this.txService.registerLendTx(this.loan, tx);
-      this.pendingTx = this.txService.getLastLend(this.loan);)*/
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.message.indexOf('User denied transaction signature') < 0) {
@@ -142,13 +111,8 @@ export class PayButtonComponent implements OnInit {
           data: { error: e }
         });
       }
-      console.log(e);
-    } finally {
-      //this.finishOperation();
-      console.log("Finally");
     }
   }
-
 
   showCivicDialog() {
     const dialogRef: MatDialogRef<CivicAuthComponent> = this.dialog.open(CivicAuthComponent, {
@@ -156,7 +120,7 @@ export class PayButtonComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.handlePay(true);
+        this.loadPay(true);
       } else {
         this.cancelOperation();
       }
@@ -176,7 +140,7 @@ export class PayButtonComponent implements OnInit {
     dialogRef.componentInstance.autoClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.handlePay(true);
+        this.loadPay(true);
       } else {
         this.cancelOperation();
       }
@@ -184,28 +148,13 @@ export class PayButtonComponent implements OnInit {
   }
 
   cancelOperation() {
-    console.log('Cancel lend');
+    console.log('Cancel Pay');
     this.openSnackBar('Your transaction has failed', '');
     this.opPending = false;
   }  
 
-  finishOperation() {
-    console.log('Lend finished');
-    this.opPending = false;
-  }  
-
-  startOperation() {
-    console.log('Started lending');
-    this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
-    this.opPending = true;
-  }
-
   retrievePendingTx() {
     this.pendingTx = this.txService.getLastPendingTransfer(environment.contracts.basaltEngine, this.loan);
-  }
-
-  getId(url){
-  	return parseInt(url.match(/\d+/g));
   }
 
   openSnackBar(message: string, action: string) {
@@ -223,14 +172,13 @@ export class PayButtonComponent implements OnInit {
         'loan #' + this.loan.id
       );
 
-      this.handlePay();
+      this.loadPay();
     } else {
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }
   }  
 
   ngOnInit() {
-  	//this.id = this.getId(this.router.url); //Get id via URL to get the loan.
     this.retrievePendingTx();
     this.web3Service.getAccount().then((account) => {
       this.account = account;

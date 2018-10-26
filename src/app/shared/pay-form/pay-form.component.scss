@@ -1,4 +1,20 @@
+form{
+	width: 100%;
+}
+
+.mat-form-field-appearance-legacy{
+  .mat-hint,
+  .mat-form-field-label{
+    color: #fff !important;
+  }
+}
 .error {
-    color: #FF0909;
-    font-size: 1em;
+  color: #FF0909;
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1.125;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.mat-form-field-appearance-legacy .mat-form-field-label{
+  color: #fff !important;
 }
