@@ -78,10 +78,10 @@ export class PayButtonComponent implements OnInit {
         return;
       }
 
-      /*if (!await civicApproved) {     
+      if (!await civicApproved) {     
         this.showCivicDialog();
         return;
-      }*/
+      }
 
       const dialogRef = this.dialog.open(DialogLoanPayComponent);
       dialogRef.afterClosed().subscribe(amount => {
