@@ -62,7 +62,7 @@
 
 .icon-block{
   display: flex;
-  padding: 10px 0 30px;
+  padding: 10px 0 40px;
   .icon{
     width: 40px;
     height: 40px;
@@ -71,6 +71,7 @@
     background: $gray7;
     @extend %flex-container-align;
     svg{
+      font-size: 16px;
       margin: 0 auto;
     }
   }
