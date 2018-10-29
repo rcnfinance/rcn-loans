@@ -36,15 +36,15 @@ $gray9: #0c0c0c;
 // Typography variables
 // --------------------------------------------------
 
-%font-thin{font-weight: 100;}
-%font-extra-light{font-weight: 200;}
-%font-light{font-weight: 300;}
-%font-regular{font-weight: 400;}
-%font-medium{font-weight: 500;}
-%font-semi-bold{font-weight: 600;}
-%font-bold{font-weight: 700;}
-%font-extra-bold{font-weight: 800;}
-%font-black{font-weight: 900;}
+%font-thin{font-weight: 100; font-family: 'Raleway', sans-serif;}
+%font-extra-light{font-weight: 200; font-family: 'Raleway', sans-serif;}
+%font-light{font-weight: 300; font-family: 'Raleway', sans-serif;}
+%font-regular{font-weight: 400; font-family: 'Raleway', sans-serif;}
+%font-medium{font-weight: 500; font-family: 'Raleway', sans-serif;}
+%font-semi-bold{font-weight: 600; font-family: 'Raleway', sans-serif;}
+%font-bold{font-weight: 700; font-family: 'Raleway', sans-serif;}
+%font-extra-bold{font-weight: 800; font-family: 'Raleway', sans-serif;}
+%font-black{font-weight: 900; font-family: 'Raleway', sans-serif;}
 
 %roboto-thin{font-weight: 100; font-family: 'Roboto', sans-serif;}
 %roboto-extra-light{font-weight: 200; font-family: 'Roboto', sans-serif;}
@@ -218,6 +218,14 @@ $default-transition--delay: all 0.3s ease-out;
   justify-content: space-between; // Aligns items horizontally and accepts the following values:
   align-items: center; // Aligns items vertically and Determines how the items as a whole are aligned within the container
   align-content: flex-end; // Determines the spacing between lines. When there is only one line, align-content has no effect.
+}
+%flex-container-align{
+  display: flex;
+  flex-direction: row;
+  flex-flow: row;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-end;
 }
 %flex-item{
   > .flex-item {
