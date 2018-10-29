@@ -20,6 +20,7 @@ import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loa
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 
 
 
@@ -30,14 +31,13 @@ import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-con
 })
 export class PayButtonComponent implements OnInit {
 
-	@Input() loan: Loan;
+  @Input() loan: Loan;
   @Input() isOngoing: boolean;
   account: string;
-	pendingTx: Tx = undefined;
+  pendingTx: Tx = undefined;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   opPending = false;
   lendEnabled: Boolean;
-  
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
@@ -46,7 +46,7 @@ export class PayButtonComponent implements OnInit {
     public snackBar: MatSnackBar,
     private civicService: CivicService,
     private countriesService: CountriesService,
-    public dialog: MatDialog	
+    public dialog: MatDialog
   ) {}
 
   handlePay() {}
@@ -54,12 +54,17 @@ export class PayButtonComponent implements OnInit {
   async loadPay(forze = false) {
     if (this.opPending && !forze) { return; }
 
+    if (this.account === undefined) {
+      this.dialog.open(DialogClientAccountComponent);
+      return;
+    }
+
     try {
       const engineApproved = await this.contractsService.isEngineApproved();
       const civicApproved = this.civicService.status();
       const balance = await this.contractsService.getUserBalanceRCNWei();
       const required = await this.contractsService.estimateRequiredAmount(this.loan);
-      
+
       if (! engineApproved) {
         this.showApproveDialog();
         return;
@@ -76,20 +81,20 @@ export class PayButtonComponent implements OnInit {
         return;
       }
 
-      if (!await civicApproved) {     
+      if (!await civicApproved) {
         this.showCivicDialog();
         return;
       }
 
       const dialogRef = this.dialog.open(DialogLoanPayComponent);
       dialogRef.afterClosed().subscribe(amount => {
-        if(amount){ 
-          amount = amount * 10 ** Currency.getDecimals("RCN");
+        if (amount) {
+          amount = amount * 10 ** Currency.getDecimals('RCN');
           this.eventsService.trackEvent(
             'set-to-pay-loan',
             Category.Loan,
             'loan #' + this.loan.id + ' of ' + amount
-          ); 
+          );
 
           this.contractsService.payLoan(this.loan, amount).then((tx) => {
             this.eventsService.trackEvent(
@@ -97,11 +102,11 @@ export class PayButtonComponent implements OnInit {
               Category.Loan,
               'loan #' + this.loan.id + ' of ' + amount
             );
-            this.txService.registerTransferTx(tx, environment.contracts.basaltEngine, this.loan, amount);  
+            this.txService.registerTransferTx(tx, environment.contracts.basaltEngine, this.loan, amount);
             this.retrievePendingTx();
           });
         }
-      });         
+      });
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.message.indexOf('User denied transaction signature') < 0) {
@@ -149,7 +154,7 @@ export class PayButtonComponent implements OnInit {
     console.log('Cancel Pay');
     this.openSnackBar('Your transaction has failed', '');
     this.opPending = false;
-  }  
+  }
 
   retrievePendingTx() {
     this.pendingTx = this.txService.getLastPendingTransfer(environment.contracts.basaltEngine, this.loan);
@@ -160,7 +165,7 @@ export class PayButtonComponent implements OnInit {
       duration: 4000,
       horizontalPosition: this.horizontalPosition,
     });
-  }  
+  }
 
   clickPay() {
     if (this.pendingTx === undefined) {
@@ -174,7 +179,7 @@ export class PayButtonComponent implements OnInit {
     } else {
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }
-  }  
+  }
 
   ngOnInit() {
     this.retrievePendingTx();
@@ -183,7 +188,7 @@ export class PayButtonComponent implements OnInit {
     });
     this.countriesService.lendEnabled().then((lendEnabled) => {
       this.lendEnabled = lendEnabled;
-    });    
+    });
   }
 
 }
