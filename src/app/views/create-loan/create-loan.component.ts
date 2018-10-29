@@ -35,7 +35,6 @@ export class CreateLoanComponent implements OnInit {
     this.formGroup3 = this._formBuilder.group({
       thirdCtrl: ['', Validators.required]
     });
-    animalControl = new FormControl('', [Validators.required]);
   }
 
 

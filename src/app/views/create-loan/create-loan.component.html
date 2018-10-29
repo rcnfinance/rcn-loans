@@ -18,7 +18,7 @@
 
       <mat-vertical-stepper linear #stepper>
         
-        <mat-step [stepControl]="formGroup1" [optional]="isOptional" [editable]='!isEditable' errorMessage="This is required.">
+        <mat-step [stepControl]="formGroup1" [optional]="isOptional" [editable]='isEditable'>
           <form [formGroup]="formGroup1">
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
 
@@ -75,7 +75,6 @@
                     <div class="properties-block">
                       <div class="title">{{ 'Request' }}</div>
                       <div class="currency">
-                        <!-- {{ 'RCN' }} -->
                         <mat-select placeholder="Currency" required>
                           <mat-option>--</mat-option>
                           <mat-option *ngFor="let currency of currencies" [value]="currency">
