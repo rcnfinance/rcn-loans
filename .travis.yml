@@ -11,4 +11,5 @@ branches:
     - master
 
 script:
+  - npm run-script build-ropsten
   - npm run-script build
