@@ -9,16 +9,32 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./create-loan.component.scss']
 })
 export class CreateLoanComponent implements OnInit {
+  public formGroup1 = new FormGroup({
+    duration: new FormGroup({
+      daysDuration: new FormControl,
+      mounthsDuration: new FormControl,
+      yearsDuration: new FormControl,
+      daysCancelable: new FormControl
+    }),
+    interest: new FormGroup({
+      annualInterest: new FormControl,
+      annualPunitory: new FormControl
+    }),
+    conversionGraphic: new FormGroup({
+      requestValue: new FormControl
+    })
+  });
+  public formGroup2: FormGroup;
+  public formGroup3: FormGroup;
+  public currencies: object = ['rcn', 'mana', 'ars'];
+
   public isOptional = true;
   public isEditable = true;
 
   public checked = true;
   public disabled = false;
 
-  public formGroup1: FormGroup;
-  public formGroup2: FormGroup;
-  public formGroup3: FormGroup;
-  public currencies: object = ['rcn', 'mana', 'ars'];
+  onSubmit() { console.log(this.formGroup1.value); }
 
   constructor(
     private spinner: NgxSpinnerService,
