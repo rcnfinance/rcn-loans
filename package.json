@@ -12,6 +12,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prebuild": "node version.js",
+    "prebuild-ropsten": "node version.js",
     "prestart": "node version.js",
     "postinstall": "node patch-crypto.js"
   },
