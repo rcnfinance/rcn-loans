@@ -41,11 +41,11 @@ export class DecentralandCosignerProvider implements CosignerProvider {
         return this.manager;
     }
     isValid(loan: Loan): boolean {
-        return loan.creator === this.creator;
+        return loan.creator.toLowerCase() === this.creator.toLowerCase();
     }
     isCurrent(loan: Loan): boolean {
         return loan.status !== Status.Request
-            && loan.cosigner === this.manager;
+            && loan.cosigner.toLowerCase() === this.manager.toLowerCase();
     }
     offer(loan: Loan): Promise<CosignerOffer> {
         return new Promise((resolve, err) => {
