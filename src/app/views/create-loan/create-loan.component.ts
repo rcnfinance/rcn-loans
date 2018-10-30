@@ -11,6 +11,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class CreateLoanComponent implements OnInit {
   public isOptional = true;
   public isEditable = true;
+
+  public checked = true;
+  public disabled = false;
+
   public formGroup1: FormGroup;
   public formGroup2: FormGroup;
   public formGroup3: FormGroup;
