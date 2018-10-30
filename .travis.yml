@@ -1,0 +1,14 @@
+sudo: required
+addons:
+  chrome: stable
+
+language: node_js
+node_js:
+  - "8"
+
+branches:
+  only:
+    - master
+
+script:
+  - npm run-script build
