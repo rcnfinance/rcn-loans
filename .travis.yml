@@ -10,8 +10,5 @@ branches:
   only:
     - master
 
-before_script:
-  - npm install
-
 script:
-  - npm build
+  - npm run-script build
