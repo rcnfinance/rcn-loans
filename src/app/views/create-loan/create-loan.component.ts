@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 // App Services
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -21,10 +22,14 @@ export class CreateLoanComponent implements OnInit {
       annualPunitory: new FormControl
     }),
     conversionGraphic: new FormGroup({
-      requestValue: new FormControl,
-      requestedCurrency: new FormControl
+      requestValue: new FormControl
     })
   });
+
+  requestedCurrency = new FormControl('', [Validators.required]);
+  requiredInvalid = new BehaviorSubject(false);
+  currentState = this.requiredInvalid.asObservable();
+
   public formGroup2: FormGroup;
   public formGroup3: FormGroup;
   public currencies: object = ['rcn', 'mana', 'ars'];
@@ -36,7 +41,16 @@ export class CreateLoanComponent implements OnInit {
   public disabled = false;
 
   onSubmit() {
-    console.log(this.formGroup1.value);
+    if (this.formGroup1.valid) {
+      console.log(this.formGroup1.value);
+    }
+    if ( this.requestedCurrency.hasError('required') ) {
+      console.log(this.requiredInvalid);
+      console.log(this.currentState);
+    } else if ( !this.requestedCurrency.hasError('required') ) {
+      console.log(this.requiredInvalid);
+      console.log(this.currentState);
+    }
   }
 
   constructor(
@@ -47,7 +61,6 @@ export class CreateLoanComponent implements OnInit {
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
     this.spinner.hide(); // Stop spinner
-
 
     // this.formGroup1 = this._formBuilder.group({
     //   firstCtrl: ['', Validators.required]

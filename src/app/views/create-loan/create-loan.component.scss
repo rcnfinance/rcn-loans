@@ -76,3 +76,10 @@
     }
   }
 }
+.required{
+  height: 1px;
+  background-color: $secondary;
+  &.required-invalid{
+    background-color: #f44336;
+  }
+}

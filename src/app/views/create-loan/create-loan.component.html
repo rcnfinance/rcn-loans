@@ -76,12 +76,13 @@
                     <div class="properties-block">
                       <div class="title">{{ 'Request' }}</div>
                       <div class="currency">
-                        <mat-select placeholder="Currency" formControlName="requestedCurrency" required>
+                        <mat-select placeholder="Select a Currency*" [formControl]="requestedCurrency" required>
                           <mat-option>--</mat-option>
                           <mat-option *ngFor="let currency of currencies" [value]="currency">
                             {{ currency }}
                           </mat-option>
                         </mat-select>
+                        <div class="required" *ngIf='requestedCurrency.invalid' [ngClass]="{'required-invalid': requiredInvalid}"></div>
                       </div>
                       <div class="title">{{ 'Return' }}</div>
                     </div>
@@ -101,7 +102,6 @@
             <div class='margintop20'>
               <button mat-raised-button type="submit" 
               class='button button-primary' 
-              (click)='onSubmit()' 
               matStepperNext>
               Next
             </button>
