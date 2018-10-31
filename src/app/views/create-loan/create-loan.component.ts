@@ -21,7 +21,8 @@ export class CreateLoanComponent implements OnInit {
       annualPunitory: new FormControl
     }),
     conversionGraphic: new FormGroup({
-      requestValue: new FormControl
+      requestValue: new FormControl,
+      requestedCurrency: new FormControl
     })
   });
   public formGroup2: FormGroup;
@@ -34,7 +35,9 @@ export class CreateLoanComponent implements OnInit {
   public checked = true;
   public disabled = false;
 
-  onSubmit() { console.log(this.formGroup1.value); }
+  onSubmit() {
+    console.log(this.formGroup1.value);
+  }
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -46,15 +49,15 @@ export class CreateLoanComponent implements OnInit {
     this.spinner.hide(); // Stop spinner
 
 
-    this.formGroup1 = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-    this.formGroup2 = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
-    this.formGroup3 = this._formBuilder.group({
-      thirdCtrl: ['', Validators.required]
-    });
+    // this.formGroup1 = this._formBuilder.group({
+    //   firstCtrl: ['', Validators.required]
+    // });
+    // this.formGroup2 = this._formBuilder.group({
+    //   secondCtrl: ['', Validators.required]
+    // });
+    // this.formGroup3 = this._formBuilder.group({
+    //   thirdCtrl: ['', Validators.required]
+    // });
   }
 
 

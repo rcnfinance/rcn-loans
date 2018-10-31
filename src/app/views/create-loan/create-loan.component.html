@@ -18,8 +18,8 @@
 
       <mat-vertical-stepper linear #stepper>
         
-        <mat-step [stepControl]="formGroup1" [optional]="isOptional" [editable]='isEditable'>
-          <form [formGroup]="formGroup1" (ngSubmit)="onSubmit()">
+        <mat-step [stepControl]="formGroup1" [optional]="!isOptional" [editable]='isEditable'>
+          <form [formGroup]="formGroup1" (ngSubmit)="onSubmit(f)" #f='ngForm'>
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
 
               <div class="container-fluid paddingleft0 paddingright0">
@@ -29,26 +29,26 @@
                   <div class="col-6 d-none d-lg-block"><div class="title property marginbottom10">Cancelable At</div></div>
                   <div class="col-xs-12 col-lg-2">
                     <mat-form-field>
-                      <input matInput type='number' value="0" formControlName="daysDuration">
+                      <input matInput type='number' value="0" formControlName="daysDuration" required>
                       <mat-hint>Set the Days</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-xs-12 col-lg-2">
                     <mat-form-field>
-                      <input matInput type='number' value="0" formControlName="mounthsDuration">
+                      <input matInput type='number' value="0" formControlName="mounthsDuration" required>
                       <mat-hint>Set the Mounths</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-xs-12 col-lg-2">
                     <mat-form-field>
-                      <input matInput type='number' value="0" formControlName="yearsDuration">
+                      <input matInput type='number' value="0" formControlName="yearsDuration" required>
                       <mat-hint>Set the Years</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-6 d-block d-lg-none"><div class="title property margintop20 marginbottom10">Cancelable At</div></div>
                   <div class="col-xs-12 col-lg-6">
                     <mat-form-field>
-                      <input matInput type='number' value="0" formControlName="daysCancelable">
+                      <input matInput type='number' value="0" formControlName="daysCancelable" required>
                       <span matSuffix>Days</span>
                       <mat-hint>Set the minimum time the loan</mat-hint>
                     </mat-form-field>
@@ -58,14 +58,14 @@
                   <div class="col col-lg-12"><div class="title property margintop30 marginbottom10">ANNUAL INTEREST / PUNITORY</div></div>
                   <div class="col-xs-12 col-lg-3">
                     <mat-form-field>
-                      <input matInput type='number' value="40" max='200' formControlName="annualInterest">
+                      <input matInput type='number' value="40" max='200' formControlName="annualInterest" required>
                       <mat-hint>Annual Interest rate</mat-hint>
                       <span matSuffix>%</span>
                     </mat-form-field>
                   </div>
                   <div class="col-xs-12 col-lg-3">
                     <mat-form-field>
-                      <input matInput type='number' value="60" max='200' formControlName="annualPunitory">
+                      <input matInput type='number' value="60" max='200' formControlName="annualPunitory" required>
                       <mat-hint>Annual Punitory rate</mat-hint>
                       <span matSuffix>%</span>
                     </mat-form-field>
@@ -76,7 +76,7 @@
                     <div class="properties-block">
                       <div class="title">{{ 'Request' }}</div>
                       <div class="currency">
-                        <mat-select placeholder="Currency" required>
+                        <mat-select placeholder="Currency" formControlName="requestedCurrency" required>
                           <mat-option>--</mat-option>
                           <mat-option *ngFor="let currency of currencies" [value]="currency">
                             {{ currency }}
@@ -88,7 +88,7 @@
                     <div class="conversion-block">
                       <div class="block-title">
                         <mat-form-field>
-                          <input matInput type='number' value="0" formControlName="requestValue">
+                          <input matInput type='number' value="0" formControlName="requestValue" required>
                         </mat-form-field>
                       </div>
                       <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
@@ -99,12 +99,19 @@
               </div>
 
             <div class='margintop20'>
-              <button mat-raised-button type="submit" class='button button-primary' matStepperNext>Next</button>
+              <button mat-raised-button type="submit" 
+              class='button button-primary' 
+              (click)='onSubmit()' 
+              matStepperNext>
+              Next
+            </button>
+
+            <div class="title main-m3 margintop10">Form Status: {{ formGroup1.status }}</div>
             </div>
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="formGroup2" [optional]="isOptional" [editable]='isEditable'>
+        <!-- <mat-step [stepControl]="formGroup2" [optional]="isOptional" [editable]='isEditable'>
           <form [formGroup]="formGroup2">
             <ng-template matStepLabel>Complete your identity with Bloom</ng-template>
             <div class="stepper-title">
@@ -182,7 +189,7 @@
             <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
             </div>
           </form>
-        </mat-step>
+        </mat-step> -->
 
         <mat-step>
           <ng-template matStepLabel>Finnish</ng-template>
