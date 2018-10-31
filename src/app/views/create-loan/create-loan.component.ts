@@ -18,8 +18,8 @@ export class CreateLoanComponent implements OnInit {
       daysCancelable: new FormControl
     }),
     interest: new FormGroup({
-      annualInterest: new FormControl,
-      annualPunitory: new FormControl
+      annualInterest: new FormControl(40),
+      annualPunitory: new FormControl(60)
     }),
     conversionGraphic: new FormGroup({
       requestValue: new FormControl,
@@ -27,7 +27,6 @@ export class CreateLoanComponent implements OnInit {
     })
   });
 
-  // public requestedCurrency = new FormControl('', [Validators.required]);
   public requiredInvalid = false;
 
   public formGroup2: FormGroup;
