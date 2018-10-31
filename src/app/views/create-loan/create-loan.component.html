@@ -76,13 +76,14 @@
                     <div class="properties-block">
                       <div class="title">{{ 'Request' }}</div>
                       <div class="currency">
-                        <mat-select placeholder="Select a Currency*" [formControl]="requestedCurrency" required>
+                        <mat-select placeholder="Currency" formControlName="requestedCurrency" required>
                           <mat-option>--</mat-option>
                           <mat-option *ngFor="let currency of currencies" [value]="currency">
                             {{ currency }}
                           </mat-option>
                         </mat-select>
-                        <div class="required" *ngIf='requestedCurrency.invalid' [ngClass]="{'required-invalid': requiredInvalid}"></div>
+                        <div class="required" *ngIf='requiredInvalid' 
+                        [ngClass]="{'required-invalid': formGroup1.controls.conversionGraphic.controls.requestedCurrency.invalid}"></div>
                       </div>
                       <div class="title">{{ 'Return' }}</div>
                     </div>

@@ -22,13 +22,13 @@ export class CreateLoanComponent implements OnInit {
       annualPunitory: new FormControl
     }),
     conversionGraphic: new FormGroup({
-      requestValue: new FormControl
+      requestValue: new FormControl,
+      requestedCurrency: new FormControl
     })
   });
 
-  requestedCurrency = new FormControl('', [Validators.required]);
-  requiredInvalid = new BehaviorSubject(false);
-  currentState = this.requiredInvalid.asObservable();
+  // public requestedCurrency = new FormControl('', [Validators.required]);
+  public requiredInvalid = false;
 
   public formGroup2: FormGroup;
   public formGroup3: FormGroup;
@@ -44,13 +44,7 @@ export class CreateLoanComponent implements OnInit {
     if (this.formGroup1.valid) {
       console.log(this.formGroup1.value);
     }
-    if ( this.requestedCurrency.hasError('required') ) {
-      console.log(this.requiredInvalid);
-      console.log(this.currentState);
-    } else if ( !this.requestedCurrency.hasError('required') ) {
-      console.log(this.requiredInvalid);
-      console.log(this.currentState);
-    }
+    this.requiredInvalid = true;
   }
 
   constructor(
