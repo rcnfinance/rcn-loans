@@ -25,26 +25,26 @@ export class CreateLoanComponent implements OnInit {
       requestedCurrency: new FormControl
     })
   });
-  public formGroup1Value = null;
+  public formGroup1Value$ = null;
 
-  public requiredInvalid = false;
+  public requiredInvalid$ = false;
 
   public formGroup2: FormGroup;
   public formGroup3: FormGroup;
   public currencies: object = ['rcn', 'mana', 'ars'];
 
-  public isOptional = true;
-  public isEditable = true;
+  public isOptional$ = true;
+  public isEditable$ = true;
 
-  public checked = true;
-  public disabled = false;
+  public checked$ = true;
+  public disabled$ = false;
 
   onSubmit(form: NgForm) {
     if (this.formGroup1.valid) {
-      this.formGroup1Value = form.value;
-      console.log(this.formGroup1Value);
+      this.formGroup1Value$ = form.value;
+      console.log(this.formGroup1Value$);
     } else {
-      this.requiredInvalid = true;
+      this.requiredInvalid$ = true;
     }
   }
 
