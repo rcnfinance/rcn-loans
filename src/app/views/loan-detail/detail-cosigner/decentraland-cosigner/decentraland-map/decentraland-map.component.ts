@@ -22,6 +22,7 @@ export class DecentralandMapComponent {
     return this.decentralandProvider.dataUrl + 'parcels/' +
       + this.center.x + '/' + this.center.y + '/map.png?' +
       'width=' + this.width +
-      '&height=' + this.height;
+      '&height=' + this.height +
+      '&publications=true';
   }
 }
