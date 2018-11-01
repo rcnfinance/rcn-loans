@@ -27,11 +27,29 @@ export class CreateLoanComponent implements OnInit {
   });
   public formGroup1Value$ = null;
 
-  public requiredInvalid$ = false;
+  public formGroup2 = new FormGroup({
+    identity: new FormGroup({
+      slideIdentityPhone: new FormControl(true),
+      slideIdentityId: new FormControl(true),
+      slideIdentitySaction: new FormControl(true),
+      slideIdentityPayroll: new FormControl(true),
+      slideIdentityFacebook: new FormControl(true),
+      slideIdentityTwitter: new FormControl(true)
+    }),
+  });
 
-  public formGroup2: FormGroup;
   public formGroup3: FormGroup;
+
+  public requiredInvalid$ = false;
   public currencies: object = ['rcn', 'mana', 'ars'];
+  public oBloomIdentity: object = [
+    { 'title': 'Phone', 'formControlName': 'slideIdentityPhone' },
+    { 'title': 'ID Document', 'formControlName': 'slideIdentityId' },
+    { 'title': 'Saction screen', 'formControlName': 'slideIdentitySaction' },
+    { 'title': 'Payroll', 'formControlName': 'slideIdentityPayroll' },
+    { 'title': 'Facebook', 'formControlName': 'slideIdentityFacebook' },
+    { 'title': 'Twitter', 'formControlName': 'slideIdentityTwitter' }
+  ];
 
   public isOptional$ = true;
   public isEditable$ = true;
@@ -55,6 +73,8 @@ export class CreateLoanComponent implements OnInit {
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
     this.spinner.hide(); // Stop spinner
+
+    console.log(this.oBloomIdentity);
   }
 
 

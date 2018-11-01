@@ -18,7 +18,7 @@
 
       <mat-vertical-stepper linear #stepper>
         
-        <mat-step [stepControl]="formGroup1" [optional]="!isOptional$" [editable]='isEditable$'>
+        <mat-step [stepControl]="formGroup1" [optional]="isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup1" (ngSubmit)="onSubmit(f)" #f='ngForm'>
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
 
@@ -119,7 +119,10 @@
           </form>
         </mat-step>
 
-        <!-- <mat-step [stepControl]="formGroup2" [optional]="isOptional$" [editable]='isEditable$'>
+          
+
+
+        <mat-step [stepControl]="formGroup2" [optional]="isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup2">
             <ng-template matStepLabel>Complete your identity with Bloom</ng-template>
             <div class="stepper-title">
@@ -127,30 +130,10 @@
               <div class="title main-b1 inline">Bloom ID</div>
             </div>
             <div class="title main-m3 margintop10">Unlock the power of a global, secure identity</div>
-            <div class="row margintop20 marginbottom20">
-              <div class="col marginbottom10">
-                <div class="title property marginbottom5">Phone</div>
-                <mat-slide-toggle [checked]="checked$" [disabled]="disabled$"></mat-slide-toggle>
-              </div>
-              <div class="col-3 marginbottom15">
-                <div class="title property marginbottom5">ID Document</div>
-                <mat-slide-toggle [checked]="checked$" [disabled]="disabled$"></mat-slide-toggle>
-              </div>
-              <div class="col-3 marginbottom15">
-                <div class="title property marginbottom5">saction screen</div>
-                <mat-slide-toggle [checked]="checked$" [disabled]="disabled$"></mat-slide-toggle>
-              </div>
-              <div class="col-3 marginbottom15">
-                <div class="title property marginbottom5">payroll</div>
-                <mat-slide-toggle [checked]="checked$" [disabled]="disabled$"></mat-slide-toggle>
-              </div>
-              <div class="col-3 marginbottom15">
-                <div class="title property marginbottom5">Facebook</div>
-                <mat-slide-toggle [checked]="checked$" [disabled]="disabled$"></mat-slide-toggle>
-              </div>
-              <div class="col-3 marginbottom15">
-                <div class="title property marginbottom5">Twitter</div>
-                <mat-slide-toggle [checked]="checked$" [disabled]="disabled$"></mat-slide-toggle>
+            <div class="row margintop20 marginbottom20" formGroupName="identity">
+              <div class="col-3 marginbottom15" *ngFor='let item of oBloomIdentity; index as i'>
+                <div class="title property marginbottom5">{{ item.title }}</div>
+                <mat-slide-toggle [disabled]="disabled$" formControlName="{{ item.formControlName }}"></mat-slide-toggle>
               </div>
             </div>
             <div>
@@ -160,7 +143,7 @@
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="formGroup3" [optional]="isOptional$" [editable]='isEditable$'>
+        <!-- <mat-step [stepControl]="formGroup3" [optional]="isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup3">
             <ng-template matStepLabel>Scan your QR</ng-template>
             <div class="stepper-title">
