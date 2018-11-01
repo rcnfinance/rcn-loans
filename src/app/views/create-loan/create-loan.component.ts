@@ -48,7 +48,6 @@ export class CreateLoanComponent implements OnInit {
 
   constructor(
     private spinner: NgxSpinnerService,
-    private _formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
