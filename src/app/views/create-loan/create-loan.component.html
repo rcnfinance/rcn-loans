@@ -29,26 +29,30 @@
                   <div class="col-6 d-none d-lg-block"><div class="title property marginbottom10">Cancelable At</div></div>
                   <div class="col-xs-12 col-lg-2">
                     <mat-form-field>
-                      <input matInput type='number' value="0" formControlName="daysDuration" required>
+                      <input matInput type='number' value="0" formControlName="daysDuration" 
+                      pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
                       <mat-hint>Set the Days</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-xs-12 col-lg-2">
                     <mat-form-field>
-                      <input matInput type='number' value="0" formControlName="mounthsDuration" required>
+                      <input matInput type='number' value="0" formControlName="mounthsDuration" 
+                      pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
                       <mat-hint>Set the Mounths</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-xs-12 col-lg-2">
                     <mat-form-field>
-                      <input matInput type='number' value="0" formControlName="yearsDuration" required>
+                      <input matInput type='number' value="0" formControlName="yearsDuration" 
+                      pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
                       <mat-hint>Set the Years</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-6 d-block d-lg-none"><div class="title property margintop20 marginbottom10">Cancelable At</div></div>
                   <div class="col-xs-12 col-lg-6">
                     <mat-form-field>
-                      <input matInput type='number' value="0" formControlName="daysCancelable" required>
+                      <input matInput type='number' value="0" formControlName="daysCancelable" 
+                      pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
                       <span matSuffix>Days</span>
                       <mat-hint>Set the minimum time the loan</mat-hint>
                     </mat-form-field>
@@ -58,14 +62,16 @@
                   <div class="col col-lg-12"><div class="title property margintop30 marginbottom10">ANNUAL INTEREST / PUNITORY</div></div>
                   <div class="col-xs-12 col-lg-3">
                     <mat-form-field>
-                      <input matInput type='number' max='200' formControlName="annualInterest" required>
+                      <input matInput type='number' max='200' formControlName="annualInterest" 
+                      pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
                       <mat-hint>Annual Interest rate</mat-hint>
                       <span matSuffix>%</span>
                     </mat-form-field>
                   </div>
                   <div class="col-xs-12 col-lg-3">
                     <mat-form-field>
-                      <input matInput type='number' max='200' formControlName="annualPunitory" required>
+                      <input matInput type='number' max='200' formControlName="annualPunitory" 
+                      pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
                       <mat-hint>Annual Punitory rate</mat-hint>
                       <span matSuffix>%</span>
                     </mat-form-field>
@@ -90,7 +96,8 @@
                     <div class="conversion-block">
                       <div class="block-title">
                         <mat-form-field>
-                          <input matInput type='number' value="0" formControlName="requestValue" required>
+                          <input matInput type='number' value="0" formControlName="requestValue" 
+                          pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
                         </mat-form-field>
                       </div>
                       <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
