@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
+import {FormGroup, FormControl, NgForm} from '@angular/forms';
 // App Services
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -26,6 +25,7 @@ export class CreateLoanComponent implements OnInit {
       requestedCurrency: new FormControl
     })
   });
+  public formGroup1Value = null;
 
   public requiredInvalid = false;
 
@@ -39,11 +39,13 @@ export class CreateLoanComponent implements OnInit {
   public checked = true;
   public disabled = false;
 
-  onSubmit() {
+  onSubmit(form: NgForm) {
     if (this.formGroup1.valid) {
-      console.log(this.formGroup1.value);
+      this.formGroup1Value = form.value;
+      console.log(this.formGroup1Value);
+    } else {
+      this.requiredInvalid = true;
     }
-    this.requiredInvalid = true;
   }
 
   constructor(
