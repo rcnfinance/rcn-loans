@@ -101,7 +101,7 @@ export class LoanDetailComponent implements OnInit {
     this.isOngoing = this.loan.status === Status.Ongoing;
     this.totalDebt = this.loan.total;
     this.pendingAmount = this.loan.pendingAmount;
-    this.canTransfer = this.loan.owner === this.userAccount && this.loan.status !== Status.Request;
+    this.canTransfer = this.loan.owner === this.userAccount && (this.loan.status !== Status.Request && this.loan.status !== Status.Paid);
     this.canCancel = this.loan.borrower === this.userAccount && this.loan.status === Status.Request;
     this.canPay = this.loan.owner !== this.userAccount && (this.loan.status === Status.Ongoing || this.loan.status === Status.Indebt);
     this.canLend = this.loan.borrower !== this.userAccount && this.isRequest;
