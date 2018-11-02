@@ -29,6 +29,28 @@ jobs:
                 paths:
                     - node_modules
 
+    # The lint job
+    lint:
+        working_directory: ~/project
+        docker:
+            - image: circleci/node:8.12
+        steps:
+            # Checkout the code from the branch into the working_directory
+            - checkout
+            # Log the current branch
+            - run:
+                name: Show current branch
+                command: echo ${CIRCLE_BRANCH}
+            # Restore local dependencies from cache
+            - restore_cache:
+                keys:
+                - v2-dependencies-{{ checksum "package.json" }}
+                - v2-dependencies-
+            # Run lint
+            - run:
+                name: Lint
+                command: npm run lint
+
     # The build job
     build-mainnet:
         working_directory: ~/project
@@ -99,6 +121,7 @@ jobs:
             # Save build
             - store_artifacts:
                 path: ropsten-build.tar.gz
+
 workflows:
     version: 2
     # The build and deploy workflow
@@ -109,5 +132,8 @@ workflows:
                 requires:
                     - install
             - build-ropsten:
+                requires:
+                    - install
+            - lint:
                 requires:
                     - install
