@@ -70,4 +70,6 @@ workflows:
     build_and_deploy:
         jobs:
             - install
-            - build-mainnet
+            - build-mainnet:
+                requires:
+                    - install
