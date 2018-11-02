@@ -18,7 +18,7 @@
 
       <mat-vertical-stepper linear #stepper>
         
-        <mat-step [stepControl]="formGroup1" [optional]="isOptional$" [editable]='isEditable$'>
+        <mat-step [stepControl]="formGroup1" [optional]="!isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup1" (ngSubmit)="onSubmit(f)" #f='ngForm'>
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
 
@@ -51,10 +51,11 @@
                   <div class="col-xs-12 col-lg-6">
                     <mat-form-field>
                       <input matInput type='number' value="0" formControlName="percentCancelable" 
-                      pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
+                      pattern='^(100|[1-9][0-9]?)$' required>
                       <span matSuffix>%</span>
                       <mat-hint>Set the minimum time the loan</mat-hint>
                     </mat-form-field>
+                    <div class="title main-m3 margintop10">Due time: {{ '20-03-2019' }}</div>
                   </div>
                 </div>
                 <div class="row" formGroupName="interest">
@@ -102,6 +103,7 @@
                       <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
                       <div class="block-title">{{ '1000' }}</div>
                     </div>
+                    <div class="title main-m3 margintop10">Oracle: {{ '0x0000000000000000000000000000000000000000' }}</div>
                   </div>
                 </div>
               </div>
@@ -110,10 +112,8 @@
               <button mat-raised-button type="submit" 
               class='button button-primary' 
               matStepperNext>
-              Next
-            </button>
-
-            <div class="title main-m3 margintop10">Form Status: {{ formGroup1.status }}</div>
+                Next
+              </button>
             </div>
           </form>
         </mat-step>
