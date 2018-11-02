@@ -59,11 +59,46 @@ jobs:
             # Compress build
             - run:
                 name: Compressing build
-                command: tar -czvf mainnet-$VERSION.tar.gz dist
+                command: tar -czvf mainnet-build.tar.gz dist
 
             # Save build
             - store_artifacts:
-                path: mainnet-$VERSION.tar.gz
+                path: mainnet-build.tar.gz
+    # The build testnet job
+    build-ropsten:
+        working_directory: ~/project
+        docker:
+            - image: circleci/node:8.12
+        steps:
+            # Checkout the code from the branch into the working_directory
+            - checkout
+            # Log the current branch
+            - run:
+                name: Show current branch
+                command: echo ${CIRCLE_BRANCH}
+            # Restore local dependencies from cache
+            - restore_cache:
+                keys:
+                - v2-dependencies-{{ checksum "package.json" }}
+                - v2-dependencies-
+            # Build the project
+            - run:
+                name: Build
+                command: npm run-script build-ropsten
+            
+            # Load version name
+            - run:
+                name: Reading version
+                command: VERSION="$(cat .version)"
+
+            # Compress build
+            - run:
+                name: Compressing build
+                command: tar -czvf ropsten-build.tar.gz dist
+
+            # Save build
+            - store_artifacts:
+                path: ropsten-build.tar.gz
 workflows:
     version: 2
     # The build and deploy workflow
@@ -71,5 +106,8 @@ workflows:
         jobs:
             - install
             - build-mainnet:
+                requires:
+                    - install
+            - build-ropsten:
                 requires:
                     - install
