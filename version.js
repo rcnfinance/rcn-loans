@@ -18,7 +18,4 @@ export const BUILD = ${JSON.stringify(gitInfo, null, 4)};
 /* tslint:enable */
 `, { encoding: 'utf-8' });
 
-const file2 = resolve(__dirname, '.version')
-writeFileSync(file2, gitInfo.raw, { encoding: 'utf-8' })
-
 console.log(`Wrote build info ${gitInfo.raw} to ${relative(resolve(__dirname, '..'), file)}`);

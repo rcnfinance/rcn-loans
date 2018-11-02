@@ -48,4 +48,3 @@ package-lock.json
 
 # Build info
 /src/environments/build-info.ts
-.version
