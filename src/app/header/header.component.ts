@@ -12,7 +12,7 @@ import { ContractsService } from '../services/contracts.service';
 import { TitleService } from '../services/title.service';
 
 import { Utils } from '../utils/utils';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-header',
