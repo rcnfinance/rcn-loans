@@ -12,6 +12,7 @@ import { ContractsService } from '../services/contracts.service';
 import { TitleService } from '../services/title.service';
 
 import { Utils } from '../utils/utils';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-header',
@@ -23,6 +24,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   makeRotate = false;
   profile: boolean;
   title: string;
+  network: string;
 
   rcnBalance = '...'; // Balance bar
   rcnAvailable = '...'; // Balance bar
@@ -114,6 +116,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.network = environment.network.name;
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.titleService.currentTitle.subscribe(title => this.title = title);
 

@@ -18,7 +18,7 @@
               <img src="../../assets/isologotypo.svg" alt="rcn-image">
             </a>
             <div class="header-title">{{ title }}</div>
-
+            <div *ngIf="network !== 'Main'">{{ network }}</div>
             <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
               <div routerLink='/requests'>Requests</div>
               <div routerLink='/activity'>Activity</div>
