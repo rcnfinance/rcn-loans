@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormControl, NgForm} from '@angular/forms';
 // App Services
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-create-loan',
@@ -27,19 +26,6 @@ export class CreateLoanComponent implements OnInit {
   });
   public formGroup1Value$ = null;
 
-  public formGroup2 = new FormGroup({
-    identity: new FormGroup({
-      slideIdentityPhone: new FormControl(true),
-      slideIdentityId: new FormControl(true),
-      slideIdentitySaction: new FormControl(true),
-      slideIdentityPayroll: new FormControl(true),
-      slideIdentityFacebook: new FormControl(true),
-      slideIdentityTwitter: new FormControl(true)
-    }),
-  });
-
-  public formGroup3: FormGroup;
-
   public requiredInvalid$ = false;
   public currencies: object = ['rcn', 'mana', 'ars'];
 
@@ -49,11 +35,9 @@ export class CreateLoanComponent implements OnInit {
   public checked$ = true;
   public disabled$ = false;
 
-  constructor(
-    private spinner: NgxSpinnerService,
-  ) {}
+  constructor() {}
 
-  onSubmit(form: NgForm) {
+  public onSubmit(form: NgForm) {
     if (this.formGroup1.valid) {
       this.formGroup1Value$ = form.value;
       console.log(this.formGroup1Value$);
@@ -62,8 +46,5 @@ export class CreateLoanComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.spinner.show(); // Initialize spinner
-    this.spinner.hide(); // Stop spinner
-  }
+  ngOnInit() {}
 }
