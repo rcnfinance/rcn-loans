@@ -6,7 +6,7 @@ jobs:
     install:
         working_directory: ~/project
         docker:
-            - image: circleci/node:6.10-browsers
+            - image: circleci/node:8.12
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -33,7 +33,7 @@ jobs:
     build-mainnet:
         working_directory: ~/project
         docker:
-            - image: circleci/node:6.10-browsers
+            - image: circleci/node:8.12
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
