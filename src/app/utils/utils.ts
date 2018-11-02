@@ -21,6 +21,15 @@ export class Utils {
     return strOut;
   }
 
+  static asciiToHex(str) {
+    const hexString = str.toUpperCase();
+    var hex = ''
+    for(var i=0; i<hexString.length; i++) {
+      hex += '' + hexString.charCodeAt(i).toString(16)
+    }
+    return "0x" + hex + '0'.repeat(64 - hex.length)
+  }
+
   static formatAddress(hex: string): string {
     return hex.replace('0x000000000000000000000000', '0x');
   }

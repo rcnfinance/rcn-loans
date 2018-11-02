@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { LoanCurator } from './../utils/loan-curator';
 import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
+import { Currency } from './../utils/currencies';
 import { Web3Service } from './web3.service';
 import { TxService } from '../tx.service';
 import { CosignerService } from './cosigner.service';
@@ -50,6 +51,7 @@ export class ContractsService {
         });
       }) as Promise<number>;
     }
+
     public async getUserBalanceRCN(): Promise<number> {
         return new Promise((resolve, reject) => {
           this.getUserBalanceRCNWei().then((balance) => {
@@ -130,7 +132,40 @@ export class ContractsService {
         return required;
       }
     }
+    public async requestLoan(oracle: string,
+                             currency: string,
+                             amount: number,
+                             interest: number,
+                             punitory: number,
+                             duesIn: number,
+                             cancelableAt: number,
+                             expirationRequest : number,
+                             metadata: string): Promise<BigNumber> {
 
+      const account = await this.web3.getAccount();
+
+      amount = amount * 10 ** Currency.getDecimals('RCN');
+      return new Promise((resolve, reject) => {
+        this._rcnEngine.createLoan(
+            oracle,
+            account,
+            currency,
+            amount,
+            interest,
+            punitory,
+            duesIn,
+            cancelableAt,
+            expirationRequest,
+            metadata,
+            { from: account }, function(err, result) {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      }) as Promise<number>;
+    }
     public async lendLoan(loan: Loan): Promise<string> {
         const account = await this.web3.getAccount();
         const pOracleData = this.getOracleData(loan);

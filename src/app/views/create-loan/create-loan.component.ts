@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormControl, NgForm} from '@angular/forms';
 // App Services
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ContractsService } from './../../services/contracts.service';
+import { Utils } from '../../utils/utils';
+import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-create-loan',
@@ -59,14 +62,34 @@ export class CreateLoanComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     if (this.formGroup1.valid) {
-      this.formGroup1Value$ = form.value;
-      console.log(this.formGroup1Value$);
+
+      let duration = form.value.duration.yearsDuration + "." +
+                      form.value.duration.mounthsDuration + "." +
+                      form.value.duration.daysDuration;
+      var duesIn = new Date(duration);
+      var cancelableAt = new Date(duration);
+      cancelableAt.setDate(new Date() + form.value.duration.daysCancelable);
+
+      var expirationRequest = new Date();
+      expirationRequest.setDate(expirationRequest.getDate() + 30); // FIXME:
+
+      this.contractsService.requestLoan(
+        "0xac1d236b6b92c69ad77bab61db605a09d9d8ec40",
+        Utils.asciiToHex(form.value.conversionGraphic.requestedCurrency),
+        form.value.conversionGraphic.requestValue,
+        Utils.formatInterest(form.value.interest.annualInterest),
+        Utils.formatInterest(form.value.interest.annualPunitory),
+        duesIn.getTime() / 1000,
+        cancelableAt.getTime() / 1000,
+        expirationRequest.getTime() / 1000,
+        "");
     } else {
       this.requiredInvalid$ = true;
     }
   }
 
   constructor(
+    private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
   ) {}
 
