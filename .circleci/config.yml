@@ -1,0 +1,73 @@
+version: 2
+
+# List of jobs
+jobs:
+    # The install job
+    install:
+        working_directory: ~/project
+        docker:
+            - image: circleci/node:6.10-browsers
+        steps:
+            # Checkout the code from the branch into the working_directory
+            - checkout
+            # Log the current branch
+            - run:
+                name: Show current branch
+                command: echo ${CIRCLE_BRANCH}
+            # Restore local dependencies from cache
+            - restore_cache:
+                keys:
+                - v1-dependencies-{{ checksum "package.json" }}
+                - v1-dependencies-
+            # Install project dependencies
+            - run:
+                name: Install local dependencies
+                command: npm install
+            # Cache local dependencies if they don't exist
+            - save_cache:
+                key: v1-dependencies-{{ checksum "package.json" }}
+                paths:
+                    - node_modules
+
+    # The build job
+    build-mainnet:
+        working_directory: ~/project
+        docker:
+            - image: circleci/node:6.10-browsers
+        steps:
+            # Checkout the code from the branch into the working_directory
+            - checkout
+            # Log the current branch
+            - run:
+                name: Show current branch
+                command: echo ${CIRCLE_BRANCH}
+            # Restore local dependencies from cache
+            - restore_cache:
+                keys:
+                - v1-dependencies-{{ checksum "package.json" }}
+                - v1-dependencies-
+            # Build the project
+            - run:
+                name: Build
+                command: npm run build
+            
+            # Load version name
+            - run:
+                name: Reading version
+                command: VERSION="$(cat .version)"
+
+            # Compress build
+            - run:
+                name: Compressing build
+                command: tar -czvf mainnet-$VERSION.tar.gz dist
+
+            # Save build
+            - store_artifacts:
+                path: mainnet-$VERSION.tar.gz
+workflows:
+    version: 2
+    # The build and deploy workflow
+    build_and_deploy:
+        jobs:
+            - install
+            - build-mainnet
