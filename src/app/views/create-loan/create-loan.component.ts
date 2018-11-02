@@ -42,20 +42,16 @@ export class CreateLoanComponent implements OnInit {
 
   public requiredInvalid$ = false;
   public currencies: object = ['rcn', 'mana', 'ars'];
-  public oBloomIdentity: object = [
-    { 'title': 'Phone', 'formControlName': 'slideIdentityPhone' },
-    { 'title': 'ID Document', 'formControlName': 'slideIdentityId' },
-    { 'title': 'Saction screen', 'formControlName': 'slideIdentitySaction' },
-    { 'title': 'Payroll', 'formControlName': 'slideIdentityPayroll' },
-    { 'title': 'Facebook', 'formControlName': 'slideIdentityFacebook' },
-    { 'title': 'Twitter', 'formControlName': 'slideIdentityTwitter' }
-  ];
 
   public isOptional$ = true;
   public isEditable$ = true;
 
   public checked$ = true;
   public disabled$ = false;
+
+  constructor(
+    private spinner: NgxSpinnerService,
+  ) {}
 
   onSubmit(form: NgForm) {
     if (this.formGroup1.valid) {
@@ -66,16 +62,8 @@ export class CreateLoanComponent implements OnInit {
     }
   }
 
-  constructor(
-    private spinner: NgxSpinnerService,
-  ) {}
-
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
     this.spinner.hide(); // Stop spinner
-
-    console.log(this.oBloomIdentity);
   }
-
-
 }

@@ -119,69 +119,6 @@
           </form>
         </mat-step>
 
-          
-
-
-        <mat-step [stepControl]="formGroup2" [optional]="isOptional$" [editable]='isEditable$'>
-          <form [formGroup]="formGroup2">
-            <ng-template matStepLabel>Complete your identity with Bloom</ng-template>
-            <div class="stepper-title">
-              <i class="fas fa-id-badge inline fa-lg"></i>
-              <div class="title main-b1 inline">Bloom ID</div>
-            </div>
-            <div class="title main-m3 margintop10">Unlock the power of a global, secure identity</div>
-            <div class="row margintop20 marginbottom20" formGroupName="identity">
-              <div class="col-3 marginbottom15" *ngFor='let item of oBloomIdentity; index as i'>
-                <div class="title property marginbottom5">{{ item.title }}</div>
-                <mat-slide-toggle [disabled]="disabled$" formControlName="{{ item.formControlName }}"></mat-slide-toggle>
-              </div>
-            </div>
-            <div>
-              <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
-              <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
-            </div>
-          </form>
-        </mat-step>
-
-        <!-- <mat-step [stepControl]="formGroup3" [optional]="isOptional$" [editable]='isEditable$'>
-          <form [formGroup]="formGroup3">
-            <ng-template matStepLabel>Scan your QR</ng-template>
-            <div class="stepper-title">
-              <i class="fas fa-id-badge inline fa-lg"></i>
-              <div class="title main-b1 inline">Bloom QR</div>
-            </div>
-            <div class="title main-m3 margintop10">Unlock the power of a global, secure identity</div>
-            
-            <div class="row margintop20 marginbottom20">
-              <div class="col marginbottom10">
-                <div class="title property marginbottom5">QR Display</div>
-              </div>
-            </div>
-            <div>
-            <div class="title main-m3 margintop10">You are verifying this information with BLOOM</div>
-            <div class="icon-block">
-              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
-                <i class="fas fa-id-badge"></i>
-              </div>
-              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
-                <i class="fas fa-phone"></i>
-              </div>
-              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
-                <i class="fas fa-address-card"></i>
-              </div>
-              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
-                <i class="fab fa-facebook-f"></i>
-              </div>
-              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
-                <i class="fab fa-twitter"></i>
-              </div>
-            </div>
-            <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
-            <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
-            </div>
-          </form>
-        </mat-step> -->
-
         <mat-step>
           <ng-template matStepLabel>Finnish</ng-template>
           You are now done.
