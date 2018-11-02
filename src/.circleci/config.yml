@@ -30,7 +30,7 @@ jobs:
                     - node_modules
 
     # The build job
-    build:
+    build-mainnet:
         working_directory: ~/project
         docker:
             - image: circleci/node:6.10-browsers
@@ -70,4 +70,4 @@ workflows:
     build_and_deploy:
         jobs:
             - install
-            - build
+            - build-mainnet
