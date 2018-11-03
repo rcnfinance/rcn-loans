@@ -95,7 +95,7 @@ export class RavenErrorHandler implements ErrorHandler {
     DialogApproveContractComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
-    DialogGenericErrorComponent,
+    DialogGenericErrorComponent
   ],
   providers: [
     ContractsService,

@@ -68,14 +68,14 @@ export class PayButtonComponent implements OnInit {
         return;
       }
 
-      if ( balance < required) {
+      if (balance < required) {
         this.eventsService.trackEvent(
           'show-insufficient-funds-lend',
           Category.Account,
           'loan #' + this.loan.id,
            required
         );
-        this.showInsufficientFundsDialog( required, balance);
+        this.showInsufficientFundsDialog(required, balance);
         return;
       }
 
@@ -149,7 +149,6 @@ export class PayButtonComponent implements OnInit {
   }
 
   cancelOperation() {
-    console.log('Cancel Pay');
     this.openSnackBar('Your transaction has failed', '');
     this.opPending = false;
   }

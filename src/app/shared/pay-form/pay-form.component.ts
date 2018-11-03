@@ -11,7 +11,7 @@ export class PayFormComponent {
 
   constructor() {}
 
- onSubmit(event: any, form: NgForm) {
+  onSubmit(event: any, form: NgForm) {
     event.preventDefault();
     const to = form.value;
     this.submitTransfer.emit(to);
