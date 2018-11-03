@@ -34,7 +34,7 @@ export class LoanDetailComponent implements OnInit {
   isRequest: boolean;
   isOngoing: boolean;
 
-  canTransfer: boolean = true;
+  canTransfer = true;
   canCancel: boolean;
   canPay: boolean;
   canLend: boolean;

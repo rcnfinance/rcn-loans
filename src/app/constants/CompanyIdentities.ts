@@ -1,3 +1,5 @@
+// tslint:disable:max-line-length
+
 import { Agent } from '../../environments/environment';
 import { CompanyIdentity } from './../models/identity.model';
 
