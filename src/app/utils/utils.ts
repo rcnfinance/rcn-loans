@@ -73,7 +73,7 @@ export class Utils {
       const intDigits = amount.toFixed(0).toString().length;
       const decDigits = maxDigits - intDigits;
 
-      let decimals = (decDigits > 0) ? decDigits : 0;
+      const decimals = (decDigits > 0) ? decDigits : 0;
 
       return Number(amount.toFixed(decimals)).toString();
     }
