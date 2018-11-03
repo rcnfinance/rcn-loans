@@ -95,14 +95,12 @@
           </tbody>
         </table>
       </div>
-
-      <div class="paddingleft15 paddingright15">
+      <div class="paddingleft15 paddingright15 paddingbottom15" *ngIf="canLend || canTransfer || (isOngoing || isInDebt)">
         <app-pay-button [loan]=loan *ngIf="isOngoing || isInDebt"></app-pay-button>
-        <app-lend-button [loan]=loan *ngIf="isRequest"></app-lend-button>
-        <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="isRequest"></app-risk-indicator>
-      </div>      
-
-      <div class="margintop15"></div>
+        <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
+        <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="canLend"></app-risk-indicator>
+        <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
+      </div>
     </div>
 
     <div class="right">

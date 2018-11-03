@@ -1,16 +1,18 @@
 {
   "name": "rcn-angular-dapp",
-  "version": "0.0.9-E",
+  "version": "0.0.10-D",
   "version_name": "Avocados",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build --prod",
+    "build-ropsten": "ng build --aot",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prebuild": "node version.js",
+    "prebuild-ropsten": "node version.js",
     "prestart": "node version.js",
     "postinstall": "node patch-crypto.js"
   },

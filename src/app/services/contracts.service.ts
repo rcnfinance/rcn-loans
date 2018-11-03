@@ -253,7 +253,12 @@ export class ContractsService {
             environment.filters.validMortgage
           ];
 
-          const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
+          const params = [
+            '0x0',
+            '0x0',
+            Utils.toBytes32(environment.contracts.decentraland.mortgageCreator)
+          ];
+
           this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
             if (err != null) {
               reject(err);

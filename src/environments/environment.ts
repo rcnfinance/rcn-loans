@@ -43,15 +43,15 @@ export const environment = {
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
     decentraland: {
-      mortgageCreator: '0x2bdf545935d4264cbb7457e97d69b6b86458eb64',
-      mortgageManager: '0xea06746f1bd82412f9f243f6bee0b8194d67a67d',
-      landMarket: '0x80faa2b517b84a5aec1078d3600eab4c0b3aff56'
+      mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
+      mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1',
+      landMarket: '0x5424912699dabaa5f2998750c1c66e73d67ad219'
     }
   },
   filters: {
     openLoans: '0x3e703de416a62525c8653be11d71486550618ec8',
     nonExpired: '0xe084b7cf7f6869a96cd72962047bf65e6d55e1e1',
-    validMortgage: '0x0bc0ac0f08235979951bb155d15f1a08dd7dcb2a',
+    validMortgage: '0x93b08a8a3cf148d62c20d3daa0b1bdf813bb7a21',
     lenderIn: '0xe52eac8af912b8b3196b2921f12b66c91b39e025',
     ongoing: '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3',
   },

@@ -41,11 +41,11 @@ export class DecentralandCosignerProvider implements CosignerProvider {
         return this.manager;
     }
     isValid(loan: Loan): boolean {
-        return loan.creator === this.creator;
+        return loan.creator.toLowerCase() === this.creator.toLowerCase();
     }
     isCurrent(loan: Loan): boolean {
         return loan.status !== Status.Request
-            && loan.cosigner === this.manager;
+            && loan.cosigner.toLowerCase() === this.manager.toLowerCase();
     }
     offer(loan: Loan): Promise<CosignerOffer> {
         return new Promise((resolve, err) => {
@@ -98,11 +98,11 @@ export class DecentralandCosignerProvider implements CosignerProvider {
               this.managerContract.mortgages(mortgageId, (errD, mortgageData) => {
                 const decentralandCosigner = new DecentralandCosigner(
                   mortgageId, // Mortgage ID
-                  Utils.toBytes32(this.web3.web3.toHex(mortgageData[4])), // Land ID
-                  mortgageData[5], // Land price
-                  ((loan.rawAmount / mortgageData[5]) * 100).toFixed(2), // Financed amount
+                  Utils.toBytes32(this.web3.web3.toHex(mortgageData[5])), // Land ID
+                  mortgageData[6], // Land price
+                  ((loan.rawAmount / mortgageData[6]) * 100).toPrecision(2), // Financed amount
                   undefined, // Parcel data
-                  mortgageData[6] // Mortgage status
+                  mortgageData[7] // Mortgage status
                 );
                 this.getParcelInfo(decentralandCosigner.x, decentralandCosigner.y).then((parcel) => {
                   decentralandCosigner.parcel = parcel;

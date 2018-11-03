@@ -24,6 +24,9 @@ import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigne
 import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
+import { TransferButtonComponent } from './../../shared/transfer-button/transfer-button.component';
+import { TransferFormComponent } from './../../shared/transfer-form/transfer-form.component';
+import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 
 @NgModule({
   imports: [
@@ -31,7 +34,7 @@ import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loa
     NgxSpinnerModule,
     SharedModule,
     LoanDetailRoutingModule,
-    MaterialModule,
+    MaterialModule
   ],
   providers: [
     ContractsService,
@@ -49,13 +52,17 @@ import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loa
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
     GobackButtonComponent,
-    DialogLoanPayComponent,
+    TransferButtonComponent,
+    TransferFormComponent,
 
-  ],
-  exports: [
+    DialogLoanTransferComponent,
     DialogLoanPayComponent
   ],
-  entryComponents:[
+  entryComponents: [
+    DialogLoanTransferComponent,
+    DialogLoanPayComponent
+  ],
+  exports: [
     DialogLoanPayComponent
   ]
 })
