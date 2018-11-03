@@ -3,6 +3,7 @@ import { environment } from './environment';
 import { CosignerProvider } from '../app/providers/cosigner-provider';
 
 export const cosignerOptions: CosignerProvider[] = [
+  // Decentraland Mainnet mortgages
   new DecentralandCosignerProvider(
         environment.contracts.basaltEngine,
         '0x9ABf1295086aFA0E49C60e95c437aa400c5333B8',
@@ -10,6 +11,7 @@ export const cosignerOptions: CosignerProvider[] = [
         '0x8e5660b4Ab70168b5a6fEeA0e0315cb49c8Cd539',
         'https://api.decentraland.org/v1/'
     ),
+  // Decentraland Ropsten mortgages
   new DecentralandCosignerProvider(
         environment.contracts.basaltEngine,
         '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1',
