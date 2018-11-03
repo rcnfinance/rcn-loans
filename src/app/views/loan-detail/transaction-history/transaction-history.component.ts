@@ -48,7 +48,7 @@ export class TransactionHistoryComponent implements OnInit {
     'amount': 'currency'
   };
 
-  noMatch: boolean = false;
+  noMatch = false;
 
 
   timelines_properties: object = {

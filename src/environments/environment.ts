@@ -10,9 +10,9 @@ export enum Agent {
   RipioCreator
 }
 
-const p = require('../../package.json') as any;
-
 declare let require: any;
+
+const p = require('../../package.json') as any;
 
 export const environment = {
   version: p.version,
