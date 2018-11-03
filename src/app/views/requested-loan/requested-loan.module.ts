@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// App Services
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxSpinnerService } from 'ngx-spinner';
+
+// App Services
 import { ContractsService } from './../../services/contracts.service';
 // App Modules
-import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from './../../material/material.module';
 // App Component

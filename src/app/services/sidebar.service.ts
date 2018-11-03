@@ -3,19 +3,17 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class SidebarService {
-  isOpen$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private toggleSource$ = new BehaviorSubject<boolean>(false);
+  private navmobileSource$ = new BehaviorSubject<boolean>(false);
 
-  private toggleSource = new BehaviorSubject<boolean>(false);
-  private navmobileSource = new BehaviorSubject<boolean>(false);
-
-  currentToggle = this.toggleSource.asObservable();
-  currentNavmobile = this.navmobileSource.asObservable();
+  currentToggle = this.toggleSource$.asObservable();
+  currentNavmobile = this.navmobileSource$.asObservable();
 
   toggleService(navToggle: boolean) {
-    this.toggleSource.next(navToggle);
+    this.toggleSource$.next(navToggle);
   }
 
   navmobileService(navmobileToggled: boolean) {
-    this.navmobileSource.next(navmobileToggled);
+    this.navmobileSource$.next(navmobileToggled);
   }
 }

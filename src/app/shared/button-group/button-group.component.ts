@@ -9,12 +9,12 @@ export class ButtonGroupComponent implements OnInit {
   @Output() view = new EventEmitter<string>();
   @Input() viewDetail;
 
+  constructor() { }
+
   openDetail(view: string) {
     this.view.emit(view);
     this.viewDetail = view;
   }
-
-  constructor() { }
 
   ngOnInit() {}
 

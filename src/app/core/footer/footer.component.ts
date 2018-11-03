@@ -39,7 +39,7 @@ export class FooterComponent implements OnInit {
     private web3Service: Web3Service,
     private sidebarService: SidebarService,
     public titleService: TitleService,
-    private availableLoansService: AvailableLoansService,
+    private availableLoansService: AvailableLoansService
   ) {}
 
   // Toggle Menu
@@ -81,14 +81,11 @@ export class FooterComponent implements OnInit {
   // Open Client Dialog
   openDialogClient() {
     const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+    dialogRef.afterClosed().subscribe(() => {
       if (this.lastId !== 3 || this.lastTitle !== 'Menu') { // If i dont click on menu & dont click it twice
-        console.log('CASE ONE');
         this.addClass(this.lastId);
         this.titleService.changeTitle(this.lastTitle);
       } else {
-        console.log('CASE ELSE');
         this.addClass(this.oldestId);
         this.titleService.changeTitle(this.oldestTitle);
       }
@@ -97,7 +94,6 @@ export class FooterComponent implements OnInit {
   get hasAccount(): boolean {
     return this.account !== undefined;
   }
-
 
   ngOnInit() {
     const env = environment;

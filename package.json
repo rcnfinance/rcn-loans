@@ -68,6 +68,11 @@
     "rxjs-tslint": "^0.1.5",
     "ts-node": "~4.1.0",
     "tslint": "^5.11.0",
+    "tslint-consistent-codestyle": "^1.14.0",
+    "tslint-defocus": "^2.0.5",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-origin-ordered-imports-rule": "^1.1.2",
+    "tslint-rxjs-subject-restrictions-rule": "^1.0.4",
     "typescript": "^2.9.2",
     "webpack": "^4.16.5"
   }

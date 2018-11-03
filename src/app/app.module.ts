@@ -6,6 +6,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 // App Modules
 import { MaterialModule } from './material/material.module';
@@ -18,7 +19,6 @@ import { RequestedLoanModule } from './views/requested-loan/requested-loan.modul
 
 // App Services
 import { environment } from '../environments/environment';
-import { NgxSpinnerModule } from 'ngx-spinner';
 import { ContractsService } from './services/contracts.service';
 import { TxService } from './tx.service';
 import { BrandingService } from './services/branding.service';

@@ -1,6 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Route } from '@angular/compiler/src/core';
 import { Loan } from '../../../models/loan.model';
 import { environment } from '../../../../environments/environment';
 import { IdentityService } from '../../../services/identity.service';
@@ -15,24 +13,25 @@ export class DetailIdentityComponent implements OnInit {
   @Input() loan: Loan;
   identity: Identity;
   constructor(
-    private route: ActivatedRoute,
     private identityService: IdentityService
   ) { }
 
   get class(): string {
-    if (this.identity === undefined) { return undefined; }
+    if (this.identity === undefined) { return; }
     switch (this.identity.constructor) {
       case CompanyIdentity:
         return 'company';
       default:
-        return undefined;
+        return;
     }
   }
 
   hasIdentity(): boolean {
-    if (this.identity === undefined) { return undefined; } else {
-      return true;
+    if (this.identity === undefined) {
+      return;
     }
+
+    return true;
   }
 
   ngOnInit() {

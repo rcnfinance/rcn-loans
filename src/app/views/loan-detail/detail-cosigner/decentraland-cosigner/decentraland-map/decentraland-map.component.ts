@@ -11,10 +11,10 @@ import { DecentralandCosignerProvider } from '../../../../../providers/cosigners
 export class DecentralandMapComponent {
   @Input() decentralandProvider: DecentralandCosignerProvider;
   @Input() center: Parcel;
-  @Input() public width;
-  @Input() public height;
-  public sizeBlock = 10;
-  public margin = 2;
+  @Input() width;
+  @Input() height;
+  sizeBlock = 10;
+  margin = 2;
 
   constructor() { }
 
