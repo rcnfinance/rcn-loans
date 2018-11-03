@@ -1,13 +1,14 @@
+import BigNumber from 'bignumber.js';
+
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material';
 // App Components
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
 import { environment } from '../../environments/environment';
 import { SidebarService } from '../services/sidebar.service';
-import { Web3Service, Type } from '../services/web3.service';
+import { Web3Service } from '../services/web3.service';
 import { ContractsService } from '../services/contracts.service';
-import BigNumber from 'bignumber.js';
 import { Tx, TxService } from '../tx.service';
 
 @Component({
@@ -16,6 +17,27 @@ import { Tx, TxService } from '../tx.service';
   styleUrls: ['./content-wrapper.component.scss']
 })
 export class ContentWrapperComponent implements OnInit {
+  // Get Balance
+  get hasAccount(): boolean {
+    return this.account !== undefined;
+  }
+  get balance(): string {
+    if (this.rcnBalance === undefined) {
+      return '...';
+    }
+    return this.removeTrailingZeros(this.rcnBalance.toFixed(18));
+  }
+  get available(): string {
+    if (this.weiAvailable === undefined) {
+      return '...';
+    }
+    return this.removeTrailingZeros((this.weiAvailable / this.ethWei).toFixed(18));
+  }
+  get withdrawEnabled(): boolean {
+    return this.loansWithBalance !== undefined
+      && this.loansWithBalance.length !== 0
+      && this.pendingWithdraw === undefined;
+  }
   winHeight: any = window.innerHeight;
   events: string[] = [];
   account: string;
@@ -40,7 +62,7 @@ export class ContentWrapperComponent implements OnInit {
     private web3Service: Web3Service,
     private contractService: ContractsService,
     private txService: TxService,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {}
 
   // Toggle Navbar
@@ -54,7 +76,7 @@ export class ContentWrapperComponent implements OnInit {
 
   // Open Client Dialog
   openDialogClient() {
-    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
+    this.dialog.open(DialogClientAccountComponent, {});
   }
 
   onOpen() {
@@ -69,26 +91,17 @@ export class ContentWrapperComponent implements OnInit {
       this.loadPendingWithdraw();
     }
   }
-  // Get Balance
-  get hasAccount(): boolean {
-    return this.account !== undefined;
-  }
-  get balance(): string {
-    if (this.rcnBalance === undefined) {
-      return '...';
-    }
-    return this.removeTrailingZeros(this.rcnBalance.toFixed(18));
-  }
-  get available(): string {
-    if (this.weiAvailable === undefined) {
-      return '...';
-    }
-    return this.removeTrailingZeros((this.weiAvailable / this.ethWei).toFixed(18));
-  }
-  get withdrawEnabled(): boolean {
-    return this.loansWithBalance !== undefined
-      && this.loansWithBalance.length !== 0
-      && this.pendingWithdraw === undefined;
+  ngOnInit() {
+     // Navbar toggled
+    this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
+    this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
+
+    this.loadLender();
+    this.loadRcnBalance();
+    this.loadWithdrawBalance();
+    this.web3Service.getAccount().then((account) => {
+      this.account = account;
+    });
   }
   private removeTrailingZeros(value) {
     value = value.toString();
@@ -118,18 +131,6 @@ export class ContentWrapperComponent implements OnInit {
       this.weiAvailable = result[0];
       this.loansWithBalance = result[1];
       this.loadPendingWithdraw();
-    });
-  }
-  ngOnInit() {
-     // Navbar toggled
-    this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
-    this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
-
-    this.loadLender();
-    this.loadRcnBalance();
-    this.loadWithdrawBalance();
-    this.web3Service.getAccount().then((account) => {
-      this.account = account;
     });
   }
 }

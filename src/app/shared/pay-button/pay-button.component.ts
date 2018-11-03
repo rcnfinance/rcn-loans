@@ -22,17 +22,15 @@ import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insuffic
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 
-
-
 @Component({
   selector: 'app-pay-button',
   templateUrl: './pay-button.component.html',
   styleUrls: ['./pay-button.component.scss']
 })
 export class PayButtonComponent implements OnInit {
-
   @Input() loan: Loan;
   @Input() isOngoing: boolean;
+
   account: string;
   pendingTx: Tx = undefined;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -70,14 +68,14 @@ export class PayButtonComponent implements OnInit {
         return;
       }
 
-      if ( balance <  required) {
+      if ( balance < required) {
         this.eventsService.trackEvent(
           'show-insufficient-funds-lend',
           Category.Account,
           'loan #' + this.loan.id,
            required
         );
-        this.showInsufficientFundsDialog( required,  balance);
+        this.showInsufficientFundsDialog( required, balance);
         return;
       }
 
@@ -130,8 +128,8 @@ export class PayButtonComponent implements OnInit {
     });
   }
 
- showInsufficientFundsDialog(required: number, funds: number) {
-    const dialogRef = this.dialog.open(DialogInsufficientFoundsComponent, { data: {
+  showInsufficientFundsDialog(required: number, funds: number) {
+    this.dialog.open(DialogInsufficientFoundsComponent, { data: {
       required: required,
       balance: funds
     }});
@@ -163,7 +161,7 @@ export class PayButtonComponent implements OnInit {
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message , action, {
       duration: 4000,
-      horizontalPosition: this.horizontalPosition,
+      horizontalPosition: this.horizontalPosition
     });
   }
 
@@ -190,5 +188,4 @@ export class PayButtonComponent implements OnInit {
       this.lendEnabled = lendEnabled;
     });
   }
-
 }

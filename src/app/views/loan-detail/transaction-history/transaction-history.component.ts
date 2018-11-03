@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit  } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 
 // App Models
 import { Loan } from '../../../models/loan.model';
@@ -7,11 +7,7 @@ import { Commit } from '../../../models/commit.model';
 import { CommitsService } from '../../../services/commits.service';
 import { environment } from '../../../../environments/environment';
 import { Utils } from '../../../utils/utils';
-
-import { DatePipe } from '@angular/common';
 import { EventsService } from '../../../services/events.service';
-// App Spinner
-import { NgxSpinnerService } from 'ngx-spinner';
 
 class DataEntry {
   constructor(
@@ -44,14 +40,13 @@ export class TransactionHistoryComponent implements OnInit {
 
   oTimeline: object[] = [];
 
-  data_types: object = {
+  dataTypes: object = {
     'amount': 'currency'
   };
 
   noMatch = false;
 
-
-  timelines_properties: object = {
+  timelinesProperties: object = {
     'loan_request': {
       'title': 'Requested',
       'messege': 'Requested',
@@ -156,38 +151,12 @@ export class TransactionHistoryComponent implements OnInit {
   };
 
   constructor(
-    private spinner: NgxSpinnerService,
     private commitsService: CommitsService,
     private eventsService: EventsService
   ) { }
 
-  private filterCommit(commit: Commit): boolean {
-    return commit.opcode !== 'transfer' || (commit.data['from'] !== Utils.address_0 && commit.data['to'] !== Utils.address_0);
-  }
-
-  private load_timeEvents(commits: Commit[]): object[] { // Build every timeEvents with commit event of the Loan
-    const timeEvents: object[] = [];
-
-    this.sort_by_timestamp(commits); // Order commits by timestamp
-
-    for (const commit of commits) {
-      if (this.filterCommit(commit)) {
-        const oCurrentEvent: any = {};
-        const oCurrentCommit: Commit = commit;
-
-        oCurrentEvent.oProperties = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
-
-        oCurrentEvent.commit = oCurrentCommit; // Add commit{} to timeEvent
-        oCurrentEvent.data = this.buildDataEntries(commit);
-        timeEvents.push(oCurrentEvent); // Push to timeEvents[] with commit{} + oProperties{} + oTableData[]
-      }
-    }
-
-    return timeEvents;
-  }
-
-  get_properties_by_opcode(opcode: string): object[] { // Get the timeline event properties from timelines_properties[]
-    return this.timelines_properties[opcode];
+  get_properties_by_opcode(opcode: string): object[] { // Get the timeline event properties from timelinesProperties[]
+    return this.timelinesProperties[opcode];
   }
 
   timeline_has(timeEvents, opcode) { // Filters the commits that timeline not use
@@ -201,18 +170,18 @@ export class TransactionHistoryComponent implements OnInit {
   }
 
   buildDataEntries(commit): DataEntry[] {
-    const capitalize = (string) => {
-      return string.charAt(0).toUpperCase() + string.substr(1);
+    const capitalize = (target: string) => {
+      return target.charAt(0).toUpperCase() + target.substr(1);
     };
     const showOrder = this.get_properties_by_opcode(commit.opcode)['display'];
-    const dataEntries = Object.entries(commit.data).sort(([key1, _1], [key2, _2]) => showOrder.indexOf(key1) - showOrder.indexOf(key2));
+    const dataEntries = Object.entries(commit.data).sort(([key1], [key2]) => showOrder.indexOf(key1) - showOrder.indexOf(key2));
     const result: DataEntry[] = [];
     dataEntries.forEach(([key, value]) => {
       // Aditional filters
       if (showOrder.indexOf(key) > -1 && this.filterDataEntry(commit, key, value)) {
         const name = capitalize(key.replace('_', ' '));
         let content = value as string;
-        if (this.data_types[key] === 'currency') {
+        if (this.dataTypes[key] === 'currency') {
           content = this.loan.currency + ' ' + (Number(content) / 10 ** this.loan.decimals).toString();
         }
         result.push(new DataEntry(name, content));
@@ -222,7 +191,7 @@ export class TransactionHistoryComponent implements OnInit {
   }
 
   filterDataEntry(commit, key, value): boolean {
-    return commit.opcode !== 'partial_payment' || key !== 'from' || value !== Utils.address_0; // Filter empty from
+    return commit.opcode !== 'partial_payment' || key !== 'from' || value !== Utils.address0x; // Filter empty from
   }
 
   populate_table_data(id: number) { // Render Table Component by id
@@ -250,5 +219,30 @@ export class TransactionHistoryComponent implements OnInit {
   ngOnInit() {
     this.myId.showSpinner = true;
     this.loadCommits(this.loan.id);
+  }
+
+  private filterCommit(commit: Commit): boolean {
+    return commit.opcode !== 'transfer' || (commit.data['from'] !== Utils.address0x && commit.data['to'] !== Utils.address0x);
+  }
+
+  private load_timeEvents(commits: Commit[]): object[] { // Build every timeEvents with commit event of the Loan
+    const timeEvents: object[] = [];
+
+    this.sort_by_timestamp(commits); // Order commits by timestamp
+
+    for (const commit of commits) {
+      if (this.filterCommit(commit)) {
+        const oCurrentEvent: any = {};
+        const oCurrentCommit: Commit = commit;
+
+        oCurrentEvent.oProperties = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
+
+        oCurrentEvent.commit = oCurrentCommit; // Add commit{} to timeEvent
+        oCurrentEvent.data = this.buildDataEntries(commit);
+        timeEvents.push(oCurrentEvent); // Push to timeEvents[] with commit{} + oProperties{} + oTableData[]
+      }
+    }
+
+    return timeEvents;
   }
 }

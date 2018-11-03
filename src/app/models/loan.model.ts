@@ -5,44 +5,45 @@ import { Currency } from '../utils/currencies';
 export enum Status { Request, Ongoing, Paid, Destroyed, Indebt }
 
 function timestamp(): number {
-    return (new Date().getTime() / 1000);
+  return (new Date().getTime() / 1000);
 }
 
 function calculateInterest(timeDelta: number, interestRate: number, amount: number): number {
-    if (amount === 0) {
-      return 0;
-    }
+  if (amount === 0) {
+    return 0;
+  }
 
-    return (amount * 100000 * timeDelta) / interestRate;
+  return (amount * 100000 * timeDelta) / interestRate;
 }
 
 export class Loan {
   constructor(
-      public engine: string,
-      public id: number,
-      public oracle: string,
-      public statusFlag: number,
-      public borrower: string,
-      public creator: string,
-      public rawAmount: number,
-      public duration: number,
-      public rawAnnualInterest: number,
-      public rawAnnualPunitoryInterest: number,
-      public currencyRaw: string,
-      public rawPaid: number,
-      public cumulatedInterest: number,
-      public cumulatedPunnitoryInterest: number,
-      public interestTimestamp: number,
-      public dueTimestamp: number,
-      public lenderBalance: number,
-      public owner: string,
-      public cosigner: string
-  ) { }
+        public engine: string,
+        public id: number,
+        public oracle: string,
+        public statusFlag: number,
+        public borrower: string,
+        public creator: string,
+        public rawAmount: number,
+        public duration: number,
+        public rawAnnualInterest: number,
+        public rawAnnualPunitoryInterest: number,
+        public currencyRaw: string,
+        public rawPaid: number,
+        public cumulatedInterest: number,
+        public cumulatedPunnitoryInterest: number,
+        public interestTimestamp: number,
+        public dueTimestamp: number,
+        public lenderBalance: number,
+        public owner: string,
+        public cosigner: string
+    ) { }
 
   get status(): Status {
     if (this.statusFlag === Status.Ongoing && timestamp() > this.dueTimestamp) {
       return Status.Indebt;
     }
+
     return this.statusFlag;
   }
 
@@ -60,14 +61,15 @@ export class Loan {
     let pending;
     let deltaTime;
     const endNonPunitory = Math.min(timestamp(), this.dueTimestamp);
-
     if (endNonPunitory > this.interestTimestamp) {
       deltaTime = endNonPunitory - this.interestTimestamp;
+
       if (this.rawPaid < this.rawAmount) {
         pending = this.rawAmount - this.rawPaid;
       } else {
         pending = 0;
       }
+
       newInterest += calculateInterest(deltaTime, this.rawAnnualInterest, pending);
     }
 
@@ -78,6 +80,7 @@ export class Loan {
       pending = Math.min(debt, (debt + newPunitoryInterest) - this.rawPaid);
       newPunitoryInterest += calculateInterest(deltaTime, this.rawAnnualPunitoryInterest, pending);
     }
+
     return this.rawAmount + newInterest + newPunitoryInterest;
   }
 
@@ -103,12 +106,7 @@ export class Loan {
 
   get currency(): string {
     const targetCurrency = Utils.hexToAscii(this.currencyRaw.replace(/^[0x]+|[0]+$/g, ''));
-
-    if (targetCurrency === '') {
-      return 'RCN';
-    } else {
-      return targetCurrency;
-    }
+    return targetCurrency === '' ? 'RCN' : targetCurrency;
   }
 
   get decimals(): number {

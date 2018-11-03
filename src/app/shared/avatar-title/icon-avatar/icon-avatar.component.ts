@@ -34,6 +34,9 @@ export class IconAvatarComponent implements OnInit {
         this.class = 'indebt';
         this.icon = 'error_outline';
         break;
+      default:
+        console.error('Unknown status', this.loan.status);
+        break;
     }
   }
 }
