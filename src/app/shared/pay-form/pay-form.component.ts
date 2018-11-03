@@ -8,12 +8,12 @@ import { Web3Service } from '../../services/web3.service';
   styleUrls: ['./pay-form.component.scss']
 })
 export class PayFormComponent implements OnInit {
-	@Output() submitTransfer = new EventEmitter<any>();
-	invalidAddress = false;
+  @Output() submitTransfer = new EventEmitter<any>();
+  invalidAddress = false;
 
-	constructor(
-		private web3Service: Web3Service
-	) {}
+  constructor(
+    private web3Service: Web3Service
+  ) {}
 
  onSubmit(event: any, form: NgForm) {
     event.preventDefault();

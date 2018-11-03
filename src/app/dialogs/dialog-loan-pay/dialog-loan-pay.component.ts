@@ -22,7 +22,8 @@ export class DialogLoanPayComponent implements OnInit {
   }
 
   submit(amount: any) {
-    this.dialogRef.close(amount); //If press Cancel, amount is false
+    // If pressed Cancel, amount is false
+    this.dialogRef.close(amount);
   }
 
 }

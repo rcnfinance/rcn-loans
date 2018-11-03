@@ -60,7 +60,7 @@ export class Loan {
     let pending;
     let deltaTime;
     const endNonPunitory = Math.min(timestamp(), this.dueTimestamp);
-    
+
     if (endNonPunitory > this.interestTimestamp) {
       deltaTime = endNonPunitory - this.interestTimestamp;
       if (this.rawPaid < this.rawAmount) {
