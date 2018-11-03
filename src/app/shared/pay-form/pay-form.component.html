@@ -3,10 +3,7 @@
     <div class="margintop10"></div>
     <mat-form-field>
       <input type="number" step="any" name="eth_amount" placeholder="Amount" ngModel matInput #amount>
-      <mat-hint>Remember that transferring a Loan is an irreversible operation. Please check the address carefully</mat-hint>
-      <mat-error *ngIf="invalidAddress">This is not a valid address</mat-error>
     </mat-form-field>
-    <div class="error" *ngIf="invalidAddress">This is not a valid address</div>
   </div>
   <div class="col-sm-12 margintop20">
     <div class="margintop10"></div>
