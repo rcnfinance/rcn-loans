@@ -110,9 +110,6 @@ import { PayFormComponent } from './pay-form/pay-form.component';
     RiskIndicatorComponent,
     CivicAuthComponent,
     PayFormComponent
-  ],
-  entryComponents: [
-    CivicAuthComponent
   ]
 })
 export class SharedModule { }
