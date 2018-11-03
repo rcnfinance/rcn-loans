@@ -60,10 +60,7 @@
     "interface-over-type-literal": true,
     "interface-name": false,
     "label-position": true,
-    "origin-ordered-imports": [
-      true,
-      "one-blank-line"
-    ],
+    "origin-ordered-imports": [true],
     "max-line-length": [
       true,
       140
