@@ -28,10 +28,11 @@ export class TransferFormComponent implements OnInit {
   }
   private isAddress(address: string): boolean {
     const web3 = this.web3Service.web3;
+
     if (web3.utils !== undefined) {
       return web3.utils.isAddress(address);
-    } else {
-      return web3.isAddress(address);
     }
+
+    return web3.isAddress(address);
   }
 }

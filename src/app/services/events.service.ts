@@ -43,6 +43,6 @@ export class EventsService {
     error: Error
   ) {
     Raven.captureException(error);
-    console.log(error);
+    console.error(error);
   }
 }

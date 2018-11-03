@@ -5,7 +5,7 @@ export class Commit {
   proof: string;
   data: object;
 
-  style_properties: {
+  styleProperties: {
     status: string,
     inserted: Boolean
   };
@@ -17,31 +17,10 @@ export class Commit {
     this.proof = proof;
     this.data = data;
   }
-
-  set_active(active: Boolean): void {
-    status = active ? 'active' : 'disabled';
-    this.style_properties.status = status;
-  }
-
-  is_active(): Boolean {
-    return this.style_properties.status === 'active';
-  }
-
-  set_inserted(inserted: Boolean): void {
-    this.style_properties.inserted = inserted;
-  }
-
-  get_inserted(): Boolean {
-    return this.style_properties.inserted;
-  }
-
-  export_to_object(): object {
-    return this.style_properties;
-  }
 }
 
 export class LentCommit extends Commit {
-  style_properties = {
+  styleProperties = {
     status: 'active',
     materialClass: 'material-icons',
     icon: 'trending_up',
@@ -58,7 +37,7 @@ export class LentCommit extends Commit {
 }
 
 export class PartialPaymentCommit extends Commit {
-  style_properties = {
+  styleProperties = {
     status: 'active',
     awesomeClass: 'fas fa-coins',
     title: 'Partial Payment',
@@ -76,7 +55,7 @@ export class PartialPaymentCommit extends Commit {
 }
 
 export class TransferCommit extends Commit {
-  style_properties = {
+  styleProperties = {
     status: 'active',
     materialClass: 'material-icons',
     icon: 'swap_horiz',
@@ -93,7 +72,7 @@ export class TransferCommit extends Commit {
 }
 
 export class DestroyedCommit extends Commit {
-  style_properties = {
+  styleProperties = {
     status: 'disabled',
     materialClass: 'material-icons',
     icon: 'delete',

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import * as Web3 from 'web3';
 import { environment } from '../../environments/environment';
 
-declare let require: any;
 declare let window: any;
 
 export enum Type { Injected, Provided }
@@ -29,12 +28,12 @@ export class Web3Service {
 
     if (typeof window.web3 !== 'undefined') {
       // Use Mist/MetaMask's provider
-      console.log('Web3 provider detected');
+      console.info('Web3 provider detected');
       this._web3 = new Web3(window.web3.currentProvider);
       this.web3Type = Type.Provided;
 
       if (this._web3.version.network !== environment.network.id) {
-        console.log('Mismatch provider network ID', this._web3.version.network, environment.network.id);
+        console.info('Mismatch provider network ID', this._web3.version.network, environment.network.id);
         this.web3Type = Type.Injected;
       }
     }
@@ -42,13 +41,12 @@ export class Web3Service {
 
   async getAccount(): Promise<string> {
     if (this._account == null) {
-      this._account = await new Promise((resolve, reject) => {
+      this._account = await new Promise((resolve) => {
         this._web3.eth.getAccounts((err, accs) => {
           if (err != null) {
             resolve(undefined);
             return;
           }
-          console.log(this._web3.version.network, environment.network.id);
           if (this._web3.version.network !== environment.network.id) {
             resolve(undefined);
             return;

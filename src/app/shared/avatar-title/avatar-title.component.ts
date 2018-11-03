@@ -28,6 +28,10 @@ export class AvatarTitleComponent implements OnInit {
       case Status.Indebt:
         this.status = 'In debt';
         break;
+      default:
+        this.status = 'In debt';
+        console.error('Unknown status', this.loan.status);
+        break;
     }
   }
 }

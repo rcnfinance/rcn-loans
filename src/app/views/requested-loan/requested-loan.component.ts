@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 // App Models
 import { Loan } from './../../models/loan.model';
-// App Spinner
-import { NgxSpinnerService } from 'ngx-spinner';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';

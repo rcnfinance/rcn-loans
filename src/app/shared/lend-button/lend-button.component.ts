@@ -76,7 +76,7 @@ export class LendButtonComponent implements OnInit {
         return;
       }
 
-      console.log('Try lend', await required, await balance);
+      console.info('Try lend', await required, await balance);
       if (await balance < await required) {
         this.eventsService.trackEvent(
           'show-insufficient-funds-lend',
@@ -111,25 +111,25 @@ export class LendButtonComponent implements OnInit {
           data: { error: e }
         });
       }
-      console.log(e);
+      console.error(e);
     } finally {
       this.finishOperation();
     }
   }
 
   finishOperation() {
-    console.log('Lend finished');
+    console.info('Lend finished');
     this.opPending = false;
   }
 
   startOperation() {
-    console.log('Started lending');
+    console.info('Started lending');
     this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
     this.opPending = true;
   }
 
   cancelOperation() {
-    console.log('Cancel lend');
+    console.info('Cancel lend');
     this.openSnackBar('Your transaction has failed', '');
     this.opPending = false;
   }
@@ -178,7 +178,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   showInsufficientFundsDialog(required: number, funds: number) {
-    const dialogRef = this.dialog.open(DialogInsufficientFoundsComponent, { data: {
+    this.dialog.open(DialogInsufficientFoundsComponent, { data: {
       required: required,
       balance: funds
     }});

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
 import { Loan, Status } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
@@ -12,8 +13,6 @@ import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
-// App Spinner
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-loan-detail',
@@ -85,7 +84,7 @@ export class LoanDetailComponent implements OnInit {
         this.brand = this.brandingService.getBrand(this.loan);
         this.oracle = this.loan.oracle;
         this.currency = this.loan.currency;
-        this.availableOracle = this.loan.oracle !== Utils.address_0;
+        this.availableOracle = this.loan.oracle !== Utils.address0x;
         this.loadDetail();
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
@@ -106,9 +105,9 @@ export class LoanDetailComponent implements OnInit {
   private defaultDetail(): string {
     if (this.cosignerService.getCosigner(this.loan) !== undefined) {
       return 'cosigner';
-    } else {
-      return 'identity';
     }
+
+    return 'identity';
   }
 
   private loadDetail() {

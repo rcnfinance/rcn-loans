@@ -1,7 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 
 import { CosignerLiability, CosignerOffer } from '../models/cosigner.model';
 import { Loan } from '../models/loan.model';
-import { HttpClient } from '@angular/common/http';
 import { Web3Service } from '../services/web3.service';
 
 export interface CosignerProvider {

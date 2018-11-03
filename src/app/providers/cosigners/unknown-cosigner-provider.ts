@@ -1,5 +1,6 @@
-import { CosignerProvider } from '../cosigner-provider';
 import { HttpClient } from '@angular/common/http';
+
+import { CosignerProvider } from '../cosigner-provider';
 import { Web3Service } from '../../services/web3.service';
 import { Loan } from '../../models/loan.model';
 import { CosignerOffer, CosignerLiability } from '../../models/cosigner.model';
@@ -20,7 +21,7 @@ export class UnknownCosignerProvider implements CosignerProvider {
     return true;
   }
   offer(_loan: Loan): Promise<CosignerOffer> {
-    return undefined;
+    return;
   }
   liability(loan: Loan): Promise<CosignerLiability> {
     return new Promise((resolve, _err) => {

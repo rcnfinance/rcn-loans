@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Loan } from '../models/loan.model';
-import { environment } from '../../environments/environment';
 import { CosignerService } from './cosigner.service';
 import { IdentityService } from './identity.service';
 

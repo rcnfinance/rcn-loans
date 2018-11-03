@@ -1,5 +1,8 @@
-import { Loan } from '../models/loan.model';
+import BigNumber from 'bignumber.js';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+import { Loan } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
 import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
@@ -7,8 +10,6 @@ import { Web3Service } from './web3.service';
 import { TxService } from '../tx.service';
 import { CosignerService } from './cosigner.service';
 import { Utils } from '../utils/utils';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import BigNumber from 'bignumber.js';
 import { promisify } from './../utils/utils';
 
 declare let require: any;
@@ -51,7 +52,7 @@ export class ContractsService {
     }) as Promise<number>;
   }
   async getUserBalanceRCN(): Promise<number> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.getUserBalanceRCNWei().then((balance) => {
         resolve(this.web3.web3reader.fromWei(balance));
       });
@@ -63,7 +64,7 @@ export class ContractsService {
     return new Promise((resolve, reject) => {
       const pending = this.txService.getLastPendingApprove(this._rcnContractAddress, this._rcnEngineAddress);
       if (pending !== undefined) {
-        console.log('Pending engine approved found', pending);
+        console.info('Pending engine approved found', pending);
         resolve(pending);
       } else {
         const _web3 = this.web3.web3reader;
@@ -102,7 +103,6 @@ export class ContractsService {
     const rcnAddress = this._rcnContractAddress;
     const engineAddress = this._rcnEngineAddress;
     return new Promise((resolve, reject) => {
-      const _web3 = this.web3.web3;
       this._rcnContract.approve(this._rcnEngineAddress, 0, { from: account }, function (err, result) {
         if (err != null) {
           reject(err);
@@ -115,20 +115,20 @@ export class ContractsService {
   }
 
   async estimateRequiredAmount(loan: Loan): Promise<number> {
-      // TODO: Calculate and add cost of the cosigner
-    if (loan.oracle === Utils.address_0) {
+    // TODO: Calculate and add cost of the cosigner
+    if (loan.oracle === Utils.address0x) {
       return loan.rawAmount;
-    } else {
-      const oracleData = await this.getOracleData(loan);
-      const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
-      const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
-      const rate = oracleRate[0];
-      const decimals = oracleRate[1];
-      console.log('Oracle rate obtained', rate, decimals);
-      const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
-      console.log('Estimated required rcn is', required);
-      return required;
     }
+
+    const oracleData = await this.getOracleData(loan);
+    const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
+    const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
+    const rate = oracleRate[0];
+    const decimals = oracleRate[1];
+    console.info('Oracle rate obtained', rate, decimals);
+    const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+    console.info('Estimated required rcn is', required);
+    return required;
   }
 
   async lendLoan(loan: Loan): Promise<string> {
@@ -144,7 +144,6 @@ export class ContractsService {
       cosignerData = cosignerOffer.lendData;
     }
     const oracleData = await pOracleData;
-    console.log(oracleData, cosignerData, cosignerAddr);
     return new Promise((resolve, reject) => {
       this._rcnEngine.lend(loan.id, oracleData, cosignerAddr, cosignerData, { from: account }, function(err, result) {
         if (err != null) {
@@ -178,28 +177,28 @@ export class ContractsService {
     }) as Promise<string>;
   }
   async getOracleData(loan: Loan): Promise<string> {
-    if (loan.oracle === Utils.address_0) {
+    if (loan.oracle === Utils.address0x) {
       return '0x';
-    } else {
-      const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
-      const url = await promisify(oracle.url.call, []);
-      if (url === '') { return '0x'; }
-      const oracleResponse = await this.http.get(url).toPromise() as any[];
-      console.log('Searching currency', loan.currencyRaw, oracleResponse);
-      let data;
-      oracleResponse.forEach(e => {
-        console.log(e);
-        if (e.currency === loan.currencyRaw) {
-          data = e.data;
-          console.log('Oracle data found', data);
-        }
-      });
-      if (data === undefined) {
-        throw new Error('Oracle did not provide data');
-      } else {
-        return data;
-      }
     }
+
+    const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
+    const url = await promisify(oracle.url.call, []);
+    if (url === '') { return '0x'; }
+    const oracleResponse = await this.http.get(url).toPromise() as any[];
+    console.info('Searching currency', loan.currencyRaw);
+    let data;
+    oracleResponse.forEach(e => {
+      if (e.currency === loan.currencyRaw) {
+        data = e.data;
+        console.info('Oracle data found', data);
+      }
+    });
+
+    if (data === undefined) {
+      throw new Error('Oracle did not provide data');
+    }
+
+    return data;
   }
   async getLoan(id: number): Promise<Loan> {
     return new Promise((resolve, reject) => {
@@ -281,7 +280,7 @@ export class ContractsService {
   }
   async getPendingWithdraws(): Promise<[number, number[]]> {
     const account = await this.web3.getAccount();
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.getLoansOfLender(account).then((loans: Loan[]) => {
         resolve(this.readPendingWithdraws(loans));
       });

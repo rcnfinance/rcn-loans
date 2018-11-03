@@ -13,11 +13,11 @@ export class CountriesService {
 
   buildCountry(): Promise<string> {
     // TODO: Replace with custom API
-    return new Promise((resolve, err) => {
+    return new Promise((resolve) => {
       this.http.get('https://api.ipify.org/', { responseType: 'text' }).subscribe((response: any) => {
         const ip = response;
-        this.http.get('https://ipinfo.io/' + ip + '/json').subscribe((response_ip: any) => {
-          const country = response_ip.country;
+        this.http.get('https://ipinfo.io/' + ip + '/json').subscribe((resposneIp: any) => {
+          const country = resposneIp.country;
           resolve(country);
         });
       });

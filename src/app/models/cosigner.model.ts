@@ -1,5 +1,3 @@
-import { Loan } from './loan.model';
-
 export class CosignerDetail {}
 
 export class Cosigner {

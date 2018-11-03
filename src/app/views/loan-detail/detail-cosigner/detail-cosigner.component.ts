@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Loan, Status } from '../../../models/loan.model';
+import { Loan } from '../../../models/loan.model';
 import { UnknownCosigner } from './../../../models/cosigner.model';
-import { DecentralandCosigner } from './../../../models/cosigners/decentraland-cosigner.model';
 import { CosignerService } from '../../../services/cosigner.service';
 import { CosignerProvider } from '../../../providers/cosigner-provider';
 import { DecentralandCosignerProvider } from '../../../providers/cosigners/decentraland-cosigner-provider';
@@ -22,7 +21,7 @@ export class DetailCosignerComponent implements OnInit {
   ngOnInit() {
     this.cosignerProvider = this.cosignerService.getCosigner(this.loan);
     this.detailClass = this.buildDetailClass();
-    console.log(this.detailClass);
+    console.info('Cosigner class', this.detailClass);
   }
 
   private buildDetailClass(): string {

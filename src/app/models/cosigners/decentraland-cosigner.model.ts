@@ -1,6 +1,6 @@
-
-import { CosignerDetail, CosignerLiability } from './../cosigner.model';
 import BigNumber from 'bignumber.js';
+
+import { CosignerDetail } from './../cosigner.model';
 
 export class DecentralandCosigner extends CosignerDetail {
   constructor(
@@ -39,17 +39,17 @@ export class Parcel {
   id: string;
   x: number;
   y: number;
-  auction_price: number;
+  auctionPrice: number;
   owner: string;
-  district_id: string;
+  districtId: string;
 
   constructor(json: any) {
     this.id = json.id;
     this.x = json.x;
     this.y = json.y;
-    this.auction_price = json.auction_price;
+    this.auctionPrice = json.auction_price;
     this.owner = json.owner;
-    this.district_id = json.district_id;
+    this.districtId = json.district_id;
     this.tags = json.tags;
   }
   get highlights(): Tag[] {
@@ -74,7 +74,7 @@ export class District {
 
 export class Tag {
   constructor(
-        public district_id: string,
+        public districtId: string,
         public distance: number
     ) {}
 }
@@ -88,9 +88,10 @@ function decodeTokenId(_value: string): [number, number] {
 
 function fixNegative(value: BigNumber): number {
   const mid = new BigNumber(2).pow(new BigNumber(64));
+
   if (mid.minus(value).toNumber() <= 0) {
     return value.minus(new BigNumber(2).pow(new BigNumber(128)));
-  } else {
-    return value;
   }
+
+  return value;
 }

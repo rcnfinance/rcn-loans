@@ -106,16 +106,11 @@ export class Loan {
 
   get currency(): string {
     const targetCurrency = Utils.hexToAscii(this.currencyRaw.replace(/^[0x]+|[0]+$/g, ''));
-
-    if (targetCurrency === '') {
-      return 'RCN';
-    } else {
-      return targetCurrency;
-    }
+    return targetCurrency === '' ? 'RCN' : targetCurrency;
   }
 
   get decimals(): number {
-        // TODO: Detect fiat currency
+    // TODO: Detect fiat currency
     return Currency.getDecimals(this.currency);
   }
 

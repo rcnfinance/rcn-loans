@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Web3Service } from './web3.service';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Web3Service } from './web3.service';
 
 declare let civic: any;
 
@@ -20,14 +20,14 @@ export class CivicService {
         const jwtToken = event.response;
         resolve(jwtToken);
       });
-      this.civicSip.on('user-cancelled', function (event) {
+      this.civicSip.on('user-cancelled', function () {
         resolve(undefined);
       });
        // Error events.
       this.civicSip.on('civic-sip-error', function (error) {
           // handle error display if necessary.
-        console.log('   Error type = ' + error.type);
-        console.log('   Error message = ' + error.message);
+        console.error('   Error type = ' + error.type);
+        console.error('   Error message = ' + error.message);
         resolve(undefined);
       });
     }) as Promise<string>;
@@ -40,7 +40,7 @@ export class CivicService {
         'signature': signature
       };
 
-      this.http.post(environment.identity + 'register/', body).subscribe((response: any) => {
+      this.http.post(environment.identity + 'register/', body).subscribe((_response: any) => {
         resolve(true);
       });
     }) as Promise<boolean>;

@@ -7,8 +7,7 @@ import { DecentralandCosignerProvider } from '../providers/cosigners/decentralan
 
 @Injectable()
 export class BrandingService {
-
-  static_brands = {
+  staticBrands = {
     decentraland_mortgage: new Brand(
       'Mortgage creator',
       '#E59400',
@@ -28,15 +27,15 @@ export class BrandingService {
   };
   constructor(
     private cosignerService: CosignerService
-  ) {}
+  ) { }
 
   getBrand(loan: Loan): Brand {
     if (this.cosignerService.getCosigner(loan) instanceof DecentralandCosignerProvider) {
-      return this.static_brands.decentraland_mortgage;
+      return this.staticBrands.decentraland_mortgage;
     }
 
     if (environment.dir[loan.creator.toLowerCase()] === Agent.RipioCreator) {
-      return this.static_brands.ripio;
+      return this.staticBrands.ripio;
     }
 
     if (loan.borrower === loan.creator) {

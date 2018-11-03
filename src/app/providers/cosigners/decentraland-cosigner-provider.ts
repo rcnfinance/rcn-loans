@@ -1,11 +1,12 @@
 
-import { CosignerDetail, CosignerOffer, CosignerLiability } from '../../models/cosigner.model';
-import { CosignerProvider } from '../cosigner-provider';
-import { Loan, Status } from '../../models/loan.model';
 import { HttpClient } from '@angular/common/http';
+
 import { Parcel, District, DecentralandCosigner } from '../../models/cosigners/decentraland-cosigner.model';
 import { Web3Service } from '../../services/web3.service';
 import { Utils } from '../../utils/utils';
+import { CosignerDetail, CosignerOffer, CosignerLiability } from '../../models/cosigner.model';
+import { CosignerProvider } from '../cosigner-provider';
+import { Loan, Status } from '../../models/loan.model';
 
 declare let require: any;
 
@@ -29,10 +30,10 @@ export class DecentralandCosignerProvider implements CosignerProvider {
   injectWeb3(web3: Web3Service) {
     this.web3 = web3;
   }
-  title(loan: Loan): string {
+  title(_loan: Loan): string {
     return 'Decentraland Parcel Mortgage';
   }
-  contract(loan: Loan): string {
+  contract(_loan: Loan): string {
     return this.manager;
   }
   isValid(loan: Loan): boolean {
@@ -43,7 +44,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
             && loan.cosigner.toLowerCase() === this.manager.toLowerCase();
   }
   offer(loan: Loan): Promise<CosignerOffer> {
-    return new Promise((resolve, err) => {
+    return new Promise((resolve, _err) => {
       this.detail(loan).then((detail: DecentralandCosigner) => {
         resolve(new CosignerOffer(
                     this.manager,
@@ -54,7 +55,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     }) as Promise<CosignerOffer>;
   }
   liability(loan: Loan): Promise<CosignerLiability> {
-    return new Promise((resolve, err) => {
+    return new Promise((resolve, _err) => {
       this.detail(loan).then((detail: DecentralandCosigner) => {
         resolve(new CosignerLiability(
                     this.manager,
@@ -78,7 +79,6 @@ export class DecentralandCosignerProvider implements CosignerProvider {
       const y = parseInt(center[1].toString(), 10);
       const sx = Math.ceil((size[0] / 2));
       const sy = Math.ceil((size[1] / 2));
-      console.log(size, sx, sy);
       const limitNw = (x - sx) + ',' + (y + sy);
       const limitSe = (x + sx) + ',' + (y - sy);
       this.http.get(this.dataUrl + 'parcels?nw=' + limitNw + '&se=' + limitSe).subscribe((resp: any) => {
@@ -129,10 +129,10 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     };
   }
   private detail(loan: Loan): Promise<CosignerDetail> {
-    return new Promise((resolve, err) => {
+    return new Promise((resolve, _err) => {
       this.setupContracts();
-      this.managerContract.loanToLiability(this.engine, loan.id, (errId, mortgageId) => {
-        this.managerContract.mortgages(mortgageId, (errD, mortgageData) => {
+      this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {
+        this.managerContract.mortgages(mortgageId, (_errD, mortgageData) => {
           const decentralandCosigner = new DecentralandCosigner(
                   mortgageId, // Mortgage ID
                   Utils.toBytes32(this.web3.web3.toHex(mortgageData[5])), // Land ID

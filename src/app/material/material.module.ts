@@ -1,11 +1,6 @@
 // Angular Core
-import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
-import { CdkTableModule } from '@angular/cdk/table';
-import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Angular Material
 import {
@@ -40,8 +35,7 @@ import {
   MatTabsModule,
   MatTableModule,
   MatStepperModule,
-  MatTooltipModule,
-  MatFormFieldModule
+  MatTooltipModule
 } from '@angular/material';
 
 @NgModule({

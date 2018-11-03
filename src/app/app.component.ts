@@ -1,6 +1,4 @@
-import * as Raven from 'raven-js';
-
-import { Component, OnInit, isDevMode } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '../../node_modules/@angular/router';
 import { environment } from '../environments/environment';
 
@@ -22,7 +20,7 @@ export class AppComponent implements OnInit {
           (window as any).ga('send', 'pageview');
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     });
   }

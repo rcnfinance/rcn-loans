@@ -4,7 +4,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
 import { Loan } from './../models/loan.model';
 // App Services
-import { Utils } from './../utils/utils';
 import { ContractsService } from './../services/contracts.service';
 import { AvailableLoansService } from '../services/available-loans.service';
 

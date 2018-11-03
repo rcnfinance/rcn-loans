@@ -1,6 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
-// App Component
-import { SharedModule } from '../../shared/shared.module';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-avatar',

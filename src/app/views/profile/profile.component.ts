@@ -1,13 +1,9 @@
+import BigNumber from 'bignumber.js';
 import { Component, OnInit } from '@angular/core';
-// App Component
-// import { MaterialModule } from './../../material/material.module';
-// import { SharedModule } from './../../shared/shared.module';
+
 // App Services
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
-// App Utils
-// import { Utils } from '../../utils/utils';
-import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'app-profile',
@@ -53,7 +49,6 @@ export class ProfileComponent implements OnInit {
 
   loadWithdrawBalance() {
     this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
-      console.log(result);
       this.weiAvailable = result[0];
       this.loansWithBalance = result[1];
     });

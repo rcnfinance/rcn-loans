@@ -17,7 +17,7 @@ const appRoutes: Routes = [
   { path: 'address/:address', component: AddressComponent },
   { path: 'profile', component: ProfileComponent },
   { path: '404', component: NotFoundModule },
-  { path: '**',  redirectTo: '/404' }
+  { path: '**', redirectTo: '/404' }
 ];
 
 @NgModule({

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { CivicService } from '../../services/civic.service';
 import { MatDialogRef } from '@angular/material';
+
+import { CivicService } from '../../services/civic.service';
 import { Web3Service } from '../../services/web3.service';
 
 @Component({
@@ -19,14 +19,14 @@ export class CivicAuthComponent implements OnInit {
 
   ngOnInit() {
     this.web3Service.getAccount().then((account) => {
-      console.log('Start auth with account', account);
+      console.info('Start auth with account', account);
       this.civicService.signupCivic().then((token) => {
-        console.log('Retrieved civic token', token);
+        console.info('Retrieved civic token', token);
         if (token !== undefined) {
-          this.web3Service.web3.eth.sign(account, this.web3Service.web3.sha3('\x19Ethereum Signed Message:\n30' + token), (error, sig) => {
-            console.log('Signed token', sig);
-            this.civicService.register(token, sig).then((r) => {
-              console.log('Signup done');
+          this.web3Service.web3.eth.sign(account, this.web3Service.web3.sha3('\x19Ethereum Signed Message:\n30' + token), (_error, sig) => {
+            console.info('Signed token', sig);
+            this.civicService.register(token, sig).then(() => {
+              console.info('Signup done');
               this.dialogRef.close(true);
             });
           });

@@ -1,13 +1,14 @@
+import BigNumber from 'bignumber.js';
+
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material';
 // App Components
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
 import { environment } from '../../environments/environment';
 import { SidebarService } from '../services/sidebar.service';
-import { Web3Service, Type } from '../services/web3.service';
+import { Web3Service } from '../services/web3.service';
 import { ContractsService } from '../services/contracts.service';
-import BigNumber from 'bignumber.js';
 import { Tx, TxService } from '../tx.service';
 
 @Component({
@@ -75,7 +76,7 @@ export class ContentWrapperComponent implements OnInit {
 
   // Open Client Dialog
   openDialogClient() {
-    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
+    this.dialog.open(DialogClientAccountComponent, {});
   }
 
   onOpen() {
