@@ -29,8 +29,8 @@ export class FooterComponent implements OnInit {
   // Nav Mobile toggled
   activeButton = true;
   navmobileToggled = false;
-  id: number = 0;
-  lastId: number = 0;
+  id = 0;
+  lastId = 0;
   previousLast: number;
   oldestId: number;  // Defines oldest for profile unlogged case
 
