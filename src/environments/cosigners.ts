@@ -15,6 +15,6 @@ export const cosignerOptions: CosignerProvider[] = [
         '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1',
         '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
         '0x5424912699dabaa5f2998750c1c66e73d67ad219',
-        'https://api.decentraland.org/v1/'
+        'https://api.decentraland.zone/v1/'
     )
 ];
