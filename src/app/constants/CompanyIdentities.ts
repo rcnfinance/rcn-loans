@@ -1,6 +1,7 @@
 import { Agent } from '../../environments/environment';
 import { CompanyIdentity } from './../models/identity.model';
 
+// tslint:disable-next-line:max-line-length
 export const companyIdentities = {
     [Agent.RipioCreator]: new CompanyIdentity(
             'Ripio',
