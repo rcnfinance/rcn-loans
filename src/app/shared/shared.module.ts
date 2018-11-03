@@ -25,7 +25,6 @@ import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.comp
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
 import { PayButtonComponent } from './pay-button/pay-button.component';
-import { ForgiveButtonComponent } from './forgive-button/forgive-button.component';
 import { CloseButtonComponent } from './close-button/close-button.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
@@ -57,7 +56,6 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
     LendButtonComponent,
     DetailButtonComponent,
     PayButtonComponent,
-    ForgiveButtonComponent,
     CloseButtonComponent,
     ClaimButtonComponent,
     ButtonGroupComponent,
@@ -83,7 +81,6 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
     LendButtonComponent,
     DetailButtonComponent,
     PayButtonComponent,
-    ForgiveButtonComponent,
     CloseButtonComponent,
     ClaimButtonComponent,
     ButtonGroupComponent,
