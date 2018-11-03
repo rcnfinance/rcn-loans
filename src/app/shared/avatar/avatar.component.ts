@@ -11,7 +11,8 @@ export class AvatarComponent {
   @Input() seed: string;
   @Input() size = 10;
   @Input() scale = 3;
-  public getBlockiesOptions(): Object {
+  constructor() { }
+  getBlockiesOptions(): Object {
     return { // All options are optional
       seed: this.seed, // seed used to generate icon data, default: random
       color: '#4155ff', // to manually specify the icon color, default: random
@@ -23,6 +24,4 @@ export class AvatarComponent {
       // that look like eyes, mouths and noses.
     };
   }
-  constructor() { }
 }
-

@@ -57,6 +57,6 @@ export const environment = {
     stub: '0xc7fb7d6fb0c787d5454cbd1b8140ec9624519668'
   },
   dir: {
-    '0x263231ed9b51084816a44e18d16c0f6d0727491f': Agent.RipioCreator,
+    '0x263231ed9b51084816a44e18d16c0f6d0727491f': Agent.RipioCreator
   }
 };

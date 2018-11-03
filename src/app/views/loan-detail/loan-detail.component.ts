@@ -47,7 +47,6 @@ export class LoanDetailComponent implements OnInit {
   availableOracle: boolean;
   currency: string;
 
-
   winWidth: any = window.innerWidth;
 
   constructor(
@@ -60,6 +59,43 @@ export class LoanDetailComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private brandingService: BrandingService
   ) {}
+
+  openDetail(view: string) {
+    this.viewDetail = view;
+  }
+
+  isDetail(view: string): Boolean {
+    return view === this.viewDetail;
+  }
+
+  openLender(address: string) {
+    window.open('/address/' + address, '_blank');
+  }
+
+  ngOnInit() {
+    this.spinner.show();
+    this.web3Service.getAccount().then((account) => {
+      this.userAccount = account;
+    });
+
+    this.route.params.subscribe(params => {
+      const id = +params['id']; // (+) converts string 'id' to a number
+      this.contractsService.getLoan(id).then(loan => {
+        this.loan = loan;
+        this.brand = this.brandingService.getBrand(this.loan);
+        this.oracle = this.loan.oracle;
+        this.currency = this.loan.currency;
+        this.availableOracle = this.loan.oracle !== Utils.address_0;
+        this.loadDetail();
+        this.loadIdentity();
+        this.viewDetail = this.defaultDetail();
+        this.spinner.hide();
+      }).catch(() =>
+        this.router.navigate(['/404/'])
+      );
+    });
+
+  }
 
   private loadIdentity() {
     this.identityService.getIdentity(this.loan).then((identity) => {
@@ -107,48 +143,11 @@ export class LoanDetailComponent implements OnInit {
     this.canLend = this.loan.borrower !== this.userAccount && this.isRequest;
   }
 
-  openDetail(view: string) {
-    this.viewDetail = view;
-  }
-
-  isDetail(view: string): Boolean {
-    return view === this.viewDetail;
-  }
-
-  openLender(address: string) {
-    window.open('/address/' + address, '_blank');
-  }
-
   private formatInterest(interest: number): string {
     return Number(interest.toFixed(2)).toString();
   }
 
   private formatTimestamp(timestamp: number): string {
     return new DatePipe('en-US').transform(timestamp * 1000, 'dd.MM.yyyy');
-  }
-
-  ngOnInit() {
-    this.spinner.show();
-    this.web3Service.getAccount().then((account) => {
-      this.userAccount = account;
-    });
-
-    this.route.params.subscribe(params => {
-      const id = +params['id']; // (+) converts string 'id' to a number
-      this.contractsService.getLoan(id).then(loan => {
-        this.loan = loan;
-        this.brand = this.brandingService.getBrand(this.loan);
-        this.oracle = this.loan.oracle;
-        this.currency = this.loan.currency;
-        this.availableOracle = this.loan.oracle !== Utils.address_0;
-        this.loadDetail();
-        this.loadIdentity();
-        this.viewDetail = this.defaultDetail();
-        this.spinner.hide();
-      }).catch(() =>
-        this.router.navigate(['/404/'])
-      );
-    });
-
   }
 }

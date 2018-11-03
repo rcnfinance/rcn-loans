@@ -7,7 +7,7 @@ import {
   MatDialog,
   MatDialogRef,
   MatSnackBar,
-  MatSnackBarHorizontalPosition,
+  MatSnackBarHorizontalPosition
 } from '@angular/material';
 import { Loan } from './../../models/loan.model';
 
@@ -203,7 +203,7 @@ export class LendButtonComponent implements OnInit {
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message , action, {
       duration: 4000,
-      horizontalPosition: this.horizontalPosition,
+      horizontalPosition: this.horizontalPosition
     });
   }
 
@@ -219,4 +219,3 @@ export class LendButtonComponent implements OnInit {
   }
 
 }
-

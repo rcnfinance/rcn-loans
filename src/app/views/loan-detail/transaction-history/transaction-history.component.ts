@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit  } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 // App Models
 import { Loan } from '../../../models/loan.model';
@@ -49,7 +49,6 @@ export class TransactionHistoryComponent implements OnInit {
   };
 
   noMatch = false;
-
 
   timelines_properties: object = {
     'loan_request': {
@@ -161,31 +160,6 @@ export class TransactionHistoryComponent implements OnInit {
     private eventsService: EventsService
   ) { }
 
-  private filterCommit(commit: Commit): boolean {
-    return commit.opcode !== 'transfer' || (commit.data['from'] !== Utils.address_0 && commit.data['to'] !== Utils.address_0);
-  }
-
-  private load_timeEvents(commits: Commit[]): object[] { // Build every timeEvents with commit event of the Loan
-    const timeEvents: object[] = [];
-
-    this.sort_by_timestamp(commits); // Order commits by timestamp
-
-    for (const commit of commits) {
-      if (this.filterCommit(commit)) {
-        const oCurrentEvent: any = {};
-        const oCurrentCommit: Commit = commit;
-
-        oCurrentEvent.oProperties = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
-
-        oCurrentEvent.commit = oCurrentCommit; // Add commit{} to timeEvent
-        oCurrentEvent.data = this.buildDataEntries(commit);
-        timeEvents.push(oCurrentEvent); // Push to timeEvents[] with commit{} + oProperties{} + oTableData[]
-      }
-    }
-
-    return timeEvents;
-  }
-
   get_properties_by_opcode(opcode: string): object[] { // Get the timeline event properties from timelines_properties[]
     return this.timelines_properties[opcode];
   }
@@ -250,5 +224,30 @@ export class TransactionHistoryComponent implements OnInit {
   ngOnInit() {
     this.myId.showSpinner = true;
     this.loadCommits(this.loan.id);
+  }
+
+  private filterCommit(commit: Commit): boolean {
+    return commit.opcode !== 'transfer' || (commit.data['from'] !== Utils.address_0 && commit.data['to'] !== Utils.address_0);
+  }
+
+  private load_timeEvents(commits: Commit[]): object[] { // Build every timeEvents with commit event of the Loan
+    const timeEvents: object[] = [];
+
+    this.sort_by_timestamp(commits); // Order commits by timestamp
+
+    for (const commit of commits) {
+      if (this.filterCommit(commit)) {
+        const oCurrentEvent: any = {};
+        const oCurrentCommit: Commit = commit;
+
+        oCurrentEvent.oProperties = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
+
+        oCurrentEvent.commit = oCurrentCommit; // Add commit{} to timeEvent
+        oCurrentEvent.data = this.buildDataEntries(commit);
+        timeEvents.push(oCurrentEvent); // Push to timeEvents[] with commit{} + oProperties{} + oTableData[]
+      }
+    }
+
+    return timeEvents;
   }
 }

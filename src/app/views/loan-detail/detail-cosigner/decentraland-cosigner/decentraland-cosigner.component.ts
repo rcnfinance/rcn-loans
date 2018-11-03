@@ -32,7 +32,9 @@ export class DecentralandCosignerComponent implements OnInit {
   mapWidth: number = undefined;
   mapHeight: number = undefined;
 
-  public winSize() {
+  constructor() { }
+
+  winSize() {
     if (this.winWidth < 550) {
       this.mapWidth = 400;
       this.mapHeight = 250;
@@ -43,20 +45,6 @@ export class DecentralandCosignerComponent implements OnInit {
       this.mapWidth = 500;
       this.mapHeight = 200;
     }
-  }
-
-  constructor() { }
-
-  private renderDetail() {
-    this.parcel = this.detail.parcel;
-    this.parcelId = this.parcel.id;
-    this.displayPrice = Utils.formatAmount(Number(this.detail.displayPrice));
-    this.financiation = this.detail.financePart;
-    this.highlights = this.parcel.highlights;
-
-    const coordenate = this.parcelId.split(',');
-    this.firstCoordenate = coordenate[0];
-    this.lastCoordenate = coordenate[1];
   }
   highlightTitle(tag: Tag): string {
     if (this.districtsData === undefined) {
@@ -110,5 +98,17 @@ export class DecentralandCosignerComponent implements OnInit {
         }
       });
     }
+  }
+
+  private renderDetail() {
+    this.parcel = this.detail.parcel;
+    this.parcelId = this.parcel.id;
+    this.displayPrice = Utils.formatAmount(Number(this.detail.displayPrice));
+    this.financiation = this.detail.financePart;
+    this.highlights = this.parcel.highlights;
+
+    const coordenate = this.parcelId.split(',');
+    this.firstCoordenate = coordenate[0];
+    this.lastCoordenate = coordenate[1];
   }
 }

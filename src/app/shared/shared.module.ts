@@ -110,6 +110,3 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
   ]
 })
 export class SharedModule { }
-
-
-

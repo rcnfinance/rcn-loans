@@ -9,11 +9,19 @@ export enum Type { Injected, Provided }
 
 @Injectable()
 export class Web3Service {
+
+  get web3reader(): any {
+    return this._web3reader;
+  }
+
+  get web3(): any {
+    return this._web3;
+  }
   private _web3: any;
   private _web3reader: any;
   private _account: string = null;
 
-  public web3Type: Type;
+  web3Type: Type;
 
   constructor() {
     this._web3reader = this.buildWeb3();
@@ -32,19 +40,7 @@ export class Web3Service {
     }
   }
 
-  get web3reader(): any {
-    return this._web3reader;
-  }
-
-  private buildWeb3(): any {
-    return new Web3(new Web3.providers.HttpProvider(environment.network.provider));
-  }
-
-  get web3(): any {
-    return this._web3;
-  }
-
-  public async getAccount(): Promise<string> {
+  async getAccount(): Promise<string> {
     if (this._account == null) {
       this._account = await new Promise((resolve, reject) => {
         this._web3.eth.getAccounts((err, accs) => {
@@ -67,5 +63,9 @@ export class Web3Service {
       this._web3.eth.defaultAccount = this._account;
     }
     return Promise.resolve(this._account);
+  }
+
+  private buildWeb3(): any {
+    return new Web3(new Web3.providers.HttpProvider(environment.network.provider));
   }
 }

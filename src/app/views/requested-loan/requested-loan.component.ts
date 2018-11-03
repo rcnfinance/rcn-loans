@@ -14,7 +14,7 @@ import { AvailableLoansService } from '../../services/available-loans.service';
 })
 
 export class RequestedLoanComponent implements OnInit {
-  public loading: boolean;
+  loading: boolean;
   available: any;
   loans = [];
   availableLoans = true;
@@ -23,7 +23,7 @@ export class RequestedLoanComponent implements OnInit {
   constructor(
     private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
-    private availableLoansService: AvailableLoansService,
+    private availableLoansService: AvailableLoansService
   ) {}
 
   // Available Loans service

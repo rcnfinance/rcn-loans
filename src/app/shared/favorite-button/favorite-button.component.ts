@@ -6,10 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./favorite-button.component.scss']
 })
 export class FavoriteButtonComponent implements OnInit {
+  constructor() { }
   handleFavorite() {
     console.log('You have clicked Favorite Button!');
   }
-  constructor() { }
 
   ngOnInit() {
   }

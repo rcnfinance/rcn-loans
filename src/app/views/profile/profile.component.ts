@@ -15,15 +15,6 @@ import BigNumber from 'bignumber.js';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  private ethWei = new BigNumber(10).pow(new BigNumber(18));
-  lender: string;
-  rcnBalance: BigNumber;
-  weiAvailable: BigNumber;
-  loansWithBalance: number[];
-  constructor(
-    private web3Service: Web3Service,
-    private contractService: ContractsService,
-  ) { }
 
   get balance(): string {
     if (this.rcnBalance === undefined) {
@@ -38,19 +29,15 @@ export class ProfileComponent implements OnInit {
     }
     return this.removeTrailingZeros((this.weiAvailable / this.ethWei).toFixed(18));
   }
-
-  private removeTrailingZeros(value) {
-    value = value.toString();
-
-    if (value.indexOf('.') === -1) {
-        return value;
-    }
-
-    while ((value.slice(-1) === '0' || value.slice(-1) === '.') && value.indexOf('.') !== -1) {
-        value = value.substr(0, value.length - 1);
-    }
-    return value;
-  }
+  private ethWei = new BigNumber(10).pow(new BigNumber(18));
+  lender: string;
+  rcnBalance: BigNumber;
+  weiAvailable: BigNumber;
+  loansWithBalance: number[];
+  constructor(
+    private web3Service: Web3Service,
+    private contractService: ContractsService
+  ) { }
 
   loadLender() {
     this.web3Service.getAccount().then((resolve: string) => {
@@ -76,6 +63,19 @@ export class ProfileComponent implements OnInit {
     this.loadLender();
     this.loadRcnBalance();
     this.loadWithdrawBalance();
+  }
+
+  private removeTrailingZeros(value) {
+    value = value.toString();
+
+    if (value.indexOf('.') === -1) {
+      return value;
+    }
+
+    while ((value.slice(-1) === '0' || value.slice(-1) === '.') && value.indexOf('.') !== -1) {
+      value = value.substr(0, value.length - 1);
+    }
+    return value;
   }
 
 }

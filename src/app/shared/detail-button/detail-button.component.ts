@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Loan } from './../../models/loan.model';
 
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-detail-button',
@@ -23,5 +23,3 @@ export class DetailButtonComponent {
     });
   }
 }
-
-

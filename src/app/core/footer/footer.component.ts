@@ -39,7 +39,7 @@ export class FooterComponent implements OnInit {
     private web3Service: Web3Service,
     private sidebarService: SidebarService,
     public titleService: TitleService,
-    private availableLoansService: AvailableLoansService,
+    private availableLoansService: AvailableLoansService
   ) {}
 
   // Toggle Menu
@@ -97,7 +97,6 @@ export class FooterComponent implements OnInit {
   get hasAccount(): boolean {
     return this.account !== undefined;
   }
-
 
   ngOnInit() {
     const env = environment;

@@ -7,9 +7,6 @@ import { DecentralandCosignerProvider } from '../providers/cosigners/decentralan
 
 @Injectable()
 export class BrandingService {
-  constructor(
-    private cosignerService: CosignerService
-  ) {}
 
   static_brands = {
     decentraland_mortgage: new Brand(
@@ -29,6 +26,9 @@ export class BrandingService {
       undefined
     )
   };
+  constructor(
+    private cosignerService: CosignerService
+  ) {}
 
   getBrand(loan: Loan): Brand {
     if (this.cosignerService.getCosigner(loan) instanceof DecentralandCosignerProvider) {

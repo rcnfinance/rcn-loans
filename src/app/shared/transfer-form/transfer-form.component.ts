@@ -24,6 +24,8 @@ export class TransferFormComponent implements OnInit {
       this.invalidAddress = true;
     }
   }
+  ngOnInit() {
+  }
   private isAddress(address: string): boolean {
     const web3 = this.web3Service.web3;
     if (web3.utils !== undefined) {
@@ -31,7 +33,5 @@ export class TransferFormComponent implements OnInit {
     } else {
       return web3.isAddress(address);
     }
-  }
-  ngOnInit() {
   }
 }

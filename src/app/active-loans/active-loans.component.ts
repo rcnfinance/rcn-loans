@@ -21,7 +21,7 @@ export class ActiveLoansComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private contractsService: ContractsService,
-    private availableLoansService: AvailableLoansService,
+    private availableLoansService: AvailableLoansService
   ) { }
 
   // Available Loans service

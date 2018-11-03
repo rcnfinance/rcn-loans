@@ -19,6 +19,11 @@ export class DetailCosignerComponent implements OnInit {
   constructor(
     private cosignerService: CosignerService
   ) {}
+  ngOnInit() {
+    this.cosignerProvider = this.cosignerService.getCosigner(this.loan);
+    this.detailClass = this.buildDetailClass();
+    console.log(this.detailClass);
+  }
 
   private buildDetailClass(): string {
     if (this.cosignerProvider === undefined) { return 'not_available'; }
@@ -30,10 +35,5 @@ export class DetailCosignerComponent implements OnInit {
         console.warn('Unknown cosigner retrieved', this.cosignerProvider);
         return 'unknown';
     }
-  }
-  ngOnInit() {
-    this.cosignerProvider = this.cosignerService.getCosigner(this.loan);
-    this.detailClass = this.buildDetailClass();
-    console.log(this.detailClass);
   }
 }

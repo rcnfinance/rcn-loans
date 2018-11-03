@@ -15,21 +15,21 @@ export class CivicService {
 
   signupCivic(): Promise<string> {
     return new Promise((resolve) => {
-      this.civicSip.signup({scopeRequest: this.civicSip.ScopeRequests.BASIC_SIGNUP });
+      this.civicSip.signup({ scopeRequest: this.civicSip.ScopeRequests.BASIC_SIGNUP });
       this.civicSip.on('auth-code-received', function (event) {
         const jwtToken = event.response;
         resolve(jwtToken);
       });
       this.civicSip.on('user-cancelled', function (event) {
         resolve(undefined);
-       });
+      });
        // Error events.
-       this.civicSip.on('civic-sip-error', function (error) {
+      this.civicSip.on('civic-sip-error', function (error) {
           // handle error display if necessary.
-          console.log('   Error type = ' + error.type);
-          console.log('   Error message = ' + error.message);
-          resolve(undefined);
-       });
+        console.log('   Error type = ' + error.type);
+        console.log('   Error message = ' + error.message);
+        resolve(undefined);
+      });
     }) as Promise<string>;
   }
 

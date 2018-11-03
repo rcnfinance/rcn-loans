@@ -16,7 +16,7 @@ export class LoanAvatarComponent implements OnChanges {
   brand: Brand;
 
   constructor(
-    private brandingService: BrandingService,
+    private brandingService: BrandingService
   ) { }
 
   ngOnChanges() {

@@ -17,11 +17,11 @@ export class PreviousRouteService {
     });
   }
 
-  public getPreviousUrl() {
+  getPreviousUrl() {
     return this.previousUrl;
   }
 
-  public redirectHandler() {
+  redirectHandler() {
     const previousUrl: string = this.getPreviousUrl();
     if (!previousUrl) {
       console.log('You came from external ' + previousUrl);

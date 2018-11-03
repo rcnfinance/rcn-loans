@@ -23,7 +23,7 @@ export class AddressComponent implements OnInit {
     private route: ActivatedRoute,
     private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
-    private availableLoansService: AvailableLoansService,
+    private availableLoansService: AvailableLoansService
   ) {}
 
   // Available Loans service

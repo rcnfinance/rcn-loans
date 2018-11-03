@@ -109,4 +109,3 @@ export class DestroyedCommit extends Commit {
     destroyed_by: string
   };
 }
-
