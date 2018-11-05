@@ -45,6 +45,16 @@ export class CreateLoanComponent implements OnInit {
     if (this.formGroup1.valid) {
       this.formGroup1Value$ = form.value;
       console.log(this.formGroup1Value$);
+
+      const duration = form.value.duration.yearsDuration + "." +
+      form.value.duration.mounthsDuration + "." +
+      form.value.duration.daysDuration;
+      const duesIn = new Date(duration);
+      const cancelableAt = new Date(duration);
+      console.log(duration);
+      console.log(cancelableAt);
+      console.log(cancelableAt.setDate(cancelableAt.getDate() + form.value.duration.daysCancelable));
+      cancelableAt.setDate(cancelableAt.getDate() + form.value.duration.daysCancelable);
     } else {
       this.requiredInvalid$ = true;
     }
@@ -61,16 +71,14 @@ export class CreateLoanComponent implements OnInit {
       break;
       case 'mana':
       if (environment.production) {
-        // TODO: change to mainnet oracle
-        this.selectedOracle = '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40';
+        this.selectedOracle = '0x2aaf69a2df2828b55fa4a5e30ee8c3c7cd9e5d5b';
       } else {
         this.selectedOracle = '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40';
       }
       break;
       case 'ars':
       if (environment.production) {
-        // TODO: change to mainnet oracle
-        this.selectedOracle = '0x0ac18b74b5616fdeaeff809713d07ed1486d0128';
+        this.selectedOracle = '0x22222c1944efcc38ca46489f96c3a372c4db74e6';
       } else {
         this.selectedOracle = '0x0ac18b74b5616fdeaeff809713d07ed1486d0128';
       }
