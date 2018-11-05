@@ -63,18 +63,18 @@ export class CreateLoanComponent implements OnInit {
   onSubmit(form: NgForm) {
     if (this.formGroup1.valid) {
 
-      let duration = form.value.duration.yearsDuration + "." +
-                      form.value.duration.mounthsDuration + "." +
+      const duration = form.value.duration.yearsDuration + '.' +
+                      form.value.duration.mounthsDuration + '.' +
                       form.value.duration.daysDuration;
-      var duesIn = new Date(duration);
-      var cancelableAt = new Date(duration);
+      const duesIn = new Date(duration);
+      const cancelableAt = new Date(duration);
       cancelableAt.setDate(new Date() + form.value.duration.daysCancelable);
 
-      var expirationRequest = new Date();
+      const expirationRequest = new Date();
       expirationRequest.setDate(expirationRequest.getDate() + 30); // FIXME:
 
       this.contractsService.requestLoan(
-        "0xac1d236b6b92c69ad77bab61db605a09d9d8ec40",
+        '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40',
         Utils.asciiToHex(form.value.conversionGraphic.requestedCurrency),
         form.value.conversionGraphic.requestValue,
         Utils.formatInterest(form.value.interest.annualInterest),
@@ -82,7 +82,7 @@ export class CreateLoanComponent implements OnInit {
         duesIn.getTime() / 1000,
         cancelableAt.getTime() / 1000,
         expirationRequest.getTime() / 1000,
-        "");
+        '');
     } else {
       this.requiredInvalid$ = true;
     }

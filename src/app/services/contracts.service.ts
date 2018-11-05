@@ -139,7 +139,7 @@ export class ContractsService {
                              punitory: number,
                              duesIn: number,
                              cancelableAt: number,
-                             expirationRequest : number,
+                             expirationRequest: number,
                              metadata: string): Promise<BigNumber> {
 
       const account = await this.web3.getAccount();

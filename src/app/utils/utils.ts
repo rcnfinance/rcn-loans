@@ -23,11 +23,11 @@ export class Utils {
 
   static asciiToHex(str) {
     const hexString = str.toUpperCase();
-    var hex = ''
-    for(var i=0; i<hexString.length; i++) {
-      hex += '' + hexString.charCodeAt(i).toString(16)
+    let hex = '';
+    for (let i = 0; i < hexString.length; i++) {
+      hex += '' + hexString.charCodeAt(i).toString(16);
     }
-    return "0x" + hex + '0'.repeat(64 - hex.length)
+    return '0x' + hex + '0'.repeat(64 - hex.length);
   }
 
   static formatAddress(hex: string): string {
@@ -89,7 +89,7 @@ export class Utils {
       const intDigits = amount.toFixed(0).toString().length;
       const decDigits = maxDigits - intDigits;
 
-      let decimals = (decDigits > 0) ? decDigits : 0;
+      const decimals = (decDigits > 0) ? decDigits : 0;
 
       return Number(amount.toFixed(decimals)).toString();
     }
