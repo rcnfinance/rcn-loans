@@ -82,7 +82,7 @@
                     <div class="properties-block">
                       <div class="title">{{ 'Request' }}</div>
                       <div class="currency">
-                        <mat-select placeholder="Currency" formControlName="requestedCurrency" required>
+                        <mat-select placeholder="Currency" formControlName="requestedCurrency" (selectionChange)="onCurrencyChange($event)" required>
                           <mat-option>--</mat-option>
                           <mat-option *ngFor="let currency of currencies" [value]="currency">
                             {{ currency }}
@@ -103,7 +103,7 @@
                       <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
                       <div class="block-title">{{ '1000' }}</div>
                     </div>
-                    <div class="title main-m3 margintop10">Oracle: {{ '0x0000000000000000000000000000000000000000' }}</div>
+                    <div class="title main-m3 margintop10">Oracle: {{ selectedOracle }}</div>
                   </div>
                 </div>
               </div>
