@@ -26,8 +26,8 @@
   @extend %flex-container;
   padding: 0px 15px;
   margin: 5px -15px 15px;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  // border-top: 1px solid black;
+  // border-bottom: 1px solid black;
   div{
     flex: 1;
     @extend %font-bold;

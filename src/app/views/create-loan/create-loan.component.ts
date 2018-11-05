@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormControl, NgForm} from '@angular/forms';
+import { environment } from '../../../environments/environment.prod';
+
 // App Services
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractsService } from './../../services/contracts.service';
@@ -17,7 +19,7 @@ export class CreateLoanComponent implements OnInit {
       daysDuration: new FormControl,
       mounthsDuration: new FormControl,
       yearsDuration: new FormControl,
-      daysCancelable: new FormControl
+      percentCancelable: new FormControl
     }),
     interest: new FormGroup({
       annualInterest: new FormControl(40),
@@ -29,30 +31,11 @@ export class CreateLoanComponent implements OnInit {
     })
   });
   public formGroup1Value$ = null;
-
-  public formGroup2 = new FormGroup({
-    identity: new FormGroup({
-      slideIdentityPhone: new FormControl(true),
-      slideIdentityId: new FormControl(true),
-      slideIdentitySaction: new FormControl(true),
-      slideIdentityPayroll: new FormControl(true),
-      slideIdentityFacebook: new FormControl(true),
-      slideIdentityTwitter: new FormControl(true)
-    }),
-  });
-
-  public formGroup3: FormGroup;
+  public selectedCurrency: string;
+  public selectedOracle = 'Please select a currency to unlock the oracle';
 
   public requiredInvalid$ = false;
   public currencies: object = ['rcn', 'mana', 'ars'];
-  public oBloomIdentity: object = [
-    { 'title': 'Phone', 'formControlName': 'slideIdentityPhone' },
-    { 'title': 'ID Document', 'formControlName': 'slideIdentityId' },
-    { 'title': 'Saction screen', 'formControlName': 'slideIdentitySaction' },
-    { 'title': 'Payroll', 'formControlName': 'slideIdentityPayroll' },
-    { 'title': 'Facebook', 'formControlName': 'slideIdentityFacebook' },
-    { 'title': 'Twitter', 'formControlName': 'slideIdentityTwitter' }
-  ];
 
   public isOptional$ = true;
   public isEditable$ = true;
@@ -60,7 +43,7 @@ export class CreateLoanComponent implements OnInit {
   public checked$ = true;
   public disabled$ = false;
 
-  onSubmit(form: NgForm) {
+  public onSubmit(form: NgForm) {
     if (this.formGroup1.valid) {
 
       const duration = form.value.duration.yearsDuration + '.' +
@@ -92,13 +75,36 @@ export class CreateLoanComponent implements OnInit {
     private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
   ) {}
-
-  ngOnInit() {
-    this.spinner.show(); // Initialize spinner
-    this.spinner.hide(); // Stop spinner
-
-    console.log(this.oBloomIdentity);
+  onCurrencyChange(requestedCurrency) {
+    switch (requestedCurrency.value) {
+      case 'rcn':
+      if (environment.production) {
+        this.selectedOracle = '0x0000000000000000000000000000000000000000';
+      } else {
+        this.selectedOracle = '0x0000000000000000000000000000000000000000';
+      }
+      break;
+      case 'mana':
+      if (environment.production) {
+        this.selectedOracle = '0x2aaf69a2df2828b55fa4a5e30ee8c3c7cd9e5d5b';
+      } else {
+        this.selectedOracle = '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40';
+      }
+      break;
+      case 'ars':
+      if (environment.production) {
+        this.selectedOracle = '0x22222c1944efcc38ca46489f96c3a372c4db74e6';
+      } else {
+        this.selectedOracle = '0x0ac18b74b5616fdeaeff809713d07ed1486d0128';
+      }
+      break;
+      default:
+      this.selectedOracle = 'Please select a currency to unlock the oracle';
+    }
+    this.selectedCurrency = requestedCurrency.value;
   }
 
-
+  ngOnInit() {
+    console.log(environment.production);
+  }
 }
