@@ -45,16 +45,6 @@ export class CreateLoanComponent implements OnInit {
     if (this.formGroup1.valid) {
       this.formGroup1Value$ = form.value;
       console.log(this.formGroup1Value$);
-
-      const duration = form.value.duration.yearsDuration + "." +
-      form.value.duration.mounthsDuration + "." +
-      form.value.duration.daysDuration;
-      const duesIn = new Date(duration);
-      const cancelableAt = new Date(duration);
-      console.log(duration);
-      console.log(cancelableAt);
-      console.log(cancelableAt.setDate(cancelableAt.getDate() + form.value.duration.daysCancelable));
-      cancelableAt.setDate(cancelableAt.getDate() + form.value.duration.daysCancelable);
     } else {
       this.requiredInvalid$ = true;
     }
