@@ -131,6 +131,8 @@ export class LoanDetailComponent implements OnInit {
 
       this.expectedReturn = new Currency(this.loan.readCurrency()).fromUnit(this.loan.descriptor.getEstimatedReturn());
       this.isRequest = this.loan.isRequest;
+      this.canTransfer = false;
+      this.canLend = true;
     } else if (this.loan instanceof Loan) {
       const currency = new Currency(this.loan.readCurrency());
 
