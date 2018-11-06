@@ -11,10 +11,10 @@ import { DecentralandCosignerProvider } from '../../../../../providers/cosigners
 export class DecentralandMapComponent {
   @Input() decentralandProvider: DecentralandCosignerProvider;
   @Input() center: Parcel;
-  @Input() public width;
-  @Input() public height;
-  public sizeBlock = 10;
-  public margin = 2;
+  @Input() width;
+  @Input() height;
+  sizeBlock = 10;
+  margin = 2;
 
   constructor() { }
 
@@ -22,6 +22,7 @@ export class DecentralandMapComponent {
     return this.decentralandProvider.dataUrl + 'parcels/' +
       + this.center.x + '/' + this.center.y + '/map.png?' +
       'width=' + this.width +
-      '&height=' + this.height;
+      '&height=' + this.height +
+      '&publications=true';
   }
 }

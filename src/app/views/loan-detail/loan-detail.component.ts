@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
 import { Loan, Status } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
@@ -12,8 +13,6 @@ import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
-// App Spinner
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-loan-detail',
@@ -34,7 +33,7 @@ export class LoanDetailComponent implements OnInit {
   isRequest: boolean;
   isOngoing: boolean;
 
-  canTransfer: boolean = true;
+  canTransfer = true;
   canCancel: boolean;
   canPay: boolean;
   canLend: boolean;
@@ -46,7 +45,6 @@ export class LoanDetailComponent implements OnInit {
   oracle: string;
   availableOracle: boolean;
   currency: string;
-
 
   winWidth: any = window.innerWidth;
 
@@ -61,6 +59,43 @@ export class LoanDetailComponent implements OnInit {
     private brandingService: BrandingService
   ) {}
 
+  openDetail(view: string) {
+    this.viewDetail = view;
+  }
+
+  isDetail(view: string): Boolean {
+    return view === this.viewDetail;
+  }
+
+  openLender(address: string) {
+    window.open('/address/' + address, '_blank');
+  }
+
+  ngOnInit() {
+    this.spinner.show();
+    this.web3Service.getAccount().then((account) => {
+      this.userAccount = account;
+    });
+
+    this.route.params.subscribe(params => {
+      const id = +params['id']; // (+) converts string 'id' to a number
+      this.contractsService.getLoan(id).then(loan => {
+        this.loan = loan;
+        this.brand = this.brandingService.getBrand(this.loan);
+        this.oracle = this.loan.oracle;
+        this.currency = this.loan.currency;
+        this.availableOracle = this.loan.oracle !== Utils.address0x;
+        this.loadDetail();
+        this.loadIdentity();
+        this.viewDetail = this.defaultDetail();
+        this.spinner.hide();
+      }).catch(() =>
+        this.router.navigate(['/404/'])
+      );
+    });
+
+  }
+
   private loadIdentity() {
     this.identityService.getIdentity(this.loan).then((identity) => {
       this.identityName = identity !== undefined ? identity.short : 'Unknown';
@@ -70,9 +105,9 @@ export class LoanDetailComponent implements OnInit {
   private defaultDetail(): string {
     if (this.cosignerService.getCosigner(this.loan) !== undefined) {
       return 'cosigner';
-    } else {
-      return 'identity';
     }
+
+    return 'identity';
   }
 
   private loadDetail() {
@@ -101,22 +136,10 @@ export class LoanDetailComponent implements OnInit {
     this.isOngoing = this.loan.status === Status.Ongoing;
     this.totalDebt = this.loan.total;
     this.pendingAmount = this.loan.pendingAmount;
-    this.canTransfer = this.loan.owner === this.userAccount && this.loan.status !== Status.Request;
+    this.canTransfer = this.loan.owner === this.userAccount && (this.loan.status !== Status.Request && this.loan.status !== Status.Paid);
     this.canCancel = this.loan.borrower === this.userAccount && this.loan.status === Status.Request;
     this.canPay = this.loan.owner !== this.userAccount && (this.loan.status === Status.Ongoing || this.loan.status === Status.Indebt);
     this.canLend = this.loan.borrower !== this.userAccount && this.isRequest;
-  }
-
-  openDetail(view: string) {
-    this.viewDetail = view;
-  }
-
-  isDetail(view: string): Boolean {
-    return view === this.viewDetail;
-  }
-
-  openLender(address: string) {
-    window.open('/address/' + address, '_blank');
   }
 
   private formatInterest(interest: number): string {
@@ -125,30 +148,5 @@ export class LoanDetailComponent implements OnInit {
 
   private formatTimestamp(timestamp: number): string {
     return new DatePipe('en-US').transform(timestamp * 1000, 'dd.MM.yyyy');
-  }
-
-  ngOnInit() {
-    this.spinner.show();
-    this.web3Service.getAccount().then((account) => {
-      this.userAccount = account;
-    });
-
-    this.route.params.subscribe(params => {
-      const id = +params['id']; // (+) converts string 'id' to a number
-      this.contractsService.getLoan(id).then(loan => {
-        this.loan = loan;
-        this.brand = this.brandingService.getBrand(this.loan);
-        this.oracle = this.loan.oracle;
-        this.currency = this.loan.currency;
-        this.availableOracle = this.loan.oracle !== Utils.address_0;
-        this.loadDetail();
-        this.loadIdentity();
-        this.viewDetail = this.defaultDetail();
-        this.spinner.hide();
-      }).catch(() =>
-        this.router.navigate(['/404/'])
-      );
-    });
-
   }
 }

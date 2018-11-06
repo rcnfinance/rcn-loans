@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 // App Models
 import { Loan } from './../../models/loan.model';
-// App Spinner
-import { NgxSpinnerService } from 'ngx-spinner';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
@@ -14,24 +14,25 @@ import { AvailableLoansService } from '../../services/available-loans.service';
 })
 
 export class RequestedLoanComponent implements OnInit {
-  public loading: boolean;
-  public available: any;
-  public loans = [];
-  public availableLoans = true;
-  public pendingLend = [];
+
+  loading: boolean;
+  available: any;
+  loans = [];
+  availableLoans = true;
+  pendingLend = [];
 
   constructor(
     private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
-    private availableLoansService: AvailableLoansService,
+    private availableLoansService: AvailableLoansService
   ) {}
 
   // Available Loans service
-  public upgradeAvaiblable() {
+  upgradeAvaiblable() {
     this.availableLoansService.updateAvailable(this.loans.length);
   }
 
-  public loadLoans() {
+  loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
       this.upgradeAvaiblable();

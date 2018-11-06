@@ -10,9 +10,9 @@ export enum Agent {
   RipioCreator
 }
 
-const p = require('../../package.json') as any;
-
 declare let require: any;
+
+const p = require('../../package.json') as any;
 
 export const environment = {
   version: p.version,
@@ -53,9 +53,9 @@ export const environment = {
     nonExpired: '0xe084b7cf7f6869a96cd72962047bf65e6d55e1e1',
     validMortgage: '0x93b08a8a3cf148d62c20d3daa0b1bdf813bb7a21',
     lenderIn: '0xe52eac8af912b8b3196b2921f12b66c91b39e025',
-    ongoing: '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3',
+    ongoing: '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3'
   },
   dir: {
-    '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioCreator,
+    '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioCreator
   }
 };

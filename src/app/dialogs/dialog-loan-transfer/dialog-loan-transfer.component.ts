@@ -19,7 +19,7 @@ export class DialogLoanTransferComponent implements OnInit {
   }
 
   submit(address: any) {
-    console.log('Transfer loan to ', address);
+    console.info('Requested transfer loan', this.loan.id, address);
     this.dialogRef.close(address);
   }
 }

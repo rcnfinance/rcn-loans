@@ -2,14 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // App Services
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { CommitsService } from './../../services/commits.service';
 import { PreviousRouteService } from './../../services/previousRoute.service';
-// App Utils
-import { Utils } from './../../utils/utils';
 // App Modules
-import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from '../../material/material.module';
 import { LoanDetailRoutingModule } from './loan-detail-routing.module';

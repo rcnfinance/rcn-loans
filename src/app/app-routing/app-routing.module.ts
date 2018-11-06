@@ -11,15 +11,15 @@ import { NotFoundModule } from '../not-found/not-found.module';
 import { CreateLoanComponent } from '../views/create-loan/create-loan.component';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/requests', pathMatch: 'full'},
   { path: 'create', component: CreateLoanComponent },
+  { path: '', redirectTo: '/requests', pathMatch: 'full' },
   { path: 'requests', component: RequestedLoanComponent },
   { path: 'activity', component: ActiveLoansComponent },
   { path: 'loan/:id', component: LoanDetailComponent },
   { path: 'address/:address', component: AddressComponent },
   { path: 'profile', component: ProfileComponent },
   { path: '404', component: NotFoundModule },
-  { path: '**',  redirectTo: '/404' },
+  { path: '**', redirectTo: '/404' }
 ];
 
 @NgModule({

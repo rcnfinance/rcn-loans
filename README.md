@@ -1,5 +1,5 @@
 # rcn.loans dApp
-[![Build Status](https://travis-ci.com/ripio/rcn-loans.svg?branch=master)](https://travis-ci.com/ripio/rcn-loans)
+[![CircleCI](https://circleci.com/gh/ripio/rcn-loans/tree/master.svg?style=shield)](https://circleci.com/gh/ripio/rcn-loans/tree/master)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
 

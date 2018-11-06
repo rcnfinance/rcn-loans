@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {FormGroup, FormControl, NgForm} from '@angular/forms';
+import { FormGroup, FormControl, NgForm } from '@angular/forms';
 import { environment } from '../../../environments/environment.prod';
 
 // App Services
+import { ContractsService } from './../../services/contracts.service';
+import { Utils } from '../../utils/utils';
 
 @Component({
   selector: 'app-create-loan',
@@ -10,7 +12,7 @@ import { environment } from '../../../environments/environment.prod';
   styleUrls: ['./create-loan.component.scss']
 })
 export class CreateLoanComponent implements OnInit {
-  public formGroup1 = new FormGroup({
+  formGroup1 = new FormGroup({
     duration: new FormGroup({
       daysDuration: new FormControl,
       mounthsDuration: new FormControl,
@@ -27,25 +29,46 @@ export class CreateLoanComponent implements OnInit {
       requestedCurrency: new FormControl
     })
   });
-  public formGroup1Value$ = null;
-  public selectedCurrency: string;
-  public selectedOracle = 'Please select a currency to unlock the oracle';
+  formGroup1Value$ = null;
+  selectedCurrency: string;
+  selectedOracle = 'Please select a currency to unlock the oracle';
 
-  public requiredInvalid$ = false;
-  public currencies: object = ['rcn', 'mana', 'ars'];
+  requiredInvalid$ = false;
+  currencies: object = ['rcn', 'mana', 'ars'];
 
-  public isOptional$ = true;
-  public isEditable$ = true;
+  isOptional$ = true;
+  isEditable$ = true;
 
-  public checked$ = true;
-  public disabled$ = false;
+  checked$ = true;
+  disabled$ = false;
 
-  constructor() {}
+  constructor(
+    private contractsService: ContractsService
+  ) {}
 
-  public onSubmit(form: NgForm) {
+  onSubmit(form: NgForm) {
     if (this.formGroup1.valid) {
-      this.formGroup1Value$ = form.value;
-      console.log(this.formGroup1Value$);
+
+      const duration = form.value.duration.yearsDuration + '.' +
+                      form.value.duration.mounthsDuration + '.' +
+                      form.value.duration.daysDuration;
+      const duesIn = new Date(duration);
+      const cancelableAt = new Date(duration);
+      cancelableAt.setDate(new Date() + form.value.duration.daysCancelable);
+
+      const expirationRequest = new Date();
+      expirationRequest.setDate(expirationRequest.getDate() + 30); // FIXME: HARKCODE
+
+      this.contractsService.requestLoan(
+        this.selectedOracle,
+        Utils.asciiToHex(form.value.conversionGraphic.requestedCurrency),
+        form.value.conversionGraphic.requestValue,
+        Utils.formatInterest(form.value.interest.annualInterest),
+        Utils.formatInterest(form.value.interest.annualPunitory),
+        duesIn.getTime() / 1000,
+        cancelableAt.getTime() / 1000,
+        expirationRequest.getTime() / 1000,
+        '');
     } else {
       this.requiredInvalid$ = true;
     }
@@ -54,33 +77,28 @@ export class CreateLoanComponent implements OnInit {
   onCurrencyChange(requestedCurrency) {
     switch (requestedCurrency.value) {
       case 'rcn':
-      if (environment.production) {
         this.selectedOracle = '0x0000000000000000000000000000000000000000';
-      } else {
-        this.selectedOracle = '0x0000000000000000000000000000000000000000';
-      }
-      break;
+        break;
       case 'mana':
-      if (environment.production) {
-        this.selectedOracle = '0x2aaf69a2df2828b55fa4a5e30ee8c3c7cd9e5d5b';
-      } else {
-        this.selectedOracle = '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40';
-      }
-      break;
+        if (environment.production) {
+          this.selectedOracle = '0x2aaf69a2df2828b55fa4a5e30ee8c3c7cd9e5d5b';
+        } else {
+          this.selectedOracle = '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40';
+        }
+        break;
       case 'ars':
-      if (environment.production) {
-        this.selectedOracle = '0x22222c1944efcc38ca46489f96c3a372c4db74e6';
-      } else {
-        this.selectedOracle = '0x0ac18b74b5616fdeaeff809713d07ed1486d0128';
-      }
-      break;
+        if (environment.production) {
+          this.selectedOracle = '0x22222c1944efcc38ca46489f96c3a372c4db74e6';
+        } else {
+          this.selectedOracle = '0x0ac18b74b5616fdeaeff809713d07ed1486d0128';
+        }
+        break;
       default:
-      this.selectedOracle = 'Please select a currency to unlock the oracle';
+        this.selectedOracle = 'Please select a currency to unlock the oracle';
     }
     this.selectedCurrency = requestedCurrency.value;
   }
 
   ngOnInit() {
-    console.log(environment.production);
   }
 }

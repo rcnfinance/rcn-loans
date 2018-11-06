@@ -4,7 +4,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
 import { Loan } from './../models/loan.model';
 // App Services
-import { Utils } from './../utils/utils';
 import { ContractsService } from './../services/contracts.service';
 import { AvailableLoansService } from '../services/available-loans.service';
 
@@ -21,7 +20,7 @@ export class ActiveLoansComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private contractsService: ContractsService,
-    private availableLoansService: AvailableLoansService,
+    private availableLoansService: AvailableLoansService
   ) { }
 
   // Available Loans service

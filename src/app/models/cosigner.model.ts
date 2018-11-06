@@ -1,37 +1,35 @@
-import { Loan } from './loan.model';
-
 export class CosignerDetail {}
 
 export class Cosigner {
-    constructor (
+  constructor (
         public contract: string,
         public cosignerDetail: CosignerDetail
     ) {}
 }
 
 export class CosignerOffer extends Cosigner {
-    constructor (
+  constructor (
         public contract: string,
         public cosignerDetail: CosignerDetail,
         public lendData: string
     ) {
-        super(contract, cosignerDetail);
-    }
+    super(contract, cosignerDetail);
+  }
 }
 
 export class CosignerLiability extends Cosigner {
-    constructor (
+  constructor (
         public contract: string,
         public cosignerDetail: CosignerDetail,
         public canClaim: Boolean,
         public claim: () => Promise<string>
     ) {
-        super(contract, cosignerDetail);
-    }
+    super(contract, cosignerDetail);
+  }
 }
 
 export class UnknownCosigner extends CosignerDetail {
-    constructor () {
-        super();
-    }
+  constructor () {
+    super();
+  }
 }

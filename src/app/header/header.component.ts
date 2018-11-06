@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private router: Router,
     private sidebarService: SidebarService,
     private contractService: ContractsService,
-    public titleService: TitleService,
+    public titleService: TitleService
   ) {}
 
   // Toggle Navbar
@@ -48,33 +48,19 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   handleProfile() {
     this.profile = !this.profile;
     if (this.profile) {
-      this.router.navigate(['/profile/']).then(nav => {
-        console.log(nav); // true if navigation is successful
-      }, err => {
-        console.log(err); // when there's an error
-      });
+      this.router.navigate(['/profile/']);
     } else {
-      this.router.navigate(['/requests/']).then(nav => {
-        console.log(nav); // true if navigation is successful
-      }, err => {
-        console.log(err); // when there's an error
-      });
+      this.router.navigate(['/requests/']);
     }
   }
 
   // Open Approve Dialog
   openDialogApprove() {
-    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    this.dialog.open(DialogApproveContractComponent, {});
   }
   // Open Client Dialog
   openDialogClient() {
-    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    this.dialog.open(DialogClientAccountComponent, {});
   }
   // Open Approve Dialog
   openDialog() {
@@ -82,16 +68,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
       this.makeRotate = true;
       dialogRef.componentInstance.autoClose = false;
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(`Dialog result: ${result}`);
+      dialogRef.afterClosed().subscribe(() => {
         this.makeRotate = false;
       });
+    } else if (this.web3Service.web3Type === Type.Injected) {
+      window.open('https://metamask.io/', '_blank');
     } else {
-      if (this.web3Service.web3Type === Type.Injected) {
-        window.open('https://metamask.io/', '_blank');
-      } else {
-        this.openDialogClient();
-      }
+      this.openDialogClient();
     }
   }
 
@@ -104,10 +87,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     });
   }
 
-// Withdraw button
+  // Withdraw button
   loadWithdrawBalance() {
     this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
-      console.log(result);
       this.rcnAvailable = Utils.formatAmount(result[0] / 10 ** 18);
       this.loansWithBalance = result[1];
     });
@@ -126,5 +108,3 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): any {}
 }
-
-
