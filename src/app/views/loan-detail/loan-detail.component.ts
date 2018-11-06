@@ -30,6 +30,7 @@ export class LoanDetailComponent implements OnInit {
   loanConfigData = [];
   loanStatusData = [];
   interestMiddleText: string;
+  isExpired: boolean;
   isRequest: boolean;
   isOngoing: boolean;
 
@@ -85,6 +86,7 @@ export class LoanDetailComponent implements OnInit {
         this.oracle = this.loan.oracle;
         this.currency = this.loan.currency;
         this.availableOracle = this.loan.oracle !== Utils.address0x;
+        this.isExpired = new Date(this.loan.expirationRequest).getTime() <= new Date().getTime() / 1000;
         this.loadDetail();
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
@@ -139,7 +141,7 @@ export class LoanDetailComponent implements OnInit {
     this.canTransfer = this.loan.owner === this.userAccount && (this.loan.status !== Status.Request && this.loan.status !== Status.Paid);
     this.canCancel = this.loan.borrower === this.userAccount && this.loan.status === Status.Request;
     this.canPay = this.loan.owner !== this.userAccount && (this.loan.status === Status.Ongoing || this.loan.status === Status.Indebt);
-    this.canLend = this.loan.borrower !== this.userAccount && this.isRequest;
+    this.canLend = this.loan.borrower !== this.userAccount && this.isRequest && !this.isExpired;
   }
 
   private formatInterest(interest: number): string {
