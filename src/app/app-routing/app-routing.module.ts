@@ -11,6 +11,7 @@ import { NotFoundModule } from '../not-found/not-found.module';
 import { CreateLoanComponent } from '../views/create-loan/create-loan.component';
 
 const appRoutes: Routes = [
+  { path: 'create', component: CreateLoanComponent },
   { path: '', redirectTo: '/requests', pathMatch: 'full' },
   { path: 'requests', component: RequestedLoanComponent },
   { path: 'activity', component: ActiveLoansComponent },

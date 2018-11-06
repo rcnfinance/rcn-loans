@@ -6,7 +6,6 @@ import { environment } from '../../../environments/environment.prod';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractsService } from './../../services/contracts.service';
 import { Utils } from '../../utils/utils';
-import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-create-loan',
@@ -30,18 +29,18 @@ export class CreateLoanComponent implements OnInit {
       requestedCurrency: new FormControl
     })
   });
-  public formGroup1Value$ = null;
-  public selectedCurrency: string;
-  public selectedOracle = 'Please select a currency to unlock the oracle';
+  formGroup1Value$ = null;
+  selectedCurrency: string;
+  selectedOracle = 'Please select a currency to unlock the oracle';
 
-  public requiredInvalid$ = false;
-  public currencies: object = ['rcn', 'mana', 'ars'];
+  requiredInvalid$ = false;
+  currencies: object = ['rcn', 'mana', 'ars'];
 
-  public isOptional$ = true;
-  public isEditable$ = true;
+  isOptional$ = true;
+  isEditable$ = true;
 
-  public checked$ = true;
-  public disabled$ = false;
+  checked$ = true;
+  disabled$ = false;
 
   public onSubmit(form: NgForm) {
     if (this.formGroup1.valid) {
@@ -54,10 +53,10 @@ export class CreateLoanComponent implements OnInit {
       cancelableAt.setDate(new Date() + form.value.duration.daysCancelable);
 
       const expirationRequest = new Date();
-      expirationRequest.setDate(expirationRequest.getDate() + 30); // FIXME:
+      expirationRequest.setDate(expirationRequest.getDate() + 30); // FIXME: HARKCODE
 
       this.contractsService.requestLoan(
-        '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40',
+        this.selectedOracle,
         Utils.asciiToHex(form.value.conversionGraphic.requestedCurrency),
         form.value.conversionGraphic.requestValue,
         Utils.formatInterest(form.value.interest.annualInterest),
@@ -78,11 +77,7 @@ export class CreateLoanComponent implements OnInit {
   onCurrencyChange(requestedCurrency) {
     switch (requestedCurrency.value) {
       case 'rcn':
-      if (environment.production) {
         this.selectedOracle = '0x0000000000000000000000000000000000000000';
-      } else {
-        this.selectedOracle = '0x0000000000000000000000000000000000000000';
-      }
       break;
       case 'mana':
       if (environment.production) {
