@@ -91,7 +91,7 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
     ButtonGroupComponent,
     SocialContainerComponent,
     RiskIndicatorComponent,
-    CivicAuthComponent,
+    CivicAuthComponent
   ]
 })
 export class SharedModule { }

@@ -28,11 +28,11 @@ export class RequestedLoanComponent implements OnInit {
   ) {}
 
   // Available Loans service
-  public upgradeAvaiblable() {
+  upgradeAvaiblable() {
     this.availableLoansService.updateAvailable(this.loans.length);
   }
 
-  public loadLoans() {
+  loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
       this.loans = result;
       this.upgradeAvaiblable();
