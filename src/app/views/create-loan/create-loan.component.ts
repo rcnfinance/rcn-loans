@@ -14,9 +14,7 @@ import { Utils } from '../../utils/utils';
 export class CreateLoanComponent implements OnInit {
   formGroup1 = new FormGroup({
     duration: new FormGroup({
-      daysDuration: new FormControl,
-      mounthsDuration: new FormControl,
-      yearsDuration: new FormControl,
+      fullDuration: new FormControl,
       percentCancelable: new FormControl,
       expirationRequest: new FormControl
     }),
