@@ -72,7 +72,7 @@ export class TxService {
   }
 
   registerApproveTx(tx: string, token: string, contract: string, action: boolean) {
-    const data = { contract: contract, action: action };
+    const data = { contract: contract.toLowerCase(), action: action };
     this.txMemory.push(new Tx(tx, token, false, Type.approve, data));
     this.saveTxs();
   }

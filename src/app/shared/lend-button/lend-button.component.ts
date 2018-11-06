@@ -67,7 +67,7 @@ export class LendButtonComponent implements OnInit {
     this.startOperation();
 
     try {
-      const engineApproved = this.contractsService.isEngineApproved();
+      const engineApproved = this.contractsService.isApproved(environment.contracts.basaltEngine);
       const civicApproved = this.civicService.status();
       const balance = this.contractsService.getUserBalanceRCNWei();
       const required = this.contractsService.estimateRequiredAmount(this.loan);
@@ -136,7 +136,7 @@ export class LendButtonComponent implements OnInit {
 
   showApproveDialog() {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
-    dialogRef.componentInstance.autoClose = true;
+    dialogRef.componentInstance.onlyAddress = environment.contracts.basaltEngine;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.handleLend(true);

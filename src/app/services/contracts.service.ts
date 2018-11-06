@@ -62,62 +62,25 @@ export class ContractsService {
       });
     }) as Promise<number>;
   }
-
-  async isEngineApproved(): Promise<boolean> {
-    const account = await this.web3.getAccount();
-    return new Promise((resolve, reject) => {
-      const pending = this.txService.getLastPendingApprove(this._rcnContractAddress, this._rcnEngineAddress);
-      if (pending !== undefined) {
-        console.info('Pending engine approved found', pending);
-        resolve(pending);
-      } else {
-        const _web3 = this.web3.web3reader;
-        this._rcnContract.allowance.call(account, this._rcnEngineAddress, function (err, result) {
-          if (err != null) {
-            reject(err);
-          }
-
-          resolve(_web3.fromWei(result) >= _web3.toWei(1000000000));
-        });
-      }
-    }) as Promise<boolean>;
+  async isApproved(contract: string): Promise<boolean> {
+    const pending = this.txService.getLastPendingApprove(this._rcnContract.address, contract);
+    if (pending !== undefined) {
+      return pending;
+    }
+    const result = await promisify(this._rcnContract.allowance.call, [contract]);
+    return result >= this.web3.web3.toWei(1000000000);
   }
-
-  async approveEngine(): Promise<string> {
-    const account = await this.web3.getAccount();
-    const txService = this.txService;
-    const rcnAddress = this._rcnContractAddress;
-    const engineAddress = this._rcnEngineAddress;
-    return new Promise((resolve, reject) => {
-      const _web3 = this.web3.web3;
-      this._rcnContract.approve(this._rcnEngineAddress, _web3.toWei(10 ** 32), { from: account }, function (err, result) {
-        if (err != null) {
-          reject(err);
-        } else {
-          txService.registerApproveTx(result, rcnAddress, engineAddress, true);
-          resolve(result);
-        }
-      });
-    }) as Promise<string>;
+  async approve(contract: string): Promise<string> {
+    const _web3 = this.web3.web3;
+    const result = await promisify(this._rcnContract.approve, [contract, _web3.toWei(10 ** 32)]);
+    this.txService.registerApproveTx(result, this._rcnContract.address, contract, true);
+    return result;
   }
-
-  async disapproveEngine(): Promise<string> {
-    const account = await this.web3.getAccount();
-    const txService = this.txService;
-    const rcnAddress = this._rcnContractAddress;
-    const engineAddress = this._rcnEngineAddress;
-    return new Promise((resolve, reject) => {
-      this._rcnContract.approve(this._rcnEngineAddress, 0, { from: account }, function (err, result) {
-        if (err != null) {
-          reject(err);
-        } else {
-          txService.registerApproveTx(result, rcnAddress, engineAddress, false);
-          resolve(result);
-        }
-      });
-    }) as Promise<string>;
+  async disapprove(contract: string): Promise<string> {
+    const result = await promisify(this._rcnContract.approve, [contract, 0]);
+    this.txService.registerApproveTx(result, this._rcnContract.address, contract, false);
+    return result;
   }
-
   async estimateRequiredAmount(loan: Loan): Promise<number> {
     if (loan.oracle === Utils.address0x) {
       return loan.amount;
@@ -133,7 +96,6 @@ export class ContractsService {
     console.info('Estimated required rcn is', required);
     return required;
   }
-
   async lendLoan(request: Request): Promise<string> {
     const account = await this.web3.getAccount();
     const pOracleData = this.getOracleData(request);
