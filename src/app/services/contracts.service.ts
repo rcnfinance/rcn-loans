@@ -113,7 +113,7 @@ export class ContractsService {
       });
     }) as Promise<string>;
   }
-  public async requestLoan(oracle: string,
+  async requestLoan(oracle: string,
     currency: string,
     amount: number,
     interest: number,
