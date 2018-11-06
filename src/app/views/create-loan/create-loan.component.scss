@@ -5,7 +5,7 @@
   @extend %flex-container;
   div{
     flex: 1;
-    font-size: 11px;
+    font-size: 12px;
     text-transform: uppercase;
     @extend %font-light;
     &:nth-child(1){
@@ -85,3 +85,5 @@
     background-color: #f44336;
   }
 }
+
+.title{ &.property{ font-size: 12px; } }
