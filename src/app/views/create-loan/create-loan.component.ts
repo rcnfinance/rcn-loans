@@ -15,8 +15,8 @@ export class CreateLoanComponent implements OnInit {
   formGroup1 = new FormGroup({
     duration: new FormGroup({
       fullDuration: new FormControl,
-      percentCancelable: new FormControl,
-      expirationRequest: new FormControl
+      cancelableDate: new FormControl,
+      expirationRequestDate: new FormControl
     }),
     interest: new FormGroup({
       annualInterest: new FormControl(40),
@@ -47,12 +47,10 @@ export class CreateLoanComponent implements OnInit {
   onSubmit(form: NgForm) {
     if (this.formGroup1.valid) {
 
-      const duration = form.value.duration.yearsDuration + '.' +
-                       form.value.duration.mounthsDuration + '.' +
-                       form.value.duration.daysDuration;
+      const duration = form.value.duration.fullDuration;
       const duesIn = new Date(duration);
       const cancelableAt = new Date(duration);
-      cancelableAt.setDate(new Date() + form.value.duration.daysCancelable);
+      cancelableAt.setDate(new Date() + form.value.duration.cancelableDate);
 
       const expirationRequest = new Date();
       expirationRequest.setDate(expirationRequest.getDate() + 30); // FIXME: HARKCODE

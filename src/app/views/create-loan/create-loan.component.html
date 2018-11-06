@@ -37,17 +37,17 @@
                   <div class="col-12"><div class="title property margintop20 marginbottom10">Cancelable At / Expiration Request</div></div>
                   <div class="col-xs-12 col-lg-6">
                     <mat-form-field>
-                      <input matInput [matDatepicker]="percentCancelablePicker" formControlName="percentCancelable" placeholder="Choose a date" required>
-                      <mat-datepicker-toggle matSuffix [for]="percentCancelablePicker"></mat-datepicker-toggle>
-                      <mat-datepicker #percentCancelablePicker></mat-datepicker>
+                      <input matInput [matDatepicker]="cancelableDatePicker" formControlName="cancelableDate" placeholder="Choose a date" required>
+                      <mat-datepicker-toggle matSuffix [for]="cancelableDatePicker"></mat-datepicker-toggle>
+                      <mat-datepicker #cancelableDatePicker></mat-datepicker>
                       <mat-hint>Set the minimum time the loan</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-xs-12 col-lg-6">
                     <mat-form-field>
-                      <input matInput [matDatepicker]="expirationRequestPicker" formControlName="expirationRequest" placeholder="Choose a date" required>
-                      <mat-datepicker-toggle matSuffix [for]="expirationRequestPicker"></mat-datepicker-toggle>
-                      <mat-datepicker #expirationRequestPicker></mat-datepicker>
+                      <input matInput [matDatepicker]="expirationRequestDatePicker" formControlName="expirationRequestDate" placeholder="Choose a date" required>
+                      <mat-datepicker-toggle matSuffix [for]="expirationRequestDatePicker"></mat-datepicker-toggle>
+                      <mat-datepicker #expirationRequestDatePicker></mat-datepicker>
                       <mat-hint>Set the request duration without a lender</mat-hint>
                     </mat-form-field>
                   </div>
