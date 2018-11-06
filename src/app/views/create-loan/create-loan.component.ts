@@ -68,7 +68,7 @@ export class CreateLoanComponent implements OnInit {
         duesIn.getTime() / 1000,
         cancelableAt.getTime() / 1000,
         expirationRequest.getTime() / 1000,
-        '');
+      '');
     } else {
       this.requiredInvalid$ = true;
     }
