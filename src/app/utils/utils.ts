@@ -1,15 +1,8 @@
 export class Utils {
-  static address_0 = '0x0000000000000000000000000000000000000000';
+  static address0x = '0x0000000000000000000000000000000000000000';
 
   static formatInterest(raw: number): number {
     return 311040000000000 / raw;
-  }
-
-  static newGuid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = Math.random() * 16 | 0, v = c === 'x' ? r : ( r & 0x3 | 0x8 );
-      return v.toString(16);
-    });
   }
 
   static hexToAscii(str) {
@@ -36,7 +29,7 @@ export class Utils {
 
   static toBytes32(hex: string): string {
     const raw = hex.replace('0x', '');
-    const result =  hex.replace('0x', '0x' + '0'.repeat(64 - raw.length));
+    const result = hex.replace('0x', '0x' + '0'.repeat(64 - raw.length));
     return result;
   }
 
@@ -83,16 +76,16 @@ export class Utils {
 
   static formatAmount(amount: Number): string {
     const maxDigits = 6;
+
     if (amount.toString().length <= maxDigits) {
       return amount.toString();
-    } else {
-      const intDigits = amount.toFixed(0).toString().length;
-      const decDigits = maxDigits - intDigits;
-
-      const decimals = (decDigits > 0) ? decDigits : 0;
-
-      return Number(amount.toFixed(decimals)).toString();
     }
+
+    const intDigits = amount.toFixed(0).toString().length;
+    const decDigits = maxDigits - intDigits;
+    const decimals = (decDigits > 0) ? decDigits : 0;
+
+    return Number(amount.toFixed(decimals)).toString();
   }
 
   static removeTrailingZeros(value: string): string {

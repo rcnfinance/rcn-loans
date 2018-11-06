@@ -7,12 +7,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./dialog-generic-error.component.scss']
 })
 export class DialogGenericErrorComponent implements OnInit {
-
   error: Error;
 
   constructor(
     public dialogRef: MatDialogRef<DialogGenericErrorComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.error = data.error;
   }

@@ -1,17 +1,17 @@
 
 export class Identity {
-    constructor(
+  constructor(
         public short: string
     ) {}
 }
 
 export class CompanyIdentity extends Identity {
-    constructor(
+  constructor(
         public name: string,
         public description: string,
         public logo: string,
         public foundation: string
     ) {
-        super(name);
-    }
+    super(name);
+  }
 }

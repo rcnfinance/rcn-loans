@@ -2,8 +2,8 @@ import { Loan } from '../models/loan.model';
 import { Utils } from './utils';
 
 export class LoanUtils {
-    static loanFromBytes(engine: string, id: number, loanBytes: any): Loan {
-        return new Loan(
+  static loanFromBytes(engine: string, id: number, loanBytes: any): Loan {
+    return new Loan(
           engine,
           id,
           Utils.formatAddress(loanBytes[1]),
@@ -24,5 +24,5 @@ export class LoanUtils {
           Utils.formatAddress(loanBytes[0]),
           Utils.formatAddress(loanBytes[3])
         );
-    }
+  }
 }

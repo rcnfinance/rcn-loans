@@ -7,7 +7,7 @@ import { companyIdentities } from '../constants/CompanyIdentities';
 @Injectable()
 export class IdentityService {
   constructor() { }
-  public getIdentity(loan: Loan): Promise<Identity> {
+  getIdentity(loan: Loan): Promise<Identity> {
     return new Promise((resolve) => {
       resolve(companyIdentities[environment.dir[loan.borrower]]);
     }) as Promise<Identity>;

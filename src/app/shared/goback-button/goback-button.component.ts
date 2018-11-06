@@ -12,7 +12,7 @@ export class GobackButtonComponent implements OnInit {
     private previousRouteService: PreviousRouteService
   ) {}
 
-  public handleGoback() {
+  handleGoback() {
     this.previousRouteService.redirectHandler();
   }
 

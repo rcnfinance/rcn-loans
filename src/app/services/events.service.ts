@@ -6,31 +6,31 @@ import { Injectable } from '@angular/core';
 export enum Category {
   Loan = 'loan',
   Account = 'account',
-  Transaction = 'transaction',
+  Transaction = 'transaction'
 }
 
 @Injectable()
 export class EventsService {
-  public trackEvent(
+  trackEvent(
     action: string,
     category: Category,
     label: string,
     value: number = 0,
-    nonInteraction: boolean = false,
+    nonInteraction: boolean = false
   ) {
     // Sentry tracking
     Raven.captureBreadcrumb({
       message: action,
       category: category,
       data: {
-         label: label,
-         value: value,
-         nonInteraction: nonInteraction
+        label: label,
+        value: value,
+        nonInteraction: nonInteraction
       }
     });
 
     // GA Tracking
-    (<any>window).ga('send', 'event', {
+    (window as any).ga('send', 'event', {
       eventCategory: category,
       eventLabel: label,
       eventAction: action,
@@ -39,10 +39,10 @@ export class EventsService {
     });
   }
 
-  public trackError(
+  trackError(
     error: Error
   ) {
     Raven.captureException(error);
-    console.log(error);
+    console.error(error);
   }
 }

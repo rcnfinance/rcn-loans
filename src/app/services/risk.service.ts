@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Loan } from '../models/loan.model';
-import { environment } from '../../environments/environment';
 import { CosignerService } from './cosigner.service';
 import { IdentityService } from './identity.service';
 
@@ -12,7 +11,7 @@ export class RiskService {
     private cosignerService: CosignerService,
     private identityService: IdentityService
   ) { }
-  public estimateRisk(loan: Loan): Promise<Level> {
+  estimateRisk(loan: Loan): Promise<Level> {
     return new Promise((resolve) => {
       if (this.cosignerService.getCosigner(loan) !== undefined) {
         resolve(Level.normal);

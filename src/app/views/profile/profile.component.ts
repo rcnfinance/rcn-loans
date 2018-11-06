@@ -1,13 +1,9 @@
+import BigNumber from 'bignumber.js';
 import { Component, OnInit } from '@angular/core';
-// App Component
-// import { MaterialModule } from './../../material/material.module';
-// import { SharedModule } from './../../shared/shared.module';
+
 // App Services
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
-// App Utils
-// import { Utils } from '../../utils/utils';
-import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'app-profile',
@@ -15,15 +11,6 @@ import BigNumber from 'bignumber.js';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  private ethWei = new BigNumber(10).pow(new BigNumber(18));
-  lender: string;
-  rcnBalance: BigNumber;
-  weiAvailable: BigNumber;
-  loansWithBalance: number[];
-  constructor(
-    private web3Service: Web3Service,
-    private contractService: ContractsService,
-  ) { }
 
   get balance(): string {
     if (this.rcnBalance === undefined) {
@@ -38,19 +25,15 @@ export class ProfileComponent implements OnInit {
     }
     return this.removeTrailingZeros((this.weiAvailable / this.ethWei).toFixed(18));
   }
-
-  private removeTrailingZeros(value) {
-    value = value.toString();
-
-    if (value.indexOf('.') === -1) {
-        return value;
-    }
-
-    while ((value.slice(-1) === '0' || value.slice(-1) === '.') && value.indexOf('.') !== -1) {
-        value = value.substr(0, value.length - 1);
-    }
-    return value;
-  }
+  private ethWei = new BigNumber(10).pow(new BigNumber(18));
+  lender: string;
+  rcnBalance: BigNumber;
+  weiAvailable: BigNumber;
+  loansWithBalance: number[];
+  constructor(
+    private web3Service: Web3Service,
+    private contractService: ContractsService
+  ) { }
 
   loadLender() {
     this.web3Service.getAccount().then((resolve: string) => {
@@ -66,7 +49,6 @@ export class ProfileComponent implements OnInit {
 
   loadWithdrawBalance() {
     this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
-      console.log(result);
       this.weiAvailable = result[0];
       this.loansWithBalance = result[1];
     });
@@ -76,6 +58,19 @@ export class ProfileComponent implements OnInit {
     this.loadLender();
     this.loadRcnBalance();
     this.loadWithdrawBalance();
+  }
+
+  private removeTrailingZeros(value) {
+    value = value.toString();
+
+    if (value.indexOf('.') === -1) {
+      return value;
+    }
+
+    while ((value.slice(-1) === '0' || value.slice(-1) === '.') && value.indexOf('.') !== -1) {
+      value = value.substr(0, value.length - 1);
+    }
+    return value;
   }
 
 }

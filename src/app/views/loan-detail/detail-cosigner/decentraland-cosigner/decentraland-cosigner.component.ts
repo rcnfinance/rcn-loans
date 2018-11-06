@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { District, Tag, DecentralandCosigner, Parcel } from '../../../../models/cosigners/decentraland-cosigner.model';
 import { Loan, Status } from '../../../../models/loan.model';
 import { DecentralandCosignerProvider } from '../../../../providers/cosigners/decentraland-cosigner-provider';
-import { CosignerDetail, Cosigner } from '../../../../models/cosigner.model';
 import { Utils } from '../../../../utils/utils';
 import { environment } from '../../../../../environments/environment';
 
@@ -32,7 +31,9 @@ export class DecentralandCosignerComponent implements OnInit {
   mapWidth: number = undefined;
   mapHeight: number = undefined;
 
-  public winSize() {
+  constructor() { }
+
+  winSize() {
     if (this.winWidth < 550) {
       this.mapWidth = 400;
       this.mapHeight = 250;
@@ -44,34 +45,21 @@ export class DecentralandCosignerComponent implements OnInit {
       this.mapHeight = 200;
     }
   }
-
-  constructor() { }
-
-  private renderDetail() {
-    this.parcel = this.detail.parcel;
-    this.parcelId = this.parcel.id;
-    this.displayPrice = Utils.formatAmount(Number(this.detail.displayPrice));
-    this.financiation = this.detail.financePart;
-    this.highlights = this.parcel.highlights;
-
-    const coordenate = this.parcelId.split(',');
-    this.firstCoordenate = coordenate[0];
-    this.lastCoordenate = coordenate[1];
-  }
   highlightTitle(tag: Tag): string {
     if (this.districtsData === undefined) {
       return '...'; // Loading districts data
     }
 
-    const candidate = this.districtsData.find(d => d.id === tag.district_id);
+    const candidate = this.districtsData.find(d => d.id === tag.districtId);
+
     if (candidate !== undefined) {
       return candidate.name;
-    } else {
-      return 'Unknown';
     }
+
+    return 'Unknown';
   }
   highlightIcon(tag: Tag): string {
-    switch (tag.district_id) {
+    switch (tag.districtId) {
       case 'f77140f9-c7b4-4787-89c9-9fa0e219b079':
         return 'https://market.decentraland.org/static/media/road-icon.1be1f581.svg';
       default:
@@ -81,11 +69,13 @@ export class DecentralandCosignerComponent implements OnInit {
   highlightDistance(tag: Tag): string {
     if (tag.distance === 0) {
       return 'part of';
-    } else if (tag.distance === 1) {
-      return tag.distance + ' parcel away';
-    } else {
-      return tag.distance + ' parcels away';
     }
+
+    if (tag.distance === 1) {
+      return tag.distance + ' parcel away';
+    }
+
+    return tag.distance + ' parcels away';
   }
 
   ngOnInit() {
@@ -110,5 +100,17 @@ export class DecentralandCosignerComponent implements OnInit {
         }
       });
     }
+  }
+
+  private renderDetail() {
+    this.parcel = this.detail.parcel;
+    this.parcelId = this.parcel.id;
+    this.displayPrice = Utils.formatAmount(Number(this.detail.displayPrice));
+    this.financiation = this.detail.financePart;
+    this.highlights = this.parcel.highlights;
+
+    const coordenate = this.parcelId.split(',');
+    this.firstCoordenate = coordenate[0];
+    this.lastCoordenate = coordenate[1];
   }
 }
