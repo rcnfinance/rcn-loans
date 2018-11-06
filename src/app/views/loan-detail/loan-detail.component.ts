@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
-import { Loan, Status, Request } from './../../models/loan.model';
+import { Loan, Status, Request, BasaltLoan } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
 // App Utils
 import { Utils } from './../../utils/utils';
@@ -39,6 +39,8 @@ export class LoanDetailComponent implements OnInit {
   canPay: boolean;
   canLend: boolean;
 
+  hasHistory: boolean;
+
   totalDebt: number;
   pendingAmount: number;
   expectedReturn: number;
@@ -72,6 +74,7 @@ export class LoanDetailComponent implements OnInit {
       const id = params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
+        this.hasHistory = loan instanceof BasaltLoan;
         this.brand = this.brandingService.getBrand(this.loan);
         this.oracle = this.loan.oracle;
         this.currency = this.loan.readCurrency();

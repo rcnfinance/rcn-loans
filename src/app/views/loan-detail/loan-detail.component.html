@@ -110,9 +110,11 @@
 
   </div>
 
-  <div class="margintop40"></div>
-  <div class="title main-h1 feature-padding">History</div>
-  <div class="paddingleft15 paddingright15">
-    <app-transaction-history [loan]=loan></app-transaction-history>
+  <div *ngIf="hasHistory">
+    <div class="margintop40"></div>
+    <div class="title main-h1 feature-padding">History</div>
+    <div class="paddingleft15 paddingright15">
+      <app-transaction-history [loan]=loan></app-transaction-history>
+    </div>
   </div>
 </div>
