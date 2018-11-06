@@ -15,7 +15,7 @@ export class CreateLoanComponent implements OnInit {
   formGroup1 = new FormGroup({
     duration: new FormGroup({
       fullDuration: new FormControl,
-      cancelableDate: new FormControl,
+      payableAtDate: new FormControl,
       expirationRequestDate: new FormControl
     }),
     interest: new FormGroup({
@@ -27,6 +27,7 @@ export class CreateLoanComponent implements OnInit {
       requestedCurrency: new FormControl
     })
   });
+  minDate: Date = new Date();
   formGroup1Value$ = null;
   selectedCurrency: string;
   selectedOracle = 'Please select a currency to unlock the oracle';
@@ -50,7 +51,7 @@ export class CreateLoanComponent implements OnInit {
       const duration = form.value.duration.fullDuration;
       const duesIn = new Date(duration);
       const cancelableAt = new Date(duration);
-      cancelableAt.setDate(new Date() + form.value.duration.cancelableDate);
+      cancelableAt.setDate(new Date() + form.value.duration.payableAtDate);
 
       const expirationRequest = new Date();
       expirationRequest.setDate(expirationRequest.getDate() + 30); // FIXME: HARKCODE

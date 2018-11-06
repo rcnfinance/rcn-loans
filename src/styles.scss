@@ -297,11 +297,15 @@ mat-form-field{
   .mat-hint{ color: $secondary; }
   .mat-form-field-label{ color: rgba(255,255,255,.7); }
   .mat-form-field-underline { background-color: rgba(255,255,255,.5); }
+  .mat-form-field-suffix .mat-datepicker-toggle-default-icon { width: 1.3em !important; }
 }
 .conversion-block{
   .mat-form-field-appearance-legacy{
     .mat-form-field-infix{
       padding: 0.4375em 0 0 0 !important;
+    }
+    .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
+      width: 1.5em !important;
     }
   }
 }

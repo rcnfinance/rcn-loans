@@ -28,7 +28,7 @@
                   <div class="col-12"><div class="title property marginbottom10">Duration</div></div>
                   <div class="col-12">
                     <mat-form-field>
-                      <input matInput [matDatepicker]="fullDurationPicker" formControlName="fullDuration" placeholder="Choose a date" required>
+                      <input matInput [matDatepicker]="fullDurationPicker" [min]="minDate" formControlName="fullDuration" placeholder="Choose a date" required>
                       <mat-datepicker-toggle matSuffix [for]="fullDurationPicker"></mat-datepicker-toggle>
                       <mat-datepicker #fullDurationPicker></mat-datepicker>
                       <mat-hint>Set the Duration</mat-hint>
@@ -37,15 +37,15 @@
                   <div class="col-12"><div class="title property margintop20 marginbottom10">Cancelable At / Expiration Request</div></div>
                   <div class="col-xs-12 col-lg-6">
                     <mat-form-field>
-                      <input matInput [matDatepicker]="cancelableDatePicker" formControlName="cancelableDate" placeholder="Choose a date" required>
-                      <mat-datepicker-toggle matSuffix [for]="cancelableDatePicker"></mat-datepicker-toggle>
-                      <mat-datepicker #cancelableDatePicker></mat-datepicker>
+                      <input matInput [matDatepicker]="payableAtDatePicker" [min]="minDate" formControlName="payableAtDate" placeholder="Choose a date" required>
+                      <mat-datepicker-toggle matSuffix [for]="payableAtDatePicker"></mat-datepicker-toggle>
+                      <mat-datepicker #payableAtDatePicker></mat-datepicker>
                       <mat-hint>Set the minimum time the loan</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-xs-12 col-lg-6">
                     <mat-form-field>
-                      <input matInput [matDatepicker]="expirationRequestDatePicker" formControlName="expirationRequestDate" placeholder="Choose a date" required>
+                      <input matInput [matDatepicker]="expirationRequestDatePicker" [min]="minDate" formControlName="expirationRequestDate" placeholder="Choose a date" required>
                       <mat-datepicker-toggle matSuffix [for]="expirationRequestDatePicker"></mat-datepicker-toggle>
                       <mat-datepicker #expirationRequestDatePicker></mat-datepicker>
                       <mat-hint>Set the request duration without a lender</mat-hint>
