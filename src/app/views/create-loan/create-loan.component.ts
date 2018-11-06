@@ -28,12 +28,12 @@ export class CreateLoanComponent implements OnInit {
     })
   });
   minDate: Date = new Date();
-  formGroup1Value$ = null;
+  formGroup1Value$: any = null;
   selectedCurrency: string;
-  selectedOracle = 'Please select a currency to unlock the oracle';
+  selectedOracle: string = 'Please select a currency to unlock the oracle';
 
   requiredInvalid$ = false;
-  currencies: object = ['rcn', 'mana', 'ars'];
+  currencies: Object = ['rcn', 'mana', 'ars'];
 
   isOptional$ = true;
   isEditable$ = true;
