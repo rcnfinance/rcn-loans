@@ -43,9 +43,9 @@ export const environment = {
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
     diaspore: {
-      debtEngine: '0x2a878750a122ec3d6a193a4c6003ecd8e98feb17',
-      loanManager: '0xa6e4b95a0d1be10e886317fe711a4515544c578a',
-      viewRequets: '0xe018de95842700ad46cdd83a3ce19407b1b55ab2'
+      debtEngine: '0x0bfaf956b4771b0627bf5a67730240dc863676cb',
+      loanManager: '0x26064491dbdcdd6e7a3e7e6288b632a20c28d1a7',
+      viewRequets: '0x8ed6a89ba8028861020200d54a33f45040e20afc'
     },
     decentraland: {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',

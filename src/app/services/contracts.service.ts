@@ -263,7 +263,7 @@ export class ContractsService {
       });
     }) as Promise<Loan[]>;
     const diaspore = new Promise((resolve, reject) => {
-      this._requestsView.getRequests(environment.contracts.diaspore.loanManager, 0, 2, (err, result) => {
+      this._requestsView.getRequests(environment.contracts.diaspore.loanManager, 0, 10000, [], (err, result) => {
         if (err != null) {
           reject(err);
           console.error(err);
