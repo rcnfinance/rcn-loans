@@ -47,14 +47,24 @@
                       <mat-hint>Set the Years</mat-hint>
                     </mat-form-field>
                   </div>
-                  <div class="col-12"><div class="title property margintop20 marginbottom10">Cancelable At</div></div>
-                  <div class="col-12">
+                  <div class="col-12"><div class="title property margintop20 marginbottom10">Cancelable At / Expiration Request</div></div>
+                  <div class="col-xs-12 col-lg-6">
                     <mat-form-field>
                       <input matInput type='number' value="0" formControlName="percentCancelable" 
                       pattern='^(100|[1-9][0-9]?)$' required>
                       <span matSuffix>%</span>
                       <mat-hint>Set the minimum time the loan</mat-hint>
                     </mat-form-field>
+                  </div>
+                  <div class="col-xs-12 col-lg-6">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="picker" formControlName="expirationRequest" placeholder="Choose a date" required>
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                      <mat-hint>Set the request duration without a lender</mat-hint>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xs-12 col-lg-6">
                     <div class="title main-m3 margintop10">Due time: {{ '20-03-2019' }}</div>
                   </div>
                 </div>

@@ -15,7 +15,8 @@ export class CreateLoanComponent implements OnInit {
       daysDuration: new FormControl,
       mounthsDuration: new FormControl,
       yearsDuration: new FormControl,
-      percentCancelable: new FormControl
+      percentCancelable: new FormControl,
+      expirationRequest: new FormControl
     }),
     interest: new FormGroup({
       annualInterest: new FormControl(40),
