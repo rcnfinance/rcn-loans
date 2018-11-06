@@ -2,14 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // App Services
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { CommitsService } from './../../services/commits.service';
 import { PreviousRouteService } from './../../services/previousRoute.service';
-// App Utils
-import { Utils } from './../../utils/utils';
 // App Modules
-import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from '../../material/material.module';
 import { LoanDetailRoutingModule } from './loan-detail-routing.module';
@@ -23,6 +21,10 @@ import { GobackButtonComponent } from '../../shared/goback-button/goback-button.
 import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
+import { TransferButtonComponent } from './../../shared/transfer-button/transfer-button.component';
+import { TransferFormComponent } from './../../shared/transfer-form/transfer-form.component';
+
+import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 
 @NgModule({
   imports: [
@@ -30,7 +32,7 @@ import { TransactionHistoryComponent } from './transaction-history/transaction-h
     NgxSpinnerModule,
     SharedModule,
     LoanDetailRoutingModule,
-    MaterialModule,
+    MaterialModule
   ],
   providers: [
     ContractsService,
@@ -47,7 +49,15 @@ import { TransactionHistoryComponent } from './transaction-history/transaction-h
     DecentralandMapComponent,
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
-    GobackButtonComponent
+    GobackButtonComponent,
+    TransferButtonComponent,
+    TransferFormComponent,
+
+    DialogLoanTransferComponent
   ],
+  entryComponents: [
+    DialogLoanTransferComponent
+  ],
+  exports: []
 })
 export class LoanDetailModule { }

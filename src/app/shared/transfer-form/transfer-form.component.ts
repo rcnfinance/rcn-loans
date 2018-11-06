@@ -1,18 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import {
-  FormsModule,
-  FormGroup,
-  FormBuilder,
-  FormControl,
-  Validators,
-  NgForm,
-} from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { NgForm } from '@angular/forms';
 // App Component
-import { MaterialModule } from './../../material/material.module';
-import { SharedModule } from './../../shared/shared.module';
 import { Web3Service } from '../../services/web3.service';
 
 @Component({
@@ -36,14 +24,15 @@ export class TransferFormComponent implements OnInit {
       this.invalidAddress = true;
     }
   }
+  ngOnInit() {
+  }
   private isAddress(address: string): boolean {
     const web3 = this.web3Service.web3;
+
     if (web3.utils !== undefined) {
       return web3.utils.isAddress(address);
-    } else {
-      return web3.isAddress(address);
     }
-  }
-  ngOnInit() {
+
+    return web3.isAddress(address);
   }
 }

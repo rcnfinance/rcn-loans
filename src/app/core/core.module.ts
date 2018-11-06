@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule }  from "@angular/router";
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 // App Component
@@ -9,17 +9,17 @@ import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
-    FooterComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     MaterialModule,
-    RouterModule,
+    RouterModule
   ],
   exports: [
-    FooterComponent,
+    FooterComponent
   ],
-  providers: [],
+  providers: []
 })
 export class CoreModule { }

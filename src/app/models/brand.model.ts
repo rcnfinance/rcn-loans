@@ -1,6 +1,6 @@
 
 export class Brand {
-    constructor(
+  constructor(
         public name: string,
         public color: string,
         public icon: string,

@@ -30,7 +30,6 @@ export class ClaimButtonComponent implements OnInit {
   claim() {
     if (this.pendingTx === undefined) {
       this.provider.liability(this.loan).then((liability) => {
-        console.log(liability);
         liability.claim().then((tx) => {
           this.txService.registerClaimTx(tx, liability.contract, this.loan);
           this.pendingTx = tx;

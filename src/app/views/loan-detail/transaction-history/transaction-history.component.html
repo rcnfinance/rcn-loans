@@ -1,7 +1,9 @@
+<ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" class="overlay-setup" type="ball-clip-rotate-multiple" id ="spinner" #spinner></ngx-spinner>
 <div class="transaction-component">
   <div class="timeline">
 
     <div class="timeline-structure">
+      <h2 *ngIf="noMatch" class="title main-h1 text-center"> History is not available </h2>
       <div *ngFor='let event of oTimeline; index as i; first as isFirst; last as isLast'
         (click)="change_table_content(i);"
         class="time-event {{ event.oProperties.inserted }} {{ event.oProperties.status }}"
@@ -17,7 +19,6 @@
         
         <div class="header-wrapper flex-row">
           <div class="flex-col"></div>
-          
           <div class="flex-col">
             <div class="icon-event bg-{{ event.oProperties.color }}"
               matTooltip="{{ event.oProperties.messege }}" matTooltipPosition="above">
@@ -52,7 +53,6 @@
         </div>
 
       </div>
-    </div>
-    
+    </div> 
   </div>
 </div>

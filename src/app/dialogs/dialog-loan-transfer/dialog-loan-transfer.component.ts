@@ -1,8 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogConfig, MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 import { Loan } from '../../models/loan.model';
-import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-dialog-loan-transfer',
@@ -10,7 +8,6 @@ import { Web3Service } from '../../services/web3.service';
   styleUrls: ['./dialog-loan-transfer.component.scss']
 })
 export class DialogLoanTransferComponent implements OnInit {
-
   @Input() loan: Loan;
 
   constructor(
@@ -22,7 +19,7 @@ export class DialogLoanTransferComponent implements OnInit {
   }
 
   submit(address: any) {
-    console.log('Transfer loan to ', address);
+    console.info('Requested transfer loan', this.loan.id, address);
     this.dialogRef.close(address);
   }
 }

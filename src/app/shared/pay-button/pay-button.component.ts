@@ -8,9 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class PayButtonComponent implements OnInit {
   constructor() { }
 
-  handlePay() {
-    console.log('You are paying');
-  }
+  handlePay() {}
   ngOnInit() {}
 
 }

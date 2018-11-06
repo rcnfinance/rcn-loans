@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Loan, Request } from './../models/loan.model';
+import { Request } from './../models/loan.model';
 import { Agent, environment } from '../../environments/environment';
 import { Brand } from './../models/brand.model';
 import { CosignerService } from './cosigner.service';
@@ -7,11 +7,7 @@ import { DecentralandCosignerProvider } from '../providers/cosigners/decentralan
 
 @Injectable()
 export class BrandingService {
-  constructor(
-    private cosignerService: CosignerService
-  ) {}
-
-  static_brands = {
+  staticBrands = {
     decentraland_mortgage: new Brand(
       'Mortgage creator',
       '#E59400',
@@ -29,14 +25,17 @@ export class BrandingService {
       undefined
     )
   };
+  constructor(
+    private cosignerService: CosignerService
+  ) { }
 
   getBrand(loan: Request): Brand {
     if (this.cosignerService.getCosigner(loan) instanceof DecentralandCosignerProvider) {
-      return this.static_brands.decentraland_mortgage;
+      return this.staticBrands.decentraland_mortgage;
     }
 
     if (environment.dir[loan.creator.toLowerCase()] === Agent.RipioCreator) {
-      return this.static_brands.ripio;
+      return this.staticBrands.ripio;
     }
 
     if (loan.borrower === loan.creator) {

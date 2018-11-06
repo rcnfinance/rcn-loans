@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Loan, Status, Request } from '../../models/loan.model';
+import { Loan, Request } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 
@@ -32,7 +32,7 @@ export class LoanCardComponent implements OnInit {
       this.rightLabel = 'Return';
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.getEstimatedReturn()));
       this.canLend = true;
-    } else if(this.loan instanceof Loan) {
+    } else if (this.loan instanceof Loan) {
       const currency = new Currency(this.loan.readCurrency());
       this.leftLabel = 'Paid';
       this.leftValue = Utils.formatAmount(currency.fromUnit(this.loan.paid));
@@ -47,16 +47,16 @@ export class LoanCardComponent implements OnInit {
   getInterestRate(): string {
     if (this.loan.isRequest) {
       return this.loan.descriptor.getInterestRate();
-    } else if (this.loan instanceof Loan) {
-      return Utils.formatInterest(this.loan.interestRate).toFixed(0);
     }
+    const loan = (this.loan as Loan);
+    return Utils.formatInterest(loan.interestRate).toFixed(0);
   }
 
   getPunitiveInterestRate(): string {
     if (this.loan.isRequest) {
       return this.loan.descriptor.getPunitiveInterestRate();
-    } else if (this.loan instanceof Loan) {
-      return Utils.formatInterest(this.loan.punitiveInterestRate).toFixed(0);
     }
+    const loan = (this.loan as Loan);
+    return Utils.formatInterest(loan.interestRate).toFixed(0);
   }
 }

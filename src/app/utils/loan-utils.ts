@@ -2,8 +2,8 @@ import { Request, BasaltLoan, DiasporeDescriptor } from '../models/loan.model';
 import { Utils } from './utils';
 
 export class LoanUtils {
-    static parseBasaltLoan(engine: string, id: number, loanBytes: any): BasaltLoan {
-        return new BasaltLoan(
+  static parseBasaltLoan(engine: string, id: number, loanBytes: any): BasaltLoan {
+    return new BasaltLoan(
             engine,
             id,
             Utils.formatAddress(loanBytes[1]),
@@ -24,10 +24,10 @@ export class LoanUtils {
             Utils.formatAddress(loanBytes[0]),
             Utils.formatAddress(loanBytes[3])
         );
-    }
-    static parseRequest(engine: string, bytes: any): Request {
-        const amount = parseInt(bytes[3], 16);
-        return new Request(
+  }
+  static parseRequest(engine: string, bytes: any): Request {
+    const amount = parseInt(bytes[3], 16);
+    return new Request(
             engine,
             bytes[0],
             Utils.formatAddress(bytes[1]),
@@ -44,5 +44,5 @@ export class LoanUtils {
                 parseInt(bytes[12], 16)
             )
         );
-    }
+  }
 }

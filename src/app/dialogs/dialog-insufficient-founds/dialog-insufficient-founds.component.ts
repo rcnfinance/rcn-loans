@@ -1,7 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { environment } from '../../../environments/environment';
-import { Utils } from '../../utils/utils';
 
 @Component({
   selector: 'app-dialog-insufficient-founds',
@@ -9,14 +8,13 @@ import { Utils } from '../../utils/utils';
   styleUrls: ['./dialog-insufficient-founds.component.scss']
 })
 export class DialogInsufficientFoundsComponent implements OnInit {
-
   required: number;
   balance: number;
   link: string;
 
   constructor(
     public dialogRef: MatDialogRef<DialogInsufficientFoundsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
   ngOnInit() {
