@@ -1,4 +1,4 @@
-import { Request, BasaltLoan, DiasporeDescriptor } from '../models/loan.model';
+import { Request, BasaltLoan, DiasporeDescriptor, Status } from '../models/loan.model';
 import { Utils } from './utils';
 
 export class LoanUtils {
@@ -37,6 +37,7 @@ export class LoanUtils {
             Utils.formatAddress(bytes[5]),
             parseInt(bytes[7], 16),
             Utils.formatAddress(bytes[8]),
+            parseInt(bytes[9], 16),
             new DiasporeDescriptor(
                 amount,
                 parseInt(bytes[13], 16),
@@ -44,5 +45,8 @@ export class LoanUtils {
                 parseInt(bytes[12], 16)
             )
         );
+  }
+  static parseLoan(engine: string, bytes: any): Request {
+    
   }
 }

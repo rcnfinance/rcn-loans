@@ -162,18 +162,10 @@ export class ContractsService {
   }
   async getLoan(id: string): Promise<Request> {
     if (id.startsWith('0x')) {
-        // Load Diaspore loan
-      return new Promise((resolve, reject) => {
-        this._requestsView.getRequest.call(environment.contracts.diaspore.loanManager, id, (err, result) => {
-          if (err != null) {
-            reject(err);
-          } else if (result.length === 0) {
-            reject(new Error('Loan does not exist'));
-          } else {
-            resolve(LoanUtils.parseRequest(environment.contracts.diaspore.loanManager, result));
-          }
-        });
-      }) as Promise<Request>;
+      // Load Diaspore loan
+      const result = await promisify(this._requestsView.getRequest.call, [environment.contracts.diaspore.loanManager, id]);
+      if (result.length === 0 ) throw new Error("Loan not found");
+      return LoanUtils.parseRequest(environment.contracts.diaspore.loanManager, result);
     }
 
     return new Promise((resolve, reject) => {
