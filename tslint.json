@@ -33,7 +33,7 @@
       true,
       "check-space"
     ],
-    "curly": true,
+    "curly": [true, "ignore-same-line"],
     "deprecation": {
       "severity": "warn"
     },

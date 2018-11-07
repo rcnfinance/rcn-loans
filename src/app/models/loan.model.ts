@@ -1,118 +1,127 @@
 
 import { Utils } from './../utils/utils';
-import { Currency } from '../utils/currencies';
+
+export enum Network {
+  Basalt = 2,
+  Diaspore = 4
+}
 
 export enum Status {
-    Request,
-    Ongoing,
-    Paid,
-    Destroyed,
-    Indebt
+  Request,
+  Ongoing,
+  Paid,
+  Destroyed,
+  Indebt
 }
 
-export interface Descriptor {
-  getInterestRate(): string;
-  getPunitiveInterestRate(): string;
-  getEstimatedReturn(): number;
-  getDuration(): number;
-}
-
-export class Request {
+export class Descriptor {
   constructor(
-        public engine: string,
-        public id: string,
-        public borrower: string,
-        public creator: string,
-        public amount: number,
-        public currency: string,
-        public oracle: string,
-        public expiration: number,
-        public model: string,
-        public descriptor: Descriptor
-    ) { }
-
-  get isRequest() { return true; }
-
-  get status() { return Status.Request; }
-
-  decimals(): number {
-    return Currency.getDecimals(this.readCurrency());
-  }
-
-  readCurrency(): string {
-    const targetCurrency = Utils.hexToAscii(this.currency.replace(/^[0x]+|[0]+$/g, ''));
-    return targetCurrency === '' ? 'RCN' : targetCurrency;
-  }
-
-  readAmount(): number {
-    return this.amount / 10 ** this.decimals();
-  }
+    public network: Network,
+    public firstObligation: number,
+    public totalObligation: number,
+    public duration: number,
+    public punitiveInterestRateRate: number,
+    public frequency: number,
+    public installments: number
+  ) {}
 }
 
-export class Loan extends Request {
+export class Model {
   constructor(
-        public engine: string,
-        public id: string,
-        public borrower: string,
-        public owner: string,
-        public creator: string,
-        public amount: number,
-        public currency: string,
-        public oracle: string,
-        public expiration: number,
-        public model: string,
-        public _status: Status,
-        public lentTime: number,
-        public lenderBalance: number,
-        // To review
-        public cosigner: string,
-        // Model
-        public dueTime: number,
-        public paid: number,
-        public estimated: number,
-        public interestRate: number,
-        public punitiveInterestRate: number
-    ) {
-    super(
-            engine,
-            id,
-            borrower,
-            creator,
-            amount,
-            currency,
-            oracle,
-            expiration,
-            model,
-            undefined
-        );
-  }
-
-  get status() { return this._status; }
-  get isRequest() { return false; }
-
-  get remainingTime() { return this.dueTime - (new Date().getTime() / 1000); }
+    public network: Network,
+    public address: string,
+    public paid: number,
+    public nextObligation: number,
+    public currentObligation: number,
+    public estimatedObliation: number,
+    public dueTime: number
+  ) {}
 }
 
-export class BasaltDescriptor implements Descriptor {
+export class Oracle {
   constructor(
-          private interestRate: number,
-          private punitiveInterestRate: number,
-          private amount: number,
-          private duration: number
-      ) { }
-  getPunitiveInterestRate(): string {
-    return Utils.formatInterest(this.punitiveInterestRate).toPrecision(2);
-  }
-  getInterestRate(): string {
-    return Utils.formatInterest(this.interestRate).toPrecision(2);
-  }
-  getEstimatedReturn(): number {
-    return ((this.amount * 100000 * this.duration) / this.interestRate) + this.amount;
-  }
-  getDuration(): number {
-    return this.duration;
-  }
+    public network: Network,
+    public address: string,
+    public currency: string
+  ) {}
 }
+
+export class Debt {
+  constructor(
+    public network: Network,
+    public id: string,
+    public model: Model,
+    public balance: number,
+    public creator: string,
+    public owner: string,
+    public oracle?: Oracle
+  ) {}
+}
+
+export class Loan {
+  constructor(
+    public network: Network,
+    public amount: number,
+    public oracle: Oracle,
+    public debt: Debt,
+    public descriptor: Descriptor,
+    public cosigner?: string
+  ) {}
+}
+
+// export class Request {
+//   constructor(
+//         public engine: string,
+//         public id: string,
+//         public borrower: string,
+//         public creator: string,
+//         public amount: number,
+//         public currency: string,
+//         public oracle: string,
+//         public expiration: number,
+//         public model: string,
+//         public status: Status,
+//         public detail: Descriptor | 
+//     ) { }
+
+//   get isRequest() { return true; }
+
+//   // get status() { return Status.Request; }
+
+//   decimals(): number {
+//     return Currency.getDecimals(this.readCurrency());
+//   }
+
+//   readCurrency(): string {
+//     const targetCurrency = Utils.hexToAscii(this.currency.replace(/^[0x]+|[0]+$/g, ''));
+//     return targetCurrency === '' ? 'RCN' : targetCurrency;
+//   }
+
+//   readAmount(): number {
+//     return this.amount / 10 ** this.decimals();
+//   }
+// }
+
+// export class BasaltDescriptor extends Descriptor {
+//   constructor(
+//           private interestRate: number,
+//           private punitiveInterestRate: number,
+//           private amount: number,
+//           private duration: number
+//       ) { }
+//   getPunitiveInterestRate(): string {
+//     return Utils.formatInterest(this.punitiveInterestRate).toPrecision(2);
+//   }
+//   getInterestRate(): string {
+//     return Utils.formatInterest(this.interestRate).toPrecision(2);
+//   }
+//   getEstimatedReturn(): number {
+//     return ((this.amount * 100000 * this.duration) / this.interestRate) + this.amount;
+//   }
+//   getDuration(): number {
+//     return this.duration;
+//   }
+// }
 
 export class BasaltLoan extends Loan {
   constructor(

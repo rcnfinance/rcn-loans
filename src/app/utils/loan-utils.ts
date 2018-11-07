@@ -47,6 +47,6 @@ export class LoanUtils {
         );
   }
   static parseLoan(engine: string, bytes: any): Request {
-    
+    return new Request()
   }
 }
