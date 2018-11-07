@@ -31,7 +31,10 @@
                       <input matInput [matDatepicker]="fullDurationPicker" [min]="minDate" formControlName="fullDuration" placeholder="Choose a date" required>
                       <mat-datepicker-toggle matSuffix [for]="fullDurationPicker"></mat-datepicker-toggle>
                       <mat-datepicker #fullDurationPicker></mat-datepicker>
-                      <mat-hint>Set the loan Duration</mat-hint>
+                      <mat-hint>
+                        <span *ngIf="fullDuration.pristine && fullDuration.untouched">Set the loan Duration</span> 
+                        <span class='red' *ngIf="fullDuration.errors && (fullDuration.dirty || fullDuration.touched)">The loan Duration is required</span>
+                      </mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-12"><div class="title property margintop20 marginbottom10">Payable At</div></div>
@@ -97,6 +100,9 @@
                 </div>
               </div>
 
+            <pre>{{ expirationRequestDate.dirty }}</pre>
+            <pre>{{ expirationRequestDate.dirty }}</pre>
+
             <div class='margintop20'>
               <button mat-raised-button type="submit" 
               class='button button-primary' 
@@ -111,7 +117,7 @@
           <ng-template matStepLabel>Finnish</ng-template>
           You are now done.
 
-          <form [formGroup]="formGroup2" (ngSubmit)="onSubmit(fStep2)" #fStep2='ngForm'>
+          <form [formGroup]="formGroup2" (ngSubmit)="onSubmitForm(fStep2)" #fStep2='ngForm'>
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row" formGroupName="expiration">
                 <div class="col-12"><div class="title property margintop20 marginbottom10">Expiration Request</div></div>
@@ -126,6 +132,8 @@
               </div>
             </div>
           </form>
+          <pre>{{ expirationRequestDate.value }}</pre>
+          <button mat-raised-button class='button button-primary' type="submit">Submit</button>
 
           
           <div class='margintop20'>
@@ -137,7 +145,44 @@
       </mat-vertical-stepper>
 
 
-    </div>    
+    </div>   
+
+
+    <div class="col-xs-12 col-lg-4">
+      <div class="card-container">
+        <!-- <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
+        <app-risk-indicator class="risk-indicator" [loan]=loan></app-risk-indicator> -->
+        <!-- <app-creator-container [loan]=loan></app-creator-container> -->
+        <div class="card-row">
+          <div class="card-property">
+            <div class="title">{{ 'Borrower' }}</div>
+            <div class="paragraph">{{ 'loan.borrowerShort' }}</div>
+          </div>
+          <div class="card-property">
+            <div class="title">{{ 'Duration' }}</div>
+            <div class="paragraph">{{ fullDuration }}</div>
+          </div>
+          <div class="card-property">
+            <div class="title">{{ 'Annual Interest / Punitory' }}</div>
+            <div class="paragraph"> ~ {{ 'formatInterest(loan.annualInterest)' }} % /  ~ {{ 'formatInterest(loan.annualPunitoryInterest)' }} %</div>
+          </div>
+          <div class="properties-block">
+            <div class="title">{{ 'Lend' }}</div>
+            <div class="currency">{{ loanCard.currency }}</div>
+            <div class="title">{{ 'Return' }}</div>
+          </div>
+          <div class="conversion-block">
+            <div class="block-title">{{ 'leftValue' }}</div>
+            <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
+            <div class="block-title">{{ 'rightValue' }}</div>
+          </div>
+          <!-- <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
+          <app-detail-button [loan]=loan></app-detail-button> -->
+        </div>
+      </div>
+    </div>
+    
+    
   </div>
 
 </div>

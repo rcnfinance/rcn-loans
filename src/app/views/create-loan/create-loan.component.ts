@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, NgForm } from '@angular/forms';
+import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment.prod';
 
 // App Services
@@ -12,25 +12,21 @@ import { Utils } from '../../utils/utils';
   styleUrls: ['./create-loan.component.scss']
 })
 export class CreateLoanComponent implements OnInit {
-  formGroup1 = new FormGroup({
-    duration: new FormGroup({
-      fullDuration: new FormControl,
-      payableAtDate: new FormControl
-    }),
-    interest: new FormGroup({
-      annualInterest: new FormControl(40),
-      annualPunitory: new FormControl(60)
-    }),
-    conversionGraphic: new FormGroup({
-      requestValue: new FormControl,
-      requestedCurrency: new FormControl
-    })
-  });
-  formGroup2 = new FormGroup({
-    expiration: new FormGroup({
-      expirationRequestDate: new FormControl
-    })
-  });
+  formGroup1: FormGroup;
+  fullDuration: FormControl;
+  payableAtDate: FormControl;
+  annualInterest: FormControl;
+  annualPunitory: FormControl;
+  requestValue: FormControl;
+  requestedCurrency: FormControl;
+  
+  formGroup2: FormGroup;
+  expirationRequestDate: FormControl;
+
+  loanCard: any = {
+    duration: 10,
+    currency: 'Currency',
+  }
   minDate: Date = new Date();
   formGroup1Value$: any = null;
   selectedCurrency: string;
@@ -49,8 +45,49 @@ export class CreateLoanComponent implements OnInit {
     private contractsService: ContractsService
   ) {}
 
+  createFormControls() {
+    this.fullDuration = new FormControl('', Validators.required);
+    this.payableAtDate = new FormControl('', Validators.required);
+    this.annualInterest = new FormControl('', Validators.required);
+    this.annualPunitory = new FormControl('', Validators.required);
+    this.requestValue = new FormControl('', Validators.required);
+    this.requestedCurrency = new FormControl('', Validators.required);
+
+    this.expirationRequestDate = new FormControl('', Validators.required);
+  }
+
+  createForm() {
+    this.formGroup1 = new FormGroup({
+      duration: new FormGroup({
+        fullDuration: this.fullDuration,
+        payableAtDate: this.payableAtDate
+      }),
+      interest: new FormGroup({
+        annualInterest: this.annualInterest,
+        annualPunitory: this.annualPunitory
+      }),
+      conversionGraphic: new FormGroup({
+        requestValue: this.requestValue,
+        requestedCurrency: this.requestedCurrency
+      })
+    });
+
+    this.formGroup2 = new FormGroup({
+      expiration: new FormGroup({
+        expirationRequestDate: this.expirationRequestDate
+      }),
+    });
+  }
+
+  onSubmitForm(form: NgForm) {
+    if (this.formGroup2.valid) {
+      console.log(form.value);
+    }
+  }
+
   onSubmit(form: NgForm) {
     if (this.formGroup1.valid) {
+      this.loanCard.duration = form.value.duration.fullDuration;
 
       const duration = form.value.duration.fullDuration;
       const duesIn = new Date(duration);
@@ -76,6 +113,7 @@ export class CreateLoanComponent implements OnInit {
   }
 
   onCurrencyChange(requestedCurrency) {
+    this.loanCard.currency = requestedCurrency.value;
     switch (requestedCurrency.value) {
       case 'rcn':
         this.selectedOracle = undefined;
@@ -101,5 +139,7 @@ export class CreateLoanComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.createFormControls();
+    this.createForm();
   }
 }
