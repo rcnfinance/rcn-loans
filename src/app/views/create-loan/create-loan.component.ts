@@ -34,7 +34,7 @@ export class CreateLoanComponent implements OnInit {
   minDate: Date = new Date();
   formGroup1Value$: any = null;
   selectedCurrency: string;
-  selectedOracle: string = 'Please select a currency to unlock the oracle';
+  selectedOracle: string = undefined;
 
   requiredInvalid$ = false;
   currencies: Object = ['rcn', 'mana', 'ars'];
@@ -78,7 +78,7 @@ export class CreateLoanComponent implements OnInit {
   onCurrencyChange(requestedCurrency) {
     switch (requestedCurrency.value) {
       case 'rcn':
-        this.selectedOracle = '0x0000000000000000000000000000000000000000';
+        this.selectedOracle = undefined;
         break;
       case 'mana':
         if (environment.production) {

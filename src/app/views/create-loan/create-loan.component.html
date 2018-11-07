@@ -31,7 +31,7 @@
                       <input matInput [matDatepicker]="fullDurationPicker" [min]="minDate" formControlName="fullDuration" placeholder="Choose a date" required>
                       <mat-datepicker-toggle matSuffix [for]="fullDurationPicker"></mat-datepicker-toggle>
                       <mat-datepicker #fullDurationPicker></mat-datepicker>
-                      <mat-hint>Set the Duration</mat-hint>
+                      <mat-hint>Set the loan Duration</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-12"><div class="title property margintop20 marginbottom10">Payable At</div></div>
@@ -40,7 +40,7 @@
                       <input matInput [matDatepicker]="payableAtDatePicker" [min]="minDate" formControlName="payableAtDate" placeholder="Choose a date" required>
                       <mat-datepicker-toggle matSuffix [for]="payableAtDatePicker"></mat-datepicker-toggle>
                       <mat-datepicker #payableAtDatePicker></mat-datepicker>
-                      <mat-hint>Set the minimum time the loan</mat-hint>
+                      <mat-hint>Set the minimum Payment date</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-12">
@@ -92,7 +92,7 @@
                       <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
                       <div class="block-title">{{ '1000' }}</div>
                     </div>
-                    <div class="title main-m3 margintop10 ellipsis">Oracle: {{ selectedOracle }}</div>
+                    <div *ngIf='selectedOracle' class="title main-m3 margintop10 ellipsis">Oracle: {{ selectedOracle }}</div>
                   </div>
                 </div>
               </div>
