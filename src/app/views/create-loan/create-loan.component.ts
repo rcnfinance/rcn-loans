@@ -15,8 +15,7 @@ export class CreateLoanComponent implements OnInit {
   formGroup1 = new FormGroup({
     duration: new FormGroup({
       fullDuration: new FormControl,
-      payableAtDate: new FormControl,
-      expirationRequestDate: new FormControl
+      payableAtDate: new FormControl
     }),
     interest: new FormGroup({
       annualInterest: new FormControl(40),
@@ -25,6 +24,11 @@ export class CreateLoanComponent implements OnInit {
     conversionGraphic: new FormGroup({
       requestValue: new FormControl,
       requestedCurrency: new FormControl
+    })
+  });
+  formGroup2 = new FormGroup({
+    expiration: new FormGroup({
+      expirationRequestDate: new FormControl
     })
   });
   minDate: Date = new Date();

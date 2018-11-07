@@ -18,8 +18,8 @@
 
       <mat-vertical-stepper linear #stepper>
         
-        <mat-step [stepControl]="formGroup1" [optional]="!isOptional$" [editable]='isEditable$'>
-          <form [formGroup]="formGroup1" (ngSubmit)="onSubmit(f)" #f='ngForm'>
+        <mat-step [stepControl]="formGroup1" [optional]="isOptional$" [editable]='isEditable$'>
+          <form [formGroup]="formGroup1" (ngSubmit)="onSubmit(fStep1)" #fStep1='ngForm'>
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
 
               <div class="container-fluid paddingleft0 paddingright0">
@@ -34,8 +34,8 @@
                       <mat-hint>Set the Duration</mat-hint>
                     </mat-form-field>
                   </div>
-                  <div class="col-12"><div class="title property margintop20 marginbottom10">Payable At / Expiration Request</div></div>
-                  <div class="col-xs-12 col-lg-6">
+                  <div class="col-12"><div class="title property margintop20 marginbottom10">Payable At</div></div>
+                  <div class="col-12">
                     <mat-form-field>
                       <input matInput [matDatepicker]="payableAtDatePicker" [min]="minDate" formControlName="payableAtDate" placeholder="Choose a date" required>
                       <mat-datepicker-toggle matSuffix [for]="payableAtDatePicker"></mat-datepicker-toggle>
@@ -43,16 +43,8 @@
                       <mat-hint>Set the minimum time the loan</mat-hint>
                     </mat-form-field>
                   </div>
-                  <div class="col-xs-12 col-lg-6">
-                    <mat-form-field>
-                      <input matInput [matDatepicker]="expirationRequestDatePicker" [min]="minDate" formControlName="expirationRequestDate" placeholder="Choose a date" required>
-                      <mat-datepicker-toggle matSuffix [for]="expirationRequestDatePicker"></mat-datepicker-toggle>
-                      <mat-datepicker #expirationRequestDatePicker></mat-datepicker>
-                      <mat-hint>Set the request duration without a lender</mat-hint>
-                    </mat-form-field>
-                  </div>
                   <div class="col-12">
-                    <div class="title main-m3 margintop10">Due time: {{ f.value.duration.fullDuration }}</div>
+                    <div class="title main-m3 margintop10">Due time: {{ fStep1.value.duration.fullDuration }}</div>
                   </div>
                 </div>
                 <div class="row" formGroupName="interest">
@@ -115,10 +107,28 @@
           </form>
         </mat-step>
 
-        <mat-step>
+        <mat-step [stepControl]="formGroup2" [optional]="!isOptional$">
           <ng-template matStepLabel>Finnish</ng-template>
           You are now done.
-          <div>
+
+          <form [formGroup]="formGroup2" (ngSubmit)="onSubmit(fStep2)" #fStep2='ngForm'>
+            <div class="container-fluid paddingleft0 paddingright0">
+              <div class="row" formGroupName="expiration">
+                <div class="col-12"><div class="title property margintop20 marginbottom10">Expiration Request</div></div>
+                <div class="col-12">
+                  <mat-form-field>
+                    <input matInput [matDatepicker]="expirationRequestDatePicker" [min]="minDate" formControlName="expirationRequestDate" placeholder="Choose a date" required>
+                    <mat-datepicker-toggle matSuffix [for]="expirationRequestDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #expirationRequestDatePicker></mat-datepicker>
+                    <mat-hint>Set the request duration without a lender</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          
+          <div class='margintop20'>
             <button mat-raised-button class='button button-secondary marginright8' (click)="stepper.reset()" matStepperPrevious>Reset</button>
             <button mat-raised-button class='button button-primary'>Create</button>
           </div>
