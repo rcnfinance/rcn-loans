@@ -2,7 +2,7 @@
 import { Utils } from './../utils/utils';
 import { Currency } from '../utils/currencies';
 
-export enum Status { Request, Ongoing, Paid, Destroyed, Indebt }
+export enum Status { Request, Ongoing, Paid, Destroyed, Expired, Indebt }
 
 function timestamp(): number {
   return (new Date().getTime() / 1000);
@@ -44,7 +44,9 @@ export class Loan {
     if (this.statusFlag === Status.Ongoing && timestamp() > this.dueTimestamp) {
       return Status.Indebt;
     }
-
+    if (new Date(this.expirationRequest).getTime() / 1000 <= new Date().getTime() / 1000) {
+      return Status.Expired;
+    }
     return this.statusFlag;
   }
 
