@@ -31,7 +31,7 @@ export class IconAvatarComponent implements OnInit {
         this.icon = 'delete';
         break;
       case Status.Expired:
-        this.class = 'loan_expired';
+        this.class = 'expired';
         this.icon = 'snooze';
         break;
       case Status.Indebt:
