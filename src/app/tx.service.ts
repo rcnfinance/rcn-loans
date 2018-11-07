@@ -2,7 +2,7 @@ declare let window: any;
 
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { Loan } from './models/loan.model';
+import { Loan, Request } from './models/loan.model';
 import { Web3Service } from './services/web3.service';
 import { EventsService, Category } from './services/events.service';
 
@@ -59,12 +59,12 @@ export class TxService {
     }, 5000);
   }
 
-  registerLendTx(loan: Loan, tx: string) {
-    this.txMemory.push(new Tx(tx, loan.engine, false, Type.lend, loan.id));
+  registerLendTx(request: Request, tx: string) {
+    this.txMemory.push(new Tx(tx, request.engine, false, Type.lend, request.id));
     this.saveTxs();
   }
 
-  getLastLend(loan: Loan): Tx {
+  getLastLend(loan: Request): Tx {
     return this.txMemory
       .filter(tx => !tx.confirmed)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)

@@ -9,7 +9,6 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
-import { Loan } from './../../models/loan.model';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
@@ -24,6 +23,7 @@ import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { Request } from './../../models/loan.model';
 
 @Component({
   selector: 'app-lend-button',
@@ -31,7 +31,7 @@ import { DialogClientAccountComponent } from '../../dialogs/dialog-client-accoun
   styleUrls: ['./lend-button.component.scss']
 })
 export class LendButtonComponent implements OnInit {
-  @Input() loan: Loan;
+  @Input() request: Request;
   pendingTx: Tx = undefined;
   account: string;
   lendEnabled: Boolean;
@@ -67,10 +67,10 @@ export class LendButtonComponent implements OnInit {
     this.startOperation();
 
     try {
-      const engineApproved = this.contractsService.isApproved(environment.contracts.basaltEngine);
+      const engineApproved = this.contractsService.isApproved(this.request.engine);
       const civicApproved = this.civicService.status();
       const balance = this.contractsService.getUserBalanceRCNWei();
-      const required = this.contractsService.estimateRequiredAmount(this.loan);
+      const required = this.contractsService.estimateRequiredAmount(this.request);
       if (!await engineApproved) {
         this.showApproveDialog();
         return;
@@ -81,7 +81,7 @@ export class LendButtonComponent implements OnInit {
         this.eventsService.trackEvent(
           'show-insufficient-funds-lend',
           Category.Account,
-          'loan #' + this.loan.id,
+          'request #' + this.request.id,
           await required
         );
 
@@ -94,16 +94,16 @@ export class LendButtonComponent implements OnInit {
         return;
       }
 
-      const tx = await this.contractsService.lendLoan(this.loan);
+      const tx = await this.contractsService.lendLoan(this.request);
 
       this.eventsService.trackEvent(
         'lend',
         Category.Account,
-        'loan #' + this.loan.id
+        'request #' + this.request.id
       );
 
-      this.txService.registerLendTx(this.loan, tx);
-      this.pendingTx = this.txService.getLastLend(this.loan);
+      this.txService.registerLendTx(this.request, tx);
+      this.pendingTx = this.txService.getLastLend(this.request);
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.message.indexOf('User denied transaction signature') < 0) {
@@ -136,7 +136,7 @@ export class LendButtonComponent implements OnInit {
 
   showApproveDialog() {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
-    dialogRef.componentInstance.onlyAddress = environment.contracts.basaltEngine;
+    dialogRef.componentInstance.onlyAddress = this.request.engine;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.handleLend(true);
@@ -151,7 +151,7 @@ export class LendButtonComponent implements OnInit {
       this.eventsService.trackEvent(
         'click-lend',
         Category.Loan,
-        'loan #' + this.loan.id
+        'request #' + this.request.id
       );
 
       this.handleLend();
@@ -161,7 +161,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   retrievePendingTx() {
-    this.pendingTx = this.txService.getLastLend(this.loan);
+    this.pendingTx = this.txService.getLastLend(this.request);
   }
 
   showCivicDialog() {
@@ -186,7 +186,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   get enabled(): Boolean {
-    return this.txService.getLastLend(this.loan) === undefined;
+    return this.txService.getLastLend(this.request) === undefined;
   }
 
   get buttonText(): string {

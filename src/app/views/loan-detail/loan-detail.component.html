@@ -97,7 +97,7 @@
       </div>
 
       <div class="paddingleft15 paddingright15 paddingbottom15" *ngIf="canLend || canTransfer">
-        <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
+        <app-lend-button [request]=loan *ngIf="canLend"></app-lend-button>
         <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="canLend"></app-risk-indicator>
         <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
       </div>

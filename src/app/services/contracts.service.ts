@@ -19,6 +19,7 @@ const engineAbi = require('../contracts/NanoLoanEngine.json');
 const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const oracleAbi = require('../contracts/Oracle.json');
 const requestsAbi = require('../contracts/RequestsView.json');
+const loanManagerAbi = require('../contracts/LoanManager.json');
 
 @Injectable()
 export class ContractsService {
@@ -30,6 +31,7 @@ export class ContractsService {
   private _rcnExtension: any;
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
   private _requestsView: any;
+  private _loanManager: any;
 
   constructor(
       private web3: Web3Service,
@@ -39,8 +41,8 @@ export class ContractsService {
     ) {
     this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
     this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
+    this._loanManager = this.web3.web3.eth.contract(loanManagerAbi).at(environment.contracts.diaspore.loanManager);
     this._rcnExtension = this.web3.web3reader.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-      // TODO: Fix not working with web3reader
     this._requestsView = this.web3.web3reader.eth.contract(requestsAbi).at(environment.contracts.diaspore.viewRequets);
   }
 
@@ -81,7 +83,7 @@ export class ContractsService {
     this.txService.registerApproveTx(result, this._rcnContract.address, contract, false);
     return result;
   }
-  async estimateRequiredAmount(loan: Loan): Promise<number> {
+  async estimateRequiredAmount(loan: Request): Promise<number> {
     if (loan.oracle === Utils.address0x) {
       return loan.amount;
     }
@@ -97,7 +99,6 @@ export class ContractsService {
     return required;
   }
   async lendLoan(request: Request): Promise<string> {
-    const account = await this.web3.getAccount();
     const pOracleData = this.getOracleData(request);
     const cosigner = this.cosignerService.getCosigner(request);
     let cosignerAddr = '0x0';
@@ -108,15 +109,12 @@ export class ContractsService {
       cosignerData = cosignerOffer.lendData;
     }
     const oracleData = await pOracleData;
-    return new Promise((resolve, reject) => {
-      this._rcnEngine.lend(request.id, oracleData, cosignerAddr, cosignerData, { from: account }, function(err, result) {
-        if (err != null) {
-          reject(err);
-        } else {
-          resolve(result);
-        }
-      });
-    }) as Promise<string>;
+
+    if (request instanceof BasaltLoan) {
+      return await promisify(this._rcnEngine.lend, [request.id, oracleData, cosignerAddr, cosignerData]);
+    }
+
+    return await promisify(this._loanManager.lend, [request.id, oracleData, cosignerAddr, cosignerData, 0]);
   }
   async transferLoan(loan: Loan, to: string): Promise<string> {
     const account = await this.web3.getAccount();
