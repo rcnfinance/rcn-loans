@@ -19,14 +19,14 @@ export class CreateLoanComponent implements OnInit {
   annualPunitory: FormControl;
   requestValue: FormControl;
   requestedCurrency: FormControl;
-  
+
   formGroup2: FormGroup;
   expirationRequestDate: FormControl;
 
   loanCard: any = {
     duration: 10,
-    currency: 'Currency',
-  }
+    currency: 'Currency'
+  };
   minDate: Date = new Date();
   formGroup1Value$: any = null;
   selectedCurrency: string;
@@ -46,10 +46,10 @@ export class CreateLoanComponent implements OnInit {
   ) {}
 
   createFormControls() {
-    this.fullDuration = new FormControl('', Validators.required);
+    this.fullDuration = new FormControl('0', Validators.required);
     this.payableAtDate = new FormControl('', Validators.required);
-    this.annualInterest = new FormControl('', Validators.required);
-    this.annualPunitory = new FormControl('', Validators.required);
+    this.annualInterest = new FormControl('40', Validators.required);
+    this.annualPunitory = new FormControl('60', Validators.required);
     this.requestValue = new FormControl('', Validators.required);
     this.requestedCurrency = new FormControl('', Validators.required);
 
@@ -75,14 +75,12 @@ export class CreateLoanComponent implements OnInit {
     this.formGroup2 = new FormGroup({
       expiration: new FormGroup({
         expirationRequestDate: this.expirationRequestDate
-      }),
+      })
     });
   }
 
   onSubmitForm(form: NgForm) {
-    if (this.formGroup2.valid) {
-      console.log(form.value);
-    }
+    if (this.formGroup2.valid) {}
   }
 
   onSubmit(form: NgForm) {

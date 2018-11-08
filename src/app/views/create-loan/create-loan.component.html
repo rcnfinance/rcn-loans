@@ -43,11 +43,14 @@
                       <input matInput [matDatepicker]="payableAtDatePicker" [min]="minDate" formControlName="payableAtDate" placeholder="Choose a date" required>
                       <mat-datepicker-toggle matSuffix [for]="payableAtDatePicker"></mat-datepicker-toggle>
                       <mat-datepicker #payableAtDatePicker></mat-datepicker>
-                      <mat-hint>Set the minimum Payment date</mat-hint>
+                      <mat-hint>
+                        <span *ngIf="payableAtDate.pristine && payableAtDate.untouched">Set the minimum Payment date</span> 
+                        <span class='red' *ngIf="payableAtDate.errors && (payableAtDate.dirty || payableAtDate.touched)">The minimum Payment date is required</span>
+                      </mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="col-12">
-                    <div class="title main-m3 margintop10">Due time: {{ fStep1.value.duration.fullDuration }}</div>
+                    <div *ngIf='fullDuration.valid' class="title main-m3 margintop10">Due time: {{ fullDuration.value }}</div>
                   </div>
                 </div>
                 <div class="row" formGroupName="interest">
@@ -56,7 +59,10 @@
                     <mat-form-field>
                       <input matInput type='number' max='200' formControlName="annualInterest" 
                       pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
-                      <mat-hint>Annual Interest rate</mat-hint>
+                      <mat-hint>
+                          <span *ngIf="annualInterest.valid">Annual Interest rate</span> 
+                          <span class='red' *ngIf="annualInterest.errors && (annualInterest.dirty || annualInterest.touched)">The minimum Annual Interest rate is 1%</span>
+                        </mat-hint>
                       <span matSuffix>%</span>
                     </mat-form-field>
                   </div>
@@ -64,7 +70,10 @@
                     <mat-form-field>
                       <input matInput type='number' max='200' formControlName="annualPunitory" 
                       pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
-                      <mat-hint>Annual Punitory rate</mat-hint>
+                      <mat-hint>
+                        <span *ngIf="annualPunitory.valid">Annual Punitory rate</span> 
+                        <span class='red' *ngIf="annualPunitory.errors && (annualPunitory.dirty || annualPunitory.touched)">The minimum Annual Punitory rate is 1%</span>
+                      </mat-hint>
                       <span matSuffix>%</span>
                     </mat-form-field>
                   </div>
@@ -100,7 +109,6 @@
                 </div>
               </div>
 
-            <pre>{{ expirationRequestDate.dirty }}</pre>
             <pre>{{ expirationRequestDate.dirty }}</pre>
 
             <div class='margintop20'>
@@ -160,7 +168,7 @@
           </div>
           <div class="card-property">
             <div class="title">{{ 'Duration' }}</div>
-            <div class="paragraph">{{ fullDuration }}</div>
+            <div class="paragraph">{{ fullDuration.value }}</div>
           </div>
           <div class="card-property">
             <div class="title">{{ 'Annual Interest / Punitory' }}</div>
