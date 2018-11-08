@@ -312,7 +312,7 @@ mat-form-field{
 
 .mat-form-field-underline{ color: $secondary; }
 .mat-select-arrow{ color: $secondary; }
-.mat-select-placeholder, .mat-select-value-text { color: $secondary; text-transform: uppercase; }
+.mat-select-placeholder, .mat-select-value-text { color: $secondary; text-transform: uppercase; @extend %font-medium;}
 .mat-select-content{
   background-color: #101010;
   .mat-option{

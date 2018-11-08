@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment.prod';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { Utils } from '../../utils/utils';
+import { Currency } from 'src/app/utils/currencies';
 
 @Component({
   selector: 'app-create-loan',
@@ -23,17 +24,13 @@ export class CreateLoanComponent implements OnInit {
   formGroup2: FormGroup;
   expirationRequestDate: FormControl;
 
-  loanCard: any = {
-    duration: 10,
-    currency: 'Currency'
-  };
   minDate: Date = new Date();
   formGroup1Value$: any = null;
   selectedCurrency: string;
   selectedOracle: string = undefined;
 
   requiredInvalid$ = false;
-  currencies: Object = ['rcn', 'mana', 'ars'];
+  currencies: string[] = ['rcn', 'mana', 'ars'];
 
   isOptional$ = true;
   isEditable$ = true;
@@ -47,11 +44,11 @@ export class CreateLoanComponent implements OnInit {
 
   createFormControls() {
     this.fullDuration = new FormControl('0', Validators.required);
-    this.payableAtDate = new FormControl('', Validators.required);
+    this.payableAtDate = new FormControl('0', Validators.required);
     this.annualInterest = new FormControl('40', Validators.required);
     this.annualPunitory = new FormControl('60', Validators.required);
-    this.requestValue = new FormControl('', Validators.required);
-    this.requestedCurrency = new FormControl('', Validators.required);
+    this.requestValue = new FormControl('0', Validators.required);
+    this.requestedCurrency = new FormControl(undefined, Validators.required);
 
     this.expirationRequestDate = new FormControl('', Validators.required);
   }
@@ -84,8 +81,10 @@ export class CreateLoanComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
+    console.log(this.requestedCurrency.value);
+    typeof this.requestedCurrency.value;
     if (this.formGroup1.valid) {
-      this.loanCard.duration = form.value.duration.fullDuration;
+      this.fullDuration = form.value.duration.fullDuration;
 
       const duration = form.value.duration.fullDuration;
       const duesIn = new Date(duration);
@@ -111,7 +110,6 @@ export class CreateLoanComponent implements OnInit {
   }
 
   onCurrencyChange(requestedCurrency) {
-    this.loanCard.currency = requestedCurrency.value;
     switch (requestedCurrency.value) {
       case 'rcn':
         this.selectedOracle = undefined;

@@ -32,7 +32,7 @@
                       <mat-datepicker-toggle matSuffix [for]="fullDurationPicker"></mat-datepicker-toggle>
                       <mat-datepicker #fullDurationPicker></mat-datepicker>
                       <mat-hint>
-                        <span *ngIf="fullDuration.pristine && fullDuration.untouched">Set the loan Duration</span> 
+                        <span *ngIf="fullDuration.valid || fullDuration.pristine && fullDuration.untouched">Set the loan Duration</span> 
                         <span class='red' *ngIf="fullDuration.errors && (fullDuration.dirty || fullDuration.touched)">The loan Duration is required</span>
                       </mat-hint>
                     </mat-form-field>
@@ -44,7 +44,7 @@
                       <mat-datepicker-toggle matSuffix [for]="payableAtDatePicker"></mat-datepicker-toggle>
                       <mat-datepicker #payableAtDatePicker></mat-datepicker>
                       <mat-hint>
-                        <span *ngIf="payableAtDate.pristine && payableAtDate.untouched">Set the minimum Payment date</span> 
+                        <span *ngIf="payableAtDate.valid || payableAtDate.pristine && payableAtDate.untouched">Set the minimum Payment date</span> 
                         <span class='red' *ngIf="payableAtDate.errors && (payableAtDate.dirty || payableAtDate.touched)">The minimum Payment date is required</span>
                       </mat-hint>
                     </mat-form-field>
@@ -60,9 +60,9 @@
                       <input matInput type='number' max='200' formControlName="annualInterest" 
                       pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
                       <mat-hint>
-                          <span *ngIf="annualInterest.valid">Annual Interest rate</span> 
-                          <span class='red' *ngIf="annualInterest.errors && (annualInterest.dirty || annualInterest.touched)">The minimum Annual Interest rate is 1%</span>
-                        </mat-hint>
+                        <span *ngIf="annualInterest.valid || annualInterest.pristine && annualInterest.untouched">Annual Interest rate</span> 
+                        <span class='red' *ngIf="annualInterest.errors && (annualInterest.dirty || annualInterest.touched)">The minimum Annual Interest rate is 1%</span>
+                      </mat-hint>
                       <span matSuffix>%</span>
                     </mat-form-field>
                   </div>
@@ -71,7 +71,7 @@
                       <input matInput type='number' max='200' formControlName="annualPunitory" 
                       pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
                       <mat-hint>
-                        <span *ngIf="annualPunitory.valid">Annual Punitory rate</span> 
+                        <span *ngIf="annualPunitory.valid || annualPunitory.pristine && annualPunitory.untouched">Annual Punitory rate</span> 
                         <span class='red' *ngIf="annualPunitory.errors && (annualPunitory.dirty || annualPunitory.touched)">The minimum Annual Punitory rate is 1%</span>
                       </mat-hint>
                       <span matSuffix>%</span>
@@ -99,6 +99,10 @@
                         <mat-form-field>
                           <input matInput type='number' value="0" formControlName="requestValue" 
                           pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
+                          <mat-hint>
+                            <span *ngIf="requestValue.valid || requestValue.pristine && requestValue.untouched">Requested amount</span> 
+                            <span class='red' *ngIf="requestValue.errors && (requestValue.dirty || requestValue.touched)">The minimum is 1</span>
+                          </mat-hint>
                         </mat-form-field>
                       </div>
                       <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
@@ -134,7 +138,10 @@
                     <input matInput [matDatepicker]="expirationRequestDatePicker" [min]="minDate" formControlName="expirationRequestDate" placeholder="Choose a date" required>
                     <mat-datepicker-toggle matSuffix [for]="expirationRequestDatePicker"></mat-datepicker-toggle>
                     <mat-datepicker #expirationRequestDatePicker></mat-datepicker>
-                    <mat-hint>Set the request duration without a lender</mat-hint>
+                    <mat-hint>
+                      <span *ngIf="expirationRequestDate.valid || expirationRequestDate.pristine && expirationRequestDate.untouched">Set the request duration without a lender</span> 
+                      <span class='red' *ngIf="expirationRequestDate.errors && (expirationRequestDate.dirty || expirationRequestDate.touched)">The Request Duration is required</span>
+                    </mat-hint>
                   </mat-form-field>
                 </div>
               </div>
@@ -172,20 +179,21 @@
           </div>
           <div class="card-property">
             <div class="title">{{ 'Annual Interest / Punitory' }}</div>
-            <div class="paragraph"> ~ {{ 'formatInterest(loan.annualInterest)' }} % /  ~ {{ 'formatInterest(loan.annualPunitoryInterest)' }} %</div>
+            <div class="paragraph"> ~ {{ annualInterest.value }} % /  ~ {{ annualPunitory.value }} %</div>
           </div>
           <div class="properties-block">
             <div class="title">{{ 'Lend' }}</div>
-            <div class="currency">{{ loanCard.currency }}</div>
+            <!-- <div *ngIf='requestedCurrency == undefined' class="currency">{{ 'Currency' }}</div> -->
+            <!-- <div *ngIf='requestedCurrency !== undefined' class="currency">{{ requestedCurrency.value }}</div> -->
+            <div class="currency">{{ requestedCurrency.value == undefined || requestedCurrency.value == null ? 'Currency' : requestedCurrency.value }}</div>
+            <!-- <div class="currency">{{ true ? 'true' : 'false' }}</div> -->
             <div class="title">{{ 'Return' }}</div>
           </div>
           <div class="conversion-block">
-            <div class="block-title">{{ 'leftValue' }}</div>
+            <div class="block-title">{{ requestValue.value }}</div>
             <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
-            <div class="block-title">{{ 'rightValue' }}</div>
+            <div class="block-title">{{ requestValue.value }}</div>
           </div>
-          <!-- <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
-          <app-detail-button [loan]=loan></app-detail-button> -->
         </div>
       </div>
     </div>
