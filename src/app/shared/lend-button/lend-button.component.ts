@@ -23,7 +23,7 @@ import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
-import { Request } from './../../models/loan.model';
+import { Loan } from './../../models/loan.model';
 
 @Component({
   selector: 'app-lend-button',
@@ -31,7 +31,7 @@ import { Request } from './../../models/loan.model';
   styleUrls: ['./lend-button.component.scss']
 })
 export class LendButtonComponent implements OnInit {
-  @Input() request: Request;
+  @Input() loan: Loan;
   pendingTx: Tx = undefined;
   account: string;
   lendEnabled: Boolean;
@@ -67,10 +67,10 @@ export class LendButtonComponent implements OnInit {
     this.startOperation();
 
     try {
-      const engineApproved = this.contractsService.isApproved(this.request.engine);
+      const engineApproved = this.contractsService.isApproved(this.loan.address);
       const civicApproved = this.civicService.status();
       const balance = this.contractsService.getUserBalanceRCNWei();
-      const required = this.contractsService.estimateRequiredAmount(this.request);
+      const required = this.contractsService.estimateRequiredAmount(this.loan);
       if (!await engineApproved) {
         this.showApproveDialog();
         return;
@@ -81,7 +81,7 @@ export class LendButtonComponent implements OnInit {
         this.eventsService.trackEvent(
           'show-insufficient-funds-lend',
           Category.Account,
-          'request #' + this.request.id,
+          'request #' + this.loan.id,
           await required
         );
 
@@ -94,16 +94,16 @@ export class LendButtonComponent implements OnInit {
         return;
       }
 
-      const tx = await this.contractsService.lendLoan(this.request);
+      const tx = await this.contractsService.lendLoan(this.loan);
 
       this.eventsService.trackEvent(
         'lend',
         Category.Account,
-        'request #' + this.request.id
+        'request #' + this.loan.id
       );
 
-      this.txService.registerLendTx(this.request, tx);
-      this.pendingTx = this.txService.getLastLend(this.request);
+      this.txService.registerLendTx(this.loan, tx);
+      this.pendingTx = this.txService.getLastLend(this.loan);
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.message.indexOf('User denied transaction signature') < 0) {
@@ -136,7 +136,7 @@ export class LendButtonComponent implements OnInit {
 
   showApproveDialog() {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
-    dialogRef.componentInstance.onlyAddress = this.request.engine;
+    dialogRef.componentInstance.onlyAddress = this.loan.address;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.handleLend(true);
@@ -151,7 +151,7 @@ export class LendButtonComponent implements OnInit {
       this.eventsService.trackEvent(
         'click-lend',
         Category.Loan,
-        'request #' + this.request.id
+        'request #' + this.loan.id
       );
 
       this.handleLend();
@@ -161,7 +161,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   retrievePendingTx() {
-    this.pendingTx = this.txService.getLastLend(this.request);
+    this.pendingTx = this.txService.getLastLend(this.loan);
   }
 
   showCivicDialog() {
@@ -186,7 +186,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   get enabled(): Boolean {
-    return this.txService.getLastLend(this.request) === undefined;
+    return this.txService.getLastLend(this.loan) === undefined;
   }
 
   get buttonText(): string {

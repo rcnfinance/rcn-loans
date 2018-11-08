@@ -1,8 +1,10 @@
 
 export class Currency {
   decimals;
-  constructor(currency: string) {
-    this.decimals = Currency.getDecimals(currency);
+  constructor(
+    public symbol: string
+  ) {
+    this.decimals = Currency.getDecimals(symbol);
   }
   static getDecimals(currency: string): number {
     switch (currency.toUpperCase()) {
@@ -26,4 +28,5 @@ export class Currency {
   fromUnit(n: number): number {
     return n / 10 ** this.decimals;
   }
+  toString = (): string => this.symbol;
 }

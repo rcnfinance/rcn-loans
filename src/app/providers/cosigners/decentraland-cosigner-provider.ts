@@ -5,7 +5,7 @@ import { Web3Service } from '../../services/web3.service';
 import { Utils } from '../../utils/utils';
 import { CosignerDetail, CosignerOffer, CosignerLiability } from '../../models/cosigner.model';
 import { CosignerProvider } from '../cosigner-provider';
-import { Loan, Status, Request } from '../../models/loan.model';
+import { Loan, Status } from '../../models/loan.model';
 
 declare let require: any;
 
@@ -35,13 +35,13 @@ export class DecentralandCosignerProvider implements CosignerProvider {
   contract(_loan: Loan): string {
     return this.manager;
   }
-  isValid(loan: Request): boolean {
+  isValid(loan: Loan): boolean {
     return loan.creator === this.creator;
   }
-  isCurrent(loan: Request): boolean {
-    return !loan.isRequest && (loan as Loan).cosigner === this.manager;
+  isCurrent(loan: Loan): boolean {
+    return !loan.isRequest && loan.cosigner === this.manager;
   }
-  offer(loan: Request): Promise<CosignerOffer> {
+  offer(loan: Loan): Promise<CosignerOffer> {
     return new Promise((resolve, _err) => {
       this.detail(loan).then((detail: DecentralandCosigner) => {
         resolve(new CosignerOffer(
@@ -106,7 +106,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
   }
   private isDefaulted(loan: Loan, detail: DecentralandCosigner): boolean {
     return (loan.status === Status.Ongoing || loan.status === Status.Indebt) // The loan should not be in debt
-            && loan.dueTime + (7 * 24 * 60 * 60) < Math.floor(Date.now() / 1000) // Due time must be pased by 1 week
+            && loan.debt.model.dueTime + (7 * 24 * 60 * 60) < Math.floor(Date.now() / 1000) // Due time must be pased by 1 week
             // tslint:disable-next-line:triple-equals
             && detail.status == 1; // Detail should be ongoing
   }
@@ -126,7 +126,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
       });
     };
   }
-  private detail(loan: Request): Promise<CosignerDetail> {
+  private detail(loan: Loan): Promise<CosignerDetail> {
     return new Promise((resolve, _err) => {
       this.setupContracts();
       this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {

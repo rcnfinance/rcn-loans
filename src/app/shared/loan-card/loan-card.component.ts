@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Loan, Request } from '../../models/loan.model';
+import { Loan } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
-import { Currency } from '../../utils/currencies';
 
 @Component({
   selector: 'app-loan-card',
@@ -9,7 +8,7 @@ import { Currency } from '../../utils/currencies';
   styleUrls: ['./loan-card.component.scss']
 })
 export class LoanCardComponent implements OnInit {
-  @Input() loan: Request;
+  @Input() loan: Loan;
 
   leftLabel: string;
   leftValue: string;
@@ -25,38 +24,31 @@ export class LoanCardComponent implements OnInit {
 
   ngOnInit() {
     if (this.loan.isRequest) {
-      const currency = new Currency(this.loan.readCurrency());
+      const currency = this.loan.currency;
       this.leftLabel = 'Lend';
       this.leftValue = Utils.formatAmount(currency.fromUnit(this.loan.amount));
       this.durationLabel = 'Duration';
+      this.durationValue = Utils.formatDelta(this.loan.descriptor.duration);
       this.rightLabel = 'Return';
-      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.getEstimatedReturn()));
+      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
       this.canLend = true;
     } else if (this.loan instanceof Loan) {
-      const currency = new Currency(this.loan.readCurrency());
+      const currency = this.loan.currency;
       this.leftLabel = 'Paid';
-      this.leftValue = Utils.formatAmount(currency.fromUnit(this.loan.paid));
+      this.leftValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
       this.durationLabel = 'Remaining';
-      this.durationValue = Utils.formatDelta(this.loan.remainingTime);
+      this.durationValue = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000));
       this.rightLabel = 'Pending';
-      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.estimated));
+      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObliation));
       this.canLend = false;
     }
   }
 
   getInterestRate(): string {
-    if (this.loan.isRequest) {
-      return this.loan.descriptor.getInterestRate();
-    }
-    const loan = (this.loan as Loan);
-    return Utils.formatInterest(loan.interestRate).toFixed(0);
+    return this.loan.descriptor.interestRate.toFixed(2);
   }
 
   getPunitiveInterestRate(): string {
-    if (this.loan.isRequest) {
-      return this.loan.descriptor.getPunitiveInterestRate();
-    }
-    const loan = (this.loan as Loan);
-    return Utils.formatInterest(loan.interestRate).toFixed(0);
+    return this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
   }
 }

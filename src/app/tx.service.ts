@@ -2,7 +2,7 @@ declare let window: any;
 
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { Loan, Request } from './models/loan.model';
+import { Loan } from './models/loan.model';
 import { Web3Service } from './services/web3.service';
 import { EventsService, Category } from './services/events.service';
 
@@ -59,16 +59,16 @@ export class TxService {
     }, 5000);
   }
 
-  registerLendTx(request: Request, tx: string) {
-    this.txMemory.push(new Tx(tx, request.engine, false, Type.lend, request.id));
+  registerLendTx(request: Loan, tx: string) {
+    this.txMemory.push(new Tx(tx, request.address, false, Type.lend, request.id));
     this.saveTxs();
   }
 
-  getLastLend(loan: Request): Tx {
+  getLastLend(loan: Loan): Tx {
     return this.txMemory
       .filter(tx => !tx.confirmed)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
-      .find(tx => tx.type === Type.lend && tx.data === loan.id && loan.engine === tx.to);
+      .find(tx => tx.type === Type.lend && tx.data === loan.id && loan.address === tx.to);
   }
 
   registerApproveTx(tx: string, token: string, contract: string, action: boolean) {
@@ -118,7 +118,7 @@ export class TxService {
 
   registerClaimTx(tx: string, cosigner: string, loan: Loan) {
     const data = {
-      engine: loan.engine,
+      engine: loan.address,
       id: loan.id
     };
 
@@ -130,7 +130,7 @@ export class TxService {
     return this.txMemory
       .filter(tx => !tx.confirmed && tx.type === Type.claim && tx.to === cosigner)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
-      .find(tx => tx.data.id === loan.id && tx.data.engine === loan.engine);
+      .find(tx => tx.data.id === loan.id && tx.data.engine === loan.address);
   }
 
   openSnackBar(message: string, action: string) {

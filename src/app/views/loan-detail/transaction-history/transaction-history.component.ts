@@ -183,7 +183,7 @@ export class TransactionHistoryComponent implements OnInit {
         const name = capitalize(key.replace('_', ' '));
         let content = value as string;
         if (this.dataTypes[key] === 'currency') {
-          const currency = this.loan.readCurrency();
+          const currency = this.loan.currency.symbol;
           content = currency + ' ' + new Currency(currency).fromUnit(Number(content)).toString();
         }
         result.push(new DataEntry(name, content));

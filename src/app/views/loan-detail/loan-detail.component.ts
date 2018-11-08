@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
-import { Loan, Status, Request, BasaltLoan } from './../../models/loan.model';
+import { Loan, Status, Network } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
 // App Utils
 import { Utils } from './../../utils/utils';
@@ -13,7 +13,6 @@ import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
-import { Currency } from '../../utils/currencies';
 
 @Component({
   selector: 'app-loan-detail',
@@ -21,11 +20,10 @@ import { Currency } from '../../utils/currencies';
   styleUrls: ['./loan-detail.component.scss']
 })
 export class LoanDetailComponent implements OnInit {
-  loan: Request;
+  loan: Loan;
   identityName = '...';
   viewDetail = undefined;
   userAccount: string;
-
   brand: Brand;
 
   loanConfigData = [];
@@ -41,17 +39,15 @@ export class LoanDetailComponent implements OnInit {
 
   hasHistory: boolean;
 
-  totalDebt: number;
-  pendingAmount: number;
-  expectedReturn: number;
+  totalDebt: string;
+  pendingAmount: string;
+  expectedReturn: string;
   paid: string;
 
   // Loan Oracle
   oracle: string;
   availableOracle: boolean;
   currency: string;
-
-  winWidth: any = window.innerWidth;
 
   constructor(
     private identityService: IdentityService,
@@ -74,19 +70,21 @@ export class LoanDetailComponent implements OnInit {
       const id = params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
-        this.hasHistory = loan instanceof BasaltLoan;
+        this.hasHistory = loan.network === Network.Basalt;
         this.brand = this.brandingService.getBrand(this.loan);
-        this.oracle = this.loan.oracle;
-        this.currency = this.loan.readCurrency();
-        this.availableOracle = this.loan.oracle !== Utils.address0x;
+        this.oracle = this.loan.oracle ? this.loan.oracle.address : undefined;
+        this.currency = this.loan.oracle ? this.loan.oracle.currency : 'RCN';
+        this.availableOracle = this.loan.oracle !== undefined;
         this.loadDetail();
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
 
         this.spinner.hide();
-      }).catch(() =>
-        this.router.navigate(['/404/'])
-      );
+      }).catch((e: Error) => {
+        console.error(e);
+        console.info('Loan', this.loan.id, 'not found');
+        this.router.navigate(['/404/']);
+      });
     });
   }
 
@@ -121,39 +119,48 @@ export class LoanDetailComponent implements OnInit {
     if (this.loan.isRequest) {
       // Show request detail
       // Load config data
-      const interest = this.loan.descriptor.getInterestRate();
-      const interestPunnitory = this.loan.descriptor.getPunitiveInterestRate();
+      const interest = this.loan.descriptor.interestRate.toFixed(2);
+      const interestPunnitory = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
       this.loanConfigData = [
-        ['Currency', this.loan.readCurrency()],
+        ['Currency', this.loan.currency],
         ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
-        ['Duration', Utils.formatDelta(this.loan.descriptor.getDuration())]
+        ['Duration', Utils.formatDelta(this.loan.descriptor.duration)]
       ];
 
-      this.expectedReturn = new Currency(this.loan.readCurrency()).fromUnit(this.loan.descriptor.getEstimatedReturn());
+      this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
       this.isRequest = this.loan.isRequest;
       this.canTransfer = false;
       this.canLend = true;
-    } else if (this.loan instanceof Loan) {
-      const currency = new Currency(this.loan.readCurrency());
-
+    } else {
+      const currency = this.loan.currency;
       // Show ongoing loan detail
       this.loanStatusData = [
-        ['Lend date', this.formatTimestamp(this.loan.lentTime)],
-        ['Due date', this.formatTimestamp(this.loan.dueTime)],
-        ['Deadline', this.formatTimestamp(this.loan.dueTime)],
-        ['Remaining', Utils.formatDelta(this.loan.remainingTime, 2)]
+        ['Lend date', this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration)], // TODO
+        ['Due date', this.formatTimestamp(this.loan.debt.model.dueTime)],
+        ['Deadline', this.formatTimestamp(this.loan.debt.model.dueTime)],
+        ['Remaining', Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2)]
       ];
 
       // Interest middle text
-      const displayInterest = this.loan.status !== Status.Indebt ? this.loan.interestRate : this.loan.punitiveInterestRate;
-      this.interestMiddleText = '~ ' + Utils.formatInterest(displayInterest).toFixed(0);
+      let displayInterest: number;
+      if (this.loan.status !== Status.Indebt) {
+        displayInterest = this.loan.descriptor.interestRate;
+      } else {
+        displayInterest = this.loan.descriptor.punitiveInterestRateRate;
+      }
+
+      this.interestMiddleText = '~ ' + displayInterest.toFixed(0);
 
       // Load status data
       this.isOngoing = this.loan.status === Status.Ongoing;
-      this.totalDebt = currency.fromUnit(this.loan.estimated + this.loan.paid);
-      this.pendingAmount = currency.fromUnit(this.loan.estimated);
-      this.canTransfer = this.loan.owner === this.userAccount && this.loan.status !== Status.Request;
-      this.paid = Utils.formatAmount(this.loan.paid);
+      // this.totalDebt = currency.fromUnit(this.loan.oracle.currency) + this.loan.paid);
+      // this.pendingAmount = currency.fromUnit(this.loan.estimated);
+      // this.canTransfer = this.loan.owner === this.userAccount && this.loan.status !== Status.Request;
+      // this.paid = Utils.formatAmount(this.loan.paid);
+      this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObliation + this.loan.debt.model.paid));
+      this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObliation));
+      this.canTransfer = this.loan.debt.owner === this.userAccount && this.loan.status !== Status.Request;
+      this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
     }
   }
 

@@ -2,14 +2,13 @@ import BigNumber from 'bignumber.js';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Request, Loan, BasaltLoan } from '../models/loan.model';
+import { Loan, Oracle, Network } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
 import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
 import { TxService } from '../tx.service';
 import { CosignerService } from './cosigner.service';
-import { Utils } from '../utils/utils';
 import { promisify } from './../utils/utils';
 
 declare let require: any;
@@ -83,14 +82,14 @@ export class ContractsService {
     this.txService.registerApproveTx(result, this._rcnContract.address, contract, false);
     return result;
   }
-  async estimateRequiredAmount(loan: Request): Promise<number> {
-    if (loan.oracle === Utils.address0x) {
+  async estimateRequiredAmount(loan: Loan): Promise<number> {
+    if (!loan.oracle) {
       return loan.amount;
     }
 
-    const oracleData = await this.getOracleData(loan);
+    const oracleData = await this.getOracleData(loan.oracle);
     const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
-    const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
+    const oracleRate = await promisify(oracle.getRate, [oracle.currency, oracleData]);
     const rate = oracleRate[0];
     const decimals = oracleRate[1];
     console.info('Oracle rate obtained', rate, decimals);
@@ -98,23 +97,26 @@ export class ContractsService {
     console.info('Estimated required rcn is', required);
     return required;
   }
-  async lendLoan(request: Request): Promise<string> {
-    const pOracleData = this.getOracleData(request);
-    const cosigner = this.cosignerService.getCosigner(request);
+  async lendLoan(loan: Loan): Promise<string> {
+    const pOracleData = this.getOracleData(loan.oracle);
+    const cosigner = this.cosignerService.getCosigner(loan);
     let cosignerAddr = '0x0';
     let cosignerData = '0x0';
     if (cosigner !== undefined) {
-      const cosignerOffer = await cosigner.offer(request);
+      const cosignerOffer = await cosigner.offer(loan);
       cosignerAddr = cosignerOffer.contract;
       cosignerData = cosignerOffer.lendData;
     }
     const oracleData = await pOracleData;
 
-    if (request instanceof BasaltLoan) {
-      return await promisify(this._rcnEngine.lend, [request.id, oracleData, cosignerAddr, cosignerData]);
+    switch (loan.network) {
+      case Network.Basalt:
+        return await promisify(this._rcnEngine.lend, [loan.id, oracleData, cosignerAddr, cosignerData]);
+      case Network.Diaspore:
+        return await promisify(this._loanManager.lend, [loan.id, oracleData, cosignerAddr, cosignerData, 0]);
+      default:
+        throw Error('Unknown network');
     }
-
-    return await promisify(this._loanManager.lend, [request.id, oracleData, cosignerAddr, cosignerData, 0]);
   }
   async transferLoan(loan: Loan, to: string): Promise<string> {
     const account = await this.web3.getAccount();
@@ -138,19 +140,19 @@ export class ContractsService {
       });
     }) as Promise<string>;
   }
-  async getOracleData(loan: Request): Promise<string> {
-    if (loan.oracle === Utils.address0x) {
+  async getOracleData(oracle?: Oracle): Promise<string> {
+    if (!oracle) {
       return '0x';
     }
 
-    const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
-    const url = await promisify(oracle.url.call, []);
+    const oracleContract = this.web3.web3reader.eth.contract(oracleAbi.abi).at(oracle.address);
+    const url = await promisify(oracleContract.url.call, []);
     if (url === '') { return '0x'; }
     const oracleResponse = (await this.http.get(url).toPromise()) as any[];
-    console.info('Searching currency', loan.currency, oracleResponse);
+    console.info('Searching currency', oracle.currency, oracleResponse);
     let data;
     oracleResponse.forEach(e => {
-      if (e.currency === loan.currency) {
+      if (e.currency === oracle.currency) {
         data = e.data;
         console.info('Oracle data found', data);
       }
@@ -160,12 +162,12 @@ export class ContractsService {
     }
     return data;
   }
-  async getLoan(id: string): Promise<Request> {
+  async getLoan(id: string): Promise<Loan> {
     if (id.startsWith('0x')) {
       // Load Diaspore loan
-      const result = await promisify(this._requestsView.getRequest.call, [environment.contracts.diaspore.loanManager, id]);
-      if (result.length === 0 ) throw new Error("Loan not found");
-      return LoanUtils.parseRequest(environment.contracts.diaspore.loanManager, result);
+      const result = await promisify(this._requestsView.getLoan.call, [environment.contracts.diaspore.loanManager, id]);
+      if (result.length === 0 ) throw new Error('Loan not found');
+      return LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, result);
     }
 
     return new Promise((resolve, reject) => {
@@ -175,10 +177,10 @@ export class ContractsService {
         } else if (result.length === 0) {
           reject(new Error('Loan does not exist'));
         } else {
-          resolve(LoanUtils.parseBasaltLoan(this._rcnEngineAddress, +id, result));
+          resolve(LoanUtils.parseBasaltLoan(this._rcnEngineAddress, result));
         }
       });
-    }) as Promise<Request>;
+    }) as Promise<Loan>;
   }
   async getActiveLoans(): Promise<Loan[]> {
       // TODO: Add Diaspore, currently not supported
@@ -197,7 +199,7 @@ export class ContractsService {
       });
     }) as Promise<Loan[]>;
   }
-  async getRequests(): Promise<Request[]> {
+  async getRequests(): Promise<Loan[]> {
     const basalt = new Promise((resolve, reject) => {
           // Filter open loans, non expired loand and valid mortgage
       const filters = [
@@ -222,7 +224,7 @@ export class ContractsService {
         }
         resolve(this.parseRequestBytes(result));
       });
-    }) as Promise<Request[]>;
+    }) as Promise<Loan[]>;
     return (await diaspore).concat(await basalt);
   }
   getLoansOfLender(lender: string): Promise<Loan[]> {
@@ -243,8 +245,8 @@ export class ContractsService {
     let total = 0;
 
     loans.forEach(loan => {
-      if (loan.lenderBalance > 0) {
-        total += loan.lenderBalance;
+      if (loan.debt.balance > 0) {
+        total += loan.debt.balance;
         pendingLoans.push(loan.id);
       }
     });
@@ -259,26 +261,34 @@ export class ContractsService {
       });
     }) as Promise<[number, number[]]>;
   }
-  private parseBasaltBytes(bytes: any): BasaltLoan[] {
+  private parseBasaltBytes(bytes: any): Loan[] {
     const loans = [];
     const total = bytes.length / 20;
     for (let i = 0; i < total; i++) {
-      const id = parseInt(bytes[(i * 20) + 19], 16);
+      // const id = parseInt(bytes[(i * 20) + 19], 16);
       const loanBytes = bytes.slice(i * 20, i * 20 + 20);
-      loans.push(LoanUtils.parseBasaltLoan(this._rcnEngineAddress, id, loanBytes));
+      loans.push(LoanUtils.parseBasaltLoan(this._rcnEngineAddress, loanBytes));
     }
     return loans;
   }
-  private parseRequestBytes(bytes: any): Request[] {
+  private parseRequestBytes(bytes: any): Loan[] {
     const requests = [];
     const total = bytes.length / 16;
     for (let i = 0; i < total; i++) {
       const loanBytes = bytes.slice(i * 16, i * 16 + 16);
-      requests.push(LoanUtils.parseRequest(environment.contracts.diaspore.loanManager, loanBytes));
+      requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
     }
     return requests;
   }
-
+  private parseLoanBytes(bytes: any): Loan[] {
+    const requests = [];
+    const total = bytes.length / 24;
+    for (let i = 0; i < total; i++) {
+      const loanBytes = bytes.slice(i * 24, i * 24 + 24);
+      requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
+    }
+    return requests;
+  }
   private addressToBytes32(address: string): string {
     return '0x000000000000000000000000' + address.replace('0x', '');
   }

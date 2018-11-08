@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 
 import { Injectable } from '@angular/core';
-import { Request } from './../models/loan.model';
+import { Loan } from './../models/loan.model';
 import { cosignerOptions } from '../../environments/cosigners';
 import { CosignerProvider } from '../providers/cosigner-provider';
 import { Web3Service } from './web3.service';
@@ -13,7 +13,7 @@ export class CosignerService {
     private http: HttpClient,
     private web3: Web3Service
   ) { }
-  getCosigner(loan: Request): CosignerProvider {
+  getCosigner(loan: Loan): CosignerProvider {
     if (loan.isRequest) {
       // Return a cosigner option
       const cosignerOption = cosignerOptions.find(cp => cp.isValid(loan));

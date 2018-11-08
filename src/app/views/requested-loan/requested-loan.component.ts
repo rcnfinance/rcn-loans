@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 // App Models
-import { Request } from './../../models/loan.model';
+import { Loan } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
@@ -16,7 +16,7 @@ import { AvailableLoansService } from '../../services/available-loans.service';
 export class RequestedLoanComponent implements OnInit {
   loading: boolean;
   available: any;
-  loans: Request[] = [];
+  loans: Loan[] = [];
   availableLoans = true;
   pendingLend = [];
 
@@ -32,7 +32,7 @@ export class RequestedLoanComponent implements OnInit {
   }
 
   loadLoans() {
-    this.contractsService.getRequests().then((result: Request[]) => {
+    this.contractsService.getRequests().then((result: Loan[]) => {
       this.loans = result;
       this.upgradeAvaiblable();
       this.spinner.hide();

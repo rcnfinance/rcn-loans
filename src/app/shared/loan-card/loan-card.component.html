@@ -17,7 +17,7 @@
     </div>
     <div class="properties-block">
       <div class="title">{{ leftLabel }}</div>
-      <div class="currency">{{ loan.readCurrency() }}</div>
+      <div class="currency">{{ loan.currency }}</div>
       <div class="title">{{ rightLabel }}</div>
     </div>
     <div class="conversion-block">
@@ -25,7 +25,7 @@
       <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
       <div class="block-title">{{ rightValue }}</div>
     </div>
-    <app-lend-button [request]=loan *ngIf="canLend"></app-lend-button>
+    <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
     <app-detail-button [loan]=loan></app-detail-button>
   </div>
 </div>
