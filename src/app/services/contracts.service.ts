@@ -273,9 +273,9 @@ export class ContractsService {
   }
   private parseRequestBytes(bytes: any): Loan[] {
     const requests = [];
-    const total = bytes.length / 16;
+    const total = bytes.length / 17;
     for (let i = 0; i < total; i++) {
-      const loanBytes = bytes.slice(i * 16, i * 16 + 16);
+      const loanBytes = bytes.slice(i * 17, i * 17 + 17);
       requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
     }
     return requests;
