@@ -25,8 +25,6 @@ export class CreateLoanComponent implements OnInit {
   expirationRequestDate: FormControl;
 
   minDate: Date = new Date();
-  formGroup1Value$: any = null;
-  selectedCurrency: string;
   selectedOracle: string = undefined;
 
   requiredInvalid$ = false;
@@ -81,7 +79,6 @@ export class CreateLoanComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    console.log(this.requestedCurrency.value);
     typeof this.requestedCurrency.value;
     if (this.formGroup1.valid) {
       this.fullDuration = form.value.duration.fullDuration;
@@ -131,7 +128,6 @@ export class CreateLoanComponent implements OnInit {
       default:
         this.selectedOracle = 'Please select a currency to unlock the oracle';
     }
-    this.selectedCurrency = requestedCurrency.value;
   }
 
   ngOnInit() {
