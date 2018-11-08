@@ -13,8 +13,10 @@ import { Web3Service } from './../../services/web3.service';
   styleUrls: ['./create-loan.component.scss']
 })
 export class CreateLoanComponent implements OnInit {
+  currentTimestamp: any = Utils.formatDelta(new Date().getTime());
+
   formGroup1: FormGroup;
-  fullDuration: FormControl;
+  fullDuration: any;
   payableAtDate: FormControl;
   annualInterest: any;
   annualPunitory: FormControl;
@@ -26,7 +28,7 @@ export class CreateLoanComponent implements OnInit {
   expirationRequestDate: FormControl;
 
   minDate: Date = new Date();
-  selectedOracle: string = undefined;
+  selectedOracle: string;
 
   requiredInvalid$ = false;
   currencies: string[] = ['rcn', 'mana', 'ars'];
@@ -37,7 +39,7 @@ export class CreateLoanComponent implements OnInit {
   checked$ = true;
   disabled$ = false;
 
-  account;
+  account: string;
 
   constructor(
     private contractsService: ContractsService,
@@ -45,11 +47,11 @@ export class CreateLoanComponent implements OnInit {
   ) {}
 
   createFormControls() {
-    this.fullDuration = new FormControl('0', Validators.required);
+    this.fullDuration = new FormControl(this.currentTimestamp, Validators.required);
     this.payableAtDate = new FormControl('0', Validators.required);
     this.annualInterest = new FormControl('40', Validators.required);
     this.annualPunitory = new FormControl('60', Validators.required);
-    this.requestValue = new FormControl('0', Validators.required);
+    this.requestValue = new FormControl('0');
     this.requestedCurrency = new FormControl(undefined, Validators.required);
 
     this.expirationRequestDate = new FormControl('', Validators.required);
@@ -137,14 +139,22 @@ export class CreateLoanComponent implements OnInit {
     let interest = this.annualInterest.value/100;
     this.returnValue = (interest * this.requestValue.value) + this.requestValue.value;
   }
+  expectedDuration(){
+    console.log(this.fullDuration.value);
+    this.fullDuration.value = Math.round((this.fullDuration.value).getTime() / 1000);
+    console.log(this.fullDuration.value);
 
+
+    this.fullDuration.value = Utils.formatDelta(this.fullDuration.value);
+    console.log(this.fullDuration.value);
+  }
+  
   ngOnInit() {
     this.createFormControls();
     this.createForm();
 
     this.web3Service.getAccount().then((account) => {
-      this.account = account;
-      console.log(this.account);
+      this.account = Utils.shortAddress(account);
     });
   }
 }
