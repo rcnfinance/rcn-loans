@@ -13,7 +13,7 @@ import { Web3Service } from './../../services/web3.service';
   styleUrls: ['./create-loan.component.scss']
 })
 export class CreateLoanComponent implements OnInit {
-  currentTimestamp: any = Utils.formatDelta(new Date().getTime());
+  currentTimestamp: any = Utils.formatDelta((Math.round((new Date()).getTime() / 1000)));
 
   formGroup1: FormGroup;
   fullDuration: any;
@@ -47,7 +47,7 @@ export class CreateLoanComponent implements OnInit {
   ) {}
 
   createFormControls() {
-    this.fullDuration = new FormControl(this.currentTimestamp, Validators.required);
+    this.fullDuration = new FormControl(0, Validators.required);
     this.payableAtDate = new FormControl('0', Validators.required);
     this.annualInterest = new FormControl('40', Validators.required);
     this.annualPunitory = new FormControl('60', Validators.required);
@@ -140,9 +140,9 @@ export class CreateLoanComponent implements OnInit {
     this.returnValue = (interest * this.requestValue.value) + this.requestValue.value;
   }
   expectedDuration(){
-    console.log(this.fullDuration.value);
+    let now = Math.round((new Date()).getTime() / 1000);
     this.fullDuration.value = Math.round((this.fullDuration.value).getTime() / 1000);
-    console.log(this.fullDuration.value);
+    this.fullDuration.value = this.fullDuration.value - now;
 
 
     this.fullDuration.value = Utils.formatDelta(this.fullDuration.value);
