@@ -97,8 +97,8 @@
                     <div class="conversion-block">
                       <div class="block-title">
                         <mat-form-field>
-                          <input matInput type='number' value="0" formControlName="requestValue" 
-                          pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required>
+                          <input matInput type='number' min="0" value="0" formControlName="requestValue" (change)='expectedReturn()'
+                          pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required> 
                           <mat-hint>
                             <span *ngIf="requestValue.valid || requestValue.pristine && requestValue.untouched">Requested amount</span> 
                             <span class='red' *ngIf="requestValue.errors && (requestValue.dirty || requestValue.touched)">The minimum is 1</span>
@@ -106,14 +106,14 @@
                         </mat-form-field>
                       </div>
                       <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
-                      <div class="block-title">{{ '1000' }}</div>
+                      <div class="block-title">{{ returnValue }}</div>
                     </div>
                     <div *ngIf='selectedOracle' class="title main-m3 margintop20 ellipsis">Oracle: {{ selectedOracle }}</div>
                   </div>
                 </div>
               </div>
 
-            <pre>{{ expirationRequestDate.dirty }}</pre>
+            <pre>{{ fStep1.value | json  }}</pre>
 
             <div class='margintop20'>
               <button mat-raised-button type="submit" 
@@ -183,16 +183,13 @@
           </div>
           <div class="properties-block">
             <div class="title">{{ 'Lend' }}</div>
-            <!-- <div *ngIf='requestedCurrency == undefined' class="currency">{{ 'Currency' }}</div> -->
-            <!-- <div *ngIf='requestedCurrency !== undefined' class="currency">{{ requestedCurrency.value }}</div> -->
             <div class="currency">{{ requestedCurrency.value == undefined || requestedCurrency.value == null ? 'Currency' : requestedCurrency.value }}</div>
-            <!-- <div class="currency">{{ true ? 'true' : 'false' }}</div> -->
             <div class="title">{{ 'Return' }}</div>
           </div>
           <div class="conversion-block">
             <div class="block-title">{{ requestValue.value }}</div>
             <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
-            <div class="block-title">{{ requestValue.value }}</div>
+            <div class="block-title">{{ returnValue }}</div>
           </div>
         </div>
       </div>

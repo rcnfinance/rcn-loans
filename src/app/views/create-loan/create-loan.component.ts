@@ -16,10 +16,11 @@ export class CreateLoanComponent implements OnInit {
   formGroup1: FormGroup;
   fullDuration: FormControl;
   payableAtDate: FormControl;
-  annualInterest: FormControl;
+  annualInterest: any;
   annualPunitory: FormControl;
-  requestValue: FormControl;
+  requestValue: any;
   requestedCurrency: FormControl;
+  returnValue: number = 0;
 
   formGroup2: FormGroup;
   expirationRequestDate: FormControl;
@@ -79,7 +80,6 @@ export class CreateLoanComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    typeof this.requestedCurrency.value;
     if (this.formGroup1.valid) {
       this.fullDuration = form.value.duration.fullDuration;
 
@@ -128,6 +128,13 @@ export class CreateLoanComponent implements OnInit {
       default:
         this.selectedOracle = 'Please select a currency to unlock the oracle';
     }
+  }
+
+  expectedReturn(){
+    let interest = this.annualInterest.value/100;
+    this.returnValue = (interest * this.requestValue.value) + this.requestValue.value;
+    console.log(interest * this.requestValue.value);
+    console.log(this.returnValue);
   }
 
   ngOnInit() {

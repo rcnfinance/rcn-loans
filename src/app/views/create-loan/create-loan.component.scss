@@ -28,14 +28,14 @@
   margin: 5px -15px 15px;
   div{
     flex: 1;
-    @extend %font-bold;
+    @extend %roboto-bold;
     &:nth-child(1){
       text-align: left;
       font-size: 26px;
     }
     &:nth-child(2){
       display: flex;
-      @extend %font-regular;
+      @extend %roboto-regular;
       i{ margin: 0 auto; }
     }
     &:nth-child(3){
