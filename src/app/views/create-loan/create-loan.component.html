@@ -98,7 +98,7 @@
                       <div class="block-title">
                         <mat-form-field>
                           <input matInput type='number' min="0" value="0" formControlName="requestValue" (change)='expectedReturn()'
-                          pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required> 
+                          pattern='^\d+$' required> 
                           <mat-hint>
                             <span *ngIf="requestValue.valid || requestValue.pristine && requestValue.untouched">Requested amount</span> 
                             <span class='red' *ngIf="requestValue.errors && (requestValue.dirty || requestValue.touched)">The minimum is 1</span>
@@ -139,8 +139,14 @@
                     <mat-datepicker-toggle matSuffix [for]="expirationRequestDatePicker"></mat-datepicker-toggle>
                     <mat-datepicker #expirationRequestDatePicker></mat-datepicker>
                     <mat-hint>
-                      <span *ngIf="expirationRequestDate.valid || expirationRequestDate.pristine && expirationRequestDate.untouched">Set the request duration without a lender</span> 
-                      <span class='red' *ngIf="expirationRequestDate.errors && (expirationRequestDate.dirty || expirationRequestDate.touched)">The Request Duration is required</span>
+                      <span 
+                      *ngIf="expirationRequestDate.valid || expirationRequestDate.pristine && expirationRequestDate.untouched">
+                        Set the request duration without a lender
+                      </span> 
+                      <span class='red' 
+                      *ngIf="expirationRequestDate.errors && (expirationRequestDate.dirty || expirationRequestDate.touched)">
+                        The Request Duration is required
+                      </span>
                     </mat-hint>
                   </mat-form-field>
                 </div>
@@ -171,7 +177,7 @@
         <div class="card-row">
           <div class="card-property">
             <div class="title">{{ 'Borrower' }}</div>
-            <div class="paragraph">{{ 'loan.borrowerShort' }}</div>
+            <div class="paragraph">{{ account }}</div>
           </div>
           <div class="card-property">
             <div class="title">{{ 'Duration' }}</div>

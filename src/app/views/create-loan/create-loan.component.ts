@@ -3,9 +3,9 @@ import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment.prod';
 
 // App Services
-import { ContractsService } from './../../services/contracts.service';
 import { Utils } from '../../utils/utils';
-import { Currency } from 'src/app/utils/currencies';
+import { ContractsService } from './../../services/contracts.service';
+import { Web3Service } from './../../services/web3.service';
 
 @Component({
   selector: 'app-create-loan',
@@ -37,8 +37,11 @@ export class CreateLoanComponent implements OnInit {
   checked$ = true;
   disabled$ = false;
 
+  account;
+
   constructor(
-    private contractsService: ContractsService
+    private contractsService: ContractsService,
+    private web3Service: Web3Service
   ) {}
 
   createFormControls() {
@@ -133,12 +136,15 @@ export class CreateLoanComponent implements OnInit {
   expectedReturn(){
     let interest = this.annualInterest.value/100;
     this.returnValue = (interest * this.requestValue.value) + this.requestValue.value;
-    console.log(interest * this.requestValue.value);
-    console.log(this.returnValue);
   }
 
   ngOnInit() {
     this.createFormControls();
     this.createForm();
+
+    this.web3Service.getAccount().then((account) => {
+      this.account = account;
+      console.log(this.account);
+    });
   }
 }
