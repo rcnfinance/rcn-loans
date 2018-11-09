@@ -26,6 +26,9 @@ export class LoanDetailComponent implements OnInit {
   userAccount: string;
   brand: Brand;
 
+  diasporeData = [];
+  isDiaspore: boolean;
+
   loanConfigData = [];
   loanStatusData = [];
   interestMiddleText: string;
@@ -161,6 +164,19 @@ export class LoanDetailComponent implements OnInit {
       this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObliation));
       this.canTransfer = this.loan.debt.owner === this.userAccount && this.loan.status !== Status.Request;
       this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
+    }
+
+    this.isDiaspore = this.loan.network === Network.Diaspore;
+
+    if (this.loan.network === Network.Diaspore) {
+      this.diasporeData = [
+        ['Installments', 'Duration', 'Cuota'],
+        [
+          this.loan.descriptor.installments,
+          Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments),
+          this.loan.currency.fromUnit(this.loan.descriptor.firstObligation) + ' ' + this.loan.currency.symbol
+        ]
+      ];
     }
   }
 
