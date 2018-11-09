@@ -156,10 +156,6 @@ export class LoanDetailComponent implements OnInit {
 
       // Load status data
       this.isOngoing = this.loan.status === Status.Ongoing;
-      // this.totalDebt = currency.fromUnit(this.loan.oracle.currency) + this.loan.paid);
-      // this.pendingAmount = currency.fromUnit(this.loan.estimated);
-      // this.canTransfer = this.loan.owner === this.userAccount && this.loan.status !== Status.Request;
-      // this.paid = Utils.formatAmount(this.loan.paid);
       this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObliation + this.loan.debt.model.paid));
       this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObliation));
       this.canTransfer = this.loan.debt.owner === this.userAccount && this.loan.status !== Status.Request;
