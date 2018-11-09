@@ -154,8 +154,8 @@ export class CreateLoanComponent implements OnInit {
     }
   }
   onRequestedChange() {
-    if(this.requestValue.value < 0){ this.requestValue = new FormControl(0); } // Limit de min to 0
-    if(this.requestValue.value > 1000000){ this.requestValue = new FormControl(1000000); } // Limit the max to 1000000
+    if (this.requestValue.value < 0){ this.requestValue = new FormControl(0); } // Limit de min to 0
+    if (this.requestValue.value > 1000000){ this.requestValue = new FormControl(1000000); } // Limit the max to 1000000
   }
   expectedReturn() {
     let interest = this.annualInterest.value / 100;
@@ -163,16 +163,16 @@ export class CreateLoanComponent implements OnInit {
     this.returnValue = Utils.formatAmount(returnInterest);
   }
   expectedDuration() {
-    let now = Math.round((new Date()).getTime() / 1000);
+    const now = Math.round( (new Date() ).getTime() / 1000);
     this.fullDuration.value = Math.round((this.fullDuration.value).getTime() / 1000);
     this.fullDuration.value = this.fullDuration.value - now;
     this.fullDuration.value = Utils.formatDelta(this.fullDuration.value); // Calculate the duetime of the loan
   }
-  
+
   ngOnInit() {
     this.createFormControls(); // Generate Form Controls variables
     this.createForm(); // Generate Form Object variables
-    
+
     this.web3Service.getAccount().then((account) => {
       this.account = Utils.shortAddress(account); // Get account address
     });
