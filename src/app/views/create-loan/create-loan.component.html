@@ -28,7 +28,7 @@
                   <div class="col-12"><div class="title property marginbottom10">Duration</div></div>
                   <div class="col-12">
                     <mat-form-field>
-                      <input matInput [matDatepicker]="fullDurationPicker" [min]="minDate" formControlName="fullDuration" 
+                      <input matInput [matDatepicker]="fullDurationPicker" [min]="tomorrowDate" formControlName="fullDuration" 
                       (dateChange)='expectedDuration()' placeholder="Choose a date" required>
                       <mat-datepicker-toggle matSuffix [for]="fullDurationPicker"></mat-datepicker-toggle>
                       <mat-datepicker #fullDurationPicker></mat-datepicker>
@@ -41,7 +41,7 @@
                   <div class="col-12"><div class="title property margintop20 marginbottom10">Payable At</div></div>
                   <div class="col-12">
                     <mat-form-field>
-                      <input matInput [matDatepicker]="payableAtDatePicker" [min]="minDate" formControlName="payableAtDate" placeholder="Choose a date" required>
+                      <input matInput [matDatepicker]="payableAtDatePicker" [min]="tomorrowDate" formControlName="payableAtDate" placeholder="Choose a date" required>
                       <mat-datepicker-toggle matSuffix [for]="payableAtDatePicker"></mat-datepicker-toggle>
                       <mat-datepicker #payableAtDatePicker></mat-datepicker>
                       <mat-hint>
@@ -131,7 +131,7 @@
                 <div class="col-12"><div class="title property margintop20 marginbottom10">Expiration Request</div></div>
                 <div class="col-12">
                   <mat-form-field>
-                    <input matInput [matDatepicker]="expirationRequestDatePicker" [min]="minDate" 
+                    <input matInput [matDatepicker]="expirationRequestDatePicker" [min]="tomorrowDate" 
                     formControlName="expirationRequestDate" placeholder="Choose a date" required>
                     <mat-datepicker-toggle matSuffix [for]="expirationRequestDatePicker"></mat-datepicker-toggle>
                     <mat-datepicker #expirationRequestDatePicker></mat-datepicker>

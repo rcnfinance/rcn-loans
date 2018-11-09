@@ -14,8 +14,12 @@ import { Loan, Status } from './../../models/loan.model';
   styleUrls: ['./create-loan.component.scss']
 })
 export class CreateLoanComponent implements OnInit {
-  currentTimestamp: any = Utils.formatDelta((Math.round((new Date()).getTime() / 1000)));
+  // Date Variables
+  now: Date = new Date();
+  tomorrow: Date = new Date();
+  tomorrowDate: Date = new Date(this.tomorrow.setDate(this.now.getDate()+1));
 
+  // Form Variables
   formGroup1: FormGroup;
   fullDuration: any;
   payableAtDate: FormControl;
@@ -28,7 +32,8 @@ export class CreateLoanComponent implements OnInit {
   formGroup2: FormGroup;
   expirationRequestDate: FormControl;
 
-  minDate: Date = new Date();
+  
+  
   selectedOracle: string;
 
   requiredInvalid$ = false;
