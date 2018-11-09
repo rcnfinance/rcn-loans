@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
@@ -46,8 +45,6 @@ export class RequestedLoanComponent implements OnInit {
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
     this.loadLoans();
-
-    // Available Loans service
-    this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
+    this.availableLoansService.currentAvailable.subscribe(available => this.available = available); // Available Loans service
   }
 }

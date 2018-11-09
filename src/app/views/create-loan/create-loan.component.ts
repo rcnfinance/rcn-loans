@@ -44,11 +44,11 @@ export class CreateLoanComponent implements OnInit {
 
   loan: Loan = new Loan(
     'engine',
-    1,
+    0,
     this.selectedOracle,
     Status.Request,
-    'borrower',
-    'creator',
+    this.account,
+    'this.account',
     1,
     this.fullDuration,
     this.annualInterest,
@@ -160,7 +160,8 @@ export class CreateLoanComponent implements OnInit {
 
   expectedReturn(){
     let interest = this.annualInterest.value/100;
-    this.returnValue = (interest * this.requestValue.value) + this.requestValue.value;
+    let returnInterest = (interest * this.requestValue.value) + this.requestValue.value;
+    this.returnValue = returnInterest.toFixed(); 
   }
   expectedDuration(){
     let now = Math.round((new Date()).getTime() / 1000);
@@ -169,13 +170,12 @@ export class CreateLoanComponent implements OnInit {
 
 
     this.fullDuration.value = Utils.formatDelta(this.fullDuration.value);
-    console.log(this.fullDuration.value);
   }
   
   ngOnInit() {
     this.createFormControls();
     this.createForm();
-
+    
     this.web3Service.getAccount().then((account) => {
       this.account = Utils.shortAddress(account);
     });

@@ -50,6 +50,7 @@
       @extend %propiety-title;
     }
     .paragraph{
+      min-height: 21px;
       @extend %propiety-subtitle;
     }
     .btn{
