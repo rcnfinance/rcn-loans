@@ -124,7 +124,7 @@ export class LoanUtils {
     const borrower = Utils.formatAddress(bytes[1]);
     const creator = Utils.formatAddress(bytes[2]);
     const amount = parseInt(bytes[3], 16);
-    const currency = bytes[4];
+    const currency = Utils.hexToAscii(bytes[4].replace(/^[0x]+|[0]+$/g, ''));
     const oracleAddress = Utils.formatAddress(bytes[5]);
     // const approved = parseInt(bytes[6], 16) === 1;
     const expiration = parseInt(bytes[7], 16);
