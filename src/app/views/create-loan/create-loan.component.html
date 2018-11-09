@@ -51,7 +51,7 @@
                     </mat-form-field>
                   </div>
                   <div class="col-12">
-                    <div *ngIf='fullDuration.valid' class="title main-m3 margintop10">Due time: {{ fullDuration.value }}</div>
+                    <!-- <div *ngIf='fullDuration.valid' class="title main-m3 margintop10">Due time: {{ fullDuration.value }}</div> -->
                   </div>
                 </div>
                 <div class="row" formGroupName="interest">
@@ -171,11 +171,11 @@
     </div>   
 
 
-    <div class="col-xs-12 col-lg-4">
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
       <div class="card-container">
-        <!-- <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
-        <app-risk-indicator class="risk-indicator" [loan]=loan></app-risk-indicator> -->
-        <!-- <app-creator-container [loan]=loan></app-creator-container> -->
+        <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
+        <app-risk-indicator class="risk-indicator" [loan]=loan></app-risk-indicator>
+        <app-creator-container [loan]=loan></app-creator-container>
         <div class="card-row">
           <div class="card-property">
             <div class="title">{{ 'Borrower' }}</div>

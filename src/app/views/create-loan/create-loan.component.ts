@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
-import { environment } from '../../../environments/environment.prod';
-
 // App Services
+import { environment } from '../../../environments/environment.prod';
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from './../../services/web3.service';
+// App Models
+import { Loan, Status } from './../../models/loan.model';
 
 @Component({
   selector: 'app-create-loan',
@@ -19,9 +20,9 @@ export class CreateLoanComponent implements OnInit {
   fullDuration: any;
   payableAtDate: FormControl;
   annualInterest: any;
-  annualPunitory: FormControl;
+  annualPunitory: any;
   requestValue: any;
-  requestedCurrency: FormControl;
+  requestedCurrency: any;
   returnValue: number = 0;
 
   formGroup2: FormGroup;
@@ -40,6 +41,28 @@ export class CreateLoanComponent implements OnInit {
   disabled$ = false;
 
   account: string;
+
+  loan: Loan = new Loan(
+    'engine',
+    1,
+    this.selectedOracle,
+    Status.Request,
+    'borrower',
+    'creator',
+    1,
+    this.fullDuration,
+    this.annualInterest,
+    this.annualPunitory,
+    this.requestedCurrency,
+    this.returnValue,
+    1,
+    1,
+    this.fullDuration,
+    this.fullDuration,
+    0,
+    '0x0',
+    '0x0'
+  );
 
   constructor(
     private contractsService: ContractsService,
