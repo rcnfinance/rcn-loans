@@ -17,9 +17,14 @@ export class CreateLoanComponent implements OnInit {
   // Date Variables
   now: Date = new Date();
   tomorrow: Date = new Date();
-  tomorrowDate: Date = new Date(this.tomorrow.setDate(this.now.getDate()+1));
+  tomorrowDate: Date = new Date( this.tomorrow.setDate( this.now.getDate() + 1) );
 
   // Form Variables
+  isOptional$ = true;
+  isEditable$ = true;
+  checked$ = true;
+  disabled$ = false;
+
   formGroup1: FormGroup;
   fullDuration: any;
   payableAtDate: FormControl;
@@ -32,21 +37,12 @@ export class CreateLoanComponent implements OnInit {
   formGroup2: FormGroup;
   expirationRequestDate: FormControl;
 
-  
-  
-  selectedOracle: string;
-
   requiredInvalid$ = false;
   currencies: string[] = ['rcn', 'mana', 'ars'];
+  selectedOracle: string;
 
-  isOptional$ = true;
-  isEditable$ = true;
-
-  checked$ = true;
-  disabled$ = false;
-
+  // Card Variables
   account: string;
-
   loan: Loan = new Loan(
     'engine',
     0,
