@@ -37,7 +37,8 @@ export class LoanUtils {
       oracle = new Oracle(
         Network.Basalt,
         oracleAddress,
-        Utils.hexToAscii(currency.replace(/^[0x]+|[0]+$/g, ''))
+        Utils.hexToAscii(currency.replace(/^[0x]+|[0]+$/g, '')),
+        currency
       );
     }
 
@@ -144,7 +145,8 @@ export class LoanUtils {
       oracle = new Oracle(
         Network.Diaspore,
         oracleAddress,
-        currency
+        currency,
+        bytes[4]
       );
     }
 

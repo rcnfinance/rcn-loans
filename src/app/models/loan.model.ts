@@ -43,7 +43,8 @@ export class Oracle {
   constructor(
     public network: Network,
     public address: string,
-    public currency: string
+    public currency: string,
+    public code: string
   ) {}
   toString = (): string => this.address;
 }

@@ -68,7 +68,7 @@ export class ContractsService {
     if (pending !== undefined) {
       return pending;
     }
-    const result = await promisify(this._rcnContract.allowance.call, [contract]);
+    const result = await promisify(this._rcnContract.allowance.call, [await this.web3.getAccount(), contract]);
     return result >= this.web3.web3.toWei(1000000000);
   }
   async approve(contract: string): Promise<string> {
@@ -152,7 +152,7 @@ export class ContractsService {
     console.info('Searching currency', oracle.currency, oracleResponse);
     let data;
     oracleResponse.forEach(e => {
-      if (e.currency === oracle.currency) {
+      if (e.currency === oracle.code) {
         data = e.data;
         console.info('Oracle data found', data);
       }
