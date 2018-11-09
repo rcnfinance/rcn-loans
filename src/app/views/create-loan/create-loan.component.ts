@@ -141,45 +141,44 @@ export class CreateLoanComponent implements OnInit {
         break;
       case 'mana':
         if (environment.production) {
-          this.selectedOracle = '0x2aaf69a2df2828b55fa4a5e30ee8c3c7cd9e5d5b';
+          this.selectedOracle = '0x2aaf69a2df2828b55fa4a5e30ee8c3c7cd9e5d5b'; // Mana Prod Oracle
         } else {
-          this.selectedOracle = '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40';
+          this.selectedOracle = '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40'; // Mana Dev Oracle
         }
         break;
       case 'ars':
         if (environment.production) {
-          this.selectedOracle = '0x22222c1944efcc38ca46489f96c3a372c4db74e6';
+          this.selectedOracle = '0x22222c1944efcc38ca46489f96c3a372c4db74e6'; // Ars Prod Oracle
         } else {
-          this.selectedOracle = '0x0ac18b74b5616fdeaeff809713d07ed1486d0128';
+          this.selectedOracle = '0x0ac18b74b5616fdeaeff809713d07ed1486d0128'; // Ars Dev Oracle
         }
         break;
       default:
         this.selectedOracle = 'Please select a currency to unlock the oracle';
     }
   }
-
+  onRequestedChange(){
+    if(this.requestValue.value < 0){ this.requestValue = new FormControl(0); } // Limit de min to 0
+    if(this.requestValue.value > 1000000){ this.requestValue = new FormControl(1000000); } // Limit the max to 1000000
+  }
   expectedReturn(){
-    if(this.requestValue.value < 0){ this.requestValue.value = 0; } // Limit de min to 0
-    if(this.requestValue.value > 1000000){ this.requestValue.value = 1000000; } // Limit the max to 1000000
     let interest = this.annualInterest.value/100;
-    let returnInterest = (interest * this.requestValue.value) + this.requestValue.value;
+    let returnInterest = (interest * this.requestValue.value) + this.requestValue.value; // Calculate the return amount
     this.returnValue = Utils.formatAmount(returnInterest);
   }
   expectedDuration(){
     let now = Math.round((new Date()).getTime() / 1000);
     this.fullDuration.value = Math.round((this.fullDuration.value).getTime() / 1000);
     this.fullDuration.value = this.fullDuration.value - now;
-
-
-    this.fullDuration.value = Utils.formatDelta(this.fullDuration.value);
+    this.fullDuration.value = Utils.formatDelta(this.fullDuration.value); // Calculate the duetime of the loan
   }
   
   ngOnInit() {
-    this.createFormControls();
-    this.createForm();
+    this.createFormControls(); // Generate Form Controls variables
+    this.createForm(); // Generate Form Object variables
     
     this.web3Service.getAccount().then((account) => {
-      this.account = Utils.shortAddress(account);
+      this.account = Utils.shortAddress(account); // Get account address
     });
   }
 }
