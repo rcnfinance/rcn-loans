@@ -154,12 +154,12 @@ export class CreateLoanComponent implements OnInit {
     }
   }
   onRequestedChange() {
-    if (this.requestValue.value < 0){ this.requestValue = new FormControl(0); } // Limit de min to 0
-    if (this.requestValue.value > 1000000){ this.requestValue = new FormControl(1000000); } // Limit the max to 1000000
+    if (this.requestValue.value < 0) { this.requestValue = new FormControl(0); } // Limit de min to 0
+    if (this.requestValue.value > 1000000) { this.requestValue = new FormControl(1000000); } // Limit the max to 1000000
   }
   expectedReturn() {
-    let interest = this.annualInterest.value / 100;
-    let returnInterest = ( interest * this.requestValue.value ) + this.requestValue.value; // Calculate the return amount
+    const interest = this.annualInterest.value / 100;
+    const returnInterest = ( interest * this.requestValue.value ) + this.requestValue.value; // Calculate the return amount
     this.returnValue = Utils.formatAmount(returnInterest);
   }
   expectedDuration() {
