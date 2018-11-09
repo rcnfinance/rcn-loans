@@ -125,7 +125,7 @@
           <ng-template matStepLabel>Finnish</ng-template>
           You are now done.
 
-          <form [formGroup]="formGroup2" (ngSubmit)="onSubmitForm(fStep2)" #fStep2='ngForm'>
+          <form [formGroup]="formGroup2" (ngSubmit)="onSubmitStep2(fStep2)" #fStep2='ngForm'>
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row" formGroupName="expiration">
                 <div class="col-12"><div class="title property margintop20 marginbottom10">Expiration Request</div></div>
