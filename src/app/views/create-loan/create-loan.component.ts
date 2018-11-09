@@ -103,11 +103,7 @@ export class CreateLoanComponent implements OnInit {
     });
   }
 
-    onSubmitStep2(form: NgForm) {
-      const step2Form = form.value.expiration.expirationRequestDate;
-    }
-
-    onSubmit(form: NgForm) {
+  onSubmitStep1(form: NgForm) {
     if (this.formGroup1.valid) {
       this.fullDuration = form.value.duration.fullDuration;
 
@@ -132,6 +128,10 @@ export class CreateLoanComponent implements OnInit {
     } else {
       this.requiredInvalid$ = true;
     }
+  }
+
+  onSubmitStep2(form: NgForm) {
+    const step2Form = form.value.expiration.expirationRequestDate;
   }
 
   onCurrencyChange(requestedCurrency) {

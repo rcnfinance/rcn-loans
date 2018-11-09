@@ -19,7 +19,7 @@
       <mat-vertical-stepper linear #stepper>
         
         <mat-step [stepControl]="formGroup1" [optional]="isOptional$" [editable]='isEditable$'>
-          <form [formGroup]="formGroup1" (ngSubmit)="onSubmit(fStep1)" #fStep1='ngForm'>
+          <form [formGroup]="formGroup1" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1='ngForm'>
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
 
               <div class="container-fluid paddingleft0 paddingright0">
