@@ -10,7 +10,8 @@ export enum Status {
   Ongoing,
   Paid,
   Destroyed,
-  Indebt
+  Indebt,
+  Expired
 }
 
 export class Descriptor {
@@ -69,7 +70,8 @@ export class Loan {
     public descriptor: Descriptor,
     public borrower: string,
     public creator: string,
-    public status: Status,
+    public _status: Status,
+    public expiration: number,
     public cosigner?: string,
     public debt?: Debt
   ) {}
@@ -80,5 +82,17 @@ export class Loan {
 
   get currency(): Currency {
     return new Currency(this.oracle ? this.oracle.currency : 'RCN');
+  }
+
+  get status(): Status {
+    if (this._status === Status.Request && this.expiration < new Date().getTime() / 1000) {
+      return Status.Expired;
+    }
+
+    if (this._status === Status.Ongoing && this.debt.model.dueTime < new Date().getTime() / 1000) {
+      return Status.Indebt;
+    }
+
+    return this._status;
   }
 }

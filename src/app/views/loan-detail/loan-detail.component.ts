@@ -32,6 +32,7 @@ export class LoanDetailComponent implements OnInit {
   loanConfigData = [];
   loanStatusData = [];
   interestMiddleText: string;
+  isExpired: boolean;
   isRequest: boolean;
   isOngoing: boolean;
 
@@ -159,6 +160,11 @@ export class LoanDetailComponent implements OnInit {
       this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObliation + this.loan.debt.model.paid));
       this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObliation));
       this.canTransfer = this.loan.debt.owner === this.userAccount && this.loan.status !== Status.Request;
+
+      this.canPay =
+        this.loan.debt.owner !== this.userAccount &&
+          (this.loan.status === Status.Ongoing || this.loan.status === Status.Indebt);
+
       this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
     }
 

@@ -27,7 +27,7 @@ export class LoanUtils {
     const status = parseInt(loanBytes[14], 16);
     const lenderBalance = parseInt(loanBytes[15], 16);
     const currency = loanBytes[16];
-    // const expirationRequest = parseInt(loanBytes[17], 16);
+    const expirationRequest = parseInt(loanBytes[17], 16);
     const interest = parseInt(loanBytes[18], 16);
     const id = parseInt(loanBytes[19], 16);
 
@@ -112,6 +112,7 @@ export class LoanUtils {
       borrower,
       creator,
       status,
+      expirationRequest,
       cosigner !== Utils.address0x ? cosigner : undefined,
       debt
     );
@@ -126,7 +127,7 @@ export class LoanUtils {
     const currency = bytes[4];
     const oracleAddress = Utils.formatAddress(bytes[5]);
     // const approved = parseInt(bytes[6], 16) === 1;
-    // const expiration = parseInt(bytes[7], 16);
+    const expiration = parseInt(bytes[7], 16);
     const model = Utils.formatAddress(bytes[8]);
     const status = parseInt(bytes[9], 16);
     // Descriptor
@@ -200,6 +201,7 @@ export class LoanUtils {
       borrower,
       creator,
       status,
+      expiration,
       cosigner,
       debt
     );
