@@ -153,16 +153,16 @@ export class CreateLoanComponent implements OnInit {
         this.selectedOracle = 'Please select a currency to unlock the oracle';
     }
   }
-  onRequestedChange(){
+  onRequestedChange() {
     if(this.requestValue.value < 0){ this.requestValue = new FormControl(0); } // Limit de min to 0
     if(this.requestValue.value > 1000000){ this.requestValue = new FormControl(1000000); } // Limit the max to 1000000
   }
   expectedReturn() {
     let interest = this.annualInterest.value / 100;
-    let returnInterest = (interest * this.requestValue.value) + this.requestValue.value; // Calculate the return amount
+    let returnInterest = ( interest * this.requestValue.value ) + this.requestValue.value; // Calculate the return amount
     this.returnValue = Utils.formatAmount(returnInterest);
   }
-  expectedDuration(){
+  expectedDuration() {
     let now = Math.round((new Date()).getTime() / 1000);
     this.fullDuration.value = Math.round((this.fullDuration.value).getTime() / 1000);
     this.fullDuration.value = this.fullDuration.value - now;
