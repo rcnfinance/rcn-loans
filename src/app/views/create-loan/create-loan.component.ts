@@ -103,7 +103,11 @@ export class CreateLoanComponent implements OnInit {
     });
   }
 
-  onSubmit(form: NgForm) {
+    onSubmitForm(form: NgForm) {
+      const step2Form = form.value.expiration.expirationRequestDate;
+    }
+    
+    onSubmit(form: NgForm) {
     if (this.formGroup1.valid) {
       this.fullDuration = form.value.duration.fullDuration;
 
