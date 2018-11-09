@@ -95,7 +95,7 @@
                     <div class="conversion-block">
                       <div class="block-title">
                         <mat-form-field>
-                          <input matInput type='number' min="0" value="0" formControlName="requestValue" (change)='expectedReturn()'
+                          <input matInput type='number' min="0" max="1000000" value="0" formControlName="requestValue" (change)='expectedReturn()'
                           pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$' required> 
                           <mat-hint>
                             <span *ngIf="requestValue.valid || requestValue.pristine && requestValue.untouched">Requested amount</span> 
@@ -199,7 +199,6 @@
         </div>
       </div>
     </div>
-    
     
   </div>
 

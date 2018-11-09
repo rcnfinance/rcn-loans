@@ -23,7 +23,7 @@ export class CreateLoanComponent implements OnInit {
   annualPunitory: any;
   requestValue: any;
   requestedCurrency: any;
-  returnValue: number = 0;
+  returnValue: any = 0;
 
   formGroup2: FormGroup;
   expirationRequestDate: FormControl;
@@ -159,9 +159,11 @@ export class CreateLoanComponent implements OnInit {
   }
 
   expectedReturn(){
+    if(this.requestValue.value < 0){ this.requestValue.value = 0; } // Limit de min to 0
+    if(this.requestValue.value > 1000000){ this.requestValue.value = 1000000; } // Limit the max to 1000000
     let interest = this.annualInterest.value/100;
     let returnInterest = (interest * this.requestValue.value) + this.requestValue.value;
-    this.returnValue = returnInterest.toFixed(); 
+    this.returnValue = Utils.formatAmount(returnInterest);
   }
   expectedDuration(){
     let now = Math.round((new Date()).getTime() / 1000);
