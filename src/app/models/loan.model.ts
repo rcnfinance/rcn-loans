@@ -44,7 +44,7 @@ export class Loan {
     if (this.statusFlag === Status.Ongoing && timestamp() > this.dueTimestamp) {
       return Status.Indebt;
     }
-    if (new Date(this.expirationRequest).getTime() / 1000 <= new Date().getTime() / 1000) {
+    if (this.expirationRequest <= new Date().getTime() / 1000) {
       return Status.Expired;
     }
     return this.statusFlag;
