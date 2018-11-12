@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
-import { Web3Service, Type } from '../services/web3.service';
+import { Web3Service } from '../services/web3.service';
 import { SidebarService } from '../services/sidebar.service';
 import { ContractsService } from '../services/contracts.service';
 import { TitleService } from '../services/title.service';
@@ -63,7 +63,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.dialog.open(DialogClientAccountComponent, {});
   }
   // Open Approve Dialog
-  openDialog() {
+  async openDialog() {
     if (this.hasAccount) {
       const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
       this.makeRotate = true;
@@ -71,8 +71,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       dialogRef.afterClosed().subscribe(() => {
         this.makeRotate = false;
       });
-    } else if (this.web3Service.web3Type === Type.Injected) {
-      window.open('https://metamask.io/', '_blank');
+    } else if (await this.web3Service.requestLogin()) {
+      return;
     } else {
       this.openDialogClient();
     }
@@ -96,8 +96,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     });
   }
 
-  async loadLogin(to: boolean) {
-    if (to && !this.hasAccount) {
+  async loadLogin() {
+    if (!this.hasAccount) {
       this.account = await this.web3Service.getAccount();
       this.loadRcnBalance();
       this.loadWithdrawBalance();
@@ -107,8 +107,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.titleService.currentTitle.subscribe(title => this.title = title);
-    this.loadLogin(this.web3Service.loggedIn);
-    this.web3Service.loginEvent.subscribe(this.loadLogin);
+    this.web3Service.loginEvent.subscribe(() => this.loadLogin());
+    this.loadLogin();
   }
 
   ngAfterViewInit(): any {}

@@ -5,8 +5,6 @@ import { promisify } from '../utils/utils';
 
 declare let window: any;
 
-export enum Type { Injected, Provided }
-
 @Injectable()
 export class Web3Service {
   loginEvent = new EventEmitter<boolean>(true);
