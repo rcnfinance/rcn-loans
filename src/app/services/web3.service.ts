@@ -48,8 +48,21 @@ export class Web3Service {
   }
 
   async requestLogin(): Promise<boolean> {
-    // TODO: Handle request login
-    return false;
+    if (this.loggedIn) {
+      return true;
+    }
+
+    if (window.ethereum) {
+      try {
+        const candWeb3 = new Web3(window.ethereum);
+        await window.ethereum.enable();
+        this._web3account = candWeb3;
+        return true;
+      } catch (e) {
+        console.info('User rejected login');
+        return false;
+      }
+    }
   }
 
   async getAccount(): Promise<string> {
