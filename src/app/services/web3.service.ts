@@ -56,6 +56,10 @@ export class Web3Service {
     if (window.ethereum) {
       try {
         const candWeb3 = new Web3(window.ethereum);
+        if (candWeb3.version.network !== environment.network.id) {
+          console.info('Mismatch provider network ID', candWeb3.version.network, environment.network.id);
+          return false;
+        }
         await window.ethereum.enable();
         this._web3account = candWeb3;
         this.loginEvent.emit(true);
