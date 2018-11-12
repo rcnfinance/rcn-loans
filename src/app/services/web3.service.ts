@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as Web3 from 'web3';
 import { environment } from '../../environments/environment';
+import { promisify } from 'util';
 
 declare let window: any;
 
@@ -8,59 +9,65 @@ export enum Type { Injected, Provided }
 
 @Injectable()
 export class Web3Service {
+  private _web3: any;
 
-  get web3reader(): any {
-    return this._web3reader;
+  web3Type: Type;
+
+  // Account properties
+  private _web3account: any;
+  private _account: string = null;
+
+  constructor() {
+    this._web3 = this.buildWeb3();
+    // this._web3 = this._web3;
+
+    if (typeof window.web3 !== 'undefined') {
+      // Use Mist/MetaMask's provider
+      console.info('Web3 provider detected');
+      const candWeb3 = new Web3(window.web3.currentProvider);
+      this.web3Type = Type.Provided;
+
+      if (candWeb3.version.network === environment.network.id) {
+        this._web3account = candWeb3;
+      } else {
+        console.info('Mismatch provider network ID', candWeb3.version.network, environment.network.id);
+      }
+    }
   }
 
   get web3(): any {
     return this._web3;
   }
-  private _web3: any;
-  private _web3reader: any;
-  private _account: string = null;
 
-  web3Type: Type;
+  get opsWeb3(): any {
+    return this._web3account;
+  }
 
-  constructor() {
-    this._web3reader = this.buildWeb3();
-    this._web3 = this._web3reader;
+  get loggedIn(): boolean {
+    return this._web3account !== undefined;
+  }
 
-    if (typeof window.web3 !== 'undefined') {
-      // Use Mist/MetaMask's provider
-      console.info('Web3 provider detected');
-      this._web3 = new Web3(window.web3.currentProvider);
-      this.web3Type = Type.Provided;
-
-      if (this._web3.version.network !== environment.network.id) {
-        console.info('Mismatch provider network ID', this._web3.version.network, environment.network.id);
-        this.web3Type = Type.Injected;
-      }
-    }
+  async requestLogin(): Promise<boolean> {
+    // TODO: Handle request login
+    return false;
   }
 
   async getAccount(): Promise<string> {
-    if (this._account == null) {
-      this._account = await new Promise((resolve) => {
-        this._web3.eth.getAccounts((err, accs) => {
-          if (err != null) {
-            resolve(undefined);
-            return;
-          }
-          if (this._web3.version.network !== environment.network.id) {
-            resolve(undefined);
-            return;
-          }
-          if (accs.length === 0) {
-            resolve(undefined);
-            return;
-          }
-          resolve(accs[0]);
-        });
-      }) as string;
-      this._web3.eth.defaultAccount = this._account;
+    if (!this.loggedIn) {
+      return;
     }
-    return Promise.resolve(this._account);
+
+    if (this._account) {
+      return this._account;
+    }
+
+    const accounts = await promisify(this._web3account.eth.getAccount);
+    if (!accounts || accounts.length === 0) {
+      return;
+    }
+
+    this._account = accounts[0];
+    return accounts[0];
   }
 
   private buildWeb3(): any {

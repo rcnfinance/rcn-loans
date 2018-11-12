@@ -37,7 +37,7 @@ export class ContractsService {
     ) {
     this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
     this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
-    this._rcnExtension = this.web3.web3reader.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
+    this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
   }
 
   async getUserBalanceRCNWei(): Promise<number> {
@@ -51,10 +51,11 @@ export class ContractsService {
       });
     }) as Promise<number>;
   }
+
   async getUserBalanceRCN(): Promise<number> {
     return new Promise((resolve) => {
       this.getUserBalanceRCNWei().then((balance) => {
-        resolve(this.web3.web3reader.fromWei(balance));
+        resolve(this.web3.web3.fromWei(balance));
       });
     }) as Promise<number>;
   }
@@ -67,7 +68,7 @@ export class ContractsService {
         console.info('Pending engine approved found', pending);
         resolve(pending);
       } else {
-        const _web3 = this.web3.web3reader;
+        const _web3 = this.web3.web3;
         this._rcnContract.allowance.call(account, this._rcnEngineAddress, function (err, result) {
           if (err != null) {
             reject(err);
@@ -121,7 +122,7 @@ export class ContractsService {
     }
 
     const oracleData = await this.getOracleData(loan);
-    const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
+    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
     const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
     const rate = oracleRate[0];
     const decimals = oracleRate[1];
@@ -181,7 +182,7 @@ export class ContractsService {
       return '0x';
     }
 
-    const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
+    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
     const url = await promisify(oracle.url.call, []);
     if (url === '') { return '0x'; }
     const oracleResponse = await this.http.get(url).toPromise() as any[];
