@@ -10,7 +10,6 @@ export enum Type { Injected, Provided }
 @Injectable()
 export class Web3Service {
   loginEvent = new EventEmitter<boolean>(true);
-  web3Type: Type;
 
   private _web3: any;
 
@@ -25,12 +24,14 @@ export class Web3Service {
       // Use Mist/MetaMask's provider
       console.info('Web3 provider detected');
       const candWeb3 = new Web3(window.web3.currentProvider);
-      this.web3Type = Type.Provided;
-
       if (candWeb3.version.network === environment.network.id) {
-        console.info('Logged in');
-        this._web3account = candWeb3;
-        this.loginEvent.emit(true);
+        candWeb3.eth.getAccounts((err, result) => {
+          if (!err && result && result.length > 0) {
+            console.info('Logged in');
+            this._web3account = candWeb3;
+            this.loginEvent.emit(true);
+          }
+        });
       } else {
         console.info('Mismatch provider network ID', candWeb3.version.network, environment.network.id);
       }
