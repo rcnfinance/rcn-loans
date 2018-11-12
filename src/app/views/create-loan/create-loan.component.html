@@ -15,9 +15,7 @@
   <div class="row">
     <div class="col-xs-12 col-lg-6">
 
-
       <mat-vertical-stepper linear #stepper>
-        
         <mat-step [stepControl]="formGroup1" [optional]="isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup1" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1='ngForm'>
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
@@ -133,36 +131,40 @@
             <div class="row margintop20 marginbottom20">
               <div class="col marginbottom10">
                 <div class="title property marginbottom5">Phone</div>
-                <mat-slide-toggle [checked]="checked$" [disabled]="disabled$" formControlName="phoneSlide"></mat-slide-toggle>
+                <mat-slide-toggle [checked]="checked$" formControlName="phoneSlide"></mat-slide-toggle>
               </div>
               <div class="col-4 marginbottom15">
                 <div class="title property marginbottom5">ID Document</div>
-                <mat-slide-toggle [checked]="checked$" [disabled]="disabled$" formControlName="idSlide"></mat-slide-toggle>
+                <mat-slide-toggle [checked]="checked$" formControlName="idSlide"></mat-slide-toggle>
               </div>
               <div class="col-4 marginbottom15">
                 <div class="title property marginbottom5">saction screen</div>
-                <mat-slide-toggle [checked]="checked$" [disabled]="disabled$" formControlName="sactionSlide"></mat-slide-toggle>
+                <mat-slide-toggle [checked]="checked$" formControlName="sactionSlide"></mat-slide-toggle>
               </div>
               <div class="col-4 marginbottom15">
                 <div class="title property marginbottom5">payroll</div>
-                <mat-slide-toggle [checked]="checked$" [disabled]="disabled$" formControlName="payrollSlide"></mat-slide-toggle>
+                <mat-slide-toggle [checked]="checked$" formControlName="payrollSlide"></mat-slide-toggle>
               </div>
               <div class="col-4 marginbottom15">
                 <div class="title property marginbottom5">Facebook</div>
-                <mat-slide-toggle [checked]="checked$" [disabled]="disabled$" formControlName="facebookSlide"></mat-slide-toggle>
+                <mat-slide-toggle [checked]="checked$" formControlName="facebookSlide"></mat-slide-toggle>
               </div>
               <div class="col-4 marginbottom15">
                 <div class="title property marginbottom5">Twitter</div>
-                <mat-slide-toggle [checked]="checked$" [disabled]="disabled$" formControlName="twitterSlide"></mat-slide-toggle>
+                <mat-slide-toggle [checked]="checked$" formControlName="twitterSlide"></mat-slide-toggle>
               </div>
             </div>
-            <div>
-              <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
+              
+            <div class='margintop20'>
+              <button mat-raised-button type="submit" 
+              class='button button-primary' 
+              matStepperNext>
+                Next
+              </button>
             </div>
           </form>
 
           <pre>{{ fStep2.value | json }}</pre>
-          <pre>{{ fStep2.status }}</pre>
         </mat-step>
 
         <!-- <mat-step [stepControl]="formGroup3" [optional]="isOptional$" [editable]='isEditable$'>
@@ -235,16 +237,13 @@
           </form>
           <pre>{{ expirationRequestDate.value }}</pre>
           <button mat-raised-button class='button button-primary' type="submit">Submit</button>
-
           
           <div class='margintop20'>
             <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
             <button mat-raised-button class='button button-primary'>Create</button>
           </div>
         </mat-step>
-
       </mat-vertical-stepper>
-
 
     </div>   
 
