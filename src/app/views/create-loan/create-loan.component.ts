@@ -35,7 +35,12 @@ export class CreateLoanComponent implements OnInit {
   returnValue: any = 0;
 
   formGroup2: FormGroup;
-  slideToggle: any;
+  phoneSlide: any;
+  idSlide: any;
+  sactionSlide: any;
+  payrollSlide: any;
+  facebookSlide: any;
+  twitterSlide: any;
 
   formGroup3: FormGroup;
   
@@ -83,7 +88,12 @@ export class CreateLoanComponent implements OnInit {
     this.requestValue = new FormControl('0'); // formGroup1
     this.requestedCurrency = new FormControl(undefined, Validators.required); // formGroup1
 
-    this.slideToggle = new FormControl(); // formGroup2
+    this.phoneSlide = new FormControl(true); // formGroup2
+    this.idSlide = new FormControl(true); // formGroup2
+    this.sactionSlide = new FormControl(); // formGroup2
+    this.payrollSlide = new FormControl(); // formGroup2
+    this.facebookSlide = new FormControl(); // formGroup2
+    this.twitterSlide = new FormControl(); // formGroup2
 
     this.expirationRequestDate = new FormControl('', Validators.required); // formGroup4
   }
@@ -105,7 +115,12 @@ export class CreateLoanComponent implements OnInit {
     });
 
     this.formGroup2 = new FormGroup({
-      slideToggle: this.slideToggle
+      phoneSlide: this.phoneSlide,
+      idSlide: this.idSlide,
+      sactionSlide: this.sactionSlide,
+      payrollSlide: this.payrollSlide,
+      facebookSlide: this.facebookSlide,
+      twitterSlide: this.twitterSlide
     });
 
     this.formGroup4 = new FormGroup({
@@ -144,7 +159,6 @@ export class CreateLoanComponent implements OnInit {
 
   onSubmitStep2(form: NgForm) {
     const step2Form = form.value;
-    console.log(step2Form);
   }
 
   onSubmitStep4(form: NgForm) {
