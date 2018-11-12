@@ -44,25 +44,25 @@ export class CreateLoanComponent implements OnInit {
   // Card Variables
   account: string;
   loan: Loan = new Loan(
-    'engine',
-    0,
-    this.selectedOracle,
-    Status.Request,
-    this.account,
-    'this.account',
-    1,
-    this.fullDuration,
-    this.annualInterest,
-    this.annualPunitory,
-    this.requestedCurrency,
-    this.returnValue,
-    1,
-    1,
-    this.fullDuration,
-    this.fullDuration,
-    0,
-    '0x0',
-    '0x0'
+    'engine', // engine
+    0, // id
+    this.selectedOracle, // oracle
+    Status.Request, // statusFlag
+    this.account, // borrower
+    this.account, // creator
+    1, // rawAmount
+    this.fullDuration, // duration
+    this.annualInterest, // rawAnnualInterest
+    this.annualPunitory, // rawAnnualPunitoryInterest
+    this.requestedCurrency, // currencyRaw
+    this.returnValue, // rawPaid
+    0, // cumulatedInterest
+    0, // cumulatedPunnitoryInterest
+    this.fullDuration, // interestTimestamp
+    this.fullDuration, // dueTimestamp
+    0, // lenderBalance
+    '0x0', // owner
+    '0x0' // cosigner
   );
 
   constructor(
@@ -70,7 +70,7 @@ export class CreateLoanComponent implements OnInit {
     private web3Service: Web3Service
   ) {}
 
-  createFormControls() {
+  createFormControls() { // Create form controls and define values
     this.fullDuration = new FormControl(0, Validators.required);
     this.payableAtDate = new FormControl('0', Validators.required);
     this.annualInterest = new FormControl('40', Validators.required);
@@ -81,7 +81,7 @@ export class CreateLoanComponent implements OnInit {
     this.expirationRequestDate = new FormControl('', Validators.required);
   }
 
-  createForm() {
+  createForm() { // Create form groups
     this.formGroup1 = new FormGroup({
       duration: new FormGroup({
         fullDuration: this.fullDuration,
@@ -175,11 +175,11 @@ export class CreateLoanComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.createFormControls(); // Generate Form Controls variables
-    this.createForm(); // Generate Form Object variables
-
     this.web3Service.getAccount().then((account) => {
       this.account = Utils.shortAddress(account); // Get account address
     });
+
+    this.createFormControls(); // Generate Form Controls variables
+    this.createForm(); // Generate Form Object variables
   }
 }
