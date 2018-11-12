@@ -49,7 +49,7 @@ export class CreateLoanComponent implements OnInit {
     this.selectedOracle, // oracle
     Status.Request, // statusFlag
     this.account, // borrower
-    this.account, // creator
+    'this.account', // creator
     1, // rawAmount
     this.fullDuration, // duration
     this.annualInterest, // rawAnnualInterest
@@ -177,6 +177,8 @@ export class CreateLoanComponent implements OnInit {
   ngOnInit() {
     this.web3Service.getAccount().then((account) => {
       this.account = Utils.shortAddress(account); // Get account address
+      this.createFormControls(); // Generate Form Controls variables
+      this.createForm(); // Generate Form Object variables
     });
 
     this.createFormControls(); // Generate Form Controls variables
