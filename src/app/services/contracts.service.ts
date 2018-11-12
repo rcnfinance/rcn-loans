@@ -141,7 +141,7 @@ export class ContractsService {
 
   async lendLoan(loan: Loan): Promise<string> {
     const pOracleData = this.getOracleData(loan);
-
+    const account = await this.web3.getAccount();
     const cosigner = this.cosignerService.getCosigner(loan);
     let cosignerAddr = '0x0';
     let cosignerData = '0x0';
@@ -160,7 +160,7 @@ export class ContractsService {
         oracleData,
         cosignerAddr,
         cosignerData,
-        { from: this.web3.getAccount() },
+        { from: account },
         function(err, result) {
           if (err != null) {
             reject(err);
@@ -172,11 +172,12 @@ export class ContractsService {
     }) as Promise<string>;
   }
   async transferLoan(loan: Loan, to: string): Promise<string> {
+    const account = await this.web3.getAccount();
     return new Promise((resolve, reject) => {
       this.loadAltContract(
         this.web3.opsWeb3,
         this._rcnEngine
-      ).transfer(to, loan.id, function(err, result) {
+      ).transfer(to, loan.id, { from: account }, function(err, result) {
         if (err != null) {
           reject(err);
         }
@@ -190,7 +191,7 @@ export class ContractsService {
       this.loadAltContract(
         this.web3.opsWeb3,
         this._rcnEngine
-      ).withdrawalList(loans, account, (err, result) => {
+      ).withdrawalList(loans, account, { from: account }, (err, result) => {
         if (err != null) {
           reject(err);
         }
@@ -219,7 +220,6 @@ export class ContractsService {
     if (data === undefined) {
       throw new Error('Oracle did not provide data');
     }
-    web3.eth.contract(contract.abi).at(contract.address)
     return data;
   }
   async getLoan(id: number): Promise<Loan> {
