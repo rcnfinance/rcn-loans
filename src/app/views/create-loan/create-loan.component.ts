@@ -35,6 +35,11 @@ export class CreateLoanComponent implements OnInit {
   returnValue: any = 0;
 
   formGroup2: FormGroup;
+  slideToggle: any;
+
+  formGroup3: FormGroup;
+  
+  formGroup4: FormGroup;
   expirationRequestDate: FormControl;
 
   requiredInvalid$ = false;
@@ -71,14 +76,16 @@ export class CreateLoanComponent implements OnInit {
   ) {}
 
   createFormControls() { // Create form controls and define values
-    this.fullDuration = new FormControl(0, Validators.required);
-    this.payableAtDate = new FormControl('0', Validators.required);
-    this.annualInterest = new FormControl('40', Validators.required);
-    this.annualPunitory = new FormControl('60', Validators.required);
-    this.requestValue = new FormControl('0');
-    this.requestedCurrency = new FormControl(undefined, Validators.required);
+    this.fullDuration = new FormControl(0, Validators.required); // formGroup1
+    this.payableAtDate = new FormControl('0', Validators.required); // formGroup1
+    this.annualInterest = new FormControl('40', Validators.required); // formGroup1
+    this.annualPunitory = new FormControl('60', Validators.required); // formGroup1
+    this.requestValue = new FormControl('0'); // formGroup1
+    this.requestedCurrency = new FormControl(undefined, Validators.required); // formGroup1
 
-    this.expirationRequestDate = new FormControl('', Validators.required);
+    this.slideToggle = new FormControl(); // formGroup2
+
+    this.expirationRequestDate = new FormControl('', Validators.required); // formGroup4
   }
 
   createForm() { // Create form groups
@@ -98,6 +105,10 @@ export class CreateLoanComponent implements OnInit {
     });
 
     this.formGroup2 = new FormGroup({
+      slideToggle: this.slideToggle
+    });
+
+    this.formGroup4 = new FormGroup({
       expiration: new FormGroup({
         expirationRequestDate: this.expirationRequestDate
       })
@@ -132,7 +143,12 @@ export class CreateLoanComponent implements OnInit {
   }
 
   onSubmitStep2(form: NgForm) {
-    const step2Form = form.value.expiration.expirationRequestDate;
+    const step2Form = form.value;
+    console.log(step2Form);
+  }
+
+  onSubmitStep4(form: NgForm) {
+    const step4Form = form.value.expiration.expirationRequestDate;
   }
 
   onCurrencyChange(requestedCurrency) {
