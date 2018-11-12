@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
+import { promisify } from 'util';
 import * as Web3 from 'web3';
 import { environment } from '../../environments/environment';
-import { promisify } from 'util';
 
 declare let window: any;
 
@@ -9,9 +9,10 @@ export enum Type { Injected, Provided }
 
 @Injectable()
 export class Web3Service {
-  private _web3: any;
-
+  loginEvent = new EventEmitter<boolean>();
   web3Type: Type;
+
+  private _web3: any;
 
   // Account properties
   private _web3account: any;
@@ -29,6 +30,7 @@ export class Web3Service {
 
       if (candWeb3.version.network === environment.network.id) {
         this._web3account = candWeb3;
+        this.loginEvent.emit(true);
       } else {
         console.info('Mismatch provider network ID', candWeb3.version.network, environment.network.id);
       }
@@ -57,8 +59,10 @@ export class Web3Service {
         const candWeb3 = new Web3(window.ethereum);
         await window.ethereum.enable();
         this._web3account = candWeb3;
+        this.loginEvent.emit(true);
         return true;
       } catch (e) {
+        this.loginEvent.emit(false);
         console.info('User rejected login');
         return false;
       }
