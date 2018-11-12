@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { promisify } from 'util';
 import * as Web3 from 'web3';
 import { environment } from '../../environments/environment';
+import { promisify } from '../utils/utils';
 
 declare let window: any;
 
@@ -9,7 +9,7 @@ export enum Type { Injected, Provided }
 
 @Injectable()
 export class Web3Service {
-  loginEvent = new EventEmitter<boolean>();
+  loginEvent = new EventEmitter<boolean>(true);
   web3Type: Type;
 
   private _web3: any;
@@ -20,7 +20,6 @@ export class Web3Service {
 
   constructor() {
     this._web3 = this.buildWeb3();
-    // this._web3 = this._web3;
 
     if (typeof window.web3 !== 'undefined') {
       // Use Mist/MetaMask's provider
@@ -29,6 +28,7 @@ export class Web3Service {
       this.web3Type = Type.Provided;
 
       if (candWeb3.version.network === environment.network.id) {
+        console.info('Logged in');
         this._web3account = candWeb3;
         this.loginEvent.emit(true);
       } else {
@@ -78,7 +78,7 @@ export class Web3Service {
       return this._account;
     }
 
-    const accounts = await promisify(this._web3account.eth.getAccount);
+    const accounts = await promisify(this._web3account.eth.getAccounts, []);
     if (!accounts || accounts.length === 0) {
       return;
     }

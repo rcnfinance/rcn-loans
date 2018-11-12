@@ -81,6 +81,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   get hasAccount(): boolean {
     return this.account !== undefined;
   }
+
   loadRcnBalance() {
     this.contractService.getUserBalanceRCN().then((balance: number) => {
       this.rcnBalance = Utils.formatAmount(balance);
@@ -95,15 +96,19 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     });
   }
 
+  async loadLogin(to: boolean) {
+    if (to && !this.hasAccount) {
+      this.account = await this.web3Service.getAccount();
+      this.loadRcnBalance();
+      this.loadWithdrawBalance();
+    }
+  }
+
   ngOnInit() {
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.titleService.currentTitle.subscribe(title => this.title = title);
-
-    this.web3Service.getAccount().then((account) => {
-      this.account = account;
-      this.loadRcnBalance();
-      this.loadWithdrawBalance();
-    });
+    this.loadLogin(this.web3Service.loggedIn);
+    this.web3Service.loginEvent.subscribe(this.loadLogin);
   }
 
   ngAfterViewInit(): any {}
