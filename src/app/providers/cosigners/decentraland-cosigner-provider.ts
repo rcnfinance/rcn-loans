@@ -103,7 +103,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
   }
   private setupContracts() {
     if (this.managerContract === undefined) {
-      this.managerContract = this.web3.web3reader.eth.contract(mortgageManagerAbi).at(this.manager);
+      this.managerContract = this.web3.web3.eth.contract(mortgageManagerAbi).at(this.manager);
     }
   }
   private isDefaulted(loan: Loan, detail: DecentralandCosigner): boolean {

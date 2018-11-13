@@ -142,7 +142,7 @@ export class TxService {
   private checkUpdate() {
     this.txMemory.forEach(tx => {
       if (!tx.confirmed) {
-        this.web3service.web3reader.eth.getTransactionReceipt(tx.tx, (_err, receipt) => {
+        this.web3service.web3.eth.getTransactionReceipt(tx.tx, (_err, receipt) => {
           if (receipt !== null) {
             if (tx.type === Type.lend) { this.openSnackBar('Lent Successfully', ''); }
             console.info('Found receipt tx', tx, receipt);
