@@ -20,6 +20,7 @@
     &.indebt{background-color: $orange;}
     &.paid{background-color: $gray7;}
     &.destroyed{background-color: $red;}
+    &.expired{background-color: $red;}
     i{
       @extend %position-center;
     }

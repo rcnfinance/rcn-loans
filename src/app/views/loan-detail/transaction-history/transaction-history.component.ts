@@ -126,15 +126,15 @@ export class TransactionHistoryComponent implements OnInit {
       'hexa': '#333',
       'display': ['from', 'to']
     },
-    'loan_expired': {
-      'title': 'Destroyed',
-      'messege': 'Destroyed',
+    'expired': {
+      'title': 'Expired',
+      'messege': 'Expired',
       'status': 'active',
       'materialClass': 'material-icons',
-      'icon': 'delete',
+      'icon': 'snooze',
       'color': 'red',
       'hexa': '#333',
-      'inserted': false,
+      'inserted': true,
       'display': []
     },
     'destroyed_loan': {
