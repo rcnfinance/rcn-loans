@@ -42,6 +42,7 @@ export class CreateLoanComponent implements OnInit {
   facebookSlide: any;
   twitterSlide: any;
   slideSelection: any;
+  iconsSelection: any;
 
   formGroup3: FormGroup;
   
@@ -163,17 +164,45 @@ export class CreateLoanComponent implements OnInit {
   onSubmitStep2(form: NgForm) {
     const step2Form = form.value;
     this.getSlideSelection(step2Form);
+    this.switchIdentityIcon(this.slideSelection);
   }
 
   getSlideSelection(step2Form) {
-    let property: any;
     this.slideSelection = [];
-    for (property in step2Form) {
+    for (let property in step2Form) {
+      let value: any = step2Form[property];
       if (step2Form[property] === true) {
         this.slideSelection.push(property);
       }
     }
     console.log(this.slideSelection);
+  }
+
+  switchIdentityIcon(iconCase) {
+    this.iconsSelection = [];
+    for(let icon in iconCase){
+      switch(iconCase[icon]) {
+        case 'phoneSlide':
+          this.iconsSelection.push({'font':'fas fa-id-badge'});
+          break;
+        case 'idSlide':
+          this.iconsSelection.push({'font':'fas fa-phone'});
+          break;
+        case 'sactionSlide':
+          this.iconsSelection.push({'font':'fas fa-address-card'});
+          break;
+        case 'payrollSlide':
+          this.iconsSelection.push({'font':'fas fa-address-card'});
+          break;
+        case 'facebookSlide':
+          this.iconsSelection.push({'font':'fab fa-facebook-f'});
+          break;
+        case 'twitterSlide':
+          this.iconsSelection.push({'font':'fab fa-twitter'});
+          break;
+      }
+    }
+    console.log(this.iconsSelection);
   }
 
   onSubmitStep4(form: NgForm) {
@@ -227,5 +256,6 @@ export class CreateLoanComponent implements OnInit {
 
     this.createFormControls(); // Generate Form Controls variables
     this.createForm(); // Generate Form Object variables
+
   }
 }

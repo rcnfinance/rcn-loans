@@ -81,7 +81,7 @@
             <div>
             <div class="title main-m3 margintop10">You are verifying this information with BLOOM</div>
             <div class="icon-block">
-              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
+              <!-- <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
                 <i class="fas fa-id-badge"></i>
               </div>
               <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
@@ -92,10 +92,13 @@
               </div>
               <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
                 <i class="fab fa-facebook-f"></i>
-              </div>
-              <div class="icon" *ngFor='let icon of slideSelection' 
+              </div> -->
+              <div class="icon" *ngFor='let icon of slideSelection; index as i' 
               matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
-                <i class="fab fa-twitter"></i>
+                <i class="{{ icon[i].font }}"></i>
+                <div>{{icon.font}}</div>
+                <div>{{icon[i]}}</div>
+                <div>{{icon['font']}}</div>
               </div>
             </div>
             <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
