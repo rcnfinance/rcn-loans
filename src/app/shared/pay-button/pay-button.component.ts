@@ -31,7 +31,6 @@ export class PayButtonComponent implements OnInit {
   @Input() loan: Loan;
   @Input() isOngoing: boolean;
 
-  account: string;
   pendingTx: Tx = undefined;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   opPending = false;
@@ -52,7 +51,12 @@ export class PayButtonComponent implements OnInit {
   async loadPay(forze = false) {
     if (this.opPending && !forze) { return; }
 
-    if (this.account === undefined) {
+    if (!this.web3Service.loggedIn) {
+      if (await this.web3Service.requestLogin()) {
+        this.loadPay();
+        return;
+      }
+
       this.dialog.open(DialogClientAccountComponent);
       return;
     }
@@ -180,9 +184,6 @@ export class PayButtonComponent implements OnInit {
 
   ngOnInit() {
     this.retrievePendingTx();
-    this.web3Service.getAccount().then((account) => {
-      this.account = account;
-    });
     this.countriesService.lendEnabled().then((lendEnabled) => {
       this.lendEnabled = lendEnabled;
     });
