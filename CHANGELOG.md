@@ -4,7 +4,7 @@
 
 - [Pending]
 
-## **0.0.10-D** Avocados - 2018/10/30
+## **0.0.10-D** Avocados - 2018/11/14
 
 ### Features:
 - Added support for Metamask privacy mode
