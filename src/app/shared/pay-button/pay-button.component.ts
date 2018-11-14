@@ -46,14 +46,12 @@ export class PayButtonComponent implements OnInit {
     public dialog: MatDialog
   ) {}
 
-  handlePay() {}
-
-  async loadPay(forze = false) {
+  async handlePay(forze = false) {
     if (this.opPending && !forze) { return; }
 
     if (!this.web3Service.loggedIn) {
       if (await this.web3Service.requestLogin()) {
-        this.loadPay();
+        this.handlePay();
         return;
       }
 
@@ -125,7 +123,7 @@ export class PayButtonComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.loadPay(true);
+        this.handlePay(true);
       } else {
         this.cancelOperation();
       }
@@ -145,7 +143,7 @@ export class PayButtonComponent implements OnInit {
     dialogRef.componentInstance.autoClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadPay(true);
+        this.handlePay(true);
       } else {
         this.cancelOperation();
       }
@@ -176,7 +174,7 @@ export class PayButtonComponent implements OnInit {
         'loan #' + this.loan.id
       );
 
-      this.loadPay();
+      this.handlePay();
     } else {
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }
