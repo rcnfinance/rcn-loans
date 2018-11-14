@@ -41,6 +41,7 @@ export class CreateLoanComponent implements OnInit {
   payrollSlide: any;
   facebookSlide: any;
   twitterSlide: any;
+  slideSelection: any;
 
   formGroup3: FormGroup;
   
@@ -123,6 +124,8 @@ export class CreateLoanComponent implements OnInit {
       twitterSlide: this.twitterSlide
     });
 
+    this.formGroup3 = new FormGroup({});
+
     this.formGroup4 = new FormGroup({
       expiration: new FormGroup({
         expirationRequestDate: this.expirationRequestDate
@@ -159,10 +162,23 @@ export class CreateLoanComponent implements OnInit {
 
   onSubmitStep2(form: NgForm) {
     const step2Form = form.value;
+    this.getSlideSelection(step2Form);
+  }
+
+  getSlideSelection(step2Form) {
+    let property: any;
+    this.slideSelection = [];
+    for (property in step2Form) {
+      if (step2Form[property] === true) {
+        this.slideSelection.push(property);
+      }
+    }
+    console.log(this.slideSelection);
   }
 
   onSubmitStep4(form: NgForm) {
     const step4Form = form.value.expiration.expirationRequestDate;
+    console.log(step4Form);
   }
 
   onCurrencyChange(requestedCurrency) {

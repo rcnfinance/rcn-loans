@@ -16,6 +16,94 @@
     <div class="col-xs-12 col-lg-6">
 
       <mat-vertical-stepper linear #stepper>
+
+        <mat-step [stepControl]="formGroup2" [optional]="isOptional$" [editable]='isEditable$'>
+          <form [formGroup]="formGroup2" (ngSubmit)="onSubmitStep2(fStep2)" #fStep2='ngForm'>
+
+            <ng-template matStepLabel>Complete your identity with Bloom</ng-template>
+            <div class="stepper-title">
+              <i class="fas fa-id-badge inline fa-lg"></i>
+              <div class="title main-b1 inline">Bloom ID</div>
+            </div>
+            <div class="title main-m3 margintop10">Unlock the power of a global, secure identity</div>
+            <div class="row margintop20 marginbottom20">
+              <div class="col marginbottom10">
+                <div class="title property marginbottom5">Phone</div>
+                <mat-slide-toggle [checked]="checked$" formControlName="phoneSlide"></mat-slide-toggle>
+              </div>
+              <div class="col-4 marginbottom15">
+                <div class="title property marginbottom5">ID Document</div>
+                <mat-slide-toggle [checked]="checked$" formControlName="idSlide"></mat-slide-toggle>
+              </div>
+              <div class="col-4 marginbottom15">
+                <div class="title property marginbottom5">saction screen</div>
+                <mat-slide-toggle [checked]="checked$" formControlName="sactionSlide"></mat-slide-toggle>
+              </div>
+              <div class="col-4 marginbottom15">
+                <div class="title property marginbottom5">payroll</div>
+                <mat-slide-toggle [checked]="checked$" formControlName="payrollSlide"></mat-slide-toggle>
+              </div>
+              <div class="col-4 marginbottom15">
+                <div class="title property marginbottom5">Facebook</div>
+                <mat-slide-toggle [checked]="checked$" formControlName="facebookSlide"></mat-slide-toggle>
+              </div>
+              <div class="col-4 marginbottom15">
+                <div class="title property marginbottom5">Twitter</div>
+                <mat-slide-toggle [checked]="checked$" formControlName="twitterSlide"></mat-slide-toggle>
+              </div>
+            </div>
+              
+            <div class='margintop20'>
+              <button mat-raised-button type="submit" 
+              class='button button-primary' matStepperNext>
+                Next
+              </button>
+            </div>
+          </form>
+
+          <pre>{{ fStep2.value | json }}</pre>
+        </mat-step>
+
+        <mat-step [stepControl]="formGroup3" [optional]="isOptional$" [editable]='isEditable$'>
+          <form [formGroup]="formGroup3">
+            <ng-template matStepLabel>Scan your QR</ng-template>
+            <div class="stepper-title">
+              <i class="fas fa-id-badge inline fa-lg"></i>
+              <div class="title main-b1 inline">Bloom QR</div>
+            </div>
+            <div class="title main-m3 margintop10">Unlock the power of a global, secure identity</div>
+            
+            <div class="row margintop20 marginbottom20">
+              <div class="col marginbottom10">
+                <div class="title property marginbottom5">QR Display</div>
+              </div>
+            </div>
+            <div>
+            <div class="title main-m3 margintop10">You are verifying this information with BLOOM</div>
+            <div class="icon-block">
+              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
+                <i class="fas fa-id-badge"></i>
+              </div>
+              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
+                <i class="fas fa-address-card"></i>
+              </div>
+              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
+                <i class="fab fa-facebook-f"></i>
+              </div>
+              <div class="icon" *ngFor='let icon of slideSelection' 
+              matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
+                <i class="fab fa-twitter"></i>
+              </div>
+            </div>
+            <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
+            <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        
         <mat-step [stepControl]="formGroup1" [optional]="isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup1" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1='ngForm'>
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
@@ -108,7 +196,7 @@
                   </div>
                 </div>
               </div>
-            <pre>{{ fStep1.value | json }}</pre>
+            <!-- <pre>{{ fStep1.value | json }}</pre> -->
             <div class='margintop20'>
               <button mat-raised-button type="submit" 
               class='button button-primary' 
@@ -118,93 +206,6 @@
             </div>
           </form>
         </mat-step>
-
-        <mat-step [stepControl]="formGroup2" [optional]="isOptional$" [editable]='isEditable$'>
-          <form [formGroup]="formGroup2" (ngSubmit)="onSubmitStep2(fStep2)" #fStep2='ngForm'>
-
-            <ng-template matStepLabel>Complete your identity with Bloom</ng-template>
-            <div class="stepper-title">
-              <i class="fas fa-id-badge inline fa-lg"></i>
-              <div class="title main-b1 inline">Bloom ID</div>
-            </div>
-            <div class="title main-m3 margintop10">Unlock the power of a global, secure identity</div>
-            <div class="row margintop20 marginbottom20">
-              <div class="col marginbottom10">
-                <div class="title property marginbottom5">Phone</div>
-                <mat-slide-toggle [checked]="checked$" formControlName="phoneSlide"></mat-slide-toggle>
-              </div>
-              <div class="col-4 marginbottom15">
-                <div class="title property marginbottom5">ID Document</div>
-                <mat-slide-toggle [checked]="checked$" formControlName="idSlide"></mat-slide-toggle>
-              </div>
-              <div class="col-4 marginbottom15">
-                <div class="title property marginbottom5">saction screen</div>
-                <mat-slide-toggle [checked]="checked$" formControlName="sactionSlide"></mat-slide-toggle>
-              </div>
-              <div class="col-4 marginbottom15">
-                <div class="title property marginbottom5">payroll</div>
-                <mat-slide-toggle [checked]="checked$" formControlName="payrollSlide"></mat-slide-toggle>
-              </div>
-              <div class="col-4 marginbottom15">
-                <div class="title property marginbottom5">Facebook</div>
-                <mat-slide-toggle [checked]="checked$" formControlName="facebookSlide"></mat-slide-toggle>
-              </div>
-              <div class="col-4 marginbottom15">
-                <div class="title property marginbottom5">Twitter</div>
-                <mat-slide-toggle [checked]="checked$" formControlName="twitterSlide"></mat-slide-toggle>
-              </div>
-            </div>
-              
-            <div class='margintop20'>
-              <button mat-raised-button type="submit" 
-              class='button button-primary' 
-              matStepperNext>
-                Next
-              </button>
-            </div>
-          </form>
-
-          <pre>{{ fStep2.value | json }}</pre>
-        </mat-step>
-
-        <!-- <mat-step [stepControl]="formGroup3" [optional]="isOptional$" [editable]='isEditable$'>
-          <form [formGroup]="formGroup3">
-            <ng-template matStepLabel>Scan your QR</ng-template>
-            <div class="stepper-title">
-              <i class="fas fa-id-badge inline fa-lg"></i>
-              <div class="title main-b1 inline">Bloom QR</div>
-            </div>
-            <div class="title main-m3 margintop10">Unlock the power of a global, secure identity</div>
-            
-            <div class="row margintop20 marginbottom20">
-              <div class="col marginbottom10">
-                <div class="title property marginbottom5">QR Display</div>
-              </div>
-            </div>
-            <div>
-            <div class="title main-m3 margintop10">You are verifying this information with BLOOM</div>
-            <div class="icon-block">
-              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
-                <i class="fas fa-id-badge"></i>
-              </div>
-              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
-                <i class="fas fa-phone"></i>
-              </div>
-              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
-                <i class="fas fa-address-card"></i>
-              </div>
-              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
-                <i class="fab fa-facebook-f"></i>
-              </div>
-              <div class="icon" matTooltip="Identity messege" matTooltipPosition="below" target="_blank">
-                <i class="fab fa-twitter"></i>
-              </div>
-            </div>
-            <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
-            <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
-            </div>
-          </form>
-        </mat-step> -->
 
         <mat-step [stepControl]="formGroup4" [optional]="!isOptional$">
           <ng-template matStepLabel>Finish</ng-template>
@@ -236,11 +237,10 @@
             </div>
           </form>
           <pre>{{ expirationRequestDate.value }}</pre>
-          <button mat-raised-button class='button button-primary' type="submit">Submit</button>
           
           <div class='margintop20'>
             <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
-            <button mat-raised-button class='button button-primary'>Create</button>
+            <button mat-raised-button type="submit" class='button button-primary'>Create</button>
           </div>
         </mat-step>
       </mat-vertical-stepper>
