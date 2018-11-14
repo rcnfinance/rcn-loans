@@ -2,7 +2,8 @@
 
 ## **Unreleased**
 
-- [Pending]
+### Fix:
+- Fix bug when loading metamask privacy on account detail
 
 ## **0.0.10-D** Avocados - 2018/11/14
 
