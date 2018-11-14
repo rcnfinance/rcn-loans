@@ -68,7 +68,7 @@
         </table>
       </div>
       <div class="table-responsive">
-        <table class="table" (click)="openLender(loan.owner)" *ngIf="!isRequest">
+        <table class="table" (click)="openLender(loan.owner)" *ngIf="!isRequest && !isExpired">
           <thead>
             <tr>
               <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
