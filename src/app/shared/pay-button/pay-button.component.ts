@@ -102,7 +102,7 @@ export class PayButtonComponent implements OnInit {
               Category.Loan,
               'loan #' + this.loan.id + ' of ' + amount
             );
-            this.txService.registerTransferTx(tx, environment.contracts.basaltEngine, this.loan, amount);
+            this.txService.registerPayTx(tx, environment.contracts.basaltEngine, this.loan, amount);
             this.retrievePendingTx();
           });
         }
@@ -156,7 +156,7 @@ export class PayButtonComponent implements OnInit {
   }
 
   retrievePendingTx() {
-    this.pendingTx = this.txService.getLastPendingTransfer(environment.contracts.basaltEngine, this.loan);
+    this.pendingTx = this.txService.getLastPendingPay(this.loan);
   }
 
   openSnackBar(message: string, action: string) {
