@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
-import { 
+import {
   MatStepper,
   MatSnackBar,
   MatSnackBarHorizontalPosition
@@ -52,7 +52,7 @@ export class CreateLoanComponent implements OnInit {
   iconsSelection: any;
 
   formGroup3: FormGroup;
-  
+
   formGroup4: FormGroup;
   expirationRequestDate: FormControl;
 
@@ -177,38 +177,38 @@ export class CreateLoanComponent implements OnInit {
 
   getSlideSelection(step2Form) {
     this.slideSelection = [];
-    for (let property in step2Form) {
+    for (const property in step2Form) {
       if (step2Form[property] === true) {
         this.slideSelection.push(property);
       }
     }
   }
-  
-  moveTo(index: number){
+
+  moveTo(index: number) {
     this.stepper.selectedIndex = index;
   }
 
   switchIdentityIcon(iconCase) {
     this.iconsSelection = [];
-    for(let icon in iconCase) {
-      switch(iconCase[icon]) {
+    for (let icon in iconCase) {
+      switch (iconCase[icon]) {
         case 'phoneSlide':
-          this.iconsSelection.push({'class':'fas fa-phone', 'tooltip': 'Phone'});
+          this.iconsSelection.push( { 'class':'fas fa-phone', 'tooltip': 'Phone' } );
           break;
         case 'idSlide':
-          this.iconsSelection.push({'class':'fas fa-id-badge', 'tooltip': 'ID Document'});
+          this.iconsSelection.push( { 'class':'fas fa-id-badge', 'tooltip': 'ID Document' } );
           break;
         case 'sactionSlide':
-          this.iconsSelection.push({'class':'fas fa-address-card', 'tooltip': 'Saction Screen'});
+          this.iconsSelection.push( { 'class':'fas fa-address-card', 'tooltip': 'Saction Screen' } );
           break;
         case 'payrollSlide':
-          this.iconsSelection.push({'class':'fas fa-receipt', 'tooltip': 'Payroll'});
+          this.iconsSelection.push( { 'class':'fas fa-receipt', 'tooltip': 'Payroll' } );
           break;
         case 'facebookSlide':
-          this.iconsSelection.push({'class':'fab fa-facebook-f', 'tooltip': 'Facebook'});
+          this.iconsSelection.push( { 'class':'fab fa-facebook-f', 'tooltip': 'Facebook' } );
           break;
         case 'twitterSlide':
-          this.iconsSelection.push({'class':'fab fa-twitter', 'tooltip': 'Twitter'});
+          this.iconsSelection.push( { 'class':'fab fa-twitter', 'tooltip': 'Twitter' } );
           break;
       }
     }
@@ -253,7 +253,7 @@ export class CreateLoanComponent implements OnInit {
     this.fullDuration.value = Utils.formatDelta(this.fullDuration.value); // Calculate the duetime of the loan
   }
 
-  onCreateLoan(){
+  onCreateLoan() {
     this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', '');
   }
 
