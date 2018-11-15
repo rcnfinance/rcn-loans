@@ -6,7 +6,14 @@ import { Loan } from './models/loan.model';
 import { Web3Service } from './services/web3.service';
 import { EventsService, Category } from './services/events.service';
 
-enum Type { lend = 'lend', approve = 'approve', withdraw = 'withdraw', transfer = 'transfer', claim = 'claim' }
+enum Type {
+  lend = 'lend',
+  approve = 'approve',
+  withdraw = 'withdraw',
+  transfer = 'transfer',
+  claim = 'claim',
+  pay = 'pay'
+}
 
 export class Tx {
   tx: string;
@@ -131,6 +138,26 @@ export class TxService {
       .filter(tx => !tx.confirmed && tx.type === Type.claim && tx.to === cosigner)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
       .find(tx => tx.data.id === loan.id && tx.data.engine === loan.engine);
+  }
+
+  registerPayTx(tx: string, engine: string, loan: Loan, amount: number) {
+    const data = {
+      engine: engine,
+      id: loan.id,
+      amount: amount
+    };
+    this.txMemory.push(new Tx(tx, engine, false, Type.pay, data));
+    this.saveTxs();
+  }
+
+  getLastPendingPay(loan: Loan) {
+    return this.txMemory
+      .filter(tx =>
+        !tx.confirmed &&
+        tx.type === Type.pay &&
+        tx.data.id === loan.id &&
+        tx.data.engine === loan.engine)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
   }
 
   openSnackBar(message: string, action: string) {

@@ -1,1 +1,1 @@
-<a mat-raised-button (click)='handlePay()' class="button button-primary">{{ 'Pay' }}</a>
+<a mat-raised-button (click)='clickPay()' class="button button-primary">{{ pendingTx === undefined ? 'Pay' : 'Paying ...' }}</a>

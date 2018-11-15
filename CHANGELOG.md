@@ -2,6 +2,9 @@
 
 ## **Unreleased**
 
+### Features:
+- Added pay loan option
+
 ### Fix:
 - Fix bug when loading metamask privacy on account detail
 
