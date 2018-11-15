@@ -170,17 +170,15 @@ export class CreateLoanComponent implements OnInit {
   getSlideSelection(step2Form) {
     this.slideSelection = [];
     for (let property in step2Form) {
-      let value: any = step2Form[property];
       if (step2Form[property] === true) {
         this.slideSelection.push(property);
       }
     }
-    console.log(this.slideSelection);
   }
 
   switchIdentityIcon(iconCase) {
     this.iconsSelection = [];
-    for(let icon in iconCase){
+    for(let icon in iconCase) {
       switch(iconCase[icon]) {
         case 'phoneSlide':
           this.iconsSelection.push({'class':'fas fa-phone', 'tooltip': 'Phone'});
@@ -189,10 +187,10 @@ export class CreateLoanComponent implements OnInit {
           this.iconsSelection.push({'class':'fas fa-id-badge', 'tooltip': 'ID Document'});
           break;
         case 'sactionSlide':
-          this.iconsSelection.push({'class':'fas fa-address-card', 'tooltip': 'saction screen'});
+          this.iconsSelection.push({'class':'fas fa-address-card', 'tooltip': 'Saction Screen'});
           break;
         case 'payrollSlide':
-          this.iconsSelection.push({'class':'fas fa-receipt', 'tooltip': 'payroll'});
+          this.iconsSelection.push({'class':'fas fa-receipt', 'tooltip': 'Payroll'});
           break;
         case 'facebookSlide':
           this.iconsSelection.push({'class':'fab fa-facebook-f', 'tooltip': 'Facebook'});
@@ -202,7 +200,6 @@ export class CreateLoanComponent implements OnInit {
           break;
       }
     }
-    console.log(this.iconsSelection);
   }
 
   onSubmitStep4(form: NgForm) {
