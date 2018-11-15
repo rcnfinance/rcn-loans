@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
+import { MatStepper } from '@angular/material';
 // App Services
 import { environment } from '../../../environments/environment.prod';
 import { Utils } from '../../utils/utils';
@@ -14,6 +15,7 @@ import { Loan, Status } from './../../models/loan.model';
   styleUrls: ['./create-loan.component.scss']
 })
 export class CreateLoanComponent implements OnInit {
+  @ViewChild('stepper') stepper: MatStepper;
   // Date Variables
   now: Date = new Date();
   tomorrow: Date = new Date();
@@ -175,6 +177,10 @@ export class CreateLoanComponent implements OnInit {
       }
     }
   }
+  
+  moveTo(index: number){
+    this.stepper.selectedIndex = index;
+  }
 
   switchIdentityIcon(iconCase) {
     this.iconsSelection = [];
@@ -253,6 +259,5 @@ export class CreateLoanComponent implements OnInit {
 
     this.createFormControls(); // Generate Form Controls variables
     this.createForm(); // Generate Form Object variables
-
   }
 }
