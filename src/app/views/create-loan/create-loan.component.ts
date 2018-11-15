@@ -92,9 +92,9 @@ export class CreateLoanComponent implements OnInit {
 
     this.phoneSlide = new FormControl(true); // formGroup2
     this.idSlide = new FormControl(true); // formGroup2
-    this.sactionSlide = new FormControl(); // formGroup2
-    this.payrollSlide = new FormControl(); // formGroup2
-    this.facebookSlide = new FormControl(); // formGroup2
+    this.sactionSlide = new FormControl(true); // formGroup2
+    this.payrollSlide = new FormControl(true); // formGroup2
+    this.facebookSlide = new FormControl(true); // formGroup2
     this.twitterSlide = new FormControl(); // formGroup2
 
     this.expirationRequestDate = new FormControl('', Validators.required); // formGroup4
@@ -183,22 +183,22 @@ export class CreateLoanComponent implements OnInit {
     for(let icon in iconCase){
       switch(iconCase[icon]) {
         case 'phoneSlide':
-          this.iconsSelection.push({'font':'fas fa-id-badge'});
+          this.iconsSelection.push({'class':'fas fa-phone', 'tooltip': 'Phone'});
           break;
         case 'idSlide':
-          this.iconsSelection.push({'font':'fas fa-phone'});
+          this.iconsSelection.push({'class':'fas fa-id-badge', 'tooltip': 'ID Document'});
           break;
         case 'sactionSlide':
-          this.iconsSelection.push({'font':'fas fa-address-card'});
+          this.iconsSelection.push({'class':'fas fa-address-card', 'tooltip': 'saction screen'});
           break;
         case 'payrollSlide':
-          this.iconsSelection.push({'font':'fas fa-address-card'});
+          this.iconsSelection.push({'class':'fas fa-receipt', 'tooltip': 'payroll'});
           break;
         case 'facebookSlide':
-          this.iconsSelection.push({'font':'fab fa-facebook-f'});
+          this.iconsSelection.push({'class':'fab fa-facebook-f', 'tooltip': 'Facebook'});
           break;
         case 'twitterSlide':
-          this.iconsSelection.push({'font':'fab fa-twitter'});
+          this.iconsSelection.push({'class':'fab fa-twitter', 'tooltip': 'Twitter'});
           break;
       }
     }
