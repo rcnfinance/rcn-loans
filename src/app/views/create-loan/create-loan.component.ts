@@ -1,6 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
-import { MatStepper } from '@angular/material';
+import { 
+  MatStepper,
+  MatSnackBar,
+  MatSnackBarHorizontalPosition
+} from '@angular/material';
 // App Services
 import { environment } from '../../../environments/environment.prod';
 import { Utils } from '../../utils/utils';
@@ -16,6 +20,7 @@ import { Loan, Status } from './../../models/loan.model';
 })
 export class CreateLoanComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   // Date Variables
   now: Date = new Date();
   tomorrow: Date = new Date();
@@ -81,7 +86,8 @@ export class CreateLoanComponent implements OnInit {
 
   constructor(
     private contractsService: ContractsService,
-    private web3Service: Web3Service
+    private web3Service: Web3Service,
+    public snackBar: MatSnackBar
   ) {}
 
   createFormControls() { // Create form controls and define values
@@ -196,7 +202,7 @@ export class CreateLoanComponent implements OnInit {
           this.iconsSelection.push({'class':'fas fa-address-card', 'tooltip': 'Saction Screen'});
           break;
         case 'payrollSlide':
-          this.iconsSelection.push({'class':'fas fa-receipt', 'tooltip': 'Payro`ll'});
+          this.iconsSelection.push({'class':'fas fa-receipt', 'tooltip': 'Payroll'});
           break;
         case 'facebookSlide':
           this.iconsSelection.push({'class':'fab fa-facebook-f', 'tooltip': 'Facebook'});
@@ -206,11 +212,6 @@ export class CreateLoanComponent implements OnInit {
           break;
       }
     }
-  }
-
-  onSubmitStep4(form: NgForm) {
-    const step4Form = form.value.expiration.expirationRequestDate;
-    console.log(step4Form);
   }
 
   onCurrencyChange(requestedCurrency) {
@@ -250,6 +251,17 @@ export class CreateLoanComponent implements OnInit {
     this.fullDuration.value = Math.round((this.fullDuration.value).getTime() / 1000);
     this.fullDuration.value = this.fullDuration.value - now;
     this.fullDuration.value = Utils.formatDelta(this.fullDuration.value); // Calculate the duetime of the loan
+  }
+
+  onCreateLoan(){
+    this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', '');
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message , action, {
+      duration: 4000,
+      horizontalPosition: this.horizontalPosition
+    });
   }
 
   ngOnInit() {

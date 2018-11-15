@@ -184,7 +184,7 @@
 
         <mat-step [stepControl]="formGroup4" [optional]="!isOptional$">
           <ng-template matStepLabel>Finish</ng-template>
-          <form [formGroup]="formGroup4" (ngSubmit)="onSubmitStep4(fStep4)" #fStep4='ngForm'>
+          <form [formGroup]="formGroup4" #fStep4='ngForm'>
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row" formGroupName="expiration">
                 <div class="col-12"><div class="title property margintop20 marginbottom10">Expiration Request</div></div>
@@ -211,7 +211,7 @@
           </form>
           <div class='margintop20'>
             <button mat-raised-button class='button button-secondary marginright8' (click)='moveTo(1)'>Back</button>
-            <button mat-raised-button type="submit" class='button button-primary'>Create</button>
+            <button mat-raised-button type="submit" class='button button-primary' (click)='onCreateLoan()'>Create</button>
           </div>
         </mat-step>
       </mat-vertical-stepper>
