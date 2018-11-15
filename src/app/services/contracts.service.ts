@@ -122,7 +122,7 @@ export class ContractsService {
     }) as Promise<string>;
   }
 
-  async estimateRequiredAmount(loan: Loan): Promise<number> {
+  async estimateLendAmount(loan: Loan): Promise<number> {
     // TODO: Calculate and add cost of the cosigner
     if (loan.oracle === Utils.address0x) {
       return loan.rawAmount;

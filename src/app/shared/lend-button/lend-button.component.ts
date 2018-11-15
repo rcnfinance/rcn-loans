@@ -74,7 +74,7 @@ export class LendButtonComponent implements OnInit {
       const engineApproved = this.contractsService.isEngineApproved();
       const civicApproved = this.civicService.status();
       const balance = this.contractsService.getUserBalanceRCNWei();
-      const required = this.contractsService.estimateRequiredAmount(this.loan);
+      const required = this.contractsService.estimateLendAmount(this.loan);
       if (!await engineApproved) {
         this.showApproveDialog();
         return;
