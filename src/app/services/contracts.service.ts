@@ -138,6 +138,21 @@ export class ContractsService {
     return required;
   }
 
+  async estimatePayAmount(loan: Loan, amount: number): Promise<number> {
+    if (loan.oracle === Utils.address0x) {
+      return loan.rawAmount;
+    }
+    const oracleData = await this.getOracleData(loan);
+    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
+    const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
+    const rate = oracleRate[0];
+    const decimals = oracleRate[1];
+    console.info('Oracle rate obtained', rate, decimals);
+    const required = (rate * amount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+    console.info('Estimated required rcn is', required);
+    return required;
+  }
+
   async payLoan(loan: Loan, amount: number): Promise<string> {
     const account = await this.web3.getAccount();
     const pOracleData = this.getOracleData(loan);

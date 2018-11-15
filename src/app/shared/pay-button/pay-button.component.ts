@@ -63,21 +63,9 @@ export class PayButtonComponent implements OnInit {
       const engineApproved = await this.contractsService.isEngineApproved();
       const civicApproved = this.civicService.status();
       const balance = await this.contractsService.getUserBalanceRCNWei();
-      const required = await this.contractsService.estimateRequiredAmount(this.loan);
 
       if (! engineApproved) {
         this.showApproveDialog();
-        return;
-      }
-
-      if (balance < required) {
-        this.eventsService.trackEvent(
-          'show-insufficient-funds-lend',
-          Category.Account,
-          'loan #' + this.loan.id,
-           required
-        );
-        this.showInsufficientFundsDialog(required, balance);
         return;
       }
 
@@ -87,9 +75,21 @@ export class PayButtonComponent implements OnInit {
       }
 
       const dialogRef = this.dialog.open(DialogLoanPayComponent);
-      dialogRef.afterClosed().subscribe(amount => {
+      dialogRef.afterClosed().subscribe(async amount => {
         if (amount) {
           amount = amount * 10 ** Currency.getDecimals('RCN');
+          const requiredTokens = await this.contractsService.estimatePayAmount(this.loan, amount);
+          if (balance < requiredTokens) {
+            this.eventsService.trackEvent(
+              'show-insufficient-funds-lend',
+              Category.Account,
+              'loan #' + this.loan.id,
+              requiredTokens
+            );
+            this.showInsufficientFundsDialog(requiredTokens, balance);
+            return;
+          }
+
           this.eventsService.trackEvent(
             'set-to-pay-loan',
             Category.Loan,
