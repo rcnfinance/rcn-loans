@@ -190,26 +190,27 @@ export class CreateLoanComponent implements OnInit {
 
   switchIdentityIcon(iconCase) {
     this.iconsSelection = [];
-    for (let icon in iconCase) {
+    for (const icon in iconCase) {
       switch (iconCase[icon]) {
         case 'phoneSlide':
-          this.iconsSelection.push( { 'class':'fas fa-phone', 'tooltip': 'Phone' } );
+          this.iconsSelection.push( { 'class': 'fas fa-phone', 'tooltip': 'Phone' } );
           break;
         case 'idSlide':
-          this.iconsSelection.push( { 'class':'fas fa-id-badge', 'tooltip': 'ID Document' } );
+          this.iconsSelection.push( { 'class': 'fas fa-id-badge', 'tooltip': 'ID Document' } );
           break;
         case 'sactionSlide':
-          this.iconsSelection.push( { 'class':'fas fa-address-card', 'tooltip': 'Saction Screen' } );
+          this.iconsSelection.push( { 'class': 'fas fa-address-card', 'tooltip': 'Saction Screen' } );
           break;
         case 'payrollSlide':
-          this.iconsSelection.push( { 'class':'fas fa-receipt', 'tooltip': 'Payroll' } );
+          this.iconsSelection.push( { 'class': 'fas fa-receipt', 'tooltip': 'Payroll' } );
           break;
         case 'facebookSlide':
-          this.iconsSelection.push( { 'class':'fab fa-facebook-f', 'tooltip': 'Facebook' } );
+          this.iconsSelection.push( { 'class': 'fab fa-facebook-f', 'tooltip': 'Facebook' } );
           break;
         case 'twitterSlide':
-          this.iconsSelection.push( { 'class':'fab fa-twitter', 'tooltip': 'Twitter' } );
+          this.iconsSelection.push( { 'class': 'fab fa-twitter', 'tooltip': 'Twitter' } );
           break;
+        default:
       }
     }
   }
