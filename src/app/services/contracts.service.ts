@@ -159,7 +159,10 @@ export class ContractsService {
     const oracleData = await pOracleData;
 
     return new Promise((resolve, reject) => {
-      this._rcnEngine.pay(loan.id, amount, account, oracleData, { from: account }, function(err, result) {
+      this.loadAltContract(
+        this.web3.opsWeb3,
+        this._rcnEngine
+      ).pay(loan.id, amount, account, oracleData, { from: account }, function(err, result) {
         if (err != null) {
           reject(err);
         } else {
