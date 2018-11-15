@@ -72,16 +72,36 @@ export class LendButtonComponent implements OnInit {
 
     try {
       const engineApproved = this.contractsService.isEngineApproved();
-      const civicApproved = this.civicService.status();
-      const balance = this.contractsService.getUserBalanceRCNWei();
-      const required = this.contractsService.estimateRequiredAmount(this.loan);
       if (!await engineApproved) {
         this.showApproveDialog();
         return;
       }
 
+      const civicApproved = this.civicService.status();
+      if (!await civicApproved) {
+        this.showCivicDialog();
+        return;
+      }
+
+      const balance = await this.contractsService.getUserBalanceRCNWei();
+      const required = await this.contractsService.estimateRequiredAmount(this.loan);
       console.info('Try lend', await required, await balance);
-      if (await balance < await required) {
+
+      const ethBalance = await this.contractsService.getUserBalanceETHWei();
+      const estimated = await this.contractsService.estimateEthRequiredAmount(this.loan);
+      console.info('Try lend', await estimated, await ethBalance);
+
+      if (balance > required || ethBalance > estimated) {
+        const tx = await this.contractsService.lendLoan(this.loan, (balance <= required), estimated);
+        this.eventsService.trackEvent(
+          'lend',
+          Category.Account,
+          'loan #' + this.loan.id
+        );
+
+        this.txService.registerLendTx(this.loan, tx);
+        this.pendingTx = this.txService.getLastLend(this.loan);
+      } else {
         this.eventsService.trackEvent(
           'show-insufficient-funds-lend',
           Category.Account,
@@ -90,24 +110,8 @@ export class LendButtonComponent implements OnInit {
         );
 
         this.showInsufficientFundsDialog(await required, await balance);
-        return;
       }
 
-      if (!await civicApproved) {
-        this.showCivicDialog();
-        return;
-      }
-
-      const tx = await this.contractsService.lendLoan(this.loan);
-
-      this.eventsService.trackEvent(
-        'lend',
-        Category.Account,
-        'loan #' + this.loan.id
-      );
-
-      this.txService.registerLendTx(this.loan, tx);
-      this.pendingTx = this.txService.getLastLend(this.loan);
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.message.indexOf('User denied transaction signature') < 0) {

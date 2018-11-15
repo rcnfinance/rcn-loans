@@ -18,6 +18,7 @@ const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
 const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const oracleAbi = require('../contracts/Oracle.json');
+const converterRampAbi = require('../contracts/ConverterRamp.json');
 
 @Injectable()
 export class ContractsService {
@@ -28,6 +29,8 @@ export class ContractsService {
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
   private _rcnExtension: any;
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
+  private _rcnConverterRamp: any;
+  private _rcnConverterRampAddress: string = environment.contracts.converterRamp;
 
   constructor(
       private web3: Web3Service,
@@ -38,6 +41,15 @@ export class ContractsService {
     this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
     this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
+    this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
+
+  }
+
+  async getUserBalanceETHWei(): Promise<number> {
+    const account = await this.web3.getAccount();
+    return new Promise((resolve) => {
+      resolve(this.web3.web3.eth.getBalance(account));
+    }) as Promise<number>;
   }
 
   async getUserBalanceRCNWei(): Promise<number> {
@@ -122,6 +134,44 @@ export class ContractsService {
     }) as Promise<string>;
   }
 
+  async estimateEthRequiredAmount(loan: Loan): Promise<number> {
+
+    const oracleData = await this.getOracleData(loan);
+    const cosigner = this.cosignerService.getCosigner(loan);
+    const account = await this.web3.getAccount();
+
+    let cosignerAddr = '0x0';
+    let cosignerData = '0x0';
+    if (cosigner !== undefined) {
+      const cosignerOffer = await cosigner.offer(loan);
+      cosignerAddr = cosignerOffer.contract;
+      cosignerData = cosignerOffer.lendData;
+    }
+    const loanParams = [ environment.contracts.basaltEngine, loan.id, cosignerAddr];
+    const convertParams = [ 1000001, 0, 10 ** 9 ];
+    return new Promise((resolve, reject) => {
+      this.loadAltContract(
+        this.web3.opsWeb3,
+        this._rcnConverterRamp
+      ).requiredLendSell(
+        environment.contracts.tokenConverter,
+        environment.contracts.rcnToken,
+        loanParams,
+        oracleData,
+        cosignerData,
+        convertParams,
+        { from: account },
+        function(err, result) {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    }) as Promise<number>;
+  }
+
   async estimateRequiredAmount(loan: Loan): Promise<number> {
     // TODO: Calculate and add cost of the cosigner
     if (loan.oracle === Utils.address0x) {
@@ -138,8 +188,7 @@ export class ContractsService {
     console.info('Estimated required rcn is', required);
     return required;
   }
-
-  async lendLoan(loan: Loan): Promise<string> {
+  async lendLoan(loan: Loan, swap: boolean, value: number): Promise<string> {
     const pOracleData = this.getOracleData(loan);
     const account = await this.web3.getAccount();
     const cosigner = this.cosignerService.getCosigner(loan);
@@ -151,6 +200,32 @@ export class ContractsService {
       cosignerData = cosignerOffer.lendData;
     }
     const oracleData = await pOracleData;
+    if (swap) {
+      /*return new Promise((resolve, reject) => {
+        this.loadAltContract(
+          this.web3.opsWeb3,
+          this._rcnConverterRamp
+        ).lend(
+          value,
+          '0x0a17f419ee137ad8296c5c36d7f0f686299ab2ff',
+          [ loan.id ],
+          oracleData,
+          cosignerAddr,
+          cosignerData,
+          [],
+          { from: account,
+            value: value
+          },
+          function(err, result) {
+            if (err != null) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      }) as Promise<string>;*/
+    }
     return new Promise((resolve, reject) => {
       this.loadAltContract(
         this.web3.opsWeb3,
