@@ -14,7 +14,6 @@
 
   <div class="row">
     <div class="col-xs-12 col-lg-6">
-
       <mat-vertical-stepper linear #stepper>
         
         <mat-step [stepControl]="formGroup1" [optional]="isOptional$" [editable]='isEditable$'>
@@ -109,7 +108,6 @@
                   </div>
                 </div>
               </div>
-            <!-- <pre>{{ fStep1.value | json }}</pre> -->
             <div class='margintop20'>
               <button mat-raised-button type="submit" 
               class='button button-primary' 
@@ -122,7 +120,6 @@
 
         <mat-step [stepControl]="formGroup2" [optional]="isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup2" (ngSubmit)="onSubmitStep2(fStep2)" #fStep2='ngForm'>
-
             <ng-template matStepLabel>Complete your identity with Bloom</ng-template>
             <div class="stepper-title">
               <i class="fas fa-id-badge inline fa-lg"></i>
@@ -155,7 +152,6 @@
                 <mat-slide-toggle [checked]="checked$" formControlName="twitterSlide"></mat-slide-toggle>
               </div>
             </div>
-              
             <div class='margintop20'>
               <button mat-raised-button type="submit" 
               class='button button-primary' matStepperNext>
@@ -163,8 +159,6 @@
               </button>
             </div>
           </form>
-
-          <pre>{{ fStep2.value | json }}</pre>
         </mat-step>
 
         <mat-step [stepControl]="formGroup3" [optional]="isOptional$" [editable]='isEditable$'>
@@ -175,7 +169,6 @@
               <div class="title main-b1 inline">Bloom QR</div>
             </div>
             <div class="title main-m3 margintop10">Unlock the power of a global, secure identity</div>
-            
             <div class="row margintop20 marginbottom20">
               <div class="col marginbottom10">
                 <div class="title property marginbottom5">QR Display</div>
@@ -197,8 +190,6 @@
 
         <mat-step [stepControl]="formGroup4" [optional]="!isOptional$">
           <ng-template matStepLabel>Finish</ng-template>
-          You are now done.
-
           <form [formGroup]="formGroup4" (ngSubmit)="onSubmitStep4(fStep4)" #fStep4='ngForm'>
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row" formGroupName="expiration">
@@ -224,8 +215,6 @@
               </div>
             </div>
           </form>
-          <pre>{{ expirationRequestDate.value }}</pre>
-          
           <div class='margintop20'>
             <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
             <button mat-raised-button type="submit" class='button button-primary'>Create</button>
