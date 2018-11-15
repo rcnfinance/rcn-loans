@@ -196,7 +196,7 @@ export class CreateLoanComponent implements OnInit {
           this.iconsSelection.push({'class':'fas fa-address-card', 'tooltip': 'Saction Screen'});
           break;
         case 'payrollSlide':
-          this.iconsSelection.push({'class':'fas fa-receipt', 'tooltip': 'Payroll'});
+          this.iconsSelection.push({'class':'fas fa-receipt', 'tooltip': 'Payro`ll'});
           break;
         case 'facebookSlide':
           this.iconsSelection.push({'class':'fab fa-facebook-f', 'tooltip': 'Facebook'});
