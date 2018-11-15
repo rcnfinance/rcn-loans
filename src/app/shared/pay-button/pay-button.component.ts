@@ -77,7 +77,7 @@ export class PayButtonComponent implements OnInit {
       const dialogRef = this.dialog.open(DialogLoanPayComponent);
       dialogRef.afterClosed().subscribe(async amount => {
         if (amount) {
-          amount = amount * 10 ** Currency.getDecimals('RCN');
+          amount = amount * 10 ** Currency.getDecimals(this.loan.currency);
           const requiredTokens = await this.contractsService.estimatePayAmount(this.loan, amount);
           if (balance < requiredTokens) {
             this.eventsService.trackEvent(
