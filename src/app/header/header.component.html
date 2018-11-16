@@ -20,12 +20,21 @@
             <div class="header-title">{{ title }}</div>
 
             <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
-              <div routerLink='/requests'>Requests</div>
-              <div routerLink='/activity'>Activity</div>
-              <div routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</div>
-              <div (click)="openDialog()" *ngIf="!hasAccount">Login</div>
+              <!-- Menu section -->
+              <div class="hover" routerLink='/requests'>Requests</div>
+              <div class="hover" routerLink='/activity'>Activity</div>
+              <div class="hover" routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</div>
+              <div class="hover" (click)="openDialog()" *ngIf="!hasAccount">Login</div>
               <div class="separator">|</div>
-              <div (click)="openDialog();">
+              <!-- Balance section -->
+              <div class="balance" *ngIf="hasAccount">
+                  <div class="sans">{{ displayTotal ? rcnBalance : rcnTotal }}</div>
+                  <div class="sans">RCN</div>
+                  <i class="material-icons plus" (click)="clickWithdraw()" *ngIf='withdrawAvailable'>add_circle</i>
+                  <div class="pending-balance sans pending" (click)="clickWithdraw()" *ngIf='withdrawAvailable'>{{ rcnAvailable }}</div>
+                </div>
+                <div class="separator" *ngIf="hasAccount">|</div>
+              <div class="hover" (click)="openDialog();">
                 <div class="flex-container" *ngIf="hasAccount">
                   <div class="flex-item">
                     <div class="list-avatar">

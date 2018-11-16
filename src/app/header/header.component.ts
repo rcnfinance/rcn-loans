@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
+
 // App Component
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
@@ -12,6 +13,8 @@ import { ContractsService } from '../services/contracts.service';
 import { TitleService } from '../services/title.service';
 
 import { Utils } from '../utils/utils';
+import { TxService, Tx } from '../tx.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -24,9 +27,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   profile: boolean;
   title: string;
 
-  rcnBalance = '...'; // Balance bar
-  rcnAvailable = '...'; // Balance bar
+  _rcnBalance: number;
+  _rcnAvailable: number;
   loansWithBalance: number[]; // Balance bar
+  ongoingWithdraw: Tx;
 
   isOpen$: BehaviorSubject<boolean>;
   navToggle: boolean; // Navbar toggled
@@ -37,6 +41,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private router: Router,
     private sidebarService: SidebarService,
     private contractService: ContractsService,
+    private txService: TxService,
     public titleService: TitleService
   ) {}
 
@@ -82,18 +87,64 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     return this.account !== undefined;
   }
 
+  get withdrawAvailable(): boolean {
+    return this.loansWithBalance !== undefined &&
+      this.loansWithBalance.length !== 0 &&
+      this.ongoingWithdraw === undefined;
+  }
+
+  get rcnBalance(): string {
+    return this._rcnBalance ? Utils.formatAmount(this._rcnBalance) : '...';
+  }
+
+  get rcnAvailable(): string {
+    return this._rcnAvailable ? Utils.formatAmount(this._rcnAvailable) : '...';
+  }
+
+  get displayTotal(): boolean {
+    return this.ongoingWithdraw !== undefined && !this.withdrawAvailable;
+  }
+
+  get rcnTotal(): string {
+    if (!this._rcnAvailable || !this._rcnBalance) {
+      return '...';
+    }
+
+    return Utils.formatAmount(this._rcnAvailable + this._rcnBalance);
+  }
+
   loadRcnBalance() {
     this.contractService.getUserBalanceRCN().then((balance: number) => {
-      this.rcnBalance = Utils.formatAmount(balance);
+      this._rcnBalance = balance;
     });
   }
 
   // Withdraw button
   loadWithdrawBalance() {
     this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
-      this.rcnAvailable = Utils.formatAmount(result[0] / 10 ** 18);
+      this._rcnAvailable = result[0] / 10 ** 18;
       this.loansWithBalance = result[1];
+      this.loadOngoingWithdraw();
     });
+  }
+
+  loadOngoingWithdraw() {
+    this.ongoingWithdraw = this.txService.getLastWithdraw(
+      environment.contracts.basaltEngine,
+      this.loansWithBalance
+    );
+    this.ongoingWithdraw = this.txService.getLastWithdraw(environment.contracts.basaltEngine, this.loansWithBalance);
+    if (this.ongoingWithdraw) {
+      this._rcnBalance += this._rcnAvailable;
+    }
+  }
+
+  async clickWithdraw() {
+    if (this.withdrawAvailable) {
+      const tx = await this.contractService.withdrawFunds(this.loansWithBalance);
+      this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.loansWithBalance);
+      this.loadWithdrawBalance();
+    }
   }
 
   async loadLogin() {
