@@ -148,6 +148,9 @@ jobs:
                 name: Start server
                 command: npm start
                 background: true
+            - run:
+                name: Wait NPM start
+                command: sleep 20
             # Launch jest
             - run:
                 name: Jest E2E
