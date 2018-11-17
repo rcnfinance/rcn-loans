@@ -16,7 +16,7 @@ let pfund;
 beforeAll(async (done) => {
   wallet = new TestWallet();
   pfund = wallet.fund();
-  browser = await dappeteer.launch(puppeteer, { headless: true, args: '--no-sandbox --disable-setuid-sandbox' });
+  browser = await dappeteer.launch(puppeteer, { args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   metamask = await dappeteer.getMetamask(browser);
   await metamask.importAccount(wallet.mnemonic);
   await metamask.switchNetwork('ropsten');
@@ -42,7 +42,7 @@ afterEach(async (done) => {
 });
 
 test('Should approve basalt contract expend tokens', async () => {
-  const profileButton = (await page.$x('//*[@id="navbar"]/div/div/div/div/div[2]/div[5]/div'))[0];
+  const profileButton = (await page.$x('//*[@id="mat-checkbox-1"]/label/div/div[1]'))[0];
   await page.waitFor(300);
   await profileButton.click();
   await page.waitFor(1000);

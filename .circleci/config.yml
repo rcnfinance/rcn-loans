@@ -149,6 +149,9 @@ jobs:
                 command: npm start
                 background: true
             - run:
+                name: Workaround for GoogleChrome/puppeteer#290
+                command: 'sh .circleci/setup_puppeteer.sh'
+            - run:
                 name: Wait NPM start
                 command: sleep 20
             # Launch jest
