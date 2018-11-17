@@ -103,6 +103,7 @@ jobs:
                 keys:
                 - v2-dependencies-{{ checksum "package.json" }}
                 - v2-dependencies-
+
             # Build the project
             - run:
                 name: Build
@@ -125,6 +126,35 @@ jobs:
             # Save build
             - store_artifacts:
                 path: ropsten-build.tar.gz
+    
+    test-e2e:
+        working_directory: ~/project
+        docker:
+            - image: circleci/node:8.12
+        steps:
+            # Checkout the code from the branch into the working_directory
+            - checkout
+            # Log the current branch
+            - run:
+                name: Show current branch
+                command: echo ${CIRCLE_BRANCH}
+            # Restore local dependencies from cache
+            - restore_cache:
+                keys:
+                - v2-dependencies-{{ checksum "package.json" }}
+                - v2-dependencies-
+            # Start web server
+            - run:
+                name: Start server
+                command: npm start
+                background: true
+            # Launch jest
+            - run:
+                name: Jest E2E
+                command: ./node_modules/.bin/jest
+            # Upload images
+            - store_artifacts:
+                path: screenshots
 
     deploy-ropsten:  
         docker:
@@ -160,11 +190,15 @@ workflows:
             - lint:
                 requires:
                     - install
+            - test-e2e:
+                requires:
+                    - install
             - deploy-ropsten:
                 requires:
                     - lint
                     - build-ropsten
                     - build-mainnet
+                    - test-e2e
                 filters:
                     branches:
                         only: master
