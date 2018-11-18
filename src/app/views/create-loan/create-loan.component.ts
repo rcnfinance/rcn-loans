@@ -61,6 +61,7 @@ export class CreateLoanComponent implements OnInit {
     this.fullDuration, // interestTimestamp
     this.fullDuration, // dueTimestamp
     0, // lenderBalance
+    0, // timestamp TODO: Provide expire date
     '0x0', // owner
     '0x0' // cosigner
   );
