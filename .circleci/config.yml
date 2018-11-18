@@ -154,6 +154,7 @@ jobs:
             - run:
                 name: Wait NPM start
                 command: until $(curl --output /dev/null --silent --head --fail http://localhost:4200); do printf '.'; sleep 0.1; done;
+                timeout: 90
             # Launch jest
             - run:
                 name: Jest E2E
