@@ -2,6 +2,7 @@ module.exports = {
     "roots": [
       "<rootDir>/e2e"
     ],
+    "testRunner": "jest-circus/runner",
     "transform": {
         "^.+\\.tsx?$": "ts-jest"
     },

@@ -4,6 +4,9 @@ import 'jest';
 import { TestWallet } from './utils/test-wallet';
 import { screenshot, TIMEOUT_METAMASK } from './utils/test-utils';
 
+declare let jest: any;
+jest.retryTimes(3);
+
 const puppeteer = require('puppeteer');
 const dappeteer = require('dappeteer');
 
