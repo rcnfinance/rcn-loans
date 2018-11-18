@@ -16,20 +16,27 @@ export class TestWallet {
     ));
   }
 
-  async fund(amount = '0.01') {
-    const source = new Web3(new HDWalletProvider(
-        process.env.FAUCET_KEY,
-        'https://ropsten.node.rcn.loans:8545/'
-    ));
+  async fund(amount = '0.01', r = 0) {
+    try {
+      const source = new Web3(new HDWalletProvider(
+          process.env.FAUCET_KEY,
+          'https://ropsten.node.rcn.loans:8545/'
+      ));
 
-    const saccounts = await promisify(source.eth.getAccounts, []);
-    const waccounts = await promisify(this.web3.eth.getAccounts, []);
-    const tx = await promisify(source.eth.sendTransaction, [{
-      from: saccounts[0],
-      to: waccounts[0],
-      value: this.web3.toWei(amount)
-    }]);
-    await waitForReceipt(this.web3, tx);
+      const saccounts = await promisify(source.eth.getAccounts, []);
+      const waccounts = await promisify(this.web3.eth.getAccounts, []);
+      const tx = await promisify(source.eth.sendTransaction, [{
+        from: saccounts[0],
+        to: waccounts[0],
+        value: this.web3.toWei(amount)
+      }]);
+      await waitForReceipt(this.web3, tx);
+    } catch {
+      if (r < 90) {
+        await delay(1000);
+        await this.fund(amount, r + 1);
+      }
+    }
   }
 
   async destroy(r = 0): Promise<string> {
@@ -52,7 +59,7 @@ export class TestWallet {
     } catch {
       if (r < 30) {
         await delay(1000);
-        this.destroy(r + 1);
+        await this.destroy(r + 1);
       }
     }
   }
