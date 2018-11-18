@@ -53,7 +53,7 @@ test('Should display detail of loan', async () => {
   );
 
   expect(lenderText).toContain('0x791bcc53d4adbfeb6f471f6241262b9a9021ea3f');
-}, 10000);
+}, 14000);
 
 afterAll(async () => {
   browser.close();
