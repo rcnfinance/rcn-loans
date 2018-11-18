@@ -4,11 +4,12 @@ import 'jest';
 import { screenshot } from './utils/test-utils';
 
 const puppeteer = require('puppeteer');
+const dappeteer = require('dappeteer');
 
 let browser;
 
 beforeAll(async (done) => {
-  browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  browser = await dappeteer.launch(puppeteer, { args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   done();
 });
 

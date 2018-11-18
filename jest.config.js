@@ -14,5 +14,8 @@ module.exports = {
       "json",
       "node"
     ],
-  }
+    "jest": {
+      "verbose": true
+    }
+}
   
