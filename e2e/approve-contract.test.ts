@@ -16,7 +16,7 @@ let pfund;
 beforeAll(async (done) => {
   wallet = new TestWallet();
   pfund = wallet.fund();
-  browser = await dappeteer.launch(puppeteer, { args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  browser = await dappeteer.launch(puppeteer, { headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   metamask = await dappeteer.getMetamask(browser);
   await metamask.importAccount(wallet.mnemonic);
   await metamask.switchNetwork('ropsten');

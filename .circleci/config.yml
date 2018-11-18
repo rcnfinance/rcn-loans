@@ -157,7 +157,7 @@ jobs:
             # Launch jest
             - run:
                 name: Jest E2E
-                command: ./node_modules/.bin/jest --verbose
+                command: npm run-script e2e
             # Upload images
             - store_artifacts:
                 path: screenshots
