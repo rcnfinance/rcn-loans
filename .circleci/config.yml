@@ -127,7 +127,7 @@ jobs:
             - store_artifacts:
                 path: ropsten-build.tar.gz
     
-    test-e2e:
+    e2e-tests:
         working_directory: ~/project
         docker:
             - image: circleci/node:8.12-browsers
@@ -161,6 +161,38 @@ jobs:
             # Upload images
             - store_artifacts:
                 path: screenshots
+
+    unit-tests:
+        working_directory: ~/project
+        docker:
+            - image: circleci/node:8.12-browsers
+        steps:
+            # Checkout the code from the branch into the working_directory
+            - checkout
+            # Log the current branch
+            - run:
+                name: Show current branch
+                command: echo ${CIRCLE_BRANCH}
+            # Restore local dependencies from cache
+            - restore_cache:
+                keys:
+                - v2-dependencies-{{ checksum "package.json" }}
+                - v2-dependencies-
+            # Stamp version
+            - run:
+                name: Read version
+                command: node version.js
+            # Run unit tests
+            - run:
+                name: Unit tests
+                command: ./node_modules/.bin/ng test --code-coverage --watch=false
+            # Upload results
+            - run:
+                name: Upload coverage to coveralls
+                command: cat coverage/lcov.info | node_modules/.bin/coveralls
+            # Save artifacts
+            - store_artifacts:
+                path: coverage
 
     deploy-ropsten:  
         docker:
@@ -196,7 +228,9 @@ workflows:
             - lint:
                 requires:
                     - install
-            - test-e2e:
+            - e2e-tests:
+                    - install
+            - unit-tests:
                 requires:
                     - install
             - deploy-ropsten:
@@ -204,7 +238,8 @@ workflows:
                     - lint
                     - build-ropsten
                     - build-mainnet
-                    - test-e2e
+                    - e2e-tests
+                    - unit-tests
                 filters:
                     branches:
                         only: master
