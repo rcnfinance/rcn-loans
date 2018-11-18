@@ -103,6 +103,7 @@ jobs:
                 keys:
                 - v2-dependencies-{{ checksum "package.json" }}
                 - v2-dependencies-
+
             # Build the project
             - run:
                 name: Build
@@ -112,7 +113,11 @@ jobs:
             - run:
                 name: Reading version
                 command: VERSION="$(cat .version)"
-
+            # Save uncompressed build
+            - persist_to_workspace:
+                root: .
+                paths:
+                    - ./dist/*
             # Compress build
             - run:
                 name: Compressing build
@@ -121,6 +126,92 @@ jobs:
             # Save build
             - store_artifacts:
                 path: ropsten-build.tar.gz
+    
+    e2e-tests:
+        working_directory: ~/project
+        docker:
+            - image: circleci/node:8.12-browsers
+        steps:
+            # Checkout the code from the branch into the working_directory
+            - checkout
+            # Log the current branch
+            - run:
+                name: Show current branch
+                command: echo ${CIRCLE_BRANCH}
+            # Restore local dependencies from cache
+            - restore_cache:
+                keys:
+                - v2-dependencies-{{ checksum "package.json" }}
+                - v2-dependencies-
+            # Start web server
+            - run:
+                name: Start server
+                command: npm start
+                background: true
+            - run:
+                name: Workaround for GoogleChrome/puppeteer#290
+                command: 'sh .circleci/setup_puppeteer.sh'
+            - run:
+                name: Wait NPM start
+                command: until $(curl --output /dev/null --silent --head --fail http://localhost:4200); do printf '.'; sleep 0.1; done;
+            # Launch jest
+            - run:
+                name: Jest E2E
+                command: ./node_modules/.bin/jest --runInBand
+            # Upload images
+            - store_artifacts:
+                path: screenshots
+
+    unit-tests:
+        working_directory: ~/project
+        docker:
+            - image: circleci/node:8.12-browsers
+        steps:
+            # Checkout the code from the branch into the working_directory
+            - checkout
+            # Log the current branch
+            - run:
+                name: Show current branch
+                command: echo ${CIRCLE_BRANCH}
+            # Restore local dependencies from cache
+            - restore_cache:
+                keys:
+                - v2-dependencies-{{ checksum "package.json" }}
+                - v2-dependencies-
+            # Stamp version
+            - run:
+                name: Read version
+                command: node version.js
+            # Run unit tests
+            - run:
+                name: Unit tests
+                command: ./node_modules/.bin/ng test --code-coverage --watch=false
+            # Upload results
+            - run:
+                name: Upload coverage to coveralls
+                command: cat coverage/lcov.info | node_modules/.bin/coveralls
+            # Save artifacts
+            - store_artifacts:
+                path: coverage
+
+    deploy-ropsten:  
+        docker:
+        - image: circleci/python:3.6.1
+        environment:
+        AWS_DEFAULT_OUTPUT: json
+        AWS_DEFAULT_REGION: us-east-2
+        steps:
+        - checkout
+        - run:
+            name: Install awscli
+            command: |
+                sudo pip install awscli
+        - attach_workspace:
+            at: ~/project
+        - run:
+            name: Upload to S3
+            command: |
+                aws s3 sync ./dist s3://rcn-loans-ropsten/ --acl public-read
 
 workflows:
     version: 2
@@ -137,3 +228,19 @@ workflows:
             - lint:
                 requires:
                     - install
+            - e2e-tests:
+                requires:
+                    - install
+            - unit-tests:
+                requires:
+                    - install
+            - deploy-ropsten:
+                requires:
+                    - lint
+                    - build-ropsten
+                    - build-mainnet
+                    - e2e-tests
+                    - unit-tests
+                filters:
+                    branches:
+                        only: master

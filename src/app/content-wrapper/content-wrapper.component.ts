@@ -75,7 +75,11 @@ export class ContentWrapperComponent implements OnInit {
   }
 
   // Open Client Dialog
-  openDialogClient() {
+  async openDialogClient() {
+    if (await this.web3Service.requestLogin()) {
+      return;
+    }
+
     this.dialog.open(DialogClientAccountComponent, {});
   }
 
@@ -95,13 +99,16 @@ export class ContentWrapperComponent implements OnInit {
      // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
-
-    this.loadLender();
-    this.loadRcnBalance();
-    this.loadWithdrawBalance();
-    this.web3Service.getAccount().then((account) => {
-      this.account = account;
-    });
+    this.web3Service.loginEvent.subscribe(() => this.loadAccount());
+    this.loadAccount();
+  }
+  async loadAccount() {
+    if (!this.hasAccount) {
+      this.account = await this.web3Service.getAccount();
+      this.loadLender();
+      this.loadRcnBalance();
+      this.loadWithdrawBalance();
+    }
   }
   private removeTrailingZeros(value) {
     value = value.toString();

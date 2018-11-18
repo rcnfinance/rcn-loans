@@ -34,6 +34,7 @@ import { SocialContainerComponent } from './social-container/social-container.co
 
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
+import { PayFormComponent } from './pay-form/pay-form.component';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
     ButtonGroupComponent,
     SocialContainerComponent,
     RiskIndicatorComponent,
-    CivicAuthComponent
+    CivicAuthComponent,
+    PayFormComponent
   ],
   entryComponents: [
     CivicAuthComponent
@@ -91,7 +93,8 @@ import { CivicAuthComponent } from './civic-auth/civic-auth.component';
     ButtonGroupComponent,
     SocialContainerComponent,
     RiskIndicatorComponent,
-    CivicAuthComponent
+    CivicAuthComponent,
+    PayFormComponent
   ]
 })
 export class SharedModule { }

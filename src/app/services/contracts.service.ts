@@ -38,7 +38,7 @@ export class ContractsService {
     ) {
     this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
     this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
-    this._rcnExtension = this.web3.web3reader.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
+    this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
   }
 
   async getUserBalanceRCNWei(): Promise<number> {
@@ -52,10 +52,11 @@ export class ContractsService {
       });
     }) as Promise<number>;
   }
+
   async getUserBalanceRCN(): Promise<number> {
     return new Promise((resolve) => {
       this.getUserBalanceRCNWei().then((balance) => {
-        resolve(this.web3.web3reader.fromWei(balance));
+        resolve(this.web3.web3.fromWei(balance));
       });
     }) as Promise<number>;
   }
@@ -68,7 +69,7 @@ export class ContractsService {
         console.info('Pending engine approved found', pending);
         resolve(pending);
       } else {
-        const _web3 = this.web3.web3reader;
+        const _web3 = this.web3.web3;
         this._rcnContract.allowance.call(account, this._rcnEngineAddress, function (err, result) {
           if (err != null) {
             reject(err);
@@ -86,8 +87,11 @@ export class ContractsService {
     const rcnAddress = this._rcnContractAddress;
     const engineAddress = this._rcnEngineAddress;
     return new Promise((resolve, reject) => {
-      const _web3 = this.web3.web3;
-      this._rcnContract.approve(this._rcnEngineAddress, _web3.toWei(10 ** 32), { from: account }, function (err, result) {
+      const web3 = this.web3.opsWeb3;
+      this.loadAltContract(
+        web3,
+        this._rcnContract
+      ).approve(this._rcnEngineAddress, web3.toWei(10 ** 32), { from: account }, function (err, result) {
         if (err != null) {
           reject(err);
         } else {
@@ -103,7 +107,11 @@ export class ContractsService {
     const rcnAddress = this._rcnContractAddress;
     const engineAddress = this._rcnEngineAddress;
     return new Promise((resolve, reject) => {
-      this._rcnContract.approve(this._rcnEngineAddress, 0, { from: account }, function (err, result) {
+      const web3 = this.web3.opsWeb3;
+      this.loadAltContract(
+        web3,
+        this._rcnContract
+      ).approve(this._rcnEngineAddress, 0, { from: account }, function (err, result) {
         if (err != null) {
           reject(err);
         } else {
@@ -147,14 +155,14 @@ export class ContractsService {
         });
     }) as Promise<number>;
   }
-  async estimateRequiredAmount(loan: Loan): Promise<number> {
+
+  async estimateLendAmount(loan: Loan): Promise<number> {
     // TODO: Calculate and add cost of the cosigner
     if (loan.oracle === Utils.address0x) {
       return loan.rawAmount;
     }
-
     const oracleData = await this.getOracleData(loan);
-    const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
+    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
     const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
     const rate = oracleRate[0];
     const decimals = oracleRate[1];
@@ -164,10 +172,43 @@ export class ContractsService {
     return required;
   }
 
-  async lendLoan(loan: Loan): Promise<string> {
+  async estimatePayAmount(loan: Loan, amount: number): Promise<number> {
+    if (loan.oracle === Utils.address0x) {
+      return loan.rawAmount;
+    }
+    const oracleData = await this.getOracleData(loan);
+    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
+    const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
+    const rate = oracleRate[0];
+    const decimals = oracleRate[1];
+    console.info('Oracle rate obtained', rate, decimals);
+    const required = (rate * amount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+    console.info('Estimated required rcn is', required);
+    return required;
+  }
+
+  async payLoan(loan: Loan, amount: number): Promise<string> {
     const account = await this.web3.getAccount();
     const pOracleData = this.getOracleData(loan);
+    const oracleData = await pOracleData;
 
+    return new Promise((resolve, reject) => {
+      this.loadAltContract(
+        this.web3.opsWeb3,
+        this._rcnEngine
+      ).pay(loan.id, amount, account, oracleData, { from: account }, function(err, result) {
+        if (err != null) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    }) as Promise<string>;
+  }
+
+  async lendLoan(loan: Loan): Promise<string> {
+    const pOracleData = this.getOracleData(loan);
+    const account = await this.web3.getAccount();
     const cosigner = this.cosignerService.getCosigner(loan);
     let cosignerAddr = '0x0';
     let cosignerData = '0x0';
@@ -178,19 +219,32 @@ export class ContractsService {
     }
     const oracleData = await pOracleData;
     return new Promise((resolve, reject) => {
-      this._rcnEngine.lend(loan.id, oracleData, cosignerAddr, cosignerData, { from: account }, function(err, result) {
-        if (err != null) {
-          reject(err);
-        } else {
-          resolve(result);
+      this.loadAltContract(
+        this.web3.opsWeb3,
+        this._rcnEngine
+      ).lend(
+        loan.id,
+        oracleData,
+        cosignerAddr,
+        cosignerData,
+        { from: account },
+        function(err, result) {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
         }
-      });
+      );
     }) as Promise<string>;
   }
   async transferLoan(loan: Loan, to: string): Promise<string> {
     const account = await this.web3.getAccount();
     return new Promise((resolve, reject) => {
-      this._rcnEngine.transfer(to, loan.id, { from: account }, function(err, result) {
+      this.loadAltContract(
+        this.web3.opsWeb3,
+        this._rcnEngine
+      ).transfer(to, loan.id, { from: account }, function(err, result) {
         if (err != null) {
           reject(err);
         }
@@ -201,7 +255,10 @@ export class ContractsService {
   async withdrawFunds(loans: number[]): Promise<string> {
     const account = await this.web3.getAccount();
     return new Promise((resolve, reject) => {
-      this._rcnEngine.withdrawalList(loans, account, (err, result) => {
+      this.loadAltContract(
+        this.web3.opsWeb3,
+        this._rcnEngine
+      ).withdrawalList(loans, account, { from: account }, (err, result) => {
         if (err != null) {
           reject(err);
         }
@@ -214,7 +271,7 @@ export class ContractsService {
       return '0x';
     }
 
-    const oracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle);
+    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
     const url = await promisify(oracle.url.call, []);
     if (url === '') { return '0x'; }
     const oracleResponse = await this.http.get(url).toPromise() as any[];
@@ -230,7 +287,6 @@ export class ContractsService {
     if (data === undefined) {
       throw new Error('Oracle did not provide data');
     }
-
     return data;
   }
   async getLoan(id: number): Promise<Loan> {
@@ -318,6 +374,9 @@ export class ContractsService {
         resolve(this.readPendingWithdraws(loans));
       });
     }) as Promise<[number, number[]]>;
+  }
+  private loadAltContract(web3: any, contract: any): any {
+    return web3.eth.contract(contract.abi).at(contract.address);
   }
   private parseLoansBytes(bytes: any): Loan[] {
     const loans = [];
