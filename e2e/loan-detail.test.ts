@@ -10,7 +10,7 @@ const dappeteer = require('dappeteer');
 let browser;
 
 beforeAll(async (done) => {
-  browser = await dappeteer.launch(puppeteer, { headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  browser = await dappeteer.launch(puppeteer, { args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   done();
 });
 
