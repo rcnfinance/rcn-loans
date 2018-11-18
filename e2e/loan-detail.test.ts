@@ -12,7 +12,7 @@ let browser;
 beforeAll(async (done) => {
   browser = await dappeteer.launch(puppeteer, { args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   done();
-});
+}, 60000);
 
 test('Shoud navigate to detail', async () => {
   const page = await browser.newPage();
@@ -26,7 +26,7 @@ test('Shoud navigate to detail', async () => {
   await page.waitFor(1000);
   expect(await page.evaluate(() => location.href)).toBe('http://localhost:4200/loan/2');
   await page.close();
-});
+}, 60000);
 
 test('Should display detail of loan', async () => {
   // Open profile
@@ -68,8 +68,8 @@ test('Should display detail of loan', async () => {
   expect(lenderText).toContain('0x791bcc53d4adbfeb6f471f6241262b9a9021ea3f');
 
   await page.close();
-}, 14000);
+}, 60000);
 
 afterAll(async () => {
   browser.close();
-});
+}, 60000);
