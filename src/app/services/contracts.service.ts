@@ -121,7 +121,8 @@ export class ContractsService {
       });
     }) as Promise<string>;
   }
-  async requestLoan(oracle: string,
+  async requestLoan(
+    oracle: string,
     currency: string,
     amount: number,
     interest: number,
@@ -129,8 +130,8 @@ export class ContractsService {
     duesIn: number,
     cancelableAt: number,
     expirationRequest: number,
-    metadata: string): Promise<BigNumber> {
-
+    metadata: string
+  ): Promise<BigNumber> {
     const account = await this.web3.getAccount();
     amount = amount * 10 ** Currency.getDecimals('RCN');
 
