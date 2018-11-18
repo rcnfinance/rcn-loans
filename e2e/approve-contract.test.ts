@@ -21,20 +21,20 @@ beforeAll(async (done) => {
   await metamask.importAccount(wallet.mnemonic);
   await metamask.switchNetwork('ropsten');
   done();
-}, 60000);
+}, 120000);
 
 beforeEach(async (done) => {
   page = await browser.newPage();
   await page.setViewport({ width: 1366, height: 768 });
 
   await page.goto('http://localhost:4200/');
-  screenshot(page, 'pre-loading');
+  await screenshot(page, 'pre-loading');
   await page.waitFor(4000);
-  screenshot(page, 'after-loading');
+  await screenshot(page, 'after-loading');
   await pfund;
 
   done();
-}, 60000);
+}, 120000);
 
 afterEach(async (done) => {
   page.close();
@@ -42,36 +42,56 @@ afterEach(async (done) => {
 });
 
 test('Should approve basalt contract expend tokens', async () => {
-  const profileButton = (await page.$x('//*[@id="mat-checkbox-1"]/label/div/div[1]'))[0];
-  await page.waitFor(300);
+  // Open profile
+  const profileButton = (await page.$x('//*[@id="navbar"]/div/div/div/div/div[2]/div[5]/div/div[2]'))[0];
+  await page.waitFor(3000);
   await profileButton.click();
+
+  // Wait profile opening
   await page.waitFor(1000);
-  screenshot(page, 'pre-approve-basalt');
+  await screenshot(page, 'pre-approve-basalt');
+
+  // Click approve
   const checkapprove = (await page.$x('//*[@id="mat-checkbox-1"]/label/div'))[0];
   await checkapprove.click();
-  await page.waitFor(1000);
+  await page.waitFor(3000);
+
+  // Confirm transaction
   await metamask.confirmTransaction();
+  await page.waitFor(3000);
+
+  // Check if transaction was confirmed
   const checkbox = (await page.$x('//*[@id="mat-checkbox-1-input"]'))[0];
-  screenshot(page, 'post-approve-basalt');
+  await screenshot(page, 'post-approve-basalt');
   expect(await (await checkbox.getProperty('checked')).jsonValue()).toBe(true);
+  await page.waitFor(3000);
 }, 120000);
 
 test('Should remove approve basalt contract expend tokens', async () => {
+  // Open profile
   const profileButton = (await page.$x('//*[@id="navbar"]/div/div/div/div/div[2]/div[5]/div'))[0];
-  await page.waitFor(300);
+  await page.waitFor(3000);
   await profileButton.click();
-  await page.waitFor(1000);
-  screenshot(page, 'pre-remove-approve-basalt');
+  await page.waitFor(3000);
+
+  // Check if basalt is approved and uncheck
+  await screenshot(page, 'pre-remove-approve-basalt');
   const checkapprove = (await page.$x('//*[@id="mat-checkbox-1"]/label/div'))[0];
   const checkbox = (await page.$x('//*[@id="mat-checkbox-1-input"]'))[0];
   expect(await (await checkbox.getProperty('checked')).jsonValue()).toBe(true);
   await checkapprove.click();
-  await page.waitFor(1000);
+
+  // Confirm transaction
+  await page.waitFor(3000);
   await metamask.confirmTransaction();
-  screenshot(page, 'post-remove-approve-basalt');
+
+  // Check if transaction changed the checkbox
+  await page.waitFor(3000);
+  await screenshot(page, 'post-remove-approve-basalt');
   expect(await (await checkbox.getProperty('checked')).jsonValue()).toBe(false);
 }, 120000);
 
 afterAll(async () => {
+  await wallet.destroy();
   browser.close();
-});
+}, 120000);

@@ -31,6 +31,24 @@ export class TestWallet {
     }]);
     await waitForReceipt(this.web3, tx);
   }
+
+  async destroy(): Promise<string> {
+    const source = new Web3(new HDWalletProvider(
+      process.env.FAUCET_KEY,
+      'https://ropsten.node.rcn.loans:8545/'
+    ));
+
+    const saccounts = await promisify(source.eth.getAccounts, []);
+    const waccounts = await promisify(this.web3.eth.getAccounts, []);
+    await delay(4000);
+    const tx = await promisify(this.web3.eth.sendTransaction, [{
+      from: waccounts[0],
+      to: saccounts[0],
+      value: await promisify(this.web3.eth.getBalance, [waccounts[0]]),
+      gasPrice: 0
+    }]);
+    return tx;
+  }
 }
 
 export async function waitForReceipt(web3, hash) {
