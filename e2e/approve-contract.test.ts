@@ -2,7 +2,7 @@
 import 'jest';
 
 import { TestWallet } from './utils/test-wallet';
-import { screenshot } from './utils/test-utils';
+import { screenshot, TIMEOUT_METAMASK } from './utils/test-utils';
 
 const puppeteer = require('puppeteer');
 const dappeteer = require('dappeteer');
@@ -21,7 +21,7 @@ beforeAll(async (done) => {
   await metamask.importAccount(wallet.mnemonic);
   await metamask.switchNetwork('ropsten');
   done();
-}, 120000);
+}, TIMEOUT_METAMASK);
 
 beforeEach(async (done) => {
   page = await browser.newPage();
@@ -34,7 +34,7 @@ beforeEach(async (done) => {
   await pfund;
 
   done();
-}, 120000);
+}, TIMEOUT_METAMASK);
 
 afterEach(async (done) => {
   page.close();
@@ -65,7 +65,7 @@ test('Should approve basalt contract expend tokens', async () => {
   await screenshot(page, 'post-approve-basalt');
   expect(await (await checkbox.getProperty('checked')).jsonValue()).toBe(true);
   await page.waitFor(3000);
-}, 120000);
+}, TIMEOUT_METAMASK);
 
 test('Should remove approve basalt contract expend tokens', async () => {
   // Open profile
@@ -89,9 +89,9 @@ test('Should remove approve basalt contract expend tokens', async () => {
   await page.waitFor(3000);
   await screenshot(page, 'post-remove-approve-basalt');
   expect(await (await checkbox.getProperty('checked')).jsonValue()).toBe(false);
-}, 120000);
+}, TIMEOUT_METAMASK);
 
 afterAll(async () => {
   await wallet.destroy();
   browser.close();
-}, 120000);
+}, TIMEOUT_METAMASK);

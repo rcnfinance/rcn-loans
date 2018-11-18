@@ -3,6 +3,8 @@ import fs = require('fs');
 let sessionId: string;
 let imgNonce = 0;
 
+export const TIMEOUT_METAMASK = 240000;
+
 export function delay(timeout) {
   return new Promise((resolve) => {
     setTimeout(resolve, timeout);
