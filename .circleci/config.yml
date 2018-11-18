@@ -153,7 +153,7 @@ jobs:
                 command: 'sh .circleci/setup_puppeteer.sh'
             - run:
                 name: Wait NPM start
-                command: sleep 20
+                command: until $(curl --output /dev/null --silent --head --fail http://localhost:4200); do printf '.'; sleep 0.1; done;
             # Launch jest
             - run:
                 name: Jest E2E
