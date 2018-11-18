@@ -103,6 +103,7 @@ jobs:
                 keys:
                 - v2-dependencies-{{ checksum "package.json" }}
                 - v2-dependencies-
+
             # Build the project
             - run:
                 name: Build
@@ -125,6 +126,41 @@ jobs:
             # Save build
             - store_artifacts:
                 path: ropsten-build.tar.gz
+    
+    e2e-tests:
+        working_directory: ~/project
+        docker:
+            - image: circleci/node:8.12-browsers
+        steps:
+            # Checkout the code from the branch into the working_directory
+            - checkout
+            # Log the current branch
+            - run:
+                name: Show current branch
+                command: echo ${CIRCLE_BRANCH}
+            # Restore local dependencies from cache
+            - restore_cache:
+                keys:
+                - v2-dependencies-{{ checksum "package.json" }}
+                - v2-dependencies-
+            # Start web server
+            - run:
+                name: Start server
+                command: npm start
+                background: true
+            - run:
+                name: Workaround for GoogleChrome/puppeteer#290
+                command: 'sh .circleci/setup_puppeteer.sh'
+            - run:
+                name: Wait NPM start
+                command: until $(curl --output /dev/null --silent --head --fail http://localhost:4200); do printf '.'; sleep 0.1; done;
+            # Launch jest
+            - run:
+                name: Jest E2E
+                command: ./node_modules/.bin/jest --runInBand
+            # Upload images
+            - store_artifacts:
+                path: screenshots
 
     unit-tests:
         working_directory: ~/project
@@ -192,6 +228,9 @@ workflows:
             - lint:
                 requires:
                     - install
+            - e2e-tests:
+                requires:
+                    - install
             - unit-tests:
                 requires:
                     - install
@@ -200,6 +239,7 @@ workflows:
                     - lint
                     - build-ropsten
                     - build-mainnet
+                    - e2e-tests
                     - unit-tests
                 filters:
                     branches:
