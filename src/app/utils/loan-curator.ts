@@ -5,16 +5,14 @@ export class LoanCurator {
   static curateLoans(loans: Loan[]): Loan[] {
     return loans.filter(loan => {
       // Check blacklist
-      if (environment.blacklist) {
-        let blacklisted = false;
-        environment.blacklist.forEach(element => {
-          if (element.forbidden.includes(loan[element.key])) {
-            blacklisted = true;
-            return;
-          }
-        });
-        if (blacklisted) { return false; }
-      }
+      let blacklisted = false;
+      environment.blacklist.forEach(element => {
+        if (element.forbidden.includes(loan[element.key])) {
+          blacklisted = true;
+          return;
+        }
+      });
+      if (blacklisted) { return false; }
 
       // Check common wrong values
       return loan.annualInterest < 1000 &&
