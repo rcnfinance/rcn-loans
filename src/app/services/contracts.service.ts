@@ -136,24 +136,28 @@ export class ContractsService {
 
   async estimateEthRequiredAmount(loan: Loan): Promise<number> {
 
-    const oracleData = await this.getOracleData(loan);
-    const cosigner = this.cosignerService.getCosigner(loan);
+    let oracleData = await this.getOracleData(loan);
+    if (oracleData === '0x') {
+      oracleData = oracleData + '0'.repeat(64);
+    }
     const account = await this.web3.getAccount();
 
-    let cosignerAddr = '0x0';
-    let cosignerData = '0x0';
+    let cosignerData = '0x' + '0'.repeat(64);
+    const cosigner = this.cosignerService.getCosigner(loan);
     if (cosigner !== undefined) {
       const cosignerOffer = await cosigner.offer(loan);
-      cosignerAddr = cosignerOffer.contract;
       cosignerData = cosignerOffer.lendData;
     }
-    const loanParams = [ environment.contracts.basaltEngine, loan.id, cosignerAddr];
-    const convertParams = [ 1000001, 0, 10 ** 9 ];
+    const loanId = loan.id.toString(16);
+    const loanIdBytes = '0x' + '0'.repeat(64 - loanId.length) + loanId;
+    const loanParams = [
+      this.addressToBytes32(environment.contracts.basaltEngine),
+      loanIdBytes,
+      cosignerData
+    ];
+    const convertParams = [ 1000001, 0, 10 ** 9];
     return new Promise((resolve, reject) => {
-      this.loadAltContract(
-        this.web3.opsWeb3,
-        this._rcnConverterRamp
-      ).requiredLendSell(
+      this._rcnConverterRamp.requiredLendSell.call(
         environment.contracts.tokenConverter,
         environment.contracts.rcnToken,
         loanParams,
@@ -161,7 +165,7 @@ export class ContractsService {
         cosignerData,
         convertParams,
         { from: account },
-        function(err, result) {
+        (err, result) => {
           if (err != null) {
             reject(err);
           } else {
