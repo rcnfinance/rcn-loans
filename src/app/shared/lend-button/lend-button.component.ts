@@ -24,6 +24,7 @@ import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { DecentralandCosignerProvider } from '../../providers/cosigners/decentraland-cosigner-provider';
 
 @Component({
   selector: 'app-lend-button',
@@ -36,6 +37,7 @@ export class LendButtonComponent implements OnInit {
   lendEnabled: Boolean;
   opPending = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  
 
   constructor(
     private contractsService: ContractsService,
@@ -45,7 +47,8 @@ export class LendButtonComponent implements OnInit {
     private countriesService: CountriesService,
     private eventsService: EventsService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    public decentralandCosignerProvider: DecentralandCosignerProvider
   ) {}
 
   async handleLend(forze = false) {
@@ -64,6 +67,18 @@ export class LendButtonComponent implements OnInit {
     if (!this.lendEnabled) {
       this.dialog.open(DialogGenericErrorComponent, { data: {
         error: new Error('Lending is not enabled in this region')
+      }});
+      return;
+    }
+
+    await this.decentralandCosignerProvider.injectWeb3(new Web3Service);
+    // const parcelStatus = this.decentralandCosignerProvider.getStatusOfParcel(this.loan);
+    // console.log(parcelStatus);
+
+    if(this.decentralandCosignerProvider.getStatusOfParcel(this.loan)){
+      console.log(this.decentralandCosignerProvider.getStatusOfParcel(this.loan));
+      this.dialog.open(DialogGenericErrorComponent, { data: {
+        error: new Error('Parcel is already sold')
       }});
       return;
     }

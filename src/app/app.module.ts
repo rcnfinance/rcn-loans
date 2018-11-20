@@ -110,7 +110,7 @@ export class RavenErrorHandler implements ErrorHandler {
     TitleService,
     AvailableLoansService,
     CountriesService,
-    EventsService
+    EventsService,
   ],
   exports: [],
   bootstrap: [AppComponent]

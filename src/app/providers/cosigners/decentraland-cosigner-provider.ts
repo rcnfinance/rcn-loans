@@ -1,4 +1,4 @@
-
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Parcel, District, DecentralandCosigner } from '../../models/cosigners/decentraland-cosigner.model';
@@ -12,6 +12,7 @@ declare let require: any;
 
 const mortgageManagerAbi = require('../../contracts/decentraland/MortgageManager.json');
 
+@Injectable()
 export class DecentralandCosignerProvider implements CosignerProvider {
   http: HttpClient;
   web3: Web3Service;
@@ -128,10 +129,11 @@ export class DecentralandCosignerProvider implements CosignerProvider {
       });
     };
   }
-  private detail(loan: Loan): Promise<CosignerDetail> {
+  private detail(loan: Loan): Promise<DecentralandCosigner> {
     return new Promise((resolve, _err) => {
       this.setupContracts();
       this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {
+        console.log(mortgageId);
         this.managerContract.mortgages(mortgageId, (_errD, mortgageData) => {
           const decentralandCosigner = new DecentralandCosigner(
                   mortgageId, // Mortgage ID
@@ -153,4 +155,19 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     const hex = index.toString(16);
     return '0x' + Array(65 - hex.length).join('0') + hex;
   }
+
+  getStatusOfParcel(loan: Loan): Promise<Boolean> {
+    return new Promise(resolve => {
+          this.detail(loan).then((decentralandCosignerDetail) => {
+            const parcel: Parcel = decentralandCosignerDetail.parcel;
+            console.log(parcel.status);
+            if(parcel.status == 'open'){
+              resolve(false);
+            }
+              resolve(false);  
+          });   
+    }) as Promise<Boolean>;
+  }
+
+
 }

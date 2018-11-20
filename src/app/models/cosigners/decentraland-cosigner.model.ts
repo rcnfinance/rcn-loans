@@ -42,6 +42,7 @@ export class Parcel {
   auctionPrice: number;
   owner: string;
   districtId: string;
+  status: string;
 
   constructor(json: any) {
     this.id = json.id;
@@ -51,6 +52,7 @@ export class Parcel {
     this.owner = json.owner;
     this.districtId = json.district_id;
     this.tags = json.tags;
+    this.status = json.status;
   }
   get highlights(): Tag[] {
     const result = [];
