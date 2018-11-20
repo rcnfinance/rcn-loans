@@ -46,7 +46,7 @@ afterEach(async (done) => {
 
 test('Should approve basalt contract expend tokens', async () => {
   // Open profile
-  const profileButton = (await page.$x('//*[@id="navbar"]/div/div/div/div/div[2]/div[5]/div/div[2]'))[0];
+  const profileButton = (await page.$x('//div[contains(text(), \'Profile\')]'))[0];
   await page.waitFor(3000);
   await profileButton.click();
 
@@ -72,7 +72,7 @@ test('Should approve basalt contract expend tokens', async () => {
 
 test('Should remove approve basalt contract expend tokens', async () => {
   // Open profile
-  const profileButton = (await page.$x('//*[@id="navbar"]/div/div/div/div/div[2]/div[5]/div'))[0];
+  const profileButton = (await page.$x('//div[contains(text(), \'Profile\')]'))[0];
   await page.waitFor(3000);
   await profileButton.click();
   await page.waitFor(3000);
