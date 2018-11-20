@@ -185,32 +185,6 @@
         align-items: center;
         float: right;
         @include transition;
-        .balance {
-          cursor: auto;
-          display: flex;
-          font-size: 14px;
-          align-items: inherit;
-          > * {
-            padding-left: 3px;
-            padding-right: 3px;
-            float: left;
-            &.sans {
-              font-family: sans-serif;
-            }
-            &.plus {
-              font-size: 14px;
-              color: $primary;
-            }
-            &.pending {
-              color: $primary;
-              padding-left: 0;
-              cursor: pointer;        
-            }
-          }
-          &:hover{
-            color: $secondary;
-          }
-        }
         > div{
           // max-width: 40px;
           display: block;
