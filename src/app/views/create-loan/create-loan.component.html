@@ -1,14 +1,28 @@
 <ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
 
 <div class="container">
+  <div class="margintop10 d-lg-none d-xs-block"></div>
   <div class="row">
     <div class="col-xs-12 col-lg-6 d-none d-lg-block">
-      <div class="title main-h1">Create Loan</div>
+      <div class="title main-h1 margintop30">Create Loan</div>
       <div class="title main-p1 marginbottom30">Create a loan according to your needs and send it to the network</div>
     </div>
-    <div class="col-xs-12 col-lg-6 d-none d-lg-block">
-      <div class="title main-h1">Success Rate</div>
-      <div class="title main-p1 marginbottom30">This is your success posibilities of been lent</div>
+    <div class="col-xs-12 col-lg-6 progress-container">
+      <div class="inline">
+        <circle-progress
+        [percent]="50"
+        [radius]="45"
+        [outerStrokeWidth]="5"
+        [innerStrokeWidth]="5"
+        [outerStrokeColor]="'#4155ff'"
+        [innerStrokeColor]="'#ffffff'"
+        [animation]="true"
+        [animationDuration]="600"></circle-progress>
+      </div>
+      <div class="inline marginleft15">
+        <div class="title main-h1">Success Rate</div>
+        <div class="title main-p1">This is your success posibilities of been lent</div>
+      </div>
     </div>
   </div>
 

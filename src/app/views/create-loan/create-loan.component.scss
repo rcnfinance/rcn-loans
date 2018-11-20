@@ -204,6 +204,12 @@
   }
 }
 
+.progress-container{
+  display: flex;
+  align-items: center;
+  @extend %roboto-bold;
+}
+
 @media (min-width: 768px){
   .card-col{
     margin-top: 30px;

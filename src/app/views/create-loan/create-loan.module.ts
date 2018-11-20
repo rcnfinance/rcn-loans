@@ -7,6 +7,8 @@ import { CreateLoanRoutingModule } from './create-loan-routing/create-loan-routi
 // App Component
 import { CreateLoanComponent } from './create-loan.component';
 import { SharedModule } from '../../shared/shared.module';
+// App Services
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @NgModule({
   imports: [
@@ -14,7 +16,30 @@ import { SharedModule } from '../../shared/shared.module';
     NgxSpinnerModule,
     MaterialModule,
     SharedModule,
-    CreateLoanRoutingModule
+    CreateLoanRoutingModule,
+    NgCircleProgressModule.forRoot({
+      "radius": 10,
+      "space": -5,
+      "responsive": false,
+      "outerStrokeLinecap": 'square',
+      "outerStrokeWidth": 5,
+      "outerStrokeColor": "#4155ff",
+      "innerStrokeColor": "#ffffff",
+      "innerStrokeWidth": -5,
+      "animationDuration": 600,
+      "showBackground": false,
+      "clockwise": false,
+      "startFromZero": true,
+      "showTitle": true,
+      "titleColor": '#ffffff',
+      "animateTitle": false,
+      "titleFontSize": "32",
+      "showUnits": true,
+      "unitsColor": '#ffffff',
+      "unitsFontSize": "32",
+      'showSubtitle': false,
+      "subtitleFontSize": "32"
+    })
   ],
   declarations: [
     CreateLoanComponent

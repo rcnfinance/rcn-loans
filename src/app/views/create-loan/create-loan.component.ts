@@ -5,13 +5,13 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
+// App Models
+import { Loan, Status } from './../../models/loan.model';
 // App Services
 import { environment } from '../../../environments/environment.prod';
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from './../../services/web3.service';
-// App Models
-import { Loan, Status } from './../../models/loan.model';
 
 @Component({
   selector: 'app-create-loan',
