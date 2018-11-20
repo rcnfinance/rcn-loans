@@ -162,7 +162,7 @@ export class ContractsService {
         this._rcnConverterRamp
       ).requiredLendSell.call(
         environment.contracts.tokenConverter,
-        environment.contracts.rcnToken,
+        '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         loanParams,
         oracleData,
         cosignerData,
