@@ -157,7 +157,10 @@ export class ContractsService {
     ];
     const convertParams = [ 1000001, 0, 10 ** 9];
     return new Promise((resolve, reject) => {
-      this._rcnConverterRamp.requiredLendSell.call(
+      this.loadAltContract(
+        this.web3.web3,
+        this._rcnConverterRamp
+      ).requiredLendSell.call(
         environment.contracts.tokenConverter,
         environment.contracts.rcnToken,
         loanParams,
