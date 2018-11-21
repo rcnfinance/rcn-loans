@@ -42,8 +42,16 @@ export const environment = {
     rcnToken: '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6',
     basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
-    converterRamp: '0x56783153d0a8ccb009dcb79df5337835ed1a9d6c',
-    tokenConverter: '0x223fe3c346bf47334eaccf1400717cb00d403372',
+    converter: {
+      converterRamp: '0x56783153d0a8ccb009dcb79df5337835ed1a9d6c',
+      tokenConverter: '0x223fe3c346bf47334eaccf1400717cb00d403372',
+      ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      params: {
+        marginSpend: 100000,
+        maxSpend: 0,
+        rebuyThreshold: 1000000000
+      }
+    },
     decentraland: {
       mortgageCreator: '0x90263Ea5C57Dc6603CA7202920735A6E31235bB9',
       mortgageManager: '0x9ABf1295086aFA0E49C60e95c437aa400c5333B8',
