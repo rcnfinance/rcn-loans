@@ -47,8 +47,9 @@ export class ContractsService {
 
   async getUserBalanceETHWei(): Promise<number> {
     const account = await this.web3.getAccount();
+    const balance = await this.web3.web3.eth.getBalance(account);
     return new Promise((resolve) => {
-      resolve(this.web3.web3.eth.getBalance(account));
+      resolve(this.web3.web3.fromWei(balance) * 10 ** 18);
     }) as Promise<number>;
   }
 
