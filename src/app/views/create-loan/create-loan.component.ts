@@ -86,7 +86,7 @@ export class CreateLoanComponent implements OnInit {
   );
 
   // Progress bar
-  progress: number = 0;
+  progress: number;
 
   constructor(
     private contractsService: ContractsService,
@@ -269,10 +269,12 @@ export class CreateLoanComponent implements OnInit {
     });
   }
 
-  onNext(){
-    const progressNumber = (100 / this.stepper._steps.length) * this.stepper.selectedIndex;
-    console.log('TEST');
-    console.log(this.stepper.selectedIndex);
+  onNext() {
+    console.log('PROGRESS BEFORE ' + this.progress);
+    console.log('STEPPER INDEX ' + this.stepper.selectedIndex);
+    const progressNumber = (100 / ( this.stepper._steps.length - 1 ) ) * (this.stepper.selectedIndex);
+    this.progress = progressNumber;
+    console.log('PROGRESS AFTER ' + this.progress);
     switch(this.stepper.selectedIndex) {
       case 0:
       this.progress = progressNumber;
@@ -284,7 +286,7 @@ export class CreateLoanComponent implements OnInit {
       this.progress = progressNumber;
       break;
       default:
-      this.progress = 0;
+      // this.progress = 0;
     }
   }
 
@@ -295,6 +297,5 @@ export class CreateLoanComponent implements OnInit {
 
     this.createFormControls(); // Generate Form Controls variables
     this.createForm(); // Generate Form Object variables
-
   }
 }
