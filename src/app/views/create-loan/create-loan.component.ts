@@ -270,11 +270,8 @@ export class CreateLoanComponent implements OnInit {
   }
 
   onNext() {
-    console.log('PROGRESS BEFORE ' + this.progress);
     console.log('STEPPER INDEX ' + this.stepper.selectedIndex);
     const progressNumber = (100 / ( this.stepper._steps.length - 1 ) ) * (this.stepper.selectedIndex);
-    this.progress = progressNumber;
-    console.log('PROGRESS AFTER ' + this.progress);
     switch(this.stepper.selectedIndex) {
       case 0:
       this.progress = progressNumber;
@@ -284,9 +281,11 @@ export class CreateLoanComponent implements OnInit {
       break;
       case 2:
       this.progress = progressNumber;
+      case 3:
+      this.progress = progressNumber;
       break;
       default:
-      // this.progress = 0;
+      this.progress = 0;
     }
   }
 

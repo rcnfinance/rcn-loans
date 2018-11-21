@@ -28,7 +28,7 @@
 
   <div class="row">
     <div class="col-xs-12 col-lg-6">
-      <mat-vertical-stepper (selectionChange)="onNext()" linear #stepper>
+      <mat-vertical-stepper (animationDone)="onNext()" linear #stepper>
         
         <mat-step [stepControl]="formGroup1" [optional]="isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup1" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1='ngForm'>
