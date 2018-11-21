@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment.prod';
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from './../../services/web3.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-create-loan',
@@ -269,19 +270,20 @@ export class CreateLoanComponent implements OnInit {
   }
 
   onNext(){
+    const progressNumber = (100 / this.stepper._steps.length) * this.stepper.selectedIndex;
+    console.log('TEST');
     console.log(this.stepper.selectedIndex);
-    console.log(this.stepper._steps.length);
     switch(this.stepper.selectedIndex) {
       case 0:
-      this.progress = 25;
+      this.progress = progressNumber;
       break;
       case 1:
-      this.progress = 50;
+      this.progress = progressNumber;
       break;
       case 2:
-      this.progress = 75;
+      this.progress = progressNumber;
       break;
-      defaul:
+      default:
       this.progress = 0;
     }
   }
