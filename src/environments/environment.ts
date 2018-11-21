@@ -44,6 +44,16 @@ export const environment = {
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
     converterRamp: '0xeaf063101ae319a18330ff78fdd81d992bf83349',
     tokenConverter: '0x0a17f419ee137ad8296c5c36d7f0f686299ab2ff',
+    converter: {
+      converterRamp: '0xeaf063101ae319a18330ff78fdd81d992bf83349',
+      tokenConverter: '0x0a17f419ee137ad8296c5c36d7f0f686299ab2ff',
+      ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      params: {
+        marginSpend: 100000,
+        maxSpend: 0,
+        rebuyThreshold: 1000000000
+      }
+    },
     decentraland: {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
       mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1',
