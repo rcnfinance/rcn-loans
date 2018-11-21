@@ -135,7 +135,6 @@ export class ContractsService {
   }
 
   async estimateEthRequiredAmount(loan: Loan): Promise<number> {
-
     let oracleData = await this.getOracleData(loan);
     if (oracleData === '0x') {
       oracleData = oracleData + '0'.repeat(64);
@@ -195,7 +194,7 @@ export class ContractsService {
     console.info('Estimated required rcn is', required);
     return required;
   }
-  async lendLoan(loan: Loan, swap: boolean, value: number): Promise<string> {
+  async lendLoan(loan: Loan): Promise<string> {
     const pOracleData = this.getOracleData(loan);
     const account = await this.web3.getAccount();
     const cosigner = this.cosignerService.getCosigner(loan);
@@ -207,32 +206,6 @@ export class ContractsService {
       cosignerData = cosignerOffer.lendData;
     }
     const oracleData = await pOracleData;
-    if (swap) {
-      /*return new Promise((resolve, reject) => {
-        this.loadAltContract(
-          this.web3.opsWeb3,
-          this._rcnConverterRamp
-        ).lend(
-          value,
-          '0x0a17f419ee137ad8296c5c36d7f0f686299ab2ff',
-          [ loan.id ],
-          oracleData,
-          cosignerAddr,
-          cosignerData,
-          [],
-          { from: account,
-            value: value
-          },
-          function(err, result) {
-            if (err != null) {
-              reject(err);
-            } else {
-              resolve(result);
-            }
-          }
-        );
-      }) as Promise<string>;*/
-    }
     return new Promise((resolve, reject) => {
       this.loadAltContract(
         this.web3.opsWeb3,
@@ -244,6 +217,49 @@ export class ContractsService {
         cosignerData,
         { from: account },
         function(err, result) {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    }) as Promise<string>;
+  }
+  async lendLoanWithSwap(loan: Loan, value: number): Promise<string> {
+    const pOracleData = this.getOracleData(loan);
+    const account = await this.web3.getAccount();
+    const cosigner = this.cosignerService.getCosigner(loan);
+    let cosignerData = '0x0';
+    if (cosigner !== undefined) {
+      const cosignerOffer = await cosigner.offer(loan);
+      cosignerData = cosignerOffer.lendData;
+    }
+    const oracleData = await pOracleData;
+    const loanId = loan.id.toString(16);
+    const loanIdBytes = '0x' + '0'.repeat(64 - loanId.length) + loanId;
+    const loanParams = [
+      this.addressToBytes32(environment.contracts.basaltEngine),
+      loanIdBytes,
+      cosignerData
+    ];
+    const convertParams = [ 1000001, 0, 10 ** 9];
+    return new Promise((resolve, reject) => {
+      this.loadAltContract(
+        this.web3.opsWeb3,
+        this._rcnConverterRamp
+      ).lend(
+        environment.contracts.tokenConverter,
+        '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+        loanParams,
+        oracleData,
+        cosignerData,
+        convertParams,
+        {
+          from: account,
+          value: value
+        },
+        (err, result) => {
           if (err != null) {
             reject(err);
           } else {
