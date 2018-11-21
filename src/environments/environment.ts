@@ -44,7 +44,7 @@ export const environment = {
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
     converter: {
       converterRamp: '0xeaf063101ae319a18330ff78fdd81d992bf83349',
-      tokenConverter: '0x0a17f419ee137ad8296c5c36d7f0f686299ab2ff',
+      tokenConverter: '0xc4b1b3083174716542ef387326e58293917bf3bf',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       params: {
         marginSpend: 100000,
