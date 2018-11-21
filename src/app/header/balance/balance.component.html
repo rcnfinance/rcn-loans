@@ -1,0 +1,8 @@
+<div class='main'>
+    <div class="sans">{{ displayBalance }}</div>
+    <div matTooltip="Withdraw payments" class="sans pending" (click)="clickWithdraw()" *ngIf='canWithdraw'>
+        <i class="material-icons plus">add_circle</i>
+        {{ displayAvailable }}
+    </div>
+    <div class="sans">RCN</div>
+</div>

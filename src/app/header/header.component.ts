@@ -2,16 +2,17 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
+import { BalanceComponent } from './balance/balance.component';
+
+export { BalanceComponent };
+
 // App Component
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
 import { Web3Service } from '../services/web3.service';
 import { SidebarService } from '../services/sidebar.service';
-import { ContractsService } from '../services/contracts.service';
 import { TitleService } from '../services/title.service';
-
-import { Utils } from '../utils/utils';
 
 @Component({
   selector: 'app-header',
@@ -24,10 +25,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   profile: boolean;
   title: string;
 
-  rcnBalance = '...'; // Balance bar
-  rcnAvailable = '...'; // Balance bar
-  loansWithBalance: number[]; // Balance bar
-
   isOpen$: BehaviorSubject<boolean>;
   navToggle: boolean; // Navbar toggled
 
@@ -36,7 +33,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private web3Service: Web3Service,
     private router: Router,
     private sidebarService: SidebarService,
-    private contractService: ContractsService,
     public titleService: TitleService
   ) {}
 
@@ -82,25 +78,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     return this.account !== undefined;
   }
 
-  loadRcnBalance() {
-    this.contractService.getUserBalanceRCN().then((balance: number) => {
-      this.rcnBalance = Utils.formatAmount(balance);
-    });
-  }
-
-  // Withdraw button
-  loadWithdrawBalance() {
-    this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
-      this.rcnAvailable = Utils.formatAmount(result[0] / 10 ** 18);
-      this.loansWithBalance = result[1];
-    });
-  }
-
   async loadLogin() {
     if (!this.hasAccount) {
       this.account = await this.web3Service.getAccount();
-      this.loadRcnBalance();
-      this.loadWithdrawBalance();
     }
   }
 
