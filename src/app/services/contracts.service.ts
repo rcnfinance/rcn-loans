@@ -136,32 +136,36 @@ export class ContractsService {
 
   async estimateEthRequiredAmount(loan: Loan): Promise<number> {
     let oracleData = await this.getOracleData(loan);
-    if (oracleData === '0x') {
-      oracleData = oracleData + '0'.repeat(64);
+    if (Utils.isEmpty(oracleData)) {
+      oracleData = Utils.initBytes();
     }
     const account = await this.web3.getAccount();
 
-    let cosignerData = '0x' + '0'.repeat(64);
+    let cosignerData = Utils.initBytes();
     const cosigner = this.cosignerService.getCosigner(loan);
     if (cosigner !== undefined) {
       const cosignerOffer = await cosigner.offer(loan);
       cosignerData = cosignerOffer.lendData;
     }
     const loanId = loan.id.toString(16);
-    const loanIdBytes = '0x' + '0'.repeat(64 - loanId.length) + loanId;
+    const loanIdBytes = Utils.toBytes(loanId);
     const loanParams = [
       this.addressToBytes32(environment.contracts.basaltEngine),
       loanIdBytes,
       cosignerData
     ];
-    const convertParams = [ 1000001, 0, 10 ** 9];
+    const convertParams = [
+      environment.contracts.converter.params.marginSpend,
+      environment.contracts.converter.params.maxSpend,
+      environment.contracts.converter.params.rebuyThreshold
+    ];
     return new Promise((resolve, reject) => {
       this.loadAltContract(
         this.web3.web3,
         this._rcnConverterRamp
       ).requiredLendSell.call(
-        environment.contracts.tokenConverter,
-        '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+        environment.contracts.converter.tokenConverter,
+        environment.contracts.converter.ethAddress,
         loanParams,
         oracleData,
         cosignerData,
@@ -230,27 +234,31 @@ export class ContractsService {
     const pOracleData = this.getOracleData(loan);
     const account = await this.web3.getAccount();
     const cosigner = this.cosignerService.getCosigner(loan);
-    let cosignerData = '0x0';
+    let cosignerData = Utils.initBytes();
     if (cosigner !== undefined) {
       const cosignerOffer = await cosigner.offer(loan);
       cosignerData = cosignerOffer.lendData;
     }
     const oracleData = await pOracleData;
     const loanId = loan.id.toString(16);
-    const loanIdBytes = '0x' + '0'.repeat(64 - loanId.length) + loanId;
+    const loanIdBytes = Utils.toBytes(loanId);
     const loanParams = [
       this.addressToBytes32(environment.contracts.basaltEngine),
       loanIdBytes,
       cosignerData
     ];
-    const convertParams = [ 1000001, 0, 10 ** 9];
+    const convertParams = [
+      environment.contracts.converter.params.marginSpend,
+      environment.contracts.converter.params.maxSpend,
+      environment.contracts.converter.params.rebuyThreshold
+    ];
     return new Promise((resolve, reject) => {
       this.loadAltContract(
         this.web3.opsWeb3,
         this._rcnConverterRamp
       ).lend(
-        environment.contracts.tokenConverter,
-        '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+        environment.contracts.converter.tokenConverter,
+        environment.contracts.converter.ethAddress,
         loanParams,
         oracleData,
         cosignerData,
