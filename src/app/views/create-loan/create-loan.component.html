@@ -143,7 +143,7 @@
                 </div>
               </div>
             <div class='margintop20'>
-              <button mat-raised-button type="submit" class='button button-primary' matStepperNext>Next</button>
+              <button mat-raised-button type="submit" class='button button-primary' (click)='onNext()' matStepperNext>Next</button>
             </div>
           </form>
         </mat-step>
@@ -184,7 +184,7 @@
             </div>
             <div class='margintop20'>
               <button mat-raised-button class='button button-secondary marginright8' (click)='moveTo(3)'>Skip</button>
-              <button mat-raised-button type="submit" class='button button-primary' matStepperNext>Next</button>
+              <button mat-raised-button type="submit" class='button button-primary' (click)='onNext()' matStepperNext>Next</button>
             </div>
           </form>
         </mat-step>
@@ -211,7 +211,7 @@
               </div>
             </div>
             <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
-            <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
+            <button mat-raised-button class='button button-primary' (click)='onNext()' matStepperNext>Next</button>
             </div>
           </form>
         </mat-step>
@@ -245,7 +245,7 @@
           </form>
           <div class='margintop20'>
             <button mat-raised-button class='button button-secondary marginright8' (click)='moveTo(1)'>Back</button>
-            <button mat-raised-button type="submit" class='button button-primary' (click)='onCreateLoan()'>Create</button>
+            <button mat-raised-button type="submit" class='button button-primary' (click)='onCreateLoan(); onNext()'>Create</button>
           </div>
         </mat-step>
       </mat-vertical-stepper>

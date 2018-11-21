@@ -85,7 +85,7 @@ export class CreateLoanComponent implements OnInit {
   );
 
   // Progress bar
-  progress: number = 40;
+  progress: number = 0;
 
   constructor(
     private contractsService: ContractsService,
@@ -268,6 +268,24 @@ export class CreateLoanComponent implements OnInit {
     });
   }
 
+  onNext(){
+    console.log(this.stepper.selectedIndex);
+    console.log(this.stepper._steps.length);
+    switch(this.stepper.selectedIndex) {
+      case 0:
+      this.progress = 25;
+      break;
+      case 1:
+      this.progress = 50;
+      break;
+      case 2:
+      this.progress = 75;
+      break;
+      defaul:
+      this.progress = 0;
+    }
+  }
+
   ngOnInit() {
     this.web3Service.getAccount().then((account) => {
       this.account = Utils.shortAddress(account); // Get account address
@@ -275,5 +293,6 @@ export class CreateLoanComponent implements OnInit {
 
     this.createFormControls(); // Generate Form Controls variables
     this.createForm(); // Generate Form Object variables
+
   }
 }
