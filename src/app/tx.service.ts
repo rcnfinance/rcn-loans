@@ -104,7 +104,7 @@ export class TxService {
     return this.txMemory
       .filter(tx => !tx.confirmed && tx.type === Type.withdraw)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
-      .find(tx => tx.to === engine && tx.data === loans);
+      .find(tx => tx.to === engine && tx.data.toString() === loans.toString());
   }
 
   registerTransferTx(tx: string, engine: string, loan: Loan, to: string) {
