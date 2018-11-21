@@ -11,6 +11,7 @@ import { Loan, Status } from '../../models/loan.model';
 declare let require: any;
 
 const mortgageManagerAbi = require('../../contracts/decentraland/MortgageManager.json');
+enum  MortgageStatus {Pending, Ongoing, Canceled, Paid, Defaulted};
 
 @Injectable()
 export class DecentralandCosignerProvider implements CosignerProvider {
@@ -18,6 +19,9 @@ export class DecentralandCosignerProvider implements CosignerProvider {
   web3: Web3Service;
   _districts: District[] = undefined;
   managerContract: any;
+  mortgageStatus : typeof MortgageStatus = MortgageStatus;
+  
+
   constructor(
         public engine: string,
         public manager: string,
@@ -160,14 +164,27 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     return new Promise(resolve => {
           this.detail(loan).then((decentralandCosignerDetail) => {
             const parcel: Parcel = decentralandCosignerDetail.parcel;
-            console.log(parcel.status);
-            if(parcel.status == 'open'){
-              resolve(false);
-            }
+             if(parcel.status == 'open'){
+                resolve(true);
+             }
               resolve(false);  
           });   
     }) as Promise<Boolean>;
   }
 
+  isMortgageCancelled(loan: Loan): Promise<Boolean> {
+    return new Promise((resolve, _err) => {
+      this.setupContracts();
+      this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {
+        this.managerContract.mortgages(mortgageId, (_errD, mortgageData) => {
+            const mortgageStatus = parseInt(mortgageData[7], 16);
+            if( mortgageStatus == this.mortgageStatus.Canceled) {
+               resolve(true);
+            }
+              resolve(false);
+        });
+      });
+    });
+  }
 
 }

@@ -9,6 +9,7 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
+import { HttpClient } from '@angular/common/http';
 import { Loan } from './../../models/loan.model';
 
 // App Services
@@ -25,6 +26,8 @@ import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DecentralandCosignerProvider } from '../../providers/cosigners/decentraland-cosigner-provider';
+import { CosignerService } from './../../services/cosigner.service';
+
 
 @Component({
   selector: 'app-lend-button',
@@ -38,7 +41,8 @@ export class LendButtonComponent implements OnInit {
   opPending = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   
-
+  
+CosignerService
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
@@ -48,7 +52,9 @@ export class LendButtonComponent implements OnInit {
     private eventsService: EventsService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
-    public decentralandCosignerProvider: DecentralandCosignerProvider
+    public decentralandCosignerProvider: DecentralandCosignerProvider,
+    public cosignerService: CosignerService,
+    private http: HttpClient,
   ) {}
 
   async handleLend(forze = false) {
@@ -71,16 +77,38 @@ export class LendButtonComponent implements OnInit {
       return;
     }
 
-    await this.decentralandCosignerProvider.injectWeb3(new Web3Service);
-    // const parcelStatus = this.decentralandCosignerProvider.getStatusOfParcel(this.loan);
-    // console.log(parcelStatus);
+    //const cosigner = this.cosignerService.getCosigner(this.loan);
+    
+    const cosigner = new DecentralandCosignerProvider(
+      environment.contracts.basaltEngine,
+      '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1',
+      '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
+      '0x80faa2b517b84a5aec1078d3600eab4c0b3aff56',
+      'https://api.decentraland.zone/v1/'
+  );
+  
+    if (cosigner !== undefined) {
+      cosigner.injectHttp(this.http);
+      cosigner.injectWeb3(this.web3Service);
+    }
 
-    if(this.decentralandCosignerProvider.getStatusOfParcel(this.loan)){
-      console.log(this.decentralandCosignerProvider.getStatusOfParcel(this.loan));
-      this.dialog.open(DialogGenericErrorComponent, { data: {
-        error: new Error('Parcel is already sold')
-      }});
-      return;
+    if (cosigner instanceof DecentralandCosignerProvider) {
+      console.log('checkparcelstatus');
+      const isParcelStatusOpen = await cosigner.getStatusOfParcel(this.loan);
+      console.log(isParcelStatusOpen);
+        if (!isParcelStatusOpen){
+          this.dialog.open(DialogGenericErrorComponent, { data: {
+            error: new Error('Not Available, Parcel is already sold')
+          }});
+          return;
+          }
+      const isMortgageCancelled = await cosigner.isMortgageCancelled(this.loan);
+        if (isMortgageCancelled){
+          this.dialog.open(DialogGenericErrorComponent, { data: {
+            error: new Error('Not Available, Mortgage has been cancelled')
+          }});
+          return;
+      } 
     }
 
     this.startOperation();

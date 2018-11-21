@@ -52,7 +52,7 @@ export class Parcel {
     this.owner = json.owner;
     this.districtId = json.district_id;
     this.tags = json.tags;
-    this.status = json.status;
+    this.status = json.publication != null ? json.publication.status : null;
   }
   get highlights(): Tag[] {
     const result = [];
