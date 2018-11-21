@@ -28,7 +28,7 @@ import { RequestedLoanComponent } from './requested-loan.component';
     NgxSpinnerService,
     DecentralandCosignerProvider,
     CosignerService,
-    {provide: String, useValue: ""}
+    { provide: String, useValue: '' }
   ],
   exports: [
     RequestedLoanComponent

@@ -9,7 +9,6 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
-import { HttpClient } from '@angular/common/http';
 import { Loan } from './../../models/loan.model';
 
 // App Services
@@ -50,8 +49,7 @@ export class LendButtonComponent implements OnInit {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public decentralandCosignerProvider: DecentralandCosignerProvider,
-    public cosignerService: CosignerService,
-    private http: HttpClient
+    public cosignerService: CosignerService
   ) {}
 
   async handleLend(forze = false) {
