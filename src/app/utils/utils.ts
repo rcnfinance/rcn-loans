@@ -24,6 +24,18 @@ export class Utils {
     return result;
   }
 
+  static toBytes(hex: string): string {
+    return '0x' + '0'.repeat(64 - hex.length) + hex;
+  }
+
+  static initBytes(): string {
+    return '0x' + '0'.repeat(64);
+  }
+
+  static isEmpty(oracleData: string) {
+    return oracleData === '0x';
+  }
+
   static shortAddress(address: string): string {
     return address.substr(0, 4) + '...' + address.substr(-4);
   }
