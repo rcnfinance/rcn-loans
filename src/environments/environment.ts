@@ -42,8 +42,6 @@ export const environment = {
     rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
-    converterRamp: '0xeaf063101ae319a18330ff78fdd81d992bf83349',
-    tokenConverter: '0x0a17f419ee137ad8296c5c36d7f0f686299ab2ff',
     converter: {
       converterRamp: '0xeaf063101ae319a18330ff78fdd81d992bf83349',
       tokenConverter: '0x0a17f419ee137ad8296c5c36d7f0f686299ab2ff',

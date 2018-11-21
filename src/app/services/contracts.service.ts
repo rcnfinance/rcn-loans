@@ -30,7 +30,7 @@ export class ContractsService {
   private _rcnExtension: any;
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
   private _rcnConverterRamp: any;
-  private _rcnConverterRampAddress: string = environment.contracts.converterRamp;
+  private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
 
   constructor(
       private web3: Web3Service,
