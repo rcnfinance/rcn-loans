@@ -1,0 +1,27 @@
+@import '../../../scss/_variables.scss'; //variables
+
+div {
+    cursor: auto;
+    display: flex;
+    font-size: 14px;
+    float: left;
+    align-items: center;
+    font-weight: 700;
+    > * {
+      padding-left: 3px;
+      padding-right: 3px;
+      float: left;
+      &.sans {
+        font-family: sans-serif;
+      }
+      &.plus {
+        font-size: 14px;
+        color: $primary;
+      }
+      &.pending {
+        color: $primary;
+        padding-left: 0;
+        cursor: pointer;        
+      }
+    }
+}

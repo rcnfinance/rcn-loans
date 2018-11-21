@@ -72,6 +72,7 @@ export class LendButtonComponent implements OnInit {
 
     try {
       const engineApproved = this.contractsService.isEngineApproved();
+
       if (!await engineApproved) {
         this.showApproveDialog();
         return;
@@ -84,7 +85,7 @@ export class LendButtonComponent implements OnInit {
       }
 
       const balance = await this.contractsService.getUserBalanceRCNWei();
-      const required = await this.contractsService.estimateRequiredAmount(this.loan);
+      const required = await this.contractsService.estimateLendAmount(this.loan);
       console.info('Try lend RCN', required, balance);
 
       if (balance > required) {
@@ -234,7 +235,6 @@ export class LendButtonComponent implements OnInit {
     this.countriesService.lendEnabled().then((lendEnabled) => {
       this.lendEnabled = lendEnabled;
     });
-
   }
 
 }

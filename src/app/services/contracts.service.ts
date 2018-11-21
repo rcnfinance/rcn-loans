@@ -133,7 +133,6 @@ export class ContractsService {
       });
     }) as Promise<string>;
   }
-
   async estimateEthRequiredAmount(loan: Loan): Promise<number> {
     let oracleData = await this.getOracleData(loan);
     if (Utils.isEmpty(oracleData)) {
@@ -181,13 +180,11 @@ export class ContractsService {
       );
     }) as Promise<number>;
   }
-
-  async estimateRequiredAmount(loan: Loan): Promise<number> {
+  async estimateLendAmount(loan: Loan): Promise<number> {
     // TODO: Calculate and add cost of the cosigner
     if (loan.oracle === Utils.address0x) {
       return loan.rawAmount;
     }
-
     const oracleData = await this.getOracleData(loan);
     const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
     const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
@@ -197,6 +194,38 @@ export class ContractsService {
     const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
     console.info('Estimated required rcn is', required);
     return required;
+  }
+  async estimatePayAmount(loan: Loan, amount: number): Promise<number> {
+    if (loan.oracle === Utils.address0x) {
+      return loan.rawAmount;
+    }
+    const oracleData = await this.getOracleData(loan);
+    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
+    const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
+    const rate = oracleRate[0];
+    const decimals = oracleRate[1];
+    console.info('Oracle rate obtained', rate, decimals);
+    const required = (rate * amount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+    console.info('Estimated required rcn is', required);
+    return required;
+  }
+  async payLoan(loan: Loan, amount: number): Promise<string> {
+    const account = await this.web3.getAccount();
+    const pOracleData = this.getOracleData(loan);
+    const oracleData = await pOracleData;
+
+    return new Promise((resolve, reject) => {
+      this.loadAltContract(
+        this.web3.opsWeb3,
+        this._rcnEngine
+      ).pay(loan.id, amount, account, oracleData, { from: account }, function(err, result) {
+        if (err != null) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    }) as Promise<string>;
   }
   async lendLoan(loan: Loan): Promise<string> {
     const pOracleData = this.getOracleData(loan);

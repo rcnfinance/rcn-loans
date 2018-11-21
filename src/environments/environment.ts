@@ -60,6 +60,14 @@ export const environment = {
       landMarket: '0x5424912699dabaa5f2998750c1c66e73d67ad219'
     }
   },
+  blacklist: [
+    {
+      key: 'oracle',
+      forbidden: [
+        '0x0ac18b74b5616fdeaeff809713d07ed1486d0128'
+      ]
+    }
+  ],
   filters: {
     openLoans: '0x3e703de416a62525c8653be11d71486550618ec8',
     nonExpired: '0xe084b7cf7f6869a96cd72962047bf65e6d55e1e1',
