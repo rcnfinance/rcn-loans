@@ -4,14 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { Parcel, District, DecentralandCosigner } from '../../models/cosigners/decentraland-cosigner.model';
 import { Web3Service } from '../../services/web3.service';
 import { Utils } from '../../utils/utils';
-import { CosignerDetail, CosignerOffer, CosignerLiability } from '../../models/cosigner.model';
+import { CosignerOffer, CosignerLiability } from '../../models/cosigner.model';
 import { CosignerProvider } from '../cosigner-provider';
 import { Loan, Status } from '../../models/loan.model';
 
 declare let require: any;
 
 const mortgageManagerAbi = require('../../contracts/decentraland/MortgageManager.json');
-enum  MortgageStatus {Pending, Ongoing, Canceled, Paid, Defaulted};
+enum MortgageStatus {Pending, Ongoing, Canceled, Paid, Defaulted}
 
 @Injectable()
 export class DecentralandCosignerProvider implements CosignerProvider {
@@ -19,8 +19,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
   web3: Web3Service;
   _districts: District[] = undefined;
   managerContract: any;
-  mortgageStatus : typeof MortgageStatus = MortgageStatus;
-  
+  mortgageStatus: typeof MortgageStatus = MortgageStatus;
 
   constructor(
         public engine: string,
@@ -106,6 +105,33 @@ export class DecentralandCosignerProvider implements CosignerProvider {
       }
     }) as Promise<District[]>;
   }
+  getStatusOfParcel(loan: Loan): Promise<Boolean> {
+    return new Promise(resolve => {
+      this.detail(loan).then((decentralandCosignerDetail) => {
+        const parcel: Parcel = decentralandCosignerDetail.parcel;
+        if (parcel.status === 'open') {
+          resolve(true);
+        }
+        resolve(false);
+      });
+    }) as Promise<Boolean>;
+  }
+
+  isMortgageCancelled(loan: Loan): Promise<Boolean> {
+    return new Promise((resolve, _err) => {
+      this.setupContracts();
+      this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {
+        this.managerContract.mortgages(mortgageId, (_errD, mortgageData) => {
+          const mortgageStatus = parseInt(mortgageData[7], 16);
+          if (mortgageStatus === this.mortgageStatus.Canceled) {
+            resolve(true);
+          }
+          resolve(false);
+        });
+      });
+    });
+  }
+
   private setupContracts() {
     if (this.managerContract === undefined) {
       this.managerContract = this.web3.web3.eth.contract(mortgageManagerAbi).at(this.manager);
@@ -137,7 +163,6 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     return new Promise((resolve, _err) => {
       this.setupContracts();
       this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {
-        console.log(mortgageId);
         this.managerContract.mortgages(mortgageId, (_errD, mortgageData) => {
           const decentralandCosigner = new DecentralandCosigner(
                   mortgageId, // Mortgage ID
@@ -159,32 +184,4 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     const hex = index.toString(16);
     return '0x' + Array(65 - hex.length).join('0') + hex;
   }
-
-  getStatusOfParcel(loan: Loan): Promise<Boolean> {
-    return new Promise(resolve => {
-          this.detail(loan).then((decentralandCosignerDetail) => {
-            const parcel: Parcel = decentralandCosignerDetail.parcel;
-             if(parcel.status == 'open'){
-                resolve(true);
-             }
-              resolve(false);  
-          });   
-    }) as Promise<Boolean>;
-  }
-
-  isMortgageCancelled(loan: Loan): Promise<Boolean> {
-    return new Promise((resolve, _err) => {
-      this.setupContracts();
-      this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {
-        this.managerContract.mortgages(mortgageId, (_errD, mortgageData) => {
-            const mortgageStatus = parseInt(mortgageData[7], 16);
-            if( mortgageStatus == this.mortgageStatus.Canceled) {
-               resolve(true);
-            }
-              resolve(false);
-        });
-      });
-    });
-  }
-
 }

@@ -28,7 +28,6 @@ import { DialogClientAccountComponent } from '../../dialogs/dialog-client-accoun
 import { DecentralandCosignerProvider } from '../../providers/cosigners/decentraland-cosigner-provider';
 import { CosignerService } from './../../services/cosigner.service';
 
-
 @Component({
   selector: 'app-lend-button',
   templateUrl: './lend-button.component.html',
@@ -40,9 +39,7 @@ export class LendButtonComponent implements OnInit {
   lendEnabled: Boolean;
   opPending = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  
-  
-CosignerService
+
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
@@ -54,7 +51,7 @@ CosignerService
     public snackBar: MatSnackBar,
     public decentralandCosignerProvider: DecentralandCosignerProvider,
     public cosignerService: CosignerService,
-    private http: HttpClient,
+    private http: HttpClient
   ) {}
 
   async handleLend(forze = false) {
@@ -78,22 +75,21 @@ CosignerService
     }
 
     const cosigner = this.cosignerService.getCosigner(this.loan);
-    
     if (cosigner instanceof DecentralandCosignerProvider) {
       const isParcelStatusOpen = await cosigner.getStatusOfParcel(this.loan);
-        if (!isParcelStatusOpen){
-          this.dialog.open(DialogGenericErrorComponent, { data: {
-            error: new Error('Not Available, Parcel is already sold')
-          }});
-          return;
-          }
+      if (!isParcelStatusOpen) {
+        this.dialog.open(DialogGenericErrorComponent, { data: {
+          error: new Error('Not Available, Parcel is already sold')
+        }});
+        return;
+      }
       const isMortgageCancelled = await cosigner.isMortgageCancelled(this.loan);
-        if (isMortgageCancelled){
-          this.dialog.open(DialogGenericErrorComponent, { data: {
-            error: new Error('Not Available, Mortgage has been cancelled')
-          }});
-          return;
-      } 
+      if (isMortgageCancelled) {
+        this.dialog.open(DialogGenericErrorComponent, { data: {
+          error: new Error('Not Available, Mortgage has been cancelled')
+        }});
+        return;
+      }
     }
 
     this.startOperation();
