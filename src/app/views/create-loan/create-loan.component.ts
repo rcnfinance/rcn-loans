@@ -84,6 +84,9 @@ export class CreateLoanComponent implements OnInit {
     '0x0' // cosigner
   );
 
+  // Progress bar
+  progress: number = 40;
+
   constructor(
     private contractsService: ContractsService,
     private web3Service: Web3Service,
