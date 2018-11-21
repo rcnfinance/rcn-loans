@@ -85,14 +85,10 @@ export class LendButtonComponent implements OnInit {
 
       const balance = await this.contractsService.getUserBalanceRCNWei();
       const required = await this.contractsService.estimateRequiredAmount(this.loan);
-      console.info('Try lend', await required, await balance);
+      console.info('Try lend RCN', required, balance);
 
-      const ethBalance = await this.contractsService.getUserBalanceETHWei();
-      const estimated = await this.contractsService.estimateEthRequiredAmount(this.loan);
-      console.info('Try lend', await estimated, await ethBalance);
-
-      if (balance > required || ethBalance > estimated) {
-        const tx = await this.contractsService.lendLoan(this.loan, (balance <= required), estimated);
+      if (balance > required) {
+        const tx = await this.contractsService.lendLoan(this.loan);
         this.eventsService.trackEvent(
           'lend',
           Category.Account,
@@ -101,16 +97,34 @@ export class LendButtonComponent implements OnInit {
 
         this.txService.registerLendTx(this.loan, tx);
         this.pendingTx = this.txService.getLastLend(this.loan);
-      } else {
+        return;
+      }
+
+      const ethBalance = await this.contractsService.getUserBalanceETHWei();
+      const estimated = await this.contractsService.estimateEthRequiredAmount(this.loan);
+      console.info('Try lend ETH', estimated, ethBalance);
+
+      if (ethBalance > estimated) {
+        const tx = await this.contractsService.lendLoanWithSwap(this.loan, estimated);
         this.eventsService.trackEvent(
-          'show-insufficient-funds-lend',
+          'lend',
           Category.Account,
-          'loan #' + this.loan.id,
-          await required
+          'loan #' + this.loan.id
         );
 
-        this.showInsufficientFundsDialog(await required, await balance);
+        this.txService.registerLendTx(this.loan, tx);
+        this.pendingTx = this.txService.getLastLend(this.loan);
+        return;
       }
+
+      this.eventsService.trackEvent(
+        'show-insufficient-funds-lend',
+        Category.Account,
+        'loan #' + this.loan.id,
+        required
+      );
+
+      this.showInsufficientFundsDialog(required, balance);
 
     } catch (e) {
       // Don't show 'User denied transaction signature' error
