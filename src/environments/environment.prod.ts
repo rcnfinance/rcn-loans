@@ -47,7 +47,7 @@ export const environment = {
       tokenConverter: '0x223fe3c346bf47334eaccf1400717cb00d403372',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       params: {
-        marginSpend: 100000,
+        marginSpend: 100001,
         maxSpend: 0,
         rebuyThreshold: 1000000000
       }
