@@ -142,9 +142,11 @@ export class ContractsService {
     const account = await this.web3.getAccount();
 
     let cosignerData = Utils.initBytes();
+    let cosignerAddr = '0x0';
     const cosigner = this.cosignerService.getCosigner(loan);
     if (cosigner !== undefined) {
       const cosignerOffer = await cosigner.offer(loan);
+      cosignerAddr = cosignerOffer.contract;
       cosignerData = cosignerOffer.lendData;
     }
     const loanId = loan.id.toString(16);
@@ -152,7 +154,7 @@ export class ContractsService {
     const loanParams = [
       this.addressToBytes32(environment.contracts.basaltEngine),
       loanIdBytes,
-      cosignerData
+      this.addressToBytes32(cosignerAddr)
     ];
     const convertParams = [
       environment.contracts.converter.params.marginSpend,
@@ -265,8 +267,10 @@ export class ContractsService {
     const account = await this.web3.getAccount();
     const cosigner = this.cosignerService.getCosigner(loan);
     let cosignerData = Utils.initBytes();
+    let cosignerAddr = '0x0';
     if (cosigner !== undefined) {
       const cosignerOffer = await cosigner.offer(loan);
+      cosignerAddr = cosignerOffer.contract;
       cosignerData = cosignerOffer.lendData;
     }
     const oracleData = await pOracleData;
@@ -275,7 +279,7 @@ export class ContractsService {
     const loanParams = [
       this.addressToBytes32(environment.contracts.basaltEngine),
       loanIdBytes,
-      cosignerData
+      this.addressToBytes32(cosignerAddr)
     ];
     const convertParams = [
       environment.contracts.converter.params.marginSpend,
