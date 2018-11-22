@@ -162,10 +162,7 @@ export class ContractsService {
       environment.contracts.converter.params.rebuyThreshold
     ];
     return new Promise((resolve, reject) => {
-      this.loadAltContract(
-        this.web3.web3,
-        this._rcnConverterRamp
-      ).requiredLendSell.call(
+      this._rcnConverterRamp.requiredLendSell.call(
         environment.contracts.converter.tokenConverter,
         environment.contracts.converter.ethAddress,
         loanParams,
