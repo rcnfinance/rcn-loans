@@ -32,8 +32,8 @@ export class Utils {
     return '0x' + '0'.repeat(64);
   }
 
-  static isEmpty(oracleData: string) {
-    return oracleData === '0x';
+  static isEmpty(hex: string) {
+    return hex === '0x';
   }
 
   static shortAddress(address: string): string {
