@@ -26,15 +26,11 @@
     </div>
   </div>
 
-  <!-- [selectedIndex]="this.selectedIndex" 
-  (selectionChange)="selectionChange($event)" -->
-
   <div class="row">
     <div class="col-xs-12 col-lg-6">
-      <mat-vertical-stepper (animationDone)="onSelectionChange()"
-      linear #stepper>
+      <mat-vertical-stepper (animationDone)="onSelectionChange()" linear #stepper>
         
-        <mat-step [stepControl]="formGroup1" [optional]="isOptional$" [editable]='isEditable$'>
+        <mat-step [stepControl]="formGroup1" [optional]="!isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup1" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1='ngForm'>
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
 
@@ -152,7 +148,7 @@
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="formGroup2" [optional]="isOptional$" [editable]='isEditable$'>
+        <mat-step [stepControl]="formGroup2" [optional]="!isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup2" (ngSubmit)="onSubmitStep2(fStep2)" #fStep2='ngForm'>
             <ng-template matStepLabel>Complete your identity with Bloom</ng-template>
             <div class="stepper-title">
@@ -187,13 +183,13 @@
               </div>
             </div>
             <div class='margintop20'>
-              <button mat-raised-button class='button button-secondary marginright8' (click)='moveTo(3)'>Skip</button>
+              <button mat-raised-button class='button button-secondary marginright8' (click)='onSkip()'>Skip</button>
               <button mat-raised-button type="submit" class='button button-primary' matStepperNext>Next</button>
             </div>
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="formGroup3" [optional]="isOptional$" [editable]='isEditable$'>
+        <mat-step [stepControl]="formGroup3" [optional]="isOptional$" [editable]='!isEditable$'>
           <form [formGroup]="formGroup3">
             <ng-template matStepLabel>Scan your QR</ng-template>
             <div class="stepper-title">

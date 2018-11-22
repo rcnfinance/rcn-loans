@@ -61,6 +61,8 @@ export class CreateLoanComponent implements OnInit {
   currencies: string[] = ['rcn', 'mana', 'ars'];
   selectedOracle: string;
 
+  skipped = false;
+
   // Card Variables
   account: string;
   loan: Loan = new Loan(
@@ -95,12 +97,16 @@ export class CreateLoanComponent implements OnInit {
   ) {}
 
   createFormControls() { // Create form controls and define values
-    this.fullDuration = new FormControl(0, Validators.required); // formGroup1
-    this.payableAtDate = new FormControl('0', Validators.required); // formGroup1
+    // this.fullDuration = new FormControl(0, Validators.required); // formGroup1
+    this.fullDuration = new FormControl(this.tomorrowDate, Validators.required); // formGroup1 WARNING HARDCODED!!!!!
+    // this.payableAtDate = new FormControl('0', Validators.required); // formGroup1
+    this.payableAtDate = new FormControl(this.tomorrowDate, Validators.required); // formGroup1 WARNING HARDCODED!!!!!
     this.annualInterest = new FormControl('40', Validators.required); // formGroup1
     this.annualPunitory = new FormControl('60', Validators.required); // formGroup1
-    this.requestValue = new FormControl('0'); // formGroup1
-    this.requestedCurrency = new FormControl(undefined, Validators.required); // formGroup1
+    // this.requestValue = new FormControl('0'); // formGroup1
+    this.requestValue = new FormControl(1); // formGroup1 WARNING HARDCODED!!!!!
+    // this.requestedCurrency = new FormControl(undefined, Validators.required); // formGroup1
+    this.requestedCurrency = new FormControl('mana', Validators.required); // formGroup1 WARNING HARDCODED!!!!!
 
     this.phoneSlide = new FormControl(true); // formGroup2
     this.idSlide = new FormControl(true); // formGroup2
@@ -177,6 +183,9 @@ export class CreateLoanComponent implements OnInit {
     const step2Form = form.value;
     this.getSlideSelection(step2Form);
     this.switchIdentityIcon(this.slideSelection);
+    console.log(this.skipped);
+    // if (this.skipped == true) { this.slideSelection = []; } else { this.skipped == false }
+    console.log(this.skipped);
   }
 
   getSlideSelection(step2Form) {
@@ -186,10 +195,6 @@ export class CreateLoanComponent implements OnInit {
         this.slideSelection.push(property);
       }
     }
-  }
-
-  moveTo(index: number) {
-    this.stepper.selectedIndex = index;
   }
 
   switchIdentityIcon(iconCase) {
@@ -217,6 +222,15 @@ export class CreateLoanComponent implements OnInit {
         default:
       }
     }
+  }
+
+  moveTo(index: number) {
+    this.stepper.selectedIndex = index;
+  }
+
+  onSkip(){
+    this.moveTo(3);
+    this.skipped = true;
   }
 
   onCurrencyChange(requestedCurrency) {
@@ -259,7 +273,7 @@ export class CreateLoanComponent implements OnInit {
   }
 
   onCreateLoan() {
-    this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', '');
+    this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', ''); // TODO Use when create loan service is finnished
   }
 
   openSnackBar(message: string, action: string) {
@@ -270,19 +284,32 @@ export class CreateLoanComponent implements OnInit {
   }
 
   onSelectionChange() {
-    const progressNumber = ( 100 / ( this.stepper._steps.length - 1 ) ) * (this.stepper.selectedIndex);
     switch(this.stepper.selectedIndex) {
       case 0:
-        this.progress = progressNumber;
+        if (this.formGroup1.valid) { // Form 1 is completed
+          this.progress = 60;
+        } else {
+          this.progress = 0;
+        }
         break;
       case 1:
-        this.progress = progressNumber;
+        if (this.formGroup1.valid) { // Form 1 is completed
+          this.progress = 60;
+        }
         break;
       case 2:
-        this.progress = progressNumber;
+        if (this.formGroup1.valid && this.slideSelection.length > 1) { // Form 1 is completed and Selected at least 1 bloom identity field
+          this.progress = 90;
+        }
         break;
-      case 3:
-        this.progress = progressNumber;
+        case 3:
+        if (this.formGroup1.valid && this.slideSelection.length > 1) { // Form 1 is completed and Selected at least 1 bloom identity field
+          this.progress = 90;
+        } else if (this.formGroup1.valid && this.slideSelection.length < 1) { // Form 1 is completed
+          this.progress = 60;
+        } else {
+          this.progress = 0;
+        }
         break;
       default:
         this.progress = 0;
