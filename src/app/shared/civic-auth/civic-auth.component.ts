@@ -23,7 +23,9 @@ export class CivicAuthComponent implements OnInit {
       this.civicService.signupCivic().then((token) => {
         console.info('Retrieved civic token', token);
         if (token !== undefined) {
-          this.web3Service.web3.eth.sign(account, this.web3Service.web3.sha3('\x19Ethereum Signed Message:\n30' + token), (_error, sig) => {
+          this.web3Service.opsWeb3.eth.sign(
+            account, this.web3Service.web3.sha3('\x19Ethereum Signed Message:\n30' + token
+          ), (_error, sig) => {
             console.info('Signed token', sig);
             this.civicService.register(token, sig).then(() => {
               console.info('Signup done');
