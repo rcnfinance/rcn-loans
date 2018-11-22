@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+// App Services
+import { NgCircleProgressModule } from 'ng-circle-progress';
 // App Modules
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MaterialModule } from '../../material/material.module';
@@ -7,8 +9,6 @@ import { CreateLoanRoutingModule } from './create-loan-routing/create-loan-routi
 // App Component
 import { CreateLoanComponent } from './create-loan.component';
 import { SharedModule } from '../../shared/shared.module';
-// App Services
-import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @NgModule({
   imports: [
