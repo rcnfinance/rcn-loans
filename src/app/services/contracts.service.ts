@@ -142,7 +142,7 @@ export class ContractsService {
     const account = await this.web3.getAccount();
 
     let cosignerData = Utils.initBytes();
-    let cosignerAddr = '0x0';
+    let cosignerAddr = Utils.address0x;
     const cosigner = this.cosignerService.getCosigner(loan);
     if (cosigner !== undefined) {
       const cosignerOffer = await cosigner.offer(loan);
@@ -267,7 +267,7 @@ export class ContractsService {
     const account = await this.web3.getAccount();
     const cosigner = this.cosignerService.getCosigner(loan);
     let cosignerData = Utils.initBytes();
-    let cosignerAddr = '0x0';
+    let cosignerAddr = Utils.address0x;
     if (cosigner !== undefined) {
       const cosignerOffer = await cosigner.offer(loan);
       cosignerAddr = cosignerOffer.contract;
