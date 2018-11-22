@@ -26,19 +26,21 @@ import { SharedModule } from '../../shared/shared.module';
       'outerStrokeColor': '#4155ff',
       'innerStrokeColor': '#ffffff',
       'innerStrokeWidth': -5,
-      'animationDuration': 600,
       'showBackground': false,
       'clockwise': false,
-      'startFromZero': true,
+      'startFromZero': false,
+      'renderOnClick': false,
+      'animation': true,
+      'animateTitle': true,
+      'animationDuration': 300,
       'showTitle': true,
       'titleColor': '#ffffff',
-      'animateTitle': false,
-      'titleFontSize': '32',
+      'titleFontSize': '28',
       'showUnits': true,
       'unitsColor': '#ffffff',
-      'unitsFontSize': '32',
+      'unitsFontSize': '28',
       'showSubtitle': false,
-      'subtitleFontSize': '32'
+      'subtitleFontSize': '28'
     })
   ],
   declarations: [

@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment.prod';
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from './../../services/web3.service';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-create-loan',
@@ -268,8 +269,8 @@ export class CreateLoanComponent implements OnInit {
     });
   }
 
-  onNext() {
-    const progressNumber = (100 / ( this.stepper._steps.length - 1 ) ) * (this.stepper.selectedIndex);
+  onSelectionChange() {
+    const progressNumber = ( 100 / ( this.stepper._steps.length - 1 ) ) * (this.stepper.selectedIndex);
     switch(this.stepper.selectedIndex) {
       case 0:
         this.progress = progressNumber;

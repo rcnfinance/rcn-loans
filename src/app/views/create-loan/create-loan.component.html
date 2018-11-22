@@ -26,9 +26,13 @@
     </div>
   </div>
 
+  <!-- [selectedIndex]="this.selectedIndex" 
+  (selectionChange)="selectionChange($event)" -->
+
   <div class="row">
     <div class="col-xs-12 col-lg-6">
-      <mat-vertical-stepper (animationDone)="onNext()" linear #stepper>
+      <mat-vertical-stepper (animationDone)="onSelectionChange()"
+      linear #stepper>
         
         <mat-step [stepControl]="formGroup1" [optional]="isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup1" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1='ngForm'>
@@ -143,7 +147,7 @@
                 </div>
               </div>
             <div class='margintop20'>
-              <button mat-raised-button type="submit" class='button button-primary' (click)='onNext()' matStepperNext>Next</button>
+              <button mat-raised-button type="submit" class='button button-primary' matStepperNext>Next</button>
             </div>
           </form>
         </mat-step>
@@ -184,7 +188,7 @@
             </div>
             <div class='margintop20'>
               <button mat-raised-button class='button button-secondary marginright8' (click)='moveTo(3)'>Skip</button>
-              <button mat-raised-button type="submit" class='button button-primary' (click)='onNext()' matStepperNext>Next</button>
+              <button mat-raised-button type="submit" class='button button-primary' matStepperNext>Next</button>
             </div>
           </form>
         </mat-step>
@@ -211,7 +215,7 @@
               </div>
             </div>
             <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
-            <button mat-raised-button class='button button-primary' (click)='onNext()' matStepperNext>Next</button>
+            <button mat-raised-button class='button button-primary' matStepperNext>Next</button>
             </div>
           </form>
         </mat-step>
@@ -245,7 +249,7 @@
           </form>
           <div class='margintop20'>
             <button mat-raised-button class='button button-secondary marginright8' (click)='moveTo(1)'>Back</button>
-            <button mat-raised-button type="submit" class='button button-primary' (click)='onCreateLoan(); onNext()'>Create</button>
+            <button mat-raised-button type="submit" class='button button-primary' (click)='onCreateLoan()'>Create</button>
           </div>
         </mat-step>
       </mat-vertical-stepper>
