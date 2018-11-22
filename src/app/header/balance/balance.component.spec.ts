@@ -65,7 +65,7 @@ describe('BalanceComponent', () => {
     fixture.detectChanges();
 
     expect(
-      readComponent(fixture, '.main:nth-child(1)').innerText
+      readComponent(fixture, '.main > div:nth-child(1)').innerText
     ).toBe('1000');
 
     expect(
@@ -112,7 +112,7 @@ describe('BalanceComponent', () => {
     ).toBeFalsy();
 
     expect(
-      readComponent(fixture, '.main:nth-child(1)').innerText
+      readComponent(fixture, '.main > div:nth-child(1)').innerText
     ).toBe('3000');
   }));
 
@@ -130,7 +130,7 @@ describe('BalanceComponent', () => {
     ).toBeFalsy();
 
     expect(
-      readComponent(fixture, '.main:nth-child(1)').innerText
+      readComponent(fixture, '.main > div:nth-child(1)').innerText
     ).toBe('3000');
   }));
 });
