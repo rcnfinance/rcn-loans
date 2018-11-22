@@ -1,5 +1,6 @@
 export class Utils {
   static address0x = '0x0000000000000000000000000000000000000000';
+  static emptyString = '';
 
   static formatInterest(raw: number): number {
     return 311040000000000 / raw;
@@ -29,7 +30,7 @@ export class Utils {
   }
 
   static initBytes(): string {
-    return '0x' + '0'.repeat(64);
+    return Utils.toBytes(Utils.emptyString);
   }
 
   static isEmpty(hex: string) {
