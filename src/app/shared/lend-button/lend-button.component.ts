@@ -72,21 +72,21 @@ export class LendButtonComponent implements OnInit {
 
     try {
       const engineApproved = this.contractsService.isEngineApproved();
+      const civicApproved = this.civicService.status();
+      const balance = await this.contractsService.getUserBalanceRCNWei();
+      const required = await this.contractsService.estimateLendAmount(this.loan);
+      const ethBalance = await this.contractsService.getUserBalanceETHWei();
+      const estimated = await this.contractsService.estimateEthRequiredAmount(this.loan);
 
       if (!await engineApproved) {
         this.showApproveDialog();
         return;
       }
 
-      const civicApproved = this.civicService.status();
       if (!await civicApproved) {
         this.showCivicDialog();
         return;
       }
-
-      const balance = await this.contractsService.getUserBalanceRCNWei();
-      const required = await this.contractsService.estimateLendAmount(this.loan);
-      console.info('Try lend RCN', required, balance);
 
       if (balance > required) {
         const tx = await this.contractsService.lendLoan(this.loan);
@@ -100,10 +100,6 @@ export class LendButtonComponent implements OnInit {
         this.pendingTx = this.txService.getLastLend(this.loan);
         return;
       }
-
-      const ethBalance = await this.contractsService.getUserBalanceETHWei();
-      const estimated = await this.contractsService.estimateEthRequiredAmount(this.loan);
-      console.info('Try lend ETH', estimated, ethBalance);
 
       if (ethBalance > estimated) {
         const tx = await this.contractsService.lendLoanWithSwap(this.loan, estimated);
