@@ -24,8 +24,8 @@ import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
-import { DecentralandCosignerProvider } from '../../providers/cosigners/decentraland-cosigner-provider';
 import { CosignerService } from './../../services/cosigner.service';
+import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
 
 @Component({
   selector: 'app-lend-button',
@@ -48,8 +48,8 @@ export class LendButtonComponent implements OnInit {
     private eventsService: EventsService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
-    public decentralandCosignerProvider: DecentralandCosignerProvider,
-    public cosignerService: CosignerService
+    public cosignerService: CosignerService,
+    public decentralandCosignerProvider: DecentralandCosignerProvider
   ) {}
 
   async handleLend(forze = false) {

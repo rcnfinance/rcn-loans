@@ -5,8 +5,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
-import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
-import { CosignerService } from './../../services/cosigner.service';
 // App Modules
 import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from './../../material/material.module';
@@ -25,10 +23,7 @@ import { RequestedLoanComponent } from './requested-loan.component';
   ],
   providers: [
     ContractsService,
-    NgxSpinnerService,
-    DecentralandCosignerProvider,
-    CosignerService,
-    { provide: String, useValue: '' }
+    NgxSpinnerService
   ],
   exports: [
     RequestedLoanComponent

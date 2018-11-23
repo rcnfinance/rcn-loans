@@ -20,14 +20,44 @@ export class DecentralandCosignerProvider implements CosignerProvider {
   _districts: District[] = undefined;
   managerContract: any;
   mortgageStatus: typeof MortgageStatus = MortgageStatus;
+  engine: string;
+  manager: string;
+  creator: string;
+  market: string;
+  dataUrl: string;
 
-  constructor(
-        public engine: string,
-        public manager: string,
-        public creator: string,
-        public market: string,
-        public dataUrl: string
-    ) {}
+  constructor() {}
+
+  getEngine() {
+    return this.engine;
+  }
+  setEngine(engine: string) {
+    this.engine = engine;
+  }
+  getManager() {
+    return this.manager;
+  }
+  setManager(manager: string) {
+    this.manager = manager;
+  }
+  getCreator() {
+    return this.creator;
+  }
+  setCreator(creator: string) {
+    this.creator = creator;
+  }
+  getMarket() {
+    return this.market;
+  }
+  setMarket(market: string) {
+    this.market = market;
+  }
+  getDataUrl() {
+    return this.dataUrl;
+  }
+  setDataUrl(dataUrl: string) {
+    this.dataUrl = dataUrl;
+  }
   injectHttp(http: HttpClient) {
     this.http = http;
   }
