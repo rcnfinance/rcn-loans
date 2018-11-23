@@ -184,7 +184,7 @@ export class CreateLoanComponent implements OnInit {
     this.getSlideSelection(step2Form);
     this.switchIdentityIcon(this.slideSelection);
     console.log(this.skipped);
-    // if (this.skipped == true) { this.slideSelection = []; } else { this.skipped == false }
+    if (this.skipped == true) { this.slideSelection = []; }
     console.log(this.skipped);
   }
 
@@ -231,6 +231,9 @@ export class CreateLoanComponent implements OnInit {
   onSkip(){
     this.moveTo(3);
     this.skipped = true;
+  }
+  onNotSkipped(){
+    this.skipped = false;
   }
 
   onCurrencyChange(requestedCurrency) {
