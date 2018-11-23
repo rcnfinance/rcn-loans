@@ -96,16 +96,12 @@ export class CreateLoanComponent implements OnInit {
   ) {}
 
   createFormControls() { // Create form controls and define values
-    // this.fullDuration = new FormControl(0, Validators.required); // formGroup1
-    this.fullDuration = new FormControl(this.tomorrowDate, Validators.required); // formGroup1 WARNING HARDCODED!!!!!
-    // this.payableAtDate = new FormControl('0', Validators.required); // formGroup1
-    this.payableAtDate = new FormControl(this.tomorrowDate, Validators.required); // formGroup1 WARNING HARDCODED!!!!!
+    this.fullDuration = new FormControl(0, Validators.required); // formGroup1
+    this.payableAtDate = new FormControl('0', Validators.required); // formGroup1
     this.annualInterest = new FormControl('40', Validators.required); // formGroup1
     this.annualPunitory = new FormControl('60', Validators.required); // formGroup1
-    // this.requestValue = new FormControl('0'); // formGroup1
-    this.requestValue = new FormControl(1); // formGroup1 WARNING HARDCODED!!!!!
-    // this.requestedCurrency = new FormControl(undefined, Validators.required); // formGroup1
-    this.requestedCurrency = new FormControl('mana', Validators.required); // formGroup1 WARNING HARDCODED!!!!!
+    this.requestValue = new FormControl('0'); // formGroup1
+    this.requestedCurrency = new FormControl(undefined, Validators.required); // formGroup1
 
     this.phoneSlide = new FormControl(true); // formGroup2
     this.idSlide = new FormControl(true); // formGroup2
