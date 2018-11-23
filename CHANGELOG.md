@@ -5,6 +5,10 @@
 ### Features:
 - Added pay loan option
 
+### Misc:
+- Setup unit tests
+- Setup e2e tests
+
 ### Fix:
 - Fix bug when loading metamask privacy on account detail
 

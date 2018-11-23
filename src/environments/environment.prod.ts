@@ -48,6 +48,7 @@ export const environment = {
       landMarket: '0xb3bca6f5052c7e24726b44da7403b56a8a1b98f8'
     }
   },
+  blacklist: [],
   filters: {
     openLoans: '0xb18aa197fdb7d20c695dac42da71eb55883fb253',
     nonExpired: '0x56a65418a09aa5cd0cb79d437cb1d318037817d7',
