@@ -9,15 +9,7 @@
     </div>
     <div class="col-xs-12 col-lg-6 progress-container">
       <div class="inline">
-        <circle-progress
-        [percent]="progress"
-        [radius]="45"
-        [outerStrokeWidth]="5"
-        [innerStrokeWidth]="5"
-        [outerStrokeColor]="'#4155ff'"
-        [innerStrokeColor]="'#ffffff'"
-        [animation]="true"
-        [animationDuration]="600"></circle-progress>
+        <app-circle-progress [progress]='progress'></app-circle-progress>
       </div>
       <div class="inline marginleft15">
         <div class="title main-h1">Success Rate</div>

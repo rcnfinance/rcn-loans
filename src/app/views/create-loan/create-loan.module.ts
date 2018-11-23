@@ -9,6 +9,7 @@ import { CreateLoanRoutingModule } from './create-loan-routing/create-loan-routi
 // App Component
 import { CreateLoanComponent } from './create-loan.component';
 import { SharedModule } from '../../shared/shared.module';
+import { CircleProgressComponent } from './circle-progress/circle-progress.component';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { SharedModule } from '../../shared/shared.module';
     })
   ],
   declarations: [
-    CreateLoanComponent
+    CreateLoanComponent,
+    CircleProgressComponent
   ]
 })
 export class CreateLoanModule { }
