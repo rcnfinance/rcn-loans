@@ -21,6 +21,7 @@ import { Web3Service } from './../../services/web3.service';
 export class CreateLoanComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+
   // Date Variables
   now: Date = new Date();
   tomorrow: Date = new Date();
@@ -29,7 +30,6 @@ export class CreateLoanComponent implements OnInit {
   // Form Variables
   isOptional$ = true;
   isEditable$ = true;
-  checked$ = true;
   disabled$ = false;
 
   formGroup1: FormGroup;
@@ -42,6 +42,14 @@ export class CreateLoanComponent implements OnInit {
   returnValue: any = 0;
 
   formGroup2: FormGroup;
+  slideToggles: object[] = [ 
+    {'title': 'Phone', 'property': 'phoneSlide' },
+    {'title': 'ID Document', 'property': 'idSlide' },
+    {'title': 'Phone', 'property': 'sactionSlide' },
+    {'title': 'Phone', 'property': 'payrollSlide' },
+    {'title': 'Phone', 'property': 'facebookSlide' },
+    {'title': 'Phone' , 'property': 'twitterSlide' }
+  ];
   phoneSlide: any;
   idSlide: any;
   sactionSlide: any;
@@ -105,8 +113,8 @@ export class CreateLoanComponent implements OnInit {
 
     this.phoneSlide = new FormControl(true); // formGroup2
     this.idSlide = new FormControl(true); // formGroup2
-    this.sactionSlide = new FormControl(true); // formGroup2
-    this.payrollSlide = new FormControl(true); // formGroup2
+    this.sactionSlide = new FormControl(); // formGroup2
+    this.payrollSlide = new FormControl(); // formGroup2
     this.facebookSlide = new FormControl(true); // formGroup2
     this.twitterSlide = new FormControl(); // formGroup2
 
@@ -178,9 +186,7 @@ export class CreateLoanComponent implements OnInit {
     const step2Form = form.value;
     this.getSlideSelection(step2Form);
     this.switchIdentityIcon(this.slideSelection);
-    console.log(this.skipped);
     if (this.skipped == true) { this.slideSelection = []; }
-    console.log(this.skipped);
   }
 
   getSlideSelection(step2Form) {
