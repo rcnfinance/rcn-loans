@@ -12,7 +12,6 @@ import { environment } from '../../../environments/environment.prod';
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from './../../services/web3.service';
-import { StepperSelectionEvent } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-create-loan',
