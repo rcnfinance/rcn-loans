@@ -178,7 +178,7 @@ export class CreateLoanComponent implements OnInit {
     const step2Form = form.value;
     this.getSlideSelection(step2Form);
     this.switchIdentityIcon(this.slideSelection);
-    if (this.skipped == true) { this.slideSelection = []; }
+    if (this.skipped === true) { this.slideSelection = []; }
   }
 
   getSlideSelection(step2Form) {
@@ -221,11 +221,11 @@ export class CreateLoanComponent implements OnInit {
     this.stepper.selectedIndex = index;
   }
 
-  onSkip(){
+  onSkip() {
     this.moveTo(3);
     this.skipped = true;
   }
-  onNotSkipped(){
+  onNotSkipped() {
     this.skipped = false;
   }
 
@@ -269,7 +269,8 @@ export class CreateLoanComponent implements OnInit {
   }
 
   onCreateLoan() {
-    this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', ''); // TODO Use when create loan service is finnished
+    // TODO Use when create loan service is finnished
+    this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', '');
   }
 
   openSnackBar(message: string, action: string) {
@@ -298,7 +299,7 @@ export class CreateLoanComponent implements OnInit {
           this.progress = 90;
         }
         break;
-        case 3:
+      case 3:
         if (this.formGroup1.valid && this.slideSelection.length > 1) { // Form 1 is completed and Selected at least 1 bloom identity field
           this.progress = 90;
         } else if (this.formGroup1.valid && this.slideSelection.length < 1) { // Form 1 is completed
