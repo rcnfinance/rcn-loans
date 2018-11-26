@@ -22,7 +22,7 @@
     <div class="col-xs-12 col-lg-6">
       <mat-vertical-stepper (animationDone)="onSelectionChange()" linear #stepper>
         
-        <mat-step [stepControl]="formGroup1" [optional]=" isOptional$" [editable]='isEditable$'>
+        <mat-step [stepControl]="formGroup1" [optional]="!isOptional$" [editable]='isEditable$'>
           <form [formGroup]="formGroup1" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1='ngForm'>
             <ng-template matStepLabel>Fill out your loans inputs</ng-template>
 
@@ -149,11 +149,7 @@
             </div>
             <div class="title main-m3 margintop10">Unlock the power of a global, secure identity</div>
             <div class="row margintop20 marginbottom20">
-              <div class="col-4 marginbottom15" *ngFor='let slideToggle of slideToggles'>
-                <div class="title property marginbottom5">{{ slideToggle['title'] }}</div>
-                <mat-slide-toggle formControlName="{{ slideToggle['formControlName'] }}"></mat-slide-toggle>
-              </div>
-              <!-- <div class="col-4 marginbottom15">
+              <div class="col-4 marginbottom15">
                 <div class="title property marginbottom5">Phone</div>
                 <mat-slide-toggle formControlName="phoneSlide"></mat-slide-toggle>
               </div>
@@ -176,7 +172,7 @@
               <div class="col-4 marginbottom15">
                 <div class="title property marginbottom5">Twitter</div>
                 <mat-slide-toggle formControlName="twitterSlide"></mat-slide-toggle>
-              </div> -->
+              </div>
             </div>
             <div class='margintop20'>
               <button mat-raised-button class='button button-secondary marginright8' (click)='onSkip()'>Skip</button>

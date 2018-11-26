@@ -42,14 +42,6 @@ export class CreateLoanComponent implements OnInit {
   returnValue: any = 0;
 
   formGroup2: FormGroup;
-  slideToggles: object[] = [ 
-    {'title': 'Phone', 'property': 'phoneSlide' },
-    {'title': 'ID Document', 'property': 'idSlide' },
-    {'title': 'Phone', 'property': 'sactionSlide' },
-    {'title': 'Phone', 'property': 'payrollSlide' },
-    {'title': 'Phone', 'property': 'facebookSlide' },
-    {'title': 'Phone' , 'property': 'twitterSlide' }
-  ];
   phoneSlide: any;
   idSlide: any;
   sactionSlide: any;
