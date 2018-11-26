@@ -25,6 +25,7 @@ export class DecentralandCosignerComponent implements OnInit {
   financiation = '...';
   highlights = [];
   mortgageManager: string = environment.contracts.decentraland.mortgageManager;
+  status: string = undefined;
 
   // Decentraland Map DATA
   winWidth: number = window.innerWidth;
@@ -108,6 +109,7 @@ export class DecentralandCosignerComponent implements OnInit {
     this.displayPrice = Utils.formatAmount(Number(this.detail.displayPrice));
     this.financiation = this.detail.financePart;
     this.highlights = this.parcel.highlights;
+    this.status = this.parcel.status;
 
     const coordenate = this.parcelId.split(',');
     this.firstCoordenate = coordenate[0];
