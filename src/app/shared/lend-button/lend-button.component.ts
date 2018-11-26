@@ -9,6 +9,7 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
+
 import { Loan } from './../../models/loan.model';
 
 // App Services
@@ -101,7 +102,7 @@ export class LendButtonComponent implements OnInit {
         return;
       }
 
-      if (ethBalance > estimated) {
+      if (ethBalance.toNumber() >= estimated.toNumber()) {
         const tx = await this.contractsService.lendLoanWithSwap(this.loan, estimated);
         this.eventsService.trackEvent(
           'lend',
