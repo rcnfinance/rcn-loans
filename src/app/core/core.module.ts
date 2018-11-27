@@ -5,10 +5,10 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
 // App Component
-import { FooterComponent } from './footer/footer.component';
-import { HeaderComponent } from './header/header.component';
-import { BalanceComponent } from './balance/balance.component';
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
+import { BalanceComponent } from './balance/balance.component';
 // App Services
 import { Web3Service } from '../services/web3.service';
 import { SidebarService } from '../services/sidebar.service';
@@ -22,10 +22,10 @@ import { TitleService } from '../services/title.service';
     RouterModule
   ],
   declarations: [
+    ContentWrapperComponent,
     HeaderComponent,
     FooterComponent,
-    BalanceComponent,
-    ContentWrapperComponent
+    BalanceComponent
   ],
   providers: [
     Web3Service,
@@ -33,10 +33,10 @@ import { TitleService } from '../services/title.service';
     TitleService
   ],
   exports: [
+    ContentWrapperComponent,
     HeaderComponent,
     FooterComponent,
-    BalanceComponent,
-    ContentWrapperComponent
+    BalanceComponent
   ]
 })
 export class CoreModule { }
