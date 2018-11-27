@@ -6,7 +6,7 @@ import { RequestedLoanComponent } from '../views/requested-loan/requested-loan.c
 import { ActiveLoansComponent } from '../views/active-loans/active-loans.component';
 import { AddressComponent } from '../views/address/address.component';
 import { LoanDetailComponent } from '../views/loan-detail/loan-detail.component';
-import { NotFoundModule } from '../not-found/not-found.module';
+import { NotFoundModule } from '../views/not-found/not-found.module';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/requests', pathMatch: 'full' },
