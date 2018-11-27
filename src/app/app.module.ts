@@ -78,7 +78,7 @@ export class RavenErrorHandler implements ErrorHandler {
     NotFoundModule,
     LoanDetailModule,
     RequestedLoanModule,
-    ActiveLoansModule
+    ActiveLoansModule,
     AddressModule
   ],
   declarations: [
