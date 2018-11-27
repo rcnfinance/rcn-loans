@@ -2,7 +2,6 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
-
 // App Component
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';

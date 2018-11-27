@@ -21,8 +21,9 @@ import { TitleService } from '../services/title.service';
     RouterModule
   ],
   declarations: [
-    // HeaderComponent,
-    FooterComponent
+    HeaderComponent,
+    FooterComponent,
+    BalanceComponent
   ],
   providers: [
     Web3Service,
@@ -30,7 +31,7 @@ import { TitleService } from '../services/title.service';
     TitleService
   ],
   exports: [
-    // HeaderComponent,
+    HeaderComponent,
     FooterComponent,
     BalanceComponent
   ],

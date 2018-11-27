@@ -26,7 +26,7 @@
               <div class="marginright20" routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</div>
               <div class="marginright20" (click)="openDialog()" *ngIf="!hasAccount">Login</div>
               <div class="separator">|</div>
-              <app-component-balance *ngIf='hasAccount'></app-component-balance>
+              <!-- <app-component-balance *ngIf='hasAccount'></app-component-balance> -->
               <div class="separator" *ngIf="hasAccount">|</div>
               <!-- Balance section -->
               <div (click)="openDialog();">
