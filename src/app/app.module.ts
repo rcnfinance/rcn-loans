@@ -37,7 +37,6 @@ import { EventsService } from './services/events.service';
 
 // App Component
 import { AppComponent } from './app.component';
-import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 
 import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
@@ -82,7 +81,6 @@ export class RavenErrorHandler implements ErrorHandler {
   ],
   declarations: [
     AppComponent,
-    ContentWrapperComponent,
     ProfileComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,

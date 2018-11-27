@@ -8,6 +8,7 @@ import { MaterialModule } from '../material/material.module';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { BalanceComponent } from './balance/balance.component';
+import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 // App Services
 import { Web3Service } from '../services/web3.service';
 import { SidebarService } from '../services/sidebar.service';
@@ -23,7 +24,8 @@ import { TitleService } from '../services/title.service';
   declarations: [
     HeaderComponent,
     FooterComponent,
-    BalanceComponent
+    BalanceComponent,
+    ContentWrapperComponent
   ],
   providers: [
     Web3Service,
@@ -33,7 +35,8 @@ import { TitleService } from '../services/title.service';
   exports: [
     HeaderComponent,
     FooterComponent,
-    BalanceComponent
+    BalanceComponent,
+    ContentWrapperComponent
   ],
 })
 export class CoreModule { }

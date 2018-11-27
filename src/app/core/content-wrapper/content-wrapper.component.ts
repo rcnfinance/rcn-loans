@@ -3,13 +3,13 @@ import BigNumber from 'bignumber.js';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 // App Components
-import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
-import { environment } from '../../environments/environment';
-import { SidebarService } from '../services/sidebar.service';
-import { Web3Service } from '../services/web3.service';
-import { ContractsService } from '../services/contracts.service';
-import { Tx, TxService } from '../tx.service';
+import { environment } from '../../../environments/environment';
+import { SidebarService } from '../../services/sidebar.service';
+import { Web3Service } from '../../services/web3.service';
+import { ContractsService } from '../../services/contracts.service';
+import { Tx, TxService } from '../../tx.service';
 
 @Component({
   selector: 'app-content-wrapper',
