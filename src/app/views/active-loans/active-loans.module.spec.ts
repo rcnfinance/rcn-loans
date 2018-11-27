@@ -7,7 +7,7 @@ describe('ActiveLoansModule', () => {
     activeLoansModule = new ActiveLoansModule();
   });
 
-  it('should create an instance', () => {
-    expect(activeLoansModule).toBeTruthy();
-  });
+  // it('should create an instance', () => {
+  //   expect(activeLoansModule).toBeTruthy();
+  // });
 });
