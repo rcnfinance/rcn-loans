@@ -112,7 +112,7 @@ import { EventsService } from './../services/events.service';
     TitleService,
     AvailableLoansService,
     CountriesService,
-    EventsService,
+    EventsService
   ],
   exports: [
     LoanCardComponent,

@@ -21,10 +21,12 @@ import { GobackButtonComponent } from '../../shared/goback-button/goback-button.
 import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
-import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { TransferButtonComponent } from './../../shared/transfer-button/transfer-button.component';
 import { TransferFormComponent } from './../../shared/transfer-form/transfer-form.component';
+
+import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
+import { DialogInsufficientFoundsComponent } from './../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
 @NgModule({
   imports: [
@@ -58,6 +60,7 @@ import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfe
   ],
   entryComponents: [
     DialogLoanTransferComponent,
+    DialogInsufficientFoundsComponent,
     DialogLoanPayComponent
   ],
   exports: [
