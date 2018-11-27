@@ -17,6 +17,7 @@ import { NotFoundModule } from './not-found/not-found.module';
 import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
 import { ActiveLoansModule } from './views/active-loans/active-loans.module';
 import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
+import { AddressModule } from './views/address/address.module';
 
 // App Services
 import { environment } from '../environments/environment';
@@ -38,8 +39,6 @@ import { EventsService } from './services/events.service';
 import { AppComponent } from './app.component';
 import { HeaderComponent, BalanceComponent } from './header/header.component';
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
-
-import { AddressComponent } from './views/address/address.component';
 
 import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
@@ -80,6 +79,7 @@ export class RavenErrorHandler implements ErrorHandler {
     LoanDetailModule,
     RequestedLoanModule,
     ActiveLoansModule
+    AddressModule
   ],
   declarations: [
     AppComponent,
@@ -87,7 +87,6 @@ export class RavenErrorHandler implements ErrorHandler {
     BalanceComponent,
     ContentWrapperComponent,
     ProfileComponent,
-    AddressComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
