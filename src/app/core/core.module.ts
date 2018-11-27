@@ -37,6 +37,6 @@ import { TitleService } from '../services/title.service';
     FooterComponent,
     BalanceComponent,
     ContentWrapperComponent
-  ],
+  ]
 })
 export class CoreModule { }
