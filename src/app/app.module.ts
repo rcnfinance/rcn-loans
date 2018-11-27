@@ -42,7 +42,6 @@ import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient
 
 import { DialogGenericErrorComponent } from './dialogs/dialog-generic-error/dialog-generic-error.component';
 
-import { ProfileComponent } from './views/profile/profile.component'; // TODO check if necesary and remove
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 import { DecentralandCosignerProvider } from './providers/cosigners/decentraland-cosigner-provider';
@@ -81,7 +80,6 @@ export class RavenErrorHandler implements ErrorHandler {
   ],
   declarations: [
     AppComponent,
-    ProfileComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,
