@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { BlockiesModule } from 'angular-blockies';
-
 // App Modules
 import { MaterialModule } from '../material/material.module';
 // App Component
@@ -41,8 +40,8 @@ import { DialogInsufficientFoundsComponent } from '../dialogs/dialog-insufficien
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogGenericErrorComponent } from '../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
-
 // App Services
+import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
 import { TxService } from './../tx.service';
 import { BrandingService } from './../services/branding.service';
@@ -100,6 +99,7 @@ import { EventsService } from './../services/events.service';
     DialogGenericErrorComponent
   ],
   providers: [
+    DecentralandCosignerProvider,
     ContractsService,
     TxService,
     BrandingService,
