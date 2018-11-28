@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatSnackBar,
+  MatSnackBarHorizontalPosition } from '@angular/material';
 // App Service
 import { EventsService, Category } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
@@ -17,11 +18,15 @@ import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/
 export class TransferButtonComponent implements OnInit {
   @Input() loan: Loan;
   pendingTx: Tx = undefined;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  opPending = false;
+
   constructor(
     private contractService: ContractsService,
     private txService: TxService,
     private eventsService: EventsService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar
   ) { }
 
   loanTransfer() {
@@ -68,6 +73,24 @@ export class TransferButtonComponent implements OnInit {
   retrievePendingTx() {
     this.pendingTx = this.txService.getLastPendingTransfer(environment.contracts.basaltEngine, this.loan);
   }
+
+  get buttonText(): string {
+    const tx = this.pendingTx;
+    if (tx === undefined) {
+      return 'Transfer';
+    }
+    if (tx.confirmed) {
+      return 'Transfer completed';
+    }
+    return 'Transfer Pending...';
+  }
+
+  // openSnackBar(message: string, action: string) {
+  //   this.snackBar.open(message , action, {
+  //     duration: 4000,
+  //     horizontalPosition: this.horizontalPosition
+  //   });
+  // }
 
   ngOnInit() {
     this.retrievePendingTx();
