@@ -24,8 +24,6 @@ export class TransferButtonComponent implements OnInit {
     public dialog: MatDialog
   ) { }
 
-  handleTransfer() {}
-
   loanTransfer() {
     const dialogConfig = new MatDialogConfig();
 
