@@ -31,8 +31,8 @@ import { DialogInsufficientFoundsComponent } from './../../dialogs/dialog-insuff
 
 @NgModule({
   imports: [
-    HttpModule,
     CommonModule,
+    HttpModule,
     NgxSpinnerModule,
     SharedModule,
     LoanDetailRoutingModule,

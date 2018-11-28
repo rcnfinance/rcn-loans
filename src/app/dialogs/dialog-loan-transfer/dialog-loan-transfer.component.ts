@@ -17,11 +17,11 @@ export class DialogLoanTransferComponent implements OnInit {
     this.loan = data.loan;
   }
 
-  ngOnInit() {
-    this.dialogRef.updateSize('auto', 'auto');
-  }
-
   submit(address: any) {
     this.dialogRef.close(address);
+  }
+
+  ngOnInit() {
+    this.dialogRef.updateSize('auto', 'auto');
   }
 }
