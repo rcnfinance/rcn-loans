@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 // App Components
 import { RequestedLoanComponent } from '../views/requested-loan/requested-loan.component';
 import { ActiveLoansComponent } from '../views/active-loans/active-loans.component';
