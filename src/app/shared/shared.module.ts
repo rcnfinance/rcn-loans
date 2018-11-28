@@ -16,7 +16,6 @@ import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector
 import { ConversionGraphicComponent } from './conversion-graphic/conversion-graphic.component';
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
-
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -28,7 +27,6 @@ import { ButtonGroupComponent } from './button-group/button-group.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 import { PayFormComponent } from './pay-form/pay-form.component';
-
 // App Dialogs
 import { DialogInsufficientFoundsComponent } from '../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
