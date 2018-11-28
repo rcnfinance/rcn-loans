@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Loan } from '../../models/loan.model';
 
 @Component({
@@ -8,11 +8,14 @@ import { Loan } from '../../models/loan.model';
   styleUrls: ['./dialog-loan-transfer.component.scss']
 })
 export class DialogLoanTransferComponent implements OnInit {
-  @Input() loan: Loan;
+  loan: Loan;
 
   constructor(
-    public dialogRef: MatDialogRef<any>
-  ) { }
+    public dialogRef: MatDialogRef<any>,
+    @Inject(MAT_DIALOG_DATA) data
+  ) {
+    this.loan = data.loan;
+  }
 
   ngOnInit() {
     this.dialogRef.updateSize('auto', 'auto');
