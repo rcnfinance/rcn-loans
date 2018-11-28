@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 // App Service
 import { EventsService, Category } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
@@ -27,7 +27,13 @@ export class TransferButtonComponent implements OnInit {
   handleTransfer() {}
 
   loanTransfer() {
-    const dialogRef = this.dialog.open(DialogLoanTransferComponent);
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.data = {
+      loan: this.loan
+    };
+
+    const dialogRef = this.dialog.open(DialogLoanTransferComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(to => {
       this.eventsService.trackEvent(
