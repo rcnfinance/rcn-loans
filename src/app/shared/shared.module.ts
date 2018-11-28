@@ -2,7 +2,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
 import { BlockiesModule } from 'angular-blockies';
 // App Modules
 import { MaterialModule } from '../material/material.module';
@@ -60,7 +59,6 @@ import { EventsService } from './../services/events.service';
   imports: [
     CommonModule,
     BrowserModule,
-    HttpModule,
     MaterialModule,
     BlockiesModule
   ],

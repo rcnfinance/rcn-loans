@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpModule } from '@angular/http';
 // App Services
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -30,6 +31,7 @@ import { DialogInsufficientFoundsComponent } from './../../dialogs/dialog-insuff
 
 @NgModule({
   imports: [
+    HttpModule,
     CommonModule,
     NgxSpinnerModule,
     SharedModule,
