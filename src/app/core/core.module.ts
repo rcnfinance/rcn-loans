@@ -1,25 +1,42 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
-// App Component
+// App Modules
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
+// App Component
+import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
+import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { BalanceComponent } from './balance/balance.component';
+// App Services
+import { Web3Service } from '../services/web3.service';
+import { SidebarService } from '../services/sidebar.service';
+import { TitleService } from '../services/title.service';
 
 @NgModule({
-  declarations: [
-    FooterComponent
-  ],
   imports: [
     CommonModule,
     SharedModule,
     MaterialModule,
     RouterModule
   ],
-  exports: [
-    FooterComponent
+  declarations: [
+    ContentWrapperComponent,
+    HeaderComponent,
+    FooterComponent,
+    BalanceComponent
   ],
-  providers: []
+  providers: [
+    Web3Service,
+    SidebarService,
+    TitleService
+  ],
+  exports: [
+    ContentWrapperComponent,
+    HeaderComponent,
+    FooterComponent,
+    BalanceComponent
+  ]
 })
 export class CoreModule { }
