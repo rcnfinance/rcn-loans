@@ -9,8 +9,7 @@ import { ContentWrapperComponent } from './content-wrapper/content-wrapper.compo
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BalanceComponent } from './balance/balance.component';
-
-import { SocialContainerComponent } from './social-container/social-container.component'; // TODO move to CORE Module
+import { SocialContainerComponent } from './social-container/social-container.component';
 // App Services
 import { Web3Service } from '../services/web3.service';
 import { SidebarService } from '../services/sidebar.service';
