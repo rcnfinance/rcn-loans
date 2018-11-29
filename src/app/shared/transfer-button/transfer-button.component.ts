@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatSnackBar,
-  MatSnackBarHorizontalPosition } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 // App Service
 import { EventsService, Category } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
@@ -18,15 +17,13 @@ import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/
 export class TransferButtonComponent implements OnInit {
   @Input() loan: Loan;
   pendingTx: Tx = undefined;
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   opPending = false;
 
   constructor(
     private contractService: ContractsService,
     private txService: TxService,
     private eventsService: EventsService,
-    public dialog: MatDialog,
-    public snackBar: MatSnackBar
+    public dialog: MatDialog
   ) { }
 
   loanTransfer() {
@@ -84,13 +81,6 @@ export class TransferButtonComponent implements OnInit {
     }
     return 'Transfer Pending...';
   }
-
-  // openSnackBar(message: string, action: string) {
-  //   this.snackBar.open(message , action, {
-  //     duration: 4000,
-  //     horizontalPosition: this.horizontalPosition
-  //   });
-  // }
 
   ngOnInit() {
     this.retrievePendingTx();
