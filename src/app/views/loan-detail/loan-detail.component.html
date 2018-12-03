@@ -27,10 +27,10 @@
         </div>
       </div>
       <div class="paddingleft15 paddingright15">
-        <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="isRequest ? loan.expectedReturn : totalDebt"></app-conversion-graphic>
+        <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="loan.expectedReturn"></app-conversion-graphic>
       </div>
       <div class="paddingleft15 paddingright15">
-        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="loan.paid" *ngIf="!isRequest"></app-conversion-graphic>
+        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountLeft]="loan.paid" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" *ngIf="!isRequest"></app-conversion-graphic>
       </div>
 
       <div class="margintop20"></div>

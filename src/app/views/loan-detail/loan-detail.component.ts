@@ -40,7 +40,6 @@ export class LoanDetailComponent implements OnInit {
   canPay: boolean;
   canLend: boolean;
 
-  totalDebt: number;
   pendingAmount: number;
 
   // Loan Oracle
@@ -141,9 +140,7 @@ export class LoanDetailComponent implements OnInit {
     this.isRequest = this.loan.status === Status.Request;
     this.isOngoing = this.loan.status === Status.Ongoing;
     this.isExpired = this.loan.status === Status.Expired;
-    this.totalDebt = this.loan.total;
-    this.pendingAmount = this.loan.pendingAmount;
-
+    this.pendingAmount = (this.loan.expectedReturn - this.loan.paid > 0) ? this.loan.expectedReturn - this.loan.paid : 0;
     this.loadUserActions();
   }
 
