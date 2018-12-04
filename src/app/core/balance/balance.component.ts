@@ -20,8 +20,8 @@ export class BalanceComponent implements OnInit {
   ongoingWithdraw: Tx;
 
   canWithdraw = false;
-  displayBalance = '...';
-  displayAvailable = '...';
+  displayBalance = '';
+  displayAvailable = '';
 
   constructor(
     private web3Service: Web3Service,
@@ -37,10 +37,14 @@ export class BalanceComponent implements OnInit {
   updateDisplay() {
     if (this.rcnBalance) {
       this.displayBalance = Utils.formatAmount(this.rcnBalance);
+    } else {
+      this.displayBalance = '0';
     }
 
     if (this.rcnAvailable) {
       this.displayAvailable = Utils.formatAmount(this.rcnAvailable);
+    } else {
+      this.displayAvailable = '0';
     }
 
     this.canWithdraw =
@@ -51,8 +55,7 @@ export class BalanceComponent implements OnInit {
     if (this.ongoingWithdraw !== undefined) {
       this.displayBalance = Utils.formatAmount(
         this.rcnBalance + this.rcnAvailable
-      );
-    }
+      ); }
   }
 
   async loadLogin() {
