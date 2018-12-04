@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 // App Components
 import { RequestedLoanComponent } from '../views/requested-loan/requested-loan.component';
 import { ActiveLoansComponent } from '../views/active-loans/active-loans.component';
 import { AddressComponent } from '../views/address/address.component';
 import { LoanDetailComponent } from '../views/loan-detail/loan-detail.component';
-import { ProfileComponent } from '../views/profile/profile.component';
-import { NotFoundModule } from '../not-found/not-found.module';
+import { NotFoundModule } from '../views/not-found/not-found.module';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/requests', pathMatch: 'full' },
@@ -15,7 +13,6 @@ const appRoutes: Routes = [
   { path: 'activity', component: ActiveLoansComponent },
   { path: 'loan/:id', component: LoanDetailComponent },
   { path: 'address/:address', component: AddressComponent },
-  { path: 'profile', component: ProfileComponent },
   { path: '404', component: NotFoundModule },
   { path: '**', redirectTo: '/404' }
 ];

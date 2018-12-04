@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 // App Service
 import { EventsService, Category } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
@@ -17,6 +17,8 @@ import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/
 export class TransferButtonComponent implements OnInit {
   @Input() loan: Loan;
   pendingTx: Tx = undefined;
+  opPending = false;
+
   constructor(
     private contractService: ContractsService,
     private txService: TxService,
@@ -24,10 +26,14 @@ export class TransferButtonComponent implements OnInit {
     public dialog: MatDialog
   ) { }
 
-  handleTransfer() {}
-
   loanTransfer() {
-    const dialogRef = this.dialog.open(DialogLoanTransferComponent);
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.data = {
+      loan: this.loan
+    };
+
+    const dialogRef = this.dialog.open(DialogLoanTransferComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(to => {
       this.eventsService.trackEvent(
@@ -63,6 +69,17 @@ export class TransferButtonComponent implements OnInit {
 
   retrievePendingTx() {
     this.pendingTx = this.txService.getLastPendingTransfer(environment.contracts.basaltEngine, this.loan);
+  }
+
+  get buttonText(): string {
+    const tx = this.pendingTx;
+    if (tx === undefined) {
+      return 'Transfer';
+    }
+    if (tx.confirmed) {
+      return 'Transfer completed';
+    }
+    return 'Transfer Pending...';
   }
 
   ngOnInit() {

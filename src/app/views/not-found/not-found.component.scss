@@ -1,4 +1,4 @@
-@import '../../scss/_variables.scss'; //variables
+@import '../../../scss/_variables.scss'; //variables
 
 .margin-spacing{
   position: relative;
@@ -23,7 +23,7 @@
 .img-container{
   width: 100%;
   height: 100%;
-  background-image: url(../../assets/404-tree.svg);
+  background-image: url(../../../assets/404-tree.svg);
   background-repeat: no-repeat;
   background-position: center center;
   @include background-size(cover);
