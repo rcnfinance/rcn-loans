@@ -14,6 +14,11 @@
       <div class="title main-h1">There are no available Loans</div>
     </div>
 
+    <div class="row" class="col-sm-12 text-center">
+      <app-filters-form></app-filters-form>
+      </div>
+
+
     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col" 
     *ngFor='let loan of loans; let i of index'>
       <app-loan-card [loan]="loan"></app-loan-card>

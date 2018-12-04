@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // App Modules
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
@@ -15,7 +16,9 @@ import { RequestedLoanComponent } from './requested-loan.component';
     CommonModule,
     NgxSpinnerModule,
     MaterialModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   declarations: [
     RequestedLoanComponent

@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BlockiesModule } from 'angular-blockies';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // App Modules
 import { MaterialModule } from '../material/material.module';
 // App Component
@@ -47,12 +48,16 @@ import { TitleService } from './../services/title.service';
 import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
+import { FiltersFormComponent } from './filters-form/filters-form.component';
+
 
 @NgModule({
   imports: [
     CommonModule,
     MaterialModule,
-    BlockiesModule
+    BlockiesModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   declarations: [
     LoanCardComponent,
@@ -78,7 +83,8 @@ import { EventsService } from './../services/events.service';
     DialogInsufficientFoundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
-    DialogGenericErrorComponent
+    DialogGenericErrorComponent,
+    FiltersFormComponent
   ],
   entryComponents: [
     CivicAuthComponent,
@@ -123,7 +129,8 @@ import { EventsService } from './../services/events.service';
     ButtonGroupComponent,
     RiskIndicatorComponent,
     CivicAuthComponent,
-    PayFormComponent
+    PayFormComponent,
+    FiltersFormComponent
   ]
 })
 export class SharedModule { }
