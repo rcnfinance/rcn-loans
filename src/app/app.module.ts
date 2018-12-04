@@ -14,8 +14,10 @@ import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { CoreModule } from './core/core.module';
 import { NotFoundModule } from './not-found/not-found.module';
-import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
 import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
+import { ActiveLoansModule } from './views/active-loans/active-loans.module';
+import { AddressModule } from './views/address/address.module';
+import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
 
 // App Services
 import { environment } from '../environments/environment';
@@ -35,17 +37,12 @@ import { EventsService } from './services/events.service';
 
 // App Component
 import { AppComponent } from './app.component';
-import { HeaderComponent, BalanceComponent } from './header/header.component';
-import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 
-import { AddressComponent } from './views/address/address.component';
-
-import { ActiveLoansComponent } from './active-loans/active-loans.component';
 import { DialogInsufficientFoundsComponent } from './dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 
 import { DialogGenericErrorComponent } from './dialogs/dialog-generic-error/dialog-generic-error.component';
 
-import { ProfileComponent } from './views/profile/profile.component';
+import { ProfileComponent } from './views/profile/profile.component'; // TODO check if necesary and remove
 import { DialogApproveContractComponent } from './dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from './dialogs/dialog-client-account/dialog-client-account.component';
 import { DecentralandCosignerProvider } from './providers/cosigners/decentraland-cosigner-provider';
@@ -74,20 +71,17 @@ export class RavenErrorHandler implements ErrorHandler {
     NgxSpinnerModule,
     MaterialModule,
     SharedModule,
-    CoreModule,
-
     NotFoundModule,
-    LoanDetailModule,
-    RequestedLoanModule
+
+    CoreModule,
+    RequestedLoanModule,
+    ActiveLoansModule,
+    AddressModule,
+    LoanDetailModule
   ],
   declarations: [
     AppComponent,
-    HeaderComponent,
-    BalanceComponent,
-    ContentWrapperComponent,
     ProfileComponent,
-    AddressComponent,
-    ActiveLoansComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
     DialogInsufficientFoundsComponent,

@@ -2,17 +2,13 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
-import { BalanceComponent } from './balance/balance.component';
-
-export { BalanceComponent };
-
 // App Component
-import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
-import { Web3Service } from '../services/web3.service';
-import { SidebarService } from '../services/sidebar.service';
-import { TitleService } from '../services/title.service';
+import { Web3Service } from '../../services/web3.service';
+import { SidebarService } from '../../services/sidebar.service';
+import { TitleService } from '../../services/title.service';
 
 @Component({
   selector: 'app-header',
@@ -30,8 +26,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   constructor(
     public dialog: MatDialog,
-    private web3Service: Web3Service,
     private router: Router,
+    private web3Service: Web3Service,
     private sidebarService: SidebarService,
     public titleService: TitleService
   ) {}
