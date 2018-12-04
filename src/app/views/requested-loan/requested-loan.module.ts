@@ -6,6 +6,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from './../../material/material.module';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
+import { FilterLoansService } from './../../services/filterloans.service';
 // App Component
 import { RequestedLoanComponent } from './requested-loan.component';
 
@@ -21,7 +22,8 @@ import { RequestedLoanComponent } from './requested-loan.component';
   ],
   providers: [
     NgxSpinnerService,
-    ContractsService
+    ContractsService,
+    FilterLoansService
   ],
   exports: [
     RequestedLoanComponent

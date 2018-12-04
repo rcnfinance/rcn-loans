@@ -6,6 +6,7 @@ import { Loan } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
+import { FilterLoansService } from './../../services/filterloans.service';
 
 @Component({
   selector: 'app-requested-loan',
@@ -19,11 +20,19 @@ export class RequestedLoanComponent implements OnInit {
   loans = [];
   availableLoans = true;
   pendingLend = [];
+  filters: {
+    currency: string ;
+    amountStart: number,
+    amountEnd: number,
+    interest: number,
+    duration: number
+  };
 
   constructor(
     private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
-    private availableLoansService: AvailableLoansService
+    private availableLoansService: AvailableLoansService,
+    private filterLoansService: FilterLoansService
   ) {}
 
   // Available Loans service
@@ -33,7 +42,19 @@ export class RequestedLoanComponent implements OnInit {
 
   loadLoans() {
     this.contractsService.getOpenLoans().then((result: Loan[]) => {
-      this.loans = result;
+      console.log(result.length);
+      this.filters = {
+        currency: 'MANA',
+        amountStart: 90000,
+        amountEnd: 100000,
+        interest: 11,
+        duration: 8640000
+      };
+
+      const filterLoans = this.filterLoansService.filterLoans(result, this.filters);
+      console.log(filterLoans);
+      this.loans = filterLoans;
+
       this.upgradeAvaiblable();
       this.spinner.hide();
       if (this.loans.length === 0) {
