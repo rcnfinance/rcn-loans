@@ -2,7 +2,7 @@
 import { Utils } from './../utils/utils';
 import { Currency } from '../utils/currencies';
 
-export enum Status { Request, Ongoing, Paid, Destroyed, Indebt }
+export enum Status { Request, Ongoing, Paid, Destroyed, Expired, Indebt }
 
 function timestamp(): number {
   return (new Date().getTime() / 1000);
@@ -35,6 +35,7 @@ export class Loan {
         public interestTimestamp: number,
         public dueTimestamp: number,
         public lenderBalance: number,
+        public expirationRequest: number,
         public owner: string,
         public cosigner: string
     ) { }
@@ -43,7 +44,9 @@ export class Loan {
     if (this.statusFlag === Status.Ongoing && timestamp() > this.dueTimestamp) {
       return Status.Indebt;
     }
-
+    if (this.statusFlag === Status.Request && this.expirationRequest <= new Date().getTime() / 1000) {
+      return Status.Expired;
+    }
     return this.statusFlag;
   }
 
