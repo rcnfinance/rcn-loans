@@ -1,20 +1,22 @@
-<form [formGroup]="form" class="form-group">
-
- <mat-form-field>
-    <input [(ngModel)]="currency"  (change)="currencyChange()"  matInput 
-    formControlName="currency"
-    id="currency"
-    type="text"
-    placeholder="Currency">
-    <div *ngIf="currency.touched && currency.invalid" class="alert alert-danger">Currency is required</div>
- </mat-form-field>
-
-  <mat-form-field>
-    <input matInput 
-    formControlName="amount"
-    id="amount"
-    type="text"
-    placeholder="Amount">
-  </mat-form-field>
-
-</form>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-lg-12 d-none d-lg-block">
+      <div class="title main-h1">Filters</div>
+    </div>
+  <div class="row">
+  <div class="row">
+      <div class="col-xs-12 col-lg-3 d-none d-lg-block">
+            <div class="title main-h1">Amount</div>
+          </div>
+          <div class="col-xs-12 col-lg-3 d-none d-lg-block">
+            <div class="title main-h1">Currency</div>
+          </div>
+            <div class="col-xs-12 col-lg-3 d-none d-lg-block">
+                <div class="title main-h1">Duration</div>
+            </div>
+          <div class="col-xs-12 col-lg-3 d-none d-lg-block">
+            <div class="title main-h1">Interest</div>   
+          </div>
+  <div class="row">
+    
+</div>

@@ -7,6 +7,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./filters-form.component.scss']
 })
 export class FiltersFormComponent implements OnInit {
+  panelOpenState = false;
 
   form = new FormGroup({
     currency: new FormControl('', Validators.required),
