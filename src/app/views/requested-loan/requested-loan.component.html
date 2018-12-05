@@ -4,23 +4,55 @@
     <div class="col-sm-12 d-none d-lg-block">
       <div class="title main-h1 marginbottom30">Requests</div>
       <mat-chip-list>
-        <mat-chip class="marginright15" selected="true">{{ loans.length }} AVAILABLE</mat-chip>
+        <mat-chip class="marginright15 marginbottom30" selected="true">{{ loans.length }} AVAILABLE</mat-chip>
+        <mat-chip class="marginright15 marginbottom30" selected="true"> FILTERS </mat-chip>
       </mat-chip-list>
     </div>
   </div>
-  
+
+  <form [formGroup]="formGroup">
+    <div class="row">
+      <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
+        <mat-form-field>
+          <mat-select placeholder="Currency" formControlName="currencyControl">
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let currency of currencies" [value]="currency">
+              {{ currency }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
+          <div class="form-control"> 
+          <mat-slider thumbLabel min="1" max="10" step="1" value="4"></mat-slider>
+          </div>
+      </div>
+      <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
+        <div class="form-control title main-h1">Duration</div>
+      </div>
+      <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
+        <mat-form-field>
+          <input matInput type='number' max='200' formControlName="annualInterest" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
+            required>
+          <mat-hint>
+            <span *ngIf="annualInterest.valid || annualInterest.pristine && annualInterest.untouched">Annual Interest
+              rate</span>
+            <span class='red' *ngIf="annualInterest.errors && (annualInterest.dirty || annualInterest.touched)">The
+              minimum Annual Interest rate is 1%</span>
+          </mat-hint>
+          <span matSuffix>%</span>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+
+
   <div class="row">
     <div class="col-sm-12 text-center" *ngIf='!availableLoans'>
       <div class="title main-h1">There are no available Loans</div>
     </div>
 
-    <div class="row" class="col-sm-12 text-center">
-      <app-filters-form></app-filters-form>
-      </div>
-
-
-    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col" 
-    *ngFor='let loan of loans; let i of index'>
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col" *ngFor='let loan of loans; let i of index'>
       <app-loan-card [loan]="loan"></app-loan-card>
     </div>
   </div>
