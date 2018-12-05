@@ -1,4 +1,4 @@
-@import '../../scss/_variables.scss'; //variables
+@import '../../../scss/_variables.scss'; //variables
 
 .navbar{
   height: 60px;
@@ -174,8 +174,10 @@
         display: none;
       }
       .nav{
-        &.hasAccount{width: 480px;}
-        width: 380px;
+        > * {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
         height: 45px;
         display: flex;
         flex-direction: row;

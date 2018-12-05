@@ -6,8 +6,9 @@ import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from './../../material/material.module';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
+import { AvailableLoansService } from '../../services/available-loans.service';
 // App Component
-import { RequestedLoanComponent } from './requested-loan.component';
+import { AddressComponent } from './address.component';
 
 @NgModule({
   imports: [
@@ -17,14 +18,15 @@ import { RequestedLoanComponent } from './requested-loan.component';
     SharedModule
   ],
   declarations: [
-    RequestedLoanComponent
+    AddressComponent
   ],
   providers: [
     NgxSpinnerService,
-    ContractsService
+    ContractsService,
+    AvailableLoansService
   ],
   exports: [
-    RequestedLoanComponent
+    AddressComponent
   ]
 })
-export class RequestedLoanModule { }
+export class AddressModule { }
