@@ -5,16 +5,16 @@
       <div class="title main-h1 marginbottom30">Requests</div>
       <mat-chip-list>
         <mat-chip class="marginright15 marginbottom30" selected="true">{{ loans.length }} AVAILABLE</mat-chip>
-        <mat-chip class="marginright15 marginbottom30" selected="true"> FILTERS </mat-chip>
+        <mat-chip class="marginright15 marginbottom30" selected="true" (click)="openFilters()"> FILTERS </mat-chip>
       </mat-chip-list>
     </div>
   </div>
 
   <form [formGroup]="formGroup">
-    <div class="row">
+    <div class="row" *ngIf='filtersOpen'>
       <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
         <mat-form-field>
-          <mat-select placeholder="Currency" formControlName="currencyControl">
+          <mat-select class="form-control" placeholder="Currency" formControlName="currency" required>
             <mat-option>--</mat-option>
             <mat-option *ngFor="let currency of currencies" [value]="currency">
               {{ currency }}
@@ -23,20 +23,28 @@
         </mat-form-field>
       </div>
       <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
-          <div class="form-control"> 
-          <mat-slider thumbLabel min="1" max="10" step="1" value="4"></mat-slider>
-          </div>
+        <mat-form-field>
+          <input matInput type='number' placeholder="Amount" formControlName="amount" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
+            required>
+          <mat-hint>
+            <span *ngIf="amount.valid || amount.pristine && amount.untouched"></span>
+          </mat-hint>
+        </mat-form-field>
       </div>
       <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
-        <div class="form-control title main-h1">Duration</div>
+      <mat-form-field>
+          <input matInput [matDatepicker]="fullDurationPicker" [min]="tomorrowDate" formControlName="duration" 
+          (dateChange)='expectedDuration()' placeholder="Choose a date" required>
+          <mat-datepicker-toggle matSuffix [for]="fullDurationPicker"></mat-datepicker-toggle>
+          <mat-datepicker #fullDurationPicker></mat-datepicker>
+        </mat-form-field>
       </div>
       <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
         <mat-form-field>
-          <input matInput type='number' max='200' formControlName="annualInterest" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
+          <input matInput type='number' placeholder="Interest Rate" max='200' formControlName="annualInterest" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
             required>
           <mat-hint>
-            <span *ngIf="annualInterest.valid || annualInterest.pristine && annualInterest.untouched">Annual Interest
-              rate</span>
+            <span *ngIf="annualInterest.valid || annualInterest.pristine && annualInterest.untouched"></span>
             <span class='red' *ngIf="annualInterest.errors && (annualInterest.dirty || annualInterest.touched)">The
               minimum Annual Interest rate is 1%</span>
           </mat-hint>
