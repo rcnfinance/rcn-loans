@@ -50,7 +50,6 @@ import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
 import { FiltersFormComponent } from './filters-form/filters-form.component';
 
-
 @NgModule({
   imports: [
     CommonModule,
