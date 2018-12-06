@@ -48,7 +48,6 @@ import { TitleService } from './../services/title.service';
 import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
-import { FiltersFormComponent } from './filters-form/filters-form.component';
 
 @NgModule({
   imports: [
@@ -82,8 +81,7 @@ import { FiltersFormComponent } from './filters-form/filters-form.component';
     DialogInsufficientFoundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
-    DialogGenericErrorComponent,
-    FiltersFormComponent
+    DialogGenericErrorComponent
   ],
   entryComponents: [
     CivicAuthComponent,
@@ -128,8 +126,7 @@ import { FiltersFormComponent } from './filters-form/filters-form.component';
     ButtonGroupComponent,
     RiskIndicatorComponent,
     CivicAuthComponent,
-    PayFormComponent,
-    FiltersFormComponent
+    PayFormComponent
   ]
 })
 export class SharedModule { }
