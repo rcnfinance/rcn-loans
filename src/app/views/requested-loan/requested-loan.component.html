@@ -14,8 +14,8 @@
     <div class="row" *ngIf='filtersOpen'>
       <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
         <mat-form-field>
-          <mat-select class="form-control" placeholder="Currency" formControlName="currency" required>
-            <mat-option >--</mat-option>
+          <mat-select class="form-control" placeholder="Currency" formControlName="currency">
+            <mat-option>--</mat-option>
             <mat-option *ngFor="let currency of currencies" [value]="currency">
               {{ currency }}
             </mat-option>
@@ -23,31 +23,37 @@
         </mat-form-field>
       </div>
       <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
+        <div class="row">
+          <div class="col-lg-6">
+            <mat-form-field>
+              <input matInput type='number' placeholder="Start Amount" formControlName="amountStart" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6">
+            <mat-form-field>
+              <input matInput type='number' placeholder="End Amount" formControlName="amountEnd" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-xs-12 col-lg-1 d-none d-lg-block" formGroupName="duration">
         <mat-form-field>
-          <input matInput type='number' placeholder="Amount" formControlName="amount" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
-            required>
-          <mat-hint>
-            <span *ngIf="amount.valid || amount.pristine && amount.untouched"></span>
-          </mat-hint>
+          <input matInput type='number' placeholder="Days" formControlName="days" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+        </mat-form-field>
+      </div>
+      <div class="form-group col-xs-12 col-lg-1 d-none d-lg-block" formGroupName="duration">
+        <mat-form-field>
+          <input matInput type='number' placeholder="Months" formControlName="months" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+        </mat-form-field>
+      </div>
+      <div class="form-group col-xs-12 col-lg-1 d-none d-lg-block" formGroupName="duration">
+        <mat-form-field>
+          <input matInput type='number' placeholder="Years" formControlName="years" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
         </mat-form-field>
       </div>
       <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
-      <mat-form-field>
-          <input matInput [matDatepicker]="fullDurationPicker" [min]="tomorrowDate" formControlName="duration" 
-          (dateChange)='expectedDuration()' placeholder="Choose a date" required>
-          <mat-datepicker-toggle matSuffix [for]="fullDurationPicker"></mat-datepicker-toggle>
-          <mat-datepicker #fullDurationPicker></mat-datepicker>
-        </mat-form-field>
-      </div>
-      <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
         <mat-form-field>
-          <input matInput type='number' placeholder="Interest Rate" max='200' formControlName="annualInterest" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
-            required>
-          <mat-hint>
-            <span *ngIf="annualInterest.valid || annualInterest.pristine && annualInterest.untouched"></span>
-            <span class='red' *ngIf="annualInterest.errors && (annualInterest.dirty || annualInterest.touched)">The
-              minimum Annual Interest rate is 1%</span>
-          </mat-hint>
+          <input matInput type='number' placeholder="Interest Rate" max='200' formControlName="annualInterest" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
           <span matSuffix>%</span>
         </mat-form-field>
       </div>

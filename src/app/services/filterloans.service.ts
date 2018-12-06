@@ -17,6 +17,8 @@ export class FilterLoansService {
   filter: Filters;
   defaultStringValue = undefined;
   defaultNumberValue = null;
+  maxAmount: number;
+  minAmount: number;
 
   constructor() { }
 
@@ -36,8 +38,15 @@ export class FilterLoansService {
   }
 
   checkAmountRange(amount: number) {
-    if (this.filterHasNumberDefaultValue(this.filter.amountStart)) {
+    if (this.filterHasNumberDefaultValue(this.filter.amountStart)
+    && this.filterHasNumberDefaultValue(this.filter.amountEnd)) {
       return true;
+    }
+    if (this.filterHasNumberDefaultValue(this.filter.amountEnd)) {
+      return amount >= this.filter.amountStart && amount <= this.maxAmount;
+    }
+    if (this.filterHasNumberDefaultValue(this.filter.amountStart)) {
+      return amount >= this.minAmount && amount <= this.filter.amountEnd;
     }
     return amount >= this.filter.amountStart && amount <= this.filter.amountEnd;
   }
@@ -65,6 +74,13 @@ export class FilterLoansService {
 
   filterLoans(loans: Loan[], filters: Filters) {
     this.filter = filters;
+
+    const amountArray = loans.map(loan => loan.amount);
+    console.log(amountArray);
+    this.minAmount = Math.min.apply(null, amountArray);
+    this.maxAmount = Math.max.apply(null, amountArray);
+    console.log(this.minAmount);
+    console.log(this.maxAmount);
 
     const filterLoans = loans.filter(loan => this.checkFilters(loan));
     console.log(filterLoans.length);

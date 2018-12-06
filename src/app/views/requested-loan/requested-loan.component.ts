@@ -15,7 +15,7 @@ import { FilterLoansService } from './../../services/filterloans.service';
   styleUrls: ['./requested-loan.component.scss']
 })
 export class RequestedLoanComponent implements OnInit {
-    // Date Variables
+  // Date Variables
   now: Date = new Date();
   tomorrow: Date = new Date();
   tomorrowDate: Date = new Date(this.tomorrow.setDate(this.now.getDate() + 1));
@@ -33,8 +33,13 @@ export class RequestedLoanComponent implements OnInit {
   };
   formGroup = new FormGroup({
     currency: new FormControl(),
-    amount: new FormControl(),
-    duration: new FormControl(),
+    amountStart: new FormControl(),
+    amountEnd: new FormControl(),
+    duration: new FormGroup({
+      days: new FormControl(),
+      months: new FormControl(),
+      years: new FormControl()
+    }),
     annualInterest: new FormControl
   });
   currencies: string[] = ['RCN', 'MANA', 'ARS'];
@@ -45,7 +50,7 @@ export class RequestedLoanComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private availableLoansService: AvailableLoansService,
     private filterLoansService: FilterLoansService
-  ) {}
+  ) { }
 
   get annualInterest() {
     return this.formGroup.get('annualInterest');
@@ -53,11 +58,11 @@ export class RequestedLoanComponent implements OnInit {
   get currency() {
     return this.formGroup.get('currency');
   }
-  get amount() {
-    return this.formGroup.get('amount');
+  get amountStart() {
+    return this.formGroup.get('amountStart');
   }
-  get duration() {
-    return this.formGroup.get('duration');
+  get amountEnd() {
+    return this.formGroup.get('amountEnd');
   }
 
   openFilters() {
@@ -89,39 +94,55 @@ export class RequestedLoanComponent implements OnInit {
 
   onChanges(): void {
     this.currency.valueChanges.subscribe(val => {
-      this.filters.currency = val;
-      console.log(val);
-      this.spinner.show();
-      this.loadLoans();
+      if (this.filters.currency !== val) {
+        this.filters.currency = val;
+        console.log(val);
+        this.spinner.show();
+        this.loadLoans();
+      }
     });
 
-    this.amount.valueChanges.subscribe(val => {
-      this.filters.amountStart = val;
-      console.log(val);
-      this.spinner.show();
-      this.loadLoans();
+    this.amountStart.valueChanges.subscribe(val => {
+      if (this.filters.amountStart !== val) {
+        this.filters.amountStart = val;
+        console.log(val);
+        this.spinner.show();
+        this.loadLoans();
+      }
     });
 
-    this.duration.valueChanges.subscribe(val => {
-      this.filters.duration = val;
-      console.log(val);
-      this.spinner.show();
-      this.loadLoans();
+    this.amountEnd.valueChanges.subscribe(val => {
+      if (this.filters.amountEnd !== val) {
+        this.filters.amountEnd = val;
+        console.log(val);
+        this.spinner.show();
+        this.loadLoans();
+      }
+    });
+
+    this.formGroup.controls.duration.valueChanges.subscribe(val => {
+      const daysInSeconds = val.days * 24 * 60 * 60;
+      const monthsInSeconds = val.months * 30 * 24 * 60 * 60;
+      const yearsInSeconds = val.years * 12 * 30 * 24 * 60 * 60;
+      const durationInSeconds = daysInSeconds + monthsInSeconds + yearsInSeconds;
+
+      if (durationInSeconds !== this.filters.duration) {
+        this.filters.duration = val.days === null && val.months === null && val.years === null
+          ? null : durationInSeconds;
+
+        this.spinner.show();
+        this.loadLoans();
+      }
     });
 
     this.annualInterest.valueChanges.subscribe(val => {
-      this.filters.interest = val;
-      console.log(val);
-      this.spinner.show();
-      this.loadLoans();
+      if (this.filters.interest !== val) {
+        this.filters.interest = val;
+        console.log(val);
+        this.spinner.show();
+        this.loadLoans();
+      }
     });
-  }
-
-  expectedDuration() {
-    const now = Math.round((new Date()).getTime() / 1000);
-    const secondsDuration = Math.round((this.duration.value).getTime() / 1000) - now;
-    console.log(secondsDuration);
-    this.formGroup.controls['duration'].setValue(secondsDuration);
   }
 
   ngOnInit() {
@@ -175,7 +196,7 @@ export class RequestedLoanComponent implements OnInit {
 //   slideToggle: any;
 
 //   formGroup3: FormGroup;
-  
+
 //   formGroup4: FormGroup;
 //   expirationRequestDate: FormControl;
 
