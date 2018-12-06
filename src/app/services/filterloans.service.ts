@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Loan } from './../models/loan.model';
 
 interface Filters {
-  currency: string ;
+  currency: string;
   amountStart: number;
   amountEnd: number;
   interest: number;
@@ -39,7 +39,7 @@ export class FilterLoansService {
 
   checkAmountRange(amount: number) {
     if (this.filterHasNumberDefaultValue(this.filter.amountStart)
-    && this.filterHasNumberDefaultValue(this.filter.amountEnd)) {
+      && this.filterHasNumberDefaultValue(this.filter.amountEnd)) {
       return true;
     }
     if (this.filterHasNumberDefaultValue(this.filter.amountEnd)) {
@@ -67,26 +67,20 @@ export class FilterLoansService {
 
   checkFilters(loan: Loan) {
     return this.checkCurrency(loan.currency) &&
-    this.checkAmountRange(loan.amount) &&
-    this.checkDuration(loan.duration) &&
-    this.checkInterestRate(loan.annualInterest);
+      this.checkAmountRange(loan.amount) &&
+      this.checkDuration(loan.duration) &&
+      this.checkInterestRate(loan.annualInterest);
   }
 
   filterLoans(loans: Loan[], filters: Filters) {
     this.filter = filters;
 
     const amountArray = loans.map(loan => loan.amount);
-    console.log(amountArray);
     this.minAmount = Math.min.apply(null, amountArray);
     this.maxAmount = Math.max.apply(null, amountArray);
-    console.log(this.minAmount);
-    console.log(this.maxAmount);
 
     const filterLoans = loans.filter(loan => this.checkFilters(loan));
-    console.log(filterLoans.length);
-
     return filterLoans;
-
   }
 
 }
