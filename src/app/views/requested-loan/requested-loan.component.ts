@@ -25,11 +25,11 @@ export class RequestedLoanComponent implements OnInit {
   availableLoans = true;
   pendingLend = [];
   filters = {
-    currency: 'MANA',
-    amountStart: 0,
-    amountEnd: 1000000,
-    interest: 0,
-    duration: 238329398383
+    currency: undefined,
+    amountStart: null,
+    amountEnd: null,
+    interest: null,
+    duration: null
   };
   formGroup = new FormGroup({
     currency: new FormControl(),
@@ -38,10 +38,7 @@ export class RequestedLoanComponent implements OnInit {
     annualInterest: new FormControl
   });
   currencies: string[] = ['RCN', 'MANA', 'ARS'];
-  selectedOracle: string;
-  rateValue: any;
   filtersOpen = false;
-  auxDuration: any;
 
   constructor(
     private contractsService: ContractsService,
@@ -91,14 +88,30 @@ export class RequestedLoanComponent implements OnInit {
   }
 
   onChanges(): void {
-    this.formGroup.valueChanges.subscribe(val => {
-      this.filters.interest = val.annualInterest;
-      this.filters.currency = val.currency;
-      this.filters.amountStart = val.amount;
+    this.currency.valueChanges.subscribe(val => {
+      this.filters.currency = val;
+      console.log(val);
+      this.spinner.show();
+      this.loadLoans();
+    });
 
-      console.log(val.annualInterest);
-      console.log(val.currency);
-      console.log(val.duration);
+    this.amount.valueChanges.subscribe(val => {
+      this.filters.amountStart = val;
+      console.log(val);
+      this.spinner.show();
+      this.loadLoans();
+    });
+
+    this.duration.valueChanges.subscribe(val => {
+      this.filters.duration = val;
+      console.log(val);
+      this.spinner.show();
+      this.loadLoans();
+    });
+
+    this.annualInterest.valueChanges.subscribe(val => {
+      this.filters.interest = val;
+      console.log(val);
       this.spinner.show();
       this.loadLoans();
     });
@@ -106,10 +119,9 @@ export class RequestedLoanComponent implements OnInit {
 
   expectedDuration() {
     const now = Math.round((new Date()).getTime() / 1000);
-    this.auxDuration = Math.round((this.duration.value).getTime() / 1000);
-    this.auxDuration = this.auxDuration - now;
-    this.auxDuration = Utils.formatDelta(this.auxDuration); // Calculate the duetime of the loan
-    this.formGroup.controls['duration'].setValue(this.auxDuration);
+    const secondsDuration = Math.round((this.duration.value).getTime() / 1000) - now;
+    console.log(secondsDuration);
+    this.formGroup.controls['duration'].setValue(secondsDuration);
   }
 
   ngOnInit() {

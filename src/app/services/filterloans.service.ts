@@ -15,22 +15,44 @@ interface Filters {
 export class FilterLoansService {
 
   filter: Filters;
+  defaultStringValue = undefined;
+  defaultNumberValue = null;
 
   constructor() { }
 
+  filterHasStringDefaultValue(filterValue: string) {
+    return filterValue === this.defaultStringValue;
+  }
+
+  filterHasNumberDefaultValue(filterValue: number) {
+    return filterValue === this.defaultNumberValue;
+  }
+
   checkCurrency(currency: string) {
+    if (this.filterHasStringDefaultValue(this.filter.currency)) {
+      return true;
+    }
     return currency === this.filter.currency;
   }
 
   checkAmountRange(amount: number) {
+    if (this.filterHasNumberDefaultValue(this.filter.amountStart)) {
+      return true;
+    }
     return amount >= this.filter.amountStart && amount <= this.filter.amountEnd;
   }
 
   checkDuration(duration: number) {
+    if (this.filterHasNumberDefaultValue(this.filter.duration)) {
+      return true;
+    }
     return duration <= this.filter.duration;
   }
 
   checkInterestRate(interest: number) {
+    if (this.filterHasNumberDefaultValue(this.filter.interest)) {
+      return true;
+    }
     return interest >= this.filter.interest;
   }
 
