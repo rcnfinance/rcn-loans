@@ -4,26 +4,18 @@
     <div class="col-sm-12 d-none d-lg-block">
       <div class="title main-h1 marginbottom30">Requests</div>
     </div>
-  </div>
-  <div class="row marginbottom15 marginright15" >
-    <div class="col-lg-12 d-lg-block">
-      <div class="row ">
-        <div class="col-lg-11">
-          <mat-chip-list>
-            <mat-chip selected="true">{{ loans.length }} AVAILABLE</mat-chip>
-          </mat-chip-list>
-      </div>
-        <div class="col-lg-1 ">
-          <button mat-button (click)="openFilters()">FILTER <mat-icon>filter_list</mat-icon></button>
-         </div>
-      </div>
+    <div class="col-sm-12 flex-between margintop10 marginbottom10">
+      <mat-chip-list>
+        <mat-chip selected="true">{{ loans.length }} AVAILABLE</mat-chip>
+      </mat-chip-list>
+      <button mat-button class='float-right' (click)="openFilters()">FILTER <mat-icon>filter_list</mat-icon></button>
     </div>
   </div>
-
+  
   <div class="row" *ngIf='filtersOpen'>
     <form [formGroup]="formGroup">
-      <div class="col-sm-12 col-lg-3 d-lg-block">
-        <div class="form-group">
+      <div class="form-group">
+        <div class="col-sm-12 col-lg-3 d-lg-block">
           <mat-form-field>
             <mat-select class="form-control" placeholder="Currency" formControlName="currency">
               <mat-option>--</mat-option>
