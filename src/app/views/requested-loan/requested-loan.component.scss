@@ -13,7 +13,7 @@
   top: -10px;
   @include transition();
   &.active{
-    height: 60px;
+    height: 102px;
     top: 0;
     opacity: 1;
   }

@@ -19,8 +19,10 @@
           <div class="row">
 
             <div class="col-sm-12 col-lg-3">
+
+            <div class="title property margintop20 marginbottom10">Currency</div>
               <mat-form-field>
-                <mat-select class="form-control" placeholder="Currency" formControlName="currency">
+                <mat-select class="form-control" placeholder="Choose your Currency" formControlName="currency">
                   <mat-option>--</mat-option>
                   <mat-option *ngFor="let currency of currencies" [value]="currency">
                     {{ currency }}
@@ -28,6 +30,24 @@
                 </mat-select>
               </mat-form-field>
             </div>
+
+
+            <!-- <div class="col-12">
+              <mat-form-field>
+                <input matInput [matDatepicker]="payableAtDatePicker" [min]="tomorrowDate" formControlName="payableAtDate" 
+                placeholder="Choose a date" required>
+                <mat-datepicker-toggle matSuffix [for]="payableAtDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #payableAtDatePicker></mat-datepicker>
+                <mat-hint>
+                  <span *ngIf="payableAtDate.valid || payableAtDate.pristine && payableAtDate.untouched">
+                    Set the minimum Payment date
+                  </span> 
+                  <span class='red' *ngIf="payableAtDate.errors && (payableAtDate.dirty || payableAtDate.touched)">
+                    The minimum Payment date is required
+                  </span>
+                </mat-hint>
+              </mat-form-field>
+            </div> -->
 
             <div class="col-sm-12 col-lg-3">
               <div class="row">
