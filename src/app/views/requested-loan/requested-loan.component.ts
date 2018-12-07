@@ -41,6 +41,7 @@ export class RequestedLoanComponent implements OnInit {
   filtersOpen = false;
   daySeconds = 24 * 60 * 60;
   disableForm = true;
+  iconFilterFlagColor = '';
 
   constructor(
     private contractsService: ContractsService,
@@ -105,6 +106,7 @@ export class RequestedLoanComponent implements OnInit {
     });
 
     this.amountEnd.valueChanges.subscribe(val => {
+
       if (this.filters.amountEnd !== val) {
         this.filters.amountEnd = val;
         this.spinner.show();
