@@ -19,8 +19,7 @@
           <div class="row">
 
             <div class="col-sm-12 col-lg-3">
-
-            <div class="title property margintop20 marginbottom10">Currency</div>
+              <div class="title property margintop20 marginbottom10">Currency</div>
               <mat-form-field>
                 <mat-select class="form-control" placeholder="Choose your Currency" formControlName="currency">
                   <mat-option>--</mat-option>
@@ -31,37 +30,21 @@
               </mat-form-field>
             </div>
 
-
-            <!-- <div class="col-12">
-              <mat-form-field>
-                <input matInput [matDatepicker]="payableAtDatePicker" [min]="tomorrowDate" formControlName="payableAtDate" 
-                placeholder="Choose a date" required>
-                <mat-datepicker-toggle matSuffix [for]="payableAtDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #payableAtDatePicker></mat-datepicker>
-                <mat-hint>
-                  <span *ngIf="payableAtDate.valid || payableAtDate.pristine && payableAtDate.untouched">
-                    Set the minimum Payment date
-                  </span> 
-                  <span class='red' *ngIf="payableAtDate.errors && (payableAtDate.dirty || payableAtDate.touched)">
-                    The minimum Payment date is required
-                  </span>
-                </mat-hint>
-              </mat-form-field>
-            </div> -->
-
             <div class="col-sm-12 col-lg-3">
               <div class="row">
                 <div class="col-xs-6 col-sm-6">
+                  <div class="title property margintop20 marginbottom10">Start Amount</div>
                   <div class="form-group">
                     <mat-form-field>
-                      <input matInput type='number' placeholder="Start Amount" formControlName="amountStart" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+                      <input matInput type='number' placeholder="Set amount" formControlName="amountStart" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="col-xs-6 col-sm-6">
+                  <div class="title property margintop20 marginbottom10">End Amount</div>
                   <div class="form-group">
                     <mat-form-field>
-                      <input matInput type='number' placeholder="End Amount" formControlName="amountEnd" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+                      <input matInput type='number' placeholder="Set amount" formControlName="amountEnd" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
                     </mat-form-field>
                   </div>
                 </div>
@@ -69,6 +52,7 @@
             </div>
 
             <div class="col-sm-12 col-lg-3">
+              <div class="title property margintop20 marginbottom10">Duration</div>
               <div class="row">
                 <div class="col-sm-4">
                   <div class="form-group" formGroupName="duration">
@@ -95,9 +79,10 @@
             </div>
 
             <div class="col-sm-12 col-lg-3">
-              <div class="form-group" formGroupName="duration">
+              <div class="title property margintop20 marginbottom10">Interest</div>
+              <div class="form-group">
                 <mat-form-field>
-                  <input matInput type='number' placeholder="Interest Rate" max='200' formControlName="annualInterest"
+                  <input matInput type='number' placeholder="Set annual interest" max='200' formControlName="annualInterest"
                   pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
                   <span matSuffix>%</span>
                 </mat-form-field>
