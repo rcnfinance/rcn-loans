@@ -12,7 +12,7 @@
     </div>
   </div>
   
-  <div class="row" *ngIf='filtersOpen'>
+  <div class="row filters" [ngClass]="{'active': filtersOpen}">
     <div class="col-sm-12">
       <form [formGroup]="formGroup">
         <div class="form-group">
