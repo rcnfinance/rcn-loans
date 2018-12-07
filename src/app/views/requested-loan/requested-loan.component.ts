@@ -66,10 +66,6 @@ export class RequestedLoanComponent implements OnInit {
     this.filtersOpen = !this.filtersOpen;
   }
 
-  enableForm() {
-
-  }
-
   // Available Loans service
   upgradeAvaiblable() {
     this.availableLoansService.updateAvailable(this.loans.length);

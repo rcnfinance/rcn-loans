@@ -3,64 +3,79 @@
   <div class="row">
     <div class="col-sm-12 d-none d-lg-block">
       <div class="title main-h1 marginbottom30">Requests</div>
-      <mat-chip-list>
-        <mat-chip class="marginright15 marginbottom30" selected="true">{{ loans.length }} AVAILABLE</mat-chip>
-        <mat-chip class="marginright15 marginbottom30" selected="true" (click)="openFilters()"> FILTERS </mat-chip>
-      </mat-chip-list>
+    </div>
+  </div>
+  <div class="row marginbottom15 marginright15" >
+    <div class="col-lg-12 d-lg-block">
+      <div class="row ">
+        <div class="col-lg-11">
+          <mat-chip-list>
+            <mat-chip selected="true">{{ loans.length }} AVAILABLE</mat-chip>
+          </mat-chip-list>
+      </div>
+        <div class="col-lg-1 ">
+          <button mat-button (click)="openFilters()">FILTER <mat-icon>filter_list</mat-icon></button>
+         </div>
+      </div>
     </div>
   </div>
 
-
-  <form [formGroup]="formGroup">
-    <div class="row" *ngIf='filtersOpen'>
-      <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
-        <mat-form-field>
-          <mat-select class="form-control" placeholder="Currency" formControlName="currency">
-            <mat-option>--</mat-option>
-            <mat-option *ngFor="let currency of currencies" [value]="currency">
-              {{ currency }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
-        <div class="row">
-          <div class="col-lg-6">
-            <mat-form-field>
-              <input matInput type='number' placeholder="Start Amount" formControlName="amountStart" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
-            </mat-form-field>
-          </div>
-          <div class="col-lg-6">
-            <mat-form-field>
-              <input matInput type='number' placeholder="End Amount" formControlName="amountEnd" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
-            </mat-form-field>
+  <div class="row" *ngIf='filtersOpen'>
+    <form class="marginright15 marginleft15" [formGroup]="formGroup">
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-3 d-lg-block">
+          <mat-form-field>
+            <mat-select class="form-control" placeholder="Currency" formControlName="currency">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let currency of currencies" [value]="currency">
+                {{ currency }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group col-sm-12 col-lg-3 d-lg-block">
+          <div class="row">
+            <div class="col-lg-6">
+              <mat-form-field>
+                <input matInput type='number' placeholder="Start Amount" formControlName="amountStart" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+              <mat-form-field>
+                <input matInput type='number' placeholder="End Amount" formControlName="amountEnd" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+              </mat-form-field>
+            </div>
           </div>
         </div>
+        <div class="col-sm-12 col-lg-3 d-lg-block">
+          <div class="row">
+            <div class="form-group col-sm-4 col-lg-4 d-lg-block" formGroupName="duration">
+              <mat-form-field>
+                <input matInput type='number' placeholder="Days" formControlName="days" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+              </mat-form-field>
+            </div>
+            <div class="form-group col-sm-4 col-lg-4 d-lg-block" formGroupName="duration">
+              <mat-form-field>
+                <input matInput type='number' placeholder="Months" formControlName="months" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+              </mat-form-field>
+            </div>
+            <div class="form-group col-sm-4 col-lg-4 d-lg-block" formGroupName="duration">
+              <mat-form-field>
+                <input matInput type='number' placeholder="Years" formControlName="years" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-3 d-lg-block">
+          <mat-form-field>
+            <input matInput type='number' placeholder="Interest Rate" max='200' formControlName="annualInterest"
+              pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+            <span matSuffix>%</span>
+          </mat-form-field>
+        </div>
       </div>
-      <div class="form-group col-xs-12 col-lg-1 d-none d-lg-block" formGroupName="duration">
-        <mat-form-field>
-          <input matInput type='number' placeholder="Days" formControlName="days" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
-        </mat-form-field>
-      </div>
-      <div class="form-group col-xs-12 col-lg-1 d-none d-lg-block" formGroupName="duration">
-        <mat-form-field>
-          <input matInput type='number' placeholder="Months" formControlName="months" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
-        </mat-form-field>
-      </div>
-      <div class="form-group col-xs-12 col-lg-1 d-none d-lg-block" formGroupName="duration">
-        <mat-form-field>
-          <input matInput type='number' placeholder="Years" formControlName="years" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
-        </mat-form-field>
-      </div>
-      <div class="form-group col-xs-12 col-lg-3 d-none d-lg-block">
-        <mat-form-field>
-          <input matInput type='number' placeholder="Interest Rate" max='200' formControlName="annualInterest" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
-          <span matSuffix>%</span>
-        </mat-form-field>
-      </div>
-    </div>
-  </form>
-
+    </form>
+  </div>
 
   <div class="row">
     <div class="col-sm-12 text-center" *ngIf='!availableLoans'>
