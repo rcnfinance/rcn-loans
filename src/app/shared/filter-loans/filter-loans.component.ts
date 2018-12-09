@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { FormGroup, FormControl } from '@angular/forms';
 
 interface Filters {
@@ -33,8 +32,7 @@ export class FilterLoansComponent implements OnInit {
   currencies: string[] = ['RCN', 'MANA', 'ARS'];
   daySeconds = 24 * 60 * 60;
 
-  constructor(
-    private spinner: NgxSpinnerService) {
+  constructor() {
   }
 
   get annualInterest() {
@@ -83,7 +81,6 @@ export class FilterLoansComponent implements OnInit {
         this.filters.duration = val.days === null && val.months === null && val.years === null
           ? null : durationInSeconds;
 
-        this.spinner.show();
         this.filtered.emit();
       }
     });
@@ -91,7 +88,6 @@ export class FilterLoansComponent implements OnInit {
     this.annualInterest.valueChanges.subscribe(val => {
       if (this.filters.interest !== val) {
         this.filters.interest = val;
-        this.spinner.show();
         this.filtered.emit();
       }
     });

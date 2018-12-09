@@ -38,14 +38,14 @@ export class RequestedLoanComponent implements OnInit {
     this.filtersOpen = !this.filtersOpen;
   }
 
-  // Available Loans service
-  upgradeAvaiblable() {
-    this.availableLoansService.updateAvailable(this.loans.length);
-  }
-
   onFiltered() {
     this.spinner.show();
     this.loadLoans();
+  }
+
+  // Available Loans service
+  upgradeAvaiblable() {
+    this.availableLoansService.updateAvailable(this.loans.length);
   }
 
   loadLoans() {
