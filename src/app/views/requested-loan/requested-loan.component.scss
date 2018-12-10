@@ -19,10 +19,18 @@
   }
 }
 
+@media (min-width: 576px){
+  .filters{
+    &.active{
+      height: 410px;
+    }
+  }
+}
+
 @media (min-width: 768px){
   .filters{
     &.active{
-      height: 390px;
+      height: 410px;
     }
   }
 }
