@@ -13,9 +13,24 @@
   top: -10px;
   @include transition();
   &.active{
-    height: 102px;
+    height: 605px;
     top: 0;
     opacity: 1;
   }
 }
 
+@media (min-width: 768px){
+  .filters{
+    &.active{
+      height: 390px;
+    }
+  }
+}
+
+@media (min-width: 992px){
+  .filters{
+    &.active{
+      height: 102px;
+    }
+  }
+}
