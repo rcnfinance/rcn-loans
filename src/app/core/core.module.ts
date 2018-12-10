@@ -14,6 +14,7 @@ import { SocialContainerComponent } from './social-container/social-container.co
 import { Web3Service } from '../services/web3.service';
 import { SidebarService } from '../services/sidebar.service';
 import { TitleService } from '../services/title.service';
+import { IconGroupHeaderComponent } from './header/icon-group-header/icon-group-header.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { TitleService } from '../services/title.service';
     HeaderComponent,
     FooterComponent,
     BalanceComponent,
-    SocialContainerComponent
+    SocialContainerComponent,
+    IconGroupHeaderComponent
   ],
   providers: [
     Web3Service,
