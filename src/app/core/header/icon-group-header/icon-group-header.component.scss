@@ -1,0 +1,51 @@
+@import './../../../../scss/_variables.scss'; //variables
+
+.button-group{
+  position: relative;
+  .button{
+    cursor: pointer;
+    i,
+    svg{ font-size: 22px; }
+    .available-notifications {
+      width: 22px;
+      height: 18px;
+      text-align: center;
+      font-size: 12px;
+      border-radius: 30px;
+      margin-left: 14px;
+      margin-top: -10px;
+      background-color: $red;
+      @extend %absolute-center;
+      @include transition(all 0.1s ease-out);
+    }
+  }
+}
+
+.notifications-container{
+  width: 320px;
+  position: absolute;
+  right: -22px;
+  top: 25px;
+  opacity: 0;
+  z-index: -1;
+  background-color: $fifth;
+  @extend %roboto-regular;
+  @include transition();
+  &.active{
+    z-index: 3;
+    opacity: 1;
+    top: 35px;
+  }
+  ul{
+    li{
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      height: 60px;
+      &:nth-child(1){
+        height: 30px;
+        border-bottom: 1px solid #1d1d1d;
+      }
+    }
+  }
+}

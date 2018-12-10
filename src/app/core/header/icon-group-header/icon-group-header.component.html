@@ -1,0 +1,19 @@
+<div class="button-group">
+  <div class="button" (click)="openDetail('notifications');">
+    <i class="fas fa-bell"></i>
+    <div class="available-notifications">{{ availableNotifications }}</div>
+  </div>
+  <div class="notifications-container" [ngClass]="{'active': isDetail('notifications') }">
+    <ul>
+      <li>
+        Notifications
+      </li>
+      <li>
+        Asd 1
+      </li>
+      <li>
+        Asd 1
+      </li>
+    </ul>
+  </div>
+</div>
