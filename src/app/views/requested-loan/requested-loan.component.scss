@@ -6,10 +6,7 @@
 }
 
 .filters{
-  height: 0px;
-  position: relative;
-  overflow: hidden;
-
+  display: none;
   @-webkit-keyframes anm-forward { 0% { height: 0px; opacity: 0; } 40% { height: 410px; opacity: 0; } 100% { height: 410px; opacity: 1; } }
   @-moz-keyframes anm-forward { 0% { height: 0px; opacity: 0; } 40% { height: 410px; opacity: 0; } 100% { height: 410px; opacity: 1; } }
   @-o-keyframes anm-forward { 0% { height: 0px; opacity: 0; } 40% { height: 410px; opacity: 0; } 100% { height: 410px; opacity: 1; } }
@@ -19,21 +16,24 @@
   @-moz-keyframes anm-backwards { 0% { height: 410px; opacity: 1; } 40% { height: 410px; opacity: 0; } 100% { height: 0px; opacity: 0;} }
   @-o-keyframes anm-backwards { 0% { height: 410px; opacity: 1; } 40% { height: 410px; opacity: 0; } 100% { height: 0px; opacity: 0;} }
   @keyframes anm-backwards { 0% { height: 410px; opacity: 1; } 40% { height: 410px; opacity: 0; } 100% { height: 0px; opacity: 0;} }
-
-  animation-name: anm-backwards;
-  animation-timing-function: ease-in;
-  animation-duration: .3s;
-  animation-delay: 0s;
-  animation-iteration-count: 1;
-  animation-direction: alternate;
-  animation-fill-mode: both;
   &.active{
+    display: block;
     animation-name: anm-forward;
     animation-timing-function: ease-in;
     animation-duration: .4s;
     animation-delay: 0s;
     animation-iteration-count: 1;
-    animation-direction: alternate;
+    animation-direction: normal;
+    animation-fill-mode: both;
+  }
+  &.disabled{
+    display: block;
+    animation-name: anm-backwards;
+    animation-timing-function: ease-in;
+    animation-duration: .3s;
+    animation-delay: 0s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
     animation-fill-mode: both;
   }
 }

@@ -8,11 +8,14 @@
       <mat-chip-list>
         <mat-chip selected="true">{{ loans.length }} AVAILABLE</mat-chip>
       </mat-chip-list>
-      <button mat-button (click)="openFilters()">FILTERS <mat-icon>filter_list</mat-icon></button>
+      <button mat-button (click)="openFilters()">
+        FILTERS 
+        <mat-icon>filter_list</mat-icon>
+      </button>
     </div>
   </div>
 
-  <div class="filters anm-01" [ngClass]="{'active': filtersOpen}">
+  <div class="filters anm-01" [ngClass]="{'active': filtersOpen, 'disabled': filtersOpen === false}">
     <app-filter-loans [filters]="filters" (filtered)='onFiltered()'></app-filter-loans>
   </div>
   

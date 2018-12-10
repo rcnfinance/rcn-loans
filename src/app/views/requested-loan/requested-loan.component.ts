@@ -26,7 +26,7 @@ export class RequestedLoanComponent implements OnInit {
     interest: null,
     duration: null
   };
-  filtersOpen = false;
+  filtersOpen = undefined;
 
   constructor(
     private contractsService: ContractsService,
