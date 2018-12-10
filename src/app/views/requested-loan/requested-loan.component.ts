@@ -27,7 +27,6 @@ export class RequestedLoanComponent implements OnInit {
     duration: null
   };
   filtersOpen = undefined;
-  somethingOpen = false;
 
   constructor(
     private contractsService: ContractsService,
@@ -38,10 +37,6 @@ export class RequestedLoanComponent implements OnInit {
 
   openFilters() {
     this.filtersOpen = !this.filtersOpen;
-  }
-
-  openSomething() {
-    this.somethingOpen = !this.somethingOpen;
   }
 
   onFiltered() {
