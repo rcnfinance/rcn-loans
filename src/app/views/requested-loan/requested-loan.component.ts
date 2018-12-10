@@ -5,7 +5,7 @@ import { Loan } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
-import { FilterLoansService } from './../../services/filterloans.service';
+import { FilterLoansService } from '../../services/filter-loans.service';
 
 @Component({
   selector: 'app-requested-loan',
@@ -13,6 +13,7 @@ import { FilterLoansService } from './../../services/filterloans.service';
   styleUrls: ['./requested-loan.component.scss']
 })
 export class RequestedLoanComponent implements OnInit {
+  winHeight: number = window.innerHeight;
   loading: boolean;
   available: any;
   loans = [];
