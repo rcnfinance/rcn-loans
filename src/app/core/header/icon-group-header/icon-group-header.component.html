@@ -1,7 +1,8 @@
-<div class="button-group">
-  <div class="button" (click)="openDetail('notifications');">
+<div class="button-group" appClickOutside (clickOutside)="closeNotifications()">
+  <div class="button" (click)="openDetail('notifications');" 
+  [ngClass]="{'active': isDetail('notifications')}">
     <i class="fas fa-bell"></i>
-    <div class="available-notifications">{{ oNotifications ? oNotifications.length : '0' }}</div>
+    <div class="available-notifications" *ngIf='oNotifications.length > 0'>{{ oNotifications ? oNotifications.length : '0' }}</div>
   </div>
 
   <div class="notifications-container" 
@@ -14,9 +15,11 @@
           <div class="icon-event bg-{{ 'green' }}">
             <i class="fas fa-coins"></i>
           </div>
-          <div class="action-event">Borrowing · </div>
+          <div class="action-event">Borrowing</div>
+          <div class="separator"> · </div>
           <div class="starring-event">0x35...4bed</div>
-          <div class="time-event"> · Just now</div>
+          <div class="separator"> · </div>
+          <div class="time-event">Just now</div>
         </div>
         <div class="action-container">
           <div class="leading-txt">Creating</div>

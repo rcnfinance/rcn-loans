@@ -4,6 +4,7 @@
   position: relative;
   .button{
     cursor: pointer;
+    &.active{i,svg{color: $primary;}};
     i,
     svg{ font-size: 22px; }
     .available-notifications {
@@ -40,13 +41,13 @@
   ul{
     li{
       cursor: pointer;
+      height: 64px;
       position: relative;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 0 10px;
-      height: 60px;
+      padding: 10px;
       border-bottom: 1px solid $quaternary;
       background-color: $gray7;
       &:nth-child(1){
@@ -58,8 +59,7 @@
         border-bottom: 1px solid $secondary;
       }
       &.progressOn{
-        height: 64px;
-        padding-bottom: 4px;
+        padding-bottom: 10px;
         background-color: $quaternary;
         border-bottom: 1px solid $quaternary;
       }
@@ -91,19 +91,15 @@
       .action-event,
       .time-event,
       .supporter-txt{
-        margin-left: 10px;
         @extend %roboto-light;
-      }
-      .supporter-txt{
-        margin-left: 5px;
       }
       .leading-txt,
       .starring-event{
         @extend %roboto-bold;
       }
-      .starring-event{ 
-        margin-left: 10px;
-      }
+      .action-event{margin-left: 10px;}
+      .separator{margin: 0 5px;}
+      .supporter-txt{margin-left: 5px;}
       mat-progress-bar.mat-progress-bar{
         height: 4px;
         position: absolute;

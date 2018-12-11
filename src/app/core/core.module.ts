@@ -10,6 +10,8 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BalanceComponent } from './balance/balance.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
+// App Directives
+import { ClickOutsideDirective } from '../directives/click-outside.directive';
 // App Services
 import { Web3Service } from '../services/web3.service';
 import { SidebarService } from '../services/sidebar.service';
@@ -29,7 +31,8 @@ import { IconGroupHeaderComponent } from './header/icon-group-header/icon-group-
     FooterComponent,
     BalanceComponent,
     SocialContainerComponent,
-    IconGroupHeaderComponent
+    IconGroupHeaderComponent,
+    ClickOutsideDirective
   ],
   providers: [
     Web3Service,

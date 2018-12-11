@@ -11,7 +11,8 @@ export class IconGroupHeaderComponent implements OnInit {
     ['object'],
     ['object']
   ];
-  viewDetail: string = 'notifications';
+
+  viewDetail: string = '';
   selection: string;
   previousSelection: string;
 
@@ -24,10 +25,13 @@ export class IconGroupHeaderComponent implements OnInit {
 
   constructor() { }
 
+  closeNotifications() {
+    this.viewDetail = undefined;
+  }
+
   isDetail(view: string): Boolean {
     return view === this.viewDetail;
   }
-
   openDetail(selection: string) {
     this.previousSelection = this.selection;
     this.selection = selection;
