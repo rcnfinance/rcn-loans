@@ -28,16 +28,8 @@
   width: 320px;
   position: absolute;
   right: -22px;
-  top: 45px;
-  opacity: 0;
-  z-index: -1;
   @extend %roboto-regular;
   @include transition();
-  &.active{
-    z-index: 3;
-    opacity: 1;
-    top: 43px;
-  }
   ul{
     li{
       cursor: pointer;

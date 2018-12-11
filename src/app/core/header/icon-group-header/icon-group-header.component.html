@@ -1,12 +1,13 @@
 <div class="button-group" appClickOutside (clickOutside)="closeNotifications()">
-  <div class="button" (click)="openDetail('notifications');" 
-  [ngClass]="{'active': isDetail('notifications')}">
+  <div class="button" (click)="openDetail('notifications')" 
+  [ngClass]="{'active': isDetail('notifications'), 'disabled': !isDetail('notifications')}">
     <i class="fas fa-bell"></i>
     <div class="available-notifications" *ngIf='oNotifications.length > 0'>{{ oNotifications ? oNotifications.length : '0' }}</div>
   </div>
 
   <div class="notifications-container" 
-  [ngClass]="{'active': isDetail('notifications')}">
+  [ngClass]="{'active': isDetail('notifications'), 'disabled': !isDetail('notifications')}"
+  [@anmNotifications]="isDetail('notifications') ? 'open' : 'closed'">
     <ul>
       <li>Notifications</li>
       <li *ngFor='let notification of oNotifications; let i of index'
