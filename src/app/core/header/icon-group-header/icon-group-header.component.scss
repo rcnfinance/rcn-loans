@@ -7,15 +7,17 @@
     i,
     svg{ font-size: 22px; }
     .available-notifications {
-      width: 22px;
-      height: 18px;
-      text-align: center;
-      font-size: 12px;
-      border-radius: 30px;
-      margin-left: 14px;
-      margin-top: -10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      right: -8px;
+      top: -5px;
+      padding: 0 4px;
+      font-size: 11px;
+      border-radius: 2px;
       background-color: $red;
-      @extend %absolute-center;
+      @extend %roboto-regular;
       @include transition(all 0.1s ease-out);
     }
   }
@@ -25,26 +27,95 @@
   width: 320px;
   position: absolute;
   right: -22px;
-  top: 25px;
+  top: 45px;
   opacity: 0;
   z-index: -1;
-  background-color: $fifth;
   @extend %roboto-regular;
   @include transition();
   &.active{
     z-index: 3;
     opacity: 1;
-    top: 35px;
+    top: 43px;
   }
   ul{
     li{
+      cursor: pointer;
+      position: relative;
       display: flex;
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
       padding: 0 10px;
       height: 60px;
+      border-bottom: 1px solid $quaternary;
+      background-color: $gray7;
       &:nth-child(1){
+        cursor: default;
         height: 30px;
-        border-bottom: 1px solid #1d1d1d;
+        flex-direction: row;
+        justify-content: left;
+        background-color: $gray7;
+        border-bottom: 1px solid $secondary;
+      }
+      &.progressOn{
+        height: 64px;
+        padding-bottom: 4px;
+        background-color: $quaternary;
+        border-bottom: 1px solid $quaternary;
+      }
+      .status-container{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+      }
+      .action-container{
+        width: 100%;
+        display: flex;
+        margin-top: 2px;
+        font-size: 14px;
+      }
+      .icon-event{
+        width: 22px;
+        height: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        @include transition();
+        i,
+        svg{
+          font-size: 12px;
+        }
+      }
+      .action-event,
+      .time-event,
+      .supporter-txt{
+        margin-left: 10px;
+        @extend %roboto-light;
+      }
+      .supporter-txt{
+        margin-left: 5px;
+      }
+      .leading-txt,
+      .starring-event{
+        @extend %roboto-bold;
+      }
+      .starring-event{ 
+        margin-left: 10px;
+      }
+      mat-progress-bar.mat-progress-bar{
+        height: 4px;
+        position: absolute;
+        bottom: 0;
+        ::ng-deep{
+          .mat-progress-bar-fill::after {
+            background-color: $primary;
+          }
+          .mat-progress-bar-buffer {
+            background: $quaternary;
+          }
+        }
       }
     }
   }

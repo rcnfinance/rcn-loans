@@ -6,10 +6,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./icon-group-header.component.scss']
 })
 export class IconGroupHeaderComponent implements OnInit {
-  availableNotifications = 0;
-  viewDetail: string;
+  oNotifications: object[] = [
+    ['object'],
+    ['object'],
+    ['object']
+  ];
+  viewDetail: string = 'notifications';
   selection: string;
   previousSelection: string;
+
+  // Progress bar
+  progressOn = true;
+  color = 'primary';
+  mode = 'query';
+  value = 50;
+  bufferValue = 75;
 
   constructor() { }
 
@@ -18,28 +29,19 @@ export class IconGroupHeaderComponent implements OnInit {
   }
 
   openDetail(selection: string) {
-    console.info('Selection is ' + selection);
-    console.info('Previous selection is ' + this.previousSelection);
     this.previousSelection = this.selection;
     this.selection = selection;
-    // this.lastTitle = this.title;
-    // this.title = clickedTitle;
-    // if (clickedTitle !== 3 || this.lastTitle !== 'Menu') { // If i dont click on menu & dont click it twice
     switch (selection) {
       case 'notifications':
         if (selection !== this.previousSelection || this.viewDetail === undefined) {
-          console.info('Setted notifications');
           this.viewDetail = selection;
         } else {
-          console.info('Setted as undefined');
           this.viewDetail = undefined;
         }
         break;
       default:
-        // this.viewDetail = undefined;
         break;
     }
-    // console.info(this.viewDetail);
   }
 
   ngOnInit() {

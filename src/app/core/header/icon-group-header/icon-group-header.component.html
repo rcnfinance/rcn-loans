@@ -1,19 +1,49 @@
 <div class="button-group">
   <div class="button" (click)="openDetail('notifications');">
     <i class="fas fa-bell"></i>
-    <div class="available-notifications">{{ availableNotifications }}</div>
+    <div class="available-notifications">{{ oNotifications ? oNotifications.length : '0' }}</div>
   </div>
-  <div class="notifications-container" [ngClass]="{'active': isDetail('notifications') }">
+
+  <div class="notifications-container" 
+  [ngClass]="{'active': isDetail('notifications')}">
     <ul>
-      <li>
-        Notifications
+      <li>Notifications</li>
+      <li *ngFor='let notification of oNotifications; let i of index'
+      [ngClass]="{'progressOn': progressOn }">
+        <div class="status-container">
+          <div class="icon-event bg-{{ 'green' }}">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="action-event">Borrowing · </div>
+          <div class="starring-event">0x35...4bed</div>
+          <div class="time-event"> · Just now</div>
+        </div>
+        <div class="action-container">
+          <div class="leading-txt">Creating</div>
+          <div class="supporter-txt">a new loan</div>
+        </div>
+        <mat-progress-bar *ngIf='progressOn'
+          [color]="color"
+          [mode]="mode"
+          [value]="value"
+          [bufferValue]="bufferValue">
+        </mat-progress-bar>
       </li>
       <li>
-        Asd 1
-      </li>
-      <li>
-        Asd 1
+        <div class="status-container">
+          <div class="icon-event bg-{{ 'green' }}">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="action-event">Borrowing · </div>
+          <div class="starring-event">0x35...4bed</div>
+          <div class="time-event"> · Just now</div>
+        </div>
+        <div class="action-container">
+          <div class="leading-txt">Lending</div>
+          <div class="supporter-txt">a new loan</div>
+        </div>
       </li>
     </ul>
   </div>
+
 </div>
