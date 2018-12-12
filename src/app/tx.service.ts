@@ -72,12 +72,14 @@ export class TxService {
   subscribeNewTx(cb: (tx: Tx) => void) {
     if (!this.newTxSubscribers.find(c => c === cb)) {
       this.newTxSubscribers.push(cb);
+      console.info('Confirming newTxSubscribers', this.newTxSubscribers);
     }
   }
 
   subscribeConfirmedTx(cb: (tx: Tx) => void) {
     if (!this.confirmedTxSubscribers.find(c => c === cb)) {
       this.confirmedTxSubscribers.push(cb);
+      console.info('Confirming confirmedTxSubscribers', this.confirmedTxSubscribers);
     }
   }
 
@@ -88,6 +90,7 @@ export class TxService {
   registerTx(tx: Tx) {
     this.txMemory.push(tx);
     this.newTxSubscribers.forEach(c => c(tx));
+    console.info('Registering newTxSubscribers', this.newTxSubscribers);
     this.saveTxs();
   }
 

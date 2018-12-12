@@ -41,6 +41,10 @@ export class Utils {
     return address.substr(0, 4) + '...' + address.substr(-4);
   }
 
+  static capFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   static formatDelta(totalSeconds: number, display: number = 2): string {
     let result = '';
     let visible = 0;
