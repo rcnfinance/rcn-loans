@@ -20,7 +20,6 @@ const oracleAbi = require('../contracts/Oracle.json');
 const requestsAbi = require('../contracts/RequestsView.json');
 const loanManagerAbi = require('../contracts/LoanManager.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
-const converterRampAbi = require('../contracts/ConverterRamp.json');
 
 @Injectable()
 export class ContractsService {
@@ -33,7 +32,6 @@ export class ContractsService {
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
   private _requestsView: any;
   private _loanManager: any;
-  private _rcnConverterRamp: any;
   private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
 
   constructor(
@@ -48,7 +46,6 @@ export class ContractsService {
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     this._requestsView = this.web3.web3.eth.contract(requestsAbi).at(environment.contracts.diaspore.viewRequets);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-    this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
 
   }
 
