@@ -8,8 +8,10 @@ import { MaterialModule } from '../material/material.module';
 // App Component
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
 import { BalanceComponent } from './balance/balance.component';
+import { IconGroupHeaderComponent } from './header/icon-group-header/icon-group-header.component';
+import { NotificationsComponent } from './header/notifications/notifications.component';
+import { FooterComponent } from './footer/footer.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
 // App Directives
 import { ClickOutsideDirective } from '../directives/click-outside.directive';
@@ -17,7 +19,7 @@ import { ClickOutsideDirective } from '../directives/click-outside.directive';
 import { Web3Service } from '../services/web3.service';
 import { SidebarService } from '../services/sidebar.service';
 import { TitleService } from '../services/title.service';
-import { IconGroupHeaderComponent } from './header/icon-group-header/icon-group-header.component';
+import { NotificationsService } from '../services/notifications.service';
 
 @NgModule({
   imports: [
@@ -30,22 +32,24 @@ import { IconGroupHeaderComponent } from './header/icon-group-header/icon-group-
   declarations: [
     ContentWrapperComponent,
     HeaderComponent,
-    FooterComponent,
     BalanceComponent,
-    SocialContainerComponent,
     IconGroupHeaderComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    NotificationsComponent,
+    FooterComponent,
+    SocialContainerComponent
   ],
   providers: [
     Web3Service,
     SidebarService,
-    TitleService
+    TitleService,
+    NotificationsService
   ],
   exports: [
     ContentWrapperComponent,
     HeaderComponent,
-    FooterComponent,
     BalanceComponent,
+    FooterComponent,
     SocialContainerComponent
   ]
 })
