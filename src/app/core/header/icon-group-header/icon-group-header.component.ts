@@ -6,6 +6,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { Notification } from '../../../models/notification.model';
 
 @Component({
   selector: 'app-icon-group-header',
@@ -13,12 +14,12 @@ import {
   styleUrls: ['./icon-group-header.component.scss'],
   animations: [
     trigger('anmNotifications', [
-      state('open', style({
+      state('closed', style({
         opacity: 1,
         display: 'block',
         top: '43px'
       })),
-      state('closed', style({
+      state('open', style({
         opacity: 0,
         display: 'none',
         top: '48px'
@@ -34,15 +35,10 @@ import {
 })
 
 export class IconGroupHeaderComponent implements OnInit {
-  oNotifications: object[] = [
-    ['object'],
-    ['object'],
-    ['object']
-  ];
-
   isOpen = true;
+  timeEvent = 0; // TODO define the value
 
-  viewDetail: string = '';
+  viewDetail: string;
   selection: string;
   previousSelection: string;
 
@@ -53,7 +49,22 @@ export class IconGroupHeaderComponent implements OnInit {
   value = 50;
   bufferValue = 75;
 
+  // Notification Model
+  mNotification = Notification;
+  oNotifications: Array<Notification> = [
+    new Notification('Borrowing', '0x35...4bed', this.getTime(this.timeEvent) , 'Creating', 'a new loan'),
+    new Notification('Lending', '4bed...0x35', this.getTime(this.timeEvent), 'Creating', 'a new loan'),
+    new Notification('Borrowing', '0x35...4bed', this.getTime(200), 'Creating', 'a new loan')
+  ];
+
   constructor() { }
+
+  getTime(timestamp) {
+    if (timestamp <= 0) {
+      return 'Just now';
+    }
+    return timestamp + 's';
+  }
 
   closeNotifications() { // Force to close notifications Component by Directive event
     this.viewDetail = undefined;

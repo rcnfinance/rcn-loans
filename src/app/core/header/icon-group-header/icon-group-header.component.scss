@@ -6,7 +6,7 @@
     cursor: pointer;
     &.active{i,svg{color: $primary;}};
     i,
-    svg{ font-size: 22px; }
+    svg{ font-size: 22px; @include transition(); }
     .available-notifications {
       display: flex;
       align-items: center;
@@ -29,7 +29,6 @@
   position: absolute;
   right: -22px;
   @extend %roboto-regular;
-  @include transition();
   ul{
     li{
       cursor: pointer;
@@ -74,7 +73,6 @@
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        @include transition();
         i,
         svg{
           font-size: 12px;

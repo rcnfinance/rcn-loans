@@ -1,12 +1,11 @@
 <div class="button-group" appClickOutside (clickOutside)="closeNotifications()">
   <div class="button" (click)="openDetail('notifications')" 
-  [ngClass]="{'active': isDetail('notifications'), 'disabled': !isDetail('notifications')}">
+  [ngClass]="{'active': isDetail('notifications')}">
     <i class="fas fa-bell"></i>
     <div class="available-notifications" *ngIf='oNotifications.length > 0'>{{ oNotifications ? oNotifications.length : '0' }}</div>
   </div>
 
-  <div class="notifications-container" 
-  [ngClass]="{'active': isDetail('notifications'), 'disabled': !isDetail('notifications')}"
+  <div class="notifications-container"
   [@anmNotifications]="isDetail('notifications') ? 'open' : 'closed'">
     <ul>
       <li>Notifications</li>
@@ -16,15 +15,15 @@
           <div class="icon-event bg-{{ 'green' }}">
             <i class="fas fa-coins"></i>
           </div>
-          <div class="action-event">Borrowing</div>
+          <div class="action-event">{{ notification.actionEvent }}</div>
           <div class="separator"> · </div>
-          <div class="starring-event">0x35...4bed</div>
+          <div class="starring-event">{{ notification.starringEvent }}</div>
           <div class="separator"> · </div>
-          <div class="time-event">Just now</div>
+          <div class="time-event">{{ notification.timeEvent }}</div>
         </div>
         <div class="action-container">
-          <div class="leading-txt">Creating</div>
-          <div class="supporter-txt">a new loan</div>
+          <div class="leading-txt">{{ notification.leadingTxt }}</div>
+          <div class="supporter-txt">{{ notification.supporterTxt }}</div>
         </div>
         <mat-progress-bar *ngIf='progressOn'
           [color]="color"
@@ -38,12 +37,14 @@
           <div class="icon-event bg-{{ 'green' }}">
             <i class="fas fa-coins"></i>
           </div>
-          <div class="action-event">Borrowing · </div>
+          <div class="action-event">Borrowing</div>
+          <div class="separator"> · </div>
           <div class="starring-event">0x35...4bed</div>
-          <div class="time-event"> · Just now</div>
+          <div class="separator"> · </div>
+          <div class="time-event">Just now</div>
         </div>
         <div class="action-container">
-          <div class="leading-txt">Lending</div>
+          <div class="leading-txt">Creating</div>
           <div class="supporter-txt">a new loan</div>
         </div>
       </li>
