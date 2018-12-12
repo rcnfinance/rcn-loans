@@ -6,6 +6,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
+
 @Component({
   selector: 'app-icon-group-header',
   templateUrl: './icon-group-header.component.html',
@@ -15,7 +16,7 @@ import {
       state('open', style({
         opacity: 1,
         display: 'block',
-        top: '45px'
+        top: '43px'
       })),
       state('closed', style({
         opacity: 0,
@@ -31,6 +32,7 @@ import {
     ])
   ]
 })
+
 export class IconGroupHeaderComponent implements OnInit {
   oNotifications: object[] = [
     ['object'],
@@ -53,19 +55,14 @@ export class IconGroupHeaderComponent implements OnInit {
 
   constructor() { }
 
-  toggle() {
-    console.info('toggled');
-    this.isOpen = !this.isOpen;
-  }
-
-  closeNotifications() {
+  closeNotifications() { // Force to close notifications Component by Directive event
     this.viewDetail = undefined;
   }
 
-  isDetail(view: string): Boolean {
+  isDetail(view: string): Boolean { // Check viewDetail state to open/close notifications Component
     return view === this.viewDetail;
   }
-  openDetail(selection: string) {
+  openDetail(selection: string) { // Change viewDetail state to open/close notifications Component
     this.previousSelection = this.selection;
     this.selection = selection;
     switch (selection) {
