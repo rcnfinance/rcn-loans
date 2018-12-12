@@ -65,13 +65,14 @@ export class NotificationsComponent implements OnInit {
     this.notificationsService.currentDetail.subscribe(detail => this.viewDetail = detail); // Subscribe to detail from Notifications Service
     this.txService.subscribeNewTx((tx: Tx) => this.onNewTransaction(tx));
     this.txService.subscribeConfirmedTx((tx: Tx) => this.onNewTransaction(tx));
+    this.txService.unsubscribeConfirmedTx((tx: Tx) => this.onNewTransaction(tx));
   }
 
   private onNewTransaction(tx: Tx) {
     this.oNotifications.push(new Notification(
       Utils.capFirstLetter(tx.type.toString()),
       Utils.shortAddress(tx.to),
-      Utils.formatDelta(tx.timestamp / 1000),
+      Utils.formatDelta(Math.floor((new Date().getTime() - tx.timestamp) / 1000)),
       Utils.capFirstLetter(tx.type.toString()),
       'a new loan'
     ));
