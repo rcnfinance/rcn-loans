@@ -54,12 +54,30 @@ export const environment = {
         notExpired: '0xada8797ece7e2bda72140a26d13185a788a636cb'
       }
     },
+    converter: {
+      converterRamp: '0xeaf063101ae319a18330ff78fdd81d992bf83349',
+      tokenConverter: '0xc4b1b3083174716542ef387326e58293917bf3bf',
+      ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      params: {
+        marginSpend: 3000,
+        maxSpend: 0,
+        rebuyThreshold: 10000000000000000000
+      }
+    },
     decentraland: {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
       mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1',
       landMarket: '0x5424912699dabaa5f2998750c1c66e73d67ad219'
     }
   },
+  blacklist: [
+    {
+      key: 'oracle',
+      forbidden: [
+        '0x0ac18b74b5616fdeaeff809713d07ed1486d0128'
+      ]
+    }
+  ],
   filters: {
     openLoans: '0x3e703de416a62525c8653be11d71486550618ec8',
     nonExpired: '0xe084b7cf7f6869a96cd72962047bf65e6d55e1e1',

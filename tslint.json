@@ -99,6 +99,10 @@
     "no-empty": false,
     "no-empty-interface": true,
     "no-eval": true,
+    "space-within-parens": [
+      true,
+      0
+    ],
     "no-inferrable-types": [
       true,
       "ignore-params"

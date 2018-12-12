@@ -1,17 +1,10 @@
 import { Currency } from '../utils/currencies';
 
+export enum Status { Request, Ongoing, Paid, Destroyed, Expired, Indebt }
+
 export enum Network {
   Basalt = 2,
   Diaspore = 4
-}
-
-export enum Status {
-  Request,
-  Ongoing,
-  Paid,
-  Destroyed,
-  Indebt,
-  Expired
 }
 
 export class Descriptor {
@@ -24,7 +17,7 @@ export class Descriptor {
     public punitiveInterestRateRate: number,
     public frequency: number,
     public installments: number
-  ) {}
+  ) { }
 }
 
 export class Model {
@@ -36,7 +29,7 @@ export class Model {
     public currentObligation: number,
     public estimatedObliation: number,
     public dueTime: number
-  ) {}
+  ) { }
 }
 
 export class Oracle {
@@ -45,7 +38,7 @@ export class Oracle {
     public address: string,
     public currency: string,
     public code: string
-  ) {}
+  ) { }
   toString = (): string => this.address;
 }
 
@@ -58,7 +51,7 @@ export class Debt {
     public creator: string,
     public owner: string,
     public oracle?: Oracle
-  ) {}
+  ) { }
 }
 
 export class Loan {

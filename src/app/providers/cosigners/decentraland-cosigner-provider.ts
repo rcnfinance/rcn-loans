@@ -1,28 +1,63 @@
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Parcel, District, DecentralandCosigner } from '../../models/cosigners/decentraland-cosigner.model';
 import { Web3Service } from '../../services/web3.service';
 import { Utils } from '../../utils/utils';
-import { CosignerDetail, CosignerOffer, CosignerLiability } from '../../models/cosigner.model';
+import { CosignerOffer, CosignerLiability } from '../../models/cosigner.model';
 import { CosignerProvider } from '../cosigner-provider';
 import { Loan, Status } from '../../models/loan.model';
 
 declare let require: any;
 
 const mortgageManagerAbi = require('../../contracts/decentraland/MortgageManager.json');
+enum MortgageStatus {Pending, Ongoing, Canceled, Paid, Defaulted}
 
+@Injectable()
 export class DecentralandCosignerProvider implements CosignerProvider {
   http: HttpClient;
   web3: Web3Service;
   _districts: District[] = undefined;
   managerContract: any;
-  constructor(
-        public engine: string,
-        public manager: string,
-        public creator: string,
-        public market: string,
-        public dataUrl: string
-    ) {}
+  mortgageStatus: typeof MortgageStatus = MortgageStatus;
+  engine: string;
+  manager: string;
+  creator: string;
+  market: string;
+  dataUrl: string;
+
+  constructor() {}
+
+  getEngine() {
+    return this.engine;
+  }
+  setEngine(engine: string) {
+    this.engine = engine;
+  }
+  getManager() {
+    return this.manager;
+  }
+  setManager(manager: string) {
+    this.manager = manager;
+  }
+  getCreator() {
+    return this.creator;
+  }
+  setCreator(creator: string) {
+    this.creator = creator;
+  }
+  getMarket() {
+    return this.market;
+  }
+  setMarket(market: string) {
+    this.market = market;
+  }
+  getDataUrl() {
+    return this.dataUrl;
+  }
+  setDataUrl(dataUrl: string) {
+    this.dataUrl = dataUrl;
+  }
   injectHttp(http: HttpClient) {
     this.http = http;
   }
@@ -99,9 +134,36 @@ export class DecentralandCosignerProvider implements CosignerProvider {
       }
     }) as Promise<District[]>;
   }
+  getStatusOfParcel(loan: Loan): Promise<Boolean> {
+    return new Promise(resolve => {
+      this.detail(loan).then((decentralandCosignerDetail) => {
+        const parcel: Parcel = decentralandCosignerDetail.parcel;
+        if (parcel.status === 'open') {
+          resolve(true);
+        }
+        resolve(false);
+      });
+    }) as Promise<Boolean>;
+  }
+
+  isMortgageCancelled(loan: Loan): Promise<Boolean> {
+    return new Promise((resolve, _err) => {
+      this.setupContracts();
+      this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {
+        this.managerContract.mortgages(mortgageId, (_errD, mortgageData) => {
+          const mortgageStatus = parseInt(mortgageData[7], 16);
+          if (mortgageStatus === this.mortgageStatus.Canceled) {
+            resolve(true);
+          }
+          resolve(false);
+        });
+      });
+    });
+  }
+
   private setupContracts() {
     if (this.managerContract === undefined) {
-      this.managerContract = this.web3.web3reader.eth.contract(mortgageManagerAbi).at(this.manager);
+      this.managerContract = this.web3.web3.eth.contract(mortgageManagerAbi).at(this.manager);
     }
   }
   private isDefaulted(loan: Loan, detail: DecentralandCosigner): boolean {
@@ -126,7 +188,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
       });
     };
   }
-  private detail(loan: Loan): Promise<CosignerDetail> {
+  private detail(loan: Loan): Promise<DecentralandCosigner> {
     return new Promise((resolve, _err) => {
       this.setupContracts();
       this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {

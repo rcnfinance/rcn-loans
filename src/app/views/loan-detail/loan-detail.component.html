@@ -69,7 +69,7 @@
         </table>
       </div>
       <div class="table-responsive">
-        <table class="table" (click)="openLender(loan.owner)" *ngIf="!isRequest">
+        <table class="table" (click)="openLender(loan.owner)" *ngIf="!isRequest && !isExpired">
           <thead>
             <tr>
               <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
@@ -96,8 +96,8 @@
           </tbody>
         </table>
       </div>
-
-      <div class="paddingleft15 paddingright15 paddingbottom15" *ngIf="canLend || canTransfer">
+      <div class="paddingleft15 paddingright15 paddingbottom15" *ngIf="canLend || canTransfer || canPay">
+        <app-pay-button [loan]=loan *ngIf="canPay"></app-pay-button>
         <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
         <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="canLend"></app-risk-indicator>
         <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>

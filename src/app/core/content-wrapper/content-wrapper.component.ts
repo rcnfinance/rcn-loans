@@ -3,13 +3,13 @@ import BigNumber from 'bignumber.js';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 // App Components
-import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
-import { environment } from '../../environments/environment';
-import { SidebarService } from '../services/sidebar.service';
-import { Web3Service } from '../services/web3.service';
-import { ContractsService } from '../services/contracts.service';
-import { Tx, TxService } from '../tx.service';
+import { environment } from '../../../environments/environment';
+import { SidebarService } from '../../services/sidebar.service';
+import { Web3Service } from '../../services/web3.service';
+import { ContractsService } from '../../services/contracts.service';
+import { Tx, TxService } from '../../tx.service';
 
 @Component({
   selector: 'app-content-wrapper',
@@ -75,7 +75,11 @@ export class ContentWrapperComponent implements OnInit {
   }
 
   // Open Client Dialog
-  openDialogClient() {
+  async openDialogClient() {
+    if (await this.web3Service.requestLogin()) {
+      return;
+    }
+
     this.dialog.open(DialogClientAccountComponent, {});
   }
 
@@ -95,13 +99,16 @@ export class ContentWrapperComponent implements OnInit {
      // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
-
-    this.loadLender();
-    this.loadRcnBalance();
-    this.loadWithdrawBalance();
-    this.web3Service.getAccount().then((account) => {
-      this.account = account;
-    });
+    this.web3Service.loginEvent.subscribe(() => this.loadAccount());
+    this.loadAccount();
+  }
+  async loadAccount() {
+    if (!this.hasAccount) {
+      this.account = await this.web3Service.getAccount();
+      this.loadLender();
+      this.loadRcnBalance();
+      this.loadWithdrawBalance();
+    }
   }
   private removeTrailingZeros(value) {
     value = value.toString();

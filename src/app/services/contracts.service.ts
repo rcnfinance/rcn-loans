@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -20,6 +20,7 @@ const oracleAbi = require('../contracts/Oracle.json');
 const requestsAbi = require('../contracts/RequestsView.json');
 const loanManagerAbi = require('../contracts/LoanManager.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
+const converterRampAbi = require('../contracts/ConverterRamp.json');
 
 @Injectable()
 export class ContractsService {
@@ -32,6 +33,8 @@ export class ContractsService {
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
   private _requestsView: any;
   private _loanManager: any;
+  private _rcnConverterRamp: any;
+  private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
 
   constructor(
       private web3: Web3Service,
@@ -42,8 +45,19 @@ export class ContractsService {
     this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
     this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
     this._loanManager = this.web3.web3.eth.contract(loanManagerAbi).at(environment.contracts.diaspore.loanManager);
-    this._rcnExtension = this.web3.web3reader.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-    this._requestsView = this.web3.web3reader.eth.contract(requestsAbi).at(environment.contracts.diaspore.viewRequets);
+    this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
+    this._requestsView = this.web3.web3.eth.contract(requestsAbi).at(environment.contracts.diaspore.viewRequets);
+    this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
+    this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
+
+  }
+
+  async getUserBalanceETHWei(): Promise<BigNumber> {
+    const account = await this.web3.getAccount();
+    const balance = await this.web3.web3.eth.getBalance(account);
+    return new Promise((resolve) => {
+      resolve(balance);
+    }) as Promise<BigNumber>;
   }
 
   async getUserBalanceRCNWei(): Promise<number> {
@@ -57,10 +71,11 @@ export class ContractsService {
       });
     }) as Promise<number>;
   }
+
   async getUserBalanceRCN(): Promise<number> {
     return new Promise((resolve) => {
       this.getUserBalanceRCNWei().then((balance) => {
-        resolve(this.web3.web3reader.fromWei(balance));
+        resolve(this.web3.web3.fromWei(balance));
       });
     }) as Promise<number>;
   }
@@ -91,7 +106,7 @@ export class ContractsService {
     const oracleData = await this.getOracleData(loan.oracle);
 
     if (loan.network === Network.Basalt) {
-      const legacyOracle = this.web3.web3reader.eth.contract(oracleAbi.abi).at(loan.oracle.address);
+      const legacyOracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
       const oracleRate = await promisify(legacyOracle.getRate, [loan.oracle.code, oracleData]);
       const rate = oracleRate[0];
       const decimals = oracleRate[1];
@@ -101,7 +116,7 @@ export class ContractsService {
       return required;
     }
 
-    const oracle = this.web3.web3reader.eth.contract(diasporeOracleAbi).at(loan.oracle.address);
+    const oracle = this.web3.web3.eth.contract(diasporeOracleAbi).at(loan.oracle.address);
     const oracleResult = await promisify(oracle.readSample.call, [oracleData]);
     const tokens = oracleResult[0];
     const equivalent = oracleResult[1];
@@ -150,12 +165,13 @@ export class ContractsService {
       });
     }) as Promise<string>;
   }
+
   async getOracleData(oracle?: Oracle): Promise<string> {
     if (!oracle) {
       return '0x';
     }
 
-    const oracleContract = this.web3.web3reader.eth.contract(oracleAbi.abi).at(oracle.address);
+    const oracleContract = this.web3.web3.eth.contract(oracleAbi.abi).at(oracle.address);
     const url = await promisify(oracleContract.url.call, []);
     if (url === '') { return '0x'; }
     const oracleResponse = (await this.http.get(url).toPromise()) as any[];
@@ -176,7 +192,7 @@ export class ContractsService {
     if (id.startsWith('0x')) {
       // Load Diaspore loan
       const result = await promisify(this._requestsView.getLoan.call, [environment.contracts.diaspore.loanManager, id]);
-      if (result.length === 0 ) throw new Error('Loan not found');
+      if (result.length === 0) throw new Error('Loan not found');
       return LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, result);
     }
 

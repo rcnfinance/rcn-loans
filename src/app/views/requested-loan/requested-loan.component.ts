@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
@@ -12,7 +11,6 @@ import { AvailableLoansService } from '../../services/available-loans.service';
   templateUrl: './requested-loan.component.html',
   styleUrls: ['./requested-loan.component.scss']
 })
-
 export class RequestedLoanComponent implements OnInit {
   loading: boolean;
   available: any;

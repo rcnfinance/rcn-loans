@@ -1,5 +1,6 @@
 export class Utils {
   static address0x = '0x0000000000000000000000000000000000000000';
+  static emptyString = '';
 
   static formatInterest(raw: number): number {
     return 311040000000000 / raw;
@@ -22,6 +23,18 @@ export class Utils {
     const raw = hex.replace('0x', '');
     const result = hex.replace('0x', '0x' + '0'.repeat(64 - raw.length));
     return result;
+  }
+
+  static toBytes(hex: string): string {
+    return '0x' + '0'.repeat(64 - hex.length) + hex;
+  }
+
+  static initBytes(): string {
+    return Utils.toBytes(Utils.emptyString);
+  }
+
+  static isEmpty(hex: string) {
+    return hex === '0x';
   }
 
   static shortAddress(address: string): string {
@@ -65,9 +78,7 @@ export class Utils {
     return prefix + result.slice(0, -2);
   }
 
-  static formatAmount(amount: Number): string {
-    const maxDigits = 6;
-
+  static formatAmount(amount: Number, maxDigits = 6): string {
     if (amount.toString().length <= maxDigits) {
       return amount.toString();
     }

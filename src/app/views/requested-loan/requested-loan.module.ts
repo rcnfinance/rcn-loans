@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { NgxSpinnerService } from 'ngx-spinner';
-
-// App Services
-import { ContractsService } from './../../services/contracts.service';
 // App Modules
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from './../../material/material.module';
+// App Services
+import { ContractsService } from './../../services/contracts.service';
 // App Component
 import { RequestedLoanComponent } from './requested-loan.component';
 
@@ -22,8 +20,8 @@ import { RequestedLoanComponent } from './requested-loan.component';
     RequestedLoanComponent
   ],
   providers: [
-    ContractsService,
-    NgxSpinnerService
+    NgxSpinnerService,
+    ContractsService
   ],
   exports: [
     RequestedLoanComponent

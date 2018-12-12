@@ -6,7 +6,14 @@ import { Loan } from './models/loan.model';
 import { Web3Service } from './services/web3.service';
 import { EventsService, Category } from './services/events.service';
 
-enum Type { lend = 'lend', approve = 'approve', withdraw = 'withdraw', transfer = 'transfer', claim = 'claim' }
+enum Type {
+  lend = 'lend',
+  approve = 'approve',
+  withdraw = 'withdraw',
+  transfer = 'transfer',
+  claim = 'claim',
+  pay = 'pay'
+}
 
 export class Tx {
   tx: string;
@@ -97,7 +104,7 @@ export class TxService {
     return this.txMemory
       .filter(tx => !tx.confirmed && tx.type === Type.withdraw)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
-      .find(tx => tx.to === engine && tx.data === loans);
+      .find(tx => tx.to === engine && tx.data.toString() === loans.toString());
   }
 
   registerTransferTx(tx: string, engine: string, loan: Loan, to: string) {
@@ -133,6 +140,26 @@ export class TxService {
       .find(tx => tx.data.id === loan.id && tx.data.engine === loan.address);
   }
 
+  registerPayTx(tx: string, engine: string, loan: Loan, amount: number) {
+    const data = {
+      engine: engine,
+      id: loan.id,
+      amount: amount
+    };
+    this.txMemory.push(new Tx(tx, engine, false, Type.pay, data));
+    this.saveTxs();
+  }
+
+  // getLastPendingPay(loan: Loan) {
+  //   return this.txMemory
+  //     .filter(tx =>
+  //       !tx.confirmed &&
+  //       tx.type === Type.pay &&
+  //       tx.data.id === loan.id &&
+  //       tx.data.engine === loan.engine)
+  //     .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
+  // }
+
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message , action, {
       duration: 4000
@@ -142,7 +169,7 @@ export class TxService {
   private checkUpdate() {
     this.txMemory.forEach(tx => {
       if (!tx.confirmed) {
-        this.web3service.web3reader.eth.getTransactionReceipt(tx.tx, (_err, receipt) => {
+        this.web3service.web3.eth.getTransactionReceipt(tx.tx, (_err, receipt) => {
           if (receipt !== null) {
             if (tx.type === Type.lend) { this.openSnackBar('Lent Successfully', ''); }
             console.info('Found receipt tx', tx, receipt);

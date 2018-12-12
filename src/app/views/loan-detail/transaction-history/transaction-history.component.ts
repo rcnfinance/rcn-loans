@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-
 // App Models
 import { Loan } from '../../../models/loan.model';
 import { Commit } from '../../../models/commit.model';

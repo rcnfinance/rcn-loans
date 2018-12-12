@@ -10,6 +10,8 @@ import {
   MatSnackBarHorizontalPosition
 } from '@angular/material';
 
+import { Loan } from './../../models/loan.model';
+
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx } from './../../tx.service';
@@ -23,7 +25,8 @@ import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
-import { Loan } from './../../models/loan.model';
+import { CosignerService } from './../../services/cosigner.service';
+import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
 
 @Component({
   selector: 'app-lend-button',
@@ -33,7 +36,6 @@ import { Loan } from './../../models/loan.model';
 export class LendButtonComponent implements OnInit {
   @Input() loan: Loan;
   pendingTx: Tx = undefined;
-  account: string;
   lendEnabled: Boolean;
   opPending = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -46,13 +48,20 @@ export class LendButtonComponent implements OnInit {
     private countriesService: CountriesService,
     private eventsService: EventsService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    public cosignerService: CosignerService,
+    public decentralandCosignerProvider: DecentralandCosignerProvider
   ) {}
 
   async handleLend(forze = false) {
     if (this.opPending && !forze) { return; }
 
-    if (this.account === undefined) {
+    if (!this.web3Service.loggedIn) {
+      if (await this.web3Service.requestLogin()) {
+        this.handleLend();
+        return;
+      }
+
       this.dialog.open(DialogClientAccountComponent);
       return;
     }
@@ -62,6 +71,24 @@ export class LendButtonComponent implements OnInit {
         error: new Error('Lending is not enabled in this region')
       }});
       return;
+    }
+
+    const cosigner = this.cosignerService.getCosigner(this.loan);
+    if (cosigner instanceof DecentralandCosignerProvider) {
+      const isParcelStatusOpen = await cosigner.getStatusOfParcel(this.loan);
+      if (!isParcelStatusOpen) {
+        this.dialog.open(DialogGenericErrorComponent, { data: {
+          error: new Error('Not Available, Parcel is already sold')
+        }});
+        return;
+      }
+      const isMortgageCancelled = await cosigner.isMortgageCancelled(this.loan);
+      if (isMortgageCancelled) {
+        this.dialog.open(DialogGenericErrorComponent, { data: {
+          error: new Error('Not Available, Mortgage has been cancelled')
+        }});
+        return;
+      }
     }
 
     this.startOperation();
@@ -209,13 +236,9 @@ export class LendButtonComponent implements OnInit {
 
   ngOnInit() {
     this.retrievePendingTx();
-    this.web3Service.getAccount().then((account) => {
-      this.account = account;
-    });
     this.countriesService.lendEnabled().then((lendEnabled) => {
       this.lendEnabled = lendEnabled;
     });
-
   }
 
 }
