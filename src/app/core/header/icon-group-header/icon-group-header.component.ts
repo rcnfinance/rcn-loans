@@ -27,7 +27,8 @@ export class IconGroupHeaderComponent implements OnInit {
     switch (selection) {
       case 'notifications':
         if (selection !== this.previousSelection || this.viewDetail === undefined) {
-          this.notificationsService.changeDetail(selection); // Change value of detail from Notifications Service
+          this.notificationsService.changeDetail(selection); // Change value of viewDetail from Notifications Service
+          this.notificationsService.changeCounter(0); // Change value of notificationsCounter from Notifications Service
         } else {
           this.notificationsService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event
         }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   trigger,
   state,
@@ -34,7 +34,7 @@ import { NotificationsService } from '../../../services/notifications.service';
     ])
   ]
 })
-export class NotificationsComponent implements OnInit, OnChanges {
+export class NotificationsComponent implements OnInit {
   viewDetail: string;
   selection: string;
   previousSelection: string;
