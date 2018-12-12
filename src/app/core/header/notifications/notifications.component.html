@@ -5,5 +5,8 @@
     <li *ngFor='let notification of oNotifications; let i of index'>
       <app-notification-item [notification]='notification'></app-notification-item>
     </li>
+    <li *ngIf='oNotifications.length === 0'>
+      There is no available Notifications
+    </li>
   </ul>
 </div>
