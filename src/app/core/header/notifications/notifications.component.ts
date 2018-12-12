@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   trigger,
   state,
@@ -8,6 +8,7 @@ import {
 } from '@angular/animations';
 import { Notification } from '../../../models/notification.model';
 import { NotificationsService } from '../../../services/notifications.service';
+import { TxService, Tx } from '../../../tx.service';
 
 @Component({
   selector: 'app-notifications',
@@ -44,14 +45,15 @@ export class NotificationsComponent implements OnInit {
   // Notification Model
   mNotification = Notification;
   oNotifications: Array<Notification> = [
-    new Notification('Borrowing', '0x35...4bed', this.getTime(this.timeEvent) , 'Creating', 'a new loan'),
-    new Notification('Lending', '4bed...0x35', this.getTime(this.timeEvent), 'Creating', 'a new loan'),
-    new Notification('Borrowing', '0x35...4bed', this.getTime(200), 'Creating', 'a new loan')
+    // new Notification('Borrowing', '0x35...4bed', this.getTime(this.timeEvent) , 'Creating', 'a new loan'),
+    // new Notification('Lending', '4bed...0x35', this.getTime(this.timeEvent), 'Creating', 'a new loan'),
+    // new Notification('Borrowing', '0x35...4bed', this.getTime(200), 'Creating', 'a new loan')
   ];
    // Change value of detail from Notifications Service
   notificationsCounter: any = this.notificationsService.changeCounter(this.oNotifications.length);
 
   constructor(
+    private txService: TxService,
     public notificationsService: NotificationsService
   ) { }
 
@@ -64,5 +66,17 @@ export class NotificationsComponent implements OnInit {
 
   ngOnInit() {
     this.notificationsService.currentDetail.subscribe(detail => this.viewDetail = detail); // Subscribe to detail from Notifications Service
+    this.txService.subscribeNewTx((tx: Tx) => this.onNewTransaction(tx));
+  }
+
+  private onNewTransaction(tx: Tx) {
+    this.oNotifications.push(new Notification(
+      tx.data,
+      tx.type.toString(),
+      123,
+      "pepito",
+      "hola"
+    ));
+    this.notificationsService.changeCounter(this.oNotifications.length);
   }
 }

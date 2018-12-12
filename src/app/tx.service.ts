@@ -6,7 +6,7 @@ import { Loan } from './models/loan.model';
 import { Web3Service } from './services/web3.service';
 import { EventsService, Category } from './services/events.service';
 
-enum Type {
+export enum Type {
   lend = 'lend',
   approve = 'approve',
   withdraw = 'withdraw',
@@ -49,6 +49,9 @@ export class TxService {
   // tslint:disable-next-line:no-unused-variable
   private interval: any;
 
+  private newTxSubscribers: ((tx: Tx) => void)[] = [];
+  private confirmedTxSubscribers: ((tx: Tx) => void)[] = [];
+
   constructor(
     private web3service: Web3Service,
     private eventsService: EventsService,
@@ -66,9 +69,42 @@ export class TxService {
     }, 5000);
   }
 
-  registerLendTx(loan: Loan, tx: string) {
-    this.txMemory.push(new Tx(tx, loan.engine, false, Type.lend, loan.id));
+  subscribeNewTx(cb: (tx: Tx) => void) {
+    if (!this.newTxSubscribers.find(c => c === cb)) {
+      this.newTxSubscribers.push(cb);
+    }
+  }
+
+  subscribeConfirmedTx(cb: (tx: Tx) => void) {
+    if (!this.confirmedTxSubscribers.find(c => c === cb)) {
+      this.confirmedTxSubscribers.push(cb);
+    }
+  }
+
+  unsubscribeConfirmedTx(cb: (tx: Tx) => void) {
+    this.confirmedTxSubscribers = this.confirmedTxSubscribers.filter(c => c !== cb);
+  }
+
+  registerTx(tx: Tx) {
+    this.txMemory.push(tx);
+    this.newTxSubscribers.forEach(c => c(tx));
     this.saveTxs();
+  }
+
+  registerLendTx(loan: Loan, hash: string) {
+    const tx = new Tx(hash, loan.engine, false, Type.lend, loan.id);
+    this.registerTx(tx);
+  }
+
+  getPendingTxs(): Tx[] {
+    return this.txMemory.filter(tx => !tx.confirmed);
+  }
+
+  getPastTxs(count: number): Tx[] {
+    return this.txMemory
+      .filter(tx => tx.confirmed)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
+      .slice(0, count);
   }
 
   getLastLend(loan: Loan): Tx {
@@ -80,8 +116,7 @@ export class TxService {
 
   registerApproveTx(tx: string, token: string, contract: string, action: boolean) {
     const data = { contract: contract, action: action };
-    this.txMemory.push(new Tx(tx, token, false, Type.approve, data));
-    this.saveTxs();
+    this.registerTx(new Tx(tx, token, false, Type.approve, data));
   }
 
   getLastPendingApprove(token: string, contract: string): boolean {
@@ -96,8 +131,7 @@ export class TxService {
   }
 
   registerWithdrawTx(tx: string, engine: string, loans: number[]) {
-    this.txMemory.push(new Tx(tx, engine, false, Type.withdraw, loans));
-    this.saveTxs();
+    this.registerTx(new Tx(tx, engine, false, Type.withdraw, loans));
   }
 
   getLastWithdraw(engine: string, loans: number[]): Tx {
@@ -112,8 +146,7 @@ export class TxService {
       id: loan.id,
       to: to
     };
-    this.txMemory.push(new Tx(tx, engine, false, Type.transfer, data));
-    this.saveTxs();
+    this.registerTx(new Tx(tx, engine, false, Type.transfer, data));
   }
 
   getLastPendingTransfer(engine: string, loan: Loan): Tx {
@@ -129,8 +162,7 @@ export class TxService {
       id: loan.id
     };
 
-    this.txMemory.push(new Tx(tx, cosigner, false, Type.claim, data));
-    this.saveTxs();
+    this.registerTx(new Tx(tx, cosigner, false, Type.claim, data));
   }
 
   getLastPendingClaim(cosigner: string, loan: Loan) {
@@ -146,8 +178,7 @@ export class TxService {
       id: loan.id,
       amount: amount
     };
-    this.txMemory.push(new Tx(tx, engine, false, Type.pay, data));
-    this.saveTxs();
+    this.registerTx(new Tx(tx, engine, false, Type.pay, data));
   }
 
   getLastPendingPay(loan: Loan) {
@@ -180,6 +211,7 @@ export class TxService {
               0, true
             );
             tx.confirmed = true;
+            this.confirmedTxSubscribers.forEach(c => c(tx));
             this.saveTxs();
           }
         });

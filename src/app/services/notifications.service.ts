@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class NotificationsService {
-  private detailSource$ = new BehaviorSubject('notifications');
+  private detailSource$ = new BehaviorSubject(undefined);
   currentDetail = this.detailSource$.asObservable();
 
   private counterSource$ = new BehaviorSubject(undefined);
