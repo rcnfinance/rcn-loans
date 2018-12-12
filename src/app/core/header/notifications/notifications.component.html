@@ -1,45 +1,9 @@
 <div class="notifications-container"
 [@anmNotifications]="viewDetail === 'notifications' ? 'open' : 'closed'">
-<ul>
-  <li>Notifications</li>
-    <li *ngFor='let notification of oNotifications; let i of index'
-    [ngClass]="{'progressOn': progressOn }">
-      <div class="status-container">
-        <div class="icon-event bg-{{ 'green' }}">
-          <i class="fas fa-coins"></i>
-        </div>
-        <div class="action-event">{{ notification.actionEvent }}</div>
-        <div class="separator"> · </div>
-        <div class="starring-event">{{ notification.starringEvent }}</div>
-        <div class="separator"> · </div>
-        <div class="time-event">{{ notification.timeEvent }}</div>
-      </div>
-      <div class="action-container">
-        <div class="leading-txt">{{ notification.leadingTxt }}</div>
-        <div class="supporter-txt">{{ notification.supporterTxt }}</div>
-      </div>
-      <mat-progress-bar *ngIf='progressOn'
-        [color]="color"
-        [mode]="mode"
-        [value]="value"
-        [bufferValue]="bufferValue">
-      </mat-progress-bar>
-    </li>
-    <li>
-      <div class="status-container">
-        <div class="icon-event bg-{{ 'green' }}">
-          <i class="fas fa-coins"></i>
-        </div>
-        <div class="action-event">Borrowing</div>
-        <div class="separator"> · </div>
-        <div class="starring-event">0x35...4bed</div>
-        <div class="separator"> · </div>
-        <div class="time-event">Just now</div>
-      </div>
-      <div class="action-container">
-        <div class="leading-txt">Creating</div>
-        <div class="supporter-txt">a new loan</div>
-      </div>
+  <ul>
+    <li>Notifications</li>
+    <li *ngFor='let notification of oNotifications; let i of index'>
+      <app-notification-item [notification]='notification'></app-notification-item>
     </li>
   </ul>
 </div>

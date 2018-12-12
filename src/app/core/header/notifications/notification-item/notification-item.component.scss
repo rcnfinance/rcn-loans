@@ -1,0 +1,68 @@
+@import './../../../../../scss/_variables.scss'; //variables
+
+.notification-container{
+  cursor: pointer;
+  height: 64px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid $quaternary;
+  background-color: $gray7;
+  &.progressOn{
+    padding-bottom: 10px;
+    background-color: $quaternary;
+    border-bottom: 1px solid $quaternary;
+  }
+}
+.status-container{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+.action-container{
+  width: 100%;
+  display: flex;
+  margin-top: 2px;
+  font-size: 14px;
+}
+.icon-event{
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  i,
+  svg{
+    font-size: 12px;
+  }
+}
+.action-event,
+.time-event,
+.supporter-txt{
+  @extend %roboto-light;
+}
+.leading-txt,
+.starring-event{
+  @extend %roboto-bold;
+}
+.action-event{margin-left: 10px;}
+.separator{margin: 0 5px;}
+.supporter-txt{margin-left: 5px;}
+mat-progress-bar.mat-progress-bar{
+  height: 4px;
+  position: absolute;
+  bottom: 0;
+  ::ng-deep{
+    .mat-progress-bar-fill::after {
+      background-color: $primary;
+    }
+    .mat-progress-bar-buffer {
+      background: $quaternary;
+    }
+  }
+}

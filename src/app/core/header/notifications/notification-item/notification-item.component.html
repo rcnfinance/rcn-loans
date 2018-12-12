@@ -1,0 +1,23 @@
+<div class="notification-container"
+[ngClass]="{'progressOn': progressOn }">
+  <div class="status-container">
+    <div class="icon-event bg-{{ 'green' }}">
+      <i class="fas fa-coins"></i>
+    </div>
+    <div class="action-event">{{ notification.actionEvent }}</div>
+    <div class="separator"> · </div>
+    <div class="starring-event">{{ notification.starringEvent }}</div>
+    <div class="separator"> · </div>
+    <div class="time-event">{{ notification.timeEvent }}</div>
+  </div>
+  <div class="action-container">
+    <div class="leading-txt">{{ notification.leadingTxt }}</div>
+    <div class="supporter-txt">{{ notification.supporterTxt }}</div>
+  </div>
+  <mat-progress-bar *ngIf='progressOn'
+    [color]="color"
+    [mode]="mode"
+    [value]="value"
+    [bufferValue]="bufferValue">
+  </mat-progress-bar>
+</div>

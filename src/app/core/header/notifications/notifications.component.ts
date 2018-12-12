@@ -38,16 +38,8 @@ export class NotificationsComponent implements OnInit {
   viewDetail: string;
   selection: string;
   previousSelection: string;
-  isOpen = true; // TODO delete
 
   timeEvent = 0; // TODO define the value
-
-  // Progress bar
-  progressOn = true;
-  color = 'primary';
-  mode = 'query';
-  value = 50;
-  bufferValue = 75;
 
   // Notification Model
   mNotification = Notification;
