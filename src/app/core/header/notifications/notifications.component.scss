@@ -13,9 +13,9 @@
         height: 30px;
         padding: 10px;
         background-color: $gray7;
-        border-bottom: 1px solid $secondary;
+        border-bottom: 1px solid $quaternary;
       }
-      &:nth-child(2){
+      &.unavailable{
         height: 64px;
         position: relative;
         display: flex;
