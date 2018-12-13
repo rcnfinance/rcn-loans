@@ -5,6 +5,7 @@ import { Loan } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
+import { ApiService } from './../../services/api.service';
 
 @Component({
   selector: 'app-requested-loan',
@@ -21,7 +22,8 @@ export class RequestedLoanComponent implements OnInit {
   constructor(
     private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
-    private availableLoansService: AvailableLoansService
+    private availableLoansService: AvailableLoansService,
+    private apiService: ApiService
   ) {}
 
   // Available Loans service
@@ -43,6 +45,7 @@ export class RequestedLoanComponent implements OnInit {
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
     this.loadLoans();
+    this.apiService.getRequests();
 
     // Available Loans service
     this.availableLoansService.currentAvailable.subscribe(available => this.available = available);

@@ -29,6 +29,9 @@ export const environment = {
   rcn_node: {
     loan: 'https://testnet.rnode.rcn.loans/v1/loans/$id/'
   },
+  rcn_node_api: {
+    url: 'https://ropsten.rnode.staging.rcn.loans/v4/'
+  },
   network: {
     id: '3',
     name: 'Ropsten',

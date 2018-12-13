@@ -32,7 +32,6 @@ export class ContractsService {
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
   private _requestsView: any;
   private _loanManager: any;
-  private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
 
   constructor(
       private web3: Web3Service,
@@ -248,6 +247,7 @@ export class ContractsService {
           reject(err);
           console.error(err);
         }
+        console.log(result);
         resolve(this.parseRequestBytes(result));
       });
     }) as Promise<Loan[]>;
