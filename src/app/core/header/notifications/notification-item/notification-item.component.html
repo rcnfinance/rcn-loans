@@ -1,5 +1,5 @@
 <div class="notification-container"
-[ngClass]="{'progressOn': progressOn }">
+[ngClass]="{'progressOn': !confirmedTx }">
   <div class="status-container">
     <div class="icon-event bg-{{ 'blue' }}">
       <!-- <i class="fas fa-coins"></i> -->
@@ -15,7 +15,7 @@
     <div class="leading-txt">{{ notification.leadingTxt }}</div>
     <div class="supporter-txt">{{ notification.supporterTxt }}</div>
   </div>
-  <mat-progress-bar *ngIf='progressOn'
+  <mat-progress-bar *ngIf='!confirmedTx'
     [color]="color"
     [mode]="mode"
     [value]="value"

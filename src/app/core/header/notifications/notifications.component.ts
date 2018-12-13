@@ -63,19 +63,29 @@ export class NotificationsComponent implements OnInit {
 
   ngOnInit() {
     this.notificationsService.currentDetail.subscribe(detail => this.viewDetail = detail); // Subscribe to detail from Notifications Service
-    this.txService.subscribeNewTx((tx: Tx) => this.onNewTransaction(tx));
-    this.txService.subscribeConfirmedTx((tx: Tx) => this.onNewTransaction(tx));
-    this.txService.unsubscribeConfirmedTx((tx: Tx) => this.onNewTransaction(tx));
+    this.txService.subscribeNewTx((tx: Tx) => this.addNewNotification(tx));
+    this.txService.subscribeConfirmedTx((tx: Tx) => this.setTxFinished(tx));
   }
 
-  private onNewTransaction(tx: Tx) {
+  private addNewNotification(tx: Tx) {
     this.oNotifications.push(new Notification(
+      tx.tx,
       Utils.capFirstLetter(tx.type.toString()),
       Utils.shortAddress(tx.to),
       Utils.formatDelta(Math.floor((new Date().getTime() - tx.timestamp) / 1000)),
       Utils.capFirstLetter(tx.type.toString()),
-      'a new loan'
+      'a new loan',
+      false
     ));
     this.notificationsService.changeCounter(this.oNotifications.length);
+  }
+
+  private setTxFinished(tx: Tx) { // TODO review any type
+    console.info(this.oNotifications, ' this is your oNotifications[] Before setTxFinished');
+    const txFinished = this.oNotifications.find(c => c.hashTx === tx.tx);
+    txFinished.confirmedTx = true;
+    // this.oNotifications.push(txFinished);
+    this.notificationsService.changeState(true);
+    console.info(tx, ' this is your txFinished after pushed');
   }
 }

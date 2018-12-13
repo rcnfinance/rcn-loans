@@ -16,7 +16,7 @@ export class IconGroupHeaderComponent implements OnInit {
 
   constructor(
     public notificationsService: NotificationsService
-  ) { }
+  ) {}
 
   isDetail(view: string): Boolean { // Check viewDetail state to open/close notifications Component
     return view === this.viewDetail;
