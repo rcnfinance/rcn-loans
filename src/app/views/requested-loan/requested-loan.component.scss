@@ -1,0 +1,45 @@
+@import '../../../scss/_variables.scss'; //variables
+
+.flex-between{
+  display: flex;
+  justify-content: space-between;
+}
+.requested-wrapper{
+  .filters{
+    display: none;
+    @include keyframes(anm-forward) { 0% { height: 0px; opacity: 0; } 100% { height: 410px; opacity: 1; } }
+    @include keyframes(anm-backwards) { 0% { height: 410px; opacity: 1; } 100% { height: 0px; opacity: 0;} }
+  }
+  .icon-active,
+  .icon-disabled{ position: absolute; top: 6px; right: 0; @include transition(); }
+  .icon-disabled{ opacity: 0; }
+  &.active{
+    .filters{
+      display: block;
+      @include animation(anm-forward, .3s, ease-in, 0s, normal);
+      animation-fill-mode: both;
+    }
+    .icon-active{ opacity: 0; @include transform(rotate(-180deg)); }
+    .icon-disabled{ opacity: 1; @include transform(rotate(0deg)); }
+  }
+  &.disabled{
+    .filters{
+      display: block;
+      @include animation(anm-backwards, .3s, ease-in, 0s, normal);
+      animation-fill-mode: both;
+    }
+    .icon-active{ opacity: 1; @include transform(rotate(0deg)); }
+    .icon-disabled{ opacity: 0; @include transform(rotate(180deg)); }
+  }
+}
+
+@media (min-width: 992px){
+  .filters{
+    @include keyframes(anm-forward) { 0% { height: 0px; opacity: 0; } 100% { height: 102px; opacity: 1; } }
+    @include keyframes(anm-backwards) { 0% { height: 102px; opacity: 1; } 100% { height: 0px; opacity: 0;} }
+    @include animation(anm-forward, .3s, ease-in, 0s, normal);
+    animation-fill-mode: both;
+    @include animation(anm-backwards, .3s, ease-in, 0s, normal);
+    animation-fill-mode: both;
+  }
+}
