@@ -15,6 +15,7 @@
 - Fix bug when loading metamask privacy on account detail
 - Fix try to lend an invalid mortgage request
 - Fix bug when the request is expired, the estimated return of a loan shows an incorrect amount
+- Fix margin "This address is not a lender" message
 
 ## **0.0.10-D** Avocados - 2018/11/14
 
