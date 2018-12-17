@@ -10,12 +10,12 @@ export class Notification {
 
   ) {}
 
-  get time(): any {
-    if (this.timeEvent > 0) {
-      console.info('Happen');
-      return 'Just now';
-    }
-    console.info('Not');
-    return this.timeEvent;
-  }
+  // get time(): any {
+  //   if (this.timeEvent > 0) {
+  //     console.info('Happen');
+  //     return 'Just now';
+  //   }
+  //   console.info('Not');
+  //   return this.timeEvent;
+  // }
 }

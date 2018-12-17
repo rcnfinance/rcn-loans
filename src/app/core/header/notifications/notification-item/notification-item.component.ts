@@ -18,18 +18,15 @@ export class NotificationItemComponent implements OnInit, OnChanges {
 
   confirmedTx: Boolean;
 
-  constructor(
-    // public notificationsService: NotificationsService
-  ) {}
+  constructor() {}
 
   ngOnInit() {
-    // this.confirmedTx = this.notification.confirmedTx;
-    // this.notificationsService.currentState.subscribe(confirmedTx => this.confirmedTx = confirmedTx);
-    console.info(this.notification);
+    this.confirmedTx = this.notification.confirmedTx;
+    console.info(this.notification, ' this.notification ngOnInit');
   }
   ngOnChanges() {
-    // this.confirmedTx = this.notification.confirmedTx;
-    console.info(this.notification, ' Changes');
-    console.info(this.confirmedTx, ' Changed');
+    this.confirmedTx = this.notification.confirmedTx;
+    console.info(this.notification, ' this.notification ngOnChanges');
+    console.info(this.confirmedTx, ' this.confirmedTx ngOnChanges');
   }
 }

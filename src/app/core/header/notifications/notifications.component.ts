@@ -81,11 +81,9 @@ export class NotificationsComponent implements OnInit {
   }
 
   private setTxFinished(tx: Tx) { // TODO review any type
-    console.info(this.oNotifications, ' this is your oNotifications[] Before setTxFinished');
-    const txFinished = this.oNotifications.find(c => c.hashTx === tx.tx);
-    txFinished.confirmedTx = true;
-    // this.oNotifications.push(txFinished);
-    this.notificationsService.changeState(true);
-    console.info(tx, ' this is your txFinished after pushed');
+    const index = this.oNotifications.findIndex(c => c.hashTx === tx.tx);
+    // console.info(this.oNotifications[index].confirmedTx, ' this is your oNotifications[] Before setTxFinished');
+    this.oNotifications[index] = { ...this.oNotifications[index], confirmedTx: true };
+    // console.info(tx, ' this is your txFinished after pushed');
   }
 }
