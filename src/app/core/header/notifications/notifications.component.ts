@@ -6,7 +6,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
-import { Notification } from '../../../models/notification.model';
+import { Notification, TxObject } from '../../../models/notification.model';
 import { NotificationsService } from '../../../services/notifications.service';
 import { TxService, Tx } from '../../../tx.service';
 import { Utils } from '../../../utils/utils';
@@ -54,11 +54,38 @@ export class NotificationsComponent implements OnInit {
     public notificationsService: NotificationsService
   ) { }
 
-  getTime(timestamp) {
+  getTime(timestamp: number) {
     if (timestamp <= 0) {
       return 'Just now';
     }
     return timestamp + 's';
+  }
+
+  getTxObject(tx: Tx): TxObject {
+    let txObject: TxObject;
+    switch (tx.type) {
+      case 'lend':
+        txObject = new TxObject('Lent', 'a new loan', 'Lending', 'material-icons', 'trending_up', '', 'blue');
+        break;
+      case 'withdraw':
+        txObject = new TxObject('Withdrawed', 'your founds', 'Withdrawing', 'material-icons', 'call_made', '', 'white');
+        break;
+      case 'transfer':
+        txObject = new TxObject('Transfered', 'a new loan', 'Transfering', '', '', 'fas fa-exchange-alt', 'orange');
+        break;
+      case 'pay':
+        txObject = new TxObject('Payed', 'a loan', 'Paying', '', '', 'fas fa-coins', 'green');
+        break;
+      case 'claim':
+        txObject = new TxObject('Claimed', 'a loan', 'Claiming', 'material-icons', 'call_made', '', 'white');
+        break;
+      case 'approve':
+        txObject = new TxObject('Authorized', 'the Loan Engine contract to operate', 'Approving', '', '', 'fas fa-user-check', 'violet');
+        break;
+      default:
+        break;
+    }
+    return txObject;
   }
 
   ngOnInit() {
@@ -68,22 +95,22 @@ export class NotificationsComponent implements OnInit {
   }
 
   private addNewNotification(tx: Tx) {
-    this.oNotifications.push(new Notification(
-      tx.tx,
-      Utils.capFirstLetter(tx.type.toString()),
-      Utils.shortAddress(tx.to),
-      Utils.formatDelta(Math.floor((new Date().getTime() - tx.timestamp) / 1000)),
-      Utils.capFirstLetter(tx.type.toString()),
-      'a new loan',
-      false
+    this.oNotifications.unshift(new Notification(
+      tx.tx,                                                                       // This is the Notification hashTx
+      Utils.capFirstLetter(tx.type.toString()),                                    // This is the Notification actionEvent
+      Utils.shortAddress(tx.to),                                                   // This is the Notification starringEvent
+      Utils.formatDelta(Math.floor((new Date().getTime() - tx.timestamp) / 1000)), // This is the Notification timeEvent
+      Utils.capFirstLetter(tx.type.toString()),                                    // This is the Notification leadingTxt
+      'a new loan',                                                                // This is the Notification supporterTxt
+      false,                                                                       // This is the Notification confirmedTx
+      this.getTxObject(tx)                                                    // This is the Notification txObject
     ));
     this.notificationsService.changeCounter(this.oNotifications.length);
   }
 
   private setTxFinished(tx: Tx) { // TODO review any type
     const index = this.oNotifications.findIndex(c => c.hashTx === tx.tx);
-    // console.info(this.oNotifications[index].confirmedTx, ' this is your oNotifications[] Before setTxFinished');
     this.oNotifications[index] = { ...this.oNotifications[index], confirmedTx: true };
-    // console.info(tx, ' this is your txFinished after pushed');
+    // this.oNotifications[index] = { ...this.oNotifications[index].txObject, messegePending: 'asd' };
   }
 }

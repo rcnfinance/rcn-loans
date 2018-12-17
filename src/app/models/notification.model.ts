@@ -1,21 +1,24 @@
 export class Notification {
   constructor(
-    public hashTx: string,
-    public actionEvent: string,
-    public starringEvent: string,
-    public timeEvent: any,
-    public leadingTxt: string,
-    public supporterTxt: string,
-    public confirmedTx: Boolean
-
+    public hashTx: String,          // This is the Notification hashTx
+    public actionEvent: String,     // This is the Notification actionEvent
+    public starringEvent: String,   // This is the Notification starringEvent
+    public timeEvent: any,          // This is the Notification timeEvent
+    public leadingTxt: String,      // This is the Notification leadingTxt
+    public supporterTxt: String,    // This is the Notification supporterTxt
+    public confirmedTx: Boolean,    // This is the Notification confirmedTx
+    public txObject: TxObject         // This is the Notification txObject
   ) {}
+}
 
-  // get time(): any {
-  //   if (this.timeEvent > 0) {
-  //     console.info('Happen');
-  //     return 'Just now';
-  //   }
-  //   console.info('Not');
-  //   return this.timeEvent;
-  // }
+export class TxObject {
+  constructor(
+    public title: String,
+    public messege: String,
+    public messegePending: String,
+    public materialClass: String,
+    public icon: String,
+    public awesomeClass: String,
+    public color: String
+  ) {}
 }

@@ -1,19 +1,18 @@
 <div class="notification-container"
 [ngClass]="{'progressOn': !confirmedTx }">
   <div class="status-container">
-    <div class="icon-event bg-{{ 'blue' }}">
-      <!-- <i class="fas fa-coins"></i> -->
-      <i class="material-icons">trending_up</i>
+    <div class="icon-event bg-{{ notification.txObject.color }}">
+      <i class="{{ notification.txObject.materialClass }} {{ notification.txObject.awesomeClass }}">{{ notification.txObject.icon }}</i>
     </div>
-    <div class="action-event">{{ notification.actionEvent }}</div>
+    <div class="action-event">{{ notification.txObject.title }}</div>
     <div class="separator"> · </div>
     <div class="starring-event">{{ notification.starringEvent }}</div>
     <div class="separator"> · </div>
     <div class="time-event">{{ notification.timeEvent }}</div>
   </div>
   <div class="action-container">
-    <div class="leading-txt">{{ notification.leadingTxt }}</div>
-    <div class="supporter-txt">{{ notification.supporterTxt }}</div>
+    <div class="leading-txt">{{ notification.txObject.title }}</div>
+    <div class="supporter-txt">{{ notification.txObject.messege }}</div>
   </div>
   <mat-progress-bar *ngIf='!confirmedTx'
     [color]="color"

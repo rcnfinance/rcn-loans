@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Notification } from '../../../../models/notification.model';
-// import { NotificationsService } from '../../../../services/notifications.service';
 
 @Component({
   selector: 'app-notification-item',
@@ -22,11 +21,8 @@ export class NotificationItemComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.confirmedTx = this.notification.confirmedTx;
-    console.info(this.notification, ' this.notification ngOnInit');
   }
   ngOnChanges() {
     this.confirmedTx = this.notification.confirmedTx;
-    console.info(this.notification, ' this.notification ngOnChanges');
-    console.info(this.confirmedTx, ' this.confirmedTx ngOnChanges');
   }
 }
