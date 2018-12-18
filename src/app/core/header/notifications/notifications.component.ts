@@ -65,22 +65,22 @@ export class NotificationsComponent implements OnInit {
     let txObject: TxObject;
     switch (tx.type) {
       case 'lend':
-        txObject = new TxObject('Lent', 'a new loan', 'Lending', 'material-icons', 'trending_up', '', 'blue');
+        txObject = new TxObject('Lending', 'a new loan', 'material-icons', 'trending_up', '', 'blue');
         break;
       case 'withdraw':
-        txObject = new TxObject('Withdrawed', 'your founds', 'Withdrawing', 'material-icons', 'call_made', '', 'white');
+        txObject = new TxObject('Withdrawing', 'your founds', 'material-icons', 'call_made', '', 'white');
         break;
       case 'transfer':
-        txObject = new TxObject('Transfered', 'a new loan', 'Transfering', '', '', 'fas fa-exchange-alt', 'orange');
+        txObject = new TxObject('Transfering', 'a new loan', '', '', 'fas fa-exchange-alt', 'orange');
         break;
       case 'pay':
-        txObject = new TxObject('Payed', 'a loan', 'Paying', '', '', 'fas fa-coins', 'green');
+        txObject = new TxObject('Paying', 'a loan', '', '', 'fas fa-coins', 'green');
         break;
       case 'claim':
-        txObject = new TxObject('Claimed', 'a loan', 'Claiming', 'material-icons', 'call_made', '', 'white');
+        txObject = new TxObject('Claiming', 'a loan', 'material-icons', 'call_made', '', 'white');
         break;
       case 'approve':
-        txObject = new TxObject('Authorized', 'the Loan Engine contract to operate', 'Approving', '', '', 'fas fa-user-check', 'violet');
+        txObject = new TxObject('Authorizing', 'the Loan Engine contract to operate', '', '', 'fas fa-check', 'violet');
         break;
       default:
         break;
@@ -88,10 +88,38 @@ export class NotificationsComponent implements OnInit {
     return txObject;
   }
 
+  getTxObjectConfirmed(tx: Tx): String {
+    let message: String;
+    switch (tx.type) {
+      case 'lend':
+        message = 'Lent';
+        break;
+      case 'withdraw':
+        message = 'Withdrawed';
+        break;
+      case 'transfer':
+        message = 'Transfered';
+        break;
+      case 'pay':
+        message = 'Payed';
+        break;
+      case 'claim':
+        message = 'Claimed';
+        break;
+      case 'approve':
+        message = 'Authorized';
+        break;
+      default:
+        break;
+    }
+    return message;
+  }
+
   ngOnInit() {
     this.notificationsService.currentDetail.subscribe(detail => this.viewDetail = detail); // Subscribe to detail from Notifications Service
     this.txService.subscribeNewTx((tx: Tx) => this.addNewNotification(tx));
     this.txService.subscribeConfirmedTx((tx: Tx) => this.setTxFinished(tx));
+    console.info(this.txService.txMemory);
   }
 
   private addNewNotification(tx: Tx) {
@@ -103,7 +131,7 @@ export class NotificationsComponent implements OnInit {
       Utils.capFirstLetter(tx.type.toString()),                                    // This is the Notification leadingTxt
       'a new loan',                                                                // This is the Notification supporterTxt
       false,                                                                       // This is the Notification confirmedTx
-      this.getTxObject(tx)                                                    // This is the Notification txObject
+      this.getTxObject(tx)                                                         // This is the Notification txObject
     ));
     this.notificationsService.changeCounter(this.oNotifications.length);
   }
@@ -111,6 +139,6 @@ export class NotificationsComponent implements OnInit {
   private setTxFinished(tx: Tx) { // TODO review any type
     const index = this.oNotifications.findIndex(c => c.hashTx === tx.tx);
     this.oNotifications[index] = { ...this.oNotifications[index], confirmedTx: true };
-    // this.oNotifications[index] = { ...this.oNotifications[index].txObject, messegePending: 'asd' };
+    this.oNotifications[index].txObject = { ...this.oNotifications[index].txObject, title: this.getTxObjectConfirmed(tx) };
   }
 }

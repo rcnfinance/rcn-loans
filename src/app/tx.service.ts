@@ -102,7 +102,7 @@ export class TxService {
 
   getPastTxs(count: number): Tx[] {
     return this.txMemory
-      // .filter(tx => tx.confirmed)
+      .filter(tx => tx.confirmed)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
       .slice(0, count);
   }
