@@ -115,11 +115,18 @@ export class NotificationsComponent implements OnInit {
     return message;
   }
 
+  renderLastestTx(txMemory: Tx[]) {
+    const lastestTx: Tx[] = txMemory.slice(0, 6);
+    console.info(lastestTx);
+    lastestTx.forEach(c => this.addNewNotification(c));
+    lastestTx.forEach(c => this.setTxFinished(c));
+  }
+
   ngOnInit() {
     this.notificationsService.currentDetail.subscribe(detail => this.viewDetail = detail); // Subscribe to detail from Notifications Service
     this.txService.subscribeNewTx((tx: Tx) => this.addNewNotification(tx));
     this.txService.subscribeConfirmedTx((tx: Tx) => this.setTxFinished(tx));
-    console.info(this.txService.txMemory);
+    this.renderLastestTx(this.txService.txMemory);
   }
 
   private addNewNotification(tx: Tx) {

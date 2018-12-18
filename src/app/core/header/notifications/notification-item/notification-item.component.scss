@@ -44,6 +44,12 @@
     color: #000;
   }
 }
+.time-event{
+  // ellipsis
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 .action-event,
 .time-event,
 .supporter-txt{

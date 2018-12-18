@@ -42,7 +42,7 @@ export class Tx {
 @Injectable()
 export class TxService {
   private txKey = 'tx';
-  private txMemory: Tx[];
+  txMemory: Tx[];
 
   private localStorage: any;
 

@@ -3,7 +3,6 @@
   <ul>
     <li>Notifications</li>
     <li *ngFor='let notification of oNotifications; let i of index'>
-      <!-- <pre>{{notification | json}}</pre> -->
       <app-notification-item [notification]='notification'></app-notification-item>
     </li>
     <li class='unavailable' *ngIf='oNotifications.length === 0'>
