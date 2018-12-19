@@ -12,7 +12,7 @@ export class IconGroupHeaderComponent implements OnInit {
   selection: string;
   previousSelection: string;
 
-  notificationsCounter: any;
+  notificationsCounter = 0;
 
   constructor(
     public notificationsService: NotificationsService

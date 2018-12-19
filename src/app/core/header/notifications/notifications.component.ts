@@ -63,24 +63,32 @@ export class NotificationsComponent implements OnInit {
 
   getTxObject(tx: Tx): TxObject {
     let txObject: TxObject;
+    let txt = 'the loan #';
+    let id: string;
+    if (tx.data.id) { id = tx.data.id; } else { id = tx.data; } // Defines if the ID comes from data (new Loans) or data.id (past Loans)
+    if (tx.type === 'approve') {
+      txt = 'the Loan Engine contract to operate';
+    } else if (tx.type === 'withdraw') {
+      txt = 'your founds';
+    }
     switch (tx.type) {
       case 'lend':
-        txObject = new TxObject('Lending', 'a new loan', 'material-icons', 'trending_up', '', 'blue');
+        txObject = new TxObject('Lending', txt + id, 'material-icons', 'trending_up', '', 'blue');
         break;
       case 'withdraw':
-        txObject = new TxObject('Withdrawing', 'your founds', 'material-icons', 'call_made', '', 'white');
+        txObject = new TxObject('Withdrawing', txt, 'material-icons', 'call_made', '', 'white');
         break;
       case 'transfer':
-        txObject = new TxObject('Transfering', 'a new loan', '', '', 'fas fa-exchange-alt', 'orange');
+        txObject = new TxObject('Transfering', txt + id, '', '', 'fas fa-exchange-alt', 'orange');
         break;
       case 'pay':
-        txObject = new TxObject('Paying', 'a loan', '', '', 'fas fa-coins', 'green');
+        txObject = new TxObject('Paying', txt + id, '', '', 'fas fa-coins', 'green');
         break;
       case 'claim':
-        txObject = new TxObject('Claiming', 'a loan', 'material-icons', 'call_made', '', 'white');
+        txObject = new TxObject('Claiming', txt + id, 'material-icons', 'call_made', '', 'white');
         break;
       case 'approve':
-        txObject = new TxObject('Authorizing', 'the Loan Engine contract to operate', '', '', 'fas fa-check', 'violet');
+        txObject = new TxObject('Authorizing', txt, '', '', 'fas fa-check', 'violet');
         break;
       default:
         break;
@@ -116,7 +124,8 @@ export class NotificationsComponent implements OnInit {
   }
 
   renderLastestTx(txMemory: Tx[]) {
-    const lastestTx: Tx[] = txMemory.slice(0, 6);
+    // const lastestTx: Tx[] = txMemory.slice(0, 6);
+    const lastestTx: Tx[] = txMemory;
     console.info(lastestTx);
     lastestTx.forEach(c => this.addNewNotification(c));
     lastestTx.forEach(c => this.setTxFinished(c));
@@ -130,6 +139,7 @@ export class NotificationsComponent implements OnInit {
   }
 
   private addNewNotification(tx: Tx) {
+    console.info(tx);
     this.oNotifications.unshift(new Notification(
       tx.tx,                                                                       // This is the Notification hashTx
       Utils.capFirstLetter(tx.type.toString()),                                    // This is the Notification actionEvent

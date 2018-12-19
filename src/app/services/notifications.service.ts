@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class NotificationsService {
   private detailSource$ = new BehaviorSubject(undefined);
-  currentDetail = this.detailSource$.asObservable();
+  currentDetail: Observable<string> = this.detailSource$.asObservable();
 
   private counterSource$ = new BehaviorSubject(undefined);
-  currentCounter = this.counterSource$.asObservable();
+  currentCounter: Observable<number> = this.counterSource$.asObservable();
 
   changeDetail(detail: string) {
     this.detailSource$.next(detail);
