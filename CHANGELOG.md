@@ -5,7 +5,8 @@
 ### Features:
 - Added pay loan option
 - Lend using ETH if user has no RCN balance
-- Filer loan requests by currency, amount, interest rates and duration
+- Filter loan requests by currency, amount, interest rates and duration
+- Added Discord to Footer Component
 
 ### Misc:
 - Setup unit tests
