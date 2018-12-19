@@ -41,8 +41,6 @@ export class NotificationsComponent implements OnInit {
   selection: string;
   previousSelection: string;
 
-  timeEvent = 0; // TODO define the value
-
   // Notification Model
   mNotification = Notification;
   oNotifications: Array<Notification> = [];
@@ -54,18 +52,7 @@ export class NotificationsComponent implements OnInit {
     public notificationsService: NotificationsService
   ) { }
 
-  getTxTime(timestamp: number) {
-    return Math.floor((new Date().getTime() - timestamp) / 1000);
-  }
-
-  getFormattedTime(timestamp: number) {
-    const delta: number = this.getTxTime(timestamp);
-    const deltaFormatted: string = Utils.formatDelta(delta);
-    if (delta <= 0) { return 'Just now'; }
-    return deltaFormatted;
-  }
-
-  getTxMessage(tx: Tx): string {
+  getTxMessage(tx: Tx): string { // Return the TxObject Message to render the Notification
     let txt = 'the loan #';
     let id: string;
     if (tx.data.id) { id = tx.data.id; } else { id = tx.data; } // Defines if the ID comes from data (new Loans) or data.id (past Loans)
@@ -79,7 +66,7 @@ export class NotificationsComponent implements OnInit {
     return txt + id;
   }
 
-  getTxObject(tx: Tx): TxObject {
+  getTxObject(tx: Tx): TxObject { // Return the TxObject to render style data
     let txObject: TxObject;
     const message: string = this.getTxMessage(tx);
     switch (tx.type) {
@@ -107,7 +94,7 @@ export class NotificationsComponent implements OnInit {
     return txObject;
   }
 
-  getTxObjectConfirmed(tx: Tx): String {
+  getTxObjectConfirmed(tx: Tx): String { // Change the Tx Message onConfirmed
     let message: String;
     switch (tx.type) {
       case 'lend':
@@ -134,24 +121,40 @@ export class NotificationsComponent implements OnInit {
     return message;
   }
 
-  getLastestTx(txMemory: Tx[]): Tx[] {
+  getLastestTx(txMemory: Tx[]): Tx[] { // Get the last 10 Txs
     const allTxMemery: number = txMemory.length;
     const loansToRender: number = allTxMemery - 10;
     return txMemory.slice(loansToRender, allTxMemery);
   }
-  renderLastestTx(txMemory: Tx[]) {
+  renderLastestTx(txMemory: Tx[]) { // Render the last 10 Txs
     const lastestTx: Tx[] = this.getLastestTx(txMemory);
     lastestTx.forEach(c => this.addNewNotification(c));
     lastestTx.forEach(c => this.setTxFinished(c));
   }
 
-  setTime(tx: Tx) {
-    const now = Utils.formatDelta(Math.floor((new Date().getTime() - tx.timestamp) / 1000));
-    const index = this.oNotifications.findIndex(c => c.hashTx === tx.tx);
-    this.oNotifications[index] = { ...this.oNotifications[index], timeEvent: now };
+  getTxTime(timestamp: number) { // Get Delta between Now and TxTime
+    return Math.floor((new Date().getTime() - timestamp) / 1000);
   }
 
-  updateTime() {
+  getFormattedTime(timestamp: number) { // Receive a timestamp and formatted to a String
+    const delta: number = this.getTxTime(timestamp);
+    const deltaFormatted: string = Utils.formatDelta(delta);
+    if (delta <= 0) { return 'Just now'; }
+    return deltaFormatted;
+  }
+
+  setTime(tx: Tx) { // Receive a Tx and return an Updated Time
+    const delta: number = this.getTxTime(tx.timestamp);
+    const deltaFormatted: string = Utils.formatDelta(delta);
+    const index = this.oNotifications.findIndex(c => c.hashTx === tx.tx);
+    if (delta < 60) {
+      this.oNotifications[index] = { ...this.oNotifications[index], timeEvent: 'Just now' };
+    } else {
+      this.oNotifications[index] = { ...this.oNotifications[index], timeEvent: deltaFormatted };
+    }
+  }
+
+  updateTime() { // Updated the Time of all oNotification[]
     const lastestTx: Tx[] = this.getLastestTx(this.txService.txMemory);
     lastestTx.forEach(c => this.setTime(c));
   }
@@ -159,9 +162,9 @@ export class NotificationsComponent implements OnInit {
   ngOnInit() {
     this.notificationsService.currentDetail.subscribe(detail => {
       this.viewDetail = detail;
-      // if (detail) {
-      //   this.updateTime();
-      // }
+      if (detail) {
+        this.updateTime();
+      }
     }); // Subscribe to detail from Notifications Service
     this.txService.subscribeNewTx((tx: Tx) => this.addNewNotification(tx));
     this.txService.subscribeConfirmedTx((tx: Tx) => this.setTxFinished(tx));
@@ -172,9 +175,8 @@ export class NotificationsComponent implements OnInit {
   private addNewNotification(tx: Tx) {
     this.oNotifications.unshift(new Notification(
       tx.tx,                                                                       // This is the Notification hashTx
-      Utils.capFirstLetter(tx.type.toString()),                                    // This is the Notification actionEvent
       Utils.shortAddress(tx.to),                                                   // This is the Notification starringEvent
-      this.getFormattedTime(tx.timestamp), // This is the Notification timeEvent
+      this.getFormattedTime(tx.timestamp),                                         // This is the Notification timeEvent
       false,                                                                       // This is the Notification confirmedTx
       this.getTxObject(tx)                                                         // This is the Notification txObject
     ));
