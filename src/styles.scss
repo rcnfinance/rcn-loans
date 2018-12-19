@@ -26,15 +26,6 @@ body{
 p{ margin-block-start: 0em; margin-block-end: 0em; }
 
 // Civic
-.civic-modal .civic-qrcode .civic-show{
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  z-index: 9999;
-  -webkit-transform: translate(-50%, 50%);
-  transform: translate(-50%, 50%);
-}
 .civic-modal{
   width: 100%;
   position: absolute;
