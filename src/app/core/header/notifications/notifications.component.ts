@@ -124,9 +124,7 @@ export class NotificationsComponent implements OnInit {
   }
 
   renderLastestTx(txMemory: Tx[]) {
-    // const lastestTx: Tx[] = txMemory.slice(0, 6);
-    const lastestTx: Tx[] = txMemory;
-    console.info(lastestTx);
+    const lastestTx: Tx[] = txMemory.slice(0, 20);
     lastestTx.forEach(c => this.addNewNotification(c));
     lastestTx.forEach(c => this.setTxFinished(c));
   }
