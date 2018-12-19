@@ -55,40 +55,47 @@ export class NotificationsComponent implements OnInit {
   ) { }
 
   getTime(timestamp: number) {
-    if (timestamp <= 0) {
-      return 'Just now';
-    }
-    return timestamp + 's';
+    const delta: number = Math.floor((new Date().getTime() - timestamp) / 1000);
+    const deltaFormated: string = Utils.formatDelta(delta);
+    if (delta <= 0) { return 'Just now'; }
+    return deltaFormated;
   }
 
-  getTxObject(tx: Tx): TxObject {
-    let txObject: TxObject;
+  getTxMessage(tx: Tx): string {
     let txt = 'the loan #';
     let id: string;
     if (tx.data.id) { id = tx.data.id; } else { id = tx.data; } // Defines if the ID comes from data (new Loans) or data.id (past Loans)
     if (tx.type === 'approve') {
       txt = 'the Loan Engine contract to operate';
+      id = '';
     } else if (tx.type === 'withdraw') {
       txt = 'your founds';
+      id = '';
     }
+    return txt + id;
+  }
+
+  getTxObject(tx: Tx): TxObject {
+    let txObject: TxObject;
+    const message: string = this.getTxMessage(tx);
     switch (tx.type) {
       case 'lend':
-        txObject = new TxObject('Lending', txt + id, 'material-icons', 'trending_up', '', 'blue');
+        txObject = new TxObject('Lending', message, 'material-icons', 'trending_up', '', 'blue');
         break;
       case 'withdraw':
-        txObject = new TxObject('Withdrawing', txt, 'material-icons', 'call_made', '', 'white');
+        txObject = new TxObject('Withdrawing', message, 'material-icons', 'call_made', '', 'white');
         break;
       case 'transfer':
-        txObject = new TxObject('Transfering', txt + id, '', '', 'fas fa-exchange-alt', 'orange');
+        txObject = new TxObject('Transfering', message, '', '', 'fas fa-exchange-alt', 'orange');
         break;
       case 'pay':
-        txObject = new TxObject('Paying', txt + id, '', '', 'fas fa-coins', 'green');
+        txObject = new TxObject('Paying', message, '', '', 'fas fa-coins', 'green');
         break;
       case 'claim':
-        txObject = new TxObject('Claiming', txt + id, 'material-icons', 'call_made', '', 'white');
+        txObject = new TxObject('Claiming', message, 'material-icons', 'call_made', '', 'white');
         break;
       case 'approve':
-        txObject = new TxObject('Authorizing', txt, '', '', 'fas fa-check', 'violet');
+        txObject = new TxObject('Authorizing', message, '', '', 'fas fa-check', 'violet');
         break;
       default:
         break;
@@ -123,10 +130,26 @@ export class NotificationsComponent implements OnInit {
     return message;
   }
 
+  getLastestTx(txMemory: Tx[]): Tx[] {
+    const allTxMemery: number = txMemory.length;
+    const loansToRender: number = allTxMemery - 10;
+    return txMemory.slice(loansToRender, allTxMemery);
+  }
   renderLastestTx(txMemory: Tx[]) {
-    const lastestTx: Tx[] = txMemory.slice(0, 20);
+    const lastestTx: Tx[] = this.getLastestTx(txMemory);
     lastestTx.forEach(c => this.addNewNotification(c));
     lastestTx.forEach(c => this.setTxFinished(c));
+  }
+
+  setTime(tx: Tx) {
+    const now = Utils.formatDelta(Math.floor((new Date().getTime() - tx.timestamp) / 1000));
+    const index = this.oNotifications.findIndex(c => c.hashTx === tx.tx);
+    this.oNotifications[index] = { ...this.oNotifications[index], timeEvent: now };
+  }
+
+  updateTime(txMemory: Tx[]) {
+    const lastestTx: Tx[] = this.getLastestTx(txMemory);
+    lastestTx.forEach(c => this.setTime(c));
   }
 
   ngOnInit() {
@@ -137,12 +160,11 @@ export class NotificationsComponent implements OnInit {
   }
 
   private addNewNotification(tx: Tx) {
-    console.info(tx);
     this.oNotifications.unshift(new Notification(
       tx.tx,                                                                       // This is the Notification hashTx
       Utils.capFirstLetter(tx.type.toString()),                                    // This is the Notification actionEvent
       Utils.shortAddress(tx.to),                                                   // This is the Notification starringEvent
-      Utils.formatDelta(Math.floor((new Date().getTime() - tx.timestamp) / 1000)), // This is the Notification timeEvent
+      this.getTime(tx.timestamp), // This is the Notification timeEvent
       Utils.capFirstLetter(tx.type.toString()),                                    // This is the Notification leadingTxt
       'a new loan',                                                                // This is the Notification supporterTxt
       false,                                                                       // This is the Notification confirmedTx
