@@ -6,9 +6,7 @@
     </div>
     <div class="action-event">{{ notification.txObject.title }}</div>
     <div class="separator"> · </div>
-    <a href="{{ url }}address/{{ notification.starringEvent }}" target='_blank'>
-      <div class="starring-event">{{ notification.starringEventShort }}</div>
-    </a>
+    <div routerLink='address/{{ notification.starringEvent }}' class="starring-event">{{ notification.starringEventShort }}</div>
     <div class="separator"> · </div>
     <div class="time-event">{{ notification.timeEvent }}</div>
   </div>
