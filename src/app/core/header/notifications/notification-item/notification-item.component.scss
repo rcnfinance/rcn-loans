@@ -16,13 +16,6 @@
     border-bottom: 1px solid $quaternary;
   }
 }
-a{
-  color: $secondary;
-  @include transition();
-  &:hover{
-    color: $primary;
-  }
-}
 .status-container{
   width: 100%;
   display: flex;
@@ -56,7 +49,15 @@ a{
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.starring-event{cursor: pointer;}
+.starring-event{
+  cursor: pointer;
+  color: $secondary;
+  outline: none; outline-offset: 0px;
+  @include transition();
+  &:hover{
+    color: $primary;
+  }
+}
 .action-event,
 .time-event,
 .supporter-txt{
@@ -68,7 +69,20 @@ a{
 }
 .action-event{margin-left: 10px;}
 .separator{margin: 0 5px;}
-.supporter-txt{margin-left: 5px;}
+.supporter-txt{
+  margin-left: 5px;
+  span{
+    cursor: pointer;
+    margin-left: 2px;
+    outline: none; outline-offset: 0px;
+    color: $secondary;
+    @include transition();
+    @extend %roboto-bold;
+    &:hover{
+      color: $primary;
+    }
+  }
+}
 mat-progress-bar.mat-progress-bar{
   height: 4px;
   position: absolute;

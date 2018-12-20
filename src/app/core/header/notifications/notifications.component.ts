@@ -53,40 +53,48 @@ export class NotificationsComponent implements OnInit {
   ) { }
 
   getTxMessage(tx: Tx): string { // Return the TxObject Message to render the Notification
-    let txt = 'the loan #';
-    let id: string;
-    if (tx.data.id) { id = tx.data.id; } else { id = tx.data; } // Defines if the ID comes from data (new Loans) or data.id (past Loans)
+    let txt = 'the loan';
     if (tx.type === 'approve') {
       txt = 'the Loan Engine contract to operate';
-      id = '';
     } else if (tx.type === 'withdraw') {
       txt = 'your founds';
-      id = '';
     }
-    return txt + id;
+    return txt;
+  }
+
+  getTxId(tx: Tx): Number { // Return the TxObject Message to render the Notification
+    let id: Number;
+    if (tx.data.id) { id = tx.data.id; } else { id = tx.data; } // Defines if the ID comes from data (new Loans) or data.id (past Loans)
+    if (tx.type === 'approve') {
+      id = undefined;
+    } else if (tx.type === 'withdraw') {
+      id = undefined;
+    }
+    return id;
   }
 
   getTxObject(tx: Tx): TxObject { // Return the TxObject to render style data
     let txObject: TxObject;
+    const id: Number = this.getTxId(tx);
     const message: string = this.getTxMessage(tx);
     switch (tx.type) {
       case 'lend':
-        txObject = new TxObject('Lending', message, 'material-icons', 'trending_up', '', 'blue');
+        txObject = new TxObject(id, 'Lending', message, 'material-icons', 'trending_up', '', 'blue');
         break;
       case 'withdraw':
-        txObject = new TxObject('Withdrawing', message, 'material-icons', 'call_made', '', 'white');
+        txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'call_made', '', 'white');
         break;
       case 'transfer':
-        txObject = new TxObject('Transfering', message, '', '', 'fas fa-exchange-alt', 'orange');
+        txObject = new TxObject(id, 'Transfering', message, '', '', 'fas fa-exchange-alt', 'orange');
         break;
       case 'pay':
-        txObject = new TxObject('Paying', message, '', '', 'fas fa-coins', 'green');
+        txObject = new TxObject(id, 'Paying', message, '', '', 'fas fa-coins', 'green');
         break;
       case 'claim':
-        txObject = new TxObject('Claiming', message, 'material-icons', 'call_made', '', 'white');
+        txObject = new TxObject(id, 'Claiming', message, 'material-icons', 'call_made', '', 'white');
         break;
       case 'approve':
-        txObject = new TxObject('Authorizing', message, '', '', 'fas fa-check', 'violet');
+        txObject = new TxObject(id, 'Authorizing', message, '', '', 'fas fa-check', 'violet');
         break;
       default:
         break;
