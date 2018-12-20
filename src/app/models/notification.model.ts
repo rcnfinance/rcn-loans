@@ -1,10 +1,11 @@
 export class Notification {
   constructor(
-    public hashTx: String,          // This is the Notification hashTx
-    public starringEvent: String,   // This is the Notification starringEvent
-    public timeEvent: any,          // This is the Notification timeEvent
-    public confirmedTx: Boolean,    // This is the Notification confirmedTx
-    public txObject: TxObject         // This is the Notification txObject
+    public hashTx: String,                // This is the Notification hashTx
+    public starringEvent: String,         // This is the Notification starringEvent
+    public starringEventShort: String,    // This is the Notification starringEventShort
+    public timeEvent: any,                // This is the Notification timeEvent
+    public confirmedTx: Boolean,          // This is the Notification confirmedTx
+    public txObject: TxObject             // This is the Notification txObject
   ) {}
 }
 

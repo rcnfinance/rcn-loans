@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Notification } from '../../../../models/notification.model';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-notification-item',
@@ -8,10 +9,13 @@ import { Notification } from '../../../../models/notification.model';
 })
 export class NotificationItemComponent implements OnInit {
   @Input() notification: Notification;
+  url: string = environment.url;
 
   progressbarMode = 'query';
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.info(this.url);
+  }
 }

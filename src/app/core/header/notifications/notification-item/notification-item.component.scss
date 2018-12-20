@@ -16,6 +16,13 @@
     border-bottom: 1px solid $quaternary;
   }
 }
+a{
+  color: $secondary;
+  @include transition();
+  &:hover{
+    color: $primary;
+  }
+}
 .status-container{
   width: 100%;
   display: flex;
