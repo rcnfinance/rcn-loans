@@ -2,12 +2,11 @@
 
 .notifications-container{
   width: 340px;
+  max-height: 670px;
   position: absolute;
   right: -22px;
   @extend %roboto-regular;
   ul{
-    max-height: 670px;
-    overflow-y: scroll;
     li{
       &:nth-child(1){
         display: flex;

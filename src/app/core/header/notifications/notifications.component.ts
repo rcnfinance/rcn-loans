@@ -123,7 +123,7 @@ export class NotificationsComponent implements OnInit {
 
   getLastestTx(txMemory: Tx[]): Tx[] { // Get the last 10 Txs
     const allTxMemery: number = txMemory.length;
-    const loansToRender: number = allTxMemery - 10;
+    const loansToRender: number = allTxMemery - 20;
     return txMemory.slice(loansToRender, allTxMemery);
   }
   renderLastestTx(txMemory: Tx[]) { // Render the last 10 Txs
