@@ -27,7 +27,7 @@ export class FilterLoansComponent implements OnInit {
       months: new FormControl(),
       years: new FormControl()
     }),
-    annualInterest: new FormControl
+    annualInterest: new FormControl()
   });
   currencies: string[] = ['RCN', 'MANA', 'ARS'];
   daySeconds = 24 * 60 * 60;
@@ -48,9 +48,17 @@ export class FilterLoansComponent implements OnInit {
     return this.formGroup.get('amountEnd');
   }
 
+  setControlsDisable() {
+    this.currency.disable();
+    this.amountStart.disable();
+    this.amountEnd.disable();
+    this.formGroup.controls.duration.disable();
+    this.annualInterest.disable();
+  }
+
   onChanges(): void {
     this.currency.valueChanges.subscribe(val => {
-      if (this.filters.currency !== val) {
+      if (this.filters.currency !== val && val !== null) {
         this.filters.currency = val;
         this.filtered.emit();
       }
@@ -64,7 +72,6 @@ export class FilterLoansComponent implements OnInit {
     });
 
     this.amountEnd.valueChanges.subscribe(val => {
-
       if (this.filters.amountEnd !== val) {
         this.filters.amountEnd = val;
         this.filtered.emit();
@@ -72,10 +79,15 @@ export class FilterLoansComponent implements OnInit {
     });
 
     this.formGroup.controls.duration.valueChanges.subscribe(val => {
+
       const daysInSeconds = val.days * this.daySeconds;
       const monthsInSeconds = val.months * 30 * this.daySeconds;
       const yearsInSeconds = val.years * 12 * 30 * this.daySeconds;
-      const durationInSeconds = daysInSeconds + monthsInSeconds + yearsInSeconds;
+      let durationInSeconds = daysInSeconds + monthsInSeconds + yearsInSeconds;
+
+      if (durationInSeconds === 0) {
+        durationInSeconds = null;
+      }
 
       if (durationInSeconds !== this.filters.duration) {
         this.filters.duration = val.days === null && val.months === null && val.years === null
@@ -94,6 +106,7 @@ export class FilterLoansComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setControlsDisable();
     this.onChanges();
   }
 
