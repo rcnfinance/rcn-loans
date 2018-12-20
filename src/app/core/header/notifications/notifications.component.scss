@@ -8,8 +8,10 @@
   right: -22px;
   @extend %roboto-regular;
   @include transition();
-  &:hover{
-    overflow-y: scroll;
+  &.scrollOn{
+    &:hover{
+      overflow-y: scroll;
+    }
   }
   ul{
     li{
