@@ -28,7 +28,6 @@ export class IconGroupHeaderComponent implements OnInit {
       case 'notifications':
         if (selection !== this.previousSelection || this.viewDetail === undefined) {
           this.notificationsService.changeDetail(selection); // Change value of viewDetail from Notifications Service
-          this.notificationsService.changeCounter(undefined); // Change value of notificationsCounter from Notifications Service
         } else {
           this.notificationsService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event
         }
@@ -42,8 +41,6 @@ export class IconGroupHeaderComponent implements OnInit {
   ngOnInit() {
     // Subscribe to detail from Notifications Service
     this.notificationsService.currentDetail.subscribe(detail => this.viewDetail = detail);
-    // Subscribe to counter from Notifications Service
-    this.notificationsService.currentCounter.subscribe(counter => this.notificationsCounter = counter);
   }
 
 }

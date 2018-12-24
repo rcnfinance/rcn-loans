@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import {
   trigger,
   state,
@@ -37,6 +37,8 @@ import { Utils } from '../../../utils/utils';
   ]
 })
 export class NotificationsComponent implements OnInit {
+  @Output() notificationsCounter = new EventEmitter<number>();
+
   viewDetail: string;
   selection: string;
   previousSelection: string;
@@ -44,8 +46,6 @@ export class NotificationsComponent implements OnInit {
   // Notification Model
   mNotification = Notification;
   oNotifications: Array<Notification> = [];
-   // Change value of detail from Notifications Service
-  notificationsCounter: any = this.notificationsService.changeCounter(this.oNotifications.length);
 
   constructor(
     private txService: TxService,
@@ -130,12 +130,12 @@ export class NotificationsComponent implements OnInit {
   }
 
   // Render Tx[]
-  getLastestTx(txMemory: Tx[]): Tx[] { // Get the last 10 Txs
+  getLastestTx(txMemory: Tx[]): Tx[] { // Get the last 8 Txs
     const allTxMemery: number = txMemory.length;
-    const loansToRender: number = allTxMemery - 10; // Set the number of tx you want to render on NotifComponent
+    const loansToRender: number = allTxMemery - 8; // Set the number of tx you want to render on NotifComponent
     return txMemory.slice(loansToRender, allTxMemery);
   }
-  renderLastestTx(txMemory: Tx[]) { // Render the last 10 Txs
+  renderLastestTx(txMemory: Tx[]) { // Render the last 8 Txs
     const lastestTx: Tx[] = this.getLastestTx(txMemory);
     lastestTx.forEach(c => this.addNewNotification(c));
     lastestTx.forEach(c => this.setTxFinished(c));
@@ -169,6 +169,7 @@ export class NotificationsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.notificationsCounter.emit(this.oNotifications.length);
     this.notificationsService.currentDetail.subscribe(detail => {
       this.viewDetail = detail;
       if (detail) {
@@ -190,7 +191,7 @@ export class NotificationsComponent implements OnInit {
       false,                                                                       // This is the Notification confirmedTx
       this.getTxObject(tx)                                                         // This is the Notification txObject
     ));
-    this.notificationsService.changeCounter(this.oNotifications.length);
+    this.notificationsCounter.emit(this.oNotifications.length);
   }
 
   private setTxFinished(tx: Tx) { // TODO review any type
