@@ -1,6 +1,6 @@
 # Changelog
 
-## **Unreleased**
+## **0.0.11** Avocados - 2018/12/25
 
 ### Features:
 - Added pay loan option
