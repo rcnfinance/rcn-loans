@@ -1,0 +1,11 @@
+<form (submit)="onSubmit($event, amount)">
+    <div class="margintop10"></div>
+    <mat-form-field>
+      <input matInput type="number" min='0' step="any" name="eth_amount" placeholder="Amount" ngModel #amount>
+      <mat-hint>Pay amount</mat-hint>
+    </mat-form-field>
+    <div class="margintop10"></div>
+    <button type="submit" mat-raised-button class="button button-primary" ngModel>{{ 'Pay' }}</button>
+    <button mat-raised-button class="button button-secondary" [mat-dialog-close]='false'>{{ 'Cancel' }}</button>
+</form>
+

@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -18,6 +18,7 @@ const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
 const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const oracleAbi = require('../contracts/Oracle.json');
+const converterRampAbi = require('../contracts/ConverterRamp.json');
 
 @Injectable()
 export class ContractsService {
@@ -28,6 +29,8 @@ export class ContractsService {
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
   private _rcnExtension: any;
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
+  private _rcnConverterRamp: any;
+  private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
 
   constructor(
       private web3: Web3Service,
@@ -38,6 +41,16 @@ export class ContractsService {
     this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
     this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
+    this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
+
+  }
+
+  async getUserBalanceETHWei(): Promise<BigNumber> {
+    const account = await this.web3.getAccount();
+    const balance = await this.web3.web3.eth.getBalance(account);
+    return new Promise((resolve) => {
+      resolve(balance);
+    }) as Promise<BigNumber>;
   }
 
   async getUserBalanceRCNWei(): Promise<number> {
@@ -121,13 +134,57 @@ export class ContractsService {
       });
     }) as Promise<string>;
   }
+  async estimateEthRequiredAmount(loan: Loan): Promise<BigNumber> {
+    let oracleData = await this.getOracleData(loan);
+    if (Utils.isEmpty(oracleData)) {
+      oracleData = Utils.initBytes();
+    }
+    const account = await this.web3.getAccount();
 
-  async estimateRequiredAmount(loan: Loan): Promise<number> {
+    let cosignerData = Utils.initBytes();
+    let cosignerAddr = Utils.address0x;
+    const cosigner = this.cosignerService.getCosigner(loan);
+    if (cosigner !== undefined) {
+      const cosignerOffer = await cosigner.offer(loan);
+      cosignerAddr = cosignerOffer.contract;
+      cosignerData = cosignerOffer.lendData;
+    }
+    const loanId = loan.id.toString(16);
+    const loanIdBytes = Utils.toBytes(loanId);
+    const loanParams = [
+      this.addressToBytes32(environment.contracts.basaltEngine),
+      loanIdBytes,
+      this.addressToBytes32(cosignerAddr)
+    ];
+    const convertParams = [
+      environment.contracts.converter.params.marginSpend,
+      environment.contracts.converter.params.maxSpend,
+      environment.contracts.converter.params.rebuyThreshold
+    ];
+    return new Promise((resolve, reject) => {
+      this._rcnConverterRamp.requiredLendSell.call(
+        environment.contracts.converter.tokenConverter,
+        environment.contracts.converter.ethAddress,
+        loanParams,
+        oracleData,
+        cosignerData,
+        convertParams,
+        { from: account },
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    }) as Promise<BigNumber>;
+  }
+  async estimateLendAmount(loan: Loan): Promise<BigNumber> {
     // TODO: Calculate and add cost of the cosigner
     if (loan.oracle === Utils.address0x) {
       return loan.rawAmount;
     }
-
     const oracleData = await this.getOracleData(loan);
     const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
     const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
@@ -138,7 +195,38 @@ export class ContractsService {
     console.info('Estimated required rcn is', required);
     return required;
   }
+  async estimatePayAmount(loan: Loan, amount: number): Promise<number> {
+    if (loan.oracle === Utils.address0x) {
+      return loan.rawAmount;
+    }
+    const oracleData = await this.getOracleData(loan);
+    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
+    const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
+    const rate = oracleRate[0];
+    const decimals = oracleRate[1];
+    console.info('Oracle rate obtained', rate, decimals);
+    const required = (rate * amount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+    console.info('Estimated required rcn is', required);
+    return required;
+  }
+  async payLoan(loan: Loan, amount: number): Promise<string> {
+    const account = await this.web3.getAccount();
+    const pOracleData = this.getOracleData(loan);
+    const oracleData = await pOracleData;
 
+    return new Promise((resolve, reject) => {
+      this.loadAltContract(
+        this.web3.opsWeb3,
+        this._rcnEngine
+      ).pay(loan.id, amount, account, oracleData, { from: account }, function(err, result) {
+        if (err != null) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    }) as Promise<string>;
+  }
   async lendLoan(loan: Loan): Promise<string> {
     const pOracleData = this.getOracleData(loan);
     const account = await this.web3.getAccount();
@@ -162,6 +250,55 @@ export class ContractsService {
         cosignerData,
         { from: account },
         function(err, result) {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    }) as Promise<string>;
+  }
+  async lendLoanWithSwap(loan: Loan, value: number): Promise<string> {
+    const pOracleData = this.getOracleData(loan);
+    const account = await this.web3.getAccount();
+    const cosigner = this.cosignerService.getCosigner(loan);
+    let cosignerData = Utils.initBytes();
+    let cosignerAddr = Utils.address0x;
+    if (cosigner !== undefined) {
+      const cosignerOffer = await cosigner.offer(loan);
+      cosignerAddr = cosignerOffer.contract;
+      cosignerData = cosignerOffer.lendData;
+    }
+    const oracleData = await pOracleData;
+    const loanId = loan.id.toString(16);
+    const loanIdBytes = Utils.toBytes(loanId);
+    const loanParams = [
+      this.addressToBytes32(environment.contracts.basaltEngine),
+      loanIdBytes,
+      this.addressToBytes32(cosignerAddr)
+    ];
+    const convertParams = [
+      environment.contracts.converter.params.marginSpend,
+      environment.contracts.converter.params.maxSpend,
+      environment.contracts.converter.params.rebuyThreshold
+    ];
+    return new Promise((resolve, reject) => {
+      this.loadAltContract(
+        this.web3.opsWeb3,
+        this._rcnConverterRamp
+      ).lend(
+        environment.contracts.converter.tokenConverter,
+        environment.contracts.converter.ethAddress,
+        loanParams,
+        oracleData,
+        cosignerData,
+        convertParams,
+        {
+          from: account,
+          value: value
+        },
+        (err, result) => {
           if (err != null) {
             reject(err);
           } else {

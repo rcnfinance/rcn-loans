@@ -13,7 +13,7 @@ $material-icons-font-path: '~material-icons/iconfont/'; // Material Icons
         './scss/_material-custom-theme.scss'; //material-custom-theme
 
 // General
-html {height: 0;}
+html { height: 0; }
 body{
   position: relative;
   margin: 0;
@@ -24,6 +24,7 @@ body{
   background-color: $tertiary;
 }
 p{ margin-block-start: 0em; margin-block-end: 0em; }
+label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
 
 //TABS
 .mat-tab-label-container{
@@ -107,8 +108,12 @@ p{ margin-block-start: 0em; margin-block-end: 0em; }
   &.main-h3{font-size: 18px; @extend %font-bold;} 
   &.main-h4{font-size: 16px; @extend %font-regular;} 
   &.main-h5{font-size: 14px; @extend %font-thin;} 
+  &.main-b1{font-size: 32px; @extend %font-black;} 
+  &.main-p1{font-size: 14px; @extend %font-regular;} 
+  &.main-m3{font-size: 14px; @extend %font-bold;} 
   &.main-title{line-height: 1.4; font-size: 16px; @extend %font-medium;} 
   &.main-subtitle{line-height: 1.4; font-size: 14px; @extend %font-medium;} 
+  &.property{font-size: 11px; text-transform: uppercase; @extend %font-light;} 
 }
 .font-light{@extend %font-light;}
 .font-regular{@extend %font-regular;}
@@ -117,6 +122,7 @@ p{ margin-block-start: 0em; margin-block-end: 0em; }
 
 // Loader
 ngx-spinner .black-overlay.ng-star-inserted {
+  position: fixed;
   z-index: 9 !important;
 }
 
@@ -285,17 +291,102 @@ mat-form-field{
   .mat-form-field-label{ color: $secondary; }
   .mat-hint,
   .mat-select-arrow {
-    color: rgba(255,255,255,.5);
+    color: rgba(124, 81, 81, 0.5);
   }
 }
 .mat-form-field-appearance-legacy{
   .mat-hint{ color: $secondary; }
-  .mat-form-field-label{ color: rgba(255,255,255,.5); }
+  .mat-form-field-label{ color: rgba(255,255,255,.7); }
   .mat-form-field-underline { background-color: rgba(255,255,255,.5); }
+  .mat-form-field-suffix .mat-datepicker-toggle-default-icon { width: 1.3em !important; }
+}
+.conversion-block{
+  .mat-form-field-appearance-legacy{
+    .mat-form-field-infix{
+      padding: 0.4375em 0 0 0 !important;
+    }
+    .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
+      width: 1.5em !important;
+    }
+  }
+}
+
+.mat-form-field-appearance-legacy.mat-form-field-disabled {
+  .mat-form-field-underline{background-color: $gray5 !important;}
+  .mat-form-field-label,
+  .mat-form-field-suffix{color: $gray5;}
+  }
+  
+.mat-form-field-underline{ color: $secondary; }
+.mat-select-arrow{ color: $secondary; }
+.mat-select-placeholder, .mat-select-value-text { color: $secondary; text-transform: uppercase; @extend %font-medium;}
+.mat-select-content{
+  background-color: #101010;
+  .mat-option{
+    color: $secondary;
+    text-transform: uppercase;
+    @include transition;
+    &:hover{
+      background-color: #404040;
+    }
+  }
+}
+
+.mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
+  color: rgba(255,255,255,.8);
+}
+
+//Stepper
+.mat-stepper-horizontal, 
+.mat-stepper-vertical{
+  background-color: transparent;
+  .mat-vertical-content { padding: 0 24px 24px 15px; }
+  .mat-vertical-content-container { margin-left: 20px; }
+  .mat-stepper-vertical-line::before { border-left-color: rgba(255, 255, 255, 0.5); }
+  .mat-step-header {
+    padding: 25px 0px;
+    max-height: 50px;
+    .mat-step-label {
+      color: inherit;
+      font-weight: 700;
+    }
+    .mat-step-optional{ color: rgba(255,255,255,.6); }
+    .mat-step-icon-not-touched {
+      background-color: #333333;
+    }
+    .mat-step-icon,
+    .mat-step-icon-not-touched {
+      height: 40px;
+      width: 40px;
+      .mat-step-icon-content{ font-weight: 900; }
+    }
+    .mat-step-icon{ background-color: $primary; }
+  }
+}
+.mat-slide-toggle{
+  .mat-slide-toggle-bar{
+    background-color: $gray7;
+    &:focus {
+      outline: -webkit-focus-ring-color auto 0px;
+    }
+  } 
+  &.mat-checked:not(.mat-disabled){
+    .mat-slide-toggle-bar{
+      background-color: $secondary;
+    } 
+    .mat-slide-toggle-thumb{
+      background-color: $primary;
+    }
+  }
 }
 
 @media (min-width: 768px){
 //Material
+  //Stepper
+  .mat-stepper-horizontal, 
+  .mat-stepper-vertical{
+    .mat-vertical-content { padding: 0 24px 24px 34px; }
+  }
   //Menu
   .mat-menu-panel {
     .mat-menu-content {
@@ -345,7 +436,7 @@ mat-form-field{
   background-color: transparent;
   border: 1px solid transparent;
   span{
-    background-color: #fff;
+    background-color: $secondary;
     height: 1px;
     width: 23px;
   }
@@ -598,7 +689,7 @@ footer {
       display: none;
     }
     a{
-      color: #fff;
+      color: $secondary;
       @include transition();
       &:hover{
         color: $primary;
@@ -618,4 +709,3 @@ footer {
     }
   }
 }
-

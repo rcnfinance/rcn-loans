@@ -1,4 +1,4 @@
-@import '../../scss/_variables.scss'; //variables
+@import '../../../scss/_variables.scss'; //variables
 
 .navbar{
   height: 60px;
@@ -37,7 +37,13 @@
       @extend %font-bold;
       @extend %absolute-center-top;
     }
-    .nav{ display: none; > div{ @extend %font-bold; } }
+    .nav{ 
+      display: none; 
+      > div{ 
+        outline: -webkit-focus-ring-color auto 0px;
+        @extend %font-bold;
+      } 
+    }
     .icon-hamburguer{
       cursor: pointer;
       font-size: 32px;
@@ -174,8 +180,10 @@
         display: none;
       }
       .nav{
-        &.hasAccount{width: 480px;}
-        width: 380px;
+        > * {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
         height: 45px;
         display: flex;
         flex-direction: row;
