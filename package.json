@@ -30,7 +30,6 @@
     "@angular/platform-browser-dynamic": "^6.1.2",
     "@angular/platform-server": "^6.1.2",
     "@angular/router": "^6.1.2",
-    "@fortawesome/fontawesome-free-brands": "^5.0.13",
     "@types/bignumber.js": "^5.0.0",
     "angular": "^1.7.3",
     "angular-blockies": "^1.1.1",
