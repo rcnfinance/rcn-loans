@@ -38,6 +38,10 @@ export class IconGroupHeaderComponent implements OnInit {
     }
   }
 
+  updateCounter(counter: number) {
+    this.notificationsCounter = counter;
+  }
+
   ngOnInit() {
     // Subscribe to detail from Notifications Service
     this.notificationsService.currentDetail.subscribe(detail => this.viewDetail = detail);

@@ -6,5 +6,5 @@
       {{ notificationsCounter ? notificationsCounter : '0' }}
     </div>
   </div>
-  <app-notifications (notificationsCounter)="notificationsCounter"></app-notifications>
+  <app-notifications (notificationsCounter)="updateCounter($event)"></app-notifications>
 </div>
