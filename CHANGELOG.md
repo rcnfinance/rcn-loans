@@ -5,6 +5,7 @@
 ### Features:
 - Added pay loan option
 - Lend using ETH if user has no RCN balance
+- Notification Component added
 
 ### Misc:
 - Setup unit tests
