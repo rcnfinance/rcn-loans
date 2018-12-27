@@ -37,7 +37,13 @@
       @extend %font-bold;
       @extend %absolute-center-top;
     }
-    .nav{ display: none; > div{ @extend %font-bold; } }
+    .nav{ 
+      display: none; 
+      > div{ 
+        outline: -webkit-focus-ring-color auto 0px;
+        @extend %font-bold;
+      } 
+    }
     .icon-hamburguer{
       cursor: pointer;
       font-size: 32px;

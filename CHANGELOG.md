@@ -1,11 +1,18 @@
 # Changelog
 
-## **Unreleased**
+## Unreleased
+
+### Features:
+
+- Notification Component added
+
+## **0.0.11** Avocados - 2018/12/25
 
 ### Features:
 - Added pay loan option
 - Lend using ETH if user has no RCN balance
-- Notification Component added
+- Filter loan requests by currency, amount, interest rates and duration
+- Added Discord to Footer Component
 
 ### Misc:
 - Setup unit tests
@@ -15,6 +22,7 @@
 - Fix bug when loading metamask privacy on account detail
 - Fix try to lend an invalid mortgage request
 - Fix bug when the request is expired, the estimated return of a loan shows an incorrect amount
+- Fix margin "This address is not a lender" message
 
 ## **0.0.10-D** Avocados - 2018/11/14
 
