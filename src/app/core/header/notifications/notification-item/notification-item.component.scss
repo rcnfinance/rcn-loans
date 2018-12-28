@@ -47,21 +47,34 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
+.leading-txt,
 .starring-event{
   cursor: pointer;
   color: $secondary;
   outline: none; outline-offset: 0px;
   @include transition();
+  @extend %roboto-bold;
   &:hover{
     color: $primary;
   }
 }
-.action-event,
-.time-event,
+.action-event{
+  cursor: pointer;
+  color: $secondary;
+  outline: none; outline-offset: 0px;
+  @include transition();
+  @extend %roboto-light;
+  &:hover{
+    color: $primary;
+  }
+}
+.time-event
 .supporter-txt{
   @extend %roboto-light;
 }
-.leading-txt,
+.leading-txt{
+  cursor: pointer;
+}
 .starring-event{
   @extend %roboto-bold;
 }
