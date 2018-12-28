@@ -185,8 +185,14 @@ export class NotificationsComponent implements OnInit {
         this.notificationsCounter.emit(this.unseenNotifications.length = 0);
       }
     }); // Subscribe to detail from Notifications Service
-    this.txService.subscribeNewTx((tx: Tx) => this.addNewNotification(tx));
-    this.txService.subscribeConfirmedTx((tx: Tx) => this.setTxFinished(tx));
+    this.txService.subscribeNewTx((tx: Tx) => {
+      this.addNewNotification(tx);
+      this.emitCounter(tx); // Set the notificationsCounter on new Notifications
+    });
+    this.txService.subscribeConfirmedTx((tx: Tx) => {
+      this.setTxFinished(tx);
+      this.emitCounter(tx); // Set the notificationsCounter on new Notifications
+    });
     this.renderLastestTx(this.txService.txMemory);
     this.updateTime();
   }
@@ -200,14 +206,11 @@ export class NotificationsComponent implements OnInit {
       false,                                                                       // This is the Notification confirmedTx
       this.getTxObject(tx)                                                         // This is the Notification txObject
     ));
-    this.emitCounter(tx); // Set the notificationsCounter on new Notifications
   }
 
   private setTxFinished(tx: Tx) { // TODO review any type
     const index = this.oNotifications.findIndex(c => c.hashTx === tx.tx);
     this.oNotifications[index] = { ...this.oNotifications[index], confirmedTx: true };
     this.oNotifications[index].txObject = { ...this.oNotifications[index].txObject, title: this.getTxObjectConfirmed(tx) };
-
-    this.emitCounter(tx); // Set the notificationsCounter on new Notifications
   }
 }
