@@ -15,9 +15,7 @@ export class NotificationItemComponent implements OnInit {
   constructor() {}
 
   openAddres() {
-    if (environment.production) {
-      window.open(environment.network.explorer.tx.replace('${tx}', this.notification.hashTx), '_blank');
-    }
+    window.open(environment.network.explorer.tx.replace('${tx}', this.notification.hashTx), '_blank');
   }
 
   ngOnInit() {}
