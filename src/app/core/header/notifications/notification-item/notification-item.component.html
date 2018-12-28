@@ -4,18 +4,18 @@
     <div class="icon-event bg-{{ notification.txObject.color }}">
       <i class="{{ notification.txObject.materialClass }} {{ notification.txObject.awesomeClass }}">{{ notification.txObject.icon }}</i>
     </div>
-    <a href="{{urlAddress}}{{ notification.hashTx }}" target='_blank' class="action-event">
-        {{ notification.txObject.title }}
-      </a>
+    <div (click)='openAddres()' class="action-event">
+      {{ notification.txObject.title }}
+    </div>
     <div class="separator"> · </div>
     <div routerLink='address/{{ notification.starringEvent }}' class="starring-event">{{ notification.starringEventShort }}</div>
     <div class="separator"> · </div>
     <div class="time-event">{{ notification.timeEvent }}</div>
   </div>
   <div class="action-container">
-    <a href="{{urlAddress}}{{ notification.hashTx }}" target='_blank' class="leading-txt">
+    <div (click)='openAddres()' class="leading-txt">
       {{ notification.txObject.title }}
-    </a>
+    </div>
     <div class="supporter-txt">
       {{ notification.txObject.message }}
       <span routerLink='loan/{{ notification.txObject.id }}' class="supporter-txt" *ngIf='notification.txObject.id'>#{{ notification.txObject.id }}</span>

@@ -1,6 +1,6 @@
 export class Notification {
   constructor(
-    public hashTx: String,                // This is the Notification hashTx
+    public hashTx: string,                // This is the Notification hashTx
     public starringEvent: String,         // This is the Notification starringEvent
     public starringEventShort: String,    // This is the Notification starringEventShort
     public timeEvent: any,                // This is the Notification timeEvent

@@ -11,15 +11,14 @@ export class NotificationItemComponent implements OnInit {
   @Input() notification: Notification;
 
   progressbarMode = 'query';
-  urlAddress: String;
 
   constructor() {}
 
-  ngOnInit() {
-    if (environment.envName === 'dev') {
-      this.urlAddress = 'https://ropsten.etherscan.io/tx/';
-    } else {
-      this.urlAddress = 'https://etherscan.io/tx/';
+  openAddres() {
+    if (environment.production) {
+      window.open(environment.network.explorer.tx.replace('${tx}', this.notification.hashTx), '_blank');
     }
   }
+
+  ngOnInit() {}
 }
