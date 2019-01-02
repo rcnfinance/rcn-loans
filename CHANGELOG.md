@@ -4,6 +4,7 @@
 
 ### Fix:
 - Fix bug when view card-loan type visibility
+- Fix bug when approve contract checkbox visibility
 
 ## **0.0.11** Avocados - 2018/12/25
 
