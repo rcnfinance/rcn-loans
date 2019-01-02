@@ -45,7 +45,6 @@ export class RequestedLoanComponent implements OnInit {
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
     this.loadLoans();
-    this.apiService.getRequests();
 
     // Available Loans service
     this.availableLoansService.currentAvailable.subscribe(available => this.available = available);

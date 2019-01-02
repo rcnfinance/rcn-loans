@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
 import { TxService } from '../tx.service';
 import { CosignerService } from './cosigner.service';
+import { ApiService } from './api.service';
 import { promisify, Utils } from './../utils/utils';
 
 declare let require: any;
@@ -37,7 +38,8 @@ export class ContractsService {
       private web3: Web3Service,
       private txService: TxService,
       private cosignerService: CosignerService,
-      private http: HttpClient
+      private http: HttpClient,
+      private apiService: ApiService
     ) {
     this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
     this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
@@ -221,37 +223,40 @@ export class ContractsService {
     return this.parseLoanBytes(await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
   }
   async getRequests(): Promise<Loan[]> {
-    const basalt = new Promise((resolve, reject) => {
-      // Filter open loans, non expired loand and valid mortgage
-      const filters = [
-        environment.filters.openLoans,
-        environment.filters.nonExpired,
-        environment.filters.validMortgage
-      ];
+    // const basalt = new Promise((resolve, reject) => {
+    //   // Filter open loans, non expired loand and valid mortgage
+    //   const filters = [
+    //     environment.filters.openLoans,
+    //     environment.filters.nonExpired,
+    //     environment.filters.validMortgage
+    //   ];
 
-      const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
-      this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(LoanCurator.curateBasaltRequests(this.parseBasaltBytes(result)));
-      });
-    }) as Promise<Loan[]>;
-    const diaspore = new Promise((resolve, reject) => {
-      const filters = [
-        this.addressToBytes32(environment.contracts.diaspore.filters.notExpired),
-        '0x0000000000000000000000000000000000000000000000000000000000000000'
-      ];
-      this._requestsView.getRequests(environment.contracts.diaspore.loanManager, 1, 10000, filters, (err, result) => {
-        if (err != null) {
-          reject(err);
-          console.error(err);
-        }
-        console.log(result);
-        resolve(this.parseRequestBytes(result));
-      });
-    }) as Promise<Loan[]>;
-    return (await diaspore).concat(await basalt);
+    //   const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
+    //   this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
+    //     if (err != null) {
+    //       reject(err);
+    //     }
+    //     resolve(LoanCurator.curateBasaltRequests(this.parseBasaltBytes(result)));
+    //   });
+    // }) as Promise<Loan[]>;
+
+    const diaspore = this.apiService.getRequests();
+
+    // const diaspore = new Promise((resolve, reject) => {
+    //   const filters = [
+    //     this.addressToBytes32(environment.contracts.diaspore.filters.notExpired),
+    //     '0x0000000000000000000000000000000000000000000000000000000000000000'
+    //   ];
+    //   this._requestsView.getRequests(environment.contracts.diaspore.loanManager, 1, 10000, filters, (err, result) => {
+    //     if (err != null) {
+    //       reject(err);
+    //       console.error(err);
+    //     }
+    //     resolve(this.parseRequestBytes(result));
+    //   });
+    // }) as Promise<Loan[]>;
+    return await diaspore;
+    // return (await diaspore).concat(await basalt);
   }
   async getLoansOfLender(lender: string): Promise<Loan[]> {
     // Filter [lenderIn] Basalt loans
