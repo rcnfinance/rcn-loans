@@ -3,8 +3,10 @@
 ## Unreleased
 
 ### Features:
-
 - Notification Component added
+
+### Fix:
+- Fix bug when view card-loan type visibility
 
 ## **0.0.11** Avocados - 2018/12/25
 
