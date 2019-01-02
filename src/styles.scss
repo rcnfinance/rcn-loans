@@ -336,6 +336,15 @@ mat-form-field{
   color: rgba(255,255,255,.8);
 }
 
+mat-checkbox{
+  .mat-checkbox-frame{
+    border-color: $secondary;
+  }
+  .mat-ripple-element {
+    background: $primary;
+  }
+}
+
 //Stepper
 .mat-stepper-horizontal, 
 .mat-stepper-vertical{
