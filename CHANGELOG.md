@@ -13,6 +13,7 @@
 - Setup e2e tests
 
 ### Fix:
+- Fix bug when view card-loan type visibility
 - Fix bug when loading metamask privacy on account detail
 - Fix try to lend an invalid mortgage request
 - Fix bug when the request is expired, the estimated return of a loan shows an incorrect amount
