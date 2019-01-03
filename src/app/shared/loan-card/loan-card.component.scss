@@ -50,6 +50,7 @@
       @extend %propiety-title;
     }
     .paragraph{
+      @extend %roboto-medium;
       @extend %propiety-subtitle;
     }
     .btn{
@@ -90,10 +91,10 @@
   border-bottom: 1px solid black;
   div{
     flex: 1;
-    @extend %font-bold;
+    @extend %roboto-bold;
     &:nth-child(1){
       text-align: left;
-      font-size: 26px;
+      font-size: 24px;
     }
     &:nth-child(2){
       display: flex;
@@ -103,7 +104,7 @@
     &:nth-child(3){
       color: $primary;
       text-align: right;
-      font-size: 26px;
+      font-size: 24px;
     }
   }
 }
