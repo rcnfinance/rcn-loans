@@ -7,6 +7,9 @@
   </div>
   <div class="txt-container">
     <div class="subtitle">Created by</div>
-    <div class="title ellipsis">{{ name }}</div>
+    <div class="title ellipsis" (click)="copyMessage(name)">
+      {{ name }}
+      <i class="material-icons">file_copy</i>
+    </div>
   </div>
 </div>

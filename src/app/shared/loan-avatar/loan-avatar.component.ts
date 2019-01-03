@@ -19,6 +19,20 @@ export class LoanAvatarComponent implements OnChanges {
     private brandingService: BrandingService
   ) { }
 
+  copyMessage(name: string) {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = name;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+  }
+
   ngOnChanges() {
     this.brand = this.brandingService.getBrand(this.loan);
   }
