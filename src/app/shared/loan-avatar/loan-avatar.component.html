@@ -10,7 +10,8 @@
     <div class="title ellipsis">
       {{ name }}
       <i class="material-icons"
-      (click)="copyMessage(name)">
+      (click)="copyMessage(name)"
+      matTooltip="{{ tooltipTxt }}">
         content_copy
       </i>
     </div>
