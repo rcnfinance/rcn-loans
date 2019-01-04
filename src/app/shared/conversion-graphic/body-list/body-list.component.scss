@@ -9,7 +9,7 @@
   border-bottom: 1px solid black;
   div{
     flex: 1;
-    @extend %roboto-bold;
+    @extend %roboto-black;
     &:nth-child(1){
       text-align: left;
       font-size: 26px;
