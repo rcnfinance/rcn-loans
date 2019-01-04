@@ -108,8 +108,6 @@
 @media (min-width: 992px) { 
   .loan-detail{
     width: 970px;
-    // padding-right: 15px;
-    // padding-left: 15px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -142,6 +140,18 @@
 @media (min-width: 1200px) { 
   .loan-detail{
     width: 1170px;
+  }
+  .loan-description{
+    &.flex-container{
+      .left{
+        .avatar-information{
+          .flex-item{
+            &:nth-child(1){ width: 80%; }
+            &:nth-child(2){ width: 20%; }
+          }
+        }
+      }
+    }
   }
 }
 
