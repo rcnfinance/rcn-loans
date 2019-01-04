@@ -33,9 +33,16 @@
   }
   .txt-container{
     .title{
+      display: flex;
       line-height: 1.4;
       font-size: 16px;
       @extend %font-medium;
+      i.material-icons{
+        cursor: pointer;
+        font-size: 20px;
+        margin-left: 5px;
+        color: $gray3;
+      }
     }
     .subtitle{
       line-height: 1.4;

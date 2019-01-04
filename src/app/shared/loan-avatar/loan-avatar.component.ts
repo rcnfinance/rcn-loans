@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges } from '@angular/core';
-
 import { BrandingService } from './../../services/branding.service';
 import { Loan } from '../../models/loan.model';
 import { Brand } from '../../models/brand.model';
@@ -14,12 +13,14 @@ export class LoanAvatarComponent implements OnChanges {
   @Input() short: Boolean;
   @Input() loan: Loan;
   brand: Brand;
+  tooltipTxt: String = 'Copy this Address to clipboard';
 
   constructor(
     private brandingService: BrandingService
   ) { }
 
-  copyMessage(name: string) {
+  copyMessage(name: string) { // Copy to clipboard
+    this.tooltipTxt = 'Copied!';
     const selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
     selBox.style.left = '0';

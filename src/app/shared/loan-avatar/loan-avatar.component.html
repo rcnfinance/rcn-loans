@@ -7,9 +7,13 @@
   </div>
   <div class="txt-container">
     <div class="subtitle">Created by</div>
-    <div class="title ellipsis" (click)="copyMessage(name)">
+    <div class="title ellipsis">
       {{ name }}
-      <i class="material-icons">file_copy</i>
+      <i class="material-icons"
+      (click)="copyMessage(name)"
+      #tooltip>
+        content_copy
+      </i>
     </div>
   </div>
 </div>
