@@ -23,8 +23,7 @@ export class LoanCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.loan);
-    if (this.loan._status === 0) {
+    if (this.loan.isRequest) {
       const currency = this.loan.currency;
       this.leftLabel = 'Lend';
       this.leftValue = Utils.formatAmount(currency.fromUnit(this.loan.amount));

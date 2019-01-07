@@ -189,9 +189,10 @@ export class ContractsService {
   async getLoan(id: string): Promise<Loan> {
     if (id.startsWith('0x')) {
       // Load Diaspore loan
-      const result = await promisify(this._requestsView.getLoan.call, [environment.contracts.diaspore.loanManager, id]);
-      if (result.length === 0) throw new Error('Loan not found');
-      return LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, result);
+      return this.apiService.getLoan(id);
+      // const result = await promisify(this._requestsView.getLoan.call, [environment.contracts.diaspore.loanManager, id]);
+      // if (result.length === 0) throw new Error('Loan not found');
+      // return LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, result);
     }
 
     return new Promise((resolve, reject) => {
@@ -255,7 +256,7 @@ export class ContractsService {
     //     resolve(this.parseRequestBytes(result));
     //   });
     // }) as Promise<Loan[]>;
-    return await diaspore;
+    return diaspore;
     // return (await diaspore).concat(await basalt);
   }
   async getLoansOfLender(lender: string): Promise<Loan[]> {

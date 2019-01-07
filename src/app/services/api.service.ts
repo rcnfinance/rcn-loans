@@ -10,14 +10,23 @@ import { LoanUtils } from '../utils/loan-utils';
 })
 export class ApiService {
 
+  url = environment.rcn_node_api.url;
+
   constructor(private http: Http) { }
 
+  async getLoan(id: string): Promise<Loan> {
+    const response = await this.http.get(this.url.concat(`loans/${id}`)).toPromise();
+    const data = response.json();
+    const loanArray = [data.content];
+    const loan = this.completeLoanModels(loanArray);
+    return loan[0];
+  }
+
   async getRequests(): Promise<Loan[]> {
-    const response = await this.http.get(environment.rcn_node_api.url.concat('loans')).toPromise();
+    const response = await this.http.get(this.url.concat('loans')).toPromise();
     const data = response.json();
     const loansArray = this.completeLoanModels(data.content);
     const loansRequests = loansArray.filter(loan => loan._status === 0);
-    console.log(loansRequests);
     return loansRequests;
   }
 
@@ -27,7 +36,6 @@ export class ApiService {
     const engine = environment.contracts.diaspore.loanManager;
 
     for (const loan of loanArray) {
-      console.log(loan);
 
       let oracle: Oracle;
       if (loan.oracle !== Utils.address0x) {
@@ -47,20 +55,21 @@ export class ApiService {
       }
 
       const descriptor = new Descriptor(
-        Network.Diaspore, parseInt(loan.descriptor.first_obligation, 10), parseInt(loan.descriptor.total_obligation, 10),
-        parseInt(loan.descriptor.duration, 10), parseInt(loan.descriptor.interest_rate, 10),
-        LoanUtils.decodeInterest(parseInt(loan.descriptor.punitive_interest_rate, 10)),
-        parseInt(loan.descriptor.frequency, 10), parseInt(loan.descriptor.installments, 10));
+        Network.Diaspore, Number(loan.descriptor.first_obligation), Number(loan.descriptor.total_obligation),
+        Number(loan.descriptor.duration), Number(loan.descriptor.interest_rate),
+        LoanUtils.decodeInterest(Number(loan.descriptor.punitive_interest_rate)),
+        Number(loan.descriptor.frequency), Number(loan.descriptor.installments));
 
       let debt: Debt;
-      const paid = 0;
-      const dueTime = 0;
-      const estimatedObligation = 0;
-      const nextObligation = 0;
-      const currentObligation = 0;
-      const debtBalance = 0;
-      const owner = '0';
-      debt = new Debt(
+      if (Number(loan.status) !== Status.Request) {
+        const paid = 0;
+        const dueTime = 0;
+        const estimatedObligation = 0;
+        const nextObligation = 0;
+        const currentObligation = 0;
+        const debtBalance = 0;
+        const owner = '0';
+        debt = new Debt(
             Network.Diaspore,
             loan.id,
             new Model(
@@ -77,18 +86,19 @@ export class ApiService {
             owner,
             oracle
           );
+      }
 
       const newLoan = new Loan(
         Network.Diaspore,
         loan.id,
         engine,
-        parseInt(loan.amount, 10),
+        Number(loan.amount),
         oracle,
         descriptor,
         loan.borrower,
         loan.creator,
-        parseInt(loan.status, 10),
-        parseInt(loan.expiration, 10),
+        Number(loan.status),
+        Number(loan.expiration),
         loan.cosigner,
         debt
       );
