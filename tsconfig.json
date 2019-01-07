@@ -16,7 +16,7 @@
       "es2017",
       "dom"
     ],
-    "baseUrl": "./",
+    "baseUrl": "./src/",
     "paths": {
       "@angular/*": ["../node_modules/@angular/*"]
     }
