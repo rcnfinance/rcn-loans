@@ -6,6 +6,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { environment } from '../../../../environments/environment';
 import { Notification, TxObject } from '../../../models/notification.model';
 import { NotificationsService } from '../../../services/notifications.service';
 import { TxService, Tx } from '../../../tx.service';
@@ -54,13 +55,19 @@ export class NotificationsComponent implements OnInit {
   ) { }
 
   getTxMessage(tx: Tx): string { // Return the TxObject Message to render the Notification
-    let txt = 'the loan';
     if (tx.type === 'approve') {
-      txt = 'the Loan Engine contract to operate';
-    } else if (tx.type === 'withdraw') {
-      txt = 'your founds';
+      if (tx.data.contract === environment.contracts.basaltEngine) {
+        return 'the Loan Engine contract';
+      }
+
+      return 'the contract ' + tx.data.contract;
     }
-    return txt;
+
+    if (tx.type === 'withdraw') {
+      return 'your founds';
+    }
+
+    return 'the loan';
   }
 
   getTxId(tx: Tx): Number { // Return the TxObject Message to render the Notification
@@ -95,7 +102,11 @@ export class NotificationsComponent implements OnInit {
         txObject = new TxObject(id, 'Claiming', message, 'material-icons', 'call_made', '', 'white');
         break;
       case 'approve':
-        txObject = new TxObject(id, 'Authorizing', message, '', '', 'fas fa-check', 'violet');
+        if (tx.data.action) {
+          txObject = new TxObject(id, 'Authorizing', message, '', '', 'fas fa-lock-open', 'green');
+        } else {
+          txObject = new TxObject(id, 'Locking', message, '', '', 'fas fa-lock', 'red');
+        }
         break;
       default:
         break;
@@ -122,7 +133,11 @@ export class NotificationsComponent implements OnInit {
         message = 'Claimed';
         break;
       case 'approve':
-        message = 'Authorized';
+        if (tx.data.action) {
+          message = 'Authorized';
+        } else {
+          message = 'Locked';
+        }
         break;
       default:
         break;
