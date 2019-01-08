@@ -154,7 +154,6 @@ export class NotificationsComponent implements OnInit {
   renderLastestTx(txMemory: Tx[]) { // Render the last 8 Txs
     const lastestTx: Tx[] = this.getLastestTx(txMemory);
     lastestTx.forEach(c => this.addNewNotification(c));
-    lastestTx.filter(c => c.confirmed).forEach(c => this.setTxFinished(c));
   }
 
   emitCounter() { // Set the notificationsCounter on new Notifications
@@ -176,7 +175,7 @@ export class NotificationsComponent implements OnInit {
       tx.to,                                                                       // This is the Notification starringEvent
       Utils.shortAddress(tx.to),                                                   // This is the Notification starringEventShort
       tx.timestamp,                                                                // This is the Notification timeEvent
-      false,                                                                       // This is the Notification confirmedTx
+      tx.confirmed,                                                                // This is the Notification confirmedTx
       this.getTxObject(tx)                                                         // This is the Notification txObject
     ));
     this.emitCounter();
