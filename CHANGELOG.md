@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Misc:
+- Use Roboto font for number display
+
 ### Fix:
 - Fix bug when view card-loan type visibility
 - Fix bug when approve contract checkbox visibility
