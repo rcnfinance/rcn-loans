@@ -10,7 +10,7 @@
     <div class="separator"> · </div>
     <div routerLink='address/{{ notification.starringEvent }}' class="starring-event">{{ notification.starringEventShort }}</div>
     <div class="separator"> · </div>
-    <div class="time-event">{{ notification.timeEvent }}</div>
+    <div class="time-event">{{ deltaFormatted }}</div>
   </div>
   <div class="action-container">
     <div (click)='openAddres()' class="leading-txt">

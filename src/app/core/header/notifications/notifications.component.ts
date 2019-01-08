@@ -157,33 +157,6 @@ export class NotificationsComponent implements OnInit {
     lastestTx.filter(c => c.confirmed).forEach(c => this.setTxFinished(c));
   }
 
-  // Render Tx Time
-  getTxTime(timestamp: number) { // Get Delta between Now and TxTime
-    return Math.floor((new Date().getTime() - timestamp) / 1000);
-  }
-  getFormattedTime(timestamp: number) { // Receive a timestamp and formatted to a String
-    const delta: number = this.getTxTime(timestamp);
-    const deltaFormatted: string = Utils.formatDelta(delta);
-    if (delta <= 0) { return 'Just now'; }
-    return deltaFormatted;
-  }
-
-  // Update Tx Time
-  setTime(tx: Tx) { // Receive a Tx and return an Updated Time
-    const delta: number = this.getTxTime(tx.timestamp);
-    const deltaFormatted: string = Utils.formatDelta(delta);
-    const index = this.oNotifications.findIndex(c => c.hashTx === tx.tx);
-    if (delta < 60) {
-      this.oNotifications[index] = { ...this.oNotifications[index], timeEvent: 'Just now' };
-    } else {
-      this.oNotifications[index] = { ...this.oNotifications[index], timeEvent: deltaFormatted };
-    }
-  }
-  updateTime() { // Updated the Time of all oNotification[]
-    const lastestTx: Tx[] = this.getLastestTx(this.txService.txMemory);
-    lastestTx.forEach(c => this.setTime(c));
-  }
-
   emitCounter() { // Set the notificationsCounter on new Notifications
     this.notificationsCounter.emit(this.oNotifications.filter(c => !c.confirmedTx).length);
   }
@@ -191,14 +164,10 @@ export class NotificationsComponent implements OnInit {
   ngOnInit() {
     this.notificationsService.currentDetail.subscribe(detail => {
       this.viewDetail = detail;
-      if (detail) {
-        this.updateTime();
-      }
     }); // Subscribe to detail from Notifications Service
     this.txService.subscribeNewTx((tx: Tx) => { this.addNewNotification(tx); });
     this.txService.subscribeConfirmedTx((tx: Tx) => { this.setTxFinished(tx); });
     this.renderLastestTx(this.txService.txMemory);
-    this.updateTime();
   }
 
   private addNewNotification(tx: Tx) {
@@ -206,7 +175,7 @@ export class NotificationsComponent implements OnInit {
       tx.tx,                                                                       // This is the Notification hashTx
       tx.to,                                                                       // This is the Notification starringEvent
       Utils.shortAddress(tx.to),                                                   // This is the Notification starringEventShort
-      this.getFormattedTime(tx.timestamp),                                         // This is the Notification timeEvent
+      tx.timestamp,                                                                // This is the Notification timeEvent
       false,                                                                       // This is the Notification confirmedTx
       this.getTxObject(tx)                                                         // This is the Notification txObject
     ));
