@@ -73,6 +73,7 @@ export class LoanDetailComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       const id = params['id']; // (+) converts string 'id' to a number
+      console.log(id);
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
         this.hasHistory = loan.network === Network.Basalt;

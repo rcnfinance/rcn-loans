@@ -14,23 +14,34 @@ export class ApiService {
 
   constructor(private http: Http) { }
 
+  async getActiveLoans(): Promise<Loan[]> {
+    const response = await this.http.get(this.url.concat('loans?status=1')).toPromise();
+    const data = response.json();
+    const activeLoans = await this.completeLoanModels(data.content);
+    console.log(activeLoans);
+    return activeLoans;
+  }
   async getLoan(id: string): Promise<Loan> {
     const response = await this.http.get(this.url.concat(`loans/${id}`)).toPromise();
     const data = response.json();
     const loanArray = [data.content];
-    const loan = this.completeLoanModels(loanArray);
-    return loan[0];
+    const loan = await this.completeLoanModels(loanArray);
+    try {
+      return loan[0];
+    } catch {
+      console.log("loan does not exist");
+    }
   }
 
   async getRequests(): Promise<Loan[]> {
-    const response = await this.http.get(this.url.concat('loans')).toPromise();
+    const response = await this.http.get(this.url.concat('loans?status=0')).toPromise();
     const data = response.json();
-    const loansArray = this.completeLoanModels(data.content);
-    const loansRequests = loansArray.filter(loan => loan._status === 0);
+    const loansRequests = await this.completeLoanModels(data.content);
+    console.log(loansRequests);
     return loansRequests;
   }
 
-  completeLoanModels(loanArray: any[]): Loan[] {
+  async completeLoanModels(loanArray: any[]): Promise<Loan[]> {
 
     const loans: Loan[] = [];
     const engine = environment.contracts.diaspore.loanManager;
@@ -62,13 +73,15 @@ export class ApiService {
 
       let debt: Debt;
       if (Number(loan.status) !== Status.Request) {
-        const paid = 0;
-        const dueTime = 0;
-        const estimatedObligation = 0;
-        const nextObligation = 0;
-        const currentObligation = 0;
-        const debtBalance = 0;
-        const owner = '0';
+        const response = await this.http.get(this.url.concat(`model_debt_info/${loan.id}`)).toPromise();
+        const data = response.json();
+        const paid = data.paid;
+        const dueTime = data.dueTime;
+        const estimatedObligation = data.estimatedObligation;
+        const nextObligation = data.nextObligation;
+        const currentObligation = data.currentObligation;
+        const debtBalance = data.debtBalance;
+        const owner = data.owner;
         debt = new Debt(
             Network.Diaspore,
             loan.id,
