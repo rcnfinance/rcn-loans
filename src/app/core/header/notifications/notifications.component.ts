@@ -140,7 +140,7 @@ export class NotificationsComponent implements OnInit {
   renderLastestTx(txMemory: Tx[]) { // Render the last 8 Txs
     const lastestTx: Tx[] = this.getLastestTx(txMemory);
     lastestTx.forEach(c => this.addNewNotification(c));
-    lastestTx.forEach(c => this.setTxFinished(c));
+    lastestTx.filter(c => c.confirmed).forEach(c => this.setTxFinished(c));
   }
 
   // Render Tx Time
