@@ -39,7 +39,6 @@ import { Utils } from '../../../utils/utils';
 export class NotificationsComponent implements OnInit {
   @Output()
   notificationsCounter = new EventEmitter<number>(true);
-  unseenNotifications: Array<Tx> = [];
 
   viewDetail: string;
   selection: string;
@@ -170,11 +169,8 @@ export class NotificationsComponent implements OnInit {
     lastestTx.forEach(c => this.setTime(c));
   }
 
-  emitCounter(tx: Tx) { // Set the notificationsCounter on new Notifications
-    if (!this.unseenNotifications.find(c => c === tx)) {
-      this.unseenNotifications.push(tx);
-    }
-    this.notificationsCounter.emit(this.unseenNotifications.length);
+  emitCounter() { // Set the notificationsCounter on new Notifications
+    this.notificationsCounter.emit(this.oNotifications.filter(c => !c.confirmedTx).length);
   }
 
   ngOnInit() {
@@ -182,17 +178,10 @@ export class NotificationsComponent implements OnInit {
       this.viewDetail = detail;
       if (detail) {
         this.updateTime();
-        this.notificationsCounter.emit(this.unseenNotifications.length = 0);
       }
     }); // Subscribe to detail from Notifications Service
-    this.txService.subscribeNewTx((tx: Tx) => {
-      this.addNewNotification(tx);
-      this.emitCounter(tx); // Set the notificationsCounter on new Notifications
-    });
-    this.txService.subscribeConfirmedTx((tx: Tx) => {
-      this.setTxFinished(tx);
-      this.emitCounter(tx); // Set the notificationsCounter on new Notifications
-    });
+    this.txService.subscribeNewTx((tx: Tx) => { this.addNewNotification(tx); });
+    this.txService.subscribeConfirmedTx((tx: Tx) => { this.setTxFinished(tx); });
     this.renderLastestTx(this.txService.txMemory);
     this.updateTime();
   }
@@ -206,11 +195,13 @@ export class NotificationsComponent implements OnInit {
       false,                                                                       // This is the Notification confirmedTx
       this.getTxObject(tx)                                                         // This is the Notification txObject
     ));
+    this.emitCounter();
   }
 
   private setTxFinished(tx: Tx) { // TODO review any type
     const index = this.oNotifications.findIndex(c => c.hashTx === tx.tx);
     this.oNotifications[index] = { ...this.oNotifications[index], confirmedTx: true };
     this.oNotifications[index].txObject = { ...this.oNotifications[index].txObject, title: this.getTxObjectConfirmed(tx) };
+    this.emitCounter();
   }
 }
