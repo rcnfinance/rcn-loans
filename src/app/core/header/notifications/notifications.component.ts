@@ -181,10 +181,10 @@ export class NotificationsComponent implements OnInit {
     this.emitCounter();
   }
 
-  private setTxFinished(tx: Tx) { // TODO review any type
-    const index = this.oNotifications.findIndex(c => c.hashTx === tx.tx);
-    this.oNotifications[index] = { ...this.oNotifications[index], confirmedTx: true };
-    this.oNotifications[index].txObject = { ...this.oNotifications[index].txObject, title: this.getTxObjectConfirmed(tx) };
+  private setTxFinished(tx: Tx) {
+    const notification = this.oNotifications.find(c => c.hashTx === tx.tx);
+    notification.confirmedTx = tx.confirmed;
+    notification.txObject.title = this.getTxObjectConfirmed(tx);
     this.emitCounter();
   }
 }
