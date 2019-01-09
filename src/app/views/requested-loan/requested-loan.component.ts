@@ -33,6 +33,8 @@ export class RequestedLoanComponent implements OnInit {
 
   loadLoans() {
     this.contractsService.getRequests().then((result: Loan[]) => {
+      console.log("Requested loans");
+      console.log(result);
       this.loans = result;
       this.upgradeAvaiblable();
       this.spinner.hide();

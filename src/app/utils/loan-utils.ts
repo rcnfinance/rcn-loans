@@ -181,8 +181,11 @@ export class LoanUtils {
     }
 
     // Calculate interest rate
-    const yearAccrued = (totalObligation * 86400 * 360) / duration;
-    const interestRate = ((yearAccrued / amount) - 1) * 100;
+    const durationPercentage = ((totalObligation / amount) - 1) * 100;
+    const interestRate = (durationPercentage * 360 * 86000) / duration;
+
+    // const yearAccrued = (totalObligation * 86400 * 360) / duration;
+    // const interestRate = ((yearAccrued / amount) - 1) * 100;
 
     return new Loan(
       Network.Diaspore,
