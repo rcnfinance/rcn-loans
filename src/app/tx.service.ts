@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import { Loan } from './models/loan.model';
 import { Web3Service } from './services/web3.service';
 import { EventsService, Category } from './services/events.service';
+import { environment } from '../environments/environment';
 
 export enum Type {
   lend = 'lend',
@@ -92,7 +93,7 @@ export class TxService {
   }
 
   registerLendTx(loan: Loan, hash: string) {
-    const tx = new Tx(hash, loan.engine, false, Type.lend, loan.id);
+    const tx = new Tx(hash, environment.contracts.diaspore.debtEngine, false, Type.lend, loan.id);
     this.registerTx(tx);
   }
 
