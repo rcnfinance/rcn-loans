@@ -18,27 +18,27 @@ function calculateInterest(timeDelta: number, interestRate: number, amount: numb
 
 export class Loan {
   constructor(
-        public engine: string,
-        public id: number,
-        public oracle: string,
-        public statusFlag: number,
-        public borrower: string,
-        public creator: string,
-        public rawAmount: number,
-        public duration: number,
-        public rawAnnualInterest: number,
-        public rawAnnualPunitoryInterest: number,
-        public currencyRaw: string,
-        public rawPaid: number,
-        public cumulatedInterest: number,
-        public cumulatedPunnitoryInterest: number,
-        public interestTimestamp: number,
-        public dueTimestamp: number,
-        public lenderBalance: number,
-        public expirationRequest: number,
-        public owner: string,
-        public cosigner: string
-    ) { }
+    public engine: string,
+    public id: number,
+    public oracle: string,
+    public statusFlag: number,
+    public borrower: string,
+    public creator: string,
+    public rawAmount: number,
+    public duration: number,
+    public rawAnnualInterest: number,
+    public rawAnnualPunitoryInterest: number,
+    public currencyRaw: string,
+    public rawPaid: number,
+    public cumulatedInterest: number,
+    public cumulatedPunnitoryInterest: number,
+    public interestTimestamp: number,
+    public dueTimestamp: number,
+    public lenderBalance: number,
+    public expirationRequest: number,
+    public owner: string,
+    public cosigner: string
+  ) { }
 
   get status(): Status {
     if (this.statusFlag === Status.Ongoing && timestamp() > this.dueTimestamp) {

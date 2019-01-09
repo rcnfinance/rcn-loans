@@ -1,5 +1,19 @@
 # Changelog
 
+## **0.0.12** Avocados - 2019/01/09
+
+### Features:
+- Notification Component
+
+### Misc:
+- Use Roboto font for number display
+- Increase extra ETH send from 3% to 5%
+- Increase min rebuy to 40 RCN
+
+### Fix:
+- Fix bug when view card-loan type visibility
+- Fix bug when approve contract checkbox visibility
+
 ## **0.0.11** Avocados - 2018/12/25
 
 ### Features:

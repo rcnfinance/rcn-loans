@@ -1,0 +1,10 @@
+<div class="button-group" appClickOutside (clickOutside)="openDetail('clickOutside')">
+  <div class="button" (click)="openDetail('notifications')" 
+  [ngClass]="{'active': isDetail('notifications')}">
+    <i class="fas fa-bell"></i>
+    <div class="available-notifications" *ngIf='notificationsCounter'>
+      {{ notificationsCounter ? notificationsCounter : '0' }}
+    </div>
+  </div>
+  <app-notifications (notificationsCounter)="updateCounter($event)"></app-notifications>
+</div>

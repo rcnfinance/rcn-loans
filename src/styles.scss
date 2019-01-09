@@ -26,6 +26,17 @@ body{
 p{ margin-block-start: 0em; margin-block-end: 0em; }
 label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
 
+// Civic
+.civic-modal{
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 9999;
+  -webkit-transform: translate(-50%, 50%);
+  transform: translate(-50%, 50%);
+}
+
 //TABS
 .mat-tab-label-container{
   margin-top: 20px;
@@ -336,6 +347,24 @@ mat-form-field{
   color: rgba(255,255,255,.8);
 }
 
+mat-checkbox{
+  .mat-checkbox-frame{
+    border-color: $secondary;
+  }
+  .mat-ripple-element {
+    background: $primary;
+  }
+  &.mat-checkbox-checked.mat-accent .mat-checkbox-background, 
+  &.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: $primary;
+  }
+  &.mat-checkbox-checked{
+    .mat-checkbox-background{
+      background-color: $primary;
+    }
+  }
+}
+
 //Stepper
 .mat-stepper-horizontal, 
 .mat-stepper-vertical{
@@ -597,6 +626,7 @@ footer {
   background-color: #121212;
   padding: 15px 0;
 }
+
 .nav-mobile{
   ul{
     margin: 0 auto;

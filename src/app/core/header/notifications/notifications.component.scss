@@ -1,0 +1,39 @@
+@import './../../../../scss/_variables.scss'; //variables
+
+.notifications-container{
+  width: 340px;
+  max-height: 670px;
+  overflow: hidden;
+  position: absolute;
+  right: -22px;
+  @extend %roboto-regular;
+  @include transition();
+  &.scrollOn{
+    &:hover{
+      overflow-y: scroll;
+    }
+  }
+  ul{
+    li{
+      &:nth-child(1){
+        display: flex;
+        align-items: center;
+        height: 30px;
+        padding: 10px;
+        background-color: $gray7;
+        border-bottom: 1px solid $quaternary;
+      }
+      &.unavailable{
+        height: 64px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid $quaternary;
+        background-color: $quaternary;
+      }
+    }
+  }
+}
