@@ -47,9 +47,9 @@ export const environment = {
       tokenConverter: '0x3b81db7c9fe71a2c6d78f9ae2fe4df4c92272622',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       params: {
-        marginSpend: 3000,
+        marginSpend: 5000,
         maxSpend: 0,
-        rebuyThreshold: 10000000000000000000
+        rebuyThreshold: 40000000000000000000
       }
     },
     decentraland: {
