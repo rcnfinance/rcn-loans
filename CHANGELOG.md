@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Features:
+- Notification Component added
+
 ### Misc:
 - Use Roboto font for number display
 - Increase extra ETH send from 3% to 5%
