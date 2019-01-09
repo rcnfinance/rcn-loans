@@ -1,6 +1,6 @@
 # Changelog
 
-## **0.0.12** Avocados - 2018/12/25
+## **0.0.12** Avocados - 2019/01/09
 
 ### Features:
 - Notification Component
