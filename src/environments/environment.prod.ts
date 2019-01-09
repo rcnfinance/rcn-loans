@@ -44,12 +44,12 @@ export const environment = {
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
     converter: {
       converterRamp: '0x56783153d0a8ccb009dcb79df5337835ed1a9d6c',
-      tokenConverter: '0x223fe3c346bf47334eaccf1400717cb00d403372',
+      tokenConverter: '0x3b81db7c9fe71a2c6d78f9ae2fe4df4c92272622',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       params: {
-        marginSpend: 3000,
+        marginSpend: 5000,
         maxSpend: 0,
-        rebuyThreshold: 10000000000000000000
+        rebuyThreshold: 40000000000000000000
       }
     },
     decentraland: {

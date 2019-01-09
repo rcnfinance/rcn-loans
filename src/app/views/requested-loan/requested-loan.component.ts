@@ -6,6 +6,7 @@ import { Loan } from './../../models/loan.model';
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
 import { ApiService } from './../../services/api.service';
+import { FilterLoansService } from '../../services/filter-loans.service';
 
 @Component({
   selector: 'app-requested-loan',
@@ -13,18 +14,37 @@ import { ApiService } from './../../services/api.service';
   styleUrls: ['./requested-loan.component.scss']
 })
 export class RequestedLoanComponent implements OnInit {
+  winHeight: number = window.innerHeight;
   loading: boolean;
   available: any;
   loans: Loan[] = [];
   availableLoans = true;
   pendingLend = [];
+  filters = {
+    currency: undefined,
+    amountStart: null,
+    amountEnd: null,
+    interest: null,
+    duration: null
+  };
+  filtersOpen = undefined;
 
   constructor(
     private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
     private availableLoansService: AvailableLoansService,
-    private apiService: ApiService
-  ) {}
+    private apiService: ApiService,
+    private filterLoansService: FilterLoansService
+  ) { }
+
+  openFilters() {
+    this.filtersOpen = !this.filtersOpen;
+  }
+
+  onFiltered() {
+    this.spinner.show();
+    this.loadLoans();
+  }
 
   // Available Loans service
   upgradeAvaiblable() {
@@ -33,13 +53,16 @@ export class RequestedLoanComponent implements OnInit {
 
   loadLoans() {
     this.contractsService.getRequests().then((result: Loan[]) => {
-      console.log("Requested loans");
-      console.log(result);
-      this.loans = result;
+
+      const filterLoans = this.filterLoansService.filterLoans(result, this.filters);
+      this.loans = filterLoans;
+
       this.upgradeAvaiblable();
       this.spinner.hide();
       if (this.loans.length === 0) {
         this.availableLoans = false;
+      } else {
+        this.availableLoans = true;
       }
     });
   }

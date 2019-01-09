@@ -37,7 +37,13 @@
       @extend %font-bold;
       @extend %absolute-center-top;
     }
-    .nav{ display: none; > div{ @extend %font-bold; } }
+    .nav{ 
+      display: none; 
+      > div{ 
+        outline: -webkit-focus-ring-color auto 0px;
+        @extend %font-bold;
+      } 
+    }
     .icon-hamburguer{
       cursor: pointer;
       font-size: 32px;
@@ -47,9 +53,9 @@
 }
 .flex-container {
   display: flex;
-  flex-direction: row; // Defines the direction items are placed in the container
-  flex-wrap: wrap; // Items wrap around to additional lines.
-  flex-flow: row wrap; // The two properties flex-direction and flex-wrap are used so often together that the shorthand property flex-flow was created to combine them. This shorthand property accepts the value of one of the two properties separated by a space.
+  // flex-direction: row; // Defines the direction items are placed in the container
+  // flex-wrap: wrap; // Items wrap around to additional lines.
+  flex-flow: row; // The two properties flex-direction and flex-wrap are used so often together that the shorthand property flex-flow was created to combine them. This shorthand property accepts the value of one of the two properties separated by a space.
   justify-content: space-between; // Aligns items horizontally and accepts the following values:
   align-items: center; // Aligns items vertically and Determines how the items as a whole are aligned within the container
   align-content: flex-end; // Determines the spacing between lines. When there is only one line, align-content has no effect.

@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BlockiesModule } from 'angular-blockies';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // App Modules
 import { MaterialModule } from '../material/material.module';
 // App Component
@@ -12,6 +13,7 @@ import { AvatarComponent } from './avatar/avatar.component';
 import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.component';
 import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
 import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector.component';
+import { FilterLoansComponent } from './filter-loans/filter-loans.component';
 
 import { ConversionGraphicComponent } from './conversion-graphic/conversion-graphic.component';
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
@@ -52,7 +54,9 @@ import { EventsService } from './../services/events.service';
   imports: [
     CommonModule,
     MaterialModule,
-    BlockiesModule
+    BlockiesModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   declarations: [
     LoanCardComponent,
@@ -74,11 +78,13 @@ import { EventsService } from './../services/events.service';
     RiskIndicatorComponent,
     CivicAuthComponent,
     PayFormComponent,
+    FilterLoansComponent,
 
     DialogInsufficientFoundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
-    DialogGenericErrorComponent
+    DialogGenericErrorComponent,
+    FilterLoansComponent
   ],
   entryComponents: [
     CivicAuthComponent,
@@ -123,7 +129,8 @@ import { EventsService } from './../services/events.service';
     ButtonGroupComponent,
     RiskIndicatorComponent,
     CivicAuthComponent,
-    PayFormComponent
+    PayFormComponent,
+    FilterLoansComponent
   ]
 })
 export class SharedModule { }

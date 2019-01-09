@@ -38,7 +38,7 @@ export class ContentWrapperComponent implements OnInit {
       && this.loansWithBalance.length !== 0
       && this.pendingWithdraw === undefined;
   }
-  winHeight: any = window.innerHeight;
+  winHeight: number = window.innerHeight;
   events: string[] = [];
   account: string;
   version: string = environment.version;
