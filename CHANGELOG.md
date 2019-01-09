@@ -1,9 +1,9 @@
 # Changelog
 
-## Unreleased
+## **0.0.12** Avocados - 2018/12/25
 
 ### Features:
-- Notification Component added
+- Notification Component
 
 ### Misc:
 - Use Roboto font for number display
