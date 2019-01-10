@@ -83,9 +83,6 @@ export class ContractsService {
       return pending;
     }
     const result = await promisify(this._rcnContract.allowance.call, [await this.web3.getAccount(), contract]);
-    console.log(this.web3.web3.toWei(1000000000));
-    console.log(result);
-    console.log(result >= this.web3.web3.toWei(1000000000));
     return result >= this.web3.web3.toWei(1000000000);
   }
   async approve(contract: string): Promise<string> {
@@ -118,7 +115,11 @@ export class ContractsService {
       return loan.amount;
     }
 
+    console.log("calculating estimatedRequeiredAmount");
+
     const oracleData = await this.getOracleData(loan.oracle);
+
+    console.log(oracleData);
 
     if (loan.network === Network.Basalt) {
       const legacyOracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
@@ -132,9 +133,11 @@ export class ContractsService {
     }
 
     const oracle = this.web3.web3.eth.contract(diasporeOracleAbi).at(loan.oracle.address);
+    console.log(oracle);
     const oracleResult = await promisify(oracle.readSample.call, [oracleData]);
     const tokens = oracleResult[0];
     const equivalent = oracleResult[1];
+    console.log((tokens * loan.amount) / equivalent);
     return (tokens * loan.amount) / equivalent;
   }
   async lendLoan(loan: Loan): Promise<string> {
@@ -153,7 +156,11 @@ export class ContractsService {
       case Network.Basalt:
         return await promisify(this._rcnEngine.lend, [loan.id, oracleData, cosignerAddr, cosignerData]);
       case Network.Diaspore:
-        return await promisify(this._loanManager.lend, [loan.id, oracleData, cosignerAddr, cosignerData, 0]);
+
+        const account = await this.web3.getAccount();
+        const web3 = this.web3.opsWeb3;
+        return await promisify(this.loadAltContract(web3, this._loanManager).lend,
+        [loan.id, oracleData, cosignerAddr, cosignerData, 0, { from: account }]);
       default:
         throw Error('Unknown network');
     }
@@ -182,12 +189,17 @@ export class ContractsService {
   }
 
   async getOracleData(oracle?: Oracle): Promise<string> {
-    if (!oracle) {
+    if (oracle) {
       return '0x';
     }
 
+    console.log("calculating oracleData");
+
     const oracleContract = this.web3.web3.eth.contract(oracleAbi.abi).at(oracle.address);
+    console.log(oracleContract);
     const url = await promisify(oracleContract.url.call, []);
+    console.log(url);
+
     if (url === '') { return '0x'; }
     const oracleResponse = (await this.http.get(url).toPromise()) as any[];
     console.info('Searching currency', oracle.currency, oracleResponse);

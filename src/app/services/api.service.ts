@@ -15,7 +15,7 @@ export class ApiService {
   constructor(private http: Http) { }
 
   async getActiveLoans(): Promise<Loan[]> {
-    const response = await this.http.get(this.url.concat('loans?status=1')).toPromise();
+    const response = await this.http.get(this.url.concat('loans?open=false')).toPromise();
     const data = response.json();
     const activeLoans = await this.completeLoanModels(data.content);
     console.log(activeLoans);
@@ -34,7 +34,7 @@ export class ApiService {
   }
 
   async getRequests(): Promise<Loan[]> {
-    const response = await this.http.get(this.url.concat('loans?status=0')).toPromise();
+    const response = await this.http.get(this.url.concat('loans?open=true')).toPromise();
     const data = response.json();
     const loansRequests = await this.completeLoanModels(data.content);
     console.log(loansRequests);
@@ -72,7 +72,7 @@ export class ApiService {
         Number(loan.descriptor.frequency), Number(loan.descriptor.installments));
 
       let debt: Debt;
-      if (Number(loan.status) !== Status.Request) {
+      if ((loan.open) !== true) {
         const response = await this.http.get(this.url.concat(`model_debt_info/${loan.id}`)).toPromise();
         const data = response.json();
         const paid = data.paid;
