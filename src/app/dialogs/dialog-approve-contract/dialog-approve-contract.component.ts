@@ -60,13 +60,19 @@ export class DialogApproveContractComponent implements OnInit {
     let action;
     let actionCode;
 
+    console.log(contract.address);
+    console.log(event);
+
     try {
+      console.log(event.checked);
       if (!event.checked) {
         actionCode = 'disapprove' + contract.name;
         action = this.contractsService.disapprove(contract.address);
       } else {
         actionCode = 'approve-' + contract.name;
-        action = this.contractsService.approve(contract.address);
+        console.log(actionCode);
+        action = await this.contractsService.approve(contract.address);
+        console.log(action);
       }
 
       this.eventsService.trackEvent(
@@ -83,10 +89,20 @@ export class DialogApproveContractComponent implements OnInit {
         environment.contracts.basaltEngine
       );
 
-      if (this.onlyAddress) {
-        this.dialogRef.close(event.checked);
-      }
+      action.then(() => {
+        this.loadApproved().then(() => {
+          this.eventsService.trackEvent(
+            actionCode + '-basalt-rcn',
+            Category.Account,
+            environment.contracts.basaltEngine
+          );
+          if (this.onlyAddress) {
+            this.dialogRef.close(event.checked);
+          }
+        });
+      });
     } catch (e) {
+      console.log(e);
       console.info('Approve rejected');
       event.source.checked = !event.checked;
       return;
