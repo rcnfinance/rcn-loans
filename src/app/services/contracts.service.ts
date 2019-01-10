@@ -83,37 +83,34 @@ export class ContractsService {
       return pending;
     }
     const result = await promisify(this._rcnContract.allowance.call, [await this.web3.getAccount(), contract]);
+    console.log(this.web3.web3.toWei(1000000000));
+    console.log(result);
+    console.log(result >= this.web3.web3.toWei(1000000000));
     return result >= this.web3.web3.toWei(1000000000);
   }
   async approve(contract: string): Promise<string> {
-    const _web3 = this.web3.web3;
 
     const account = await this.web3.getAccount();
+    const web3 = this.web3.opsWeb3;
 
-    const approve = await this._rcnContract.approve(contract, _web3.toWei(10 ** 32))
-    .send({
-      from: account
-    });
-    console.log(approve);
+    const result = await promisify(this.loadAltContract(web3, this._rcnContract).approve,
+     [contract, web3.toWei(10 ** 32), { from: account }]);
 
-    const result1 = new Promise((resolve, reject) => {
-      this._rcnContract.approve(contract, _web3.toWei(10 ** 32), { from: account }, function(err, result) {
-        if (err != null) {
-          console.log(err);
-          reject(err);
-        }
-        console.log(result1);
-        resolve(result);
-      });
-    }) as Promise<string>;
+    this.txService.registerApproveTx(result, this._rcnContract.address, contract, true);
 
-    // const result = await promisify(this._rcnContract.approve, [contract, _web3.toWei(10 ** 32),{ from: await this.web3.getAccount() }]);
-    this.txService.registerApproveTx(await result1, this._rcnContract.address, contract, true);
-    return result1;
+    return result;
   }
+
   async disapprove(contract: string): Promise<string> {
-    const result = await promisify(this._rcnContract.approve, [contract, 0]);
+
+    const account = await this.web3.getAccount();
+    const web3 = this.web3.opsWeb3;
+
+    const result = await promisify(this.loadAltContract(web3, this._rcnContract).approve,
+     [contract, 0, { from: account }]);
+
     this.txService.registerApproveTx(result, this._rcnContract.address, contract, false);
+
     return result;
   }
   async estimateRequiredAmount(loan: Loan): Promise<number> {
@@ -209,10 +206,10 @@ export class ContractsService {
   async getLoan(id: string): Promise<Loan> {
     if (id.startsWith('0x')) {
       // Load Diaspore loan
-      // return this.apiService.getLoan(id);
-      const result = await promisify(this._requestsView.getLoan.call, [environment.contracts.diaspore.loanManager, id]);
-      if (result.length === 0) throw new Error('Loan not found');
-      return LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, result);
+      return this.apiService.getLoan(id);
+      // const result = await promisify(this._requestsView.getLoan.call, [environment.contracts.diaspore.loanManager, id]);
+      // if (result.length === 0) throw new Error('Loan not found');
+      // return LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, result);
     }
 
     return new Promise((resolve, reject) => {
@@ -232,20 +229,20 @@ export class ContractsService {
     // const bparams = ['0x0'];
     // const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
     // Filter lenderIn Diaspore loans
-    const dfilter = [
-      // Created by loan manager
-      this.addressToBytes32(environment.contracts.diaspore.filters.debtCreator),
-      this.addressToBytes32(this._loanManager.address),
-      // Ongoing status
-      this.addressToBytes32(environment.contracts.diaspore.filters.isStatus),
-      Utils.toBytes32('0x1')
-    ];
-    const pdiaspore = promisify(this._requestsView.getLoans, [this._loanManager.address, dfilter]);
-    // return this.parseLoanBytes(await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
-    return this.parseLoanBytes(await pdiaspore);
+    // const dfilter = [
+    //   // Created by loan manager
+    //   this.addressToBytes32(environment.contracts.diaspore.filters.debtCreator),
+    //   this.addressToBytes32(this._loanManager.address),
+    //   // Ongoing status
+    //   this.addressToBytes32(environment.contracts.diaspore.filters.isStatus),
+    //   Utils.toBytes32('0x1')
+    // ];
+    // const pdiaspore = promisify(this._requestsView.getLoans, [this._loanManager.address, dfilter]);
+    // // return this.parseLoanBytes(await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
+    // return this.parseLoanBytes(await pdiaspore);
 
-    // const activeDiasporeLoans = this.apiService.getActiveLoans();
-    // return activeDiasporeLoans;
+    const activeDiasporeLoans = this.apiService.getActiveLoans();
+    return activeDiasporeLoans;
 
   }
   async getRequests(): Promise<Loan[]> {
@@ -266,21 +263,21 @@ export class ContractsService {
     //   });
     // }) as Promise<Loan[]>;
 
-    // const diaspore = this.apiService.getRequests();
+    const diaspore = this.apiService.getRequests();
 
-    const diaspore = new Promise((resolve, reject) => {
-      const filters = [
-        this.addressToBytes32(environment.contracts.diaspore.filters.notExpired),
-        '0x0000000000000000000000000000000000000000000000000000000000000000'
-      ];
-      this._requestsView.getRequests(environment.contracts.diaspore.loanManager, 1, 10000, filters, (err, result) => {
-        if (err != null) {
-          reject(err);
-          console.error(err);
-        }
-        resolve(this.parseRequestBytes(result));
-      });
-    }) as Promise<Loan[]>;
+    // const diaspore = new Promise((resolve, reject) => {
+    //   const filters = [
+    //     this.addressToBytes32(environment.contracts.diaspore.filters.notExpired),
+    //     '0x0000000000000000000000000000000000000000000000000000000000000000'
+    //   ];
+    //   this._requestsView.getRequests(environment.contracts.diaspore.loanManager, 1, 10000, filters, (err, result) => {
+    //     if (err != null) {
+    //       reject(err);
+    //       console.error(err);
+    //     }
+    //     resolve(this.parseRequestBytes(result));
+    //   });
+    // }) as Promise<Loan[]>;
     return diaspore;
     // return (await diaspore).concat(await basalt);
   }
@@ -351,5 +348,8 @@ export class ContractsService {
   }
   private addressToBytes32(address: string): string {
     return '0x000000000000000000000000' + address.replace('0x', '');
+  }
+  private loadAltContract(web3: any, contract: any): any {
+    return web3.eth.contract(contract.abi).at(contract.address);
   }
 }
