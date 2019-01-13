@@ -321,7 +321,13 @@ mat-form-field{
     }
   }
 }
-
+// Civic fix display
+.civic-modal {
+  left: 0%;
+  z-index: 99999999;
+  -webkit-transform: translate(0%, 0%);
+  transform: translate(0%, 0%);
+}
 .mat-form-field-appearance-legacy.mat-form-field-disabled {
   .mat-form-field-underline{background-color: $gray5 !important;}
   .mat-form-field-label,
