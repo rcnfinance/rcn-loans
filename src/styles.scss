@@ -22,6 +22,12 @@ body{
   font-family: 'Raleway', sans-serif;
   color: $secondary;
   background-color: $tertiary;
+  &::-webkit-scrollbar { width: .5em; }
+  &::-webkit-scrollbar-thumb { 
+    border-radius: 10px; background-color: #404040; outline: 1px solid #eeeeee;
+    &:hover{ background-color: #eeeeee; }
+  }
+  &::-webkit-scrollbar-track { box-shadow: inset 0 0 6px rgba(255,255,255,0.3); -webkit-box-shadow: inset 0 0 6px rgba(255,255,255,0.3); }
 }
 p{ margin-block-start: 0em; margin-block-end: 0em; }
 label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
