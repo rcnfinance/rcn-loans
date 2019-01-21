@@ -45,8 +45,10 @@ export class AddressComponent implements OnInit {
     this.spinner.show(); // Initialize spinner
     this.route.params.subscribe(params => {
       this.address = params['address'];
-      this.loadLoans();
     });
+    if (this.address !== undefined) {
+      this.loadLoans();
+    }
 
     // Available Loans service
     this.availableLoansService.currentAvailable.subscribe(available => this.available = available);

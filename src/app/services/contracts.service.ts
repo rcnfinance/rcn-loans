@@ -111,17 +111,16 @@ export class ContractsService {
     return result;
   }
   async estimateRequiredAmount(loan: Loan): Promise<number> {
+    console.log(loan.oracle);
     if (!loan.oracle) {
       return loan.amount;
     }
 
-    console.log("calculating estimatedRequeiredAmount");
-
     const oracleData = await this.getOracleData(loan.oracle);
-
     console.log(oracleData);
 
     if (loan.network === Network.Basalt) {
+      console.log(loan.oracle.address);
       const legacyOracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
       const oracleRate = await promisify(legacyOracle.getRate, [loan.oracle.code, oracleData]);
       const rate = oracleRate[0];
@@ -135,8 +134,11 @@ export class ContractsService {
     const oracle = this.web3.web3.eth.contract(diasporeOracleAbi).at(loan.oracle.address);
     console.log(oracle);
     const oracleResult = await promisify(oracle.readSample.call, [oracleData]);
+    console.log(oracleResult);
     const tokens = oracleResult[0];
     const equivalent = oracleResult[1];
+    console.log(tokens);
+    console.log(equivalent);
     console.log((tokens * loan.amount) / equivalent);
     return (tokens * loan.amount) / equivalent;
   }
@@ -189,11 +191,9 @@ export class ContractsService {
   }
 
   async getOracleData(oracle?: Oracle): Promise<string> {
-    if (oracle) {
+    if (!oracle) {
       return '0x';
     }
-
-    console.log("calculating oracleData");
 
     const oracleContract = this.web3.web3.eth.contract(oracleAbi.abi).at(oracle.address);
     console.log(oracleContract);
@@ -275,7 +275,12 @@ export class ContractsService {
     //   });
     // }) as Promise<Loan[]>;
 
-    const diaspore = this.apiService.getRequests();
+    const web3 = await this.web3.web3;
+
+    const block = web3.eth.getBlock('latest');
+    const now = block.timestamp;
+
+    const diaspore = this.apiService.getRequests(now);
 
     // const diaspore = new Promise((resolve, reject) => {
     //   const filters = [
@@ -295,20 +300,25 @@ export class ContractsService {
   }
   async getLoansOfLender(lender: string): Promise<Loan[]> {
     // Filter [lenderIn] Basalt loans
-    const bfilters = [environment.filters.lenderIn];
-    const bparams = [this.addressToBytes32(lender)];
-    const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
-    // Filter lenderIn Diaspore loans
-    const dfilter = [
-      // Created by loan manager
-      this.addressToBytes32(environment.contracts.diaspore.filters.debtCreator),
-      this.addressToBytes32(this._loanManager.address),
-      // Lender in
-      this.addressToBytes32(environment.contracts.diaspore.filters.isLender),
-      this.addressToBytes32(lender)
-    ];
-    const pdiaspore = promisify(this._requestsView.getLoans, [this._loanManager.address, dfilter]);
-    return this.parseLoanBytes(await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
+    // const bfilters = [environment.filters.lenderIn];
+    // const bparams = [this.addressToBytes32(lender)];
+    // const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
+    // // Filter lenderIn Diaspore loans
+    // const dfilter = [
+    //   // Created by loan manager
+    //   this.addressToBytes32(environment.contracts.diaspore.filters.debtCreator),
+    //   this.addressToBytes32(this._loanManager.address),
+    //   // Lender in
+    //   this.addressToBytes32(environment.contracts.diaspore.filters.isLender),
+    //   this.addressToBytes32(lender)
+    // ];
+    // const pdiaspore = promisify(this._requestsView.getLoans, [this._loanManager.address, dfilter]);
+    // // return this.parseLoanBytes(await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
+    // return this.parseLoanBytes(await pdiaspore);
+    const pdiaspore = await this.apiService.getLoansOfLender(lender);
+
+    return pdiaspore;
+
   }
   readPendingWithdraws(loans: Loan[]): [BigNumber, number[]] {
     const pendingLoans = [];

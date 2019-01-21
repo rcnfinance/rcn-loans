@@ -14,6 +14,16 @@ export class ApiService {
 
   constructor(private http: Http) { }
 
+  async getLoansOfLender(lender: string): Promise<Loan[]> {
+    const response = await this.http.get(this.url.concat('loans?open=false')).toPromise();
+    const data = response.json();
+    const activeLoans = await this.completeLoanModels(data.content);
+    console.log(activeLoans);
+    console.log(lender);
+    const loansOfLender = activeLoans.filter(loan => loan.debt.owner === lender);
+    return loansOfLender;
+  }
+
   async getActiveLoans(): Promise<Loan[]> {
     const response = await this.http.get(this.url.concat('loans?open=false')).toPromise();
     const data = response.json();
@@ -33,12 +43,13 @@ export class ApiService {
     }
   }
 
-  async getRequests(): Promise<Loan[]> {
+  async getRequests(now: number): Promise<Loan[]> {
     const response = await this.http.get(this.url.concat('loans?open=true')).toPromise();
     const data = response.json();
     const loansRequests = await this.completeLoanModels(data.content);
-    console.log(loansRequests);
-    return loansRequests;
+    const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now);
+    console.log(notExpiredResquestLoans);
+    return notExpiredResquestLoans;
   }
 
   async completeLoanModels(loanArray: any[]): Promise<Loan[]> {
