@@ -18,8 +18,6 @@ export class ApiService {
     const response = await this.http.get(this.url.concat('loans?open=false')).toPromise();
     const data = response.json();
     const activeLoans = await this.completeLoanModels(data.content);
-    console.log(activeLoans);
-    console.log(lender);
     const loansOfLender = activeLoans.filter(loan => loan.debt.owner === lender);
     return loansOfLender;
   }
@@ -28,7 +26,6 @@ export class ApiService {
     const response = await this.http.get(this.url.concat('loans?open=false')).toPromise();
     const data = response.json();
     const activeLoans = await this.completeLoanModels(data.content);
-    console.log(activeLoans);
     return activeLoans;
   }
   async getLoan(id: string): Promise<Loan> {
@@ -48,7 +45,6 @@ export class ApiService {
     const data = response.json();
     const loansRequests = await this.completeLoanModels(data.content);
     const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now);
-    console.log(notExpiredResquestLoans);
     return notExpiredResquestLoans;
   }
 
