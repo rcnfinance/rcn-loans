@@ -161,7 +161,8 @@ export class NotificationsComponent implements OnInit {
   renderLastestTx(txMemory: Tx[]) { // Render the last 8 Txs
     const lastestTx: Tx[] = this.getLastestTx(txMemory);
     lastestTx.forEach(c => this.addNewNotification(c));
-    lastestTx.forEach(c => this.setTxFinished(c));
+    const confirmedTxOnly = lastestTx.filter(c => c.confirmed);
+    confirmedTxOnly.forEach(c => this.setTxFinished(c));
   }
 
   emitCounter() { // Set the notificationsCounter on new Notifications

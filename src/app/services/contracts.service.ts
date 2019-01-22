@@ -131,9 +131,24 @@ export class ContractsService {
     }
 
     const oracle = this.web3.web3.eth.contract(diasporeOracleAbi).at(loan.oracle.address);
+    console.log(oracle);
     const oracleResult = await promisify(oracle.readSample.call, [oracleData]);
+    console.log("oracleResult");
+    console.log(oracleResult);
+
     const tokens = oracleResult[0];
+    console.log("tokens");
+    console.log(tokens.toNumber());
+
     const equivalent = oracleResult[1];
+    console.log("equivalent");
+    console.log(equivalent.toNumber());
+
+    console.log("Loan Amount");
+    console.log(loan.amount);
+
+    console.log("estimated required amount");
+    console.log((tokens * loan.amount) / equivalent);
     return (tokens * loan.amount) / equivalent;
   }
   async lendLoan(loan: Loan): Promise<string> {
@@ -185,7 +200,7 @@ export class ContractsService {
   }
 
   async getOracleData(oracle?: Oracle): Promise<string> {
-    if (!oracle) {
+    if (oracle) {
       return '0x';
     }
 
