@@ -115,7 +115,9 @@ export class ContractsService {
       return loan.amount;
     }
 
+    console.log(loan.oracle);
     const oracleData = await this.getOracleData(loan.oracle);
+    console.log(oracleData);
 
     if (loan.network === Network.Basalt) {
       const legacyOracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
