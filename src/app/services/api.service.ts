@@ -18,7 +18,7 @@ export class ApiService {
     const response = await this.http.get(this.url.concat('loans?open=false')).toPromise();
     const data = response.json();
     const activeLoans = await this.completeLoanModels(data.content);
-    const loansOfLender = activeLoans.filter(loan => loan.debt.owner === lender);
+    const loansOfLender = activeLoans.filter(loan => loan.debt.owner.toLowerCase() === lender);
     return loansOfLender;
   }
 
@@ -44,7 +44,7 @@ export class ApiService {
     const response = await this.http.get(this.url.concat('loans?open=true')).toPromise();
     const data = response.json();
     const loansRequests = await this.completeLoanModels(data.content);
-    const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now);
+    const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now);   
     return notExpiredResquestLoans;
   }
 
@@ -54,6 +54,7 @@ export class ApiService {
     const engine = environment.contracts.diaspore.loanManager;
 
     for (const loan of loanArray) {
+      const loanCurrencyWith0x = '0x';
 
       let oracle: Oracle;
       if (loan.oracle !== Utils.address0x) {
@@ -61,14 +62,14 @@ export class ApiService {
         Network.Diaspore,
         loan.oracle,
         Utils.hexToAscii(loan.currency.replace(/^[0x]+|[0]+$/g, '')),
-        loan.currency
+        loanCurrencyWith0x.concat(loan.currency)
       );
       } else {
         oracle = new Oracle(
           Network.Diaspore,
           loan.oracle,
           'RCN',
-          loan.currency
+          loanCurrencyWith0x.concat(loan.currency)
         );
       }
 
@@ -79,7 +80,7 @@ export class ApiService {
         Number(loan.descriptor.frequency), Number(loan.descriptor.installments));
 
       let debt: Debt;
-      if ((loan.open) !== true) {
+      if (!loan.open && !loan.canceled) {
         const response = await this.http.get(this.url.concat(`model_debt_info/${loan.id}`)).toPromise();
         const data = response.json();
         const paid = data.paid;
