@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Loan, Oracle, Network } from '../models/loan.model';
-import { LoanCurator } from './../utils/loan-curator';
 import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
@@ -21,6 +20,7 @@ const oracleAbi = require('../contracts/Oracle.json');
 const requestsAbi = require('../contracts/RequestsView.json');
 const loanManagerAbi = require('../contracts/LoanManager.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
+const converterRampAbi = require('../contracts/ConverterRamp.json');
 
 @Injectable()
 export class ContractsService {
@@ -31,6 +31,8 @@ export class ContractsService {
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
   private _rcnExtension: any;
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
+  private _rcnConverterRamp: any;
+  private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
   private _requestsView: any;
   private _loanManager: any;
 
@@ -47,7 +49,7 @@ export class ContractsService {
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     this._requestsView = this.web3.web3.eth.contract(requestsAbi).at(environment.contracts.diaspore.viewRequets);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-
+    this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
   }
 
   async getUserBalanceETHWei(): Promise<BigNumber> {
@@ -77,6 +79,7 @@ export class ContractsService {
       });
     }) as Promise<number>;
   }
+
   async isApproved(contract: string): Promise<boolean> {
     const pending = this.txService.getLastPendingApprove(this._rcnContract.address, contract);
     if (pending !== undefined) {
@@ -85,6 +88,7 @@ export class ContractsService {
     const result = await promisify(this._rcnContract.allowance.call, [await this.web3.getAccount(), contract]);
     return result >= this.web3.web3.toWei(1000000000);
   }
+
   async approve(contract: string): Promise<string> {
 
     const account = await this.web3.getAccount();
@@ -110,9 +114,10 @@ export class ContractsService {
 
     return result;
   }
-  async estimateRequiredAmount(loan: Loan): Promise<number> {
 
-    if (loan.oracle.currency === 'RCN') {
+  async estimateLendAmount(loan: Loan): Promise<number> {
+
+    if (loan.oracle.address === Utils.address0x) {
       return loan.amount;
     }
 
@@ -137,6 +142,7 @@ export class ContractsService {
     const equivalent = oracleResult[1];
     return (tokens * loan.amount) / equivalent;
   }
+
   async lendLoan(loan: Loan): Promise<string> {
     const pOracleData = await this.getOracleData(loan.oracle);
     const cosigner = this.cosignerService.getCosigner(loan);
@@ -162,6 +168,7 @@ export class ContractsService {
         throw Error('Unknown network');
     }
   }
+
   async transferLoan(loan: Loan, to: string): Promise<string> {
     const account = await this.web3.getAccount();
     return new Promise((resolve, reject) => {
@@ -173,6 +180,7 @@ export class ContractsService {
       });
     }) as Promise<string>;
   }
+
   async withdrawFunds(loans: number[]): Promise<string> {
     const account = await this.web3.getAccount();
     return new Promise((resolve, reject) => {

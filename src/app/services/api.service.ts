@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { environment } from '../../environments/environment';
-import { Loan, Network, Oracle, Descriptor, Debt, Status, Model } from '../models/loan.model';
+import { Loan, Network, Oracle, Descriptor, Debt, Model } from '../models/loan.model';
 import { Utils } from '../utils/utils';
 import { LoanUtils } from '../utils/loan-utils';
 
@@ -36,7 +36,7 @@ export class ApiService {
     try {
       return loan[0];
     } catch {
-      console.log("loan does not exist");
+      console.info('loan does not exist');
     }
   }
 
@@ -44,7 +44,7 @@ export class ApiService {
     const response = await this.http.get(this.url.concat('loans?open=true')).toPromise();
     const data = response.json();
     const loansRequests = await this.completeLoanModels(data.content);
-    const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now);   
+    const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now);
     return notExpiredResquestLoans;
   }
 
