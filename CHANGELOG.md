@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fix:
+
+- Fix scrollbar style
+
 ## **0.0.12** Avocados - 2019/01/09
 
 ### Features:
