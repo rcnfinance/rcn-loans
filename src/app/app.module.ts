@@ -10,6 +10,7 @@ import { RequestedLoanModule } from './views/requested-loan/requested-loan.modul
 import { ActiveLoansModule } from './views/active-loans/active-loans.module';
 import { AddressModule } from './views/address/address.module';
 import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
+import { OverviewModule } from './views/overview/overview.module';
 // App Component
 import { AppComponent } from './app.component';
 
@@ -34,7 +35,8 @@ export class RavenErrorHandler implements ErrorHandler {
     RequestedLoanModule,
     ActiveLoansModule,
     AddressModule,
-    LoanDetailModule
+    LoanDetailModule,
+    OverviewModule
   ],
   declarations: [
     AppComponent

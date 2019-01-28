@@ -9,6 +9,7 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
+import { Router } from '@angular/router';
 
 import { Loan } from './../../models/loan.model';
 
@@ -50,11 +51,15 @@ export class LendButtonComponent implements OnInit {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public cosignerService: CosignerService,
-    public decentralandCosignerProvider: DecentralandCosignerProvider
+    public decentralandCosignerProvider: DecentralandCosignerProvider,
+    private router: Router
   ) {}
 
   async handleLend(forze = false) {
     if (this.opPending && !forze) { return; }
+
+    this.router.navigate(['/overview/', this.loan.id]);
+    return;
 
     if (!this.web3Service.loggedIn) {
       if (await this.web3Service.requestLogin()) {
