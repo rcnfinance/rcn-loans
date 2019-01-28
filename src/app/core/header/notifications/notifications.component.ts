@@ -61,11 +61,11 @@ export class NotificationsComponent implements OnInit {
       }
 
       if (tx.data.contract === environment.contracts.diaspore.loanManager) {
-        return 'the Diaspore Loan manager contract';
+        return 'the Diaspore Loan Manager Contract';
       }
 
       if (tx.data.contract === environment.contracts.diaspore.debtEngine) {
-        return 'the Diaspore Debt manager contract';
+        return 'the Diaspore Debt Manager Contract';
       }
       return 'the contract ' + tx.data.contract;
     }
@@ -77,8 +77,8 @@ export class NotificationsComponent implements OnInit {
     return 'the loan';
   }
 
-  getTxId(tx: Tx): Number { // Return the TxObject Message to render the Notification
-    let id: Number;
+  getTxId(tx: Tx): String { // Return the TxObject Message to render the Notification
+    let id: String;
     if (tx.data.id) { id = tx.data.id; } else { id = tx.data; } // Defines if the ID comes from data (new Loans) or data.id (past Loans)
     if (tx.type === 'approve') {
       id = undefined;
@@ -90,7 +90,7 @@ export class NotificationsComponent implements OnInit {
 
   getTxObject(tx: Tx): TxObject { // Return the TxObject to render style data
     let txObject: TxObject;
-    const id: Number = this.getTxId(tx);
+    const id: String = this.getTxId(tx);
     const message: string = this.getTxMessage(tx);
     switch (tx.type) {
       case 'lend':

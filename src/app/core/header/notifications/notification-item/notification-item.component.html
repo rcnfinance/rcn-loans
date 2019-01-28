@@ -18,7 +18,7 @@
     </div>
     <div class="supporter-txt">
       {{ notification.txObject.message }}
-      <span routerLink='loan/{{ notification.txObject.id }}' class="supporter-txt" *ngIf='notification.txObject.id'>#{{ notification.txObject.id }}</span>
+      <span routerLink='loan/{{ notification.txObject.id }}' class="supporter-txt" *ngIf='notification.txObject.id'>{{ shortAddress }}</span>
     </div>
   </div>
   <mat-progress-bar *ngIf='!notification.confirmedTx' [mode]="progressbarMode">
