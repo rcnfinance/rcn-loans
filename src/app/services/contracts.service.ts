@@ -111,13 +111,12 @@ export class ContractsService {
     return result;
   }
   async estimateRequiredAmount(loan: Loan): Promise<number> {
-    if (!loan.oracle) {
+
+    if (loan.oracle.currency === 'RCN') {
       return loan.amount;
     }
 
-    console.log(loan.oracle);
     const oracleData = await this.getOracleData(loan.oracle);
-    console.log(oracleData);
 
     if (loan.network === Network.Basalt) {
       const legacyOracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
@@ -131,28 +130,15 @@ export class ContractsService {
     }
 
     const oracle = this.web3.web3.eth.contract(diasporeOracleAbi).at(loan.oracle.address);
-    console.log(oracle);
     const oracleResult = await promisify(oracle.readSample.call, [oracleData]);
-    console.log("oracleResult");
-    console.log(oracleResult);
 
     const tokens = oracleResult[0];
-    console.log("tokens");
-    console.log(tokens.toNumber());
 
     const equivalent = oracleResult[1];
-    console.log("equivalent");
-    console.log(equivalent.toNumber());
-
-    console.log("Loan Amount");
-    console.log(loan.amount);
-
-    console.log("estimated required amount");
-    console.log((tokens * loan.amount) / equivalent);
     return (tokens * loan.amount) / equivalent;
   }
   async lendLoan(loan: Loan): Promise<string> {
-    const pOracleData = this.getOracleData(loan.oracle);
+    const pOracleData = await this.getOracleData(loan.oracle);
     const cosigner = this.cosignerService.getCosigner(loan);
     let cosignerAddr = '0x0';
     let cosignerData = '0x0';
@@ -161,7 +147,7 @@ export class ContractsService {
       cosignerAddr = cosignerOffer.contract;
       cosignerData = cosignerOffer.lendData;
     }
-    const oracleData = await pOracleData;
+    const oracleData = pOracleData;
 
     switch (loan.network) {
       case Network.Basalt:
@@ -200,11 +186,11 @@ export class ContractsService {
   }
 
   async getOracleData(oracle?: Oracle): Promise<string> {
-    if (oracle) {
+    if (oracle.address === Utils.address0x) {
       return '0x';
     }
 
-    const oracleContract = this.web3.web3.eth.contract(oracleAbi.abi).at(oracle.address);
+    const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
     const url = await promisify(oracleContract.url.call, []);
 
     if (url === '') { return '0x'; }
@@ -322,7 +308,8 @@ export class ContractsService {
     // const pdiaspore = promisify(this._requestsView.getLoans, [this._loanManager.address, dfilter]);
     // // return this.parseLoanBytes(await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
     // return this.parseLoanBytes(await pdiaspore);
-    const pdiaspore = await this.apiService.getLoansOfLender(lender);
+
+    const pdiaspore = this.apiService.getLoansOfLender(lender);
 
     return pdiaspore;
 

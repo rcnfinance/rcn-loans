@@ -46,9 +46,8 @@ export class AddressComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.address = params['address'];
     });
-    if (this.address !== undefined) {
-      this.loadLoans();
-    }
+
+    this.loadLoans();
 
     // Available Loans service
     this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
