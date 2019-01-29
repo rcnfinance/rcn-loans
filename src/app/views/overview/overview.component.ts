@@ -1,8 +1,9 @@
 import {
-  Component, OnChanges, OnInit, AfterViewInit, OnDestroy,
-  Input, ViewChild, DoCheck
+  Component, OnInit, OnDestroy,
+  Input, ViewChild
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material';
 // App Models
 import { Loan } from 'app/models/loan.model';
@@ -15,16 +16,18 @@ import { LendingService } from 'app/services/lending.service';
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.scss']
 })
-export class OverviewComponent implements OnChanges, OnInit, DoCheck, AfterViewInit, OnDestroy {
+export class OverviewComponent implements OnInit, OnDestroy {
   @Input() loan: Loan;
   @ViewChild('stepper') stepper: MatStepper;
   selectedIndex = 0;
+  firstFormGroup: FormGroup;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private contractsService: ContractsService,
-    public lendingService: LendingService
+    public lendingService: LendingService,
+    private _formBuilder: FormBuilder
     ) { }
 
   moveTo() {
@@ -34,13 +37,16 @@ export class OverviewComponent implements OnChanges, OnInit, DoCheck, AfterViewI
     }
     return;
   }
-
-  ngOnChanges() {
-    this.stepper.selectedIndex = 0;
+  initForm() {
+    this.firstFormGroup = this._formBuilder.group({
+      firstCtrl: ['', Validators.required]
+    });
   }
+
   ngOnInit() {
-    this.stepper.selectedIndex = 1;
-    this.lendingService.changeOverview(true);
+    this.initForm();
+    this.stepper.selectedIndex = 1; // Skip first step
+    this.lendingService.changeOverview(true); // Notify service overview is active
 
     this.route.params.subscribe(params => {
       const id = +params['id']; // (+) converts string 'id' to a number
@@ -48,12 +54,6 @@ export class OverviewComponent implements OnChanges, OnInit, DoCheck, AfterViewI
         this.loan = loan;
       });
     });
-  }
-  ngDoCheck() {
-    // this.stepper.selectedIndex = 1;
-  }
-  ngAfterViewInit() {
-    // this.stepper.selectedIndex = 1;
   }
   ngOnDestroy() {
     this.lendingService.changeOverview(false);

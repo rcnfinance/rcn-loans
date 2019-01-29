@@ -219,6 +219,14 @@ $default-transition--delay: all 0.3s ease-out;
   align-items: center; // Aligns items vertically and Determines how the items as a whole are aligned within the container
   align-content: flex-end; // Determines the spacing between lines. When there is only one line, align-content has no effect.
 }
+%flex-container-align{
+  display: flex;
+  flex-direction: row;
+  flex-flow: row;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-end;
+}
 %flex-item{
   > .flex-item {
     align-self: flex-end; //  This property accepts the same values as align-items and its value for the specific item.

@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-sm-12">
 
-      <mat-horizontal-stepper [linear]="true" #stepper>
+      <mat-horizontal-stepper linear #stepper>
         <mat-step [editable]='false' [completed]="true">
           <ng-template routerLink='/requests' matStepLabel>Select your loan</ng-template>
         </mat-step>
@@ -10,7 +10,7 @@
           <ng-template matStepLabel>Overview</ng-template>
           <app-lend-button [loan]=loan></app-lend-button>
         </mat-step>
-        <mat-step state="chat" [editable]='false' [completed]="false"><ng-template matStepLabel>Lent</ng-template></mat-step>
+        <mat-step [editable]='false' [completed]="false"><ng-template matStepLabel>Lent</ng-template></mat-step>
       </mat-horizontal-stepper>
 
     </div>
