@@ -28,6 +28,7 @@ import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { CosignerService } from './../../services/cosigner.service';
 import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
+import { LendingService } from '../../services/lending.service';
 
 @Component({
   selector: 'app-lend-button',
@@ -40,6 +41,7 @@ export class LendButtonComponent implements OnInit {
   lendEnabled: Boolean;
   opPending = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  overview: boolean;
 
   constructor(
     private contractsService: ContractsService,
@@ -52,14 +54,18 @@ export class LendButtonComponent implements OnInit {
     public snackBar: MatSnackBar,
     public cosignerService: CosignerService,
     public decentralandCosignerProvider: DecentralandCosignerProvider,
-    private router: Router
+    private router: Router,
+    public lendingService: LendingService
   ) {}
 
   async handleLend(forze = false) {
     if (this.opPending && !forze) { return; }
 
-    this.router.navigate(['/overview/', this.loan.id]);
-    return;
+    if (this.overview === false) {
+      console.info(this.overview);
+      this.router.navigate(['/overview/', this.loan.id]);
+      return;
+    }
 
     if (!this.web3Service.loggedIn) {
       if (await this.web3Service.requestLogin()) {
@@ -238,8 +244,11 @@ export class LendButtonComponent implements OnInit {
 
   get buttonText(): string {
     const tx = this.pendingTx;
-    if (tx === undefined) {
+    if (this.overview === false) {
       return 'Lend';
+    }
+    if (tx === undefined) {
+      return 'Proceed';
     }
     if (tx.confirmed) {
       return 'Lent';
@@ -255,6 +264,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.lendingService.currentOverview.subscribe(overview => this.overview = overview);
     this.retrievePendingTx();
     this.countriesService.lendEnabled().then((lendEnabled) => {
       this.lendEnabled = lendEnabled;
