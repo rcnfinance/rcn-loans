@@ -61,8 +61,7 @@ export class LendButtonComponent implements OnInit {
   async handleLend(forze = false) {
     if (this.opPending && !forze) { return; }
 
-    if (this.overview === false) {
-      console.info(this.overview);
+    if (this.overview === false) { // If Lend isnt on overview it navigates there
       this.router.navigate(['/overview/', this.loan.id]);
       return;
     }

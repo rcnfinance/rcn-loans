@@ -1,0 +1,10 @@
+@import '../../../scss/_variables.scss'; //variables
+
+.stepper-title{
+  @extend %flex-container-align;
+  svg{
+    color: $gray7;
+    font-size: 54px;
+    margin-right: 15px;
+  }
+}
