@@ -1,0 +1,54 @@
+@import './../../../../scss/_variables.scss'; //variables
+
+.card-container{
+  width: 100%;
+  position: relative;
+  margin-bottom: 20px;
+}
+.header-container{
+  position: relative;
+  .creator-container {
+    .creator-title{
+      color: $fifth;
+      font-size: 36px;
+      @extend %font-black;
+    }
+  }
+  &.flex-container{
+    height: 70px;
+    @extend %flex-container;
+    background-color: $gray7;
+    > .flex-item {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      height: 100%;
+      min-width: 60px;
+      @include transition;
+      &:nth-child(1){
+        order: 1;
+        &:hover{
+          background-color: $fifth;
+        }
+      }
+      &:nth-child(2){ order: 2; cursor: default; @extend %position-center; }
+      &:nth-child(3){ order: 3; }
+    }
+  }
+}
+
+@media (min-width: 992px) { 
+  .card-container{
+    width: 970px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+  .header-container{
+    &.flex-container{
+      height: 100px;
+      > .flex-item { min-width: 70px; }
+    }
+  }
+}

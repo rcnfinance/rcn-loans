@@ -17,7 +17,6 @@ import { LoanDetailComponent } from './loan-detail.component';
 import { DetailTableComponent } from './detail-table/detail-table.component';
 import { DetailIdentityComponent } from './detail-identity/detail-identity.component';
 import { DetailCosignerComponent } from './detail-cosigner/detail-cosigner.component';
-import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
 
 import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
@@ -53,7 +52,6 @@ import { DialogInsufficientFoundsComponent } from './../../dialogs/dialog-insuff
     DecentralandMapComponent,
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
-    GobackButtonComponent,
     TransferButtonComponent,
     TransferFormComponent,
 

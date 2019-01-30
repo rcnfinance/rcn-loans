@@ -25,6 +25,7 @@ import { PayButtonComponent } from './pay-button/pay-button.component';
 import { CloseButtonComponent } from './close-button/close-button.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
+import { GobackButtonComponent } from './goback-button/goback-button.component';
 
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
@@ -75,6 +76,7 @@ import { EventsService } from './../services/events.service';
     CloseButtonComponent,
     ClaimButtonComponent,
     ButtonGroupComponent,
+    GobackButtonComponent,
     RiskIndicatorComponent,
     CivicAuthComponent,
     PayFormComponent,
@@ -127,6 +129,7 @@ import { EventsService } from './../services/events.service';
     CloseButtonComponent,
     ClaimButtonComponent,
     ButtonGroupComponent,
+    GobackButtonComponent,
     RiskIndicatorComponent,
     CivicAuthComponent,
     PayFormComponent,

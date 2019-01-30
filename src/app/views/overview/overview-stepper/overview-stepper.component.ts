@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatStepper } from '@angular/material';
 import { PreviousRouteService } from '../../../services/previousRoute.service';
 
@@ -12,13 +11,8 @@ export class OverviewStepperComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
 
   constructor(
-    private previousRouteService: PreviousRouteService,
-    public breakpointObserver: BreakpointObserver
+    private previousRouteService: PreviousRouteService
   ) { }
-
-  get isDesktop() {
-    return this.breakpointObserver.isMatched('(min-width: 992px)');
-  }
 
   handleGoback() {
     this.previousRouteService.redirectHandler();

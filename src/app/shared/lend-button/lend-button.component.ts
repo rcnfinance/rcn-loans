@@ -29,6 +29,7 @@ import { DialogClientAccountComponent } from '../../dialogs/dialog-client-accoun
 import { CosignerService } from './../../services/cosigner.service';
 import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
 import { LendingService } from '../../services/lending.service';
+import { TitleService } from '../../services/title.service';
 
 @Component({
   selector: 'app-lend-button',
@@ -55,7 +56,8 @@ export class LendButtonComponent implements OnInit {
     public cosignerService: CosignerService,
     public decentralandCosignerProvider: DecentralandCosignerProvider,
     private router: Router,
-    public lendingService: LendingService
+    public lendingService: LendingService,
+    public titleService: TitleService
   ) {}
 
   async handleLend(forze = false) {
@@ -63,6 +65,7 @@ export class LendButtonComponent implements OnInit {
 
     if (this.overview === false) { // If Lend isnt on overview it navigates there
       this.router.navigate(['/overview/', this.loan.id]);
+      this.titleService.changeTitle('Checkout');
       return;
     }
 

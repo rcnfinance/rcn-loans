@@ -153,7 +153,7 @@ ngx-spinner .black-overlay.ng-star-inserted {
     >tr{
       >th {
         border: 0px;
-        background-color: #333333;
+        background-color: $gray7;
         @extend %propiety-title;
       }
     }
