@@ -1,0 +1,7 @@
+mat-horizontal-stepper{
+  display: none;
+}
+
+@media (min-width: 992px){
+  mat-horizontal-stepper{display: block;} 
+}

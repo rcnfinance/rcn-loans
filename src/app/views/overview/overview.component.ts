@@ -1,10 +1,5 @@
-import {
-  Component, OnInit, OnDestroy,
-  Input, ViewChild
-} from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatStepper } from '@angular/material';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 // App Models
 import { Loan } from 'app/models/loan.model';
 // App Services
@@ -18,34 +13,14 @@ import { LendingService } from 'app/services/lending.service';
 })
 export class OverviewComponent implements OnInit, OnDestroy {
   @Input() loan: Loan;
-  @ViewChild('stepper') stepper: MatStepper;
-  selectedIndex = 0;
-  firstFormGroup: FormGroup;
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     private contractsService: ContractsService,
-    public lendingService: LendingService,
-    private _formBuilder: FormBuilder
-    ) { }
-
-  moveTo() {
-    const index = this.stepper.selectedIndex;
-    if (index < 1) {
-      this.router.navigate(['/']);
-    }
-    return;
-  }
-  initForm() {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-  }
+    public lendingService: LendingService
+  ) {}
 
   ngOnInit() {
-    this.initForm();
-    this.stepper.selectedIndex = 1; // Skip first step
     this.lendingService.changeOverview(true); // Notify service overview is active
 
     this.route.params.subscribe(params => {
@@ -55,8 +30,9 @@ export class OverviewComponent implements OnInit, OnDestroy {
       });
     });
   }
+
   ngOnDestroy() {
-    this.lendingService.changeOverview(false);
+    this.lendingService.changeOverview(false); // Notify service overview is desactivated
   }
 
 }

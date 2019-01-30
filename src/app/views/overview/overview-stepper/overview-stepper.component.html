@@ -1,0 +1,9 @@
+<mat-horizontal-stepper linear #stepper>
+  <mat-step [editable]='false' [completed]="true">
+    <ng-template matStepLabel><div (click)='handleGoback()'>Select your loan</div></ng-template>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Overview</ng-template>
+  </mat-step>
+  <mat-step><ng-template matStepLabel>Lent</ng-template></mat-step>
+</mat-horizontal-stepper>
