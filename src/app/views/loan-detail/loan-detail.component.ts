@@ -73,7 +73,6 @@ export class LoanDetailComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       const id = params['id']; // (+) converts string 'id' to a number
-      console.log(id);
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
         this.hasHistory = loan.network === Network.Basalt;
@@ -159,8 +158,8 @@ export class LoanDetailComponent implements OnInit {
 
       // Load status data
       this.isOngoing = this.loan.status === Status.Ongoing;
-      this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObliation + this.loan.debt.model.paid));
-      this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObliation));
+      this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation + this.loan.debt.model.paid));
+      this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation));
       this.canTransfer = this.loan.debt.owner === this.userAccount && this.loan.status !== Status.Request;
 
       this.canPay =

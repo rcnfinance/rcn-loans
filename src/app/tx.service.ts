@@ -182,15 +182,15 @@ export class TxService {
     this.registerTx(new Tx(tx, engine, false, Type.pay, data));
   }
 
-  // getLastPendingPay(loan: Loan) {
-  //   return this.txMemory
-  //     .filter(tx =>
-  //       !tx.confirmed &&
-  //       tx.type === Type.pay &&
-  //       tx.data.id === loan.id &&
-  //       tx.data.engine === loan.engine)
-  //     .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
-  // }
+  getLastPendingPay(loan: Loan) {
+    return this.txMemory
+      .filter(tx =>
+        !tx.confirmed &&
+        tx.type === Type.pay &&
+        tx.data.id === loan.id &&
+        tx.data.engine === environment.contracts.diaspore.debtEngine)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
+  }
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message , action, {

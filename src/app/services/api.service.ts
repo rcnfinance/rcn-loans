@@ -45,6 +45,7 @@ export class ApiService {
     const data = response.json();
     const loansRequests = await this.completeLoanModels(data.content);
     const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now);
+    console.log(notExpiredResquestLoans);
     return notExpiredResquestLoans;
   }
 
@@ -84,11 +85,11 @@ export class ApiService {
         const response = await this.http.get(this.url.concat(`model_debt_info/${loan.id}`)).toPromise();
         const data = response.json();
         const paid = data.paid;
-        const dueTime = data.dueTime;
-        const estimatedObligation = data.estimatedObligation;
-        const nextObligation = data.nextObligation;
-        const currentObligation = data.currentObligation;
-        const debtBalance = data.debtBalance;
+        const dueTime = data.due_time;
+        const estimatedObligation = data.estimated_obligation;
+        const nextObligation = data.next_obligation;
+        const currentObligation = data.current_obligation;
+        const debtBalance = data.debt_balance;
         const owner = data.owner;
         debt = new Debt(
             Network.Diaspore,

@@ -19,6 +19,7 @@ const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const oracleAbi = require('../contracts/Oracle.json');
 const requestsAbi = require('../contracts/RequestsView.json');
 const loanManagerAbi = require('../contracts/LoanManager.json');
+const debtEngineAbi = require('../contracts/DebtEngine.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 
@@ -26,7 +27,6 @@ const converterRampAbi = require('../contracts/ConverterRamp.json');
 export class ContractsService {
   private _rcnContract: any;
   private _rcnContractAddress: string = environment.contracts.rcnToken;
-
   private _rcnEngine: any;
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
   private _rcnExtension: any;
@@ -35,6 +35,7 @@ export class ContractsService {
   private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
   private _requestsView: any;
   private _loanManager: any;
+  private _debtEngine: any;
 
   constructor(
       private web3: Web3Service,
@@ -46,6 +47,7 @@ export class ContractsService {
     this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
     this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
     this._loanManager = this.web3.web3.eth.contract(loanManagerAbi).at(environment.contracts.diaspore.loanManager);
+    this._debtEngine = this.web3.web3.eth.contract(debtEngineAbi).at(environment.contracts.diaspore.debtEngine);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     this._requestsView = this.web3.web3.eth.contract(requestsAbi).at(environment.contracts.diaspore.viewRequets);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
@@ -164,6 +166,51 @@ export class ContractsService {
         const web3 = this.web3.opsWeb3;
         return await promisify(this.loadAltContract(web3, this._loanManager).lend,
         [loan.id, oracleData, cosignerAddr, cosignerData, 0, { from: account }]);
+      default:
+        throw Error('Unknown network');
+    }
+  }
+
+  async estimatePayAmount(loan: Loan, amount: number): Promise<number> {
+    if (loan.oracle.address === Utils.address0x) {
+      return amount;
+    }
+
+    const oracleData = await this.getOracleData(loan.oracle);
+
+    if (loan.network === Network.Basalt) {
+      const legacyOracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
+      const oracleRate = await promisify(legacyOracle.getRate, [loan.oracle.code, oracleData]);
+      const rate = oracleRate[0];
+      const decimals = oracleRate[1];
+      console.info('Oracle rate obtained', rate, decimals);
+      const required = (rate * amount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+      console.info('Estimated required rcn is', required);
+      return required;
+    }
+
+    const oracle = this.web3.web3.eth.contract(diasporeOracleAbi).at(loan.oracle.address);
+    const oracleResult = await promisify(oracle.readSample.call, [oracleData]);
+
+    const tokens = oracleResult[0];
+
+    const equivalent = oracleResult[1];
+    return (tokens * amount) / equivalent;
+  }
+
+  async payLoan(loan: Loan, amount: number): Promise<string> {
+    const account = await this.web3.getAccount();
+    const pOracleData = this.getOracleData(loan.oracle);
+    const oracleData = await pOracleData;
+
+    switch (loan.network) {
+      case Network.Basalt:
+        return await promisify(this._rcnEngine.pay, [loan.id, amount, account, oracleData]);
+      case Network.Diaspore:
+
+        const web3 = this.web3.opsWeb3;
+        return await promisify(this.loadAltContract(web3, this._debtEngine).pay,
+        [loan.id, amount, account, oracleData, { from: account }]);
       default:
         throw Error('Unknown network');
     }

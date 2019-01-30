@@ -27,7 +27,7 @@ export class Model {
     public paid: number,
     public nextObligation: number,
     public currentObligation: number,
-    public estimatedObliation: number,
+    public estimatedObligation: number,
     public dueTime: number
   ) { }
 }

@@ -39,7 +39,7 @@ export class LoanCardComponent implements OnInit {
       this.durationLabel = 'Remaining';
       this.durationValue = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000));
       this.rightLabel = 'Pending';
-      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObliation));
+      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation));
       this.canLend = false;
     }
   }
