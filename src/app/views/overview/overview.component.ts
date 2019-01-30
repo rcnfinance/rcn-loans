@@ -2,9 +2,11 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 // App Models
 import { Loan } from 'app/models/loan.model';
+import { Brand } from 'app/models/brand.model';
 // App Services
 import { ContractsService } from 'app/services/contracts.service';
 import { LendingService } from 'app/services/lending.service';
+import { BrandingService } from 'app/services/branding.service';
 
 @Component({
   selector: 'app-overview',
@@ -13,11 +15,13 @@ import { LendingService } from 'app/services/lending.service';
 })
 export class OverviewComponent implements OnInit, OnDestroy {
   @Input() loan: Loan;
+  brand: Brand;
 
   constructor(
     private route: ActivatedRoute,
     private contractsService: ContractsService,
-    public lendingService: LendingService
+    public lendingService: LendingService,
+    private brandingService: BrandingService
   ) {}
 
   ngOnInit() {
@@ -27,6 +31,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
       const id = +params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
+        this.brand = this.brandingService.getBrand(this.loan);
       });
     });
   }
@@ -34,5 +39,4 @@ export class OverviewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.lendingService.changeOverview(false); // Notify service overview is desactivated
   }
-
 }

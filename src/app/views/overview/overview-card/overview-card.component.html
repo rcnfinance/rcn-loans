@@ -1,15 +1,36 @@
 <div class="card-container" *ngIf="loan !== undefined">
-  <div class="header-container flex-container">
-    <div class="flex-item">
-      <app-goback-button *ngIf='!isDesktop'></app-goback-button>
-    </div>
-    <div class="flex-item">
-      <div class="creator-container">
-        <div class="creator-title">
-            {{ 'brand.header' }}
+  <div class="header-container">
+    <div class="branding-row">
+      <div class="flex-item" *ngIf='!isDesktop'>
+        <app-goback-button></app-goback-button>
+      </div>
+      <div class="flex-item">
+        <div class="creator-container">
+          <div class="creator-title">{{ brand.header }}</div>
         </div>
       </div>
     </div>
+    <div class="content-row">
+      <div class="properties-group">
+        <app-lend-button [loan]=loan *ngIf='isDesktop'></app-lend-button>
+      </div>
+      <mat-tab-group>
+        <mat-tab label="Information">
+          <div class="card-content">
+            Content 1 
+          </div>
+        </mat-tab>
+        <mat-tab label="Collateral">
+          <div class="card-content">
+            Content 2 
+          </div>
+        </mat-tab>
+        <mat-tab label="Benefits">
+          <div class="card-content">
+            Content 3 
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
   </div>
 </div>
-<app-lend-button [loan]=loan></app-lend-button>

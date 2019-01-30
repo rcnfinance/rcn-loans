@@ -114,6 +114,22 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
     }
   }
 }
+footer{
+  .button{
+    &.button-primary{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 50px;
+      position: absolute;
+      bottom: 0;
+    }
+  }
+}
+@media (min-width: 992px){
+  footer{ .button{ &.button-primary{ display: none; } } }
+}
 
 // Colors
 .primary{color: $primary;}
@@ -459,6 +475,43 @@ mat-checkbox{
 @media (min-width: 1200px){
   .mat-dialog-content {
     min-width: 850px;
+  }
+}
+
+// Tabs
+.mat-tab-group{
+  .mat-tab-header{
+    .mat-tab-label-container{
+      margin-top: 0;
+      .mat-tab-list{
+        .mat-tab-labels{
+          .mat-tab-label {
+            width: 33.3%;
+            height: 38px;
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) { 
+  .mat-tab-group{
+    .mat-tab-header{
+      border-top: 1px solid $gray7;
+      .mat-tab-label-container{
+        .mat-tab-list{
+          .mat-tab-labels{
+            .mat-tab-label {
+              padding: 0 15px;
+              min-width: 80px;
+              max-width: 110px;
+            }
+          }
+        }
+      }
+    }
   }
 }
 
