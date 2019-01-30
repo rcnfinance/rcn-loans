@@ -22,6 +22,7 @@ export class LoanCardComponent implements OnInit {
 
   constructor() { }
 
+
   ngOnInit() {
     if (this.loan.isRequest) {
       const currency = this.loan.currency;

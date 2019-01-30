@@ -157,12 +157,11 @@ export class ContractsService {
     }
     const oracleData = pOracleData;
 
+    const account = await this.web3.getAccount();
     switch (loan.network) {
       case Network.Basalt:
-        return await promisify(this._rcnEngine.lend, [loan.id, oracleData, cosignerAddr, cosignerData]);
+        return await promisify(this._rcnEngine.lend, [loan.id, oracleData, cosignerAddr, cosignerData, { from: account }]);
       case Network.Diaspore:
-
-        const account = await this.web3.getAccount();
         const web3 = this.web3.opsWeb3;
         return await promisify(this.loadAltContract(web3, this._loanManager).lend,
         [loan.id, oracleData, cosignerAddr, cosignerData, 0, { from: account }]);
@@ -205,7 +204,7 @@ export class ContractsService {
 
     switch (loan.network) {
       case Network.Basalt:
-        return await promisify(this._rcnEngine.pay, [loan.id, amount, account, oracleData]);
+        return await promisify(this._rcnEngine.pay, [loan.id, amount, account, oracleData, { from: account }]);
       case Network.Diaspore:
 
         const web3 = this.web3.opsWeb3;
@@ -218,14 +217,16 @@ export class ContractsService {
 
   async transferLoan(loan: Loan, to: string): Promise<string> {
     const account = await this.web3.getAccount();
-    return new Promise((resolve, reject) => {
-      this._rcnEngine.transfer(to, loan.id, { from: account }, function(err, result) {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(result);
-      });
-    }) as Promise<string>;
+    switch (loan.network) {
+      case Network.Basalt:
+        return await promisify(this._rcnEngine.transfer, [to, loan.id, { from: account }]);
+      case Network.Diaspore:
+        const web3 = this.web3.opsWeb3;
+        return await promisify(this.loadAltContract(web3, this._debtEngine).safeTransferFrom,
+        [account, to, loan.id, { from: account }]);
+      default:
+        throw Error('Unknown network');
+    }
   }
 
   async withdrawFunds(loans: number[]): Promise<string> {

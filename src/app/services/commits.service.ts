@@ -6,10 +6,12 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class CommitsService {
 
+  url = environment.rcn_node_api.url;
+
   constructor(private http: Http) {}
 
   async getCommits(id: string): Promise<Commit[]> {
-    const response = await this.http.get(environment.rcn_node.loan.replace('$id', id)).toPromise();
+    const response = await this.http.get(this.url.concat(`loans/${id}`)).toPromise();
     const data = response.json();
     return data.content.commits;
   }

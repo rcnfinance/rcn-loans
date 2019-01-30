@@ -9,7 +9,7 @@ import {
 import { environment } from '../../../environments/environment';
 import { TxService, Tx } from '../../tx.service';
 import { ContractsService } from '../../services/contracts.service';
-import { Loan } from '../../models/loan.model';
+import { Loan, Network } from '../../models/loan.model';
 import { Currency } from '../../utils/currencies';
 import { EventsService, Category } from '../../services/events.service';
 import { Web3Service } from '../../services/web3.service';
@@ -105,7 +105,11 @@ export class PayButtonComponent implements OnInit {
               'loan #' + this.loan.id + ' of ' + amount
             );
 
-            this.txService.registerPayTx(tx, environment.contracts.basaltEngine, this.loan, amount);
+            if (this.loan.network === Network.Basalt) {
+              this.txService.registerPayTx(tx, environment.contracts.basaltEngine, this.loan, amount);
+            } else {
+              this.txService.registerPayTx(tx, environment.contracts.diaspore.debtEngine, this.loan, amount);
+            }
             this.retrievePendingTx();
           });
         }
