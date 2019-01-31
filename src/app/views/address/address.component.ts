@@ -31,7 +31,7 @@ export class AddressComponent implements OnInit {
   }
 
   loadLoans() {
-    this.contractsService.getLoansOfLender(this.address).then((result: Loan[]) => {
+    this.contractsService.getLoansOfLender().then((result: Loan[]) => {
       this.loans = result;
       this.upgradeAvaiblable();
       this.spinner.hide();
@@ -43,9 +43,9 @@ export class AddressComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
-    this.route.params.subscribe(params => {
-      this.address = params['address'];
-    });
+    // this.route.params.subscribe(params => {
+    //   this.address = params['address'];
+    // });
 
     this.loadLoans();
 

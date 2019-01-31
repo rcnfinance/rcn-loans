@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Loan, Oracle, Network } from '../models/loan.model';
+import { LoanCurator } from './../utils/loan-curator';
 import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
@@ -307,22 +308,22 @@ export class ContractsService {
 
   }
   async getRequests(): Promise<Loan[]> {
-    // const basalt = new Promise((resolve, reject) => {
-    //   // Filter open loans, non expired loand and valid mortgage
-    //   const filters = [
-    //     environment.filters.openLoans,
-    //     environment.filters.nonExpired,
-    //     environment.filters.validMortgage
-    //   ];
+    const basalt = new Promise((resolve, reject) => {
+      // Filter open loans, non expired loand and valid mortgage
+      const filters = [
+        environment.filters.openLoans,
+        environment.filters.nonExpired,
+        environment.filters.validMortgage
+      ];
 
-    //   const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
-    //   this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
-    //     if (err != null) {
-    //       reject(err);
-    //     }
-    //     resolve(LoanCurator.curateBasaltRequests(this.parseBasaltBytes(result)));
-    //   });
-    // }) as Promise<Loan[]>;
+      const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
+      this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
+        if (err != null) {
+          reject(err);
+        }
+        resolve(LoanCurator.curateBasaltRequests(this.parseBasaltBytes(result)));
+      });
+    }) as Promise<Loan[]>;
 
     const web3 = await this.web3.web3;
 
@@ -344,10 +345,10 @@ export class ContractsService {
     //     resolve(this.parseRequestBytes(result));
     //   });
     // }) as Promise<Loan[]>;
-    return diaspore;
-    // return (await diaspore).concat(await basalt);
+    //return diaspore;
+    return (await diaspore).concat(await basalt);
   }
-  async getLoansOfLender(lender: string): Promise<Loan[]> {
+  async getLoansOfLender(): Promise<Loan[]> {
     // Filter [lenderIn] Basalt loans
     // const bfilters = [environment.filters.lenderIn];
     // const bparams = [this.addressToBytes32(lender)];
@@ -364,8 +365,9 @@ export class ContractsService {
     // const pdiaspore = promisify(this._requestsView.getLoans, [this._loanManager.address, dfilter]);
     // // return this.parseLoanBytes(await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
     // return this.parseLoanBytes(await pdiaspore);
+    const account = await this.web3.getAccount();
 
-    const pdiaspore = this.apiService.getLoansOfLender(lender);
+    const pdiaspore = this.apiService.getLoansOfLender(account);
 
     return pdiaspore;
 
@@ -384,9 +386,8 @@ export class ContractsService {
     return [total, pendingLoans];
   }
   async getPendingWithdraws(): Promise<[number, number[]]> {
-    const account = await this.web3.getAccount();
     return new Promise((resolve, _reject) => {
-      this.getLoansOfLender(account).then((loans: Loan[]) => {
+      this.getLoansOfLender().then((loans: Loan[]) => {
         resolve(this.readPendingWithdraws(loans));
       });
     }) as Promise<[number, number[]]>;
