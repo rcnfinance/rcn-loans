@@ -35,7 +35,7 @@
       </li>
     </ul>
   </div>
-  <app-lend-button *ngIf='!isDesktop'></app-lend-button>
+  <app-lend-button [overviewLendButton]='overviewLendButton' *ngIf='!isDesktop'></app-lend-button>
   <div class="container-fluid d-none d-lg-block">
     <div class="row">
       <div class="col-sm-12 col-lg-6 left">

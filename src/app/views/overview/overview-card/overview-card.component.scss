@@ -70,8 +70,13 @@
     .content-row{
       background-color: $gray8;
       .properties-group{
-        display: block;
         height: 200px;
+        display: block;
+        padding: 15px;
+        .button{
+          background-color: red;
+          float: right;
+        }
       }
       .card-content{
         padding: 100px 0;

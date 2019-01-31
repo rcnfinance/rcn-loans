@@ -1,6 +1,7 @@
 <a mat-raised-button 
 class="button button-primary" 
 (click)='clickLend()'
+[ngClass]="{'overview-active': overviewLendButton && overview , 'overview-disabled': overviewLendButton && !overview}"
 [matTooltip]="this.lendEnabled ? '' : 'This feature is not enabled in your country'" 
 matTooltipPosition="above">
   {{ buttonText }}

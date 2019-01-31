@@ -33,6 +33,7 @@ export class FooterComponent implements OnInit {
   lastId = 0;
   previousLast: number;
   oldestId: number;  // Defines oldest for profile unlogged case
+  overviewLendButton = true;
 
   constructor(
     public dialog: MatDialog,

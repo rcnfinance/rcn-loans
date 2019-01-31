@@ -1,0 +1,8 @@
+.button{
+  &.overview-active{ display: flex; }
+  &.overview-disabled{ display: none; }
+}
+
+@media (min-width: 992px){
+  .button{ &.overview-active{ display: none; } }
+}

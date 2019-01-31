@@ -38,6 +38,7 @@ import { TitleService } from '../../services/title.service';
 })
 export class LendButtonComponent implements OnInit {
   @Input() loan: Loan;
+  @Input() overviewLendButton: boolean;
   pendingTx: Tx = undefined;
   lendEnabled: Boolean;
   opPending = false;
