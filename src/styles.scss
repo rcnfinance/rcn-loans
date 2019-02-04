@@ -85,7 +85,6 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
   &.button-primary{
     color: $secondary;
     background-color: $primary;
-    margin-right: 8px;
     &:hover, &:active, &:visited, &:focus{
       color: $secondary;
       background-color: $hover-primary;

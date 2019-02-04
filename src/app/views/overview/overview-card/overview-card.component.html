@@ -12,12 +12,19 @@
     </div>
     <div class="content-row">
       <div class="properties-group">
-        <app-lend-button [loan]=loan *ngIf='isDesktop'></app-lend-button>
+        <div class="flex-container">
+          <div class="flex-item">
+            <app-loan-avatar [loan]=loan [short]=true *ngIf='isDesktop'></app-loan-avatar>
+          </div>
+          <div class="flex-item">
+            <app-lend-button [loan]=loan *ngIf='isDesktop'></app-lend-button>
+          </div>
+        </div>
       </div>
       <mat-tab-group>
         <mat-tab label="Information">
           <div class="card-content">
-            Content 1 
+            <app-loan-avatar [loan]=loan [short]=true *ngIf='!isDesktop'></app-loan-avatar>
           </div>
         </mat-tab>
         <mat-tab label="Collateral">

@@ -87,11 +87,16 @@
         }
       }
       .card-content{
-        padding: 100px 0;
+        min-height: 200px; // Testing purpose
+        padding: 15px;
         background-color: #303137;
         border-bottom-left-radius: 2px;
         border-bottom-right-radius: 2px;
       }
     }
   }
+}
+
+.flex-container{
+  @extend %flex-container;
 }

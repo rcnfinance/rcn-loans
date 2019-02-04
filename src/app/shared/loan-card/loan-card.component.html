@@ -1,5 +1,6 @@
 <div class="card-container">
   <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
+  <div class="marginbottom15"></div>
   <app-risk-indicator class="risk-indicator" [loan]=loan></app-risk-indicator>
   <app-creator-container [loan]=loan></app-creator-container>
   <div class="card-row">
@@ -26,6 +27,7 @@
       <div class="block-title">{{ rightValue }}</div>
     </div>
     <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
+    <div class='inline spacer8'></div>
     <app-detail-button [loan]=loan></app-detail-button>
   </div>
 </div>
