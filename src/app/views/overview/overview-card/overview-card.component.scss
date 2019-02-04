@@ -68,6 +68,10 @@
       }
     }
     .content-row{
+      border-top-left-radius: 0;
+      border-top-right-radius: 2px;
+      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: 2px;
       background-color: $gray8;
       border-top-left-radius: 0;
       border-top-right-radius: 2px;
