@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -17,7 +24,24 @@ import { BrandingService } from './../../services/branding.service';
 @Component({
   selector: 'app-loan-detail',
   templateUrl: './loan-detail.component.html',
-  styleUrls: ['./loan-detail.component.scss']
+  styleUrls: ['./loan-detail.component.scss'],
+  animations: [
+    trigger('anmFadeIn', [
+      state('in', style({
+        opacity: 1,
+        display: 'block',
+        transform: 'translateX(0px)'
+      })),
+      transition('void => *', [
+        style({
+          opacity: 0,
+          display: 'none',
+          transform: 'translateX(-20px)'
+        }),
+        animate(300)
+      ])
+    ])
+  ]
 })
 export class LoanDetailComponent implements OnInit {
   loan: Loan;
