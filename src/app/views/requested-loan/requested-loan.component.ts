@@ -1,4 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+  query,
+  stagger
+} from '@angular/animations';
 import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
 import { Loan } from './../../models/loan.model';
@@ -10,7 +19,37 @@ import { FilterLoansService } from '../../services/filter-loans.service';
 @Component({
   selector: 'app-requested-loan',
   templateUrl: './requested-loan.component.html',
-  styleUrls: ['./requested-loan.component.scss']
+  styleUrls: ['./requested-loan.component.scss'],
+  animations: [
+    trigger('anmFadeIn', [
+      state('in', style({
+        opacity: 1,
+        display: 'block'
+      })),
+      transition('void => *', [
+        style({
+          opacity: 0,
+          display: 'none'
+        }),
+        animate(300)
+      ])
+    ]),
+    trigger('listAnimation', [
+      transition('* => *', [ // each time the binding value changes
+        query(':leave', [
+          stagger(100, [
+            animate(300, style({ opacity: 0 }))
+          ])
+        ], { optional: true }),
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(-5px)' }),
+          stagger(100, [
+            animate(300, style({ opacity: 1, transform: 'translateY(0px)' }))
+          ])
+        ], { optional: true })
+      ])
+    ])
+  ]
 })
 export class RequestedLoanComponent implements OnInit {
   winHeight: number = window.innerHeight;
@@ -27,6 +66,7 @@ export class RequestedLoanComponent implements OnInit {
     duration: null
   };
   filtersOpen = undefined;
+  onInit: boolean;
 
   constructor(
     private contractsService: ContractsService,
@@ -67,6 +107,7 @@ export class RequestedLoanComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
+    this.onInit = true;
     this.loadLoans();
 
     // Available Loans service

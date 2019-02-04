@@ -1,4 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+  query,
+  stagger
+} from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -11,7 +20,37 @@ import { AvailableLoansService } from '../../services/available-loans.service';
 @Component({
   selector: 'app-address',
   templateUrl: './address.component.html',
-  styleUrls: ['./address.component.scss']
+  styleUrls: ['./address.component.scss'],
+  animations: [
+    trigger('anmFadeIn', [
+      state('in', style({
+        opacity: 1,
+        display: 'block'
+      })),
+      transition('void => *', [
+        style({
+          opacity: 0,
+          display: 'none'
+        }),
+        animate(300)
+      ])
+    ]),
+    trigger('listAnimation', [
+      transition('* => *', [ // each time the binding value changes
+        query(':leave', [
+          stagger(100, [
+            animate(300, style({ opacity: 0 }))
+          ])
+        ], { optional: true }),
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(-5px)' }),
+          stagger(100, [
+            animate(300, style({ opacity: 1, transform: 'translateY(0px)' }))
+          ])
+        ], { optional: true })
+      ])
+    ])
+  ]
 })
 export class AddressComponent implements OnInit {
   address: string;

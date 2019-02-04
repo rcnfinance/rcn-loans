@@ -1,5 +1,5 @@
 <ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
-<div class="container">
+<div class="container" [@anmFadeIn]>
   <div class="row">
     <div class="col-sm-12 d-none d-lg-block">
       <div class="title main-h1">lent by</div>
@@ -9,8 +9,7 @@
       </mat-chip-list>
     </div>
   </div>
-  <div class="row">
-
+  <div class="row" [@listAnimation]="loans.length">
     <div class="col-sm-12 text-center margintop30" *ngIf='!availableLoans'>
       <div class="title main-h1">This address is not a lender</div>
     </div>

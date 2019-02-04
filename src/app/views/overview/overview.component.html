@@ -1,8 +1,10 @@
-<div class="container">
+<div class="container" [@anmFadeIn]="loan ? 'normalState' : 'anmDone'">
   <div class="row">
     <div class="col-sm-12">
       <app-overview-stepper></app-overview-stepper>
     </div>
   </div>
 </div>
-<app-overview-card [loan]=loan [brand]=brand></app-overview-card>
+<div class="relative" [@anmSlideIn]="loan ? 'normalState' : 'anmDone'">
+  <app-overview-card [loan]=loan [brand]=brand></app-overview-card>
+</div>

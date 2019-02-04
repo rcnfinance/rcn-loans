@@ -69,6 +69,10 @@
     }
     .content-row{
       background-color: $gray8;
+      border-top-left-radius: 0;
+      border-top-right-radius: 2px;
+      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: 2px;
       .properties-group{
         height: 200px;
         display: block;
@@ -81,6 +85,8 @@
       .card-content{
         padding: 100px 0;
         background-color: #303137;
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
       }
     }
   }
