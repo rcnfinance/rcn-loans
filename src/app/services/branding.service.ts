@@ -9,7 +9,7 @@ import { DecentralandCosignerProvider } from '../providers/cosigners/decentralan
 export class BrandingService {
   staticBrands = {
     decentraland_mortgage: new Brand(
-      'Mortgage creator',
+      'Decentraland',
       '#E59400',
       'https://avatars1.githubusercontent.com/u/12685795?s=400&v=4',
       '',

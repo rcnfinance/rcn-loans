@@ -15,6 +15,7 @@
         <div class="flex-container">
           <div class="flex-item">
             <app-loan-avatar [loan]=loan [short]=true *ngIf='isDesktop'></app-loan-avatar>
+            <app-risk-indicator class="risk-indicator" [loan]=loan></app-risk-indicator>
           </div>
           <div class="flex-item">
             <app-lend-button [loan]=loan *ngIf='isDesktop'></app-lend-button>
