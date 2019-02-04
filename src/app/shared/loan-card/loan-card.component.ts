@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Loan } from '../../models/loan.model';
+import { Loan, Network } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 
 @Component({
@@ -17,11 +17,11 @@ export class LoanCardComponent implements OnInit {
   durationLabel: string;
   durationValue: string;
   canLend: boolean;
+  network: string;
 
   shortAddress = Utils.shortAddress;
 
   constructor() { }
-
 
   ngOnInit() {
     if (this.loan.isRequest) {
@@ -40,8 +40,17 @@ export class LoanCardComponent implements OnInit {
       this.durationLabel = 'Remaining';
       this.durationValue = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000));
       this.rightLabel = 'Pending';
+      console.info('EO', this.loan.debt.model.estimatedObligation);
+      console.info('fromUnit', currency.fromUnit(this.loan.debt.model.estimatedObligation));
+      console.info('estimatedObligation', Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation)));
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation));
       this.canLend = false;
+    }
+
+    if (this.loan.network === Network.Basalt) {
+      this.network = 'Basalt';
+    } else {
+      this.network = 'Diaspore';
     }
   }
 

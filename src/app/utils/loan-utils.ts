@@ -32,6 +32,8 @@ export class LoanUtils {
     const id = parseInt(loanBytes[19], 16);
 
     // Build Oracle if exist
+    const loanCurrencyWith0x = '0x';
+
     let oracle: Oracle;
     if (oracleAddress !== Utils.address0x) {
       oracle = new Oracle(
@@ -39,6 +41,13 @@ export class LoanUtils {
         oracleAddress,
         Utils.hexToAscii(currency.replace(/^[0x]+|[0]+$/g, '')),
         currency
+      );
+    } else {
+      oracle = new Oracle(
+        Network.Diaspore,
+        oracleAddress,
+        'RCN',
+        loanCurrencyWith0x.concat(currency)
       );
     }
 

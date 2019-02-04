@@ -157,13 +157,15 @@ export class ContractsService {
       cosignerData = cosignerOffer.lendData;
     }
     const oracleData = pOracleData;
-
+    const web3 = this.web3.opsWeb3;
     const account = await this.web3.getAccount();
     switch (loan.network) {
+
       case Network.Basalt:
-        return await promisify(this._rcnEngine.lend, [loan.id, oracleData, cosignerAddr, cosignerData, { from: account }]);
+        return await promisify(this.loadAltContract(web3, this._rcnEngine).lend,
+         [loan.id, oracleData, cosignerAddr, cosignerData, { from: account }]);
       case Network.Diaspore:
-        const web3 = this.web3.opsWeb3;
+
         return await promisify(this.loadAltContract(web3, this._loanManager).lend,
         [loan.id, oracleData, cosignerAddr, cosignerData, 0, { from: account }]);
       default:
@@ -202,13 +204,12 @@ export class ContractsService {
     const account = await this.web3.getAccount();
     const pOracleData = this.getOracleData(loan.oracle);
     const oracleData = await pOracleData;
+    const web3 = this.web3.opsWeb3;
 
     switch (loan.network) {
       case Network.Basalt:
-        return await promisify(this._rcnEngine.pay, [loan.id, amount, account, oracleData, { from: account }]);
+        return await promisify(this.loadAltContract(web3, this._rcnEngine).pay, [loan.id, amount, account, oracleData, { from: account }]);
       case Network.Diaspore:
-
-        const web3 = this.web3.opsWeb3;
         return await promisify(this.loadAltContract(web3, this._debtEngine).pay,
         [loan.id, amount, account, oracleData, { from: account }]);
       default:
@@ -218,11 +219,11 @@ export class ContractsService {
 
   async transferLoan(loan: Loan, to: string): Promise<string> {
     const account = await this.web3.getAccount();
+    const web3 = this.web3.opsWeb3;
     switch (loan.network) {
       case Network.Basalt:
-        return await promisify(this._rcnEngine.transfer, [to, loan.id, { from: account }]);
+        return await promisify(this.loadAltContract(web3, this._rcnEngine).transfer, [to, loan.id, { from: account }]);
       case Network.Diaspore:
-        const web3 = this.web3.opsWeb3;
         return await promisify(this.loadAltContract(web3, this._debtEngine).safeTransferFrom,
         [account, to, loan.id, { from: account }]);
       default:

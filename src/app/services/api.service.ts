@@ -23,7 +23,7 @@ export class ApiService {
   }
 
   async getActiveLoans(): Promise<Loan[]> {
-    const response = await this.http.get(this.url.concat('loans?open=false')).toPromise();
+    const response = await this.http.get(this.url.concat('loans?open=false&status=1')).toPromise();
     const data = response.json();
     const activeLoans = await this.completeLoanModels(data.content);
     return activeLoans;
@@ -45,7 +45,6 @@ export class ApiService {
     const data = response.json();
     const loansRequests = await this.completeLoanModels(data.content);
     const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now);
-    console.log(notExpiredResquestLoans);
     return notExpiredResquestLoans;
   }
 
