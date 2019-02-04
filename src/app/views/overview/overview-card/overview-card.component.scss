@@ -100,3 +100,7 @@
 .flex-container{
   @extend %flex-container;
 }
+.selected-class{
+  height: 24px;
+  margin-left: 40px;
+}
