@@ -26,7 +26,7 @@ import { BrandingService } from './../../services/branding.service';
   templateUrl: './loan-detail.component.html',
   styleUrls: ['./loan-detail.component.scss'],
   animations: [
-    trigger('anmFadeIn', [
+    trigger('anmSlideIn', [
       state('in', style({
         opacity: 1,
         display: 'block',
