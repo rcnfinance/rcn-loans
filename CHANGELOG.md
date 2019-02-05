@@ -3,12 +3,12 @@
 ## Unreleased
 
 ### Fix:
-
 - Fix scrollbar style
 
 ### Features:
 - Animations onInit to main Component to improve interaction
 - Overview instance for Lending
+- Fix Civic QR CSS
 
 ## **0.0.12** Avocados - 2019/01/09
 
