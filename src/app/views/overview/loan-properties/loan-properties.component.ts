@@ -17,7 +17,6 @@ export class LoanPropertiesComponent implements OnInit {
   rightValue: string;
   durationLabel: string;
   durationValue: string;
-  canLend: boolean;
 
   constructor() { }
 
@@ -29,7 +28,6 @@ export class LoanPropertiesComponent implements OnInit {
       this.rightValue = this.formatAmount(this.loan.expectedReturn);
       this.durationLabel = 'Duration';
       this.durationValue = this.loan.verboseDuration;
-      this.canLend = true;
     } else {
       this.leftLabel = 'Borrowing Amount';
       this.leftValue = this.formatAmount(this.loan.paid);
@@ -37,7 +35,6 @@ export class LoanPropertiesComponent implements OnInit {
       this.rightValue = this.formatAmount(this.loan.pendingAmount);
       this.durationLabel = 'Remaining';
       this.durationValue = Utils.formatDelta(this.loan.remainingTime);
-      this.canLend = false;
     }
   }
 

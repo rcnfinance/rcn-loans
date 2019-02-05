@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatDialog, MatDialogRef } from '@angular/material';
 // App Components
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
@@ -40,8 +41,13 @@ export class FooterComponent implements OnInit {
     private web3Service: Web3Service,
     private sidebarService: SidebarService,
     public titleService: TitleService,
-    private availableLoansService: AvailableLoansService
+    private availableLoansService: AvailableLoansService,
+    public breakpointObserver: BreakpointObserver
   ) {}
+
+  get isDesktop() {
+    return this.breakpointObserver.isMatched('(min-width: 992px)');
+  }
 
   // Toggle Menu
   navmobileToggle() {

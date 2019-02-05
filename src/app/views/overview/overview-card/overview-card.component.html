@@ -24,7 +24,7 @@
             </div>
           </div>
           <div class="flex-item">
-            <app-lend-button [loan]=loan *ngIf='isDesktop'></app-lend-button>
+            <app-lend-button [loan]=loan *ngIf='canLend && isDesktop'></app-lend-button>
           </div>
         </div>
         <div class="icon-row">
