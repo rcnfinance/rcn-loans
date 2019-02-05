@@ -43,11 +43,7 @@ import { BrandingService } from 'app/services/branding.service';
         display: 'none',
         transform: 'translateX(-20px)'
       })),
-<<<<<<< HEAD
       transition('normalState <=> anmDone', [animate(300)])
-=======
-      transition('normalState <=> anmDone', [animate(600)])
->>>>>>> d75f7392b7b8ce5c29424f7c7ab71ade3901a0da
     ])
   ]
 })

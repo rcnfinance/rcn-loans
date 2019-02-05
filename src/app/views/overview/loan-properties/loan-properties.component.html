@@ -1,0 +1,44 @@
+<div class="icon-row">
+  <div class="col-sm-12 col-lg-4 icon-container">
+    <i class="far fa-user"></i>
+    <div class="txt-container">
+      <div class="title">Borrower</div>
+      <div class="subtitle">{{ loan.borrowerShort }}</div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-lg-4 icon-container">
+    <i class="far fa-calendar"></i>
+    <div class="txt-container">
+      <div class="title">{{ durationLabel }}</div>
+      <div class="subtitle">{{ durationValue }}</div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-lg-4 icon-container">
+    <i class="fas fa-calculator"></i>
+    <div class="txt-container">
+      <div class="title">{{ 'Annual Interest / Punitory' }}</div>
+      <div class="subtitle"> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-lg-4 icon-container">
+    <i class="fas fa-sort-amount-up"></i>
+    <div class="txt-container">
+      <div class="title">{{ leftLabel }}</div>
+      <div class="subtitle">{{ leftValue }}</div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-lg-4 icon-container">
+    <i class="fas fa-coins"></i>
+    <div class="txt-container">
+      <div class="title">{{ 'Borrowing currency' }}</div>
+      <div class="subtitle">{{ loan.currency }}</div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-lg-4 icon-container">
+    <i class="fas fa-sort-amount-down"></i>
+    <div class="txt-container">
+      <div class="title">{{ rightLabel }}</div>
+      <div class="subtitle">{{ rightValue }}</div>
+    </div>
+  </div>
+</div>

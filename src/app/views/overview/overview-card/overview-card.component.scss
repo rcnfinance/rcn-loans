@@ -49,7 +49,8 @@
 
 @media (min-width: 992px) { 
   .card-container{
-    width: 970px;
+    // width: 970px;
+    width: 770px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -78,7 +79,6 @@
       border-bottom-left-radius: 2px;
       border-bottom-right-radius: 2px;
       .properties-group{
-        height: 200px;
         display: block;
         padding: 15px;
         .button{

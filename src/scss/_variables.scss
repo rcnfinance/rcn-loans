@@ -1,4 +1,3 @@
-
 // VARIABLES
 // -------------------------
 
@@ -56,8 +55,8 @@ $gray9: #0c0c0c;
 %roboto-extra-bold{font-weight: 800; font-family: 'Roboto', sans-serif}
 %roboto-black{font-weight: 900; font-family: 'Roboto', sans-serif}
 
-%propiety-title {font-size: 11px; text-transform: uppercase; @extend %font-light;}
-%propiety-subtitle {font-size: 15px; @extend %font-medium;}
+%propiety-title {font-size: 11px; text-transform: uppercase; @extend %roboto-light;}
+%propiety-subtitle {font-size: 15px; @extend %roboto-medium;}
 
 /*MIXINS*/
 // -------------------------

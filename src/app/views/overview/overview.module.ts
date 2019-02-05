@@ -10,6 +10,7 @@ import { LendingService } from '../../services/lending.service';
 import { OverviewComponent } from './overview.component';
 import { OverviewCardComponent } from './overview-card/overview-card.component';
 import { OverviewStepperComponent } from './overview-stepper/overview-stepper.component';
+import { LoanPropertiesComponent } from './loan-properties/loan-properties.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { OverviewStepperComponent } from './overview-stepper/overview-stepper.co
   declarations: [
     OverviewComponent,
     OverviewCardComponent,
-    OverviewStepperComponent
+    OverviewStepperComponent,
+    LoanPropertiesComponent
   ],
   providers: [
     LendingService

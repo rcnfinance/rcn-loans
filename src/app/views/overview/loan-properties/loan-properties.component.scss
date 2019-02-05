@@ -1,0 +1,27 @@
+@import './../../../../scss/_variables.scss'; //variables
+
+.icon-row{
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.icon-container {
+  margin-top: 15px;
+  padding-left: 40px;
+  i,
+  svg {
+    font-size: 1.8em !important;
+    left: 5px;
+    @extend %center-top;
+  }
+  .txt-container{
+    color: $secondary;
+    .title{
+      @extend %propiety-title;
+    }
+    .subtitle{
+      @extend %propiety-subtitle;
+    }
+  }
+}

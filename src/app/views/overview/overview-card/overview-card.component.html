@@ -27,6 +27,9 @@
             <app-lend-button [loan]=loan *ngIf='isDesktop'></app-lend-button>
           </div>
         </div>
+        <div class="icon-row">
+          <app-loan-properties [loan]=loan></app-loan-properties>
+        </div>
       </div>
       <mat-tab-group>
         <mat-tab label="Information">
