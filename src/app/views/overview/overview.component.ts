@@ -9,7 +9,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
 // App Models
-import { Loan } from 'app/models/loan.model';
+import { Loan, Status } from 'app/models/loan.model';
 import { Brand } from 'app/models/brand.model';
 // App Services
 import { ContractsService } from 'app/services/contracts.service';
@@ -50,6 +50,7 @@ import { BrandingService } from 'app/services/branding.service';
 export class OverviewComponent implements OnInit, OnDestroy {
   @Input() loan: Loan;
   brand: Brand;
+  canLend: boolean;
   get isDesktop() {
     return this.breakpointObserver.isMatched('(min-width: 992px)');
   }
@@ -62,6 +63,14 @@ export class OverviewComponent implements OnInit, OnDestroy {
     public breakpointObserver: BreakpointObserver
   ) {}
 
+  verifyLend() { // Check loan status to verify if canLend
+    if (this.loan.status === Status.Request) {
+      this.canLend = true;
+    } else {
+      this.canLend = false;
+    }
+  }
+
   ngOnInit() {
     this.lendingService.changeOverview(true); // Notify service overview is active
 
@@ -70,10 +79,10 @@ export class OverviewComponent implements OnInit, OnDestroy {
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
         this.brand = this.brandingService.getBrand(this.loan);
+        this.verifyLend(); // Check loan status to verify if canLend
       });
     });
   }
-
   ngOnDestroy() {
     this.lendingService.changeOverview(false); // Notify service overview is desactivated
   }

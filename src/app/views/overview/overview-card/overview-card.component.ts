@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 // App Models
-import { Loan, Status } from 'app/models/loan.model';
+import { Loan } from 'app/models/loan.model';
 import { Brand } from 'app/models/brand.model';
 
 @Component({
@@ -12,7 +12,7 @@ import { Brand } from 'app/models/brand.model';
 export class OverviewCardComponent implements OnInit {
   @Input() loan: Loan;
   @Input() brand: Brand;
-  canLend: boolean;
+  @Input() canLend: boolean;
 
   get isDesktop() {
     return this.breakpointObserver.isMatched('(min-width: 992px)');
@@ -22,13 +22,6 @@ export class OverviewCardComponent implements OnInit {
     public breakpointObserver: BreakpointObserver
   ) { }
 
-  ngOnInit() {
-    if (this.loan.status === Status.Request) {
-      this.canLend = true;
-    } else {
-      this.canLend = false;
-    }
-    console.info(this.loan.status);
-  }
+  ngOnInit() {}
 
 }
