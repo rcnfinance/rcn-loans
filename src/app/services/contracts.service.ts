@@ -39,12 +39,12 @@ export class ContractsService {
   private _debtEngine: any;
 
   constructor(
-      private web3: Web3Service,
-      private txService: TxService,
-      private cosignerService: CosignerService,
-      private http: HttpClient,
-      private apiService: ApiService
-    ) {
+    private web3: Web3Service,
+    private txService: TxService,
+    private cosignerService: CosignerService,
+    private http: HttpClient,
+    private apiService: ApiService
+  ) {
     this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
     this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
     this._loanManager = this.web3.web3.eth.contract(loanManagerAbi).at(environment.contracts.diaspore.loanManager);
@@ -98,7 +98,7 @@ export class ContractsService {
     const web3 = this.web3.opsWeb3;
 
     const result = await promisify(this.loadAltContract(web3, this._rcnContract).approve,
-     [contract, web3.toWei(10 ** 32), { from: account }]);
+      [contract, web3.toWei(10 ** 32), { from: account }]);
 
     this.txService.registerApproveTx(result, this._rcnContract.address, contract, true);
 
@@ -111,7 +111,7 @@ export class ContractsService {
     const web3 = this.web3.opsWeb3;
 
     const result = await promisify(this.loadAltContract(web3, this._rcnContract).approve,
-     [contract, 0, { from: account }]);
+      [contract, 0, { from: account }]);
 
     this.txService.registerApproveTx(result, this._rcnContract.address, contract, false);
 
@@ -163,11 +163,11 @@ export class ContractsService {
 
       case Network.Basalt:
         return await promisify(this.loadAltContract(web3, this._rcnEngine).lend,
-         [loan.id, oracleData, cosignerAddr, cosignerData, { from: account }]);
+          [loan.id, oracleData, cosignerAddr, cosignerData, { from: account }]);
       case Network.Diaspore:
 
         return await promisify(this.loadAltContract(web3, this._loanManager).lend,
-        [loan.id, oracleData, cosignerAddr, cosignerData, 0, { from: account }]);
+          [loan.id, oracleData, cosignerAddr, cosignerData, 0, { from: account }]);
       default:
         throw Error('Unknown network');
     }
@@ -211,7 +211,7 @@ export class ContractsService {
         return await promisify(this.loadAltContract(web3, this._rcnEngine).pay, [loan.id, amount, account, oracleData, { from: account }]);
       case Network.Diaspore:
         return await promisify(this.loadAltContract(web3, this._debtEngine).pay,
-        [loan.id, amount, account, oracleData, { from: account }]);
+          [loan.id, amount, account, oracleData, { from: account }]);
       default:
         throw Error('Unknown network');
     }
@@ -225,7 +225,7 @@ export class ContractsService {
         return await promisify(this.loadAltContract(web3, this._rcnEngine).transfer, [to, loan.id, { from: account }]);
       case Network.Diaspore:
         return await promisify(this.loadAltContract(web3, this._debtEngine).safeTransferFrom,
-        [account, to, loan.id, { from: account }]);
+          [account, to, loan.id, { from: account }]);
       default:
         throw Error('Unknown network');
     }
@@ -269,7 +269,7 @@ export class ContractsService {
   async getLoan(id: string): Promise<Loan> {
     if (id.startsWith('0x')) {
       // Load Diaspore loan
-      return this.apiService.getLoan(id);
+      return await this.apiService.getLoan(id);
       // const result = await promisify(this._requestsView.getLoan.call, [environment.contracts.diaspore.loanManager, id]);
       // if (result.length === 0) throw new Error('Loan not found');
       // return LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, result);
@@ -288,9 +288,9 @@ export class ContractsService {
     }) as Promise<Loan>;
   }
   async getActiveLoans(): Promise<Loan[]> {
-    // const bfilters = [environment.filters.ongoing];
-    // const bparams = ['0x0'];
-    // const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
+    const bfilters = [environment.filters.ongoing];
+    const bparams = ['0x0'];
+    const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
     // Filter lenderIn Diaspore loans
     // const dfilter = [
     //   // Created by loan manager
@@ -301,30 +301,31 @@ export class ContractsService {
     //   Utils.toBytes32('0x1')
     // ];
     // const pdiaspore = promisify(this._requestsView.getLoans, [this._loanManager.address, dfilter]);
-    // // return this.parseLoanBytes(await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
+    // return this.parseLoanBytes(await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
     // return this.parseLoanBytes(await pdiaspore);
 
     const activeDiasporeLoans = this.apiService.getActiveLoans();
-    return activeDiasporeLoans;
+    return (await activeDiasporeLoans).concat(this.parseBasaltBytes(await pbasalt));
+    //return activeDiasporeLoans;
 
   }
   async getRequests(): Promise<Loan[]> {
-    const basalt = new Promise((resolve, reject) => {
-      // Filter open loans, non expired loand and valid mortgage
-      const filters = [
-        environment.filters.openLoans,
-        environment.filters.nonExpired,
-        environment.filters.validMortgage
-      ];
+    // const basalt = new Promise((resolve, reject) => {
+    //   // Filter open loans, non expired loand and valid mortgage
+    //   const filters = [
+    //     environment.filters.openLoans,
+    //     environment.filters.nonExpired,
+    //     environment.filters.validMortgage
+    //   ];
 
-      const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
-      this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(LoanCurator.curateBasaltRequests(this.parseBasaltBytes(result)));
-      });
-    }) as Promise<Loan[]>;
+    //   const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
+    //   this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
+    //     if (err != null) {
+    //       reject(err);
+    //     }
+    //     resolve(LoanCurator.curateBasaltRequests(this.parseBasaltBytes(result)));
+    //   });
+    // }) as Promise<Loan[]>;
 
     const web3 = await this.web3.web3;
 
@@ -346,13 +347,14 @@ export class ContractsService {
     //     resolve(this.parseRequestBytes(result));
     //   });
     // }) as Promise<Loan[]>;
-    //return diaspore;
-    return (await diaspore).concat(await basalt);
+    return diaspore;
+    //return (await diaspore).concat(await basalt);
   }
   async getLoansOfLender(): Promise<Loan[]> {
+    const account = await this.web3.getAccount();
     // Filter [lenderIn] Basalt loans
     // const bfilters = [environment.filters.lenderIn];
-    // const bparams = [this.addressToBytes32(lender)];
+    // const bparams = [this.addressToBytes32(account)];
     // const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
     // // Filter lenderIn Diaspore loans
     // const dfilter = [
@@ -366,11 +368,11 @@ export class ContractsService {
     // const pdiaspore = promisify(this._requestsView.getLoans, [this._loanManager.address, dfilter]);
     // // return this.parseLoanBytes(await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
     // return this.parseLoanBytes(await pdiaspore);
-    const account = await this.web3.getAccount();
 
     const pdiaspore = this.apiService.getLoansOfLender(account);
 
-    return pdiaspore;
+    // return (await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
+    return await pdiaspore;
 
   }
   readPendingWithdraws(loans: Loan[]): [BigNumber, number[]] {

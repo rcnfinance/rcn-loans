@@ -41,11 +41,19 @@ export class ApiService {
   }
 
   async getRequests(now: number): Promise<Loan[]> {
-    const response = await this.http.get(this.url.concat('loans?open=true')).toPromise();
-    const data = response.json();
-    const loansRequests = await this.completeLoanModels(data.content);
-    const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now);
-    return notExpiredResquestLoans;
+    let allRequestLoans: Loan[] = [];
+    let apiCalls = 0;
+    let page = 0;
+    do {
+      const response = await this.http.get(this.url.concat('loans?open=true&page=' + page)).toPromise();
+      const data = response.json();
+      apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      const loansRequests = await this.completeLoanModels(data.content);
+      const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now);
+      allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
+      page++;
+    } while (page < apiCalls);
+    return allRequestLoans;
   }
 
   async completeLoanModels(loanArray: any[]): Promise<Loan[]> {
