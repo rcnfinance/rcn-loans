@@ -11,6 +11,7 @@ import { OverviewComponent } from './overview.component';
 import { OverviewCardComponent } from './overview-card/overview-card.component';
 import { OverviewStepperComponent } from './overview-stepper/overview-stepper.component';
 import { LoanPropertiesComponent } from './loan-properties/loan-properties.component';
+import { CurrencySelectionComponent } from './currency-selection/currency-selection.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { LoanPropertiesComponent } from './loan-properties/loan-properties.compo
     OverviewComponent,
     OverviewCardComponent,
     OverviewStepperComponent,
-    LoanPropertiesComponent
+    LoanPropertiesComponent,
+    CurrencySelectionComponent
   ],
   providers: [
     LendingService

@@ -51,9 +51,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
   @Input() loan: Loan;
   brand: Brand;
   canLend: boolean;
-  get isDesktop() {
-    return this.breakpointObserver.isMatched('(min-width: 992px)');
-  }
+  get isDesktop() { return this.breakpointObserver.isMatched('(min-width: 992px)'); }
 
   constructor(
     private route: ActivatedRoute,

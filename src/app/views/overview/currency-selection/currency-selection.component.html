@@ -1,0 +1,40 @@
+<div class="currency-selection-container">
+  <div class="title main-h1" *ngIf='isDesktop'>Loan Information</div>
+  <div class="title main-h1 margintop15" *ngIf='!isDesktop'>currency selection</div>
+  <p>Select the Currency you want to lend and compare with the other available currencies values</p>
+
+  <div class="currency-block" 
+  [ngClass]="{'active': selectedCurrency === 'rcn' ? true : false }"
+  (click)="selectCurrency('rcn')">
+    <div class="circle-container">
+      <div class="circle">
+        <img src='src/assets/rcn-currency.svg' alt='rcn-logo'>
+      </div>
+    </div>
+    <div class="txt-container">
+      <div class="amount">{{ this.formatAmount(this.loan.amount) }}</div>
+      <div class="currency">{{ 'RCN' }}</div>
+    </div>
+    <mat-slide-toggle #rcnSlideToggle
+    (change)="toggle($event)" 
+    [checked]="selectedCurrency === 'rcn'"></mat-slide-toggle>
+  </div>
+  
+  <div class="currency-block disabled" 
+  [ngClass]="{'active': selectedCurrency === 'eth' ? true : false , 'disabled': !ethAvailable }"
+  (click)="selectCurrency('eth')">
+    <div class="circle-container">
+      <div class="circle">
+        <i class="fab fa-ethereum"></i>
+      </div>
+    </div>
+    <div class="txt-container">
+      <div class="amount">{{ this.formatAmount(this.loan.amount) }}</div>
+      <div class="currency">{{ 'ETH' }}</div>
+    </div>
+    <mat-slide-toggle #ethSlideToggle
+    (change)="toggle($event)" 
+    [checked]="selectedCurrency === 'eth'" 
+    [disabled]='!ethAvailable'></mat-slide-toggle>
+  </div>
+</div>

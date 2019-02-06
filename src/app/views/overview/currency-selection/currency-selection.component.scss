@@ -1,0 +1,72 @@
+@import './../../../../scss/_variables.scss'; //variables
+
+.currency-selection-container{
+  margin: 40px 0;
+}
+.currency-block{
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin-top: 20px;
+  padding-left: 67px;
+  .circle-container{
+    left: 0;
+    @extend %center-top;
+    .circle {
+      display: flex;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      background-color: white;
+      border-radius: 50%;
+      img{width: 40px;}
+      i,
+      svg {
+        color: $gray7;
+        font-size: 2.5em !important;
+        @extend %center-top-left;
+      }
+    }
+  }
+  .txt-container{
+    .amount{
+      line-height: 1;
+      font-size: 26px;
+      @extend %roboto-black;
+    }
+    .currency{
+      @extend %roboto-light;
+    }
+  }
+  ::ng-deep{
+    .mat-slide-toggle{
+      .mat-slide-toggle-bar{
+        width: 48px;
+        height: 14px;
+        .mat-slide-toggle-thumb-container{
+          transform: translate3d(0,-2px,0);
+          height: 24px;
+        }
+      }
+      .mat-slide-toggle-thumb{
+        height: 23px;
+        width: 23px;
+      } 
+      &.mat-checked:not(.mat-disabled){
+        .mat-slide-toggle-thumb-container{
+          transform: translate3d(26px, -2px,0);
+        } 
+      }
+    }
+  }
+  &.disabled{
+    .circle-container{
+      .circle {background-color: $gray7; i,svg {color: $tertiary;} }
+    }
+    .txt-container{
+      color: $gray7;
+    }
+  }
+}

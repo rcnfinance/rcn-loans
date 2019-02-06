@@ -1,9 +1,21 @@
 @import './../../../../scss/_variables.scss'; //variables
 
+.title{&.main-h1{font-size: 18px;}}
+p{margin-top: 5px; @extend %font-light;}
+
 .card-container{
   width: 100%;
   position: relative;
   margin-bottom: 20px;
+}
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-flow: row;
+  flex-wrap: wrap;
+  justify-content: unset;
+  align-items: center;
+  align-content: flex-end;
 }
 .header-container{
   .branding-row{
@@ -41,18 +53,21 @@
       display: none;
     }
     .card-content{
-      padding: 100px 0;
+      padding: 15px;
       background-color: $gray8;
     }
   }
 }
 
 @media (min-width: 992px) { 
+  p{margin-top: 0px;}
   .card-container{
-    // width: 970px;
     width: 770px;
     margin-left: auto;
     margin-right: auto;
+  }
+  .flex-container {
+    justify-content: space-between;
   }
 
   .header-container{
@@ -81,10 +96,6 @@
       .properties-group{
         display: block;
         padding: 15px;
-        .button{
-          background-color: red;
-          float: right;
-        }
       }
       .card-content{
         min-height: 200px; // Testing purpose

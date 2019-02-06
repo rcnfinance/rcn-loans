@@ -45,9 +45,7 @@ export class FooterComponent implements OnInit {
     public breakpointObserver: BreakpointObserver
   ) {}
 
-  get isDesktop() {
-    return this.breakpointObserver.isMatched('(min-width: 992px)');
-  }
+  get isDesktop() { return this.breakpointObserver.isMatched('(min-width: 992px)'); }
 
   // Toggle Menu
   navmobileToggle() {

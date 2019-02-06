@@ -34,7 +34,15 @@
       <mat-tab-group>
         <mat-tab label="Information">
           <div class="card-content">
-            <app-loan-avatar [loan]=loan [short]=true *ngIf='!isDesktop'></app-loan-avatar>
+            <div class="flex-container" *ngIf='!isDesktop'>
+              <div class="flex-item">
+                <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
+              </div>
+              <div class="flex-item selected-class">
+                <app-risk-indicator class="risk-indicator" [loan]=loan></app-risk-indicator>
+              </div>
+            </div>
+            <app-currency-selection [loan]=loan></app-currency-selection>
           </div>
         </mat-tab>
         <mat-tab label="Collateral">
