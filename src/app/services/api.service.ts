@@ -23,10 +23,18 @@ export class ApiService {
   }
 
   async getActiveLoans(): Promise<Loan[]> {
-    const response = await this.http.get(this.url.concat('loans?open=false&status=1')).toPromise();
-    const data = response.json();
-    const activeLoans = await this.completeLoanModels(data.content);
-    return activeLoans;
+    let allActiveLoans: Loan[] = [];
+    let apiCalls = 0;
+    let page = 0;
+    do {
+      const response = await this.http.get(this.url.concat('loans?open=false&status=1')).toPromise();
+      const data = response.json();
+      apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      const activeLoans = await this.completeLoanModels(data.content);
+      allActiveLoans = allActiveLoans.concat(activeLoans);
+      page++;
+    } while (page < apiCalls);
+    return allActiveLoans;
   }
   async getLoan(id: string): Promise<Loan> {
     const response = await this.http.get(this.url.concat(`loans/${id}`)).toPromise();

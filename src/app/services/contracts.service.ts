@@ -288,9 +288,9 @@ export class ContractsService {
     }) as Promise<Loan>;
   }
   async getActiveLoans(): Promise<Loan[]> {
-    const bfilters = [environment.filters.ongoing];
-    const bparams = ['0x0'];
-    const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
+    // const bfilters = [environment.filters.ongoing];
+    // const bparams = ['0x0'];
+    // const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
     // Filter lenderIn Diaspore loans
     // const dfilter = [
     //   // Created by loan manager
@@ -305,8 +305,8 @@ export class ContractsService {
     // return this.parseLoanBytes(await pdiaspore);
 
     const activeDiasporeLoans = this.apiService.getActiveLoans();
-    return (await activeDiasporeLoans).concat(this.parseBasaltBytes(await pbasalt));
-    //return activeDiasporeLoans;
+    //return (await activeDiasporeLoans).concat(this.parseBasaltBytes(await pbasalt));
+    return activeDiasporeLoans;
 
   }
   async getRequests(): Promise<Loan[]> {
