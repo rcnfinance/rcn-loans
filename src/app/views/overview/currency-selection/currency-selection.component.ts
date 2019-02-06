@@ -32,11 +32,11 @@ export class CurrencySelectionComponent implements OnInit {
     switch (selection) {
       case 'rcn':
         console.info('this is' , this.rcnSlideToggle);
-        console.info(this.rcnSlideToggle.checked);
+        // console.info(this.rcnSlideToggle.checked);
         break;
       case 'eth':
         console.info('this is' , this.ethSlideToggle);
-        console.info(this.rcnSlideToggle.checked);
+        // console.info(this.rcnSlideToggle.checked);
         break;
       default:
         break;
