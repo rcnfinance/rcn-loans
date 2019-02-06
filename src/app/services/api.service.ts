@@ -15,11 +15,19 @@ export class ApiService {
   constructor(private http: Http) { }
 
   async getLoansOfLender(lender: string): Promise<Loan[]> {
-    const response = await this.http.get(this.url.concat('loans?open=false')).toPromise();
-    const data = response.json();
-    const activeLoans = await this.completeLoanModels(data.content);
-    const loansOfLender = activeLoans.filter(loan => loan.debt.owner.toLowerCase() === lender);
-    return loansOfLender;
+    let allLoansOfLender: Loan[] = [];
+    let apiCalls = 0;
+    let page = 0;
+    do {
+      const response = await this.http.get(this.url.concat('loans?open=false')).toPromise();
+      const data = response.json();
+      apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      const activeLoans = await this.completeLoanModels(data.content);
+      const loansOfLender = activeLoans.filter(loan => loan.debt.owner.toLowerCase() === lender);
+      allLoansOfLender = allLoansOfLender.concat(loansOfLender);
+      page++;
+    } while (page < apiCalls);
+    return allLoansOfLender;
   }
 
   async getActiveLoans(): Promise<Loan[]> {
