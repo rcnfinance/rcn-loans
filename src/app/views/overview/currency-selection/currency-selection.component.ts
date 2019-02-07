@@ -32,13 +32,13 @@ export class CurrencySelectionComponent implements OnInit {
 
     switch (selection) {
       case 'rcn':
-        if (this.rcnAvailable = true) {
+        if (this.rcnAvailable === true) {
           this.rcnSlideToggle.checked = true;
           this.ethSlideToggle.checked = false;
         }
         break;
       case 'eth':
-        if (this.ethAvailable = true) {
+        if (this.ethAvailable === true) {
           this.rcnSlideToggle.checked = false;
           this.ethSlideToggle.checked = true;
         }
@@ -51,12 +51,16 @@ export class CurrencySelectionComponent implements OnInit {
   toggle(event: MatSlideToggleChange) { // Toggle the current Slide Toggle on something (change)
     switch (event.source.id) {
       case 'mat-slide-toggle-1':
-        this.rcnSlideToggle.checked = true;
-        this.ethSlideToggle.checked = false;
+        if (this.rcnAvailable = true) {
+          this.rcnSlideToggle.checked = true;
+          this.ethSlideToggle.checked = false;
+        }
         break;
       case 'mat-slide-toggle-2':
-        this.rcnSlideToggle.checked = false;
-        this.ethSlideToggle.checked = true;
+        if (this.ethAvailable = true) {
+          this.rcnSlideToggle.checked = false;
+          this.ethSlideToggle.checked = true;
+        }
         break;
       default:
         break;

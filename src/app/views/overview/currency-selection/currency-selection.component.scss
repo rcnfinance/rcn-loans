@@ -12,6 +12,15 @@
   position: relative;
   margin-top: 20px;
   padding-left: 67px;
+  .header-block,
+  .content-block{
+    display: contents;
+  }
+  .header-block{
+    .title{
+      @extend %font-black;
+    }
+  }
   .circle-container{
     left: 0;
     @extend %center-top;
@@ -74,6 +83,53 @@
 
 @media (min-width: 992px){
   .currency-selection-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     margin: 0;
+  }
+  .currency-block{
+    cursor: pointer;
+    width: calc(50% - 8px);
+    height: auto;
+    flex-wrap: wrap;
+    background-color: $gray6;
+    padding-left: 0;
+    .header-block,
+    .content-block{
+      width: 100%;
+      padding: 15px;
+      display: flex;
+    }
+    .header-block{
+      justify-content: center;
+      text-align: center;
+      background-color: $secondary;
+      .title{
+        font-size: 24px;
+        color: $tertiary;
+        font-family: 'Raleway', sans-serif
+      }
+    }
+    .content-block{
+      justify-content: space-between;
+      align-items: center;
+    }
+    &.active-currency{
+      .header-block{
+        background-color: $primary;
+        .title{
+          color: $secondary;
+        }
+      }
+    }
+    &.disabled-currency{
+      .header-block{
+        background-color: $gray5;
+        .title{
+          color: $tertiary;
+        }
+      }
+    }
   }
 }
