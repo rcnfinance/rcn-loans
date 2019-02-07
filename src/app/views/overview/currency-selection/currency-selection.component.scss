@@ -1,7 +1,8 @@
 @import './../../../../scss/_variables.scss'; //variables
 
+.title{&.main-h1{font-size: 18px;}}
 .currency-selection-container{
-  margin: 40px 0;
+  margin: 30px 0;
 }
 .currency-block{
   height: 52px;
@@ -68,5 +69,11 @@
     .txt-container{
       color: $gray7;
     }
+  }
+}
+
+@media (min-width: 992px){
+  .currency-selection-container{
+    margin: 0;
   }
 }

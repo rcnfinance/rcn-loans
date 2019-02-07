@@ -1,6 +1,5 @@
-<div class="currency-selection-container">
-  <div class="title main-h1" *ngIf='isDesktop'>Loan Information</div>
-  <div class="title main-h1 margintop15" *ngIf='!isDesktop'>currency selection</div>
+<div class="currency-selection-container" *ngIf='!isDesktop'>
+  <div class="title main-h1 margintop15">currency selection</div>
   <p>Select the Currency you want to lend and compare with the other available currencies values</p>
 
   <div class="currency-block" 

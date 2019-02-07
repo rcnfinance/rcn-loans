@@ -42,6 +42,7 @@
                 <app-risk-indicator class="risk-indicator" [loan]=loan></app-risk-indicator>
               </div>
             </div>
+            <div class="title main-h1" *ngIf='isDesktop'>Loan Information</div>
             <app-currency-selection [loan]=loan></app-currency-selection>
           </div>
         </mat-tab>
