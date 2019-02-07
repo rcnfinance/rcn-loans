@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 // App Models
-import { Loan } from '../../../models/loan.model';
+import { Loan, Network } from '../../../models/loan.model';
 import { Commit } from '../../../models/commit.model';
 // App Services
 import { CommitsService } from '../../../services/commits.service';
@@ -46,7 +46,7 @@ export class TransactionHistoryComponent implements OnInit {
 
   noMatch = false;
 
-  timelinesProperties: object = {
+  basaltTimelinesProperties: object = {
     'loan_request': {
       'title': 'Requested',
       'message': 'Requested',
@@ -150,13 +150,49 @@ export class TransactionHistoryComponent implements OnInit {
     }
   };
 
+  diasporeTimelinesProperties: object = {
+    'requested_loan_manager': {
+      'title': 'Requested',
+      'message': 'Requested',
+      'status': 'active',
+      'materialClass': 'material-icons',
+      'icon': 'code',
+      'color': 'white',
+      'inserted': false,
+      'display': ['creator']
+    },
+    'approved_loan_manager': {
+      'title': 'Loan Approved',
+      'message': 'Loan Approved',
+      'status': 'active',
+      'materialClass': 'material-icons',
+      'icon': 'done',
+      'color': 'white',
+      'inserted': true,
+      'display': ['approved_by']
+    },
+    'lent_loan_manager': {
+      'title': 'Lent',
+      'message': 'Lent',
+      'status': 'active',
+      'materialClass': 'material-icons',
+      'icon': 'trending_up',
+      'color': 'blue',
+      'inserted': true,
+      'display': ['lender']
+    }
+  };
+
   constructor(
     private commitsService: CommitsService,
     private eventsService: EventsService
   ) { }
 
   get_properties_by_opcode(opcode: string): object[] { // Get the timeline event properties from timelinesProperties[]
-    return this.timelinesProperties[opcode];
+    if (this.loan.network === Network.Basalt) {
+      return this.basaltTimelinesProperties[opcode];
+    }
+    return this.diasporeTimelinesProperties[opcode];
   }
 
   timeline_has(timeEvents, opcode) { // Filters the commits that timeline not use

@@ -75,7 +75,8 @@ export class LoanDetailComponent implements OnInit {
       const id = params['id']; // (+) converts string 'id' to a number
       this.contractsService.getLoan(id).then(loan => {
         this.loan = loan;
-        this.hasHistory = loan.network === Network.Basalt;
+        // this.hasHistory = loan.network === Network.Basalt;
+        this.hasHistory = true;
         this.brand = this.brandingService.getBrand(this.loan);
         this.oracle = this.loan.oracle ? this.loan.oracle.address : undefined;
         this.currency = this.loan.oracle ? this.loan.oracle.currency : 'RCN';
