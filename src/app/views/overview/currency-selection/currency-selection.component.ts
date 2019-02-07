@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
-import { MatSlideToggleChange, MatSlideToggle } from '@angular/material';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
 // App Models
 import { Loan } from 'app/models/loan.model';
@@ -12,10 +12,11 @@ import { Utils } from 'app/utils/utils';
 })
 export class CurrencySelectionComponent implements OnInit {
   @Input() loan: Loan;
-  @ViewChild('rcnSlideToggle') rcnSlideToggle: ElementRef<MatSlideToggle>;
-  @ViewChild('ethSlideToggle') ethSlideToggle: ElementRef<MatSlideToggle>;
+  @ViewChild('rcnSlideToggle') rcnSlideToggle: MatSlideToggle;
+  @ViewChild('ethSlideToggle') ethSlideToggle: MatSlideToggle;
   selectedCurrency = 'rcn';
-  ethAvailable = false;
+  rcnAvailable = true;
+  ethAvailable = true;
   get isDesktop() { return this.breakpointObserver.isMatched('(min-width: 992px)'); }
 
   constructor(
@@ -26,25 +27,40 @@ export class CurrencySelectionComponent implements OnInit {
     return Utils.formatAmount(amount);
   }
 
-  selectCurrency(selection: string) {
+  selectCurrency(selection: string) { // Toggle the current Slide Toggle on div (click)
     this.selectedCurrency = selection;
 
     switch (selection) {
       case 'rcn':
-        console.info('this is' , this.rcnSlideToggle);
-        // console.info(this.rcnSlideToggle.checked);
+        if (this.rcnAvailable = true) {
+          this.rcnSlideToggle.checked = true;
+          this.ethSlideToggle.checked = false;
+        }
         break;
       case 'eth':
-        console.info('this is' , this.ethSlideToggle);
-        // console.info(this.rcnSlideToggle.checked);
+        if (this.ethAvailable = true) {
+          this.rcnSlideToggle.checked = false;
+          this.ethSlideToggle.checked = true;
+        }
         break;
       default:
         break;
     }
   }
 
-  toggle(event: MatSlideToggleChange) {
-    console.info('toggle', event.checked);
+  toggle(event: MatSlideToggleChange) { // Toggle the current Slide Toggle on something (change)
+    switch (event.source.id) {
+      case 'mat-slide-toggle-1':
+        this.rcnSlideToggle.checked = true;
+        this.ethSlideToggle.checked = false;
+        break;
+      case 'mat-slide-toggle-2':
+        this.rcnSlideToggle.checked = false;
+        this.ethSlideToggle.checked = true;
+        break;
+      default:
+        break;
+    }
   }
 
   ngOnInit() {}

@@ -59,6 +59,15 @@ p{margin-top: 5px; @extend %font-light;}
   }
 }
 
+.flex-container{
+  @extend %flex-container;
+}
+.selected-class{
+  height: 24px;
+  margin-left: 40px;
+}
+
+
 @media (min-width: 992px) { 
   p{margin-top: 0px;}
   .card-container{
@@ -106,12 +115,4 @@ p{margin-top: 5px; @extend %font-light;}
       }
     }
   }
-}
-
-.flex-container{
-  @extend %flex-container;
-}
-.selected-class{
-  height: 24px;
-  margin-left: 40px;
 }

@@ -4,7 +4,7 @@
   <p>Select the Currency you want to lend and compare with the other available currencies values</p>
 
   <div class="currency-block" 
-  [ngClass]="{'active': selectedCurrency === 'rcn' ? true : false }"
+  [ngClass]="rcnAvailable ? 'available-currency' : 'disabled-currency'"
   (click)="selectCurrency('rcn')">
     <div class="circle-container">
       <div class="circle">
@@ -16,12 +16,12 @@
       <div class="currency">{{ 'RCN' }}</div>
     </div>
     <mat-slide-toggle #rcnSlideToggle
-    (change)="toggle($event)" 
-    [checked]="selectedCurrency === 'rcn'"></mat-slide-toggle>
+    (change)='toggle($event)'
+    [checked]=true></mat-slide-toggle>
   </div>
   
   <div class="currency-block disabled" 
-  [ngClass]="{'active': selectedCurrency === 'eth' ? true : false , 'disabled': !ethAvailable }"
+  [ngClass]="ethAvailable ? 'available-currency' : 'disabled-currency'"
   (click)="selectCurrency('eth')">
     <div class="circle-container">
       <div class="circle">
@@ -33,8 +33,7 @@
       <div class="currency">{{ 'ETH' }}</div>
     </div>
     <mat-slide-toggle #ethSlideToggle
-    (change)="toggle($event)" 
-    [checked]="selectedCurrency === 'eth'" 
+    (change)='toggle($event)'
     [disabled]='!ethAvailable'></mat-slide-toggle>
   </div>
 </div>
