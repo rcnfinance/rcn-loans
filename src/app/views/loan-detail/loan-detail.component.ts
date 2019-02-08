@@ -87,6 +87,7 @@ export class LoanDetailComponent implements OnInit {
         this.loadDetail();
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
+        console.info(this.loan);
         this.spinner.hide();
       }).catch(() =>
         this.router.navigate(['/404/'])
@@ -140,7 +141,8 @@ export class LoanDetailComponent implements OnInit {
     this.isRequest = this.loan.status === Status.Request;
     this.isOngoing = this.loan.status === Status.Ongoing;
     this.isExpired = this.loan.status === Status.Expired;
-    this.pendingAmount = (this.loan.expectedReturn - this.loan.paid > 0) ? this.loan.expectedReturn - this.loan.paid : 0;
+    this.pendingAmount = (this.loan.expectedReturn - this.loan.paid > 0) ?
+    this.loan.expectedReturn + this.loan.expectedPunitoryReturn - this.loan.paid : 0;
     this.loadUserActions();
   }
 

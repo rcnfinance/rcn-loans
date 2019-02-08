@@ -137,6 +137,10 @@ export class Loan {
     return ((this.amount * 100000 * this.duration) / this.rawAnnualInterest) + this.amount;
   }
 
+  get expectedPunitoryReturn(): number {
+    return (this.pendingAmount * ((Date.now() / 1000) - this.expirationRequest) * 100000) / this.rawAnnualPunitoryInterest;
+  }
+
   get borrowerShort(): string {
     return Utils.shortAddress(this.borrower);
   }
