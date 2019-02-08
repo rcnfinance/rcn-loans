@@ -44,6 +44,23 @@
             </div>
             <div class="title main-h1" *ngIf='isDesktop'>Loan Information</div>
             <app-currency-selection [loan]=loan></app-currency-selection>
+            <div class="expandable-content-container">
+              <div class="expandable-content-block">
+                <div class="header-block">
+                  <div class="title">Loan Properties</div>
+                </div>
+                <div class="content-block">
+                  <ul class="icon-group">
+                    <li class="icon"><i class="far fa-user"></i></li>
+                    <li class="icon"><i class="far fa-calendar"></i></li>
+                    <li class="icon"><i class="fas fa-calculator"></i></li>
+                    <li class="icon"><i class="fas fa-sort-amount-down"></i></li>
+                    <li class="icon"><i class="fas fa-coins"></i></li>
+                    <li class="icon"><i class="fas fa-sort-amount-up"></i></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </mat-tab>
         <mat-tab label="Collateral">
