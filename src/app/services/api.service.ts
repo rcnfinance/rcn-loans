@@ -19,10 +19,11 @@ export class ApiService {
     let apiCalls = 0;
     let page = 0;
     do {
-      const response = await this.http.get(this.url.concat('loans?open=false')).toPromise();
+      const response = await this.http.get(this.url.concat('loans?open=false&page=' + page)).toPromise();
       const data = response.json();
       apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       const activeLoans = await this.completeLoanModels(data.content);
+      console.info('lender', lender);
       const loansOfLender = activeLoans.filter(loan => loan.debt.owner.toLowerCase() === lender);
       allLoansOfLender = allLoansOfLender.concat(loansOfLender);
       page++;
@@ -35,13 +36,18 @@ export class ApiService {
     let apiCalls = 0;
     let page = 0;
     do {
-      const response = await this.http.get(this.url.concat('loans?open=false&status=1')).toPromise();
+      const response = await this.http.get(this.url.concat('loans?open=false&page=' + page)).toPromise();
       const data = response.json();
+      console.log(data.meta.resource_count);
       apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      console.log(apiCalls);
       const activeLoans = await this.completeLoanModels(data.content);
+      console.log(activeLoans);
       allActiveLoans = allActiveLoans.concat(activeLoans);
+      console.log(allActiveLoans);
       page++;
     } while (page < apiCalls);
+    console.info('activeLoans', allActiveLoans);
     return allActiveLoans;
   }
   async getLoan(id: string): Promise<Loan> {
@@ -69,6 +75,7 @@ export class ApiService {
       allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
       page++;
     } while (page < apiCalls);
+    console.log(allRequestLoans);
     return allRequestLoans;
   }
 
@@ -83,11 +90,11 @@ export class ApiService {
       let oracle: Oracle;
       if (loan.oracle !== Utils.address0x) {
         oracle = new Oracle(
-        Network.Diaspore,
-        loan.oracle,
-        Utils.hexToAscii(loan.currency.replace(/^[0x]+|[0]+$/g, '')),
-        loanCurrencyWith0x.concat(loan.currency)
-      );
+          Network.Diaspore,
+          loan.oracle,
+          Utils.hexToAscii(loan.currency.replace(/^[0x]+|[0]+$/g, '')),
+          loanCurrencyWith0x.concat(loan.currency)
+        );
       } else {
         oracle = new Oracle(
           Network.Diaspore,
@@ -115,22 +122,22 @@ export class ApiService {
         const debtBalance = data.debt_balance;
         const owner = data.owner;
         debt = new Debt(
+          Network.Diaspore,
+          loan.id,
+          new Model(
             Network.Diaspore,
-            loan.id,
-            new Model(
-              Network.Diaspore,
-              loan.model,
-              paid,
-              nextObligation,
-              currentObligation,
-              estimatedObligation,
-              dueTime
-            ),
-            debtBalance,
-            engine,
-            owner,
-            oracle
-          );
+            loan.model,
+            paid,
+            nextObligation,
+            currentObligation,
+            estimatedObligation,
+            dueTime
+          ),
+          debtBalance,
+          engine,
+          owner,
+          oracle
+        );
       }
 
       const newLoan = new Loan(

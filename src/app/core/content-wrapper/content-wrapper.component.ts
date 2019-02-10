@@ -28,15 +28,15 @@ export class ContentWrapperComponent implements OnInit {
     return this.removeTrailingZeros(this.rcnBalance.toFixed(18));
   }
   get available(): string {
-    if (this.weiAvailable === undefined) {
+    if (this.rcnAvailable === undefined) {
       return '...';
     }
-    return this.removeTrailingZeros((this.weiAvailable / this.ethWei).toFixed(18));
+    return this.removeTrailingZeros((this.rcnAvailable / this.ethWei).toFixed(18));
   }
   get withdrawEnabled(): boolean {
-    return this.loansWithBalance !== undefined
-      && this.loansWithBalance.length !== 0
-      && this.pendingWithdraw === undefined;
+    return this.basaltLoansWithBalance !== undefined || this.diasporeLoansWithBalance !== undefined &&
+    this.basaltLoansWithBalance.length > 0 || this.diasporeLoansWithBalance.length > 0 &&
+    this.pendingBasaltWithdraw === undefined || this.pendingDiasporeWithdraw === undefined;
   }
   winHeight: number = window.innerHeight;
   events: string[] = [];
@@ -46,8 +46,16 @@ export class ContentWrapperComponent implements OnInit {
 
   private ethWei = new BigNumber(10).pow(new BigNumber(18));
   rcnBalance: BigNumber;
-  weiAvailable: BigNumber;
+  rcnAvailable: BigNumber;
   loansWithBalance: number[];
+
+  private basaltRcnAvailable: number;
+  private diasporeRcnAvailable: number;
+
+  basaltLoansWithBalance: number[];
+  diasporeLoansWithBalance: number[];
+  pendingBasaltWithdraw: Tx;
+  pendingDiasporeWithdraw: Tx;
 
   autoClose: boolean;
   isApproved: boolean;
@@ -63,7 +71,7 @@ export class ContentWrapperComponent implements OnInit {
     private contractService: ContractsService,
     private txService: TxService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   // Toggle Navbar
   sidebarToggle() {
@@ -86,17 +94,25 @@ export class ContentWrapperComponent implements OnInit {
   onOpen() {
     this.sidebarService.toggleService(this.navToggle = true);
   }
+
   async clickWithdraw() {
     if (!this.withdrawEnabled) {
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingWithdraw.tx));
     } else {
-      const tx = await this.contractService.withdrawFunds(this.loansWithBalance);
-      this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.loansWithBalance);
-      this.loadPendingWithdraw();
+      if (this.basaltLoansWithBalance.length > 0) {
+        const tx = await this.contractService.withdrawFundsBasalt(this.basaltLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.basaltLoansWithBalance);
+      }
+      if (this.diasporeLoansWithBalance.length > 0) {
+        console.log('registering Withdraw transaction');
+        const tx = await this.contractService.withdrawFundsDiaspore(this.diasporeLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, environment.contracts.diaspore.debtEngine, this.diasporeLoansWithBalance);
+      }
+      this.loadWithdrawBalance();
     }
   }
   ngOnInit() {
-     // Navbar toggled
+    // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
     this.web3Service.loginEvent.subscribe(() => this.loadAccount());
@@ -121,7 +137,14 @@ export class ContentWrapperComponent implements OnInit {
     return value;
   }
   private loadPendingWithdraw() {
-    this.pendingWithdraw = this.txService.getLastWithdraw(environment.contracts.basaltEngine, this.loansWithBalance);
+    this.pendingBasaltWithdraw = this.txService.getLastWithdraw(
+      environment.contracts.basaltEngine,
+      this.basaltLoansWithBalance
+    );
+    this.pendingDiasporeWithdraw = this.txService.getLastWithdraw(
+      environment.contracts.diaspore.debtEngine,
+      this.diasporeLoansWithBalance
+    );
   }
   private loadLender() {
     this.web3Service.getAccount().then((resolve: string) => {
@@ -133,11 +156,13 @@ export class ContentWrapperComponent implements OnInit {
       this.rcnBalance = balance;
     });
   }
-  private loadWithdrawBalance() {
-    this.contractService.getPendingWithdraws().then((result: [number, number[]]) => {
-      this.weiAvailable = result[0];
-      this.loansWithBalance = result[1];
-      this.loadPendingWithdraw();
-    });
+  private async loadWithdrawBalance() {
+    const pendingWithdraws = await this.contractService.getPendingWithdraws();
+    this.basaltRcnAvailable = pendingWithdraws[0] / 10 ** 18;
+    this.diasporeRcnAvailable = pendingWithdraws[2] / 10 ** 18;
+    this.rcnAvailable = this.basaltRcnAvailable + this.diasporeRcnAvailable;
+    this.basaltLoansWithBalance = pendingWithdraws[1];
+    this.diasporeLoansWithBalance = pendingWithdraws[3];
+    this.loadPendingWithdraw();
   }
 }

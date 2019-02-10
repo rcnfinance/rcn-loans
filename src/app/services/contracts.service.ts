@@ -231,16 +231,21 @@ export class ContractsService {
     }
   }
 
-  async withdrawFunds(loans: number[]): Promise<string> {
+  async withdrawFundsBasalt(basaltIdLoans: number[]): Promise<string> {
     const account = await this.web3.getAccount();
-    return new Promise((resolve, reject) => {
-      this._rcnEngine.withdrawalList(loans, account, (err, result) => {
-        if (err != null) {
-          reject(err);
-        }
-        resolve(result);
-      });
-    }) as Promise<string>;
+    const web3 = this.web3.opsWeb3;
+
+    return await promisify(this.loadAltContract(web3, this._rcnEngine).withdrawalList,
+      [basaltIdLoans, account, { from: account }]);
+  }
+
+  async withdrawFundsDiaspore(diasporeIdLoans: number[]): Promise<string> {
+    const account = await this.web3.getAccount();
+    const web3 = this.web3.opsWeb3;
+
+    console.info('loans to withdraw diaspore', diasporeIdLoans);
+    return await promisify(this.loadAltContract(web3, this._debtEngine).withdrawBatch,
+      [diasporeIdLoans, account, { from: account }]);
   }
 
   async getOracleData(oracle?: Oracle): Promise<string> {
@@ -375,25 +380,30 @@ export class ContractsService {
     return await pdiaspore;
 
   }
-  readPendingWithdraws(loans: Loan[]): [BigNumber, number[]] {
-    const pendingLoans = [];
-    let total = 0;
+  readPendingWithdraws(loans: Loan[]): [BigNumber, number[], BigNumber, number[]] {
+    const pendingBasaltLoans = [];
+    const pendingDiasporeLoans = [];
+    let totalBasalt = 0;
+    let totalDiaspore = 0;
 
     loans.forEach(loan => {
-      if (loan.debt.balance > 0) {
-        total += loan.debt.balance;
-        pendingLoans.push(loan.id);
+      if (loan.debt.balance > 0 && loan.network === Network.Basalt) {
+        totalBasalt += loan.debt.balance;
+        pendingBasaltLoans.push(loan.id);
+      } else if (loan.debt.balance > 0 && loan.network === Network.Diaspore) {
+        totalDiaspore += loan.debt.balance;
+        pendingDiasporeLoans.push(loan.id);
       }
     });
-
-    return [total, pendingLoans];
+    return [totalBasalt, pendingBasaltLoans, totalDiaspore, pendingDiasporeLoans];
   }
-  async getPendingWithdraws(): Promise<[number, number[]]> {
+
+  async getPendingWithdraws(): Promise<[number, number[], number, number[]]> {
     return new Promise((resolve, _reject) => {
       this.getLoansOfLender().then((loans: Loan[]) => {
         resolve(this.readPendingWithdraws(loans));
       });
-    }) as Promise<[number, number[]]>;
+    }) as Promise<[number, number[], number, number[]]>;
   }
   private parseBasaltBytes(bytes: any): Loan[] {
     const loans = [];
