@@ -21,7 +21,9 @@ export class ApiService {
     do {
       const response = await this.http.get(this.url.concat('loans?open=false&page=' + page)).toPromise();
       const data = response.json();
-      apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      if (page === 0) {
+        apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      }
       const activeLoans = await this.completeLoanModels(data.content);
       const loansOfLender = activeLoans.filter(loan => loan.debt.owner.toLowerCase() === lender);
       allLoansOfLender = allLoansOfLender.concat(loansOfLender);
@@ -37,7 +39,9 @@ export class ApiService {
     do {
       const response = await this.http.get(this.url.concat('loans?open=false&page=' + page)).toPromise();
       const data = response.json();
-      apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      if (page === 0) {
+        apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      }
       const activeLoans = await this.completeLoanModels(data.content);
       allActiveLoans = allActiveLoans.concat(activeLoans);
       page++;
@@ -63,7 +67,9 @@ export class ApiService {
     do {
       const response = await this.http.get(this.url.concat('loans?open=true&page=' + page)).toPromise();
       const data = response.json();
-      apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      if (page === 0) {
+        apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      }
       const loansRequests = await this.completeLoanModels(data.content);
       const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now);
       allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);

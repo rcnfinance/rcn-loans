@@ -18,8 +18,8 @@ export class BalanceComponent implements OnInit {
   private basaltRcnAvailable: number;
   private diasporeRcnAvailable: number;
 
-  basaltLoansWithBalance: number[];
-  diasporeLoansWithBalance: number[];
+  basaltLoansWithBalance: number[] = [];
+  diasporeLoansWithBalance: number[] = [];
   ongoingBasaltWithdraw: Tx;
   ongoingDiasporeWithdraw: Tx;
 
