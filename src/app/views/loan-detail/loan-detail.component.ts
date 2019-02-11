@@ -73,7 +73,7 @@ export class LoanDetailComponent implements OnInit {
   }
 
   canculatePendingAmount() {
-    let expectedPunitoryReturn = null;
+    let expectedPunitoryReturn: number;
     if (this.loan.status === Status.Indebt) { // Loan is in debt so this calculate pendingAmount with PunitoryInterest
       expectedPunitoryReturn = this.loan.expectedPunitoryReturn;
     }
