@@ -228,6 +228,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   get enabled(): Boolean {
+    console.log(this.txService.getLastLend(this.loan) === undefined);
     return this.txService.getLastLend(this.loan) === undefined;
   }
 

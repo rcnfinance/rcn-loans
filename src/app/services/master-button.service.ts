@@ -5,11 +5,11 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
-import { Subject, BehaviorSubject } from 'rxjs';
 import { environment } from 'environments/environment';
 // App Model
 import { Loan } from 'app/models/loan.model';
 // App Component
+import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogInsufficientFoundsComponent } from 'app/dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 // App Services
 import { Tx, TxService } from 'app/tx.service';
@@ -21,15 +21,10 @@ import { EventsService, Category } from './events.service';
   providedIn: 'root'
 })
 export class MasterButtonService {
-  @Input() loan: Loan;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   pendingTx: Tx = undefined;
   lendEnabled: Boolean;
   opPending = false;
-
-  private loanSource$ = new Subject<Loan>();
-
-  loan$ = this.loanSource$.asObservable();
 
   constructor(
     private txService: TxService,
@@ -42,10 +37,6 @@ export class MasterButtonService {
     this.countriesService.lendEnabled().then((lendEnabled) => {
       this.lendEnabled = lendEnabled;
     });
-  }
-
-  updateLoan(loan: Loan) {
-    this.loanSource$.next(loan);
   }
 
   get enabled(): Boolean {
@@ -64,7 +55,6 @@ export class MasterButtonService {
   }
 
   clickLend() {
-    console.info(this.loanSource$);
     if (this.pendingTx === undefined) {
       this.eventsService.trackEvent(
         'click-lend',
@@ -97,6 +87,18 @@ export class MasterButtonService {
     console.info('Cancel lend');
     this.openSnackBar('Your transaction has failed', '');
     this.opPending = false;
+  }
+
+  showApproveDialog() {
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
+    dialogRef.componentInstance.autoClose = true;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.handleLend(true);
+      } else {
+        this.cancelOperation();
+      }
+    });
   }
 
   showInsufficientFundsDialog(required: number, funds: number) {

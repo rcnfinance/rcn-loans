@@ -12,23 +12,18 @@ import { MasterButtonService } from 'app/services/master-button.service';
 export class MasterButtonComponent implements OnInit {
   @Input() action: string;
   @Output() actionEvent = new EventEmitter<string>();
-  loan: Loan;
   buttonText: string;
 
   constructor(
     public masterButtonService: MasterButtonService
   ) {
     this.buttonText = this.masterButtonService.buttonText;
-    this.masterButtonService.loan$.subscribe(loan => this.loan = loan);
   }
 
   sendClickEvent() {
-    this.actionEvent.emit(this.buttonText);
-    // this.masterButtonService.clickLend();
+    this.actionEvent.emit(this.action);
   }
 
-  ngOnInit() {
-    // console.info(this.loan);
-  }
+  ngOnInit() {}
 
 }

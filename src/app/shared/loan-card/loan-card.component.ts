@@ -26,12 +26,10 @@ export class LoanCardComponent implements OnInit {
 
   constructor(
     private masterButtonService: MasterButtonService
-  ) {
-    this.masterButtonService.updateLoan(this.loan);
-  }
+  ) {}
 
-  receiveClickEvent($event) {
-    console.info($event);
+  receiveClickEvent(action: string) {
+    console.info(action);
   }
 
   ngOnInit() {
