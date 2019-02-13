@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { MasterButtonService } from 'app/services/master-button.service';
 import { Loan, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 
@@ -10,6 +11,11 @@ import { Utils } from '../../utils/utils';
 export class LoanCardComponent implements OnInit {
   @Input() loan: Loan;
 
+  actions = {
+    lend: 'Lend',
+    transfer: 'Transfer'
+  };
+
   leftLabel: string;
   leftValue: string;
   rightLabel: string;
@@ -18,7 +24,15 @@ export class LoanCardComponent implements OnInit {
   durationValue: string;
   canLend: boolean;
 
-  constructor() { }
+  constructor(
+    private masterButtonService: MasterButtonService
+  ) {
+    this.masterButtonService.updateLoan(this.loan);
+  }
+
+  receiveClickEvent($event) {
+    console.info($event);
+  }
 
   ngOnInit() {
     if (this.loan.status === Status.Request) {

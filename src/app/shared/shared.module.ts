@@ -19,6 +19,7 @@ import { ConversionGraphicComponent } from './conversion-graphic/conversion-grap
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
 // App Buttons
+import { MasterButtonComponent } from './master-button/master-button.component';
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
 import { PayButtonComponent } from './pay-button/pay-button.component';
@@ -49,6 +50,7 @@ import { TitleService } from './../services/title.service';
 import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
+import { MasterButtonService } from './../services/master-button.service';
 
 @NgModule({
   imports: [
@@ -69,6 +71,7 @@ import { EventsService } from './../services/events.service';
     BodyListComponent,
     AvatarTitleComponent,
     IconAvatarComponent,
+    MasterButtonComponent,
     LendButtonComponent,
     DetailButtonComponent,
     PayButtonComponent,
@@ -107,7 +110,8 @@ import { EventsService } from './../services/events.service';
     TitleService,
     AvailableLoansService,
     CountriesService,
-    EventsService
+    EventsService,
+    MasterButtonService
   ],
   exports: [
     LoanCardComponent,
@@ -121,6 +125,7 @@ import { EventsService } from './../services/events.service';
     BodyListComponent,
     AvatarTitleComponent,
     IconAvatarComponent,
+    MasterButtonComponent,
     LendButtonComponent,
     DetailButtonComponent,
     PayButtonComponent,
