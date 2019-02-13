@@ -138,7 +138,18 @@ export class Loan {
   }
 
   get expectedPunitoryReturn(): number {
-    return (this.pendingAmount * ((Date.now() / 1000) - this.expirationRequest) * 100000) / this.rawAnnualPunitoryInterest;
+    //                         timestampLastPayment       interestPunitory          360
+    // actualPunitoryDebt = ( now - lastPaymentTime ) * (( punitoryInterest % / yearInSeconds ) * totalDebtAfterLastPayment)
+    // actualPunitoryDebt = ( now - interestTimestamp ) * (( punitoryInterest % / yearInSeconds ) * cumulatedPunnitoryInterest)
+
+    // console.info((timestamp() - this.interestTimestamp) * ((this.annualPunitoryInterest / 360) * this.cumulatedPunnitoryInterest));
+    console.info(this.rawTotal);
+    console.info(this.total);
+    console.info(this.paid);
+    console.info('total' , (this.total - this.paid));
+
+    // return (this.pendingAmount * (timestamp() - this.expirationRequest) * 100000) / this.rawAnnualPunitoryInterest;
+    return this.total - this.paid;
   }
 
   get borrowerShort(): string {
