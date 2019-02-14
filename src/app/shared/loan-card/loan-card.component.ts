@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MasterButtonService } from 'app/services/master-button.service';
+import { ActionsTriggerService } from 'app/services/actions-trigger.service';
 import { Loan, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 
@@ -25,7 +25,7 @@ export class LoanCardComponent implements OnInit {
   canLend: boolean;
 
   constructor(
-    private masterButtonService: MasterButtonService
+    private actionsTriggerService: ActionsTriggerService
   ) {}
 
   receiveClickEvent(action: string) {

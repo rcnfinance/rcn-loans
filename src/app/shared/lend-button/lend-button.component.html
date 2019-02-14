@@ -1,5 +1,6 @@
-<a mat-raised-button (click)='clickLend()' class="button button-primary" 
+<a mat-raised-button class="button button-primary" 
+(click)='sendClickEvent($event)'
 [matTooltip]="this.lendEnabled ? '' : 'This feature is not enabled in your country'" matTooltipPosition="above">
   {{ buttonText }}
-  <div style="display: inline; margin-left: 5px; vertical-align: baseline;" *ngIf='opPending'><i class="fa fa-circle-notch fa-spin"></i></div>
+  <div style="display: inline; margin-left: 5px; vertical-align: baseline;"><i class="fa fa-circle-notch fa-spin"></i></div>
 </a>
