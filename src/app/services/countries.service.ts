@@ -14,12 +14,9 @@ export class CountriesService {
   buildCountry(): Promise<string> {
     // TODO: Replace with custom API
     return new Promise((resolve) => {
-      this.http.get('https://api.ipify.org/', { responseType: 'text' }).subscribe((response: any) => {
-        const ip = response;
-        this.http.get('https://ipinfo.io/' + ip + '/json').subscribe((resposneIp: any) => {
-          const country = resposneIp.country;
-          resolve(country);
-        });
+      this.http.get('https://api.ipdata.co/?api-key=3a5c90300b23f1d3880abf05ff24c226db274a4fbfc574e66c280acf'
+      , { responseType: 'json' }).subscribe((response: any) => {
+        resolve(response.country_code);
       });
     });
   }

@@ -252,6 +252,7 @@ export class LendButtonComponent implements OnInit {
   ngOnInit() {
     this.retrievePendingTx();
     this.countriesService.lendEnabled().then((lendEnabled) => {
+      console.info(this.lendEnabled);
       this.lendEnabled = lendEnabled;
     });
   }
