@@ -5,6 +5,7 @@
 ### Fix:
 
 - Fix scrollbar style
+- Api Fix Geolocalization
 
 ## **0.0.12** Avocados - 2019/01/09
 
@@ -19,7 +20,6 @@
 ### Fix:
 - Fix bug when view card-loan type visibility
 - Fix bug when approve contract checkbox visibility
-- Api Fix Geolocalization
 
 ## **0.0.11** Avocados - 2018/12/25
 
