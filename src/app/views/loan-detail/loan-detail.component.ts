@@ -72,6 +72,14 @@ export class LoanDetailComponent implements OnInit {
     window.open('/address/' + address, '_blank');
   }
 
+  canculatePendingAmount() {
+    if (this.loan.status === Status.Indebt) { // Loan is in debt so this calculate pendingAmount with PunitoryInterest
+      return this.loan.expectedPunitoryReturn;
+    }
+    // Loan is in running normally so this calculate pendingAmount with AnnualInterest
+    return (this.loan.expectedReturn - this.loan.paid > 0) ? this.loan.expectedReturn - this.loan.paid : 0;
+  }
+
   ngOnInit() {
     this.spinner.show();
     this.loadAccount();
@@ -140,7 +148,10 @@ export class LoanDetailComponent implements OnInit {
     this.isRequest = this.loan.status === Status.Request;
     this.isOngoing = this.loan.status === Status.Ongoing;
     this.isExpired = this.loan.status === Status.Expired;
-    this.pendingAmount = (this.loan.expectedReturn - this.loan.paid > 0) ? this.loan.expectedReturn - this.loan.paid : 0;
+
+    // Loan is check if in debt and calculate pendingAmount with AnnualInterest or PunitoryInterest
+    this.pendingAmount = this.canculatePendingAmount();
+
     this.loadUserActions();
   }
 

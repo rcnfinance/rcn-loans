@@ -134,7 +134,13 @@ export class Loan {
   }
 
   get expectedReturn(): number {
+    // Loan is in running normally so this calculate pendingAmount with AnnualInterest
     return ((this.amount * 100000 * this.duration) / this.rawAnnualInterest) + this.amount;
+  }
+
+  get expectedPunitoryReturn(): number {
+    // Loan is in debt so this calculate pendingAmount with PunitoryInterest
+    return this.total - this.paid;
   }
 
   get borrowerShort(): string {
