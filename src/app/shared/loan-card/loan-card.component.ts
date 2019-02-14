@@ -11,11 +11,6 @@ import { Utils } from '../../utils/utils';
 export class LoanCardComponent implements OnInit {
   @Input() loan: Loan;
 
-  actions = {
-    lend: 'Lend',
-    transfer: 'Transfer'
-  };
-
   leftLabel: string;
   leftValue: string;
   rightLabel: string;
@@ -30,6 +25,11 @@ export class LoanCardComponent implements OnInit {
 
   receiveClickEvent(action: string) {
     console.info(action);
+  }
+
+  onChangeUpload(event) {
+    console.info('event');
+    console.info(event);
   }
 
   ngOnInit() {
