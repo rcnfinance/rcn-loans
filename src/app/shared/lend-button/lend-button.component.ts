@@ -22,6 +22,7 @@ export class LendButtonComponent implements OnInit {
   pendingTx: Tx = undefined;
   lendEnabled: Boolean;
   buttonText: string;
+  action: 'lendTEst';
 
   constructor(
     private countriesService: CountriesService
