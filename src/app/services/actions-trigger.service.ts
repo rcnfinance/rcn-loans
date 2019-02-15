@@ -5,10 +5,12 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from 'environments/environment';
 // App Model
 import { Loan } from 'app/models/loan.model';
 // App Component
+import { CivicAuthComponent } from 'app/shared/civic-auth/civic-auth.component';
 import { DialogClientAccountComponent } from 'app/dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogInsufficientFoundsComponent } from 'app/dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
@@ -22,13 +24,16 @@ import { Web3Service } from './web3.service';
 import { CosignerService } from './cosigner.service';
 import { CivicService } from './civic.service';
 import { EventsService, Category } from './events.service';
-import { CivicAuthComponent } from 'app/shared/civic-auth/civic-auth.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActionsTriggerService {
   loan: Loan;
+
+  private buttonTextSource$ = new BehaviorSubject(undefined);
+  currentbuttonText = this.buttonTextSource$.asObservable();
+
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   pendingTx: Tx = undefined;
   lendEnabled: Boolean;
@@ -54,14 +59,17 @@ export class ActionsTriggerService {
     return this.txService.getLastLend(this.loan) === undefined;
   }
 
-  get buttonText(): string {
+  get changeButtonText() {
     const tx = this.pendingTx;
     if (tx === undefined) {
+      this.buttonTextSource$.next('Lend');
       return 'Lend';
     }
     if (tx.confirmed) {
+      this.buttonTextSource$.next('Lent');
       return 'Lent';
     }
+    this.buttonTextSource$.next('Lending...');
     return 'Lending...';
   }
 
@@ -73,7 +81,7 @@ export class ActionsTriggerService {
         'loan #' + this.loan.id
       );
 
-      // this.handleLend();
+      this.handleLend();
     } else {
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }

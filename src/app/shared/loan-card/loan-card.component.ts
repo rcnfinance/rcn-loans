@@ -23,13 +23,12 @@ export class LoanCardComponent implements OnInit {
     private actionsTriggerService: ActionsTriggerService
   ) {}
 
-  receiveClickEvent(action: string) {
-    console.info(action);
+  get enabled(): Boolean {
+    return this.actionsTriggerService.enabled;
   }
 
-  onChangeUpload(event) {
-    console.info('event');
-    console.info(event);
+  receiveClickEvent(action: any) {
+    console.info(action);
   }
 
   ngOnInit() {
