@@ -2,7 +2,14 @@
 
 ## Unreleased
 
+--
+
+## **0.0.13** Avocados - 2019/02/15
+
 ### Fix:
+
+- Fix scrollbar style
+- Api Fix Geolocalization
 - Fix Civic QR CSS
 
 ## **0.0.12** Avocados - 2019/01/09
