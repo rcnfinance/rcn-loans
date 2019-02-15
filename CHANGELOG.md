@@ -6,6 +6,7 @@
 
 - Fix scrollbar style
 - Api Fix Geolocalization
+- Fix Civic QR CSS
 
 ## **0.0.12** Avocados - 2019/01/09
 
