@@ -18,12 +18,12 @@ import { CountriesService } from '../../services/countries.service';
 })
 export class LendButtonComponent implements OnInit {
   @Input() loan: Loan;
-  @Input() enabledButton: boolean;
   @Output() actionEvent = new EventEmitter<string>();
-  opPending: boolean = this.actionsTriggerService.opPending;
+  @Input() enabledButton: Boolean;
+  @Input() opPending: boolean;
+  @Input() buttonText: any;
   pendingTx: Tx = undefined;
   lendEnabled: Boolean;
-  buttonText: any = this.actionsTriggerService.changeButtonText;
 
   constructor(
     private actionsTriggerService: ActionsTriggerService,

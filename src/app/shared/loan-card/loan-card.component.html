@@ -25,8 +25,11 @@
       <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
       <div class="block-title">{{ rightValue }}</div>
     </div>
-    <app-lend-button [loan]=loan 
-    [enabledButton]='this.enabled' 
+    <app-lend-button
+    [loan]=loan
+    [opPending]=opPending
+    [buttonText]=buttonText
+    [enabledButton]=enabledButton
     (actionEvent)="receiveClickEvent($event)"
     *ngIf="canLend"></app-lend-button>
     <app-detail-button [loan]=loan></app-detail-button>

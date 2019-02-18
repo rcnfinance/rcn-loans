@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { ActionsTriggerService } from 'app/services/actions-trigger.service';
 import { Loan, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
@@ -8,7 +8,7 @@ import { Utils } from '../../utils/utils';
   templateUrl: './loan-card.component.html',
   styleUrls: ['./loan-card.component.scss']
 })
-export class LoanCardComponent implements OnInit {
+export class LoanCardComponent implements OnInit, OnChanges {
   @Input() loan: Loan;
 
   leftLabel: string;
@@ -19,13 +19,14 @@ export class LoanCardComponent implements OnInit {
   durationValue: string;
   canLend: boolean;
 
+  // Button Properties
+  enabledButton: Boolean;
+  opPending: boolean;
+  buttonText: any;
+
   constructor(
     private actionsTriggerService: ActionsTriggerService
   ) {}
-
-  get enabled(): Boolean {
-    return this.actionsTriggerService.enabled;
-  }
 
   receiveClickEvent(action: any) {
     console.info(action);
@@ -49,6 +50,12 @@ export class LoanCardComponent implements OnInit {
       this.durationValue = Utils.formatDelta(this.loan.remainingTime);
       this.canLend = false;
     }
+  }
+
+  ngOnChanges() {
+    this.enabledButton = this.actionsTriggerService.enabled;
+    this.opPending = this.actionsTriggerService.opPending;
+    this.buttonText = this.actionsTriggerService.changeButtonText;
   }
 
   formatAmount(amount: number): string {
