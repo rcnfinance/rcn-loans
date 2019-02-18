@@ -30,6 +30,7 @@ export class LoanCardComponent implements OnInit, OnChanges {
 
   receiveClickEvent(action: any) {
     console.info(action);
+    this.actionsTriggerService.clickLend(this.loan);
   }
 
   ngOnInit() {
@@ -53,7 +54,7 @@ export class LoanCardComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.enabledButton = this.actionsTriggerService.enabled;
+    this.enabledButton = this.actionsTriggerService.enabled(this.loan);
     this.opPending = this.actionsTriggerService.opPending;
     this.buttonText = this.actionsTriggerService.changeButtonText;
   }

@@ -55,8 +55,8 @@ export class ActionsTriggerService {
     });
   }
 
-  get enabled(): Boolean {
-    return this.txService.getLastLend(this.loan) === undefined;
+  enabled(loan: Loan): Boolean {
+    return this.txService.getLastLend(loan) === undefined;
   }
 
   get changeButtonText() {
@@ -73,26 +73,28 @@ export class ActionsTriggerService {
     return 'Lending...';
   }
 
-  clickLend() {
+  clickLend(loan: Loan) {
+    const clickedLoan: Loan = loan;
     if (this.pendingTx === undefined) {
       this.eventsService.trackEvent(
         'click-lend',
         Category.Loan,
-        'loan #' + this.loan.id
+        'loan #' + clickedLoan.id
       );
 
-      this.handleLend();
+      this.handleLend(clickedLoan);
     } else {
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }
   }
 
-  async handleLend(forze = false) {
+  async handleLend(loan: Loan, forze = false) {
+    console.info('actions trigger loan' , loan);
     if (this.opPending && !forze) { return; }
 
     if (!this.web3Service.loggedIn) {
       if (await this.web3Service.requestLogin()) {
-        this.handleLend();
+        this.handleLend(loan);
         return;
       }
 
@@ -107,16 +109,16 @@ export class ActionsTriggerService {
       return;
     }
 
-    const cosigner = this.cosignerService.getCosigner(this.loan);
+    const cosigner = this.cosignerService.getCosigner(loan);
     if (cosigner instanceof DecentralandCosignerProvider) {
-      const isParcelStatusOpen = await cosigner.getStatusOfParcel(this.loan);
+      const isParcelStatusOpen = await cosigner.getStatusOfParcel(loan);
       if (!isParcelStatusOpen) {
         this.dialog.open(DialogGenericErrorComponent, { data: {
           error: new Error('Not Available, Parcel is already sold')
         }});
         return;
       }
-      const isMortgageCancelled = await cosigner.isMortgageCancelled(this.loan);
+      const isMortgageCancelled = await cosigner.isMortgageCancelled(loan);
       if (isMortgageCancelled) {
         this.dialog.open(DialogGenericErrorComponent, { data: {
           error: new Error('Not Available, Mortgage has been cancelled')
@@ -131,9 +133,9 @@ export class ActionsTriggerService {
       const engineApproved = this.contractsService.isEngineApproved();
       const civicApproved = this.civicService.status();
       const balance = await this.contractsService.getUserBalanceRCNWei();
-      const required = await this.contractsService.estimateLendAmount(this.loan);
+      const required = await this.contractsService.estimateLendAmount(loan);
       const ethBalance = await this.contractsService.getUserBalanceETHWei();
-      const estimated = await this.contractsService.estimateEthRequiredAmount(this.loan);
+      const estimated = await this.contractsService.estimateEthRequiredAmount(loan);
 
       if (!await engineApproved) {
         this.showApproveDialog();
@@ -146,35 +148,35 @@ export class ActionsTriggerService {
       }
 
       if (balance > required) {
-        const tx = await this.contractsService.lendLoan(this.loan);
+        const tx = await this.contractsService.lendLoan(loan);
         this.eventsService.trackEvent(
           'lend',
           Category.Account,
-          'loan #' + this.loan.id
+          'loan #' + loan.id
         );
 
-        this.txService.registerLendTx(this.loan, tx);
-        this.pendingTx = this.txService.getLastLend(this.loan);
+        this.txService.registerLendTx(loan, tx);
+        this.pendingTx = this.txService.getLastLend(loan);
         return;
       }
 
       if (ethBalance.toNumber() >= estimated.toNumber()) {
-        const tx = await this.contractsService.lendLoanWithSwap(this.loan, estimated);
+        const tx = await this.contractsService.lendLoanWithSwap(loan, estimated);
         this.eventsService.trackEvent(
           'lend',
           Category.Account,
-          'loan #' + this.loan.id
+          'loan #' + loan.id
         );
 
-        this.txService.registerLendTx(this.loan, tx);
-        this.pendingTx = this.txService.getLastLend(this.loan);
+        this.txService.registerLendTx(loan, tx);
+        this.pendingTx = this.txService.getLastLend(loan);
         return;
       }
 
       this.eventsService.trackEvent(
         'show-insufficient-funds-lend',
         Category.Account,
-        'loan #' + this.loan.id,
+        'loan #' + loan.id,
         required
       );
 

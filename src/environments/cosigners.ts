@@ -29,8 +29,7 @@ const consignerOptions: CosignerOption[] = [ {
   creator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
   market: '0x5424912699dabaa5f2998750c1c66e73d67ad219',
   dataUrl: 'https://api.decentraland.org/v1/'
-}
-];
+} ];
 
 function setOptions() {
   const optionsArray: Array<CosignerProvider> = [];
