@@ -36,7 +36,6 @@ export class ActionsTriggerService {
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   pendingTx: Tx = undefined;
-  lendEnabled: Boolean;
   opPending = false;
 
   constructor(
@@ -49,11 +48,7 @@ export class ActionsTriggerService {
     private civicService: CivicService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar
-  ) {
-    this.countriesService.lendEnabled().then((lendEnabled) => {
-      this.lendEnabled = lendEnabled;
-    });
-  }
+  ) {}
 
   enabled(loan: Loan): Boolean {
     return this.txService.getLastLend(loan) === undefined;
@@ -73,28 +68,27 @@ export class ActionsTriggerService {
     return 'Lending...';
   }
 
-  clickLend(loan: Loan) {
-    const clickedLoan: Loan = loan;
+  clickLend(loan: Loan, enableRegion: Boolean) {
     if (this.pendingTx === undefined) {
       this.eventsService.trackEvent(
         'click-lend',
         Category.Loan,
-        'loan #' + clickedLoan.id
+        'loan #' + loan.id
       );
 
-      this.handleLend(clickedLoan);
+      this.handleLend(loan, enableRegion);
     } else {
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }
   }
 
-  async handleLend(loan: Loan, forze = false) {
+  async handleLend(loan: Loan, enableRegion: Boolean, forze = false) {
     console.info('actions trigger loan' , loan);
     if (this.opPending && !forze) { return; }
 
     if (!this.web3Service.loggedIn) {
       if (await this.web3Service.requestLogin()) {
-        this.handleLend(loan);
+        this.handleLend(loan, enableRegion);
         return;
       }
 
@@ -102,7 +96,7 @@ export class ActionsTriggerService {
       return;
     }
 
-    if (!this.lendEnabled) {
+    if (!enableRegion) {
       this.dialog.open(DialogGenericErrorComponent, { data: {
         error: new Error('Lending is not enabled in this region')
       }});

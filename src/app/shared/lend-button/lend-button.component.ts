@@ -6,10 +6,8 @@ import {
 } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 // App Services
-import { ActionsTriggerService } from 'app/services/actions-trigger.service';
 import { Loan } from './../../models/loan.model';
 import { Tx } from './../../tx.service';
-import { CountriesService } from '../../services/countries.service';
 
 @Component({
   selector: 'app-lend-button',
@@ -18,26 +16,18 @@ import { CountriesService } from '../../services/countries.service';
 })
 export class LendButtonComponent implements OnInit {
   @Input() loan: Loan;
-  @Output() actionEvent = new EventEmitter<string>();
-  @Input() enabledButton: Boolean;
+  @Input() enableRegion: Boolean; // ...
   @Input() opPending: boolean;
   @Input() buttonText: any;
+  @Output() actionEvent = new EventEmitter<string>();
   pendingTx: Tx = undefined;
-  lendEnabled: Boolean;
 
-  constructor(
-    private actionsTriggerService: ActionsTriggerService,
-    private countriesService: CountriesService
-  ) {}
+  constructor() {}
 
   sendClickEvent() {
     this.actionEvent.emit(this.buttonText);
   }
 
-  ngOnInit() {
-    this.countriesService.lendEnabled().then((lendEnabled) => {
-      this.lendEnabled = lendEnabled;
-    });
-  }
+  ngOnInit() {}
 
 }

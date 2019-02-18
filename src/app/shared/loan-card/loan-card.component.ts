@@ -1,5 +1,7 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
+// App Services
 import { ActionsTriggerService } from 'app/services/actions-trigger.service';
+import { CountriesService } from '../../services/countries.service';
 import { Loan, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 
@@ -20,17 +22,18 @@ export class LoanCardComponent implements OnInit, OnChanges {
   canLend: boolean;
 
   // Button Properties
-  enabledButton: Boolean;
   opPending: boolean;
   buttonText: any;
+  enableRegion: Boolean; // Check user country and define if is able to lend
 
   constructor(
-    private actionsTriggerService: ActionsTriggerService
+    private actionsTriggerService: ActionsTriggerService,
+    private countriesService: CountriesService
   ) {}
 
   receiveClickEvent(action: any) {
-    console.info(action);
-    this.actionsTriggerService.clickLend(this.loan);
+    console.info('Your action is to ' , action);
+    this.actionsTriggerService.clickLend(this.loan, this.enableRegion);
   }
 
   ngOnInit() {
@@ -54,9 +57,13 @@ export class LoanCardComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.enabledButton = this.actionsTriggerService.enabled(this.loan);
+    this.enableRegion = this.actionsTriggerService.enabled(this.loan);
     this.opPending = this.actionsTriggerService.opPending;
     this.buttonText = this.actionsTriggerService.changeButtonText;
+
+    this.countriesService.lendEnabled().then((enableRegion) => {
+      this.enableRegion = enableRegion;
+    });
   }
 
   formatAmount(amount: number): string {
