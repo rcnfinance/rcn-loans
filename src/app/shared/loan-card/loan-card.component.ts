@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 // App Services
 import { ActionsTriggerService } from 'app/services/actions-trigger.service';
+import { Tx } from 'app/tx.service';
 import { CountriesService } from '../../services/countries.service';
 import { Loan, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
@@ -25,6 +26,8 @@ export class LoanCardComponent implements OnInit, OnChanges {
   opPending: boolean;
   buttonText: any;
   enableRegion: Boolean; // Check user country and define if is able to lend
+
+  pendingTx: Tx;
 
   constructor(
     private actionsTriggerService: ActionsTriggerService,
@@ -58,8 +61,8 @@ export class LoanCardComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.enableRegion = this.actionsTriggerService.enabled(this.loan);
-    this.buttonText = this.actionsTriggerService.changeButtonText;
 
+    this.actionsTriggerService.currentbuttonText.subscribe(buttonText => this.buttonText = buttonText);
     this.actionsTriggerService.currentOpPending.subscribe(opPending => this.opPending = opPending);
 
     this.countriesService.lendEnabled().then((enableRegion) => {

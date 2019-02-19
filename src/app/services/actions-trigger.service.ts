@@ -28,9 +28,7 @@ import { EventsService, Category } from './events.service';
   providedIn: 'root'
 })
 export class ActionsTriggerService {
-  loan: Loan;
-
-  private buttonTextSource$ = new BehaviorSubject<string>(undefined);
+  private buttonTextSource$ = new BehaviorSubject<string>('Lend');
   currentbuttonText = this.buttonTextSource$.asObservable();
 
   private opPendingSource$ = new BehaviorSubject<boolean>(false);
@@ -48,13 +46,7 @@ export class ActionsTriggerService {
     private civicService: CivicService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar
-  ) {
-    if (this.opPendingSource$.value) {
-      console.info('this.currentOpPending is true' , this.currentOpPending);
-    } else {
-      console.info('this.currentOpPending is false' , this.currentOpPending);
-    }
-  }
+  ) {}
 
   enabled(loan: Loan): Boolean {
     return this.txService.getLastLend(loan) === undefined;
@@ -89,12 +81,6 @@ export class ActionsTriggerService {
   }
 
   async handleLend(loan: Loan, enableRegion: Boolean) {
-    console.info('actions trigger loan' , loan);
-    if (this.opPendingSource$.value) {
-      console.info('this.currentOpPending is true' , this.currentOpPending);
-    } else {
-      console.info('this.currentOpPending is false' , this.currentOpPending);
-    }
     if (this.opPendingSource$.value) { return; }
 
     if (!this.web3Service.loggedIn) {
@@ -151,7 +137,6 @@ export class ActionsTriggerService {
         this.showCivicDialog(loan, enableRegion);
         return;
       }
-
       if (balance > required) {
         const tx = await this.contractsService.lendLoan(loan);
         this.eventsService.trackEvent(
@@ -161,6 +146,7 @@ export class ActionsTriggerService {
         );
 
         this.txService.registerLendTx(loan, tx);
+
         this.pendingTx = this.txService.getLastLend(loan);
         return;
       }
