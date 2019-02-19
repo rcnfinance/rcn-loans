@@ -19,7 +19,6 @@ import { DialogGenericErrorComponent } from 'app/dialogs/dialog-generic-error/di
 import { DecentralandCosignerProvider } from 'app/providers/cosigners/decentraland-cosigner-provider';
 import { Tx, TxService } from 'app/tx.service';
 import { ContractsService } from './contracts.service';
-import { CountriesService } from './countries.service';
 import { Web3Service } from './web3.service';
 import { CosignerService } from './cosigner.service';
 import { CivicService } from './civic.service';
@@ -31,24 +30,31 @@ import { EventsService, Category } from './events.service';
 export class ActionsTriggerService {
   loan: Loan;
 
-  private buttonTextSource$ = new BehaviorSubject(undefined);
+  private buttonTextSource$ = new BehaviorSubject<string>(undefined);
   currentbuttonText = this.buttonTextSource$.asObservable();
+
+  private opPendingSource$ = new BehaviorSubject<boolean>(false);
+  currentOpPending = this.opPendingSource$.asObservable();
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   pendingTx: Tx = undefined;
-  opPending = false;
 
   constructor(
     private txService: TxService,
     private contractsService: ContractsService,
-    private countriesService: CountriesService,
     private web3Service: Web3Service,
     private eventsService: EventsService,
     private cosignerService: CosignerService,
     private civicService: CivicService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar
-  ) {}
+  ) {
+    if (this.opPendingSource$.value) {
+      console.info('this.currentOpPending is true' , this.currentOpPending);
+    } else {
+      console.info('this.currentOpPending is false' , this.currentOpPending);
+    }
+  }
 
   enabled(loan: Loan): Boolean {
     return this.txService.getLastLend(loan) === undefined;
@@ -82,9 +88,14 @@ export class ActionsTriggerService {
     }
   }
 
-  async handleLend(loan: Loan, enableRegion: Boolean, forze = false) {
+  async handleLend(loan: Loan, enableRegion: Boolean) {
     console.info('actions trigger loan' , loan);
-    if (this.opPending && !forze) { return; }
+    if (this.opPendingSource$.value) {
+      console.info('this.currentOpPending is true' , this.currentOpPending);
+    } else {
+      console.info('this.currentOpPending is false' , this.currentOpPending);
+    }
+    if (this.opPendingSource$.value) { return; }
 
     if (!this.web3Service.loggedIn) {
       if (await this.web3Service.requestLogin()) {
@@ -132,12 +143,12 @@ export class ActionsTriggerService {
       const estimated = await this.contractsService.estimateEthRequiredAmount(loan);
 
       if (!await engineApproved) {
-        this.showApproveDialog();
+        this.showApproveDialog(loan, enableRegion);
         return;
       }
 
       if (!await civicApproved) {
-        this.showCivicDialog();
+        this.showCivicDialog(loan, enableRegion);
         return;
       }
 
@@ -191,40 +202,40 @@ export class ActionsTriggerService {
 
   finishOperation() {
     console.info('Lend finished');
-    this.opPending = false;
+    this.opPendingSource$.next(this.opPendingSource$.value === false);
   }
 
   startOperation() {
     console.info('Started lending');
     this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
-    this.opPending = true;
+    this.opPendingSource$.next(this.opPendingSource$.value === true);
   }
 
   cancelOperation() {
     console.info('Cancel lend');
     this.openSnackBar('Your transaction has failed', '');
-    this.opPending = false;
+    this.opPendingSource$.next(this.opPendingSource$.value === false);
   }
 
-  showCivicDialog() {
+  showCivicDialog(loan: Loan, enableRegion: Boolean) {
     const dialogRef: MatDialogRef<CivicAuthComponent> = this.dialog.open(CivicAuthComponent, {
       width: '800px'
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // this.handleLend(true);
+        this.handleLend(loan, enableRegion);
       } else {
         this.cancelOperation();
       }
     });
   }
 
-  showApproveDialog() {
+  showApproveDialog(loan: Loan, enableRegion: Boolean) {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
     dialogRef.componentInstance.autoClose = true;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // this.handleLend(true);
+        this.handleLend(loan, enableRegion);
       } else {
         this.cancelOperation();
       }

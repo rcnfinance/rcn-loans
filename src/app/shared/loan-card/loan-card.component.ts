@@ -58,8 +58,9 @@ export class LoanCardComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.enableRegion = this.actionsTriggerService.enabled(this.loan);
-    this.opPending = this.actionsTriggerService.opPending;
     this.buttonText = this.actionsTriggerService.changeButtonText;
+
+    this.actionsTriggerService.currentOpPending.subscribe(opPending => this.opPending = opPending);
 
     this.countriesService.lendEnabled().then((enableRegion) => {
       this.enableRegion = enableRegion;
