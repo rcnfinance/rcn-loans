@@ -18,7 +18,7 @@ export class LendButtonComponent implements OnInit {
   @Input() loan: Loan;
   @Input() enableRegion: Boolean; // ...
   @Input() opPending: boolean;
-  @Input() buttonText: any;
+  @Input() buttonText: string;
   @Output() actionEvent = new EventEmitter<string>();
   pendingTx: Tx = undefined;
 

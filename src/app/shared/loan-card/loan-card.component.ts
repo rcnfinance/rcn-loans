@@ -24,7 +24,7 @@ export class LoanCardComponent implements OnInit, OnChanges {
 
   // Button Properties
   opPending: boolean;
-  buttonText: any;
+  buttonText: string;
   enableRegion: Boolean; // Check user country and define if is able to lend
 
   pendingTx: Tx;
