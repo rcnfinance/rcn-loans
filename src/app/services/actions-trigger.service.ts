@@ -48,11 +48,11 @@ export class ActionsTriggerService {
     public snackBar: MatSnackBar
   ) {}
 
-  enabled(loan: Loan): Boolean {
+  enabled(loan: Loan): Boolean { // get boolean if enable to operate in your region Region
     return this.txService.getLastLend(loan) === undefined;
   }
 
-  get changeButtonText() {
+  get changeButtonText() { // get button text depending on Tx state
     const tx = this.pendingTx;
     if (tx === undefined) {
       this.buttonTextSource$.next('Lend');
@@ -67,33 +67,34 @@ export class ActionsTriggerService {
   }
 
   clickLend(loan: Loan, enableRegion: Boolean) {
-    if (this.pendingTx === undefined) {
+    if (this.pendingTx === undefined) { // Track click
       this.eventsService.trackEvent(
         'click-lend',
         Category.Loan,
         'loan #' + loan.id
       );
 
-      this.handleLend(loan, enableRegion);
+      this.handleLend(loan, enableRegion); // Init lend Tx after track click
     } else {
+      // Tx is pending so redirect to Tx link Etherscan
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }
   }
 
   async handleLend(loan: Loan, enableRegion: Boolean) {
-    if (this.opPendingSource$.value) { return; }
+    if (this.opPendingSource$.value) { return; } // Return if Tx is pending state
 
-    if (!this.web3Service.loggedIn) {
+    if (!this.web3Service.loggedIn) { // check and wait for account login
       if (await this.web3Service.requestLogin()) {
         this.handleLend(loan, enableRegion);
         return;
       }
 
-      this.dialog.open(DialogClientAccountComponent);
+      this.dialog.open(DialogClientAccountComponent); // Account is not logged
       return;
     }
 
-    if (!enableRegion) {
+    if (!enableRegion) { // Check boolean if enable to operate in your region Region
       this.dialog.open(DialogGenericErrorComponent, { data: {
         error: new Error('Lending is not enabled in this region')
       }});
@@ -118,7 +119,7 @@ export class ActionsTriggerService {
       }
     }
 
-    this.startOperation();
+    this.startOperation(); // Start Tx Operation
 
     try {
       const engineApproved = this.contractsService.isEngineApproved();
@@ -133,11 +134,11 @@ export class ActionsTriggerService {
         return;
       }
 
-      if (!await civicApproved) {
+      if (!await civicApproved) { // Check if Civic ID is approved
         this.showCivicDialog(loan, enableRegion);
         return;
       }
-      if (balance > required) {
+      if (balance > required) { // Yout Balance is > than required by Tx
         const tx = await this.contractsService.lendLoan(loan);
         this.eventsService.trackEvent(
           'lend',
@@ -145,13 +146,13 @@ export class ActionsTriggerService {
           'loan #' + loan.id
         );
 
-        this.txService.registerLendTx(loan, tx);
+        this.txService.registerLendTx(loan, tx); // Register Tx Operation
 
-        this.pendingTx = this.txService.getLastLend(loan);
+        this.pendingTx = this.txService.getLastLend(loan); // Get Tx object
         return;
       }
 
-      if (ethBalance.toNumber() >= estimated.toNumber()) {
+      if (ethBalance.toNumber() >= estimated.toNumber()) { // RCN to ETH
         const tx = await this.contractsService.lendLoanWithSwap(loan, estimated);
         this.eventsService.trackEvent(
           'lend',
@@ -159,7 +160,7 @@ export class ActionsTriggerService {
           'loan #' + loan.id
         );
 
-        this.txService.registerLendTx(loan, tx);
+        this.txService.registerLendTx(loan, tx); // Register Tx Operation
         this.pendingTx = this.txService.getLastLend(loan);
         return;
       }
@@ -188,19 +189,22 @@ export class ActionsTriggerService {
 
   finishOperation() {
     console.info('Lend finished');
-    this.opPendingSource$.next(this.opPendingSource$.value === false);
+    this.opPendingSource$.next(this.opPendingSource$.value === false); // TODO
+    this.buttonTextSource$.next('Lent'); // TODO
   }
 
   startOperation() {
     console.info('Started lending');
     this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
-    this.opPendingSource$.next(this.opPendingSource$.value === true);
+    this.opPendingSource$.next(this.opPendingSource$.value === true); // TODO
+    this.buttonTextSource$.next('Lending'); // TODO
   }
 
   cancelOperation() {
     console.info('Cancel lend');
     this.openSnackBar('Your transaction has failed', '');
-    this.opPendingSource$.next(this.opPendingSource$.value === false);
+    this.opPendingSource$.next(this.opPendingSource$.value === false); // TODO
+    this.buttonTextSource$.next('Lend'); // TODO
   }
 
   showCivicDialog(loan: Loan, enableRegion: Boolean) {
