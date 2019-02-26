@@ -18,7 +18,7 @@ import { CivicService } from '../../services/civic.service';
 import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
+import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 
@@ -61,7 +61,8 @@ export class PayButtonComponent implements OnInit {
 
     try {
       const engineApproved = await this.contractsService.isApproved(this.loan.address);
-      const civicApproved = await this.civicService.status();
+      //const civicApproved = await this.civicService.status();
+      const civicApproved = true;
       const balance = await this.contractsService.getUserBalanceRCNWei();
 
       if (! engineApproved) {
@@ -138,7 +139,7 @@ export class PayButtonComponent implements OnInit {
   }
 
   showInsufficientFundsDialog(required: number, funds: number) {
-    this.dialog.open(DialogInsufficientFoundsComponent, { data: {
+    this.dialog.open(DialogInsufficientfundsComponent, { data: {
       required: required,
       balance: funds
     }});

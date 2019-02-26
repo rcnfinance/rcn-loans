@@ -71,7 +71,7 @@ export class NotificationsComponent implements OnInit {
     }
 
     if (tx.type === 'withdraw') {
-      return 'your founds';
+      return 'funds';
     }
 
     return 'the loan';

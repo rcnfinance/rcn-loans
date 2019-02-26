@@ -66,6 +66,7 @@ export class Loan {
     public creator: string,
     public _status: Status,
     public expiration: number,
+    public model: string,
     public cosigner?: string,
     public debt?: Debt
   ) {}

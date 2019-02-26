@@ -20,7 +20,7 @@ import { environment } from '../../../environments/environment';
 import { Web3Service } from '../../services/web3.service';
 import { CivicService } from '../../services/civic.service';
 import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
-import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
+import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
@@ -95,9 +95,12 @@ export class LendButtonComponent implements OnInit {
 
     try {
       const engineApproved = await this.contractsService.isApproved(this.loan.address);
-      const civicApproved = await this.civicService.status();
+      //const civicApproved = await this.civicService.status();
+      const civicApproved = true;
       const balance = await this.contractsService.getUserBalanceRCNWei();
+      console.info('balance', Number(balance));
       const required = await this.contractsService.estimateLendAmount(this.loan);
+      console.info('required', required);
 
       if (!await engineApproved) {
         this.showApproveDialog();
@@ -112,6 +115,7 @@ export class LendButtonComponent implements OnInit {
       console.info('Try lend', await required, await balance);
       if (balance > required) {
         const tx = await this.contractsService.lendLoan(this.loan);
+        console.log(tx);
         this.eventsService.trackEvent(
           'lend',
           Category.Account,
@@ -212,7 +216,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   showInsufficientFundsDialog(required: number, funds: number) {
-    this.dialog.open(DialogInsufficientFoundsComponent, { data: {
+    this.dialog.open(DialogInsufficientfundsComponent, { data: {
       required: required,
       balance: funds
     }});
@@ -243,9 +247,10 @@ export class LendButtonComponent implements OnInit {
 
   ngOnInit() {
     this.retrievePendingTx();
-    this.countriesService.lendEnabled().then((lendEnabled) => {
-      this.lendEnabled = lendEnabled;
-    });
+    this.lendEnabled = true;
+    // this.countriesService.lendEnabled().then((lendEnabled) => {
+    //   this.lendEnabled = lendEnabled;
+    // });
   }
 
 }

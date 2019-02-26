@@ -14,6 +14,7 @@ export class ApiService {
 
   constructor(private http: Http) { }
 
+  // Loads all loans lent by the account that is logged in
   async getLoansOfLender(lender: string): Promise<Loan[]> {
     let allLoansOfLender: Loan[] = [];
     let apiCalls = 0;
@@ -32,6 +33,7 @@ export class ApiService {
     return allLoansOfLender;
   }
 
+  // Gets all loans that were lent and there status is ongoing. Meaning that they are not canceled or finished.
   async getActiveLoans(): Promise<Loan[]> {
     let allActiveLoans: Loan[] = [];
     let apiCalls = 0;
@@ -60,18 +62,20 @@ export class ApiService {
     }
   }
 
+  // Get all loans request that are open, not canceled or expired.
   async getRequests(now: number): Promise<Loan[]> {
     let allRequestLoans: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
     do {
-      const response = await this.http.get(this.url.concat('loans?open=true&page=' + page)).toPromise();
+      const response = await this.http.get(this.url.concat('loans?open=true&approved=true&page=' + page)).toPromise();
       const data = response.json();
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
       const loansRequests = await this.completeLoanModels(data.content);
-      const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now);
+      const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > Math.floor(Date.now() / 1000)
+      && loan.model !== '0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53');
       allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
       page++;
     } while (page < apiCalls);
@@ -84,7 +88,6 @@ export class ApiService {
     const engine = environment.contracts.diaspore.loanManager;
 
     for (const loan of loanArray) {
-      const loanCurrencyWith0x = '0x';
 
       let oracle: Oracle;
       if (loan.oracle !== Utils.address0x) {
@@ -92,14 +95,14 @@ export class ApiService {
           Network.Diaspore,
           loan.oracle,
           Utils.hexToAscii(loan.currency.replace(/^[0x]+|[0]+$/g, '')),
-          loanCurrencyWith0x.concat(loan.currency)
+          loan.currency
         );
       } else {
         oracle = new Oracle(
           Network.Diaspore,
           loan.oracle,
           'RCN',
-          loanCurrencyWith0x.concat(loan.currency)
+          loan.currency
         );
       }
 
@@ -110,7 +113,7 @@ export class ApiService {
         Number(loan.descriptor.frequency), Number(loan.descriptor.installments));
 
       let debt: Debt;
-      if (!loan.open && !loan.canceled) {
+      if (!loan.open && !loan.canceled && loan.status) {
         const response = await this.http.get(this.url.concat(`model_debt_info/${loan.id}`)).toPromise();
         const data = response.json();
         const paid = data.paid;
@@ -150,6 +153,7 @@ export class ApiService {
         loan.creator,
         Number(loan.status),
         Number(loan.expiration),
+        loan.model,
         loan.cosigner,
         debt
       );

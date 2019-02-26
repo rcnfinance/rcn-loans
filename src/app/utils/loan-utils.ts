@@ -123,6 +123,7 @@ export class LoanUtils {
       creator,
       status,
       expirationRequest,
+      '',
       cosigner !== Utils.address0x ? cosigner : undefined,
       debt
     );
@@ -216,6 +217,7 @@ export class LoanUtils {
       creator,
       status,
       expiration,
+      model,
       cosigner,
       debt
     );

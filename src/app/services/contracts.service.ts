@@ -148,6 +148,7 @@ export class ContractsService {
 
   async lendLoan(loan: Loan): Promise<string> {
     const pOracleData = await this.getOracleData(loan.oracle);
+    console.info('oracle Data', pOracleData);
     const cosigner = this.cosignerService.getCosigner(loan);
     let cosignerAddr = '0x0';
     let cosignerData = '0x0';
@@ -167,7 +168,7 @@ export class ContractsService {
       case Network.Diaspore:
 
         return await promisify(this.loadAltContract(web3, this._loanManager).lend,
-          [loan.id, oracleData, cosignerAddr, cosignerData, 0, { from: account }]);
+          [loan.id, oracleData, cosignerAddr, 0, cosignerData, { from: account }]);
       default:
         throw Error('Unknown network');
     }
@@ -210,6 +211,10 @@ export class ContractsService {
       case Network.Basalt:
         return await promisify(this.loadAltContract(web3, this._rcnEngine).pay, [loan.id, amount, account, oracleData, { from: account }]);
       case Network.Diaspore:
+        console.info('loan.id', loan.id);
+        console.info('amount', amount);
+        console.info('account', account);
+        console.info('oracleData', oracleData);
         return await promisify(this.loadAltContract(web3, this._debtEngine).pay,
           [loan.id, amount, account, oracleData, { from: account }]);
       default:
@@ -255,6 +260,8 @@ export class ContractsService {
 
     const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
     const url = await promisify(oracleContract.url.call, []);
+
+    console.info('Url oracle contract', url);
 
     if (url === '') { return '0x'; }
     const oracleResponse = (await this.http.get(url).toPromise()) as any[];
