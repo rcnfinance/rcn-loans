@@ -74,7 +74,7 @@ export class ApiService {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
       const loansRequests = await this.completeLoanModels(data.content);
-      const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > Math.floor(Date.now() / 1000)
+      const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now
       && loan.model !== '0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53');
       allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
       page++;

@@ -211,10 +211,6 @@ export class ContractsService {
       case Network.Basalt:
         return await promisify(this.loadAltContract(web3, this._rcnEngine).pay, [loan.id, amount, account, oracleData, { from: account }]);
       case Network.Diaspore:
-        console.info('loan.id', loan.id);
-        console.info('amount', amount);
-        console.info('account', account);
-        console.info('oracleData', oracleData);
         return await promisify(this.loadAltContract(web3, this._debtEngine).pay,
           [loan.id, amount, account, oracleData, { from: account }]);
       default:
@@ -341,7 +337,7 @@ export class ContractsService {
 
     const web3 = await this.web3.web3;
 
-    const block = web3.eth.getBlock('latest');
+    const block = await web3.eth.getBlock('latest');
     const now = block.timestamp;
 
     const diaspore = this.apiService.getRequests(now);
