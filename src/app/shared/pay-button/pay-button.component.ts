@@ -80,8 +80,6 @@ export class PayButtonComponent implements OnInit {
         if (amount) {
           amount = amount * 10 ** Currency.getDecimals(this.loan.oracle.currency);
           const requiredTokens = await this.contractsService.estimatePayAmount(this.loan, amount);
-          console.info('balance', balance);
-          console.info('requiredTokens', requiredTokens);
           if (balance < requiredTokens) {
             this.eventsService.trackEvent(
               'show-insufficient-funds-lend',
