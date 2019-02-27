@@ -10,19 +10,34 @@ export class CommitsService {
   constructor(private http: Http) { }
 
   async getCommits(id: string, network: number): Promise<Commit[]> {
-    let url = '';
+    let commits: any;
 
     if (network === Network.Basalt) {
 
-      url = environment.rcn_node.loan.replace('$id', id.toString());
+      const urlBasaltCommits = environment.rcn_node.loan.replace('$id', id.toString());
+      const response = await this.http.get(urlBasaltCommits).toPromise();
+      const data = response.json();
+      commits = data.content.commits;
 
     } else {
-      url = environment.rcn_node_api.url.concat(`loans/${id}`);
+      const urlLoanManagerCommits = environment.rcn_node_api.url.concat(`loans/${id}`);
+      console.log(urlLoanManagerCommits);
+      const responseLoanManager = await this.http.get(urlLoanManagerCommits).toPromise();
+      const commitsLoanManager = responseLoanManager.json().content.commits;
+      console.info('commits loan manager', commitsLoanManager);
+
+      const urlDebtEngineCommits = environment.rcn_node_api.url.concat(`debts/${id}`);
+      console.log(urlDebtEngineCommits);
+      const responseDebtEngine = await this.http.get(urlDebtEngineCommits).toPromise();
+      const commitsDebtEngine = responseDebtEngine.json().content.commits;
+      console.info('commits Debt Engine', commitsDebtEngine);
+
+      const diasporeCommits = commitsLoanManager.concat(commitsDebtEngine);
+
+      commits = diasporeCommits;
+
     }
 
-    const response = await this.http.get(url).toPromise();
-
-    const data = response.json();
-    return data.content.commits;
+    return commits;
   }
 }

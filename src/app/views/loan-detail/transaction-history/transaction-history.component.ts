@@ -13,7 +13,7 @@ class DataEntry {
   constructor(
     public title: string,
     public value: string
-  ) {}
+  ) { }
 }
 
 @Component({
@@ -180,6 +180,36 @@ export class TransactionHistoryComponent implements OnInit {
       'color': 'blue',
       'inserted': true,
       'display': ['lender']
+    },
+    'paid_debt_engine': {
+      'title': 'Pay',
+      'message': 'Pay',
+      'status': 'active',
+      'awesomeClass': 'fas fa-coins',
+      'color': 'green',
+      'inserted': true,
+      'display': ['sender', 'from', 'amount']
+    },
+    'transfer': {
+      'title': 'Transfer',
+      'message': 'Transfer',
+      'status': 'active',
+      'materialClass': 'material-icons',
+      'icon': 'swap_horiz',
+      'color': 'orange',
+      'inserted': true,
+      'hexa': '#333',
+      'display': ['from', 'to']
+    },
+    'withdrawn_debt_engine': {
+      'title': 'Withdraw',
+      'message': 'Withdraw',
+      'status': 'active',
+      'materialClass': 'material-icons',
+      'icon': 'call_made',
+      'color': 'white',
+      'inserted': true,
+      'display': []
     }
   };
 
@@ -258,11 +288,22 @@ export class TransactionHistoryComponent implements OnInit {
     this.loadCommits(this.loan.id, this.loan.network);
   }
 
+  private IsInTimelineProperties(commit: Commit): boolean {
+    // search for commit opcode in TimelineProperties
+    const properties = this.get_properties_by_opcode(commit.opcode);
+
+    if (properties !== undefined) {
+      return true;
+    }
+    return false;
+  }
+
   private filterCommit(commit: Commit): boolean {
-    return commit.opcode !== 'transfer' || (commit.data['from'] !== Utils.address0x && commit.data['to'] !== Utils.address0x);
+    return this.IsInTimelineProperties(commit) && (commit.data['from'] !== Utils.address0x && commit.data['to'] !== Utils.address0x);
   }
 
   private load_timeEvents(commits: Commit[]): object[] { // Build every timeEvents with commit event of the Loan
+
     const timeEvents: object[] = [];
 
     this.sort_by_timestamp(commits); // Order commits by timestamp
@@ -271,6 +312,8 @@ export class TransactionHistoryComponent implements OnInit {
       if (this.filterCommit(commit)) {
         const oCurrentEvent: any = {};
         const oCurrentCommit: Commit = commit;
+
+        console.log(commit);
 
         oCurrentEvent.oProperties = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
 
