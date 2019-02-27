@@ -239,9 +239,9 @@ export class TransactionHistoryComponent implements OnInit {
     this.oDataTable = this.populate_table_data(i);
   }
 
-  async loadCommits(id: string) { // Load get() API commits from the DB by id
+  async loadCommits(id: string, network: number) { // Load get() API commits from the DB by id
     try {
-      const commits = await this.commitsService.getCommits(id);
+      const commits = await this.commitsService.getCommits(id, network);
       this.oTimeline = this.load_timeEvents(commits);
       this.oDataTable = this.populate_table_data(this.id);
       this.myId.showSpinner = false;
@@ -255,7 +255,7 @@ export class TransactionHistoryComponent implements OnInit {
 
   ngOnInit() {
     this.myId.showSpinner = true;
-    this.loadCommits(this.loan.id);
+    this.loadCommits(this.loan.id, this.loan.network);
   }
 
   private filterCommit(commit: Commit): boolean {

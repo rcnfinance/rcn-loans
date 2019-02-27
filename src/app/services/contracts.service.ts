@@ -296,10 +296,10 @@ export class ContractsService {
     }) as Promise<Loan>;
   }
   async getActiveLoans(): Promise<Loan[]> {
-    // const bfilters = [environment.filters.ongoing];
-    // const bparams = ['0x0'];
-    // const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
-    // Filter lenderIn Diaspore loans
+    const bfilters = [environment.filters.ongoing];
+    const bparams = ['0x0'];
+    const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
+    //Filter lenderIn Diaspore loans
     // const dfilter = [
     //   // Created by loan manager
     //   this.addressToBytes32(environment.contracts.diaspore.filters.debtCreator),
@@ -313,27 +313,27 @@ export class ContractsService {
     // return this.parseLoanBytes(await pdiaspore);
 
     const activeDiasporeLoans = this.apiService.getActiveLoans();
-    //return (await activeDiasporeLoans).concat(this.parseBasaltBytes(await pbasalt));
-    return activeDiasporeLoans;
+    return (await activeDiasporeLoans).concat(this.parseBasaltBytes(await pbasalt));
+    //return activeDiasporeLoans;
 
   }
   async getRequests(): Promise<Loan[]> {
-    // const basalt = new Promise((resolve, reject) => {
-    //   // Filter open loans, non expired loand and valid mortgage
-    //   const filters = [
-    //     environment.filters.openLoans,
-    //     environment.filters.nonExpired,
-    //     environment.filters.validMortgage
-    //   ];
+    const basalt = new Promise((resolve, reject) => {
+      // Filter open loans, non expired loand and valid mortgage
+      const filters = [
+        environment.filters.openLoans,
+        environment.filters.nonExpired,
+        environment.filters.validMortgage
+      ];
 
-    //   const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
-    //   this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
-    //     if (err != null) {
-    //       reject(err);
-    //     }
-    //     resolve(LoanCurator.curateBasaltRequests(this.parseBasaltBytes(result)));
-    //   });
-    // }) as Promise<Loan[]>;
+      const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
+      this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 0, filters, params, (err, result) => {
+        if (err != null) {
+          reject(err);
+        }
+        resolve(LoanCurator.curateBasaltRequests(this.parseBasaltBytes(result)));
+      });
+    }) as Promise<Loan[]>;
 
     const web3 = await this.web3.web3;
 
@@ -355,15 +355,15 @@ export class ContractsService {
     //     resolve(this.parseRequestBytes(result));
     //   });
     // }) as Promise<Loan[]>;
-    return diaspore;
-    //return (await diaspore).concat(await basalt);
+    //return diaspore;
+    return (await diaspore).concat(await basalt);
   }
   async getLoansOfLender(): Promise<Loan[]> {
     const account = await this.web3.getAccount();
     // Filter [lenderIn] Basalt loans
-    // const bfilters = [environment.filters.lenderIn];
-    // const bparams = [this.addressToBytes32(account)];
-    // const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
+    const bfilters = [environment.filters.lenderIn];
+    const bparams = [this.addressToBytes32(account)];
+    const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
     // // Filter lenderIn Diaspore loans
     // const dfilter = [
     //   // Created by loan manager
@@ -379,8 +379,8 @@ export class ContractsService {
 
     const pdiaspore = this.apiService.getLoansOfLender(account);
 
-    // return (await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
-    return await pdiaspore;
+    return (await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
+    // return await pdiaspore;
 
   }
   readPendingWithdraws(loans: Loan[]): [BigNumber, number[], BigNumber, number[]] {
