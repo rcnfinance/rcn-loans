@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Loan, Status } from '../../../models/loan.model';
+import { Utils } from '../../../utils/utils';
 
 @Component({
   selector: 'app-detail-table',
@@ -7,9 +9,11 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class DetailTableComponent implements OnInit {
   @Input() data: [string, string][] = [];
+
   constructor() { }
 
   ngOnInit() {
+
   }
 
 }

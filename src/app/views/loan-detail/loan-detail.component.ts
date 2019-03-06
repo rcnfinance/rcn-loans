@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -14,13 +14,15 @@ import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
 
+
+
 @Component({
   selector: 'app-loan-detail',
   templateUrl: './loan-detail.component.html',
   styleUrls: ['./loan-detail.component.scss']
 })
 export class LoanDetailComponent implements OnInit {
-  loan: Loan;
+  @Input() loan: Loan;
   identityName = '...';
   viewDetail = undefined;
   userAccount: string;
@@ -41,6 +43,9 @@ export class LoanDetailComponent implements OnInit {
   canLend: boolean;
 
   pendingAmount: number;
+
+  durationLabel: string;
+  durationValue: string;
 
   // Loan Oracle
   oracle: string;
@@ -73,6 +78,8 @@ export class LoanDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    
     this.spinner.show();
     this.loadAccount();
     this.web3Service.loginEvent.subscribe(() => this.loadAccount());
@@ -92,6 +99,9 @@ export class LoanDetailComponent implements OnInit {
         this.router.navigate(['/404/'])
       );
     });
+
+    
+    
   }
 
   private async loadAccount() {
@@ -124,6 +134,8 @@ export class LoanDetailComponent implements OnInit {
       ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
       ['Duration', Utils.formatDelta(this.loan.duration)]
     ];
+
+    // da
 
     // Interest middle text
     this.interestMiddleText =
