@@ -14,8 +14,6 @@ import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
 
-
-
 @Component({
   selector: 'app-loan-detail',
   templateUrl: './loan-detail.component.html',
@@ -78,8 +76,6 @@ export class LoanDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    
     this.spinner.show();
     this.loadAccount();
     this.web3Service.loginEvent.subscribe(() => this.loadAccount());
@@ -99,9 +95,6 @@ export class LoanDetailComponent implements OnInit {
         this.router.navigate(['/404/'])
       );
     });
-
-    
-    
   }
 
   private async loadAccount() {

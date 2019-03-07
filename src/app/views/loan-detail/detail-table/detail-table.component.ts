@@ -1,6 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Loan, Status } from '../../../models/loan.model';
-import { Utils } from '../../../utils/utils';
 
 @Component({
   selector: 'app-detail-table',
@@ -13,7 +11,5 @@ export class DetailTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
   }
-
 }
