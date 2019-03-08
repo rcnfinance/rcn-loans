@@ -269,7 +269,7 @@ export class TransactionHistoryComponent implements OnInit {
     this.oDataTable = this.populate_table_data(i);
   }
 
-  async loadCommits(id: string, network: number) { // Load get() API commits from the DB by id
+  async loadCommits(id: string, network: number) { // Load get() API commits from the DB by id if Diaspore loans
     try {
       const commits = await this.commitsService.getCommits(id, network);
       this.oTimeline = this.load_timeEvents(commits);

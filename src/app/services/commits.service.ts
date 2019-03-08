@@ -11,6 +11,8 @@ export class CommitsService {
 
   async getCommits(id: string, network: number): Promise<Commit[]> {
     let commits: any;
+    let commitsLoanManager;
+    let commitsDebtEngine: any;
 
     if (network === Network.Basalt) {
 
@@ -21,15 +23,25 @@ export class CommitsService {
 
     } else {
       const urlLoanManagerCommits = environment.rcn_node_api.url.concat(`loans/${id}`);
-      console.log(urlLoanManagerCommits);
-      const responseLoanManager = await this.http.get(urlLoanManagerCommits).toPromise();
-      const commitsLoanManager = responseLoanManager.json().content.commits;
+
+      try {
+        const responseLoanManager = await this.http.get(urlLoanManagerCommits).toPromise();
+        commitsLoanManager = responseLoanManager.json().content.commits;
+      } catch (err) {
+        commitsLoanManager = [];
+        console.info('ERROR', err);
+      }
       console.info('commits loan manager', commitsLoanManager);
 
       const urlDebtEngineCommits = environment.rcn_node_api.url.concat(`debts/${id}`);
-      console.log(urlDebtEngineCommits);
-      const responseDebtEngine = await this.http.get(urlDebtEngineCommits).toPromise();
-      const commitsDebtEngine = responseDebtEngine.json().content.commits;
+      try {
+        const responseDebtEngine = await this.http.get(urlDebtEngineCommits).toPromise();
+        commitsDebtEngine = responseDebtEngine.json().content.commits;
+      } catch (err) {
+        commitsDebtEngine = [];
+        console.info('ERROR', err);
+      }
+
       console.info('commits Debt Engine', commitsDebtEngine);
 
       const diasporeCommits = commitsLoanManager.concat(commitsDebtEngine);
