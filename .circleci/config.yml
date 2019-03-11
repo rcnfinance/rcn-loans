@@ -237,7 +237,6 @@ workflows:
                     - lint
                     - build-ropsten
                     - build-mainnet
-                    - e2e-tests
                     - unit-tests
                 filters:
                     branches:
