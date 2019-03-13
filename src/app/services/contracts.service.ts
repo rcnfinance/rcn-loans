@@ -299,7 +299,7 @@ export class ContractsService {
     const bfilters = [environment.filters.ongoing];
     const bparams = ['0x0'];
     const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
-    //Filter lenderIn Diaspore loans
+    // Filter lenderIn Diaspore loans
     // const dfilter = [
     //   // Created by loan manager
     //   this.addressToBytes32(environment.contracts.diaspore.filters.debtCreator),
@@ -314,7 +314,7 @@ export class ContractsService {
 
     const activeDiasporeLoans = this.apiService.getActiveLoans();
     return (await activeDiasporeLoans).concat(this.parseBasaltBytes(await pbasalt));
-    //return activeDiasporeLoans;
+    // return activeDiasporeLoans;
 
   }
   async getRequests(): Promise<Loan[]> {
@@ -355,7 +355,7 @@ export class ContractsService {
     //     resolve(this.parseRequestBytes(result));
     //   });
     // }) as Promise<Loan[]>;
-    //return diaspore;
+    // return diaspore;
     return (await diaspore).concat(await basalt);
   }
   async getLoansOfLender(): Promise<Loan[]> {

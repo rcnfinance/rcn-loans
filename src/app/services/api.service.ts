@@ -19,17 +19,21 @@ export class ApiService {
     let allLoansOfLender: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
-    do {
-      const response = await this.http.get(this.url.concat('loans?open=false&page=' + page)).toPromise();
-      const data = response.json();
-      if (page === 0) {
-        apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
-      }
-      const activeLoans = await this.completeLoanModels(data.content);
-      const loansOfLender = activeLoans.filter(loan => loan.debt.owner.toLowerCase() === lender);
-      allLoansOfLender = allLoansOfLender.concat(loansOfLender);
-      page++;
-    } while (page < apiCalls);
+    try {
+      do {
+        const response = await this.http.get(this.url.concat('loans?open=false&page=' + page)).toPromise();
+        const data = response.json();
+        if (page === 0) {
+          apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+        }
+        const activeLoans = await this.completeLoanModels(data.content);
+        const loansOfLender = activeLoans.filter(loan => loan.debt.owner.toLowerCase() === lender);
+        allLoansOfLender = allLoansOfLender.concat(loansOfLender);
+        page++;
+      } while (page < apiCalls);
+    } catch (err) {
+      console.info('Error', err);
+    }
     return allLoansOfLender;
   }
 
@@ -38,18 +42,23 @@ export class ApiService {
     let allActiveLoans: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
-    do {
-      const response = await this.http.get(this.url.concat('loans?open=false&page=' + page)).toPromise();
-      const data = response.json();
-      if (page === 0) {
-        apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
-      }
-      const activeLoans = await this.completeLoanModels(data.content);
-      allActiveLoans = allActiveLoans.concat(activeLoans);
-      page++;
-    } while (page < apiCalls);
+    try {
+      do {
+        const response = await this.http.get(this.url.concat('loans?open=false&page=' + page)).toPromise();
+        const data = response.json();
+        if (page === 0) {
+          apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+        }
+        const activeLoans = await this.completeLoanModels(data.content);
+        allActiveLoans = allActiveLoans.concat(activeLoans);
+        page++;
+      } while (page < apiCalls);
+    } catch (err) {
+      console.info('Error', err);
+    }
     return allActiveLoans;
   }
+
   async getLoan(id: string): Promise<Loan> {
     const response = await this.http.get(this.url.concat(`loans/${id}`)).toPromise();
     const data = response.json();
@@ -67,18 +76,22 @@ export class ApiService {
     let allRequestLoans: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
-    do {
-      const response = await this.http.get(this.url.concat('loans?open=true&approved=true&page=' + page)).toPromise();
-      const data = response.json();
-      if (page === 0) {
-        apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
-      }
-      const loansRequests = await this.completeLoanModels(data.content);
-      const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now
-      && loan.model !== '0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53');
-      allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
-      page++;
-    } while (page < apiCalls);
+    try {
+      do {
+        const response = await this.http.get(this.url.concat('loans?open=true&approved=true&page=' + page)).toPromise();
+        const data = response.json();
+        if (page === 0) {
+          apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+        }
+        const loansRequests = await this.completeLoanModels(data.content);
+        const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now
+          && loan.model !== '0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53');
+        allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
+        page++;
+      } while (page < apiCalls);
+    } catch (err) {
+      console.info('Error', err);
+    }
     return allRequestLoans;
   }
 
