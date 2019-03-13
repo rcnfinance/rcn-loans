@@ -14,7 +14,7 @@ import { Currency } from '../../utils/currencies';
 import { EventsService, Category } from '../../services/events.service';
 import { Web3Service } from '../../services/web3.service';
 import { CountriesService } from '../../services/countries.service';
-// import { CivicService } from '../../services/civic.service';
+import { CivicService } from '../../services/civic.service';
 import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
@@ -41,7 +41,7 @@ export class PayButtonComponent implements OnInit {
     private eventsService: EventsService,
     private web3Service: Web3Service,
     public snackBar: MatSnackBar,
-    // private civicService: CivicService,
+    private civicService: CivicService,
     private countriesService: CountriesService,
     public dialog: MatDialog
   ) {}
@@ -61,8 +61,7 @@ export class PayButtonComponent implements OnInit {
 
     try {
       const engineApproved = await this.contractsService.isApproved(this.loan.address);
-      // const civicApproved = await this.civicService.status();
-      const civicApproved = true;
+      const civicApproved = await this.civicService.status();
       const balance = await this.contractsService.getUserBalanceRCNWei();
 
       if (! engineApproved) {

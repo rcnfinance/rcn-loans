@@ -18,7 +18,7 @@ import { TxService, Tx } from './../../tx.service';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { environment } from '../../../environments/environment';
 import { Web3Service } from '../../services/web3.service';
-// import { CivicService } from '../../services/civic.service';
+import { CivicService } from '../../services/civic.service';
 import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { CountriesService } from '../../services/countries.service';
@@ -44,7 +44,7 @@ export class LendButtonComponent implements OnInit {
     private contractsService: ContractsService,
     private txService: TxService,
     private web3Service: Web3Service,
-    // private civicService: CivicService,
+    private civicService: CivicService,
     private countriesService: CountriesService,
     private eventsService: EventsService,
     public dialog: MatDialog,
@@ -101,8 +101,7 @@ export class LendButtonComponent implements OnInit {
 
     try {
       const engineApproved = await this.contractsService.isApproved(this.loan.address);
-      // const civicApproved = await this.civicService.status();
-      const civicApproved = true;
+      const civicApproved = await this.civicService.status();
       const balance = await this.contractsService.getUserBalanceRCNWei();
       console.info('balance', Number(balance));
       const required = await this.contractsService.estimateLendAmount(this.loan);

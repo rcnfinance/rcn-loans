@@ -417,24 +417,24 @@ export class ContractsService {
     }
     return loans;
   }
-  private parseRequestBytes(bytes: any): Loan[] {
-    const requests = [];
-    const total = bytes.length / 17;
-    for (let i = 0; i < total; i++) {
-      const loanBytes = bytes.slice(i * 17, i * 17 + 17);
-      requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
-    }
-    return requests;
-  }
-  private parseLoanBytes(bytes: any): Loan[] {
-    const requests = [];
-    const total = bytes.length / 25;
-    for (let i = 0; i < total; i++) {
-      const loanBytes = bytes.slice(i * 25, i * 25 + 25);
-      requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
-    }
-    return requests;
-  }
+  // private parseRequestBytes(bytes: any): Loan[] {
+  //   const requests = [];
+  //   const total = bytes.length / 17;
+  //   for (let i = 0; i < total; i++) {
+  //     const loanBytes = bytes.slice(i * 17, i * 17 + 17);
+  //     requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
+  //   }
+  //   return requests;
+  // }
+  // private parseLoanBytes(bytes: any): Loan[] {
+  //   const requests = [];
+  //   const total = bytes.length / 25;
+  //   for (let i = 0; i < total; i++) {
+  //     const loanBytes = bytes.slice(i * 25, i * 25 + 25);
+  //     requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
+  //   }
+  //   return requests;
+  // }
   private addressToBytes32(address: string): string {
     return '0x000000000000000000000000' + address.replace('0x', '');
   }
