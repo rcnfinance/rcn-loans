@@ -59,7 +59,6 @@ export class Utils {
     const prefix = '';
 
     if (totalSeconds < 0) {
-    //   prefix = '- ';
       totalSeconds *= -1;
     }
 
