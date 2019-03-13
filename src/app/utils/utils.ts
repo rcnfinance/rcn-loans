@@ -56,10 +56,10 @@ export class Utils {
       }
     }
 
-    let prefix = '';
+    const prefix = '';
 
     if (totalSeconds < 0) {
-      prefix = '- ';
+    //   prefix = '- ';
       totalSeconds *= -1;
     }
 

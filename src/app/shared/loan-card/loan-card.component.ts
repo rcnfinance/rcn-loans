@@ -34,14 +34,13 @@ export class LoanCardComponent implements OnInit {
       this.leftValue = this.formatAmount(this.loan.paid);
       this.rightLabel = 'Pending';
       this.rightValue = this.formatAmount(this.loan.pendingAmount);
-      this.durationLabel = 'Remaining';
       this.durationValue = Utils.formatDelta(this.loan.remainingTime);
-      const timeLeft = Utils.formatDelta(this.loan.remainingTime);
-      if (timeLeft.startsWith('-')) {
-        this.durationLabel = 'In debt for';
-        this.durationValue = timeLeft.substr(2);
-      }
       this.canLend = false;
+      if (this.loan.status === Status.Indebt) {
+        this.durationLabel = 'In debt for';
+      } else {
+        this.durationLabel = 'Remaining';
+      }
     }
   }
 
