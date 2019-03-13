@@ -5,7 +5,6 @@ import { Loan } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
-import { ApiService } from './../../services/api.service';
 import { FilterLoansService } from '../../services/filter-loans.service';
 
 @Component({
@@ -33,7 +32,6 @@ export class RequestedLoanComponent implements OnInit {
     private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
     private availableLoansService: AvailableLoansService,
-    private apiService: ApiService,
     private filterLoansService: FilterLoansService
   ) { }
 

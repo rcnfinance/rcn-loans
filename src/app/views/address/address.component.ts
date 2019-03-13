@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+// import { ActivatedRoute } from '@angular/router';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
@@ -19,7 +19,7 @@ export class AddressComponent implements OnInit {
   loans = [];
   availableLoans = true;
   constructor(
-    private route: ActivatedRoute,
+    // private route: ActivatedRoute,
     private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
     private availableLoansService: AvailableLoansService

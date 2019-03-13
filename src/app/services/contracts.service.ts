@@ -18,11 +18,11 @@ const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
 const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const oracleAbi = require('../contracts/Oracle.json');
-const requestsAbi = require('../contracts/RequestsView.json');
 const loanManagerAbi = require('../contracts/LoanManager.json');
 const debtEngineAbi = require('../contracts/DebtEngine.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
-const converterRampAbi = require('../contracts/ConverterRamp.json');
+// const converterRampAbi = require('../contracts/ConverterRamp.json');
+// const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
 export class ContractsService {
@@ -32,11 +32,11 @@ export class ContractsService {
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
   private _rcnExtension: any;
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
-  private _rcnConverterRamp: any;
-  private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
-  private _requestsView: any;
   private _loanManager: any;
   private _debtEngine: any;
+  // private _rcnConverterRamp: any;
+  // private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
+  // private _requestsView: any;
 
   constructor(
     private web3: Web3Service,
@@ -50,9 +50,9 @@ export class ContractsService {
     this._loanManager = this.web3.web3.eth.contract(loanManagerAbi).at(environment.contracts.diaspore.loanManager);
     this._debtEngine = this.web3.web3.eth.contract(debtEngineAbi).at(environment.contracts.diaspore.debtEngine);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-    this._requestsView = this.web3.web3.eth.contract(requestsAbi).at(environment.contracts.diaspore.viewRequets);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-    this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
+    // this._requestsView = this.web3.web3.eth.contract(requestsAbi).at(environment.contracts.diaspore.viewRequets);
+    // this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
   }
 
   async getUserBalanceETHWei(): Promise<BigNumber> {

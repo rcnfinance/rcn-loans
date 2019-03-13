@@ -18,7 +18,7 @@ import { TxService, Tx } from './../../tx.service';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { environment } from '../../../environments/environment';
 import { Web3Service } from '../../services/web3.service';
-import { CivicService } from '../../services/civic.service';
+// import { CivicService } from '../../services/civic.service';
 import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { CountriesService } from '../../services/countries.service';
@@ -44,14 +44,14 @@ export class LendButtonComponent implements OnInit {
     private contractsService: ContractsService,
     private txService: TxService,
     private web3Service: Web3Service,
-    private civicService: CivicService,
+    // private civicService: CivicService,
     private countriesService: CountriesService,
     private eventsService: EventsService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public cosignerService: CosignerService,
     public decentralandCosignerProvider: DecentralandCosignerProvider
-  ) {}
+  ) { }
 
   async handleLend(forze = false) {
     if (this.opPending && !forze) { return; }
@@ -67,9 +67,11 @@ export class LendButtonComponent implements OnInit {
     }
 
     if (!this.lendEnabled) {
-      this.dialog.open(DialogGenericErrorComponent, { data: {
-        error: new Error('Lending is not enabled in this region')
-      }});
+      this.dialog.open(DialogGenericErrorComponent, {
+        data: {
+          error: new Error('Lending is not enabled in this region')
+        }
+      });
       return;
     }
 
@@ -77,16 +79,20 @@ export class LendButtonComponent implements OnInit {
     if (cosigner instanceof DecentralandCosignerProvider) {
       const isParcelStatusOpen = await cosigner.getStatusOfParcel(this.loan);
       if (!isParcelStatusOpen) {
-        this.dialog.open(DialogGenericErrorComponent, { data: {
-          error: new Error('Not Available, Parcel is already sold')
-        }});
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: {
+            error: new Error('Not Available, Parcel is already sold')
+          }
+        });
         return;
       }
       const isMortgageCancelled = await cosigner.isMortgageCancelled(this.loan);
       if (isMortgageCancelled) {
-        this.dialog.open(DialogGenericErrorComponent, { data: {
-          error: new Error('Not Available, Mortgage has been cancelled')
-        }});
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: {
+            error: new Error('Not Available, Mortgage has been cancelled')
+          }
+        });
         return;
       }
     }
@@ -95,7 +101,7 @@ export class LendButtonComponent implements OnInit {
 
     try {
       const engineApproved = await this.contractsService.isApproved(this.loan.address);
-      //const civicApproved = await this.civicService.status();
+      // const civicApproved = await this.civicService.status();
       const civicApproved = true;
       const balance = await this.contractsService.getUserBalanceRCNWei();
       console.info('balance', Number(balance));
@@ -215,10 +221,12 @@ export class LendButtonComponent implements OnInit {
   }
 
   showInsufficientFundsDialog(required: number, funds: number) {
-    this.dialog.open(DialogInsufficientfundsComponent, { data: {
-      required: required,
-      balance: funds
-    }});
+    this.dialog.open(DialogInsufficientfundsComponent, {
+      data: {
+        required: required,
+        balance: funds
+      }
+    });
     this.cancelOperation();
   }
 
@@ -238,7 +246,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   openSnackBar(message: string, action: string) {
-    this.snackBar.open(message , action, {
+    this.snackBar.open(message, action, {
       duration: 4000,
       horizontalPosition: this.horizontalPosition
     });
@@ -247,9 +255,9 @@ export class LendButtonComponent implements OnInit {
   ngOnInit() {
     this.retrievePendingTx();
     this.lendEnabled = true;
-    // this.countriesService.lendEnabled().then((lendEnabled) => {
-    //   this.lendEnabled = lendEnabled;
-    // });
+    this.countriesService.lendEnabled().then((lendEnabled) => {
+      this.lendEnabled = lendEnabled;
+    });
   }
 
 }
