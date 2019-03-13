@@ -104,7 +104,6 @@ export class ContentWrapperComponent implements OnInit {
         this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.basaltLoansWithBalance);
       }
       if (this.diasporeLoansWithBalance.length > 0) {
-        console.log('registering Withdraw transaction');
         const tx = await this.contractService.withdrawFundsDiaspore(this.diasporeLoansWithBalance);
         this.txService.registerWithdrawTx(tx, environment.contracts.diaspore.debtEngine, this.diasporeLoansWithBalance);
       }

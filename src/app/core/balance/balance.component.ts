@@ -72,7 +72,6 @@ export class BalanceComponent implements OnInit {
 
   async loadWithdrawBalance() {
     const pendingWithdraws = await this.contractService.getPendingWithdraws();
-    console.log('pending Withdraws', pendingWithdraws);
     this.basaltRcnAvailable = pendingWithdraws[0] / 10 ** 18;
     this.diasporeRcnAvailable = pendingWithdraws[2] / 10 ** 18;
     this.rcnAvailable = this.basaltRcnAvailable + this.diasporeRcnAvailable;
@@ -100,13 +99,11 @@ export class BalanceComponent implements OnInit {
 
   async clickWithdraw() {
     if (this.canWithdraw) {
-      console.log('withdrawing trancasction');
       if (this.basaltLoansWithBalance.length > 0) {
         const tx = await this.contractService.withdrawFundsBasalt(this.basaltLoansWithBalance);
         this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.basaltLoansWithBalance);
       }
       if (this.diasporeLoansWithBalance.length > 0) {
-        console.log('registering Withdraw transaction');
         const tx = await this.contractService.withdrawFundsDiaspore(this.diasporeLoansWithBalance);
         this.txService.registerWithdrawTx(tx, environment.contracts.diaspore.debtEngine, this.diasporeLoansWithBalance);
       }

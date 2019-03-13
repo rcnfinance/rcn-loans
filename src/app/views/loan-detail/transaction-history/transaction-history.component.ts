@@ -313,8 +313,6 @@ export class TransactionHistoryComponent implements OnInit {
         const oCurrentEvent: any = {};
         const oCurrentCommit: Commit = commit;
 
-        console.log(commit);
-
         oCurrentEvent.oProperties = this.get_properties_by_opcode(commit.opcode); // Return the properties of the commit.opcode
 
         oCurrentEvent.commit = oCurrentCommit; // Add commit{} to timeEvent

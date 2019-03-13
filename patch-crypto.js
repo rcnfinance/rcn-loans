@@ -13,9 +13,9 @@ function removeComments(path) {
     if (!isComment(line)) output += line + '\n'; else comments++;
   });
   if (comments > 0) {
-    console.log('Removed comments', comments, path);
+    console.info('Removed comments', comments, path);
     fs.writeFile(path, output, 'utf8', function (err) {
-      if (err) return console.log(err);
+      if (err) return console.info(err);
     });
   }
 }

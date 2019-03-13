@@ -30,8 +30,6 @@ export class ActiveLoansComponent implements OnInit {
 
   loadLoans() {
     this.contractsService.getActiveLoans().then((result: Loan[]) => {
-      console.log("Active Loans");
-      console.log(result);
       this.loans = result;
       this.upgradeAvaiblable();
       this.spinner.hide();

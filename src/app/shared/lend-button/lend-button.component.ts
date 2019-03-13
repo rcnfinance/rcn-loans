@@ -115,7 +115,6 @@ export class LendButtonComponent implements OnInit {
       console.info('Try lend', await required, await balance);
       if (balance > required) {
         const tx = await this.contractsService.lendLoan(this.loan);
-        console.log(tx);
         this.eventsService.trackEvent(
           'lend',
           Category.Account,
