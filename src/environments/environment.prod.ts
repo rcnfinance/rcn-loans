@@ -29,6 +29,9 @@ export const environment = {
   rcn_node: {
     loan: 'https://rnode.rcn.loans/v1/loans/$id/'
   },
+  rcn_node_api: {
+    url: 'http://localhost:8000/v4/'
+  },
   network: {
     id: '1',
     name: 'Main',
@@ -42,6 +45,18 @@ export const environment = {
     rcnToken: '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6',
     basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
+    diaspore: {
+      debtEngine: '0xe4BfBBB04844cdEbd6b7814183f92E0703257d48',
+      loanManager: '0x978ef6D2bd7559181e6Ac82fFa5C875364d9071b',
+      viewRequets: '0x7edb5117f91514579e3c8d39eed71e6be278632a',
+      filters: {
+        debtCreator: '0x998a67ce5827cb372fe07942561006c7a76cf06f',
+        isLender: '0x22a87c89dd8d8d0abe94062eba672f088e808d49',
+        isBorrower: '0x11dad1b4b85b4ca7d03847231554571f5e7db726',
+        isStatus: '0x43c6c2ae47a31e5850b820f09520310ec0481600',
+        notExpired: '0xada8797ece7e2bda72140a26d13185a788a636cb'
+      }
+    },
     converter: {
       converterRamp: '0x56783153d0a8ccb009dcb79df5337835ed1a9d6c',
       tokenConverter: '0x3b81db7c9fe71a2c6d78f9ae2fe4df4c92272622',
