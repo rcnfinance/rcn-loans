@@ -10,6 +10,7 @@ import { LoanUtils } from '../utils/loan-utils';
 })
 export class ApiService {
 
+  installmentModelAddress = '0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53';
   url = environment.rcn_node_api.url;
 
   constructor(private http: Http) { }
@@ -85,7 +86,7 @@ export class ApiService {
         }
         const loansRequests = await this.completeLoanModels(data.content);
         const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now
-          && loan.model !== '0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53');
+          && loan.model !== this.installmentModelAddress);
         allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
         page++;
       } while (page < apiCalls);
