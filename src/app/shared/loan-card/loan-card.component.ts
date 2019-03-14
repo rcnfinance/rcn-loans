@@ -40,8 +40,8 @@ export class LoanCardComponent implements OnInit {
       this.durationLabel = 'Remaining';
       this.durationValue = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000));
       this.rightLabel = 'Pending';
-      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.currentObligation) -
-      currency.fromUnit(this.loan.debt.model.paid));
+      const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
+      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
       this.canLend = false;
     }
 

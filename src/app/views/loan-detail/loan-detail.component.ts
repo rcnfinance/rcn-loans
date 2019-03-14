@@ -159,9 +159,11 @@ export class LoanDetailComponent implements OnInit {
       // Load status data
       this.isOngoing = this.loan.status === Status.Ongoing;
 
+      const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
+
       this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
-      this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.currentObligation) -
-      currency.fromUnit(this.loan.debt.model.paid));
+      this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
+
       this.canTransfer = this.loan.debt.owner === this.userAccount && this.loan.status !== Status.Request;
 
       this.canPay =
