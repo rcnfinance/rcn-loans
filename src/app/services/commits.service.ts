@@ -31,7 +31,6 @@ export class CommitsService {
         commitsLoanManager = [];
         console.info('ERROR', err);
       }
-      console.info('commits loan manager', commitsLoanManager);
 
       const urlDebtEngineCommits = environment.rcn_node_api.url.concat(`debts/${id}`);
       try {
@@ -41,8 +40,6 @@ export class CommitsService {
         commitsDebtEngine = [];
         console.info('ERROR', err);
       }
-
-      console.info('commits Debt Engine', commitsDebtEngine);
 
       const diasporeCommits = commitsLoanManager.concat(commitsDebtEngine);
 
