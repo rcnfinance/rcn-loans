@@ -171,6 +171,17 @@ export class PayButtonComponent implements OnInit {
     });
   }
 
+  get buttonText(): string {
+    const tx = this.pendingTx;
+    if (tx === undefined) {
+      return 'Pay';
+    }
+    if (tx.confirmed) {
+      return 'Payed';
+    }
+    return 'Paying...';
+  }
+
   clickPay() {
     if (this.pendingTx === undefined) {
       this.eventsService.trackEvent(

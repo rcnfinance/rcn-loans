@@ -187,8 +187,6 @@ export class LoanDetailComponent implements OnInit {
       return;
     }
 
-    console.log(this.loan.status);
-
     switch (this.loan.status) {
       case Status.Request: {
         this.loanStatusRequest();
@@ -244,7 +242,6 @@ export class LoanDetailComponent implements OnInit {
     this.canTransfer = false;
     this.canCancel = isBorrower;
   }
-
 
   private formatInterest(interest: number): string {
     return Number(interest.toFixed(2)).toString();
