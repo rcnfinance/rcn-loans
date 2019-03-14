@@ -2,10 +2,6 @@
 
 ## Unreleased
 
---
-
-## **0.0.14** Avocados - 
-
 ### Fix:
 
 - Fix activity duration title bug
