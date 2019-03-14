@@ -147,7 +147,7 @@ export class LoanDetailComponent implements OnInit {
       ];
 
       // Interest middle text
-      this.interestMiddleText = '~ ' + this.formatInterest(this.loan.status === Status.Indebt ? 
+      this.interestMiddleText = '~ ' + this.formatInterest(this.loan.status === Status.Indebt ?
         this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate) + ' %';
 
       // Load status data
