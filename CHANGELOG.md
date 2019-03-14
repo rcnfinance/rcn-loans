@@ -4,6 +4,12 @@
 
 --
 
+## **0.0.14** Avocados - 
+
+### Fix:
+
+- Fix activity duration title bug
+
 ## **0.0.13** Avocados - 2019/02/15
 
 ### Fix:
