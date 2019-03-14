@@ -147,14 +147,8 @@ export class LoanDetailComponent implements OnInit {
       ];
 
       // Interest middle text
-      let displayInterest: number;
-      if (this.loan.status !== Status.Indebt) {
-        displayInterest = this.loan.descriptor.interestRate;
-      } else {
-        displayInterest = this.loan.descriptor.punitiveInterestRateRate;
-      }
-
-      this.interestMiddleText = '~ ' + displayInterest.toFixed(0);
+      this.interestMiddleText = '~ ' + this.formatInterest(this.loan.status === Status.Indebt ? 
+        this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate) + ' %';
 
       // Load status data
       this.isOngoing = this.loan.status === Status.Ongoing;
@@ -185,6 +179,10 @@ export class LoanDetailComponent implements OnInit {
         ]
       ];
     }
+  }
+
+  private formatInterest(interest: number): string {
+    return Number(interest.toFixed(2)).toString();
   }
 
   private formatTimestamp(timestamp: number): string {
