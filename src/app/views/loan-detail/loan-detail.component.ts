@@ -130,38 +130,42 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private loadDetail() {
+    if (this.loan.status === Status.Request) {
       // Load config data
-    const interest = this.loan.descriptor.interestRate.toFixed(2);
-    const interestPunnitory = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
-    this.loanConfigData = [
-      ['Currency', this.loan.currency],
-      ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
-      ['Duration', Utils.formatDelta(this.loan.descriptor.duration)]
-    ];
+      const interest = this.loan.descriptor.interestRate.toFixed(2);
+      const interestPunnitory = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
+      this.loanConfigData = [
+        ['Currency', this.loan.currency],
+        ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
+        ['Duration', Utils.formatDelta(this.loan.descriptor.duration)]
+      ];
 
-    this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
+      this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
 
-    const currency = this.loan.currency;
-    // Show ongoing loan detail
-    this.loanStatusData = [
-      ['Lend date', this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration)], // TODO
-      ['Due date', this.formatTimestamp(this.loan.debt.model.dueTime)],
-      ['Deadline', this.formatTimestamp(this.loan.debt.model.dueTime)],
-      ['Remaining', Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2)]
-    ];
+    } else {
+      const currency = this.loan.currency;
+      // Show ongoing loan detail
+      this.loanStatusData = [
+        ['Lend date', this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration)], // TODO
+        ['Due date', this.formatTimestamp(this.loan.debt.model.dueTime)],
+        ['Deadline', this.formatTimestamp(this.loan.debt.model.dueTime)],
+        ['Remaining', Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2)]
+      ];
 
-    // Interest middle text
-    this.interestMiddleText = '~ ' + this.formatInterest(this.loan.status === Status.Indebt ?
-      this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate) + ' %';
+      // Interest middle text
+      this.interestMiddleText = '~ ' + this.formatInterest(this.loan.status === Status.Indebt ?
+        this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate) + ' %';
 
-    // Load status data
+      // Load status data
 
-    const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
+      const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
 
-    this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
-    this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
+      this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
+      this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
 
-    this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
+      this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
+
+    }
 
     this.isDiaspore = this.loan.network === Network.Diaspore;
 
@@ -183,20 +187,64 @@ export class LoanDetailComponent implements OnInit {
       return;
     }
 
-    const loanPayable = this.loan.status === Status.Ongoing || this.loan.status === Status.Indebt;
-    const loanLendeable = this.isRequest && !this.isExpired;
-    if (this.userAccount.toUpperCase() !== this.loan.debt.owner.toUpperCase()) {
-      this.canTransfer = false;
-      this.canCancel = false;
-      this.canPay = loanPayable;
-      this.canLend = loanLendeable;
-    } else {
-      this.canTransfer = this.loan.status !== Status.Request && this.loan.status !== Status.Paid && this.loan.status !== Status.Destroyed;
-      this.canCancel = this.loan.borrower.toUpperCase() === this.userAccount.toUpperCase() && this.loan.status === Status.Request;
-      this.canPay = false;
-      this.canLend = this.loan.borrower.toUpperCase() !== this.userAccount.toUpperCase() && loanLendeable;
+    console.log(this.loan.status);
+
+    switch (this.loan.status) {
+      case Status.Request: {
+        this.loanStatusRequest();
+        break;
+      }
+      case Status.Ongoing: {
+        this.loanOnGoingorIndebt();
+        break;
+      }
+      case Status.Paid: {
+        this.invalidActions();
+        break;
+      }
+      case Status.Expired: {
+        this.invalidActions();
+        break;
+      }
+      case Status.Destroyed: {
+        this.invalidActions();
+        break;
+      }
+      case Status.Indebt: {
+        this.loanOnGoingorIndebt();
+        break;
+      }
+      default: {
+        break;
+      }
     }
   }
+
+  private invalidActions() {
+    this.canLend = false;
+    this.canPay = false;
+    this.canTransfer = false;
+    this.canCancel = false;
+  }
+
+  private loanOnGoingorIndebt() {
+    if (this.loan.debt !== undefined) {
+      const isDebtOwner = this.userAccount.toUpperCase() === this.loan.debt.owner.toUpperCase();
+      this.canTransfer = isDebtOwner;
+      this.canCancel = false;
+      this.canPay = !isDebtOwner;
+      this.canLend = false;
+    }
+  }
+
+  private loanStatusRequest() {
+    const isBorrower = this.loan.borrower.toUpperCase() === this.userAccount.toUpperCase();
+    this.canLend = !isBorrower;
+    this.canPay = false;
+    this.canTransfer = false;
+    this.canCancel = isBorrower;
+  }
+
 
   private formatInterest(interest: number): string {
     return Number(interest.toFixed(2)).toString();
