@@ -226,7 +226,7 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private loanOnGoingorIndebt() {
-    if (this.loan.debt !== undefined) {
+    if (this.loan.debt !== undefined && this.userAccount) {
       const isDebtOwner = this.userAccount.toUpperCase() === this.loan.debt.owner.toUpperCase();
       this.canTransfer = isDebtOwner;
       this.canCancel = false;
@@ -236,11 +236,13 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private loanStatusRequest() {
-    const isBorrower = this.loan.borrower.toUpperCase() === this.userAccount.toUpperCase();
-    this.canLend = !isBorrower;
-    this.canPay = false;
-    this.canTransfer = false;
-    this.canCancel = isBorrower;
+    if (this.userAccount) {
+      const isBorrower = this.loan.borrower.toUpperCase() === this.userAccount.toUpperCase();
+      this.canLend = !isBorrower;
+      this.canPay = false;
+      this.canTransfer = false;
+      this.canCancel = isBorrower;
+    }
   }
 
   private formatInterest(interest: number): string {
