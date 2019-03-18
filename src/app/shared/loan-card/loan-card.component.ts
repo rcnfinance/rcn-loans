@@ -44,12 +44,6 @@ export class LoanCardComponent implements OnInit {
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
       this.canLend = false;
     }
-
-    if (this.loan.network === Network.Basalt) {
-      this.network = 'Basalt';
-    } else {
-      this.network = 'Diaspore';
-    }
   }
 
   getInterestRate(): string {
