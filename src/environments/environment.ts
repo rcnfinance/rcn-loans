@@ -30,7 +30,7 @@ export const environment = {
     loan: 'https://testnet.rnode.rcn.loans/v1/loans/$id/'
   },
   rcn_node_api: {
-    url: 'http://localhost:8000/v4/'
+    url: 'https://api-diaspore-ropsten.eu.ngrok.io/v4/'
   },
   network: {
     id: '3',
