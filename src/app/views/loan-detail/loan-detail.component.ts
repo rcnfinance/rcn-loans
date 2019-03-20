@@ -76,7 +76,7 @@ export class LoanDetailComponent implements OnInit {
         this.brand = this.brandingService.getBrand(this.loan);
         this.oracle = this.loan.oracle ? this.loan.oracle.address : undefined;
         this.currency = this.loan.oracle ? this.loan.oracle.currency : 'RCN';
-        this.availableOracle = this.loan.oracle !== undefined;
+        this.availableOracle = this.loan.oracle.currency !== 'RCN';
 
         this.isRequest = this.loan.status === Status.Request;
         this.isOngoing = this.loan.status === Status.Ongoing;
