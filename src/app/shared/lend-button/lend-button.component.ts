@@ -10,7 +10,7 @@ import {
   MatSnackBarHorizontalPosition
 } from '@angular/material';
 
-import { Loan } from './../../models/loan.model';
+import { Loan, Network } from './../../models/loan.model';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
@@ -126,26 +126,23 @@ export class LendButtonComponent implements OnInit {
           'loan #' + this.loan.id
         );
 
-        this.txService.registerLendTx(this.loan, tx);
-        this.pendingTx = this.txService.getLastLend(this.loan);
-        return;
+        if (this.loan.network === Network.Basalt) {
+          this.txService.registerLendTx(tx, environment.contracts.basaltEngine, this.loan);
+        } else {
+          this.txService.registerLendTx(tx, environment.contracts.diaspore.loanManager, this.loan);
+        }
+        this.retrievePendingTx();
+      } else {
+
+        this.eventsService.trackEvent(
+          'show-insufficient-funds-lend',
+          Category.Account,
+          'loan #' + this.loan.id,
+          required
+        );
+
+        this.showInsufficientFundsDialog(required, balance);
       }
-
-      this.eventsService.trackEvent(
-        'lend',
-        Category.Account,
-        'request #' + this.loan.id
-      );
-
-      this.eventsService.trackEvent(
-        'show-insufficient-funds-lend',
-        Category.Account,
-        'loan #' + this.loan.id,
-        required
-      );
-
-      this.showInsufficientFundsDialog(required, balance);
-
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.message.indexOf('User denied transaction signature') < 0) {
@@ -203,7 +200,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   retrievePendingTx() {
-    this.pendingTx = this.txService.getLastLend(this.loan);
+    this.pendingTx = this.txService.getLastPendingLend(this.loan);
   }
 
   showCivicDialog() {
@@ -230,7 +227,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   get enabled(): Boolean {
-    return this.txService.getLastLend(this.loan) === undefined;
+    return this.txService.getLastPendingLend(this.loan) === undefined;
   }
 
   get buttonText(): string {

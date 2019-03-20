@@ -92,9 +92,12 @@ export class TxService {
     this.saveTxs();
   }
 
-  registerLendTx(loan: Loan, hash: string) {
-    const tx = new Tx(hash, environment.contracts.diaspore.debtEngine, false, Type.lend, loan.id);
-    this.registerTx(tx);
+  registerLendTx(tx: string, engine: string, loan: Loan) {
+    const data = {
+      engine: engine,
+      id: loan.id
+    };
+    this.registerTx(new Tx(tx, engine, false, Type.lend, data));
   }
 
   getPendingTxs(): Tx[] {
@@ -108,11 +111,11 @@ export class TxService {
       .slice(0, count);
   }
 
-  getLastLend(loan: Loan): Tx {
+  getLastPendingLend(loan: Loan): Tx {
     return this.txMemory
       .filter(tx => !tx.confirmed)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
-      .find(tx => tx.type === Type.lend && tx.data === loan.id && loan.address === tx.to);
+      .find(tx => tx.type === Type.lend && tx.data.id === loan.id && loan.address === tx.to);
   }
 
   registerApproveTx(tx: string, token: string, contract: string, action: boolean) {
@@ -187,8 +190,7 @@ export class TxService {
       .filter(tx =>
         !tx.confirmed &&
         tx.type === Type.pay &&
-        tx.data.id === loan.id &&
-        tx.data.engine === environment.contracts.diaspore.debtEngine)
+        tx.data.id === loan.id)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
   }
 

@@ -185,7 +185,7 @@ export class PayButtonComponent implements OnInit {
   clickPay() {
     if (this.pendingTx === undefined) {
       this.eventsService.trackEvent(
-        'click-lend',
+        'click-pay',
         Category.Loan,
         'loan #' + this.loan.id
       );
