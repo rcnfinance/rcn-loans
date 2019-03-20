@@ -5,7 +5,6 @@ import { MatSnackBar } from '@angular/material';
 import { Loan } from './models/loan.model';
 import { Web3Service } from './services/web3.service';
 import { EventsService, Category } from './services/events.service';
-import { environment } from '../environments/environment';
 
 export enum Type {
   lend = 'lend',
