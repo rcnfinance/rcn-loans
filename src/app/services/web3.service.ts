@@ -14,15 +14,20 @@ export class Web3Service {
   // Account properties
   private _web3account: any;
   private _account: string = null;
+  correctNet: boolean = false;
+  hasWebWallet: boolean = false;
+  hasAccount: boolean = false;
 
   constructor() {
     this._web3 = this.buildWeb3();
-
+    
     if (typeof window.web3 !== 'undefined') {
+      this.hasWebWallet = true;
       // Use Mist/MetaMask's provider
       console.info('Web3 provider detected');
       const candWeb3 = new Web3(window.web3.currentProvider);
       if (candWeb3.version.network === environment.network.id) {
+        this.correctNet = true;
         candWeb3.eth.getAccounts((err, result) => {
           if (!err && result && result.length > 0) {
             console.info('Logged in');
@@ -32,6 +37,7 @@ export class Web3Service {
         });
       } else {
         console.info('Mismatch provider network ID', candWeb3.version.network, environment.network.id);
+        this.correctNet = false;
       }
     }
   }
@@ -60,7 +66,7 @@ export class Web3Service {
           console.info('Mismatch provider network ID', candWeb3.version.network, environment.network.id);
           return false;
         }
-        await window.ethereum.enable();
+        // await window.ethereum.enable();
         this._web3account = candWeb3;
         this.loginEvent.emit(true);
         return true;
