@@ -8,7 +8,7 @@ import { DialogClientAccountComponent } from '../../dialogs/dialog-client-accoun
 import { DialogClientWalletComponent } from '../../dialogs/dialog-client-wallet/dialog-client-wallet.component';
 import { DialogClientNetworkComponent } from '../../dialogs/dialog-client-network/dialog-client-network.component';
 import { DialogClientInstructionsComponent } from '../../dialogs/dialog-client-instructions/dialog-client-instructions.component';
-import { DialogClientStepsComponent } from '../../dialogs/dialog-client-steps/dialog-client-steps.component';
+
 // App Service
 import { Web3Service } from '../../services/web3.service';
 import { SidebarService } from '../../services/sidebar.service';

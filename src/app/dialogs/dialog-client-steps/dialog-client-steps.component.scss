@@ -1,1 +1,21 @@
 @import '../dialog-client-account/dialog-client-account.component.scss'; //styles
+
+.container {
+    display: flex;
+    justify-content: center
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    width: 30%;
+}
+
+.columns {
+    display: flex;
+    justify-content: center;
+}
+
+.reg{
+    font-weight: 400; 
+}

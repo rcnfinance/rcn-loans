@@ -7,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DialogClientWalletComponent implements OnInit {
 
-  constructor() { }
+  constructor() { 
+    
+  }
+
+  view:boolean = true;
 
   ngOnInit() {
   }
