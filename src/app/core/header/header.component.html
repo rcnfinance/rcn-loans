@@ -24,16 +24,16 @@
               <div class="marginright20" routerLink='/requests'>Requests</div>
               <div class="marginright20" routerLink='/activity'>Activity</div>
               <div class="marginright20" routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</div>
-              <div class="marginright20" (click)="openInstructions()" *ngIf="!hasAccount">Sign up</div>
-              <div class="marginright20" (click)="openDialog()" *ngIf="!hasAccount">Login</div>
-              <div class="separator" *ngIf='hasAccount'>|</div>
-              <app-icon-group-header *ngIf='hasAccount'></app-icon-group-header>
-              <div class="separator" *ngIf='hasAccount'>|</div>
-              <app-component-balance *ngIf='hasAccount'></app-component-balance>
-              <div class="separator" *ngIf="hasAccount">|</div>
+              <div class="marginright20" (click)="openInstructions()" *ngIf="!hasAccount || !correctNet">Sign up</div>
+              <div class="marginright20" (click)="openDialog()" *ngIf="!hasAccount || !correctNet">Login</div>
+              <div class="separator" *ngIf='hasAccount && correctNet'>|</div>
+              <app-icon-group-header *ngIf='hasAccount && correctNet'></app-icon-group-header>
+              <div class="separator" *ngIf='hasAccount && correctNet'>|</div>
+              <app-component-balance *ngIf='hasAccount && correctNet'></app-component-balance>
+              <div class="separator" *ngIf="hasAccount && correctNet">|</div>
               <!-- Balance section -->
               <div (click)="openDialog();">
-                <div class="flex-container" *ngIf="hasAccount">
+                <div class="flex-container" *ngIf="hasAccount && correctNet">
                   <div class="flex-item">
                     <div class="list-avatar">
                       <div class="avatar-container">
