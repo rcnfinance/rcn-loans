@@ -24,7 +24,7 @@
               <div class="marginright20" routerLink='/requests'>Requests</div>
               <div class="marginright20" routerLink='/activity'>Activity</div>
               <div class="marginright20" routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</div>
-              <div class="marginright20" (click)="openDialog()" *ngIf="!hasAccount">Sign up</div>
+              <div class="marginright20" (click)="openInstructions()" *ngIf="!hasAccount">Sign up</div>
               <div class="marginright20" (click)="openDialog()" *ngIf="!hasAccount">Login</div>
               <div class="separator" *ngIf='hasAccount'>|</div>
               <app-icon-group-header *ngIf='hasAccount'></app-icon-group-header>

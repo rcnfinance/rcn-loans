@@ -66,6 +66,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   openDialogNetwork() {
     this.dialog.open(DialogClientNetworkComponent, {});
   }
+
+  // Open Instructions Dialog
+  openInstructions() {
+    this.dialog.open(DialogClientInstructionsComponent, {});
+  }
+
   // Open Approve Dialog
   async openDialog() {
     if (this.hasAccount) {
@@ -75,39 +81,43 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       dialogRef.afterClosed().subscribe(() => {
         this.makeRotate = false;
       });
-    } 
-    if (!this.hasAccount && this.hasWebWallet){
-      console.info(1234)
-     this.openDialogClient();
+    } else if (!this.hasAccount && this.hasWebWallet){
+      this.openDialogClient();
+    }
+    if (!this.hasWebWallet){
+     this.openDialogWallet();
     } else if (await this.web3Service.requestLogin()) {
       return;
     } 
+    else if (!this.correctNet){
+      this.openDialogNetwork();
+    }
+
+
+    // if (this.hasAccount) {
+    //   const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
+    //   this.makeRotate = true;
+    //   dialogRef.componentInstance.autoClose = false;
+    //   dialogRef.afterClosed().subscribe(() => {
+    //     this.makeRotate = false;
+    //   });
+    // } 
+    // if (!this.hasAccount && this.hasWebWallet){
+    //   console.info(1234)
+    //  this.openDialogClient();
+    // } else if (await this.web3Service.requestLogin()) {
+    //   return;
+    // } 
     
-    if (!this.hasWebWallet){
-     this.openDialogWallet();
-    } 
+    // if (!this.hasWebWallet){
+    //  this.openDialogWallet();
+    // } 
 
-    if (!this.correctNet){
-     this.openDialogNetwork();
-    } 
+    // if (!this.correctNet){
+    //  this.openDialogNetwork();
+    // } 
 
 
-  //   if (this.hasAccount) {
-  //     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-  //     this.makeRotate = true;
-  //     dialogRef.componentInstance.autoClose = false;
-  //     dialogRef.afterClosed().subscribe(() => {
-  //       this.makeRotate = false;
-  //     });
-  //   } else if (!this.hasAccount){
-  //     this.openDialogClient();
-  //   }
-
-  //   if (!this.hasWebWallet){
-  //     this.openDialogWallet();
-  //   }  else if (!this.correctNet){
-  //     this.openDialogNetwork();
-  //   } 
   }
 
   get hasAccount(): boolean {
