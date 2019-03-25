@@ -13,6 +13,7 @@ export class Web3Service {
 
   // Account properties
   private _web3account: any;
+  private _candWeb3: any;
   private _account: string = null;
   correctNet: boolean = false;
   hasWebWallet: boolean = false;
@@ -20,18 +21,21 @@ export class Web3Service {
 
   constructor() {
     this._web3 = this.buildWeb3();
-    
+
     if (typeof window.web3 !== 'undefined') {
       this.hasWebWallet = true;
       // Use Mist/MetaMask's provider
       console.info('Web3 provider detected');
       const candWeb3 = new Web3(window.web3.currentProvider);
+      this._candWeb3 = candWeb3;
+      console.info('candWeb3', candWeb3);
       if (candWeb3.version.network === environment.network.id) {
         this.correctNet = true;
         candWeb3.eth.getAccounts((err, result) => {
           if (!err && result && result.length > 0) {
-            console.info('Logged in');
             this._web3account = candWeb3;
+            console.info('Logged in');
+            console.info('constructorWeb3Account', this._web3account);
             this.loginEvent.emit(true);
           }
         });
@@ -51,7 +55,7 @@ export class Web3Service {
   }
 
   get loggedIn(): boolean {
-    return this._web3account !== undefined;
+    return this._candWeb3 !== undefined;
   }
 
   async requestLogin(): Promise<boolean> {
@@ -78,7 +82,12 @@ export class Web3Service {
     }
   }
 
+  correctNetwork(): boolean {
+    return this._candWeb3.version.network === environment.network.id;
+  }
+
   async getAccount(): Promise<string> {
+    console.info('web3Account', this._candWeb3);
     if (!this.loggedIn) {
       return;
     }
@@ -87,7 +96,7 @@ export class Web3Service {
       return this._account;
     }
 
-    const accounts = await promisify(this._web3account.eth.getAccounts, []);
+    const accounts = await promisify(this._candWeb3.eth.getAccounts, []);
     if (!accounts || accounts.length === 0) {
       return;
     }

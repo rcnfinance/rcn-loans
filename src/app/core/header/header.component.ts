@@ -1,3 +1,5 @@
+///// header component
+
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -34,7 +36,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private web3Service: Web3Service,
     private sidebarService: SidebarService,
     public titleService: TitleService
-  ) {}
+  ) { }
 
   // Toggle Navbar
   sidebarToggle() {
@@ -74,58 +76,64 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   // Open Approve Dialog
   async openDialog() {
-    if (this.hasAccount) {
-      const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-      this.makeRotate = true;
-      dialogRef.componentInstance.autoClose = false;
-      dialogRef.afterClosed().subscribe(() => {
-        this.makeRotate = false;
-      });
-    } else if (!this.hasAccount && this.hasWebWallet){
-      this.openDialogClient();
-    }
-    if (!this.hasWebWallet){
-     this.openDialogWallet();
-    } else if (await this.web3Service.requestLogin()) {
+    if (this.hasWebWallet) {
+
+      await this.loadLogin();
+
+      console.info('hasAccount', this.hasAccount);
+      console.info('correctNetWork', this.correctNet);
+
+      if (this.hasAccount) {
+        if (this.correctNet) {
+          const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
+          this.makeRotate = true;
+          dialogRef.componentInstance.autoClose = false;
+          dialogRef.afterClosed().subscribe(() => {
+            this.makeRotate = false;
+          });
+        } else {
+          this.openDialogNetwork();
+          return;
+        }
+      } else {
+        this.openDialogClient();
+        return;
+      }
+    } else {
+      this.openDialogWallet();
       return;
-    } 
-    else if (!this.correctNet){
-      this.openDialogNetwork();
     }
-
-
-    // if (this.hasAccount) {
-    //   const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-    //   this.makeRotate = true;
-    //   dialogRef.componentInstance.autoClose = false;
-    //   dialogRef.afterClosed().subscribe(() => {
-    //     this.makeRotate = false;
-    //   });
-    // } 
-    // if (!this.hasAccount && this.hasWebWallet){
-    //   console.info(1234)
-    //  this.openDialogClient();
-    // } else if (await this.web3Service.requestLogin()) {
-    //   return;
-    // } 
-    
-    // if (!this.hasWebWallet){
-    //  this.openDialogWallet();
-    // } 
-
-    // if (!this.correctNet){
-    //  this.openDialogNetwork();
-    // } 
-
-
   }
+
+  // if (this.hasAccount) {
+  //   const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
+  //   this.makeRotate = true;
+  //   dialogRef.componentInstance.autoClose = false;
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.makeRotate = false;
+  //   });
+  // } 
+  // if (!this.hasAccount && this.hasWebWallet){
+  //   console.info(1234)
+  //  this.openDialogClient();
+  // } else if (await this.web3Service.requestLogin()) {
+  //   return;
+  // } 
+
+  // if (!this.hasWebWallet){
+  //  this.openDialogWallet();
+  // } 
+
+  // if (!this.correctNet){
+  //  this.openDialogNetwork();
+  // }
 
   get hasAccount(): boolean {
     return this.account !== undefined;
   }
 
   get correctNet(): boolean {
-    return this.web3Service.correctNet !== false;
+    return this.web3Service.correctNetwork();
   }
 
   get hasWebWallet(): boolean {
@@ -135,6 +143,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   async loadLogin() {
     if (!this.hasAccount) {
       this.account = await this.web3Service.getAccount();
+      console.info('account', this.account);
     }
   }
 
@@ -145,5 +154,5 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.loadLogin();
   }
 
-  ngAfterViewInit(): any {}
+  ngAfterViewInit(): any { }
 }
