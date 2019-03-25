@@ -75,17 +75,19 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       dialogRef.afterClosed().subscribe(() => {
         this.makeRotate = false;
       });
-    } else 
-    if (await this.web3Service.requestLogin()) {
+    } 
+    if (!this.hasAccount && this.hasWebWallet){
+      console.info(1234)
+     this.openDialogClient();
+    } else if (await this.web3Service.requestLogin()) {
       return;
     } 
+    
     if (!this.hasWebWallet){
      this.openDialogWallet();
     } 
-    if (this.hasWebWallet && !this.hasAccount){
-     this.openDialogClient();
-    } 
-    if (this.hasWebWallet && !this.correctNet){
+
+    if (!this.correctNet){
      this.openDialogNetwork();
     } 
 
