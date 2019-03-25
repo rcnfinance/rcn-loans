@@ -22,14 +22,13 @@ export class ApiService {
     let page = 0;
     try {
       do {
-        const response = await this.http.get(this.url.concat('loans?open=false&page=' + page)).toPromise();
+        const response = await this.http.get(this.url.concat('loans?open=false&page=' + page + '&lender=' + lender)).toPromise();
         const data = response.json();
         if (page === 0) {
           apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
         }
         const activeLoans = await this.completeLoanModels(data.content);
-        const loansOfLender = activeLoans.filter(loan => loan.debt.owner.toLowerCase() === lender);
-        allLoansOfLender = allLoansOfLender.concat(loansOfLender);
+        allLoansOfLender = allLoansOfLender.concat(activeLoans);
         page++;
       } while (page < apiCalls);
     } catch (err) {
@@ -79,14 +78,14 @@ export class ApiService {
     let page = 0;
     try {
       do {
-        const response = await this.http.get(this.url.concat('loans?open=true&approved=true&page=' + page)).toPromise();
+        const response = await this.http.get(this.url.concat('loans?open=true&approved=true&page=' + page
+        + 'expiration__gt=' + now)).toPromise();
         const data = response.json();
         if (page === 0) {
           apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
         }
         const loansRequests = await this.completeLoanModels(data.content);
-        const notExpiredResquestLoans = loansRequests.filter(loan => loan.expiration > now
-          && loan.model !== this.installmentModelAddress);
+        const notExpiredResquestLoans = loansRequests.filter(loan => loan.model !== this.installmentModelAddress);
         allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
         page++;
       } while (page < apiCalls);
