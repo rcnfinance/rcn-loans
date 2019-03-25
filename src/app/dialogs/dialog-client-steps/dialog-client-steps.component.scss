@@ -19,3 +19,21 @@
 .reg{
     font-weight: 400; 
 }
+
+
+@media (max-width: 768px) {
+    .columns {
+        display: block;
+    }
+
+    .content {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .img-container {
+        margin-top: 40px;
+    }
+
+}
