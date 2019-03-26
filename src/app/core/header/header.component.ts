@@ -74,16 +74,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.dialog.open(DialogClientInstructionsComponent, {});
   }
 
-  // Open Approve Dialog
+  // Open error on login Dialogs
   async openDialog() {
+  // Check if there is a Web Wallet
     if (this.hasWebWallet) {
-
       await this.loadLogin();
-
-      console.info('hasAccount', this.hasAccount);
-      console.info('correctNetWork', this.correctNet);
-
+  // Check if it has logged in
       if (this.hasAccount) {
+  // Check if the network is correct
         if (this.correctNet) {
           const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
           this.makeRotate = true;
@@ -104,29 +102,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       return;
     }
   }
-
-  // if (this.hasAccount) {
-  //   const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-  //   this.makeRotate = true;
-  //   dialogRef.componentInstance.autoClose = false;
-  //   dialogRef.afterClosed().subscribe(() => {
-  //     this.makeRotate = false;
-  //   });
-  // } 
-  // if (!this.hasAccount && this.hasWebWallet){
-  //   console.info(1234)
-  //  this.openDialogClient();
-  // } else if (await this.web3Service.requestLogin()) {
-  //   return;
-  // } 
-
-  // if (!this.hasWebWallet){
-  //  this.openDialogWallet();
-  // } 
-
-  // if (!this.correctNet){
-  //  this.openDialogNetwork();
-  // }
 
   get hasAccount(): boolean {
     return this.account !== undefined;

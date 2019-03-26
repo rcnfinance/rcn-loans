@@ -37,7 +37,7 @@ export class RavenErrorHandler implements ErrorHandler {
     LoanDetailModule
   ],
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   entryComponents: [],
   bootstrap: [AppComponent]
