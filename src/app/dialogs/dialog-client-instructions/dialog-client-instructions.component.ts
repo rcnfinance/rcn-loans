@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
-
+import { MatDialog } from '@angular/material';
 import { DialogClientStepsComponent } from '../../dialogs/dialog-client-steps/dialog-client-steps.component';
 
 @Component({
@@ -10,14 +9,11 @@ import { DialogClientStepsComponent } from '../../dialogs/dialog-client-steps/di
 })
 export class DialogClientInstructionsComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { 
-    
-  }
-
+  constructor(public dialog: MatDialog) { }
     // Open Instructions Dialog
-    openDialog() {
-      this.dialog.open(DialogClientStepsComponent, {});
-    }
+  openDialog() {
+    this.dialog.open(DialogClientStepsComponent, {});
+  }
 
   ngOnInit() {
   }

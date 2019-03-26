@@ -6,12 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dialog-client-wallet.component.scss']
 })
 export class DialogClientWalletComponent implements OnInit {
-
-  constructor() { 
-    
-  }
-
-  view:boolean = true;
+  view = true;
+  constructor() { }
 
   ngOnInit() {
   }

@@ -15,9 +15,9 @@ export class Web3Service {
   private _web3account: any;
   private _candWeb3: any;
   private _account: string = null;
-  correctNet: boolean = false;
-  hasWebWallet: boolean = false;
-  hasAccount: boolean = false;
+  correctNet = false;
+  hasWebWallet = false;
+  hasAccount = false;
 
   constructor() {
     this._web3 = this.buildWeb3();
