@@ -8,7 +8,6 @@ import { DialogClientStepsComponent } from '../../dialogs/dialog-client-steps/di
   styleUrls: ['./dialog-client-instructions.component.scss']
 })
 export class DialogClientInstructionsComponent implements OnInit {
-
   constructor(public dialog: MatDialog) { }
     // Open Instructions Dialog
   openDialog() {
