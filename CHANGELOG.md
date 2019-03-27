@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fix:
+
+- Improve SEO
+
 --
 
 ## **0.0.13** Avocados - 2019/02/15
