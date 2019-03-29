@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Loan, Network } from '../../models/loan.model';
+import { Loan, Network, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 
 @Component({
