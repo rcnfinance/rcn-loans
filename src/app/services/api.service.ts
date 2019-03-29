@@ -88,10 +88,9 @@ export class ApiService {
   async getLoan(id: string): Promise<Loan> {
     const response = await this.http.get(this.url.concat(`loans/${id}`)).toPromise();
     const data = response.json();
-    const loanArray = [data.content];
-    const loan = await this.completeLoanModels(loanArray);
+    const loan = await this.completeLoanModels(data.content);
     try {
-      return loan[0];
+      return loan;
     } catch {
       console.info('loan does not exist');
     }
