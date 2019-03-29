@@ -42,7 +42,13 @@ export class LoanCardComponent implements OnInit {
       this.rightLabel = 'Pending';
       const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
+
       this.canLend = false;
+      if (this.loan.status === Status.Indebt) {
+        this.durationLabel = 'In debt for';
+      } else {
+        this.durationLabel = 'Remaining';
+      }
     }
   }
 
