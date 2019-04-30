@@ -46,8 +46,8 @@ export const environment = {
     basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
     diaspore: {
-      debtEngine: '0xe4BfBBB04844cdEbd6b7814183f92E0703257d48',
-      loanManager: '0x978ef6D2bd7559181e6Ac82fFa5C875364d9071b',
+      debtEngine: '0xc1b4f53ab978de0bbc347c6d85cef40226f85758',
+      loanManager: '0x6b3e82ddc85710ed9c32c61b317ade1b2a80fc77',
       viewRequets: '0x7edb5117f91514579e3c8d39eed71e6be278632a',
       filters: {
         debtCreator: '0x998a67ce5827cb372fe07942561006c7a76cf06f',
