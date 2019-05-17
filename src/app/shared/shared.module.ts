@@ -34,6 +34,7 @@ import { DialogInsufficientFoundsComponent } from '../dialogs/dialog-insufficien
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogGenericErrorComponent } from '../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 // App Services
 import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
@@ -84,6 +85,7 @@ import { EventsService } from './../services/events.service';
     DialogApproveContractComponent,
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
+    DialogWrongCountryComponent,
     FilterLoansComponent
   ],
   entryComponents: [

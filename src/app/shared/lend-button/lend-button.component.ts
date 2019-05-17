@@ -24,6 +24,7 @@ import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insuffic
 import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
+import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { CosignerService } from './../../services/cosigner.service';
 import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
@@ -66,10 +67,15 @@ export class LendButtonComponent implements OnInit {
       return;
     }
 
+    // if (!this.lendEnabled) {
+    //   this.dialog.open(DialogWrongCountryComponent, { data: {
+    //     error: new Error('Lending is not enabled in this region')
+    //   }});
+    //   return;
+    // }
+
     if (!this.lendEnabled) {
-      this.dialog.open(DialogGenericErrorComponent, { data: {
-        error: new Error('Lending is not enabled in this region')
-      }});
+      this.dialog.open(DialogWrongCountryComponent);
       return;
     }
 
