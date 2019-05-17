@@ -133,7 +133,8 @@ import { EventsService } from './../services/events.service';
     RiskIndicatorComponent,
     CivicAuthComponent,
     PayFormComponent,
-    FilterLoansComponent
+    FilterLoansComponent,
+    DialogWrongCountryComponent,
   ]
 })
 export class SharedModule { }
