@@ -2,6 +2,8 @@
     background-color: black;
     width: 678px;
     height: 362px;
+    display: flex;
+    align-items: center;
 }
 
 img {
@@ -25,9 +27,9 @@ img {
     margin: 20px 0;
 }
 
-.row {
-    margin: 50px; 
-}
+// .row {
+//     margin: 50px; 
+// }
 
 @media (max-width: 767px) {
     .dialog {
