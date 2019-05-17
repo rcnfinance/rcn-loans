@@ -1,12 +1,12 @@
-.dialog {
-    width: fit-content;
-    height: fit-content;
-}
+// .dialog {
+//     width: auto;
+//     height: auto;
+// }
 
-.container-fluid {
+.container {
     background-color: black;
-    width: 678px;
-    height: 362px;
+    // width: 678px;
+    // height: 362px;
 }
 
 img {
@@ -40,7 +40,7 @@ img {
         width: 50%;
     }
     
-    .container {
+    .dialog-new-title {
         width: auto;
         height: auto;
     }
