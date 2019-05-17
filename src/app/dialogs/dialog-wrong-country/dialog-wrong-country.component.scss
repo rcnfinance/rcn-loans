@@ -1,6 +1,6 @@
 .dialog {
-    width: 678px;
-    height: 300px;
+    width: auto;
+    height: auto;
 }
 
 .container {
@@ -11,16 +11,16 @@ img {
     width: 100%;
 }
 .dialog-new-title {
-//     width: 311px;
-//   height: 36px;
-  font-family: Raleway;
-  font-size: 20px;
-  font-weight: bold;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: #dadada;
+    width: 311px;
+    height: 36px;
+    font-family: Raleway;
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #dadada;
 }
 
 .dialog-new-text {
@@ -31,5 +31,10 @@ img {
     .dialog {
         width: auto;
         height: auto;
-    } 
+    }
+    
+    .dialog-new-title {
+        width: auto;
+        height: auto;
+    }
 }
