@@ -4,12 +4,6 @@
     height: 362px;
 }
 
-.container {
-    
-    // width: 678px;
-    // height: 362px;
-}
-
 img {
     width: 100%;
 }
@@ -48,5 +42,9 @@ img {
     .dialog-new-title {
         width: auto;
         height: auto;
+    }
+
+    .row {
+        margin: 0; 
     }
 }
