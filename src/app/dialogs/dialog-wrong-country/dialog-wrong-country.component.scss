@@ -1,10 +1,9 @@
-// .dialog {
-//     width: auto;
-//     height: auto;
-// }
+.dialog {
+    background-color: black;
+}
 
 .container {
-    background-color: black;
+    
     // width: 678px;
     // height: 362px;
 }
@@ -28,6 +27,10 @@ img {
 
 .dialog-new-text {
     margin: 20px 0;
+}
+
+.row {
+    margin: 50px; 
 }
 
 @media (max-width: 767px) {
