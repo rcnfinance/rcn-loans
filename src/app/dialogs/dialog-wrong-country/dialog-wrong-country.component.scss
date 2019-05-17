@@ -1,11 +1,12 @@
 .dialog {
-    width: 678px;
-    height: 362px;
+    width: fit-content;
+    height: fit-content;
 }
 
-.container {
+.container-fluid {
     background-color: black;
-   
+    width: 678px;
+    height: 362px;
 }
 
 img {
