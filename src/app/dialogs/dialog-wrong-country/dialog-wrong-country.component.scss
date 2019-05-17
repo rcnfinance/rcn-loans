@@ -1,7 +1,10 @@
-.container-fluid {
-    background-color: black;
+.dialog {
     width: 678px;
     height: 300px;
+}
+
+.container {
+    background-color: black;
 }
 
 img {
@@ -22,4 +25,11 @@ img {
 
 .dialog-new-text {
     margin: 20px 0;
+}
+
+@media (max-width: 767px) {
+    .dialog {
+        width: auto;
+        height: auto;
+    } 
 }
