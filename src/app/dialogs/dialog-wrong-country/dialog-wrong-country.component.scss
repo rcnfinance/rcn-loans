@@ -5,6 +5,8 @@
 
 .container {
     background-color: black;
+    width: 678px;
+    height: 362px;
 }
 
 img {
@@ -21,6 +23,7 @@ img {
     line-height: normal;
     letter-spacing: normal;
     color: #dadada;
+    margin: 0;
 }
 
 .dialog-new-text {
@@ -32,8 +35,12 @@ img {
         width: auto;
         height: auto;
     }
+
+    img {
+        width: 50%;
+    }
     
-    .dialog-new-title {
+    .container {
         width: auto;
         height: auto;
     }
