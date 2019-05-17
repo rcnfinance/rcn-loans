@@ -67,17 +67,17 @@ export class LendButtonComponent implements OnInit {
       return;
     }
 
-    // if (!this.lendEnabled) {
-    //   this.dialog.open(DialogWrongCountryComponent, { data: {
-    //     error: new Error('Lending is not enabled in this region')
-    //   }});
-    //   return;
-    // }
-
     if (!this.lendEnabled) {
-      this.dialog.open(DialogWrongCountryComponent);
+      this.dialog.open(DialogWrongCountryComponent, { data: {
+        error: new Error('Lending is not enabled in this region')
+      }});
       return;
     }
+
+    // if (!this.lendEnabled) {
+    //   this.dialog.open(DialogWrongCountryComponent);
+    //   return;
+    // }
 
     const cosigner = this.cosignerService.getCosigner(this.loan);
     if (cosigner instanceof DecentralandCosignerProvider) {

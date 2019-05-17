@@ -93,7 +93,8 @@ import { EventsService } from './../services/events.service';
     DialogInsufficientFoundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
-    DialogGenericErrorComponent
+    DialogGenericErrorComponent,
+    DialogWrongCountryComponent,
   ],
   providers: [
     DecentralandCosignerProvider,
