@@ -36,7 +36,7 @@ export const environment = {
       address: 'https://etherscan.io/address/${address}',
       tx: 'https://etherscan.io/tx/${tx}'
     },
-    provider: 'https://main.node.rcn.loans:8545/'
+    provider: 'https://node.rcn.loans/'
   },
   contracts: {
     rcnToken: '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6',
