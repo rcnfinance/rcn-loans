@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-dialog-wrong-country',
@@ -6,8 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dialog-wrong-country.component.scss']
 })
 export class DialogWrongCountryComponent implements OnInit {
+  
 
-  constructor() { }
+  constructor(public dialogRef: MatDialogRef<DialogWrongCountryComponent>) { }
+
+  closeDialog() {
+    this.dialogRef.close(DialogWrongCountryComponent);
+  }
 
   ngOnInit() {
   }
