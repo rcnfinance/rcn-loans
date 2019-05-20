@@ -72,11 +72,6 @@ export class LendButtonComponent implements OnInit {
       return;
     }
 
-    // if (!this.lendEnabled) {
-    //   this.dialog.open(DialogWrongCountryComponent);
-    //   return;
-    // }
-
     const cosigner = this.cosignerService.getCosigner(this.loan);
     if (cosigner instanceof DecentralandCosignerProvider) {
       const isParcelStatusOpen = await cosigner.getStatusOfParcel(this.loan);
