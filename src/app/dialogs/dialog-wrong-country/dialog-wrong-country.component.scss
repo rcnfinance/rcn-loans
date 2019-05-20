@@ -1,7 +1,7 @@
 .dialog {
     background-color: black;
     width: 678px;
-    height: 362px;
+    height: 300px;
     display: flex;
     align-items: center;
     .dialog-new-title {
@@ -18,7 +18,7 @@
         margin: 0;
     }
     .dialog-new-text {
-        margin: 20px 0;
+        margin: 15px 0 20px 0;
         font-family: Raleway;
         font-size: 16px;
         font-weight: 500;
@@ -38,7 +38,7 @@ img {
 @media (max-width: 767px) {
     .dialog {
         width: auto;
-        height: auto;
+        min-height: fit-content;
         padding: 15px 0;
         .dialog-new-title {
             width: auto;
