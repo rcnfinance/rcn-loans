@@ -104,11 +104,16 @@ export class ContentWrapperComponent implements OnInit {
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
     this.web3Service.loginEvent.subscribe(() => this.loadAccount());
     this.loadAccount();
+    this.canLend();
+  }
+
+  async canLend() {
     if (!this.lendEnabled) {
       this.dialog.open(DialogWrongCountryComponent);
       return;
     }
   }
+
   async loadAccount() {
     if (!this.hasAccount) {
       this.account = await this.web3Service.getAccount();
