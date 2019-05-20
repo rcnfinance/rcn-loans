@@ -13,6 +13,7 @@ export class DialogWrongCountryComponent implements OnInit {
 
   closeDialog() {
     this.dialogRef.close(DialogWrongCountryComponent);
+    return;
   }
 
   ngOnInit() {
