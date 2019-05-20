@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 // App Components
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
+
 // App Service
 import { environment } from '../../../environments/environment';
 import { SidebarService } from '../../services/sidebar.service';
@@ -43,6 +45,7 @@ export class ContentWrapperComponent implements OnInit {
   account: string;
   version: string = environment.version;
   lender: string;
+  lendEnabled: Boolean;
 
   private ethWei = new BigNumber(10).pow(new BigNumber(18));
   rcnBalance: BigNumber;
@@ -101,6 +104,10 @@ export class ContentWrapperComponent implements OnInit {
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
     this.web3Service.loginEvent.subscribe(() => this.loadAccount());
     this.loadAccount();
+    if (!this.lendEnabled) {
+      this.dialog.open(DialogWrongCountryComponent);
+      return;
+    }
   }
   async loadAccount() {
     if (!this.hasAccount) {

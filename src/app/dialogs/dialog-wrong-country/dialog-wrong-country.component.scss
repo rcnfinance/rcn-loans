@@ -29,13 +29,20 @@
         color: #dadada;
     }
 }
-
-img {
-    width: 80%;
+.img {
+    margin-right: 30px;
+    img {
+        width: 100%;
+    }
 }
+
 
 .medium {
     font-weight: 600;
+}
+
+.mat-dialog-content {
+    min-width: 678px;
 }
 
 
@@ -50,18 +57,21 @@ img {
         }
     }
 
-    img {
-        width: 50%;
-        margin: auto;
+    .img {
+        margin-right: 0px;
+        img {
+            width: 50%;
+            margin: auto;
+        }
     }
+    
 
     .text {
         margin-top: 30px;
     }
     
-    
+    .mat-dialog-content {
+        min-width: auto;
+    }
 
-    // .row {
-    //     margin: 0; 
-    // }
 }
