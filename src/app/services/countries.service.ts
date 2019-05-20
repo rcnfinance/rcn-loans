@@ -22,8 +22,7 @@ export class CountriesService {
   }
 
   async lendEnabled(): Promise<Boolean> {
-    // const country = await this.country;
-    // return country.toUpperCase() !== 'US';
-    return false;
+    const country = await this.country;
+    return country.toUpperCase() !== 'US';
   }
 }
