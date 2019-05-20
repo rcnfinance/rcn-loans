@@ -68,9 +68,7 @@ export class LendButtonComponent implements OnInit {
     }
 
     if (!this.lendEnabled) {
-      this.dialog.open(DialogWrongCountryComponent, { data: {
-        error: new Error('Lending is not enabled in this region')
-      }});
+      this.dialog.open(DialogWrongCountryComponent);
       return;
     }
 
