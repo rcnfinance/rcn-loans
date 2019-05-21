@@ -7,7 +7,6 @@ import { MatDialogRef } from '@angular/material';
   styleUrls: ['./dialog-wrong-country.component.scss']
 })
 export class DialogWrongCountryComponent implements OnInit {
-  
 
   constructor(public dialogRef: MatDialogRef<DialogWrongCountryComponent>) { }
 

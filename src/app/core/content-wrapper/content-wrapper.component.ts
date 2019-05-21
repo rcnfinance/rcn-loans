@@ -12,6 +12,7 @@ import { SidebarService } from '../../services/sidebar.service';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Tx, TxService } from '../../tx.service';
+import { CountriesService } from '../../services/countries.service';
 
 @Component({
   selector: 'app-content-wrapper',
@@ -65,7 +66,8 @@ export class ContentWrapperComponent implements OnInit {
     private web3Service: Web3Service,
     private contractService: ContractsService,
     private txService: TxService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private countriesService: CountriesService
   ) {}
 
   // Toggle Navbar
@@ -108,6 +110,7 @@ export class ContentWrapperComponent implements OnInit {
   }
 
   async canLend() {
+    this.lendEnabled = await this.countriesService.lendEnabled();
     if (!this.lendEnabled) {
       this.dialog.open(DialogWrongCountryComponent);
       return;

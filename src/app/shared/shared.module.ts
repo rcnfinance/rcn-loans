@@ -94,7 +94,7 @@ import { EventsService } from './../services/events.service';
     DialogApproveContractComponent,
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
-    DialogWrongCountryComponent,
+    DialogWrongCountryComponent
   ],
   providers: [
     DecentralandCosignerProvider,
@@ -134,7 +134,7 @@ import { EventsService } from './../services/events.service';
     CivicAuthComponent,
     PayFormComponent,
     FilterLoansComponent,
-    DialogWrongCountryComponent,
+    DialogWrongCountryComponent
   ]
 })
 export class SharedModule { }
