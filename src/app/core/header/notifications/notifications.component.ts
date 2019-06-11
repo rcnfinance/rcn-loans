@@ -11,6 +11,7 @@ import { Notification, TxObject } from '../../../models/notification.model';
 import { NotificationsService } from '../../../services/notifications.service';
 import { TxService, Tx } from '../../../tx.service';
 import { Utils } from '../../../utils/utils';
+import { Web3Service } from '../../../services/web3.service';
 
 @Component({
   selector: 'app-notifications',
@@ -44,6 +45,7 @@ export class NotificationsComponent implements OnInit {
   viewDetail: string;
   selection: string;
   previousSelection: string;
+  account: string;
 
   // Notification Model
   mNotification = Notification;
@@ -51,7 +53,8 @@ export class NotificationsComponent implements OnInit {
 
   constructor(
     private txService: TxService,
-    public notificationsService: NotificationsService
+    public notificationsService: NotificationsService,
+    public web3: Web3Service
   ) { }
 
   getTxMessage(tx: Tx): string { // Return the TxObject Message to render the Notification
@@ -147,14 +150,26 @@ export class NotificationsComponent implements OnInit {
 
   // Render Tx[]
   getLastestTx(txMemory: Tx[]): Tx[] { // Get the last 8 Txs
-    const allTxMemery: number = txMemory.length;
+
+    console.info('txMemory:', txMemory);
+    console.log(this.account);
+
+    const txMemoryAccount = txMemory.filter(tx => tx.from === this.account);
+
+    console.info('txMemoryAccount:', txMemoryAccount);
+
+    const allTxMemery: number = txMemoryAccount.length;
+
     const loansToRender: number = allTxMemery - 8; // Set the number of tx you want to render on NotifComponent
-    return txMemory.slice(loansToRender, allTxMemery);
+    return txMemoryAccount.slice(loansToRender, allTxMemery);
   }
   renderLastestTx(txMemory: Tx[]) { // Render the last 8 Txs
+
     const lastestTx: Tx[] = this.getLastestTx(txMemory);
+    console.info('transactions', lastestTx);
     lastestTx.forEach(c => this.addNewNotification(c));
     const confirmedTxOnly = lastestTx.filter(c => c.confirmed);
+
     confirmedTxOnly.forEach(c => this.setTxFinished(c));
   }
 
@@ -163,12 +178,21 @@ export class NotificationsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.notificationsService.currentDetail.subscribe(detail => {
-      this.viewDetail = detail;
-    }); // Subscribe to detail from Notifications Service
-    this.txService.subscribeNewTx((tx: Tx) => { this.addNewNotification(tx); });
-    this.txService.subscribeConfirmedTx((tx: Tx) => { this.setTxFinished(tx); });
-    this.renderLastestTx(this.txService.txMemory);
+
+    this.web3.loginEvent.subscribe(() => this.loadLogin());
+    this.loadLogin();
+  }
+
+  async loadLogin() {
+    if (!this.account) {
+      this.account = await this.web3.getAccount();
+      this.notificationsService.currentDetail.subscribe(detail => {
+        this.viewDetail = detail;
+      }); // Subscribe to detail from Notifications Service
+      this.txService.subscribeNewTx((tx: Tx) => { this.addNewNotification(tx); });
+      this.txService.subscribeConfirmedTx((tx: Tx) => { this.setTxFinished(tx); });
+      this.renderLastestTx(this.txService.txMemory);
+    }
   }
 
   private addNewNotification(tx: Tx) {

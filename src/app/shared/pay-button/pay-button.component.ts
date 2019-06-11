@@ -103,7 +103,7 @@ export class PayButtonComponent implements OnInit {
               Category.Loan,
               'loan #' + this.loan.id + ' of ' + amount
             );
-            this.txService.registerPayTx(tx, environment.contracts.basaltEngine, this.loan, amount);
+
             this.retrievePendingTx();
           });
         }

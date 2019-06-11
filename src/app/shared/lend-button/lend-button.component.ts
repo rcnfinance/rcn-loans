@@ -111,27 +111,25 @@ export class LendButtonComponent implements OnInit {
       }
 
       if (balance > required) {
-        const tx = await this.contractsService.lendLoan(this.loan);
+        await this.contractsService.lendLoan(this.loan);
         this.eventsService.trackEvent(
           'lend',
           Category.Account,
           'loan #' + this.loan.id
         );
 
-        this.txService.registerLendTx(this.loan, tx);
         this.pendingTx = this.txService.getLastLend(this.loan);
         return;
       }
 
       if (ethBalance.toNumber() >= estimated.toNumber()) {
-        const tx = await this.contractsService.lendLoanWithSwap(this.loan, estimated);
+        await this.contractsService.lendLoanWithSwap(this.loan, estimated);
         this.eventsService.trackEvent(
           'lend',
           Category.Account,
           'loan #' + this.loan.id
         );
 
-        this.txService.registerLendTx(this.loan, tx);
         this.pendingTx = this.txService.getLastLend(this.loan);
         return;
       }

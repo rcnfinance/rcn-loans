@@ -107,7 +107,7 @@ export class ContractsService {
         if (err != null) {
           reject(err);
         } else {
-          txService.registerApproveTx(result, rcnAddress, engineAddress, true);
+          txService.registerApproveTx(result, rcnAddress, engineAddress, true, account);
           resolve(result);
         }
       });
@@ -128,7 +128,7 @@ export class ContractsService {
         if (err != null) {
           reject(err);
         } else {
-          txService.registerApproveTx(result, rcnAddress, engineAddress, false);
+          txService.registerApproveTx(result, rcnAddress, engineAddress, false, account);
           resolve(result);
         }
       });
@@ -222,6 +222,7 @@ export class ContractsService {
         if (err != null) {
           reject(err);
         } else {
+          this.txService.registerPayTx(result, environment.contracts.basaltEngine, this.loan, amount, account);
           resolve(result);
         }
       });
@@ -231,6 +232,8 @@ export class ContractsService {
     const pOracleData = this.getOracleData(loan);
     const account = await this.web3.getAccount();
     const cosigner = this.cosignerService.getCosigner(loan);
+    const txService = this.txService;
+
     let cosignerAddr = '0x0';
     let cosignerData = '0x0';
     if (cosigner !== undefined) {
@@ -253,6 +256,9 @@ export class ContractsService {
           if (err != null) {
             reject(err);
           } else {
+            console.log(txService);
+            console.log(result);
+            txService.registerLendTx(loan, result, account);
             resolve(result);
           }
         }
@@ -302,6 +308,7 @@ export class ContractsService {
           if (err != null) {
             reject(err);
           } else {
+            this.txService.registerLendTx(loan, result, account);
             resolve(result);
           }
         }
@@ -318,6 +325,7 @@ export class ContractsService {
         if (err != null) {
           reject(err);
         }
+        this.txService.registerTransferTx(result.transactionHash, environment.contracts.basaltEngine, this.loan, to, account);
         resolve(result);
       });
     }) as Promise<string>;

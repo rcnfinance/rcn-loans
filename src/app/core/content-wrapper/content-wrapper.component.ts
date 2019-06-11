@@ -96,7 +96,7 @@ export class ContentWrapperComponent implements OnInit {
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingWithdraw.tx));
     } else {
       const tx = await this.contractService.withdrawFunds(this.loansWithBalance);
-      this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.loansWithBalance);
+      this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.loansWithBalance, this.account);
       this.loadPendingWithdraw();
     }
   }

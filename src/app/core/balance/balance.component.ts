@@ -89,7 +89,7 @@ export class BalanceComponent implements OnInit {
   async clickWithdraw() {
     if (this.canWithdraw) {
       const tx = await this.contractService.withdrawFunds(this.loansWithBalance);
-      this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.loansWithBalance);
+      this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.loansWithBalance, this.account);
       this.loadWithdrawBalance();
     }
   }

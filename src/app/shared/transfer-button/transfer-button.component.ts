@@ -47,7 +47,7 @@ export class TransferButtonComponent implements OnInit {
           Category.Loan,
           'loan #' + this.loan.id + ' to ' + to
         );
-        this.txService.registerTransferTx(tx, environment.contracts.basaltEngine, this.loan, to);
+
         this.retrievePendingTx();
       });
     });

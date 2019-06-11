@@ -18,6 +18,7 @@ export enum Type {
 export class Tx {
   tx: string;
   to: string;
+  from: string;
   confirmed: Boolean;
   type: Type;
   data: any;
@@ -26,12 +27,14 @@ export class Tx {
   constructor(
     tx: string,
     to: string,
+    from: string,
     confirmed: Boolean,
     type: Type,
     data: any
   ) {
     this.tx = tx;
     this.to = to;
+    this.from = from;
     this.confirmed = confirmed;
     this.type = type;
     this.data = data;
@@ -91,8 +94,8 @@ export class TxService {
     this.saveTxs();
   }
 
-  registerLendTx(loan: Loan, hash: string) {
-    const tx = new Tx(hash, loan.engine, false, Type.lend, loan.id);
+  registerLendTx(loan: Loan, hash: string, from: string) {
+    const tx = new Tx(hash, loan.engine, from, false, Type.lend, loan.id);
     this.registerTx(tx);
   }
 
@@ -114,9 +117,9 @@ export class TxService {
       .find(tx => tx.type === Type.lend && tx.data === loan.id && loan.engine === tx.to);
   }
 
-  registerApproveTx(tx: string, token: string, contract: string, action: boolean) {
+  registerApproveTx(tx: string, token: string, contract: string, action: boolean, from: string ) {
     const data = { contract: contract, action: action };
-    this.registerTx(new Tx(tx, token, false, Type.approve, data));
+    this.registerTx(new Tx(tx, token, from, false, Type.approve, data));
   }
 
   getLastPendingApprove(token: string, contract: string): boolean {
@@ -130,8 +133,8 @@ export class TxService {
     }
   }
 
-  registerWithdrawTx(tx: string, engine: string, loans: number[]) {
-    this.registerTx(new Tx(tx, engine, false, Type.withdraw, loans));
+  registerWithdrawTx(tx: string, engine: string, loans: number[], from: string) {
+    this.registerTx(new Tx(tx, engine, from, false, Type.withdraw, loans));
   }
 
   getLastWithdraw(engine: string, loans: number[]): Tx {
@@ -141,12 +144,12 @@ export class TxService {
       .find(tx => tx.to === engine && tx.data.toString() === loans.toString());
   }
 
-  registerTransferTx(tx: string, engine: string, loan: Loan, to: string) {
+  registerTransferTx(tx: string, engine: string, loan: Loan, to: string, from: string) {
     const data = {
       id: loan.id,
       to: to
     };
-    this.registerTx(new Tx(tx, engine, false, Type.transfer, data));
+    this.registerTx(new Tx(tx, engine, from, false, Type.transfer, data));
   }
 
   getLastPendingTransfer(engine: string, loan: Loan): Tx {
@@ -156,13 +159,13 @@ export class TxService {
       .find(tx => tx.data.id === loan.id);
   }
 
-  registerClaimTx(tx: string, cosigner: string, loan: Loan) {
+  registerClaimTx(tx: string, cosigner: string, loan: Loan, from: string) {
     const data = {
       engine: loan.engine,
       id: loan.id
     };
 
-    this.registerTx(new Tx(tx, cosigner, false, Type.claim, data));
+    this.registerTx(new Tx(tx, cosigner, from, false, Type.claim, data));
   }
 
   getLastPendingClaim(cosigner: string, loan: Loan) {
@@ -172,13 +175,13 @@ export class TxService {
       .find(tx => tx.data.id === loan.id && tx.data.engine === loan.engine);
   }
 
-  registerPayTx(tx: string, engine: string, loan: Loan, amount: number) {
+  registerPayTx(tx: string, engine: string, loan: Loan, amount: number, from: string) {
     const data = {
       engine: engine,
       id: loan.id,
       amount: amount
     };
-    this.registerTx(new Tx(tx, engine, false, Type.pay, data));
+    this.registerTx(new Tx(tx, engine, from, false, Type.pay, data));
   }
 
   getLastPendingPay(loan: Loan) {
