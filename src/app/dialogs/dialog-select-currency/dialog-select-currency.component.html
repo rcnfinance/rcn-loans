@@ -1,0 +1,61 @@
+<mat-dialog-content class="dialog">
+  <div class="navbar-container">
+    <div class="creator-container">
+      <div class="creator-title">Checkout process</div>
+    </div>
+  </div>
+  <div class="col-sm-12 dialog-padding">
+    <div class="title main-h3">Select the Currency you want to lend and compare with the other available currencies
+      values.<div class="i" matTooltip="The currency rates may vary during the loan terms"><i
+          class="far fa-question-circle"></i></div>
+    </div>
+    <div class="margintop40"></div>
+    <div class="row">
+      <div class="col title main-h6">
+        <div class="row">LENDING CURRENCY</div>
+        <div class="row">
+          <mat-form-field>
+            <mat-label>Select Token</mat-label>
+            <mat-select [(value)]="selected2">
+              <mat-option *ngFor="let option of options" value="{{ option }}">
+                <div class="row align-items-center">
+                  <div class="icon-box item">
+                    <!-- <div class="imgs">
+                      <img matPrefix class="input-icon" src="{{option.img}}">
+                    </div> -->
+                    <img matPrefix class="input-icon" src="{{option.img}}">
+                  </div>
+                  <!-- <div>{{option.img}}</div> -->
+                  <div class="currency">{{ option.name }}</div>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col title main-h6">
+        <div class="row">LENDING AMOUNT</div>
+        <div class="row lending amount justify-content-center">0</div>
+        <div class="margintop10"></div>
+        <div class="row text">1.800<div class="ars"> ARS</div>
+        </div>
+      </div>
+      <div class="col-sm-1 title main-h6"><i class="fas fa-arrow-right"></i></div>
+      <div class="col title main-h6">
+        <div class="row">RETURN</div>
+        <div class="row return amount justify-content-center">0</div>
+        <div class="margintop10"></div>
+        <div class="row text">~1915.5<div class="ars"> ARS</div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="title main-h4">We recomend you to operate with:</div>
+    <div class="row img-container">
+      <div class='col-sm-12'>
+        <img src="https://metamask.io/img/metamask.png" alt="ether-client">
+        <div class="title main-h1 margintop10">Metamask</div>
+        <button mat-raised-button href="https://metamask.io/"  target="_blank" class="button button-primary margintop20">GET</button>
+      </div> -->
+    <!-- </div> -->
+  </div>
+</mat-dialog-content>

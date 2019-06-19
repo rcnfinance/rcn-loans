@@ -26,6 +26,7 @@ import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 import { CosignerService } from './../../services/cosigner.service';
 import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
 
@@ -189,6 +190,7 @@ export class LendButtonComponent implements OnInit {
 
   clickLend() {
     if (this.pendingTx === undefined) {
+      this.dialog.open(DialogSelectCurrencyComponent);
       this.eventsService.trackEvent(
         'click-lend',
         Category.Loan,
@@ -197,6 +199,8 @@ export class LendButtonComponent implements OnInit {
 
       this.handleLend();
     } else {
+      this.dialog.open(DialogSelectCurrencyComponent);
+      //Logica selección de moneda
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }
   }

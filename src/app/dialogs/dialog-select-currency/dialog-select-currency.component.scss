@@ -1,0 +1,143 @@
+@import '../../../scss/_variables.scss'; //variables
+
+//Dialog Client
+.dialog {
+    width: 100vw;
+}
+.dialog-padding{
+  padding: 30px 53px;
+  text-align: left;
+}
+.navbar-container {
+  height: 70px;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #333333;
+  .creator-container {
+    .creator-title{
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      color: $fifth;
+      font-size: 22px;
+      text-align: center;
+      padding: 0 15px;
+      @extend %font-black;
+      @include transform(translate(-50%, -50%));
+    }
+  }
+}
+
+.i {
+    display: inline-block;
+    cursor: pointer;
+    .fa-question-circle {
+        color: gray !important;
+        margin: 0 8px;
+        font-size: 16px;
+    }
+}
+
+.row {
+    margin-right: -8px;
+    margin-left: -8px;
+}
+
+.lending {
+    font-size: 26px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    color: gray;
+}
+
+.return {
+    font-size: 38px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    color: gray;
+}
+
+.amount {
+    height: 40px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.ars {
+    font-weight: 400;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.icon-box {
+    width: 35px; 
+    height: 35px;
+    display: flex;
+    align-items: center;
+    margin: 30px 30px;
+    border-radius: 50px;
+    background-color: white;
+    padding: 3px;
+    .imgs {
+        width: 20px;
+        height: 20px;
+        .input-icon {
+            display: inline-block;
+            max-height: 100%;
+        }
+    }
+    
+}
+
+.item {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.currency {
+    font-size: 18px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
+}
+
+img {
+    max-height: 100%;
+    margin: auto;
+}
+
+.text {
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    color: gray;
+}
+
+.img-container{
+  text-align: center;
+  margin-top: 20px;
+  img{
+    height: 150px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px){
+
+    .dialog {
+        width: 750px;
+    }
+  .dialog-padding{
+    padding: 30px 53px;
+  }
+  .navbar-container {
+    height: 100px;
+    .creator-container {
+      .creator-title{
+        font-size: 36px;
+      }
+    }
+  }
+}
