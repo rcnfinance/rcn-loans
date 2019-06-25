@@ -1,7 +1,8 @@
 <mat-dialog-content class="dialog">
   <div class="navbar-container">
     <div class="creator-container">
-      <div class="creator-title">Checkout process</div>
+        
+      <div class="creator-title"><button matDialogClose class="arrow col-sm-1 title main-h6 auto in no-gutters pad-left"><i class="fas fa-arrow-left"></i></button>Checkout process</div>
     </div>
   </div>
   <div class="col-sm-12 dialog-padding">
@@ -9,10 +10,10 @@
       values.<div class="i" matTooltip="The currency rates may vary during the loan terms"><i
           class="far fa-question-circle"></i></div>
     </div>
-    <div class="margintop40"></div>
+    <div class="margintop50"></div>
     <div class="row">
-      <div class="col title main-h6">
-        <div class="row">LENDING CURRENCY</div>
+      <div class="col-sm-12 col-md-3 title main-h6">
+        <div class="row title-2">LENDING CURRENCY</div>
         <div class="row">
           <mat-form-field>
             <mat-label>Select Token</mat-label>
@@ -33,29 +34,65 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="col title main-h6">
-        <div class="row">LENDING AMOUNT</div>
-        <div class="row lending amount justify-content-center">0</div>
-        <div class="margintop10"></div>
-        <div class="row text">1.800<div class="ars"> ARS</div>
+      <div class="col-sm-1"></div>
+      <div class="wrap">
+        <div class="col-sm-6 col-md-5 title main-h6 auto">
+          <div class="row title-2">LENDING AMOUNT</div>
+          <!-- <div class="w-100"></div> -->
+          <div class="cero-box">
+            <div class="row lending amount justify-content-center">0</div>
+          </div>
+          <div class="margintop10"></div>
+          <div class="row data">{{ loan.amount }}<div class="ars"> {{ loan.currency }}</div>
+          </div>
         </div>
-      </div>
-      <div class="col-sm-1 title main-h6"><i class="fas fa-arrow-right"></i></div>
-      <div class="col title main-h6">
-        <div class="row">RETURN</div>
-        <div class="row return amount justify-content-center">0</div>
-        <div class="margintop10"></div>
-        <div class="row text">~1915.5<div class="ars"> ARS</div>
+        <div class="col-sm-1 title main-h6 auto"><i class="fas fa-arrow-right"></i></div>
+        <div class="arrow-space col-sm-1"></div>
+
+        <div class="col-sm-5 col-md-5 title main-h6 auto">
+          <div class="row title-2">RETURN</div>
+          <!-- <div class="w-100"></div> -->
+          <div class="cero-box">
+            <div class="row return amount justify-content-center">0</div>
+
+          </div>
+          <div class="margintop10"></div>
+          <div class="row data">~{{ loan.expectedReturn }}<div class="ars"> {{ loan.currency }}</div>
+          </div>
         </div>
       </div>
     </div>
-    <!-- <div class="title main-h4">We recomend you to operate with:</div>
+  </div>
+  <div class="margintop40 desktop"></div>
+  <div class="mobile"></div>
+  <div class="exchange">
+    <div class="align-items-center padding">
+      <div class="inline rate">Exchange Rate 1 {{ loan.currency }} = x.xxx RCN = 43.51 ARS</div>
+      <!-- <h6 class="title">Exchange Rate 1 DAI = x.xxx RCN = 43.51 ARS</h6> -->
+    </div>
+  </div>
+  <div class="margintop20"></div>
+  <div class="row padding justify-content-between align-items-center no-gutters">
+    <div class=" col-sm-12 col-md-6 inline account">Lending from your 0x2c…ef20 account.</div>
+    <div class="col-sm-12 col-md-6">
+    <div class="row justify-content-end no-gutters">
+      <div class="col-sm-12 col-md-4">
+      <button mat-raised-button (click)='clickLend()' class="button button-primary lend">LEND</button>
+      </div>
+      <div class="col-sm-0 col-md-4">
+      <button mat-raised-button href="https://metamask.io/" target="_blank"
+        class="button button-secondary cancel">CANCEL</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- <div class="title main-h4">We recomend you to operate with:</div>
     <div class="row img-container">
       <div class='col-sm-12'>
         <img src="https://metamask.io/img/metamask.png" alt="ether-client">
         <div class="title main-h1 margintop10">Metamask</div>
         <button mat-raised-button href="https://metamask.io/"  target="_blank" class="button button-primary margintop20">GET</button>
       </div> -->
-    <!-- </div> -->
-  </div>
+  <!-- </div> -->
+  <div class="margintop20"></div>
 </mat-dialog-content>

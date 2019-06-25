@@ -7,7 +7,8 @@ import {
   MatDialog,
   MatDialogRef,
   MatSnackBar,
-  MatSnackBarHorizontalPosition
+  MatSnackBarHorizontalPosition,
+  MatDialogConfig
 } from '@angular/material';
 
 import { Loan } from './../../models/loan.model';
@@ -56,6 +57,7 @@ export class LendButtonComponent implements OnInit {
   ) {}
 
   async handleLend(forze = false) {
+   
     if (this.opPending && !forze) { return; }
 
     if (!this.web3Service.loggedIn) {
@@ -189,8 +191,13 @@ export class LendButtonComponent implements OnInit {
   }
 
   clickLend() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.data = {
+      loan: this.loan
+    };
     if (this.pendingTx === undefined) {
-      this.dialog.open(DialogSelectCurrencyComponent);
+      this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
       this.eventsService.trackEvent(
         'click-lend',
         Category.Loan,
@@ -199,7 +206,7 @@ export class LendButtonComponent implements OnInit {
 
       this.handleLend();
     } else {
-      this.dialog.open(DialogSelectCurrencyComponent);
+      this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
       //Logica selección de moneda
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }
