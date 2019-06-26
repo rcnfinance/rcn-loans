@@ -41,7 +41,7 @@
     "material-icons": "^0.2.3",
     "ngx-spinner": "^6.1.2",
     "package.json": "^2.0.1",
-    "raven-js": "^3.26.4",
+    "raven-js": "3.26.4",
     "rxjs": "^6.2.2",
     "rxjs-compat": "^6.2.2",
     "web3": "^0.18.4",

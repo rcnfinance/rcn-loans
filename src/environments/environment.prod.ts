@@ -27,7 +27,7 @@ export const environment = {
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   gaTracking: 'UA-122615331-3',
   rcn_node: {
-    loan: 'https://rnode.rcn.loans/v1/loans/$id/'
+    loan: 'https://rnode.rcn.loans/v1/loans/$id'
   },
   network: {
     id: '1',
@@ -36,7 +36,7 @@ export const environment = {
       address: 'https://etherscan.io/address/${address}',
       tx: 'https://etherscan.io/tx/${tx}'
     },
-    provider: 'https://main.node.rcn.loans:8545/'
+    provider: 'https://node.rcn.loans/'
   },
   contracts: {
     rcnToken: '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6',
