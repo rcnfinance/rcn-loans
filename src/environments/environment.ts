@@ -27,7 +27,7 @@ export const environment = {
   version_verbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   rcn_node: {
-    loan: 'https://testnet.rnode.rcn.loans/v1/loans/$id/'
+    loan: 'https://ropsten-rnode.rcn.loans/v1/loans/$id'
   },
   rcn_node_api: {
     url: 'https://diaspore-ropsten-rnode.rcn.loans/v4/'
@@ -39,7 +39,7 @@ export const environment = {
       address: 'https://ropsten.etherscan.io/address/${address}',
       tx: 'https://ropsten.etherscan.io/tx/${tx}'
     },
-    provider: 'https://ropsten.node.rcn.loans:8545/'
+    provider: 'https://ropsten-node.rcn.loans/'
   },
   contracts: {
     rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
