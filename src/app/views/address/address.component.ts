@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-// import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
@@ -19,37 +19,35 @@ export class AddressComponent implements OnInit {
   loans = [];
   availableLoans = true;
   constructor(
-    // private route: ActivatedRoute,
+    private route: ActivatedRoute,
     private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
     private availableLoansService: AvailableLoansService
   ) {}
 
-  // Available Loans service
-  upgradeAvaiblable() {
-    this.availableLoansService.updateAvailable(this.loans.length);
-  }
-
-  loadLoans() {
-    this.contractsService.getLoansOfLender().then((result: Loan[]) => {
-      this.loans = result;
-      this.upgradeAvaiblable();
-      this.spinner.hide();
-      if (this.loans.length <= 0) {
-        this.availableLoans = false;
-      }
-    });
-  }
-
   ngOnInit() {
     this.spinner.show(); // Initialize spinner
-    // this.route.params.subscribe(params => {
-    //   this.address = params['address'];
-    // });
-
-    this.loadLoans();
+    this.route.params.subscribe(params => {
+      this.address = params['address'];
+      this.loadLoans(this.address);
+    });
 
     // Available Loans service
     this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
+  }
+
+  private async loadLoans(address: string) {
+    const result: Loan[] = await this.contractsService.getLoansOfLender(address);
+    this.loans = result;
+    this.upgradeAvaiblable();
+    this.spinner.hide();
+    if (this.loans.length <= 0) {
+      this.availableLoans = false;
+    }
+  }
+
+  // Available Loans service
+  private upgradeAvaiblable() {
+    this.availableLoansService.updateAvailable(this.loans.length);
   }
 }

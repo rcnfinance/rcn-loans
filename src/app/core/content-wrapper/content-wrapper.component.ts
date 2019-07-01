@@ -110,14 +110,15 @@ export class ContentWrapperComponent implements OnInit {
       this.loadWithdrawBalance();
     }
   }
+
   ngOnInit() {
     // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
     this.web3Service.loginEvent.subscribe(() => this.loadAccount());
-    this.loadAccount();
   }
-  async loadAccount() {
+
+  private async loadAccount() {
     if (!this.hasAccount) {
       this.account = await this.web3Service.getAccount();
       this.loadLender();
@@ -125,6 +126,7 @@ export class ContentWrapperComponent implements OnInit {
       this.loadWithdrawBalance();
     }
   }
+
   private removeTrailingZeros(value) {
     value = value.toString();
     if (value.indexOf('.') === -1) {
@@ -135,6 +137,7 @@ export class ContentWrapperComponent implements OnInit {
     }
     return value;
   }
+
   private loadPendingWithdraw() {
     this.pendingBasaltWithdraw = this.txService.getLastWithdraw(
       environment.contracts.basaltEngine,
@@ -145,16 +148,19 @@ export class ContentWrapperComponent implements OnInit {
       this.diasporeLoansWithBalance
     );
   }
+
   private loadLender() {
     this.web3Service.getAccount().then((resolve: string) => {
       this.lender = resolve;
     });
   }
+
   private loadRcnBalance() {
     this.contractService.getUserBalanceRCN().then((balance: number) => {
       this.rcnBalance = balance;
     });
   }
+
   private async loadWithdrawBalance() {
     const pendingWithdraws = await this.contractService.getPendingWithdraws();
     this.basaltRcnAvailable = pendingWithdraws[0] / 10 ** 18;

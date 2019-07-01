@@ -358,12 +358,12 @@ export class ContractsService {
     // return diaspore;
     return (await diaspore).concat(await basalt);
   }
-  async getLoansOfLender(): Promise<Loan[]> {
-    const account = await this.web3.getAccount();
+
+  async getLoansOfLender(lender: string): Promise<Loan[]> {
     // Filter [lenderIn] Basalt loans
     const bfilters = [environment.filters.lenderIn];
-    const bparams = [this.addressToBytes32(account)];
-    const pbasalt = promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
+    const bparams = [this.addressToBytes32(lender)];
+    const pbasalt = await promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
     // // Filter lenderIn Diaspore loans
     // const dfilter = [
     //   // Created by loan manager
@@ -377,12 +377,12 @@ export class ContractsService {
     // // return this.parseLoanBytes(await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
     // return this.parseLoanBytes(await pdiaspore);
 
-    const pdiaspore = this.apiService.getLoansOfLender(account);
+    const pdiaspore = await this.apiService.getLoansOfLender(lender);
+    return (pdiaspore).concat(this.parseBasaltBytes(pbasalt));
 
-    return (await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
     // return await pdiaspore;
-
   }
+
   readPendingWithdraws(loans: Loan[]): [BigNumber, number[], BigNumber, number[]] {
     const pendingBasaltLoans = [];
     const pendingDiasporeLoans = [];
@@ -402,12 +402,15 @@ export class ContractsService {
   }
 
   async getPendingWithdraws(): Promise<[number, number[], number, number[]]> {
+    const account = await this.web3.getAccount();
+
     return new Promise((resolve, _reject) => {
-      this.getLoansOfLender().then((loans: Loan[]) => {
+      this.getLoansOfLender(account).then((loans: Loan[]) => {
         resolve(this.readPendingWithdraws(loans));
       });
     }) as Promise<[number, number[], number, number[]]>;
   }
+
   private parseBasaltBytes(bytes: any): Loan[] {
     const loans = [];
     const total = bytes.length / 20;
