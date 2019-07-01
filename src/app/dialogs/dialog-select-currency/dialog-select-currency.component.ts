@@ -25,6 +25,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
   daiReturn:string;
   ethReturn:string;
   loanAmount:string;
+  expectedReturn: string;
   loanCurrency:string;
 
 
@@ -41,7 +42,13 @@ export class DialogSelectCurrencyComponent implements OnInit {
     console.log(data.loan);
   }
 
+  
+
   ngOnInit() {
+    this.loanAmount = this.formatAmount(this.loan.amount);
+    this.expectedReturn= this.formatAmount(this.loan.expectedReturn);
+
+    
     // console.info()
     // if (this.loan.status === Status.Request) {
     //   this.leftLabel = 'Lend';
