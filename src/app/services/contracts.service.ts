@@ -20,6 +20,7 @@ const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const oracleAbi = require('../contracts/Oracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 
+
 @Injectable()
 export class ContractsService {
   private _rcnContract: any;
@@ -31,6 +32,7 @@ export class ContractsService {
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
   private _rcnConverterRamp: any;
   private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
+  loanRcnAmount: any;
 
   constructor(
       private web3: Web3Service,
@@ -193,8 +195,27 @@ export class ContractsService {
     console.info('Oracle rate obtained', rate, decimals);
     const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
     console.info('Estimated required rcn is', required);
+    // this.loanRcnAmount = required
     return required;
   }
+
+  async getRate(loan: Loan): Promise<BigNumber> {
+    // TODO: Calculate and add cost of the cosigner
+    if (loan.oracle === Utils.address0x) {
+      return loan.rawAmount;
+    }
+    const oracleData = await this.getOracleData(loan);
+    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
+    const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
+    const rate = oracleRate[0];
+    const decimals = oracleRate[1];
+    console.info('Oracle rate obtained', rate, decimals);
+    const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+    console.info('Estimated required rcn is', required);
+    // this.loanRcnAmount = required
+    return rate;
+  }
+
   async estimatePayAmount(loan: Loan, amount: number): Promise<number> {
     if (loan.oracle === Utils.address0x) {
       return loan.rawAmount;

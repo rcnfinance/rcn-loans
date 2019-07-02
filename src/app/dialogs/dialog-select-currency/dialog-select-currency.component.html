@@ -16,9 +16,9 @@
         <div class="row title-2">LENDING CURRENCY</div>
         <div class="row">
           <mat-form-field>
-            <mat-label>Select Token</mat-label>
-            <mat-select [(value)]="selected2">
-              <mat-option *ngFor="let option of options" value="{{ option }}">
+            <mat-label *ngIf="selected == '-'" id="label">Select Token</mat-label>
+            <mat-select [(value)]="selected">
+              <mat-option *ngFor="let option of options" value="{{ option.name }}">
                 <div class="row align-items-center">
                   <div class="icon-box item">
                     <img matPrefix class="input-icon" src="{{option.img}}">
@@ -39,11 +39,14 @@
         </div>
         <div class="margintop10"></div>
         <div class="small-table-row --highlight row">
-          <div class="col --auto no-pad-left --data-margin data-style">0 <span
-              class="data--currency-style">{{ loan.currency }}</span></div>
+          <div class="col --auto no-pad-left --data-margin data-style"> 
+            <span *ngIf="selected == '-'">0 </span>
+            <span *ngIf="selected == 'RCN'">{{ rcnAmount }} </span>   
+
+            <span class="data--currency-style">{{ selected }}</span></div>
           <div class="col-sm-1 no-gutters --auto"></div>
           <div class="col --auto --data-margin data-style">0 <span
-              class="data--currency-style">{{ loan.currency }}</span> <i class="fas fa-exclamation-triangle margin-left triangle"></i></div>
+              class="data--currency-style">{{ selected }}</span> <i *ngIf="selected != '-'" class="fas fa-exclamation-triangle margin-left triangle"></i></div>
         </div>
         <div class="margintop10"></div>
         <div class="small-table-row row">
@@ -55,8 +58,11 @@
           <div class="col-sm-1 no-gutters --auto vertical-center"><i class="fas fa-arrow-right"></i></div>
           <div class="col title-2 --auto --data-margin wrap baseline"> 
             <div class="--auto wrap end">
-            <span
-              class="--return-amount">{{ expectedReturn }}</span> <span class="margin-left"> RCN </span><i class="fas fa-check-circle check margin-left"></i>
+            <span *ngIf="selected == '-'" id="label"
+              class="--return-amount">0</span>
+              <span *ngIf="selected != '-'" id="label"
+              class="--return-amount">{{ rcnAmount }}</span>
+              <span class="margin-left"> RCN </span><i *ngIf="selected != '-'" class="fas fa-check-circle check margin-left"></i>
             </div>
             </div>
         </div>
@@ -67,7 +73,7 @@
     <div class="mobile"></div>
     <div class="exchange">
       <div>
-        <div class="inline rate">Exchange Rate 1 {{ loan.currency }} = x.xxx RCN = 43.51 ARS</div>
+        <div class="inline rate">Exchange Rate 1 {{ loan.currency }} = x.xxx RCN = 43.51 {{ selected }}</div>
       </div>
     </div>
   </div>
