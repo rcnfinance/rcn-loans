@@ -49,8 +49,8 @@ export class AddressComponent implements OnInit {
       if (this.loans.length <= 0) {
         this.availableLoans = false;
       }
-    }
-    catch(err) {
+
+    } catch (err) {
       this.spinner.hide();
       this.availableLoans = false;
     }

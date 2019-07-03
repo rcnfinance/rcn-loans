@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Loan, Network, Oracle, Descriptor, Debt, Model } from '../models/loan.model';
 import { Utils } from '../utils/utils';
@@ -13,7 +13,7 @@ export class ApiService {
   installmentModelAddress = '0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53';
   url = environment.rcn_node_api.url;
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   // Loads all loans lent by the account that is logged in
   async getLoansOfLender(lender: string): Promise<Loan[]> {
@@ -21,8 +21,7 @@ export class ApiService {
     let apiCalls = 0;
     let page = 0;
     try {
-      const response = await this.http.get(this.url.concat('loans?open=false&page=' + page + '&lender=' + lender)).toPromise();
-      const data = response.json();
+      const data: any = await this.http.get(this.url.concat('loans?open=false&page=' + page + '&lender=' + lender)).toPromise();
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
@@ -56,8 +55,7 @@ export class ApiService {
     let page = 0;
     try {
 
-      const response = await this.http.get(this.url.concat('loans?open=false&page=' + page)).toPromise();
-      const data = response.json();
+      const data: any = await this.http.get(this.url.concat('loans?open=false&page=' + page)).toPromise();
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
@@ -86,8 +84,7 @@ export class ApiService {
   }
 
   async getLoan(id: string): Promise<Loan> {
-    const response = await this.http.get(this.url.concat(`loans/${id}`)).toPromise();
-    const data = response.json();
+    const data: any = await this.http.get(this.url.concat(`loans/${id}`)).toPromise();
     const loan = await this.completeLoanModels(data.content);
     try {
       return loan;
@@ -150,9 +147,8 @@ export class ApiService {
     let page = 0;
     try {
 
-      const response = await this.http.get(this.url.concat('loans?open=true&approved=true&page=' + page
+      const data: any = await this.http.get(this.url.concat('loans?open=true&approved=true&page=' + page
         + '&expiration__gt=' + now)).toPromise();
-      const data = response.json();
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
@@ -211,8 +207,7 @@ export class ApiService {
 
     let debt: Debt;
     if (!loan.open && !loan.canceled && loan.status) {
-      const response = await this.http.get(this.url.concat(`model_debt_info/${loan.id}`)).toPromise();
-      const data = response.json();
+      const data: any = await this.http.get(this.url.concat(`model_debt_info/${loan.id}`)).toPromise();
       const paid = data.paid;
       const dueTime = data.due_time;
       const estimatedObligation = data.estimated_obligation;

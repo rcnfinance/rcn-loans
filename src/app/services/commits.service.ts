@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Commit } from '../models/commit.model';
 import { environment } from '../../environments/environment';
 import { Network } from '../models/loan.model';
@@ -7,7 +7,7 @@ import { Network } from '../models/loan.model';
 @Injectable()
 export class CommitsService {
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   async getCommits(id: string, network: number): Promise<Commit[]> {
     let commits: any;
@@ -17,16 +17,15 @@ export class CommitsService {
     if (network === Network.Basalt) {
 
       const urlBasaltCommits = environment.rcn_node.loan.replace('$id', id.toString());
-      const response = await this.http.get(urlBasaltCommits).toPromise();
-      const data = response.json();
+      const data: any = await this.http.get(urlBasaltCommits).toPromise();
       commits = data.content.commits;
 
     } else {
       const urlLoanManagerCommits = environment.rcn_node_api.url.concat(`loans/${id}`);
 
       try {
-        const responseLoanManager = await this.http.get(urlLoanManagerCommits).toPromise();
-        commitsLoanManager = responseLoanManager.json().content.commits;
+        const responseLoanManager: any = await this.http.get(urlLoanManagerCommits).toPromise();
+        commitsLoanManager = responseLoanManager.content.commits;
       } catch (err) {
         commitsLoanManager = [];
         console.info('ERROR', err);
@@ -34,8 +33,8 @@ export class CommitsService {
 
       const urlDebtEngineCommits = environment.rcn_node_api.url.concat(`debts/${id}`);
       try {
-        const responseDebtEngine = await this.http.get(urlDebtEngineCommits).toPromise();
-        commitsDebtEngine = responseDebtEngine.json().content.commits;
+        const responseDebtEngine: any = await this.http.get(urlDebtEngineCommits).toPromise();
+        commitsDebtEngine = responseDebtEngine.content.commits;
       } catch (err) {
         commitsDebtEngine = [];
         console.info('ERROR', err);
