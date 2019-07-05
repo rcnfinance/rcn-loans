@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Loan } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
-
 import { ContractsService } from '../../services/contracts.service';
 import { Web3Service } from '../../services/web3.service';
 
