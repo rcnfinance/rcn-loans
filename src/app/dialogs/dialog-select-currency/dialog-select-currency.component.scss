@@ -21,8 +21,12 @@
 
 .padding {
     padding: 0px 20px;
-
 }
+
+.padding-2 {
+  padding: 0px 30px;
+}
+
 .navbar-container {
   height: 70px;
   position: relative;
@@ -207,6 +211,7 @@ img {
 .account {
   display: none;
   font-family: 'Roboto', sans-serif;
+  color: #ADADAD;
 }
 
 .mobile {
@@ -316,6 +321,10 @@ img {
   align-items: baseline;
 }
 
+.right {
+  margin-right: 12px;
+}
+
 @media (min-width: 768px){
   .arrow-space {
     display: block;
@@ -381,10 +390,12 @@ img {
   }
 
   .padding {
-    padding: 0px 53px;
-}
+    padding: 0px 42px;
+  }
 
-
+  .padding-2 {
+    padding: 0px 40px;
+  }
 
   .data {
     font-size: 16px;
