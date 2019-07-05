@@ -57,7 +57,7 @@ export class LendButtonComponent implements OnInit {
   ) {}
 
   async handleLend(forze = false) {
-   
+
     if (this.opPending && !forze) { return; }
 
     if (!this.web3Service.loggedIn) {
@@ -207,7 +207,7 @@ export class LendButtonComponent implements OnInit {
       this.handleLend();
     } else {
       this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
-      //Logica selección de moneda
+      // Logica selección de moneda
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }
   }

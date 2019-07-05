@@ -20,7 +20,6 @@ const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const oracleAbi = require('../contracts/Oracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 
-
 @Injectable()
 export class ContractsService {
   private _rcnContract: any;
