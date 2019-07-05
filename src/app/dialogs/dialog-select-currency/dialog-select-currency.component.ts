@@ -30,6 +30,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
   loanAmount: string;
   expectedReturn: string;
   loanCurrency: string;
+  account: string;
 
   options = [
     { 'id': 1, name: 'RCN', img: '../../../assets/rcn.png' },
@@ -63,6 +64,9 @@ export class DialogSelectCurrencyComponent implements OnInit {
 
     // this.rcnAmount = this.formatAmount(this.rcnAmount);
     console.info('rcn amount is:', this.rcnAmount);
+
+    this.account = await this.web3.getAccount();
+    console.info ("my account is:" + this.account)
 
   }
 
