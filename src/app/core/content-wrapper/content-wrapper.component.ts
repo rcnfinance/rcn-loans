@@ -4,12 +4,15 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 // App Components
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
+
 // App Service
 import { environment } from '../../../environments/environment';
 import { SidebarService } from '../../services/sidebar.service';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Tx, TxService } from '../../tx.service';
+import { CountriesService } from '../../services/countries.service';
 
 @Component({
   selector: 'app-content-wrapper',
@@ -43,6 +46,7 @@ export class ContentWrapperComponent implements OnInit {
   account: string;
   version: string = environment.version;
   lender: string;
+  lendEnabled: Boolean;
 
   private ethWei = new BigNumber(10).pow(new BigNumber(18));
   rcnBalance: BigNumber;
@@ -70,8 +74,9 @@ export class ContentWrapperComponent implements OnInit {
     private web3Service: Web3Service,
     private contractService: ContractsService,
     private txService: TxService,
-    public dialog: MatDialog
-  ) { }
+    public dialog: MatDialog,
+    private countriesService: CountriesService
+  ) {}
 
   // Toggle Navbar
   sidebarToggle() {
@@ -116,9 +121,19 @@ export class ContentWrapperComponent implements OnInit {
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
     this.web3Service.loginEvent.subscribe(() => this.loadAccount());
+    this.loadAccount();
+    this.canLend();
   }
 
-  private async loadAccount() {
+  async canLend() {
+    this.lendEnabled = await this.countriesService.lendEnabled();
+    if (!this.lendEnabled) {
+      this.dialog.open(DialogWrongCountryComponent);
+      return;
+    }
+  }
+
+  async loadAccount() {
     if (!this.hasAccount) {
       this.account = await this.web3Service.getAccount();
       this.loadLender();

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Enhancement:
+
+- Improving Restricted Region Dialog
+
+## **0.0.13** Avocados - 2019/05/23
+
 ### Fix:
 
 - Improve SEO
