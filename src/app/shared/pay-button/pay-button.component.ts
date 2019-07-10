@@ -61,11 +61,24 @@ export class PayButtonComponent implements OnInit {
     }
 
     try {
-      const engineApproved = await this.contractsService.isApproved(this.loan.address);
+      let engineApproved: boolean;
       const civicApproved = await this.civicService.status();
       const balance = await this.contractsService.getUserBalanceRCNWei();
 
-      if (! engineApproved) {
+      switch (this.loan.network) {
+        case Network.Basalt:
+          engineApproved = await this.contractsService.isApproved(this.loan.address);
+          break;
+        case Network.Diaspore:
+          const debtEngineAddress = environment.contracts.diaspore.debtEngine;
+          engineApproved = await this.contractsService.isApproved(debtEngineAddress);
+          break;
+        default:
+          this.cancelOperation();
+          return;
+      }
+
+      if (!engineApproved) {
         this.showApproveDialog();
         return;
       }
@@ -146,7 +159,20 @@ export class PayButtonComponent implements OnInit {
 
   showApproveDialog() {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
-    // dialogRef.componentInstance.autoClose = true;
+
+    switch (this.loan.network) {
+      case Network.Basalt:
+        dialogRef.componentInstance.onlyAddress = this.loan.address;
+        break;
+      case Network.Diaspore:
+        const debtEngineAddress = environment.contracts.diaspore.debtEngine;
+        dialogRef.componentInstance.onlyAddress = debtEngineAddress;
+        break;
+      default:
+        this.cancelOperation();
+        break;
+    }
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.handlePay(true);
