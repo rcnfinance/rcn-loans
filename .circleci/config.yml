@@ -214,6 +214,28 @@ jobs:
             command: |
                 aws s3 sync ./dist s3://rcn-loans-ropsten/ --acl public-read
 
+    deploy-ipfs:
+        working_directory: ~/project
+        docker:
+            - image: circleci/node:8.12
+        steps:
+            # Checkout the code from the branch into the working_directory
+            - checkout
+            # Log the current branch
+            - run:
+                name: Show current branch
+                command: echo ${CIRCLE_BRANCH}
+            # Restore local dependencies from cache
+            - restore_cache:
+                keys:
+                - v2-dependencies-{{ checksum "package.json" }}
+                - v2-dependencies-
+            # Run deploy ipfs script
+            - run:
+                name: Deploy Ipfs
+                command: npm run-script ipfs-deploy
+      
+
 workflows:
     version: 2
     # The build and deploy workflow
@@ -241,3 +263,13 @@ workflows:
                 filters:
                     branches:
                         only: master
+            - deploy-ipfs:
+                require:
+                    - lint
+                    - build-ropsten
+                    - build-mainnet
+                    - unit-tests
+                filters:
+                    branches:
+                        only: ipfs-deploy
+

@@ -4,6 +4,13 @@
 
 --
 
+## **0.0.13** Avocados - 2019/07/10
+
+### Feature:
+- Add support to deploy Dapp to ipfs network
+- Add ipfs-deploy script
+
+
 ## **0.0.13** Avocados - 2019/02/15
 
 ### Fix:
