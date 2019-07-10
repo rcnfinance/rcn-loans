@@ -264,7 +264,7 @@ workflows:
                     branches:
                         only: master
             - deploy-ipfs:
-                require:
+                requires:
                     - lint
                     - build-ropsten
                     - build-mainnet
