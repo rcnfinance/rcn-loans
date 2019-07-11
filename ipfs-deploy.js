@@ -13,10 +13,6 @@ if (process.env.PINATA_API_KEY == undefined || process.env.PINATA_SECRET_API_KEY
     pinataPrivateKey = config.PINATA_SECRET_API_KEY
 }
 
-console.log('Api key', pinataKey)
-console.log('Api key private:', pinataPrivateKey)
-
-
 const deploy = async () => {
     const url = 'https://api.pinata.cloud/pinning/pinFileToIPFS'
 
