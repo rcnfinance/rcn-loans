@@ -232,6 +232,11 @@ jobs:
                 - v2-dependencies-
             # Run deploy ipfs script
             - run:
+                name: Check global_env variables
+                command: echo ${PINATA_API_KEY} 
+                         echo ${PINATA_SECRET_API_KEY}          
+
+            - run:
                 name: Deploy Ipfs
                 command: npm run-script ipfs-deploy
       
