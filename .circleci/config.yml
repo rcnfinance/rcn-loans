@@ -221,24 +221,16 @@ jobs:
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
-            # Log the current branch
-            - run:
-                name: Show current branch
-                command: echo ${CIRCLE_BRANCH}
-            # Restore local dependencies from cache
-            - restore_cache:
-                keys:
-                - v2-dependencies-{{ checksum "package.json" }}
-                - v2-dependencies-
+            - attach_workspace:
+                at: ~/project
             # Run deploy ipfs script
             - run:
                 name: Check global_env variables
                 command: echo ${PINATA_API_KEY} 
                          echo ${PINATA_SECRET_API_KEY}          
-
             - run:
                 name: Deploy Ipfs
-                command: npm run-script ipfs-deploy
+                command: npm run-script ipfs-deploy -- ./dist ${PINATA_API_KEY} ${PINATA_SECRET_API_KEY}  
       
 
 workflows:

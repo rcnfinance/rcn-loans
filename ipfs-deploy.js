@@ -3,6 +3,10 @@ const fs = require('fs-extra')
 const FormData = require('form-data')
 const recursive = require('recursive-fs')
 
+process.argv.forEach((val, index) => {
+    console.log(`${index}: ${val}`);
+  });
+
 const deploy = async () => {
     const url = 'https://api.pinata.cloud/pinning/pinFileToIPFS'
 
