@@ -3,9 +3,19 @@ const fs = require('fs-extra')
 const FormData = require('form-data')
 const recursive = require('recursive-fs')
 
-process.argv.forEach((val, index) => {
-    console.log(`${index}: ${val}`);
-  });
+
+var pinataKey = process.env.PINATA_API_KEY;
+var pinataPrivateKey = process.env.PINATA_SECRET_API_KEY;
+
+if (process.env.PINATA_API_KEY == undefined || process.env.PINATA_SECRET_API_KEY == undefined) {
+    const config = require('./config.js')
+    pinataKey = config.PINATA_API_KEY
+    pinataPrivateKey = config.PINATA_SECRET_API_KEY
+}
+
+console.log('Api key', pinataKey)
+console.log('Api key private:', pinataPrivateKey)
+
 
 const deploy = async () => {
     const url = 'https://api.pinata.cloud/pinning/pinFileToIPFS'
@@ -38,8 +48,8 @@ const deploy = async () => {
                         maxContentLength: 'Infinity',
                         headers: {
                             'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
-                            pinata_api_key: process.env.PINATA_API_KEY,
-                            pinata_secret_api_key: process.env.PINATA_SECRET_API_KEY
+                            pinata_api_key: pinataKey,
+                            pinata_secret_api_key: pinataPrivateKey
                         },
                     })
                     .then(resolve)

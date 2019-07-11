@@ -228,14 +228,10 @@ jobs:
                 keys:
                 - v2-dependencies-{{ checksum "package.json" }}
                 - v2-dependencies-    
-            # Run deploy ipfs script
-            - run:
-                name: Check global_env variables
-                command: echo ${PINATA_API_KEY} 
-                         echo ${PINATA_SECRET_API_KEY}          
+            # Run deploy ipfs script    
             - run:
                 name: Deploy Ipfs
-                command: npm run-script ipfs-deploy -- ./dist ${PINATA_API_KEY} ${PINATA_SECRET_API_KEY}  
+                command: npm run-script ipfs-deploy -- ${PINATA_API_KEY} ${PINATA_SECRET_API_KEY}  
       
 
 workflows:
