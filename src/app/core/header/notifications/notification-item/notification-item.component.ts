@@ -28,7 +28,7 @@ export class NotificationItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.notification) {
+    if (this.notification) {
       this.deltaFormatted = this.toDeltaFormatted(this.notification.time);
       if (this.notification.txObject.id !== undefined) {
         this.shortAddress = Utils.shortAddress(this.notification.txObject.id.toString());

@@ -442,7 +442,7 @@ export class ContractsService {
     try {
       address = '0x000000000000000000000000' + address.replace('0x', '');
       return address;
-    } catch(e) {
+    } catch (e) {
       return null;
     }
   }
