@@ -439,7 +439,12 @@ export class ContractsService {
   //   return requests;
   // }
   private addressToBytes32(address: string): string {
-    return '0x000000000000000000000000' + address.replace('0x', '');
+    try {
+      address = '0x000000000000000000000000' + address.replace('0x', '');
+      return address;
+    } catch(e) {
+      return null;
+    }
   }
   private loadAltContract(web3: any, contract: any): any {
     return web3.eth.contract(contract.abi).at(contract.address);
