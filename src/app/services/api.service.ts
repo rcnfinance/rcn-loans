@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Loan, Network, Oracle, Descriptor, Debt, Model } from '../models/loan.model';
 import { Utils } from '../utils/utils';
 import { LoanUtils } from '../utils/loan-utils';
+import { Web3Service } from './web3.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +14,19 @@ export class ApiService {
   installmentModelAddress = '0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53';
   url = environment.rcn_node_api.url;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private web3Service: Web3Service
+  ) { }
 
   // Loads all loans lent by the account that is logged in
   async getLoansOfLender(lender: string): Promise<Loan[]> {
+    const web3 = this.web3Service.web3;
     let allLoansOfLender: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
     try {
+      lender = web3.toChecksumAddress(lender);
       const data: any = await this.http.get(this.url.concat('loans?open=false&page=' + page + '&lender=' + lender)).toPromise();
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
