@@ -1,5 +1,5 @@
 <div class="notification-container"
-[ngClass]="{'progressOn': !notification.confirmedTx }">
+[ngClass]="{'progressOn': !notification.confirmedTx }" *ngIf="notification">
   <div class="status-container">
     <div class="icon-event bg-{{ notification.txObject.color }}">
       <i class="{{ notification.txObject.materialClass }} {{ notification.txObject.awesomeClass }}">{{ notification.txObject.icon }}</i>
