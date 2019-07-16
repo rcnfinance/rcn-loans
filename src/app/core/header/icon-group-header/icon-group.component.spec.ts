@@ -1,10 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material/material.module';
 import { SharedModule } from '../../../shared/shared.module';
 import { IconGroupHeaderComponent } from './icon-group-header.component';
-import { NotificationsComponent } from './../notifications/notifications.component';
-import { NotificationItemComponent } from './../notifications/notification-item/notification-item.component';
 import { NotificationsService } from '../../../services/notifications.service';
 
 describe('IconGroupHeaderComponent', () => {
@@ -19,12 +18,13 @@ describe('IconGroupHeaderComponent', () => {
         SharedModule
       ],
       declarations: [
-        IconGroupHeaderComponent,
-        NotificationsComponent,
-        NotificationItemComponent
+        IconGroupHeaderComponent
       ],
       providers: [
         NotificationsService
+      ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
       ]
     })
     .compileComponents();
@@ -38,5 +38,17 @@ describe('IconGroupHeaderComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should return true', () => {
+    const view = 'notifications';
+    component.viewDetail = view;
+    expect(component.isDetail(view)).toBeTruthy();
+  });
+
+  it('should update counter', () => {
+    const counter = 5;
+    component.updateCounter(counter);
+    expect(component.notificationsCounter).toEqual(counter);
   });
 });
