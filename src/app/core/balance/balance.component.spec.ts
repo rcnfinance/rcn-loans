@@ -32,7 +32,7 @@ describe('BalanceComponent', () => {
   });
 
   it('should display balance', async () => {
-    let thisComponent: any = component;
+    const thisComponent: any = component;
 
     // set balance amount
     thisComponent.rcnBalance = 25000.789;
