@@ -181,7 +181,7 @@ export class ContractsService {
       );
     }) as Promise<BigNumber>;
   }
-  
+
   async requestLoan(oracle: string,
     currency: string,
     amount: number,
