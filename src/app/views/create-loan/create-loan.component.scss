@@ -1,5 +1,94 @@
 @import '../../../scss/_variables.scss'; //variables
 
+//Create Loan
+.properties-block{
+  @extend %flex-container;
+  div{
+    flex: 1;
+    font-size: 12px;
+    text-transform: uppercase;
+    @extend %font-light;
+    &:nth-child(1){
+      text-align: left;
+    }
+    &:nth-child(2){
+      text-align: center;
+      @extend %propiety-subtitle;
+    }
+    &:nth-child(3){
+      text-align: right;
+    }
+  }
+}
+
+.conversion-block{
+  height: 50px;
+  @extend %flex-container;
+  padding: 0px 15px;
+  margin: 5px -15px 15px;
+  div{
+    flex: 1;
+    @extend %roboto-bold;
+    &:nth-child(1){
+      text-align: left;
+      font-size: 26px;
+    }
+    &:nth-child(2){
+      display: flex;
+      @extend %roboto-regular;
+      i{ margin: 0 auto; }
+    }
+    &:nth-child(3){
+      color: $primary;
+      text-align: right;
+      font-size: 26px;
+    }
+  }
+  mat-form-field{
+    font-weight: 700 !important;
+  }
+}
+
+.stepper-title{
+  @extend %flex-container-align;
+  svg{
+    color: $gray7;
+    font-size: 54px;
+    margin-right: 15px;
+  }
+}
+
+.icon-block{
+  display: flex;
+  padding: 10px 0 40px;
+  .icon{
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    border-radius: 50%;
+    background: $gray7;
+    @extend %flex-container-align;
+    svg{
+      font-size: 16px;
+      margin: 0 auto;
+    }
+  }
+}
+.required{
+  height: 1px;
+  opacity: .5;
+  background-color: $secondary;
+  &.required-invalid{
+    opacity: 1;
+    background-color: #f44336;
+  }
+}
+
+.title{ &.property{ font-size: 12px; } }
+
+
+
+
 //CARDS
 .card-col{
   margin-top: 15px;
@@ -91,10 +180,16 @@
   border-bottom: 1px solid black;
   div{
     flex: 1;
-    @extend %roboto-black;
+    @extend %font-bold;
     &:nth-child(1){
       text-align: left;
-      font-size: 24px;
+      font-size: 26px;
+      .mat-hint{
+        font-weight: 400;
+        line-height: 1.125;
+        font-size: 10px;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+      }
     }
     &:nth-child(2){
       display: flex;
@@ -104,9 +199,15 @@
     &:nth-child(3){
       color: $primary;
       text-align: right;
-      font-size: 24px;
+      font-size: 26px;
     }
   }
+}
+
+.progress-container{
+  display: flex;
+  align-items: center;
+  @extend %roboto-bold;
 }
 
 @media (min-width: 768px){

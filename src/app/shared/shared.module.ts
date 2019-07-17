@@ -113,8 +113,10 @@ import { EventsService } from './../services/events.service';
     EventsService
   ],
   exports: [
-    LoanCardComponent,
+    FormsModule,
+    ReactiveFormsModule,
 
+    LoanCardComponent,
     CreatorContainerComponent,
     AvatarComponent,
     LoanAvatarComponent,
