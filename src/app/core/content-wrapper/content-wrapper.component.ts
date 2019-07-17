@@ -1,11 +1,9 @@
 import BigNumber from 'bignumber.js';
-
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 // App Components
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
-
 // App Service
 import { environment } from '../../../environments/environment';
 import { SidebarService } from '../../services/sidebar.service';
@@ -120,7 +118,13 @@ export class ContentWrapperComponent implements OnInit {
     // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
-    this.web3Service.loginEvent.subscribe(() => this.loadAccount());
+    this.web3Service.loginEvent.subscribe(
+      (isLogged) => {
+        if (isLogged) {
+          this.loadAccount();
+        }
+      }
+    );
     this.loadAccount();
     this.canLend();
   }
@@ -164,16 +168,14 @@ export class ContentWrapperComponent implements OnInit {
     );
   }
 
-  private loadLender() {
-    this.web3Service.getAccount().then((resolve: string) => {
-      this.lender = resolve;
-    });
+  private async loadLender() {
+    const lender: string = await this.web3Service.getAccount();
+    this.lender = lender;
   }
 
-  private loadRcnBalance() {
-    this.contractService.getUserBalanceRCN().then((balance: number) => {
-      this.rcnBalance = balance;
-    });
+  private async loadRcnBalance() {
+    const balance: number = await this.contractService.getUserBalanceRCN();
+    this.rcnBalance = balance;
   }
 
   private async loadWithdrawBalance() {

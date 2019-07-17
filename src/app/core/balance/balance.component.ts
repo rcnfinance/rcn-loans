@@ -34,7 +34,6 @@ export class BalanceComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.web3Service.loginEvent.subscribe(() => this.loadLogin());
     this.loadLogin();
   }
 
@@ -59,7 +58,8 @@ export class BalanceComponent implements OnInit {
     if (this.ongoingBasaltWithdraw !== undefined || this.ongoingDiasporeWithdraw !== undefined) {
       this.displayBalance = Utils.formatAmount(
         this.rcnBalance + this.rcnAvailable
-      ); }
+      );
+    }
   }
 
   async loadLogin() {
