@@ -27,7 +27,7 @@ export const environment = {
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   gaTracking: 'UA-122615331-3',
   rcn_node: {
-    loan: 'https://rnode.rcn.loans/v1/loans/$id/'
+    loan: 'https://rnode.rcn.loans/v1/loans/$id'
   },
   network: {
     id: '1',
@@ -36,18 +36,29 @@ export const environment = {
       address: 'https://etherscan.io/address/${address}',
       tx: 'https://etherscan.io/tx/${tx}'
     },
-    provider: 'https://main.node.rcn.loans:8545/'
+    provider: 'https://node.rcn.loans/'
   },
   contracts: {
     rcnToken: '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6',
     basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
+    converter: {
+      converterRamp: '0x56783153d0a8ccb009dcb79df5337835ed1a9d6c',
+      tokenConverter: '0x3b81db7c9fe71a2c6d78f9ae2fe4df4c92272622',
+      ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      params: {
+        marginSpend: 5000,
+        maxSpend: 0,
+        rebuyThreshold: 40000000000000000000
+      }
+    },
     decentraland: {
       mortgageCreator: '0x90263Ea5C57Dc6603CA7202920735A6E31235bB9',
       mortgageManager: '0x9ABf1295086aFA0E49C60e95c437aa400c5333B8',
       landMarket: '0xb3bca6f5052c7e24726b44da7403b56a8a1b98f8'
     }
   },
+  blacklist: [],
   filters: {
     openLoans: '0xb18aa197fdb7d20c695dac42da71eb55883fb253',
     nonExpired: '0x56a65418a09aa5cd0cb79d437cb1d318037817d7',

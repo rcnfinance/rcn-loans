@@ -12,6 +12,8 @@
   --red: #f44136;
   --green: #71b464;
   --orange: #da7d3a;
+  --yellow: #ffca00;
+  --violet: #8d00ab;
   --primary: #4155ff;
   --secondary: #ffffff;
   --tertiary: #000000;
@@ -26,6 +28,8 @@
 .gray8 {color: #232323;}
 .gray9 {color: #1d1d1d;}
 .orange {color: #da7d3a;}
+.yellow {color: #ffca00;}
+.violet {color: #8d00ab;}
 .red {color: #f44136;}
 .primary {color: #4155ff;}
 .secondary {color: #ffffff;}
@@ -56,11 +60,11 @@
 .darkblue   {color: #192535;} 
 .green      {color: #30ad23;}
 .blue       {color: #4155ff;}
-.violet     {color: #b977b6;}
+.violet     {color: #8d00ab;}
 .seagreen   {color: #3a8586;}
 .red        {color: #f44136;}
 .turquoise  {color: #00ccbe;}
-.yellow     {color: #f2851e;}
+.yellow     {color: #ffca00;}
 .c-facebook {color: #426AA9;}
 .c-twitter  {color: #4299FF;}
 .c-google   {color: #CC3B2A;}
@@ -88,11 +92,11 @@
 .bg-green       {background-color: #71b464;}
 .bg-cyan        {background-color: #9db3ca;}
 .bg-darkblue    {background-color: #031930;}
-.bg-violet      {background-color: #b977b6;}
+.bg-vio-light   {background-color: #b977b6;}
+.bg-violet      {background-color: #8d00ab;}
 .bg-seagreen    {background-color: #39B6C1;}
 .bg-turquoise   {background-color: #00ccbe;}
 .bg-yellow      {background-color: #FFCF11;}
-.bg-violet      {background-color: #b977b6;}
 .bg-facebook    {background-color: #426AA9;}
 .bg-twitter     {background-color: #4299FF;}
 .bg-google      {background-color: #CC3B2A;}

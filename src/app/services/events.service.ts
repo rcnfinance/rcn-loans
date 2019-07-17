@@ -1,4 +1,3 @@
-
 import * as Raven from 'raven-js';
 
 import { Injectable } from '@angular/core';

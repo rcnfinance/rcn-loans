@@ -16,21 +16,20 @@
   </div>
 
   <div class="loan-description flex-container">
-
     <div class="left">
       <div class="avatar-information">
         <div class="flex-item">
-          <app-loan-avatar [loan]=loan [short]=false></app-loan-avatar>
+          <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
         </div>
         <div class="flex-item">
           <app-avatar-title [loan]=loan></app-avatar-title>
         </div>
       </div>
       <div class="paddingleft15 paddingright15">
-        <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="isRequest ? loan.expectedReturn : totalDebt"></app-conversion-graphic>
+        <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="loan.expectedReturn"></app-conversion-graphic>
       </div>
       <div class="paddingleft15 paddingright15">
-        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="loan.paid" *ngIf="!isRequest"></app-conversion-graphic>
+        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountLeft]="loan.paid" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" *ngIf="!isRequest"></app-conversion-graphic>
       </div>
 
       <div class="margintop20"></div>
@@ -68,7 +67,7 @@
         </table>
       </div>
       <div class="table-responsive">
-        <table class="table" (click)="openLender(loan.owner)" *ngIf="!isRequest">
+        <table class="table" (click)="openLender(loan.owner)" *ngIf="!isRequest && !isExpired">
           <thead>
             <tr>
               <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
@@ -95,8 +94,8 @@
           </tbody>
         </table>
       </div>
-
-      <div class="paddingleft15 paddingright15 paddingbottom15" *ngIf="canLend || canTransfer">
+      <div class="paddingleft15 paddingright15 paddingbottom15" *ngIf="canLend || canTransfer || canPay">
+        <app-pay-button [loan]=loan *ngIf="canPay"></app-pay-button>
         <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
         <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="canLend"></app-risk-indicator>
         <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>

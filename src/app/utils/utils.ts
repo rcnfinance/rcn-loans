@@ -1,5 +1,6 @@
 export class Utils {
   static address0x = '0x0000000000000000000000000000000000000000';
+  static emptyString = '';
 
   static formatInterest(raw: number): number {
     return 311040000000000 / raw;
@@ -33,11 +34,27 @@ export class Utils {
     return result;
   }
 
+  static toBytes(hex: string): string {
+    return '0x' + '0'.repeat(64 - hex.length) + hex;
+  }
+
+  static initBytes(): string {
+    return Utils.toBytes(Utils.emptyString);
+  }
+
+  static isEmpty(hex: string) {
+    return hex === '0x';
+  }
+
   static shortAddress(address: string): string {
     return address.substr(0, 4) + '...' + address.substr(-4);
   }
 
-  static formatDelta(totalSeconds: number, display: number = 2): string {
+  static capFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  static formatDelta(totalSeconds: number, display: number = 2, showSeconds = true): string {
     let result = '';
     let visible = 0;
 
@@ -48,10 +65,9 @@ export class Utils {
       }
     }
 
-    let prefix = '';
+    const prefix = '';
 
     if (totalSeconds < 0) {
-      prefix = '- ';
       totalSeconds *= -1;
     }
 
@@ -68,15 +84,16 @@ export class Utils {
     totalSeconds %= 3600;
     const minutes = Math.floor(totalSeconds / 60);
     timeToStr(minutes, ' minutes, ');
-    const seconds = totalSeconds % 60;
-    timeToStr(seconds, ' seconds, ');
+
+    if (showSeconds) {
+      const seconds = totalSeconds % 60;
+      timeToStr(seconds, ' seconds, ');
+    }
 
     return prefix + result.slice(0, -2);
   }
 
-  static formatAmount(amount: Number): string {
-    const maxDigits = 6;
-
+  static formatAmount(amount: Number, maxDigits = 6): string {
     if (amount.toString().length <= maxDigits) {
       return amount.toString();
     }

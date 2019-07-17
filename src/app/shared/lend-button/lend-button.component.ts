@@ -9,6 +9,7 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
+
 import { Loan } from './../../models/loan.model';
 
 // App Services
@@ -23,7 +24,10 @@ import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insuffic
 import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
+import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { CosignerService } from './../../services/cosigner.service';
+import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
 
 @Component({
   selector: 'app-lend-button',
@@ -33,7 +37,6 @@ import { DialogClientAccountComponent } from '../../dialogs/dialog-client-accoun
 export class LendButtonComponent implements OnInit {
   @Input() loan: Loan;
   pendingTx: Tx = undefined;
-  account: string;
   lendEnabled: Boolean;
   opPending = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -46,22 +49,45 @@ export class LendButtonComponent implements OnInit {
     private countriesService: CountriesService,
     private eventsService: EventsService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    public cosignerService: CosignerService,
+    public decentralandCosignerProvider: DecentralandCosignerProvider
   ) {}
 
   async handleLend(forze = false) {
     if (this.opPending && !forze) { return; }
 
-    if (this.account === undefined) {
+    if (!this.web3Service.loggedIn) {
+      if (await this.web3Service.requestLogin()) {
+        this.handleLend();
+        return;
+      }
+
       this.dialog.open(DialogClientAccountComponent);
       return;
     }
 
     if (!this.lendEnabled) {
-      this.dialog.open(DialogGenericErrorComponent, { data: {
-        error: new Error('Lending is not enabled in this region')
-      }});
+      this.dialog.open(DialogWrongCountryComponent);
       return;
+    }
+
+    const cosigner = this.cosignerService.getCosigner(this.loan);
+    if (cosigner instanceof DecentralandCosignerProvider) {
+      const isParcelStatusOpen = await cosigner.getStatusOfParcel(this.loan);
+      if (!isParcelStatusOpen) {
+        this.dialog.open(DialogGenericErrorComponent, { data: {
+          error: new Error('Not Available, Parcel is already sold')
+        }});
+        return;
+      }
+      const isMortgageCancelled = await cosigner.isMortgageCancelled(this.loan);
+      if (isMortgageCancelled) {
+        this.dialog.open(DialogGenericErrorComponent, { data: {
+          error: new Error('Not Available, Mortgage has been cancelled')
+        }});
+        return;
+      }
     }
 
     this.startOperation();
@@ -69,23 +95,13 @@ export class LendButtonComponent implements OnInit {
     try {
       const engineApproved = this.contractsService.isEngineApproved();
       const civicApproved = this.civicService.status();
-      const balance = this.contractsService.getUserBalanceRCNWei();
-      const required = this.contractsService.estimateRequiredAmount(this.loan);
+      const balance = await this.contractsService.getUserBalanceRCNWei();
+      const required = await this.contractsService.estimateLendAmount(this.loan);
+      const ethBalance = await this.contractsService.getUserBalanceETHWei();
+      const estimated = await this.contractsService.estimateEthRequiredAmount(this.loan);
+
       if (!await engineApproved) {
         this.showApproveDialog();
-        return;
-      }
-
-      console.info('Try lend', await required, await balance);
-      if (await balance < await required) {
-        this.eventsService.trackEvent(
-          'show-insufficient-funds-lend',
-          Category.Account,
-          'loan #' + this.loan.id,
-          await required
-        );
-
-        this.showInsufficientFundsDialog(await required, await balance);
         return;
       }
 
@@ -94,16 +110,41 @@ export class LendButtonComponent implements OnInit {
         return;
       }
 
-      const tx = await this.contractsService.lendLoan(this.loan);
+      if (balance > required) {
+        const tx = await this.contractsService.lendLoan(this.loan);
+        this.eventsService.trackEvent(
+          'lend',
+          Category.Account,
+          'loan #' + this.loan.id
+        );
+
+        this.txService.registerLendTx(this.loan, tx);
+        this.pendingTx = this.txService.getLastLend(this.loan);
+        return;
+      }
+
+      if (ethBalance.toNumber() >= estimated.toNumber()) {
+        const tx = await this.contractsService.lendLoanWithSwap(this.loan, estimated);
+        this.eventsService.trackEvent(
+          'lend',
+          Category.Account,
+          'loan #' + this.loan.id
+        );
+
+        this.txService.registerLendTx(this.loan, tx);
+        this.pendingTx = this.txService.getLastLend(this.loan);
+        return;
+      }
 
       this.eventsService.trackEvent(
-        'lend',
+        'show-insufficient-funds-lend',
         Category.Account,
-        'loan #' + this.loan.id
+        'loan #' + this.loan.id,
+        required
       );
 
-      this.txService.registerLendTx(this.loan, tx);
-      this.pendingTx = this.txService.getLastLend(this.loan);
+      this.showInsufficientFundsDialog(required, balance);
+
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.message.indexOf('User denied transaction signature') < 0) {
@@ -209,13 +250,11 @@ export class LendButtonComponent implements OnInit {
 
   ngOnInit() {
     this.retrievePendingTx();
-    this.web3Service.getAccount().then((account) => {
-      this.account = account;
-    });
-    this.countriesService.lendEnabled().then((lendEnabled) => {
-      this.lendEnabled = lendEnabled;
-    });
+    this.canLend();
+  }
 
+  async canLend() {
+    this.lendEnabled = await this.countriesService.lendEnabled();
   }
 
 }

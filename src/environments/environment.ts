@@ -27,7 +27,7 @@ export const environment = {
   version_verbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   rcn_node: {
-    loan: 'https://testnet.rnode.rcn.loans/v1/loans/$id/'
+    loan: 'https://ropsten-rnode.rcn.loans/v1/loans/$id'
   },
   network: {
     id: '3',
@@ -36,18 +36,36 @@ export const environment = {
       address: 'https://ropsten.etherscan.io/address/${address}',
       tx: 'https://ropsten.etherscan.io/tx/${tx}'
     },
-    provider: 'https://ropsten.node.rcn.loans:8545/'
+    provider: 'https://ropsten-node.rcn.loans/'
   },
   contracts: {
     rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
+    converter: {
+      converterRamp: '0xeaf063101ae319a18330ff78fdd81d992bf83349',
+      tokenConverter: '0xc4b1b3083174716542ef387326e58293917bf3bf',
+      ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      params: {
+        marginSpend: 5000,
+        maxSpend: 0,
+        rebuyThreshold: 40000000000000000000
+      }
+    },
     decentraland: {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
       mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1',
       landMarket: '0x5424912699dabaa5f2998750c1c66e73d67ad219'
     }
   },
+  blacklist: [
+    {
+      key: 'oracle',
+      forbidden: [
+        '0x0ac18b74b5616fdeaeff809713d07ed1486d0128'
+      ]
+    }
+  ],
   filters: {
     openLoans: '0x3e703de416a62525c8653be11d71486550618ec8',
     nonExpired: '0xe084b7cf7f6869a96cd72962047bf65e6d55e1e1',
