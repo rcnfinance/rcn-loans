@@ -15,9 +15,13 @@ export class BalanceComponent implements OnInit {
 
   private rcnBalance: number;
   private rcnAvailable: number;
+  private basaltRcnAvailable: number;
+  private diasporeRcnAvailable: number;
 
-  loansWithBalance: number[]; // Balance bar
-  ongoingWithdraw: Tx;
+  basaltLoansWithBalance: number[] = [];
+  diasporeLoansWithBalance: number[] = [];
+  ongoingBasaltWithdraw: Tx;
+  ongoingDiasporeWithdraw: Tx;
 
   canWithdraw = false;
   displayBalance = '';
@@ -30,7 +34,6 @@ export class BalanceComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.web3Service.loginEvent.subscribe(() => this.loadLogin());
     this.loadLogin();
   }
 
@@ -48,14 +51,15 @@ export class BalanceComponent implements OnInit {
     }
 
     this.canWithdraw =
-      this.loansWithBalance !== undefined &&
-      this.loansWithBalance.length > 0 &&
-      this.ongoingWithdraw === undefined;
+      this.basaltLoansWithBalance !== undefined || this.diasporeLoansWithBalance !== undefined &&
+      this.basaltLoansWithBalance.length > 0 || this.diasporeLoansWithBalance.length > 0 &&
+      this.ongoingBasaltWithdraw === undefined || this.ongoingDiasporeWithdraw === undefined;
 
-    if (this.ongoingWithdraw !== undefined) {
+    if (this.ongoingBasaltWithdraw !== undefined || this.ongoingDiasporeWithdraw !== undefined) {
       this.displayBalance = Utils.formatAmount(
         this.rcnBalance + this.rcnAvailable
-      ); }
+      );
+    }
   }
 
   async loadLogin() {
@@ -67,9 +71,12 @@ export class BalanceComponent implements OnInit {
   }
 
   async loadWithdrawBalance() {
-    const r = await this.contractService.getPendingWithdraws();
-    this.rcnAvailable = r[0] / 10 ** 18;
-    this.loansWithBalance = r[1];
+    const pendingWithdraws = await this.contractService.getPendingWithdraws();
+    this.basaltRcnAvailable = pendingWithdraws[0] / 10 ** 18;
+    this.diasporeRcnAvailable = pendingWithdraws[2] / 10 ** 18;
+    this.rcnAvailable = this.basaltRcnAvailable + this.diasporeRcnAvailable;
+    this.basaltLoansWithBalance = pendingWithdraws[1];
+    this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadOngoingWithdraw();
     this.updateDisplay();
   }
@@ -80,16 +87,26 @@ export class BalanceComponent implements OnInit {
   }
 
   loadOngoingWithdraw() {
-    this.ongoingWithdraw = this.txService.getLastWithdraw(
+    this.ongoingBasaltWithdraw = this.txService.getLastWithdraw(
       environment.contracts.basaltEngine,
-      this.loansWithBalance
+      this.basaltLoansWithBalance
+    );
+    this.ongoingDiasporeWithdraw = this.txService.getLastWithdraw(
+      environment.contracts.diaspore.debtEngine,
+      this.diasporeLoansWithBalance
     );
   }
 
   async clickWithdraw() {
     if (this.canWithdraw) {
-      const tx = await this.contractService.withdrawFunds(this.loansWithBalance);
-      this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.loansWithBalance);
+      if (this.basaltLoansWithBalance.length > 0) {
+        const tx = await this.contractService.withdrawFundsBasalt(this.basaltLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.basaltLoansWithBalance);
+      }
+      if (this.diasporeLoansWithBalance.length > 0) {
+        const tx = await this.contractService.withdrawFundsDiaspore(this.diasporeLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, environment.contracts.diaspore.debtEngine, this.diasporeLoansWithBalance);
+      }
       this.loadWithdrawBalance();
     }
   }

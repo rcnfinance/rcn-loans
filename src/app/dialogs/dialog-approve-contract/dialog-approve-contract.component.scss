@@ -1,6 +1,12 @@
 @import '../../../scss/_variables.scss'; //variables
 
-
+// Background border
+/deep/ .mat-checkbox .mat-checkbox-frame {
+  border-color: gray;
+}
+.checkbox {
+  margin-bottom: 16px;
+}
 .dialog-padding{
   padding: 30px;
 }

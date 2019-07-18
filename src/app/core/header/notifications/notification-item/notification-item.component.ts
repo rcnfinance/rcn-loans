@@ -11,6 +11,7 @@ import { Utils } from '../../../../utils/utils';
 export class NotificationItemComponent implements OnInit {
   @Input() notification: Notification;
   deltaFormatted: string;
+  shortAddress: string;
 
   progressbarMode = 'query';
 
@@ -27,6 +28,11 @@ export class NotificationItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.deltaFormatted = this.toDeltaFormatted(this.notification.time);
+    if (this.notification) {
+      this.deltaFormatted = this.toDeltaFormatted(this.notification.time);
+      if (this.notification.txObject.id !== undefined) {
+        this.shortAddress = Utils.shortAddress(this.notification.txObject.id.toString());
+      }
+    }
   }
 }

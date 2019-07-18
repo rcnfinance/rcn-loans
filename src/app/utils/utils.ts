@@ -87,7 +87,7 @@ export class Utils {
 
     if (showSeconds) {
       const seconds = totalSeconds % 60;
-      timeToStr(seconds, ' seconds, ');
+      timeToStr(seconds.toFixed(0), ' seconds, ');
     }
 
     return prefix + result.slice(0, -2);

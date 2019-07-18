@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Loan, Status } from '../../models/loan.model';
+import { Loan, Network, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 
 @Component({
@@ -17,24 +17,31 @@ export class LoanCardComponent implements OnInit {
   durationLabel: string;
   durationValue: string;
   canLend: boolean;
+  network: string;
+
+  shortAddress = Utils.shortAddress;
 
   constructor() { }
 
   ngOnInit() {
-    if (this.loan.status === Status.Request) {
+    if (this.loan.isRequest) {
+      const currency = this.loan.currency;
       this.leftLabel = 'Lend';
-      this.leftValue = this.formatAmount(this.loan.amount);
-      this.rightLabel = 'Return';
-      this.rightValue = this.formatAmount(this.loan.expectedReturn);
+      this.leftValue = Utils.formatAmount(currency.fromUnit(this.loan.amount));
       this.durationLabel = 'Duration';
-      this.durationValue = this.loan.verboseDuration;
+      this.durationValue = Utils.formatDelta(this.loan.descriptor.duration);
+      this.rightLabel = 'Return';
+      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
       this.canLend = true;
-    } else {
+    } else if (this.loan instanceof Loan) {
+      const currency = this.loan.currency;
       this.leftLabel = 'Paid';
-      this.leftValue = this.formatAmount(this.loan.paid);
+      this.leftValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
+      this.durationLabel = 'Remaining';
+      this.durationValue = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000));
       this.rightLabel = 'Pending';
-      this.rightValue = this.formatAmount(this.loan.pendingAmount);
-      this.durationValue = Utils.formatDelta(this.loan.remainingTime);
+      const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
+      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
       this.canLend = false;
       if (this.loan.status === Status.Indebt) {
         this.durationLabel = 'In debt for';
@@ -44,10 +51,11 @@ export class LoanCardComponent implements OnInit {
     }
   }
 
-  formatAmount(amount: number): string {
-    return Utils.formatAmount(amount);
+  getInterestRate(): string {
+    return this.loan.descriptor.interestRate.toFixed(2);
   }
-  formatInterest(interest: Number): string {
-    return Number(interest.toFixed(2)).toString();
+
+  getPunitiveInterestRate(): string {
+    return this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
   }
 }

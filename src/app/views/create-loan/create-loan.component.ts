@@ -6,7 +6,7 @@ import {
   MatSnackBarHorizontalPosition
 } from '@angular/material';
 // App Models
-import { Loan, Status } from './../../models/loan.model';
+import { Loan, Status, Network } from './../../models/loan.model';
 // App Services
 import { environment } from '../../../environments/environment.prod';
 import { Utils } from '../../utils/utils';
@@ -58,32 +58,24 @@ export class CreateLoanComponent implements OnInit {
 
   requiredInvalid$ = false;
   currencies: string[] = ['rcn', 'mana', 'ars'];
-  selectedOracle: string;
+  selectedOracle: any; // FIXME: type Oracle
 
   skipped = false;
 
   // Card Variables
   account: string;
   loan: Loan = new Loan(
-    'engine', // engine
-    0, // id
+    Network.Diaspore, // network
+    '', // id
+    'this.account', // address
+    1, // amount
     this.selectedOracle, // oracle
-    Status.Request, // statusFlag
+    null, // descriptor
     this.account, // borrower
     'this.account', // creator
-    1, // rawAmount
-    this.fullDuration, // duration
-    this.annualInterest, // rawAnnualInterest
-    this.annualPunitory, // rawAnnualPunitoryInterest
-    this.requestedCurrency, // currencyRaw
-    this.returnValue, // rawPaid
-    0, // cumulatedInterest
-    0, // cumulatedPunnitoryInterest
-    this.fullDuration, // interestTimestamp
-    this.fullDuration, // dueTimestamp
-    0, // lenderBalance
-    null, // expirationRequest
-    '0x0', // owner
+    Status.Request, // _status
+    null, // expiration
+    null, // model
     '0x0' // cosigner
   );
 
