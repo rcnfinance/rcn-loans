@@ -6,9 +6,11 @@ import { ActiveLoansComponent } from '../views/active-loans/active-loans.compone
 import { AddressComponent } from '../views/address/address.component';
 import { LoanDetailComponent } from '../views/loan-detail/loan-detail.component';
 import { NotFoundModule } from '../views/not-found/not-found.module';
+import { CreateLoanModule } from '../views/create-loan/create-loan.module';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/requests', pathMatch: 'full' },
+  { path: 'create', component: CreateLoanModule },
   { path: 'requests', component: RequestedLoanComponent },
   { path: 'activity', component: ActiveLoansComponent },
   { path: 'loan/:id', component: LoanDetailComponent },
@@ -20,6 +22,7 @@ const appRoutes: Routes = [
 @NgModule({
   imports: [
     NotFoundModule,
+    CreateLoanModule,
     RouterModule.forRoot(appRoutes)
   ],
   exports: [RouterModule]

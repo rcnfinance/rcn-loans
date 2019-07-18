@@ -11,6 +11,7 @@ import { TxService } from '../tx.service';
 import { CosignerService } from './cosigner.service';
 import { ApiService } from './api.service';
 import { promisify, Utils } from './../utils/utils';
+import { Currency } from '../utils/currencies';
 
 declare let require: any;
 
@@ -106,7 +107,6 @@ export class ContractsService {
   }
 
   async disapprove(contract: string): Promise<string> {
-
     const account = await this.web3.getAccount();
     const web3 = this.web3.opsWeb3;
 
@@ -160,18 +160,87 @@ export class ContractsService {
     const oracleData = pOracleData;
     const web3 = this.web3.opsWeb3;
     const account = await this.web3.getAccount();
-    switch (loan.network) {
 
+    switch (loan.network) {
       case Network.Basalt:
         return await promisify(this.loadAltContract(web3, this._rcnEngine).lend,
           [loan.id, oracleData, cosignerAddr, cosignerData, { from: account }]);
       case Network.Diaspore:
-
         return await promisify(this.loadAltContract(web3, this._loanManager).lend,
           [loan.id, oracleData, cosignerAddr, 0, cosignerData, { from: account }]);
       default:
         throw Error('Unknown network');
     }
+  }
+
+    /*
+    const loanId = loan.id.toString(16);
+    const loanIdBytes = Utils.toBytes(loanId);
+    const loanParams = [
+      this.addressToBytes32(environment.contracts.basaltEngine),
+      loanIdBytes,
+      this.addressToBytes32(cosignerAddr)
+    ];
+    const convertParams = [
+      environment.contracts.converter.params.marginSpend,
+      environment.contracts.converter.params.maxSpend,
+      environment.contracts.converter.params.rebuyThreshold
+    ];
+    return new Promise((resolve, reject) => {
+      this._rcnConverterRamp.requiredLendSell.call(
+        environment.contracts.converter.tokenConverter,
+        environment.contracts.converter.ethAddress,
+        loanParams,
+        oracleData,
+        cosignerData,
+        convertParams,
+        { from: account },
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    }) as Promise<BigNumber>;
+  }
+  */
+
+  async requestLoan(oracle: string,
+    currency: string,
+    amount: number,
+    interest: number,
+    punitory: number,
+    duesIn: number,
+    cancelableAt: number,
+    expirationRequest: number,
+    metadata: string): Promise<BigNumber> {
+
+    const account = await this.web3.getAccount();
+    amount = amount * 10 ** Currency.getDecimals('RCN');
+
+    return new Promise((resolve, reject) => {
+      this._rcnEngine.createLoan(
+        oracle,
+        account,
+        currency,
+        amount,
+        interest,
+        punitory,
+        duesIn,
+        cancelableAt,
+        expirationRequest,
+        metadata,
+        { from: account }, function (err, result) {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    }) as Promise<BigNumber>;
   }
 
   async estimatePayAmount(loan: Loan, amount: number): Promise<number> {

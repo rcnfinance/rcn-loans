@@ -15,6 +15,15 @@ export class Utils {
     return strOut;
   }
 
+  static asciiToHex(str) {
+    const hexString = str.toUpperCase();
+    let hex = '';
+    for (let i = 0; i < hexString.length; i++) {
+      hex += '' + hexString.charCodeAt(i).toString(16);
+    }
+    return '0x' + hex + '0'.repeat(64 - hex.length);
+  }
+
   static formatAddress(hex: string): string {
     return hex.replace('0x000000000000000000000000', '0x');
   }
@@ -91,7 +100,6 @@ export class Utils {
 
     const intDigits = amount.toFixed(0).toString().length;
     const decDigits = maxDigits - intDigits;
-
     const decimals = (decDigits > 0) ? decDigits : 0;
 
     return Number(amount.toFixed(decimals)).toString();
