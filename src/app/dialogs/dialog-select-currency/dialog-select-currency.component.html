@@ -61,8 +61,8 @@
             <span *ngIf="selected == '-'" id="label"
               class="--return-amount">0</span>
               <span *ngIf="selected != '-'" id="label"
-              class="--return-amount">{{ rcnAmount }}</span>
-              <span class="margin-left"> RCN </span><i *ngIf="selected != '-'" class="fas fa-check-circle check margin-left"></i>
+              class="--return-amount">{{ expectedReturn }}</span>
+              <span class="margin-left"> {{ loan.currency }} </span><i *ngIf="selected != '-'" class="fas fa-check-circle check margin-left"></i>
             </div>
             </div>
         </div>
