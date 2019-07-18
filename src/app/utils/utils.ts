@@ -118,6 +118,17 @@ export class Utils {
 
     return value;
   }
+
+  /**
+   * Return the interest rate based on an annual percentage
+   * @param interest Annual percentage
+   * @return Interest rate
+   */
+  toInterestRate(interest: number) {
+    const secondsInYear = 360 * 86400;
+    const rawInterest = Math.floor(10000000 / interest);
+    return rawInterest * secondsInYear;
+  }
 }
 
 export function promisify(func: any, args: any): Promise<any> {
