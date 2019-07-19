@@ -7,8 +7,7 @@ import {
   MatDialog,
   MatDialogRef,
   MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatDialogConfig
+  MatSnackBarHorizontalPosition
 } from '@angular/material';
 
 import { Loan, Network } from './../../models/loan.model';
@@ -26,7 +25,6 @@ import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
-import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 import { CosignerService } from './../../services/cosigner.service';
 import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
 
@@ -56,7 +54,6 @@ export class LendButtonComponent implements OnInit {
   ) { }
 
   async handleLend(forze = false) {
-
     if (this.opPending && !forze) { return; }
 
     if (!this.web3Service.loggedIn) {
@@ -189,13 +186,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   clickLend() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.data = {
-      loan: this.loan
-    };
     if (this.pendingTx === undefined) {
-      this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
       this.eventsService.trackEvent(
         'click-lend',
         Category.Loan,
@@ -204,8 +195,6 @@ export class LendButtonComponent implements OnInit {
 
       this.handleLend();
     } else {
-      this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
-      // Logica selección de moneda
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }
   }
