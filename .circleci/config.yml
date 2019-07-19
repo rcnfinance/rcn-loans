@@ -269,5 +269,5 @@ workflows:
                     - unit-tests
                 filters:
                     branches:
-                        only: test-ipfs-deploy
+                        only: master
 
