@@ -229,9 +229,6 @@ workflows:
             - lint:
                 requires:
                     - install
-            - e2e-tests:
-                requires:
-                    - install
             - unit-tests:
                 requires:
                     - install
@@ -240,7 +237,6 @@ workflows:
                     - lint
                     - build-ropsten
                     - build-mainnet
-                    - e2e-tests
                     - unit-tests
                 filters:
                     branches:

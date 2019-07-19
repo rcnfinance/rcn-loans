@@ -16,6 +16,9 @@
     "postinstall": "node patch-crypto.js",
     "e2e": "jest"
   },
+  "pre-commit": [
+    "lint"
+  ],
   "private": true,
   "dependencies": {
     "@angular/animations": "^6.1.2",
@@ -41,7 +44,7 @@
     "material-icons": "^0.2.3",
     "ngx-spinner": "^6.1.2",
     "package.json": "^2.0.1",
-    "raven-js": "^3.26.4",
+    "raven-js": "3.26.4",
     "rxjs": "^6.2.2",
     "rxjs-compat": "^6.2.2",
     "web3": "^0.18.4",
@@ -70,6 +73,7 @@
     "karma-coverage-istanbul-reporter": "^1.4.3",
     "karma-jasmine": "^1.1.2",
     "karma-jasmine-html-reporter": "^1.2.0",
+    "pre-commit": "^1.2.2",
     "puppeteer": "^1.10.0",
     "rxjs-tslint": "^0.1.5",
     "truffle-hdwallet-provider": "0.0.6",

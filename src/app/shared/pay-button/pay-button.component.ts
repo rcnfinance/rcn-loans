@@ -9,7 +9,7 @@ import {
 import { environment } from '../../../environments/environment';
 import { TxService, Tx } from '../../tx.service';
 import { ContractsService } from '../../services/contracts.service';
-import { Loan } from '../../models/loan.model';
+import { Loan, Network } from '../../models/loan.model';
 import { Currency } from '../../utils/currencies';
 import { EventsService, Category } from '../../services/events.service';
 import { Web3Service } from '../../services/web3.service';
@@ -18,7 +18,7 @@ import { CivicService } from '../../services/civic.service';
 import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
+import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
@@ -61,11 +61,24 @@ export class PayButtonComponent implements OnInit {
     }
 
     try {
-      const engineApproved = await this.contractsService.isEngineApproved();
-      const civicApproved = this.civicService.status();
+      let engineApproved: boolean;
+      const civicApproved = await this.civicService.status();
       const balance = await this.contractsService.getUserBalanceRCNWei();
 
-      if (! engineApproved) {
+      switch (this.loan.network) {
+        case Network.Basalt:
+          engineApproved = await this.contractsService.isApproved(this.loan.address);
+          break;
+        case Network.Diaspore:
+          const debtEngineAddress = environment.contracts.diaspore.debtEngine;
+          engineApproved = await this.contractsService.isApproved(debtEngineAddress);
+          break;
+        default:
+          this.cancelOperation();
+          return;
+      }
+
+      if (!engineApproved) {
         this.showApproveDialog();
         return;
       }
@@ -78,7 +91,7 @@ export class PayButtonComponent implements OnInit {
       const dialogRef = this.dialog.open(DialogLoanPayComponent);
       dialogRef.afterClosed().subscribe(async amount => {
         if (amount) {
-          amount = amount * 10 ** Currency.getDecimals(this.loan.currency);
+          amount = amount * 10 ** Currency.getDecimals(this.loan.oracle.currency);
           const requiredTokens = await this.contractsService.estimatePayAmount(this.loan, amount);
           if (balance < requiredTokens) {
             this.eventsService.trackEvent(
@@ -103,7 +116,12 @@ export class PayButtonComponent implements OnInit {
               Category.Loan,
               'loan #' + this.loan.id + ' of ' + amount
             );
-            this.txService.registerPayTx(tx, environment.contracts.basaltEngine, this.loan, amount);
+
+            if (this.loan.network === Network.Basalt) {
+              this.txService.registerPayTx(tx, environment.contracts.basaltEngine, this.loan, amount);
+            } else {
+              this.txService.registerPayTx(tx, environment.contracts.diaspore.debtEngine, this.loan, amount);
+            }
             this.retrievePendingTx();
           });
         }
@@ -132,7 +150,7 @@ export class PayButtonComponent implements OnInit {
   }
 
   showInsufficientFundsDialog(required: number, funds: number) {
-    this.dialog.open(DialogInsufficientFoundsComponent, { data: {
+    this.dialog.open(DialogInsufficientfundsComponent, { data: {
       required: required,
       balance: funds
     }});
@@ -141,7 +159,20 @@ export class PayButtonComponent implements OnInit {
 
   showApproveDialog() {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
-    dialogRef.componentInstance.autoClose = true;
+
+    switch (this.loan.network) {
+      case Network.Basalt:
+        dialogRef.componentInstance.onlyAddress = this.loan.address;
+        break;
+      case Network.Diaspore:
+        const debtEngineAddress = environment.contracts.diaspore.debtEngine;
+        dialogRef.componentInstance.onlyAddress = debtEngineAddress;
+        break;
+      default:
+        this.cancelOperation();
+        break;
+    }
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.handlePay(true);
@@ -167,6 +198,17 @@ export class PayButtonComponent implements OnInit {
     });
   }
 
+  get buttonText(): string {
+    const tx = this.pendingTx;
+    if (tx === undefined) {
+      return 'Pay';
+    }
+    if (tx.confirmed) {
+      return 'Payed';
+    }
+    return 'Paying...';
+  }
+
   clickPay() {
     if (!this.lendEnabled) {
       this.dialog.open(DialogWrongCountryComponent);
@@ -174,7 +216,7 @@ export class PayButtonComponent implements OnInit {
     }
     if (this.pendingTx === undefined) {
       this.eventsService.trackEvent(
-        'click-lend',
+        'click-pay',
         Category.Loan,
         'loan #' + this.loan.id
       );

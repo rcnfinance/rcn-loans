@@ -74,7 +74,14 @@ export class Web3Service {
 
   async getAccount(): Promise<string> {
     if (!this.loggedIn) {
-      return;
+      try {
+        await this.requestLogin();
+        if (!this.loggedIn) {
+          throw Error;
+        }
+      } catch (e) {
+        return;
+      }
     }
 
     if (this._account) {

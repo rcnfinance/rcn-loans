@@ -30,7 +30,7 @@ import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.componen
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 import { PayFormComponent } from './pay-form/pay-form.component';
 // App Dialogs
-import { DialogInsufficientFoundsComponent } from '../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
+import { DialogInsufficientfundsComponent } from '../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogGenericErrorComponent } from '../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
@@ -82,7 +82,7 @@ import { EventsService } from './../services/events.service';
     PayFormComponent,
     FilterLoansComponent,
 
-    DialogInsufficientFoundsComponent,
+    DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
@@ -92,7 +92,7 @@ import { EventsService } from './../services/events.service';
   ],
   entryComponents: [
     CivicAuthComponent,
-    DialogInsufficientFoundsComponent,
+    DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
     DialogGenericErrorComponent,

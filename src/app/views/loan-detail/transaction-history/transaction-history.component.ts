@@ -1,18 +1,19 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 // App Models
-import { Loan } from '../../../models/loan.model';
+import { Loan, Network } from '../../../models/loan.model';
 import { Commit } from '../../../models/commit.model';
 // App Services
 import { CommitsService } from '../../../services/commits.service';
 import { environment } from '../../../../environments/environment';
 import { Utils } from '../../../utils/utils';
 import { EventsService } from '../../../services/events.service';
+import { Currency } from '../../../utils/currencies';
 
 class DataEntry {
   constructor(
     public title: string,
     public value: string
-  ) {}
+  ) { }
 }
 
 @Component({
@@ -45,7 +46,7 @@ export class TransactionHistoryComponent implements OnInit {
 
   noMatch = false;
 
-  timelinesProperties: object = {
+  basaltTimelinesProperties: object = {
     'loan_request': {
       'title': 'Requested',
       'message': 'Requested',
@@ -149,13 +150,79 @@ export class TransactionHistoryComponent implements OnInit {
     }
   };
 
+  diasporeTimelinesProperties: object = {
+    'requested_loan_manager': {
+      'title': 'Requested',
+      'message': 'Requested',
+      'status': 'active',
+      'materialClass': 'material-icons',
+      'icon': 'code',
+      'color': 'white',
+      'inserted': false,
+      'display': ['creator']
+    },
+    'approved_loan_manager': {
+      'title': 'Loan Approved',
+      'message': 'Loan Approved',
+      'status': 'active',
+      'materialClass': 'material-icons',
+      'icon': 'done',
+      'color': 'white',
+      'inserted': true,
+      'display': ['approved_by']
+    },
+    'lent_loan_manager': {
+      'title': 'Lent',
+      'message': 'Lent',
+      'status': 'active',
+      'materialClass': 'material-icons',
+      'icon': 'trending_up',
+      'color': 'blue',
+      'inserted': true,
+      'display': ['lender']
+    },
+    'paid_debt_engine': {
+      'title': 'Pay',
+      'message': 'Pay',
+      'status': 'active',
+      'awesomeClass': 'fas fa-coins',
+      'color': 'green',
+      'inserted': true,
+      'display': ['sender', 'from', 'amount']
+    },
+    'transfer': {
+      'title': 'Transfer',
+      'message': 'Transfer',
+      'status': 'active',
+      'materialClass': 'material-icons',
+      'icon': 'swap_horiz',
+      'color': 'orange',
+      'inserted': true,
+      'hexa': '#333',
+      'display': ['from', 'to']
+    },
+    'withdrawn_debt_engine': {
+      'title': 'Withdraw',
+      'message': 'Withdraw',
+      'status': 'active',
+      'materialClass': 'material-icons',
+      'icon': 'call_made',
+      'color': 'white',
+      'inserted': true,
+      'display': []
+    }
+  };
+
   constructor(
     private commitsService: CommitsService,
     private eventsService: EventsService
   ) { }
 
   get_properties_by_opcode(opcode: string): object[] { // Get the timeline event properties from timelinesProperties[]
-    return this.timelinesProperties[opcode];
+    if (this.loan.network === Network.Basalt) {
+      return this.basaltTimelinesProperties[opcode];
+    }
+    return this.diasporeTimelinesProperties[opcode];
   }
 
   timeline_has(timeEvents, opcode) { // Filters the commits that timeline not use
@@ -181,7 +248,8 @@ export class TransactionHistoryComponent implements OnInit {
         const name = capitalize(key.replace('_', ' '));
         let content = value as string;
         if (this.dataTypes[key] === 'currency') {
-          content = this.loan.currency + ' ' + (Number(content) / 10 ** this.loan.decimals).toString();
+          const currency = this.loan.currency.symbol;
+          content = currency + ' ' + new Currency(currency).fromUnit(Number(content)).toString();
         }
         result.push(new DataEntry(name, content));
       }
@@ -201,9 +269,9 @@ export class TransactionHistoryComponent implements OnInit {
     this.oDataTable = this.populate_table_data(i);
   }
 
-  async loadCommits(id: number) { // Load get() API commits from the DB by id
+  async loadCommits(id: string, network: number) { // Load get() API commits from the DB by id if Diaspore loans
     try {
-      const commits = await this.commitsService.getCommits(id);
+      const commits = await this.commitsService.getCommits(id, network);
       this.oTimeline = this.load_timeEvents(commits);
       this.oDataTable = this.populate_table_data(this.id);
       this.myId.showSpinner = false;
@@ -217,14 +285,25 @@ export class TransactionHistoryComponent implements OnInit {
 
   ngOnInit() {
     this.myId.showSpinner = true;
-    this.loadCommits(this.loan.id);
+    this.loadCommits(this.loan.id, this.loan.network);
+  }
+
+  private IsInTimelineProperties(commit: Commit): boolean {
+    // search for commit opcode in TimelineProperties
+    const properties = this.get_properties_by_opcode(commit.opcode);
+
+    if (properties !== undefined) {
+      return true;
+    }
+    return false;
   }
 
   private filterCommit(commit: Commit): boolean {
-    return commit.opcode !== 'transfer' || (commit.data['from'] !== Utils.address0x && commit.data['to'] !== Utils.address0x);
+    return this.IsInTimelineProperties(commit) && (commit.data['from'] !== Utils.address0x && commit.data['to'] !== Utils.address0x);
   }
 
   private load_timeEvents(commits: Commit[]): object[] { // Build every timeEvents with commit event of the Loan
+
     const timeEvents: object[] = [];
 
     this.sort_by_timestamp(commits); // Order commits by timestamp

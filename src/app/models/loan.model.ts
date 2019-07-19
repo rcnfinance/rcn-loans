@@ -1,149 +1,93 @@
-
-import { Utils } from './../utils/utils';
 import { Currency } from '../utils/currencies';
 
 export enum Status { Request, Ongoing, Paid, Destroyed, Expired, Indebt }
 
-function timestamp(): number {
-  return (new Date().getTime() / 1000);
+export enum Network {
+  Basalt = 2,
+  Diaspore = 4
 }
 
-function calculateInterest(timeDelta: number, interestRate: number, amount: number): number {
-  if (amount === 0) {
-    return 0;
-  }
+export class Descriptor {
+  constructor(
+    public network: Network,
+    public firstObligation: number,
+    public totalObligation: number,
+    public duration: number,
+    public interestRate: number,
+    public punitiveInterestRateRate: number,
+    public frequency: number,
+    public installments: number
+  ) { }
+}
 
-  return (amount * 100000 * timeDelta) / interestRate;
+export class Model {
+  constructor(
+    public network: Network,
+    public address: string,
+    public paid: number,
+    public nextObligation: number,
+    public currentObligation: number,
+    public estimatedObligation: number,
+    public dueTime: number
+  ) { }
+}
+
+export class Oracle {
+  constructor(
+    public network: Network,
+    public address: string,
+    public currency: string,
+    public code: string
+  ) { }
+  toString = (): string => this.address;
+}
+
+export class Debt {
+  constructor(
+    public network: Network,
+    public id: string,
+    public model: Model,
+    public balance: number,
+    public creator: string,
+    public owner: string,
+    public oracle?: Oracle
+  ) { }
 }
 
 export class Loan {
   constructor(
-    public engine: string,
-    public id: number,
-    public oracle: string,
-    public statusFlag: number,
+    public network: Network,
+    public id: string,
+    public address: string,
+    public amount: number,
+    public oracle: Oracle,
+    public descriptor: Descriptor,
     public borrower: string,
     public creator: string,
-    public rawAmount: number,
-    public duration: number,
-    public rawAnnualInterest: number,
-    public rawAnnualPunitoryInterest: number,
-    public currencyRaw: string,
-    public rawPaid: number,
-    public cumulatedInterest: number,
-    public cumulatedPunnitoryInterest: number,
-    public interestTimestamp: number,
-    public dueTimestamp: number,
-    public lenderBalance: number,
-    public expirationRequest: number,
-    public owner: string,
-    public cosigner: string
-  ) { }
+    public _status: Status,
+    public expiration: number,
+    public model: string,
+    public cosigner?: string,
+    public debt?: Debt
+  ) {}
+
+  get isRequest(): boolean {
+    return this.debt === undefined;
+  }
+
+  get currency(): Currency {
+    return new Currency(this.oracle ? this.oracle.currency : 'RCN');
+  }
 
   get status(): Status {
-    if (this.statusFlag === Status.Ongoing && timestamp() > this.dueTimestamp) {
-      return Status.Indebt;
-    }
-    if (this.statusFlag === Status.Request && this.expirationRequest <= new Date().getTime() / 1000) {
+    if (this._status === Status.Request && this.expiration < new Date().getTime() / 1000) {
       return Status.Expired;
     }
-    return this.statusFlag;
-  }
 
-  get lentTimestamp(): number {
-    return this.dueTimestamp - this.duration;
-  }
-
-  get remainingTime(): number {
-    return this.dueTimestamp - timestamp();
-  }
-
-  get rawTotal(): number {
-    let newInterest = this.cumulatedInterest;
-    let newPunitoryInterest = this.cumulatedPunnitoryInterest;
-    let pending;
-    let deltaTime;
-    const endNonPunitory = Math.min(timestamp(), this.dueTimestamp);
-    if (endNonPunitory > this.interestTimestamp) {
-      deltaTime = endNonPunitory - this.interestTimestamp;
-
-      if (this.rawPaid < this.rawAmount) {
-        pending = this.rawAmount - this.rawPaid;
-      } else {
-        pending = 0;
-      }
-
-      newInterest += calculateInterest(deltaTime, this.rawAnnualInterest, pending);
+    if (this._status === Status.Ongoing && this.debt.model.dueTime < new Date().getTime() / 1000) {
+      return Status.Indebt;
     }
 
-    if (timestamp() > this.dueTimestamp) {
-      const startPunitory = Math.max(this.dueTimestamp, this.interestTimestamp);
-      deltaTime = timestamp() - startPunitory;
-      const debt = this.rawAmount + newInterest;
-      pending = Math.min(debt, (debt + newPunitoryInterest) - this.rawPaid);
-      newPunitoryInterest += calculateInterest(deltaTime, this.rawAnnualPunitoryInterest, pending);
-    }
-
-    return this.rawAmount + newInterest + newPunitoryInterest;
-  }
-
-  get total(): number {
-    return this.rawTotal / 10 ** this.decimals;
-  }
-
-  get rawPendingAmount() {
-    return this.rawTotal - this.rawPaid;
-  }
-
-  get pendingAmount(): number {
-    return this.rawPendingAmount / 10 ** this.decimals;
-  }
-
-  get paid(): number {
-    return this.rawPaid / 10 ** this.decimals;
-  }
-
-  get uid(): string {
-    return this.engine + this.id;
-  }
-
-  get currency(): string {
-    const targetCurrency = Utils.hexToAscii(this.currencyRaw.replace(/^[0x]+|[0]+$/g, ''));
-    return targetCurrency === '' ? 'RCN' : targetCurrency;
-  }
-
-  get decimals(): number {
-    // TODO: Detect fiat currency
-    return Currency.getDecimals(this.currency);
-  }
-
-  get amount(): number {
-    return this.rawAmount / 10 ** this.decimals;
-  }
-
-  get annualInterest(): number {
-    return Utils.formatInterest(this.rawAnnualInterest);
-  }
-
-  get annualPunitoryInterest(): number {
-    return Utils.formatInterest(this.rawAnnualPunitoryInterest);
-  }
-
-  get verboseDuration(): string {
-    return Utils.formatDelta(this.duration);
-  }
-
-  get expectedReturn(): number {
-    // Loan is in running normally so this calculate pendingAmount with AnnualInterest
-    return ((this.amount * 100000 * this.duration) / this.rawAnnualInterest) + this.amount;
-  }
-
-  get expectedPunitoryReturn(): number {
-    // Loan is in debt so this calculate pendingAmount with PunitoryInterest
-    return this.total - this.paid;
-  }
-
-  get borrowerShort(): string {
-    return Utils.shortAddress(this.borrower);
+    return this._status;
   }
 }

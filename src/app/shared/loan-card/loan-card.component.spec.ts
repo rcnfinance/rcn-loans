@@ -1,7 +1,5 @@
 import {} from 'jasmine';
-
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Loan } from '../../models/loan.model';
 import { LoanCardComponent } from './loan-card.component';
@@ -26,25 +24,31 @@ describe('BannerComponent', () => {
 
   it('should render a request loan', () => {
     const loan = new Loan(
-      '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
-      31,
-      '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40',
-      0,
-      '0xe4d3ba99ffdae47c003f1756c01d8e7ee8fef7c9',
-      '0x0679cde060990fb409cb19b4434714c1e5f2ae6e',
-      9e+22,
-      18418265,
-      15552000000000,
-      10367989632000,
-      '0x4d414e4100000000000000000000000000000000000000000000000000000000',
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1528675200000,
-      '0x0000000000000000000000000000000000000000',
+      4,
+      '0xd1c9866cbd3e57fdf025e7a2eef568d834a64f5f341a550e9b19714bfbcef27b',
+      '0xc78a11c729275e656fa3decc1f15aebee69d08fc',
+      8.48592e+22,
+      {
+        'network': 4,
+        'address': '0x0000000000000000000000000000000000000000',
+        'currency': 'RCN',
+        'code': '0x0000000000000000000000000000000000000000000000000000000000000000'
+      },
+      {
+        'network': 4,
+        'firstObligation': 3.408e+22,
+        'totalObligation': 1.0224e+23,
+        'duration': 5854446,
+        'interestRate': 108.31434467543319,
+        'punitiveInterestRateRate': 79.00017380038236,
+        'frequency': 1951482,
+        'installments': 3
+      },
+      '0x8a9FB40D5e4510650FEb2f528DbE86242F64b69e',
+      '0x8a9FB40D5e4510650FEb2f528DbE86242F64b69e',
+      1,
+      1687856143,
+      '0x97d0300281C55DC6BE27Cf57343184Ab5C8dcdFF',
       '0x0000000000000000000000000000000000000000'
     );
 
@@ -58,39 +62,67 @@ describe('BannerComponent', () => {
     expect(detailButton).toBeDefined();
 
     const currencyLabel = readComponent(fixture, '.currency');
-    expect(currencyLabel.innerText).toBe('MANA');
+    expect(currencyLabel.innerText).toBe('RCN');
 
     expect(
       readComponent(fixture, '.block-title', 0).innerText
-    ).toBe('90000');
+    ).toBe('84859.2');
 
     expect(
       readComponent(fixture, '.block-title', 1).innerText
-    ).toBe('100659');
+    ).toBe('102240');
   });
 
   it('should render an ongoing loan', () => {
     const loan = new Loan(
-      '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
-      31,
-      '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40',
-      3,
-      '0xe4d3ba99ffdae47c003f1756c01d8e7ee8fef7c9',
-      '0x0679cde060990fb409cb19b4434714c1e5f2ae6e',
-      20000,
-      18418265,
-      15552000000000,
-      10367989632000,
-      '0x4152530000000000000000000000000000000000000000000000000000000000',
-      20000,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1528675200000,
+      4,
+      '0x212c362e33abf6e3e6354363e0634aa1300c3045a18c8c5a08f3bb2a17184768',
+      '0xc78a11c729275e656fa3decc1f15aebee69d08fc',
+      11000000000000000000,
+      {
+        'network': 4,
+        'address': '0x0000000000000000000000000000000000000000',
+        'currency': 'RCN',
+        'code': '0x0000000000000000000000000000000000000000000000000000000000000000'
+      },
+      {
+        'network': 4,
+        'firstObligation': 1000000000000000000,
+        'totalObligation': 12000000000000000000,
+        'duration': 31104000,
+        'interestRate': 9.048821548821541,
+        'punitiveInterestRateRate': 11.976896418944936,
+        'frequency': 2592000,
+        'installments': 12
+      },
+      '0x06779a9848e5Df60ce0F5f63F88c5310C4c7289C',
+      '0x06779a9848e5Df60ce0F5f63F88c5310C4c7289C',
+      1,
+      1677953062,
+      '0x97d0300281C55DC6BE27Cf57343184Ab5C8dcdFF',
       '0x0000000000000000000000000000000000000000',
-      '0x0000000000000000000000000000000000000000'
+      {
+        'network' : 4,
+        'id' : '0x212c362e33abf6e3e6354363e0634aa1300c3045a18c8c5a08f3bb2a17184768',
+        'model' : {
+          'network' : 4,
+          'address' : '0x97d0300281C55DC6BE27Cf57343184Ab5C8dcdFF',
+          'paid' : 10000000000000000000,
+          'nextObligation' : 1000000000000000000,
+          'currentObligation' : 0,
+          'estimatedObligation' : 2000000000000000000,
+          'dueTime' : 1580148440
+        },
+        'balance' : 6000000000000000000,
+        'creator' : '0xc78a11c729275e656fa3decc1f15aebee69d08fc',
+        'owner' : '0xA5823617776f816e4AD1a26cb51Df2eF9458D0EA',
+        'oracle' : {
+          'network' : 4,
+          'address' : '0x0000000000000000000000000000000000000000',
+          'currency' : 'RCN',
+          'code' : '0x0000000000000000000000000000000000000000000000000000000000000000'
+        }
+      }
     );
 
     component.loan = loan;
@@ -103,14 +135,14 @@ describe('BannerComponent', () => {
     expect(detailButton).toBeDefined();
 
     const currencyLabel = readComponent(fixture, '.currency');
-    expect(currencyLabel.innerText).toBe('ARS');
+    expect(currencyLabel.innerText).toBe('RCN');
 
     expect(
       readComponent(fixture, '.block-title', 0).innerText
-    ).toBe('200');
+    ).toBe('10');
 
     expect(
       readComponent(fixture, '.block-title', 1).innerText
-    ).toBe('0');
+    ).toBe('2');
   });
 });

@@ -11,7 +11,7 @@ import {
   MatDialogConfig
 } from '@angular/material';
 
-import { Loan } from './../../models/loan.model';
+import { Loan, Network } from './../../models/loan.model';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
@@ -21,11 +21,10 @@ import { environment } from '../../../environments/environment';
 import { Web3Service } from '../../services/web3.service';
 import { CivicService } from '../../services/civic.service';
 import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
-import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
+import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 import { CosignerService } from './../../services/cosigner.service';
@@ -54,7 +53,7 @@ export class LendButtonComponent implements OnInit {
     public snackBar: MatSnackBar,
     public cosignerService: CosignerService,
     public decentralandCosignerProvider: DecentralandCosignerProvider
-  ) {}
+  ) { }
 
   async handleLend(forze = false) {
 
@@ -71,7 +70,11 @@ export class LendButtonComponent implements OnInit {
     }
 
     if (!this.lendEnabled) {
-      this.dialog.open(DialogWrongCountryComponent);
+      this.dialog.open(DialogGenericErrorComponent, {
+        data: {
+          error: new Error('Lending is not enabled in this region')
+        }
+      });
       return;
     }
 
@@ -79,16 +82,20 @@ export class LendButtonComponent implements OnInit {
     if (cosigner instanceof DecentralandCosignerProvider) {
       const isParcelStatusOpen = await cosigner.getStatusOfParcel(this.loan);
       if (!isParcelStatusOpen) {
-        this.dialog.open(DialogGenericErrorComponent, { data: {
-          error: new Error('Not Available, Parcel is already sold')
-        }});
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: {
+            error: new Error('Not Available, Parcel is already sold')
+          }
+        });
         return;
       }
       const isMortgageCancelled = await cosigner.isMortgageCancelled(this.loan);
       if (isMortgageCancelled) {
-        this.dialog.open(DialogGenericErrorComponent, { data: {
-          error: new Error('Not Available, Mortgage has been cancelled')
-        }});
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: {
+            error: new Error('Not Available, Mortgage has been cancelled')
+          }
+        });
         return;
       }
     }
@@ -96,12 +103,12 @@ export class LendButtonComponent implements OnInit {
     this.startOperation();
 
     try {
-      const engineApproved = this.contractsService.isEngineApproved();
-      const civicApproved = this.civicService.status();
+      const engineApproved = await this.contractsService.isApproved(this.loan.address);
+      const civicApproved = await this.civicService.status();
       const balance = await this.contractsService.getUserBalanceRCNWei();
+      console.info('balance', Number(balance));
       const required = await this.contractsService.estimateLendAmount(this.loan);
-      const ethBalance = await this.contractsService.getUserBalanceETHWei();
-      const estimated = await this.contractsService.estimateEthRequiredAmount(this.loan);
+      console.info('required', required);
 
       if (!await engineApproved) {
         this.showApproveDialog();
@@ -113,6 +120,7 @@ export class LendButtonComponent implements OnInit {
         return;
       }
 
+      console.info('Try lend', await required, await balance);
       if (balance > required) {
         const tx = await this.contractsService.lendLoan(this.loan);
         this.eventsService.trackEvent(
@@ -121,33 +129,23 @@ export class LendButtonComponent implements OnInit {
           'loan #' + this.loan.id
         );
 
-        this.txService.registerLendTx(this.loan, tx);
-        this.pendingTx = this.txService.getLastLend(this.loan);
-        return;
-      }
+        if (this.loan.network === Network.Basalt) {
+          this.txService.registerLendTx(tx, environment.contracts.basaltEngine, this.loan);
+        } else {
+          this.txService.registerLendTx(tx, environment.contracts.diaspore.loanManager, this.loan);
+        }
+        this.retrievePendingTx();
+      } else {
 
-      if (ethBalance.toNumber() >= estimated.toNumber()) {
-        const tx = await this.contractsService.lendLoanWithSwap(this.loan, estimated);
         this.eventsService.trackEvent(
-          'lend',
+          'show-insufficient-funds-lend',
           Category.Account,
-          'loan #' + this.loan.id
+          'loan #' + this.loan.id,
+          required
         );
 
-        this.txService.registerLendTx(this.loan, tx);
-        this.pendingTx = this.txService.getLastLend(this.loan);
-        return;
+        this.showInsufficientFundsDialog(required, balance);
       }
-
-      this.eventsService.trackEvent(
-        'show-insufficient-funds-lend',
-        Category.Account,
-        'loan #' + this.loan.id,
-        required
-      );
-
-      this.showInsufficientFundsDialog(required, balance);
-
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.message.indexOf('User denied transaction signature') < 0) {
@@ -180,7 +178,7 @@ export class LendButtonComponent implements OnInit {
 
   showApproveDialog() {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
-    dialogRef.componentInstance.autoClose = true;
+    dialogRef.componentInstance.onlyAddress = this.loan.address;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.handleLend(true);
@@ -201,7 +199,7 @@ export class LendButtonComponent implements OnInit {
       this.eventsService.trackEvent(
         'click-lend',
         Category.Loan,
-        'loan #' + this.loan.id
+        'request #' + this.loan.id
       );
 
       this.handleLend();
@@ -213,7 +211,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   retrievePendingTx() {
-    this.pendingTx = this.txService.getLastLend(this.loan);
+    this.pendingTx = this.txService.getLastPendingLend(this.loan);
   }
 
   showCivicDialog() {
@@ -230,15 +228,17 @@ export class LendButtonComponent implements OnInit {
   }
 
   showInsufficientFundsDialog(required: number, funds: number) {
-    this.dialog.open(DialogInsufficientFoundsComponent, { data: {
-      required: required,
-      balance: funds
-    }});
+    this.dialog.open(DialogInsufficientfundsComponent, {
+      data: {
+        required: required,
+        balance: funds
+      }
+    });
     this.cancelOperation();
   }
 
   get enabled(): Boolean {
-    return this.txService.getLastLend(this.loan) === undefined;
+    return this.txService.getLastPendingLend(this.loan) === undefined;
   }
 
   get buttonText(): string {
@@ -253,7 +253,7 @@ export class LendButtonComponent implements OnInit {
   }
 
   openSnackBar(message: string, action: string) {
-    this.snackBar.open(message , action, {
+    this.snackBar.open(message, action, {
       duration: 4000,
       horizontalPosition: this.horizontalPosition
     });
@@ -261,6 +261,10 @@ export class LendButtonComponent implements OnInit {
 
   ngOnInit() {
     this.retrievePendingTx();
+    this.lendEnabled = true;
+    this.countriesService.lendEnabled().then((lendEnabled) => {
+      this.lendEnabled = lendEnabled;
+    });
     this.canLend();
   }
 

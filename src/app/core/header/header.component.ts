@@ -59,7 +59,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     if (this.hasAccount) {
       const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
       this.makeRotate = true;
-      dialogRef.componentInstance.autoClose = false;
       dialogRef.afterClosed().subscribe(() => {
         this.makeRotate = false;
       });

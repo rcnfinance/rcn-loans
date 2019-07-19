@@ -6,22 +6,26 @@
   </div>
   <div class="col-sm-12 dialog-padding">
     <div class="row">
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-5">
         <div class="title main-h1 marginbottom20">Account Information</div>
         <div class="list-avatar">
           <div class="avatar-container">
-            <app-avatar [seed]=lender></app-avatar>
+            <app-avatar [seed]=account></app-avatar>
           </div>
           <div class="txt-container">
             <div class="subtitle">Wallet address</div>
-            <div class="title ellipsis">{{ lender }}</div>
+            <div class="title ellipsis">{{ account }}</div>
           </div>
         </div>
       </div>
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-7">
         <div class="margintop20 d-none d-md-none"></div>
         <div class="title main-h1 marginbottom20">Authorize</div>
-        <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Loan Engine contract to operate RCN on your behalf
+        <div class="checkbox" *ngFor='let contract of contracts'>
+          <mat-checkbox [disabled]="!isEnabled(contract)" [checked]="contract.isApproved" (change)="clickCheck(contract, $event)" *ngIf="!onlyAddress || onlyAddress == contract.address">
+            Authorize the <b>{{ contract.name }}</b> contract to operate RCN on your behalf
+          </mat-checkbox>
+        </div>
       </div>
     </div>
   </div>

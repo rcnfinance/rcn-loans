@@ -16,7 +16,7 @@ export class RequestedLoanComponent implements OnInit {
   winHeight: number = window.innerHeight;
   loading: boolean;
   available: any;
-  loans = [];
+  loans: Loan[] = [];
   availableLoans = true;
   pendingLend = [];
   filters = {
@@ -50,7 +50,7 @@ export class RequestedLoanComponent implements OnInit {
   }
 
   loadLoans() {
-    this.contractsService.getOpenLoans().then((result: Loan[]) => {
+    this.contractsService.getRequests().then((result: Loan[]) => {
 
       const filterLoans = this.filterLoansService.filterLoans(result, this.filters);
       this.loans = filterLoans;

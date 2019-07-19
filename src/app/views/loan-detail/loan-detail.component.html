@@ -26,13 +26,14 @@
         </div>
       </div>
       <div class="paddingleft15 paddingright15">
-        <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="loan.expectedReturn"></app-conversion-graphic>
+        <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.currency.fromUnit(loan.amount)" [amountRight]="isRequest ? expectedReturn : totalDebt"></app-conversion-graphic>
       </div>
       <div class="paddingleft15 paddingright15">
-        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountLeft]="loan.paid" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" *ngIf="!isRequest"></app-conversion-graphic>
+        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="paid" *ngIf="!isRequest"></app-conversion-graphic>
       </div>
 
       <div class="margintop20"></div>
+      <app-detail-table [data]="diasporeData" *ngIf="isDiaspore"></app-detail-table>
       <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
       <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
 
@@ -75,7 +76,7 @@
           </thead>
           <tbody>
             <tr>
-              <td style='cursor: pointer'>{{ loan.owner }}</td>
+              <td style='cursor: pointer'>{{ loan.debt.owner }}</td>
             </tr>
           </tbody>
         </table>
@@ -109,9 +110,11 @@
 
   </div>
 
-  <div class="margintop40"></div>
-  <div class="title main-h1 feature-padding">History</div>
-  <div class="paddingleft15 paddingright15">
-    <app-transaction-history [loan]=loan></app-transaction-history>
+  <div *ngIf="hasHistory">
+    <div class="margintop40"></div>
+    <div class="title main-h1 feature-padding">History</div>
+    <div class="paddingleft15 paddingright15">
+      <app-transaction-history [loan]=loan></app-transaction-history>
+    </div>
   </div>
 </div>
