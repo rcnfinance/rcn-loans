@@ -4,6 +4,7 @@ import { Loan } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { ContractsService } from '../../services/contracts.service';
 import { Web3Service } from '../../services/web3.service';
+import { Currency } from '../../utils/currencies';
 
 @Component({
   selector: 'app-dialog-select-currency',
@@ -20,13 +21,9 @@ export class DialogSelectCurrencyComponent implements OnInit {
   // durationLabel: string;
   // durationValue: string;
   // canLend: boolean;
-  rcnAmount: any;
+  newAmount: any;
   rate: any;
-  daiAmount: string;
-  ethAmount: string;
-  rcnReturn: any;
-  daiReturn: string;
-  ethReturn: string;
+  loanReturn: any;
   loanAmount: string;
   expectedReturn: string;
   loanCurrency: string;
@@ -50,23 +47,55 @@ export class DialogSelectCurrencyComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.loanAmount = this.formatAmount(this.loan.amount);
-    this.expectedReturn = this.formatAmount(this.loan.expectedReturn);
-    this.rcnAmount = await this.contractsService.estimateLendAmount(this.loan);
-    this.rcnAmount = this.web3.web3.fromWei(this.rcnAmount);
-    this.rcnAmount = parseInt(this.rcnAmount, 10);
-    this.rcnReturn = await this.contractsService.estimatePayAmount(this.loan, parseInt(this.loanAmount, 10));
-    // this.rcnReturn = this.web3.web3.fromWei(this.rcnReturn)
-    // this.rcnReturn = parseInt(this.rcnReturn)
-    console.info('rcn return is:', this.rcnReturn);
+    const currency = this.loan.currency;
+    this.loanAmount = Utils.formatAmount(currency.fromUnit(this.loan.amount));
+    this.expectedReturn = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
+    // this.rcnAmount = await this.contractsService.estimateLendAmount(this.loan);
+    // this.rcnAmount = this.web3.web3.fromWei(this.rcnAmount);
+    // this.rcnAmount = parseInt(this.rcnAmount, 10);
+    // this.rcnReturn = await this.contractsService.estimatePayAmount(this.loan, parseInt(this.loanAmount, 10));
 
     this.getRate();
 
     // this.rcnAmount = this.formatAmount(this.rcnAmount);
-    console.info('rcn amount is:', this.rcnAmount);
 
     this.account = await this.web3.getAccount();
     console.info ("my account is:" + this.account)
+
+  }
+
+  async changeSelect() {
+    console.log(this.selected)
+    const currency = this.loan.currency;
+    let amount: any;
+    let loanReturn: number;
+    switch (this.selected) {
+      case 'RCN': 
+        amount = await this.contractsService.estimateLendAmount(this.loan);
+        amount = this.web3.web3.fromWei(amount);
+        debugger;
+
+        console.log('decimals', Currency.getDecimals(this.loan.oracle.currency))
+        
+        // amount = parseInt(amount, 10);
+        this.newAmount = amount * 10 ** Currency.getDecimals(this.loan.oracle.currency)
+        loanReturn = await this.contractsService.estimatePayAmount(this.loan, this.newAmount);
+        
+        break;
+      case 'DAI': 
+        amount = 0;
+        loanReturn = 0;
+        break;
+      case 'ETH': 
+        amount = 0;
+        loanReturn = 0;
+        break;
+    }
+
+    
+    this.newAmount = Utils.formatAmount(currency.fromUnit(this.newAmount));
+    this.loanReturn = Utils.formatAmount(currency.fromUnit(loanReturn));
+
 
   }
 

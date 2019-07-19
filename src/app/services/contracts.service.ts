@@ -174,7 +174,7 @@ export class ContractsService {
     }
   }
 
-  async getRate(loan: Loan): Promise<BigNumber> {
+  async getRate(loan: any): Promise<BigNumber> {
     // TODO: Calculate and add cost of the cosigner
     if (loan.oracle === Utils.address0x) {
       return loan.rawAmount;
@@ -204,6 +204,7 @@ export class ContractsService {
       const rate = oracleRate[0];
       const decimals = oracleRate[1];
       console.info('Oracle rate obtained', rate, decimals);
+      console.log(BigNumber(rate).toString());
       const required = (rate * amount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
       console.info('Estimated required rcn is', required);
       return required;

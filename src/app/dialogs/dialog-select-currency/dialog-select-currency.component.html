@@ -17,7 +17,7 @@
         <div class="row">
           <mat-form-field>
             <mat-label *ngIf="selected == '-'" id="label">Select Token</mat-label>
-            <mat-select [(value)]="selected">
+            <mat-select [(value)]="selected" (selectionChange)="changeSelect()">
               <mat-option *ngFor="let option of options" value="{{ option.name }}">
                 <div class="row align-items-center">
                   <div class="icon-box item">
@@ -41,12 +41,16 @@
         <div class="small-table-row --highlight row">
           <div class="col --auto no-pad-left --data-margin data-style"> 
             <span *ngIf="selected == '-'">0 </span>
-            <span *ngIf="selected == 'RCN'">{{ rcnAmount }} </span>   
+            <span *ngIf="selected == 'RCN'">{{ newAmount }} </span>   
 
             <span class="data--currency-style">{{ selected }}</span></div>
           <div class="col-sm-1 no-gutters --auto"></div>
-          <div class="col --auto --data-margin data-style">0 <span
-              class="data--currency-style">{{ selected }}</span> <i *ngIf="selected != '-'" class="fas fa-exclamation-triangle margin-left triangle"></i></div>
+          <div class="col --auto --data-margin data-style"> 
+              <span  *ngIf="selected == '-'" >0</span>
+              <span *ngIf="selected == 'RCN'">{{ loanReturn }} </span>  
+              <span class="data--currency-style">{{ selected }}</span>
+              
+               <i *ngIf="selected != '-'" class="fas fa-exclamation-triangle margin-left triangle"></i></div>
         </div>
         <div class="margintop10"></div>
         <div class="small-table-row row">
