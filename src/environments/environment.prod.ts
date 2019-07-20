@@ -41,7 +41,7 @@ export const environment = {
   contracts: {
     rcnToken: '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6',
     basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
-    engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
+    engineExtension: '0x634a38e69b792404e465d0fa70314ee4dec2120e',
     converter: {
       converterRamp: '0x56783153d0a8ccb009dcb79df5337835ed1a9d6c',
       tokenConverter: '0x3b81db7c9fe71a2c6d78f9ae2fe4df4c92272622',
