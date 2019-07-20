@@ -380,7 +380,7 @@ export class ContractsService {
       ];
 
       const params = ['0x0', '0x0', this.addressToBytes32(environment.contracts.decentraland.mortgageCreator)];
-      this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 100, filters, params, (err, result) => {
+      this._rcnExtension.queryLoans.call(this._rcnEngineAddress, 0, 50, filters, params, (err, result) => {
         if (err != null) {
           reject(err);
         }
