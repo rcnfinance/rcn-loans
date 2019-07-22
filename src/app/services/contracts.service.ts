@@ -11,7 +11,6 @@ import { TxService } from '../tx.service';
 import { CosignerService } from './cosigner.service';
 import { ApiService } from './api.service';
 import { promisify, Utils } from './../utils/utils';
-import { Currency } from '../utils/currencies';
 
 declare let require: any;
 
@@ -22,6 +21,7 @@ const oracleAbi = require('../contracts/Oracle.json');
 const loanManagerAbi = require('../contracts/LoanManager.json');
 const debtEngineAbi = require('../contracts/DebtEngine.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
+const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
 // const converterRampAbi = require('../contracts/ConverterRamp.json');
 // const requestsAbi = require('../contracts/RequestsView.json');
 
@@ -35,6 +35,7 @@ export class ContractsService {
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
   private _loanManager: any;
   private _debtEngine: any;
+  private _installmentsModel: any;
   // private _rcnConverterRamp: any;
   // private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
   // private _requestsView: any;
@@ -50,6 +51,7 @@ export class ContractsService {
     this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
     this._loanManager = this.web3.web3.eth.contract(loanManagerAbi).at(environment.contracts.diaspore.loanManager);
     this._debtEngine = this.web3.web3.eth.contract(debtEngineAbi).at(environment.contracts.diaspore.debtEngine);
+    this._installmentsModel = this.web3.web3.eth.contract(installmentsModelAbi.abi).at(environment.contracts.diaspore.models.installments);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     // this._requestsView = this.web3.web3.eth.contract(requestsAbi).at(environment.contracts.diaspore.viewRequets);
@@ -173,28 +175,20 @@ export class ContractsService {
     }
   }
 
-    /*
-    const loanId = loan.id.toString(16);
-    const loanIdBytes = Utils.toBytes(loanId);
-    const loanParams = [
-      this.addressToBytes32(environment.contracts.basaltEngine),
-      loanIdBytes,
-      this.addressToBytes32(cosignerAddr)
-    ];
-    const convertParams = [
-      environment.contracts.converter.params.marginSpend,
-      environment.contracts.converter.params.maxSpend,
-      environment.contracts.converter.params.rebuyThreshold
-    ];
+  async encodeInstallmentsData(
+    cuota: number,
+    interestRate: number,
+    installments: number,
+    duration: number,
+    timeUnit: number
+  ) {
     return new Promise((resolve, reject) => {
-      this._rcnConverterRamp.requiredLendSell.call(
-        environment.contracts.converter.tokenConverter,
-        environment.contracts.converter.ethAddress,
-        loanParams,
-        oracleData,
-        cosignerData,
-        convertParams,
-        { from: account },
+      this._installmentsModel.encodeData(
+        cuota,
+        interestRate,
+        installments,
+        duration,
+        timeUnit,
         (err, result) => {
           if (err != null) {
             reject(err);
@@ -203,36 +197,19 @@ export class ContractsService {
           }
         }
       );
-    }) as Promise<BigNumber>;
+    });
   }
-  */
 
-  async requestLoan(oracle: string,
-    currency: string,
-    amount: number,
-    interest: number,
-    punitory: number,
-    duesIn: number,
-    cancelableAt: number,
-    expirationRequest: number,
-    metadata: string): Promise<BigNumber> {
-
-    const account = await this.web3.getAccount();
-    amount = amount * 10 ** Currency.getDecimals('RCN');
-
+  /**
+   * Check encoded installments data
+   * @param encodedData Array of bytes
+   * @return True if can validate the data
+   */
+  async validateEncodedData(encodedData: string) {
     return new Promise((resolve, reject) => {
-      this._rcnEngine.createLoan(
-        oracle,
-        account,
-        currency,
-        amount,
-        interest,
-        punitory,
-        duesIn,
-        cancelableAt,
-        expirationRequest,
-        metadata,
-        { from: account }, function (err, result) {
+      this._installmentsModel.validate(
+        encodedData,
+        (err, result) => {
           if (err != null) {
             reject(err);
           } else {
@@ -240,7 +217,40 @@ export class ContractsService {
           }
         }
       );
-    }) as Promise<BigNumber>;
+    });
+  }
+
+  /**
+   * Request a loan
+   * @param amount Total amount
+   * @param model Model address
+   * @param oracle Oracle address
+   * @param borrower Borrower address
+   * @param salt Salt hash
+   * @param expiration Expiration timestamp
+   * @param loanData Loan model data
+   * @return Loan ID
+   */
+  async requestLoan(
+    amount: number,
+    model: string,
+    oracle: string,
+    borrower: string,
+    salt: string,
+    expiration: number,
+    loanData: any
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._loanManager).requestLoan, [
+      amount,
+      model,
+      oracle,
+      borrower,
+      salt,
+      expiration,
+      loanData,
+      { from: borrower }
+    ]);
   }
 
   async estimatePayAmount(loan: Loan, amount: number): Promise<number> {
