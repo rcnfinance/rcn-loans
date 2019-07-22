@@ -16,11 +16,6 @@ export class Currency {
       case 'RCN':
         return 18;
 
-      case 'MANA':
-      case 'ETH':
-      case 'RCN':
-        return 18;
-
       default:
         return 0;
     }
