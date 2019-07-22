@@ -55,6 +55,9 @@ export const environment = {
         isBorrower: '0x11dad1b4b85b4ca7d03847231554571f5e7db726',
         isStatus: '0x43c6c2ae47a31e5850b820f09520310ec0481600',
         notExpired: '0xada8797ece7e2bda72140a26d13185a788a636cb'
+      },
+      models: {
+        installments: '0xc67e7fdcbea83fb5a2bb2b60b794efff016c7cf7'
       }
     },
     converter: {

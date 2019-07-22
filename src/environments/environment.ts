@@ -55,10 +55,13 @@ export const environment = {
         isBorrower: '0x11dad1b4b85b4ca7d03847231554571f5e7db726',
         isStatus: '0x43c6c2ae47a31e5850b820f09520310ec0481600',
         notExpired: '0xada8797ece7e2bda72140a26d13185a788a636cb'
+      },
+      models: {
+        installments: '0xc67e7fdcbea83fb5a2bb2b60b794efff016c7cf7'
       }
     },
     converter: {
-      converterRamp: '0xeaf063101ae319a18330ff78fdd81d992bf83349',
+      converterRamp: '0x01f8c610ec9dab9986735f6e3068aaaf555e9937',
       tokenConverter: '0xc4b1b3083174716542ef387326e58293917bf3bf',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       params: {
