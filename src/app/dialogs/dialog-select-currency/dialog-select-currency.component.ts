@@ -4,7 +4,6 @@ import { Loan } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { ContractsService } from '../../services/contracts.service';
 import { Web3Service } from '../../services/web3.service';
-import { Currency } from '../../utils/currencies';
 
 @Component({
   selector: 'app-dialog-select-currency',
@@ -13,14 +12,6 @@ import { Currency } from '../../utils/currencies';
 })
 export class DialogSelectCurrencyComponent implements OnInit {
   loan: Loan;
-
-  // leftLabel: string;
-  // leftValue: string;
-  // rightLabel: string;
-  // rightValue: string;
-  // durationLabel: string;
-  // durationValue: string;
-  // canLend: boolean;
   newAmount: any;
   rate: any;
   loanReturn: any;
@@ -28,14 +19,14 @@ export class DialogSelectCurrencyComponent implements OnInit {
   expectedReturn: string;
   loanCurrency: string;
   account: string;
-
   options = [
     { 'id': 1, name: 'RCN', img: '../../../assets/rcn.png' },
     { 'id': 2, name: 'DAI', img: '../../../assets/dai.png' },
-    { 'id': 2, name: 'ETH', img: '../../../assets/eth.png' }
+    { 'id': 3, name: 'ETH', img: '../../../assets/eth.png' },
+    { 'id': 4, name: 'ARS', img: '../../../assets/ars.png' }
   ];
-
   selected = '-';
+
   constructor(
     private contractsService: ContractsService,
     private web3: Web3Service,
@@ -50,49 +41,29 @@ export class DialogSelectCurrencyComponent implements OnInit {
     const currency = this.loan.currency;
     this.loanAmount = Utils.formatAmount(currency.fromUnit(this.loan.amount));
     this.expectedReturn = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
-    // this.rcnAmount = await this.contractsService.estimateLendAmount(this.loan);
-    // this.rcnAmount = this.web3.web3.fromWei(this.rcnAmount);
-    // this.rcnAmount = parseInt(this.rcnAmount, 10);
-    // this.rcnReturn = await this.contractsService.estimatePayAmount(this.loan, parseInt(this.loanAmount, 10));
-
     this.getRate();
-
-    // this.rcnAmount = this.formatAmount(this.rcnAmount);
 
     this.account = await this.web3.getAccount();
     console.info ('my account is:' + this.account);
-
   }
 
   async changeSelect() {
-    const currency = this.loan.currency;
-    let amount: any;
-    let loanReturn: number;
-    switch (this.selected) {
-      case 'RCN':
-        amount = await this.contractsService.estimateLendAmount(this.loan);
-        amount = this.web3.web3.fromWei(amount);
-        console.info('decimals', Currency.getDecimals(this.loan.oracle.currency));
+    const loanCurrency: any = this.loan.currency;
+    const selectedCurrency: string = this.selected;
 
-        // amount = parseInt(amount, 10);
-        this.newAmount = amount * 10 ** Currency.getDecimals(this.loan.oracle.currency);
-        loanReturn = await this.contractsService.estimatePayAmount(this.loan, this.newAmount);
-
-        break;
-      case 'DAI':
-        amount = 0;
-        loanReturn = 0;
-        break;
-      case 'ETH':
-        amount = 0;
-        loanReturn = 0;
-        break;
-      default:
-        break;
+    if (loanCurrency === 'ARS') {
+      this.calculateCurrencyLoanNoERC20(loanCurrency, selectedCurrency);
+    } else {
+      this.calculateCurrencyLoanERC20(loanCurrency, selectedCurrency);
     }
-    this.newAmount = Utils.formatAmount(currency.fromUnit(this.newAmount));
-    this.loanReturn = Utils.formatAmount(currency.fromUnit(loanReturn));
+  }
 
+  calculateCurrencyLoanNoERC20(loanCurrency, selectedCurrency) {
+    console.info(loanCurrency, selectedCurrency);
+  }
+
+  calculateCurrencyLoanERC20(loanCurrency, selectedCurrency) {
+    console.info(loanCurrency, selectedCurrency);
   }
 
   async getRate() {
