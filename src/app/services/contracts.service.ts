@@ -34,8 +34,6 @@ export class ContractsService {
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
   private _loanManager: any;
   private _debtEngine: any;
-  private _rcnConverterRamp: any;
-  private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
   loanRcnAmount: any;
 
   constructor(
@@ -204,7 +202,6 @@ export class ContractsService {
       const rate = oracleRate[0];
       const decimals = oracleRate[1];
       console.info('Oracle rate obtained', rate, decimals);
-      console.log(BigNumber(rate).toString());
       const required = (rate * amount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
       console.info('Estimated required rcn is', required);
       return required;

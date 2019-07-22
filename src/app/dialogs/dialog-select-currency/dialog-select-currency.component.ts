@@ -60,42 +60,38 @@ export class DialogSelectCurrencyComponent implements OnInit {
     // this.rcnAmount = this.formatAmount(this.rcnAmount);
 
     this.account = await this.web3.getAccount();
-    console.info ("my account is:" + this.account)
+    console.info ('my account is:' + this.account);
 
   }
 
   async changeSelect() {
-    console.log(this.selected)
     const currency = this.loan.currency;
     let amount: any;
     let loanReturn: number;
     switch (this.selected) {
-      case 'RCN': 
+      case 'RCN':
         amount = await this.contractsService.estimateLendAmount(this.loan);
         amount = this.web3.web3.fromWei(amount);
-        debugger;
+        console.info('decimals', Currency.getDecimals(this.loan.oracle.currency));
 
-        console.log('decimals', Currency.getDecimals(this.loan.oracle.currency))
-        
         // amount = parseInt(amount, 10);
-        this.newAmount = amount * 10 ** Currency.getDecimals(this.loan.oracle.currency)
+        this.newAmount = amount * 10 ** Currency.getDecimals(this.loan.oracle.currency);
         loanReturn = await this.contractsService.estimatePayAmount(this.loan, this.newAmount);
-        
+
         break;
-      case 'DAI': 
+      case 'DAI':
         amount = 0;
         loanReturn = 0;
         break;
-      case 'ETH': 
+      case 'ETH':
         amount = 0;
         loanReturn = 0;
+        break;
+      default:
         break;
     }
-
-    
     this.newAmount = Utils.formatAmount(currency.fromUnit(this.newAmount));
     this.loanReturn = Utils.formatAmount(currency.fromUnit(loanReturn));
-
 
   }
 
