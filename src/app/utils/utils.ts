@@ -124,7 +124,7 @@ export class Utils {
    * @param interest Annual percentage
    * @return Interest rate
    */
-  toInterestRate(interest: number) {
+  static toInterestRate(interest: number) {
     const secondsInYear = 360 * 86400;
     const rawInterest = Math.floor(10000000 / interest);
     return rawInterest * secondsInYear;
