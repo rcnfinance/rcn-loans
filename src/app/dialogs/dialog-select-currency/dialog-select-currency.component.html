@@ -16,7 +16,7 @@
         <div class="row title-3">LENDING CURRENCY</div>
         <div class="row">
           <mat-form-field>
-            <mat-label *ngIf="selected == '-'" id="label">Select Token</mat-label>
+            <mat-label *ngIf="selected === '-'" id="label">Select Token</mat-label>
             <mat-select [(value)]="selected" (selectionChange)="changeSelect()">
               <mat-option *ngFor="let option of options" value="{{ option.name }}">
                 <div class="row align-items-center">
@@ -39,17 +39,17 @@
         </div>
         <div class="margintop15"></div>
         <div class="small-table-row --highlight row">
-          <div class="col --auto no-pad-left --data-margin data-style"> 
+          <div class="col --auto no-pad-left --data-margin data-style">
             <span *ngIf="selected == '-'">0 </span>
-            <span *ngIf="selected == 'RCN'">{{ newAmount }} </span>   
+            <span *ngIf="selected == 'RCN'">{{ newAmount }} </span>
 
             <span class="data--currency-style">{{ selected }}</span></div>
           <div class="col-sm-1 no-gutters --auto"></div>
-          <div class="col --auto --data-margin data-style"> 
+          <div class="col --auto --data-margin data-style">
               <span  *ngIf="selected == '-'" >0</span>
-              <span *ngIf="selected == 'RCN'">{{ loanReturn }} </span>  
+              <span *ngIf="selected == 'RCN'">{{ loanReturn }} </span>
               <span class="data--currency-style">{{ selected }}</span>
-              
+
                <i *ngIf="selected != '-'" class="fas fa-exclamation-triangle margin-left triangle"></i></div>
         </div>
         <div class="margintop10"></div>
@@ -60,7 +60,7 @@
           </div>
           </div>
           <div class="col-sm-1 no-gutters --auto vertical-center"><i class="fas fa-arrow-right"></i></div>
-          <div class="col title-2 --auto --data-margin wrap baseline"> 
+          <div class="col title-2 --auto --data-margin wrap baseline">
             <div class="--auto wrap end">
             <span *ngIf="selected == '-'" id="label"
               class="--return-amount">0</span>
@@ -72,7 +72,7 @@
         </div>
       </div>
     </div>
-  
+
   </div>
   <div class="margintop-30 mobile"></div>
   <div class="margintop50"></div>
@@ -85,7 +85,7 @@
 
   <div class="margintop20"></div>
   <div class="row padding justify-content-between align-items-center">
-    <div class=" col-sm-12 col-md-6 inline account">Lending from your 0x2c…ef20 account.</div>
+    <div class=" col-sm-12 col-md-6 inline account">Lending from your {{ account }} account.</div>
     <div class="col-sm-12 col-md-6">
       <div class="row justify-content-end no-gutters">
         <div class="col-sm-12 col-md-3 right">

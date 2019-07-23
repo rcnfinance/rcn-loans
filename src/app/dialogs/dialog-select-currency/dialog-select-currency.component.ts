@@ -35,7 +35,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
     { 'id': 2, name: 'ETH', img: '../../../assets/eth.png' }
   ];
 
-  selected = '-';
+  selected: any = '-';
   constructor(
     private contractsService: ContractsService,
     private web3: Web3Service,
@@ -60,8 +60,8 @@ export class DialogSelectCurrencyComponent implements OnInit {
     // this.rcnAmount = this.formatAmount(this.rcnAmount);
 
     this.account = await this.web3.getAccount();
+    this.account = Utils.shortAddress(this.account);
     console.info ('my account is:' + this.account);
-
   }
 
   async changeSelect() {
