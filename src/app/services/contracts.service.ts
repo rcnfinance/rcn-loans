@@ -21,7 +21,7 @@ const oracleAbi = require('../contracts/Oracle.json');
 const loanManagerAbi = require('../contracts/LoanManager.json');
 const debtEngineAbi = require('../contracts/DebtEngine.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
-// const converterRampAbi = require('../contracts/ConverterRamp.json');
+const converterRampAbi = require('../contracts/ConverterRamp.json');
 // const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
@@ -34,6 +34,8 @@ export class ContractsService {
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
   private _loanManager: any;
   private _debtEngine: any;
+  private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
+  private _rcnConverterRamp: any;
   loanRcnAmount: any;
 
   constructor(
@@ -49,8 +51,7 @@ export class ContractsService {
     this._debtEngine = this.web3.web3.eth.contract(debtEngineAbi).at(environment.contracts.diaspore.debtEngine);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-    // this._requestsView = this.web3.web3.eth.contract(requestsAbi).at(environment.contracts.diaspore.viewRequets);
-    // this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
+    this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
   }
 
   async getUserBalanceETHWei(): Promise<BigNumber> {
@@ -142,6 +143,105 @@ export class ContractsService {
 
     const equivalent = oracleResult[1];
     return (tokens * loan.amount) / equivalent;
+  }
+
+  /**
+   * Lend loan using ConverterRamp
+   * @param payableAmount Ether amount
+   * @param converter Converter address
+   * @param fromToken From token address
+   * @param loanManager Loan Manager address
+   * @param cosigner Cosigner address
+   * @param debtEngine Debt Engine address
+   * @param loanId Loan ID
+   * @param oracleData Oracle data
+   * @param cosignerData Cosigner data
+   * @param account Account address
+   * @return Required amount
+   */
+  async converterRampLend(
+    payableAmount: number,
+    converter: string,
+    fromToken: string,
+    loanManager: string,
+    cosigner: string,
+    debtEngine: string,
+    loanId: string,
+    oracleData: string,
+    cosignerData: string,
+    account: string
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._rcnConverterRamp).lend, [
+      payableAmount,
+      converter,
+      fromToken,
+      loanManager,
+      cosigner,
+      debtEngine,
+      loanId,
+      oracleData,
+      cosignerData,
+      { from: account }
+    ]);
+  }
+
+  /**
+   * Pay loan using ConverterRamp
+   * @param payableAmount Ether amount
+   * @param converter TokenConverter address
+   * @param fromToken From token address
+   * @param loanManager Loan Manager address
+   * @param debtEngine Debt Engine address
+   * @param loanId Loan ID
+   * @param oracleData Oracle data
+   * @param account Account address
+   * @return Required amount
+   */
+  async converterRampPay(
+    payableAmount: number,
+    converter: string,
+    fromToken: string,
+    loanManager: string,
+    debtEngine: string,
+    loanId: string,
+    oracleData: string,
+    account: string
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._rcnConverterRamp).pay, [
+      payableAmount,
+      converter,
+      fromToken,
+      loanManager,
+      debtEngine,
+      account,
+      loanId,
+      oracleData,
+      { from: account }
+    ]);
+  }
+
+  /**
+   * Get token cost in RCN
+   * @param amount Amount value
+   * @param converter Converter address
+   * @param fromToken From token address
+   * @param token Token address
+   * @return Amount in RCN
+   */
+  async getCostInRcn(
+    amount: number,
+    converter: string,
+    fromToken: string,
+    token: string
+  ) {
+    return await promisify(this._rcnConverterRamp.getCost, [
+      amount,
+      converter,
+      fromToken,
+      token
+    ]);
   }
 
   async lendLoan(loan: Loan): Promise<string> {
