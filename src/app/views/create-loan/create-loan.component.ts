@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
 import {
   MatStepper,
-  MatSnackBar,
-  MatSnackBarHorizontalPosition
+  MatSnackBar
 } from '@angular/material';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
@@ -12,6 +11,7 @@ import { environment } from '../../../environments/environment.prod';
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from './../../services/web3.service';
+import { TxService } from '../../tx.service';
 
 @Component({
   selector: 'app-create-loan',
@@ -20,7 +20,6 @@ import { Web3Service } from './../../services/web3.service';
 })
 export class CreateLoanComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
   // Date Variables
   now: Date = new Date();
@@ -33,201 +32,196 @@ export class CreateLoanComponent implements OnInit {
   disabled$ = false;
 
   formGroup1: FormGroup;
-  fullDuration: any;
-  payableAtDate: FormControl;
-  annualInterest: any;
-  annualPunitory: any;
-  requestValue: any;
-  requestedCurrency: any;
+  fullDuration: FormControl;
+  annualInterest: FormControl;
+  requestValue: FormControl;
+  requestedCurrency: FormControl;
+  installmentsFlag: FormControl;
+  expirationRequestDate: FormControl;
+  installments = 1;
+  installmentsAvailable: number;
+  installmentsData: any;
   returnValue: any = 0;
+  durationLabel: string;
+  installmentDaysInterval: any = 15;
 
   formGroup2: FormGroup;
-  phoneSlide: any;
-  idSlide: any;
-  sactionSlide: any;
-  payrollSlide: any;
-  facebookSlide: any;
-  twitterSlide: any;
-  slideSelection: any;
-  iconsSelection: any;
-
-  formGroup3: FormGroup;
-
-  formGroup4: FormGroup;
-  expirationRequestDate: FormControl;
+  collateralAdjustment: FormControl;
+  collateralAsset: FormControl;
+  liquidationRatio: FormControl;
 
   requiredInvalid$ = false;
   currencies: string[] = ['rcn', 'mana', 'ars'];
-  selectedOracle: any; // FIXME: type Oracle
-
-  skipped = false;
+  durationDays: number[] = [15, 30, 45, 60, 75, 90];
+  selectedOracle: any;
 
   // Card Variables
   account: string;
-  loan: Loan = new Loan(
-    Network.Diaspore, // network
-    '', // id
-    'this.account', // address
-    1, // amount
-    this.selectedOracle, // oracle
-    null, // descriptor
-    this.account, // borrower
-    'this.account', // creator
-    Status.Request, // _status
-    null, // expiration
-    null, // model
-    '0x0' // cosigner
-  );
-
-  // Progress bar
-  progress: number;
+  shortAccount: string;
+  loan: Loan;
 
   constructor(
     private contractsService: ContractsService,
     private web3Service: Web3Service,
+    private txService: TxService,
     public snackBar: MatSnackBar
   ) {}
 
-  createFormControls() { // Create form controls and define values
-    this.fullDuration = new FormControl(0, Validators.required); // formGroup1
-    this.payableAtDate = new FormControl('0', Validators.required); // formGroup1
-    this.annualInterest = new FormControl('40', Validators.required); // formGroup1
-    this.annualPunitory = new FormControl('60', Validators.required); // formGroup1
-    this.requestValue = new FormControl('0'); // formGroup1
-    this.requestedCurrency = new FormControl(undefined, Validators.required); // formGroup1
+  async ngOnInit() {
+    this.createFormControls();
+    this.createForm();
 
-    this.phoneSlide = new FormControl(true); // formGroup2
-    this.idSlide = new FormControl(true); // formGroup2
-    this.sactionSlide = new FormControl(); // formGroup2
-    this.payrollSlide = new FormControl(); // formGroup2
-    this.facebookSlide = new FormControl(true); // formGroup2
-    this.twitterSlide = new FormControl(); // formGroup2
+    const web3 = this.web3Service.web3;
+    const account = await this.web3Service.getAccount();
+    this.account = web3.toChecksumAddress(account);
+    this.shortAccount = Utils.shortAddress(this.account);
 
-    this.expirationRequestDate = new FormControl('', Validators.required); // formGroup4
+    this.loan = new Loan(
+      Network.Diaspore,
+      '',
+      this.account,
+      1,
+      this.selectedOracle,
+      null,
+      this.account,
+      this.account,
+      Status.Request,
+      null,
+      null,
+      '0x0'
+    );
   }
 
-  createForm() { // Create form groups
+  /**
+   * Create form controls and define values
+   */
+  createFormControls() {
+    // Form group 1
+    this.requestedCurrency = new FormControl(undefined, Validators.required);
+    this.requestValue = new FormControl('0');
+    this.fullDuration = new FormControl(null, Validators.required);
+    this.annualInterest = new FormControl('40', Validators.required);
+    this.installmentsFlag = new FormControl(false, Validators.required);
+    this.expirationRequestDate = new FormControl(7, Validators.required);
+    // Form group 2
+    this.collateralAdjustment = new FormControl('', Validators.required);
+    this.collateralAsset = new FormControl('', Validators.required);
+    this.liquidationRatio = new FormControl('', Validators.required);
+  }
+
+  /**
+   * Create form object variables
+   */
+  createForm() {
     this.formGroup1 = new FormGroup({
       duration: new FormGroup({
-        fullDuration: this.fullDuration,
-        payableAtDate: this.payableAtDate
+        fullDuration: this.fullDuration
       }),
       interest: new FormGroup({
-        annualInterest: this.annualInterest,
-        annualPunitory: this.annualPunitory
+        annualInterest: this.annualInterest
       }),
       conversionGraphic: new FormGroup({
         requestValue: this.requestValue,
         requestedCurrency: this.requestedCurrency
-      })
+      }),
+      installmentsFlag: this.installmentsFlag,
+      expirationRequestDate: this.expirationRequestDate
     });
-
     this.formGroup2 = new FormGroup({
-      phoneSlide: this.phoneSlide,
-      idSlide: this.idSlide,
-      sactionSlide: this.sactionSlide,
-      payrollSlide: this.payrollSlide,
-      facebookSlide: this.facebookSlide,
-      twitterSlide: this.twitterSlide
-    });
-
-    this.formGroup3 = new FormGroup({});
-
-    this.formGroup4 = new FormGroup({
-      expiration: new FormGroup({
-        expirationRequestDate: this.expirationRequestDate
-      })
+      collateralAdjustment: this.collateralAdjustment,
+      collateralAsset: this.collateralAsset,
+      liquidationRatio: this.liquidationRatio
     });
   }
 
-  onSubmitStep1(form: NgForm) {
-    if (this.formGroup1.valid) {
-      this.fullDuration = form.value.duration.fullDuration;
-
-      const duration = form.value.duration.fullDuration;
-      const duesIn = new Date(duration);
-      const cancelableAt = new Date(duration);
-      cancelableAt.setDate(new Date() + form.value.duration.payableAtDate);
-
-      const expirationRequest = new Date();
-      expirationRequest.setDate(expirationRequest.getDate() + 30); // FIXME: HARKCODE
-
-      this.contractsService.requestLoan(
-        this.selectedOracle,
-        Utils.asciiToHex(form.value.conversionGraphic.requestedCurrency),
-        form.value.conversionGraphic.requestValue,
-        Utils.formatInterest(form.value.interest.annualInterest),
-        Utils.formatInterest(form.value.interest.annualPunitory),
-        duesIn.getTime() / 1000,
-        cancelableAt.getTime() / 1000,
-        expirationRequest.getTime() / 1000,
-      '');
+  /**
+   * Call the required methods when completing the first step
+   * @param form Form group 1
+   */
+  async onSubmitStep1(form: NgForm) {
+    if (form.valid) {
+      const encodedData = await this.getInstallmentsData(form);
+      this.installmentsData = encodedData;
     } else {
       this.requiredInvalid$ = true;
     }
   }
 
-  onSubmitStep2(form: NgForm) {
-    const step2Form = form.value;
-    this.getSlideSelection(step2Form);
-    this.switchIdentityIcon(this.slideSelection);
-    if (this.skipped === true) { this.slideSelection = []; }
-  }
+  /**
+   * Call the required methods when completing the second step
+   * @param form Form group 1
+   */
+  async onSubmitStep2(form: NgForm) {
+    if (form.valid) {
+      this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', '');
 
-  getSlideSelection(step2Form) {
-    this.slideSelection = [];
-    for (const property in step2Form) {
-      if (step2Form[property] === true) {
-        this.slideSelection.push(property);
-      }
+      const web3 = this.web3Service.web3;
+      const formGroup1: any = this.formGroup1;
+      const tx = await this.requestLoan(formGroup1);
+      this.txService.registerCreateTx(tx, {
+        engine: environment.contracts.diaspore.loanManager,
+        id: web3.toHex(new Date().getTime()),
+        amount: 1
+      });
     }
   }
 
-  switchIdentityIcon(iconCase) {
-    this.iconsSelection = [];
-    for (const icon in iconCase) {
-      if (iconCase.hasOwnProperty(icon)) {
-        switch (iconCase[icon]) {
-          case 'phoneSlide':
-            this.iconsSelection.push({ 'class': 'fas fa-phone', 'tooltip': 'Phone' });
-            break;
-          case 'idSlide':
-            this.iconsSelection.push({ 'class': 'fas fa-id-badge', 'tooltip': 'ID Document' });
-            break;
-          case 'sactionSlide':
-            this.iconsSelection.push({ 'class': 'fas fa-address-card', 'tooltip': 'Saction Screen' });
-            break;
-          case 'payrollSlide':
-            this.iconsSelection.push({ 'class': 'fas fa-receipt', 'tooltip': 'Payroll' });
-            break;
-          case 'facebookSlide':
-            this.iconsSelection.push({ 'class': 'fab fa-facebook-f', 'tooltip': 'Facebook' });
-            break;
-          case 'twitterSlide':
-            this.iconsSelection.push({ 'class': 'fab fa-twitter', 'tooltip': 'Twitter' });
-            break;
-          default:
-        }
-      }
+  /**
+   * Get installments encoded data
+   * @param form Form group 1
+   * @return Installments data
+   */
+  async getInstallmentsData(form: NgForm) {
+    const installments: number = this.installments;
+    const cuotaWithInterest = Number(this.expectedInstallmentAmount()) * 10 ** 18;
+    const annualInterest: number = form.value.interest.annualInterest;
+    const interestRate: number = Utils.toInterestRate(annualInterest);
+    const timeUnit: number = 24 * 60 * 60;
+    let installmentDuration: number;
+
+    if (installments === 1) {
+      installmentDuration = this.fullDuration.value * timeUnit;
+    } else {
+      installmentDuration = this.installmentDaysInterval * timeUnit;
+    }
+
+    const encodedData: any = await this.contractsService.encodeInstallmentsData(
+      cuotaWithInterest,
+      interestRate,
+      installments,
+      installmentDuration,
+      timeUnit
+    );
+
+    try {
+      await this.contractsService.validateEncodedData(encodedData);
+      return encodedData;
+    } catch (e) {
+      console.info(e);
+      throw Error('error on installments encoded data validation');
     }
   }
 
-  moveTo(index: number) {
-    this.stepper.selectedIndex = index;
+  /**
+   * Set installments data if is empty when stepper is toggled
+   * @param stepper.selectedIndex Selected index
+   */
+  async onStepperChange(stepper) {
+    if (stepper.selectedIndex === 1 && !this.installmentsData) {
+      const form: any = this.formGroup1;
+      const encodedData = await this.getInstallmentsData(form);
+      this.installmentsData = encodedData;
+    }
   }
 
-  onSkip() {
-    this.moveTo(3);
-    this.skipped = true;
-  }
-  onNotSkipped() {
-    this.skipped = false;
-  }
-
+  /**
+   * Update selected oracle when currency is updated
+   * @param requestedCurrency.value Requested currency as string
+   */
   onCurrencyChange(requestedCurrency) {
     switch (requestedCurrency.value) {
       case 'rcn':
-        this.selectedOracle = undefined;
+        this.selectedOracle = null;
         break;
       case 'mana':
         if (environment.production) {
@@ -247,73 +241,170 @@ export class CreateLoanComponent implements OnInit {
         this.selectedOracle = 'Please select a currency to unlock the oracle';
     }
   }
-  onRequestedChange() {
-    if (this.requestValue.value < 0) { this.requestValue = new FormControl(0); } // Limit de min to 0
-    if (this.requestValue.value > 1000000) { this.requestValue = new FormControl(1000000); } // Limit the max to 1000000
-  }
-  expectedReturn() {
-    const interest = this.annualInterest.value / 100;
-    const returnInterest = (interest * this.requestValue.value) + this.requestValue.value; // Calculate the return amount
-    this.returnValue = Utils.formatAmount(returnInterest);
-  }
-  expectedDuration() {
-    const now = Math.round((new Date()).getTime() / 1000);
-    this.fullDuration.value = Math.round((this.fullDuration.value).getTime() / 1000);
-    this.fullDuration.value = this.fullDuration.value - now;
-    this.fullDuration.value = Utils.formatDelta(this.fullDuration.value); // Calculate the duetime of the loan
+
+  /**
+   * Limit min/max values for requestValue when request amount is updated
+   * @param requestValue.value Requested currency as string
+   */
+  onRequestedChange(requestValue) {
+    if (requestValue.value < 0) {
+      this.requestValue.patchValue(0);
+    } else if (requestValue.value > 1000000) {
+      this.requestValue.patchValue(1000000);
+    }
+    this.expectedReturn();
   }
 
-  onCreateLoan() {
-    // TODO Use when create loan service is finnished
-    this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', '');
-  }
+  /**
+   * Calculate the duration in seconds when duration select is updated
+   */
+  onDurationChange() {
+    const fullDuration = this.returnDaysAs(this.fullDuration.value, 'seconds');
 
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message , action, {
-      duration: 4000,
-      horizontalPosition: this.horizontalPosition
+    this.formGroup1.patchValue({
+      fullDuration
     });
+
+    this.durationLabel = Utils.formatDelta(fullDuration, 2, false);
+    this.expectedInstallmentsAvailable();
+    this.expectedReturn();
   }
 
-  onSelectionChange() {
-    switch (this.stepper.selectedIndex) {
-      case 0:
-        if (this.formGroup1.valid) { // Form 1 is completed
-          this.progress = 60;
-        } else {
-          this.progress = 0;
-        }
-        break;
-      case 1:
-        if (this.formGroup1.valid) { // Form 1 is completed
-          this.progress = 60;
-        }
-        break;
-      case 2:
-        if (this.formGroup1.valid && this.slideSelection.length > 1) { // Form 1 is completed and Selected at least 1 bloom identity field
-          this.progress = 90;
-        }
-        break;
-      case 3:
-        if (this.formGroup1.valid && this.slideSelection.length > 1) { // Form 1 is completed and Selected at least 1 bloom identity field
-          this.progress = 90;
-        } else if (this.formGroup1.valid && this.slideSelection.length < 1) { // Form 1 is completed
-          this.progress = 60;
-        } else {
-          this.progress = 0;
-        }
-        break;
-      default:
-        this.progress = 0;
+  /**
+   * Calculate the return value when installments flag button is toggled
+   */
+  onInstallmentsChange() {
+    this.expectedInstallmentsAvailable();
+    this.expectedReturn();
+  }
+
+  /**
+   * Calculate the available quantity of installments
+   */
+  expectedInstallmentsAvailable() {
+    const fullDuration = this.returnDaysAs(this.fullDuration.value, 'seconds');
+    const secondsInDay = 86400;
+    const paymentDaysInterval = 15;
+    const installmentsFlag: boolean = this.installmentsFlag.value;
+
+    this.installmentsAvailable = (fullDuration / paymentDaysInterval) / secondsInDay;
+    if (installmentsFlag) {
+      this.installments = this.installmentsAvailable;
+    } else {
+      this.installments = 1;
+    }
+
+    if (this.installments < 2) {
+      this.formGroup1.patchValue({
+        installmentsFlag: false
+      });
+      this.installments = 1;
     }
   }
 
-  ngOnInit() {
-    this.web3Service.getAccount().then((account) => {
-      this.account = Utils.shortAddress(account); // Get account address
-    });
+  /**
+   * Calculate the return amount
+   */
+  expectedReturn() {
+    if (this.annualInterest.value > 0) {
+      const installments: number = this.installments;
+      const installmentAmount: any = this.expectedInstallmentAmount();
+      const returnValue: string = Utils.formatAmount(installmentAmount * installments);
+      this.returnValue = Number(returnValue);
+    } else {
+      this.returnValue = 0;
+    }
+  }
 
-    this.createFormControls(); // Generate Form Controls variables
-    this.createForm(); // Generate Form Object variables
+  /**
+   * Calculate the installment amount
+   * @return Installment amount
+   */
+  expectedInstallmentAmount() {
+    const installments: number = this.installments;
+    let installmentAmount: number;
+
+    if (installments === 1) {
+      const interest: number = this.annualInterest.value;
+      const annualInterest: number = (interest * this.requestValue.value) / 100;
+      const returnInterest: number = (this.fullDuration.value * annualInterest) / 360;
+      installmentAmount = this.requestValue.value + returnInterest;
+    } else {
+      const amount: number = this.formGroup1.value.conversionGraphic.requestValue;
+      const rate: number = this.annualInterest.value / 100;
+      const installmentDuration: number = this.installmentDaysInterval / 360;
+      installmentAmount = - Utils.pmt(installmentDuration * rate, installments, amount, 0);
+    }
+
+    return Utils.formatAmount(installmentAmount);
+  }
+
+  /**
+   * Craete a loan
+   * @param form Form group 1
+   */
+  async requestLoan(form: NgForm) {
+    const web3 = this.web3Service.web3;
+
+    let account: string = await this.web3Service.getAccount();
+    account = web3.toChecksumAddress(account);
+
+    const expiration = this.returnDaysAs(form.value.expirationRequestDate, 'date');
+    const amount = (10 ** 18) * form.value.conversionGraphic.requestValue;
+    const salt = web3.toHex(new Date().getTime());
+    const oracle: string = this.selectedOracle;
+    const encodedData: string = this.installmentsData;
+    const callback: string = Utils.address0x;
+
+    try {
+      const model = environment.contracts.diaspore.models.installments;
+
+      return await this.contractsService.requestLoan(
+        amount,
+        model,
+        oracle,
+        account,
+        callback,
+        salt,
+        expiration,
+        encodedData
+      );
+    } catch (e) {
+      throw Error('error on create loan');
+    }
+  }
+
+  /**
+   * Returns number of days as seconds or date
+   * @param days Number of days to add
+   * @param returnFormat Expected format
+   * @return Days in the selected format
+   */
+  returnDaysAs(days: number, returnFormat: 'seconds' | 'date'): any {
+    const nowDate: Date = new Date();
+    const endDate: Date = new Date();
+    endDate.setDate(nowDate.getDate() + days);
+
+    switch (returnFormat) {
+      case 'seconds':
+        const nowDateInSeconds = Math.round(new Date().getTime() / 1000);
+        return Math.round((endDate).getTime() / 1000) - nowDateInSeconds;
+      case 'date':
+        return Math.round((endDate).getTime());
+      default:
+        return;
+    }
+  }
+
+  /**
+   * Open a snackbar with a message and an optional action
+   * @message The message to show in the snackbar
+   * @action The label for the snackbar action
+   */
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message , action, {
+      duration: 4000,
+      horizontalPosition: 'center'
+    });
   }
 }

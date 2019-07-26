@@ -193,6 +193,24 @@ export class TxService {
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
   }
 
+  registerCreateTx(tx: string, requestLoan: any) {
+    const data = {
+      engine: requestLoan.engine,
+      id: requestLoan.salt,
+      amount: requestLoan.amount
+    };
+    this.registerTx(new Tx(tx, data.engine, false, Type.pay, data));
+  }
+
+  getLastPendingCreate(requestLoan: any) {
+    return this.txMemory
+      .filter(tx =>
+        !tx.confirmed &&
+        tx.type === Type.pay &&
+        tx.data.id === requestLoan.salt)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
+  }
+
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message , action, {
       duration: 4000

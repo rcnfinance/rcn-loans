@@ -5,10 +5,10 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 // App Modules
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MaterialModule } from '../../material/material.module';
+import { SharedModule } from '../../shared/shared.module';
 import { CreateLoanRoutingModule } from './create-loan-routing/create-loan-routing.module';
 // App Component
 import { CreateLoanComponent } from './create-loan.component';
-import { SharedModule } from '../../shared/shared.module';
 import { CircleProgressComponent } from './circle-progress/circle-progress.component';
 
 @NgModule({

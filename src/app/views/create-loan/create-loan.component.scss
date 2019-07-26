@@ -49,15 +49,6 @@
   }
 }
 
-.stepper-title{
-  @extend %flex-container-align;
-  svg{
-    color: $gray7;
-    font-size: 54px;
-    margin-right: 15px;
-  }
-}
-
 .icon-block{
   display: flex;
   padding: 10px 0 40px;
@@ -107,7 +98,7 @@
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
     background-color: $primary;
-    background: 
+    background:
     linear-gradient(
       to bottom,
       rgba(65, 85, 255, 1),
@@ -202,12 +193,6 @@
       font-size: 26px;
     }
   }
-}
-
-.progress-container{
-  display: flex;
-  align-items: center;
-  @extend %roboto-bold;
 }
 
 @media (min-width: 768px){
