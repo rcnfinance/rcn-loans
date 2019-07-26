@@ -57,7 +57,7 @@
                 <div class="col-6">
                   <mat-form-field>
                     <mat-select placeholder="Select a number" formControlName="fullDuration"
-                    (selectionChange)="onDurationChange($event)" required>
+                    (selectionChange)="onDurationChange()" required>
                       <mat-option *ngFor="let duration of durationDays" [value]="duration">
                         {{ duration }} days
                       </mat-option>
