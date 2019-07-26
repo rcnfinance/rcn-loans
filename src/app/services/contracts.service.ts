@@ -159,6 +159,7 @@ export class ContractsService {
       cosignerAddr = cosignerOffer.contract;
       cosignerData = cosignerOffer.lendData;
     }
+    const callbackData = '0x0';
     const oracleData = pOracleData;
     const web3 = this.web3.opsWeb3;
     const account = await this.web3.getAccount();
@@ -169,7 +170,7 @@ export class ContractsService {
           [loan.id, oracleData, cosignerAddr, cosignerData, { from: account }]);
       case Network.Diaspore:
         return await promisify(this.loadAltContract(web3, this._loanManager).lend,
-          [loan.id, oracleData, cosignerAddr, 0, cosignerData, { from: account }]);
+          [loan.id, oracleData, cosignerAddr, 0, cosignerData, callbackData, { from: account }]);
       default:
         throw Error('Unknown network');
     }
@@ -226,6 +227,7 @@ export class ContractsService {
    * @param model Model address
    * @param oracle Oracle address
    * @param borrower Borrower address
+   * @param callback Callback address
    * @param salt Salt hash
    * @param expiration Expiration timestamp
    * @param loanData Loan model data
@@ -236,6 +238,7 @@ export class ContractsService {
     model: string,
     oracle: string,
     borrower: string,
+    callback: string,
     salt: string,
     expiration: number,
     loanData: any
@@ -246,6 +249,7 @@ export class ContractsService {
       model,
       oracle,
       borrower,
+      callback,
       salt,
       expiration,
       loanData,
