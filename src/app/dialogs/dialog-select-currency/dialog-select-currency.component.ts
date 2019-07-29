@@ -23,7 +23,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
   options = [
     { 'id': 1, name: 'RCN', img: '../../../assets/rcn.png' },
     { 'id': 2, name: 'DAI', img: '../../../assets/dai.png' },
-    { 'id': 3, name: 'ETH', img: '../../../assets/eth.png' },
+    { 'id': 3, name: 'ETH', img: '../../../assets/eth.png' }
   ];
   selected = '-';
 
@@ -69,7 +69,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
   }
 
   calculateCurrencyLoanNoERC20(loanCurrency, selectedCurrency) {
-    console.info('This are the loan currency and selected currency')
+    console.info('This are the loan currency and selected currency');
     console.info(loanCurrency, selectedCurrency);
     // this.getOracleUrl();
   }
@@ -80,14 +80,16 @@ export class DialogSelectCurrencyComponent implements OnInit {
   }
 
   async getRate() {
-    // this.rate = await this.contractsService.getRate(this.loan);
-    // this.rate = this.web3.web3.fromWei(this.rate);
-    // console.info('rcn rate is:', this.rate);
+    const oracleData = await this.contractsService.getOracleData(this.loan.oracle);
+    console.info('Oracle data get rate', oracleData);
+    this.rate = await this.contractsService.getRate(this.loan);
+    this.rate = this.web3.web3.fromWei(this.rate);
+    console.info('rcn rate is:', this.rate);
   }
 
   async getOracleUrl() {
-    let url = await this.contractsService.getOracleUrl(this.loan.oracle);
-    console.info("This is the oracle url", url)
+    const url = await this.contractsService.getOracleUrl(this.loan.oracle);
+    console.info('This is the oracle url', url);
   }
 
   formatAmount(amount: number): string {

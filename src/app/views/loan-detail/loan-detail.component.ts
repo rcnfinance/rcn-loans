@@ -65,7 +65,7 @@ export class LoanDetailComponent implements OnInit {
     private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
     private brandingService: BrandingService,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -112,8 +112,8 @@ export class LoanDetailComponent implements OnInit {
 
   openDialog() {
     // const dialogConfig = new MatDialogConfig();
-    let dialogConfig = {
-      data: { loan: this.loan },
+    const dialogConfig = {
+      data: { loan: this.loan }
     };
     this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
   }

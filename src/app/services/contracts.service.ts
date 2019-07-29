@@ -1,6 +1,5 @@
 import { BigNumber } from 'bignumber.js';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
 import { Loan, Oracle, Network } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
@@ -42,7 +41,6 @@ export class ContractsService {
     private web3: Web3Service,
     private txService: TxService,
     private cosignerService: CosignerService,
-    private http: HttpClient,
     private apiService: ApiService
   ) {
     this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
@@ -127,6 +125,7 @@ export class ContractsService {
 
     if (loan.network === Network.Basalt) {
       const legacyOracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
+
       const oracleRate = await promisify(legacyOracle.getRate, [loan.oracle.code, oracleData]);
       const rate = oracleRate[0];
       const decimals = oracleRate[1];
@@ -277,8 +276,9 @@ export class ContractsService {
     if (loan.oracle === Utils.address0x) {
       return loan.rawAmount;
     }
-    const oracleData = await this.getOracleData(loan);
-    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle);
+    const oracleData = await this.getOracleData(loan.oracle);
+    console.info('Loan oracle address', loan.oracle.address);
+    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
     const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
     const rate = oracleRate[0];
     const decimals = oracleRate[1];
@@ -369,48 +369,61 @@ export class ContractsService {
       return '0x';
     }
 
-    const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
-    const url = await promisify(oracleContract.url.call, []);
+    // const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
+    const url = 'https://oracle.ripio.com/rate';
+    // const url = await promisify(oracleContract.url.call, []);
 
     console.info('Url oracle contract', url);
 
     if (url === '') { return '0x'; }
     const oracleResponse =
-    [
-      {
-        "currency": "0x4554480000000000000000000000000000000000000000000000000000000000",
-        "data": "0x000000000000000000000000000000000000000000000000000000005d39f01b00000000000000000000000000000000000000000000027925d19e8768ea0dc00000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000001be5f909fe8bca1449d36d82672175bfcce1f21009592b38a397d05f7164f3150e599772a22fcfe89aac323a91e51f31fe4f5c64de1a2bae45a4f2e910d53a5773",
-        "decimals": 18,
-        "oracle": "0x22222c1944EfCC38CA46489f96c3A372C4dB74E6",
-        "r": "0xe5f909fe8bca1449d36d82672175bfcce1f21009592b38a397d05f7164f3150e",
-        "rate": 11679514132212099976640,
-        "s": "0x599772a22fcfe89aac323a91e51f31fe4f5c64de1a2bae45a4f2e910d53a5773",
-        "timestamp": 1564078107,
-        "v": 27
-      },
-      {
-        "currency": "0x4152530000000000000000000000000000000000000000000000000000000000",
-        "data": "0x000000000000000000000000000000000000000000000000000000005d39f01b00000000000000000000000000000000000000000000000010dcb10d6a80285b0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000001bf7a0176d67251202e4feafc6dc25c71b058923977e00b3e0b7ec3aa3196948464e23014d9e07ba49db52be6ff5d7074951e0b78cb3bfed28da83d88d251aaa03",
-        "decimals": 2,
-        "oracle": "0x22222c1944EfCC38CA46489f96c3A372C4dB74E6",
-        "r": "0xf7a0176d67251202e4feafc6dc25c71b058923977e00b3e0b7ec3aa319694846",
-        "rate": 1215040670662666331,
-        "s": "0x4e23014d9e07ba49db52be6ff5d7074951e0b78cb3bfed28da83d88d251aaa03",
-        "timestamp": 1564078107,
-        "v": 27
-      },
-      {
-        "currency": "0x4254430000000000000000000000000000000000000000000000000000000000",
-        "data": "0x000000000000000000000000000000000000000000000000000000005ca49036000000000000000000000000000000000000000000001a22fb5517ec260000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000001ccc588ee157dd3d3243216721f22980f76b3e6d5bc2774aa1c662e3d0c1100f8641325153cb3cc305fb9bc28911bc7d2453e0d234e135c58b38205b764374f705",
-        "decimals": 8,
-        "oracle": "0x22222c1944EfCC38CA46489f96c3A372C4dB74E6",
-        "r": "0xcc588ee157dd3d3243216721f22980f76b3e6d5bc2774aa1c662e3d0c1100f86",
-        "rate": 123426828260896457883648,
-        "s": "0x41325153cb3cc305fb9bc28911bc7d2453e0d234e135c58b38205b764374f705",
-        "timestamp": 1554288694,
-        "v": 28
-      }
-    ]; //FIXME
+      [
+        {
+          'currency': '0x4554480000000000000000000000000000000000000000000000000000000000',
+          'data': `0x000000000000000000000000000000000000000000000000000000005d39f01b000000
+          00000000000000000000000000000000000000027925d19e8768ea0dc000000000000000000000000
+          000000000000000000000000000000000000000120000000000000000000000000000000000000000
+          00000000000000000000001be5f909fe8bca1449d36d82672175bfcce1f21009592b38a397d05f716
+          4f3150e599772a22fcfe89aac323a91e51f31fe4f5c64de1a2bae45a4f2e910d53a5773`,
+          'decimals': 18,
+          'oracle': '0x22222c1944EfCC38CA46489f96c3A372C4dB74E6',
+          'r': '0xe5f909fe8bca1449d36d82672175bfcce1f21009592b38a397d05f7164f3150e',
+          'rate': 11679514132212099976640,
+          's': '0x599772a22fcfe89aac323a91e51f31fe4f5c64de1a2bae45a4f2e910d53a5773',
+          'timestamp': 1564078107,
+          'v': 27
+        },
+        {
+          'currency': '0x4152530000000000000000000000000000000000000000000000000000000000',
+          'data': `0x000000000000000000000000000000000000000000000000000000005d39f01b000000
+          00000000000000000000000000000000000000000010dcb10d6a80285b00000000000000000000000
+          000000000000000000000000000000000000000020000000000000000000000000000000000000000
+          00000000000000000000001bf7a0176d67251202e4feafc6dc25c71b058923977e00b3e0b7ec3aa31
+          96948464e23014d9e07ba49db52be6ff5d7074951e0b78cb3bfed28da83d88d251aaa03`,
+          'decimals': 2,
+          'oracle': '0x22222c1944EfCC38CA46489f96c3A372C4dB74E6',
+          'r': '0xf7a0176d67251202e4feafc6dc25c71b058923977e00b3e0b7ec3aa319694846',
+          'rate': 1215040670662666331,
+          's': '0x4e23014d9e07ba49db52be6ff5d7074951e0b78cb3bfed28da83d88d251aaa03',
+          'timestamp': 1564078107,
+          'v': 27
+        },
+        {
+          'currency': '0x4254430000000000000000000000000000000000000000000000000000000000',
+          'data': `0x000000000000000000000000000000000000000000000000000000005ca49036000000
+          000000000000000000000000000000000000001a22fb5517ec2600000000000000000000000000000
+          000000000000000000000000000000000000000080000000000000000000000000000000000000000
+          00000000000000000000001ccc588ee157dd3d3243216721f22980f76b3e6d5bc2774aa1c662e3d0c
+          1100f8641325153cb3cc305fb9bc28911bc7d2453e0d234e135c58b38205b764374f705`,
+          'decimals': 8,
+          'oracle': '0x22222c1944EfCC38CA46489f96c3A372C4dB74E6',
+          'r': '0xcc588ee157dd3d3243216721f22980f76b3e6d5bc2774aa1c662e3d0c1100f86',
+          'rate': 123426828260896457883648,
+          's': '0x41325153cb3cc305fb9bc28911bc7d2453e0d234e135c58b38205b764374f705',
+          'timestamp': 1554288694,
+          'v': 28
+        }
+      ]; // FIXME
 
     // (await this.http.get(url).toPromise()) as any[];
     console.info('Searching currency', oracle.currency, oracleResponse);
