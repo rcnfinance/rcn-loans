@@ -19,11 +19,11 @@ export class DialogSelectCurrencyComponent implements OnInit {
   expectedReturn: string;
   loanCurrency: string;
   account: string;
+  canLend: boolean;
   options = [
     { 'id': 1, name: 'RCN', img: '../../../assets/rcn.png' },
     { 'id': 2, name: 'DAI', img: '../../../assets/dai.png' },
     { 'id': 3, name: 'ETH', img: '../../../assets/eth.png' },
-    { 'id': 4, name: 'ARS', img: '../../../assets/ars.png' }
   ];
   selected = '-';
 
@@ -38,6 +38,16 @@ export class DialogSelectCurrencyComponent implements OnInit {
   }
 
   async ngOnInit() {
+
+    if (this.loan.isRequest) {
+
+      this.canLend = true;
+    } else if (this.loan instanceof Loan) {
+
+      this.canLend = false;
+
+    }
+    // ---------------
     const currency = this.loan.currency;
     this.loanAmount = Utils.formatAmount(currency.fromUnit(this.loan.amount));
     this.expectedReturn = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
@@ -45,7 +55,6 @@ export class DialogSelectCurrencyComponent implements OnInit {
 
     this.account = await this.web3.getAccount();
     this.account = Utils.shortAddress(this.account);
-    console.info ('my account is:' + this.account);
   }
 
   async changeSelect() {
@@ -60,17 +69,25 @@ export class DialogSelectCurrencyComponent implements OnInit {
   }
 
   calculateCurrencyLoanNoERC20(loanCurrency, selectedCurrency) {
+    console.info('This are the loan currency and selected currency')
     console.info(loanCurrency, selectedCurrency);
+    // this.getOracleUrl();
   }
 
   calculateCurrencyLoanERC20(loanCurrency, selectedCurrency) {
     console.info(loanCurrency, selectedCurrency);
+    // this.getOracleUrl();
   }
 
   async getRate() {
-    this.rate = await this.contractsService.getRate(this.loan);
-    this.rate = this.web3.web3.fromWei(this.rate);
-    console.info('rcn rate is:', this.rate);
+    // this.rate = await this.contractsService.getRate(this.loan);
+    // this.rate = this.web3.web3.fromWei(this.rate);
+    // console.info('rcn rate is:', this.rate);
+  }
+
+  async getOracleUrl() {
+    let url = await this.contractsService.getOracleUrl(this.loan.oracle);
+    console.info("This is the oracle url", url)
   }
 
   formatAmount(amount: number): string {

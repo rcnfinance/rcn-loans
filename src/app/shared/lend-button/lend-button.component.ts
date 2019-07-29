@@ -195,7 +195,7 @@ export class LendButtonComponent implements OnInit {
       loan: this.loan
     };
     if (this.pendingTx === undefined) {
-      this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
+      // this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
       this.eventsService.trackEvent(
         'click-lend',
         Category.Loan,
@@ -204,7 +204,7 @@ export class LendButtonComponent implements OnInit {
 
       this.handleLend();
     } else {
-      this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
+      // this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
       // Logica selección de moneda
       window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
     }

@@ -21,9 +21,9 @@ body{
   line-height: 1.42857143;
   font-family: 'Raleway', sans-serif;
   color: $secondary;
-  background-color: $tertiary;
+  background-color: black;
   &::-webkit-scrollbar { width: 1.2em; }
-  &::-webkit-scrollbar-thumb { 
+  &::-webkit-scrollbar-thumb {
     color: $gray6; background-color: $gray6; background-clip: content-box;
     border: 4px solid transparent; border-radius: 10px;
     outline: 1px solid $gray1; box-shadow: inset 0 0 0 10px;
@@ -124,17 +124,17 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
 
 // Typography
 .title{
-  &.main-h1{font-size: 24px; text-transform: uppercase; @extend %font-light;} 
-  &.main-h2{font-size: 18px; text-transform: uppercase; @extend %font-light;} 
-  &.main-h3{font-size: 18px; @extend %font-bold;} 
-  &.main-h4{font-size: 16px; @extend %font-regular;} 
-  &.main-h5{font-size: 14px; @extend %font-thin;} 
-  &.main-b1{font-size: 32px; @extend %font-black;} 
-  &.main-p1{font-size: 14px; @extend %font-regular;} 
-  &.main-m3{font-size: 14px; @extend %font-bold;} 
-  &.main-title{line-height: 1.4; font-size: 16px; @extend %font-medium;} 
-  &.main-subtitle{line-height: 1.4; font-size: 14px; @extend %font-medium;} 
-  &.property{font-size: 11px; text-transform: uppercase; @extend %font-light;} 
+  &.main-h1{font-size: 24px; text-transform: uppercase; @extend %font-light;}
+  &.main-h2{font-size: 18px; text-transform: uppercase; @extend %font-light;}
+  &.main-h3{font-size: 18px; @extend %font-bold;}
+  &.main-h4{font-size: 16px; @extend %font-regular;}
+  &.main-h5{font-size: 14px; @extend %font-thin;}
+  &.main-b1{font-size: 32px; @extend %font-black;}
+  &.main-p1{font-size: 14px; @extend %font-regular;}
+  &.main-m3{font-size: 14px; @extend %font-bold;}
+  &.main-title{line-height: 1.4; font-size: 16px; @extend %font-medium;}
+  &.main-subtitle{line-height: 1.4; font-size: 14px; @extend %font-medium;}
+  &.property{font-size: 11px; text-transform: uppercase; @extend %font-light;}
 }
 .font-light{@extend %font-light;}
 .font-regular{@extend %font-regular;}
@@ -177,7 +177,7 @@ ngx-spinner .black-overlay.ng-star-inserted {
   cursor: pointer;
   &.cdk-overlay-backdrop-showing{
     background-color: rgba(0, 0, 0, 0.4);
-  } 
+  }
 }
 @media (max-width: 768px){.cdk-overlay-pane{max-width: 100vw !important;}}
 
@@ -238,7 +238,7 @@ mat-sidenav-container.mat-drawer-container {
       @include transition();
       @for $i from 0 through 6 {
         &:nth-child(#{$i}) {
-         @include transition-delay(0.09s * $i); 
+         @include transition-delay(0.09s * $i);
         }
       }
     }
@@ -248,7 +248,7 @@ mat-sidenav-container.mat-drawer-container {
       @include transition();
       @for $i from 0 through 6 {
         &:nth-child(#{$i}) {
-         @include transition-delay(0.03s * $i); 
+         @include transition-delay(0.03s * $i);
         }
       }
     }
@@ -343,7 +343,7 @@ mat-form-field{
   .mat-form-field-label,
   .mat-form-field-suffix{color: $gray5;}
   }
-  
+
 .mat-form-field-underline{ color: $secondary; }
 .mat-select-arrow{ color: $secondary; }
 .mat-select-placeholder, .mat-select-value-text { color: $secondary; text-transform: uppercase; @extend %font-medium;}
@@ -370,7 +370,7 @@ mat-checkbox{
   .mat-ripple-element {
     background: $primary;
   }
-  &.mat-checkbox-checked.mat-accent .mat-checkbox-background, 
+  &.mat-checkbox-checked.mat-accent .mat-checkbox-background,
   &.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
     background-color: $primary;
   }
@@ -382,7 +382,7 @@ mat-checkbox{
 }
 
 //Stepper
-.mat-stepper-horizontal, 
+.mat-stepper-horizontal,
 .mat-stepper-vertical{
   background-color: transparent;
   .mat-vertical-content { padding: 0 24px 24px 15px; }
@@ -414,11 +414,11 @@ mat-checkbox{
     &:focus {
       outline: -webkit-focus-ring-color auto 0px;
     }
-  } 
+  }
   &.mat-checked:not(.mat-disabled){
     .mat-slide-toggle-bar{
       background-color: $secondary;
-    } 
+    }
     .mat-slide-toggle-thumb{
       background-color: $primary;
     }
@@ -436,7 +436,7 @@ mat-checkbox{
 @media (min-width: 768px){
 //Material
   //Stepper
-  .mat-stepper-horizontal, 
+  .mat-stepper-horizontal,
   .mat-stepper-vertical{
     .mat-vertical-content { padding: 0 24px 24px 34px; }
   }
@@ -635,7 +635,7 @@ mat-checkbox{
 }
 
 @media (min-width: 992px){
-  .navmobile-menu{display: none;}  
+  .navmobile-menu{display: none;}
 }
 
 // Footer
@@ -736,7 +736,7 @@ footer {
       padding-right: 15px;
       display: inline-block;
       &.version{
-        margin-right: 15px;    
+        margin-right: 15px;
       }
     }
     .nav-mobile{
@@ -757,7 +757,7 @@ footer {
     }
     .right{
       text-align: right;
-    } 
+    }
     .txt{
       line-height: 1.9;
     }

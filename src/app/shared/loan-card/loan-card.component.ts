@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Loan, Network, Status } from '../../models/loan.model';
+import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 import { Utils } from '../../utils/utils';
+import { MatDialog } from '@angular/material';
+
 
 @Component({
   selector: 'app-loan-card',
@@ -21,7 +24,9 @@ export class LoanCardComponent implements OnInit {
 
   shortAddress = Utils.shortAddress;
 
-  constructor() { }
+  constructor(
+    public dialog: MatDialog,
+  ) { }
 
   ngOnInit() {
     if (this.loan.isRequest) {
@@ -49,6 +54,14 @@ export class LoanCardComponent implements OnInit {
         this.durationLabel = 'Remaining';
       }
     }
+  }
+
+  openDialog() {
+    // const dialogConfig = new MatDialogConfig();
+    let dialogConfig = {
+      data: { loan: this.loan },
+    };
+    this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
   }
 
   getInterestRate(): string {
