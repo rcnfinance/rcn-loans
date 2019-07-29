@@ -259,6 +259,7 @@ export class NotificationsComponent implements OnInit {
 
   /**
    * Set Tx as finished
+   * @param tx Tx payload
    */
   private setTxFinished(tx: Tx) {
     const notification = this.oNotifications.find(c => c.hashTx === tx.tx);

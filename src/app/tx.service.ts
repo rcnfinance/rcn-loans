@@ -203,12 +203,12 @@ export class TxService {
     this.registerTx(new Tx(tx, data.engine, false, Type.create, data));
   }
 
-  getLastPendingCreate(requestLoan: any) {
+  getLastPendingCreate(loan: Loan) {
     return this.txMemory
       .filter(tx =>
         !tx.confirmed &&
         tx.type === Type.create &&
-        tx.data.id === requestLoan.salt)
+        tx.data.id === loan.id)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
   }
 

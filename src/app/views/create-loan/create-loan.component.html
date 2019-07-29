@@ -176,7 +176,14 @@
             </div>
             <div class='margintop20'>
               <button mat-raised-button class='button button-secondary marginright8' matStepperPrevious>Back</button>
-              <button mat-raised-button type="submit" class='button button-primary'>Create</button>
+<!--          <button mat-raised-button type="submit" class='button button-primary'>Create</button> -->
+              <button mat-raised-button type="submit" class='button button-primary'>
+                {{ submitButtonText }}
+                <div style="display: inline; margin-left: 5px; vertical-align: baseline;" *ngIf='opPending'>
+                  <i class="fa fa-circle-notch fa-spin"></i>
+                </div>
+              </button>
+
             </div>
           </form>
         </mat-step>

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
 import {
   MatStepper,
@@ -11,7 +12,7 @@ import { environment } from '../../../environments/environment.prod';
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from './../../services/web3.service';
-import { TxService } from '../../tx.service';
+import { TxService, Tx } from '../../tx.service';
 
 @Component({
   selector: 'app-create-loan',
@@ -29,7 +30,6 @@ export class CreateLoanComponent implements OnInit {
   // Form Variables
   isOptional$ = true;
   isEditable$ = true;
-  disabled$ = false;
 
   formGroup1: FormGroup;
   fullDuration: FormControl;
@@ -54,6 +54,7 @@ export class CreateLoanComponent implements OnInit {
   currencies: string[] = ['rcn', 'mana', 'ars'];
   durationDays: number[] = [15, 30, 45, 60, 75, 90];
   selectedOracle: any;
+  pendingTx: Tx = undefined;
 
   // Card Variables
   account: string;
@@ -61,6 +62,7 @@ export class CreateLoanComponent implements OnInit {
   loan: Loan;
 
   constructor(
+    private router: Router,
     private contractsService: ContractsService,
     private web3Service: Web3Service,
     private txService: TxService,
@@ -70,6 +72,7 @@ export class CreateLoanComponent implements OnInit {
   async ngOnInit() {
     this.createFormControls();
     this.createForm();
+    this.retrievePendingTx();
 
     const web3 = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
@@ -154,16 +157,26 @@ export class CreateLoanComponent implements OnInit {
   async onSubmitStep2(form: NgForm) {
     if (form.valid) {
       this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', '');
+      const pendingTx: Tx = this.pendingTx;
 
-      const formGroup1: any = this.formGroup1;
-      const tx = await this.requestLoan(formGroup1);
-      const loanId = this.loan.id;
+      if (pendingTx) {
+        if (pendingTx.confirmed) {
+          this.router.navigate(['/', 'loan', this.loan.id]);
+        }
+      } else {
+        const formGroup1: any = this.formGroup1;
+        const tx = await this.requestLoan(formGroup1);
+        const loanId = this.loan.id;
 
-      this.txService.registerCreateTx(tx, {
-        engine: environment.contracts.diaspore.loanManager,
-        id: loanId,
-        amount: 1
-      });
+        this.txService.registerCreateTx(tx, {
+          engine: environment.contracts.diaspore.loanManager,
+          id: loanId,
+          amount: 1
+        });
+
+        this.retrievePendingTx();
+      }
+
     }
   }
 
@@ -411,8 +424,8 @@ export class CreateLoanComponent implements OnInit {
 
   /**
    * Open a snackbar with a message and an optional action
-   * @message The message to show in the snackbar
-   * @action The label for the snackbar action
+   * @param message The message to show in the snackbar
+   * @param action The label for the snackbar action
    */
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message , action, {
@@ -420,4 +433,27 @@ export class CreateLoanComponent implements OnInit {
       horizontalPosition: 'center'
     });
   }
+
+  /**
+   * Retrieve pending Tx
+   */
+  retrievePendingTx() {
+    this.pendingTx = this.txService.getLastPendingCreate(this.loan);
+  }
+
+  /**
+   * Get submit button text according to the creation status
+   * @return Button text
+   */
+  get submitButtonText(): string {
+    const tx: Tx = this.pendingTx;
+    if (tx === undefined) {
+      return 'Create';
+    }
+    if (tx.confirmed) {
+      return 'Created';
+    }
+    return 'Creating...';
+  }
+
 }
