@@ -155,12 +155,13 @@ export class CreateLoanComponent implements OnInit {
     if (form.valid) {
       this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', '');
 
-      const web3 = this.web3Service.web3;
       const formGroup1: any = this.formGroup1;
       const tx = await this.requestLoan(formGroup1);
+      const loanId = this.loan.id;
+
       this.txService.registerCreateTx(tx, {
         engine: environment.contracts.diaspore.loanManager,
-        id: web3.toHex(new Date().getTime()),
+        id: loanId,
         amount: 1
       });
     }
@@ -357,7 +358,19 @@ export class CreateLoanComponent implements OnInit {
     const callback: string = Utils.address0x;
 
     try {
-      const model = environment.contracts.diaspore.models.installments;
+      const model: string = environment.contracts.diaspore.models.installments;
+      const loanId: any = await this.contractsService.calculateLoanId(
+        amount,
+        account,
+        account,
+        model,
+        oracle,
+        callback,
+        salt,
+        expiration,
+        encodedData
+      );
+      this.loan.id = loanId;
 
       return await this.contractsService.requestLoan(
         amount,

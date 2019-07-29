@@ -176,6 +176,15 @@ export class ContractsService {
     }
   }
 
+  /**
+   * Encode installments data
+   * @param cuota Installment amount
+   * @param interestRate Interest rate
+   * @param installments Number of installments
+   * @param duration Installment duration in seconds
+   * @param timeUnit Time unit (seconds)
+   * @return Encoded installments data
+   */
   async encodeInstallmentsData(
     cuota: number,
     interestRate: number,
@@ -190,6 +199,52 @@ export class ContractsService {
         installments,
         duration,
         timeUnit,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Calculate loan ID
+   * @param amount Total amount
+   * @param borrower Borrower address
+   * @param creator Creator address
+   * @param model Model address
+   * @param oracle Oracle address
+   * @param callback Callback address
+   * @param salt Salt hash
+   * @param expiration Expiration timestamp
+   * @param data Model data
+   * @return Loan ID
+   */
+  async calculateLoanId(
+    amount: number,
+    borrower: string,
+    creator: string,
+    model: string,
+    oracle: string,
+    callback: string,
+    salt: string,
+    expiration: number,
+    data: any
+  ) {
+    return new Promise((resolve, reject) => {
+      this._loanManager.calcId(
+        amount,
+        borrower,
+        creator,
+        model,
+        oracle,
+        callback,
+        salt,
+        expiration,
+        data,
         (err, result) => {
           if (err != null) {
             reject(err);

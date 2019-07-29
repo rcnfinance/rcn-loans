@@ -54,41 +54,90 @@ export class NotificationsComponent implements OnInit {
     public notificationsService: NotificationsService
   ) { }
 
-  getTxMessage(tx: Tx): string { // Return the TxObject Message to render the Notification
-    if (tx.type === 'approve') {
-      if (tx.data.contract === environment.contracts.basaltEngine) {
-        return 'the Basalt Engine contract';
-      }
-
-      if (tx.data.contract === environment.contracts.diaspore.loanManager) {
-        return 'the Diaspore Loan Manager Contract';
-      }
-
-      if (tx.data.contract === environment.contracts.diaspore.debtEngine) {
-        return 'the Diaspore Debt Manager Contract';
-      }
-      return 'the contract ' + tx.data.contract;
-    }
-
-    if (tx.type === 'withdraw') {
-      return 'funds';
-    }
-
-    return 'the loan';
+  ngOnInit() {
+    this.notificationsService.currentDetail.subscribe(detail => {
+      this.viewDetail = detail;
+    }); // Subscribe to detail from Notifications Service
+    this.txService.subscribeNewTx((tx: Tx) => { this.addNewNotification(tx); });
+    this.txService.subscribeConfirmedTx((tx: Tx) => { this.setTxFinished(tx); });
+    this.renderLastestTx(this.txService.txMemory);
   }
 
-  getTxId(tx: Tx): String { // Return the TxObject Message to render the Notification
+  /**
+   * Return the TxObject Message to render the Notification
+   * @param tx Tx payload
+   * @return Notification message
+   */
+  getTxMessage(tx: Tx): string {
+    let message: string;
+
+    switch (tx.type) {
+      case 'approve':
+        const contract: string = tx.data.contract;
+        if (contract === environment.contracts.basaltEngine) {
+          message = 'the Basalt Engine contract';
+        } else if (contract === environment.contracts.diaspore.loanManager) {
+          message = 'the Diaspore Loan Manager Contract';
+        } else if (contract === environment.contracts.diaspore.debtEngine) {
+          message = 'the Diaspore Debt Manager Contract';
+        } else {
+          message = 'the contract ' + contract;
+        }
+        break;
+
+      case 'withdraw':
+        message = 'funds';
+        break;
+
+      case 'create':
+        message = 'a loan';
+        break;
+
+      default:
+        message = 'the loan';
+        break;
+    }
+
+    return message;
+  }
+
+  /**
+   * Return the TxObject ID to render the Notification
+   * @param tx Tx payload
+   * @return Tx ID
+   */
+  getTxId(tx: Tx): String {
     let id: String;
     if (tx.data.id) { id = tx.data.id; } else { id = tx.data; } // Defines if the ID comes from data (new Loans) or data.id (past Loans)
-    if (tx.type === 'approve') {
-      id = undefined;
-    } else if (tx.type === 'withdraw') {
-      id = undefined;
+
+    switch (tx.type) {
+      case 'approve':
+      case 'withdraw':
+        id = undefined;
+        break;
+
+      case 'create':
+        if (tx.confirmed) {
+          id = tx.data.id;
+        } else {
+          id = undefined;
+        }
+        break;
+
+      default:
+        id = tx.data.id;
+        break;
     }
+
     return id;
   }
 
-  getTxObject(tx: Tx): TxObject { // Return the TxObject to render style data
+  /**
+   * Return the TxObject to render style data
+   * @param tx Tx payload
+   * @return Tx Object
+   */
+  getTxObject(tx: Tx): TxObject {
     let txObject: TxObject;
     const id: String = this.getTxId(tx);
     const message: string = this.getTxMessage(tx);
@@ -115,13 +164,21 @@ export class NotificationsComponent implements OnInit {
           txObject = new TxObject(id, 'Locking', message, '', '', 'fas fa-lock', 'red');
         }
         break;
+      case 'create':
+        txObject = new TxObject(id, 'Creating', message, 'material-icons', 'add', '', 'blue');
+        break;
       default:
         break;
     }
     return txObject;
   }
 
-  getTxObjectConfirmed(tx: Tx): String { // Change the Tx Message onConfirmed
+  /**
+   * Change the Tx Message onConfirmed
+   * @param tx Tx payload
+   * @return Tx status message
+   */
+  getTxObjectConfirmed(tx: Tx): String {
     let message: String;
     switch (tx.type) {
       case 'lend':
@@ -146,38 +203,48 @@ export class NotificationsComponent implements OnInit {
           message = 'Locked';
         }
         break;
+      case 'create':
+        message = 'Created';
+        break;
       default:
         break;
     }
     return message;
   }
 
-  // Render Tx[]
-  getLastestTx(txMemory: Tx[]): Tx[] { // Get the last 8 Txs
+  /**
+   * Get the last 8 Txs or set the number of tx you want to render on NotifComponent
+   * @param txMemory Tx array in memory
+   * @return Last 8 Txs
+   */
+  getLastestTx(txMemory: Tx[]): Tx[] {
     const allTxMemery: number = txMemory.length;
-    const loansToRender: number = allTxMemery - 8; // Set the number of tx you want to render on NotifComponent
+    const loansToRender: number = allTxMemery - 8;
     return txMemory.slice(loansToRender, allTxMemery);
   }
-  renderLastestTx(txMemory: Tx[]) { // Render the last 8 Txs
+
+  /**
+   * Render the last 8 Txs
+   * @param txMemory Tx array in memory
+   */
+  renderLastestTx(txMemory: Tx[]) {
     const lastestTx: Tx[] = this.getLastestTx(txMemory);
     lastestTx.forEach(c => this.addNewNotification(c));
     const confirmedTxOnly = lastestTx.filter(c => c.confirmed);
     confirmedTxOnly.forEach(c => this.setTxFinished(c));
   }
 
-  emitCounter() { // Set the notificationsCounter on new Notifications
+  /**
+   * Set the notificationsCounter on new Notifications
+   */
+  emitCounter() {
     this.notificationsCounter.emit(this.oNotifications.filter(c => !c.confirmedTx).length);
   }
 
-  ngOnInit() {
-    this.notificationsService.currentDetail.subscribe(detail => {
-      this.viewDetail = detail;
-    }); // Subscribe to detail from Notifications Service
-    this.txService.subscribeNewTx((tx: Tx) => { this.addNewNotification(tx); });
-    this.txService.subscribeConfirmedTx((tx: Tx) => { this.setTxFinished(tx); });
-    this.renderLastestTx(this.txService.txMemory);
-  }
-
+  /**
+   * Unshift notification to array
+   * @param tx Tx payload
+   */
   private addNewNotification(tx: Tx) {
     this.oNotifications.unshift(new Notification(
       tx.tx,                                                                       // This is the Notification hashTx
@@ -190,6 +257,9 @@ export class NotificationsComponent implements OnInit {
     this.emitCounter();
   }
 
+  /**
+   * Set Tx as finished
+   */
   private setTxFinished(tx: Tx) {
     const notification = this.oNotifications.find(c => c.hashTx === tx.tx);
     notification.confirmedTx = tx.confirmed;

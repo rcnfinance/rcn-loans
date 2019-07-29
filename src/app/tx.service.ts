@@ -12,7 +12,8 @@ export enum Type {
   withdraw = 'withdraw',
   transfer = 'transfer',
   claim = 'claim',
-  pay = 'pay'
+  pay = 'pay',
+  create = 'create'
 }
 
 export class Tx {
@@ -196,17 +197,17 @@ export class TxService {
   registerCreateTx(tx: string, requestLoan: any) {
     const data = {
       engine: requestLoan.engine,
-      id: requestLoan.salt,
+      id: requestLoan.id,
       amount: requestLoan.amount
     };
-    this.registerTx(new Tx(tx, data.engine, false, Type.pay, data));
+    this.registerTx(new Tx(tx, data.engine, false, Type.create, data));
   }
 
   getLastPendingCreate(requestLoan: any) {
     return this.txMemory
       .filter(tx =>
         !tx.confirmed &&
-        tx.type === Type.pay &&
+        tx.type === Type.create &&
         tx.data.id === requestLoan.salt)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
   }
