@@ -93,7 +93,7 @@ export class LoanDetailComponent implements OnInit {
       }).catch((e: Error) => {
         console.error(e);
         console.info('Loan', this.loan.id, 'not found');
-        this.router.navigate(['/404/']);
+        this.router.navigate(['/404/'], { skipLocationChange: true });
       });
     });
   }
