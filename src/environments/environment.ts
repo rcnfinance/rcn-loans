@@ -32,6 +32,9 @@ export const environment = {
   rcn_node_api: {
     url: 'http://localhost:8000/v4/'
   },
+  rcn_oracle: {
+    url: 'https://oracle.ripio.com/rate/'
+  },
   network: {
     id: '3',
     name: 'Ropsten',
@@ -81,6 +84,12 @@ export const environment = {
       forbidden: [
         '0x0ac18b74b5616fdeaeff809713d07ed1486d0128',
         '0x4931d0621360187199de494a1469165079b31bfc'
+      ]
+    },
+    {
+      key: 'oracleUrl',
+      forbidden: [
+        'http://ec2-54-233-188-146.sa-east-1.compute.amazonaws.com/rate/'
       ]
     }
   ],

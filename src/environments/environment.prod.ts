@@ -32,6 +32,9 @@ export const environment = {
   rcn_node_api: {
     url: 'http://localhost:8000/v4/'
   },
+  rcn_oracle: {
+    url: 'https://oracle.ripio.com/rate/'
+  },
   network: {
     id: '1',
     name: 'Main',
