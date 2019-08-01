@@ -30,7 +30,8 @@ export const environment = {
     loan: 'https://ropsten-rnode.rcn.loans/v1/loans/$id'
   },
   rcn_node_api: {
-    url: 'https://diaspore-ropsten-rnode.rcn.loans/v4/'
+    url: 'https://localhost:8000/v4/'
+    // url: 'https://diaspore-ropsten-rnode.rcn.loans/v4/'
   },
   network: {
     id: '3',

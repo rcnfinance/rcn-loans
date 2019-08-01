@@ -23,7 +23,8 @@
 
             <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
               <!-- Menu section -->
-              <div class="marginright20" routerLink='/create'>Create</div>
+              <i class="material-icons plus primary">add_circle</i>
+              <div class="marginright20 marginleft-10 primary" routerLink='/create'>Borrow</div>
               <div class="marginright20" routerLink='/requests'>Requests</div>
               <div class="marginright20" routerLink='/activity'>Activity</div>
               <div class="marginright20" routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</div>
