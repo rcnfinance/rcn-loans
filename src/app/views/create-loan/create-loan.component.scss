@@ -21,33 +21,51 @@
   }
 }
 
-.conversion-block{
-  height: 50px;
-  @extend %flex-container;
-  padding: 0px 15px;
-  margin: 5px -15px 15px;
-  div{
-    flex: 1;
-    @extend %roboto-bold;
-    &:nth-child(1){
-      text-align: left;
-      font-size: 26px;
-    }
-    &:nth-child(2){
-      display: flex;
-      @extend %roboto-regular;
-      i{ margin: 0 auto; }
-    }
-    &:nth-child(3){
-      color: $primary;
-      text-align: right;
-      font-size: 26px;
-    }
-  }
-  mat-form-field{
-    font-weight: 700 !important;
-  }
+.currency-block {
+  display: flex;
+  width: 50%;
 }
+
+.block-title {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  color: #989898;
+  font-size: 25px;
+}
+
+.subtitle-style {
+  font-family: 'Raleway', sans-serif;
+  color: #989898;
+  font-size: 14px;
+}
+
+// .conversion-block{
+//   height: 50px;
+//   @extend %flex-container;
+//   padding: 0px 15px;
+//   margin: 5px -15px 15px;
+//   div{
+//     flex: 1;
+//     @extend %roboto-bold;
+//     &:nth-child(1){
+//       text-align: left;
+//       font-size: 26px;
+//     }
+//     &:nth-child(2){
+//       display: flex;
+//       @extend %roboto-regular;
+//       i{ margin: 0 auto; }
+//     }
+//     &:nth-child(3){
+//       color: $primary;
+//       text-align: right;
+//       font-size: 26px;
+//     }
+//   }
+//   mat-form-field{
+//     font-weight: 700 !important;
+//   }
+// }
 
 .icon-block{
   display: flex;
@@ -75,9 +93,49 @@
   }
 }
 
-.title{ &.property{ font-size: 12px; } }
+.title {
+  font-size: 12px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+  color: #EDEDED;
+}
 
+mat-expansion-panel-header {
+  background-color: #222222;
+  height: 46px !important;
+}
 
+mat-expansion-panel {
+  background-color: #141414;
+}
+
+.mat-accent .mat-slider-thumb, .mat-accent .mat-slider-thumb-label, .mat-accent .mat-slider-track-fill {
+  background-color: $primary !important;
+}
+
+.mat-select-placeholder {
+  color: gray !important;
+  text-transform: lowercase !important;
+}
+
+.main-title-style {
+  color: #EDEDED;
+  font-size: 15px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-infix {
+  padding: 0;
+}
+
+// .title-style {
+//   font-family: 'Raleway', sans-serif;
+//   font-weight: 400;
+//   color: #EDEDED;
+// }
 
 
 //CARDS

@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
 import {
   MatStepper,
-  MatSnackBar
+  MatSnackBar,
+  MatExpansionPanel
 } from '@angular/material';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
@@ -21,6 +22,7 @@ import { TxService, Tx } from '../../tx.service';
 })
 export class CreateLoanComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild('MatExpansionPanel') pannel: MatExpansionPanel;
 
   // Date Variables
   now: Date = new Date();
@@ -30,6 +32,7 @@ export class CreateLoanComponent implements OnInit {
   // Form Variables
   isOptional$ = true;
   isEditable$ = true;
+  panelOpenState = false;
 
   formGroup1: FormGroup;
   fullDuration: FormControl;
@@ -220,13 +223,13 @@ export class CreateLoanComponent implements OnInit {
    * Set installments data if is empty when stepper is toggled
    * @param stepper.selectedIndex Selected index
    */
-  async onStepperChange(stepper) {
-    if (stepper.selectedIndex === 1 && !this.installmentsData) {
-      const form: any = this.formGroup1;
-      const encodedData = await this.getInstallmentsData(form);
-      this.installmentsData = encodedData;
-    }
-  }
+  // async onStepperChange(stepper) {
+  //   if (stepper.selectedIndex === 1 && !this.installmentsData) {
+  //     const form: any = this.formGroup1;
+  //     const encodedData = await this.getInstallmentsData(form);
+  //     this.installmentsData = encodedData;
+  //   }
+  // }
 
   /**
    * Update selected oracle when currency is updated
