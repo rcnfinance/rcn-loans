@@ -23,7 +23,7 @@
               1 | SET YOUR LOAN REQUIREMENTS
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <form [formGroup]="formGroup1">
+          <form [formGroup]="formGroup1" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1="ngForm">
             <ng-template>Set yout loan requirements</ng-template>
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row" formGroupName="conversionGraphic">
@@ -233,9 +233,9 @@
               </div>
             </div>
             <div class="margintop40">
-              <a class="link" (click)="onSubmitStep1(formGroup1)">
+              <button mat-raised-button type="submit" class='button button-primary'>
                 Continue
-              </a>
+              </button>
             </div>
           </form>
         </mat-expansion-panel>
@@ -248,7 +248,7 @@
               2 | SELECT YOUR COLLATERAL
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <form [formGroup]="formGroup2">
+          <form [formGroup]="formGroup2" (ngSubmit)="onSubmitStep2(fStep2)" #fStep2="ngForm">
             <ng-template>Select your collateral</ng-template>
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row">
@@ -398,7 +398,7 @@
             mat-raised-button
             class="button button-primary margintop20"
             [disabled]="!formGroup1.valid || !formGroup2.valid"
-            (click)="onSubmitStep2(formGroup2)"
+            (click)="onSubmitStep2(fStep2)"
           >
             Confirm
           </button>
