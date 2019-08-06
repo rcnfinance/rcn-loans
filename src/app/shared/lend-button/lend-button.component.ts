@@ -12,6 +12,7 @@ import {
 } from '@angular/material';
 
 import { Loan, Network } from './../../models/loan.model';
+import { Utils } from '../../utils/utils';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
@@ -36,6 +37,12 @@ import { DecentralandCosignerProvider } from './../../providers/cosigners/decent
 })
 export class LendButtonComponent implements OnInit {
   @Input() loan: Loan;
+  @Input() lendPayload: {
+    payableAmount: number,
+    converter: string,
+    fromToken: string,
+    oracleData: any
+  };
   pendingTx: Tx = undefined;
   lendEnabled: Boolean;
   opPending = false;
@@ -88,6 +95,7 @@ export class LendButtonComponent implements OnInit {
         });
         return;
       }
+
       const isMortgageCancelled = await cosigner.isMortgageCancelled(this.loan);
       if (isMortgageCancelled) {
         this.dialog.open(DialogGenericErrorComponent, {
@@ -99,6 +107,8 @@ export class LendButtonComponent implements OnInit {
       }
     }
 
+    const oracleData = await this.contractsService.getOracleData(this.loan.oracle);
+
     this.startOperation();
 
     try {
@@ -108,6 +118,7 @@ export class LendButtonComponent implements OnInit {
       console.info('balance', Number(balance));
       const required = await this.contractsService.estimateLendAmount(this.loan);
       console.info('required', required);
+      const inputLendPayload = this.lendPayload;
 
       if (!await engineApproved) {
         this.showApproveDialog();
@@ -119,23 +130,55 @@ export class LendButtonComponent implements OnInit {
         return;
       }
 
-      console.info('Try lend', await required, await balance);
+      if (!inputLendPayload) {
+        throw Error('Please choose a currency');
+      }
+
       if (balance > required) {
-        const tx = await this.contractsService.lendLoan(this.loan);
+        const web3 = this.web3Service.web3;
+        let tx: string;
+        let account: string = await this.web3Service.getAccount();
+        account = web3.toChecksumAddress(account);
+
+        switch (this.loan.network) {
+          case Network.Basalt:
+            tx = await this.contractsService.lendLoan(this.loan);
+            this.txService.registerLendTx(tx, environment.contracts.basaltEngine, this.loan);
+            break;
+
+          case Network.Diaspore:
+            if (inputLendPayload.fromToken === environment.contracts.rcnToken) {
+              tx = await this.contractsService.lendLoan(this.loan);
+            } else {
+              tx = await this.contractsService.converterRampLend(
+                inputLendPayload.payableAmount,
+                inputLendPayload.converter,
+                inputLendPayload.fromToken,
+                environment.contracts.diaspore.loanManager,
+                Utils.address0x,
+                environment.contracts.diaspore.debtEngine,
+                this.loan.id,
+                oracleData,
+                '0x0',
+                account,
+                Utils.address0x
+              );
+            }
+            this.txService.registerLendTx(tx, environment.contracts.diaspore.loanManager, this.loan);
+            break;
+
+          default:
+            break;
+        }
+
         this.eventsService.trackEvent(
           'lend',
           Category.Account,
           'loan #' + this.loan.id
         );
 
-        if (this.loan.network === Network.Basalt) {
-          this.txService.registerLendTx(tx, environment.contracts.basaltEngine, this.loan);
-        } else {
-          this.txService.registerLendTx(tx, environment.contracts.diaspore.loanManager, this.loan);
-        }
         this.retrievePendingTx();
       } else {
-
         this.eventsService.trackEvent(
           'show-insufficient-funds-lend',
           Category.Account,
