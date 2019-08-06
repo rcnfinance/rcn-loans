@@ -33,6 +33,14 @@
   font-size: 35px;
 }
 
+.block-title-white {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  color: #989898;
+  font-size: 35px;
+  color: white;
+}
+
 .subtitle-style {
   font-family: 'Raleway', sans-serif;
   color: #989898;
@@ -319,7 +327,17 @@ mat-expansion-panel {
   color: #FFFFFF;
   margin-left: -15px;
   margin-right: -15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.link-box {
+  display: flex;
+  justify-content: flex-end;
+}
+
+
 
 @media (min-width: 768px){
   .card-col{

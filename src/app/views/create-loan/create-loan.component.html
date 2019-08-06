@@ -42,7 +42,7 @@
                           <mat-option>--</mat-option>
                           <mat-option
                             *ngFor="let currency of currencies"
-                            [value]="currency"
+                            [value]="currency.currency"
                           >
                             <div class="currency-box">
                               <div class="currency-img">
@@ -78,8 +78,9 @@
                               (keyup)="onRequestedChange($event)"
                               pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
                               required
-                              class="block-title"
+                              [ngClass]="formGroup1?.value.conversionGraphic.requestValue === '0' ? 'block-title' : 'block-title-white'"
                             />
+                            <!-- {{ formGroup1?.value.conversionGraphic.requestValue }} -->
                             <mat-hint>
                               <span
                                 *ngIf="
@@ -104,7 +105,7 @@
                   <div class="margintop10"></div>
                   <div class="message-style">
                     <i class="fas fa-exclamation-triangle"></i> You’re borrowing
-                    in DAI, therefore the value of the pays is going to be
+                    in {{ formGroup1?.value.conversionGraphic.requestedCurrency }}, therefore the value of the pays is going to be
                     converted to RCN.
                   </div>
                   <div
@@ -377,18 +378,19 @@
             <div class="title">{{ "Collateral amount" }}</div>
             <div class="paragraph">{{ durationLabel }}</div>
           </div>
-          <div><a class="link" href="">See more</a></div>
+          <div class="link-box"><a class="link" href="">See more</a></div>
           <div class="margintop20"></div>
           <div class="card-property">
             <div class="title">{{ "Borrow" }}</div>
-            <div class="paragraph">{{ durationLabel }}</div>
+            <div class="block-title">{{ durationLabel }}</div>
           </div>
           <div class="card-property">
             <div class="title">{{ "Return" }}</div>
-            <div class="paragraph">{{ durationLabel }}</div>
+            <div class="block-title">{{ durationLabel }}</div>
           </div>
           <div class="margintop20"></div>
-          <div class="button">Confirm</div>
+          <div class="button"> <span>Confirm</span> </div>
+          <div class="margintop20"></div>
           <div><a class="link" href="">Reset all values</a></div>
         </div>
       </div>
