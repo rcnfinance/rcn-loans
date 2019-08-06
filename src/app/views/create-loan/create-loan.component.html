@@ -9,8 +9,8 @@
   <div class="margintop10 d-lg-none d-xs-block"></div>
   <div class="row">
     <div class="col-xs-12 col-lg-6 d-none d-lg-block">
-      <div class="title main-h1 margintop30">Borrow a Loan</div>
-      <div class="title main-p1 marginbottom30">
+      <div class="head-title main-h1 margintop30">BORROW A LOAN</div>
+      <div class="head-subtitle main-p1 marginbottom30">
         Create a loan according to your needs and send it to the network
       </div>
     </div>
@@ -61,7 +61,12 @@
                             *ngFor="let currency of currencies"
                             [value]="currency"
                           >
-                            {{ currency }}
+                            <div class="currency-box">
+                              <div class="currency-img">
+                                <img src="{{ currency.img }}" alt="" />
+                              </div>
+                              {{ currency.currency }}
+                            </div>
                           </mat-option>
                         </mat-select>
                         <div
@@ -122,7 +127,6 @@
                       </div>
                     </div>
                   </div>
-                  <div class="margintop40"></div>
 
                   <!-- <div class="properties-block">
                         <div class="currency-block">
@@ -205,14 +209,17 @@
                   </div>
                 </div>
               </div>
+              <div class="margintop60"></div>
               <div class="row" formGroupName="duration">
                 <div class="col-12">
                   <div class="title property marginbottom10">
                     Duration of the loan
                   </div>
-                  <span class="subtitle-style">Select the interest you want to pay</span>
+                  <span class="subtitle-style"
+                    >Set the number of days you want your loan to last.</span
+                  >
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                   <mat-form-field>
                     <mat-select
                       placeholder="Select a number"
@@ -230,24 +237,35 @@
                   </mat-form-field>
                 </div>
               </div>
-
-
-
-
-
+              <div class="margintop20"></div>
               <div class="row" formGroupName="interest">
                 <div class="col col-lg-12">
                   <div class="title property margintop30 marginbottom10">
                     ANNUAL INTEREST RATE
                   </div>
-                  <div class="subtitle-style">Select the interest you want to pay</div>
+                  <div class="subtitle-style">
+                    Select the interest you want to pay
+                  </div>
+                  <div class="margintop20"></div>
                   <div class="row">
                     <div class="col-12">
-                        <mat-slider step="10" tickInterval="1" color="primary" thumbLabel="true" value="10"></mat-slider>
+                      <mat-slider
+                        step="10"
+                        tickInterval="1"
+                        color="primary"
+                        thumbLabel="true"
+                        value="10"
+                      ></mat-slider>
+                      <div class="slider-percentage-box">
+                        <div class="slider-percentaje subtitle-style">10%</div>
+                        <div class="slider-percentaje subtitle-style">20%</div>
+                      </div>
                     </div>
-
                   </div>
-
+                  <div class="margintop10"></div>
+                  <div class="message-style">
+                      Higher interestes are more likely to be lended.
+                  </div>
                 </div>
                 <!-- <div class="col-xs-12 col-lg-6">
                   <mat-form-field>
@@ -284,33 +302,39 @@
                   </mat-form-field>
                 </div> -->
               </div>
-
+              <div class="margintop20"></div>
               <div class="row">
-                  <div class="col col-lg-12">
-                    <div class="title property margintop30 marginbottom10">
-                      INSTALLMENTS
-                    </div>
-                  </div>
-                  <div class="col-xs-12 col-lg-6">
-                    <mat-slide-toggle
-                      formControlName="installmentsFlag"
-                      [disabled]="
-                        !installmentsAvailable || installmentsAvailable < 2
-                      "
-                      (change)="onInstallmentsChange()"
-                    >
-                    </mat-slide-toggle>
-                  </div>
-                  <div class="col-xs-12 col-lg-6" *ngIf="installmentsFlag.value">
-                    {{ installments }}
+                <div class="col col-lg-12">
+                  <div class="title property margintop30 marginbottom10">
+                    INSTALLMENTS
                   </div>
                 </div>
-
-
+                <div class="col-xs-12 col-lg-6">
+                  <span class="subtitle-style">
+                    Do you want to pay back with installments?
+                  </span>
+                  <mat-slide-toggle
+                    formControlName="installmentsFlag"
+                    [disabled]="
+                      !installmentsAvailable || installmentsAvailable < 2
+                    "
+                    (change)="onInstallmentsChange()"
+                  >
+                  </mat-slide-toggle>
+                </div>
+                <div class="col-xs-12 col-lg-6" *ngIf="installmentsFlag.value">
+                  {{ installments }}
+                </div>
+              </div>
+              <div class="margintop20"></div>
               <div class="row">
                 <div class="col-12">
                   <div class="title property margintop30 marginbottom10">
-                    Expiration Request
+                    Expiration date
+                  </div>
+                  <div class="subtitle-style">
+                    If nobody takes your debt, the loan will expire after
+                    certain days of being generated.
                   </div>
                 </div>
                 <div class="col-12 col-lg-4">
@@ -330,7 +354,7 @@
                 </div>
               </div>
             </div>
-            <div class="margintop20">
+            <div class="margintop40">
               <!-- <button
                     mat-raised-button
                     type="submit"
@@ -339,7 +363,7 @@
                   >
                     Next
                   </button> -->
-              <div><a href="">Continue</a></div>
+              <div><a class="link" href="">Continue</a></div>
               <!-- <button
                 mat-raised-button
                 type="submit"
@@ -354,7 +378,7 @@
           (opened)="panelOpenState = true"
           (closed)="panelOpenState = false"
         >
-        <mat-expansion-panel-header>
+          <mat-expansion-panel-header>
             <mat-panel-title class="main-title-style ">
               2 | SELECT YOUR COLLATERAL
             </mat-panel-title>
@@ -363,10 +387,10 @@
               </mat-panel-description> -->
           </mat-expansion-panel-header>
           <form [formGroup]="formGroup2">
-              <!-- <ng-template matStepLabel>Select your collateral</ng-template> -->
-              <ng-template>Select your collateral</ng-template>
-              <div class="container-fluid paddingleft0 paddingright0">
-                <!-- <div class="row">
+            <!-- <ng-template matStepLabel>Select your collateral</ng-template> -->
+            <ng-template>Select your collateral</ng-template>
+            <div class="container-fluid paddingleft0 paddingright0">
+              <!-- <div class="row">
                   <div class="col col-lg-12">
                     <div class="title property margintop30 marginbottom10">
                       Collateral Adjusment
@@ -398,60 +422,86 @@
                     </mat-form-field>
                   </div>
                 </div> -->
-                <div class="row">
-                  <div class="col col-lg-12">
-                    <div class="title property margintop30 marginbottom10">
-                      Collateral Asset
-                    </div>
-                  </div>
-                  <div class="col-xs-12 col-lg-3">
-                    <mat-form-field>
-                      <mat-select
-                        placeholder="Select token"
-                        formControlName="collateralAsset"
-                        required
-                      >
-                        <mat-option
-                          *ngFor="let currency of currencies"
-                          [value]="currency"
-                        >
-                          {{ currency }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
+              <div class="row">
+                <div class="col col-lg-12">
+                  <div class="title property margintop30 marginbottom10">
+                    Collateral Asset
                   </div>
                 </div>
-                <div class="row">
-                    <div class="col col-lg-12">
-                      <div class="title property margintop30 marginbottom10">
-                        LIQUIDATION RATIO
+                <div class="col-xs-12 col-lg-3">
+                  <mat-form-field>
+                    <mat-select
+                      placeholder="Select a Token"
+                      formControlName="requestedCurrency"
+                      (selectionChange)="onCurrencyChange($event)"
+                      required
+                    >
+                      <mat-option>--</mat-option>
+                      <mat-option
+                        *ngFor="let currency of currencies"
+                        [value]="currency"
+                      >
+                        <div class="currency-box">
+                          <div class="currency-img">
+                            <img src="{{ currency.img }}" alt="" />
+                          </div>
+                          {{ currency.currency }}
+                        </div>
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="margintop30"></div>
+              <div class="row">
+                <div class="col col-lg-12">
+                  <div class="title property margintop30 marginbottom10">
+                    LIQUIDATION RATIO
+                  </div>
+                </div>
+                <div class="col-xs-12 col-lg-8">
+                  <!-- <div class="row"> -->
+                  <mat-radio-group aria-label="Select an option">
+                    <mat-radio-button color="primary" value="1"
+                      >125%</mat-radio-button
+                    >
+                    <mat-radio-button
+                      color="primary"
+                      value="2"
+                      class="marginleft30"
+                      >150%</mat-radio-button
+                    >
+                  </mat-radio-group>
+                </div>
+                <!-- </div> -->
+              </div>
+              <div class="margintop30"></div>
+              <div class="row" formGroupName="interest">
+                <div class="col col-lg-12">
+                  <div class="title property margintop30 marginbottom10">
+                    ANNUAL INTEREST RATE
+                  </div>
+                  <div class="subtitle-style">
+                    Select the interest you want to pay
+                  </div>
+                  <div class="margintop20"></div>
+                  <div class="row">
+                    <div class="col-12">
+                      <mat-slider
+                        step="10"
+                        tickInterval="1"
+                        color="primary"
+                        thumbLabel="true"
+                        value="10"
+                      ></mat-slider>
+                      <div class="slider-percentage-box">
+                        <div class="slider-percentaje subtitle-style">10%</div>
+                        <div class="slider-percentaje subtitle-style">20%</div>
                       </div>
-                    </div>
-                    <div class="col-xs-12 col-lg-8">
-                      <div class="row">
-                          <mat-radio-group aria-label="Select an option">
-                              <mat-radio-button color="primary" value="1">125%</mat-radio-button>
-                              <mat-radio-button color="primary" value="2">150%</mat-radio-button>
-                            </mat-radio-group>
-                      </div>
-
                     </div>
                   </div>
-                  <div class="row" formGroupName="interest">
-                      <div class="col col-lg-12">
-                        <div class="title property margintop30 marginbottom10">
-                          ANNUAL INTEREST RATE
-                        </div>
-                        <div class="subtitle-style">Select the interest you want to pay</div>
-                        <div class="row">
-                          <div class="col-12">
-                              <mat-slider step="10" tickInterval="1" color="primary" thumbLabel="true" value="10"></mat-slider>
-                          </div>
-
-                        </div>
-
-                      </div>
-                      <!-- <div class="col-xs-12 col-lg-6">
+                </div>
+                <!-- <div class="col-xs-12 col-lg-6">
                         <mat-form-field>
                           <input
                             matInput
@@ -485,8 +535,8 @@
                           <span matSuffix>%</span>
                         </mat-form-field>
                       </div> -->
-                    </div>
-                <!-- <div class="row">
+              </div>
+              <!-- <div class="row">
                   <div class="col col-lg-12">
                     <div class="title property margintop30 marginbottom10">
                       Liquidation Ratio
@@ -517,58 +567,58 @@
                     </mat-form-field>
                   </div>
                 </div> -->
-              </div>
-              <div class="margintop20">
-                <!-- <button
+            </div>
+            <div class="margintop20">
+              <!-- <button
                   mat-raised-button
                   class="button button-secondary marginright8"
                   matStepperPrevious
                 >
                   Back
                 </button> -->
-                <button
-                  mat-raised-button
-                  class="button button-secondary marginright8"
+              <!-- <button
+                mat-raised-button
+                class="button button-secondary marginright8"
+              >
+                Back
+              </button> -->
+              <!--          <button mat-raised-button type="submit" class='button button-primary'>Create</button> -->
+              <!-- <button
+                mat-raised-button
+                type="submit"
+                class="button button-primary"
+              >
+                {{ submitButtonText }}
+                <div
+                  style="display: inline; margin-left: 5px; vertical-align: baseline;"
+                  *ngIf="opPending"
                 >
-                  Back
-                </button>
-                <!--          <button mat-raised-button type="submit" class='button button-primary'>Create</button> -->
-                <button
-                  mat-raised-button
-                  type="submit"
-                  class="button button-primary"
-                >
-                  {{ submitButtonText }}
-                  <div
-                    style="display: inline; margin-left: 5px; vertical-align: baseline;"
-                    *ngIf="opPending"
-                  >
-                    <i class="fa fa-circle-notch fa-spin"></i>
-                  </div>
-                </button>
-              </div>
-            </form>
-
+                  <i class="fa fa-circle-notch fa-spin"></i>
+                </div>
+              </button> -->
+            </div>
+          </form>
 
           <!-- <p>I'm visible because I am open</p> -->
         </mat-expansion-panel>
       </mat-accordion>
 
       <!-- ------------------------------------------------ -------------------------------------->
+
       <!-- <mat-vertical-stepper linear #stepper (selectionChange)="onStepperChange($event)">  -->
-      <mat-accordion>
-        <!-- <mat-accordion (selectionChange)="onStepperChange($event)"> -->
-        <mat-expansion-panel>
-          <!-- <mat-expansion-panel [stepControl]="formGroup1" [optional]="!isOptional$" [editable]='isEditable$'> -->
-          <!-- <form
+      <!-- <mat-accordion> -->
+      <!-- <mat-accordion (selectionChange)="onStepperChange($event)"> -->
+      <!-- <mat-expansion-panel> -->
+      <!-- <mat-expansion-panel [stepControl]="formGroup1" [optional]="!isOptional$" [editable]='isEditable$'> -->
+      <!-- <form
               [formGroup]="formGroup1"
               (ngSubmit)="onSubmitStep1(fStep1)"
               #fStep1="ngForm"
             > -->
-          <!-- <form [formGroup]="formGroup1" #fStep1="ngForm"> -->
-          <form [formGroup]="formGroup1">
-            <!-- <ng-template matStepLabel>Set yout loan requirements</ng-template> -->
-            <ng-template>Set yout loan requirements</ng-template>
+      <!-- <form [formGroup]="formGroup1" #fStep1="ngForm"> -->
+      <!-- <form [formGroup]="formGroup1"> -->
+      <!-- <ng-template matStepLabel>Set yout loan requirements</ng-template> -->
+      <!-- <ng-template>Set yout loan requirements</ng-template>
 
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row" formGroupName="conversionGraphic">
@@ -598,8 +648,8 @@
                             formGroup1.controls.conversionGraphic.controls
                               .requestedCurrency.invalid
                         }"
-                      ></div>
-                    </div>
+                      ></div> -->
+      <!-- </div>
                     <div class="title">{{ "Return" }}</div>
                   </div>
                   <div class="conversion-block">
@@ -623,8 +673,8 @@
                               (requestValue.pristine && requestValue.untouched)
                             "
                             >Requested amount</span
-                          >
-                          <span
+                          > -->
+      <!-- <span
                             class="red"
                             *ngIf="
                               requestValue.errors &&
@@ -651,12 +701,12 @@
                 </div>
               </div>
               <div class="row" formGroupName="duration">
-                <div class="col-12">
-                  <div class="title property marginbottom10">
+                <div class="col-12"> -->
+      <!-- <div class="title property marginbottom10">
                     Duration of the loan
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                   <mat-form-field>
                     <mat-select
                       placeholder="Select a number"
@@ -680,8 +730,8 @@
                     INSTALLMENTS
                   </div>
                 </div>
-                <div class="col-xs-12 col-lg-6">
-                  <mat-slide-toggle
+                <div class="col-xs-12 col-lg-6"> -->
+      <!-- <mat-slide-toggle
                     formControlName="installmentsFlag"
                     [disabled]="
                       !installmentsAvailable || installmentsAvailable < 2
@@ -710,8 +760,8 @@
                       (keyup)="expectedReturn()"
                       pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
                       required
-                    />
-                    <mat-hint>
+                    /> -->
+      <!-- <mat-hint>
                       <span
                         *ngIf="
                           annualInterest.valid ||
@@ -736,8 +786,8 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-12">
-                  <div class="title property margintop30 marginbottom10">
+                <div class="col-12"> -->
+      <!-- <div class="title property margintop30 marginbottom10">
                     Expiration Request
                   </div>
                 </div>
@@ -758,8 +808,8 @@
                 </div>
               </div>
             </div>
-            <div class="margintop20">
-              <!-- <button
+            <div class="margintop20"> -->
+      <!-- <button
                 mat-raised-button
                 type="submit"
                 class="button button-primary"
@@ -767,7 +817,7 @@
               >
                 Next
               </button> -->
-              <button
+      <!-- <button
                 mat-raised-button
                 type="submit"
                 class="button button-primary"
@@ -776,20 +826,20 @@
               </button>
             </div>
           </form>
-        </mat-expansion-panel>
+        </mat-expansion-panel> -->
 
-        <!-- ------------------------------------------------ -------------------------------------->
-        <mat-expansion-panel>
-          <!-- <mat-expansion-panel [stepControl]="formGroup2" [optional]="!isOptional$" [editable]='isEditable$'> -->
-          <!-- <form
+      <!-- ------------------------------------------------ -------------------------------------->
+      <!-- <mat-expansion-panel> -->
+      <!-- <mat-expansion-panel [stepControl]="formGroup2" [optional]="!isOptional$" [editable]='isEditable$'> -->
+      <!-- <form
               [formGroup]="formGroup2"
               (ngSubmit)="onSubmitStep2(fStep2)"
               #fStep2="ngForm"
             > -->
-          <!-- <form [formGroup]="formGroup2" #fStep2="ngForm"> -->
-          <form [formGroup]="formGroup2">
-            <!-- <ng-template matStepLabel>Select your collateral</ng-template> -->
-            <ng-template>Select your collateral</ng-template>
+      <!-- <form [formGroup]="formGroup2" #fStep2="ngForm"> -->
+      <!-- <form [formGroup]="formGroup2"> -->
+      <!-- <ng-template matStepLabel>Select your collateral</ng-template> -->
+      <!-- <ng-template>Select your collateral</ng-template>
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row">
                 <div class="col col-lg-12">
@@ -816,8 +866,8 @@
                         "
                       >
                         Remember: loan with higher collateral are more likely to
-                        be lended.
-                      </span>
+                        be lended. -->
+      <!-- </span>
                     </mat-hint>
                     <span matSuffix>%</span>
                   </mat-form-field>
@@ -839,8 +889,8 @@
                       <mat-option
                         *ngFor="let currency of currencies"
                         [value]="currency"
-                      >
-                        {{ currency }}
+                      > -->
+      <!-- {{ currency }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
@@ -861,8 +911,8 @@
                       formControlName="liquidationRatio"
                       pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
                       required
-                    />
-                    <mat-hint>
+                    /> -->
+      <!-- <mat-hint>
                       <span
                         *ngIf="
                           liquidationRatio.valid ||
@@ -878,22 +928,22 @@
                 </div>
               </div>
             </div>
-            <div class="margintop20">
-              <!-- <button
+            <div class="margintop20"> -->
+      <!-- <button
                 mat-raised-button
                 class="button button-secondary marginright8"
                 matStepperPrevious
               >
                 Back
               </button> -->
-              <button
+      <!-- <button
                 mat-raised-button
                 class="button button-secondary marginright8"
               >
                 Back
-              </button>
-              <!--          <button mat-raised-button type="submit" class='button button-primary'>Create</button> -->
-              <button
+              </button> -->
+      <!--          <button mat-raised-button type="submit" class='button button-primary'>Create</button> -->
+      <!-- <button
                 mat-raised-button
                 type="submit"
                 class="button button-primary"
@@ -909,7 +959,8 @@
             </div>
           </form>
         </mat-expansion-panel>
-      </mat-accordion>
+      </mat-accordion> -->
+
       <!-- ------------------------------------------------ -------------------------------------->
       <!-- </mat-vertical-stepper> -->
 
@@ -927,10 +978,10 @@
           <app-creator-container [loan]="loan"></app-creator-container>
         </ng-container>
         <div class="card-row">
-          <div class="card-property">
+          <!-- <div class="card-property">
             <div class="title">{{ "Borrower" }}</div>
             <div class="paragraph">{{ shortAccount }}</div>
-          </div>
+          </div> -->
           <div class="card-property">
             <div class="title">{{ "Duration" }}</div>
             <div class="paragraph">{{ durationLabel }}</div>
@@ -939,7 +990,32 @@
             <div class="title">{{ "Annual Interest" }}</div>
             <div class="paragraph">~ {{ annualInterest.value }} %</div>
           </div>
-          <div class="properties-block">
+          <div class="card-property">
+            <div class="title">{{ "Installments" }}</div>
+            <div class="paragraph">{{ durationLabel }}</div>
+          </div>
+          <div class="card-property">
+            <div class="title">{{ "Expiration rate" }}</div>
+            <div class="paragraph">{{ durationLabel }}</div>
+          </div>
+          <div class="card-property">
+            <div class="title">{{ "Collateral amount" }}</div>
+            <div class="paragraph">{{ durationLabel }}</div>
+          </div>
+          <div><a class="link" href="">See more</a></div>
+          <div class="margintop20"></div>
+          <div class="card-property">
+            <div class="title">{{ "Borrow" }}</div>
+            <div class="paragraph">{{ durationLabel }}</div>
+          </div>
+          <div class="card-property">
+            <div class="title">{{ "Return" }}</div>
+            <div class="paragraph">{{ durationLabel }}</div>
+          </div>
+          <div class="margintop20"></div>
+          <div class="button">Confirm</div>
+          <div><a class="link" href="">Reset all values</a></div>
+          <!-- <div class="properties-block">
             <div class="title">{{ "Lend" }}</div>
             <div class="currency">
               {{
@@ -950,14 +1026,14 @@
               }}
             </div>
             <div class="title">{{ "Return" }}</div>
-          </div>
-          <div class="conversion-block">
+          </div> -->
+          <!-- <div class="conversion-block">
             <div class="block-title">{{ requestValue.value }}</div>
             <div class="currency">
               <i class="material-icons" style="font-size: 2em">arrow_forward</i>
             </div>
             <div class="block-title">{{ returnValue }}</div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

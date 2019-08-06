@@ -54,7 +54,11 @@ export class CreateLoanComponent implements OnInit {
   liquidationRatio: FormControl;
 
   requiredInvalid$ = false;
-  currencies: string[] = ['rcn', 'mana', 'ars'];
+  currencies: any = [
+  { currency: 'RCN', img: '../../../assets/rcn.png' },
+  { currency: 'MANA', img: '../../../assets/mana.png' },
+  { currency: 'ETH', img: '../../../assets/eth.png' },
+  { currency: 'DAI', img: '../../../assets/dai.png' }];
   durationDays: number[] = [15, 30, 45, 60, 75, 90];
   selectedOracle: any;
   pendingTx: Tx = undefined;

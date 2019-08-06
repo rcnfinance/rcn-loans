@@ -95,6 +95,20 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
 
 .mat-slider-horizontal {
   width: 300px;
+  height: 40px !important;
+}
+
+.mat-slider {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.mat-radio-button {
+  color: white !important;
+}
+
+.mat-radio-outer-circle {
+  border-color: white;
 }
 
 .button{
