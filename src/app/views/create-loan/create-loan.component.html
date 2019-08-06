@@ -23,7 +23,7 @@
               1 | SET YOUR LOAN REQUIREMENTS
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <form [formGroup]="formGroup1">
+          <form [formGroup]="formGroup1" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1="ngForm">
             <ng-template>Set yout loan requirements</ng-template>
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row" formGroupName="conversionGraphic">
@@ -162,6 +162,7 @@
                         color="primary"
                         thumbLabel="true"
                         value="10"
+                        formControlName="annualInterest"
                       ></mat-slider>
                       <div class="slider-percentage-box">
                         <div class="slider-percentaje subtitle-style">10%</div>
@@ -189,9 +190,7 @@
                   </span>
                   <mat-slide-toggle
                     formControlName="installmentsFlag"
-                    [disabled]="
-                      !installmentsAvailable || installmentsAvailable < 2
-                    "
+                    [disabled]="!installmentsAvailable || installmentsAvailable < 2"
                     (change)="onInstallmentsChange()"
                   >
                   </mat-slide-toggle>
@@ -235,7 +234,9 @@
               </div>
             </div>
             <div class="margintop40">
-              <div><a class="link" href="">Continue</a></div>
+              <button mat-raised-button type="submit" class='button button-primary'>
+                Continue
+              </button>
             </div>
           </form>
         </mat-expansion-panel>
@@ -248,7 +249,7 @@
               2 | SELECT YOUR COLLATERAL
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <form [formGroup]="formGroup2">
+          <form [formGroup]="formGroup2" (ngSubmit)="onSubmitStep2(fStep2)" #fStep2="ngForm">
             <ng-template>Select your collateral</ng-template>
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row">
@@ -261,11 +262,12 @@
                   <mat-form-field>
                     <mat-select
                       placeholder="Select a Token"
-                      formControlName="requestedCurrency"
-                      (selectionChange)="onCurrencyChange($event)"
+                      formControlName="collateralAsset"
                       required
                     >
-                      <mat-option>--</mat-option>
+                      <mat-option>
+                        --
+                      </mat-option>
                       <mat-option
                         *ngFor="let currency of currencies"
                         [value]="currency"
@@ -289,17 +291,20 @@
                   </div>
                 </div>
                 <div class="col-xs-12 col-lg-8">
-                  <!-- <div class="row"> -->
-                  <mat-radio-group aria-label="Select an option">
-                    <mat-radio-button color="primary" value="1"
-                      >125%</mat-radio-button
-                    >
+                  <mat-radio-group formControlName="liquidationRatio" aria-label="Select an option">
                     <mat-radio-button
                       color="primary"
-                      value="2"
-                      class="marginleft30"
-                      >150%</mat-radio-button
+                      [value]="125"
                     >
+                      125%
+                    </mat-radio-button>
+                    <mat-radio-button
+                      color="primary"
+                      [value]="150"
+                      class="marginleft30"
+                    >
+                      150%
+                    </mat-radio-button>
                   </mat-radio-group>
                 </div>
               </div>
@@ -309,7 +314,7 @@
                 sit amet, consectetur adipiscing elit.
               </div>
               <div class="margintop30"></div>
-              <div class="row" formGroupName="interest">
+              <div class="row">
                 <div class="col col-lg-12">
                   <div class="title property margintop30 marginbottom10">
                     BALANCE RATIO
@@ -321,6 +326,7 @@
                   <div class="row">
                     <div class="col-12">
                       <mat-slider
+                        formControlName="collateralAdjustment"
                         step="10"
                         tickInterval="1"
                         color="primary"
@@ -389,7 +395,14 @@
             <div class="block-title">{{ durationLabel }}</div>
           </div>
           <div class="margintop20"></div>
-          <div class="button"> <span>Confirm</span> </div>
+          <button
+            mat-raised-button
+            class="button button-primary margintop20"
+            [disabled]="!formGroup1.valid || !formGroup2.valid"
+            (click)="onSubmitStep2(fStep2)"
+          >
+            Confirm
+          </button>
           <div class="margintop20"></div>
           <div><a class="link" href="">Reset all values</a></div>
         </div>

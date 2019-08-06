@@ -240,18 +240,18 @@ export class CreateLoanComponent implements OnInit {
    * @param requestedCurrency.value Requested currency as string
    */
   onCurrencyChange(requestedCurrency) {
-    switch (requestedCurrency.value) {
-      case 'rcn':
+    switch (requestedCurrency.value.currency) {
+      case 'RCN':
         this.selectedOracle = null;
         break;
-      case 'mana':
+      case 'MANA':
         if (environment.production) {
           this.selectedOracle = '0x2aaf69a2df2828b55fa4a5e30ee8c3c7cd9e5d5b'; // Mana Prod Oracle
         } else {
           this.selectedOracle = '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40'; // Mana Dev Oracle
         }
         break;
-      case 'ars':
+      case 'ARS':
         if (environment.production) {
           this.selectedOracle = '0x22222c1944efcc38ca46489f96c3a372c4db74e6'; // Ars Prod Oracle
         } else {
