@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Loan } from '../../models/loan.model';
+import { Loan, Network } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 import { environment } from '../../../environments/environment';
@@ -25,34 +25,25 @@ export class DialogSelectCurrencyComponent implements OnInit {
   exchangeDefault = 1;
   exchangeRcn;
   exchangeToken;
+  lendPayload: {
+    payableAmount: number,
+    converter: string,
+    fromToken: string,
+    oracleData: any
+  };
   // general
   account: string;
   canLend: boolean;
-  options: Array<{
+  currencies: Array<{
+    name: string,
+    address: string
+  }> = [];
+  availableCurrencies: Array<{
     id: number,
     name: string,
     img: string,
     address: string
-  }> = [
-    {
-      id: 1,
-      name: 'RCN',
-      img: '../../../assets/rcn.png',
-      address: environment.contracts.rcnToken
-    },
-    {
-      id: 2,
-      name: 'DAI',
-      img: '../../../assets/dai.png',
-      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
-    },
-    {
-      id: 3,
-      name: 'ETH',
-      img: '../../../assets/eth.png',
-      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
-    }
-  ];
+  }> = [];
 
   constructor(
     private contractsService: ContractsService,
@@ -69,6 +60,53 @@ export class DialogSelectCurrencyComponent implements OnInit {
       this.canLend = true;
     } else if (this.loan instanceof Loan) {
       this.canLend = false;
+    }
+
+    this.currencies.push({
+      name: 'RCN',
+      address: environment.contracts.rcnToken
+    }, {
+      name: 'DAI',
+      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
+    }, {
+      name: 'MANA',
+      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
+    }, {
+      name: 'ETH',
+      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    });
+
+    switch (this.loan.network) {
+      case Network.Basalt:
+        this.availableCurrencies.push({
+          id: 1,
+          name: 'RCN',
+          img: '../../../assets/rcn.png',
+          address: environment.contracts.rcnToken
+        });
+        break;
+
+      case Network.Diaspore:
+        this.availableCurrencies.push({
+          id: 1,
+          name: 'RCN',
+          img: '../../../assets/rcn.png',
+          address: environment.contracts.rcnToken
+        }, {
+          id: 2,
+          name: 'DAI',
+          img: '../../../assets/dai.png',
+          address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
+        }, {
+          id: 3,
+          name: 'ETH',
+          img: '../../../assets/eth.png',
+          address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+        });
+        break;
+
+      default:
+        break;
     }
 
     const web3 = this.web3.web3;
@@ -124,7 +162,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
     const costInRcn: any = new web3.BigNumber(rcnRate).mul(loanAmount);
 
     // get selected currency address
-    const selectedCurrency = await this.getCurrencyByCode(selectedCurrencyCode);
+    const selectedCurrency = this.getCurrencyByCode(selectedCurrencyCode);
     const tokenAddress = selectedCurrency.address;
 
     // set conversion values
@@ -134,6 +172,8 @@ export class DialogSelectCurrencyComponent implements OnInit {
     let tokenRate;
     let requiredAmount;
     let expectedReturnAmount;
+    let tokenCost;
+    let etherCost;
 
     // get lend amount in another currency
     if (fromToken === token) {
@@ -149,8 +189,8 @@ export class DialogSelectCurrencyComponent implements OnInit {
         fromToken,
         token
       );
-      const tokenCost = new web3.BigNumber(selectedTokenRate[0]);
-      const etherCost = new web3.BigNumber(selectedTokenRate[1]);
+      tokenCost = new web3.BigNumber(selectedTokenRate[0]);
+      etherCost = new web3.BigNumber(selectedTokenRate[1]);
 
       if (tokenCost.isZero()) {
         requiredAmount = web3.fromWei(etherCost);
@@ -162,6 +202,14 @@ export class DialogSelectCurrencyComponent implements OnInit {
       expectedReturnAmount = new web3.BigNumber(tokenRate).mul(loanReturn);
     }
 
+    // set lend data
+    this.lendPayload = {
+      payableAmount: etherCost,
+      converter: uniswapProxy,
+      fromToken: fromToken,
+      oracleData: null
+    };
+
     this.exchangeToken = Utils.formatAmount(tokenRate);
     this.lendAmount = Utils.formatAmount(requiredAmount);
     this.lendExpectedReturn = Utils.formatAmount(expectedReturnAmount);
@@ -172,8 +220,8 @@ export class DialogSelectCurrencyComponent implements OnInit {
    * @param code Currency code
    * @return Currency data
    */
-  async getCurrencyByCode(code) {
-    const currency: Array<any> = this.options.filter(option => option.name === code);
+  getCurrencyByCode(code) {
+    const currency: Array<any> = this.currencies.filter(item => item.name === code);
     return currency[0] || null;
   }
 

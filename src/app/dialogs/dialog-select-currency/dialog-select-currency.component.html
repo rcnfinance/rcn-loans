@@ -30,13 +30,13 @@
               Select Token
             </mat-label>
             <mat-select [(value)]="selectedCurrency" (selectionChange)="onChangeCurrency()">
-              <mat-option *ngFor="let option of options" value="{{ option.name }}">
+              <mat-option *ngFor="let item of availableCurrencies" [value]="item.name">
                 <div class="row align-items-center">
                   <div class="icon-box item">
-                    <img matPrefix class="input-icon" src="{{option.img}}">
+                    <img matPrefix class="input-icon" [src]="item.img">
                   </div>
                   <div class="currency">
-                    {{ option.name }}
+                    {{ item.name }}
                   </div>
                 </div>
               </mat-option>
@@ -134,8 +134,7 @@
     <div class="col-sm-12 col-md-6">
       <div class="row justify-content-end no-gutters">
         <div class="col-sm-12 col-md-3 right">
-          <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
-          <!-- <button mat-raised-button class="button button-primary lend">Lend</button> -->
+          <app-lend-button [loan]="loan" [lendPayload]="lendPayload" *ngIf="canLend"></app-lend-button>
         </div>
         <div class="col-sm-0 col-md-3">
           <button mat-raised-button matDialogClose href="https://metamask.io/" target="_blank" class="button button-secondary cancel">

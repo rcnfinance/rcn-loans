@@ -181,11 +181,11 @@ export class ContractsService {
     loanId: string,
     oracleData: string,
     cosignerData: string,
-    account: string
+    account: string,
+    callbackData: string
   ) {
     const web3 = this.web3.opsWeb3;
     return await promisify(this.loadAltContract(web3, this._rcnConverterRamp).lend, [
-      payableAmount,
       converter,
       fromToken,
       loanManager,
@@ -194,7 +194,11 @@ export class ContractsService {
       loanId,
       oracleData,
       cosignerData,
-      { from: account }
+      callbackData,
+      {
+        from: account,
+        value: payableAmount
+      }
     ]);
   }
 
@@ -262,23 +266,27 @@ export class ContractsService {
     const cosigner = this.cosignerService.getCosigner(loan);
     let cosignerAddr = '0x0';
     let cosignerData = '0x0';
+
     if (cosigner !== undefined) {
       const cosignerOffer = await cosigner.offer(loan);
       cosignerAddr = cosignerOffer.contract;
       cosignerData = cosignerOffer.lendData;
     }
+
+    const callbackData = '0x0';
     const oracleData = pOracleData;
     const web3 = this.web3.opsWeb3;
     const account = await this.web3.getAccount();
-    switch (loan.network) {
 
+    switch (loan.network) {
       case Network.Basalt:
         return await promisify(this.loadAltContract(web3, this._rcnEngine).lend,
           [loan.id, oracleData, cosignerAddr, cosignerData, { from: account }]);
-      case Network.Diaspore:
 
+      case Network.Diaspore:
         return await promisify(this.loadAltContract(web3, this._loanManager).lend,
-          [loan.id, oracleData, cosignerAddr, 0, cosignerData, { from: account }]);
+          [loan.id, oracleData, cosignerAddr, 0, cosignerData, callbackData, { from: account }]);
+
       default:
         throw Error('Unknown network');
     }
