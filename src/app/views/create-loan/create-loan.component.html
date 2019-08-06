@@ -4,7 +4,6 @@
   color="#fff"
   type="ball-clip-rotate-multiple"
 ></ngx-spinner>
-
 <div class="container">
   <div class="margintop10 d-lg-none d-xs-block"></div>
   <div class="row">
@@ -15,33 +14,17 @@
       </div>
     </div>
   </div>
-
   <div class="row">
     <div class="col-xs-12 col-lg-8">
-      <!-- ------------------------------------------------ -------------------------------------->
-
       <mat-accordion>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title class="main-title-style ">
               1 | SET YOUR LOAN REQUIREMENTS
             </mat-panel-title>
-            <!-- <mat-panel-description>
-                Type your name and age
-              </mat-panel-description> -->
           </mat-expansion-panel-header>
-
-          <!-- <mat-form-field>
-              <input matInput placeholder="First name">
-            </mat-form-field>
-
-            <mat-form-field>
-              <input matInput placeholder="Age">
-            </mat-form-field> -->
           <form [formGroup]="formGroup1">
-            <!-- <ng-template matStepLabel>Set yout loan requirements</ng-template> -->
             <ng-template>Set yout loan requirements</ng-template>
-
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row" formGroupName="conversionGraphic">
                 <div class="col-12 margintop30">
@@ -82,7 +65,6 @@
                     </div>
                     <div class="col-3">
                       <div class="title">BORROW AMOUNT</div>
-                      <!-- <div class="margintop10"></div> -->
                       <div class="">
                         <div>
                           <mat-form-field>
@@ -105,102 +87,26 @@
                                   (requestValue.pristine &&
                                     requestValue.untouched)
                                 "
-                                >Requested amount</span
-                              >
+                                >Requested amount</span>
                               <span
                                 class="red"
                                 *ngIf="
                                   requestValue.errors &&
                                   (requestValue.dirty || requestValue.touched)
                                 "
-                                >The minimum is 1</span
-                              >
+                                >The minimum is 1</span>
                             </mat-hint>
                           </mat-form-field>
                         </div>
-                        <!-- <div class="currency">
-                          <i class="material-icons" style="font-size: 2em"
-                            >arrow_forward</i
-                          >
-                        </div> -->
-                        <!-- <div class="block-title">{{ returnValue }}</div> -->
                       </div>
                     </div>
                   </div>
-
-                  <!-- <div class="properties-block">
-                        <div class="currency-block">
-                        <div class="title">{{ "Request" }}</div>
-                        <div class="currency">
-                          <mat-select
-                            placeholder="Select a Token"
-                            formControlName="requestedCurrency"
-                            (selectionChange)="onCurrencyChange($event)"
-                            required
-                          >
-                            <mat-option>--</mat-option>
-                            <mat-option
-                              *ngFor="let currency of currencies"
-                              [value]="currency"
-                            >
-                              {{ currency }}
-                            </mat-option>
-                          </mat-select>
-                          <div
-                            class="required"
-                            *ngIf="requiredInvalid$"
-                            [ngClass]="{
-                              'required-invalid':
-                                formGroup1.controls.conversionGraphic.controls
-                                  .requestedCurrency.invalid
-                            }"
-                          ></div>
-                        </div>
-                      </div>
-                        <div class="title">{{ "Return" }}</div> -->
-                  <!-- </div>  -->
-
-                  <!-- <div class="conversion-block">
-                    <div class="block-title">
-                      <mat-form-field>
-                        <input
-                          matInput
-                          type="number"
-                          min="0"
-                          max="1000000"
-                          value="0"
-                          formControlName="requestValue"
-                          (keyup)="onRequestedChange($event)"
-                          pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-                          required
-                        />
-                        <mat-hint>
-                          <span
-                            *ngIf="
-                              requestValue.valid ||
-                              (requestValue.pristine && requestValue.untouched)
-                            "
-                            >Requested amount</span
-                          >
-                          <span
-                            class="red"
-                            *ngIf="
-                              requestValue.errors &&
-                              (requestValue.dirty || requestValue.touched)
-                            "
-                            >The minimum is 1</span
-                          >
-                        </mat-hint>
-                      </mat-form-field>
-                    </div>
-                    <div class="currency">
-                      <i class="material-icons" style="font-size: 2em"
-                        >arrow_forward</i
-                      >
-                    </div>
-                    <div class="block-title">{{ returnValue }}</div>
-                  </div> -->
-
+                  <div class="margintop10"></div>
+                  <div class="message-style">
+                    <i class="fas fa-exclamation-triangle"></i> You’re borrowing
+                    in DAI, therefore the value of the pays is going to be
+                    converted to RCN.
+                  </div>
                   <div
                     *ngIf="selectedOracle"
                     class="title main-m3 margintop20 ellipsis"
@@ -264,43 +170,10 @@
                   </div>
                   <div class="margintop10"></div>
                   <div class="message-style">
-                      Higher interestes are more likely to be lended.
+                    <i class="fas fa-info-circle"></i> Higher interestes are
+                    more likely to be lended.
                   </div>
                 </div>
-                <!-- <div class="col-xs-12 col-lg-6">
-                  <mat-form-field>
-                    <input
-                      matInput
-                      type="number"
-                      max="200"
-                      formControlName="annualInterest"
-                      (keyup)="expectedReturn()"
-                      pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-                      required
-                    />
-                    <mat-hint>
-                      <span
-                        *ngIf="
-                          annualInterest.valid ||
-                          (annualInterest.pristine && annualInterest.untouched)
-                        "
-                      >
-                        Remember: higher interestes are more likely to be
-                        lended.
-                      </span>
-                      <span
-                        class="red"
-                        *ngIf="
-                          annualInterest.errors &&
-                          (annualInterest.dirty || annualInterest.touched)
-                        "
-                      >
-                        The minimum Annual Interest rate is 1%
-                      </span>
-                    </mat-hint>
-                    <span matSuffix>%</span>
-                  </mat-form-field>
-                </div> -->
               </div>
               <div class="margintop20"></div>
               <div class="row">
@@ -325,6 +198,12 @@
                 <div class="col-xs-12 col-lg-6" *ngIf="installmentsFlag.value">
                   {{ installments }}
                 </div>
+              </div>
+              <div class="margintop20"></div>
+              <div class="message-style">
+                <i class="fas fa-exclamation-triangle"></i> Payments are made
+                every 15 days and the amount thereof is determined by the
+                duration of the loan.
               </div>
               <div class="margintop20"></div>
               <div class="row">
@@ -355,22 +234,7 @@
               </div>
             </div>
             <div class="margintop40">
-              <!-- <button
-                    mat-raised-button
-                    type="submit"
-                    class="button button-primary"
-                    matStepperNext
-                  >
-                    Next
-                  </button> -->
               <div><a class="link" href="">Continue</a></div>
-              <!-- <button
-                mat-raised-button
-                type="submit"
-                class="button button-primary"
-              >
-                Next
-              </button> -->
             </div>
           </form>
         </mat-expansion-panel>
@@ -382,46 +246,10 @@
             <mat-panel-title class="main-title-style ">
               2 | SELECT YOUR COLLATERAL
             </mat-panel-title>
-            <!-- <mat-panel-description>
-                Type your name and age
-              </mat-panel-description> -->
           </mat-expansion-panel-header>
           <form [formGroup]="formGroup2">
-            <!-- <ng-template matStepLabel>Select your collateral</ng-template> -->
             <ng-template>Select your collateral</ng-template>
             <div class="container-fluid paddingleft0 paddingright0">
-              <!-- <div class="row">
-                  <div class="col col-lg-12">
-                    <div class="title property margintop30 marginbottom10">
-                      Collateral Adjusment
-                    </div>
-                  </div>
-                  <div class="col-xs-12 col-lg-8">
-                    <mat-form-field>
-                      <input
-                        matInput
-                        type="number"
-                        max="200"
-                        formControlName="collateralAdjustment"
-                        pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-                        required
-                      />
-                      <mat-hint>
-                        <span
-                          *ngIf="
-                            collateralAdjustment.valid ||
-                            (collateralAdjustment.pristine &&
-                              collateralAdjustment.untouched)
-                          "
-                        >
-                          Remember: loan with higher collateral are more likely to
-                          be lended.
-                        </span>
-                      </mat-hint>
-                      <span matSuffix>%</span>
-                    </mat-form-field>
-                  </div>
-                </div> -->
               <div class="row">
                 <div class="col col-lg-12">
                   <div class="title property margintop30 marginbottom10">
@@ -473,13 +301,17 @@
                     >
                   </mat-radio-group>
                 </div>
-                <!-- </div> -->
+              </div>
+              <div class="margintop20"></div>
+              <div class="message-style">
+                <i class="fas fa-exclamation-triangle"></i> Lorem ipsum dolor
+                sit amet, consectetur adipiscing elit.
               </div>
               <div class="margintop30"></div>
               <div class="row" formGroupName="interest">
                 <div class="col col-lg-12">
                   <div class="title property margintop30 marginbottom10">
-                    ANNUAL INTEREST RATE
+                    BALANCE RATIO
                   </div>
                   <div class="subtitle-style">
                     Select the interest you want to pay
@@ -495,478 +327,25 @@
                         value="10"
                       ></mat-slider>
                       <div class="slider-percentage-box">
-                        <div class="slider-percentaje subtitle-style">10%</div>
-                        <div class="slider-percentaje subtitle-style">20%</div>
+                        <div class="slider-percentaje subtitle-style">150%</div>
+                        <div class="slider-percentaje subtitle-style">400%</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <!-- <div class="col-xs-12 col-lg-6">
-                        <mat-form-field>
-                          <input
-                            matInput
-                            type="number"
-                            max="200"
-                            formControlName="annualInterest"
-                            (keyup)="expectedReturn()"
-                            pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-                            required
-                          />
-                          <mat-hint>
-                            <span
-                              *ngIf="
-                                annualInterest.valid ||
-                                (annualInterest.pristine && annualInterest.untouched)
-                              "
-                            >
-                              Remember: higher interestes are more likely to be
-                              lended.
-                            </span>
-                            <span
-                              class="red"
-                              *ngIf="
-                                annualInterest.errors &&
-                                (annualInterest.dirty || annualInterest.touched)
-                              "
-                            >
-                              The minimum Annual Interest rate is 1%
-                            </span>
-                          </mat-hint>
-                          <span matSuffix>%</span>
-                        </mat-form-field>
-                      </div> -->
               </div>
-              <!-- <div class="row">
-                  <div class="col col-lg-12">
-                    <div class="title property margintop30 marginbottom10">
-                      Liquidation Ratio
-                    </div>
-                  </div>
-                  <div class="col-xs-12 col-lg-8">
-                    <mat-form-field>
-                      <input
-                        matInput
-                        type="number"
-                        max="200"
-                        formControlName="liquidationRatio"
-                        pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-                        required
-                      />
-                      <mat-hint>
-                        <span
-                          *ngIf="
-                            liquidationRatio.valid ||
-                            (liquidationRatio.pristine &&
-                              liquidationRatio.untouched)
-                          "
-                        >
-                          Remember: Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                        </span>
-                      </mat-hint>
-                      <span matSuffix>%</span>
-                    </mat-form-field>
-                  </div>
-                </div> -->
+              <div class="margintop20"></div>
+              <div class="message-style">
+                <i class="fas fa-exclamation-triangle"></i> Lorem ipsum dolor
+                sit amet, consectetur adipiscing elit.
+              </div>
             </div>
             <div class="margintop20">
-              <!-- <button
-                  mat-raised-button
-                  class="button button-secondary marginright8"
-                  matStepperPrevious
-                >
-                  Back
-                </button> -->
-              <!-- <button
-                mat-raised-button
-                class="button button-secondary marginright8"
-              >
-                Back
-              </button> -->
-              <!--          <button mat-raised-button type="submit" class='button button-primary'>Create</button> -->
-              <!-- <button
-                mat-raised-button
-                type="submit"
-                class="button button-primary"
-              >
-                {{ submitButtonText }}
-                <div
-                  style="display: inline; margin-left: 5px; vertical-align: baseline;"
-                  *ngIf="opPending"
-                >
-                  <i class="fa fa-circle-notch fa-spin"></i>
-                </div>
-              </button> -->
             </div>
           </form>
-
-          <!-- <p>I'm visible because I am open</p> -->
         </mat-expansion-panel>
       </mat-accordion>
-
-      <!-- ------------------------------------------------ -------------------------------------->
-
-      <!-- <mat-vertical-stepper linear #stepper (selectionChange)="onStepperChange($event)">  -->
-      <!-- <mat-accordion> -->
-      <!-- <mat-accordion (selectionChange)="onStepperChange($event)"> -->
-      <!-- <mat-expansion-panel> -->
-      <!-- <mat-expansion-panel [stepControl]="formGroup1" [optional]="!isOptional$" [editable]='isEditable$'> -->
-      <!-- <form
-              [formGroup]="formGroup1"
-              (ngSubmit)="onSubmitStep1(fStep1)"
-              #fStep1="ngForm"
-            > -->
-      <!-- <form [formGroup]="formGroup1" #fStep1="ngForm"> -->
-      <!-- <form [formGroup]="formGroup1"> -->
-      <!-- <ng-template matStepLabel>Set yout loan requirements</ng-template> -->
-      <!-- <ng-template>Set yout loan requirements</ng-template>
-
-            <div class="container-fluid paddingleft0 paddingright0">
-              <div class="row" formGroupName="conversionGraphic">
-                <div class="col-12 margintop30">
-                  <div class="properties-block">
-                    <div class="title">{{ "Request" }}</div>
-                    <div class="currency">
-                      <mat-select
-                        placeholder="Currency"
-                        formControlName="requestedCurrency"
-                        (selectionChange)="onCurrencyChange($event)"
-                        required
-                      >
-                        <mat-option>--</mat-option>
-                        <mat-option
-                          *ngFor="let currency of currencies"
-                          [value]="currency"
-                        >
-                          {{ currency }}
-                        </mat-option>
-                      </mat-select>
-                      <div
-                        class="required"
-                        *ngIf="requiredInvalid$"
-                        [ngClass]="{
-                          'required-invalid':
-                            formGroup1.controls.conversionGraphic.controls
-                              .requestedCurrency.invalid
-                        }"
-                      ></div> -->
-      <!-- </div>
-                    <div class="title">{{ "Return" }}</div>
-                  </div>
-                  <div class="conversion-block">
-                    <div class="block-title">
-                      <mat-form-field>
-                        <input
-                          matInput
-                          type="number"
-                          min="0"
-                          max="1000000"
-                          value="0"
-                          formControlName="requestValue"
-                          (keyup)="onRequestedChange($event)"
-                          pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-                          required
-                        />
-                        <mat-hint>
-                          <span
-                            *ngIf="
-                              requestValue.valid ||
-                              (requestValue.pristine && requestValue.untouched)
-                            "
-                            >Requested amount</span
-                          > -->
-      <!-- <span
-                            class="red"
-                            *ngIf="
-                              requestValue.errors &&
-                              (requestValue.dirty || requestValue.touched)
-                            "
-                            >The minimum is 1</span
-                          >
-                        </mat-hint>
-                      </mat-form-field>
-                    </div>
-                    <div class="currency">
-                      <i class="material-icons" style="font-size: 2em"
-                        >arrow_forward</i
-                      >
-                    </div>
-                    <div class="block-title">{{ returnValue }}</div>
-                  </div>
-                  <div
-                    *ngIf="selectedOracle"
-                    class="title main-m3 margintop20 ellipsis"
-                  >
-                    Oracle: {{ selectedOracle }}
-                  </div>
-                </div>
-              </div>
-              <div class="row" formGroupName="duration">
-                <div class="col-12"> -->
-      <!-- <div class="title property marginbottom10">
-                    Duration of the loan
-                  </div>
-                </div>
-                <div class="col-3">
-                  <mat-form-field>
-                    <mat-select
-                      placeholder="Select a number"
-                      formControlName="fullDuration"
-                      (selectionChange)="onDurationChange()"
-                      required
-                    >
-                      <mat-option
-                        *ngFor="let duration of durationDays"
-                        [value]="duration"
-                      >
-                        {{ duration }} days
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col col-lg-12">
-                  <div class="title property margintop30 marginbottom10">
-                    INSTALLMENTS
-                  </div>
-                </div>
-                <div class="col-xs-12 col-lg-6"> -->
-      <!-- <mat-slide-toggle
-                    formControlName="installmentsFlag"
-                    [disabled]="
-                      !installmentsAvailable || installmentsAvailable < 2
-                    "
-                    (change)="onInstallmentsChange()"
-                  >
-                  </mat-slide-toggle>
-                </div>
-                <div class="col-xs-12 col-lg-6" *ngIf="installmentsFlag.value">
-                  {{ installments }}
-                </div>
-              </div>
-              <div class="row" formGroupName="interest">
-                <div class="col col-lg-12">
-                  <div class="title property margintop30 marginbottom10">
-                    ANNUAL INTEREST RATE
-                  </div>
-                </div>
-                <div class="col-xs-12 col-lg-6">
-                  <mat-form-field>
-                    <input
-                      matInput
-                      type="number"
-                      max="200"
-                      formControlName="annualInterest"
-                      (keyup)="expectedReturn()"
-                      pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-                      required
-                    /> -->
-      <!-- <mat-hint>
-                      <span
-                        *ngIf="
-                          annualInterest.valid ||
-                          (annualInterest.pristine && annualInterest.untouched)
-                        "
-                      >
-                        Remember: higher interestes are more likely to be
-                        lended.
-                      </span>
-                      <span
-                        class="red"
-                        *ngIf="
-                          annualInterest.errors &&
-                          (annualInterest.dirty || annualInterest.touched)
-                        "
-                      >
-                        The minimum Annual Interest rate is 1%
-                      </span>
-                    </mat-hint>
-                    <span matSuffix>%</span>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-12"> -->
-      <!-- <div class="title property margintop30 marginbottom10">
-                    Expiration Request
-                  </div>
-                </div>
-                <div class="col-12 col-lg-4">
-                  <mat-form-field>
-                    <input
-                      matInput
-                      type="number"
-                      max="30"
-                      formControlName="expirationRequestDate"
-                      pattern="^[1-9]+$"
-                      required
-                    />
-                    <mat-hint>
-                      days
-                    </mat-hint>
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-            <div class="margintop20"> -->
-      <!-- <button
-                mat-raised-button
-                type="submit"
-                class="button button-primary"
-                matStepperNext
-              >
-                Next
-              </button> -->
-      <!-- <button
-                mat-raised-button
-                type="submit"
-                class="button button-primary"
-              >
-                Next
-              </button>
-            </div>
-          </form>
-        </mat-expansion-panel> -->
-
-      <!-- ------------------------------------------------ -------------------------------------->
-      <!-- <mat-expansion-panel> -->
-      <!-- <mat-expansion-panel [stepControl]="formGroup2" [optional]="!isOptional$" [editable]='isEditable$'> -->
-      <!-- <form
-              [formGroup]="formGroup2"
-              (ngSubmit)="onSubmitStep2(fStep2)"
-              #fStep2="ngForm"
-            > -->
-      <!-- <form [formGroup]="formGroup2" #fStep2="ngForm"> -->
-      <!-- <form [formGroup]="formGroup2"> -->
-      <!-- <ng-template matStepLabel>Select your collateral</ng-template> -->
-      <!-- <ng-template>Select your collateral</ng-template>
-            <div class="container-fluid paddingleft0 paddingright0">
-              <div class="row">
-                <div class="col col-lg-12">
-                  <div class="title property margintop30 marginbottom10">
-                    Collateral Adjusment
-                  </div>
-                </div>
-                <div class="col-xs-12 col-lg-8">
-                  <mat-form-field>
-                    <input
-                      matInput
-                      type="number"
-                      max="200"
-                      formControlName="collateralAdjustment"
-                      pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-                      required
-                    />
-                    <mat-hint>
-                      <span
-                        *ngIf="
-                          collateralAdjustment.valid ||
-                          (collateralAdjustment.pristine &&
-                            collateralAdjustment.untouched)
-                        "
-                      >
-                        Remember: loan with higher collateral are more likely to
-                        be lended. -->
-      <!-- </span>
-                    </mat-hint>
-                    <span matSuffix>%</span>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col col-lg-12">
-                  <div class="title property margintop30 marginbottom10">
-                    Collateral Asset
-                  </div>
-                </div>
-                <div class="col-xs-12 col-lg-8">
-                  <mat-form-field>
-                    <mat-select
-                      placeholder="Select token"
-                      formControlName="collateralAsset"
-                      required
-                    >
-                      <mat-option
-                        *ngFor="let currency of currencies"
-                        [value]="currency"
-                      > -->
-      <!-- {{ currency }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col col-lg-12">
-                  <div class="title property margintop30 marginbottom10">
-                    Liquidation Ratio
-                  </div>
-                </div>
-                <div class="col-xs-12 col-lg-8">
-                  <mat-form-field>
-                    <input
-                      matInput
-                      type="number"
-                      max="200"
-                      formControlName="liquidationRatio"
-                      pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-                      required
-                    /> -->
-      <!-- <mat-hint>
-                      <span
-                        *ngIf="
-                          liquidationRatio.valid ||
-                          (liquidationRatio.pristine &&
-                            liquidationRatio.untouched)
-                        "
-                      >
-                        Remember: Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                      </span>
-                    </mat-hint>
-                    <span matSuffix>%</span>
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-            <div class="margintop20"> -->
-      <!-- <button
-                mat-raised-button
-                class="button button-secondary marginright8"
-                matStepperPrevious
-              >
-                Back
-              </button> -->
-      <!-- <button
-                mat-raised-button
-                class="button button-secondary marginright8"
-              >
-                Back
-              </button> -->
-      <!--          <button mat-raised-button type="submit" class='button button-primary'>Create</button> -->
-      <!-- <button
-                mat-raised-button
-                type="submit"
-                class="button button-primary"
-              >
-                {{ submitButtonText }}
-                <div
-                  style="display: inline; margin-left: 5px; vertical-align: baseline;"
-                  *ngIf="opPending"
-                >
-                  <i class="fa fa-circle-notch fa-spin"></i>
-                </div>
-              </button>
-            </div>
-          </form>
-        </mat-expansion-panel>
-      </mat-accordion> -->
-
-      <!-- ------------------------------------------------ -------------------------------------->
-      <!-- </mat-vertical-stepper> -->
-
-      <!-- ------------------------------------------------ -------------------------------------->
     </div>
-
     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
       <div class="card-container">
         <ng-container *ngIf="loan">
@@ -978,10 +357,6 @@
           <app-creator-container [loan]="loan"></app-creator-container>
         </ng-container>
         <div class="card-row">
-          <!-- <div class="card-property">
-            <div class="title">{{ "Borrower" }}</div>
-            <div class="paragraph">{{ shortAccount }}</div>
-          </div> -->
           <div class="card-property">
             <div class="title">{{ "Duration" }}</div>
             <div class="paragraph">{{ durationLabel }}</div>
@@ -1015,25 +390,6 @@
           <div class="margintop20"></div>
           <div class="button">Confirm</div>
           <div><a class="link" href="">Reset all values</a></div>
-          <!-- <div class="properties-block">
-            <div class="title">{{ "Lend" }}</div>
-            <div class="currency">
-              {{
-                requestedCurrency.value == undefined ||
-                requestedCurrency.value == null
-                  ? "Currency"
-                  : requestedCurrency.value
-              }}
-            </div>
-            <div class="title">{{ "Return" }}</div>
-          </div> -->
-          <!-- <div class="conversion-block">
-            <div class="block-title">{{ requestValue.value }}</div>
-            <div class="currency">
-              <i class="material-icons" style="font-size: 2em">arrow_forward</i>
-            </div>
-            <div class="block-title">{{ returnValue }}</div>
-          </div> -->
         </div>
       </div>
     </div>

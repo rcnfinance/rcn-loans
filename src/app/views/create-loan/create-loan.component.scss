@@ -30,7 +30,7 @@
   font-family: 'Roboto', sans-serif;
   font-weight: bold;
   color: #989898;
-  font-size: 25px;
+  font-size: 35px;
 }
 
 .subtitle-style {
@@ -115,7 +115,7 @@
 }
 
 .title {
-  font-size: 12px;
+  font-size: 16px;
   font-family: 'Raleway', sans-serif;
   font-weight: 300;
   color: #EDEDED;
@@ -324,8 +324,5 @@ mat-expansion-panel {
 @media (min-width: 768px){
   .card-col{
     margin-top: 30px;
-  }
-  .card-container{
-    // margin-top: 30px;
   }
 }
