@@ -51,7 +51,7 @@ export const environment = {
     oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf',
     diaspore: {
       debtEngine: '0x50c544d5d44d603695ed221421b8cb5a78681f15',
-      loanManager: '0xc78a11c729275e656fa3decc1f15aebee69d08fc',
+      loanManager: '0x2694a6274906f488defc6ab2093342cddcdbdc5c',
       viewRequets: '0x7edb5117f91514579e3c8d39eed71e6be278632a',
       filters: {
         debtCreator: '0x998a67ce5827cb372fe07942561006c7a76cf06f',
