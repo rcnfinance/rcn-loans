@@ -14,6 +14,7 @@ import { LoanDetailRoutingModule } from './loan-detail-routing.module';
 // App Component
 import { LoanDetailComponent } from './loan-detail.component';
 import { DetailTableComponent } from './detail-table/detail-table.component';
+import { DetailCollateralComponent } from './detail-collateral/detail-collateral.component';
 import { DetailIdentityComponent } from './detail-identity/detail-identity.component';
 import { DetailCosignerComponent } from './detail-cosigner/detail-cosigner.component';
 import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
@@ -46,6 +47,7 @@ import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insuffi
   declarations: [
     LoanDetailComponent,
     DetailTableComponent,
+    DetailCollateralComponent,
     DetailIdentityComponent,
     DetailCosignerComponent,
     DecentralandMapComponent,
