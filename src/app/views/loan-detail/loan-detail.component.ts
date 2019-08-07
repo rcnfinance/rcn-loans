@@ -43,6 +43,7 @@ export class LoanDetailComponent implements OnInit {
   canLend: boolean;
 
   hasHistory: boolean;
+  generatedByUser: boolean;
 
   totalDebt: string;
   pendingAmount: string;
@@ -82,8 +83,10 @@ export class LoanDetailComponent implements OnInit {
         this.isOngoing = this.loan.status === Status.Ongoing;
         this.isExpired = this.loan.status === Status.Expired;
 
+        this.checkLoanGenerator();
         this.loadDetail();
         this.loadIdentity();
+        this.loadCollateral();
         this.viewDetail = this.defaultDetail();
 
         this.spinner.hide();
@@ -103,6 +106,10 @@ export class LoanDetailComponent implements OnInit {
     return view === this.viewDetail;
   }
 
+  checkLoanGenerator() {
+    this.generatedByUser = this.cosignerService.getCosigner(this.loan) === undefined;
+  }
+
   openLender(address: string) {
     window.open('/address/' + address, '_blank');
   }
@@ -114,11 +121,19 @@ export class LoanDetailComponent implements OnInit {
     });
   }
 
-  private loadIdentity() {
-    this.identityService.getIdentity(this.loan).then((identity) => {
-      this.identityName = identity !== undefined ? identity.short : 'Unknown';
-    });
-    return 'Unknown';
+  /**
+   * Load borrower identity
+   */
+  private async loadIdentity() {
+    const identity = await this.identityService.getIdentity(this.loan);
+    this.identityName = identity ? identity.short : 'Unknown';
+  }
+
+  /**
+   * Load collateral data
+   */
+  private loadCollateral() {
+    console.info('load collateral');
   }
 
   private defaultDetail(): string {

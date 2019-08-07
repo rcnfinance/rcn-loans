@@ -105,7 +105,7 @@
   padding: 0 15px;
 }
 
-@media (min-width: 992px) { 
+@media (min-width: 992px) {
   .loan-detail{
     width: 970px;
     margin-left: auto;
@@ -125,10 +125,30 @@
       .left{
         width: 50%;
         flex: 1;
-      } 
+      }
       .right{
         width: 50%;
         display: initial;
+
+        /deep/ .empty-container{
+          height: 100%;
+
+          .empty-row{
+            height: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            flex-flow: column;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+          }
+          a {
+            color: white;
+            font-style: italic;
+          }
+        }
       }
     }
   }
@@ -137,7 +157,7 @@
   }
 }
 
-@media (min-width: 1200px) { 
+@media (min-width: 1200px) {
   .loan-detail{
     width: 1170px;
   }
@@ -154,4 +174,3 @@
     }
   }
 }
-
