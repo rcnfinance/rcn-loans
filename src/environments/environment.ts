@@ -27,7 +27,7 @@ export const environment = {
   version_verbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   rcn_node: {
-    loan: 'https://ropsten-rnode.rcn.loans/v1/loans/$id'
+    loan: 'https://ropsten-rnode.rcn.loans/v1/commits?id_loan=$id'
   },
   network: {
     id: '3',
