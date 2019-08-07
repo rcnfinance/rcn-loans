@@ -234,7 +234,7 @@ $default-transition--delay: all 0.3s ease-out;
   }
 }
 %flex-item-01{
-  &:nth-child(1){ 
+  &:nth-child(1){
     order: 1; // By default, items have a value of 0, but we can use this property to set it to a positive or negative integer value.
   }
 }

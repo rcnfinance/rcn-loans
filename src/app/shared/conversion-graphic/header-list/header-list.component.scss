@@ -2,8 +2,10 @@
 
 .properties-block{
   @extend %flex-container;
+
   div{
     flex: 1;
+
     &:nth-child(1){
       text-align: left;
     }
@@ -13,6 +15,11 @@
     }
     &:nth-child(3){
       text-align: right;
+    }
+
+    &.title {
+      color: $gray2;
+      @extend %propiety-title;
     }
   }
 }
