@@ -12,6 +12,6 @@ export class CommitsService {
     const url = environment.rcn_node.loan.replace('$id', id.toString());
     const response = await this.http.get(url).toPromise();
     const data = response.json();
-    return data.content.commits;
+    return data.content;
   }
 }
