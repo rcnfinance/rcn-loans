@@ -1,5 +1,6 @@
 @import '../../../scss/_variables.scss'; //variables
 @import '../../../scss/_tables.scss'; //tables
+@import '../../../scss/fonts';
 
 //LOAN DETAIL
 .loan-detail{
@@ -92,6 +93,71 @@
           background-color: $primary;
         }
       }
+    }
+  }
+}
+
+
+.table {
+  &__head {
+    @include transition;
+    @extend %propiety-title;
+    background-color: $gray7;
+    padding: 8px 18px;
+    user-select: none;
+    color: $gray1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__body {
+    @extend %roboto-regular;
+    padding: 10px 18px;
+
+    .subtitle {
+      @extend .font13;
+      color: $gray2;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .due-status {
+      &--success {
+        color: $green;
+      }
+      &--warning {
+        color: $orange;
+      }
+      &--error {
+        color: $red;
+      }
+    }
+  }
+
+  &--clickable {
+    cursor: pointer;
+  }
+
+  &--active {
+    .table__head {
+      background-color: $primary;
+      color: white;
+    }
+  }
+}
+
+.table-multiple {
+  > .col {
+    &:first-child {
+      padding-right: 2px;
+    }
+    &:not(:first-child):not(:last-child) {
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+    &:last-child {
+      padding-left: 2px;
     }
   }
 }

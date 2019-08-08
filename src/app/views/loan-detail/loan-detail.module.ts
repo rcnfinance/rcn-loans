@@ -14,6 +14,7 @@ import { LoanDetailRoutingModule } from './loan-detail-routing.module';
 // App Component
 import { LoanDetailComponent } from './loan-detail.component';
 import { DetailTableComponent } from './detail-table/detail-table.component';
+import { DetailInstallmentsComponent } from './detail-installments/detail-installments.component';
 import { DetailCollateralComponent } from './detail-collateral/detail-collateral.component';
 import { DetailIdentityComponent } from './detail-identity/detail-identity.component';
 import { DetailCosignerComponent } from './detail-cosigner/detail-cosigner.component';
@@ -47,6 +48,7 @@ import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insuffi
   declarations: [
     LoanDetailComponent,
     DetailTableComponent,
+    DetailInstallmentsComponent,
     DetailCollateralComponent,
     DetailIdentityComponent,
     DetailCosignerComponent,

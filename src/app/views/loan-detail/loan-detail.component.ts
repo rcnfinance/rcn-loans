@@ -7,6 +7,7 @@ import { Loan, Status, Network } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
 // App Utils
 import { Utils } from './../../utils/utils';
+import { Currency } from './../../utils/currencies';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
@@ -31,7 +32,6 @@ export class LoanDetailComponent implements OnInit {
 
   loanConfigData = [];
   loanStatusData = [];
-  interestMiddleText: string;
   isExpired: boolean;
   isRequest: boolean;
   isOngoing: boolean;
@@ -49,6 +49,22 @@ export class LoanDetailComponent implements OnInit {
   pendingAmount: string;
   expectedReturn: string;
   paid: string;
+  interest: string;
+  duration: string;
+  collateralAmount: string; // TODO
+  collateralCurrency: string; // TODO
+  nextInstallment: {
+    installment: string,
+    amount: string,
+    dueDate: string,
+    dueTime: string
+  };
+  lendDate: string;
+  dueDate: string;
+  lender: string;
+  liquidationRatio: string; // TODO
+  balanceRatio: string; // TODO
+  punitory: string;
 
   // Loan Oracle
   oracle: string;
@@ -110,10 +126,6 @@ export class LoanDetailComponent implements OnInit {
     this.generatedByUser = this.cosignerService.getCosigner(this.loan) === undefined;
   }
 
-  openLender(address: string) {
-    window.open('/address/' + address, '_blank');
-  }
-
   private async loadAccount() {
     this.web3Service.getAccount().then((account) => {
       this.userAccount = account;
@@ -137,11 +149,11 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private defaultDetail(): string {
-    if (this.cosignerService.getCosigner(this.loan) !== undefined) {
-      return 'cosigner';
+    if (this.generatedByUser) {
+      return 'collateral';
     }
 
-    return 'identity';
+    return 'cosigner';
   }
 
   private loadDetail() {
@@ -149,50 +161,76 @@ export class LoanDetailComponent implements OnInit {
       // Load config data
       const interest = this.loan.descriptor.interestRate.toFixed(2);
       const interestPunnitory = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
+      const currency: Currency = this.loan.currency;
+      const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
+
       this.loanConfigData = [
-        ['Currency', this.loan.currency],
+        ['Currency', currency],
         ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
-        ['Duration', Utils.formatDelta(this.loan.descriptor.duration)]
+        ['Duration', duration]
       ];
+
+      // Template data
+      this.interest = `~ ${ interest }%`;
+      this.punitory = `~ ${ interestPunnitory }%`;
+      this.duration = duration;
 
       this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
-
     } else {
       const currency = this.loan.currency;
+      const lendDate: string = this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration);
+      const dueDate: string = this.formatTimestamp(this.loan.debt.model.dueTime);
+      const deadline: string = this.formatTimestamp(this.loan.debt.model.dueTime);
+      const remaning: string = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2);
+      const interest: string = this.formatInterest(
+        this.loan.status === Status.Indebt ? this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate
+      );
+
       // Show ongoing loan detail
       this.loanStatusData = [
-        ['Lend date', this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration)], // TODO
-        ['Due date', this.formatTimestamp(this.loan.debt.model.dueTime)],
-        ['Deadline', this.formatTimestamp(this.loan.debt.model.dueTime)],
-        ['Remaining', Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2)]
+        ['Lend date', lendDate], // TODO
+        ['Due date', dueDate],
+        ['Deadline', deadline],
+        ['Remaining', remaning]
       ];
 
-      // Interest middle text
-      this.interestMiddleText = '~ ' + this.formatInterest(this.loan.status === Status.Indebt ?
-        this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate) + ' %';
+      // Template data
+      this.interest = '~ ' + interest + ' %';
+      this.lendDate = dueDate;
+      this.dueDate = dueDate;
 
       // Load status data
-
       const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
-
       this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
       this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
-
       this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
-
     }
 
     this.isDiaspore = this.loan.network === Network.Diaspore;
 
     if (this.loan.network === Network.Diaspore) {
+      const installments: number = this.loan.descriptor.installments;
+      const installmentDuration: string = Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments);
+      const installmentAmount: number = this.loan.currency.fromUnit(this.loan.descriptor.firstObligation);
+      const installmentCurrency: string = this.loan.currency.symbol;
+      const nextInstallment: number = this.isRequest ? 1 : null; // TODO - Next installment
+      const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+
       this.diasporeData = [
         ['Installments', 'Duration', 'Cuota'],
         [
-          this.loan.descriptor.installments,
-          Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments),
-          this.loan.currency.fromUnit(this.loan.descriptor.firstObligation) + ' ' + this.loan.currency.symbol
+          installments,
+          installmentDuration,
+          `${ installmentAmount } ${ installmentCurrency }`
         ]
       ];
+
+      this.nextInstallment = {
+        installment: `${ nextInstallment + addSuffix(nextInstallment) } Pay`,
+        amount: `${ Utils.formatAmount(installmentAmount) } ${ installmentCurrency }`,
+        dueDate: installmentDuration,
+        dueTime: null
+      };
     }
     this.loadUserActions();
   }
