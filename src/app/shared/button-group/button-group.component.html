@@ -8,6 +8,11 @@
         [ngClass]="{'active': viewDetail === 'collateral' ? true : false }" matTooltip="Collateral" matTooltipPosition="below">
         <i class="fas fa-coins"></i>
       </div>
+      <div class="button-options"
+        (click)="openDetail('installments')"
+        [ngClass]="{'active': viewDetail === 'installments' ? true : false }" matTooltip="Installments" matTooltipPosition="below">
+        <i class="fas fa-chart-pie"></i>
+      </div>
     </ng-container>
 
     <!-- loan generated externally -->
@@ -35,6 +40,12 @@
           [ngClass]="{'active': viewDetail === 'collateral' ? true : false }">
           <i class="fas fa-coins"></i>
           <span>Collateral</span>
+        </button>
+        <button mat-menu-item
+          (click)="openDetail('installments')"
+          [ngClass]="{'active': viewDetail === 'installments' ? true : false }">
+          <i class="fas fa-chart-pie"></i>
+          <span>Installments</span>
         </button>
       </ng-container>
 
