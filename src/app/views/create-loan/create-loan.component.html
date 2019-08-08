@@ -1,3 +1,15 @@
+<!-- <pre style="background:white;color:black;border:1px solid blue;">
+    {{ formGroup1.value | json }}
+    <p>
+      Valid: {{ formGroup1.valid }}
+    </p>
+  </pre>
+  <pre style="background:white;color:black;border:1px solid blue;">
+    {{ formGroup2.value | json }}
+    <p>
+      Valid: {{ formGroup2.valid }}
+    </p>
+  </pre> -->
 <ngx-spinner
   bdColor="rgba(0,0,0,.3)"
   size="medium"
@@ -17,7 +29,9 @@
   <div class="row">
     <div class="col-xs-12 col-lg-8">
       <mat-accordion>
-        <mat-expansion-panel>
+        <mat-expansion-panel
+        [expanded]="init == true"
+        [disabled]="init != true">
           <mat-expansion-panel-header>
             <mat-panel-title class="main-title-style ">
               1 | SET YOUR LOAN REQUIREMENTS
@@ -103,7 +117,8 @@
                     </div>
                   </div>
                   <div class="margintop10"></div>
-                  <div class="message-style">
+                  <div *ngIf="formGroup1?.value.conversionGraphic.requestedCurrency != undefined &&
+                  formGroup1?.value.conversionGraphic.requestedCurrency != 'RCN'" class="message-style">
                     <i class="fas fa-exclamation-triangle"></i> You’re borrowing
                     in {{ formGroup1?.value.conversionGraphic.requestedCurrency }}, therefore the value of the pays is going to be
                     converted to RCN.
@@ -191,7 +206,8 @@
                   <mat-slide-toggle
                     formControlName="installmentsFlag"
                     [disabled]="!installmentsAvailable || installmentsAvailable < 2"
-                    (change)="onInstallmentsChange()"
+                    (change)="onInstallmentsChange($event)"
+                    [(ngModel)]="isChecked"
                   >
                   </mat-slide-toggle>
                 </div>
@@ -199,8 +215,9 @@
                   {{ installments }}
                 </div>
               </div>
-              <div class="margintop20"></div>
-              <div class="message-style">
+              <div class="margintop10"></div>
+              <div [ngClass]="isChecked === true ? 'message-style' : 'hide'"
+              >
                 <i class="fas fa-exclamation-triangle"></i> Payments are made
                 every 15 days and the amount thereof is determined by the
                 duration of the loan.
@@ -234,8 +251,8 @@
               </div>
             </div>
             <div class="margintop40">
-              <button mat-raised-button type="submit" class='button button-primary'>
-                Continue
+              <button mat-raised-button type="submit" class='button-reset button-secondary-style'>
+                Create Loan <i class="fas fa-arrow-circle-right marginright50"></i>
               </button>
             </div>
           </form>
@@ -243,6 +260,8 @@
         <mat-expansion-panel
           (opened)="panelOpenState = true"
           (closed)="panelOpenState = false"
+          [disabled]="init == true"
+          [expanded]="init != true"
         >
           <mat-expansion-panel-header>
             <mat-panel-title class="main-title-style ">
@@ -291,7 +310,7 @@
                   </div>
                 </div>
                 <div class="col-xs-12 col-lg-8">
-                  <mat-radio-group formControlName="liquidationRatio" aria-label="Select an option">
+                  <mat-radio-group formControlName="liquidationRatio" aria-label="Select an option" (change)="radioChange()">
                     <mat-radio-button
                       color="primary"
                       [value]="125"
@@ -309,7 +328,7 @@
                 </div>
               </div>
               <div class="margintop20"></div>
-              <div class="message-style">
+              <div [ngClass]="radioSelected? 'message-style italic' : 'hide'">
                 <i class="fas fa-exclamation-triangle"></i> Lorem ipsum dolor
                 sit amet, consectetur adipiscing elit.
               </div>
@@ -332,6 +351,7 @@
                         color="primary"
                         thumbLabel="true"
                         value="10"
+                        (change)="slideChange()"
                       ></mat-slider>
                       <div class="slider-percentage-box">
                         <div class="slider-percentaje subtitle-style">150%</div>
@@ -342,7 +362,7 @@
                 </div>
               </div>
               <div class="margintop20"></div>
-              <div class="message-style">
+              <div [ngClass]="slideSelected? 'message-style italic' : 'hide'">
                 <i class="fas fa-exclamation-triangle"></i> Lorem ipsum dolor
                 sit amet, consectetur adipiscing elit.
               </div>

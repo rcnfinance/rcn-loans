@@ -24,6 +24,13 @@ export class CreateLoanComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
   @ViewChild('MatExpansionPanel') pannel: MatExpansionPanel;
 
+  // Material Variables
+  isChecked = false;
+  isCheckedInit = false;
+  init = true;
+  radioSelected = false;
+  slideSelected = false;
+
   // Date Variables
   now: Date = new Date();
   tomorrow: Date = new Date();
@@ -102,6 +109,27 @@ export class CreateLoanComponent implements OnInit {
     );
   }
 
+  createLoan() {
+    this.init = !this.init;
+  }
+
+  radioChange() {
+    this.radioSelected = true;
+  }
+
+  slideChange() {
+    this.slideSelected = true;
+  }
+
+  // nextStep() {
+  //   this.step++;
+  // }
+
+  // prevStep() {
+  //   this.step--;
+  // }
+
+
   /**
    * Create form controls and define values
    */
@@ -152,6 +180,8 @@ export class CreateLoanComponent implements OnInit {
     if (form.valid) {
       const encodedData = await this.getInstallmentsData(form);
       this.installmentsData = encodedData;
+
+      this.createLoan()
     } else {
       this.requiredInvalid$ = true;
     }
@@ -240,6 +270,7 @@ export class CreateLoanComponent implements OnInit {
    * @param requestedCurrency.value Requested currency as string
    */
   onCurrencyChange(requestedCurrency) {
+    console.info('Currency', requestedCurrency)
     switch (requestedCurrency.value.currency) {
       case 'RCN':
         this.selectedOracle = null;
@@ -259,7 +290,7 @@ export class CreateLoanComponent implements OnInit {
         }
         break;
       default:
-        this.selectedOracle = 'Please select a currency to unlock the oracle';
+        // this.selectedOracle = 'Please select a currency to unlock the oracle';
     }
   }
 
