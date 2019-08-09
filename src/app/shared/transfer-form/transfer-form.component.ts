@@ -13,7 +13,7 @@ export class TransferFormComponent implements OnInit {
   invalidAddress = false;
   constructor(
     private web3Service: Web3Service
-  ) { }
+  ) {}
   onSubmit(event: any, form: NgForm) {
     event.preventDefault();
     const to = form.value;
@@ -24,8 +24,7 @@ export class TransferFormComponent implements OnInit {
       this.invalidAddress = true;
     }
   }
-  ngOnInit() {
-  }
+  ngOnInit() {}
   private isAddress(address: string): boolean {
     const web3 = this.web3Service.web3;
 

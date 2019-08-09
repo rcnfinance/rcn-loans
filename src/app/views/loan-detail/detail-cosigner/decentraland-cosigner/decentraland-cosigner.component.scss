@@ -2,7 +2,7 @@
 
 .map-container{ text-align: left; }
 a{
-  color: #fff;
+  color: $secondary;
   @include transition;
   &:hover{
     color: $primary;

@@ -81,6 +81,36 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
   }
 }
 
+.mat-accent .mat-slider-thumb, .mat-accent .mat-slider-thumb-label, .mat-accent .mat-slider-track-fill {
+  background-color: $primary !important;
+}
+
+.mat-slider-wrapper {
+  color: white !important;
+}
+
+.mat-slider-track-background {
+  background: white !important;
+}
+
+.mat-slider-horizontal {
+  width: 300px;
+  height: 40px !important;
+}
+
+.mat-slider {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.mat-radio-button {
+  color: white !important;
+}
+
+.mat-radio-outer-circle {
+  border-color: white;
+}
+
 .button{
   &.button-primary{
     color: $secondary;
@@ -346,7 +376,7 @@ mat-form-field{
 
 .mat-form-field-underline{ color: $secondary; }
 .mat-select-arrow{ color: $secondary; }
-.mat-select-placeholder, .mat-select-value-text { color: $secondary; text-transform: uppercase; @extend %font-medium;}
+.mat-select-placeholder, .mat-select-value-text { color: #EDEDED; @extend %font-medium;}
 .mat-select-content{
   background-color: #101010;
   .mat-option{

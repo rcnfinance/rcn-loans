@@ -22,6 +22,7 @@ const loanManagerAbi = require('../contracts/LoanManager.json');
 const debtEngineAbi = require('../contracts/DebtEngine.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
+const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
 // const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
@@ -37,7 +38,10 @@ export class ContractsService {
   private _debtEngine: any;
   private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
   private _rcnConverterRamp: any;
-  loanRcnAmount: any;
+  private _installmentsModel: any;
+  // private _rcnConverterRamp: any;
+  // private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
+  // private _requestsView: any;
 
   constructor(
     private http: HttpClient,
@@ -50,6 +54,7 @@ export class ContractsService {
     this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
     this._loanManager = this.web3.web3.eth.contract(loanManagerAbi).at(environment.contracts.diaspore.loanManager);
     this._debtEngine = this.web3.web3.eth.contract(debtEngineAbi).at(environment.contracts.diaspore.debtEngine);
+    this._installmentsModel = this.web3.web3.eth.contract(installmentsModelAbi.abi).at(environment.contracts.diaspore.models.installments);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
@@ -106,7 +111,6 @@ export class ContractsService {
   }
 
   async disapprove(contract: string): Promise<string> {
-
     const account = await this.web3.getAccount();
     const web3 = this.web3.opsWeb3;
 
@@ -308,6 +312,142 @@ export class ContractsService {
     console.info('Estimated required rcn is', required);
     // this.loanRcnAmount = required
     return rate;
+  }
+
+  /**
+   * Encode installments data
+   * @param cuota Installment amount
+   * @param interestRate Interest rate
+   * @param installments Number of installments
+   * @param duration Installment duration in seconds
+   * @param timeUnit Time unit (seconds)
+   * @return Encoded installments data
+   */
+  async encodeInstallmentsData(
+    cuota: number,
+    interestRate: number,
+    installments: number,
+    duration: number,
+    timeUnit: number
+  ) {
+    return new Promise((resolve, reject) => {
+      this._installmentsModel.encodeData(
+        cuota,
+        interestRate,
+        installments,
+        duration,
+        timeUnit,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Calculate loan ID
+   * @param amount Total amount
+   * @param borrower Borrower address
+   * @param creator Creator address
+   * @param model Model address
+   * @param oracle Oracle address
+   * @param callback Callback address
+   * @param salt Salt hash
+   * @param expiration Expiration timestamp
+   * @param data Model data
+   * @return Loan ID
+   */
+  async calculateLoanId(
+    amount: number,
+    borrower: string,
+    creator: string,
+    model: string,
+    oracle: string,
+    callback: string,
+    salt: string,
+    expiration: number,
+    data: any
+  ) {
+    return new Promise((resolve, reject) => {
+      this._loanManager.calcId(
+        amount,
+        borrower,
+        creator,
+        model,
+        oracle,
+        callback,
+        salt,
+        expiration,
+        data,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Check encoded installments data
+   * @param encodedData Array of bytes
+   * @return True if can validate the data
+   */
+  async validateEncodedData(encodedData: string) {
+    return new Promise((resolve, reject) => {
+      this._installmentsModel.validate(
+        encodedData,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Request a loan
+   * @param amount Total amount
+   * @param model Model address
+   * @param oracle Oracle address
+   * @param borrower Borrower address
+   * @param callback Callback address
+   * @param salt Salt hash
+   * @param expiration Expiration timestamp
+   * @param loanData Loan model data
+   * @return Loan ID
+   */
+  async requestLoan(
+    amount: number,
+    model: string,
+    oracle: string,
+    borrower: string,
+    callback: string,
+    salt: string,
+    expiration: number,
+    loanData: any
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._loanManager).requestLoan, [
+      amount,
+      model,
+      oracle,
+      borrower,
+      callback,
+      salt,
+      expiration,
+      loanData,
+      { from: borrower }
+    ]);
   }
 
   async estimatePayAmount(loan: Loan, amount: number): Promise<number> {

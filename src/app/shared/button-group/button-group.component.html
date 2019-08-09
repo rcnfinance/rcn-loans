@@ -1,30 +1,73 @@
 <div class="button-group">
-  <div class="button-options"
-    (click)="openDetail('cosigner')"
-    [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }" matTooltip="Cosigner" matTooltipPosition="below">
-    <i class="fas fa-shield-alt"></i>
-  </div>
-  <div class="button-options"
-    (click)="openDetail('identity')"
-    [ngClass]="{'active': viewDetail === 'identity' ? true : false }" matTooltip="Identity" matTooltipPosition="below">
-    <i class="fas fa-id-badge"></i>
-  </div>
+
+  <ng-container [ngSwitch]="generatedByUser">
+    <!-- loan generated through dapp -->
+    <ng-container *ngSwitchCase="true">
+      <div class="button-options"
+        (click)="openDetail('collateral')"
+        [ngClass]="{'active': viewDetail === 'collateral' ? true : false }" matTooltip="Collateral" matTooltipPosition="below">
+        <i class="fas fa-coins"></i>
+      </div>
+      <div class="button-options"
+        (click)="openDetail('installments')"
+        [ngClass]="{'active': viewDetail === 'installments' ? true : false }" matTooltip="Installments" matTooltipPosition="below">
+        <i class="fas fa-chart-pie"></i>
+      </div>
+    </ng-container>
+
+    <!-- loan generated externally -->
+    <ng-container *ngSwitchCase="false">
+      <div class="button-options"
+        (click)="openDetail('cosigner')"
+        [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }" matTooltip="Cosigner" matTooltipPosition="below">
+        <i class="fas fa-shield-alt"></i>
+      </div>
+      <div class="button-options"
+        (click)="openDetail('identity')"
+        [ngClass]="{'active': viewDetail === 'identity' ? true : false }" matTooltip="Identity" matTooltipPosition="below">
+        <i class="fas fa-id-badge"></i>
+      </div>
+    </ng-container>
+  </ng-container>
 
   <mat-menu #appMenu="matMenu" yPosition="below">
-    <button mat-menu-item
-      (click)="openDetail('identity')"
-      [ngClass]="{'active': viewDetail === 'identity' ? true : false }">
-      <i class="fas fa-id-badge"></i>
-      <span>Identity</span>
-    </button>
-    <button mat-menu-item
-      (click)="openDetail('cosigner')"
-      [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }">
-      <i class="fas fa-shield-alt"></i>
-      <span>Cosigner</span>
-    </button>
+
+    <ng-container [ngSwitch]="generatedByUser">
+      <!-- loan generated through dapp -->
+      <ng-container *ngSwitchCase="true">
+        <button mat-menu-item
+          (click)="openDetail('collateral')"
+          [ngClass]="{'active': viewDetail === 'collateral' ? true : false }">
+          <i class="fas fa-coins"></i>
+          <span>Collateral</span>
+        </button>
+        <button mat-menu-item
+          (click)="openDetail('installments')"
+          [ngClass]="{'active': viewDetail === 'installments' ? true : false }">
+          <i class="fas fa-chart-pie"></i>
+          <span>Installments</span>
+        </button>
+      </ng-container>
+
+      <!-- loan generated externally -->
+      <ng-template *ngSwitchCase="false">
+        <button mat-menu-item
+          (click)="openDetail('identity')"
+          [ngClass]="{'active': viewDetail === 'identity' ? true : false }">
+          <i class="fas fa-id-badge"></i>
+          <span>Identity</span>
+        </button>
+        <button mat-menu-item
+          (click)="openDetail('cosigner')"
+          [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }">
+          <i class="fas fa-shield-alt"></i>
+          <span>Cosigner</span>
+        </button>
+      </ng-template>
+    </ng-container>
+
   </mat-menu>
-  
+
   <button mat-icon-button [matMenuTriggerFor]="appMenu">
     <mat-icon>more_vert</mat-icon>
   </button>
