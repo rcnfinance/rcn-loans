@@ -18,6 +18,7 @@ import { DetailInstallmentsComponent } from './detail-installments/detail-instal
 import { DetailCollateralComponent } from './detail-collateral/detail-collateral.component';
 import { DetailIdentityComponent } from './detail-identity/detail-identity.component';
 import { DetailCosignerComponent } from './detail-cosigner/detail-cosigner.component';
+import { DetailEmptyComponent } from './detail-empty/detail-empty.component';
 import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
 
 import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
@@ -52,6 +53,7 @@ import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insuffi
     DetailCollateralComponent,
     DetailIdentityComponent,
     DetailCosignerComponent,
+    DetailEmptyComponent,
     DecentralandMapComponent,
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
