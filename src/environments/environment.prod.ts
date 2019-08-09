@@ -27,7 +27,7 @@ export const environment = {
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   gaTracking: 'UA-122615331-3',
   rcn_node: {
-    loan: 'https://rnode.rcn.loans/v1/loans/$id'
+    loan: 'https://rnode.rcn.loans/v1/commits?id_loan=$id'
   },
   rcn_node_api: {
     url: 'http://localhost:8000/v4/'
@@ -49,6 +49,7 @@ export const environment = {
       debtEngine: '0xe4BfBBB04844cdEbd6b7814183f92E0703257d48',
       loanManager: '0x978ef6D2bd7559181e6Ac82fFa5C875364d9071b',
       viewRequets: '0x7edb5117f91514579e3c8d39eed71e6be278632a',
+      collateral: '0x7c5bb57001eb5bebeb0359e584dc5f29675061f2', // FIXME: Ropsten collateral
       filters: {
         debtCreator: '0x998a67ce5827cb372fe07942561006c7a76cf06f',
         isLender: '0x22a87c89dd8d8d0abe94062eba672f088e808d49',
