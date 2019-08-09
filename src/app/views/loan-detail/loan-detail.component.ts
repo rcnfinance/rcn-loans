@@ -12,6 +12,7 @@ import { Utils } from './../../utils/utils';
 import { Currency } from './../../utils/currencies';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
+import { ApiService } from './../../services/api.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
@@ -53,7 +54,7 @@ export class LoanDetailComponent implements OnInit {
   paid: string;
   interest: string;
   duration: string;
-  collateralAmount: string; // TODO
+  collateral: any; // TODO
   collateralCurrency: string; // TODO
   nextInstallment: {
     installment: string,
@@ -76,6 +77,7 @@ export class LoanDetailComponent implements OnInit {
   constructor(
     private identityService: IdentityService,
     private route: ActivatedRoute,
+    private apiService: ApiService,
     private cosignerService: CosignerService,
     private contractsService: ContractsService,
     private router: Router,
@@ -155,8 +157,17 @@ export class LoanDetailComponent implements OnInit {
   /**
    * Load collateral data
    */
-  private loadCollateral() {
-    console.info('load collateral');
+  private async loadCollateral() {
+    const loanId: string = this.loan.id;
+    const collateral = await this.apiService.getCollateralByLoan(loanId);
+
+    if (!collateral.length) {
+      console.info('load hasn´t collateral');
+      return;
+    }
+
+    this.collateral = collateral[0];
+    console.info('loan collateral', collateral);
   }
 
   private defaultDetail(): string {
