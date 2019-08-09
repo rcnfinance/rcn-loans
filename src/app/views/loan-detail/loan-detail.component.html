@@ -308,10 +308,23 @@
     </div>
 
     <div class="right">
-      <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
-      <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
-      <app-detail-collateral *ngIf="isDetail('collateral')" [loan]="loan"></app-detail-collateral>
-      <app-detail-installments *ngIf="isDetail('installments')" [loan]="loan"></app-detail-installments>
+      <app-detail-identity
+        *ngIf="isDetail('identity')"
+        [loan]="loan"
+      ></app-detail-identity>
+      <app-detail-cosigner
+        *ngIf="isDetail('cosigner')"
+        [loan]="loan"
+      ></app-detail-cosigner>
+      <app-detail-collateral
+        *ngIf="isDetail('collateral')"
+        [loan]="loan"
+        [collateral]="collateral"
+      ></app-detail-collateral>
+      <app-detail-installments
+        *ngIf="isDetail('installments')"
+        [loan]="loan"
+      ></app-detail-installments>
     </div>
 
   </div>

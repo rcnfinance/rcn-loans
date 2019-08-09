@@ -1,1 +1,90 @@
-<app-detail-empty title="There is no collateral available"></app-detail-empty>
+<ng-container *ngIf="collateral; else empty">
+  <!--
+  <pre>
+    {{ collateral | json }}
+  </pre>
+  -->
+  <div class="empty-container">
+    <div class="empty-row">
+
+      <section class="collateral-detail">
+        <div class="collateral-detail__head row">
+          <div class="col-12">
+            <h3>
+              Collateral status
+            </h3>
+          </div>
+        </div>
+        <div class="collateral-detail__body row">
+          <article class="item col col-12 col-md-4">
+            <span class="item__icon">
+              <i class="fa fa-coins fa-lg"></i>
+            </span>
+            <div class="item__content">
+              <span class="item__label">
+                Collateral
+              </span>
+              <p class="item__value">
+                0,5 ETH
+              </p>
+            </div>
+          </article>
+          <article class="item col col-12 col-md-4">
+            <span class="item__icon">
+              <i class="fa fa-chart-bar fa-lg"></i>
+            </span>
+            <div class="item__content">
+              <span class="item__label">
+                Liquidation ratio
+              </span>
+              <p class="item__value">
+                150 %
+              </p>
+            </div>
+          </article>
+          <article class="item col col-12 col-md-4">
+            <span class="item__icon">
+              <i class="fa fa-chart-area fa-lg"></i>
+            </span>
+            <div class="item__content">
+              <span class="item__label">
+                Balance ratio
+              </span>
+              <p class="item__value">
+                200 %
+              </p>
+            </div>
+          </article>
+        </div>
+        <div class="collateral-detail__footer row">
+          <div class="item col col-12 col-md-4">
+            <i class="fa fa-retweet"></i>
+            Current Exchange Rate:
+            <strong class="item__value">
+              300 DAI/ETH
+            </strong>
+          </div>
+          <div class="item col col-12 col-md-4">
+            <i class="fa fa-chart-line"></i>
+            Liquidation Price:
+            <strong class="item__value">
+              200 DAI/ETH
+            </strong>
+          </div>
+          <div class="item col col-12 col-md-4">
+            <i class="fa fa-percentage"></i>
+            Change to liquidate:
+            <strong class="item__value">
+              33%
+            </strong>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #empty>
+  <app-detail-empty title="There is no collateral available"></app-detail-empty>
+</ng-template>

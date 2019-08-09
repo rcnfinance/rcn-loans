@@ -7,6 +7,7 @@ import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-curre
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
+import { Collateral } from '../../models/collateral.model';
 // App Utils
 import { Utils } from './../../utils/utils';
 import { Currency } from './../../utils/currencies';
@@ -159,14 +160,25 @@ export class LoanDetailComponent implements OnInit {
    */
   private async loadCollateral() {
     const loanId: string = this.loan.id;
-    const collateral = await this.apiService.getCollateralByLoan(loanId);
+    const collaterals = await this.apiService.getCollateralByLoan(loanId);
 
-    if (!collateral.length) {
+    if (!collaterals.length) {
       console.info('load hasn´t collateral');
       return;
     }
 
-    this.collateral = collateral[0];
+    const collateral = collaterals[0];
+    this.collateral = new Collateral(
+      collateral.id,
+      collateral.debt_id,
+      collateral.oracle,
+      collateral.token,
+      collateral.amount,
+      collateral.liquidation_ratio,
+      collateral.balance_ratio,
+      collateral.burn_fee,
+      collateral.reward_fee
+    );
     console.info('loan collateral', collateral);
   }
 
