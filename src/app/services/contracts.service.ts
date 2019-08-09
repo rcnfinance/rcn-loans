@@ -23,6 +23,7 @@ const debtEngineAbi = require('../contracts/DebtEngine.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
+const collateralAbi = require('../contracts/Collateral.json');
 // const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
@@ -39,6 +40,8 @@ export class ContractsService {
   private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
   private _rcnConverterRamp: any;
   private _installmentsModel: any;
+  private _collateral: any;
+  private _collateralAddress: string = environment.contracts.diaspore.collateral;
   // private _rcnConverterRamp: any;
   // private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
   // private _requestsView: any;
@@ -50,14 +53,24 @@ export class ContractsService {
     private cosignerService: CosignerService,
     private apiService: ApiService
   ) {
-    this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
-    this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
-    this._loanManager = this.web3.web3.eth.contract(loanManagerAbi).at(environment.contracts.diaspore.loanManager);
-    this._debtEngine = this.web3.web3.eth.contract(debtEngineAbi).at(environment.contracts.diaspore.debtEngine);
-    this._installmentsModel = this.web3.web3.eth.contract(installmentsModelAbi.abi).at(environment.contracts.diaspore.models.installments);
-    this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-    this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-    this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
+    this._rcnContract = this.makeContract(tokenAbi.abi, this._rcnContractAddress);
+    this._rcnEngine = this.makeContract(engineAbi.abi, this._rcnEngineAddress);
+    this._loanManager = this.makeContract(loanManagerAbi, environment.contracts.diaspore.loanManager);
+    this._debtEngine = this.makeContract(debtEngineAbi, environment.contracts.diaspore.debtEngine);
+    this._installmentsModel = this.makeContract(installmentsModelAbi.abi, environment.contracts.diaspore.models.installments);
+    this._rcnExtension = this.makeContract(extensionAbi.abi, this._rcnExtensionAddress);
+    this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
+    this._collateral = this.makeContract(collateralAbi.abi, this._collateralAddress);
+  }
+
+  /**
+   * Make contract private variable
+   * @param abi Contract ABI
+   * @param address Contract address
+   * @return Contract object
+   */
+  makeContract(abi: string, address: string) {
+    return this.web3.web3.eth.contract(abi).at(address);
   }
 
   async getUserBalanceETHWei(): Promise<BigNumber> {
@@ -680,6 +693,44 @@ export class ContractsService {
     return (pdiaspore).concat(this.parseBasaltBytes(pbasalt));
 
     // return await pdiaspore;
+  }
+
+  /**
+   * Create loan collateral
+   * @param loanId Loan ID
+   * @param oracle Oracle address
+   * @param collateralToken Token address
+   * @param entryAmount Collateral amount
+   * @param liquidationRatio Liquidation ratio
+   * @param balanceRatio Balance ratio
+   * @param burnFee Burn fee
+   * @param rewardFee Reward fee
+   * @param account Account address
+   * @return Loan ID
+   */
+  async createCollateral(
+    loanId: string,
+    oracle: string,
+    collateralToken: string,
+    entryAmount: string,
+    liquidationRatio: string,
+    balanceRatio: string,
+    burnFee: string,
+    rewardFee: string,
+    account: string
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._collateral).create, [
+      loanId,
+      oracle,
+      collateralToken,
+      entryAmount,
+      liquidationRatio,
+      balanceRatio,
+      burnFee,
+      rewardFee,
+      { from: account }
+    ]);
   }
 
   readPendingWithdraws(loans: Loan[]): [BigNumber, number[], BigNumber, number[]] {

@@ -146,15 +146,20 @@ export class ApiService {
     }
   }
 
-  // Get all loans request that are open, not canceled or expired.
+  /**
+   * Get all loans request that are open, not canceled or expired.
+   * @param now Block timestamp
+   * @return Loans array
+   */
   async getRequests(now: number): Promise<Loan[]> {
     let allRequestLoans: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
-    try {
 
-      const data: any = await this.http.get(this.url.concat('loans?open=true&approved=true&page=' + page
-        + '&expiration__gt=' + now)).toPromise();
+    try {
+      const uri = `loans?open=true&approved=true&page=${ page }&expiration__gt=${ now }`;
+      const data: any = await this.http.get(this.url.concat(uri)).toPromise();
+
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
@@ -169,12 +174,12 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const url = this.url.concat('loans?open=true&approved=true&page=' + page
-        + '&expiration__gt=' + now);
+      const uri = `loans?open=true&approved=true&page=${ page }&expiration__gt=${ now }`;
+      const url = this.url.concat(uri);
       urls.push(url);
     }
-    const responses = await this.getAllUrls(urls);
 
+    const responses = await this.getAllUrls(urls);
     for (const response of responses) {
       const loansRequests = await this.getAllCompleteLoans(response.content);
       const notExpiredResquestLoans = loansRequests.filter(loan => loan.model !== this.installmentModelAddress);
@@ -190,10 +195,11 @@ export class ApiService {
 
     let oracle: Oracle;
     if (loan.oracle !== Utils.address0x) {
+      const currency = loan.currency ? Utils.hexToAscii(loan.currency.replace(/^[0x]+|[0]+$/g, '')) : '';
       oracle = new Oracle(
         Network.Diaspore,
         loan.oracle,
-        Utils.hexToAscii(loan.currency.replace(/^[0x]+|[0]+$/g, '')),
+        currency,
         loan.currency
       );
     } else {
@@ -257,5 +263,21 @@ export class ApiService {
     );
 
     return newLoan;
+  }
+
+  /**
+   * Get collateral.
+   * @param loanId Loan ID
+   * @return Collateral
+   */
+  async getCollateralByLoan(loanId: string) {
+    const uri = `collaterals?debt_id=${ loanId }`;
+    const data: any = await this.http.get(this.url.concat(uri)).toPromise();
+
+    try {
+      return data.content;
+    } catch {
+      throw Error('Error obtaining loan collateral');
+    }
   }
 }
