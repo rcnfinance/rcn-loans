@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { Loan, Network, Status } from '../../models/loan.model';
+import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 import { Utils } from '../../utils/utils';
+import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-loan-card',
@@ -19,11 +22,15 @@ export class LoanCardComponent implements OnInit {
   canLend: boolean;
   network: string;
 
+  account: string;
   shortAddress = Utils.shortAddress;
 
-  constructor() { }
+  constructor(
+    public dialog: MatDialog,
+    private web3Service: Web3Service
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.loan.isRequest) {
       const currency = this.loan.currency;
       this.leftLabel = 'Lend';
@@ -32,7 +39,6 @@ export class LoanCardComponent implements OnInit {
       this.durationValue = Utils.formatDelta(this.loan.descriptor.duration);
       this.rightLabel = 'Return';
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
-      this.canLend = true;
     } else if (this.loan instanceof Loan) {
       const currency = this.loan.currency;
       this.leftLabel = 'Paid';
@@ -49,6 +55,29 @@ export class LoanCardComponent implements OnInit {
         this.durationLabel = 'Remaining';
       }
     }
+
+    const web3 = this.web3Service.web3;
+    const account = await this.web3Service.getAccount();
+    this.account = web3.toChecksumAddress(account);
+
+    this.checkCanLend();
+  }
+
+  /**
+   * Check if lend is available
+   */
+  checkCanLend() {
+    if (this.loan.isRequest) {
+      const isBorrower = this.loan.borrower.toUpperCase() === this.account.toUpperCase();
+      this.canLend = !isBorrower;
+    }
+  }
+
+  openDialog() {
+    const dialogConfig = {
+      data: { loan: this.loan }
+    };
+    this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
   }
 
   getInterestRate(): string {

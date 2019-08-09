@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MatDialog } from '@angular/material';
+import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
@@ -79,7 +81,8 @@ export class LoanDetailComponent implements OnInit {
     private router: Router,
     private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
-    private brandingService: BrandingService
+    private brandingService: BrandingService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -109,7 +112,7 @@ export class LoanDetailComponent implements OnInit {
       }).catch((e: Error) => {
         console.error(e);
         console.info('Loan', this.loan.id, 'not found');
-        this.router.navigate(['/404/']);
+        this.router.navigate(['/404/'], { skipLocationChange: true });
       });
     });
   }
@@ -124,6 +127,14 @@ export class LoanDetailComponent implements OnInit {
 
   checkLoanGenerator() {
     this.generatedByUser = this.cosignerService.getCosigner(this.loan) === undefined;
+  }
+
+  openDialog() {
+    // const dialogConfig = new MatDialogConfig();
+    const dialogConfig = {
+      data: { loan: this.loan }
+    };
+    this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
   }
 
   private async loadAccount() {

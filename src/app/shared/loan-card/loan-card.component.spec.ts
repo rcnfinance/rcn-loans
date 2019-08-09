@@ -1,6 +1,8 @@
 import {} from 'jasmine';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MaterialModule } from '../../material/material.module';
+import { Web3Service } from '../../services/web3.service';
 import { Loan } from '../../models/loan.model';
 import { LoanCardComponent } from './loan-card.component';
 import { readComponent } from '../../utils/utils.test';
@@ -11,8 +13,10 @@ describe('BannerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ MaterialModule ],
       declarations: [ LoanCardComponent ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      schemas: [ NO_ERRORS_SCHEMA ],
+      providers: [ Web3Service ]
     })
     .compileComponents();
   }));
@@ -54,9 +58,6 @@ describe('BannerComponent', () => {
 
     component.loan = loan;
     fixture.detectChanges();
-
-    const lendButton = readComponent(fixture, 'app-lend-button');
-    expect(lendButton).toBeDefined();
 
     const detailButton = readComponent(fixture, 'app-detail-button');
     expect(detailButton).toBeDefined();
