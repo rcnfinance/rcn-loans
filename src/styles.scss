@@ -243,6 +243,44 @@ ngx-spinner .black-overlay.ng-star-inserted {
     }
   }
 }
+
+// Slider
+.mat-slider-thumb-label {
+  transform: rotate(45deg) !important;
+  border-radius: 50% 50% 0 !important;
+  width: 38px !important;
+  height: 38px !important;
+}
+
+.mat-slider-thumb {
+  transform: scale(0) !important;
+}
+
+.mat-slider-thumb-label-text {
+  opacity: 1 !important;
+}
+
+.mat-slider-thumb-label-text:after {
+  content: "%";
+}
+
+.mat-slider-horizontal .mat-slider-thumb-label {
+  top: -44px !important;
+  right: -18px !important;
+}
+
+.expansion-panel--card {
+  position: absolute;
+  bottom: 50px;
+  z-index: 10;
+  // height: 85vh;
+  width: 100vw;
+}
+
+.expansion-panel--opened {
+  height: 85vh;
+}
+
 @media screen and (max-width: 767px){.table-responsive {border: 0px;}}
 
 // Material Angular
