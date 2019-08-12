@@ -5,7 +5,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { CreateLoanComponent } from '../create-loan.component';
 
 const createRoutes: Routes = [
-  { path: 'create', component: CreateLoanComponent }
+  {
+    path: 'create',
+    component: CreateLoanComponent
+  },
+  {
+    path: 'create/:id',
+    component: CreateLoanComponent
+  }
 ];
 
 @NgModule({

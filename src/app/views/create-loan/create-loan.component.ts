@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
 import {
   MatStepper,
@@ -9,7 +10,7 @@ import {
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 // App Services
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from './../../services/web3.service';
@@ -78,6 +79,8 @@ export class CreateLoanComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
+    private location: Location,
     private contractsService: ContractsService,
     private web3Service: Web3Service,
     private txService: TxService,
@@ -94,6 +97,93 @@ export class CreateLoanComponent implements OnInit {
     this.account = web3.toChecksumAddress(account);
     this.shortAccount = Utils.shortAddress(this.account);
 
+    const loanId = this.route.snapshot.params.id;
+    if (loanId) {
+      try {
+        const loan = await this.getExistingLoan(loanId);
+        await this.autocompleteForm(loan);
+        await this.getCollateral(loan);
+        this.createLoan();
+      } catch (e) {
+        console.info('Loan not found', e);
+        this.generateEmptyLoan();
+      }
+    } else {
+      this.generateEmptyLoan();
+    }
+  }
+
+  /**
+   * Check if load exists
+   * @param id Loan ID
+   * @return Loan
+   */
+  async getExistingLoan(id: string): Promise<Loan> {
+    const loan: Loan = await this.contractsService.getLoan(id);
+    const web3: any = this.web3Service.web3;
+    const isRequest = loan.status === Status.Request;
+    this.loan = loan;
+
+    if (!isRequest) {
+      throw Error('loan is not on request status');
+    }
+    if (this.account !== web3.toChecksumAddress(loan.borrower)) {
+      throw Error('loan borrower is not valid');
+    }
+
+    console.info(loan);
+    return this.loan;
+  }
+
+  /**
+   * Autocomplete form group 1
+   * @param loan Loan
+   */
+  async autocompleteForm(loan: Loan) {
+    const web3: any = this.web3Service.web3;
+    const oracle: string = loan.oracle ? loan.oracle.address : undefined;
+    const currency: string = loan.currency.symbol;
+    const selectedCurrency: any = this.currencies.filter(item => item.currency === currency)[0];
+    const requestValue = web3.fromWei(loan.amount);
+    const duration = loan.descriptor.duration;
+    const installmentsFlag = loan.descriptor.installments > 1 ? true : false;
+    const interestPunnitory = loan.descriptor.punitiveInterestRateRate;
+    this.installments = loan.descriptor.installments;
+    this.selectedOracle = oracle;
+
+    this.formGroup1.patchValue({
+      duration: {
+        fullDuration: duration
+      },
+      interest: {
+        annualInterest: interestPunnitory
+      },
+      conversionGraphic: {
+        requestValue: requestValue,
+        requestedCurrency: currency
+      },
+      installmentsFlag: installmentsFlag,
+      expirationRequestDate: 7
+    });
+
+    this.onCurrencyChange(selectedCurrency);
+    this.onRequestedChange(requestValue);
+    this.onDurationChange(duration);
+  }
+
+  /**
+   * Check if loan has collateral
+   * @param loan Autocompleted loan
+   */
+  getCollateral(loan: Loan) {
+    // TODO: get actual loan collateral (expected 0)
+    console.info('loan', loan);
+  }
+
+  /**
+   * Generate empty loan for complete all forms
+   */
+  generateEmptyLoan() {
     this.loan = new Loan(
       Network.Diaspore,
       '',
@@ -106,8 +196,10 @@ export class CreateLoanComponent implements OnInit {
       Status.Request,
       null,
       null,
-      '0x0'
+      Utils.address0x
     );
+
+    this.router.navigate(['/create']);
   }
 
    /**
@@ -179,22 +271,10 @@ export class CreateLoanComponent implements OnInit {
    */
   async onSubmitStep1(form: NgForm) {
     if (form.valid) {
-      const encodedData = await this.getInstallmentsData(form);
-      this.installmentsData = encodedData;
-      this.createLoan();
-    } else {
-      this.requiredInvalid$ = true;
-    }
-  }
-
-  /**
-   * Call the required methods when completing the second step
-   * @param form Form group 1
-   */
-  async onSubmitStep2(form: NgForm) {
-    if (form.valid) {
       this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', '');
       const pendingTx: Tx = this.pendingTx;
+      const encodedData = await this.getInstallmentsData(form);
+      this.installmentsData = encodedData;
 
       if (pendingTx) {
         if (pendingTx.confirmed) {
@@ -202,8 +282,9 @@ export class CreateLoanComponent implements OnInit {
         }
       } else {
         const formGroup1: any = this.formGroup1;
-        const tx = await this.requestLoan(formGroup1);
-        const loanId = this.loan.id;
+        const tx: string = await this.requestLoan(formGroup1);
+        const loanId: string = this.loan.id;
+        this.location.replaceState(`/create/${ loanId }`);
 
         this.txService.registerCreateTx(tx, {
           engine: environment.contracts.diaspore.loanManager,
@@ -212,9 +293,20 @@ export class CreateLoanComponent implements OnInit {
         });
 
         this.retrievePendingTx();
+        this.createLoan();
       }
-
+    } else {
+      this.requiredInvalid$ = true;
     }
+  }
+
+  /**
+   * Call the required methods when completing the second step
+   * @param form Form group 2
+   */
+  async onSubmitStep2(form: NgForm) {
+    // TODO: add collateral
+    console.info('on submit step 2', form);
   }
 
   /**
@@ -255,11 +347,11 @@ export class CreateLoanComponent implements OnInit {
 
   /**
    * Update selected oracle when currency is updated
-   * @param requestedCurrency.value Requested currency as string
+   * @param requestedCurrency.currency Requested currency as string
    */
   onCurrencyChange(requestedCurrency) {
     console.info('Currency', requestedCurrency);
-    switch (requestedCurrency.value.currency) {
+    switch (requestedCurrency.currency) {
       case 'RCN':
         this.selectedOracle = null;
         break;
@@ -287,19 +379,25 @@ export class CreateLoanComponent implements OnInit {
    * @param requestValue.value Requested currency as string
    */
   onRequestedChange(requestValue) {
-    if (requestValue.value < 0) {
-      this.requestValue.patchValue(0);
-    } else if (requestValue.value > 1000000) {
-      this.requestValue.patchValue(1000000);
+    const requestMinLimit = 0;
+    const requestMaxLimit = 1000000;
+
+    if (requestValue.value < requestMinLimit) {
+      this.requestValue.patchValue(requestMinLimit);
+    } else if (requestValue.value > requestMaxLimit) {
+      this.requestValue.patchValue(requestMaxLimit);
     }
+
     this.expectedReturn();
   }
 
   /**
    * Calculate the duration in seconds when duration select is updated
    */
-  onDurationChange() {
-    const fullDuration = this.returnDaysAs(this.fullDuration.value, 'seconds');
+  onDurationChange(fullDuration) {
+    if (!fullDuration) {
+      fullDuration = this.returnDaysAs(this.fullDuration.value, 'seconds');
+    }
 
     this.formGroup1.patchValue({
       fullDuration
@@ -391,9 +489,9 @@ export class CreateLoanComponent implements OnInit {
     account = web3.toChecksumAddress(account);
 
     const expiration = this.returnDaysAs(form.value.expirationRequestDate, 'date');
-    const amount = (10 ** 18) * form.value.conversionGraphic.requestValue;
+    const amount = new web3.BigNumber(10 ** 18).mul(form.value.conversionGraphic.requestValue);
     const salt = web3.toHex(new Date().getTime());
-    const oracle: string = this.selectedOracle;
+    const oracle: string = this.selectedOracle || Utils.address0x;
     const encodedData: string = this.installmentsData;
     const callback: string = Utils.address0x;
 
@@ -466,6 +564,12 @@ export class CreateLoanComponent implements OnInit {
    */
   retrievePendingTx() {
     this.pendingTx = this.txService.getLastPendingCreate(this.loan);
+    console.info('pending tx', this.pendingTx);
+
+    if (this.pendingTx !== undefined) {
+      const loanId: string = this.loan.id;
+      this.location.replaceState(`/create/${ loanId }`);
+    }
   }
 
   /**
