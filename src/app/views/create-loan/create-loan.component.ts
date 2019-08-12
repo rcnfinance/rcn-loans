@@ -30,6 +30,7 @@ export class CreateLoanComponent implements OnInit {
   init = true;
   radioSelected = false;
   slideSelected = false;
+  panelCardOpenState = false;
 
   // Date Variables
   now: Date = new Date();
@@ -109,26 +110,26 @@ export class CreateLoanComponent implements OnInit {
     );
   }
 
+   /**
+   * Tooggles a boolean to expand, retract and disable the expansion pannels
+   */
   createLoan() {
     this.init = !this.init;
   }
 
+  /**
+   * Tooggles a boolean to register radio input selection
+   */
   radioChange() {
     this.radioSelected = true;
   }
 
+   /**
+   * Tooggles a boolean to register slider change
+   */
   slideChange() {
     this.slideSelected = true;
   }
-
-  // nextStep() {
-  //   this.step++;
-  // }
-
-  // prevStep() {
-  //   this.step--;
-  // }
-
 
   /**
    * Create form controls and define values
@@ -180,8 +181,7 @@ export class CreateLoanComponent implements OnInit {
     if (form.valid) {
       const encodedData = await this.getInstallmentsData(form);
       this.installmentsData = encodedData;
-
-      this.createLoan()
+      this.createLoan();
     } else {
       this.requiredInvalid$ = true;
     }
@@ -254,23 +254,11 @@ export class CreateLoanComponent implements OnInit {
   }
 
   /**
-   * Set installments data if is empty when stepper is toggled
-   * @param stepper.selectedIndex Selected index
-   */
-  // async onStepperChange(stepper) {
-  //   if (stepper.selectedIndex === 1 && !this.installmentsData) {
-  //     const form: any = this.formGroup1;
-  //     const encodedData = await this.getInstallmentsData(form);
-  //     this.installmentsData = encodedData;
-  //   }
-  // }
-
-  /**
    * Update selected oracle when currency is updated
    * @param requestedCurrency.value Requested currency as string
    */
   onCurrencyChange(requestedCurrency) {
-    console.info('Currency', requestedCurrency)
+    console.info('Currency', requestedCurrency);
     switch (requestedCurrency.value.currency) {
       case 'RCN':
         this.selectedOracle = null;
@@ -320,6 +308,7 @@ export class CreateLoanComponent implements OnInit {
     this.durationLabel = Utils.formatDelta(fullDuration, 2, false);
     this.expectedInstallmentsAvailable();
     this.expectedReturn();
+
   }
 
   /**

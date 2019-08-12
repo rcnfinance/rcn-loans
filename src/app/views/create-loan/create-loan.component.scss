@@ -57,6 +57,10 @@
   font-style: italic;
 }
 
+.fullWidth {
+  width: 100%;
+}
+
 .mat-slide-toggle {
   margin-left: 10px;
 }
@@ -345,14 +349,11 @@ mat-expansion-panel {
 }
 
 .button {
-  // width: auto;
   margin: 0;
   border: none;
   background-color: #2F2F2F;
   height: 45px;
   color: #FFFFFF;
-  margin-left: -15px;
-  margin-right: -15px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -363,9 +364,25 @@ mat-expansion-panel {
   justify-content: flex-end;
 }
 
+.card-mobile {
+  display: block;
+}
+
+.card-desktop {
+  display: none;
+}
 
 
 @media (min-width: 768px){
+
+  .card-mobile {
+    display: none;
+  }
+
+  .card-desktop {
+    display: block;
+  }
+
   .card-col{
     margin-top: 30px;
   }
