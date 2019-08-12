@@ -30,7 +30,7 @@ import { TransferFormComponent } from './../../shared/transfer-form/transfer-for
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
-import { DialogCollateralAddComponent } from './../../dialogs/dialog-collateral-add/dialog-collateral-add.component';
+import { DialogCollateralComponent } from './../../dialogs/dialog-collateral/dialog-collateral.component';
 
 @NgModule({
   imports: [
@@ -64,13 +64,13 @@ import { DialogCollateralAddComponent } from './../../dialogs/dialog-collateral-
 
     DialogLoanTransferComponent,
     DialogLoanPayComponent,
-    DialogCollateralAddComponent
+    DialogCollateralComponent
   ],
   entryComponents: [
     DialogLoanTransferComponent,
     DialogInsufficientfundsComponent,
     DialogLoanPayComponent,
-    DialogCollateralAddComponent
+    DialogCollateralComponent
   ],
   exports: [
     DialogLoanPayComponent
