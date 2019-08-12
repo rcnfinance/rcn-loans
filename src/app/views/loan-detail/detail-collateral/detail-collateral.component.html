@@ -56,27 +56,53 @@
             </div>
           </article>
         </div>
-        <div class="collateral-detail__footer row">
-          <div class="item col col-12 col-md-4">
-            <i class="fa fa-retweet"></i>
-            Current Exchange Rate:
-            <strong class="item__value">
-              300 DAI/ETH
-            </strong>
+        <div class="collateral-detail__footer">
+          <div class="row row--header">
+            <div class="item col col-12 col-md-7">
+              <h4>
+                Adjust collateral
+              </h4>
+              <p>
+                Do you want to withdraw or add more collateral?
+              </p>
+            </div>
+            <div class="item col col-12 col-md-5">
+              <button
+                mat-raised-button
+                class="button button-primary"
+              >
+                Add more
+              </button>
+              <button
+                mat-raised-button
+                class="button button-clear"
+              >
+                Withdraw
+              </button>
+            </div>
           </div>
-          <div class="item col col-12 col-md-4">
-            <i class="fa fa-chart-line"></i>
-            Liquidation Price:
-            <strong class="item__value">
-              200 DAI/ETH
-            </strong>
-          </div>
-          <div class="item col col-12 col-md-4">
-            <i class="fa fa-percentage"></i>
-            Change to liquidate:
-            <strong class="item__value">
-              33%
-            </strong>
+          <div class="row row--footer">
+            <div class="item col col-12 col-md-4">
+              <i class="fa fa-retweet"></i>
+              Current Exchange Rate:
+              <strong class="item__value">
+                300 DAI/ETH
+              </strong>
+            </div>
+            <div class="item col col-12 col-md-4">
+              <i class="fa fa-chart-line"></i>
+              Liquidation Price:
+              <strong class="item__value">
+                200 DAI/ETH
+              </strong>
+            </div>
+            <div class="item col col-12 col-md-4">
+              <i class="fa fa-percentage"></i>
+              Change to liquidate:
+              <strong class="item__value">
+                33%
+              </strong>
+            </div>
           </div>
         </div>
       </section>

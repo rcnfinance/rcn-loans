@@ -1,10 +1,19 @@
 @import '../../../../scss/variables';
 @import '../../../../scss/fonts';
 
+@mixin small-title {
+  @extend %font-light;
+  @extend .font12;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 3px;
+  color: $gray2;
+}
+
+
 .collateral-detail {
   width: 100%;
   text-align: left;
-
   &__head {
     h3 {
       @extend %font-regular;
@@ -14,7 +23,6 @@
     }
   }
   &__body {
-
     .item {
       width: 100%;
       display: flex;
@@ -34,12 +42,7 @@
         user-select: none;
       }
       &__label {
-        @extend %font-light;
-        @extend .font12;
-        text-transform: uppercase;
-        display: inline-block;
-        margin-bottom: 3px;
-        color: $gray2;
+        @include small-title;
       }
       &__value {
         @extend %roboto-medium;
@@ -47,27 +50,50 @@
         color: $gray1;
       }
     }
-
   }
   &__footer {
     background: rgba($gray7, .4);
     border-radius: 4px;
-    margin: 6px 0 0;
+    margin-top: 6px;
 
-    .item {
-      @extend %roboto-light;
-      @extend .font12;
-      padding-top: 16px;
-      padding-bottom: 16px;
-      color: $gray1;
-
-      svg {
-        margin-right: 6px;
+    .row {
+      margin: 0;
+      &--header {
+        padding-top: 6px;
+        &::after {
+          content: '';
+          width: 100%;
+          height: 1px;
+          margin: 20px 16px 6px;
+          background: $gray7;
+        }
+        h4 {
+          @include small-title;
+        }
+        p {
+          @include small-title;
+          text-transform: none;
+          color: $gray4;
+        }
+        .button {
+          margin-top: 18px;
+        }
       }
-
-      .item__value {
-        @extend .font14;
-        display: block;
+      &--footer {
+        .item {
+          @extend %roboto-light;
+          @extend .font12;
+          padding-top: 16px;
+          padding-bottom: 16px;
+          color: $gray1;
+          svg {
+            margin-right: 6px;
+          }
+          .item__value {
+            @extend .font14;
+            display: block;
+          }
+        }
       }
     }
   }
@@ -79,7 +105,7 @@
     padding-bottom: 40%;
 
     &__footer {
-      margin: 32px 0 0;
+      margin-top: 32px;
     }
   }
 }
