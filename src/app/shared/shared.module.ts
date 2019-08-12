@@ -30,6 +30,7 @@ import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.componen
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 import { PayFormComponent } from './pay-form/pay-form.component';
 import { CollateralAddFormComponent } from './collateral-add-form/collateral-add-form.component';
+import { CollateralWithdrawFormComponent } from './collateral-withdraw-form/collateral-withdraw-form.component';
 // App Dialogs
 import { DialogInsufficientfundsComponent } from '../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -82,6 +83,7 @@ import { EventsService } from './../services/events.service';
     CivicAuthComponent,
     PayFormComponent,
     CollateralAddFormComponent,
+    CollateralWithdrawFormComponent,
     FilterLoansComponent,
 
     DialogInsufficientfundsComponent,
@@ -141,6 +143,7 @@ import { EventsService } from './../services/events.service';
     CivicAuthComponent,
     PayFormComponent,
     CollateralAddFormComponent,
+    CollateralWithdrawFormComponent,
     FilterLoansComponent,
     DialogWrongCountryComponent
   ]

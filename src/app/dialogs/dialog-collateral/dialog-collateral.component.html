@@ -1,0 +1,20 @@
+<mat-dialog-content>
+  <div class="navbar-container">
+    <div class="creator-container">
+      <div class="creator-title">Collateral adjustment</div>
+    </div>
+  </div>
+  <div class="col-sm-12 dialog-padding">
+    <div class="title main-h2">Select the amount you want to {{ action }} to your collateral supply.</div>
+    <ng-container [ngSwitch]="action">
+      <app-collateral-add-form
+        *ngSwitchCase="'add'"
+        (submitAdd)="submit()"
+      ></app-collateral-add-form>
+      <app-collateral-withdraw-form
+        *ngSwitchCase="'withdraw'"
+        (submitAdd)="submit()"
+      ></app-collateral-withdraw-form>
+    </ng-container>
+  </div>
+</mat-dialog-content>

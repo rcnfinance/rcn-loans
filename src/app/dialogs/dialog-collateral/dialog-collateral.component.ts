@@ -5,13 +5,14 @@ import { Loan } from '../../models/loan.model';
 import { Collateral } from '../../models/collateral.model';
 
 @Component({
-  selector: 'app-dialog-collateral-add',
-  templateUrl: './dialog-collateral-add.component.html',
-  styleUrls: ['./dialog-collateral-add.component.scss']
+  selector: 'app-dialog-collateral',
+  templateUrl: './dialog-collateral.component.html',
+  styleUrls: ['./dialog-collateral.component.scss']
 })
-export class DialogCollateralAddComponent implements OnInit {
+export class DialogCollateralComponent implements OnInit {
   loan: Loan;
   collateral: Collateral;
+  action: 'add' | 'withdraw';
 
   constructor(
     public dialogRef: MatDialogRef<any>,
@@ -19,6 +20,8 @@ export class DialogCollateralAddComponent implements OnInit {
   ) {
     this.loan = data.loan;
     this.collateral = data.collateral;
+    this.action = data.action;
+    console.info('action', this.action)
   }
 
   submit(address: any) {
