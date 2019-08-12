@@ -21,7 +21,6 @@ export class DialogCollateralComponent implements OnInit {
     this.loan = data.loan;
     this.collateral = data.collateral;
     this.action = data.action;
-    console.info('action', this.action)
   }
 
   submit(address: any) {
