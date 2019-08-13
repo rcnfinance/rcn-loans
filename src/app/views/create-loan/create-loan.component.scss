@@ -57,10 +57,6 @@
   font-style: italic;
 }
 
-.fullWidth {
-  width: 100%;
-}
-
 .mat-slide-toggle {
   margin-left: 10px;
 }
@@ -277,14 +273,16 @@ mat-expansion-panel {
     margin-top: 15px;
     color: $secondary;
     .card-property{
-      margin-bottom: 10px;
+      width: 100%;
     }
     .title{
       @extend %propiety-title;
+      font-size: 15px;
     }
     .paragraph{
       min-height: 21px;
       @extend %propiety-subtitle;
+      font-size: 18px;
     }
     .btn{
       @include transition(all .3s ease-out);
@@ -348,8 +346,21 @@ mat-expansion-panel {
   }
 }
 
+/deep/ .expansion-panel--card {
+  .mat-expansion-panel-content {
+    .mat-expansion-panel-body {
+      padding: 0 !important;
+    }
+  }
+}
+
+.card-wrapper {
+  padding: 0;
+}
+
 .button {
-  margin: 0;
+  margin: 0 -15px;
+  width: 112%;
   border: none;
   background-color: #2F2F2F;
   height: 45px;
@@ -372,6 +383,100 @@ mat-expansion-panel {
   display: none;
 }
 
+.card-property-container {
+  display: flex;
+  // align-items: center;
+  margin-bottom: 15px;
+}
+
+.card-icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+  border-radius: 50px;
+  background-color: #414141;
+  height: 35px;
+  width: 40px;
+}
+
+.card-icon {
+  font-size: 18px;
+  color: #0D0D0D;
+}
+
+.collateral-container {
+  background-color: #333333;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: -15px;
+  margin-left: -15px;
+  .collateral-title {
+    font-family:'Raleway', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    color: #0D0D0D;
+  }
+}
+
+.installments-detail-container {
+  display: flex;
+  .installments-detail {
+    display: flex;
+    flex-wrap: wrap;
+    color: #989898;
+  }
+}
+
+.installments-header {
+  background-color: #0D0D0D;
+  height: auto !important;
+  padding: 0 !important;
+}
+
+/deep/ .card-container {
+  .installments-expansion-panel {
+    background-color: #0D0D0D;
+    width: 100% !important;
+    // .mat-expansion-panel-header {
+      .mat-expansion-panel-content{
+        .mat-expansion-panel-body {
+          padding: 0 !important;
+          width: 100%;
+        }
+      }
+    // }
+  }
+}
+
+/deep/ .expansion-panel-see-more {
+  display: flex !important;
+  flex-direction: column;
+  .mat-content {
+  background-color: #0D0D0D;
+  display: flex;
+  justify-content: flex-end;
+  }
+  .mat-expansion-indicator {
+    display: none;
+  }
+  .mat-expansion-panel-content {
+    background-color: #0D0D0D;
+    .mat-expansion-panel-body {
+      padding: 0 !important;
+      width: 100%;
+      background-color: #0D0D0D;
+    }
+  }
+}
+
+.expansion-panel-header-see-more {
+  order: 2;
+  height: auto !important;
+  padding: 0 !important;
+}
 
 @media (min-width: 768px){
 

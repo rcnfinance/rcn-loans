@@ -84,6 +84,7 @@
                       </div>
                     </div>
                     <div class="col-md-3 col-sm-12">
+
                       <div class="title">BORROW AMOUNT</div>
                       <div class="">
                         <div>
@@ -408,6 +409,9 @@
       </mat-accordion>
     </div>
     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-desktop">
+
+
+
       <div class="card-container">
         <ng-container *ngIf="loan">
           <app-loan-avatar [loan]="loan" [short]="true"></app-loan-avatar>
@@ -415,30 +419,111 @@
             class="risk-indicator"
             [loan]="loan"
           ></app-risk-indicator>
-          <app-creator-container [loan]="loan"></app-creator-container>
+          <!-- <app-creator-container>Collateral loan</app-creator-container> -->
+          <!-- <app-creator-container [loan]="loan"></app-creator-container> -->
+          <div class="collateral-container">
+            <span class="collateral-title">Collateral loan</span>
+          </div>
         </ng-container>
         <div class="card-row">
-          <div class="card-property">
-            <div class="title">{{ "Duration" }}</div>
-            <div class="paragraph">{{ durationLabel }}</div>
+          <div class="card-property-container">
+            <div class="card-icon-container">
+              <i class="fas fa-calendar-alt card-icon"></i>
+            </div>
+            <div class="card-property">
+              <div class="title">{{ "Duration" }}</div>
+              <div class="paragraph">{{ durationLabel }}</div>
+            </div>
           </div>
-          <div class="card-property">
-            <div class="title">{{ "Annual Interest" }}</div>
-            <div class="paragraph">~ {{ annualInterest.value }} %</div>
+          <div class="card-property-container">
+            <div class="card-icon-container">
+              <i class="fas fa-calculator card-icon"></i>
+            </div>
+            <div class="card-property">
+              <div class="title">{{ "Annual Interest" }}</div>
+              <div class="paragraph">~ {{ annualInterest.value }} %</div>
+            </div>
           </div>
-          <div class="card-property">
-            <div class="title">{{ "Installments" }}</div>
-            <div class="paragraph">{{ installments }}</div>
+          <div class="card-property-container">
+            <div class="card-icon-container">
+              <i class="fas fa-coins card-icon"></i>
+            </div>
+            <div class="card-property">
+              <div class="title">{{ "Installments" }}</div>
+
+              <mat-expansion-panel class="installments-expansion-panel">
+                <mat-expansion-panel-header class="installments-header">
+                  <mat-panel-title class="main-title-style ">
+                    <div class="paragraph">{{ installments }} pays</div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <!-- <div class="paragraph">{{ installments }} pays</div> -->
+                <div class="row installments-detail-container no-gutters">
+                  <div class="col-4 installments-detail">1st</div>
+                  <div class="col-4 installments-detail">15 days</div>
+                  <div class="col-4 installments-detail">866 DAI</div>
+                </div>
+              </mat-expansion-panel>
+            </div>
           </div>
-          <div class="card-property">
-            <div class="title">{{ "Expiration date" }}</div>
-            <div class="paragraph">{{ durationLabel }}</div>
+          <div class="card-property-container">
+            <div class="card-icon-container">
+              <i class="fas fa-calendar-alt card-icon"></i>
+            </div>
+            <div class="card-property">
+              <div class="title">{{ "Expiration date" }}</div>
+              <div class="paragraph">{{ durationLabel }}</div>
+            </div>
           </div>
-          <div class="card-property">
-            <div class="title">{{ "Collateral amount" }}</div>
-            <div class="paragraph">{{ durationLabel }}</div>
+          <div class="card-property-container">
+            <div class="card-icon-container">
+              <i class="fas fa-coins card-icon"></i>
+            </div>
+            <div class="card-property">
+              <div class="title">{{ "Collateral" }}</div>
+              <div class="paragraph">{{ durationLabel }}</div>
+            </div>
           </div>
-          <div class="link-box"><a class="link" href="">See more</a></div>
+
+          <mat-expansion-panel
+            class="expansion-panel-see-more"
+            (opened)="panelOpenSeeMore = true"
+            (closed)="panelOpenSeeMore = false">
+            <mat-expansion-panel-header class="expansion-panel-header-see-more">
+              <div class="link-box">
+                <span class="link" *ngIf="!panelOpenSeeMore">See more</span>
+                <span class="link" *ngIf="panelOpenSeeMore">See less</span>
+              </div>
+            </mat-expansion-panel-header>
+            <div class="card-property-container">
+              <div class="card-icon-container">
+                <i class="fas fa-chart-bar card-icon"></i>
+              </div>
+              <div class="card-property">
+                <div class="title">{{ "Liquidation ratio" }}</div>
+                <div class="paragraph">{{ durationLabel }}</div>
+              </div>
+            </div>
+            <div class="card-property-container">
+              <div class="card-icon-container">
+                <i class="fas fa-chart-area card-icon"></i>
+              </div>
+              <div class="card-property">
+                <div class="title">{{ "Balance ratio" }}</div>
+                <div class="paragraph">{{ durationLabel }}</div>
+              </div>
+            </div>
+            <div class="card-property-container">
+              <div class="card-icon-container">
+                <i class="fas fa-clock card-icon"></i>
+              </div>
+              <div class="card-property">
+                <div class="title">{{ "Punitory" }}</div>
+                <div class="paragraph">{{ durationLabel }}</div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+
           <div class="margintop20"></div>
           <div class="card-property">
             <div class="title">{{ "Borrow" }}</div>
@@ -461,62 +546,159 @@
           <div><a class="link" href="">Reset all values</a></div>
         </div>
       </div>
+
+
     </div>
     <!-- <mat-accordion> -->
-      <mat-expansion-panel
-        (opened)="panelCardOpenState = true"
-        (closed)="panelCardOpenState = false"
-        [ngClass]="
+    <mat-expansion-panel
+      (opened)="panelCardOpenState = true"
+      (closed)="panelCardOpenState = false"
+      [ngClass]="
         panelCardOpenState
-        ? 'expansion-panel && expansion-panel--card && expansion-panel--opened'
-        : 'expansion-panel && expansion-panel--card'
-    "
-      class="expansion-panel expansion-panel--card">
-          <mat-expansion-panel-header>
-              <mat-panel-title class="main-title-style ">
-                Loan info
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-mobile">
+          ? 'expansion-panel && expansion-panel--card && expansion-panel--opened'
+          : 'expansion-panel && expansion-panel--card'
+      "
+      class="expansion-panel expansion-panel--card  card-mobile">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title class="main-title-style ">
+          Loan info
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-wrapper">
+
           <div class="card-container">
-            <ng-container *ngIf="loan">
-              <app-loan-avatar [loan]="loan" [short]="true"></app-loan-avatar>
-              <app-risk-indicator
-                class="risk-indicator"
-                [loan]="loan"
-              ></app-risk-indicator>
-              <app-creator-container [loan]="loan"></app-creator-container>
-            </ng-container>
-            <div class="card-row">
-              <div class="card-property">
-                <div class="title">{{ "Duration" }}</div>
-                <div class="paragraph">{{ durationLabel }}</div>
-              </div>
-              <div class="card-property">
-                <div class="title">{{ "Annual Interest" }}</div>
-                <div class="paragraph">~ {{ annualInterest.value }} %</div>
-              </div>
-              <div class="card-property">
-                <div class="title">{{ "Installments" }}</div>
-                <div class="paragraph">{{ installments }}</div>
-              </div>
-              <div class="card-property">
-                <div class="title">{{ "Expiration date" }}</div>
-                <div class="paragraph">{{ durationLabel }}</div>
-              </div>
-              <div class="card-property">
-                <div class="title">{{ "Collateral amount" }}</div>
-                <div class="paragraph">{{ durationLabel }}</div>
-              </div>
-              <div class="link-box"><a class="link" href="">See more</a></div>
-              <div class="margintop20"></div>
-              <div class="card-property">
-                <div class="title">{{ "Borrow" }}</div>
-                <div class="block-title">{{ durationLabel }}</div>
-              </div>
-              <div class="card-property">
-                <div class="title">{{ "Return" }}</div>
-                <div class="block-title">{{ durationLabel }}</div>
+              <!-- <ng-container *ngIf="loan">
+                <app-loan-avatar [loan]="loan" [short]="true"></app-loan-avatar>
+                <app-risk-indicator
+                  class="risk-indicator"
+                  [loan]="loan"
+                ></app-risk-indicator> -->
+                <!-- <app-creator-container>Collateral loan</app-creator-container> -->
+                <!-- <app-creator-container [loan]="loan"></app-creator-container> -->
+                <!-- <div class="collateral-container">
+                  <span class="collateral-title">Collateral loan</span>
+                </div>
+              </ng-container> -->
+              <div class="card-row">
+                <div class="card-property-container">
+                  <div class="card-icon-container">
+                    <i class="fas fa-calendar-alt card-icon"></i>
+                  </div>
+                  <div class="card-property">
+                    <div class="title">{{ "Duration" }}</div>
+                    <div class="paragraph">{{ durationLabel }}</div>
+                  </div>
+                </div>
+                <div class="card-property-container">
+                  <div class="card-icon-container">
+                    <i class="fas fa-calculator card-icon"></i>
+                  </div>
+                  <div class="card-property">
+                    <div class="title">{{ "Annual Interest" }}</div>
+                    <div class="paragraph">~ {{ annualInterest.value }} %</div>
+                  </div>
+                </div>
+                <div class="card-property-container">
+                  <div class="card-icon-container">
+                    <i class="fas fa-coins card-icon"></i>
+                  </div>
+                  <div class="card-property">
+                    <div class="title">{{ "Installments" }}</div>
+
+                    <mat-expansion-panel class="installments-expansion-panel">
+                      <mat-expansion-panel-header class="installments-header">
+                        <mat-panel-title class="main-title-style ">
+                          <div class="paragraph">{{ installments }} pays</div>
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <!-- <div class="paragraph">{{ installments }} pays</div> -->
+                      <div class="row installments-detail-container no-gutters">
+                        <div class="col-4 installments-detail">1st</div>
+                        <div class="col-4 installments-detail">15 days</div>
+                        <div class="col-4 installments-detail">866 DAI</div>
+                      </div>
+                    </mat-expansion-panel>
+                  </div>
+                </div>
+                <div class="card-property-container">
+                  <div class="card-icon-container">
+                    <i class="fas fa-calendar-alt card-icon"></i>
+                  </div>
+                  <div class="card-property">
+                    <div class="title">{{ "Expiration date" }}</div>
+                    <div class="paragraph">{{ durationLabel }}</div>
+                  </div>
+                </div>
+                <div class="card-property-container">
+                  <div class="card-icon-container">
+                    <i class="fas fa-coins card-icon"></i>
+                  </div>
+                  <div class="card-property">
+                    <div class="title">{{ "Collateral" }}</div>
+                    <div class="paragraph">{{ durationLabel }}</div>
+                  </div>
+                </div>
+
+                <mat-expansion-panel
+                  class="expansion-panel-see-more"
+                  (opened)="panelOpenSeeMore = true"
+                  (closed)="panelOpenSeeMore = false">
+                  <mat-expansion-panel-header class="expansion-panel-header-see-more">
+                    <div class="link-box">
+                      <span class="link" *ngIf="!panelOpenSeeMore">See more</span>
+                      <span class="link" *ngIf="panelOpenSeeMore">See less</span>
+                    </div>
+                  </mat-expansion-panel-header>
+                  <div class="card-property-container">
+                    <div class="card-icon-container">
+                      <i class="fas fa-chart-bar card-icon"></i>
+                    </div>
+                    <div class="card-property">
+                      <div class="title">{{ "Liquidation ratio" }}</div>
+                      <div class="paragraph">{{ durationLabel }}</div>
+                    </div>
+                  </div>
+                  <div class="card-property-container">
+                    <div class="card-icon-container">
+                      <i class="fas fa-chart-area card-icon"></i>
+                    </div>
+                    <div class="card-property">
+                      <div class="title">{{ "Balance ratio" }}</div>
+                      <div class="paragraph">{{ durationLabel }}</div>
+                    </div>
+                  </div>
+                  <div class="card-property-container">
+                    <div class="card-icon-container">
+                      <i class="fas fa-clock card-icon"></i>
+                    </div>
+                    <div class="card-property">
+                      <div class="title">{{ "Punitory" }}</div>
+                      <div class="paragraph">{{ durationLabel }}</div>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+
+                <div class="margintop20"></div>
+                <div class="card-property">
+                  <div class="title">{{ "Borrow" }}</div>
+                  <div class="block-title">{{ durationLabel }}</div>
+                </div>
+                <div class="card-property">
+                  <div class="title">{{ "Return" }}</div>
+                  <div class="block-title">{{ durationLabel }}</div>
+                </div>
+                <div class="margintop20"></div>
+                <button
+                  mat-raised-button
+                  class="button button-primary fullWidth margintop20"
+                  [disabled]="!formGroup1.valid || !formGroup2.valid"
+                  (click)="onSubmitStep2(fStep2)"
+                >
+                  Confirm
+                </button>
+                <div class="margintop20"></div>
+                <div><a class="link" href="">Reset all values</a></div>
               </div>
               <div class="margintop20"></div>
               <button
@@ -530,9 +712,14 @@
               <div class="margintop20"></div>
               <div><a class="link" href="">Reset all values</a></div>
             </div>
-          </div>
-        </div>
-      </mat-expansion-panel>
+
+
+      </div>
+
+
+
+
+    </mat-expansion-panel>
     <!-- </mat-accordion> -->
   </div>
 </div>
