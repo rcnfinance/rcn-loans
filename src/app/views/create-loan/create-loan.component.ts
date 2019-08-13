@@ -34,6 +34,8 @@ export class CreateLoanComponent implements OnInit {
   radioSelected = false;
   slideSelected = false;
   panelCardOpenState = false;
+  panelOpenSeeMore = false;
+  mobile = false;
 
   // Date Variables
   now: Date = new Date();
@@ -108,6 +110,9 @@ export class CreateLoanComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    if (window.screen.width <= 750) {
+      this.mobile = true;
+    }
     this.createFormControls();
     this.createForm();
     this.retrievePendingTx();

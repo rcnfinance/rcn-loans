@@ -127,6 +127,10 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
   border-color: white;
 }
 
+.mat-expansion-indicator::after {
+  color: #717171 !important;
+}
+
 .button{
   &.button-primary{
     color: $secondary;
