@@ -56,7 +56,6 @@ export class LoanDetailComponent implements OnInit {
   interest: string;
   duration: string;
   collateral: any; // TODO
-  collateralCurrency: string; // TODO
   nextInstallment: {
     installment: string,
     amount: string,
@@ -163,11 +162,12 @@ export class LoanDetailComponent implements OnInit {
     const collaterals = await this.apiService.getCollateralByLoan(loanId);
 
     if (!collaterals.length) {
-      console.info('load hasn´t collateral');
       return;
     }
 
     const collateral = collaterals[0];
+    console.info('loan collateral', collateral);
+
     this.collateral = new Collateral(
       collateral.id,
       collateral.debt_id,
@@ -179,7 +179,6 @@ export class LoanDetailComponent implements OnInit {
       collateral.burn_fee,
       collateral.reward_fee
     );
-    console.info('loan collateral', collateral);
   }
 
   private defaultDetail(): string {
