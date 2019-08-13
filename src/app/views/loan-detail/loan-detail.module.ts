@@ -14,8 +14,11 @@ import { LoanDetailRoutingModule } from './loan-detail-routing.module';
 // App Component
 import { LoanDetailComponent } from './loan-detail.component';
 import { DetailTableComponent } from './detail-table/detail-table.component';
+import { DetailInstallmentsComponent } from './detail-installments/detail-installments.component';
+import { DetailCollateralComponent } from './detail-collateral/detail-collateral.component';
 import { DetailIdentityComponent } from './detail-identity/detail-identity.component';
 import { DetailCosignerComponent } from './detail-cosigner/detail-cosigner.component';
+import { DetailEmptyComponent } from './detail-empty/detail-empty.component';
 import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
 
 import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
@@ -27,6 +30,7 @@ import { TransferFormComponent } from './../../shared/transfer-form/transfer-for
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
+import { DialogCollateralComponent } from './../../dialogs/dialog-collateral/dialog-collateral.component';
 
 @NgModule({
   imports: [
@@ -46,8 +50,11 @@ import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insuffi
   declarations: [
     LoanDetailComponent,
     DetailTableComponent,
+    DetailInstallmentsComponent,
+    DetailCollateralComponent,
     DetailIdentityComponent,
     DetailCosignerComponent,
+    DetailEmptyComponent,
     DecentralandMapComponent,
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
@@ -56,12 +63,14 @@ import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insuffi
     TransferFormComponent,
 
     DialogLoanTransferComponent,
-    DialogLoanPayComponent
+    DialogLoanPayComponent,
+    DialogCollateralComponent
   ],
   entryComponents: [
     DialogLoanTransferComponent,
     DialogInsufficientfundsComponent,
-    DialogLoanPayComponent
+    DialogLoanPayComponent,
+    DialogCollateralComponent
   ],
   exports: [
     DialogLoanPayComponent

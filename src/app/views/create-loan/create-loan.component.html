@@ -1,15 +1,15 @@
 <!-- <pre style="background:white;color:black;border:1px solid blue;">
-    {{ formGroup1.value | json }}
-    <p>
-      Valid: {{ formGroup1.valid }}
-    </p>
-  </pre>
-  <pre style="background:white;color:black;border:1px solid blue;">
-    {{ formGroup2.value | json }}
-    <p>
-      Valid: {{ formGroup2.valid }}
-    </p>
-  </pre> -->
+  {{ formGroup1.value | json }}
+  <p>
+    Valid: {{ formGroup1.valid }}
+  </p>
+</pre> -->
+<pre style="background:white;color:black;border:1px solid blue;">
+  {{ formGroup2.value | json }}
+  <p>
+    Valid: {{ formGroup2.valid }}
+  </p>
+</pre>
 <ngx-spinner
   bdColor="rgba(0,0,0,.3)"
   size="medium"
@@ -56,7 +56,7 @@
                         <mat-select
                           placeholder="Select a Token"
                           formControlName="requestedCurrency"
-                          (selectionChange)="onCurrencyChange($event)"
+                          (selectionChange)="onCurrencyChange($event.value)"
                           required
                         >
                           <mat-option>--</mat-option>
@@ -232,7 +232,7 @@
                     [disabled]="
                       !installmentsAvailable || installmentsAvailable < 2
                     "
-                    (change)="onInstallmentsChange($event)"
+                    (change)="onInstallmentsChange()"
                     [(ngModel)]="isChecked"
                   >
                   </mat-slide-toggle>
@@ -537,7 +537,7 @@
           <button
             mat-raised-button
             class="button button-primary fullWidth margintop20"
-            [disabled]="!formGroup1.valid || !formGroup2.valid"
+            [disabled]="!formGroup2.valid"
             (click)="onSubmitStep2(fStep2)"
           >
             Confirm
@@ -700,6 +700,17 @@
                 <div class="margintop20"></div>
                 <div><a class="link" href="">Reset all values</a></div>
               </div>
+              <div class="margintop20"></div>
+              <button
+                mat-raised-button
+                class="button button-primary fullWidth margintop20"
+                [disabled]="!formGroup2.valid"
+                (click)="onSubmitStep2(fStep2)"
+              >
+                Confirm
+              </button>
+              <div class="margintop20"></div>
+              <div><a class="link" href="">Reset all values</a></div>
             </div>
 
 

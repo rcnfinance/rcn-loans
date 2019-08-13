@@ -1,0 +1,111 @@
+@import '../../../../scss/variables';
+@import '../../../../scss/fonts';
+
+@mixin small-title {
+  @extend %font-light;
+  @extend .font12;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 3px;
+  color: $gray2;
+}
+
+
+.collateral-detail {
+  width: 100%;
+  text-align: left;
+  &__head {
+    h3 {
+      @extend %font-regular;
+      @extend .font20;
+      text-transform: uppercase;
+      margin: 0 0 25px;
+    }
+  }
+  &__body {
+    .item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      &__icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 18px;
+        background: $primary;
+        color: $tertiary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+      }
+      &__label {
+        @include small-title;
+      }
+      &__value {
+        @extend %roboto-medium;
+        @extend .font18;
+        color: $gray1;
+      }
+    }
+  }
+  &__footer {
+    background: rgba($gray7, .4);
+    border-radius: 4px;
+    margin-top: 6px;
+
+    .row {
+      margin: 0;
+      &--header {
+        padding-top: 6px;
+        &::after {
+          content: '';
+          width: 100%;
+          height: 1px;
+          margin: 20px 16px 6px;
+          background: $gray7;
+        }
+        h4 {
+          @include small-title;
+        }
+        p {
+          @include small-title;
+          text-transform: none;
+          color: $gray4;
+        }
+        .button {
+          margin-top: 18px;
+        }
+      }
+      &--footer {
+        .item {
+          @extend %roboto-light;
+          @extend .font12;
+          padding-top: 16px;
+          padding-bottom: 16px;
+          color: $gray1;
+          svg {
+            margin-right: 6px;
+          }
+          .item__value {
+            @extend .font14;
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+@media (min-width: 992px) {
+  .collateral-detail {
+    padding-bottom: 40%;
+
+    &__footer {
+      margin-top: 32px;
+    }
+  }
+}

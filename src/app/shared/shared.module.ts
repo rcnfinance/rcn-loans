@@ -29,12 +29,15 @@ import { ButtonGroupComponent } from './button-group/button-group.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 import { PayFormComponent } from './pay-form/pay-form.component';
+import { CollateralAddFormComponent } from './collateral-add-form/collateral-add-form.component';
+import { CollateralWithdrawFormComponent } from './collateral-withdraw-form/collateral-withdraw-form.component';
 // App Dialogs
 import { DialogInsufficientfundsComponent } from '../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogGenericErrorComponent } from '../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
+import { DialogSelectCurrencyComponent } from '../dialogs/dialog-select-currency/dialog-select-currency.component';
 // App Services
 import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
@@ -79,6 +82,8 @@ import { EventsService } from './../services/events.service';
     RiskIndicatorComponent,
     CivicAuthComponent,
     PayFormComponent,
+    CollateralAddFormComponent,
+    CollateralWithdrawFormComponent,
     FilterLoansComponent,
 
     DialogInsufficientfundsComponent,
@@ -86,6 +91,7 @@ import { EventsService } from './../services/events.service';
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
+    DialogSelectCurrencyComponent,
     FilterLoansComponent
   ],
   entryComponents: [
@@ -94,7 +100,8 @@ import { EventsService } from './../services/events.service';
     DialogApproveContractComponent,
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
-    DialogWrongCountryComponent
+    DialogWrongCountryComponent,
+    DialogSelectCurrencyComponent
   ],
   providers: [
     DecentralandCosignerProvider,
@@ -135,6 +142,8 @@ import { EventsService } from './../services/events.service';
     RiskIndicatorComponent,
     CivicAuthComponent,
     PayFormComponent,
+    CollateralAddFormComponent,
+    CollateralWithdrawFormComponent,
     FilterLoansComponent,
     DialogWrongCountryComponent
   ]

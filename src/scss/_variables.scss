@@ -12,7 +12,7 @@ $gray7: #333333;
 $gray8: #101010;
 $gray9: #0c0c0c;
 $red: #f44136;
-$green: #71b464;
+$green: #6EB548;
 $orange: #da7d3a;
 $orange-hover: #d47734;
 $primary: #4155ff;
@@ -234,7 +234,7 @@ $default-transition--delay: all 0.3s ease-out;
   }
 }
 %flex-item-01{
-  &:nth-child(1){ 
+  &:nth-child(1){
     order: 1; // By default, items have a value of 0, but we can use this property to set it to a positive or negative integer value.
   }
 }
