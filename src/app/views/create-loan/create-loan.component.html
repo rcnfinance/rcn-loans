@@ -1,15 +1,3 @@
-<!-- <pre style="background:white;color:black;border:1px solid blue;">
-  {{ formGroup1.value | json }}
-  <p>
-    Valid: {{ formGroup1.valid }}
-  </p>
-</pre> -->
-<pre style="background:white;color:black;border:1px solid blue;">
-  {{ formGroup2.value | json }}
-  <p>
-    Valid: {{ formGroup2.valid }}
-  </p>
-</pre>
 <ngx-spinner
   bdColor="rgba(0,0,0,.3)"
   size="medium"
@@ -386,6 +374,8 @@
                         color="primary"
                         thumbLabel="true"
                         value="10"
+                        min="150"
+                        max="400"
                         (change)="slideChange()"
                       ></mat-slider>
                       <div class="slider-percentage-box">

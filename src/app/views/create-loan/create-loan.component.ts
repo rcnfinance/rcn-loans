@@ -9,10 +9,12 @@ import {
 } from '@angular/material';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
+import { Collateral } from './../../models/collateral.model';
 // App Services
 import { environment } from '../../../environments/environment';
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
+import { ApiService } from './../../services/api.service';
 import { Web3Service } from './../../services/web3.service';
 import { TxService, Tx } from '../../tx.service';
 
@@ -64,10 +66,27 @@ export class CreateLoanComponent implements OnInit {
 
   requiredInvalid$ = false;
   currencies: any = [
-  { currency: 'RCN', img: '../../../assets/rcn.png' },
-  { currency: 'MANA', img: '../../../assets/mana.png' },
-  { currency: 'ETH', img: '../../../assets/eth.png' },
-  { currency: 'DAI', img: '../../../assets/dai.png' }];
+    {
+      currency: 'RCN',
+      img: '../../../assets/rcn.png',
+      address: environment.contracts.rcnToken
+    },
+    {
+      currency: 'MANA',
+      img: '../../../assets/mana.png',
+      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
+    },
+    {
+      currency: 'ETH',
+      img: '../../../assets/eth.png',
+      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    },
+    {
+      currency: 'DAI',
+      img: '../../../assets/dai.png',
+      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
+    }
+  ];
   durationDays: number[] = [15, 30, 45, 60, 75, 90];
   selectedOracle: any;
   pendingTx: Tx = undefined;
@@ -82,6 +101,7 @@ export class CreateLoanComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private contractsService: ContractsService,
+    private apiService: ApiService,
     private web3Service: Web3Service,
     private txService: TxService,
     public snackBar: MatSnackBar
@@ -102,10 +122,10 @@ export class CreateLoanComponent implements OnInit {
       try {
         const loan = await this.getExistingLoan(loanId);
         await this.autocompleteForm(loan);
-        await this.getCollateral(loan);
+        await this.getCollateral(loanId);
         this.createLoan();
       } catch (e) {
-        console.info('Loan not found', e);
+        console.info('it is not possible to assign collateral', e);
         this.generateEmptyLoan();
       }
     } else {
@@ -173,15 +193,21 @@ export class CreateLoanComponent implements OnInit {
 
   /**
    * Check if loan has collateral
-   * @param loan Autocompleted loan
+   * @param id Loan ID
+   * @return Collaterals array
    */
-  getCollateral(loan: Loan) {
-    // TODO: get actual loan collateral (expected 0)
-    console.info('loan', loan);
+  async getCollateral(id: string): Promise<Collateral[]> {
+    const collaterals = await this.apiService.getCollateralByLoan(id);
+
+    if (collaterals.length) {
+      this.router.navigate(['/loan', id]);
+    }
+
+    return collaterals;
   }
 
   /**
-   * Generate empty loan for complete all forms
+   * Generate empty loan for complete all forms and navigate to /create
    */
   generateEmptyLoan() {
     this.loan = new Loan(
@@ -305,8 +331,58 @@ export class CreateLoanComponent implements OnInit {
    * @param form Form group 2
    */
   async onSubmitStep2(form: NgForm) {
-    // TODO: add collateral
-    console.info('on submit step 2', form);
+    const web3: any = this.web3Service.web3;
+    const loan: Loan = this.loan;
+    const loanId = loan.id;
+    const oracle = loan.oracle ? loan.oracle.address : Utils.address0x;
+    const collateralToken: string = form.value.collateralAsset.address;
+    const liquidationRatio: any = form.value.liquidationRatio;
+    const balanceRatio: any = form.value.collateralAdjustment;
+    const burnFee = new web3.BigNumber(500);
+    const rewardFee = new web3.BigNumber(500);
+    const account = this.account;
+    const entryAmount = this.calculateCollateralAmount(
+      loan,
+      balanceRatio,
+      form.value.collateralAsset.currency
+    );
+
+    await this.contractsService.createCollateral(
+      loanId,
+      oracle,
+      collateralToken,
+      entryAmount,
+      liquidationRatio * 10 ** 2,
+      balanceRatio * 10 ** 2,
+      burnFee,
+      rewardFee,
+      account
+    );
+  }
+
+  /**
+   * Calculate required amount in collateral token
+   * @param loan Loan payload
+   * @param balanceRatio Collateral balance ratio
+   * @param collateralAsset Collateral currency
+   * @return Collateral amount in collateral asset
+   */
+  calculateCollateralAmount(
+    loan: Loan,
+    balanceRatio,
+    collateralAsset
+  ) {
+    const web3: any = this.web3Service.web3;
+    const loanAmount: number = web3.fromWei(loan.amount);
+    const loanCurrency: string = loan.currency.symbol;
+
+    let collateralAmount = new web3.BigNumber(balanceRatio).mul(loanAmount);
+    collateralAmount = collateralAmount.div(100);
+
+    // TODO: convert amount to collateral asset
+    console.info('loan currency', loanCurrency, 'collateral asset', collateralAsset);
+
+    return new web3.toWei(collateralAmount);
   }
 
   /**
@@ -394,7 +470,7 @@ export class CreateLoanComponent implements OnInit {
   /**
    * Calculate the duration in seconds when duration select is updated
    */
-  onDurationChange(fullDuration) {
+  onDurationChange(fullDuration?: number) {
     if (!fullDuration) {
       fullDuration = this.returnDaysAs(this.fullDuration.value, 'seconds');
     }

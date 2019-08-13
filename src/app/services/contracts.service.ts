@@ -713,10 +713,10 @@ export class ContractsService {
     oracle: string,
     collateralToken: string,
     entryAmount: string,
-    liquidationRatio: string,
-    balanceRatio: string,
-    burnFee: string,
-    rewardFee: string,
+    liquidationRatio: number,
+    balanceRatio: number,
+    burnFee: number,
+    rewardFee: number,
     account: string
   ) {
     const web3 = this.web3.opsWeb3;
