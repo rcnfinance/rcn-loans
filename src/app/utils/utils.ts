@@ -98,11 +98,11 @@ export class Utils {
       return amount.toString();
     }
 
-    const intDigits = amount.toFixed(0).toString().length;
+    const intDigits = Number(amount).toFixed(0).toString().length;
     const decDigits = maxDigits - intDigits;
     const decimals = (decDigits > 0) ? decDigits : 0;
 
-    return Number(amount.toFixed(decimals)).toString();
+    return Number(amount).toFixed(decimals).toString();
   }
 
   static removeTrailingZeros(value: string): string {
