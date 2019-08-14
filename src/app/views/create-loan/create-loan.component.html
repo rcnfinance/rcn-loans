@@ -22,10 +22,21 @@
           [disabled]="init != true"
           class="expansion-panel"
         >
-          <mat-expansion-panel-header>
-            <mat-panel-title class="main-title-style ">
+          <mat-expansion-panel-header class="expansion-panel__header">
+            <mat-panel-title class="main-title-style">
               1 | SET YOUR LOAN REQUIREMENTS
             </mat-panel-title>
+            <ng-container *ngIf="showProgress">
+              <mat-progress-bar mode="determinate" [value]="creationProgress"></mat-progress-bar>
+              <div>
+                <span class="fa fa-spinner fa-spin"></span>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!showProgress && loan?.id">
+              <div>
+                <span class="fa fa-check" *ngIf="!init"></span>
+              </div>
+            </ng-container>
           </mat-expansion-panel-header>
           <form
             [formGroup]="formGroup1"

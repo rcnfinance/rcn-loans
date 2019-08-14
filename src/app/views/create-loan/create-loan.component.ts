@@ -36,6 +36,8 @@ export class CreateLoanComponent implements OnInit {
   panelCardOpenState = false;
   panelOpenSeeMore = false;
   mobile = false;
+  creationProgress = 0;
+  showProgress = false;
 
   // Date Variables
   now: Date = new Date();
@@ -697,10 +699,35 @@ export class CreateLoanComponent implements OnInit {
     if (this.createPendingTx !== undefined) {
       const loanId: string = this.loan.id;
       this.location.replaceState(`/create/${ loanId }`);
+
+      if (this.creationProgress === 0) {
+        this.creationProgress = 1;
+        this.showProgress = true;
+
+        const updateProgressbar = () => {
+          if (this.creationProgress < 90) {
+            this.creationProgress++;
+            return;
+          }
+        };
+
+        const incrementProgress = setInterval(updateProgressbar, 500);
+
+        this.txService.subscribeConfirmedTx((tx: Tx) => {
+          if (tx.tx === this.createPendingTx.tx) {
+            clearInterval(incrementProgress);
+            this.creationProgress = 100;
+
+            setTimeout(() => {
+              this.showProgress = false;
+            }, 1000);
+          }
+        });
+
+      }
     }
 
     this.collateralPendingTx = this.txService.getLastPendingCreateCollateral(this.loan);
-    console.info('pending tx collateral', this.collateralPendingTx);
   }
 
   /**
