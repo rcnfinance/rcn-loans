@@ -251,9 +251,10 @@
                     <input
                       matInput
                       type="number"
+                      min="1"
                       max="30"
                       formControlName="expirationRequestDate"
-                      pattern="^[1-9]+$"
+                      pattern="^(?:[1-9]|[1-2][0-9]|30)$"
                       required
                     />
                     <mat-hint>
@@ -269,7 +270,7 @@
                 type="submit"
                 class="button-reset button-secondary-style"
               >
-                Create Loan
+                {{ createButtonText }}
                 <i class="fas fa-arrow-circle-right marginright50"></i>
               </button>
             </div>
@@ -530,7 +531,7 @@
             [disabled]="!formGroup2.valid"
             (click)="onSubmitStep2(fStep2)"
           >
-            Confirm
+            {{ collateralButtonText }}
           </button>
           <div class="margintop20"></div>
           <div><a class="link" href="">Reset all values</a></div>
@@ -685,7 +686,7 @@
                   [disabled]="!formGroup1.valid || !formGroup2.valid"
                   (click)="onSubmitStep2(fStep2)"
                 >
-                  Confirm
+                  {{ collateralButtonText }}
                 </button>
                 <div class="margintop20"></div>
                 <div><a class="link" href="">Reset all values</a></div>
@@ -697,7 +698,7 @@
                 [disabled]="!formGroup2.valid"
                 (click)="onSubmitStep2(fStep2)"
               >
-                Confirm
+                {{ collateralButtonText }}
               </button>
               <div class="margintop20"></div>
               <div><a class="link" href="">Reset all values</a></div>

@@ -91,7 +91,8 @@ export class CreateLoanComponent implements OnInit {
   ];
   durationDays: number[] = [15, 30, 45, 60, 75, 90];
   selectedOracle: any;
-  pendingTx: Tx = undefined;
+  createPendingTx: Tx = undefined;
+  collateralPendingTx: Tx = undefined;
 
   // Card Variables
   account: string;
@@ -303,7 +304,7 @@ export class CreateLoanComponent implements OnInit {
   async onSubmitStep1(form: NgForm) {
     if (form.valid) {
       this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', '');
-      const pendingTx: Tx = this.pendingTx;
+      const pendingTx: Tx = this.createPendingTx;
       const encodedData = await this.getInstallmentsData(form);
       this.installmentsData = encodedData;
 
@@ -336,6 +337,30 @@ export class CreateLoanComponent implements OnInit {
    * @param form Form group 2
    */
   async onSubmitStep2(form: NgForm) {
+    const pendingLoanCreation: Tx = this.createPendingTx;
+    if (pendingLoanCreation && !pendingLoanCreation.confirmed) {
+      this.openSnackBar('Wait for the loan to be created', '');
+      return;
+    }
+
+    if (form.valid) {
+      this.openSnackBar('Your Collateral is being processed. It might be available in a few seconds', '');
+      const pendingTx: Tx = this.collateralPendingTx;
+
+      if (pendingTx) {
+        if (pendingTx.confirmed) {
+          this.router.navigate(['/', 'loan', this.loan.id]);
+        }
+      } else {
+        const formGroup2: any = this.formGroup2;
+        const tx: string = await this.createCollateral(formGroup2);
+        this.txService.registerCreateCollateralTx(tx, this.loan);
+        this.retrievePendingTx();
+      }
+    }
+  }
+
+  async createCollateral(form: NgForm): Promise<string> {
     const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
     const loanId: string = loan.id;
@@ -352,17 +377,21 @@ export class CreateLoanComponent implements OnInit {
       form.value.collateralAsset.currency
     );
 
-    await this.contractsService.createCollateral(
-      loanId,
-      oracle,
-      collateralToken,
-      entryAmount,
-      liquidationRatio,
-      balanceRatio,
-      burnFee,
-      rewardFee,
-      account
-    );
+    try {
+      return await this.contractsService.createCollateral(
+        loanId,
+        oracle,
+        collateralToken,
+        entryAmount,
+        liquidationRatio,
+        balanceRatio,
+        burnFee,
+        rewardFee,
+        account
+      );
+    } catch (e) {
+      throw Error('error on create collateral');
+    }
   }
 
   /**
@@ -662,28 +691,46 @@ export class CreateLoanComponent implements OnInit {
    * Retrieve pending Tx
    */
   retrievePendingTx() {
-    this.pendingTx = this.txService.getLastPendingCreate(this.loan);
-    console.info('pending tx', this.pendingTx);
+    this.createPendingTx = this.txService.getLastPendingCreate(this.loan);
+    console.info('pending tx create', this.createPendingTx);
 
-    if (this.pendingTx !== undefined) {
+    if (this.createPendingTx !== undefined) {
       const loanId: string = this.loan.id;
       this.location.replaceState(`/create/${ loanId }`);
     }
+
+    this.collateralPendingTx = this.txService.getLastPendingCreateCollateral(this.loan);
+    console.info('pending tx collateral', this.collateralPendingTx);
   }
 
   /**
-   * Get submit button text according to the creation status
+   * Get submit button text according to the loan creation status
    * @return Button text
    */
-  get submitButtonText(): string {
-    const tx: Tx = this.pendingTx;
+  get createButtonText(): string {
+    const tx: Tx = this.createPendingTx;
     if (tx === undefined) {
-      return 'Create';
+      return 'Create Loan';
     }
     if (tx.confirmed) {
       return 'Created';
     }
     return 'Creating...';
+  }
+
+  /**
+   * Get submit button text according to the collateral creation status
+   * @return Button text
+   */
+  get collateralButtonText(): string {
+    const tx: Tx = this.collateralPendingTx;
+    if (tx === undefined) {
+      return 'Confirm';
+    }
+    if (tx.confirmed) {
+      return 'Confirmed';
+    }
+    return 'Confirming...';
   }
 
 }

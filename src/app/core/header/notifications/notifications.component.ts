@@ -93,6 +93,10 @@ export class NotificationsComponent implements OnInit {
         message = 'a loan';
         break;
 
+      case 'createCollateral':
+        message = 'the collateral';
+        break;
+
       default:
         message = 'the loan';
         break;
@@ -152,7 +156,7 @@ export class NotificationsComponent implements OnInit {
         txObject = new TxObject(id, 'Transfering', message, '', '', 'fas fa-exchange-alt', 'orange');
         break;
       case 'pay':
-        txObject = new TxObject(id, 'Paying', message, '', '', 'fas fa-coins', 'green');
+        txObject = new TxObject(id, 'Paying', message, '', '', 'fas fa-donate', 'green');
         break;
       case 'claim':
         txObject = new TxObject(id, 'Claiming', message, 'material-icons', 'call_made', '', 'white');
@@ -165,7 +169,10 @@ export class NotificationsComponent implements OnInit {
         }
         break;
       case 'create':
-        txObject = new TxObject(id, 'Creating', message, 'material-icons', 'add', '', 'blue');
+        txObject = new TxObject(id, 'Creating', message, 'material-icons', 'add', '', 'turquoise');
+        break;
+      case 'createCollateral':
+        txObject = new TxObject(id, 'Creating', message, '', '', 'fas fa-coins', 'violet');
         break;
       default:
         break;
@@ -204,6 +211,7 @@ export class NotificationsComponent implements OnInit {
         }
         break;
       case 'create':
+      case 'createCollateral':
         message = 'Created';
         break;
       default:

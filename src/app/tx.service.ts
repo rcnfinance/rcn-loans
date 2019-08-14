@@ -13,7 +13,8 @@ export enum Type {
   transfer = 'transfer',
   claim = 'claim',
   pay = 'pay',
-  create = 'create'
+  create = 'create',
+  createCollateral = 'createCollateral'
 }
 
 export class Tx {
@@ -208,6 +209,24 @@ export class TxService {
       .filter(tx =>
         !tx.confirmed &&
         tx.type === Type.create &&
+        tx.data.id === loan.id)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
+  }
+
+  registerCreateCollateralTx(tx: string, loan: Loan) {
+    const data = {
+      engine: loan.address,
+      id: loan.id,
+      amount: loan.amount
+    };
+    this.registerTx(new Tx(tx, data.engine, false, Type.createCollateral, data));
+  }
+
+  getLastPendingCreateCollateral(loan: Loan) {
+    return this.txMemory
+      .filter(tx =>
+        !tx.confirmed &&
+        tx.type === Type.createCollateral &&
         tx.data.id === loan.id)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
   }
