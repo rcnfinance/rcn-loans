@@ -230,7 +230,7 @@ export class CreateLoanComponent implements OnInit {
       Utils.address0x
     );
 
-    this.router.navigate(['/create']);
+    this.location.replaceState(`/create`);
   }
 
    /**
@@ -338,15 +338,15 @@ export class CreateLoanComponent implements OnInit {
   async onSubmitStep2(form: NgForm) {
     const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
-    const loanId = loan.id;
-    const oracle = loan.oracle ? loan.oracle.address : Utils.address0x;
+    const loanId: string = loan.id;
+    const oracle: string = loan.oracle ? loan.oracle.address : Utils.address0x;
     const collateralToken: string = form.value.collateralAsset.address;
-    const liquidationRatio: any = form.value.liquidationRatio;
-    const balanceRatio: any = form.value.collateralAdjustment;
+    const liquidationRatio: number = new web3.BigNumber(form.value.liquidationRatio).mul(100);
+    const balanceRatio: any = new web3.BigNumber(form.value.collateralAdjustment).mul(100);
     const burnFee = new web3.BigNumber(500);
     const rewardFee = new web3.BigNumber(500);
     const account = this.account;
-    const entryAmount = this.calculateCollateralAmount(
+    const entryAmount = await this.calculateCollateralAmount(
       loan,
       balanceRatio,
       form.value.collateralAsset.currency
@@ -357,8 +357,8 @@ export class CreateLoanComponent implements OnInit {
       oracle,
       collateralToken,
       entryAmount,
-      liquidationRatio * 10 ** 2,
-      balanceRatio * 10 ** 2,
+      liquidationRatio,
+      balanceRatio,
       burnFee,
       rewardFee,
       account
@@ -372,7 +372,7 @@ export class CreateLoanComponent implements OnInit {
    * @param collateralAsset Collateral currency
    * @return Collateral amount in collateral asset
    */
-  calculateCollateralAmount(
+  async calculateCollateralAmount(
     loan: Loan,
     balanceRatio,
     collateralAsset
@@ -380,14 +380,32 @@ export class CreateLoanComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const loanAmount: number = web3.fromWei(loan.amount);
     const loanCurrency: string = loan.currency.symbol;
+    balanceRatio = balanceRatio.div(100);
 
+    // calculate amount in rcn
     let collateralAmount = new web3.BigNumber(balanceRatio).mul(loanAmount);
     collateralAmount = collateralAmount.div(100);
 
-    // TODO: convert amount to collateral asset
-    console.info('loan currency', loanCurrency, 'collateral asset', collateralAsset);
+    // convert amount to collateral asset
+    if (loanCurrency === collateralAsset) {
+      collateralAmount = new web3.toWei(collateralAmount);
+    } else {
+      const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
+      const fromToken: any = this.currencies.filter(currency => currency.currency === collateralAsset)[0].address;
+      const token: any = environment.contracts.rcnToken;
+      const collateralTokenAmount = await this.contractsService.getCostInToken(
+        web3.toWei(collateralAmount),
+        uniswapProxy,
+        fromToken,
+        token
+      );
+      const tokenCost = new web3.BigNumber(collateralTokenAmount[0]);
+      const etherCost = new web3.BigNumber(collateralTokenAmount[1]);
 
-    return new web3.toWei(collateralAmount);
+      collateralAmount = tokenCost.isZero() ? etherCost : collateralAmount;
+    }
+
+    return collateralAmount;
   }
 
   /**
