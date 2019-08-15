@@ -174,11 +174,12 @@ export class CreateLoanComponent implements OnInit {
    */
   async autocompleteForm(loan: Loan) {
     const web3: any = this.web3Service.web3;
+    const secondsInDay = 86400;
     const oracle: string = loan.oracle ? loan.oracle.address : undefined;
     const currency: string = loan.currency.symbol;
     const selectedCurrency: any = this.currencies.filter(item => item.currency === currency)[0];
     const requestValue = web3.fromWei(loan.amount);
-    const duration = loan.descriptor.duration;
+    const duration = loan.descriptor.duration / secondsInDay;
     const installmentsFlag = loan.descriptor.installments > 1 ? true : false;
     const interestPunnitory = loan.descriptor.punitiveInterestRateRate;
     this.installments = loan.descriptor.installments;
@@ -201,7 +202,7 @@ export class CreateLoanComponent implements OnInit {
 
     this.onCurrencyChange(selectedCurrency);
     this.onRequestedChange(requestValue);
-    this.onDurationChange(duration);
+    this.onDurationChange();
   }
 
   /**
@@ -310,7 +311,7 @@ export class CreateLoanComponent implements OnInit {
    */
   async onSubmitStep1(form: NgForm) {
     if (form.valid) {
-      this.showMessage('Your Loan is being processed. It might be available in a few seconds', 'snackbar');
+      this.showMessage('Please confirm the metamask transaction. Your Loan is being processed.', 'snackbar');
       const pendingTx: Tx = this.createPendingTx;
       const encodedData = await this.getInstallmentsData(form);
       this.installmentsData = encodedData;
@@ -351,7 +352,7 @@ export class CreateLoanComponent implements OnInit {
     }
 
     if (form.valid) {
-      this.showMessage('Your Collateral is being processed. It might be available in a few seconds', 'snackbar');
+      this.showMessage('Please confirm the metamask transaction. Your Collateral is being processed.', 'snackbar');
       const pendingTx: Tx = this.collateralPendingTx;
 
       if (pendingTx) {
@@ -438,7 +439,7 @@ export class CreateLoanComponent implements OnInit {
       const tokenCost = new web3.BigNumber(collateralTokenAmount[0]);
       const etherCost = new web3.BigNumber(collateralTokenAmount[1]);
 
-      collateralAmount = tokenCost.isZero() ? etherCost : collateralAmount;
+      collateralAmount = tokenCost.isZero() ? etherCost : tokenCost;
     }
 
     return collateralAmount;
@@ -528,10 +529,8 @@ export class CreateLoanComponent implements OnInit {
   /**
    * Calculate the duration in seconds when duration select is updated
    */
-  onDurationChange(fullDuration?: number) {
-    if (!fullDuration) {
-      fullDuration = this.returnDaysAs(this.fullDuration.value, 'seconds');
-    }
+  onDurationChange() {
+    const fullDuration: number = this.returnDaysAs(this.fullDuration.value, 'seconds');
 
     this.formGroup1.patchValue({
       fullDuration

@@ -322,17 +322,16 @@
                       <mat-option>
                         --
                       </mat-option>
-                      <mat-option
-                        *ngFor="let currency of currencies"
-                        [value]="currency"
-                      >
-                        <div class="currency-box">
-                          <div class="currency-img">
-                            <img src="{{ currency.img }}" alt="" />
+                      <ng-container *ngFor="let currency of currencies">
+                        <mat-option [value]="currency" *ngIf="currency.currency !== formGroup1?.value.conversionGraphic.requestedCurrency">
+                          <div class="currency-box">
+                            <div class="currency-img">
+                              <img src="{{ currency.img }}" alt="" />
+                            </div>
+                            {{ currency.currency }}
                           </div>
-                          {{ currency.currency }}
-                        </div>
-                      </mat-option>
+                        </mat-option>
+                      </ng-container>
                     </mat-select>
                   </mat-form-field>
                 </div>
