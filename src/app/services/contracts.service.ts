@@ -696,6 +696,25 @@ export class ContractsService {
   }
 
   /**
+   * Check if the loan was created
+   * @param loanId Loan ID
+   * @return Boolean if the loan exist
+   */
+  async loanWasCreated(loanId: string): Promise<boolean> {
+    try {
+      const loan = await this._loanManager.getLoanData(loanId);
+
+      if (Utils.isEmpty(loan)) {
+        throw Error('Loan does not exist');
+      }
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
    * Create loan collateral
    * @param loanId Loan ID
    * @param oracle Oracle address
