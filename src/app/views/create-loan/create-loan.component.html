@@ -93,7 +93,6 @@
                               type="number"
                               min="0"
                               max="1000000"
-                              value="0"
                               formControlName="requestValue"
                               (keyup)="onRequestedChange($event)"
                               pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
@@ -155,7 +154,7 @@
               </div>
               <div class="margintop60"></div>
               <div class="row" formGroupName="duration">
-                <div class="col-12">
+                <div class="col-xs-12">
                   <div class="title property marginbottom10">
                     Duration of the loan
                   </div>
@@ -192,7 +191,7 @@
                   </div>
                   <div class="margintop20"></div>
                   <div class="row">
-                    <div class="col-12">
+                    <div class="col-xs-12">
                       <mat-slider
                         class="percentage"
                         step="10"
@@ -248,7 +247,7 @@
               </div>
               <div class="margintop20"></div>
               <div class="row">
-                <div class="col-12">
+                <div class="col-xs-12">
                   <div class="title property margintop30 marginbottom10">
                     Expiration date
                   </div>
@@ -307,23 +306,22 @@
             <ng-template>Select your collateral</ng-template>
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row">
-                <div class="col col-lg-12">
+                <div class="col col-xs-12 col-lg-3">
                   <div class="title property margintop30 marginbottom10">
                     Collateral Asset
                   </div>
-                </div>
-                <div class="col-xs-12 col-lg-3">
                   <mat-form-field>
                     <mat-select
                       placeholder="Select a Token"
                       formControlName="collateralAsset"
+                      (selectionChange)="onCollateralAssetChange()"
                       required
                     >
                       <mat-option>
                         --
                       </mat-option>
                       <ng-container *ngFor="let currency of currencies">
-                        <mat-option [value]="currency" *ngIf="currency.currency !== formGroup1?.value.conversionGraphic.requestedCurrency">
+                        <mat-option [value]="currency"> <!-- *ngIf="currency.currency !== formGroup1?.value.conversionGraphic.requestedCurrency"> -->
                           <div class="currency-box">
                             <div class="currency-img">
                               <img src="{{ currency.img }}" alt="" />
@@ -333,6 +331,42 @@
                         </mat-option>
                       </ng-container>
                     </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col col-xs-12 col-lg-3">
+                  <div class="title property margintop30 marginbottom10">
+                    Collateral Amount
+                  </div>
+                  <mat-form-field>
+                    <input
+                      matInput
+                      type="number"
+                      min="0"
+                      max="1000000"
+                      formControlName="collateralAmount"
+                      (keyup)="onCollateralAmountChange()"
+                      pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
+                      required
+                    />
+                    <!-- {{ formGroup1?.value.conversionGraphic.requestValue }} -->
+                    <mat-hint>
+                      <span
+                        *ngIf="
+                          requestValue.valid ||
+                          (requestValue.pristine &&
+                            requestValue.untouched)
+                        "
+                        >Requested amount</span
+                      >
+                      <span
+                        class="red"
+                        *ngIf="
+                          requestValue.errors &&
+                          (requestValue.dirty || requestValue.touched)
+                        "
+                        >The minimum is 1</span
+                      >
+                    </mat-hint>
                   </mat-form-field>
                 </div>
               </div>
@@ -347,7 +381,7 @@
                   <mat-radio-group
                     formControlName="liquidationRatio"
                     aria-label="Select an option"
-                    (change)="radioChange()"
+                    (change)="onLiquidationRatioChange()"
                   >
                     <mat-radio-button color="primary" [value]="125">
                       125%
@@ -378,21 +412,24 @@
                   </div>
                   <div class="margintop20"></div>
                   <div class="row">
-                    <div class="col-12">
+                    <div class="col-xs-12">
                       <mat-slider
                         formControlName="collateralAdjustment"
                         step="10"
                         tickInterval="1"
                         color="primary"
                         thumbLabel="true"
-                        value="10"
-                        min="150"
+                        [min]="formGroup2.value.liquidationRatio"
                         max="400"
-                        (change)="slideChange()"
+                        (change)="onBalanceRatioChange(); slideChange()"
                       ></mat-slider>
                       <div class="slider-percentage-box">
-                        <div class="slider-percentaje subtitle-style">150%</div>
-                        <div class="slider-percentaje subtitle-style">400%</div>
+                        <div class="slider-percentaje subtitle-style">
+                          {{ formGroup2.value.liquidationRatio }} %
+                        </div>
+                        <div class="slider-percentaje subtitle-style">
+                          400%
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -68,6 +68,7 @@ export class CreateLoanComponent implements OnInit {
   formGroup2: FormGroup;
   collateralAdjustment: FormControl;
   collateralAsset: FormControl;
+  collateralAmount: FormControl;
   liquidationRatio: FormControl;
 
   requiredInvalid$ = false;
@@ -181,7 +182,7 @@ export class CreateLoanComponent implements OnInit {
     const requestValue = web3.fromWei(loan.amount);
     const duration = loan.descriptor.duration / secondsInDay;
     const installmentsFlag = loan.descriptor.installments > 1 ? true : false;
-    const interestPunnitory = loan.descriptor.punitiveInterestRateRate;
+    const interestPunnitory = Number(loan.descriptor.punitiveInterestRateRate).toFixed(0);
     this.installments = loan.descriptor.installments;
     this.selectedOracle = oracle;
 
@@ -269,15 +270,16 @@ export class CreateLoanComponent implements OnInit {
   createFormControls() {
     // Form group 1
     this.requestedCurrency = new FormControl(undefined, Validators.required);
-    this.requestValue = new FormControl('0');
+    this.requestValue = new FormControl(null);
     this.fullDuration = new FormControl(null, Validators.required);
-    this.annualInterest = new FormControl('40', Validators.required);
+    this.annualInterest = new FormControl(40, Validators.required);
     this.installmentsFlag = new FormControl(false, Validators.required);
     this.expirationRequestDate = new FormControl(7, Validators.required);
     // Form group 2
-    this.collateralAdjustment = new FormControl('', Validators.required);
-    this.collateralAsset = new FormControl('', Validators.required);
-    this.liquidationRatio = new FormControl('', Validators.required);
+    this.collateralAdjustment = new FormControl(200, Validators.required);
+    this.collateralAsset = new FormControl(null, Validators.required);
+    this.collateralAmount = new FormControl(null, Validators.required);
+    this.liquidationRatio = new FormControl(150, Validators.required);
   }
 
   /**
@@ -301,6 +303,7 @@ export class CreateLoanComponent implements OnInit {
     this.formGroup2 = new FormGroup({
       collateralAdjustment: this.collateralAdjustment,
       collateralAsset: this.collateralAsset,
+      collateralAmount: this.collateralAmount,
       liquidationRatio: this.liquidationRatio
     });
   }
@@ -374,23 +377,19 @@ export class CreateLoanComponent implements OnInit {
     const loanId: string = loan.id;
     const oracle: string = loan.oracle ? loan.oracle.address : Utils.address0x;
     const collateralToken: string = form.value.collateralAsset.address;
+    const collateralAmount: string = form.value.collateralAmount;
     const liquidationRatio: number = new web3.BigNumber(form.value.liquidationRatio).mul(100);
     const balanceRatio: any = new web3.BigNumber(form.value.collateralAdjustment).mul(100);
     const burnFee = new web3.BigNumber(500);
     const rewardFee = new web3.BigNumber(500);
     const account = this.account;
-    const entryAmount = await this.calculateCollateralAmount(
-      loan,
-      balanceRatio,
-      form.value.collateralAsset.currency
-    );
 
     try {
       return await this.contractsService.createCollateral(
         loanId,
         oracle,
         collateralToken,
-        entryAmount,
+        collateralAmount,
         liquidationRatio,
         balanceRatio,
         burnFee,
@@ -539,7 +538,75 @@ export class CreateLoanComponent implements OnInit {
     this.durationLabel = Utils.formatDelta(fullDuration, 2, false);
     this.expectedInstallmentsAvailable();
     this.expectedReturn();
+  }
 
+  /**
+   * Set balance ratio min values
+   */
+  onLiquidationRatioChange() {
+    this.radioChange();
+    // TODO: set balance ratio min value
+    // TODO: check if balanceRatio is greater (> 50%) than liquidationRatio
+  }
+
+  /**
+   * Calculate the balance ratio
+   */
+  onCollateralAmountChange() {
+    // TODO: calculate the balance ratio
+    // TODO: check if balanceRatio is greater (> 50%) than liquidationRatio
+  }
+
+  /**
+   * Calculate the collateral amount
+   */
+  onBalanceRatioChange() {
+    const form: FormGroup = this.formGroup2;
+    const balanceRatio: number = form.value.collateralAdjustment;
+    const liquidationRatio: number = form.value.liquidationRatio;
+    const minBalanceRatio: number = (liquidationRatio + 50);
+
+    if (balanceRatio < minBalanceRatio) {
+      this.formGroup2.patchValue({
+        collateralAdjustment: minBalanceRatio
+      });
+    }
+
+    this.updateCollateralAmount();
+  }
+
+  /**
+   * Change collateral asset and restore formGroup2 values
+   */
+  async onCollateralAssetChange() {
+    const form: FormGroup = this.formGroup2;
+
+    if (!form.value.collateralAdjustment) {
+      return;
+    }
+
+    this.updateCollateralAmount();
+  }
+
+  async updateCollateralAmount() {
+    try {
+      const web3: any = this.web3Service.web3;
+      const form: FormGroup = this.formGroup2;
+      const loan: Loan = this.loan;
+      const balanceRatio: any = new web3.BigNumber(form.value.collateralAdjustment).mul(100);
+      const currency = form.value.collateralAsset.currency;
+      const amount = await this.calculateCollateralAmount(
+        loan,
+        balanceRatio,
+        currency
+      );
+
+      this.formGroup2.patchValue({
+        collateralAmount: Utils.formatAmount(web3.fromWei(amount))
+      });
+    } catch (e) {
+      throw Error(e);
+    }
   }
 
   /**
@@ -695,15 +762,24 @@ export class CreateLoanComponent implements OnInit {
       if (this.creationProgress === 0) {
         this.creationProgress = 1;
         this.showProgress = true;
+        let slowProgressbar: boolean;
 
         const updateProgressbar = () => {
-          if (this.creationProgress < 95) {
-            this.creationProgress++;
+          slowProgressbar = !slowProgressbar;
+
+          if (this.creationProgress >= 97) {
             return;
           }
+          if (this.creationProgress > 70) {
+            if (slowProgressbar) {
+              this.creationProgress++;
+            }
+            return;
+          }
+          this.creationProgress++;
         };
 
-        const incrementProgress = setInterval(updateProgressbar, 500);
+        const incrementProgress = setInterval(updateProgressbar, 250);
 
         if (!this.subscribedToConfirmedTx) {
           this.subscribedToConfirmedTx = true;
