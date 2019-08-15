@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fix:
+
+- Fix loans filter in Activity view
+
 --
 
 ## **0.0.13** Avocados - 2019/02/15
@@ -11,7 +15,6 @@
 - Fix scrollbar style
 - Api Fix Geolocalization
 - Fix Civic QR CSS
-- Fix loans filter in Activity view
 
 ## **0.0.12** Avocados - 2019/01/09
 
