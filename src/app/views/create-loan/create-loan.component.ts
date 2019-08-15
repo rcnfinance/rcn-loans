@@ -3,10 +3,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
 import {
+  MatDialog,
   MatStepper,
   MatSnackBar,
   MatExpansionPanel
 } from '@angular/material';
+import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Collateral } from './../../models/collateral.model';
@@ -16,7 +18,7 @@ import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
 import { ApiService } from './../../services/api.service';
 import { Web3Service } from './../../services/web3.service';
-import { TxService, Tx } from '../../tx.service';
+import { TxService, Tx, Type } from '../../tx.service';
 
 @Component({
   selector: 'app-create-loan',
@@ -95,6 +97,7 @@ export class CreateLoanComponent implements OnInit {
   selectedOracle: any;
   createPendingTx: Tx = undefined;
   collateralPendingTx: Tx = undefined;
+  subscribedToConfirmedTx: boolean;
 
   // Card Variables
   account: string;
@@ -109,7 +112,8 @@ export class CreateLoanComponent implements OnInit {
     private apiService: ApiService,
     private web3Service: Web3Service,
     private txService: TxService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {}
 
   async ngOnInit() {
@@ -118,7 +122,6 @@ export class CreateLoanComponent implements OnInit {
     }
     this.createFormControls();
     this.createForm();
-    this.retrievePendingTx();
 
     const web3 = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
@@ -132,8 +135,10 @@ export class CreateLoanComponent implements OnInit {
         await this.autocompleteForm(loan);
         await this.getCollateral(loanId);
         this.createLoan();
+        this.retrievePendingTx();
       } catch (e) {
-        console.info('it is not possible to assign collateral', e);
+        console.error(e);
+        this.showMessage('It is not possible to assign collateral. Please create a new loan', 'dialog');
         this.generateEmptyLoan();
       }
     } else {
@@ -305,7 +310,7 @@ export class CreateLoanComponent implements OnInit {
    */
   async onSubmitStep1(form: NgForm) {
     if (form.valid) {
-      this.openSnackBar('Your Loan is being processed. It might be available in a few seconds', '');
+      this.showMessage('Your Loan is being processed. It might be available in a few seconds', 'snackbar');
       const pendingTx: Tx = this.createPendingTx;
       const encodedData = await this.getInstallmentsData(form);
       this.installmentsData = encodedData;
@@ -341,12 +346,12 @@ export class CreateLoanComponent implements OnInit {
   async onSubmitStep2(form: NgForm) {
     const pendingLoanCreation: Tx = this.createPendingTx;
     if (pendingLoanCreation && !pendingLoanCreation.confirmed) {
-      this.openSnackBar('Wait for the loan to be created', '');
+      this.showMessage('Wait for the loan to be created', 'snackbar');
       return;
     }
 
     if (form.valid) {
-      this.openSnackBar('Your Collateral is being processed. It might be available in a few seconds', '');
+      this.showMessage('Your Collateral is being processed. It might be available in a few seconds', 'snackbar');
       const pendingTx: Tx = this.collateralPendingTx;
 
       if (pendingTx) {
@@ -470,7 +475,6 @@ export class CreateLoanComponent implements OnInit {
       await this.contractsService.validateEncodedData(encodedData);
       return encodedData;
     } catch (e) {
-      console.info(e);
       throw Error('error on installments encoded data validation');
     }
   }
@@ -651,7 +655,8 @@ export class CreateLoanComponent implements OnInit {
         encodedData
       );
     } catch (e) {
-      throw Error('error on create loan');
+      this.showMessage('A problem occurred during loan creation', 'dialog');
+      throw Error(e);
     }
   }
 
@@ -678,18 +683,6 @@ export class CreateLoanComponent implements OnInit {
   }
 
   /**
-   * Open a snackbar with a message and an optional action
-   * @param message The message to show in the snackbar
-   * @param action The label for the snackbar action
-   */
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message , action, {
-      duration: 4000,
-      horizontalPosition: 'center'
-    });
-  }
-
-  /**
    * Retrieve pending Tx
    */
   retrievePendingTx() {
@@ -705,7 +698,7 @@ export class CreateLoanComponent implements OnInit {
         this.showProgress = true;
 
         const updateProgressbar = () => {
-          if (this.creationProgress < 90) {
+          if (this.creationProgress < 95) {
             this.creationProgress++;
             return;
           }
@@ -713,21 +706,48 @@ export class CreateLoanComponent implements OnInit {
 
         const incrementProgress = setInterval(updateProgressbar, 500);
 
-        this.txService.subscribeConfirmedTx((tx: Tx) => {
-          if (tx.tx === this.createPendingTx.tx) {
-            clearInterval(incrementProgress);
-            this.creationProgress = 100;
+        if (!this.subscribedToConfirmedTx) {
+          this.subscribedToConfirmedTx = true;
 
-            setTimeout(() => {
-              this.showProgress = false;
-            }, 1000);
-          }
-        });
+          this.txService.subscribeConfirmedTx(async (tx: Tx) => {
+            if (
+              tx.type === Type.create &&
+              tx.tx === this.createPendingTx.tx
+            ) {
+              clearInterval(incrementProgress);
+              this.finishLoanCreation();
+            }
+          });
+        }
 
       }
     }
 
     this.collateralPendingTx = this.txService.getLastPendingCreateCollateral(this.loan);
+  }
+
+  /**
+   * Finish loan creation and check status
+   */
+  async finishLoanCreation() {
+    const loanWasCreated = await this.contractsService.loanWasCreated(this.loan.id);
+
+    if (loanWasCreated) {
+      this.creationProgress = 100;
+
+      setTimeout(() => {
+        this.showProgress = false;
+      }, 1000);
+    } else {
+      this.creationProgress = 0;
+
+      setTimeout(() => {
+        this.showMessage('The loan could not be created', 'dialog');
+        this.showProgress = false;
+        this.createPendingTx = undefined;
+        this.init = true;
+      }, 1000);
+    }
   }
 
   /**
@@ -758,6 +778,38 @@ export class CreateLoanComponent implements OnInit {
       return 'Confirmed';
     }
     return 'Confirming...';
+  }
+
+  /**
+   * Show dialog or snackbar with a message
+   * @param message The message to show in the snackbar
+   * @param type UI Format: dialog or snackbar
+   */
+  showMessage(message: string, type: 'dialog' | 'snackbar') {
+    switch (type) {
+      case 'dialog':
+        const error: Error = {
+          name: 'Error',
+          message: message
+        };
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: {
+            error
+          }
+        });
+        break;
+
+      case 'snackbar':
+        this.snackBar.open(message , null, {
+          duration: 4000,
+          horizontalPosition: 'center'
+        });
+        break;
+
+      default:
+        console.error(error);
+        break;
+    }
   }
 
 }
