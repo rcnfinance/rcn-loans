@@ -62,7 +62,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   setCollateralPanel() {
     const web3: any = this.web3Service.web3;
     const collateral: Collateral = this.collateral;
-    this.collateralAmount = web3.fromWei(collateral.amount);
+    this.collateralAmount = Utils.formatAmount(web3.fromWei(collateral.amount));
     this.liquidationRatio = Utils.formatAmount(collateral.liquidationRatio / 100, 0);
     this.balanceRatio = Utils.formatAmount(collateral.balanceRatio / 100, 0);
 
