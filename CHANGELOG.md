@@ -11,6 +11,7 @@
 - Fix scrollbar style
 - Api Fix Geolocalization
 - Fix Civic QR CSS
+- Fix loans filter in Activity view
 
 ## **0.0.12** Avocados - 2019/01/09
 
@@ -52,7 +53,7 @@
 ### Misc:
 - Display correct status on expired loans
 - Update Decentraland mortgages contracts
-- Hide the transfer button on paid loans 
+- Hide the transfer button on paid loans
 
 ## **0.0.10** Avocados - 2018/10/30
 
