@@ -8,6 +8,8 @@ import {
   MatSnackBar,
   MatExpansionPanel
 } from '@angular/material';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
@@ -70,6 +72,7 @@ export class CreateLoanComponent implements OnInit {
   collateralAsset: FormControl;
   collateralAmount: FormControl;
   liquidationRatio: FormControl;
+  collateralAmountObserver: any;
 
   requiredInvalid$ = false;
   currencies: any = [
@@ -416,7 +419,7 @@ export class CreateLoanComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const loanAmount: number = web3.fromWei(loan.amount);
     const loanCurrency: string = loan.currency.symbol;
-    balanceRatio = balanceRatio.div(100);
+    balanceRatio = new web3.BigNumber(balanceRatio).div(100);
 
     // calculate amount in rcn
     let collateralAmount = new web3.BigNumber(balanceRatio).mul(loanAmount);
@@ -541,37 +544,36 @@ export class CreateLoanComponent implements OnInit {
   }
 
   /**
-   * Set balance ratio min values
+   * Set balance ratio min value and update collateral amount input
    */
   onLiquidationRatioChange() {
     this.radioChange();
-    // TODO: set balance ratio min value
-    // TODO: check if balanceRatio is greater (> 50%) than liquidationRatio
+    this.updateBalanceRatio();
+    this.updateCollateralAmount();
   }
 
   /**
    * Calculate the balance ratio
    */
-  onCollateralAmountChange() {
-    // TODO: calculate the balance ratio
-    // TODO: check if balanceRatio is greater (> 50%) than liquidationRatio
+  async onCollateralAmountChange(collateralValue) {
+    console.info('onCollateralAmountChange event$');
+
+    if (!this.collateralAmountObserver) {
+      new Observable(observer => {
+        this.collateralAmountObserver = observer;
+      }).pipe(debounceTime(300))
+        .pipe(distinctUntilChanged())
+        .subscribe(async () => await this.calculateBalanceRatio());
+    }
+
+    this.collateralAmountObserver.next(collateralValue);
   }
 
   /**
    * Calculate the collateral amount
    */
   onBalanceRatioChange() {
-    const form: FormGroup = this.formGroup2;
-    const balanceRatio: number = form.value.collateralAdjustment;
-    const liquidationRatio: number = form.value.liquidationRatio;
-    const minBalanceRatio: number = (liquidationRatio + 50);
-
-    if (balanceRatio < minBalanceRatio) {
-      this.formGroup2.patchValue({
-        collateralAdjustment: minBalanceRatio
-      });
-    }
-
+    this.updateBalanceRatio();
     this.updateCollateralAmount();
   }
 
@@ -588,16 +590,84 @@ export class CreateLoanComponent implements OnInit {
     this.updateCollateralAmount();
   }
 
-  async updateCollateralAmount() {
+  async calculateBalanceRatio() {
+    const web3: any = this.web3Service.web3;
+    const form: FormGroup = this.formGroup2;
+    const collateralAmount = new web3.BigNumber(form.value.collateralAmount);
+    const collateralAmountMinLimit = 0;
+    const balanceRatioMaxLimit = 5000;
+
+    if (collateralAmount <= collateralAmountMinLimit) {
+      this.showMessage('Choose a larger collateral amount', 'snackbar');
+      return false;
+    }
+
     try {
-      const web3: any = this.web3Service.web3;
-      const form: FormGroup = this.formGroup2;
       const loan: Loan = this.loan;
-      const balanceRatio: any = new web3.BigNumber(form.value.collateralAdjustment).mul(100);
+      const currency = form.value.collateralAsset.currency;
+      const hundredPercent = 100 * 100;
+      let loanAmountInCollateral = await this.calculateCollateralAmount(
+        loan,
+        hundredPercent,
+        currency
+      );
+      loanAmountInCollateral = web3.fromWei(loanAmountInCollateral);
+      const balanceRatio = (collateralAmount.mul(100)).div(loanAmountInCollateral);
+
+      if (balanceRatio >= balanceRatioMaxLimit) {
+        this.showMessage('Choose a smaller collateral amount', 'snackbar');
+        return false;
+      }
+
+      this.formGroup2.patchValue({
+        collateralAdjustment: Utils.formatAmount(balanceRatio, 0)
+      });
+    } catch (e) {
+      throw Error(e);
+    }
+  }
+
+  /**
+   * Update balance ratio slider
+   */
+  updateBalanceRatio() {
+    const form: FormGroup = this.formGroup2;
+    const balanceRatio: number = form.value.collateralAdjustment;
+    const liquidationRatio: number = form.value.liquidationRatio;
+    const minBalanceRatio: number = (liquidationRatio + 50);
+
+    if (balanceRatio < minBalanceRatio) {
+      this.formGroup2.patchValue({
+        collateralAdjustment: minBalanceRatio
+      });
+    }
+  }
+
+  /**
+   * Update collateral amount input
+   */
+  async updateCollateralAmount() {
+    const web3: any = this.web3Service.web3;
+    const form: FormGroup = this.formGroup2;
+    const balanceRatio: any = new web3.BigNumber(form.value.collateralAdjustment);
+    const balanceRatioMinLimit = 0;
+    const balanceRatioMaxLimit = 5000;
+
+    if (balanceRatio <= balanceRatioMinLimit) {
+      this.showMessage('Choose a larger collateral amount', 'snackbar');
+      return false;
+    }
+    if (balanceRatio >= balanceRatioMaxLimit) {
+      this.showMessage('Choose a smaller collateral amount', 'snackbar');
+      return false;
+    }
+
+    try {
+      const loan: Loan = this.loan;
       const currency = form.value.collateralAsset.currency;
       const amount = await this.calculateCollateralAmount(
         loan,
-        balanceRatio,
+        balanceRatio.mul(100),
         currency
       );
 

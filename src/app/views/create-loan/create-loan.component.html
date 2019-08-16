@@ -198,7 +198,6 @@
                         tickInterval="1"
                         color="primary"
                         thumbLabel="true"
-                        value="10"
                         formControlName="annualInterest"
                       ></mat-slider>
                       <div class="slider-percentage-box">
@@ -344,7 +343,7 @@
                       min="0"
                       max="1000000"
                       formControlName="collateralAmount"
-                      (keyup)="onCollateralAmountChange()"
+                      (input)="onCollateralAmountChange($event.target.value)"
                       pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
                       required
                     />
@@ -415,7 +414,7 @@
                     <div class="col-xs-12">
                       <mat-slider
                         formControlName="collateralAdjustment"
-                        step="10"
+                        step="5"
                         tickInterval="1"
                         color="primary"
                         thumbLabel="true"
