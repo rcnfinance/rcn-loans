@@ -168,7 +168,6 @@ export class CreateLoanComponent implements OnInit {
       throw Error('loan borrower is not valid');
     }
 
-    console.info(loan);
     return this.loan;
   }
 
@@ -406,19 +405,19 @@ export class CreateLoanComponent implements OnInit {
 
   /**
    * Calculate required amount in collateral token
-   * @param loan Loan payload
+   * @param loanAmount Loan amount in rcn
+   * @param loanCurrency Loan currency token symbol
    * @param balanceRatio Collateral balance ratio
    * @param collateralAsset Collateral currency
    * @return Collateral amount in collateral asset
    */
   async calculateCollateralAmount(
-    loan: Loan,
-    balanceRatio,
-    collateralAsset
+    loanAmount: number,
+    loanCurrency: string,
+    balanceRatio: number,
+    collateralAsset: string
   ) {
     const web3: any = this.web3Service.web3;
-    const loanAmount: number = web3.fromWei(loan.amount);
-    const loanCurrency: string = loan.currency.symbol;
     balanceRatio = new web3.BigNumber(balanceRatio).div(100);
 
     // calculate amount in rcn
@@ -487,11 +486,11 @@ export class CreateLoanComponent implements OnInit {
    * @param requestedCurrency.currency Requested currency as string
    */
   onCurrencyChange(requestedCurrency) {
-    console.info('Currency', requestedCurrency);
     switch (requestedCurrency.currency) {
       case 'RCN':
         this.selectedOracle = null;
         break;
+
       case 'MANA':
         if (environment.production) {
           this.selectedOracle = '0x2aaf69a2df2828b55fa4a5e30ee8c3c7cd9e5d5b'; // Mana Prod Oracle
@@ -499,6 +498,7 @@ export class CreateLoanComponent implements OnInit {
           this.selectedOracle = '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40'; // Mana Dev Oracle
         }
         break;
+
       case 'ARS':
         if (environment.production) {
           this.selectedOracle = '0x22222c1944efcc38ca46489f96c3a372c4db74e6'; // Ars Prod Oracle
@@ -506,8 +506,9 @@ export class CreateLoanComponent implements OnInit {
           this.selectedOracle = '0x0ac18b74b5616fdeaeff809713d07ed1486d0128'; // Ars Dev Oracle
         }
         break;
+
       default:
-        // this.selectedOracle = 'Please select a currency to unlock the oracle';
+        break;
     }
   }
 
@@ -534,11 +535,9 @@ export class CreateLoanComponent implements OnInit {
   onDurationChange() {
     const fullDuration: number = this.returnDaysAs(this.fullDuration.value, 'seconds');
 
-    this.formGroup1.patchValue({
-      fullDuration
-    });
-
+    this.formGroup1.patchValue({ fullDuration });
     this.durationLabel = Utils.formatDelta(fullDuration, 2, false);
+
     this.expectedInstallmentsAvailable();
     this.expectedReturn();
   }
@@ -556,8 +555,6 @@ export class CreateLoanComponent implements OnInit {
    * Calculate the balance ratio
    */
   async onCollateralAmountChange(collateralValue) {
-    console.info('onCollateralAmountChange event$');
-
     if (!this.collateralAmountObserver) {
       new Observable(observer => {
         this.collateralAmountObserver = observer;
@@ -592,8 +589,9 @@ export class CreateLoanComponent implements OnInit {
 
   async calculateBalanceRatio() {
     const web3: any = this.web3Service.web3;
-    const form: FormGroup = this.formGroup2;
-    const collateralAmount = new web3.BigNumber(form.value.collateralAmount);
+    const loanForm: FormGroup = this.formGroup1;
+    const collateralForm: FormGroup = this.formGroup2;
+    const collateralAmount = new web3.BigNumber(collateralForm.value.collateralAmount);
     const collateralAmountMinLimit = 0;
     const balanceRatioMaxLimit = 5000;
 
@@ -603,15 +601,19 @@ export class CreateLoanComponent implements OnInit {
     }
 
     try {
-      const loan: Loan = this.loan;
-      const currency = form.value.collateralAsset.currency;
+      const loanAmount = loanForm.value.conversionGraphic.requestValue;
+      const loanCurrency = loanForm.value.conversionGraphic.requestedCurrency.currency;
+      const collateralCurrency = collateralForm.value.collateralAsset.currency;
       const hundredPercent = 100 * 100;
+
       let loanAmountInCollateral = await this.calculateCollateralAmount(
-        loan,
+        loanAmount,
+        loanCurrency,
         hundredPercent,
-        currency
+        collateralCurrency
       );
       loanAmountInCollateral = web3.fromWei(loanAmountInCollateral);
+
       const balanceRatio = (collateralAmount.mul(100)).div(loanAmountInCollateral);
 
       if (balanceRatio >= balanceRatioMaxLimit) {
@@ -648,8 +650,9 @@ export class CreateLoanComponent implements OnInit {
    */
   async updateCollateralAmount() {
     const web3: any = this.web3Service.web3;
-    const form: FormGroup = this.formGroup2;
-    const balanceRatio: any = new web3.BigNumber(form.value.collateralAdjustment);
+    const loanForm: FormGroup = this.formGroup1;
+    const collateralForm: FormGroup = this.formGroup2;
+    const balanceRatio: any = new web3.BigNumber(collateralForm.value.collateralAdjustment);
     const balanceRatioMinLimit = 0;
     const balanceRatioMaxLimit = 5000;
 
@@ -663,12 +666,15 @@ export class CreateLoanComponent implements OnInit {
     }
 
     try {
-      const loan: Loan = this.loan;
-      const currency = form.value.collateralAsset.currency;
+      const loanAmount = loanForm.value.conversionGraphic.requestValue;
+      const loanCurrency = loanForm.value.conversionGraphic.requestedCurrency.currency;
+      const collateralCurrency = collateralForm.value.collateralAsset.currency;
+
       const amount = await this.calculateCollateralAmount(
-        loan,
+        loanAmount,
+        loanCurrency,
         balanceRatio.mul(100),
-        currency
+        collateralCurrency
       );
 
       this.formGroup2.patchValue({
@@ -811,8 +817,10 @@ export class CreateLoanComponent implements OnInit {
       case 'seconds':
         const nowDateInSeconds = Math.round(new Date().getTime() / 1000);
         return Math.round((endDate).getTime() / 1000) - nowDateInSeconds;
+
       case 'date':
         return Math.round((endDate).getTime());
+
       default:
         return;
     }
@@ -823,7 +831,6 @@ export class CreateLoanComponent implements OnInit {
    */
   retrievePendingTx() {
     this.createPendingTx = this.txService.getLastPendingCreate(this.loan);
-    console.info('pending tx create', this.createPendingTx);
 
     if (this.createPendingTx !== undefined) {
       const loanId: string = this.loan.id;
@@ -853,7 +860,6 @@ export class CreateLoanComponent implements OnInit {
 
         if (!this.subscribedToConfirmedTx) {
           this.subscribedToConfirmedTx = true;
-
           this.txService.subscribeConfirmedTx(async (tx: Tx) => {
             if (
               tx.type === Type.create &&

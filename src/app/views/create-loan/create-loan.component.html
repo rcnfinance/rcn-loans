@@ -7,7 +7,7 @@
 <div class="container">
   <div class="margintop10 d-lg-none d-xs-block"></div>
   <div class="row">
-    <div class="col-xs-12 col-lg-6 d-none d-lg-block">
+    <div class="col-sm-12 col-lg-6 d-none d-lg-block">
       <div class="head-title main-h1 margintop30">BORROW A LOAN</div>
       <div class="head-subtitle main-p1 marginbottom30">
         Create a loan according to your needs and send it to the network
@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-12 col-lg-8">
+    <div class="col-sm-12 col-lg-8">
       <mat-accordion>
         <mat-expansion-panel
           [expanded]="init == true"
@@ -154,7 +154,7 @@
               </div>
               <div class="margintop60"></div>
               <div class="row" formGroupName="duration">
-                <div class="col-xs-12">
+                <div class="col col-sm-12">
                   <div class="title property marginbottom10">
                     Duration of the loan
                   </div>
@@ -162,7 +162,7 @@
                     >Set the number of days you want your loan to last.</span
                   >
                 </div>
-                <div class="col-md-3 col-sm-12">
+                <div class="col col-sm-12 col-md-3">
                   <mat-form-field>
                     <mat-select
                       placeholder="Select a number"
@@ -191,7 +191,7 @@
                   </div>
                   <div class="margintop20"></div>
                   <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-sm-12">
                       <mat-slider
                         class="percentage"
                         step="10"
@@ -220,7 +220,7 @@
                     INSTALLMENTS
                   </div>
                 </div>
-                <div class="col-xs-12 col-lg-6">
+                <div class="col-sm-12 col-lg-6">
                   <span class="subtitle-style">
                     Do you want to pay back with installments?
                   </span>
@@ -234,7 +234,7 @@
                   >
                   </mat-slide-toggle>
                 </div>
-                <div class="col-xs-12 col-lg-6" *ngIf="installmentsFlag.value">
+                <div class="col-sm-12 col-lg-6" *ngIf="installmentsFlag.value">
                   {{ installments }}
                 </div>
               </div>
@@ -246,7 +246,7 @@
               </div>
               <div class="margintop20"></div>
               <div class="row">
-                <div class="col-xs-12">
+                <div class="col-sm-12">
                   <div class="title property margintop30 marginbottom10">
                     Expiration date
                   </div>
@@ -305,7 +305,7 @@
             <ng-template>Select your collateral</ng-template>
             <div class="container-fluid paddingleft0 paddingright0">
               <div class="row">
-                <div class="col col-xs-12 col-lg-3">
+                <div class="col col-sm-12 col-lg-3">
                   <div class="title property margintop30 marginbottom10">
                     Collateral Asset
                   </div>
@@ -332,7 +332,7 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col col-xs-12 col-lg-3">
+                <div class="col col-sm-12 col-lg-3">
                   <div class="title property margintop30 marginbottom10">
                     Collateral Amount
                   </div>
@@ -376,7 +376,7 @@
                     LIQUIDATION RATIO
                   </div>
                 </div>
-                <div class="col-xs-12 col-lg-8">
+                <div class="col-sm-12 col-lg-8">
                   <mat-radio-group
                     formControlName="liquidationRatio"
                     aria-label="Select an option"
@@ -411,7 +411,7 @@
                   </div>
                   <div class="margintop20"></div>
                   <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-sm-12">
                       <mat-slider
                         formControlName="collateralAdjustment"
                         step="5"
