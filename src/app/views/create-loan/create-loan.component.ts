@@ -56,7 +56,7 @@ export class CreateLoanComponent implements OnInit {
   installmentsAvailable: number;
   installmentsData: any;
   returnValue: any = 0;
-  durationLabel: string;
+  durationLabel: any;
   installmentDaysInterval: any = 15;
 
   formGroup2: FormGroup;
