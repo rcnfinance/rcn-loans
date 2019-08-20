@@ -415,7 +415,7 @@ export class CreateLoanComponent implements OnInit {
     const loanId: string = loan.id;
     const oracle: string = loan.oracle ? loan.oracle.address : Utils.address0x;
     const collateralToken: string = form.value.collateralAsset.address;
-    const collateralAmount: string = form.value.collateralAmount;
+    const collateralAmount: string = web3.toWei(form.value.collateralAmount);
     const liquidationRatio: number = new web3.BigNumber(form.value.liquidationRatio).mul(100);
     const balanceRatio: any = new web3.BigNumber(form.value.collateralAdjustment).mul(100);
     const burnFee = new web3.BigNumber(500);
