@@ -32,7 +32,7 @@
                 <span class="fa fa-spinner fa-spin"></span>
               </div>
             </ng-container>
-            <ng-container *ngIf="!showProgress && loan?.id">
+            <ng-container *ngIf="isCompleting && loan?.id">
               <div>
                 <span class="fa fa-check" *ngIf="!init"></span>
               </div>
@@ -286,8 +286,6 @@
           </form>
         </mat-expansion-panel>
         <mat-expansion-panel
-          (opened)="panelOpenState = true"
-          (closed)="panelOpenState = false"
           [disabled]="init == true"
           [expanded]="init != true"
           class="expansion-panel"

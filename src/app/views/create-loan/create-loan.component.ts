@@ -10,12 +10,12 @@ import {
 } from '@angular/material';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Collateral } from './../../models/collateral.model';
 // App Services
-import { environment } from '../../../environments/environment';
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
 import { ApiService } from './../../services/api.service';
@@ -48,11 +48,7 @@ export class CreateLoanComponent implements OnInit {
   tomorrow: Date = new Date();
   tomorrowDate: Date = new Date(this.tomorrow.setDate(this.now.getDate() + 1));
 
-  // Form Variables
-  isOptional$ = true;
-  isEditable$ = true;
-  panelOpenState = false;
-
+  // Loan form
   formGroup1: FormGroup;
   fullDuration: FormControl;
   annualInterest: FormControl;
@@ -67,6 +63,7 @@ export class CreateLoanComponent implements OnInit {
   durationLabel: string;
   installmentDaysInterval: any = 15;
 
+  // Collateral form
   formGroup2: FormGroup;
   collateralAdjustment: FormControl;
   collateralAsset: FormControl;
@@ -102,6 +99,7 @@ export class CreateLoanComponent implements OnInit {
   createPendingTx: Tx = undefined;
   collateralPendingTx: Tx = undefined;
   subscribedToConfirmedTx: boolean;
+  isCompleting: boolean;
 
   // Card Variables
   account: string;
@@ -126,20 +124,19 @@ export class CreateLoanComponent implements OnInit {
     }
     this.createFormControls();
     this.createForm();
-
-    const web3 = this.web3Service.web3;
-    const account = await this.web3Service.getAccount();
-    this.account = web3.toChecksumAddress(account);
-    this.shortAccount = Utils.shortAddress(this.account);
+    await this.setAccount();
 
     const loanId = this.route.snapshot.params.id;
     if (loanId) {
+      this.isCompleting = true;
+
       try {
         const loan = await this.getExistingLoan(loanId);
         await this.autocompleteForm(loan);
         await this.getCollateral(loanId);
         this.createLoan();
         this.retrievePendingTx();
+        this.corroborateBorrower();
       } catch (e) {
         console.error(e);
         this.showMessage('It is not possible to assign collateral. Please create a new loan', 'dialog');
@@ -147,6 +144,43 @@ export class CreateLoanComponent implements OnInit {
       }
     } else {
       this.generateEmptyLoan();
+    }
+
+    if (this.isCompleting) {
+      this.web3Service.loginEvent.subscribe(
+        (isLogged: boolean) => {
+          if (isLogged) {
+            this.setAccount();
+            this.corroborateBorrower();
+          }
+        }
+      );
+    }
+
+  }
+
+  /**
+   * Set user account address
+   */
+  async setAccount() {
+    const web3 = this.web3Service.web3;
+    const account = await this.web3Service.getAccount();
+    this.account = web3.toChecksumAddress(account);
+    this.shortAccount = Utils.shortAddress(this.account);
+  }
+
+  /**
+   *  Check if borrower is the actual logged in account
+   */
+  corroborateBorrower() {
+    const web3: any = this.web3Service.web3;
+
+    if (this.account && this.account !== web3.toChecksumAddress(this.loan.borrower)) {
+      this.showMessage('The borrower is not authorized', 'dialog');
+      this.router.navigate(['/create']);
+      this.generateEmptyLoan();
+    } else {
+      this.loan.borrower = this.account;
     }
   }
 
@@ -157,15 +191,11 @@ export class CreateLoanComponent implements OnInit {
    */
   async getExistingLoan(id: string): Promise<Loan> {
     const loan: Loan = await this.contractsService.getLoan(id);
-    const web3: any = this.web3Service.web3;
     const isRequest = loan.status === Status.Request;
     this.loan = loan;
 
     if (!isRequest) {
       throw Error('loan is not on request status');
-    }
-    if (this.account !== web3.toChecksumAddress(loan.borrower)) {
-      throw Error('loan borrower is not valid');
     }
 
     return this.loan;
@@ -227,6 +257,7 @@ export class CreateLoanComponent implements OnInit {
    * Generate empty loan for complete all forms and navigate to /create
    */
   generateEmptyLoan() {
+    this.isCompleting = false;
     this.loan = new Loan(
       Network.Diaspore,
       '',
@@ -330,13 +361,11 @@ export class CreateLoanComponent implements OnInit {
         const tx: string = await this.requestLoan(formGroup1);
         const loanId: string = this.loan.id;
         this.location.replaceState(`/create/${ loanId }`);
-
         this.txService.registerCreateTx(tx, {
           engine: environment.contracts.diaspore.loanManager,
           id: loanId,
           amount: 1
         });
-
         this.retrievePendingTx();
         this.createLoan();
       }
@@ -350,9 +379,15 @@ export class CreateLoanComponent implements OnInit {
    * @param form Form group 2
    */
   async onSubmitStep2(form: NgForm) {
+    const web3: any = this.web3Service.web3;
     const pendingLoanCreation: Tx = this.createPendingTx;
+
     if (pendingLoanCreation && !pendingLoanCreation.confirmed) {
       this.showMessage('Wait for the loan to be created', 'snackbar');
+      return;
+    }
+    if (this.isCompleting && this.account !== web3.toChecksumAddress(this.loan.borrower)) {
+      this.showMessage('The borrower is not authorized', 'dialog');
       return;
     }
 
@@ -605,7 +640,6 @@ export class CreateLoanComponent implements OnInit {
       const loanCurrency = loanForm.value.conversionGraphic.requestedCurrency.currency;
       const collateralCurrency = collateralForm.value.collateralAsset.currency;
       const hundredPercent = 100 * 100;
-
       let loanAmountInCollateral = await this.calculateCollateralAmount(
         loanAmount,
         loanCurrency,
@@ -861,10 +895,7 @@ export class CreateLoanComponent implements OnInit {
         if (!this.subscribedToConfirmedTx) {
           this.subscribedToConfirmedTx = true;
           this.txService.subscribeConfirmedTx(async (tx: Tx) => {
-            if (
-              tx.type === Type.create &&
-              tx.tx === this.createPendingTx.tx
-            ) {
+            if (tx.type === Type.create && tx.tx === this.createPendingTx.tx) {
               clearInterval(incrementProgress);
               this.finishLoanCreation();
             }
@@ -958,9 +989,8 @@ export class CreateLoanComponent implements OnInit {
         break;
 
       default:
-        console.error(error);
+        console.error(message);
         break;
     }
   }
-
 }
