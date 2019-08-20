@@ -80,6 +80,11 @@ export const environment = {
       mortgageCreator: '0x90263Ea5C57Dc6603CA7202920735A6E31235bB9',
       mortgageManager: '0x9ABf1295086aFA0E49C60e95c437aa400c5333B8',
       landMarket: '0xb3bca6f5052c7e24726b44da7403b56a8a1b98f8'
+    },
+    currencies: {
+      rcn: '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6',
+      dai: '0x6710d597fd13127a5b64eebe384366b12e66fdb6', // FIXME: Ropsten token address
+      eth: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME: Ropsten
     }
   },
   blacklist: [],
