@@ -42,7 +42,7 @@ export class CurrenciesService {
    * @return Currency
    */
   getCurrencyByKey(key: 'symbol' | 'address', value: string): Currency {
-    const filteredCurrency: Array<Currency> = this.currencies.filter(currency => currency[key] === value);
+    const filteredCurrency: Array<Currency> = this.currencies.filter(currency => currency[key].toLowerCase() === value.toLowerCase());
 
     if (filteredCurrency.length) {
       return filteredCurrency[0];
@@ -54,7 +54,7 @@ export class CurrenciesService {
    * @return Currencies
    */
   getCurrenciesExcept(key: 'symbol' | 'address', value: string): Array<Currency> {
-    const filteredCurrency: Array<Currency> = this.currencies.filter(currency => currency[key] !== value);
+    const filteredCurrency: Array<Currency> = this.currencies.filter(currency => currency[key].toLowerCase() !== value.toLowerCase());
     return filteredCurrency;
   }
 

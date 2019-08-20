@@ -18,6 +18,7 @@ import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
+import { CurrenciesService } from './../../services/currencies.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -56,6 +57,8 @@ export class LoanDetailComponent implements OnInit {
   interest: string;
   duration: string;
   collateral: any;
+  collateralAmount: string;
+  collateralAsset: string;
   nextInstallment: {
     installment: string,
     amount: string,
@@ -80,6 +83,7 @@ export class LoanDetailComponent implements OnInit {
     private apiService: ApiService,
     private cosignerService: CosignerService,
     private contractsService: ContractsService,
+    private currenciesService: CurrenciesService,
     private router: Router,
     private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
@@ -186,6 +190,10 @@ export class LoanDetailComponent implements OnInit {
 
     this.liquidationRatio = `${ Utils.formatAmount(liquidationRatio) } %`;
     this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
+
+    const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
+    this.collateralAmount = Utils.formatAmount(web3.fromWei(collateral.amount));
+    this.collateralAsset = collateralCurrency.symbol;
   }
 
   private defaultDetail(): string {
