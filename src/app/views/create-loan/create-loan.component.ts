@@ -368,6 +368,7 @@ export class CreateLoanComponent implements OnInit {
         });
         this.retrievePendingTx();
         this.createLoan();
+        this.isCompleting = true;
       }
     } else {
       this.requiredInvalid$ = true;

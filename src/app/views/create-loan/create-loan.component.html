@@ -32,7 +32,7 @@
                 <span class="fa fa-spinner fa-spin"></span>
               </div>
             </ng-container>
-            <ng-container *ngIf="isCompleting && loan?.id">
+            <ng-container *ngIf="!showProgress && isCompleting">
               <div>
                 <span class="fa fa-check" *ngIf="!init"></span>
               </div>
