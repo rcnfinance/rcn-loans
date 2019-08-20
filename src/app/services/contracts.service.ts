@@ -759,10 +759,10 @@ export class ContractsService {
     let totalDiaspore = 0;
 
     loans.forEach(loan => {
-      if (loan.debt.balance > 0 && loan.network === Network.Basalt) {
+      if (loan.debt && loan.debt.balance > 0 && loan.network === Network.Basalt) {
         totalBasalt += loan.debt.balance;
         pendingBasaltLoans.push(loan.id);
-      } else if (loan.debt.balance > 0 && loan.network === Network.Diaspore) {
+      } else if (loan.debt && loan.debt.balance > 0 && loan.network === Network.Diaspore) {
         totalDiaspore += loan.debt.balance;
         pendingDiasporeLoans.push(loan.id);
       }
