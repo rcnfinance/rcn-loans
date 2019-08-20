@@ -696,6 +696,25 @@ export class ContractsService {
   }
 
   /**
+   * Check if the loan was created
+   * @param loanId Loan ID
+   * @return Boolean if the loan exist
+   */
+  async loanWasCreated(loanId: string): Promise<boolean> {
+    try {
+      const loan = await this._loanManager.getLoanData(loanId);
+
+      if (Utils.isEmpty(loan)) {
+        throw Error('Loan does not exist');
+      }
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
    * Create loan collateral
    * @param loanId Loan ID
    * @param oracle Oracle address
@@ -713,10 +732,10 @@ export class ContractsService {
     oracle: string,
     collateralToken: string,
     entryAmount: string,
-    liquidationRatio: string,
-    balanceRatio: string,
-    burnFee: string,
-    rewardFee: string,
+    liquidationRatio: number,
+    balanceRatio: number,
+    burnFee: number,
+    rewardFee: number,
     account: string
   ) {
     const web3 = this.web3.opsWeb3;
@@ -740,10 +759,10 @@ export class ContractsService {
     let totalDiaspore = 0;
 
     loans.forEach(loan => {
-      if (loan.debt.balance > 0 && loan.network === Network.Basalt) {
+      if (loan.debt && loan.debt.balance > 0 && loan.network === Network.Basalt) {
         totalBasalt += loan.debt.balance;
         pendingBasaltLoans.push(loan.id);
-      } else if (loan.debt.balance > 0 && loan.network === Network.Diaspore) {
+      } else if (loan.debt && loan.debt.balance > 0 && loan.network === Network.Diaspore) {
         totalDiaspore += loan.debt.balance;
         pendingDiasporeLoans.push(loan.id);
       }

@@ -1,10 +1,22 @@
 <mat-dialog-content>
   <div class="navbar-container">
     <div class="creator-container">
-      <div class="creator-title">Ups! Something went wrong</div>
+      <div class="creator-title">
+        Ups! Something went wrong
+      </div>
     </div>
   </div>
   <div class="col-sm-12 dialog-padding">
-    <div>{{ error.message }}</div>
+    <div>
+      {{ error.message }}
+    </div>
+    <button
+      mat-raised-button
+      mat-dialog-close
+      target="_blank"
+      class="button button-primary margintop20"
+    >
+      OK
+    </button>
   </div>
 </mat-dialog-content>

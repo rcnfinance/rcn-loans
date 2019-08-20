@@ -1,9 +1,4 @@
 <ng-container *ngIf="collateral; else empty">
-  <!--
-  <pre>
-    {{ collateral | json }}
-  </pre>
-  -->
   <div class="empty-container">
     <div class="empty-row">
 
@@ -25,7 +20,7 @@
                 Collateral
               </span>
               <p class="item__value">
-                0,5 ETH
+                {{ collateralAmount }} {{ collateralAsset }}
               </p>
             </div>
           </article>
@@ -38,7 +33,7 @@
                 Liquidation ratio
               </span>
               <p class="item__value">
-                150 %
+                {{ liquidationRatio }} %
               </p>
             </div>
           </article>
@@ -51,7 +46,7 @@
                 Balance ratio
               </span>
               <p class="item__value">
-                200 %
+                {{ balanceRatio }} %
               </p>
             </div>
           </article>
@@ -85,6 +80,13 @@
           </div>
           <div class="row row--footer">
             <div class="item col col-12 col-md-4">
+              <i class="fa fa-percentage"></i>
+              Current Loan To Value:
+              <strong class="item__value">
+                33%
+              </strong>
+            </div>
+            <div class="item col col-12 col-md-4">
               <i class="fa fa-retweet"></i>
               Current Exchange Rate:
               <strong class="item__value">
@@ -93,16 +95,9 @@
             </div>
             <div class="item col col-12 col-md-4">
               <i class="fa fa-chart-line"></i>
-              Liquidation Price:
+              Current Liquidation Price:
               <strong class="item__value">
                 200 DAI/ETH
-              </strong>
-            </div>
-            <div class="item col col-12 col-md-4">
-              <i class="fa fa-percentage"></i>
-              Change to liquidate:
-              <strong class="item__value">
-                33%
               </strong>
             </div>
           </div>

@@ -346,10 +346,32 @@ mat-expansion-panel {
   }
 }
 
-/deep/ .expansion-panel--card {
-  .mat-expansion-panel-content {
-    .mat-expansion-panel-body {
-      padding: 0 !important;
+/deep/ .expansion-panel {
+  &__header {
+    position: relative;
+    .mat-progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      .mat-progress-bar-buffer {
+        background-color: #222222;
+      }
+      .mat-progress-bar-fill::after {
+        background-color: $primary;
+      }
+    }
+    .fa-spinner,
+    .fa-check {
+      color: white;
+    }
+  }
+  &--card {
+    .mat-expansion-panel-content {
+      .mat-expansion-panel-body {
+        padding: 0 !important;
+      }
     }
   }
 }

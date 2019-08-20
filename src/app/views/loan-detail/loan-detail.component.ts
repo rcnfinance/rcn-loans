@@ -55,8 +55,7 @@ export class LoanDetailComponent implements OnInit {
   paid: string;
   interest: string;
   duration: string;
-  collateral: any; // TODO
-  collateralCurrency: string; // TODO
+  collateral: any;
   nextInstallment: {
     installment: string,
     amount: string,
@@ -66,8 +65,8 @@ export class LoanDetailComponent implements OnInit {
   lendDate: string;
   dueDate: string;
   lender: string;
-  liquidationRatio: string; // TODO
-  balanceRatio: string; // TODO
+  liquidationRatio: string;
+  balanceRatio: string;
   punitory: string;
 
   // Loan Oracle
@@ -161,13 +160,15 @@ export class LoanDetailComponent implements OnInit {
   private async loadCollateral() {
     const loanId: string = this.loan.id;
     const collaterals = await this.apiService.getCollateralByLoan(loanId);
+    const web3: any = this.web3Service.web3;
 
     if (!collaterals.length) {
-      console.info('load hasn´t collateral');
       return;
     }
 
     const collateral = collaterals[0];
+    console.info('loan collateral', collateral);
+
     this.collateral = new Collateral(
       collateral.id,
       collateral.debt_id,
@@ -179,7 +180,12 @@ export class LoanDetailComponent implements OnInit {
       collateral.burn_fee,
       collateral.reward_fee
     );
-    console.info('loan collateral', collateral);
+
+    const liquidationRatio = new web3.BigNumber(collateral.liquidation_ratio).div(100);
+    const balanceRatio = new web3.BigNumber(collateral.balance_ratio).div(100);
+
+    this.liquidationRatio = `${ Utils.formatAmount(liquidationRatio) } %`;
+    this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
   }
 
   private defaultDetail(): string {

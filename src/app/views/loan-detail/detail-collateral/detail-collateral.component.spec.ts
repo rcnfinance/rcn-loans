@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { APP_BASE_HREF } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MaterialModule } from '../../../material/material.module';
+import { SharedModule } from '../../../shared/shared.module';
 import { DetailCollateralComponent } from './detail-collateral.component';
 
 describe('DetailCollateralComponent', () => {
@@ -11,7 +12,8 @@ describe('DetailCollateralComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        MaterialModule
+        MaterialModule,
+        SharedModule
       ],
       declarations: [
         DetailCollateralComponent

@@ -22,17 +22,24 @@ export class Web3Service {
       // Use Mist/MetaMask's provider
       console.info('Web3 provider detected');
       const candWeb3 = new Web3(window.web3.currentProvider);
-      if (candWeb3.version.network === environment.network.id) {
-        candWeb3.eth.getAccounts((err, result) => {
-          if (!err && result && result.length > 0) {
-            console.info('Logged in');
-            this._web3account = candWeb3;
-            this.loginEvent.emit(true);
-          }
-        });
-      } else {
-        console.info('Mismatch provider network ID', candWeb3.version.network, environment.network.id);
-      }
+
+      candWeb3.version.getNetwork((err, networkId) => {
+        if (err) {
+          console.error('error getting web3 network', err);
+        }
+        if (networkId === environment.network.id) {
+          candWeb3.eth.getAccounts((e, result) => {
+            if (!e && result && result.length > 0) {
+              console.info('Logged in');
+              this._web3account = candWeb3;
+              this.loginEvent.emit(true);
+            }
+          });
+        } else {
+          console.info('Mismatch provider network ID', networkId, environment.network.id);
+        }
+      });
+
     }
   }
 
