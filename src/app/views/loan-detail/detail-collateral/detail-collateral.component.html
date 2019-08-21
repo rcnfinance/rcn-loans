@@ -83,21 +83,21 @@
               <i class="fa fa-percentage"></i>
               Current Loan To Value:
               <strong class="item__value">
-                33%
+                {{ currentLoanToValue }} %
               </strong>
             </div>
             <div class="item col col-12 col-md-4">
               <i class="fa fa-retweet"></i>
               Current Exchange Rate:
               <strong class="item__value">
-                300 DAI/ETH
+                {{ currentExchangeRate }} {{ loanCurrency }}/{{ collateralAsset }}
               </strong>
             </div>
             <div class="item col col-12 col-md-4">
               <i class="fa fa-chart-line"></i>
               Current Liquidation Price:
               <strong class="item__value">
-                200 DAI/ETH
+                {{ currentLiquidationPrice }} {{ loanCurrency }}
               </strong>
             </div>
           </div>
