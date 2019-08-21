@@ -34,7 +34,7 @@ export class CommitsService {
       const urlDebtEngineCommits = environment.rcn_node_api.url.concat(`debts/${ id }`);
       try {
         const responseDebtEngine: any = await this.http.get(urlDebtEngineCommits).toPromise();
-        commitsDebtEngine = responseDebtEngine.content.commits;
+        commitsDebtEngine = responseDebtEngine.content;
       } catch (err) {
         commitsDebtEngine = [];
         console.info('ERROR', err);
