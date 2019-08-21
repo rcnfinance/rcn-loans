@@ -772,6 +772,26 @@ export class ContractsService {
     ]);
   }
 
+  /**
+   * Add tokens to collateral
+   * @param loanId Loan ID
+   * @param amount Amount to add in wei
+   * @param account Account address
+   * @return Tx hash
+   */
+  async addCollateral(
+    loanId: string,
+    amount: number,
+    account: string
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._collateral).valueTokensToCollateral, [
+      loanId,
+      amount,
+      { from: account }
+    ]);
+  }
+
   readPendingWithdraws(loans: Loan[]): [BigNumber, number[], BigNumber, number[]] {
     const pendingBasaltLoans = [];
     const pendingDiasporeLoans = [];
