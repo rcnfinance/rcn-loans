@@ -1,8 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { APP_BASE_HREF } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '../../../material/material.module';
 import { SharedModule } from '../../../shared/shared.module';
+import { CurrenciesService } from '../../../services/currencies.service';
 import { DetailCollateralComponent } from './detail-collateral.component';
 
 describe('DetailCollateralComponent', () => {
@@ -12,6 +14,7 @@ describe('DetailCollateralComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        HttpClientModule,
         MaterialModule,
         SharedModule
       ],
@@ -19,6 +22,7 @@ describe('DetailCollateralComponent', () => {
         DetailCollateralComponent
       ],
       providers: [
+        CurrenciesService,
         {
           provide: APP_BASE_HREF, useValue: '/'
         }
