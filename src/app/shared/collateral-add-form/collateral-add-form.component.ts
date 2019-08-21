@@ -1,19 +1,29 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-collateral-add-form',
   templateUrl: './collateral-add-form.component.html',
   styleUrls: ['./collateral-add-form.component.scss']
 })
-export class CollateralAddFormComponent {
+export class CollateralAddFormComponent implements OnInit {
   @Output() submitAdd = new EventEmitter<any>();
+
+  form: FormGroup;
 
   constructor() {}
 
-  onSubmit(event: any, form: NgForm) {
-    event.preventDefault();
-    const to = form.value;
-    this.submitAdd.emit(to);
+  ngOnInit() {
+    this.form = new FormGroup({
+      amount: new FormControl(null, [
+        Validators.required,
+        Validators.min(0)
+      ])
+    });
+  }
+
+  onSubmit(form: FormGroup) {
+    const amount = form.value.amount;
+    this.submitAdd.emit(amount);
   }
 }
