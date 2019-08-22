@@ -773,21 +773,47 @@ export class ContractsService {
   }
 
   /**
-   * Add tokens to collateral
-   * @param loanId Loan ID
+   * Deposit tokens in collateral
+   * @param collateralId Collateral ID
    * @param amount Amount to add in wei
    * @param account Account address
    * @return Tx hash
    */
   async addCollateral(
-    loanId: string,
+    collateralId: number,
     amount: number,
     account: string
   ) {
     const web3 = this.web3.opsWeb3;
     return await promisify(this.loadAltContract(web3, this._collateral).deposit, [
-      loanId,
+      collateralId,
       amount,
+      { from: account }
+    ]);
+  }
+
+  /**
+   * Withdraw collateral
+   * @param collateralId Collateral ID
+   * @param to Account address
+   * @param amount Amount to add in wei
+   * @param oracleData Oracle data bytes
+   * @param account Account address
+   * @return Tx hash
+   */
+  async withdrawCollateral(
+    collateralId: number,
+    to: string,
+    amount: number,
+    oracleData: string,
+    account: string
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._collateral).withdraw, [
+      collateralId,
+      to,
+      amount,
+      oracleData,
       { from: account }
     ]);
   }
