@@ -1,16 +1,70 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
-  <div class="margintop10"></div>
-  <mat-form-field>
-    <input matInput type="number" min='0' step="any" formControlName="amount" placeholder="Amount">
-    <mat-hint>
-      Collateral amount
-    </mat-hint>
-  </mat-form-field>
-  <div class="margintop10"></div>
-  <button type="submit" mat-raised-button class="button button-primary">
-    Add
-  </button>
-  <button mat-raised-button class="button button-secondary" [mat-dialog-close]='false'>
-    Cancel
-  </button>
+
+  <div class="margintop60"></div>
+
+  <div class="collateral row">
+    <div class="collateral__entry marginbottom20 col-sm-12 col-md-4">
+      <p class="subtitle">
+        Amount you want to add
+      </p>
+      <mat-form-field>
+        <input
+          matInput
+          type="number"
+          min='0'
+          step="any"
+          formControlName="amount"
+          placeholder="Set amount"
+        >
+        <span class="currency">
+          ETH
+        </span>
+      </mat-form-field>
+    </div>
+    <div class="collateral__amount marginbottom20 col-sm-12 col-md-4 offset-md-4">
+      <p class="subtitle">
+        Collateral amount
+      </p>
+      <p class="value">
+        0,5 ETH
+      </p>
+    </div>
+    <div class="collateral__graphic marginbottom20 col-sm-12">
+      <p class="subtitle">
+        Collateral to debt
+      </p>
+      <div class="margintop10">
+        <app-collateral-slider-debt></app-collateral-slider-debt>
+      </div>
+    </div>
+  </div>
+
+  <div class="margintop40"></div>
+
+  <div class="dialog-divisor row">
+    <div class="dialog-divisor__content col-sm-12">
+      <i class="material-icons marginright5">
+        info
+      </i>
+      Liquidation Price: XXXXXXXXXXXX
+    </div>
+  </div>
+
+  <div class="margintop20"></div>
+
+  <div class="dialog-footer row">
+    <div class="dialog-footer__label col-sm-12 col-md-6">
+      <p>
+        Paying from your <strong>0x2c...ef20</strong> account.
+      </p>
+    </div>
+    <div class="dialog-footer__buttons col-sm-12 col-md-6">
+      <button type="submit" mat-raised-button class="button button-primary">
+        Add
+      </button>
+      <button mat-raised-button class="button button-clear-dark mat-elevation-z" [mat-dialog-close]='false'>
+        Cancel
+      </button>
+    </div>
+  </div>
 </form>
