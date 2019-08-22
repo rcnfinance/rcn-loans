@@ -9,7 +9,7 @@
     <ng-container [ngSwitch]="action">
       <app-collateral-add-form
         *ngSwitchCase="'add'"
-        (submitAdd)="addCollateral()"
+        (submitAdd)="addCollateral($event)"
       ></app-collateral-add-form>
       <app-collateral-withdraw-form
         *ngSwitchCase="'withdraw'"

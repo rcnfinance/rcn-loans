@@ -43,7 +43,7 @@ export class DialogCollateralComponent implements OnInit {
     account = web3.toChecksumAddress(account);
 
     await this.contractsService.addCollateral(
-      this.loan.id,
+      this.collateral.id,
       web3.toWei(amount),
       account
     );

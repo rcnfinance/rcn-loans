@@ -785,7 +785,7 @@ export class ContractsService {
     account: string
   ) {
     const web3 = this.web3.opsWeb3;
-    return await promisify(this.loadAltContract(web3, this._collateral).valueTokensToCollateral, [
+    return await promisify(this.loadAltContract(web3, this._collateral).deposit, [
       loanId,
       amount,
       { from: account }
