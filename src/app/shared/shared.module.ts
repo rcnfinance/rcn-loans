@@ -53,6 +53,7 @@ import { TitleService } from './../services/title.service';
 import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
+import { CollateralSliderDebtComponent } from './collateral-slider-debt/collateral-slider-debt.component';
 
 @NgModule({
   imports: [
@@ -92,7 +93,8 @@ import { EventsService } from './../services/events.service';
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
     DialogSelectCurrencyComponent,
-    FilterLoansComponent
+    FilterLoansComponent,
+    CollateralSliderDebtComponent
   ],
   entryComponents: [
     CivicAuthComponent,
