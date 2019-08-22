@@ -27,7 +27,10 @@
               1 | SET YOUR LOAN REQUIREMENTS
             </mat-panel-title>
             <ng-container *ngIf="showProgress">
-              <mat-progress-bar mode="determinate" [value]="creationProgress"></mat-progress-bar>
+              <mat-progress-bar
+                mode="determinate"
+                [value]="creationProgress"
+              ></mat-progress-bar>
               <div>
                 <span class="fa fa-spinner fa-spin"></span>
               </div>
@@ -103,7 +106,6 @@
                                   : 'block-title-white'
                               "
                             />
-                            <!-- {{ formGroup1?.value.conversionGraphic.requestValue }} -->
                             <mat-hint>
                               <span
                                 *ngIf="
@@ -317,7 +319,7 @@
                         --
                       </mat-option>
                       <ng-container *ngFor="let currency of currencies">
-                        <mat-option [value]="currency"> <!-- *ngIf="currency.currency !== formGroup1?.value.conversionGraphic.requestedCurrency"> -->
+                        <mat-option [value]="currency">
                           <div class="currency-box">
                             <div class="currency-img">
                               <img src="{{ currency.img }}" alt="" />
@@ -344,13 +346,11 @@
                       pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
                       required
                     />
-                    <!-- {{ formGroup1?.value.conversionGraphic.requestValue }} -->
                     <mat-hint>
                       <span
                         *ngIf="
                           requestValue.valid ||
-                          (requestValue.pristine &&
-                            requestValue.untouched)
+                          (requestValue.pristine && requestValue.untouched)
                         "
                         >Requested amount</span
                       >
@@ -442,6 +442,10 @@
         </mat-expansion-panel>
       </mat-accordion>
     </div>
+
+
+
+
     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-desktop">
       <div class="card-container">
         <ng-container *ngIf="loan">
@@ -450,8 +454,6 @@
             class="risk-indicator"
             [loan]="loan"
           ></app-risk-indicator>
-          <!-- <app-creator-container>Collateral loan</app-creator-container> -->
-          <!-- <app-creator-container [loan]="loan"></app-creator-container> -->
           <div class="collateral-container">
             <span class="collateral-title">Collateral loan</span>
           </div>
@@ -481,18 +483,20 @@
             </div>
             <div class="card-property">
               <div class="title">{{ "Installments" }}</div>
-
-              <mat-expansion-panel class="installments-expansion-panel">
+              <mat-expansion-panel class="installments-expansion-panel" [hideToggle]="formGroup1.value.installmentsFlag?false:true">
                 <mat-expansion-panel-header class="installments-header">
                   <mat-panel-title class="main-title-style ">
-                    <div class="paragraph">{{ installments }} pays</div>
+                    <div class="paragraph"><span *ngIf='!formGroup1.value.installmentsFlag'>-</span><span *ngIf='formGroup1.value.installmentsFlag'>{{ installmentsAvailable }} pays</span></div>
                   </mat-panel-title>
                 </mat-expansion-panel-header>
-                <!-- <div class="paragraph">{{ installments }} pays</div> -->
-                <div class="row installments-detail-container no-gutters">
-                  <div class="col-4 installments-detail">1st</div>
-                  <div class="col-4 installments-detail">15 days</div>
-                  <div class="col-4 installments-detail">866 DAI</div>
+                <div
+                  *ngFor="let pay of paysDetail"
+                  class="row installments-detail-container no-gutters"
+                >
+                  <!-- <div class="col-4 installments-detail"> {{pay.pay}} </div> -->
+                  <div class="col-2 installments-detail">{{ pay.pay }}</div>
+                  <div class="col-4 installments-detail">{{ pay.time }}</div>
+                  <div class="col-6 installments-detail">{{ pay.amount }}</div>
                 </div>
               </mat-expansion-panel>
             </div>
@@ -512,10 +516,9 @@
             </div>
             <div class="card-property">
               <div class="title">{{ "Collateral" }}</div>
-              <div class="paragraph">{{ durationLabel }}</div>
+              <div class="paragraph">{{ formGroup2.value.collateralAmount }} {{ formGroup2.value.collateralAsset?.currency || '-' }}</div>
             </div>
           </div>
-
           <mat-expansion-panel
             class="expansion-panel-see-more"
             (opened)="panelOpenSeeMore = true"
@@ -533,7 +536,7 @@
               </div>
               <div class="card-property">
                 <div class="title">{{ "Liquidation ratio" }}</div>
-                <div class="paragraph">{{ durationLabel }}</div>
+                <div class="paragraph">{{ formGroup2.value.liquidationRatio }}</div>
               </div>
             </div>
             <div class="card-property-container">
@@ -542,7 +545,7 @@
               </div>
               <div class="card-property">
                 <div class="title">{{ "Balance ratio" }}</div>
-                <div class="paragraph">{{ durationLabel }}</div>
+                <div class="paragraph">{{ formGroup2.value.collateralAdjustment }}</div>
               </div>
             </div>
             <div class="card-property-container">
@@ -551,36 +554,43 @@
               </div>
               <div class="card-property">
                 <div class="title">{{ "Punitory" }}</div>
-                <div class="paragraph">{{ durationLabel }}</div>
+                <div class="paragraph">To do</div>
               </div>
             </div>
           </mat-expansion-panel>
-
           <div class="margintop20"></div>
           <div class="card-property-container">
             <div class="card-icon-container">
-                <i class="fas fa-reply card-icon"></i>
+              <i class="fas fa-reply card-icon"></i>
             </div>
             <div class="card-property">
               <div class="title">{{ "Borrow" }}</div>
               <div
-                [ngClass]="this.durationLabel === '0'
-                          ? 'block-title'
-                          : 'block-title-white'">
-                {{ durationLabel }}</div>
+                [ngClass]="
+                  this.durationLabel === '0'
+                    ? 'block-title'
+                    : 'block-title-white'
+                "
+              >
+              <span *ngIf="!formGroup1.value.conversionGraphic.requestValue">-</span><span *ngIf="formGroup1.value.conversionGraphic.requestValue">{{ formGroup1.value.conversionGraphic.requestValue }}</span>
+              </div>
             </div>
           </div>
           <div class="card-property-container">
             <div class="card-icon-container">
-                <i class="fas fa-share card-icon"></i>
+              <i class="fas fa-share card-icon"></i>
             </div>
             <div class="card-property">
               <div class="title">{{ "Return" }}</div>
               <div
-              [ngClass]="this.durationLabel === '0'
-                          ? 'block-title'
-                          : 'block-title-white'">
-              {{ durationLabel }}</div>
+                [ngClass]="
+                  this.durationLabel === '0'
+                    ? 'block-title'
+                    : 'block-title-white'
+                "
+              >
+                <span *ngIf="!installmentsAvailable">-</span><span *ngIf="installmentsAvailable">{{ returnValue }}</span>
+              </div>
             </div>
           </div>
           <div class="margintop20"></div>
@@ -597,7 +607,8 @@
         </div>
       </div>
     </div>
-    <!-- <mat-accordion> -->
+
+
     <mat-expansion-panel
       (opened)="panelCardOpenState = true"
       (closed)="panelCardOpenState = false"
@@ -610,23 +621,13 @@
     >
       <mat-expansion-panel-header class="expansion-panel-header--mobile">
         <mat-panel-title class="main-title-style ">
-          Loan info
+          <div class="main-title-container">
+            <i class="fas fa-check-circle"></i>Loan info
+          </div>
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-wrapper">
         <div class="card-container">
-          <!-- <ng-container *ngIf="loan">
-                <app-loan-avatar [loan]="loan" [short]="true"></app-loan-avatar>
-                <app-risk-indicator
-                  class="risk-indicator"
-                  [loan]="loan"
-                ></app-risk-indicator> -->
-          <!-- <app-creator-container>Collateral loan</app-creator-container> -->
-          <!-- <app-creator-container [loan]="loan"></app-creator-container> -->
-          <!-- <div class="collateral-container">
-                  <span class="collateral-title">Collateral loan</span>
-                </div>
-              </ng-container> -->
           <div class="card-row">
             <div class="card-property-container">
               <div class="card-icon-container">
@@ -654,20 +655,22 @@
               </div>
               <div class="card-property">
                 <div class="title">{{ "Installments" }}</div>
-
-                <mat-expansion-panel class="installments-expansion-panel">
-                  <mat-expansion-panel-header class="installments-header">
-                    <mat-panel-title class="main-title-style ">
-                      <div class="paragraph">{{ installments }} pays</div>
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <!-- <div class="paragraph">{{ installments }} pays</div> -->
-                  <div class="row installments-detail-container-mobile no-gutters">
-                    <div class="col-4 installments-detail-mobile">1st</div>
-                    <div class="col-4 installments-detail-mobile">15 days</div>
-                    <div class="col-4 installments-detail-mobile">866 DAI</div>
-                  </div>
-                </mat-expansion-panel>
+                <mat-expansion-panel class="installments-expansion-panel" [hideToggle]="formGroup1.value.installmentsFlag?false:true">
+                    <mat-expansion-panel-header class="installments-header">
+                      <mat-panel-title class="main-title-style ">
+                        <div class="paragraph"><span *ngIf='!formGroup1.value.installmentsFlag'>-</span><span *ngIf='formGroup1.value.installmentsFlag'>{{ installmentsAvailable }} pays</span></div>
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div
+                      *ngFor="let pay of paysDetail"
+                      class="row installments-detail-container no-gutters"
+                    >
+                      <!-- <div class="col-4 installments-detail"> {{pay.pay}} </div> -->
+                      <div class="col-2 installments-detail">{{ pay.pay }}</div>
+                      <div class="col-4 installments-detail">{{ pay.time }}</div>
+                      <div class="col-6 installments-detail">{{ pay.amount }}</div>
+                    </div>
+                  </mat-expansion-panel>
               </div>
             </div>
             <div class="margintop20"></div>
@@ -687,20 +690,9 @@
               </div>
               <div class="card-property">
                 <div class="title">{{ "Collateral" }}</div>
-                <div class="paragraph">{{ durationLabel }}</div>
+                <div class="paragraph">{{ formGroup2.value.collateralAmount }} {{ formGroup2.value.collateralAsset?.currency || '-' }}</div>
               </div>
             </div>
-
-            <!-- <mat-expansion-panel
-                  class="expansion-panel-see-more"
-                  (opened)="panelOpenSeeMore = true"
-                  (closed)="panelOpenSeeMore = false">
-                  <mat-expansion-panel-header class="expansion-panel-header-see-more">
-                    <div class="link-box">
-                      <span class="link" *ngIf="!panelOpenSeeMore">See more</span>
-                      <span class="link" *ngIf="panelOpenSeeMore">See less</span>
-                    </div>
-                  </mat-expansion-panel-header> -->
             <div class="margintop20"></div>
             <div class="card-property-container">
               <div class="card-icon-container">
@@ -708,7 +700,7 @@
               </div>
               <div class="card-property">
                 <div class="title">{{ "Liquidation ratio" }}</div>
-                <div class="paragraph">{{ durationLabel }}</div>
+                <div class="paragraph">{{ formGroup2.value.liquidationRatio }}</div>
               </div>
             </div>
             <div class="margintop20"></div>
@@ -718,7 +710,7 @@
               </div>
               <div class="card-property">
                 <div class="title">{{ "Balance ratio" }}</div>
-                <div class="paragraph">{{ durationLabel }}</div>
+                <div class="paragraph">{{ formGroup2.value.collateralAdjustment }}</div>
               </div>
             </div>
             <div class="margintop20"></div>
@@ -728,48 +720,45 @@
               </div>
               <div class="card-property">
                 <div class="title">{{ "Punitory" }}</div>
-                <div class="paragraph">{{ durationLabel }}</div>
+                <div class="paragraph">To do</div>
               </div>
             </div>
-            <!-- </mat-expansion-panel> -->
-
-
-                <div class="margintop20"></div>
+            <div class="margintop20"></div>
+            <div class="card-property-container">
+                <div class="card-icon-container">
+                  <i class="fas fa-reply card-icon"></i>
+                </div>
                 <div class="card-property">
                   <div class="title">{{ "Borrow" }}</div>
-                  <div class="block-title">{{ durationLabel }}</div>
+                  <div
+                    [ngClass]="
+                      this.durationLabel === '0'
+                        ? 'block-title'
+                        : 'block-title-white'
+                    "
+                  >
+                  <span *ngIf="!formGroup1.value.conversionGraphic.requestValue">-</span><span *ngIf="formGroup1.value.conversionGraphic.requestValue">{{ formGroup1.value.conversionGraphic.requestValue }}</span>
+                  </div>
                 </div>
-                <div class="card-property">
-                  <div class="title">{{ "Return" }}</div>
-                  <div class="block-title">{{ durationLabel }}</div>
-                </div>
-                <div class="margintop20"></div>
-                <button
-                  mat-raised-button
-                  class="button button-primary fullWidth margintop20"
-                  [disabled]="!formGroup1.valid || !formGroup2.valid"
-                  (click)="onSubmitStep2(fStep2)"
-                >
-                  {{ collateralButtonText }}
-                </button>
-                <div class="margintop20"></div>
-                <div><a class="link" href="">Reset all values</a></div>
-
-              </div>
-              <div class="card-property">
-                <div class="title">{{ "Borrow" }}</div>
-                <div class="block-title">{{ durationLabel }}</div>
               </div>
             </div>
             <div class="card-property-container">
-              <div class="card-icon-container">
+                <div class="card-icon-container">
                   <i class="fas fa-share card-icon"></i>
+                </div>
+                <div class="card-property">
+                  <div class="title">{{ "Return" }}</div>
+                  <div
+                    [ngClass]="
+                      this.durationLabel === '0'
+                        ? 'block-title'
+                        : 'block-title-white'
+                    "
+                  >
+                    <span *ngIf="!installmentsAvailable">-</span><span *ngIf="installmentsAvailable">{{ returnValue }}</span>
+                  </div>
+                </div>
               </div>
-              <div class="card-property">
-                <div class="title">{{ "Return" }}</div>
-                <div class="block-title">{{ durationLabel }}</div>
-              </div>
-            </div>
             <div class="margintop20"></div>
             <button
               mat-raised-button
@@ -777,29 +766,38 @@
               [disabled]="!formGroup1.valid || !formGroup2.valid"
               (click)="onSubmitStep2(fStep2)"
             >
-              Confirm
+              {{ collateralButtonText }}
             </button>
             <div class="margintop20"></div>
-            <div><a class="link" href="">Reset all values</a></div>
+            <!-- <div><a class="link" href="">Reset all values</a></div>
           </div>
-          <div class="margintop20"></div>
-          <!-- <button
-                mat-raised-button
-                class="button button-primary fullWidth margintop20"
-                [disabled]="!formGroup2.valid"
-                (click)="onSubmitStep2(fStep2)"
-              >
-
-                {{ collateralButtonText }}
-              </button>
-              <div class="margintop20"></div>
-              <div><a class="link" href="">Reset all values</a></div>
-            </div>
-
-
-
+          <div class="card-property">
+            <div class="title">{{ "Borrow" }}</div>
+            <div class="block-title">{{ durationLabel }}</div>
+          </div>
+        </div>
+        <div class="card-property-container">
+          <div class="card-icon-container">
+            <i class="fas fa-share card-icon"></i>
+          </div>
+          <div class="card-property">
+            <div class="title">{{ "Return" }}</div>
+            <div class="block-title">{{ durationLabel }}</div>
+          </div>
+        </div>
+        <div class="margintop20"></div>
+        <button
+          mat-raised-button
+          class="button button-primary fullWidth margintop20"
+          [disabled]="!formGroup1.valid || !formGroup2.valid"
+          (click)="onSubmitStep2(fStep2)"
+        >
+          Confirm
+        </button>
+        <div class="margintop20"></div>
+        <div><a class="link" href="">Reset all values</a></div>
       </div>
-    </mat-expansion-panel>
-    <!-- </mat-accordion> -->
+      <div class="margintop20"></div> -->
+    <!-- </mat-expansion-panel> -->
   </div>
 </div>

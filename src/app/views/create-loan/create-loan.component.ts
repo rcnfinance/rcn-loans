@@ -43,6 +43,9 @@ export class CreateLoanComponent implements OnInit {
   creationProgress = 0;
   showProgress = false;
 
+  // Pays detail
+  paysDetail = [];
+
   // Date Variables
   now: Date = new Date();
   tomorrow: Date = new Date();
@@ -134,7 +137,7 @@ export class CreateLoanComponent implements OnInit {
         const loan = await this.getExistingLoan(loanId);
         await this.autocompleteForm(loan);
         await this.getCollateral(loanId);
-        this.createLoan();
+        this.isExpanded();
         this.retrievePendingTx();
         this.corroborateBorrower();
       } catch (e) {
@@ -214,7 +217,7 @@ export class CreateLoanComponent implements OnInit {
     const requestValue = web3.fromWei(loan.amount);
     const duration = loan.descriptor.duration / secondsInDay;
     const installmentsFlag = loan.descriptor.installments > 1 ? true : false;
-    const interestPunnitory = Number(loan.descriptor.punitiveInterestRateRate).toFixed(0);
+    const interestpunitory = Number(loan.descriptor.punitiveInterestRateRate).toFixed(0);
     this.installments = loan.descriptor.installments;
     this.selectedOracle = oracle;
 
@@ -223,7 +226,7 @@ export class CreateLoanComponent implements OnInit {
         fullDuration: duration
       },
       interest: {
-        annualInterest: interestPunnitory
+        annualInterest: interestpunitory
       },
       conversionGraphic: {
         requestValue: requestValue,
@@ -236,6 +239,7 @@ export class CreateLoanComponent implements OnInit {
     this.onCurrencyChange(selectedCurrency);
     this.onRequestedChange(requestValue);
     this.onDurationChange();
+
   }
 
   /**
@@ -276,10 +280,33 @@ export class CreateLoanComponent implements OnInit {
     this.location.replaceState(`/create`);
   }
 
+  /**
+   * Fills out installment's details
+   */
+  installmentsDetails() {
+    this.paysDetail = [];
+    for (let i = 0; i < this.installmentsAvailable; i++) {
+      const pay = i + 1;
+      let payNumber;
+      if (pay === 1) {
+        payNumber = 'st';
+      } else if (pay === 2) {
+        payNumber = 'nd';
+      } else {
+        payNumber = 'th';
+      }
+      const time = pay * 15;
+      const amount = this.requestValue.value / this.installmentsAvailable;
+      const obj = { pay: pay + payNumber, time: time + ' days', amount: amount + ' ' + this.requestedCurrency.value};
+      this.paysDetail.push(obj);
+
+    }
+  }
+
    /**
    * Tooggles a boolean to expand, retract and disable the expansion pannels
    */
-  createLoan() {
+  isExpanded() {
     this.init = !this.init;
   }
 
@@ -367,7 +394,7 @@ export class CreateLoanComponent implements OnInit {
           amount: 1
         });
         this.retrievePendingTx();
-        this.createLoan();
+        this.isExpanded();
         this.isCompleting = true;
       }
     } else {
@@ -546,6 +573,7 @@ export class CreateLoanComponent implements OnInit {
       default:
         break;
     }
+    this.installmentsDetails();
   }
 
   /**
@@ -563,6 +591,7 @@ export class CreateLoanComponent implements OnInit {
     }
 
     this.expectedReturn();
+    this.installmentsDetails();
   }
 
   /**
@@ -576,6 +605,7 @@ export class CreateLoanComponent implements OnInit {
 
     this.expectedInstallmentsAvailable();
     this.expectedReturn();
+    this.installmentsDetails();
   }
 
   /**

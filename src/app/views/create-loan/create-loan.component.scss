@@ -175,12 +175,17 @@
 }
 
 mat-expansion-panel-header {
-  background-color: #222222;
+  // background-color: #222222;
   height: 46px !important;
 }
 
 mat-expansion-panel {
   background-color: #141414;
+  color: inherit;
+}
+
+/deep/ .mat-expansion-panel:not(.mat-expanded):not([aria-disabled=true]) .mat-expansion-panel-header:hover {
+  background: inherit;
 }
 
 .mat-accent .mat-slider-thumb, .mat-accent .mat-slider-thumb-label, .mat-accent .mat-slider-track-fill {
@@ -199,6 +204,15 @@ mat-expansion-panel {
   font-weight: 600;
   margin: 0;
   padding: 0;
+  .main-title-container {
+    display: flex;
+    align-items: center;
+    .fa-check-circle {
+      color: $primary;
+      margin-right: 5px;
+      font-size: 12px;
+    }
+  }
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-infix {
@@ -433,7 +447,7 @@ mat-expansion-panel {
 
 .card-icon {
   font-size: 18px;
-  color: #0D0D0D;
+  color: black;
 }
 
 .collateral-container {
@@ -448,7 +462,7 @@ mat-expansion-panel {
     font-family:'Raleway', sans-serif;
     font-weight: 900;
     font-size: 32px;
-    color: #0D0D0D;
+    color: black;
   }
 }
 
@@ -462,14 +476,14 @@ mat-expansion-panel {
 }
 
 .installments-header {
-  background-color: #0D0D0D;
+  background-color: black;
   height: auto !important;
   padding: 0 !important;
 }
 
 /deep/ .card-container {
   .installments-expansion-panel {
-    background-color: #0D0D0D;
+    background-color: black;
     width: 100% !important;
     // .mat-expansion-panel-header {
       .mat-expansion-panel-content{
@@ -486,7 +500,7 @@ mat-expansion-panel {
   display: flex !important;
   flex-direction: column;
   .mat-content {
-  background-color: #0D0D0D;
+  background-color: black;
   display: flex;
   justify-content: flex-end;
   }
@@ -494,17 +508,18 @@ mat-expansion-panel {
     display: none;
   }
   .mat-expansion-panel-content {
-    background-color: #0D0D0D;
+    background-color: black;
     .mat-expansion-panel-body {
       padding: 0 !important;
       width: 100%;
-      background-color: #0D0D0D;
+      background-color: black;
     }
   }
 }
 
-/deep/ .installments-header {
-  background-color: #222222 !important;
+/deep/ .installments-header--mobile {
+  background-color: #222222;
+  box-shadow: none;
 }
 
 /deep/ .installments-detail-container-mobile {
@@ -524,7 +539,13 @@ mat-expansion-panel {
   padding: 0 !important;
 }
 
-.expansion-panel-header--mobile {
+/deep/ .expansion-panel-header--mobile {
+  .mat-expansion-indicator {
+    color: white !important;
+  }
+  .mat-expansion-indicator::after {
+    color: white !important;
+  }
   .mat-expansion-panel-content {
     .mat-expansion-panel-body {
       .card-wrapper {
