@@ -7,7 +7,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./collateral-add-form.component.scss']
 })
 export class CollateralAddFormComponent implements OnInit {
-  @Output() submitAdd = new EventEmitter<any>();
+  @Output() submitAdd = new EventEmitter<number>();
 
   form: FormGroup;
 

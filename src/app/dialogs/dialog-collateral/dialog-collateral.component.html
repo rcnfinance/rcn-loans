@@ -13,7 +13,7 @@
       ></app-collateral-add-form>
       <app-collateral-withdraw-form
         *ngSwitchCase="'withdraw'"
-        (submitAdd)="withdrawCollateral()"
+        (submitWithdraw)="withdrawCollateral($event)"
       ></app-collateral-withdraw-form>
     </ng-container>
   </div>

@@ -16,6 +16,7 @@ export class DialogCollateralComponent implements OnInit {
   loan: Loan;
   collateral: Collateral;
   action: 'add' | 'withdraw';
+  account: string;
 
   constructor(
     public dialogRef: MatDialogRef<any>,
@@ -28,8 +29,12 @@ export class DialogCollateralComponent implements OnInit {
     this.action = data.action;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.dialogRef.updateSize('auto', 'auto');
+
+    const web3: any = this.web3Service.web3;
+    const account = await this.web3Service.getAccount();
+    this.account = web3.toChecksumAddress(account);
   }
 
   /**
@@ -39,23 +44,31 @@ export class DialogCollateralComponent implements OnInit {
   async addCollateral(amount) {
     const web3: any = this.web3Service.web3;
 
-    let account = await this.web3Service.getAccount();
-    account = web3.toChecksumAddress(account);
-
     await this.contractsService.addCollateral(
       this.collateral.id,
       web3.toWei(amount),
-      account
+      this.account
     );
 
+    // TODO: track tx
     this.dialogRef.close();
   }
 
   /**
    * Withdraw collateral amount
    */
-  withdrawCollateral() {
-    // TODO: withdraw collateral
+  async withdrawCollateral(amount) {
+    const web3: any = this.web3Service.web3;
+
+    await this.contractsService.withdrawCollateral(
+      this.collateral.id,
+      this.account,
+      web3.toWei(amount),
+      null,
+      this.account
+    );
+
+    // TODO: track tx
     this.dialogRef.close();
   }
 }

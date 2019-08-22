@@ -94,9 +94,12 @@ export class LoanDetailComponent implements OnInit {
   ngOnInit() {
     this.spinner.show();
     this.loadAccount();
-    this.route.params.subscribe(params => {
-      const id = params['id']; // (+) converts string 'id' to a number
-      this.contractsService.getLoan(id).then(loan => {
+
+    this.route.params.subscribe(async params => {
+      const id = params.id;
+
+      try {
+        const loan = await this.contractsService.getLoan(id);
         this.loan = loan;
         this.hasHistory = true;
         this.brand = this.brandingService.getBrand(this.loan);
@@ -115,11 +118,11 @@ export class LoanDetailComponent implements OnInit {
         this.viewDetail = this.defaultDetail();
 
         this.spinner.hide();
-      }).catch((e: Error) => {
+      } catch (e) {
         console.error(e);
-        console.info('Loan', this.loan.id, 'not found');
+        console.info('Loan', this.loan, 'not found');
         this.router.navigate(['/404/'], { skipLocationChange: true });
-      });
+      }
     });
   }
 
