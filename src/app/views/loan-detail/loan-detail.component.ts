@@ -333,22 +333,33 @@ export class LoanDetailComponent implements OnInit {
   private loanOnGoingorIndebt() {
     if (this.loan.debt !== undefined && this.userAccount) {
       const isDebtOwner = this.userAccount.toUpperCase() === this.loan.debt.owner.toUpperCase();
+      const isBorrower = this.isBorrower();
       this.canTransfer = isDebtOwner;
       this.canCancel = false;
       this.canPay = !isDebtOwner;
       this.canLend = false;
-      this.canAdjustCollateral = isDebtOwner;
+      this.canAdjustCollateral = isBorrower;
     }
   }
 
   private loanStatusRequest() {
     if (this.userAccount) {
-      const isBorrower = this.loan.borrower.toUpperCase() === this.userAccount.toUpperCase();
+      const isBorrower = this.isBorrower();
       this.canLend = !isBorrower;
       this.canPay = false;
       this.canTransfer = false;
       this.canCancel = isBorrower;
       this.canAdjustCollateral = isBorrower;
+    }
+  }
+
+  /**
+   * Check if the loan borrower is the current account
+   * @return Boolean if is borrower
+   */
+  private isBorrower() {
+    if (this.userAccount) {
+      return this.loan.borrower.toUpperCase() === this.userAccount.toUpperCase();
     }
   }
 
