@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DialogCollateralComponent } from '../../../dialogs/dialog-collateral/dialog-collateral.component';
 import { environment } from '../../../../environments/environment';
@@ -22,6 +22,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   @Input() loan: Loan;
   @Input() collateral: Collateral;
   @Input() canAdjust: boolean;
+  @Output() updateCollateral = new EventEmitter();
 
   collateralAmount: string;
   collateralAsset: string;
@@ -47,6 +48,9 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.txService.subscribeConfirmedTx(async (tx: Tx) => {
       if (tx.type === Type.addCollateral || tx.type === Type.withdrawCollateral) {
+        if (this.addPendingTx || this.withdrawPendingTx) {
+          this.updateCollateral.emit();
+        }
         this.retrievePendingTx();
       }
     });
@@ -169,28 +173,8 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     const dialogRef = this.dialog.open(DialogCollateralComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-      (tx: string) => this.trackTx(tx, action)
+      () => this.retrievePendingTx()
     );
-  }
-
-  trackTx(txHash: string, action) {
-    let txType: string;
-
-    switch (action) {
-      case 'add':
-        txType = Type.addCollateral;
-        break;
-
-      case 'withdraw':
-        txType = Type.withdrawCollateral;
-        break;
-
-      default:
-        return;
-    }
-    console.info(txHash, txType);
-
-    this.retrievePendingTx();
   }
 
   /**
