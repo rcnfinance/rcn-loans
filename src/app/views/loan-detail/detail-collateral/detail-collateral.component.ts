@@ -21,6 +21,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
 
   @Input() loan: Loan;
   @Input() collateral: Collateral;
+  @Input() canAdjust: boolean;
 
   collateralAmount: string;
   collateralAsset: string;
@@ -45,11 +46,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.txService.subscribeConfirmedTx(async (tx: Tx) => {
-      if (
-        tx.type === Type.addCollateral ||
-        tx.type === Type.withdrawCollateral
-      ) {
-        console.info('DETECTED!!!', tx);
+      if (tx.type === Type.addCollateral || tx.type === Type.withdrawCollateral) {
         this.retrievePendingTx();
       }
     });
@@ -58,8 +55,11 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   ngOnChanges(changes) {
     if (changes.collateral && changes.collateral.currentValue) {
       this.setCollateralPanel();
-      this.setCollateralAdjustment();
-      this.retrievePendingTx();
+
+      if (this.loan.debt) {
+        this.setCollateralAdjustment();
+        this.retrievePendingTx();
+      }
     }
   }
 

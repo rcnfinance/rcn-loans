@@ -320,6 +320,7 @@
         *ngIf="isDetail('collateral')"
         [loan]="loan"
         [collateral]="collateral"
+        [canAdjust]="canAdjustCollateral"
       ></app-detail-collateral>
       <app-detail-installments
         *ngIf="isDetail('installments')"

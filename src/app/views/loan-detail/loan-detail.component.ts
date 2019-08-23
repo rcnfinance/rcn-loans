@@ -46,6 +46,7 @@ export class LoanDetailComponent implements OnInit {
   canCancel: boolean;
   canPay: boolean;
   canLend: boolean;
+  canAdjustCollateral: boolean;
 
   hasHistory: boolean;
   generatedByUser: boolean;
@@ -67,7 +68,6 @@ export class LoanDetailComponent implements OnInit {
   };
   lendDate: string;
   dueDate: string;
-  lender: string;
   liquidationRatio: string;
   balanceRatio: string;
   punitory: string;
@@ -327,6 +327,7 @@ export class LoanDetailComponent implements OnInit {
     this.canPay = false;
     this.canTransfer = false;
     this.canCancel = false;
+    this.canAdjustCollateral = false;
   }
 
   private loanOnGoingorIndebt() {
@@ -336,6 +337,7 @@ export class LoanDetailComponent implements OnInit {
       this.canCancel = false;
       this.canPay = !isDebtOwner;
       this.canLend = false;
+      this.canAdjustCollateral = isDebtOwner;
     }
   }
 
@@ -346,6 +348,7 @@ export class LoanDetailComponent implements OnInit {
       this.canPay = false;
       this.canTransfer = false;
       this.canCancel = isBorrower;
+      this.canAdjustCollateral = isBorrower;
     }
   }
 
