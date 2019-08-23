@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-collateral-slider-debt',
@@ -6,6 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./collateral-slider-debt.component.scss']
 })
 export class CollateralSliderDebtComponent implements OnInit {
+  @Input() liquidationRatio: number;
+  @Input() balanceRatio: number;
+  @Input() maxRatio = 400;
+  @Input() collateralRatio: number;
 
   constructor() { }
 

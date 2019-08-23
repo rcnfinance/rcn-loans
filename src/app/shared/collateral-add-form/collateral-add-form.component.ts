@@ -21,7 +21,13 @@ export class CollateralAddFormComponent implements OnInit {
   form: FormGroup;
   collateralAmount: string;
   collateralAsset: string;
+  liquidationRatio: number;
+  balanceRatio: number;
   shortAccount: string;
+  collateralRatio: number;
+
+  estimatedCollateralAmount: string;
+  estimatedCollateralRatio: number;
 
   constructor(
     private web3Service: Web3Service,
@@ -53,8 +59,12 @@ export class CollateralAddFormComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const collateral: Collateral = this.collateral;
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
-    this.collateralAmount = Utils.formatAmount(web3.fromWei(collateral.amount));
+    const amount = Number(web3.fromWei(collateral.amount));
+    this.collateralAmount = Utils.formatAmount(amount);
     this.collateralAsset = collateralCurrency.symbol;
+    this.balanceRatio = collateral.balanceRatio / 100;
+    this.liquidationRatio = collateral.liquidationRatio / 100;
+    this.collateralRatio = this.calculateCollateralRatio(this.form);
   }
 
   /**
@@ -68,8 +78,60 @@ export class CollateralAddFormComponent implements OnInit {
     this.shortAccount = Utils.shortAddress(account);
   }
 
+  /**
+   * Update collateral values when currency is updated
+   */
+  onAmountChange() {
+    const form: FormGroup = this.form;
+
+    if (!form.valid) {
+      this.estimatedCollateralAmount = null;
+      return;
+    }
+
+    const estimatedAmount = this.calculateAmount(form);
+    this.estimatedCollateralAmount = Utils.formatAmount(estimatedAmount);
+
+    const newCollateralRatio = this.calculateCollateralRatio(form);
+    this.estimatedCollateralRatio = newCollateralRatio;
+  }
+
+  /**
+   * Emitted when form is submitted
+   * @fires submitAdd
+   */
   onSubmit(form: FormGroup) {
     const amount = form.value.amount;
     this.submitAdd.emit(amount);
+  }
+
+  /**
+   * Calculate the new collateral amount
+   * @param form Form group
+   * @return Collateral amount
+   */
+  private calculateAmount(form: FormGroup) {
+    const web3: any = this.web3Service.web3;
+    const amountToAdd: number = form.value.amount;
+    const collateralAmount = new web3.BigNumber(this.collateralAmount);
+
+    try {
+      const estimated: number = collateralAmount.add(amountToAdd);
+      return estimated;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  }
+
+  /**
+   * Calculate the new collateral ratio
+   * @param form Form group
+   * @return Collateral ratio
+   */
+  private calculateCollateralRatio(form: FormGroup) {
+    console.info(form);
+    // TODO: calculate new collateral ratio
+    return null;
   }
 }

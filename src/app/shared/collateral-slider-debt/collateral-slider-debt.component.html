@@ -2,16 +2,17 @@
   <mat-slider
     step="1"
     tickInterval="25"
-    min="150"
-    max="400"
+    [min]="liquidationRatio"
+    [max]="maxRatio"
+    [value]="collateralRatio"
     color="primary"
   ></mat-slider>
   <div class="collateral-debt-slider__percentage">
     <div class="percentage percentage--min">
-      150%
+      {{ liquidationRatio }}%
     </div>
     <div class="percentage percentage--max">
-      200%
+      {{ balanceRatio }}%
     </div>
   </div>
 </div>

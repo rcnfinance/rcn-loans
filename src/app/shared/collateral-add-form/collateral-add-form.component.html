@@ -15,6 +15,7 @@
           step="any"
           formControlName="amount"
           placeholder="Set amount"
+          (keyup)="onAmountChange()"
         >
         <span class="currency">
           {{ collateralAsset }}
@@ -26,7 +27,7 @@
         Collateral amount
       </p>
       <p class="value">
-        {{ collateralAmount }} {{ collateralAsset }}
+        {{ estimatedCollateralAmount || collateralAmount }} {{ collateralAsset }}
       </p>
     </div>
     <div class="collateral__graphic marginbottom20 col-sm-12">
@@ -34,7 +35,11 @@
         Collateral to debt
       </p>
       <div class="margintop10">
-        <app-collateral-slider-debt></app-collateral-slider-debt>
+        <app-collateral-slider-debt
+          [liquidationRatio]="liquidationRatio"
+          [balanceRatio]="balanceRatio"
+          [collateralRatio]="estimatedCollateralRatio || collateralRatio"
+        ></app-collateral-slider-debt>
       </div>
     </div>
   </div>
