@@ -17,7 +17,7 @@
           placeholder="Set amount"
         >
         <span class="currency">
-          ETH
+          {{ collateralAsset }}
         </span>
       </mat-form-field>
     </div>
@@ -26,7 +26,7 @@
         Collateral amount
       </p>
       <p class="value">
-        0,5 ETH
+        {{ collateralAmount }} {{ collateralAsset }}
       </p>
     </div>
     <div class="collateral__graphic marginbottom20 col-sm-12">
@@ -55,7 +55,7 @@
   <div class="dialog-footer row">
     <div class="dialog-footer__label col-sm-12 col-md-6">
       <p>
-        Paying from your <strong>0x2c...ef20</strong> account.
+        Paying from your <strong>{{ shortAccount }}</strong> account.
       </p>
     </div>
     <div class="dialog-footer__buttons col-sm-12 col-md-6">

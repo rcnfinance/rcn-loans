@@ -1,7 +1,7 @@
 @import '../../../scss/_variables.scss'; //variables
 
 .mat-dialog-content {
-  max-height: none;
+  max-height: 100vh;
 }
 .mat-dialog-container {
   height: 210px;
