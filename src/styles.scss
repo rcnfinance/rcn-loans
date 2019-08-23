@@ -180,6 +180,11 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
       background-color: $orange-hover;
     }
   }
+  &.button-disabled {
+    opacity: .8;
+    user-select: none;
+    cursor: disabled;
+  }
 }
 
 // Colors

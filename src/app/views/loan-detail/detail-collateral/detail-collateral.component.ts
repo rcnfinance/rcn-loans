@@ -10,6 +10,7 @@ import { Collateral } from './../../../models/collateral.model';
 import { Web3Service } from './../../../services/web3.service';
 import { ContractsService } from './../../../services/contracts.service';
 import { CurrenciesService } from './../../../services/currencies.service';
+import { Tx, TxService, Type } from './../../../tx.service';
 
 @Component({
   selector: 'app-detail-collateral',
@@ -31,19 +32,34 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   currentExchangeRate: string;
   currentLiquidationPrice: string;
 
+  addPendingTx: Tx;
+  withdrawPendingTx: Tx;
+
   constructor(
     private dialog: MatDialog,
     private web3Service: Web3Service,
     private contractsService: ContractsService,
-    private currenciesService: CurrenciesService
+    private currenciesService: CurrenciesService,
+    private txService: TxService
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.txService.subscribeConfirmedTx(async (tx: Tx) => {
+      if (
+        tx.type === Type.addCollateral ||
+        tx.type === Type.withdrawCollateral
+      ) {
+        console.info('DETECTED!!!', tx);
+        this.retrievePendingTx();
+      }
+    });
+  }
 
   ngOnChanges(changes) {
     if (changes.collateral && changes.collateral.currentValue) {
       this.setCollateralPanel();
       this.setCollateralAdjustment();
+      this.retrievePendingTx();
     }
   }
 
@@ -128,7 +144,20 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    * Open add more / withdraw collateral dialog
    * @param action Add or Withdraw
    */
-  async openDialog(action: string) {
+  async openDialog(action: 'add' | 'withdraw') {
+    switch (action) {
+      case 'add':
+        if (this.addPendingTx) return;
+        break;
+
+      case 'withdraw':
+        if (this.withdrawPendingTx) return;
+        break;
+
+      default:
+        break;
+    }
+
     const dialogConfig: MatDialogConfig = {
       data: {
         loan: this.loan,
@@ -137,6 +166,54 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
       }
     };
 
-    this.dialog.open(DialogCollateralComponent, dialogConfig);
+    const dialogRef = this.dialog.open(DialogCollateralComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(
+      (tx: string) => this.trackTx(tx, action)
+    );
+  }
+
+  trackTx(txHash: string, action) {
+    let txType: string;
+
+    switch (action) {
+      case 'add':
+        txType = Type.addCollateral;
+        break;
+
+      case 'withdraw':
+        txType = Type.withdrawCollateral;
+        break;
+
+      default:
+        return;
+    }
+    console.info(txHash, txType);
+
+    this.retrievePendingTx();
+  }
+
+  /**
+   * Retrieve pending Tx
+   */
+  retrievePendingTx() {
+    this.addPendingTx = this.txService.getLastPendingAddCollateral(this.collateral);
+    this.withdrawPendingTx = this.txService.getLastPendingWithdrawCollateral(this.collateral);
+  }
+
+  /**
+   * Get add collateral button text
+   * @return Button text
+   */
+  get addButtonText(): string {
+    return 'Add more';
+  }
+
+  /**
+   * Get add collateral button text
+   * @return Button text
+   */
+  get withdrawButtonText(): string {
+    return 'Withdraw';
   }
 }

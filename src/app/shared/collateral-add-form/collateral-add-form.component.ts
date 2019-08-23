@@ -14,6 +14,13 @@ export class CollateralAddFormComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    this.createFormControls();
+  }
+
+  /**
+   * Create form controls and define values
+   */
+  createFormControls() {
     this.form = new FormGroup({
       amount: new FormControl(null, [
         Validators.required,
