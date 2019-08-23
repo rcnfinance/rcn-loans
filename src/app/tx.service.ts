@@ -3,6 +3,7 @@ declare let window: any;
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Loan } from './models/loan.model';
+import { Collateral } from './models/collateral.model';
 import { Web3Service } from './services/web3.service';
 import { EventsService, Category } from './services/events.service';
 
@@ -14,7 +15,9 @@ export enum Type {
   claim = 'claim',
   pay = 'pay',
   create = 'create',
-  createCollateral = 'createCollateral'
+  createCollateral = 'createCollateral',
+  addCollateral = 'addCollateral',
+  withdrawCollateral = 'withdrawCollateral'
 }
 
 export class Tx {
@@ -228,6 +231,44 @@ export class TxService {
         !tx.confirmed &&
         tx.type === Type.createCollateral &&
         tx.data.id === loan.id)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
+  }
+
+  registerAddCollateralTx(tx: string, loan: Loan, collateral: Collateral) {
+    const data = {
+      engine: loan.address,
+      id: loan.id,
+      collateralId: collateral.id
+    };
+    this.registerTx(new Tx(tx, data.engine, false, Type.addCollateral, data));
+  }
+
+  getLastPendingAddCollateral(collateral: Collateral) {
+    return this.txMemory
+      .filter(tx =>
+        !tx.confirmed &&
+        tx.type === Type.addCollateral &&
+        tx.data.collateralId === collateral.id
+      )
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
+  }
+
+  registerWithdrawCollateralTx(tx: string, loan: Loan, collateral: Collateral) {
+    const data = {
+      engine: loan.address,
+      id: loan.id,
+      collateralId: collateral.id
+    };
+    this.registerTx(new Tx(tx, data.engine, false, Type.withdrawCollateral, data));
+  }
+
+  getLastPendingWithdrawCollateral(collateral: Collateral) {
+    return this.txMemory
+      .filter(tx =>
+        !tx.confirmed &&
+        tx.type === Type.withdrawCollateral &&
+        tx.data.collateralId === collateral.id
+      )
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
   }
 

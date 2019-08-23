@@ -94,7 +94,15 @@ export class NotificationsComponent implements OnInit {
         break;
 
       case 'createCollateral':
-        message = 'the collateral';
+        message = 'a collateral';
+        break;
+
+      case 'addCollateral':
+        message = 'in collateral';
+        break;
+
+      case 'withdrawCollateral':
+        message = 'from collateral';
         break;
 
       default:
@@ -169,10 +177,16 @@ export class NotificationsComponent implements OnInit {
         }
         break;
       case 'create':
-        txObject = new TxObject(id, 'Creating', message, 'material-icons', 'add', '', 'turquoise');
+        txObject = new TxObject(id, 'Creating', message, '', '', 'fas fa-file-invoice-dollar', 'turquoise');
         break;
       case 'createCollateral':
         txObject = new TxObject(id, 'Creating', message, '', '', 'fas fa-coins', 'violet');
+        break;
+      case 'addCollateral':
+        txObject = new TxObject(id, 'Depositing', message, 'material-icons', 'add', '', 'violet');
+        break;
+      case 'withdrawCollateral':
+        txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'remove', '', 'violet');
         break;
       default:
         break;
@@ -213,6 +227,12 @@ export class NotificationsComponent implements OnInit {
       case 'create':
       case 'createCollateral':
         message = 'Created';
+        break;
+      case 'addCollateral':
+        message = 'Deposited';
+        break;
+      case 'withdrawCollateral':
+        message = 'Withdrawed';
         break;
       default:
         break;
