@@ -511,9 +511,9 @@ class="container">
                   class="row installments-detail-container no-gutters"
                 >
                   <!-- <div class="col-4 installments-detail"> {{pay.pay}} </div> -->
-                  <div class="col-2 installments-detail">{{ pay.pay }}</div>
-                  <div class="col-4 installments-detail">{{ pay.time }}</div>
-                  <div class="col-6 installments-detail">{{ pay.amount }}</div>
+                  <div  *ngIf="formGroup1.value.installmentsFlag" class="col-2 installments-detail">{{ pay.pay }}</div>
+                  <div  *ngIf="formGroup1.value.installmentsFlag" class="col-4 installments-detail">{{ pay.time }}</div>
+                  <div  *ngIf="formGroup1.value.installmentsFlag" class="col-6 installments-detail">{{ pay.amount }}</div>
                 </div>
               </mat-expansion-panel>
             </div>
