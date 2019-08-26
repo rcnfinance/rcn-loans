@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 import { environment } from '../../../environments/environment';
@@ -40,6 +41,7 @@ export class CollateralAddFormComponent implements OnInit {
   estimatedCollateralRatio: number;
 
   constructor(
+    private snackBar: MatSnackBar,
     private web3Service: Web3Service,
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService
@@ -132,6 +134,14 @@ export class CollateralAddFormComponent implements OnInit {
    * @fires submitAdd
    */
   onSubmit(form: FormGroup) {
+    const collateralRatio = Number(this.estimatedCollateralRatio);
+    const balanceRatio = Number(this.balanceRatio);
+
+    if (collateralRatio < balanceRatio) {
+      this.showMessage(`The collateral is too low, make sure it is greater than ${ balanceRatio }%`);
+      return;
+    }
+
     const amount = form.value.amount;
     this.submitAdd.emit(amount);
   }
@@ -221,4 +231,14 @@ export class CollateralAddFormComponent implements OnInit {
     return tokenCost.isZero() ? etherCost : tokenCost;
   }
 
+  /**
+   * Show snackbar with a message
+   * @param message The message to show in the snackbar
+   */
+  private showMessage(message: string) {
+    this.snackBar.open(message , null, {
+      duration: 4000,
+      horizontalPosition: 'center'
+    });
+  }
 }
