@@ -18,7 +18,7 @@
           (keyup)="onAmountChange()"
         >
         <span class="currency">
-          {{ collateralAsset }}
+          {{ collateralSymbol }}
         </span>
       </mat-form-field>
     </div>
@@ -27,7 +27,7 @@
         Collateral amount
       </p>
       <p class="value">
-        {{ estimatedCollateralAmount || collateralAmount }} {{ collateralAsset }}
+        {{ estimatedCollateralAmount || collateralAmount }} {{ collateralSymbol }}
       </p>
     </div>
     <div class="collateral__graphic marginbottom20 col-sm-12">
@@ -51,7 +51,7 @@
       <i class="material-icons marginright5">
         info
       </i>
-      Liquidation Price: XXXXXXXXXXXX
+      Liquidation Price: {{ liquidationPrice }} {{ collateralSymbol }}
     </div>
   </div>
 

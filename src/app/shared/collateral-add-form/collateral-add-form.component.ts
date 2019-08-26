@@ -1,11 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Utils } from '../../utils/utils';
+import { Currency } from '../../utils/currencies';
+import { environment } from '../../../environments/environment';
 // App models
 import { Loan } from '../../models/loan.model';
 import { Collateral } from '../../models/collateral.model';
 // App services
 import { Web3Service } from '../../services/web3.service';
+import { ContractsService } from '../../services/contracts.service';
 import { CurrenciesService } from '../../services/currencies.service';
 
 @Component({
@@ -20,24 +23,33 @@ export class CollateralAddFormComponent implements OnInit {
 
   form: FormGroup;
   collateralAmount: string;
-  collateralAsset: string;
+  collateralAsset: any;
+  collateralSymbol: string;
+  collateralRate: string;
+  collateralInRcn: string;
+  loanCurrency: any;
+  loanRate: string;
+  loanInRcn: string;
   liquidationRatio: number;
+  liquidationPrice: string;
+  collateralRatio: number;
   balanceRatio: number;
   shortAccount: string;
-  collateralRatio: number;
 
   estimatedCollateralAmount: string;
   estimatedCollateralRatio: number;
 
   constructor(
     private web3Service: Web3Service,
+    private contractsService: ContractsService,
     private currenciesService: CurrenciesService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.createFormControls();
-    this.getCollateralDetails();
     this.getAccount();
+    await this.getLoanDetails();
+    await this.getCollateralDetails();
   }
 
   /**
@@ -46,25 +58,44 @@ export class CollateralAddFormComponent implements OnInit {
   createFormControls() {
     this.form = new FormGroup({
       amount: new FormControl(null, [
-        Validators.required,
         Validators.min(0)
       ])
     });
   }
 
   /**
+   * Get loan parsed data
+   */
+  async getLoanDetails() {
+    const web3: any = this.web3Service.web3;
+    const loan: Loan = this.loan;
+    const loanCurrency = this.currenciesService.getCurrencyByKey('symbol', loan.currency.symbol);
+    const loanAmount = new web3.BigNumber(loan.currency.fromUnit(this.loan.amount), 10);
+
+    this.loanCurrency = loanCurrency;
+    this.loanRate = await this.getRate(1, loanCurrency.address);
+    this.loanInRcn = await this.getRate(loanAmount, loanCurrency.address);
+  }
+
+  /**
    * Get collateral parsed data
    */
-  getCollateralDetails() {
+  async getCollateralDetails() {
     const web3: any = this.web3Service.web3;
     const collateral: Collateral = this.collateral;
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
-    const amount = Number(web3.fromWei(collateral.amount));
-    this.collateralAmount = Utils.formatAmount(amount);
-    this.collateralAsset = collateralCurrency.symbol;
+    const currencyDecimals = new Currency(collateralCurrency.symbol);
+    const collateralAmount = new web3.BigNumber(currencyDecimals.fromUnit(collateral.amount), 10);
+
+    this.collateralAmount = Utils.formatAmount(collateralAmount);
+    this.collateralAsset = collateralCurrency;
+    this.collateralSymbol = collateralCurrency.symbol;
+    this.collateralRate = await this.getRate(1, collateralCurrency.address);
+    this.collateralInRcn = await this.getRate(collateralAmount, collateralCurrency.address);
     this.balanceRatio = collateral.balanceRatio / 100;
     this.liquidationRatio = collateral.liquidationRatio / 100;
-    this.collateralRatio = this.calculateCollateralRatio(this.form);
+    this.collateralRatio = this.calculateCollateralRatio();
+    this.liquidationPrice = Utils.formatAmount(this.calculateLiquidationPrice());
   }
 
   /**
@@ -92,7 +123,7 @@ export class CollateralAddFormComponent implements OnInit {
     const estimatedAmount = this.calculateAmount(form);
     this.estimatedCollateralAmount = Utils.formatAmount(estimatedAmount);
 
-    const newCollateralRatio = this.calculateCollateralRatio(form);
+    const newCollateralRatio = this.calculateCollateralRatio();
     this.estimatedCollateralRatio = newCollateralRatio;
   }
 
@@ -106,13 +137,33 @@ export class CollateralAddFormComponent implements OnInit {
   }
 
   /**
+   * Calculate liquidation price
+   * @return Liquidation price in collateral amount
+   */
+  calculateLiquidationPrice() {
+    const web3: any = this.web3Service.web3;
+    const loanInRcn = new web3.BigNumber(this.loanInRcn);
+    const collateralRate = new web3.BigNumber(this.collateralRate);
+    const liquidationRatio = this.liquidationRatio;
+
+    try {
+      let liquidationPrice = new web3.BigNumber(liquidationRatio).mul(loanInRcn).div(100);
+      liquidationPrice = liquidationPrice.div(collateralRate);
+
+      return liquidationPrice;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /**
    * Calculate the new collateral amount
    * @param form Form group
    * @return Collateral amount
    */
   private calculateAmount(form: FormGroup) {
     const web3: any = this.web3Service.web3;
-    const amountToAdd: number = form.value.amount;
+    const amountToAdd: number = form.value.amount || 0;
     const collateralAmount = new web3.BigNumber(this.collateralAmount);
 
     try {
@@ -129,9 +180,45 @@ export class CollateralAddFormComponent implements OnInit {
    * @param form Form group
    * @return Collateral ratio
    */
-  private calculateCollateralRatio(form: FormGroup) {
-    console.info(form);
-    // TODO: calculate new collateral ratio
-    return null;
+  private calculateCollateralRatio() {
+    const web3: any = this.web3Service.web3;
+    const loanInRcn = new web3.BigNumber(this.loanInRcn);
+    const collateralInRcn = new web3.BigNumber(this.collateralRate).mul(this.estimatedCollateralAmount || this.collateralAmount);
+
+    try {
+      const collateralRatio = collateralInRcn.mul(100).div(loanInRcn);
+      return collateralRatio;
+    } catch (e) {
+      return null;
+    }
   }
+
+  /**
+   * Get rate in rcn
+   * @param amount Amount to return
+   * @param token Converter token address
+   * @return Exchange rate
+   */
+  private async getRate(amount: number, token: string) {
+    const web3: any = this.web3Service.web3;
+    const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
+    const fromToken: any = environment.contracts.rcnToken;
+    amount = new web3.BigNumber(amount);
+
+    if (token === fromToken) {
+      return web3.toWei(amount);
+    }
+
+    const rate = await this.contractsService.getCostInToken(
+      web3.toWei(amount),
+      uniswapProxy,
+      fromToken,
+      token
+    );
+    const tokenCost = new web3.BigNumber(rate[0]);
+    const etherCost = new web3.BigNumber(rate[1]);
+
+    return tokenCost.isZero() ? etherCost : tokenCost;
+  }
+
 }
