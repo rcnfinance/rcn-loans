@@ -6,6 +6,8 @@
     [max]="maxRatio"
     [value]="collateralRatio"
     color="primary"
+    disabled
+    (change)="onSliderDrag($event)"
   ></mat-slider>
   <div class="collateral-debt-slider__percentage">
     <div class="percentage percentage--min">

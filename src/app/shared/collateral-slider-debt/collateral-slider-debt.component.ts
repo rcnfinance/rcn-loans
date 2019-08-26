@@ -16,4 +16,7 @@ export class CollateralSliderDebtComponent implements OnInit {
   ngOnInit() {
   }
 
+  onSliderDrag(e) {
+    e.source.value = this.collateralRatio;
+  }
 }
