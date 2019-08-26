@@ -288,12 +288,16 @@ export class CreateLoanComponent implements OnInit {
     for (let i = 0; i < this.installmentsAvailable; i++) {
       const pay = i + 1;
       let payNumber;
-      if (pay === 1) {
-        payNumber = 'st';
-      } else if (pay === 2) {
-        payNumber = 'nd';
-      } else {
-        payNumber = 'th';
+      switch (Number(pay)) {
+        case 1:
+          payNumber = 'st';
+          break;
+        case 2:
+          payNumber = 'nd';
+          break;
+        default:
+          payNumber = 'th';
+          break;
       }
       const time = pay * 15;
       const amount = this.requestValue.value / this.installmentsAvailable;
