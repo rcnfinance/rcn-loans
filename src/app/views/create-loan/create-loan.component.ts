@@ -297,7 +297,7 @@ export class CreateLoanComponent implements OnInit {
       }
       const time = pay * 15;
       const amount = this.requestValue.value / this.installmentsAvailable;
-      const obj = { pay: pay + payNumber, time: time + ' days', amount: amount + ' ' + this.requestedCurrency.value};
+      const obj = { pay: pay + payNumber, time: time + ' days', amount: Utils.formatAmount(amount) + ' ' + this.requestedCurrency.value };
       this.paysDetail.push(obj);
 
     }
