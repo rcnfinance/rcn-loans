@@ -185,6 +185,13 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
     user-select: none;
     cursor: disabled;
   }
+  &.button-rounded {
+    &,
+    &::before {
+      border-radius: 32px;
+      overflow: hidden;
+    }
+  }
 }
 
 // Colors
