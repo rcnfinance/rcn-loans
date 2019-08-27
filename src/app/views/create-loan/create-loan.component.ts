@@ -65,6 +65,7 @@ export class CreateLoanComponent implements OnInit {
 
   // Collateral form
   formGroup2: FormGroup;
+  balanceRatio: FormControl;
   collateralAdjustment: FormControl;
   collateralAsset: FormControl;
   collateralAmount: FormControl;
@@ -210,7 +211,6 @@ export class CreateLoanComponent implements OnInit {
     const secondsInDay = 86400;
     const oracle: string = loan.oracle ? loan.oracle.address : undefined;
     const currency: string = loan.currency.symbol;
-    const selectedCurrency: any = this.currencies.filter(item => item.currency === currency)[0];
     const requestValue = web3.fromWei(loan.amount);
     const duration = loan.descriptor.duration / secondsInDay;
     const installmentsFlag = loan.descriptor.installments > 1 ? true : false;
@@ -233,7 +233,6 @@ export class CreateLoanComponent implements OnInit {
       expirationRequestDate: 7
     });
 
-    this.onCurrencyChange(selectedCurrency);
     this.onRequestedChange(requestValue);
     this.onDurationChange();
   }
@@ -313,6 +312,7 @@ export class CreateLoanComponent implements OnInit {
     this.collateralAsset = new FormControl(null, Validators.required);
     this.collateralAmount = new FormControl(null, Validators.required);
     this.liquidationRatio = new FormControl(150, Validators.required);
+    this.balanceRatio = new FormControl(200, Validators.required);
   }
 
   /**
@@ -337,7 +337,8 @@ export class CreateLoanComponent implements OnInit {
       collateralAdjustment: this.collateralAdjustment,
       collateralAsset: this.collateralAsset,
       collateralAmount: this.collateralAmount,
-      liquidationRatio: this.liquidationRatio
+      liquidationRatio: this.liquidationRatio,
+      balanceRatio: this.balanceRatio
     });
   }
 
@@ -417,7 +418,7 @@ export class CreateLoanComponent implements OnInit {
     const collateralToken: string = form.value.collateralAsset.address;
     const collateralAmount: string = web3.toWei(form.value.collateralAmount);
     const liquidationRatio: number = new web3.BigNumber(form.value.liquidationRatio).mul(100);
-    const balanceRatio: any = new web3.BigNumber(form.value.collateralAdjustment).mul(100);
+    const balanceRatio: any = new web3.BigNumber(form.value.balanceRatio).mul(100);
     const burnFee = new web3.BigNumber(500);
     const rewardFee = new web3.BigNumber(500);
     const account = this.account;
@@ -443,21 +444,21 @@ export class CreateLoanComponent implements OnInit {
    * Calculate required amount in collateral token
    * @param loanAmount Loan amount in rcn
    * @param loanCurrency Loan currency token symbol
-   * @param balanceRatio Collateral balance ratio
+   * @param collateralRatio Collateral balance ratio
    * @param collateralAsset Collateral currency
    * @return Collateral amount in collateral asset
    */
   async calculateCollateralAmount(
     loanAmount: number,
     loanCurrency: string,
-    balanceRatio: number,
+    collateralRatio: number,
     collateralAsset: string
   ) {
     const web3: any = this.web3Service.web3;
-    balanceRatio = new web3.BigNumber(balanceRatio).div(100);
+    collateralRatio = new web3.BigNumber(collateralRatio).div(100);
 
     // calculate amount in rcn
-    let collateralAmount = new web3.BigNumber(balanceRatio).mul(loanAmount);
+    let collateralAmount = new web3.BigNumber(collateralRatio).mul(loanAmount);
     collateralAmount = collateralAmount.div(100);
 
     // convert amount to collateral asset
@@ -584,6 +585,7 @@ export class CreateLoanComponent implements OnInit {
   onLiquidationRatioChange() {
     this.radioChange();
     this.updateBalanceRatio();
+    this.updateCollateralRatio();
     this.updateCollateralAmount();
   }
 
@@ -596,7 +598,7 @@ export class CreateLoanComponent implements OnInit {
         this.collateralAmountObserver = observer;
       }).pipe(debounceTime(300))
         .pipe(distinctUntilChanged())
-        .subscribe(async () => await this.calculateBalanceRatio());
+        .subscribe(async () => await this.calculateCollateralRatio());
     }
 
     this.collateralAmountObserver.next(collateralValue);
@@ -605,8 +607,8 @@ export class CreateLoanComponent implements OnInit {
   /**
    * Calculate the collateral amount
    */
-  onBalanceRatioChange() {
-    this.updateBalanceRatio();
+  onCollateralRatioChange() {
+    this.updateCollateralRatio();
     this.updateCollateralAmount();
   }
 
@@ -623,7 +625,7 @@ export class CreateLoanComponent implements OnInit {
     this.updateCollateralAmount();
   }
 
-  async calculateBalanceRatio() {
+  async calculateCollateralRatio() {
     const web3: any = this.web3Service.web3;
     const loanForm: FormGroup = this.formGroup1;
     const collateralForm: FormGroup = this.formGroup2;
@@ -649,15 +651,15 @@ export class CreateLoanComponent implements OnInit {
       );
       loanAmountInCollateral = web3.fromWei(loanAmountInCollateral);
 
-      const balanceRatio = (collateralAmount.mul(100)).div(loanAmountInCollateral);
+      const collateralRatio = (collateralAmount.mul(100)).div(loanAmountInCollateral);
 
-      if (balanceRatio >= balanceRatioMaxLimit) {
+      if (collateralRatio >= balanceRatioMaxLimit) {
         this.showMessage('Choose a smaller collateral amount', 'snackbar');
         return false;
       }
 
       this.formGroup2.patchValue({
-        collateralAdjustment: Utils.formatAmount(balanceRatio, 0)
+        collateralAdjustment: Utils.formatAmount(collateralRatio, 0)
       });
     } catch (e) {
       throw Error(e);
@@ -665,17 +667,29 @@ export class CreateLoanComponent implements OnInit {
   }
 
   /**
-   * Update balance ratio slider
+   * Update balance ratio
    */
   updateBalanceRatio() {
     const form: FormGroup = this.formGroup2;
-    const balanceRatio: number = form.value.collateralAdjustment;
     const liquidationRatio: number = form.value.liquidationRatio;
-    const minBalanceRatio: number = (liquidationRatio + 50);
+    const balanceRatio: number = liquidationRatio + 50;
 
-    if (balanceRatio < minBalanceRatio) {
+    this.formGroup2.patchValue({
+      balanceRatio
+    });
+  }
+
+  /**
+   * Update collateral ratio slider
+   */
+  updateCollateralRatio() {
+    const form: FormGroup = this.formGroup2;
+    const balanceRatio: number = form.value.balanceRatio;
+    const collateralRatio: number = form.value.collateralAdjustment;
+
+    if (collateralRatio < balanceRatio) {
       this.formGroup2.patchValue({
-        collateralAdjustment: minBalanceRatio
+        collateralAdjustment: balanceRatio
       });
     }
   }
@@ -687,15 +701,15 @@ export class CreateLoanComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const loanForm: FormGroup = this.formGroup1;
     const collateralForm: FormGroup = this.formGroup2;
-    const balanceRatio: any = new web3.BigNumber(collateralForm.value.collateralAdjustment);
-    const balanceRatioMinLimit = 0;
-    const balanceRatioMaxLimit = 5000;
+    const collateralRatio: any = new web3.BigNumber(collateralForm.value.collateralAdjustment);
+    const collateralRatioMinLimit = 0;
+    const collateralRatioMaxLimit = 5000;
 
-    if (balanceRatio <= balanceRatioMinLimit) {
+    if (collateralRatio <= collateralRatioMinLimit) {
       this.showMessage('Choose a larger collateral amount', 'snackbar');
       return false;
     }
-    if (balanceRatio >= balanceRatioMaxLimit) {
+    if (collateralRatio >= collateralRatioMaxLimit) {
       this.showMessage('Choose a smaller collateral amount', 'snackbar');
       return false;
     }
@@ -708,7 +722,7 @@ export class CreateLoanComponent implements OnInit {
       const amount = await this.calculateCollateralAmount(
         loanAmount,
         loanCurrency,
-        balanceRatio.mul(100),
+        collateralRatio.mul(100),
         collateralCurrency
       );
 
