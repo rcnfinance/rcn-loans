@@ -17,6 +17,8 @@
       ></app-collateral-add-form>
       <app-collateral-withdraw-form
         *ngSwitchCase="'withdraw'"
+        [loan]="loan"
+        [collateral]="collateral"
         (submitWithdraw)="withdrawCollateral($event)"
       ></app-collateral-withdraw-form>
     </ng-container>

@@ -130,6 +130,7 @@ export class CollateralAddFormComponent implements OnInit {
 
   /**
    * Emitted when form is submitted
+   * @param form Form group
    * @fires submitAdd
    */
   onSubmit(form: FormGroup) {
@@ -186,7 +187,6 @@ export class CollateralAddFormComponent implements OnInit {
 
   /**
    * Calculate the new collateral ratio
-   * @param form Form group
    * @return Collateral ratio
    */
   private calculateCollateralRatio() {
