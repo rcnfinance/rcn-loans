@@ -138,13 +138,17 @@ export class CollateralWithdrawFormComponent implements OnInit {
   onSubmit(form: FormGroup) {
     const collateralRatio = Number(this.estimatedCollateralRatio);
     const balanceRatio = Number(this.balanceRatio);
+    const amount = form.value.amount;
 
     if (collateralRatio < balanceRatio) {
       this.showMessage(`The collateral is too low, make sure it is greater than ${ balanceRatio }%`);
       return;
     }
+    if (amount <= 0) {
+      this.showMessage(`The collateral amount must be greater than 0`);
+      return;
+    }
 
-    const amount = form.value.amount;
     this.submitWithdraw.emit(amount);
   }
 

@@ -27,6 +27,7 @@
     .value {
       @extend %roboto-regular;
       font-size: 2em;
+      width: 250px;
     }
   }
   &__graphic {
