@@ -259,30 +259,10 @@ export class LoanDetailComponent implements OnInit {
 
     this.isDiaspore = this.loan.network === Network.Diaspore;
 
-    if (this.loan.network === Network.Diaspore) {
-      const installments: number = this.loan.descriptor.installments;
-      const installmentDuration: string = Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments);
-      const installmentAmount: number = this.loan.currency.fromUnit(this.loan.descriptor.firstObligation);
-      const installmentCurrency: string = this.loan.currency.symbol;
-      const nextInstallment: number = this.isRequest ? 1 : null; // TODO - Next installment
-      const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
-
-      this.diasporeData = [
-        ['Installments', 'Duration', 'Cuota'],
-        [
-          installments,
-          installmentDuration,
-          `${ installmentAmount } ${ installmentCurrency }`
-        ]
-      ];
-
-      this.nextInstallment = {
-        installment: `${ nextInstallment + addSuffix(nextInstallment) } Pay`,
-        amount: `${ Utils.formatAmount(installmentAmount) } ${ installmentCurrency }`,
-        dueDate: installmentDuration,
-        dueTime: null
-      };
+    if (this.isDiaspore) {
+      this.loadInstallments();
     }
+
     this.loadUserActions();
   }
 
@@ -320,6 +300,34 @@ export class LoanDetailComponent implements OnInit {
         break;
       }
     }
+  }
+
+  /**
+   * Load next installment data
+   */
+  private loadInstallments() {
+    const installments: number = this.loan.descriptor.installments;
+    const installmentDuration: string = Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments);
+    const installmentAmount: number = this.loan.currency.fromUnit(this.loan.descriptor.firstObligation);
+    const installmentCurrency: string = this.loan.currency.symbol;
+    const nextInstallment: number = this.isRequest ? 1 : 1; // TODO - Next installment
+    const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+
+    this.diasporeData = [
+      ['Installments', 'Duration', 'Cuota'],
+      [
+        installments,
+        installmentDuration,
+        `${ installmentAmount } ${ installmentCurrency }`
+      ]
+    ];
+
+    this.nextInstallment = {
+      installment: `${ nextInstallment + addSuffix(nextInstallment) } Pay`,
+      amount: `${ Utils.formatAmount(installmentAmount) } ${ installmentCurrency }`,
+      dueDate: installmentDuration,
+      dueTime: null
+    };
   }
 
   private invalidActions() {

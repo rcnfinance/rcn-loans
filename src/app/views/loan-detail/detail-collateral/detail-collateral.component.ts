@@ -31,8 +31,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   liquidationRatio: string;
   balanceRatio: string;
 
-  loanCurrency; // FIXME: neccesary?
-  loanRate: number; // FIXME: neccesary?
+  loanCurrency;
   loanInRcn: string;
   currentLoanToValue: string;
   currentExchangeRate: string;
@@ -82,7 +81,6 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     const loanAmount = new web3.BigNumber(loan.currency.fromUnit(this.loan.amount), 10);
 
     this.loanCurrency = loanCurrency;
-    this.loanRate = await this.contractsService.getCostInToken(1, loanCurrency.address);
     this.loanInRcn = await this.contractsService.getCostInToken(loanAmount, loanCurrency.address);
   }
 
