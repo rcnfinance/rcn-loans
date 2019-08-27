@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
-import { environment } from '../../../environments/environment';
 // App models
 import { Loan } from '../../models/loan.model';
 import { Collateral } from '../../models/collateral.model';
@@ -75,8 +74,8 @@ export class CollateralAddFormComponent implements OnInit {
     const loanAmount = new web3.BigNumber(loan.currency.fromUnit(this.loan.amount), 10);
 
     this.loanCurrency = loanCurrency;
-    this.loanRate = await this.getRate(1, loanCurrency.address);
-    this.loanInRcn = await this.getRate(loanAmount, loanCurrency.address);
+    this.loanRate = await this.contractsService.getCostInToken(1, loanCurrency.address);
+    this.loanInRcn = await this.contractsService.getCostInToken(loanAmount, loanCurrency.address);
   }
 
   /**
@@ -92,8 +91,8 @@ export class CollateralAddFormComponent implements OnInit {
     this.collateralAmount = Utils.formatAmount(collateralAmount);
     this.collateralAsset = collateralCurrency;
     this.collateralSymbol = collateralCurrency.symbol;
-    this.collateralRate = await this.getRate(1, collateralCurrency.address);
-    this.collateralInRcn = await this.getRate(collateralAmount, collateralCurrency.address);
+    this.collateralRate = await this.contractsService.getCostInToken(1, collateralCurrency.address);
+    this.collateralInRcn = await this.contractsService.getCostInToken(collateralAmount, collateralCurrency.address);
     this.balanceRatio = collateral.balanceRatio / 100;
     this.liquidationRatio = collateral.liquidationRatio / 100;
     this.collateralRatio = this.calculateCollateralRatio();
@@ -201,34 +200,6 @@ export class CollateralAddFormComponent implements OnInit {
     } catch (e) {
       return null;
     }
-  }
-
-  /**
-   * Get rate in rcn
-   * @param amount Amount to return
-   * @param token Converter token address
-   * @return Exchange rate
-   */
-  private async getRate(amount: number, token: string) {
-    const web3: any = this.web3Service.web3;
-    const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
-    const fromToken: any = environment.contracts.rcnToken;
-    amount = new web3.BigNumber(amount);
-
-    if (token === fromToken) {
-      return web3.toWei(amount);
-    }
-
-    const rate = await this.contractsService.getCostInToken(
-      web3.toWei(amount),
-      uniswapProxy,
-      fromToken,
-      token
-    );
-    const tokenCost = new web3.BigNumber(rate[0]);
-    const etherCost = new web3.BigNumber(rate[1]);
-
-    return tokenCost.isZero() ? etherCost : tokenCost;
   }
 
   /**

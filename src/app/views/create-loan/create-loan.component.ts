@@ -468,7 +468,7 @@ export class CreateLoanComponent implements OnInit {
       const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
       const fromToken: any = this.currencies.filter(currency => currency.currency === collateralAsset)[0].address;
       const token: any = environment.contracts.rcnToken;
-      const collateralTokenAmount = await this.contractsService.getCostInToken(
+      const collateralTokenAmount = await this.contractsService.getCost(
         web3.toWei(collateralAmount),
         uniswapProxy,
         fromToken,

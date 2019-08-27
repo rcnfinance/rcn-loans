@@ -256,6 +256,36 @@ export class ContractsService {
   }
 
   /**
+   * Get cost in rcn
+   * @param amount Amount to calculate cost
+   * @param converter Converter address to use for swap
+   * @param fromToken Token to convert
+   * @param token RCN Token address
+   * @return _tokenCost and _etherCost
+   */
+  async getCostInToken(amount: number, token: string) {
+    const web3: any = this.web3.web3;
+    const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
+    const fromToken: any = environment.contracts.rcnToken;
+    amount = new web3.BigNumber(amount);
+
+    if (token === fromToken) {
+      return web3.toWei(amount);
+    }
+
+    const rate = await this.getCost(
+      web3.toWei(amount),
+      uniswapProxy,
+      fromToken,
+      token
+    );
+    const tokenCost = new web3.BigNumber(rate[0]);
+    const etherCost = new web3.BigNumber(rate[1]);
+
+    return tokenCost.isZero() ? etherCost : tokenCost;
+  }
+
+  /**
    * Get the cost, in wei, of making a convertion using the value specified
    * @param amount Amount to calculate cost
    * @param converter Converter address to use for swap
@@ -263,7 +293,7 @@ export class ContractsService {
    * @param token RCN Token address
    * @return _tokenCost and _etherCost
    */
-  async getCostInToken(
+  async getCost(
     amount: number,
     converter: string,
     fromToken: string,

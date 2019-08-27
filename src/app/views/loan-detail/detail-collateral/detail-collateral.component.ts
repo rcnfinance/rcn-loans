@@ -132,7 +132,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
 
     const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
     const token: any = environment.contracts.rcnToken;
-    const rate = await this.contractsService.getCostInToken(
+    const rate = await this.contractsService.getCost(
       amount,
       uniswapProxy,
       collateralAsset,
