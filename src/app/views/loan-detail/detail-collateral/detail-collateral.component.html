@@ -51,8 +51,8 @@
             </div>
           </article>
         </div>
-        <div class="collateral-detail__footer" *ngIf="canAdjust">
-          <div class="row row--header">
+        <div class="collateral-detail__footer">
+          <div class="row row--header" *ngIf="canAdjust">
             <div class="item col col-12 col-md-7">
               <h4>
                 Adjust collateral
@@ -80,7 +80,7 @@
               </button>
             </div>
           </div>
-          <div class="row row--footer" *ngIf="loan?.debt">
+          <div class="row row--footer" [class.row--divisor]="canAdjust" *ngIf="loan?.debt">
             <div class="item col col-12 col-md-4">
               <i class="fa fa-percentage"></i>
               Current Loan To Value:
@@ -99,7 +99,7 @@
               <i class="fa fa-chart-line"></i>
               Current Liquidation Price:
               <strong class="item__value">
-                {{ currentLiquidationPrice }} {{ loanCurrency }}
+                {{ currentLiquidationPrice }} {{ collateralAsset }}
               </strong>
             </div>
           </div>

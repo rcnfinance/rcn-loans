@@ -76,13 +76,6 @@
         }
       }
       &--footer {
-        &::before {
-          content: '';
-          width: 100%;
-          height: 1px;
-          margin: 0 16px 6px;
-          background: $gray7;
-        }
         .item {
           @extend %roboto-light;
           @extend .font12;
@@ -96,6 +89,15 @@
             @extend .font14;
             display: block;
           }
+        }
+      }
+      &--divisor {
+        &::before {
+          content: '';
+          width: 100%;
+          height: 1px;
+          margin: 0 16px 6px;
+          background: $gray7;
         }
       }
     }

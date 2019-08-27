@@ -87,7 +87,6 @@ export class CollateralAddFormComponent implements OnInit {
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
     const currencyDecimals = new Currency(collateralCurrency.symbol);
     const collateralAmount = new web3.BigNumber(currencyDecimals.fromUnit(collateral.amount), 10);
-
     this.collateralAmount = Utils.formatAmount(collateralAmount);
     this.collateralAsset = collateralCurrency;
     this.collateralSymbol = collateralCurrency.symbol;
@@ -96,7 +95,9 @@ export class CollateralAddFormComponent implements OnInit {
     this.balanceRatio = collateral.balanceRatio / 100;
     this.liquidationRatio = collateral.liquidationRatio / 100;
     this.collateralRatio = this.calculateCollateralRatio();
-    this.liquidationPrice = Utils.formatAmount(this.calculateLiquidationPrice());
+
+    const liquidationPrice = await this.calculateLiquidationPrice();
+    this.liquidationPrice = Utils.formatAmount(liquidationPrice);
   }
 
   /**
@@ -154,14 +155,15 @@ export class CollateralAddFormComponent implements OnInit {
    * Calculate liquidation price
    * @return Liquidation price in collateral amount
    */
-  calculateLiquidationPrice() {
+  async calculateLiquidationPrice() {
     const web3: any = this.web3Service.web3;
-    const loanInRcn = new web3.BigNumber(this.loanInRcn);
     const collateralRate = new web3.BigNumber(this.collateralRate);
     const liquidationRatio = this.liquidationRatio;
+    let debtInRcn = await this.contractsService.getClosingObligation(this.loan.id);
+    debtInRcn = new web3.BigNumber(debtInRcn || 0);
 
     try {
-      let liquidationPrice = new web3.BigNumber(liquidationRatio).mul(loanInRcn).div(100);
+      let liquidationPrice = new web3.BigNumber(liquidationRatio).mul(debtInRcn).div(100);
       liquidationPrice = liquidationPrice.div(collateralRate);
 
       return liquidationPrice;
