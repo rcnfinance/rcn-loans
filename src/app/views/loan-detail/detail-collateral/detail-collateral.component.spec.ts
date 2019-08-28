@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '../../../material/material.module';
 import { SharedModule } from '../../../shared/shared.module';
 import { CurrenciesService } from '../../../services/currencies.service';
+import { CollateralService } from '../../../services/collateral.service';
 import { DetailCollateralComponent } from './detail-collateral.component';
 
 describe('DetailCollateralComponent', () => {
@@ -23,6 +24,7 @@ describe('DetailCollateralComponent', () => {
       ],
       providers: [
         CurrenciesService,
+        CollateralService,
         {
           provide: APP_BASE_HREF, useValue: '/'
         }
