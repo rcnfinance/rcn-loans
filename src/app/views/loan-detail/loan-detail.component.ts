@@ -19,6 +19,7 @@ import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
 import { CurrenciesService } from './../../services/currencies.service';
+import { Type } from './../../tx.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -146,11 +147,43 @@ export class LoanDetailComponent implements OnInit {
     this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
   }
 
+  /**
+   * Update collateral amount and reload collateral information
+   * @param event EventEmitter payload
+   * @param event.type Collateral action type
+   * @param event.amount Amount to add or withdraw in wei
+   */
+  updateCollateral(event: {
+    type: string,
+    amount: number
+  }) {
+    const web3: any = this.web3Service.web3;
+    let amount = web3.fromWei(event.amount);
+
+    switch (event.type) {
+      case Type.addCollateral:
+        amount = new web3.BigNumber(this.collateralAmount).add(amount);
+        break;
+
+      case Type.withdrawCollateral:
+        amount = new web3.BigNumber(this.collateralAmount).sub(amount);
+        break;
+
+      default:
+        break;
+    }
+
+    this.collateralAmount = Utils.formatAmount(amount);
+    setTimeout(() => this.loadCollateral(), 1500);
+  }
+
+  /**
+   *
+   */
   private async loadAccount() {
-    this.web3Service.getAccount().then((account) => {
-      this.userAccount = account;
-      this.loadUserActions();
-    });
+    const account = await this.web3Service.getAccount();
+    this.userAccount = account;
+    this.loadUserActions();
   }
 
   /**

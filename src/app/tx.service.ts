@@ -234,11 +234,12 @@ export class TxService {
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
   }
 
-  registerAddCollateralTx(tx: string, loan: Loan, collateral: Collateral) {
+  registerAddCollateralTx(tx: string, loan: Loan, collateral: Collateral, amount: number) {
     const data = {
       engine: loan.address,
       id: loan.id,
-      collateralId: collateral.id
+      collateralId: collateral.id,
+      collateralAmount: amount
     };
     this.registerTx(new Tx(tx, data.engine, false, Type.addCollateral, data));
   }
@@ -253,11 +254,12 @@ export class TxService {
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
   }
 
-  registerWithdrawCollateralTx(tx: string, loan: Loan, collateral: Collateral) {
+  registerWithdrawCollateralTx(tx: string, loan: Loan, collateral: Collateral, amount: number) {
     const data = {
       engine: loan.address,
       id: loan.id,
-      collateralId: collateral.id
+      collateralId: collateral.id,
+      collateralAmount: amount
     };
     this.registerTx(new Tx(tx, data.engine, false, Type.withdrawCollateral, data));
   }

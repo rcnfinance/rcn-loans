@@ -54,7 +54,7 @@ export class DialogCollateralComponent implements OnInit {
       this.account
     );
 
-    this.txService.registerAddCollateralTx(tx, this.loan, this.collateral);
+    this.txService.registerAddCollateralTx(tx, this.loan, this.collateral, web3.toWei(amount));
     this.dialogRef.close(tx);
   }
 
@@ -72,7 +72,7 @@ export class DialogCollateralComponent implements OnInit {
       this.account
     );
 
-    this.txService.registerWithdrawCollateralTx(tx, this.loan, this.collateral);
+    this.txService.registerWithdrawCollateralTx(tx, this.loan, this.collateral, web3.toWei(amount));
     this.dialogRef.close(tx);
   }
 

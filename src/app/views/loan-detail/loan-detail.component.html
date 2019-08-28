@@ -321,7 +321,7 @@
         [loan]="loan"
         [collateral]="collateral"
         [canAdjust]="canAdjustCollateral"
-        (updateCollateral)="loadCollateral()"
+        (updateCollateral)="updateCollateral($event)"
       ></app-detail-collateral>
       <app-detail-installments
         *ngIf="isDetail('installments')"

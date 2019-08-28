@@ -9,6 +9,7 @@ import { Collateral } from './../../../models/collateral.model';
 // App Services
 import { Web3Service } from './../../../services/web3.service';
 import { ContractsService } from './../../../services/contracts.service';
+import { CollateralService } from './../../../services/collateral.service';
 import { CurrenciesService } from './../../../services/currencies.service';
 import { Tx, TxService, Type } from './../../../tx.service';
 
@@ -44,6 +45,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     private dialog: MatDialog,
     private web3Service: Web3Service,
     private contractsService: ContractsService,
+    private collateralService: CollateralService,
     private currenciesService: CurrenciesService,
     private txService: TxService
   ) { }
@@ -52,7 +54,10 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     this.txService.subscribeConfirmedTx(async (tx: Tx) => {
       if (tx.type === Type.addCollateral || tx.type === Type.withdrawCollateral) {
         if (this.addPendingTx || this.withdrawPendingTx) {
-          this.updateCollateral.emit();
+          this.updateCollateral.emit({
+            type: tx.type,
+            amount: tx.data.collateralAmount
+          });
         }
         this.retrievePendingTx();
       }
@@ -129,38 +134,25 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    * Calculate the new collateral ratio
    * @return Collateral ratio
    */
-  calculateCollateralRatio() {
-    const web3: any = this.web3Service.web3;
-    const loanInRcn = new web3.BigNumber(this.loanInRcn);
-    const collateralInRcn = new web3.BigNumber(this.collateralRate).mul(this.collateralAmount);
-
-    try {
-      const collateralRatio = collateralInRcn.mul(100).div(loanInRcn);
-      return collateralRatio;
-    } catch (e) {
-      return null;
-    }
+  calculateCollateralRatio(): Number {
+    return this.collateralService.calculateCollateralRatio(
+      this.loanInRcn,
+      this.collateralRate,
+      this.collateralAmount
+    );
   }
 
   /**
    * Calculate liquidation price
    * @return Liquidation price in collateral amount
    */
-  async calculateLiquidationPrice() {
-    const web3: any = this.web3Service.web3;
-    const collateralRate = new web3.BigNumber(this.collateralRate);
-    const liquidationRatio = this.liquidationRatio;
-    let debtInRcn = await this.contractsService.getClosingObligation(this.loan.id);
-    debtInRcn = new web3.BigNumber(debtInRcn || 0);
-
-    try {
-      let liquidationPrice = new web3.BigNumber(liquidationRatio).mul(debtInRcn).div(100);
-      liquidationPrice = liquidationPrice.div(collateralRate);
-
-      return liquidationPrice;
-    } catch (e) {
-      return null;
-    }
+  async calculateLiquidationPrice(): Promise<Number> {
+    return this.collateralService.calculateLiquidationPrice(
+      this.loan.id,
+      this.collateralRate,
+      this.liquidationRatio,
+      this.loanInRcn
+    );
   }
 
   /**
@@ -172,7 +164,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   async getRate(
     loanCurrency: string,
     collateralAsset: string
-  ) {
+  ): Promise<Number> {
     const web3: any = this.web3Service.web3;
     const amount = web3.toWei(new web3.BigNumber(1));
 
