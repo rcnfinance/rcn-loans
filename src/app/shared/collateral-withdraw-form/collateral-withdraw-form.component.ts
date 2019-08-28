@@ -9,6 +9,7 @@ import { Collateral } from '../../models/collateral.model';
 // App services
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
+import { CollateralService } from '../../services/collateral.service';
 import { CurrenciesService } from '../../services/currencies.service';
 
 @Component({
@@ -44,6 +45,7 @@ export class CollateralWithdrawFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private web3Service: Web3Service,
     private contractsService: ContractsService,
+    private collateralService: CollateralService,
     private currenciesService: CurrenciesService
   ) { }
 
@@ -99,6 +101,9 @@ export class CollateralWithdrawFormComponent implements OnInit {
 
     const liquidationPrice = await this.calculateLiquidationPrice();
     this.liquidationPrice = Utils.formatAmount(liquidationPrice);
+
+    const maxWithdraw = this.calculateMaxWithdraw();
+    this.maxWithdraw = Utils.formatAmount(maxWithdraw);
   }
 
   /**
@@ -171,20 +176,12 @@ export class CollateralWithdrawFormComponent implements OnInit {
    * @return Liquidation price in collateral amount
    */
   async calculateLiquidationPrice() {
-    const web3: any = this.web3Service.web3;
-    const collateralRate = new web3.BigNumber(this.collateralRate);
-    const liquidationRatio = this.liquidationRatio;
-    let debtInRcn = await this.contractsService.getClosingObligation(this.loan.id);
-    debtInRcn = new web3.BigNumber(debtInRcn || 0);
-
-    try {
-      let liquidationPrice = new web3.BigNumber(liquidationRatio).mul(debtInRcn).div(100);
-      liquidationPrice = liquidationPrice.div(collateralRate);
-
-      return liquidationPrice;
-    } catch (e) {
-      return null;
-    }
+    return this.collateralService.calculateLiquidationPrice(
+      this.loan.id,
+      this.collateralRate,
+      this.liquidationRatio,
+      this.loanInRcn
+    );
   }
 
   /**
@@ -214,16 +211,11 @@ export class CollateralWithdrawFormComponent implements OnInit {
    * @return Collateral ratio
    */
   private calculateCollateralRatio() {
-    const web3: any = this.web3Service.web3;
-    const loanInRcn = new web3.BigNumber(this.loanInRcn);
-    const collateralInRcn = new web3.BigNumber(this.collateralRate).mul(this.estimatedCollateralAmount || this.collateralAmount);
-
-    try {
-      const collateralRatio = collateralInRcn.mul(100).div(loanInRcn);
-      return collateralRatio;
-    } catch (e) {
-      return null;
-    }
+    return this.collateralService.calculateCollateralRatio(
+      this.loanInRcn,
+      this.collateralRate,
+      this.estimatedCollateralAmount || this.collateralAmount
+    );
   }
 
   /**
@@ -234,7 +226,12 @@ export class CollateralWithdrawFormComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const balanceRatio = this.balanceRatio;
     const collateralRatio = this.calculateCollateralRatio();
-    const diffRatio = Math.floor(collateralRatio.sub(balanceRatio));
+    const diffRatio = collateralRatio.sub(balanceRatio);
+
+    if (diffRatio <= 0) {
+      return 0;
+    }
+
     const collateralAmount = this.collateralInRcn;
     const collateralRate = this.collateralRate;
     const diffAmount = new web3.BigNumber(diffRatio).mul(collateralAmount).div(collateralRatio);
