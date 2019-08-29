@@ -15,6 +15,7 @@
           step="any"
           formControlName="amount"
           placeholder="Set amount"
+          [readonly]="loading"
           (keyup)="onAmountChange()"
         >
         <span class="currency">

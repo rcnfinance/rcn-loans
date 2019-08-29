@@ -98,6 +98,7 @@ export class DialogCollateralComponent implements OnInit {
     this.startProgress = false;
     this.finishProgress = false;
     this.retrievePendingTx();
+    this.dialogRef.close();
   }
 
   /**
