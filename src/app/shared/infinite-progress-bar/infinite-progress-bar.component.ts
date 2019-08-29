@@ -24,11 +24,24 @@ export class InfiniteProgressBarComponent implements OnInit, OnChanges {
     }
   }
 
-  ngOnChanges(e) {
-    console.info('infinite progress bar changes', e);
-    // TODO: detect START and call this.startProgress()
-    // TODO: detect CANCEL and call this.finishProgress()
-    // TODO: detect END and call this.cancelProgress()
+  ngOnChanges(event) {
+    const {
+      start,
+      end,
+      cancel
+    } = event;
+
+    if (start && start.currentValue) {
+      this.startProgress();
+    }
+
+    if (end && end.currentValue) {
+      this.finishProgress();
+    }
+
+    if (cancel && end.currentValue) {
+      this.cancelProgress();
+    }
   }
 
   /**
@@ -36,6 +49,7 @@ export class InfiniteProgressBarComponent implements OnInit, OnChanges {
    */
   startProgress() {
     this.progress = this.initialProgress;
+    this.stopProgress();
     this.fastProgress();
   }
 
@@ -118,6 +132,10 @@ export class InfiniteProgressBarComponent implements OnInit, OnChanges {
    * Clear and stop progress interval
    */
   stopProgress(interval = this.interval) {
-    clearInterval(interval);
+    try {
+      clearInterval(interval);
+    } catch (e) {
+      throw Error(e);
+    }
   }
 }
