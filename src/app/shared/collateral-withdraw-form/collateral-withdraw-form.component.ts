@@ -20,6 +20,7 @@ import { CurrenciesService } from '../../services/currencies.service';
 export class CollateralWithdrawFormComponent implements OnInit {
   @Input() loan: Loan;
   @Input() collateral: Collateral;
+  @Input() loading: boolean;
   @Output() submitWithdraw = new EventEmitter<number>();
 
   form: FormGroup;
@@ -145,6 +146,9 @@ export class CollateralWithdrawFormComponent implements OnInit {
     const balanceRatio = Number(this.balanceRatio);
     const amount = form.value.amount;
 
+    if (this.loading) {
+      return;
+    }
     if (collateralRatio < balanceRatio) {
       this.showMessage(`The collateral is too low, make sure it is greater than ${ balanceRatio }%`);
       return;
@@ -248,5 +252,16 @@ export class CollateralWithdrawFormComponent implements OnInit {
       duration: 4000,
       horizontalPosition: 'center'
     });
+  }
+
+  /**
+   * Get submit button text
+   * @return Button text
+   */
+  get submitButtonText(): string {
+    if (!this.loading) {
+      return 'Withdraw';
+    }
+    return 'Withdrawing...';
   }
 }

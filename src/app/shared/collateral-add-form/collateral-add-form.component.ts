@@ -20,6 +20,7 @@ import { CurrenciesService } from '../../services/currencies.service';
 export class CollateralAddFormComponent implements OnInit {
   @Input() loan: Loan;
   @Input() collateral: Collateral;
+  @Input() loading: boolean;
   @Output() submitAdd = new EventEmitter<number>();
 
   form: FormGroup;
@@ -141,6 +142,9 @@ export class CollateralAddFormComponent implements OnInit {
     const balanceRatio = Number(this.balanceRatio);
     const amount = form.value.amount;
 
+    if (this.loading) {
+      return;
+    }
     if (collateralRatio < balanceRatio) {
       this.showMessage(`The collateral is too low, make sure it is greater than ${ balanceRatio }%`);
       return;
@@ -206,5 +210,16 @@ export class CollateralAddFormComponent implements OnInit {
       duration: 4000,
       horizontalPosition: 'center'
     });
+  }
+
+  /**
+   * Get submit button text
+   * @return Button text
+   */
+  get submitButtonText(): string {
+    if (!this.loading) {
+      return 'Add';
+    }
+    return 'Adding...';
   }
 }

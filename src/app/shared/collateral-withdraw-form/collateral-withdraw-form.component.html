@@ -82,8 +82,13 @@
       </p>
     </div>
     <div class="dialog-footer__buttons col-sm-12 col-md-6">
-      <button type="submit" mat-raised-button class="button button-primary">
-        Withdraw
+      <button
+        type="submit"
+        mat-raised-button
+        class="button button-primary"
+        [class.button-disabled]="loading"
+      >
+        {{ submitButtonText }}
       </button>
       <button mat-raised-button class="button button-clear-dark mat-elevation-z" [mat-dialog-close]='false'>
         Cancel
