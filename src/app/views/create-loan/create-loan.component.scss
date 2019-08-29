@@ -201,6 +201,14 @@ mat-expansion-panel {
   margin: 0;
   padding: 0;
   white-space: nowrap;
+  .main-title--order {
+    font-family: 'Roboto', sans-serif;
+    margin-right: 10px;
+  }
+  .main-title--divider {
+    font-family: 'Raleway', sans-serif;
+    margin-right: 10px;
+  }
   .main-title-container {
     display: flex;
     align-items: center;
