@@ -384,7 +384,7 @@ export class ContractsService {
         if (err != null) {
           reject(err);
         }
-        resolve(this.parseLoansBytes(result));
+        resolve(LoanCurator.curateLoans(this.parseLoansBytes(result)));
       });
     }) as Promise<Loan[]>;
   }

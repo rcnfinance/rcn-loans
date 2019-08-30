@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fix:
+
+- Fix loans filter in Activity view
+
 --
 
 ## **0.0.13** Avocados - 2019/02/15
@@ -52,7 +56,7 @@
 ### Misc:
 - Display correct status on expired loans
 - Update Decentraland mortgages contracts
-- Hide the transfer button on paid loans 
+- Hide the transfer button on paid loans
 
 ## **0.0.10** Avocados - 2018/10/30
 
