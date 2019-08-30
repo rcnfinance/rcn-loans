@@ -65,7 +65,7 @@
               <button
                 mat-raised-button
                 class="button button-primary"
-                [class.button-disabled]="addPendingTx"
+                [class.button-disabled]="addPendingTx || withdrawPendingTx"
                 (click)="openDialog('add')"
               >
                 {{ addButtonText }}
@@ -73,7 +73,7 @@
               <button
                 mat-raised-button
                 class="button button-clear"
-                [class.button-disabled]="withdrawPendingTx"
+                [class.button-disabled]="addPendingTx || withdrawPendingTx"
                 (click)="openDialog('withdraw')"
               >
                 {{ withdrawButtonText }}

@@ -168,6 +168,10 @@ export class CollateralWithdrawFormComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const maxWithdraw: number = new web3.BigNumber(this.maxWithdraw);
 
+    if (this.loading) {
+      return;
+    }
+
     this.form.patchValue({
       amount: maxWithdraw
     });

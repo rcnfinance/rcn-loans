@@ -51,22 +51,13 @@
       }
     }
   }
-  .transfer-width{
-    min-width: 600px;
-  }
 }
 
 @media (min-width: 992px) {
-  .transfer-width {
-    min-width: 750px;
+  .mat-dialog-content {
+    width: 992px;
   }
   .dialog-padding {
     padding: 30px 60px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .transfer-width {
-    min-width: 900px;
   }
 }
