@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Loan, Network, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
+import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-loan-card',
@@ -19,11 +20,18 @@ export class LoanCardComponent implements OnInit {
   canLend: boolean;
   network: string;
 
+  account: string;
   shortAddress = Utils.shortAddress;
 
-  constructor() { }
+  constructor(
+    private web3Service: Web3Service
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const web3 = this.web3Service.web3;
+    const account = await this.web3Service.getAccount();
+    this.account = web3.toChecksumAddress(account);
+
     if (this.loan.isRequest) {
       const currency = this.loan.currency;
       this.leftLabel = 'Lend';
@@ -33,6 +41,7 @@ export class LoanCardComponent implements OnInit {
       this.rightLabel = 'Return';
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
       this.canLend = true;
+      this.checkCanLend();
     } else if (this.loan instanceof Loan) {
       const currency = this.loan.currency;
       this.leftLabel = 'Paid';
@@ -57,5 +66,13 @@ export class LoanCardComponent implements OnInit {
 
   getPunitiveInterestRate(): string {
     return this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
+  }
+
+  /**
+   * Check if lend is available
+   */
+  checkCanLend() {
+    const isBorrower = this.loan.borrower.toUpperCase() === this.account.toUpperCase();
+    this.canLend = !isBorrower;
   }
 }
