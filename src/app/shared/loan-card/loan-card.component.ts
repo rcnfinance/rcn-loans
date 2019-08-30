@@ -36,8 +36,6 @@ export class LoanCardComponent implements OnInit {
       this.durationValue = Utils.formatDelta(this.loan.descriptor.duration);
       this.rightLabel = 'Return';
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
-      this.canLend = true;
-      this.checkCanLend();
     } else if (this.loan instanceof Loan) {
       const currency = this.loan.currency;
       this.leftLabel = 'Paid';
@@ -58,6 +56,18 @@ export class LoanCardComponent implements OnInit {
     const web3 = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
     this.account = web3.toChecksumAddress(account);
+
+    this.checkCanLend();
+  }
+
+  /**
+   * Check if lend is available
+   */
+  checkCanLend() {
+    if (this.loan.isRequest) {
+      const isBorrower = this.loan.borrower.toUpperCase() === this.account.toUpperCase();
+      this.canLend = !isBorrower;
+    }
   }
 
   getInterestRate(): string {
@@ -66,13 +76,5 @@ export class LoanCardComponent implements OnInit {
 
   getPunitiveInterestRate(): string {
     return this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
-  }
-
-  /**
-   * Check if lend is available
-   */
-  checkCanLend() {
-    const isBorrower = this.loan.borrower.toUpperCase() === this.account.toUpperCase();
-    this.canLend = !isBorrower;
   }
 }
