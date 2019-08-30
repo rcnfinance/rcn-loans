@@ -57,9 +57,6 @@ describe('BannerComponent', () => {
     component.loan = loan;
     fixture.detectChanges();
 
-    const lendButton = readComponent(fixture, 'app-lend-button');
-    expect(lendButton).toBeDefined();
-
     const detailButton = readComponent(fixture, 'app-detail-button');
     expect(detailButton).toBeDefined();
 
