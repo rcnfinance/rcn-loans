@@ -28,7 +28,6 @@ export class CollateralAddFormComponent implements OnInit {
   collateralAsset: any;
   collateralSymbol: string;
   collateralRate: string;
-  collateralInRcn: string;
   loanCurrency: any;
   loanRate: string;
   loanInRcn: string;
@@ -94,7 +93,6 @@ export class CollateralAddFormComponent implements OnInit {
     this.collateralAsset = collateralCurrency;
     this.collateralSymbol = collateralCurrency.symbol;
     this.collateralRate = await this.contractsService.getCostInToken(1, collateralCurrency.address);
-    this.collateralInRcn = await this.contractsService.getCostInToken(collateralAmount, collateralCurrency.address);
     this.balanceRatio = collateral.balanceRatio / 100;
     this.liquidationRatio = collateral.liquidationRatio / 100;
     this.collateralRatio = this.calculateCollateralRatio();

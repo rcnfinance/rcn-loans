@@ -6,7 +6,8 @@ import { Collateral } from '../../models/collateral.model';
 // App services
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
-import { Tx, TxService, Type } from '../../tx.service';
+import { CollateralService } from '../../services/collateral.service';
+import { Tx, TxService } from '../../tx.service';
 
 @Component({
   selector: 'app-dialog-collateral',
@@ -29,6 +30,7 @@ export class DialogCollateralComponent implements OnInit {
     public dialogRef: MatDialogRef<any>,
     private web3Service: Web3Service,
     private contractsService: ContractsService,
+    private collateralService: CollateralService,
     private txService: TxService,
     @Inject(MAT_DIALOG_DATA) data
   ) {
@@ -105,27 +107,10 @@ export class DialogCollateralComponent implements OnInit {
    * Track progressbar value
    */
   trackProgressbar() {
-    const isCurrentTx = (tx: Tx): boolean => {
-      const txHash: string = tx.tx;
-
-      switch (tx.type) {
-        case Type.withdrawCollateral:
-          if (txHash === this.withdrawPendingTx.tx) return true;
-          break;
-
-        case Type.addCollateral:
-          if (txHash === this.addPendingTx.tx) return true;
-          break;
-
-        default:
-          break;
-      }
-    };
-
     if (!this.txSubscription) {
       this.txSubscription = true;
       this.txService.subscribeConfirmedTx(async (tx: Tx) => {
-        if (isCurrentTx(tx)) {
+        if (this.collateralService.isCurrentCollateralTx(tx, this.collateral.id)) {
           this.finishProgress = true;
         }
       });

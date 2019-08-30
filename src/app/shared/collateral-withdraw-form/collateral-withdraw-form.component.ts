@@ -28,7 +28,6 @@ export class CollateralWithdrawFormComponent implements OnInit {
   collateralAsset: any;
   collateralSymbol: string;
   collateralRate: string;
-  collateralInRcn: string;
   loanCurrency: any;
   loanRate: string;
   loanInRcn: string;
@@ -95,7 +94,6 @@ export class CollateralWithdrawFormComponent implements OnInit {
     this.collateralAsset = collateralCurrency;
     this.collateralSymbol = collateralCurrency.symbol;
     this.collateralRate = await this.contractsService.getCostInToken(1, collateralCurrency.address);
-    this.collateralInRcn = await this.contractsService.getCostInToken(collateralAmount, collateralCurrency.address);
     this.balanceRatio = collateral.balanceRatio / 100;
     this.liquidationRatio = collateral.liquidationRatio / 100;
     this.collateralRatio = this.calculateCollateralRatio();
@@ -232,19 +230,13 @@ export class CollateralWithdrawFormComponent implements OnInit {
    */
   private calculateMaxWithdraw() {
     const web3: any = this.web3Service.web3;
-    const balanceRatio = this.balanceRatio;
+    const collateralAmount = this.collateralAmount;
     const collateralRatio = this.calculateCollateralRatio();
-    const diffRatio = collateralRatio.sub(balanceRatio);
+    const balanceRatio = this.balanceRatio;
+    const balanceAmount = new web3.BigNumber(balanceRatio).mul(collateralAmount).div(collateralRatio);
+    const diffAmount = new web3.BigNumber(collateralAmount).sub(balanceAmount);
 
-    if (diffRatio <= 0) {
-      return 0;
-    }
-
-    const collateralAmount = this.collateralInRcn;
-    const collateralRate = this.collateralRate;
-    const diffAmount = new web3.BigNumber(diffRatio).mul(collateralAmount).div(collateralRatio);
-
-    return diffAmount.div(collateralRate);
+    return Math.floor(diffAmount.mul(1000)) / 1000;
   }
 
   /**
