@@ -318,7 +318,7 @@ export class ContractsService {
     // return this.parseLoanBytes(await pdiaspore);
 
     const activeDiasporeLoans = this.apiService.getActiveLoans();
-    return (await activeDiasporeLoans).concat(this.parseBasaltBytes(await pbasalt));
+    return (await activeDiasporeLoans).concat(LoanCurator.curateLoans(this.parseBasaltBytes(await pbasalt)));
     // return activeDiasporeLoans;
 
   }
@@ -336,7 +336,7 @@ export class ContractsService {
         if (err != null) {
           reject(err);
         }
-        resolve(LoanCurator.curateBasaltRequests(this.parseBasaltBytes(result)));
+        resolve(LoanCurator.curateLoans(this.parseBasaltBytes(result)));
       });
     }) as Promise<Loan[]>;
 
@@ -383,7 +383,7 @@ export class ContractsService {
     // return this.parseLoanBytes(await pdiaspore);
 
     const pdiaspore = await this.apiService.getLoansOfLender(lender);
-    return (pdiaspore).concat(this.parseBasaltBytes(pbasalt));
+    return (pdiaspore).concat(LoanCurator.curateLoans(this.parseBasaltBytes(pbasalt)));
 
     // return await pdiaspore;
   }

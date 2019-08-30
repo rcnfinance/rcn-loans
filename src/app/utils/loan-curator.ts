@@ -2,7 +2,7 @@ import { Loan } from '../models/loan.model';
 import { environment } from '../../environments/environment';
 
 export class LoanCurator {
-  static curateBasaltRequests(loans: Loan[]): Loan[] {
+  static curateLoans(loans: Loan[]): Loan[] {
     // return loans;
     return loans.filter(loan => {
       const amount = loan.currency.fromUnit(loan.amount);
