@@ -1,4 +1,3 @@
-import { BigNumber } from 'bignumber.js';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -73,12 +72,12 @@ export class ContractsService {
     return this.web3.web3.eth.contract(abi).at(address);
   }
 
-  async getUserBalanceETHWei(): Promise<BigNumber> {
+  async getUserBalanceETHWei(): Promise<any> {
     const account = await this.web3.getAccount();
     const balance = await this.web3.web3.eth.getBalance(account);
     return new Promise((resolve) => {
       resolve(balance);
-    }) as Promise<BigNumber>;
+    }) as Promise<any>;
   }
 
   async getUserBalanceRCNWei(): Promise<number> {
@@ -339,7 +338,7 @@ export class ContractsService {
     }
   }
 
-  async getRate(loan: any): Promise<BigNumber> {
+  async getRate(loan: any): Promise<any> {
     // TODO: Calculate and add cost of the cosigner
     if (loan.oracle === Utils.address0x) {
       return loan.rawAmount;
@@ -848,7 +847,7 @@ export class ContractsService {
     ]);
   }
 
-  readPendingWithdraws(loans: Loan[]): [BigNumber, number[], BigNumber, number[]] {
+  readPendingWithdraws(loans: Loan[]): [any, number[], any, number[]] {
     const pendingBasaltLoans = [];
     const pendingDiasporeLoans = [];
     let totalBasalt = 0;
