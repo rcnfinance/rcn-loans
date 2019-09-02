@@ -53,6 +53,10 @@
   color: white;
 }
 
+.message-style--italic {
+  font-style: italic;
+}
+
 .italic {
   font-style: italic;
 }
@@ -193,7 +197,7 @@ mat-expansion-panel {
   text-transform: lowercase !important;
 }
 
-.main-title-style {
+.main-title {
   color: #EDEDED;
   font-size: 13.8px;
   font-family: 'Raleway', sans-serif;
@@ -201,11 +205,11 @@ mat-expansion-panel {
   margin: 0;
   padding: 0;
   white-space: nowrap;
-  .main-title--order {
+  &--order {
     font-family: 'Roboto', sans-serif;
     margin-right: 10px;
   }
-  .main-title--divider {
+  &--divider {
     font-family: 'Raleway', sans-serif;
     margin-right: 10px;
   }
@@ -242,6 +246,22 @@ mat-expansion-panel {
       width: 100%;
     }
   }
+}
+
+/deep/ .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: rgb(38, 46, 122);
+}
+
+/deep/ .mat-select-panel .mat-optgroup-label, .mat-select-panel .mat-option {
+  font-family: 'Roboto', sans-serif;
+}
+
+/deep/ .mat-primary .mat-slider-thumb, .mat-primary .mat-slider-thumb-label, .mat-primary .mat-slider-track-fill{
+  background-color: $primary;
+}
+
+/deep/ .mat-select-value-text {
+  font-family: 'Roboto', sans-serif;;
 }
 
 //CARDS

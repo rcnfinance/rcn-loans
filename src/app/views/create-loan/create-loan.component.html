@@ -25,9 +25,9 @@ class="container">
           class="expansion-panel"
         >
           <mat-expansion-panel-header class="expansion-panel__header">
-            <mat-panel-title class="main-title-style">
-              <span class="main-title--order">1</span>
-              <span class="main-title--divider">| </span>
+            <mat-panel-title class="main-title">
+              <span class="main-title main-title--order">1</span>
+              <span class="main-title main-title--divider">| </span>
               SET YOUR LOAN REQUIREMENTS
             </mat-panel-title>
             <ng-container *ngIf="showProgress">
@@ -186,7 +186,7 @@ class="container">
                         *ngFor="let duration of durationDays"
                         [value]="duration"
                       >
-                        {{ duration }} days
+                        {{ duration }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
@@ -206,20 +206,22 @@ class="container">
                     <div class="col-sm-12">
                       <mat-slider
                         class="percentage"
-                        step="10"
+                        step="0.5"
+                        [min]="min"
+                        [max]="max"
                         tickInterval="1"
                         color="primary"
                         thumbLabel="true"
                         formControlName="annualInterest"
                       ></mat-slider>
                       <div class="slider-percentage-box">
-                        <div class="slider-percentaje subtitle-style">10%</div>
-                        <div class="slider-percentaje subtitle-style">20%</div>
+                        <div class="slider-percentaje subtitle-style">{{ minRate }}</div>
+                        <div class="slider-percentaje subtitle-style">{{ maxRate }}</div>
                       </div>
                     </div>
                   </div>
                   <div class="margintop10"></div>
-                  <div class="message-style">
+                  <div class="message-style message-style--italic">
                     <i class="fas fa-info-circle"></i> Higher interestes are
                     more likely to be lended.
                   </div>
