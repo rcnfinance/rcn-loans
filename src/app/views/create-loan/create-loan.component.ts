@@ -44,8 +44,8 @@ export class CreateLoanComponent implements OnInit {
   showProgress = false;
   minRate = '-';
   maxRate = '-';
-  min = "0";
-  max = "0";
+  min = '0';
+  max = '0';
   advisedRate = 0;
   // Pays detail
   paysDetail = [];
