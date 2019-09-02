@@ -67,6 +67,9 @@ class="container">
                             (selectionChange)="onCurrencyChange($event.value)"
                             required
                           >
+                          <!-- <mat-select-trigger *ngIf="getSelectedLabel() as selectedLabel">
+                              <mat-icon [ngStyle]="{'color': selectedLabel.color}">brightness_1</mat-icon>&nbsp;{{selectedLabel.name}}
+                            </mat-select-trigger> -->
                             <mat-option>--</mat-option>
                             <mat-option
                               *ngFor="let currency of currencies"
@@ -201,7 +204,7 @@ class="container">
                   <div class="subtitle-style">
                     Select the interest you want to pay
                   </div>
-                  <div class="margintop20"></div>
+                  <div class="margintop40"></div>
                   <div class="row">
                     <div class="col-sm-12">
                       <mat-slider
@@ -435,7 +438,7 @@ class="container">
                         thumbLabel="true"
                         [min]="formGroup2.value.liquidationRatio"
                         max="400"
-                        (change)="onCollateralRatioChange(); slideChange()"
+                        (change)="onBalanceRatioChange(); slideChange()"
                       ></mat-slider>
                       <div class="slider-percentage-box">
                         <div class="slider-percentaje subtitle-style">
@@ -844,6 +847,36 @@ class="container">
             {{ collateralButtonText }}
           </button>
           <div class="margintop20"></div>
+          <!-- <div><a class="link" href="">Reset all values</a></div>
+          </div>
+          <div class="card-property">
+            <div class="title">{{ "Borrow" }}</div>
+            <div class="block-title">{{ durationLabel }}</div>
+          </div>
+        </div>
+        <div class="card-property-container">
+          <div class="card-icon-container">
+            <i class="fas fa-share card-icon"></i>
+          </div>
+          <div class="card-property">
+            <div class="title">{{ "Return" }}</div>
+            <div class="block-title">{{ durationLabel }}</div>
+          </div>
+        </div>
+        <div class="margintop20"></div>
+        <button
+          mat-raised-button
+          class="button button-primary fullWidth margintop20"
+          [disabled]="!formGroup1.valid || !formGroup2.valid"
+          (click)="onSubmitStep2(fStep2)"
+        >
+          Confirm
+        </button>
+        <div class="margintop20"></div>
+        <div><a class="link" href="">Reset all values</a></div>
+      </div>
+      <div class="margintop20"></div> -->
+          <!-- </mat-expansion-panel> -->
         </div>
       </div>
     </mat-expansion-panel>

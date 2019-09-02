@@ -332,6 +332,8 @@ mat-expansion-panel {
 /deep/ .mat-slider-thumb-label {
   transform: rotate(45deg) !important;
   border-radius: 50% 50% 0 !important;
+  width: 40px !important;
+  height: 40px !important;
 }
 
 /deep/ .mat-slider-thumb {
@@ -340,6 +342,10 @@ mat-expansion-panel {
 
 /deep/ .mat-slider-thumb-label-text {
   opacity: 1 !important;
+}
+
+/deep/ .mat-slider-horizontal .mat-slider-thumb-label {
+  top: -46px !important;
 }
 
 //CARDS
