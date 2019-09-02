@@ -18,6 +18,8 @@ import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
+import { CurrenciesService } from './../../services/currencies.service';
+import { Type } from './../../tx.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -45,6 +47,7 @@ export class LoanDetailComponent implements OnInit {
   canCancel: boolean;
   canPay: boolean;
   canLend: boolean;
+  canAdjustCollateral: boolean;
 
   hasHistory: boolean;
   generatedByUser: boolean;
@@ -56,6 +59,8 @@ export class LoanDetailComponent implements OnInit {
   interest: string;
   duration: string;
   collateral: any;
+  collateralAmount: string;
+  collateralAsset: string;
   nextInstallment: {
     installment: string,
     amount: string,
@@ -64,7 +69,6 @@ export class LoanDetailComponent implements OnInit {
   };
   lendDate: string;
   dueDate: string;
-  lender: string;
   liquidationRatio: string;
   balanceRatio: string;
   punitory: string;
@@ -80,6 +84,7 @@ export class LoanDetailComponent implements OnInit {
     private apiService: ApiService,
     private cosignerService: CosignerService,
     private contractsService: ContractsService,
+    private currenciesService: CurrenciesService,
     private router: Router,
     private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
@@ -90,9 +95,12 @@ export class LoanDetailComponent implements OnInit {
   ngOnInit() {
     this.spinner.show();
     this.loadAccount();
-    this.route.params.subscribe(params => {
-      const id = params['id']; // (+) converts string 'id' to a number
-      this.contractsService.getLoan(id).then(loan => {
+
+    this.route.params.subscribe(async params => {
+      const id = params.id;
+
+      try {
+        const loan = await this.contractsService.getLoan(id);
         this.loan = loan;
         this.hasHistory = true;
         this.brand = this.brandingService.getBrand(this.loan);
@@ -111,11 +119,11 @@ export class LoanDetailComponent implements OnInit {
         this.viewDetail = this.defaultDetail();
 
         this.spinner.hide();
-      }).catch((e: Error) => {
+      } catch (e) {
         console.error(e);
-        console.info('Loan', this.loan.id, 'not found');
+        console.info('Loan', this.loan, 'not found');
         this.router.navigate(['/404/'], { skipLocationChange: true });
-      });
+      }
     });
   }
 
@@ -139,11 +147,43 @@ export class LoanDetailComponent implements OnInit {
     this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
   }
 
+  /**
+   * Update collateral amount and reload collateral information
+   * @param event EventEmitter payload
+   * @param event.type Collateral action type
+   * @param event.amount Amount to add or withdraw in wei
+   */
+  updateCollateral(event: {
+    type: string,
+    amount: number
+  }) {
+    const web3: any = this.web3Service.web3;
+    let amount = web3.fromWei(event.amount);
+
+    switch (event.type) {
+      case Type.addCollateral:
+        amount = new web3.BigNumber(this.collateralAmount).add(amount);
+        break;
+
+      case Type.withdrawCollateral:
+        amount = new web3.BigNumber(this.collateralAmount).sub(amount);
+        break;
+
+      default:
+        break;
+    }
+
+    this.collateralAmount = Utils.formatAmount(amount);
+    setTimeout(() => this.loadCollateral(), 1500);
+  }
+
+  /**
+   *
+   */
   private async loadAccount() {
-    this.web3Service.getAccount().then((account) => {
-      this.userAccount = account;
-      this.loadUserActions();
-    });
+    const account = await this.web3Service.getAccount();
+    this.userAccount = account;
+    this.loadUserActions();
   }
 
   /**
@@ -186,6 +226,10 @@ export class LoanDetailComponent implements OnInit {
 
     this.liquidationRatio = `${ Utils.formatAmount(liquidationRatio) } %`;
     this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
+
+    const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
+    this.collateralAmount = Utils.formatAmount(web3.fromWei(collateral.amount));
+    this.collateralAsset = collateralCurrency.symbol;
   }
 
   private defaultDetail(): string {
@@ -236,7 +280,7 @@ export class LoanDetailComponent implements OnInit {
 
       // Template data
       this.interest = '~ ' + interest + ' %';
-      this.lendDate = dueDate;
+      this.lendDate = lendDate;
       this.dueDate = dueDate;
 
       // Load status data
@@ -248,30 +292,10 @@ export class LoanDetailComponent implements OnInit {
 
     this.isDiaspore = this.loan.network === Network.Diaspore;
 
-    if (this.loan.network === Network.Diaspore) {
-      const installments: number = this.loan.descriptor.installments;
-      const installmentDuration: string = Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments);
-      const installmentAmount: number = this.loan.currency.fromUnit(this.loan.descriptor.firstObligation);
-      const installmentCurrency: string = this.loan.currency.symbol;
-      const nextInstallment: number = this.isRequest ? 1 : null; // TODO - Next installment
-      const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
-
-      this.diasporeData = [
-        ['Installments', 'Duration', 'Cuota'],
-        [
-          installments,
-          installmentDuration,
-          `${ installmentAmount } ${ installmentCurrency }`
-        ]
-      ];
-
-      this.nextInstallment = {
-        installment: `${ nextInstallment + addSuffix(nextInstallment) } Pay`,
-        amount: `${ Utils.formatAmount(installmentAmount) } ${ installmentCurrency }`,
-        dueDate: installmentDuration,
-        dueTime: null
-      };
+    if (this.isDiaspore) {
+      this.loadInstallments();
     }
+
     this.loadUserActions();
   }
 
@@ -311,30 +335,72 @@ export class LoanDetailComponent implements OnInit {
     }
   }
 
+  /**
+   * Load next installment data
+   */
+  private loadInstallments() {
+    const installments: number = this.loan.descriptor.installments;
+    const installmentDuration: string = Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments);
+    const installmentAmount: number = this.loan.currency.fromUnit(this.loan.descriptor.firstObligation);
+    const installmentCurrency: string = this.loan.currency.symbol;
+    const nextInstallment: number = this.isRequest ? 1 : 1; // TODO - Next installment
+    const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+
+    this.diasporeData = [
+      ['Installments', 'Duration', 'Cuota'],
+      [
+        installments,
+        installmentDuration,
+        `${ installmentAmount } ${ installmentCurrency }`
+      ]
+    ];
+
+    this.nextInstallment = {
+      installment: `${ nextInstallment + addSuffix(nextInstallment) } Pay`,
+      amount: `${ Utils.formatAmount(installmentAmount) } ${ installmentCurrency }`,
+      dueDate: installmentDuration,
+      dueTime: null
+    };
+  }
+
   private invalidActions() {
     this.canLend = false;
     this.canPay = false;
     this.canTransfer = false;
     this.canCancel = false;
+    this.canAdjustCollateral = false;
   }
 
   private loanOnGoingorIndebt() {
     if (this.loan.debt !== undefined && this.userAccount) {
       const isDebtOwner = this.userAccount.toUpperCase() === this.loan.debt.owner.toUpperCase();
+      const isBorrower = this.isBorrower();
       this.canTransfer = isDebtOwner;
       this.canCancel = false;
       this.canPay = !isDebtOwner;
       this.canLend = false;
+      this.canAdjustCollateral = isBorrower;
     }
   }
 
   private loanStatusRequest() {
     if (this.userAccount) {
-      const isBorrower = this.loan.borrower.toUpperCase() === this.userAccount.toUpperCase();
+      const isBorrower = this.isBorrower();
       this.canLend = !isBorrower;
       this.canPay = false;
       this.canTransfer = false;
       this.canCancel = isBorrower;
+      this.canAdjustCollateral = isBorrower;
+    }
+  }
+
+  /**
+   * Check if the loan borrower is the current account
+   * @return Boolean if is borrower
+   */
+  private isBorrower() {
+    if (this.userAccount) {
+      return this.loan.borrower.toUpperCase() === this.userAccount.toUpperCase();
     }
   }
 

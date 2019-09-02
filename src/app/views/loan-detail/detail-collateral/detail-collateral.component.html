@@ -52,7 +52,7 @@
           </article>
         </div>
         <div class="collateral-detail__footer">
-          <div class="row row--header">
+          <div class="row row--header" *ngIf="canAdjust">
             <div class="item col col-12 col-md-7">
               <h4>
                 Adjust collateral
@@ -65,39 +65,41 @@
               <button
                 mat-raised-button
                 class="button button-primary"
+                [class.button-disabled]="addPendingTx || withdrawPendingTx"
                 (click)="openDialog('add')"
               >
-                Add more
+                {{ addButtonText }}
               </button>
               <button
                 mat-raised-button
                 class="button button-clear"
+                [class.button-disabled]="addPendingTx || withdrawPendingTx"
                 (click)="openDialog('withdraw')"
               >
-                Withdraw
+                {{ withdrawButtonText }}
               </button>
             </div>
           </div>
-          <div class="row row--footer">
+          <div class="row row--footer" [class.row--divisor]="canAdjust" *ngIf="loan?.debt">
             <div class="item col col-12 col-md-4">
               <i class="fa fa-percentage"></i>
               Current Loan To Value:
               <strong class="item__value">
-                33%
+                {{ currentLoanToValue }} %
               </strong>
             </div>
             <div class="item col col-12 col-md-4">
               <i class="fa fa-retweet"></i>
               Current Exchange Rate:
               <strong class="item__value">
-                300 DAI/ETH
+                {{ currentExchangeRate }} {{ loanCurrency }}/{{ collateralAsset }}
               </strong>
             </div>
             <div class="item col col-12 col-md-4">
               <i class="fa fa-chart-line"></i>
               Current Liquidation Price:
               <strong class="item__value">
-                200 DAI/ETH
+                {{ currentLiquidationPrice }} {{ collateralAsset }}
               </strong>
             </div>
           </div>

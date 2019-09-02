@@ -7,6 +7,8 @@ import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { CommitsService } from './../../services/commits.service';
 import { PreviousRouteService } from './../../services/previousRoute.service';
+import { CollateralService } from './../../services/collateral.service';
+import { CurrenciesService } from './../../services/currencies.service';
 // App Modules
 import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from '../../material/material.module';
@@ -45,7 +47,9 @@ import { DialogCollateralComponent } from './../../dialogs/dialog-collateral/dia
     CosignerService,
     NgxSpinnerService,
     CommitsService,
-    PreviousRouteService
+    PreviousRouteService,
+    CollateralService,
+    CurrenciesService
   ],
   declarations: [
     LoanDetailComponent,

@@ -1,9 +1,12 @@
 @import '../../../scss/_variables.scss'; //variables
 
+.mat-dialog-content {
+  max-height: 100vh;
+}
 .mat-dialog-container {
   height: 210px;
 }
-.dialog-padding{
+.dialog-padding {
   padding: 30px;
 }
 .navbar-container {
@@ -14,7 +17,7 @@
   right: 0;
   background-color: #333333;
   .creator-container {
-    .creator-title{
+    .creator-title {
       width: 100%;
       position: absolute;
       top: 50%;
@@ -27,24 +30,34 @@
       @include transform(translate(-50%, -50%));
     }
   }
+  app-infinite-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+}
+.dialog-description {
+  font-size: 1.4em;
+  font-weight: 500;
 }
 
-@media (min-width: 768px){
+@media (min-width: 768px) {
   .navbar-container {
     height: 100px;
     .creator-container {
-      .creator-title{
+      .creator-title {
         font-size: 36px;
       }
     }
   }
-  .transfer-width{min-width: 600px;}
 }
 
-@media (min-width: 992px){
-  .transfer-width{min-width: 750px;}
-}
-
-@media (min-width: 1200px){
-  .transfer-width{min-width: 900px;}
+@media (min-width: 992px) {
+  .mat-dialog-content {
+    width: 992px;
+  }
+  .dialog-padding {
+    padding: 30px 60px;
+  }
 }

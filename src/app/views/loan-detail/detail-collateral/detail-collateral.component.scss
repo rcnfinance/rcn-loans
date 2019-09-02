@@ -62,13 +62,7 @@
       margin: 0;
       &--header {
         padding-top: 6px;
-        &::after {
-          content: '';
-          width: 100%;
-          height: 1px;
-          margin: 20px 16px 6px;
-          background: $gray7;
-        }
+        padding-bottom: 20px;
         h4 {
           @include small-title;
         }
@@ -95,6 +89,15 @@
             @extend .font14;
             display: block;
           }
+        }
+      }
+      &--divisor {
+        &::before {
+          content: '';
+          width: 100%;
+          height: 1px;
+          margin: 0 16px 6px;
+          background: $gray7;
         }
       }
     }

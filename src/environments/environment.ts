@@ -66,7 +66,7 @@ export const environment = {
       }
     },
     converter: {
-      converterRamp: '0x01f8c610ec9dab9986735f6e3068aaaf555e9937',
+      converterRamp: '0xc76712be96b7e8937c0e4d4b760ae5002accd280',
       tokenConverter: '0xc4b1b3083174716542ef387326e58293917bf3bf',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       uniswapProxy: '0x0c295fe65e94cd4eaffe906ad1c77d9e35923b05',
@@ -80,6 +80,11 @@ export const environment = {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
       mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1',
       landMarket: '0x5424912699dabaa5f2998750c1c66e73d67ad219'
+    },
+    currencies: {
+      rcn: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
+      dai: '0x6710d597fd13127a5b64eebe384366b12e66fdb6',
+      eth: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
     }
   },
   blacklist: [

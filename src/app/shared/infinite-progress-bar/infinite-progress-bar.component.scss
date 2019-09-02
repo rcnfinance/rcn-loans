@@ -1,0 +1,13 @@
+@import '../../../scss/variables';
+
+
+/deep/ .mat-progress-bar {
+  height: 3px;
+
+  .mat-progress-bar-buffer {
+    background-color: #222222;
+  }
+  .mat-progress-bar-fill::after {
+    background-color: $primary;
+  }
+}
