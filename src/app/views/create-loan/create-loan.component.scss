@@ -329,6 +329,19 @@ mat-expansion-panel {
   content: '%';
 }
 
+/deep/ .mat-slider-thumb-label {
+  transform: rotate(45deg) !important;
+  border-radius: 50% 50% 0 !important;
+}
+
+/deep/ .mat-slider-thumb {
+  transform: scale(0) !important;
+}
+
+/deep/ .mat-slider-thumb-label-text {
+  opacity: 1 !important;
+}
+
 //CARDS
 .card-col{
   margin-top: 15px;
