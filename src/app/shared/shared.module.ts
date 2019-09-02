@@ -1,6 +1,7 @@
 // Angular Core
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // App Modules
@@ -58,6 +59,7 @@ import { CollateralSliderDebtComponent } from './collateral-slider-debt/collater
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
     MaterialModule,
     BlockiesModule,
     ReactiveFormsModule,
