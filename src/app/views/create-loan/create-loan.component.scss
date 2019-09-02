@@ -348,6 +348,22 @@ mat-expansion-panel {
   top: -46px !important;
 }
 
+.create-button {
+  color: #989898;
+  text-decoration: underline;
+  font-size: 16px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+}
+
+.create-button:hover {
+  color: #4155ff;
+}
+
+.create-button:active {
+  color: white;
+}
+
 //CARDS
 .card-col{
   margin-top: 15px;
