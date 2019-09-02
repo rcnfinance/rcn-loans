@@ -248,6 +248,61 @@ ngx-spinner .black-overlay.ng-star-inserted {
   }
 }
 
+// Custom tooltip based on material component
+.mat-tooltip.rcn-mat-tooltip {
+  $tooltipArrowWidth: 10px;
+  $tooltipBackground: rgba(97,97,97,.9);
+  font-size: .9em;
+  padding: 10px 12px;
+
+  &::after {
+    content: 'OK';
+    display: block;
+    margin: 10px 2px 0;
+    text-align: right;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  &--arrow {
+    overflow: visible !important;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      margin: auto 0;
+      width: 0;
+      height: 0;
+    }
+  }
+  &--left {
+    margin-right: 30px;
+    &::before {
+      @include tooltip-arrow($tooltipArrowWidth, left, $tooltipBackground);
+    }
+  }
+  &--right {
+    margin-left: 30px;
+    &::before {
+      @include tooltip-arrow($tooltipArrowWidth, right, $tooltipBackground);
+    }
+  }
+  &--top {
+    margin-bottom: 30px;
+    &::before {
+      @include tooltip-arrow($tooltipArrowWidth, top, $tooltipBackground);
+    }
+  }
+  &--bottom {
+    margin-top: 30px;
+    &::before {
+      @include tooltip-arrow($tooltipArrowWidth, bottom, $tooltipBackground);
+    }
+  }
+}
+
 .expansion-panel--card {
   position: absolute;
   bottom: 50px;

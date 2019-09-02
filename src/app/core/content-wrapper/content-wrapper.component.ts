@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 // App Components
@@ -46,9 +45,9 @@ export class ContentWrapperComponent implements OnInit {
   lender: string;
   lendEnabled: Boolean;
 
-  private ethWei = new BigNumber(10).pow(new BigNumber(18));
-  rcnBalance: BigNumber;
-  rcnAvailable: BigNumber;
+  private ethWei;
+  rcnBalance;
+  rcnAvailable;
   loansWithBalance: number[];
 
   private basaltRcnAvailable: number;
@@ -62,19 +61,37 @@ export class ContentWrapperComponent implements OnInit {
   autoClose: boolean;
   isApproved: boolean;
 
-  navToggle: boolean; // Navbar toggled
-  navmobileToggled = false; // Nav Mobile toggled
+  navToggle: boolean;
+  navmobileToggled = false;
 
   pendingWithdraw: Tx;
 
   constructor(
-    private sidebarService: SidebarService, // Navbar Service
+    private sidebarService: SidebarService,
     private web3Service: Web3Service,
     private contractService: ContractsService,
     private txService: TxService,
     public dialog: MatDialog,
     private countriesService: CountriesService
   ) {}
+
+  ngOnInit() {
+    const web3: any = this.web3Service.web3;
+    this.ethWei = new web3.BigNumber(10).pow(new web3.BigNumber(18));
+
+    // Navbar toggled
+    this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
+    this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
+    this.web3Service.loginEvent.subscribe(
+      (isLogged) => {
+        if (isLogged) {
+          this.loadAccount();
+        }
+      }
+    );
+    this.loadAccount();
+    this.canLend();
+  }
 
   // Toggle Navbar
   sidebarToggle() {
@@ -112,21 +129,6 @@ export class ContentWrapperComponent implements OnInit {
       }
       this.loadWithdrawBalance();
     }
-  }
-
-  ngOnInit() {
-    // Navbar toggled
-    this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
-    this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
-    this.web3Service.loginEvent.subscribe(
-      (isLogged) => {
-        if (isLogged) {
-          this.loadAccount();
-        }
-      }
-    );
-    this.loadAccount();
-    this.canLend();
   }
 
   async canLend() {
