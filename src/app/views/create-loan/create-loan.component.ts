@@ -42,6 +42,13 @@ export class CreateLoanComponent implements OnInit {
   mobile = false;
   creationProgress = 0;
   showProgress = false;
+  minRate = '-';
+  maxRate = '-';
+  min = "0";
+  max = "0";
+  advisedRate = 0;
+  // Pays detail
+  paysDetail = [];
 
   // Date Variables
   now: Date = new Date();
@@ -135,7 +142,7 @@ export class CreateLoanComponent implements OnInit {
         const loan = await this.getExistingLoan(loanId);
         await this.autocompleteForm(loan);
         await this.getCollateral(loanId);
-        this.createLoan();
+        this.isExpanded();
         this.retrievePendingTx();
         this.corroborateBorrower();
       } catch (e) {
@@ -214,7 +221,7 @@ export class CreateLoanComponent implements OnInit {
     const requestValue = web3.fromWei(loan.amount);
     const duration = loan.descriptor.duration / secondsInDay;
     const installmentsFlag = loan.descriptor.installments > 1 ? true : false;
-    const interestPunnitory = Number(loan.descriptor.punitiveInterestRateRate).toFixed(0);
+    const interestpunitory = Number(loan.descriptor.punitiveInterestRateRate).toFixed(0);
     this.installments = loan.descriptor.installments;
     this.selectedOracle = oracle;
 
@@ -223,7 +230,7 @@ export class CreateLoanComponent implements OnInit {
         fullDuration: duration
       },
       interest: {
-        annualInterest: interestPunnitory
+        annualInterest: interestpunitory
       },
       conversionGraphic: {
         requestValue: requestValue,
@@ -235,6 +242,7 @@ export class CreateLoanComponent implements OnInit {
 
     this.onRequestedChange(requestValue);
     this.onDurationChange();
+
   }
 
   /**
@@ -275,10 +283,37 @@ export class CreateLoanComponent implements OnInit {
     this.location.replaceState(`/create`);
   }
 
+  /**
+   * Fills out installment's details
+   */
+  installmentsDetails() {
+    this.paysDetail = [];
+    for (let i = 0; i < this.installmentsAvailable; i++) {
+      const pay = i + 1;
+      let payNumber;
+      switch (Number(pay)) {
+        case 1:
+          payNumber = 'st';
+          break;
+        case 2:
+          payNumber = 'nd';
+          break;
+        default:
+          payNumber = 'th';
+          break;
+      }
+      const time = pay * 15;
+      const amount = this.requestValue.value / this.installmentsAvailable;
+      const obj = { pay: pay + payNumber, time: time + ' days', amount: Utils.formatAmount(amount) + ' ' + this.requestedCurrency.value };
+      this.paysDetail.push(obj);
+
+    }
+  }
+
    /**
    * Tooggles a boolean to expand, retract and disable the expansion pannels
    */
-  createLoan() {
+  isExpanded() {
     this.init = !this.init;
   }
 
@@ -296,6 +331,47 @@ export class CreateLoanComponent implements OnInit {
     this.slideSelected = true;
   }
 
+   /**
+   * Fills out annual interest's rate min and max values
+   */
+  interestRateMaxMin() {
+    switch (this.formGroup1.value.conversionGraphic.requestedCurrency) {
+      case 'RCN':
+        this.minRate = '0%';
+        this.maxRate = '20%';
+        this.min = '0';
+        this.max = '20';
+        break;
+      case 'MANA':
+        this.minRate = '-';
+        this.maxRate = '-';
+        this.min = '0';
+        this.max = '0';
+        break;
+      case 'ETH':
+        this.minRate = '0%';
+        this.maxRate = '5%';
+        this.min = '0';
+        this.max = '5';
+        break;
+      case 'DAI':
+        this.minRate = '10%';
+        this.maxRate = '20%';
+        this.min = '10';
+        this.max = '20';
+        break;
+      default:
+        this.minRate = '-';
+        this.maxRate = '-';
+        this.min = '0';
+        this.max = '0';
+        break;
+    }
+  }
+
+  calculateAdvisedRate() {
+    this.advisedRate = parseInt(this.max, 10) / 100 * 40;
+  }
   /**
    * Create form controls and define values
    */
@@ -304,7 +380,7 @@ export class CreateLoanComponent implements OnInit {
     this.requestedCurrency = new FormControl(undefined, Validators.required);
     this.requestValue = new FormControl(null);
     this.fullDuration = new FormControl(null, Validators.required);
-    this.annualInterest = new FormControl(40, Validators.required);
+    this.annualInterest = new FormControl(this.advisedRate, Validators.required);
     this.installmentsFlag = new FormControl(false, Validators.required);
     this.expirationRequestDate = new FormControl(7, Validators.required);
     // Form group 2
@@ -368,7 +444,7 @@ export class CreateLoanComponent implements OnInit {
           amount: 1
         });
         this.retrievePendingTx();
-        this.createLoan();
+        this.isExpanded();
         this.isCompleting = true;
       }
     } else {
@@ -547,6 +623,9 @@ export class CreateLoanComponent implements OnInit {
       default:
         break;
     }
+    this.installmentsDetails();
+    this.interestRateMaxMin();
+    this.calculateAdvisedRate();
   }
 
   /**
@@ -564,6 +643,7 @@ export class CreateLoanComponent implements OnInit {
     }
 
     this.expectedReturn();
+    this.installmentsDetails();
   }
 
   /**
@@ -577,6 +657,7 @@ export class CreateLoanComponent implements OnInit {
 
     this.expectedInstallmentsAvailable();
     this.expectedReturn();
+    this.installmentsDetails();
   }
 
   /**
