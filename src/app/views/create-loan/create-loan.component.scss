@@ -325,6 +325,10 @@ mat-expansion-panel {
   padding: 0 !important;
 }
 
+/deep/ .mat-slider-thumb-label-text:after {
+  content: '%';
+}
+
 //CARDS
 .card-col{
   margin-top: 15px;
