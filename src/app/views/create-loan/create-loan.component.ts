@@ -4,9 +4,8 @@ import { Location } from '@angular/common';
 import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
 import {
   MatDialog,
-  MatStepper,
-  MatSnackBar,
-  MatExpansionPanel
+  MatTooltip,
+  MatSnackBar
 } from '@angular/material';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -28,8 +27,7 @@ import { TxService, Tx, Type } from '../../tx.service';
   styleUrls: ['./create-loan.component.scss']
 })
 export class CreateLoanComponent implements OnInit {
-  @ViewChild('stepper') stepper: MatStepper;
-  @ViewChild('MatExpansionPanel') pannel: MatExpansionPanel;
+  @ViewChild('confirmTooltip') confirmTooltip: MatTooltip;
 
   // Material Variables
   isChecked = false;
@@ -42,6 +40,7 @@ export class CreateLoanComponent implements OnInit {
   mobile = false;
   creationProgress = 0;
   showProgress = false;
+  isConfirmTooltipAvailable = true;
   minRate = '-';
   maxRate = '-';
   min = '0';
@@ -663,11 +662,12 @@ export class CreateLoanComponent implements OnInit {
   /**
    * Set balance ratio min value and update collateral amount input
    */
-  onLiquidationRatioChange() {
+  async onLiquidationRatioChange() {
     this.radioChange();
     this.updateBalanceRatio();
     this.updateCollateralRatio();
-    this.updateCollateralAmount();
+    await this.updateCollateralAmount();
+    this.showConfirmationTooltip();
   }
 
   /**
@@ -683,14 +683,16 @@ export class CreateLoanComponent implements OnInit {
     }
 
     this.collateralAmountObserver.next(collateralValue);
+    this.showConfirmationTooltip();
   }
 
   /**
    * Calculate the collateral amount
    */
-  onCollateralRatioChange() {
+  async onCollateralRatioChange() {
     this.updateCollateralRatio();
-    this.updateCollateralAmount();
+    await this.updateCollateralAmount();
+    this.showConfirmationTooltip();
   }
 
   /**
@@ -703,7 +705,16 @@ export class CreateLoanComponent implements OnInit {
       return;
     }
 
-    this.updateCollateralAmount();
+    await this.updateCollateralAmount();
+    this.showConfirmationTooltip();
+  }
+
+  /**
+   * Calculate the return value when installments flag button is toggled
+   */
+  onInstallmentsChange() {
+    this.expectedInstallmentsAvailable();
+    this.expectedReturn();
   }
 
   async calculateCollateralRatio() {
@@ -813,14 +824,6 @@ export class CreateLoanComponent implements OnInit {
     } catch (e) {
       throw Error(e);
     }
-  }
-
-  /**
-   * Calculate the return value when installments flag button is toggled
-   */
-  onInstallmentsChange() {
-    this.expectedInstallmentsAvailable();
-    this.expectedReturn();
   }
 
   /**
@@ -1025,6 +1028,20 @@ export class CreateLoanComponent implements OnInit {
         this.createPendingTx = undefined;
         this.init = true;
       }, 1000);
+    }
+  }
+
+  /**
+   * Shows the notice that the loan can be finalized
+   */
+  showConfirmationTooltip() {
+    const tooltipAvailable: boolean = this.isConfirmTooltipAvailable;
+    const formLoan: FormGroup = this.formGroup1;
+    const formCollateral: FormGroup = this.formGroup2;
+
+    if (tooltipAvailable && (formLoan.valid && formCollateral.valid)) {
+      this.isConfirmTooltipAvailable = false;
+      this.confirmTooltip.show();
     }
   }
 

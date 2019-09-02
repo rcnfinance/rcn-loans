@@ -632,19 +632,23 @@ class="container">
           <div class="margintop20"></div>
           <button
             mat-raised-button
-            [ngClass]="
-            formGroup1.valid && formGroup2.valid
-                      ? 'button-blue button-primary fullWidth margintop20'
-                      : ' button button-primary fullWidth margintop20'
-                  "
-
+            class="button-primary fullWidth margintop20"
+            [ngClass]="formGroup1.valid && formGroup2.valid ? 'button-blue' : 'button'"
             [disabled]="!formGroup2.valid"
             (click)="onSubmitStep2(fStep2)"
+            #confirmTooltip="matTooltip"
+            matTooltip="You have completed all your loan info. Please check the card that everything you set is correct."
+            matTooltipPosition="left"
+            matTooltipClass="rcn-mat-tooltip rcn-mat-tooltip--arrow rcn-mat-tooltip--left"
           >
             {{ collateralButtonText }}
           </button>
           <div class="margintop20"></div>
-          <div><a class="link" href="">Reset all values</a></div>
+          <div>
+            <a class="link">
+              Reset all values
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -652,12 +656,8 @@ class="container">
     <mat-expansion-panel
       (opened)="panelCardOpenState = true"
       (closed)="panelCardOpenState = false"
-      [ngClass]="
-        panelCardOpenState
-          ? 'expansion-panel && expansion-panel--card && expansion-panel--opened'
-          : 'expansion-panel && expansion-panel--card'
-      "
-      class="expansion-panel expansion-panel--card  card-mobile"
+      [class.expansion-panel--opened]="panelCardOpenState"
+      class="expansion-panel expansion-panel--card card-mobile"
     >
       <mat-expansion-panel-header class="expansion-panel-header--mobile">
         <mat-panel-title class="main-title-style ">
@@ -815,14 +815,8 @@ class="container">
               </div>
               <div class="card-property">
                 <div class="title">{{ "Return" }}</div>
-                 <div class="margintop5"></div>
-                <div
-                  [ngClass]="
-                    this.durationLabel === '0'
-                      ? 'block-title'
-                      : 'block-title-white'
-                  "
-                >
+                  <div class="margintop5"></div>
+                <div [ngClass]="this.durationLabel === '0' ? 'block-title' : 'block-title-white'">
                   <span *ngIf="!installmentsAvailable">-</span
                   ><span *ngIf="installmentsAvailable">{{ returnValue }}</span>
                 </div>
