@@ -256,6 +256,36 @@ export class ContractsService {
   }
 
   /**
+   * Get cost in rcn
+   * @param amount Amount to calculate cost
+   * @param converter Converter address to use for swap
+   * @param fromToken Token to convert
+   * @param token RCN Token address
+   * @return _tokenCost and _etherCost
+   */
+  async getCostInToken(amount: number, token: string) {
+    const web3: any = this.web3.web3;
+    const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
+    const fromToken: any = environment.contracts.rcnToken;
+    amount = new web3.BigNumber(amount);
+
+    if (token === fromToken) {
+      return web3.toWei(amount);
+    }
+
+    const rate = await this.getCost(
+      web3.toWei(amount),
+      uniswapProxy,
+      fromToken,
+      token
+    );
+    const tokenCost = new web3.BigNumber(rate[0]);
+    const etherCost = new web3.BigNumber(rate[1]);
+
+    return tokenCost.isZero() ? etherCost : tokenCost;
+  }
+
+  /**
    * Get the cost, in wei, of making a convertion using the value specified
    * @param amount Amount to calculate cost
    * @param converter Converter address to use for swap
@@ -263,7 +293,7 @@ export class ContractsService {
    * @param token RCN Token address
    * @return _tokenCost and _etherCost
    */
-  async getCostInToken(
+  async getCost(
     amount: number,
     converter: string,
     fromToken: string,
@@ -461,6 +491,26 @@ export class ContractsService {
       loanData,
       { from: borrower }
     ]);
+  }
+
+  /**
+   * Get loan debt amount value
+   * @param loanId Loan ID
+   * @return Debt amount
+   */
+  async getClosingObligation(loanId: string) {
+    return new Promise((resolve, reject) => {
+      this._loanManager.getClosingObligation(
+        loanId,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
   }
 
   async estimatePayAmount(loan: Loan, amount: number): Promise<number> {
@@ -748,6 +798,52 @@ export class ContractsService {
       balanceRatio,
       burnFee,
       rewardFee,
+      { from: account }
+    ]);
+  }
+
+  /**
+   * Deposit tokens in collateral
+   * @param collateralId Collateral ID
+   * @param amount Amount to add in wei
+   * @param account Account address
+   * @return Tx hash
+   */
+  async addCollateral(
+    collateralId: number,
+    amount: number,
+    account: string
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._collateral).deposit, [
+      collateralId,
+      amount,
+      { from: account }
+    ]);
+  }
+
+  /**
+   * Withdraw collateral
+   * @param collateralId Collateral ID
+   * @param to Account address
+   * @param amount Amount to add in wei
+   * @param oracleData Oracle data bytes
+   * @param account Account address
+   * @return Tx hash
+   */
+  async withdrawCollateral(
+    collateralId: number,
+    to: string,
+    amount: number,
+    oracleData: string,
+    account: string
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._collateral).withdraw, [
+      collateralId,
+      to,
+      amount,
+      oracleData,
       { from: account }
     ]);
   }

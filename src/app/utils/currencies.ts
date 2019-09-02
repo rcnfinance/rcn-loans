@@ -13,11 +13,10 @@ export class Currency {
 
       case 'MANA':
       case 'ETH':
+      case 'DAI':
       case 'RCN':
-        return 18;
-
       default:
-        return 0;
+        return 18;
     }
   }
   fromUnit(n: number): number {

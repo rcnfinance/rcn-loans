@@ -41,6 +41,7 @@ import {
 @NgModule({
   imports: [
     CommonModule,
+    BrowserAnimationsModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -72,8 +73,7 @@ import {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule,
-    BrowserAnimationsModule
+    MatTooltipModule
   ],
   declarations: [],
   exports: [

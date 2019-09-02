@@ -1,5 +1,47 @@
 @import '../../../scss/_variables.scss'; //variables
 
+
+.mat-accent .mat-slider-thumb,
+.mat-accent .mat-slider-thumb-label,
+.mat-accent .mat-slider-track-fill {
+  background-color: $primary !important;
+}
+.mat-slider-wrapper {
+  color: white !important;
+}
+.mat-slider-track-background {
+  background: white !important;
+}
+.mat-slider-horizontal {
+  width: 300px;
+  height: 40px !important;
+}
+.mat-slider {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+// Slider
+.mat-slider-thumb-label {
+  transform: rotate(45deg) !important;
+  border-radius: 50% 50% 0 !important;
+  width: 38px !important;
+  height: 38px !important;
+}
+.mat-slider-thumb {
+  transform: scale(0) !important;
+}
+.mat-slider-thumb-label-text {
+  opacity: 1 !important;
+}
+.mat-slider-thumb-label-text:after {
+  content: "%";
+}
+.mat-slider-horizontal .mat-slider-thumb-label {
+  top: -44px !important;
+  right: -18px !important;
+}
+
 //Create Loan
 .properties-block{
   @extend %flex-container;

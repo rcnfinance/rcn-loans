@@ -1,6 +1,6 @@
 export class Collateral {
   constructor(
-    public id: string,
+    public id: number,
     public debtId: string,
     public oracle: string,
     public token: string,

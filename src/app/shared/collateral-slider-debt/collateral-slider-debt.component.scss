@@ -1,0 +1,104 @@
+@import '../../../scss/variables';
+@import '../../../scss/fonts';
+
+.collateral-debt-slider {
+  width: 100%;
+  max-width: 420px;
+
+  /deep/ mat-slider {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+
+    &.mat-slider-disabled {
+      .mat-slider-thumb {
+        transform: none;
+      }
+    }
+
+    .mat-slider-wrapper {
+      left: 0;
+    }
+
+    .mat-slider-track-wrapper {
+      &::after {
+        content: '';
+        width: 20%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: $red;
+      }
+      .mat-slider-track-background,
+      .mat-slider-track-fill {
+        background: $green !important;
+      }
+    }
+
+    .mat-slider-ticks {
+      background-size: 10% 2px !important;
+      opacity: 1 !important;
+      background-image: repeating-linear-gradient(
+        to right,
+        rgba(white, .7),
+        rgba(white, .7) 3px,
+        transparent 0,
+        transparent
+      )
+    }
+
+    .mat-slider-thumb {
+      background: transparent;
+      border: none;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 10px;
+        height: 25px;
+        background: white;
+        border-radius: 6px;
+      }
+    }
+  }
+
+
+  &__percentage {
+    width: 20%;
+    display: flex;
+    justify-content: space-between;
+
+    .percentage {
+      width: 50px;
+      color: $gray5;
+      text-align: center;
+      position: relative;
+      user-select: none;
+      @extend %roboto-regular;
+
+      &::after {
+        content: '';
+        width: 2px;
+        height: 10px;
+        position: absolute;
+        top: -12px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        background: $gray5;
+      }
+
+      &--min {
+        margin-left: -25px;
+      }
+      &--max {
+        margin-right: -25px;
+      }
+    }
+  }
+}

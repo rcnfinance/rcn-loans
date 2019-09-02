@@ -14,7 +14,7 @@ import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.comp
 import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
 import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector.component';
 import { FilterLoansComponent } from './filter-loans/filter-loans.component';
-
+import { InfiniteProgressBarComponent } from './infinite-progress-bar/infinite-progress-bar.component';
 import { ConversionGraphicComponent } from './conversion-graphic/conversion-graphic.component';
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
@@ -53,6 +53,7 @@ import { TitleService } from './../services/title.service';
 import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
+import { CollateralSliderDebtComponent } from './collateral-slider-debt/collateral-slider-debt.component';
 
 @NgModule({
   imports: [
@@ -84,7 +85,7 @@ import { EventsService } from './../services/events.service';
     PayFormComponent,
     CollateralAddFormComponent,
     CollateralWithdrawFormComponent,
-    FilterLoansComponent,
+    InfiniteProgressBarComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
@@ -92,7 +93,8 @@ import { EventsService } from './../services/events.service';
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
     DialogSelectCurrencyComponent,
-    FilterLoansComponent
+    FilterLoansComponent,
+    CollateralSliderDebtComponent
   ],
   entryComponents: [
     CivicAuthComponent,
@@ -145,6 +147,7 @@ import { EventsService } from './../services/events.service';
     CollateralAddFormComponent,
     CollateralWithdrawFormComponent,
     FilterLoansComponent,
+    InfiniteProgressBarComponent,
     DialogWrongCountryComponent
   ]
 })
