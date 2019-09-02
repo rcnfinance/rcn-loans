@@ -368,9 +368,9 @@ export class CreateLoanComponent implements OnInit {
     }
   }
 
-  calculateAdvisedRate() {
-    this.advisedRate = parseInt(this.max, 10) / 100 * 40;
-  }
+  // calculateAdvisedRate() {
+  //   this.advisedRate = parseInt(this.max, 10) / 100 * 40;
+  // }
   /**
    * Create form controls and define values
    */
