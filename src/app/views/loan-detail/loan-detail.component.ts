@@ -280,7 +280,7 @@ export class LoanDetailComponent implements OnInit {
 
       // Template data
       this.interest = '~ ' + interest + ' %';
-      this.lendDate = dueDate;
+      this.lendDate = lendDate;
       this.dueDate = dueDate;
 
       // Load status data
