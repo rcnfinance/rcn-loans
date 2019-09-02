@@ -234,6 +234,10 @@ mat-expansion-panel {
   color: #EDEDED;
 }
 
+/deep/ .mat-expansion-panel-header[aria-expanded=false] .mat-expansion-panel-header-title {
+  color: #989898 !important;
+}
+
 .mat-accent .mat-slider-thumb, .mat-accent .mat-slider-thumb-label, .mat-accent .mat-slider-track-fill {
   background-color: $primary !important;
 }
