@@ -264,6 +264,25 @@ mat-expansion-panel {
   font-family: 'Roboto', sans-serif;;
 }
 
+/deep/ .mat-accent .mat-slider-thumb,
+.mat-accent .mat-slider-thumb-label,
+.mat-accent .mat-slider-track-fill {
+  background-color: $primary !important;
+}
+
+/deep/ .mat-slider-wrapper {
+  color: white !important;
+}
+
+/deep/ .mat-slider-track-background {
+  background: white !important;
+}
+
+/deep/ .mat-slider {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 //CARDS
 .card-col{
   margin-top: 15px;
