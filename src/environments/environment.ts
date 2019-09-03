@@ -25,12 +25,12 @@ export const environment = {
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
   buyLink: 'https://www.bancor.network/communities/5a92b438583f4a0001f75f42/about',
   version_verbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
-  sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
+  sentry: 'http://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   rcn_node: {
     loan: 'https://ropsten-rnode.rcn.loans/v1/commits?id_loan=$id'
   },
   rcn_node_api: {
-    url: 'http://diaspore-ropsten.diaspore.18.221.166.157.xip.io/v4/'
+    url: 'https://diaspore-ropsten-rnode.rcn.loans/v4/loans'
   },
   network: {
     id: '3',
