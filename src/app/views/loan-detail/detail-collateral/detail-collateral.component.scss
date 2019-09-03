@@ -7,7 +7,6 @@
   text-transform: uppercase;
   display: inline-block;
   margin-bottom: 3px;
-  color: $gray2;
 }
 
 
@@ -45,11 +44,12 @@
       }
       &__label {
         @include small-title;
+        color: $gray1;
       }
       &__value {
         @extend %roboto-medium;
         @extend .font18;
-        color: $gray1;
+        color: $gray2;
       }
     }
   }
@@ -65,6 +65,7 @@
         padding-bottom: 20px;
         h4 {
           @include small-title;
+          color: $gray1;
         }
         p {
           @include small-title;

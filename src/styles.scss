@@ -150,8 +150,8 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
       left: 0;
       width: 100%;
       height: 100%;
-      border: 2px solid $primary;
-      border-radius: 4px;
+      border: 1px solid $primary;
+      border-radius: 3px;
     }
     &:hover,
     &:active,

@@ -1,4 +1,5 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/variables';
+@import '../../../scss/fonts';
 
 .mat-dialog-content {
   max-height: 100vh;
@@ -38,9 +39,133 @@
   }
 }
 .dialog-description {
-  font-size: 1.4em;
+  @extend %font-semi-bold;
+  @extend .font18;
   font-weight: 500;
 }
+
+// children form styles
+/deep/ app-collateral-add-form,
+/deep/ app-collateral-withdraw-form {
+  .collateral {
+    .subtitle {
+      @extend .font12;
+      color: white;
+      display: inline-block;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    &__entry {
+      .currency {
+        position: absolute;
+        z-index: 2;
+        right: 0;
+        bottom: -2px;
+        padding-top: 10px;
+        padding-bottom: 4px;
+        padding-left: 10px;
+        font-size: 1.5em;
+        background: $gray9;
+        color: $gray5;
+        user-select: none;
+      }
+      .mat-form-field {
+        &:not(.mat-focused) {
+          .mat-form-field-underline {
+            .mat-form-field-ripple {
+              opacity: 0 !important;
+            }
+          }
+        }
+
+        &--empty {
+          input {
+            font-size: 1em;
+            font-weight: 400;
+            height: 27px;
+          }
+        }
+
+        ::-webkit-input-placeholder,
+        ::placeholder {
+          color: $gray5;
+        }
+        input {
+          @extend %roboto-semi-bold;
+          @extend .font25;
+        }
+        .mat-form-field-flex {
+          padding-top: 0;
+        }
+        .mat-form-field-underline {
+          background: $gray5;
+        }
+      }
+    }
+    &__amount {
+      .value {
+        @extend %roboto-semi-bold;
+        @extend .font25;
+        width: 250px;
+        margin-top: 10px;
+      }
+    }
+    &__withdraw {
+      &-content {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .value {
+        @extend %roboto-regular;
+        font-size: 1.5em;
+        color: $gray5;
+      }
+      button {
+        min-width: 0;
+        line-height: 2.2em;
+      }
+    }
+    &__graphic {
+
+    }
+  }
+  .dialog-divisor {
+    background: $gray7;
+    margin: 0 -30px;
+    padding: 0 15px;
+
+    &__content {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      font-size: .9em;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      @extend %roboto-regular;
+      color: $gray2;
+      i {
+        font-size: 1.5em;
+      }
+    }
+  }
+  .dialog-footer {
+    align-items: center;
+    @extend %roboto-regular;
+
+    &__label {
+      text-align: center;
+      color: $gray2;
+    }
+    &__buttons {
+      text-align: right;
+      margin-top: 25px;
+    }
+  }
+}
+
 
 @media (min-width: 768px) {
   .navbar-container {
@@ -56,8 +181,26 @@
 @media (min-width: 992px) {
   .mat-dialog-content {
     width: 992px;
+    max-width: 100%;
   }
   .dialog-padding {
     padding: 30px 60px;
+  }
+
+  // children form styles
+  /deep/ app-collateral-add-form,
+  /deep/ app-collateral-withdraw-form {
+    .dialog-divisor {
+      margin: 0 -60px;
+      padding: 0 40px;
+    }
+    .dialog-footer {
+      &__label {
+        text-align: left;
+      }
+      &__buttons {
+        margin-top: 0;
+      }
+    }
   }
 }

@@ -1,13 +1,13 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
 
-  <div class="margintop60"></div>
+  <div class="margintop50"></div>
 
   <div class="collateral row">
     <div class="collateral__entry marginbottom20 col-sm-12 col-md-4">
       <p class="subtitle">
         Amount you want to add
       </p>
-      <mat-form-field>
+      <mat-form-field appearance="standard" [class.mat-form-field--empty]="!form.value.amount && form.value.amount !== 0">
         <input
           matInput
           type="number"
@@ -45,7 +45,7 @@
     </div>
   </div>
 
-  <div class="margintop40"></div>
+  <div class="margintop15"></div>
 
   <div class="dialog-divisor row">
     <div class="dialog-divisor__content col-sm-12">
@@ -74,7 +74,7 @@
         {{ submitButtonText }}
       </button>
       <button mat-raised-button class="button button-clear-dark mat-elevation-z" [mat-dialog-close]='false'>
-        Cancel
+        Close
       </button>
     </div>
   </div>
