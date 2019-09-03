@@ -199,10 +199,10 @@
 .mat-slider-track-background {
   background: white !important;
 }
-.mat-slider-horizontal {
-  width: 300px;
-  height: 40px !important;
-}
+// .mat-slider-horizontal {
+//   width: 250px;
+//   height: 40px !important;
+// }
 .mat-slider {
   margin: 0 !important;
   padding: 0 !important;
@@ -263,7 +263,7 @@ mat-expansion-panel {
   display: flex !important;
   flex-direction: column;
   .mat-content {
-  background-color: black;
+  background-color: #0D0D0D;
   display: flex;
   justify-content: flex-end;
   }
@@ -271,11 +271,11 @@ mat-expansion-panel {
     display: none;
   }
   .mat-expansion-panel-content {
-    background-color: black;
+    background-color: #0D0D0D;
     .mat-expansion-panel-body {
       padding: 0 !important;
       width: 100%;
-      background-color: black;
+      background-color: #0D0D0D;
     }
   }
 }
@@ -593,6 +593,11 @@ mat-expansion-panel {
   height: 40px !important;
 }
 
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    opacity: 1;
+}
+
 .card-wrapper {
   padding: 0;
 }
@@ -675,17 +680,18 @@ mat-expansion-panel {
 }
 
 .installments-header {
-  background-color: black;
+  background-color: #0D0D0D;
   height: auto !important;
   padding: 0 !important;
 }
 
-
-
-
 .divider {
   border-top: 1px solid #4A4A4A;
   margin: 20px 0;
+}
+
+.bold {
+  font-weight: 600;
 }
 
 //Resets
@@ -743,9 +749,9 @@ mat-expansion-panel {
   }
 
   /deep/ .card-container {
-    background-color: black;
+    background-color: #0D0D0D;
     .installments-expansion-panel {
-      background-color: black;
+      background-color: #0D0D0D;
       width: 100% !important;
         .mat-expansion-panel-content{
           .mat-expansion-panel-body {
@@ -754,5 +760,9 @@ mat-expansion-panel {
           }
         }
     }
+  }
+
+  /deep/ .mat-expansion-panel-header-title {
+    color: #989898;
   }
 }

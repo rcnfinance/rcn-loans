@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-lg-8">
+    <div class="col-sm-12 col-md-8">
       <mat-accordion>
         <mat-expansion-panel
           [expanded]="init == true"
@@ -279,7 +279,7 @@
                     certain days of being generated.
                   </div>
                 </div>
-                <div class="col-sm-11 col-md-4">
+                <div class="col-sm-11 col-md-1">
                   <mat-form-field>
                     <input
                       matInput
@@ -370,7 +370,7 @@
                       (input)="onCollateralAmountChange($event.target.value)"
                       pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
                       required
-                      class="block-title"
+                      class="block-title block-title--white"
                     />
                     <mat-hint>
                       <span
@@ -433,7 +433,7 @@
                   <div class="subtitle-style">
                     Select the interest you want to pay
                   </div>
-                  <div class="margintop20"></div>
+                  <div class="margintop40"></div>
                   <div class="row">
                     <div class="col-sm-12">
                       <mat-slider
@@ -447,10 +447,10 @@
                         (change)="onBalanceRatioChange(); slideChange()"
                       ></mat-slider>
                       <div class="slider-percentage-box">
-                        <div class="slider-percentaje subtitle-style">
+                        <div class="slider-percentaje subtitle-style subtitle-style--number">
                           {{ formGroup2.value.liquidationRatio }} %
                         </div>
-                        <div class="slider-percentaje subtitle-style">
+                        <div class="slider-percentaje subtitle-style subtitle-style--number">
                           400%
                         </div>
                       </div>
@@ -470,7 +470,7 @@
       </mat-accordion>
     </div>
 
-    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-desktop">
+    <div class="col-sm-12 col-md-4 card-desktop">
       <div class="card-container" id="card-container-desktop">
         <ng-container *ngIf="loan">
           <app-loan-avatar [loan]="loan" [short]="true"></app-loan-avatar>
@@ -504,7 +504,7 @@
             <div class="card-property">
               <div class="title">{{ "Installments" }}</div>
               <mat-expansion-panel
-                class="installments-expansion-panel"
+                class="installments-expansion-panel mat-elevation-z0"
                 [hideToggle]="formGroup1.value.installmentsFlag ? false : true"
               >
                 <mat-expansion-panel-header class="installments-header">
@@ -566,7 +566,7 @@
             </div>
           </div>
           <mat-expansion-panel
-            class="expansion-panel-see-more"
+            class="expansion-panel-see-more mat-elevation-z0"
             (opened)="panelOpenSeeMore = true"
             (closed)="panelOpenSeeMore = false"
           >
@@ -608,7 +608,7 @@
               </div>
             </div>
           </mat-expansion-panel>
-          <div class="margintop20"></div>
+          <div class="margintop20 divider"></div>
           <div class="card-property-container">
             <div class="card-icon-container">
               <i class="fas fa-reply card-icon"></i>
@@ -663,7 +663,7 @@
           </button>
           <div class="margintop20"></div>
           <div>
-            <a class="link">
+            <a class="link bold">
               Reset all values
             </a>
           </div>
