@@ -4,8 +4,8 @@
   <app-creator-container [loan]=loan></app-creator-container>
   <div class="card-row">
     <div class="card-property">
-      <div class="title"><h4 class="hStyle">{{ 'Borrower' }}</h4></div>
-      <div class="paragraph">{{ shortAddress(loan.borrower) }}</div>
+      <div class="title"><h4 class="hStyle">{{ 'Installments' }}</h4></div>
+      <div class="paragraph">{{ getInstallments() }}</div>
     </div>
     <div class="card-property">
       <div class="title"><h4 class="hStyle">{{ durationLabel }}</h4></div>

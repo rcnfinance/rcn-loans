@@ -53,7 +53,6 @@
       color: white;
       display: inline-block;
       text-transform: uppercase;
-      margin-bottom: 6px;
     }
     &__entry {
       .currency {
@@ -93,6 +92,9 @@
         input {
           @extend %roboto-semi-bold;
           @extend .font25;
+        }
+        .mat-form-field-infix {
+          padding: 2px 0;
         }
         .mat-form-field-flex {
           padding-top: 0;

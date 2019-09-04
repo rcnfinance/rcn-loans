@@ -31,15 +31,6 @@ $sliderHeight: 3px;
     }
 
     .mat-slider-track-wrapper {
-      &::after {
-        content: '';
-        width: 20%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: $red;
-      }
       .mat-slider-track-background,
       .mat-slider-track-fill {
         background: $green !important;
@@ -104,10 +95,10 @@ $sliderHeight: 3px;
       }
 
       &--min {
-        margin-left: -25px;
+        margin-left: -23px;
       }
       &--max {
-        margin-right: -25px;
+        margin-right: -23px;
       }
     }
   }
