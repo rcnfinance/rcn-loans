@@ -1,6 +1,8 @@
 @import '../../../scss/variables';
 @import '../../../scss/fonts';
 
+$sliderHeight: 3px;
+
 .collateral-debt-slider {
   width: 100%;
   max-width: 420px;
@@ -20,22 +22,21 @@
       left: 0;
     }
 
+    .mat-slider-track-wrapper,
+    .mat-slider-ticks-container,
+    .mat-slider-ticks,
+    .mat-slider-track-background,
+    .mat-slider-track-fill {
+      height: $sliderHeight;
+    }
+
     .mat-slider-track-wrapper {
-      &::after {
-        content: '';
-        width: 20%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: $red;
-      }
       .mat-slider-track-background,
       .mat-slider-track-fill {
         background: $green !important;
+        transform: none !important;
       }
     }
-
     .mat-slider-ticks {
       background-size: 10% 2px !important;
       opacity: 1 !important;
@@ -56,11 +57,11 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        left: 0;
+        left: 2.5px;
         right: 0;
         margin: auto;
-        width: 10px;
-        height: 25px;
+        width: 5px;
+        height: 13px;
         background: white;
         border-radius: 6px;
       }
@@ -94,10 +95,10 @@
       }
 
       &--min {
-        margin-left: -25px;
+        margin-left: -23px;
       }
       &--max {
-        margin-right: -25px;
+        margin-right: -23px;
       }
     }
   }

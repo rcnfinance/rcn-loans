@@ -1,4 +1,6 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/variables';
+@import '../../../scss/fonts';
+@import '../../../scss/helpers';
 
 //CARDS
 .card-col{
@@ -6,8 +8,8 @@
 }
 .card-container{
   position: relative;
-  padding: 15px;
-  margin-top: 15px;
+  padding: 15px 20px;
+  margin: 15px 5px 0;
   font-family: 'Raleway', sans-serif;
   border-radius: 2px;
   background-color: $fifth;
@@ -18,7 +20,7 @@
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
     background-color: $primary;
-    background: 
+    background:
     linear-gradient(
       to bottom,
       rgba(65, 85, 255, 1),
@@ -41,10 +43,10 @@
     @include background-size(cover);
   }
   .card-row{
-    margin-top: 15px;
+    margin-top: 20px;
     color: $secondary;
     .card-property{
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
     .title{
       @extend %propiety-title;
@@ -52,6 +54,7 @@
     .paragraph{
       min-height: 21px;
       @extend %propiety-subtitle;
+      @extend .ellipsis;
     }
     .btn{
       @include transition(all .3s ease-out);
@@ -70,6 +73,7 @@
     &:nth-child(2){
       text-align: center;
       @extend %propiety-subtitle;
+      @extend .font20;
     }
     &:nth-child(3){
       text-align: right;
@@ -86,9 +90,7 @@
   height: 50px;
   @extend %flex-container;
   padding: 0px 15px;
-  margin: 5px -15px 15px;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  margin: 5px -15px 25px;
   div{
     flex: 1;
     @extend %roboto-black;
