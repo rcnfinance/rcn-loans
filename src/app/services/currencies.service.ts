@@ -4,6 +4,12 @@ import { environment } from '../../environments/environment';
 export interface Currency {
   address: string;
   symbol: string;
+  isToken: boolean;
+  bestInterestRate: {
+    min: number,
+    max: number,
+    best: number
+  };
 }
 
 @Injectable()
@@ -16,15 +22,33 @@ export class CurrenciesService {
     this.currencies = [
       {
         symbol: 'RCN',
-        address: envCurrencies.rcn
+        address: envCurrencies.rcn,
+        isToken: true,
+        bestInterestRate: {
+          min: 0,
+          max: 20,
+          best: 10
+        }
       },
       {
         symbol: 'DAI',
-        address: envCurrencies.dai
+        address: envCurrencies.dai,
+        isToken: true,
+        bestInterestRate: {
+          min: 10,
+          max: 20,
+          best: 15
+        }
       },
       {
         symbol: 'ETH',
-        address: envCurrencies.eth
+        address: envCurrencies.eth,
+        isToken: true,
+        bestInterestRate: {
+          min: 0,
+          max: 5,
+          best: 1
+        }
       }
     ];
   }
@@ -33,8 +57,12 @@ export class CurrenciesService {
    * Return currencies array
    * @return Currencies
    */
-  getCurrencies(): Array<Currency> {
-    return this.currencies;
+  getCurrencies(onlyTokens: boolean = false): Array<Currency> {
+    if (!onlyTokens) {
+      return this.currencies;
+    }
+
+    this.currencies.filter(currency => currency.isToken);
   }
 
   /**
