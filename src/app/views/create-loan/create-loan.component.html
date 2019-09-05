@@ -335,30 +335,10 @@
                     Collateral Asset
                   </div>
                   <mat-form-field>
-                    <!-- <mat-select
-                      placeholder="Select a Token"
-                      formControlName="collateralAsset"
-                      (selectionChange)="onCollateralAssetChange()"
-                      required
-                    >
-                      <mat-option>
-                        --
-                      </mat-option>
-                      <ng-container *ngFor="let currency of currencies">
-                        <mat-option [value]="currency.symbol">
-                          <div class="currency-box">
-                            <div class="currency-img">
-                              <img src="{{ currency.image }}" alt="" />
-                            </div>
-                            {{ currency.symbol }}
-                          </div>
-                        </mat-option>
-                      </ng-container>
-                    </mat-select> -->
                     <mat-select
                       placeholder="Select a Token"
                       formControlName="collateralAsset"
-                      (selectionChange)="onCollateralAssetChange()"
+                      (selectionChange)="onCollateralAssetChange($event.value)"
                       required
                     >
                       <mat-option>

@@ -72,18 +72,23 @@ export class CreateLoanComponent implements OnInit {
   collateralAsset: FormControl;
   collateralAmount: FormControl;
   liquidationRatio: FormControl;
-  collateralAmountObserver: any;
 
+  // Loan state
   requiredInvalid$ = false;
   currencies: any = [];
-  collateralCurrencies: any = [];
   durationDays: number[] = [15, 30, 45, 60, 75, 90];
   selectedOracle: any;
   selectedCurrency: CurrencyItem;
   createPendingTx: Tx = undefined;
-  collateralPendingTx: Tx = undefined;
   subscribedToConfirmedTx: boolean;
   isCompleting: boolean;
+
+  // Collateral state
+  collateralAmountObserver: any;
+  collateralCurrencies: any = [];
+  collateralPendingTx: Tx = undefined;
+  collateralSelectedOracle: any;
+  collateralSelectedCurrency: CurrencyItem;
 
   // Card Variables
   account: string;
@@ -437,10 +442,8 @@ export class CreateLoanComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
     const loanId: string = loan.id;
-    // FIXME: select collateral oracle
-    // const oracle: string = loan.oracle ? loan.oracle.address : Utils.address0x;
-    const oracle: string = Utils.address0x;
-    const collateralToken: string = form.value.collateralAsset.address;
+    const oracle: string = this.collateralSelectedOracle;
+    const collateralToken: string = this.collateralSelectedCurrency.address;
     const collateralAmount: string = web3.toWei(form.value.collateralAmount);
     const liquidationRatio: number = new web3.BigNumber(form.value.liquidationRatio).mul(100);
     const balanceRatio: any = new web3.BigNumber(form.value.balanceRatio).mul(100);
@@ -468,9 +471,9 @@ export class CreateLoanComponent implements OnInit {
   /**
    * Calculate required amount in collateral token
    * @param loanAmount Loan amount in rcn
-   * @param loanCurrency Loan currency token symbol
+   * @param loanCurrency Loan currency symbol
    * @param collateralRatio Collateral balance ratio
-   * @param collateralAsset Collateral currency
+   * @param collateralAsset Collateral currency token symbol
    * @return Collateral amount in collateral asset
    */
   async calculateCollateralAmount(
@@ -640,7 +643,16 @@ export class CreateLoanComponent implements OnInit {
   /**
    * Change collateral asset and restore formGroup2 values
    */
-  async onCollateralAssetChange() {
+  async onCollateralAssetChange(currencySymbol) {
+    const oracle: string = await this.contractsService.symbolToOracle(currencySymbol);
+    this.collateralSelectedCurrency = this.currenciesService.getCurrencyByKey('symbol', currencySymbol);
+
+    if (oracle !== Utils.address0x) {
+      this.collateralSelectedOracle = oracle;
+    } else {
+      this.collateralSelectedOracle = null;
+    }
+
     const form: FormGroup = this.formGroup2;
 
     if (!form.value.collateralAdjustment) {
@@ -675,7 +687,7 @@ export class CreateLoanComponent implements OnInit {
     try {
       const loanAmount = loanForm.value.conversionGraphic.requestValue;
       const loanCurrency = loanForm.value.conversionGraphic.requestedCurrency.currency;
-      const collateralCurrency = collateralForm.value.collateralAsset.currency;
+      const collateralCurrency = this.collateralSelectedCurrency.symbol;
       const hundredPercent = 100 * 100;
       let loanAmountInCollateral = await this.calculateCollateralAmount(
         loanAmount,
@@ -751,7 +763,7 @@ export class CreateLoanComponent implements OnInit {
     try {
       const loanAmount = loanForm.value.conversionGraphic.requestValue;
       const loanCurrency = loanForm.value.conversionGraphic.requestedCurrency.currency;
-      const collateralCurrency = collateralForm.value.collateralAsset.currency;
+      const collateralCurrency = this.collateralSelectedCurrency.symbol;
 
       const amount = await this.calculateCollateralAmount(
         loanAmount,
