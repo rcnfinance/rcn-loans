@@ -54,6 +54,7 @@ import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
 import { CollateralSliderDebtComponent } from './collateral-slider-debt/collateral-slider-debt.component';
+import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
 
 @NgModule({
   imports: [
@@ -86,6 +87,7 @@ import { CollateralSliderDebtComponent } from './collateral-slider-debt/collater
     CollateralAddFormComponent,
     CollateralWithdrawFormComponent,
     InfiniteProgressBarComponent,
+    CurrencyLogoComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
@@ -148,6 +150,7 @@ import { CollateralSliderDebtComponent } from './collateral-slider-debt/collater
     CollateralWithdrawFormComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
+    CurrencyLogoComponent,
     DialogWrongCountryComponent
   ]
 })
