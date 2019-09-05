@@ -23,6 +23,7 @@ const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
 const collateralAbi = require('../contracts/Collateral.json');
+const oracleFactoryAbi = require('../contracts/OracleFactory.json');
 // const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
@@ -41,9 +42,8 @@ export class ContractsService {
   private _installmentsModel: any;
   private _collateral: any;
   private _collateralAddress: string = environment.contracts.diaspore.collateral;
-  // private _rcnConverterRamp: any;
-  // private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
-  // private _requestsView: any;
+  private _oracleFactory: any;
+  private _oracleFactoryAddress: string = environment.contracts.oracleFactory;
 
   constructor(
     private http: HttpClient,
@@ -60,6 +60,7 @@ export class ContractsService {
     this._rcnExtension = this.makeContract(extensionAbi.abi, this._rcnExtensionAddress);
     this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
     this._collateral = this.makeContract(collateralAbi.abi, this._collateralAddress);
+    this._oracleFactory = this.makeContract(oracleFactoryAbi.abi, this._oracleFactoryAddress);
   }
 
   /**
@@ -633,6 +634,24 @@ export class ContractsService {
     const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
     const url = await promisify(oracleContract.url.call, []);
     return url;
+  }
+
+  /**
+   * Get oracle address from currency symbol
+   * @param symbol Currency symbol
+   * @return Oracle address
+   */
+  async symbolToOracle(symbol: string) {
+    return await promisify(this._oracleFactory.symbolToOracle.call, [symbol]);
+  }
+
+  /**
+   * Get currency symbol from oracle address
+   * @param oracle Oracle address
+   * @return Currency symbol
+   */
+  async oracleToSymbol(oracle: string) {
+    return await promisify(this._oracleFactory.oracleToSymbol.call, [oracle]);
   }
 
   async getLoan(id: string): Promise<Loan> {
