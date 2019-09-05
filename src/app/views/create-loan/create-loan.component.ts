@@ -39,8 +39,6 @@ export class CreateLoanComponent implements OnInit {
   panelCardOpenState = false;
   panelOpenSeeMore = false;
   mobile = false;
-  creationProgress = 0;
-  showProgress = false;
   isConfirmTooltipAvailable = true;
   // Pays detail
   paysDetail = [];
@@ -80,8 +78,11 @@ export class CreateLoanComponent implements OnInit {
   selectedOracle: any;
   selectedCurrency: CurrencyItem;
   createPendingTx: Tx = undefined;
-  subscribedToConfirmedTx: boolean;
+  txSubscription: boolean;
   isCompleting: boolean;
+  startProgress = false;
+  cancelProgress = false;
+  finishProgress = false;
 
   // Collateral state
   collateralAmountObserver: any;
@@ -89,6 +90,9 @@ export class CreateLoanComponent implements OnInit {
   collateralPendingTx: Tx = undefined;
   collateralSelectedOracle: any;
   collateralSelectedCurrency: CurrencyItem;
+  collateralStartProgress = false;
+  collateralFinishProgress = false;
+  collateralWasCreated = false;
 
   // Card Variables
   account: string;
@@ -411,6 +415,7 @@ export class CreateLoanComponent implements OnInit {
   async onSubmitStep2(form: NgForm) {
     const web3: any = this.web3Service.web3;
     const pendingLoanCreation: Tx = this.createPendingTx;
+    await this.setAccount();
 
     if (pendingLoanCreation && !pendingLoanCreation.confirmed) {
       this.showMessage('Wait for the loan to be created', 'snackbar');
@@ -860,10 +865,9 @@ export class CreateLoanComponent implements OnInit {
    */
   async requestLoan(form: NgForm) {
     const web3 = this.web3Service.web3;
+    await this.setAccount();
 
-    let account: string = await this.web3Service.getAccount();
-    account = web3.toChecksumAddress(account);
-
+    const account: string = this.account;
     const expiration = this.returnDaysAs(form.value.expirationRequestDate, 'date');
     const amount = new web3.BigNumber(10 ** 18).mul(form.value.conversionGraphic.requestValue);
     const salt = web3.toHex(new Date().getTime());
@@ -931,47 +935,34 @@ export class CreateLoanComponent implements OnInit {
    */
   retrievePendingTx() {
     this.createPendingTx = this.txService.getLastPendingCreate(this.loan);
-
     if (this.createPendingTx !== undefined) {
       const loanId: string = this.loan.id;
       this.location.replaceState(`/create/${ loanId }`);
-
-      if (this.creationProgress === 0) {
-        this.creationProgress = 1;
-        this.showProgress = true;
-        let slowProgressbar: boolean;
-
-        const updateProgressbar = () => {
-          slowProgressbar = !slowProgressbar;
-
-          if (this.creationProgress >= 97) {
-            return;
-          }
-          if (this.creationProgress > 70) {
-            if (slowProgressbar) {
-              this.creationProgress++;
-            }
-            return;
-          }
-          this.creationProgress++;
-        };
-
-        const incrementProgress = setInterval(updateProgressbar, 250);
-
-        if (!this.subscribedToConfirmedTx) {
-          this.subscribedToConfirmedTx = true;
-          this.txService.subscribeConfirmedTx(async (tx: Tx) => {
-            if (tx.type === Type.create && tx.tx === this.createPendingTx.tx) {
-              clearInterval(incrementProgress);
-              this.finishLoanCreation();
-            }
-          });
-        }
-
-      }
+      this.startProgress = true;
+      this.trackProgressbar();
     }
 
     this.collateralPendingTx = this.txService.getLastPendingCreateCollateral(this.loan);
+    if (this.collateralPendingTx !== undefined) {
+      this.collateralStartProgress = true;
+      this.trackProgressbar();
+    }
+  }
+
+  /**
+   * Track progressbar value
+   */
+  trackProgressbar() {
+    if (!this.txSubscription) {
+      this.txSubscription = true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) => {
+        if (tx.type === Type.create && tx.tx === this.createPendingTx.tx) {
+          this.finishLoanCreation();
+        } else if (tx.type === Type.createCollateral && tx.tx === this.collateralPendingTx.tx) {
+          this.finishCollateralCreation();
+        }
+      });
+    }
   }
 
   /**
@@ -981,21 +972,48 @@ export class CreateLoanComponent implements OnInit {
     const loanWasCreated = await this.contractsService.loanWasCreated(this.loan.id);
 
     if (loanWasCreated) {
-      this.creationProgress = 100;
-
-      setTimeout(() => {
-        this.showProgress = false;
-      }, 1000);
+      this.finishProgress = true;
     } else {
-      this.creationProgress = 0;
-
+      this.cancelProgress = true;
       setTimeout(() => {
         this.showMessage('The loan could not be created', 'dialog');
-        this.showProgress = false;
+        this.startProgress = false;
         this.createPendingTx = undefined;
         this.init = true;
       }, 1000);
     }
+  }
+
+  /**
+   * Finish collateral creation
+   */
+  async finishCollateralCreation() {
+    this.collateralFinishProgress = true;
+  }
+
+  /**
+   * Hide progressbar
+   * @param transaction Progressbar to finish
+   */
+  hideProgressbar(transaction: 'loan' | 'collateral') {
+    switch (transaction) {
+      case 'loan':
+        this.startProgress = false;
+        this.finishProgress = false;
+        break;
+
+      case 'collateral':
+        this.collateralStartProgress = false;
+        this.collateralFinishProgress = false;
+        this.collateralWasCreated = true;
+        // TODO: redirect to my loans
+        break;
+
+      default:
+        break;
+    }
+
+    this.retrievePendingTx();
   }
 
   /**

@@ -28,16 +28,19 @@
               <span class="main-title main-title--divider">| </span>
               SET YOUR LOAN REQUIREMENTS
             </mat-panel-title>
-            <ng-container *ngIf="showProgress">
-              <mat-progress-bar
-                mode="determinate"
-                [value]="creationProgress"
-              ></mat-progress-bar>
+            <ng-container *ngIf="startProgress">
+              <app-infinite-progress-bar
+                [start]="true"
+                [end]="finishProgress"
+                [cancel]="cancelProgress"
+                (finish)="hideProgressbar('loan')"
+              >
+              </app-infinite-progress-bar>
               <div>
                 <span class="fa fa-spinner fa-spin"></span>
               </div>
             </ng-container>
-            <ng-container *ngIf="!showProgress && isCompleting">
+            <ng-container *ngIf="!startProgress && isCompleting">
               <div>
                 <span class="fa fa-check" *ngIf="!init"></span>
               </div>
@@ -321,6 +324,22 @@
               <span class="main-title main-title--divider">| </span>
               SELECT YOUR COLLATERAL
             </mat-panel-title>
+            <ng-container *ngIf="collateralStartProgress">
+              <app-infinite-progress-bar
+                [start]="true"
+                [end]="collateralFinishProgress"
+                (finish)="hideProgressbar('collateral')"
+              >
+              </app-infinite-progress-bar>
+              <div>
+                <span class="fa fa-spinner fa-spin"></span>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="collateralWasCreated">
+              <div>
+                <span class="fa fa-check"></span>
+              </div>
+            </ng-container>
           </mat-expansion-panel-header>
           <form
             [formGroup]="formGroup2"
