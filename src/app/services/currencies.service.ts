@@ -62,7 +62,7 @@ export class CurrenciesService {
       return this.currencies;
     }
 
-    this.currencies.filter(currency => currency.isToken);
+    return this.currencies.filter(currency => currency.isToken);
   }
 
   /**
