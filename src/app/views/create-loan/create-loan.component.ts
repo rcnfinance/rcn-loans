@@ -17,6 +17,7 @@ import { Collateral } from './../../models/collateral.model';
 // App Services
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
+import { CurrenciesService } from './../../services/currencies.service';
 import { ApiService } from './../../services/api.service';
 import { Web3Service } from './../../services/web3.service';
 import { TxService, Tx, Type } from '../../tx.service';
@@ -41,11 +42,6 @@ export class CreateLoanComponent implements OnInit {
   creationProgress = 0;
   showProgress = false;
   isConfirmTooltipAvailable = true;
-  minRate = '-';
-  maxRate = '-';
-  min = '0';
-  max = '0';
-  advisedRate = 0;
   // Pays detail
   paysDetail = [];
 
@@ -79,28 +75,8 @@ export class CreateLoanComponent implements OnInit {
   collateralAmountObserver: any;
 
   requiredInvalid$ = false;
-  currencies: any = [
-    {
-      currency: 'RCN',
-      img: '../../../assets/rcn.png',
-      address: environment.contracts.rcnToken
-    },
-    {
-      currency: 'MANA',
-      img: '../../../assets/mana.png',
-      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
-    },
-    {
-      currency: 'ETH',
-      img: '../../../assets/eth.png',
-      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-    },
-    {
-      currency: 'DAI',
-      img: '../../../assets/dai.png',
-      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
-    }
-  ];
+  currencies: any = [];
+  collateralCurrencies: any = [];
   durationDays: number[] = [15, 30, 45, 60, 75, 90];
   selectedOracle: any;
   createPendingTx: Tx = undefined;
@@ -118,6 +94,7 @@ export class CreateLoanComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private contractsService: ContractsService,
+    private currenciesService: CurrenciesService,
     private apiService: ApiService,
     private web3Service: Web3Service,
     private txService: TxService,
@@ -129,6 +106,7 @@ export class CreateLoanComponent implements OnInit {
     if (window.screen.width <= 750) {
       this.mobile = true;
     }
+    this.getCurrencies();
     this.createFormControls();
     this.createForm();
     await this.setAccount();
@@ -164,6 +142,14 @@ export class CreateLoanComponent implements OnInit {
       );
     }
 
+  }
+
+  /**
+   * Get available currencies for loan and collateral select
+   */
+  getCurrencies() {
+    this.currencies = this.currenciesService.getCurrencies();
+    this.collateralCurrencies = this.currenciesService.getCurrencies(true);
   }
 
   /**
@@ -330,47 +316,6 @@ export class CreateLoanComponent implements OnInit {
     this.slideSelected = true;
   }
 
-   /**
-   * Fills out annual interest's rate min and max values
-   */
-  interestRateMaxMin() {
-    switch (this.formGroup1.value.conversionGraphic.requestedCurrency) {
-      case 'RCN':
-        this.minRate = '0%';
-        this.maxRate = '20%';
-        this.min = '0';
-        this.max = '20';
-        break;
-      case 'MANA':
-        this.minRate = '-';
-        this.maxRate = '-';
-        this.min = '0';
-        this.max = '0';
-        break;
-      case 'ETH':
-        this.minRate = '0%';
-        this.maxRate = '5%';
-        this.min = '0';
-        this.max = '5';
-        break;
-      case 'DAI':
-        this.minRate = '10%';
-        this.maxRate = '20%';
-        this.min = '10';
-        this.max = '20';
-        break;
-      default:
-        this.minRate = '-';
-        this.maxRate = '-';
-        this.min = '0';
-        this.max = '0';
-        break;
-    }
-  }
-
-  // calculateAdvisedRate() {
-  //   this.advisedRate = parseInt(this.max, 10) / 100 * 40;
-  // }
   /**
    * Create form controls and define values
    */
@@ -379,7 +324,7 @@ export class CreateLoanComponent implements OnInit {
     this.requestedCurrency = new FormControl(undefined, Validators.required);
     this.requestValue = new FormControl(null);
     this.fullDuration = new FormControl(null, Validators.required);
-    this.annualInterest = new FormControl(this.advisedRate, Validators.required);
+    this.annualInterest = new FormControl(null, Validators.required);
     this.installmentsFlag = new FormControl(false, Validators.required);
     this.expirationRequestDate = new FormControl(7, Validators.required);
     // Form group 2
@@ -489,7 +434,9 @@ export class CreateLoanComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
     const loanId: string = loan.id;
-    const oracle: string = loan.oracle ? loan.oracle.address : Utils.address0x;
+    // FIXME: select collateral oracle
+    // const oracle: string = loan.oracle ? loan.oracle.address : Utils.address0x;
+    const oracle: string = Utils.address0x;
     const collateralToken: string = form.value.collateralAsset.address;
     const collateralAmount: string = web3.toWei(form.value.collateralAmount);
     const liquidationRatio: number = new web3.BigNumber(form.value.liquidationRatio).mul(100);
@@ -595,36 +542,18 @@ export class CreateLoanComponent implements OnInit {
 
   /**
    * Update selected oracle when currency is updated
-   * @param requestedCurrency.currency Requested currency as string
+   * @param requestedCurrency Requested currency as string
    */
-  onCurrencyChange(requestedCurrency) {
-    switch (requestedCurrency.currency) {
-      case 'RCN':
-        this.selectedOracle = null;
-        break;
+  async onCurrencyChange(currencySymbol) {
+    const oracle: string = await this.contractsService.symbolToOracle(currencySymbol);
 
-      case 'MANA':
-        if (environment.production) {
-          this.selectedOracle = '0x2aaf69a2df2828b55fa4a5e30ee8c3c7cd9e5d5b'; // Mana Prod Oracle
-        } else {
-          this.selectedOracle = '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40'; // Mana Dev Oracle
-        }
-        break;
-
-      case 'ARS':
-        if (environment.production) {
-          this.selectedOracle = '0x22222c1944efcc38ca46489f96c3a372c4db74e6'; // Ars Prod Oracle
-        } else {
-          this.selectedOracle = '0x0ac18b74b5616fdeaeff809713d07ed1486d0128'; // Ars Dev Oracle
-        }
-        break;
-
-      default:
-        break;
+    if (oracle !== Utils.address0x) {
+      this.selectedOracle = oracle;
+    } else {
+      this.selectedOracle = null;
     }
+
     this.installmentsDetails();
-    this.interestRateMaxMin();
-    this.calculateAdvisedRate();
   }
 
   /**

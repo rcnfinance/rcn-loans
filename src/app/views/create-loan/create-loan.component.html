@@ -65,19 +65,18 @@
                             (selectionChange)="onCurrencyChange($event.value)"
                             required
                           >
-                            <!-- <mat-select-trigger *ngIf="getSelectedLabel() as selectedLabel">
-                              <mat-icon [ngStyle]="{'color': selectedLabel.color}">brightness_1</mat-icon>&nbsp;{{selectedLabel.name}}
-                            </mat-select-trigger> -->
-                            <mat-option>--</mat-option>
+                            <mat-option>
+                              --
+                            </mat-option>
                             <mat-option
                               *ngFor="let currency of currencies"
-                              [value]="currency.currency"
+                              [value]="currency.symbol"
                             >
-                              <div class="currency-box">
-                                <div class="currency-img">
-                                  <img src="{{ currency.img }}" alt="" />
-                                </div>
-                                {{ currency.currency }}
+                              <div class="d-flex align-items-center py-1">
+                                <app-currency-logo [address]="currency.address"></app-currency-logo>
+                                <span class="ml-3">
+                                  {{ currency.symbol }}
+                                </span>
                               </div>
                             </mat-option>
                           </mat-select>
@@ -208,24 +207,25 @@
                     <div class="col-sm-12">
                       <mat-slider
                         class="percentage"
-                        step="0.5"
-                        [min]="min"
-                        [max]="max"
+                        step="1"
+                        [min]="0"
+                        [max]="40"
                         tickInterval="1"
                         color="primary"
                         thumbLabel="true"
                         formControlName="annualInterest"
+                        [disabled]="!formGroup1?.value.conversionGraphic.requestedCurrency"
                       ></mat-slider>
                       <div class="slider-percentage-box">
                         <div
                           class="slider-percentaje subtitle-style subtitle-style--number"
                         >
-                          {{ minRate }}
+                          0
                         </div>
                         <div
                           class="slider-percentaje subtitle-style subtitle-style--number"
                         >
-                          {{ maxRate }}
+                          40
                         </div>
                       </div>
                     </div>
@@ -334,7 +334,7 @@
                     Collateral Asset
                   </div>
                   <mat-form-field>
-                    <mat-select
+                    <!-- <mat-select
                       placeholder="Select a Token"
                       formControlName="collateralAsset"
                       (selectionChange)="onCollateralAssetChange()"
@@ -344,15 +344,36 @@
                         --
                       </mat-option>
                       <ng-container *ngFor="let currency of currencies">
-                        <mat-option [value]="currency">
+                        <mat-option [value]="currency.symbol">
                           <div class="currency-box">
                             <div class="currency-img">
-                              <img src="{{ currency.img }}" alt="" />
+                              <img src="{{ currency.image }}" alt="" />
                             </div>
-                            {{ currency.currency }}
+                            {{ currency.symbol }}
                           </div>
                         </mat-option>
                       </ng-container>
+                    </mat-select> -->
+                    <mat-select
+                      placeholder="Select a Token"
+                      formControlName="collateralAsset"
+                      (selectionChange)="onCollateralAssetChange()"
+                      required
+                    >
+                      <mat-option>
+                        --
+                      </mat-option>
+                      <mat-option
+                        *ngFor="let currency of collateralCurrencies"
+                        [value]="currency.symbol"
+                      >
+                        <div class="d-flex align-items-center py-1">
+                          <app-currency-logo [address]="currency.address"></app-currency-logo>
+                          <span class="ml-3">
+                            {{ currency.symbol }}
+                          </span>
+                        </div>
+                      </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>

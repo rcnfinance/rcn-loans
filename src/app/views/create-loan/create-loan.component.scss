@@ -368,22 +368,6 @@ mat-expansion-panel {
   text-transform: lowercase !important;
 }
 
-.currency-box {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  .currency-img {
-    width: 34px;
-    margin-right: 10px;
-    background-color: white;
-    border-radius: 50px;
-    padding: 3px;
-    img {
-      width: 100%;
-    }
-  }
-}
-
 //Form
 .mat-form-field-appearance-legacy .mat-form-field-infix {
   padding: 0;
