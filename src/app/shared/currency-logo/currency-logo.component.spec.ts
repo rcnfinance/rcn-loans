@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CurrenciesService } from './../../services/currencies.service';
 import { CurrencyLogoComponent } from './currency-logo.component';
 
 describe('CurrencyLogoComponent', () => {
@@ -8,7 +9,9 @@ describe('CurrencyLogoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CurrencyLogoComponent ]
+      declarations: [ CurrencyLogoComponent ],
+      providers: [ CurrenciesService ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
     .compileComponents();
   }));

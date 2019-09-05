@@ -53,6 +53,7 @@ import { TitleService } from './../services/title.service';
 import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
+import { CurrenciesService } from './../services/currencies.service';
 import { CollateralSliderDebtComponent } from './collateral-slider-debt/collateral-slider-debt.component';
 import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
 
@@ -121,7 +122,8 @@ import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
     TitleService,
     AvailableLoansService,
     CountriesService,
-    EventsService
+    EventsService,
+    CurrenciesService
   ],
   exports: [
     FormsModule,
