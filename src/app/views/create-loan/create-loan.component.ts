@@ -17,7 +17,7 @@ import { Collateral } from './../../models/collateral.model';
 // App Services
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
-import { CurrenciesService } from './../../services/currencies.service';
+import { CurrenciesService, Currency as CurrencyItem } from './../../services/currencies.service';
 import { ApiService } from './../../services/api.service';
 import { Web3Service } from './../../services/web3.service';
 import { TxService, Tx, Type } from '../../tx.service';
@@ -79,6 +79,7 @@ export class CreateLoanComponent implements OnInit {
   collateralCurrencies: any = [];
   durationDays: number[] = [15, 30, 45, 60, 75, 90];
   selectedOracle: any;
+  selectedCurrency: CurrencyItem;
   createPendingTx: Tx = undefined;
   collateralPendingTx: Tx = undefined;
   subscribedToConfirmedTx: boolean;
@@ -209,6 +210,7 @@ export class CreateLoanComponent implements OnInit {
     const interestpunitory = Number(loan.descriptor.punitiveInterestRateRate).toFixed(0);
     this.installments = loan.descriptor.installments;
     this.selectedOracle = oracle;
+    this.selectedCurrency = this.currenciesService.getCurrencyByKey('symbol', currency);
 
     this.formGroup1.patchValue({
       duration: {
@@ -227,7 +229,8 @@ export class CreateLoanComponent implements OnInit {
 
     this.onRequestedChange(requestValue);
     this.onDurationChange();
-
+    this.updateInterestRate();
+    this.expectedReturn();
   }
 
   /**
@@ -488,7 +491,7 @@ export class CreateLoanComponent implements OnInit {
       collateralAmount = new web3.toWei(collateralAmount);
     } else {
       const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
-      const fromToken: any = this.currencies.filter(currency => currency.currency === collateralAsset)[0].address;
+      const fromToken: any = this.currenciesService.getCurrencyByKey('symbol', collateralAsset).address;
       const token: any = environment.contracts.rcnToken;
       const collateralTokenAmount = await this.contractsService.getCost(
         web3.toWei(collateralAmount),
@@ -546,6 +549,7 @@ export class CreateLoanComponent implements OnInit {
    */
   async onCurrencyChange(currencySymbol) {
     const oracle: string = await this.contractsService.symbolToOracle(currencySymbol);
+    this.selectedCurrency = this.currenciesService.getCurrencyByKey('symbol', currencySymbol);
 
     if (oracle !== Utils.address0x) {
       this.selectedOracle = oracle;
@@ -554,6 +558,8 @@ export class CreateLoanComponent implements OnInit {
     }
 
     this.installmentsDetails();
+    this.updateInterestRate();
+    this.expectedReturn();
   }
 
   /**
@@ -586,6 +592,13 @@ export class CreateLoanComponent implements OnInit {
     this.expectedInstallmentsAvailable();
     this.expectedReturn();
     this.installmentsDetails();
+  }
+
+  /**
+   * Calculate the expected return amount when annual interest rate is updated
+   */
+  onInterestRateChange() {
+    this.expectedReturn();
   }
 
   /**
@@ -753,6 +766,19 @@ export class CreateLoanComponent implements OnInit {
     } catch (e) {
       throw Error(e);
     }
+  }
+
+  /**
+   * Update annual interest rate
+   */
+  updateInterestRate() {
+    const bestInterestRate = this.selectedCurrency.bestInterestRate;
+
+    this.formGroup1.patchValue({
+      interest: {
+        annualInterest: bestInterestRate.best
+      }
+    });
   }
 
   /**

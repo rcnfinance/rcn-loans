@@ -208,24 +208,25 @@
                       <mat-slider
                         class="percentage"
                         step="1"
-                        [min]="0"
-                        [max]="40"
+                        [min]="selectedCurrency?.bestInterestRate.min"
+                        [max]="selectedCurrency?.bestInterestRate.max"
                         tickInterval="1"
                         color="primary"
                         thumbLabel="true"
                         formControlName="annualInterest"
                         [disabled]="!formGroup1?.value.conversionGraphic.requestedCurrency"
+                        (change)="onInterestRateChange()"
                       ></mat-slider>
                       <div class="slider-percentage-box">
                         <div
                           class="slider-percentaje subtitle-style subtitle-style--number"
                         >
-                          0
+                          {{ selectedCurrency?.bestInterestRate.min }}
                         </div>
                         <div
                           class="slider-percentaje subtitle-style subtitle-style--number"
                         >
-                          40
+                          {{ selectedCurrency?.bestInterestRate.max }}
                         </div>
                       </div>
                     </div>
