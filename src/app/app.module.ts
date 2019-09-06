@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment';
 // App Modules
 import { AppRoutingModule } from './app-routing/app-routing.module';
+
 import { CoreModule } from './core/core.module';
 import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
 import { ActiveLoansModule } from './views/active-loans/active-loans.module';
