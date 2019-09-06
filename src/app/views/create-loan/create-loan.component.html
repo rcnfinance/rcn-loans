@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-md-8 paddingright60">
+    <div class="col-sm-12 col-md-8 padding">
       <mat-accordion>
         <mat-expansion-panel
           [expanded]="init == true"
@@ -76,7 +76,9 @@
                               [value]="currency.symbol"
                             >
                               <div class="d-flex align-items-center py-1">
-                                <app-currency-logo [address]="currency.address"></app-currency-logo>
+                                <app-currency-logo
+                                  [address]="currency.address"
+                                ></app-currency-logo>
                                 <span class="ml-3">
                                   {{ currency.symbol }}
                                 </span>
@@ -217,19 +219,21 @@
                         color="primary"
                         thumbLabel="true"
                         formControlName="annualInterest"
-                        [disabled]="!formGroup1?.value.conversionGraphic.requestedCurrency"
+                        [disabled]="
+                          !formGroup1?.value.conversionGraphic.requestedCurrency
+                        "
                         (change)="onInterestRateChange()"
                       ></mat-slider>
                       <div class="slider-percentage-box">
                         <div
                           class="slider-percentaje subtitle-style subtitle-style--number"
                         >
-                          {{ selectedCurrency?.bestInterestRate.min }}
+                          {{ selectedCurrency?.bestInterestRate.min }}
                         </div>
                         <div
                           class="slider-percentaje subtitle-style subtitle-style--number"
                         >
-                          {{ selectedCurrency?.bestInterestRate.max }}
+                          {{ selectedCurrency?.bestInterestRate.max }}
                         </div>
                       </div>
                     </div>
@@ -368,7 +372,9 @@
                         [value]="currency.symbol"
                       >
                         <div class="d-flex align-items-center py-1">
-                          <app-currency-logo [address]="currency.address"></app-currency-logo>
+                          <app-currency-logo
+                            [address]="currency.address"
+                          ></app-currency-logo>
                           <span class="ml-3">
                             {{ currency.symbol }}
                           </span>
@@ -468,10 +474,14 @@
                         (change)="onCollateralRatioChange(); slideChange()"
                       ></mat-slider>
                       <div class="slider-percentage-box">
-                        <div class="slider-percentaje subtitle-style subtitle-style--number">
+                        <div
+                          class="slider-percentaje subtitle-style subtitle-style--number"
+                        >
                           {{ formGroup2.value.liquidationRatio }} %
                         </div>
-                        <div class="slider-percentaje subtitle-style subtitle-style--number">
+                        <div
+                          class="slider-percentaje subtitle-style subtitle-style--number"
+                        >
                           400%
                         </div>
                       </div>
@@ -834,11 +844,9 @@
                 <div class="title">{{ "Borrow" }}</div>
                 <div class="margintop5"></div>
                 <div
-                class="block-title"
+                  class="block-title"
                   [ngClass]="
-                    this.durationLabel === '0'
-                      ? 'block-title'
-                      : 'block-title-white && title-blue'
+                    this.durationLabel === '0' ? '' : 'block-title--white'
                   "
                 >
                   <span *ngIf="!formGroup1.value.conversionGraphic.requestValue"
@@ -858,10 +866,11 @@
                 <div class="title">{{ "Return" }}</div>
                 <div class="margintop5"></div>
                 <div
+                  class="block-title"
                   [ngClass]="
                     this.durationLabel === '0'
                       ? 'block-title'
-                      : 'block-title-white'
+                      : 'block-title-white && title-blue'
                   "
                 >
                   <span *ngIf="!installmentsAvailable">-</span
