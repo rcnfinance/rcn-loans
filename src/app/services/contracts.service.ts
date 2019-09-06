@@ -24,13 +24,12 @@ const converterRampAbi = require('../contracts/ConverterRamp.json');
 const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
 const collateralAbi = require('../contracts/Collateral.json');
 const oracleFactoryAbi = require('../contracts/OracleFactory.json');
-// const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
 export class ContractsService {
   private _oracleAddress: string = environment.contracts.oracle;
   private _rcnContract: any;
-  private _rcnContractAddress: string = environment.contracts.rcnToken;
+  private _rcnContractAddress: string = environment.contracts.currencies.rcn;
   private _rcnEngine: any;
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
   private _rcnExtension: any;
@@ -101,37 +100,89 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  async isApproved(contract: string): Promise<boolean> {
-    const pending = this.txService.getLastPendingApprove(this._rcnContract.address, contract);
+  /**
+   * Check if the contract is approved for operate with token
+   * @param contract Contract address
+   * @param tokenAddress Token address
+   * @return Pending tx or boolean
+   */
+  async isApproved(contract: string, tokenAddress: string = environment.contracts.currencies.rcn): Promise<boolean> {
+    const pending = this.txService.getLastPendingApprove(tokenAddress, contract);
     if (pending !== undefined) {
       return pending;
     }
-    const result = await promisify(this._rcnContract.allowance.call, [await this.web3.getAccount(), contract]);
+
+    const currencies = environment.contracts.currencies;
+    const tokensArray = Object.keys(currencies).map(currency => currencies[currency]);
+    const ethAddress = currencies.eth;
+
+    if (tokenAddress === ethAddress) {
+      return true;
+    }
+    if (tokensArray.indexOf(tokenAddress) === -1) {
+      throw Error('The currency does not exist');
+    }
+
+    const tokenContract = this.makeContract(tokenAbi, tokenAddress);
+    const result: number = await promisify(tokenContract.allowance.call, [await this.web3.getAccount(), contract]);
     return result >= this.web3.web3.toWei(1000000000);
   }
 
-  async approve(contract: string): Promise<string> {
-
+  /**
+   * Approve contract for operate with token
+   * @param contract Contract address
+   * @param tokenAddress Token address
+   * @return Tx hash
+   */
+  async approve(contract: string, tokenAddress: string = environment.contracts.currencies.rcn): Promise<string> {
     const account = await this.web3.getAccount();
     const web3 = this.web3.opsWeb3;
+    const currencies = environment.contracts.currencies;
+    const tokensArray = Object.keys(currencies).map(currency => currencies[currency]);
 
-    const result = await promisify(this.loadAltContract(web3, this._rcnContract).approve,
-      [contract, web3.toWei(10 ** 32), { from: account }]);
+    if (tokensArray.indexOf(tokenAddress) === -1) {
+      throw Error('The currency does not exist');
+    }
 
-    this.txService.registerApproveTx(result, this._rcnContract.address, contract, true);
+    const tokenContract = this.makeContract(tokenAbi, tokenAddress);
+    const result = await promisify(this.loadAltContract(web3, tokenContract).approve, [
+      contract,
+      web3.toWei(10 ** 32),
+      {
+        from: account
+      }
+    ]);
 
+    this.txService.registerApproveTx(result, tokenAddress, contract, true);
     return result;
   }
 
-  async disapprove(contract: string): Promise<string> {
+  /**
+   * Disapprove contract for operate with token
+   * @param contract Contract address
+   * @param tokenAddress Token address
+   * @return Tx hash
+   */
+  async disapprove(contract: string, tokenAddress: string = environment.contracts.currencies.rcn): Promise<string> {
     const account = await this.web3.getAccount();
     const web3 = this.web3.opsWeb3;
+    const currencies = environment.contracts.currencies;
+    const tokensArray = Object.keys(currencies).map(currency => currencies[currency]);
 
-    const result = await promisify(this.loadAltContract(web3, this._rcnContract).approve,
-      [contract, 0, { from: account }]);
+    if (tokensArray.indexOf(tokenAddress) === -1) {
+      throw Error('The currency does not exist');
+    }
 
-    this.txService.registerApproveTx(result, this._rcnContract.address, contract, false);
+    const tokenContract = this.makeContract(tokenAbi, tokenAddress);
+    const result = await promisify(this.loadAltContract(web3, tokenContract).approve, [
+      contract,
+      0,
+      {
+        from: account
+      }
+    ]);
 
+    this.txService.registerApproveTx(result, tokenAddress, contract, false);
     return result;
   }
 
