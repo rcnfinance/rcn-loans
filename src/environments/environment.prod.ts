@@ -49,6 +49,7 @@ export const environment = {
     basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
     oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf', // FIXME: Ropsten oracle
+    oracleFactory: '0xeafa9510cb980aa7ed6c740ebee28d35b0c11ff8', // FIXME: Ropsten oracleFactory
     diaspore: {
       debtEngine: '0xe4BfBBB04844cdEbd6b7814183f92E0703257d48',
       loanManager: '0x978ef6D2bd7559181e6Ac82fFa5C875364d9071b',

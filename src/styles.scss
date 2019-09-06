@@ -492,17 +492,24 @@ mat-form-field{
   }
 
 .mat-form-field-underline{ color: $secondary; }
-.mat-select-arrow{ color: $secondary; }
+
+// Mat select
+.mat-select-arrow { color: $secondary; }
 .mat-select-placeholder, .mat-select-value-text { color: #EDEDED; @extend %font-medium;}
 .mat-select-content{
-  background-color: #101010;
+  background-color: $gray7;
   .mat-option{
     color: $secondary;
     text-transform: uppercase;
     @include transition;
     &:hover{
-      background-color: #404040;
+      background-color: rgba($gray2, .39);
     }
+  }
+}
+.mat-select-panel {
+  mat-option.mat-option {
+    height: auto;
   }
 }
 

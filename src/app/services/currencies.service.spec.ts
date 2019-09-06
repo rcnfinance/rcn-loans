@@ -1,6 +1,5 @@
 import { async, TestBed } from '@angular/core/testing';
 import { CurrenciesService } from './currencies.service';
-import { environment } from '../../environments/environment';
 
 describe('CurrenciesService', () => {
   let service: CurrenciesService;
@@ -30,10 +29,7 @@ describe('CurrenciesService', () => {
     const rcnSymbol = 'RCN';
     const result = service.getCurrencyByKey(key, rcnSymbol);
 
-    expect(result).toEqual({
-      symbol: rcnSymbol,
-      address: environment.contracts.currencies.rcn
-    });
+    expect(result).toEqual(service.currencies[0]);
   });
 
   it('should return all currencies except one', () => {

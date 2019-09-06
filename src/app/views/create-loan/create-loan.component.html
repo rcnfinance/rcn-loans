@@ -28,16 +28,19 @@
               <span class="main-title main-title--divider">| </span>
               SET YOUR LOAN REQUIREMENTS
             </mat-panel-title>
-            <ng-container *ngIf="showProgress">
-              <mat-progress-bar
-                mode="determinate"
-                [value]="creationProgress"
-              ></mat-progress-bar>
+            <ng-container *ngIf="startProgress">
+              <app-infinite-progress-bar
+                [start]="true"
+                [end]="finishProgress"
+                [cancel]="cancelProgress"
+                (finish)="hideProgressbar('loan')"
+              >
+              </app-infinite-progress-bar>
               <div>
                 <span class="fa fa-spinner fa-spin"></span>
               </div>
             </ng-container>
-            <ng-container *ngIf="!showProgress && isCompleting">
+            <ng-container *ngIf="!startProgress && isCompleting">
               <div>
                 <span class="fa fa-check" *ngIf="!init"></span>
               </div>
@@ -65,19 +68,18 @@
                             (selectionChange)="onCurrencyChange($event.value)"
                             required
                           >
-                            <!-- <mat-select-trigger *ngIf="getSelectedLabel() as selectedLabel">
-                              <mat-icon [ngStyle]="{'color': selectedLabel.color}">brightness_1</mat-icon>&nbsp;{{selectedLabel.name}}
-                            </mat-select-trigger> -->
-                            <mat-option>--</mat-option>
+                            <mat-option>
+                              --
+                            </mat-option>
                             <mat-option
                               *ngFor="let currency of currencies"
-                              [value]="currency.currency"
+                              [value]="currency.symbol"
                             >
-                              <div class="currency-box">
-                                <div class="currency-img">
-                                  <img src="{{ currency.img }}" alt="" />
-                                </div>
-                                {{ currency.currency }}
+                              <div class="d-flex align-items-center py-1">
+                                <app-currency-logo [address]="currency.address"></app-currency-logo>
+                                <span class="ml-3">
+                                  {{ currency.symbol }}
+                                </span>
                               </div>
                             </mat-option>
                           </mat-select>
@@ -208,24 +210,26 @@
                     <div class="col-sm-12">
                       <mat-slider
                         class="percentage"
-                        step="0.5"
-                        [min]="min"
-                        [max]="max"
+                        step="1"
+                        [min]="selectedCurrency?.bestInterestRate.min"
+                        [max]="selectedCurrency?.bestInterestRate.max"
                         tickInterval="1"
                         color="primary"
                         thumbLabel="true"
                         formControlName="annualInterest"
+                        [disabled]="!formGroup1?.value.conversionGraphic.requestedCurrency"
+                        (change)="onInterestRateChange()"
                       ></mat-slider>
                       <div class="slider-percentage-box">
                         <div
                           class="slider-percentaje subtitle-style subtitle-style--number"
                         >
-                          {{ minRate }}
+                          {{ selectedCurrency?.bestInterestRate.min }}
                         </div>
                         <div
                           class="slider-percentaje subtitle-style subtitle-style--number"
                         >
-                          {{ maxRate }}
+                          {{ selectedCurrency?.bestInterestRate.max }}
                         </div>
                       </div>
                     </div>
@@ -320,6 +324,22 @@
               <span class="main-title main-title--divider">| </span>
               SELECT YOUR COLLATERAL
             </mat-panel-title>
+            <ng-container *ngIf="collateralStartProgress">
+              <app-infinite-progress-bar
+                [start]="true"
+                [end]="collateralFinishProgress"
+                (finish)="hideProgressbar('collateral')"
+              >
+              </app-infinite-progress-bar>
+              <div>
+                <span class="fa fa-spinner fa-spin"></span>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="collateralWasCreated">
+              <div>
+                <span class="fa fa-check"></span>
+              </div>
+            </ng-container>
           </mat-expansion-panel-header>
           <form
             [formGroup]="formGroup2"
@@ -337,22 +357,23 @@
                     <mat-select
                       placeholder="Select a Token"
                       formControlName="collateralAsset"
-                      (selectionChange)="onCollateralAssetChange()"
+                      (selectionChange)="onCollateralAssetChange($event.value)"
                       required
                     >
                       <mat-option>
                         --
                       </mat-option>
-                      <ng-container *ngFor="let currency of currencies">
-                        <mat-option [value]="currency">
-                          <div class="currency-box">
-                            <div class="currency-img">
-                              <img src="{{ currency.img }}" alt="" />
-                            </div>
-                            {{ currency.currency }}
-                          </div>
-                        </mat-option>
-                      </ng-container>
+                      <mat-option
+                        *ngFor="let currency of collateralCurrencies"
+                        [value]="currency.symbol"
+                      >
+                        <div class="d-flex align-items-center py-1">
+                          <app-currency-logo [address]="currency.address"></app-currency-logo>
+                          <span class="ml-3">
+                            {{ currency.symbol }}
+                          </span>
+                        </div>
+                      </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -444,7 +465,7 @@
                         thumbLabel="true"
                         [min]="formGroup2.value.liquidationRatio"
                         max="400"
-                        (change)="onBalanceRatioChange(); slideChange()"
+                        (change)="onCollateralRatioChange(); slideChange()"
                       ></mat-slider>
                       <div class="slider-percentage-box">
                         <div class="slider-percentaje subtitle-style subtitle-style--number">

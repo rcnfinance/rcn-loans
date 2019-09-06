@@ -17,6 +17,7 @@ import { Collateral } from './../../models/collateral.model';
 // App Services
 import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
+import { CurrenciesService, Currency as CurrencyItem } from './../../services/currencies.service';
 import { ApiService } from './../../services/api.service';
 import { Web3Service } from './../../services/web3.service';
 import { TxService, Tx, Type } from '../../tx.service';
@@ -38,14 +39,7 @@ export class CreateLoanComponent implements OnInit {
   panelCardOpenState = false;
   panelOpenSeeMore = false;
   mobile = false;
-  creationProgress = 0;
-  showProgress = false;
   isConfirmTooltipAvailable = true;
-  minRate = '-';
-  maxRate = '-';
-  min = '0';
-  max = '0';
-  advisedRate = 0;
   // Pays detail
   paysDetail = [];
 
@@ -76,37 +70,29 @@ export class CreateLoanComponent implements OnInit {
   collateralAsset: FormControl;
   collateralAmount: FormControl;
   liquidationRatio: FormControl;
-  collateralAmountObserver: any;
 
+  // Loan state
   requiredInvalid$ = false;
-  currencies: any = [
-    {
-      currency: 'RCN',
-      img: '../../../assets/rcn.png',
-      address: environment.contracts.rcnToken
-    },
-    {
-      currency: 'MANA',
-      img: '../../../assets/mana.png',
-      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
-    },
-    {
-      currency: 'ETH',
-      img: '../../../assets/eth.png',
-      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-    },
-    {
-      currency: 'DAI',
-      img: '../../../assets/dai.png',
-      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
-    }
-  ];
+  currencies: any = [];
   durationDays: number[] = [15, 30, 45, 60, 75, 90];
   selectedOracle: any;
+  selectedCurrency: CurrencyItem;
   createPendingTx: Tx = undefined;
-  collateralPendingTx: Tx = undefined;
-  subscribedToConfirmedTx: boolean;
+  txSubscription: boolean;
   isCompleting: boolean;
+  startProgress = false;
+  cancelProgress = false;
+  finishProgress = false;
+
+  // Collateral state
+  collateralAmountObserver: any;
+  collateralCurrencies: any = [];
+  collateralPendingTx: Tx = undefined;
+  collateralSelectedOracle: any;
+  collateralSelectedCurrency: CurrencyItem;
+  collateralStartProgress = false;
+  collateralFinishProgress = false;
+  collateralWasCreated = false;
 
   // Card Variables
   account: string;
@@ -118,6 +104,7 @@ export class CreateLoanComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private contractsService: ContractsService,
+    private currenciesService: CurrenciesService,
     private apiService: ApiService,
     private web3Service: Web3Service,
     private txService: TxService,
@@ -129,6 +116,7 @@ export class CreateLoanComponent implements OnInit {
     if (window.screen.width <= 750) {
       this.mobile = true;
     }
+    this.getCurrencies();
     this.createFormControls();
     this.createForm();
     await this.setAccount();
@@ -164,6 +152,14 @@ export class CreateLoanComponent implements OnInit {
       );
     }
 
+  }
+
+  /**
+   * Get available currencies for loan and collateral select
+   */
+  getCurrencies() {
+    this.currencies = this.currenciesService.getCurrencies();
+    this.collateralCurrencies = this.currenciesService.getCurrencies(true);
   }
 
   /**
@@ -223,6 +219,7 @@ export class CreateLoanComponent implements OnInit {
     const interestpunitory = Number(loan.descriptor.punitiveInterestRateRate).toFixed(0);
     this.installments = loan.descriptor.installments;
     this.selectedOracle = oracle;
+    this.selectedCurrency = this.currenciesService.getCurrencyByKey('symbol', currency);
 
     this.formGroup1.patchValue({
       duration: {
@@ -241,7 +238,8 @@ export class CreateLoanComponent implements OnInit {
 
     this.onRequestedChange(requestValue);
     this.onDurationChange();
-
+    this.updateInterestRate();
+    this.expectedReturn();
   }
 
   /**
@@ -330,47 +328,6 @@ export class CreateLoanComponent implements OnInit {
     this.slideSelected = true;
   }
 
-   /**
-   * Fills out annual interest's rate min and max values
-   */
-  interestRateMaxMin() {
-    switch (this.formGroup1.value.conversionGraphic.requestedCurrency) {
-      case 'RCN':
-        this.minRate = '0%';
-        this.maxRate = '20%';
-        this.min = '0';
-        this.max = '20';
-        break;
-      case 'MANA':
-        this.minRate = '-';
-        this.maxRate = '-';
-        this.min = '0';
-        this.max = '0';
-        break;
-      case 'ETH':
-        this.minRate = '0%';
-        this.maxRate = '5%';
-        this.min = '0';
-        this.max = '5';
-        break;
-      case 'DAI':
-        this.minRate = '10%';
-        this.maxRate = '20%';
-        this.min = '10';
-        this.max = '20';
-        break;
-      default:
-        this.minRate = '-';
-        this.maxRate = '-';
-        this.min = '0';
-        this.max = '0';
-        break;
-    }
-  }
-
-  // calculateAdvisedRate() {
-  //   this.advisedRate = parseInt(this.max, 10) / 100 * 40;
-  // }
   /**
    * Create form controls and define values
    */
@@ -379,7 +336,7 @@ export class CreateLoanComponent implements OnInit {
     this.requestedCurrency = new FormControl(undefined, Validators.required);
     this.requestValue = new FormControl(null);
     this.fullDuration = new FormControl(null, Validators.required);
-    this.annualInterest = new FormControl(this.advisedRate, Validators.required);
+    this.annualInterest = new FormControl(null, Validators.required);
     this.installmentsFlag = new FormControl(false, Validators.required);
     this.expirationRequestDate = new FormControl(7, Validators.required);
     // Form group 2
@@ -458,6 +415,7 @@ export class CreateLoanComponent implements OnInit {
   async onSubmitStep2(form: NgForm) {
     const web3: any = this.web3Service.web3;
     const pendingLoanCreation: Tx = this.createPendingTx;
+    await this.setAccount();
 
     if (pendingLoanCreation && !pendingLoanCreation.confirmed) {
       this.showMessage('Wait for the loan to be created', 'snackbar');
@@ -489,8 +447,8 @@ export class CreateLoanComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
     const loanId: string = loan.id;
-    const oracle: string = loan.oracle ? loan.oracle.address : Utils.address0x;
-    const collateralToken: string = form.value.collateralAsset.address;
+    const oracle: string = this.collateralSelectedOracle;
+    const collateralToken: string = this.collateralSelectedCurrency.address;
     const collateralAmount: string = web3.toWei(form.value.collateralAmount);
     const liquidationRatio: number = new web3.BigNumber(form.value.liquidationRatio).mul(100);
     const balanceRatio: any = new web3.BigNumber(form.value.balanceRatio).mul(100);
@@ -518,9 +476,9 @@ export class CreateLoanComponent implements OnInit {
   /**
    * Calculate required amount in collateral token
    * @param loanAmount Loan amount in rcn
-   * @param loanCurrency Loan currency token symbol
+   * @param loanCurrency Loan currency symbol
    * @param collateralRatio Collateral balance ratio
-   * @param collateralAsset Collateral currency
+   * @param collateralAsset Collateral currency token symbol
    * @return Collateral amount in collateral asset
    */
   async calculateCollateralAmount(
@@ -541,7 +499,7 @@ export class CreateLoanComponent implements OnInit {
       collateralAmount = new web3.toWei(collateralAmount);
     } else {
       const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
-      const fromToken: any = this.currencies.filter(currency => currency.currency === collateralAsset)[0].address;
+      const fromToken: any = this.currenciesService.getCurrencyByKey('symbol', collateralAsset).address;
       const token: any = environment.contracts.rcnToken;
       const collateralTokenAmount = await this.contractsService.getCost(
         web3.toWei(collateralAmount),
@@ -595,36 +553,21 @@ export class CreateLoanComponent implements OnInit {
 
   /**
    * Update selected oracle when currency is updated
-   * @param requestedCurrency.currency Requested currency as string
+   * @param requestedCurrency Requested currency as string
    */
-  onCurrencyChange(requestedCurrency) {
-    switch (requestedCurrency.currency) {
-      case 'RCN':
-        this.selectedOracle = null;
-        break;
+  async onCurrencyChange(currencySymbol) {
+    const oracle: string = await this.contractsService.symbolToOracle(currencySymbol);
+    this.selectedCurrency = this.currenciesService.getCurrencyByKey('symbol', currencySymbol);
 
-      case 'MANA':
-        if (environment.production) {
-          this.selectedOracle = '0x2aaf69a2df2828b55fa4a5e30ee8c3c7cd9e5d5b'; // Mana Prod Oracle
-        } else {
-          this.selectedOracle = '0xac1d236b6b92c69ad77bab61db605a09d9d8ec40'; // Mana Dev Oracle
-        }
-        break;
-
-      case 'ARS':
-        if (environment.production) {
-          this.selectedOracle = '0x22222c1944efcc38ca46489f96c3a372c4db74e6'; // Ars Prod Oracle
-        } else {
-          this.selectedOracle = '0x0ac18b74b5616fdeaeff809713d07ed1486d0128'; // Ars Dev Oracle
-        }
-        break;
-
-      default:
-        break;
+    if (oracle !== Utils.address0x) {
+      this.selectedOracle = oracle;
+    } else {
+      this.selectedOracle = null;
     }
+
     this.installmentsDetails();
-    this.interestRateMaxMin();
-    this.calculateAdvisedRate();
+    this.updateInterestRate();
+    this.expectedReturn();
   }
 
   /**
@@ -657,6 +600,13 @@ export class CreateLoanComponent implements OnInit {
     this.expectedInstallmentsAvailable();
     this.expectedReturn();
     this.installmentsDetails();
+  }
+
+  /**
+   * Calculate the expected return amount when annual interest rate is updated
+   */
+  onInterestRateChange() {
+    this.expectedReturn();
   }
 
   /**
@@ -698,7 +648,16 @@ export class CreateLoanComponent implements OnInit {
   /**
    * Change collateral asset and restore formGroup2 values
    */
-  async onCollateralAssetChange() {
+  async onCollateralAssetChange(currencySymbol) {
+    const oracle: string = await this.contractsService.symbolToOracle(currencySymbol);
+    this.collateralSelectedCurrency = this.currenciesService.getCurrencyByKey('symbol', currencySymbol);
+
+    if (oracle !== Utils.address0x) {
+      this.collateralSelectedOracle = oracle;
+    } else {
+      this.collateralSelectedOracle = null;
+    }
+
     const form: FormGroup = this.formGroup2;
 
     if (!form.value.collateralAdjustment) {
@@ -733,7 +692,7 @@ export class CreateLoanComponent implements OnInit {
     try {
       const loanAmount = loanForm.value.conversionGraphic.requestValue;
       const loanCurrency = loanForm.value.conversionGraphic.requestedCurrency.currency;
-      const collateralCurrency = collateralForm.value.collateralAsset.currency;
+      const collateralCurrency = this.collateralSelectedCurrency.symbol;
       const hundredPercent = 100 * 100;
       let loanAmountInCollateral = await this.calculateCollateralAmount(
         loanAmount,
@@ -809,7 +768,7 @@ export class CreateLoanComponent implements OnInit {
     try {
       const loanAmount = loanForm.value.conversionGraphic.requestValue;
       const loanCurrency = loanForm.value.conversionGraphic.requestedCurrency.currency;
-      const collateralCurrency = collateralForm.value.collateralAsset.currency;
+      const collateralCurrency = this.collateralSelectedCurrency.symbol;
 
       const amount = await this.calculateCollateralAmount(
         loanAmount,
@@ -824,6 +783,19 @@ export class CreateLoanComponent implements OnInit {
     } catch (e) {
       throw Error(e);
     }
+  }
+
+  /**
+   * Update annual interest rate
+   */
+  updateInterestRate() {
+    const bestInterestRate = this.selectedCurrency.bestInterestRate;
+
+    this.formGroup1.patchValue({
+      interest: {
+        annualInterest: bestInterestRate.best
+      }
+    });
   }
 
   /**
@@ -893,10 +865,9 @@ export class CreateLoanComponent implements OnInit {
    */
   async requestLoan(form: NgForm) {
     const web3 = this.web3Service.web3;
+    await this.setAccount();
 
-    let account: string = await this.web3Service.getAccount();
-    account = web3.toChecksumAddress(account);
-
+    const account: string = this.account;
     const expiration = this.returnDaysAs(form.value.expirationRequestDate, 'date');
     const amount = new web3.BigNumber(10 ** 18).mul(form.value.conversionGraphic.requestValue);
     const salt = web3.toHex(new Date().getTime());
@@ -964,47 +935,34 @@ export class CreateLoanComponent implements OnInit {
    */
   retrievePendingTx() {
     this.createPendingTx = this.txService.getLastPendingCreate(this.loan);
-
     if (this.createPendingTx !== undefined) {
       const loanId: string = this.loan.id;
       this.location.replaceState(`/create/${ loanId }`);
-
-      if (this.creationProgress === 0) {
-        this.creationProgress = 1;
-        this.showProgress = true;
-        let slowProgressbar: boolean;
-
-        const updateProgressbar = () => {
-          slowProgressbar = !slowProgressbar;
-
-          if (this.creationProgress >= 97) {
-            return;
-          }
-          if (this.creationProgress > 70) {
-            if (slowProgressbar) {
-              this.creationProgress++;
-            }
-            return;
-          }
-          this.creationProgress++;
-        };
-
-        const incrementProgress = setInterval(updateProgressbar, 250);
-
-        if (!this.subscribedToConfirmedTx) {
-          this.subscribedToConfirmedTx = true;
-          this.txService.subscribeConfirmedTx(async (tx: Tx) => {
-            if (tx.type === Type.create && tx.tx === this.createPendingTx.tx) {
-              clearInterval(incrementProgress);
-              this.finishLoanCreation();
-            }
-          });
-        }
-
-      }
+      this.startProgress = true;
+      this.trackProgressbar();
     }
 
     this.collateralPendingTx = this.txService.getLastPendingCreateCollateral(this.loan);
+    if (this.collateralPendingTx !== undefined) {
+      this.collateralStartProgress = true;
+      this.trackProgressbar();
+    }
+  }
+
+  /**
+   * Track progressbar value
+   */
+  trackProgressbar() {
+    if (!this.txSubscription) {
+      this.txSubscription = true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) => {
+        if (tx.type === Type.create && tx.tx === this.createPendingTx.tx) {
+          this.finishLoanCreation();
+        } else if (tx.type === Type.createCollateral && tx.tx === this.collateralPendingTx.tx) {
+          this.finishCollateralCreation();
+        }
+      });
+    }
   }
 
   /**
@@ -1014,21 +972,48 @@ export class CreateLoanComponent implements OnInit {
     const loanWasCreated = await this.contractsService.loanWasCreated(this.loan.id);
 
     if (loanWasCreated) {
-      this.creationProgress = 100;
-
-      setTimeout(() => {
-        this.showProgress = false;
-      }, 1000);
+      this.finishProgress = true;
     } else {
-      this.creationProgress = 0;
-
+      this.cancelProgress = true;
       setTimeout(() => {
         this.showMessage('The loan could not be created', 'dialog');
-        this.showProgress = false;
+        this.startProgress = false;
         this.createPendingTx = undefined;
         this.init = true;
       }, 1000);
     }
+  }
+
+  /**
+   * Finish collateral creation
+   */
+  async finishCollateralCreation() {
+    this.collateralFinishProgress = true;
+  }
+
+  /**
+   * Hide progressbar
+   * @param transaction Progressbar to finish
+   */
+  hideProgressbar(transaction: 'loan' | 'collateral') {
+    switch (transaction) {
+      case 'loan':
+        this.startProgress = false;
+        this.finishProgress = false;
+        break;
+
+      case 'collateral':
+        this.collateralStartProgress = false;
+        this.collateralFinishProgress = false;
+        this.collateralWasCreated = true;
+        // TODO: redirect to my loans
+        break;
+
+      default:
+        break;
+    }
+
+    this.retrievePendingTx();
   }
 
   /**
