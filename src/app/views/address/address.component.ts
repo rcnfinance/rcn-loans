@@ -6,7 +6,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Loan } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
-import { AvailableLoansService } from '../../services/available-loans.service';
 import { Web3Service } from '../../services/web3.service';
 
 @Component({
