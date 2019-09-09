@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // App Component
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { CurrenciesService, Currency } from '../../services/currencies.service';
@@ -38,8 +38,7 @@ export class DialogApproveContractComponent implements OnInit {
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
     private eventsService: EventsService,
-    public dialog: MatDialog,
-    private dialogRef: MatDialogRef<DialogApproveContractComponent>
+    public dialog: MatDialog
   ) { }
 
   async ngOnInit() {

@@ -28,8 +28,6 @@ const oracleFactoryAbi = require('../contracts/OracleFactory.json');
 @Injectable()
 export class ContractsService {
   private _oracleAddress: string = environment.contracts.oracle;
-  private _rcnContract: any;
-  private _rcnContractAddress: string = environment.contracts.currencies.rcn;
   private _rcnEngine: any;
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
   private _rcnExtension: any;
@@ -51,7 +49,6 @@ export class ContractsService {
     private cosignerService: CosignerService,
     private apiService: ApiService
   ) {
-    this._rcnContract = this.makeContract(tokenAbi.abi, this._rcnContractAddress);
     this._rcnEngine = this.makeContract(engineAbi.abi, this._rcnEngineAddress);
     this._loanManager = this.makeContract(loanManagerAbi, environment.contracts.diaspore.loanManager);
     this._debtEngine = this.makeContract(debtEngineAbi, environment.contracts.diaspore.debtEngine);
@@ -140,11 +137,19 @@ export class ContractsService {
     }
 
     const ethAddress = environment.contracts.currencies.eth;
-    if (tokenAddress === ethAddress) {
-      return true;
-    }
-    if (!this.tokenIsValid(tokenAddress)) {
-      throw Error('The currency does not exist');
+    const wethAddress = environment.contracts.currencies.weth;
+    switch (tokenAddress) {
+      case ethAddress:
+        return true;
+
+      case wethAddress:
+        break;
+
+      default:
+        if (!this.tokenIsValid(tokenAddress)) {
+          throw Error('The currency does not exist');
+        }
+        break;
     }
 
     const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
