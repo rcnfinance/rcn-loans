@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-// import { Loan, Oracle, Network } from '../models/loan.model';
 import { ContractsService } from './contracts.service';
 import { Web3Service } from './web3.service';
+import { Tx, Type } from '../tx.service';
 
 @Injectable()
 export class CollateralService {
@@ -69,6 +69,29 @@ export class CollateralService {
       return liquidationPrice;
     } catch (e) {
       return null;
+    }
+  }
+
+  /**
+   * Check if the sended transaction is from the current collateral
+   * @param tx Tx
+   * @param collateralId Collateral ID
+   * @return Boolean
+   */
+  async isCurrentCollateralTx(
+    tx: Tx,
+    collateralId
+  ) {
+    switch (tx.type) {
+      case Type.withdrawCollateral:
+      case Type.addCollateral:
+        if (tx.data.collateralId === collateralId) {
+          return true;
+        }
+        break;
+
+      default:
+        return false;
     }
   }
 

@@ -1,12 +1,13 @@
-@import '../../../../scss/_variables.scss'; //variables
+@import '../../../../scss/variables';
+@import '../../../../scss/fonts';
 
 .properties-block {
   @extend %flex-container;
 
   &__title {
     flex: 1;
-    color: $gray2;
     @extend %propiety-title;
+    @extend .font13;
 
     &:nth-child(1) {
       text-align: left;

@@ -1,6 +1,7 @@
 // Angular Core
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // App Modules
@@ -14,7 +15,7 @@ import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.comp
 import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
 import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector.component';
 import { FilterLoansComponent } from './filter-loans/filter-loans.component';
-
+import { InfiniteProgressBarComponent } from './infinite-progress-bar/infinite-progress-bar.component';
 import { ConversionGraphicComponent } from './conversion-graphic/conversion-graphic.component';
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
@@ -53,11 +54,14 @@ import { TitleService } from './../services/title.service';
 import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
+import { CurrenciesService } from './../services/currencies.service';
 import { CollateralSliderDebtComponent } from './collateral-slider-debt/collateral-slider-debt.component';
+import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
 
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
     MaterialModule,
     BlockiesModule,
     ReactiveFormsModule,
@@ -85,7 +89,8 @@ import { CollateralSliderDebtComponent } from './collateral-slider-debt/collater
     PayFormComponent,
     CollateralAddFormComponent,
     CollateralWithdrawFormComponent,
-    FilterLoansComponent,
+    InfiniteProgressBarComponent,
+    CurrencyLogoComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
@@ -119,7 +124,8 @@ import { CollateralSliderDebtComponent } from './collateral-slider-debt/collater
     TitleService,
     AvailableLoansService,
     CountriesService,
-    EventsService
+    EventsService,
+    CurrenciesService
   ],
   exports: [
     FormsModule,
@@ -147,6 +153,8 @@ import { CollateralSliderDebtComponent } from './collateral-slider-debt/collater
     CollateralAddFormComponent,
     CollateralWithdrawFormComponent,
     FilterLoansComponent,
+    InfiniteProgressBarComponent,
+    CurrencyLogoComponent,
     DialogWrongCountryComponent
   ]
 })

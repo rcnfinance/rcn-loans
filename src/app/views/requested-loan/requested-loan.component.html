@@ -10,7 +10,7 @@
           <mat-chip selected="true">{{ loans.length }} AVAILABLE</mat-chip>
         </mat-chip-list>
         <button mat-button class='paddingright30' (click)="openFilters()">
-          FILTERS 
+          FILTERS
           <mat-icon class="icon-active">filter_list</mat-icon>
           <mat-icon class="icon-disabled">expand_more</mat-icon>
         </button>
@@ -20,13 +20,13 @@
     <div class="filters anm-01">
       <app-filter-loans [filters]="filters" (filtered)='onFiltered()'></app-filter-loans>
     </div>
-    
-    <div class="row">
+
+    <div class="loan-container row">
       <div class="col-sm-12 text-center" *ngIf='!availableLoans'>
         <div class="title main-h1">There are no available Loans</div>
       </div>
 
-      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col" *ngFor='let loan of loans; let i of index'>
+      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2 card-col" *ngFor='let loan of loans; let i of index'>
         <app-loan-card [loan]="loan"></app-loan-card>
       </div>
     </div>

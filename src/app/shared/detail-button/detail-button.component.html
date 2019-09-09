@@ -1,5 +1,6 @@
-<a mat-raised-button 
-  (click)="handleDetail();" 
-  class="button button-secondary">
+<a mat-raised-button
+  [routerLink]="['/loan', loan?.id]"
+  class="button button-secondary"
+>
   Details
 </a>

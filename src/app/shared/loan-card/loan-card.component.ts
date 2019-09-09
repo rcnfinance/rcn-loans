@@ -87,4 +87,26 @@ export class LoanCardComponent implements OnInit {
   getPunitiveInterestRate(): string {
     return this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
   }
+
+  /**
+   * Return installments quantity text
+   */
+  getInstallments(): string {
+    try {
+      const installments = this.loan.descriptor.installments;
+
+      switch (installments) {
+        case 0:
+        case 1:
+          return `1 pay`;
+
+        default:
+          return `${ installments } pays`;
+      }
+
+      return `${ installments } pays`;
+    } catch (e) {
+      return '1 pay';
+    }
+  }
 }

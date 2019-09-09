@@ -11,7 +11,7 @@ import { Web3Service } from './../../../services/web3.service';
 import { ContractsService } from './../../../services/contracts.service';
 import { CollateralService } from './../../../services/collateral.service';
 import { CurrenciesService } from './../../../services/currencies.service';
-import { Tx, TxService, Type } from './../../../tx.service';
+import { Tx, TxService } from './../../../tx.service';
 
 @Component({
   selector: 'app-detail-collateral',
@@ -51,17 +51,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    this.txService.subscribeConfirmedTx(async (tx: Tx) => {
-      if (tx.type === Type.addCollateral || tx.type === Type.withdrawCollateral) {
-        if (this.addPendingTx || this.withdrawPendingTx) {
-          this.updateCollateral.emit({
-            type: tx.type,
-            amount: tx.data.collateralAmount
-          });
-        }
-        this.retrievePendingTx();
-      }
-    });
+    this.trackCollateralTx();
   }
 
   async ngOnChanges(changes) {
@@ -71,8 +61,9 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
       if (this.loan.debt) {
         await this.getLoanDetails();
         this.setCollateralAdjustment();
-        this.retrievePendingTx();
       }
+
+      this.retrievePendingTx();
     }
   }
 
@@ -191,17 +182,8 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    * @param action Add or Withdraw
    */
   async openDialog(action: 'add' | 'withdraw') {
-    switch (action) {
-      case 'add':
-        if (this.addPendingTx) return;
-        break;
-
-      case 'withdraw':
-        if (this.withdrawPendingTx) return;
-        break;
-
-      default:
-        break;
+    if (this.addPendingTx || this.withdrawPendingTx) {
+      return;
     }
 
     const dialogConfig: MatDialogConfig = {
@@ -215,8 +197,26 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     const dialogRef = this.dialog.open(DialogCollateralComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-      () => this.retrievePendingTx()
+      () => {
+        console.info('dialog closed');
+        this.retrievePendingTx();
+      }
     );
+  }
+
+  /**
+   * Track confirmed add or withdraw collateral tx
+   */
+  trackCollateralTx() {
+    this.txService.subscribeConfirmedTx(async (tx: Tx) => {
+      if (this.collateralService.isCurrentCollateralTx(tx, this.collateral.id)) {
+        this.updateCollateral.emit({
+          type: tx.type,
+          amount: tx.data.collateralAmount
+        });
+        this.retrievePendingTx();
+      }
+    });
   }
 
   /**

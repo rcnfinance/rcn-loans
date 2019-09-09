@@ -107,7 +107,6 @@ export class LoanDetailComponent implements OnInit {
         this.oracle = this.loan.oracle ? this.loan.oracle.address : undefined;
         this.currency = this.loan.oracle ? this.loan.oracle.currency : 'RCN';
         this.availableOracle = this.loan.oracle.currency !== 'RCN';
-
         this.isRequest = this.loan.status === Status.Request;
         this.isOngoing = this.loan.status === Status.Ongoing;
         this.isExpired = this.loan.status === Status.Expired;
@@ -117,7 +116,6 @@ export class LoanDetailComponent implements OnInit {
         this.loadIdentity();
         this.loadCollateral();
         this.viewDetail = this.defaultDetail();
-
         this.spinner.hide();
       } catch (e) {
         console.error(e);
@@ -241,13 +239,16 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private loadDetail() {
+    if (this.loan.status === Status.Expired) {
+      throw Error('Loan expired');
+    }
+
     if (this.loan.status === Status.Request) {
       // Load config data
       const interest = this.loan.descriptor.interestRate.toFixed(2);
       const interestPunnitory = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
       const currency: Currency = this.loan.currency;
       const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
-
       this.loanConfigData = [
         ['Currency', currency],
         ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
@@ -258,7 +259,6 @@ export class LoanDetailComponent implements OnInit {
       this.interest = `~ ${ interest }%`;
       this.punitory = `~ ${ interestPunnitory }%`;
       this.duration = duration;
-
       this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
     } else {
       const currency = this.loan.currency;
@@ -280,7 +280,7 @@ export class LoanDetailComponent implements OnInit {
 
       // Template data
       this.interest = '~ ' + interest + ' %';
-      this.lendDate = dueDate;
+      this.lendDate = lendDate;
       this.dueDate = dueDate;
 
       // Load status data

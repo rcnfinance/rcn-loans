@@ -64,7 +64,7 @@ export class BrandingService {
       color: '#4155ff', // to manually specify the icon color, default: random
       bgcolor: '#333333', // choose a different background color, default: random
       size: 10, // width/height of the icon in blocks, default: 8
-      scale: 4, // width/height of each block in pixels, default: 4
+      scale: 5, // width/height of each block in pixels, default: 4
       spotcolor: '#3444cc' // each pixel has a 13% chance of being of a third color,
       // default: random. Set to -1 to disable it. These "spots" create structures
       // that look like eyes, mouths and noses.
