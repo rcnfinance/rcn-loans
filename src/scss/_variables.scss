@@ -24,7 +24,7 @@ $fifth: #0c0c0c;
 
 $gray0: #f9f9f9;
 $gray1: #eeeeee;
-$gray2: #C7C7C7;
+$gray2: #D8D8D8;
 $gray3: #AFAFAF;
 $gray4: #949494;
 $gray5: #585858;
@@ -56,8 +56,8 @@ $gray9: #0c0c0c;
 %roboto-extra-bold{font-weight: 800; font-family: 'Roboto', sans-serif;}
 %roboto-black{font-weight: 900; font-family: 'Roboto', sans-serif;}
 
-%propiety-title {font-size: 11px; text-transform: uppercase; @extend %font-light;}
-%propiety-subtitle {font-size: 15px; @extend %font-medium;}
+%propiety-title {font-size: 13px; text-transform: uppercase; @extend %font-regular;}
+%propiety-subtitle {font-size: 18px; @extend %roboto-medium;}
 
 /*MIXINS*/
 // -------------------------

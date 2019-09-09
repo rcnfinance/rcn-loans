@@ -1,4 +1,3 @@
-import { BigNumber } from 'bignumber.js';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -24,6 +23,7 @@ const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
 const collateralAbi = require('../contracts/Collateral.json');
+const oracleFactoryAbi = require('../contracts/OracleFactory.json');
 // const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
@@ -42,9 +42,8 @@ export class ContractsService {
   private _installmentsModel: any;
   private _collateral: any;
   private _collateralAddress: string = environment.contracts.diaspore.collateral;
-  // private _rcnConverterRamp: any;
-  // private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
-  // private _requestsView: any;
+  private _oracleFactory: any;
+  private _oracleFactoryAddress: string = environment.contracts.oracleFactory;
 
   constructor(
     private http: HttpClient,
@@ -61,6 +60,7 @@ export class ContractsService {
     this._rcnExtension = this.makeContract(extensionAbi.abi, this._rcnExtensionAddress);
     this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
     this._collateral = this.makeContract(collateralAbi.abi, this._collateralAddress);
+    this._oracleFactory = this.makeContract(oracleFactoryAbi.abi, this._oracleFactoryAddress);
   }
 
   /**
@@ -73,12 +73,12 @@ export class ContractsService {
     return this.web3.web3.eth.contract(abi).at(address);
   }
 
-  async getUserBalanceETHWei(): Promise<BigNumber> {
+  async getUserBalanceETHWei(): Promise<any> {
     const account = await this.web3.getAccount();
     const balance = await this.web3.web3.eth.getBalance(account);
     return new Promise((resolve) => {
       resolve(balance);
-    }) as Promise<BigNumber>;
+    }) as Promise<any>;
   }
 
   async getUserBalanceRCNWei(): Promise<number> {
@@ -339,7 +339,7 @@ export class ContractsService {
     }
   }
 
-  async getRate(loan: any): Promise<BigNumber> {
+  async getRate(loan: any): Promise<any> {
     // TODO: Calculate and add cost of the cosigner
     if (loan.oracle === Utils.address0x) {
       return loan.rawAmount;
@@ -636,6 +636,24 @@ export class ContractsService {
     return url;
   }
 
+  /**
+   * Get oracle address from currency symbol
+   * @param symbol Currency symbol
+   * @return Oracle address
+   */
+  async symbolToOracle(symbol: string) {
+    return await promisify(this._oracleFactory.symbolToOracle.call, [symbol]);
+  }
+
+  /**
+   * Get currency symbol from oracle address
+   * @param oracle Oracle address
+   * @return Currency symbol
+   */
+  async oracleToSymbol(oracle: string) {
+    return await promisify(this._oracleFactory.oracleToSymbol.call, [oracle]);
+  }
+
   async getLoan(id: string): Promise<Loan> {
     if (id.startsWith('0x')) {
       // Load Diaspore loan
@@ -872,7 +890,7 @@ export class ContractsService {
     ]);
   }
 
-  readPendingWithdraws(loans: Loan[]): [BigNumber, number[], BigNumber, number[]] {
+  readPendingWithdraws(loans: Loan[]): [any, number[], any, number[]] {
     const pendingBasaltLoans = [];
     const pendingDiasporeLoans = [];
     let totalBasalt = 0;

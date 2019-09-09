@@ -16,13 +16,6 @@ $default-transition--delay: all 0.3s ease-out;
        -o-transition-delay: $delay;
           transition-delay: $delay;
 }
-// @mixin transform($transform) {
-//   -webkit-transform: $transform;
-//      -moz-transform: $transform;
-//       -ms-transform: $transform;
-//        -o-transform: $transform;
-//           transform: $transform;
-// }
 @mixin background-size($background-size) {
   -webkit-background-size: $background-size;
      -moz-background-size: $background-size;
@@ -65,19 +58,29 @@ $default-transition--delay: all 0.3s ease-out;
   }
 }
 
-// Includes
-/**
- * Nota de Manuel: para que son estos. no funciona el sass en mi maquina por esto
- */
-/*
-@include background-size(cover);
-@include transform(translate(-50%, -50%));
-@include transform(rotate(360deg));
-@include transition(all 0.3s ease-out);
-@include border-radius(5px);
-@include box-shadow(0, 2px, 0px, rgba(0, 0, 0, 0.14), false);
-*/
-
+@mixin tooltip-arrow($size, $fromDirection, $color) {
+  @if $fromDirection == left {
+    margin-right: 0 - $size;
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-left: $size solid $color;
+  } @else if $fromDirection == right {
+    margin-left: 0 - $size;
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-right: $size solid $color;
+  } @else if $fromDirection == top {
+    margin-bottom: 0 - $size;
+    border-right: $size solid transparent;
+    border-left: $size solid transparent;
+    border-top: $size solid $color;
+  } @else if $fromDirection == bottom {
+    margin-top: 0 - $size;
+    border-right: $size solid transparent;
+    border-left: $size solid transparent;
+    border-bottom: $size solid $color;
+  }
+}
 
 // Animations CSS3
 @mixin animation($name, $duration, $ease, $delay, $direction) {

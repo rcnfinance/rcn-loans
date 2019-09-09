@@ -19,7 +19,6 @@
     }
   }
   &.flex-container{
-    height: 70px;
     @extend %flex-container;
     background-color: $gray7;
     > .flex-item {
@@ -38,40 +37,6 @@
       &:nth-child(2){ order: 2; cursor: default; @extend %position-center; }
       &:nth-child(3){ order: 3; }
     }
-  }
-}
-
-.loan-description{
-  &.flex-container{
-    @extend %flex-display;
-    flex-direction: column;
-
-    .left{
-      width: 100%;
-      flex: 1;
-      background-color: #0c0c0c;
-      .avatar-information{
-        @extend %flex-display;
-        justify-content: space-around;
-        .flex-item{
-          &:nth-child(1){ width: 50%; padding: 15px 8px 0 15px; }
-          &:nth-child(2){ width: 50%; padding: 15px 15px 0 8px; display: flex; align-items: flex-end; flex-direction: column; }
-        }
-      }
-    }
-
-    .right{
-      width: 100%;
-      min-height: 400px;
-      position: relative; // TODO Remove relative position after refactor & redesign decentraland
-      flex: 1;
-      display: flex;
-      text-align: center;
-      justify-content: center;
-      padding: 15px;
-      background-color: #101010;
-    }
-
   }
 }
 
@@ -102,6 +67,7 @@
   &__head {
     @include transition;
     @extend %propiety-title;
+    @extend .font14;
     background-color: $gray7;
     padding: 8px 18px;
     user-select: none;
@@ -112,12 +78,14 @@
   }
 
   &__body {
-    @extend %roboto-regular;
+    @extend %roboto-bold;
+    @extend .font18;
     padding: 10px 18px;
+    color: $gray2;
 
     .subtitle {
-      @extend .font13;
-      color: $gray2;
+      @extend %roboto-regular;
+      @extend .font15;
       display: inline-block;
       margin-bottom: 6px;
     }
@@ -171,6 +139,25 @@
   padding: 0 15px;
 }
 
+/deep/ .empty-container{
+  height: 100%;
+  .empty-row{
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+  a {
+    color: white;
+    font-style: italic;
+  }
+}
+
 @media (min-width: 992px) {
   .loan-detail{
     width: 970px;
@@ -186,40 +173,11 @@
   }
 
   .loan-description{
-    &.flex-container{
-      flex-direction: row;
-      .left{
-        width: 50%;
-        flex: 1;
-      }
-      .right{
-        width: 50%;
-        display: initial;
+    background: #0d0d0d;
 
-        /deep/ .empty-container{
-          height: 100%;
-
-          .empty-row{
-            height: 100%;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            flex-flow: column;
-            flex-wrap: nowrap;
-            justify-content: center;
-            align-items: center;
-            align-content: center;
-          }
-          a {
-            color: white;
-            font-style: italic;
-          }
-        }
-      }
+    &__details {
+      background: #0f0f0f;
     }
-  }
-  .feature-padding{
-    padding: 0;
   }
 }
 
@@ -238,5 +196,11 @@
         }
       }
     }
+  }
+}
+
+@media (min-width: 1280px) {
+  .loan-detail{
+    width: 1300px;
   }
 }

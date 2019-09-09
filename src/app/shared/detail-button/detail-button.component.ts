@@ -1,7 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
-
 import { Loan } from './../../models/loan.model';
 
 @Component({
@@ -13,11 +11,6 @@ export class DetailButtonComponent {
   @Input() loan: Loan;
 
   constructor(
-    private router: Router,
     public snackBar: MatSnackBar
-  ) {}
-
-  handleDetail() {
-    this.router.navigate(['/loan/', this.loan.id]);
-  }
+  ) { }
 }

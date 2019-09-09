@@ -1,4 +1,5 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/variables';
+@import '../../../scss/fonts';
 
 // Background border
 /deep/ .mat-checkbox .mat-checkbox-frame {
@@ -52,7 +53,7 @@
       left: 50%;
       font-size: 18px;
       color: $secondary;
-      @extend %font-black;
+      @extend %roboto-black;
       @include transform(translate(-50%, -50%));
     }
     img,
@@ -63,15 +64,15 @@
     }
   }
   .txt-container{
-    .title{
-      line-height: 1.4;
-      font-size: 16px;
-      @extend %font-medium;
+    .title {
+      line-height: 1.4em;
+      @extend %roboto-medium;
+      @extend .font18;
     }
-    .subtitle{
-      line-height: 1.4;
-      font-size: 12px;
+    .subtitle {
+      line-height: 1em;
       @extend %font-medium;
+      @extend .font14;
     }
   }
 }

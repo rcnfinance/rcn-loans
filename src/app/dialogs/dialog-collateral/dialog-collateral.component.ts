@@ -6,6 +6,7 @@ import { Collateral } from '../../models/collateral.model';
 // App services
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
+import { CollateralService } from '../../services/collateral.service';
 import { Tx, TxService } from '../../tx.service';
 
 @Component({
@@ -21,10 +22,15 @@ export class DialogCollateralComponent implements OnInit {
   addPendingTx: Tx;
   withdrawPendingTx: Tx;
 
+  txSubscription: boolean;
+  startProgress: boolean;
+  finishProgress: boolean;
+
   constructor(
     public dialogRef: MatDialogRef<any>,
     private web3Service: Web3Service,
     private contractsService: ContractsService,
+    private collateralService: CollateralService,
     private txService: TxService,
     @Inject(MAT_DIALOG_DATA) data
   ) {
@@ -39,6 +45,8 @@ export class DialogCollateralComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
     this.account = web3.toChecksumAddress(account);
+
+    this.retrievePendingTx();
   }
 
   /**
@@ -55,7 +63,7 @@ export class DialogCollateralComponent implements OnInit {
     );
 
     this.txService.registerAddCollateralTx(tx, this.loan, this.collateral, web3.toWei(amount));
-    this.dialogRef.close(tx);
+    this.showProgressbar();
   }
 
   /**
@@ -73,7 +81,40 @@ export class DialogCollateralComponent implements OnInit {
     );
 
     this.txService.registerWithdrawCollateralTx(tx, this.loan, this.collateral, web3.toWei(amount));
-    this.dialogRef.close(tx);
+    this.showProgressbar();
+  }
+
+  /**
+   * Show loading progress bar
+   */
+  showProgressbar() {
+    this.trackProgressbar();
+    this.startProgress = true;
+    this.retrievePendingTx();
+  }
+
+  /**
+   * Hide progressbar
+   */
+  hideProgressbar() {
+    this.startProgress = false;
+    this.finishProgress = false;
+    this.retrievePendingTx();
+    this.dialogRef.close();
+  }
+
+  /**
+   * Track progressbar value
+   */
+  trackProgressbar() {
+    if (!this.txSubscription) {
+      this.txSubscription = true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) => {
+        if (this.collateralService.isCurrentCollateralTx(tx, this.collateral.id)) {
+          this.finishProgress = true;
+        }
+      });
+    }
   }
 
   /**

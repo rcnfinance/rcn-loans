@@ -9,7 +9,7 @@
     disabled
     (change)="onSliderDrag($event)"
   ></mat-slider>
-  <div class="collateral-debt-slider__percentage">
+  <div class="collateral-debt-slider__percentage" [ngStyle]="{'width': disabledRatioAverage || '20%'}">
     <div class="percentage percentage--min">
       {{ liquidationRatio }}%
     </div>

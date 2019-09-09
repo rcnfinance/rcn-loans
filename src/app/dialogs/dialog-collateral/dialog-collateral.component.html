@@ -3,6 +3,14 @@
     <div class="creator-container">
       <div class="creator-title">Collateral adjustment</div>
     </div>
+    <ng-container *ngIf="startProgress">
+      <app-infinite-progress-bar
+        [start]="true"
+        [end]="finishProgress"
+        (finish)="hideProgressbar()"
+      >
+      </app-infinite-progress-bar>
+    </ng-container>
   </div>
   <div class="col-sm-12 dialog-padding">
     <div class="dialog-description">
@@ -13,12 +21,14 @@
         *ngSwitchCase="'add'"
         [loan]="loan"
         [collateral]="collateral"
+        [loading]="addPendingTx"
         (submitAdd)="addCollateral($event)"
       ></app-collateral-add-form>
       <app-collateral-withdraw-form
         *ngSwitchCase="'withdraw'"
         [loan]="loan"
         [collateral]="collateral"
+        [loading]="withdrawPendingTx"
         (submitWithdraw)="withdrawCollateral($event)"
       ></app-collateral-withdraw-form>
     </ng-container>

@@ -7,7 +7,7 @@
   <div class="col-sm-12 dialog-padding">
     <div class="row">
       <div class="col-sm-12 col-md-5">
-        <div class="title main-h1 marginbottom20">Account Information</div>
+        <div class="title main-h2 marginbottom20">Account Information</div>
         <div class="list-avatar">
           <div class="avatar-container">
             <app-avatar [seed]=account></app-avatar>
@@ -20,7 +20,7 @@
       </div>
       <div class="col-sm-12 col-md-7">
         <div class="margintop20 d-none d-md-none"></div>
-        <div class="title main-h1 marginbottom20">Authorize</div>
+        <div class="title main-h2 marginbottom20">Authorize</div>
         <div class="checkbox" *ngFor='let contract of contracts'>
           <mat-checkbox [disabled]="!isEnabled(contract)" [checked]="contract.isApproved" (change)="clickCheck(contract, $event)" *ngIf="!onlyAddress || onlyAddress == contract.address">
             Authorize the <b>{{ contract.name }}</b> contract to operate RCN on your behalf

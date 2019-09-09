@@ -1,14 +1,15 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/variables';
+@import '../../../scss/fonts';
 
 .list-avatar {
-  height: 40px;
+  height: 50px;
   position: relative;
   padding-top: 3px;
-  padding-left: 55px;
+  padding-left: 65px;
   margin-bottom: 15px;
   .avatar-container {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     position: absolute;
     overflow: hidden;
     top: 0px;
@@ -31,16 +32,16 @@
       box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
     }
   }
-  .txt-container{
-    .title{
-      line-height: 1.4;
-      font-size: 16px;
-      @extend %font-medium;
+  .txt-container {
+    .title {
+      line-height: 1.4em;
+      @extend %roboto-medium;
+      @extend .font18;
     }
-    .subtitle{
-      line-height: 1.4;
-      font-size: 12px;
-      @extend %font-medium;
+    .subtitle {
+      line-height: 1.2em;
+      @extend %font-bold;
+      @extend .font13;
     }
   }
 }
