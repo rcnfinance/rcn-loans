@@ -55,7 +55,7 @@ export class ApiService {
   }
 
    // Loads all loans borrowed by the account that is logged in
-   async getLoansOfBorrower(borrower: string): Promise<Loan[]> {
+  async getLoansOfBorrower(borrower: string): Promise<Loan[]> {
     const web3 = this.web3Service.web3;
     let allLoansOfBorrower: Loan[] = [];
     let apiCalls = 0;
