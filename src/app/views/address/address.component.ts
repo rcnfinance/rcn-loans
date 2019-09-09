@@ -18,6 +18,7 @@ export class AddressComponent implements OnInit {
   available: any;
   loans = [];
   availableLoans = true;
+  url = this.route.url;
 
   constructor(
     private route: ActivatedRoute,
