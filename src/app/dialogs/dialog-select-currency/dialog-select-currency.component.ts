@@ -29,7 +29,8 @@ export class DialogSelectCurrencyComponent implements OnInit {
     payableAmount: number,
     converter: string,
     fromToken: string,
-    oracleData: any
+    oracleData: any,
+    amountInToken: number
   };
   // general
   account: string;
@@ -207,7 +208,8 @@ export class DialogSelectCurrencyComponent implements OnInit {
       payableAmount: etherCost,
       converter: uniswapProxy,
       fromToken: fromToken,
-      oracleData: null
+      oracleData: null,
+      amountInToken: requiredAmount
     };
 
     this.exchangeToken = Utils.formatAmount(tokenRate);
