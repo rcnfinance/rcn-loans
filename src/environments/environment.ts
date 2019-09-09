@@ -70,7 +70,7 @@ export const environment = {
       converterRamp: '0xc76712be96b7e8937c0e4d4b760ae5002accd280',
       tokenConverter: '0xc4b1b3083174716542ef387326e58293917bf3bf',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      uniswapProxy: '0x0c295fe65e94cd4eaffe906ad1c77d9e35923b05',
+      uniswapProxy: '0x310d2b08abf7ff8fbf35394a9befbc35f613ecd9',
       params: {
         marginSpend: 5000,
         maxSpend: 0,
