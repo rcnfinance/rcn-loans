@@ -9,7 +9,12 @@
       </mat-chip-list>
     </div>
   </div>
-  <div class="row">
+  <div routerLink='borrowed'>Borrowed</div>
+  <div routerLink='lent'>Lent</div>
+
+
+
+  <!-- <div class="row">
 
     <div class="col-sm-12 text-center margintop30" *ngIf='!availableLoans'>
       <div class="title main-h1">This address is not a lender</div>
@@ -19,6 +24,6 @@
     *ngFor='let loan of loans; let i of index'>
       <app-loan-card [loan]="loan"></app-loan-card>
     </div>
-  </div>
+  </div> -->
 </div>
-<!-- <router-outlet></router-outlet> -->
+<router-outlet></router-outlet>
