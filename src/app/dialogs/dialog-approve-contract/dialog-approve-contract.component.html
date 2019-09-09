@@ -19,13 +19,38 @@
         </div>
       </div>
       <div class="col-sm-12 col-md-7">
-        <div class="margintop20 d-none d-md-none"></div>
-        <div class="title main-h2 marginbottom20">Authorize</div>
-        <div class="checkbox" *ngFor='let contract of contracts'>
-          <mat-checkbox [disabled]="!isEnabled(contract)" [checked]="contract.isApproved" (change)="clickCheck(contract, $event)" *ngIf="!onlyAddress || onlyAddress == contract.address">
-            Authorize the <b>{{ contract.name }}</b> contract to operate RCN on your behalf
-          </mat-checkbox>
-        </div>
+        <ng-container *ngFor="let currency of currencies">
+          <div class="row mb-3" *ngIf="!onlyToken || onlyToken == currency.address">
+            <div class="col-sm-12">
+              <div class="margintop20 d-none d-md-none"></div>
+              <div class="title main-h2 marginbottom20">
+                {{ currency.symbol }}
+              </div>
+              <div class="checkbox" *ngFor='let contract of contracts'>
+                <mat-checkbox
+                  [disabled]="!isEnabled(contract)"
+                  [checked]="contract.isApproved ? contract.isApproved[currency.address] : false"
+                  (change)="clickCheck(contract, $event, currency)"
+                  *ngIf="!onlyAddress || onlyAddress == contract.address"
+                >
+                  Authorize the <b>{{ contract.name }}</b> contract to operate {{ currency.symbol }} on your behalf
+                </mat-checkbox>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 mb-3 d-flex justify-content-end">
+        <button
+          mat-raised-button
+          mat-dialog-close
+          target="_blank"
+          class="button button-secondary margintop20"
+        >
+          Close
+        </button>
       </div>
     </div>
   </div>
