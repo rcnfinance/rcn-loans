@@ -80,6 +80,12 @@ export class NotificationsComponent implements OnInit {
           message = 'the Diaspore Loan Manager Contract';
         } else if (contract === environment.contracts.diaspore.debtEngine) {
           message = 'the Diaspore Debt Manager Contract';
+        } else if (contract === environment.contracts.diaspore.collateral) {
+          message = 'the Diaspore Collateral Contract';
+        } else if (contract === environment.contracts.converter.converterRamp) {
+          message = 'the Diaspore Converter Ramp Contract';
+        } else if (contract === environment.contracts.diaspore.collateralWethManager) {
+          message = 'the Collateral WETH Manager Contract';
         } else {
           message = 'the contract ' + contract;
         }
