@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
 import {
   MatDialog,
+  MatDialogRef,
   MatTooltip,
   MatSnackBar
 } from '@angular/material';
@@ -11,6 +12,7 @@ import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
+import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Collateral } from './../../models/collateral.model';
@@ -415,14 +417,36 @@ export class CreateLoanComponent implements OnInit {
   async onSubmitStep2(form: NgForm) {
     const web3: any = this.web3Service.web3;
     const pendingLoanCreation: Tx = this.createPendingTx;
+    const formGroup2: any = this.formGroup2;
     await this.setAccount();
 
+    // check borrower and loan creation status
     if (pendingLoanCreation && !pendingLoanCreation.confirmed) {
       this.showMessage('Wait for the loan to be created', 'snackbar');
       return;
     }
     if (this.isCompleting && this.account !== web3.toChecksumAddress(this.loan.borrower)) {
       this.showMessage('The borrower is not authorized', 'dialog');
+      return;
+    }
+
+    // check contract / token approve
+    const collateralSymbol = formGroup2.value.collateralAsset;
+    let token: string;
+    let contract: string;
+
+    if (collateralSymbol === 'ETH') {
+      token = environment.contracts.currencies.weth;
+      contract = environment.contracts.diaspore.collateralWethManager;
+    } else {
+      const collateralAsset = this.currenciesService.getCurrencyByKey('symbol', collateralSymbol);
+      token = collateralAsset.address;
+      contract = environment.contracts.diaspore.collateral;
+    }
+
+    const isApproved: boolean = await this.contractsService.isApproved(contract, token);
+    if (!isApproved) {
+      this.showApproveDialog(contract, token);
       return;
     }
 
@@ -435,7 +459,6 @@ export class CreateLoanComponent implements OnInit {
           this.router.navigate(['/', 'loan', this.loan.id]);
         }
       } else {
-        const formGroup2: any = this.formGroup2;
         const tx: string = await this.createCollateral(formGroup2);
         this.txService.registerCreateCollateralTx(tx, this.loan);
         this.retrievePendingTx();
@@ -443,6 +466,10 @@ export class CreateLoanComponent implements OnInit {
     }
   }
 
+  /**
+   * Craete a collateral
+   * @param form Form group 2
+   */
   async createCollateral(form: NgForm): Promise<string> {
     const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
@@ -1058,6 +1085,17 @@ export class CreateLoanComponent implements OnInit {
       return 'Confirmed';
     }
     return 'Confirming...';
+  }
+
+  /**
+   * Show approve dialog
+   * @param contract Contract address
+   * @param token Token address
+   */
+  showApproveDialog(contract: string, token: string) {
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
+    dialogRef.componentInstance.onlyAddress = contract;
+    dialogRef.componentInstance.onlyToken = token;
   }
 
   /**
