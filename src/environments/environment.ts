@@ -54,8 +54,8 @@ export const environment = {
       debtEngine: '0x17f910234fe7d4cb6c54601bf0cf5599b545084b',
       loanManager: '0x2694a6274906f488defc6ab2093342cddcdbdc5c',
       viewRequets: '0x7edb5117f91514579e3c8d39eed71e6be278632a',
-      collateral: '0x7c5bb57001eb5bebeb0359e584dc5f29675061f2',
-      collateralWethManager: '0xf8bd1abb303b4fb1991f754a3ea87feaadf98f73',
+      collateral: '0xb75032d9feb84556e4cf4ce7e55a9a64ace119b1',
+      collateralWethManager: '0x1853cc6c9a20d31d6cbfbce4936071c049249fd3',
       filters: {
         debtCreator: '0x998a67ce5827cb372fe07942561006c7a76cf06f',
         isLender: '0x22a87c89dd8d8d0abe94062eba672f088e808d49',
