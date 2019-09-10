@@ -21,7 +21,7 @@ import { MyBorrowedLoansComponent } from './my-borrowed-loans/my-borrowed-loans.
     CommonModule,
     NgxSpinnerModule,
     MaterialModule,
-    SharedModule,
+    SharedModule
     // AppRoutingModule
   ],
   declarations: [

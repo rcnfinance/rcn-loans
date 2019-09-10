@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
@@ -7,6 +9,7 @@ import { Loan } from './../../models/loan.model';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from '../../services/web3.service';
+
 
 @Component({
   selector: 'app-address',
@@ -19,12 +22,17 @@ export class AddressComponent implements OnInit {
   loans = [];
   availableLoans = true;
   url = this.route.url;
+  path: any;
+  pathname: any;
+  lent = false;
 
   constructor(
     private route: ActivatedRoute,
     private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
-    private web3Service: Web3Service
+    private web3Service: Web3Service,
+    private rte: Router,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -34,6 +42,16 @@ export class AddressComponent implements OnInit {
       this.address = web3.toChecksumAddress(params['address']);
       this.loadLoans(this.address);
     });
+
+  }
+
+  isPath(){
+    this.path = this.location.path()
+    if (this.path.includes('lent')) {
+      this.lent = true;
+    } else {
+      this.lent = false;
+    }
   }
 
   private async loadLoans(address: string) {
@@ -51,4 +69,5 @@ export class AddressComponent implements OnInit {
       this.availableLoans = false;
     }
   }
+
 }

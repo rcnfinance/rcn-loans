@@ -1,32 +1,31 @@
-<ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
+<ngx-spinner
+  bdColor="rgba(0,0,0,.3)"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate-multiple"
+></ngx-spinner>
 <div class="container">
   <div class="row">
-    <div class="col-sm-12 d-none d-lg-block">
-      {{ url }}
-      <div class="title main-h1">lent by</div>
-      <div class="title main-h5 ellipsis">{{ address }}</div>
-      <div routerLink='borrowed'>Borrowed</div>
-      <div routerLink='lent'>Lent</div>
-      <mat-chip-list>
-        <mat-chip class="margintop30 marginright15" selected="true">{{ loans.length }} LENT</mat-chip>
-      </mat-chip-list>
+    <!-- <div class="col-sm-12 d-none d-lg-block"> -->
+    <div class="col-sm-12">
+      <div class="title main-h1">My loans</div>
+      <div class="margintop30 d-lg-none"></div>
+      <div class="buttons-box">
+        <a class="button"
+        [ngClass]="lent? 'button-blue': ''"
+        routerLink="borrowed" (click)="isPath()">
+          <i class="fas fa-reply"></i>
+          <span class="button-style">BORROWED</span>
+        </a>
+        <a class="button"
+        [ngClass]="lent? '': 'button-blue'"
+        routerLink="lent" (click)="isPath()">
+          <i class="fas fa-share"></i>
+          <span class="button-style">LENDED</span>
+        </a>
+      </div>
     </div>
   </div>
-
-  <div routerLink='borrowed'>Borrowed</div>
-  <div routerLink='lent'>Lent</div>
-
-
-  <!-- <div class="row">
-
-    <div class="col-sm-12 text-center margintop30" *ngIf='!availableLoans'>
-      <div class="title main-h1">This address is not a lender</div>
-    </div>
-
-    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col"
-    *ngFor='let loan of loans; let i of index'>
-      <app-loan-card [loan]="loan"></app-loan-card>
-    </div>
-  </div> -->
 </div>
+<div class="marginbottom5 d-lg-none"></div>
 <router-outlet></router-outlet>
