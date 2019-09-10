@@ -55,6 +55,7 @@ export const environment = {
       loanManager: '0x978ef6D2bd7559181e6Ac82fFa5C875364d9071b',
       viewRequets: '0x7edb5117f91514579e3c8d39eed71e6be278632a',
       collateral: '0x7c5bb57001eb5bebeb0359e584dc5f29675061f2', // FIXME: Ropsten collateral
+      collateralWethManager: '0xf8bd1abb303b4fb1991f754a3ea87feaadf98f73', // FIXME: Ropsten collateralWethManager
       filters: {
         debtCreator: '0x998a67ce5827cb372fe07942561006c7a76cf06f',
         isLender: '0x22a87c89dd8d8d0abe94062eba672f088e808d49',
@@ -85,7 +86,8 @@ export const environment = {
     currencies: {
       rcn: '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6',
       dai: '0x6710d597fd13127a5b64eebe384366b12e66fdb6', // FIXME: Ropsten token address
-      eth: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME: Ropsten
+      eth: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', // FIXME: Ropsten
+      weth: '0xc778417e063141139fce010982780140aa0cd5ab' // FIXME: Ropsten token address
     }
   },
   blacklist: [],
