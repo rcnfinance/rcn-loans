@@ -36,7 +36,7 @@
                 <mat-checkbox
                   [disabled]="!isEnabled(contract)"
                   [checked]="contract.isApproved ? contract.isApproved[token.value.address] : false"
-                  (change)="clickCheck(contract, $event, currency)"
+                  (change)="clickCheck(contract, $event, token.value.address)"
                   *ngIf="!onlyAddress || onlyAddress == contract.address"
                 >
                   Authorize the <b>{{ contract.name }}</b> contract to operate {{ token.key }} on your behalf

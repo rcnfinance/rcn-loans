@@ -117,17 +117,17 @@ export class DialogApproveContractComponent implements OnInit {
     return contract.isApproved !== undefined;
   }
 
-  async clickCheck(contract: Contract, event: any, currency: Currency) {
+  async clickCheck(contract: Contract, event: any, tokenAddress: string) {
     let action;
     let actionCode;
 
     try {
       if (!event.checked) {
         actionCode = `disapprove${ contract.name }`;
-        action = this.contractsService.disapprove(contract.address, currency.address);
+        action = this.contractsService.disapprove(contract.address, tokenAddress);
       } else {
         actionCode = `disapprove${ contract.name }`;
-        action = this.contractsService.approve(contract.address, currency.address);
+        action = this.contractsService.approve(contract.address, tokenAddress);
       }
 
       this.eventsService.trackEvent(

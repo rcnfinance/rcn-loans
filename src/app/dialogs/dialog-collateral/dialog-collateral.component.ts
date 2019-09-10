@@ -1,5 +1,11 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from '@angular/material';
+import { environment } from '../../../environments/environment';
+import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 // App models
 import { Loan } from '../../models/loan.model';
 import { Collateral } from '../../models/collateral.model';
@@ -27,6 +33,7 @@ export class DialogCollateralComponent implements OnInit {
   finishProgress: boolean;
 
   constructor(
+    public dialog: MatDialog,
     public dialogRef: MatDialogRef<any>,
     private web3Service: Web3Service,
     private contractsService: ContractsService,
@@ -58,6 +65,7 @@ export class DialogCollateralComponent implements OnInit {
 
     const tx: string = await this.contractsService.addCollateral(
       this.collateral.id,
+      this.collateral.token,
       web3.toWei(amount),
       this.account
     );
@@ -71,9 +79,25 @@ export class DialogCollateralComponent implements OnInit {
    */
   async withdrawCollateral(amount) {
     const web3: any = this.web3Service.web3;
+    const token = this.collateral.token;
+    let contract = environment.contracts.diaspore.collateral;
+
+    if (token === environment.contracts.currencies.eth) {
+      contract = environment.contracts.diaspore.collateralWethManager;
+
+      // TODO: Show weth approve dialog
+    } else {
+      const isApproved: boolean = await this.contractsService.isApproved(contract, token);
+
+      if (!isApproved) {
+        this.showApproveDialog(contract, token);
+        return;
+      }
+    }
 
     const tx: string = await this.contractsService.withdrawCollateral(
       this.collateral.id,
+      this.collateral.token,
       this.account,
       web3.toWei(amount),
       null,
@@ -123,5 +147,16 @@ export class DialogCollateralComponent implements OnInit {
   retrievePendingTx() {
     this.addPendingTx = this.txService.getLastPendingAddCollateral(this.collateral);
     this.withdrawPendingTx = this.txService.getLastPendingWithdrawCollateral(this.collateral);
+  }
+
+  /**
+   * Show approve dialog
+   * @param contract Contract address
+   * @param token Token address
+   */
+  showApproveDialog(contract: string, token: string) {
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
+    dialogRef.componentInstance.onlyAddress = contract;
+    dialogRef.componentInstance.onlyToken = token;
   }
 }

@@ -23,6 +23,7 @@ const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
 const collateralAbi = require('../contracts/Collateral.json');
+const collateralWethAbi = require('../contracts/CollateralWETHManager.json');
 const oracleFactoryAbi = require('../contracts/OracleFactory.json');
 
 @Injectable()
@@ -39,6 +40,8 @@ export class ContractsService {
   private _installmentsModel: any;
   private _collateral: any;
   private _collateralAddress: string = environment.contracts.diaspore.collateral;
+  private _collateralWeth: any;
+  private _collateralWethAddress: string = environment.contracts.diaspore.collateralWethManager;
   private _oracleFactory: any;
   private _oracleFactoryAddress: string = environment.contracts.oracleFactory;
 
@@ -56,6 +59,7 @@ export class ContractsService {
     this._rcnExtension = this.makeContract(extensionAbi.abi, this._rcnExtensionAddress);
     this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
     this._collateral = this.makeContract(collateralAbi.abi, this._collateralAddress);
+    this._collateralWeth = this.makeContract(collateralWethAbi.abi, this._collateralWethAddress);
     this._oracleFactory = this.makeContract(oracleFactoryAbi.abi, this._oracleFactoryAddress);
   }
 
@@ -910,6 +914,22 @@ export class ContractsService {
     account: string
   ) {
     const web3 = this.web3.opsWeb3;
+
+    if (collateralToken === environment.contracts.currencies.eth) {
+      return await promisify(this.loadAltContract(web3, this._collateralWeth).create, [
+        loanId,
+        oracle,
+        liquidationRatio,
+        balanceRatio,
+        burnFee,
+        rewardFee,
+        {
+          from: account,
+          value: entryAmount
+        }
+      ]);
+    }
+
     return await promisify(this.loadAltContract(web3, this._collateral).create, [
       loanId,
       oracle,
@@ -926,16 +946,29 @@ export class ContractsService {
   /**
    * Deposit tokens in collateral
    * @param collateralId Collateral ID
+   * @param tokenAddress Collateral token address
    * @param amount Amount to add in wei
    * @param account Account address
    * @return Tx hash
    */
   async addCollateral(
     collateralId: number,
+    tokenAddress: string,
     amount: number,
     account: string
   ) {
     const web3 = this.web3.opsWeb3;
+
+    if (tokenAddress === environment.contracts.currencies.eth) {
+      return await promisify(this.loadAltContract(web3, this._collateralWeth).deposit, [
+        collateralId,
+        {
+          from: account,
+          value: amount
+        }
+      ]);
+    }
+
     return await promisify(this.loadAltContract(web3, this._collateral).deposit, [
       collateralId,
       amount,
@@ -954,13 +987,20 @@ export class ContractsService {
    */
   async withdrawCollateral(
     collateralId: number,
+    tokenAddress: string,
     to: string,
     amount: number,
     oracleData: string,
     account: string
   ) {
     const web3 = this.web3.opsWeb3;
-    return await promisify(this.loadAltContract(web3, this._collateral).withdraw, [
+    let contract: any = this._collateral;
+
+    if (tokenAddress === environment.contracts.currencies.eth) {
+      contract = this._collateralWeth;
+    }
+
+    return await promisify(this.loadAltContract(web3, contract).withdraw, [
       collateralId,
       to,
       amount,

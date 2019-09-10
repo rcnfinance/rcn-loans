@@ -432,22 +432,17 @@ export class CreateLoanComponent implements OnInit {
 
     // check contract / token approve
     const collateralSymbol = formGroup2.value.collateralAsset;
-    let token: string;
-    let contract: string;
 
-    if (collateralSymbol === 'ETH') {
-      token = environment.contracts.currencies.weth;
-      contract = environment.contracts.diaspore.collateralWethManager;
-    } else {
+    if (collateralSymbol !== 'ETH') {
       const collateralAsset = this.currenciesService.getCurrencyByKey('symbol', collateralSymbol);
-      token = collateralAsset.address;
-      contract = environment.contracts.diaspore.collateral;
-    }
+      const token = collateralAsset.address;
+      const contract = environment.contracts.diaspore.collateral;
 
-    const isApproved: boolean = await this.contractsService.isApproved(contract, token);
-    if (!isApproved) {
-      this.showApproveDialog(contract, token);
-      return;
+      const isApproved: boolean = await this.contractsService.isApproved(contract, token);
+      if (!isApproved) {
+        this.showApproveDialog(contract, token);
+        return;
+      }
     }
 
     if (form.valid) {
