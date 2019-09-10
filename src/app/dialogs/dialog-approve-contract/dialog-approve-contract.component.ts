@@ -15,6 +15,13 @@ class Contract {
   ) { }
 }
 
+class TokenContracts {
+  constructor(
+    public address: string,
+    public contracts: Contract[]
+  ) { }
+}
+
 @Component({
   selector: 'app-dialog-approve-contract',
   templateUrl: './dialog-approve-contract.component.html',
@@ -29,9 +36,11 @@ export class DialogApproveContractComponent implements OnInit {
     new Contract('Diaspore Loan manager', environment.contracts.diaspore.loanManager),
     new Contract('Diaspore Debt mananger', environment.contracts.diaspore.debtEngine),
     new Contract('Diaspore Collateral', environment.contracts.diaspore.collateral),
+    new Contract('Diaspore Collateral WETH Manager', environment.contracts.diaspore.collateralWethManager),
     new Contract('Diaspore Converter ramp', environment.contracts.converter.converterRamp),
     new Contract('Basalt engine', environment.contracts.basaltEngine)
   ];
+  tokenContracts = {};
 
   constructor(
     private web3Service: Web3Service,
@@ -43,7 +52,7 @@ export class DialogApproveContractComponent implements OnInit {
 
   async ngOnInit() {
     await this.loadAccount();
-    await this.loadContracts();
+    await this.loadCurrencies();
     this.loadApproved();
   }
 
@@ -55,11 +64,27 @@ export class DialogApproveContractComponent implements OnInit {
   }
 
   /**
-   * Load contracts and tokens
+   * Load currencies
    */
-  loadContracts() {
+  loadCurrencies() {
     const currencies: Array<Currency> = this.currenciesService.getCurrencies(true);
-    this.currencies = currencies.filter(currency => currency.symbol !== 'ETH');
+
+    // set weth address
+    currencies.map(currency => {
+      if (currency.address === environment.contracts.currencies.eth) {
+        currency.address = environment.contracts.currencies.weth;
+      }
+    });
+    this.currencies = currencies;
+
+    // set contracts by token
+    this.tokenContracts = this.currencies.reduce((accumulator, item) => ({
+      ...accumulator,
+      [item.symbol]: new TokenContracts(
+        item.address,
+        this.loadContracts(item.address)
+      )
+    }), {});
   }
 
   async loadApproved(): Promise<any> {
@@ -125,6 +150,40 @@ export class DialogApproveContractComponent implements OnInit {
       return;
     } finally {
       await this.loadApproved();
+    }
+  }
+
+  /**
+   * Load contracts for the specified token
+   * @param token Token address
+   * @return Contracts array
+   */
+  private loadContracts(token: string) {
+    const currencies = environment.contracts.currencies;
+    const contracts = environment.contracts;
+
+    switch (token) {
+      case currencies.weth:
+        return this.contracts.filter(
+          contract => contract.address === contracts.diaspore.collateralWethManager
+        );
+
+      case currencies.rcn:
+        return this.contracts.filter(
+          contract => contract.address !== contracts.diaspore.collateralWethManager
+        );
+
+      default:
+        return this.contracts.filter(
+          contract => {
+            if (
+              contract.address !== contracts.basaltEngine &&
+              contract.address !== contracts.diaspore.collateralWethManager
+            ) {
+              return true;
+            }
+          }
+        );
     }
   }
 }

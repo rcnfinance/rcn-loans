@@ -19,21 +19,27 @@
         </div>
       </div>
       <div class="col-sm-12 col-md-7">
-        <ng-container *ngFor="let currency of currencies">
-          <div class="row mb-3" *ngIf="!onlyToken || onlyToken == currency.address">
+        <ng-container *ngFor="let token of tokenContracts | keyvalue">
+          <div
+            class="row mb-3"
+            *ngIf="!onlyToken || onlyToken == token.value.address"
+          >
             <div class="col-sm-12">
               <div class="margintop20 d-none d-md-none"></div>
               <div class="title main-h2 marginbottom20">
-                {{ currency.symbol }}
+                {{ token.key }}
               </div>
-              <div class="checkbox" *ngFor='let contract of contracts'>
+              <div
+                class="checkbox"
+                *ngFor="let contract of token.value.contracts"
+              >
                 <mat-checkbox
                   [disabled]="!isEnabled(contract)"
-                  [checked]="contract.isApproved ? contract.isApproved[currency.address] : false"
+                  [checked]="contract.isApproved ? contract.isApproved[token.value.address] : false"
                   (change)="clickCheck(contract, $event, currency)"
                   *ngIf="!onlyAddress || onlyAddress == contract.address"
                 >
-                  Authorize the <b>{{ contract.name }}</b> contract to operate {{ currency.symbol }} on your behalf
+                  Authorize the <b>{{ contract.name }}</b> contract to operate {{ token.key }} on your behalf
                 </mat-checkbox>
               </div>
             </div>
