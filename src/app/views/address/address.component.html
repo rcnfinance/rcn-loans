@@ -6,20 +6,35 @@
 ></ngx-spinner>
 <div class="container">
   <div class="row">
-    <!-- <div class="col-sm-12 d-none d-lg-block"> -->
     <div class="col-sm-12">
-      <div class="title main-h1">My loans</div>
+      <ng-container *ngIf="myAddress; else genericAddress">
+        <div class="title main-h1">
+          My loans
+        </div>
+      </ng-container>
+      <ng-template #genericAddress>
+        <div class="title main-h1">
+          Address
+        </div>
+        <div class="title main-h5 ellipsis">
+          {{ address }}
+        </div>
+      </ng-template>
       <div class="margintop30 d-lg-none"></div>
       <div class="buttons-box">
-        <a class="button"
-        [ngClass]="lent? 'button-blue': ''"
-        routerLink="borrowed" (click)="isPath()">
+        <a
+          class="button"
+          [class.button-blue]="activeTab == 'borrowed'"
+          routerLink="borrowed"
+        >
           <i class="fas fa-reply"></i>
           <span class="button-style">BORROWED</span>
         </a>
-        <a class="button"
-        [ngClass]="lent? '': 'button-blue'"
-        routerLink="lent" (click)="isPath()">
+        <a
+          class="button"
+          [class.button-blue]="activeTab == 'lent'"
+          routerLink="lent"
+        >
           <i class="fas fa-share"></i>
           <span class="button-style">LENDED</span>
         </a>
