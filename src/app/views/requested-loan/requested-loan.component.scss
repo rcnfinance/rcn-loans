@@ -33,6 +33,19 @@
   }
 }
 
+.button-borrow {
+  position: fixed;
+  bottom: 60px;
+  right: 0px;
+  background-color: black;
+  border-radius: 40px;
+  width: 50px;
+  height: 50px;
+ i {
+   font-size: 50px;
+ }
+}
+
 @media (min-width: 992px){
   .filters{
     @include keyframes(anm-forward) { 0% { height: 0px; opacity: 0; } 100% { height: 102px; opacity: 1; } }
@@ -41,5 +54,8 @@
     animation-fill-mode: both;
     @include animation(anm-backwards, .3s, ease-in, 0s, normal, both);
     animation-fill-mode: both;
+  }
+  .button-borrow {
+    display: none;
   }
 }

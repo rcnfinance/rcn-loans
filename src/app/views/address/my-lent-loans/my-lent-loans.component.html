@@ -1,4 +1,9 @@
 <div class="container">
+  <mat-chip-list>
+    <mat-chip class="margintop30 marginright15" selected="true"
+      >{{ loans.length }} LENDED</mat-chip
+    >
+  </mat-chip-list>
   <div class="row">
     <div class="col-sm-12 text-center margintop30" *ngIf="!availableLoans">
       <div class="title main-h1">This address is not a lender</div>

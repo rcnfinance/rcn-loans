@@ -1,13 +1,18 @@
 <div class="container">
-    <div class="row">
-      <div class="col-sm-12 text-center margintop30" *ngIf="!availableLoans">
-        <div class="title main-h1">This address is not a borrower</div>
-      </div>
-      <div
-        class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col"
-        *ngFor="let loan of loans; let i; of: index"
-      >
-        <app-loan-card [loan]="loan"></app-loan-card>
-      </div>
+  <mat-chip-list>
+    <mat-chip class="margintop30 marginright15" selected="true"
+      >{{ loans.length }} BORROWED</mat-chip
+    >
+  </mat-chip-list>
+  <div class="row">
+    <div class="col-sm-12 text-center margintop30" *ngIf="!availableLoans">
+      <div class="title main-h1">This address is not a borrower</div>
+    </div>
+    <div
+      class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col"
+      *ngFor="let loan of loans; let i; of: index"
+    >
+      <app-loan-card [loan]="loan"></app-loan-card>
     </div>
   </div>
+</div>

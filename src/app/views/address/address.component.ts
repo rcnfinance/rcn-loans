@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
-// App Models
-import { Loan } from './../../models/loan.model';
 // App Services
-import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from '../../services/web3.service';
 
 @Component({
@@ -18,36 +16,36 @@ export class AddressComponent implements OnInit {
   available: any;
   loans = [];
   availableLoans = true;
+  path: any;
+  myAddress: boolean;
 
   constructor(
     private route: ActivatedRoute,
-    private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
-    private web3Service: Web3Service
+    private web3Service: Web3Service,
+    private location: Location
   ) {}
 
   ngOnInit() {
-    this.spinner.show(); // Initialize spinner
-    this.route.params.subscribe(params => {
+    this.spinner.show();
+    this.route.params.subscribe(async params => {
       const web3 = this.web3Service.web3;
-      this.address = web3.toChecksumAddress(params['address']);
-      this.loadLoans(this.address);
+      const urlAddress = web3.toChecksumAddress(params['address']);
+      let account = await this.web3Service.getAccount();
+      account = web3.toChecksumAddress(account);
+
+      this.address = urlAddress;
+
+      if (account === urlAddress) {
+        this.myAddress = true;
+      }
     });
   }
 
-  private async loadLoans(address: string) {
-    try {
-      const result: Loan[] = await this.contractsService.getLoansOfLender(address);
-      this.loans = result;
-      // this.upgradeAvaiblable();
-      this.spinner.hide();
-      if (this.loans.length <= 0) {
-        this.availableLoans = false;
-      }
-
-    } catch (err) {
-      this.spinner.hide();
-      this.availableLoans = false;
-    }
+  get activeTab() {
+    const path = this.location.path();
+    if (path.includes('borrowed')) return 'borrowed';
+    if (path.includes('lent')) return 'lent';
   }
+
 }

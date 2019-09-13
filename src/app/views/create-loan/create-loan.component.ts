@@ -1028,7 +1028,7 @@ export class CreateLoanComponent implements OnInit {
         this.collateralStartProgress = false;
         this.collateralFinishProgress = false;
         this.collateralWasCreated = true;
-        // TODO: redirect to my loans
+        this.router.navigate(['/address', this.account, 'borrowed']);
         break;
 
       default:
