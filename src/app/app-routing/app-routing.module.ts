@@ -16,7 +16,10 @@ const appRoutes: Routes = [
   { path: 'requests', component: RequestedLoanComponent },
   { path: 'activity', component: ActiveLoansComponent },
   { path: 'loan/:id', component: LoanDetailComponent },
-  { path: 'address/:address', component: AddressComponent,
+  { path: 'address/:address', redirectTo: 'address/:address/lent' },
+  {
+    path: 'address/:address',
+    component: AddressComponent,
     children: [
       {
         path: 'lent',
