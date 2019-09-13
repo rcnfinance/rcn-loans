@@ -54,6 +54,41 @@ export class ApiService {
     return allLoansOfLender;
   }
 
+   // Loads all loans borrowed by the account that is logged in
+  async getLoansOfBorrower(borrower: string): Promise<Loan[]> {
+    const web3 = this.web3Service.web3;
+    let allLoansOfBorrower: Loan[] = [];
+    let apiCalls = 0;
+    let page = 0;
+    try {
+      borrower = web3.toChecksumAddress(borrower);
+      const data: any = await this.http.get(this.url.concat('loans?open=false&page=' + page + '&borrower=' + borrower)).toPromise();
+      if (page === 0) {
+        apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      }
+      const activeLoans = await this.getAllCompleteLoans(data.content);
+      allLoansOfBorrower = allLoansOfBorrower.concat(activeLoans);
+      page++;
+    } catch (err) {
+      console.info('Error', err);
+    }
+
+    const urls = [];
+    for (page; page < apiCalls; page++) {
+      const url = this.url.concat('loans?open=false&page=' + page + '&borrower=' + borrower);
+      urls.push(url);
+    }
+    const responses = await this.getAllUrls(urls);
+
+    const allApiLoans = await this.getAllApiLoans(responses);
+
+    for (const apiLoans of allApiLoans) {
+      allLoansOfBorrower = allLoansOfBorrower.concat(apiLoans);
+    }
+
+    return allLoansOfBorrower;
+  }
+
   // Gets all loans that were lent and there status is ongoing. Meaning that they are not canceled or finished.
   async getActiveLoans(): Promise<Loan[]> {
     let allActiveLoans: Loan[] = [];

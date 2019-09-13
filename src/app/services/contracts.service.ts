@@ -763,6 +763,30 @@ export class ContractsService {
     // return await pdiaspore;
   }
 
+  async getLoansOfBorrower(borrower: string): Promise<Loan[]> {
+    // Filter [lenderIn] Basalt loans
+    // const bfilters = [environment.contracts.diaspore.filters.isBorrower];
+    // const bparams = [this.addressToBytes32(borrower)];
+    // const pbasalt = await promisify(this._rcnExtension.queryLoans.call, [this._rcnEngineAddress, 0, 0, bfilters, bparams]);
+    // // Filter lenderIn Diaspore loans
+    // const dfilter = [
+    //   // Created by loan manager
+    //   this.addressToBytes32(environment.contracts.diaspore.filters.debtCreator),
+    //   this.addressToBytes32(this._loanManager.address),
+    //   // Lender in
+    //   this.addressToBytes32(environment.contracts.diaspore.filters.isLender),
+    //   this.addressToBytes32(lender)
+    // ];
+    // const pdiaspore = promisify(this._requestsView.getLoans, [this._loanManager.address, dfilter]);
+    // // return this.parseLoanBytes(await pdiaspore).concat(this.parseBasaltBytes(await pbasalt));
+    // return this.parseLoanBytes(await pdiaspore);
+
+    const pdiaspore = await this.apiService.getLoansOfBorrower(borrower);
+    return pdiaspore;
+
+    // return await pdiaspore;
+  }
+
   /**
    * Check if the loan was created
    * @param loanId Loan ID

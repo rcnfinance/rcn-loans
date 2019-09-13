@@ -1,0 +1,25 @@
+.buttons-box {
+  display: flex;
+  justify-content: flex-end;
+  .button {
+    margin-left: 40px;
+    color: #717171;
+    cursor: pointer;
+    .button-style {
+      margin-left: 10px;
+      font-family: 'Raleway', sans-serif;
+      font-weight: bold;
+    }
+  }
+  .button-blue {
+    color: #4155FF;
+  }
+  .button:hover {
+    color: #4155FF;
+  }
+  .button:focus {
+    outline: none !important;
+    }
+}
+
+
