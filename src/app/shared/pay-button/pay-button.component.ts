@@ -14,8 +14,6 @@ import { Currency } from '../../utils/currencies';
 import { EventsService, Category } from '../../services/events.service';
 import { Web3Service } from '../../services/web3.service';
 import { CountriesService } from '../../services/countries.service';
-import { CivicService } from '../../services/civic.service';
-import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
@@ -42,7 +40,6 @@ export class PayButtonComponent implements OnInit {
     private eventsService: EventsService,
     private web3Service: Web3Service,
     public snackBar: MatSnackBar,
-    private civicService: CivicService,
     private countriesService: CountriesService,
     public dialog: MatDialog
   ) {}
@@ -62,7 +59,6 @@ export class PayButtonComponent implements OnInit {
 
     try {
       let engineApproved: boolean;
-      const civicApproved = await this.civicService.status();
       const balance = await this.contractsService.getUserBalanceRCNWei();
 
       switch (this.loan.network) {
@@ -80,11 +76,6 @@ export class PayButtonComponent implements OnInit {
 
       if (!engineApproved) {
         this.showApproveDialog();
-        return;
-      }
-
-      if (!await civicApproved) {
-        this.showCivicDialog();
         return;
       }
 
@@ -134,19 +125,6 @@ export class PayButtonComponent implements OnInit {
         });
       }
     }
-  }
-
-  showCivicDialog() {
-    const dialogRef: MatDialogRef<CivicAuthComponent> = this.dialog.open(CivicAuthComponent, {
-      width: '800px'
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.handlePay(true);
-      } else {
-        this.cancelOperation();
-      }
-    });
   }
 
   showInsufficientFundsDialog(required: number, funds: number) {
