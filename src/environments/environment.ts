@@ -36,7 +36,7 @@ export const environment = {
       address: 'https://ropsten.etherscan.io/address/${address}',
       tx: 'https://ropsten.etherscan.io/tx/${tx}'
     },
-    provider: 'https://ropsten-node.rcn.loans/'
+    provider: 'https://ropsten.infura.io/v3/acf3c538f57040839369e7c1b023c3c6'
   },
   contracts: {
     rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
