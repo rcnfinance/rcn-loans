@@ -33,6 +33,7 @@ export class LoanDetailComponent implements OnInit {
 
   loanConfigData = [];
   loanStatusData = [];
+  interestMiddleText: string;
   isExpired: boolean;
   isRequest: boolean;
   isOngoing: boolean;
@@ -80,13 +81,11 @@ export class LoanDetailComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private brandingService: BrandingService,
     public dialog: MatDialog
-    private brandingService: BrandingService
   ) { }
 
   ngOnInit() {
     this.spinner.show();
     this.loadAccount();
-
 
     this.route.params.subscribe(async params => {
       const id = params.id;
@@ -126,9 +125,18 @@ export class LoanDetailComponent implements OnInit {
     return view === this.viewDetail;
   }
 
-
   checkLoanGenerator() {
     this.generatedByUser = this.cosignerService.getCosigner(this.loan) === undefined;
+  }
+
+  /**
+   * Open choose currency dialog
+   */
+  openLendDialog() {
+    const dialogConfig = {
+      data: { loan: this.loan }
+    };
+    this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
   }
 
   /**
