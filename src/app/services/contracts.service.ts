@@ -27,8 +27,6 @@ const converterRampAbi = require('../contracts/ConverterRamp.json');
 @Injectable()
 export class ContractsService {
   private _oracleAddress: string = environment.contracts.oracle;
-  private _rcnContract: any;
-  private _rcnContractAddress: string = environment.contracts.rcnToken;
   private _rcnEngine: any;
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
   private _rcnExtension: any;
@@ -45,74 +43,168 @@ export class ContractsService {
     private cosignerService: CosignerService,
     private apiService: ApiService
   ) {
-    this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
-    this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
-    this._loanManager = this.web3.web3.eth.contract(loanManagerAbi).at(environment.contracts.diaspore.loanManager);
-    this._debtEngine = this.web3.web3.eth.contract(debtEngineAbi).at(environment.contracts.diaspore.debtEngine);
-    this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-    this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
+    this._rcnEngine = this.makeContract(engineAbi.abi, this._rcnEngineAddress);
+    this._loanManager = this.makeContract(loanManagerAbi, environment.contracts.diaspore.loanManager);
+    this._debtEngine = this.makeContract(debtEngineAbi, environment.contracts.diaspore.debtEngine);
+    this._rcnExtension = this.makeContract(extensionAbi.abi, this._rcnExtensionAddress);
+    this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
   }
 
-  async getUserBalanceETHWei(): Promise<BigNumber> {
-    const account = await this.web3.getAccount();
-    const balance = await this.web3.web3.eth.getBalance(account);
-    return new Promise((resolve) => {
-      resolve(balance);
-    }) as Promise<BigNumber>;
+  /**
+   * Make contract private variable
+   * @param abi Contract ABI
+   * @param address Contract address
+   * @return Contract object
+   */
+  makeContract(abi: string, address: string) {
+    return this.web3.web3.eth.contract(abi).at(address);
   }
 
+  /**
+   * Get user ETH balance
+   * @return Balance in wei
+   */
+  async getUserBalanceETHWei(): Promise<number> {
+    return await this.getUserBalanceInToken(environment.contracts.converter.ethAddress);
+  }
+
+  /**
+   * Get user RCN balance
+   * @return Balance in wei
+   */
   async getUserBalanceRCNWei(): Promise<number> {
+    return await this.getUserBalanceInToken(environment.contracts.rcnToken);
+  }
+
+  /**
+   * Get user RCN balance
+   * @return Balance
+   */
+  async getUserBalanceRCN(): Promise<number> {
+    const balance = await this.getUserBalanceInToken(environment.contracts.rcnToken);
+    return this.web3.web3.fromWei(balance);
+  }
+
+  /**
+   * Get user balance in selected token
+   * @param tokenAddress Token address
+   * @param inWei Amount in wei
+   * @return Balance amount
+   */
+  async getUserBalanceInToken(
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<number> {
     const account = await this.web3.getAccount();
-    return new Promise((resolve, reject) => {
-      this._rcnContract.balanceOf.call(account, function (err, result) {
+
+    return new Promise(async (resolve, reject) => {
+      const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+
+      if (!this.tokenIsValid(tokenAddress)) {
+        reject('The currency does not exist');
+      }
+
+      if (tokenAddress === environment.contracts.converter.ethAddress) {
+        const ethBalance = await this.web3.web3.eth.getBalance(account);
+        resolve(ethBalance);
+      }
+
+      tokenContract.balanceOf.call(account, (err, balance) => {
         if (err != null) {
           reject(err);
         }
-        resolve(result);
+        resolve(balance);
       });
     }) as Promise<number>;
   }
 
-  async getUserBalanceRCN(): Promise<number> {
-    return new Promise((resolve) => {
-      this.getUserBalanceRCNWei().then((balance) => {
-        resolve(this.web3.web3.fromWei(balance));
-      });
-    }) as Promise<number>;
-  }
+  /**
+   * Check if the contract is approved for operate with ERC20 token
+   * @param contract Contract address
+   * @param tokenAddress Token address
+   * @return Pending tx or boolean
+   */
+  async isApproved(
+    contract: string,
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<boolean> {
+    const pending = this.txService.getLastPendingApprove(tokenAddress, contract);
+    const ethAddress = environment.contracts.converter.ethAddress;
 
-  async isApproved(contract: string): Promise<boolean> {
-    const pending = this.txService.getLastPendingApprove(this._rcnContract.address, contract);
     if (pending !== undefined) {
       return pending;
     }
-    const result = await promisify(this._rcnContract.allowance.call, [await this.web3.getAccount(), contract]);
-    return result >= this.web3.web3.toWei(1000000000);
+
+    switch (tokenAddress) {
+      // eth does not require approve
+      case ethAddress:
+        return true;
+
+      // check if token is valid and approved
+      default:
+        const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+        const result: number = await promisify(tokenContract.allowance.call, [
+          await this.web3.getAccount(),
+          contract
+        ]);
+        return result >= this.web3.web3.toWei(1000000000);
+    }
   }
 
-  async approve(contract: string): Promise<string> {
-
+  /**
+   * Approve contract for operate with token
+   * @param contract Contract address
+   * @param tokenAddress Token address
+   * @return Tx hash
+   */
+  async approve(
+    contract: string,
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<string> {
     const account = await this.web3.getAccount();
     const web3 = this.web3.opsWeb3;
 
-    const result = await promisify(this.loadAltContract(web3, this._rcnContract).approve,
-      [contract, web3.toWei(10 ** 32), { from: account }]);
+    if (!this.tokenIsValid(tokenAddress)) {
+      throw Error('The currency does not exist');
+    }
 
-    this.txService.registerApproveTx(result, this._rcnContract.address, contract, true);
+    const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+    const result = await promisify(this.loadAltContract(web3, tokenContract).approve, [
+      contract,
+      web3.toWei(10 ** 32),
+      {
+        from: account
+      }
+    ]);
 
+    this.txService.registerApproveTx(result, tokenAddress, contract, true);
     return result;
   }
 
-  async disapprove(contract: string): Promise<string> {
-
+  /**
+   * Disapprove contract for operate with token
+   * @param contract Contract address
+   * @param tokenAddress Token address
+   * @return Tx hash
+   */
+  async disapprove(
+    contract: string,
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<string> {
     const account = await this.web3.getAccount();
     const web3 = this.web3.opsWeb3;
 
-    const result = await promisify(this.loadAltContract(web3, this._rcnContract).approve,
-      [contract, 0, { from: account }]);
+    if (!this.tokenIsValid(tokenAddress)) {
+      throw Error('The currency does not exist');
+    }
 
-    this.txService.registerApproveTx(result, this._rcnContract.address, contract, false);
+    const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+    const result = await promisify(this.loadAltContract(web3, tokenContract).approve, [
+      contract,
+      0,
+      { from: account }
+    ]);
 
+    this.txService.registerApproveTx(result, tokenAddress, contract, false);
     return result;
   }
 
@@ -592,6 +684,22 @@ export class ContractsService {
         resolve(this.readPendingWithdraws(loans));
       });
     }) as Promise<[number, number[], number, number[]]>;
+  }
+
+  /**
+   * Check if token is valid
+   * @param tokenAddress Token address
+   * @return Boolean
+   */
+  private tokenIsValid(tokenAddress): boolean {
+    const currencies = environment.usableCurrencies;
+    const currency = currencies.filter(token => token.address === tokenAddress);
+
+    if (currency.length) {
+      return true;
+    }
+
+    return false;
   }
 
   private parseBasaltBytes(bytes: any): Loan[] {
