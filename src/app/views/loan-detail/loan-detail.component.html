@@ -29,7 +29,7 @@
         <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.currency.fromUnit(loan.amount)" [amountRight]="isRequest ? expectedReturn : totalDebt"></app-conversion-graphic>
       </div>
       <div class="paddingleft15 paddingright15">
-        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="paid" *ngIf="!isRequest"></app-conversion-graphic>
+        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interest" [amountLeft]="paid" *ngIf="!isRequest"></app-conversion-graphic>
       </div>
 
       <div class="margintop20"></div>

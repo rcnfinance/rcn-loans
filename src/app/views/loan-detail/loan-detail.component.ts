@@ -33,7 +33,6 @@ export class LoanDetailComponent implements OnInit {
 
   loanConfigData = [];
   loanStatusData = [];
-  interestMiddleText: string;
   isExpired: boolean;
   isRequest: boolean;
   isOngoing: boolean;
@@ -165,13 +164,16 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private loadDetail() {
+    if (this.loan.status === Status.Expired) {
+      throw Error('Loan expired');
+    }
+
     if (this.loan.status === Status.Request) {
       // Load config data
       const interest = this.loan.descriptor.interestRate.toFixed(2);
       const interestPunnitory = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
       const currency = this.loan.currency;
       const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
-
       this.loanConfigData = [
         ['Currency', currency],
         ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
@@ -182,7 +184,6 @@ export class LoanDetailComponent implements OnInit {
       this.interest = `~ ${ interest }%`;
       this.punitory = `~ ${ interestPunnitory }%`;
       this.duration = duration;
-
       this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
     } else {
       const currency = this.loan.currency;
@@ -204,7 +205,7 @@ export class LoanDetailComponent implements OnInit {
 
       // Template data
       this.interest = '~ ' + interest + ' %';
-      this.lendDate = dueDate;
+      this.lendDate = lendDate;
       this.dueDate = dueDate;
 
       // Load status data
@@ -218,43 +219,8 @@ export class LoanDetailComponent implements OnInit {
 
     if (this.isDiaspore) {
       this.loadInstallments();
-    } else {
-      const currency = this.loan.currency;
-      // Show ongoing loan detail
-      this.loanStatusData = [
-        ['Lend date', this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration)], // TODO
-        ['Due date', this.formatTimestamp(this.loan.debt.model.dueTime)],
-        ['Deadline', this.formatTimestamp(this.loan.debt.model.dueTime)],
-        ['Remaining', Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2)]
-      ];
-
-      // Interest middle text
-      this.interestMiddleText = '~ ' + this.formatInterest(this.loan.status === Status.Indebt ?
-        this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate) + ' %';
-
-      // Load status data
-
-      const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
-
-      this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
-      this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
-
-      this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
-
     }
 
-    this.isDiaspore = this.loan.network === Network.Diaspore;
-
-    if (this.loan.network === Network.Diaspore) {
-      this.diasporeData = [
-        ['Installments', 'Duration', 'Cuota'],
-        [
-          this.loan.descriptor.installments,
-          Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments),
-          this.loan.currency.fromUnit(this.loan.descriptor.firstObligation) + ' ' + this.loan.currency.symbol
-        ]
-      ];
-    }
     this.loadUserActions();
   }
 

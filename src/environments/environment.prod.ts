@@ -32,9 +32,6 @@ export const environment = {
   rcn_node_api: {
     url: 'https://diaspore-rnode.rcn.loans/v4/'
   },
-  rcn_node_api: {
-    url: 'http://localhost:8000/v4/'
-  },
   rcn_oracle: {
     url: 'https://oracle.ripio.com/rate/'
   },

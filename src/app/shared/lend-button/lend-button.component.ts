@@ -259,15 +259,6 @@ export class LendButtonComponent implements OnInit {
         balance: funds
       }
     });
-  }
-
-  showInsufficientFundsDialog(required: number, funds: number) {
-    this.dialog.open(DialogInsufficientfundsComponent, {
-      data: {
-        required: required,
-        balance: funds
-      }
-    });
 
     this.cancelOperation();
   }
