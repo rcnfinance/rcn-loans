@@ -35,8 +35,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
   account: string;
   canLend: boolean;
   availableCurrencies: Array<{
-    id: number,
-    name: string,
+    symbol: string,
     img: string,
     address: string
   }> = [];
@@ -167,16 +166,15 @@ export class DialogSelectCurrencyComponent implements OnInit {
 
   /**
    * Get currency data by code
-   * @param code Currency code
+   * @param symbol Currency symbol
    * @return Currency data
    */
-  getCurrencyByCode(code): {
-    id: number,
-    name: string,
+  getCurrencyByCode(symbol): {
+    symbol: string,
     img: string,
     address: string
   } {
-    const currency: Array<any> = this.availableCurrencies.filter(item => item.name === code);
+    const currency: Array<any> = this.availableCurrencies.filter(item => item.symbol === symbol);
     return currency[0] || null;
   }
 
