@@ -63,30 +63,59 @@ export class ContractsService {
     return this.web3.web3.eth.contract(abi).at(address);
   }
 
-  async getUserBalanceETHWei(): Promise<BigNumber> {
-    const account = await this.web3.getAccount();
-    const balance = await this.web3.web3.eth.getBalance(account);
-    return new Promise((resolve) => {
-      resolve(balance);
-    }) as Promise<BigNumber>;
+  /**
+   * Get user ETH balance
+   * @return Balance in wei
+   */
+  async getUserBalanceETHWei(): Promise<number> {
+    return await this.getUserBalanceInToken(environment.contracts.converter.ethAddress);
   }
 
+  /**
+   * Get user RCN balance
+   * @return Balance in wei
+   */
   async getUserBalanceRCNWei(): Promise<number> {
+    return await this.getUserBalanceInToken(environment.contracts.rcnToken);
+  }
+
+  /**
+   * Get user RCN balance
+   * @return Balance
+   */
+  async getUserBalanceRCN(): Promise<number> {
+    const balance = await this.getUserBalanceInToken(environment.contracts.rcnToken);
+    return this.web3.web3.fromWei(balance);
+  }
+
+  /**
+   * Get user balance in selected token
+   * @param tokenAddress Token address
+   * @param inWei Amount in wei
+   * @return Balance amount
+   */
+  async getUserBalanceInToken(
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<number> {
     const account = await this.web3.getAccount();
-    return new Promise((resolve, reject) => {
-      this._rcnContract.balanceOf.call(account, function (err, result) {
+
+    return new Promise(async (resolve, reject) => {
+      const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+
+      if (!this.tokenIsValid(tokenAddress)) {
+        reject('The currency does not exist');
+      }
+
+      if (tokenAddress === environment.contracts.converter.ethAddress) {
+        const ethBalance = await this.web3.web3.eth.getBalance(account);
+        resolve(ethBalance);
+      }
+
+      tokenContract.balanceOf.call(account, (err, balance) => {
         if (err != null) {
           reject(err);
         }
-        resolve(result);
-      });
-    }) as Promise<number>;
-  }
-
-  async getUserBalanceRCN(): Promise<number> {
-    return new Promise((resolve) => {
-      this.getUserBalanceRCNWei().then((balance) => {
-        resolve(this.web3.web3.fromWei(balance));
+        resolve(balance);
       });
     }) as Promise<number>;
   }
@@ -667,13 +696,13 @@ export class ContractsService {
    */
   private tokenIsValid(tokenAddress): boolean {
     const currencies = environment.usableCurrencies;
-    const tokensArray = Object.keys(currencies).map(currency => currencies[currency]);
+    const currency = currencies.filter(token => token.address === tokenAddress);
 
-    if (tokensArray.indexOf(tokenAddress) === -1) {
-      return false;
+    if (currency.length) {
+      return true;
     }
 
-    return true;
+    return false;
   }
 
   private parseBasaltBytes(bytes: any): Loan[] {
