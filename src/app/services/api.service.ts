@@ -190,10 +190,11 @@ export class ApiService {
 
     let oracle: Oracle;
     if (loan.oracle !== Utils.address0x) {
+      const currency = loan.currency ? Utils.hexToAscii(loan.currency.replace(/^[0x]+|[0]+$/g, '')) : '';
       oracle = new Oracle(
         Network.Diaspore,
         loan.oracle,
-        Utils.hexToAscii(loan.currency.replace(/^[0x]+|[0]+$/g, '')),
+        currency,
         loan.currency
       );
     } else {

@@ -133,7 +133,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
       expectedReturnAmount = new web3.BigNumber(tokenRate).mul(loanReturn);
     } else {
       // Currency -> RCN
-      const selectedTokenRate = await this.contractsService.getCostInToken(
+      const selectedTokenRate = await this.contractsService.getCost(
         web3.toWei(costInRcn),
         uniswapProxy,
         fromToken,

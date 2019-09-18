@@ -37,7 +37,6 @@ export class ContractsService {
   private _debtEngine: any;
   private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
   private _rcnConverterRamp: any;
-  loanRcnAmount: any;
 
   constructor(
     private http: HttpClient,
@@ -50,7 +49,6 @@ export class ContractsService {
     this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
     this._loanManager = this.web3.web3.eth.contract(loanManagerAbi).at(environment.contracts.diaspore.loanManager);
     this._debtEngine = this.web3.web3.eth.contract(debtEngineAbi).at(environment.contracts.diaspore.debtEngine);
-    this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
     this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
   }
@@ -239,6 +237,34 @@ export class ContractsService {
   }
 
   /**
+   * Get cost in rcn
+   * @param amount Amount to calculate cost
+   * @param fromToken Token to convert
+   * @return Token cost in wei
+   */
+  async getCostInToken(amount: number, token: string) {
+    const web3: any = this.web3.web3;
+    const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
+    const fromToken: any = environment.contracts.rcnToken;
+    amount = new web3.BigNumber(amount);
+
+    if (token === fromToken) {
+      return web3.toWei(amount);
+    }
+
+    const rate = await this.getCost(
+      web3.toWei(amount),
+      uniswapProxy,
+      fromToken,
+      token
+    );
+    const tokenCost = new web3.BigNumber(rate[0]);
+    const etherCost = new web3.BigNumber(rate[1]);
+
+    return tokenCost.isZero() ? etherCost : tokenCost;
+  }
+
+  /**
    * Get the cost, in wei, of making a convertion using the value specified
    * @param amount Amount to calculate cost
    * @param converter Converter address to use for swap
@@ -246,7 +272,7 @@ export class ContractsService {
    * @param token RCN Token address
    * @return _tokenCost and _etherCost
    */
-  async getCostInToken(
+  async getCost(
     amount: number,
     converter: string,
     fromToken: string,
@@ -306,7 +332,6 @@ export class ContractsService {
     console.info('Oracle rate obtained', rate, decimals);
     const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
     console.info('Estimated required rcn is', required);
-    // this.loanRcnAmount = required
     return rate;
   }
 
@@ -419,7 +444,6 @@ export class ContractsService {
         console.info('Oracle data found', e);
       }
     });
-
     if (data === undefined) {
       throw new Error('Oracle did not provide data');
     }
@@ -472,7 +496,7 @@ export class ContractsService {
     // return this.parseLoanBytes(await pdiaspore);
 
     const activeDiasporeLoans = this.apiService.getActiveLoans();
-    return (await activeDiasporeLoans).concat(this.parseBasaltBytes(await pbasalt));
+    return (await activeDiasporeLoans).concat(LoanCurator.curateLoans(this.parseBasaltBytes(await pbasalt)));
     // return activeDiasporeLoans;
 
   }
@@ -490,7 +514,8 @@ export class ContractsService {
         if (err != null) {
           reject(err);
         }
-        resolve(LoanCurator.curateBasaltRequests(this.parseBasaltBytes(result)));
+
+        resolve(LoanCurator.curateLoans(this.parseBasaltBytes(result)));
       });
     }) as Promise<Loan[]>;
 
@@ -537,8 +562,7 @@ export class ContractsService {
     // return this.parseLoanBytes(await pdiaspore);
 
     const pdiaspore = await this.apiService.getLoansOfLender(lender);
-    return (pdiaspore).concat(this.parseBasaltBytes(pbasalt));
-
+    return (pdiaspore).concat(LoanCurator.curateLoans(this.parseBasaltBytes(pbasalt)));
     // return await pdiaspore;
   }
 
