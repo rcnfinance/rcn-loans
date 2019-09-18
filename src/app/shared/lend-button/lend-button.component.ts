@@ -39,7 +39,8 @@ export class LendButtonComponent implements OnInit {
     payableAmount: number,
     converter: string,
     fromToken: string,
-    oracleData: any
+    oracleData: any,
+    amountInToken: number
   };
   pendingTx: Tx = undefined;
   lendEnabled: Boolean;
@@ -58,9 +59,14 @@ export class LendButtonComponent implements OnInit {
     public decentralandCosignerProvider: DecentralandCosignerProvider
   ) { }
 
+  /**
+   * Handle lend button click
+   * @param forze TODO: Skip some validations
+   */
   async handleLend(forze = false) {
-
-    if (this.opPending && !forze) { return; }
+    if (this.opPending && !forze) {
+      return;
+    }
 
     if (!this.web3Service.loggedIn) {
       if (await this.web3Service.requestLogin()) {
@@ -103,30 +109,45 @@ export class LendButtonComponent implements OnInit {
         return;
       }
     }
-
     const oracleData = await this.contractsService.getOracleData(this.loan.oracle);
-
     this.startOperation();
 
     try {
-      const engineApproved = await this.contractsService.isApproved(this.loan.address);
-      const balance = await this.contractsService.getUserBalanceRCNWei();
-      console.info('balance', Number(balance));
-      const required = await this.contractsService.estimateLendAmount(this.loan);
-      console.info('required', required);
+      // validate inputs
+      const web3: any = this.web3Service.web3;
       const inputLendPayload = this.lendPayload;
-
-      if (!await engineApproved) {
-        this.showApproveDialog();
-        return;
-      }
-
       if (!inputLendPayload) {
         throw Error('Please choose a currency');
       }
 
-      if (balance > required) {
-        const web3 = this.web3Service.web3;
+      // validate and set value in specified token
+      const balance = await this.contractsService.getUserBalanceInToken(inputLendPayload.fromToken);
+      let required = await this.contractsService.estimateLendAmount(this.loan);
+      let contractAddress: string;
+
+      if (inputLendPayload.fromToken === environment.contracts.rcnToken) {
+        contractAddress = this.loan.address;
+      } else {
+        contractAddress = environment.contracts.converter.converterRamp;
+        required = web3.toWei(inputLendPayload.amountInToken);
+      }
+
+      // validate token / contract approved
+      const engineApproved = await this.contractsService.isApproved(contractAddress, inputLendPayload.fromToken);
+      if (!await engineApproved) {
+        this.showApproveDialog(contractAddress);
+        return;
+      }
+
+      // validate civic approve
+      // const civicApproved = await this.civicService.status();
+      // if (!await civicApproved) {
+      //   this.showCivicDialog();
+      //   return;
+      // }
+
+      // validate balance amount
+      if (Number(balance) > Number(required)) {
         let tx: string;
         let account: string = await this.web3Service.getAccount();
         account = web3.toChecksumAddress(account);
@@ -168,11 +189,6 @@ export class LendButtonComponent implements OnInit {
           'loan #' + this.loan.id
         );
 
-        if (this.loan.network === Network.Basalt) {
-          this.txService.registerLendTx(tx, environment.contracts.basaltEngine, this.loan);
-        } else {
-          this.txService.registerLendTx(tx, environment.contracts.diaspore.loanManager, this.loan);
-        }
         this.retrievePendingTx();
       } else {
         this.eventsService.trackEvent(
@@ -182,7 +198,8 @@ export class LendButtonComponent implements OnInit {
           required
         );
 
-        this.showInsufficientFundsDialog(required, balance);
+        const currency = environment.usableCurrencies.filter(token => token.address === inputLendPayload.fromToken)[0];
+        this.showInsufficientFundsDialog(required, balance, currency.symbol);
       }
     } catch (e) {
       // Don't show 'User denied transaction signature' error
@@ -197,26 +214,40 @@ export class LendButtonComponent implements OnInit {
     }
   }
 
+  /**
+   * Finish current lending operation
+   */
   finishOperation() {
     console.info('Lend finished');
     this.opPending = false;
   }
 
+  /**
+   * Start lend operation
+   */
   startOperation() {
-    console.info('Started lending');
+    console.info('Started lend');
     this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
     this.opPending = true;
   }
 
+  /**
+   * Cancel or fail lend operation
+   */
   cancelOperation() {
     console.info('Cancel lend');
     this.openSnackBar('Your transaction has failed', '');
     this.opPending = false;
   }
 
-  showApproveDialog() {
+  /**
+   * Show approve dialog
+   * @param contract Contract address
+   */
+  showApproveDialog(contract: string) {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
-    dialogRef.componentInstance.onlyAddress = this.loan.address;
+    dialogRef.componentInstance.onlyAddress = contract;
+    dialogRef.componentInstance.onlyToken = this.lendPayload.fromToken;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.handleLend(true);
@@ -252,14 +283,20 @@ export class LendButtonComponent implements OnInit {
     this.pendingTx = this.txService.getLastPendingLend(this.loan);
   }
 
-  showInsufficientFundsDialog(required: number, funds: number) {
+  /**
+   * Show insufficient funds dialog
+   * @param required Amount required
+   * @param balance Actual user balance in selected currency
+   * @param currency Currency symbol
+   */
+  showInsufficientFundsDialog(required: number, balance: number, currency: string) {
     this.dialog.open(DialogInsufficientfundsComponent, {
       data: {
-        required: required,
-        balance: funds
+        required,
+        balance,
+        currency
       }
     });
-
     this.cancelOperation();
   }
 

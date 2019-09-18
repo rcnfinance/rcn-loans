@@ -30,13 +30,13 @@
               Select Token
             </mat-label>
             <mat-select [(value)]="selectedCurrency" (selectionChange)="onChangeCurrency()">
-              <mat-option *ngFor="let item of availableCurrencies" [value]="item.name">
+              <mat-option *ngFor="let item of availableCurrencies" [value]="item.symbol">
                 <div class="row align-items-center">
                   <div class="icon-box item">
                     <img matPrefix class="input-icon" [src]="item.img">
                   </div>
                   <div class="currency">
-                    {{ item.name }}
+                    {{ item.symbol }}
                   </div>
                 </div>
               </mat-option>
