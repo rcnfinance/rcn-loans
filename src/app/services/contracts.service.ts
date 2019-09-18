@@ -45,12 +45,22 @@ export class ContractsService {
     private cosignerService: CosignerService,
     private apiService: ApiService
   ) {
-    this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
-    this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
-    this._loanManager = this.web3.web3.eth.contract(loanManagerAbi).at(environment.contracts.diaspore.loanManager);
-    this._debtEngine = this.web3.web3.eth.contract(debtEngineAbi).at(environment.contracts.diaspore.debtEngine);
-    this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-    this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
+    this._rcnContract = this.makeContract(tokenAbi.abi, this._rcnContractAddress);
+    this._rcnEngine = this.makeContract(engineAbi.abi, this._rcnEngineAddress);
+    this._loanManager = this.makeContract(loanManagerAbi, environment.contracts.diaspore.loanManager);
+    this._debtEngine = this.makeContract(debtEngineAbi, environment.contracts.diaspore.debtEngine);
+    this._rcnExtension = this.makeContract(extensionAbi.abi, this._rcnExtensionAddress);
+    this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
+  }
+
+  /**
+   * Make contract private variable
+   * @param abi Contract ABI
+   * @param address Contract address
+   * @return Contract object
+   */
+  makeContract(abi: string, address: string) {
+    return this.web3.web3.eth.contract(abi).at(address);
   }
 
   async getUserBalanceETHWei(): Promise<BigNumber> {
@@ -81,38 +91,94 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  async isApproved(contract: string): Promise<boolean> {
-    const pending = this.txService.getLastPendingApprove(this._rcnContract.address, contract);
+  /**
+   * Check if the contract is approved for operate with ERC20 token
+   * @param contract Contract address
+   * @param tokenAddress Token address
+   * @return Pending tx or boolean
+   */
+  async isApproved(
+    contract: string,
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<boolean> {
+    const pending = this.txService.getLastPendingApprove(tokenAddress, contract);
+    const ethAddress = environment.contracts.converter.ethAddress;
+
     if (pending !== undefined) {
       return pending;
     }
-    const result = await promisify(this._rcnContract.allowance.call, [await this.web3.getAccount(), contract]);
-    return result >= this.web3.web3.toWei(1000000000);
+
+    switch (tokenAddress) {
+      // eth does not require approve
+      case ethAddress:
+        return true;
+
+      // check if token is valid and approved
+      default:
+        const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+        const result: number = await promisify(tokenContract.allowance.call, [
+          await this.web3.getAccount(),
+          contract
+        ]);
+        return result >= this.web3.web3.toWei(1000000000);
+    }
   }
 
-  async approve(contract: string): Promise<string> {
-
+  /**
+   * Approve contract for operate with token
+   * @param contract Contract address
+   * @param tokenAddress Token address
+   * @return Tx hash
+   */
+  async approve(
+    contract: string,
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<string> {
     const account = await this.web3.getAccount();
     const web3 = this.web3.opsWeb3;
 
-    const result = await promisify(this.loadAltContract(web3, this._rcnContract).approve,
-      [contract, web3.toWei(10 ** 32), { from: account }]);
+    if (!this.tokenIsValid(tokenAddress)) {
+      throw Error('The currency does not exist');
+    }
 
-    this.txService.registerApproveTx(result, this._rcnContract.address, contract, true);
+    const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+    const result = await promisify(this.loadAltContract(web3, tokenContract).approve, [
+      contract,
+      web3.toWei(10 ** 32),
+      {
+        from: account
+      }
+    ]);
 
+    this.txService.registerApproveTx(result, tokenAddress, contract, true);
     return result;
   }
 
-  async disapprove(contract: string): Promise<string> {
-
+  /**
+   * Disapprove contract for operate with token
+   * @param contract Contract address
+   * @param tokenAddress Token address
+   * @return Tx hash
+   */
+  async disapprove(
+    contract: string,
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<string> {
     const account = await this.web3.getAccount();
     const web3 = this.web3.opsWeb3;
 
-    const result = await promisify(this.loadAltContract(web3, this._rcnContract).approve,
-      [contract, 0, { from: account }]);
+    if (!this.tokenIsValid(tokenAddress)) {
+      throw Error('The currency does not exist');
+    }
 
-    this.txService.registerApproveTx(result, this._rcnContract.address, contract, false);
+    const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+    const result = await promisify(this.loadAltContract(web3, tokenContract).approve, [
+      contract,
+      0,
+      { from: account }
+    ]);
 
+    this.txService.registerApproveTx(result, tokenAddress, contract, false);
     return result;
   }
 
@@ -592,6 +658,22 @@ export class ContractsService {
         resolve(this.readPendingWithdraws(loans));
       });
     }) as Promise<[number, number[], number, number[]]>;
+  }
+
+  /**
+   * Check if token is valid
+   * @param tokenAddress Token address
+   * @return Boolean
+   */
+  private tokenIsValid(tokenAddress): boolean {
+    const currencies = environment.usableCurrencies;
+    const tokensArray = Object.keys(currencies).map(currency => currencies[currency]);
+
+    if (tokensArray.indexOf(tokenAddress) === -1) {
+      return false;
+    }
+
+    return true;
   }
 
   private parseBasaltBytes(bytes: any): Loan[] {
