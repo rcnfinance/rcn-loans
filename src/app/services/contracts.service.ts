@@ -27,8 +27,6 @@ const converterRampAbi = require('../contracts/ConverterRamp.json');
 @Injectable()
 export class ContractsService {
   private _oracleAddress: string = environment.contracts.oracle;
-  private _rcnContract: any;
-  private _rcnContractAddress: string = environment.contracts.rcnToken;
   private _rcnEngine: any;
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
   private _rcnExtension: any;
@@ -45,7 +43,6 @@ export class ContractsService {
     private cosignerService: CosignerService,
     private apiService: ApiService
   ) {
-    this._rcnContract = this.makeContract(tokenAbi.abi, this._rcnContractAddress);
     this._rcnEngine = this.makeContract(engineAbi.abi, this._rcnEngineAddress);
     this._loanManager = this.makeContract(loanManagerAbi, environment.contracts.diaspore.loanManager);
     this._debtEngine = this.makeContract(debtEngineAbi, environment.contracts.diaspore.debtEngine);
