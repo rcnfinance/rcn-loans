@@ -65,10 +65,10 @@ export const environment = {
       }
     },
     converter: {
-      converterRamp: '0x01f8c610ec9dab9986735f6e3068aaaf555e9937',
+      converterRamp: '0x935d87676a113d4709c6b208509b592931edaaf6',
       tokenConverter: '0xc4b1b3083174716542ef387326e58293917bf3bf',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      uniswapProxy: '0x0c295fe65e94cd4eaffe906ad1c77d9e35923b05',
+      uniswapProxy: '0x79e680e613ed32f64da9e5a09ed8613c8e9ce3a7',
       params: {
         marginSpend: 5000,
         maxSpend: 0,

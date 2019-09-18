@@ -22,6 +22,7 @@ const loanManagerAbi = require('../contracts/LoanManager.json');
 const debtEngineAbi = require('../contracts/DebtEngine.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
+const uniswapConverterAbi = require('../contracts/UniswapConverter.json');
 // const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
@@ -35,6 +36,8 @@ export class ContractsService {
   private _debtEngine: any;
   private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
   private _rcnConverterRamp: any;
+  private _uniswapConverterAddress: string = environment.contracts.converter.uniswapProxy;
+  private _uniswapConverter: any;
 
   constructor(
     private http: HttpClient,
@@ -48,6 +51,7 @@ export class ContractsService {
     this._debtEngine = this.makeContract(debtEngineAbi, environment.contracts.diaspore.debtEngine);
     this._rcnExtension = this.makeContract(extensionAbi.abi, this._rcnExtensionAddress);
     this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
+    this._uniswapConverter = this.makeContract(uniswapConverterAbi.abi, this._uniswapConverterAddress);
   }
 
   /**
@@ -329,52 +333,40 @@ export class ContractsService {
   }
 
   /**
-   * Get cost in rcn
-   * @param amount Amount to calculate cost
-   * @param fromToken Token to convert
-   * @return Token cost in wei
+   * Get the cost, in wei, of making a convertion using the value specified
+   * @param fromToken From token address
+   * @param toToken To token address
+   * @param fromAmount Amount to convert
+   * @return Receive amount
    */
-  async getCostInToken(amount: number, token: string) {
-    const web3: any = this.web3.web3;
-    const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
-    const fromToken: any = environment.contracts.rcnToken;
-    amount = new web3.BigNumber(amount);
-
-    if (token === fromToken) {
-      return web3.toWei(amount);
-    }
-
-    const rate = await this.getCost(
-      web3.toWei(amount),
-      uniswapProxy,
+  async getPriceConvertFrom(
+    fromToken: string,
+    toToken: string,
+    fromAmount: number
+  ) {
+    return await promisify(this._uniswapConverter.getPriceConvertFrom, [
       fromToken,
-      token
-    );
-    const tokenCost = new web3.BigNumber(rate[0]);
-    const etherCost = new web3.BigNumber(rate[1]);
-
-    return tokenCost.isZero() ? etherCost : tokenCost;
+      toToken,
+      fromAmount
+    ]);
   }
 
   /**
    * Get the cost, in wei, of making a convertion using the value specified
-   * @param amount Amount to calculate cost
-   * @param converter Converter address to use for swap
-   * @param fromToken Token to convert
-   * @param token RCN Token address
-   * @return _tokenCost and _etherCost
+   * @param fromToken From token address
+   * @param toToken To token address
+   * @param amount Amount to convert
+   * @return Spend amount
    */
-  async getCost(
-    amount: number,
-    converter: string,
+  async getPriceConvertTo(
     fromToken: string,
-    token: string
+    toToken: string,
+    toAmount: number
   ) {
-    return await promisify(this._rcnConverterRamp.getCost, [
-      amount,
-      converter,
+    return await promisify(this._uniswapConverter.getPriceConvertTo, [
       fromToken,
-      token
+      toToken,
+      toAmount
     ]);
   }
 
