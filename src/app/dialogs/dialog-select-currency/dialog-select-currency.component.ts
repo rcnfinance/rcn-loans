@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Loan, Network } from '../../models/loan.model';
+import { Loan } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 import { environment } from '../../../environments/environment';
@@ -34,13 +34,8 @@ export class DialogSelectCurrencyComponent implements OnInit {
   // general
   account: string;
   canLend: boolean;
-  currencies: Array<{
-    name: string,
-    address: string
-  }> = [];
   availableCurrencies: Array<{
-    id: number,
-    name: string,
+    symbol: string,
     img: string,
     address: string
   }> = [];
@@ -62,53 +57,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
       this.canLend = false;
     }
 
-    this.currencies.push({
-      name: 'RCN',
-      address: environment.contracts.rcnToken
-    }, {
-      name: 'DAI',
-      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
-    }, {
-      name: 'MANA',
-      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
-    }, {
-      name: 'ETH',
-      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-    });
-
-    switch (this.loan.network) {
-      case Network.Basalt:
-        this.availableCurrencies.push({
-          id: 1,
-          name: 'RCN',
-          img: '../../../assets/rcn.png',
-          address: environment.contracts.rcnToken
-        });
-        break;
-
-      case Network.Diaspore:
-        this.availableCurrencies.push({
-          id: 1,
-          name: 'RCN',
-          img: '../../../assets/rcn.png',
-          address: environment.contracts.rcnToken
-        }, {
-          id: 2,
-          name: 'DAI',
-          img: '../../../assets/dai.png',
-          address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
-        }, {
-          id: 3,
-          name: 'ETH',
-          img: '../../../assets/eth.png',
-          address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
-        });
-        break;
-
-      default:
-        break;
-    }
-
+    this.availableCurrencies = environment.usableCurrencies;
     const web3 = this.web3.web3;
     const currency: Currency = this.loan.currency;
     const loanAmount = new web3.BigNumber(currency.fromUnit(this.loan.amount), 10);
@@ -217,11 +166,15 @@ export class DialogSelectCurrencyComponent implements OnInit {
 
   /**
    * Get currency data by code
-   * @param code Currency code
+   * @param symbol Currency symbol
    * @return Currency data
    */
-  getCurrencyByCode(code) {
-    const currency: Array<any> = this.currencies.filter(item => item.name === code);
+  getCurrencyByCode(symbol): {
+    symbol: string,
+    img: string,
+    address: string
+  } {
+    const currency: Array<any> = this.availableCurrencies.filter(item => item.symbol === symbol);
     return currency[0] || null;
   }
 

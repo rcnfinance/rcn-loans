@@ -14,6 +14,8 @@ declare let require: any;
 
 const p = require('../../package.json') as any;
 
+const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
+
 export const environment = {
   version: p.version,
   version_name: p.version_name,
@@ -45,7 +47,7 @@ export const environment = {
     provider: 'https://ropsten.infura.io/v3/acf3c538f57040839369e7c1b023c3c6'
   },
   contracts: {
-    rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
+    rcnToken: RCN_TOKEN,
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
     oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf',
@@ -103,5 +105,22 @@ export const environment = {
   },
   dir: {
     '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioCreator
-  }
+  },
+  usableCurrencies: [
+    {
+      symbol: 'RCN',
+      img: 'assets/rcn.png',
+      address: RCN_TOKEN
+    },
+    {
+      symbol: 'DAI',
+      img: 'assets/dai.png',
+      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
+    },
+    {
+      symbol: 'ETH',
+      img: 'assets/eth.png',
+      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+    }
+  ]
 };
