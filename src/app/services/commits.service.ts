@@ -18,23 +18,23 @@ export class CommitsService {
 
       const urlBasaltCommits = environment.rcn_node.loan.replace('$id', id.toString());
       const data: any = await this.http.get(urlBasaltCommits).toPromise();
-      commits = data.content.commits;
+      commits = data.content;
 
     } else {
-      const urlLoanManagerCommits = environment.rcn_node_api.url.concat(`loans/${id}`);
+      const urlLoanManagerCommits = environment.rcn_node_api.url.concat(`commits?id_loan=${ id }`);
 
       try {
         const responseLoanManager: any = await this.http.get(urlLoanManagerCommits).toPromise();
-        commitsLoanManager = responseLoanManager.content.commits;
+        commitsLoanManager = responseLoanManager.content;
       } catch (err) {
         commitsLoanManager = [];
         console.info('ERROR', err);
       }
 
-      const urlDebtEngineCommits = environment.rcn_node_api.url.concat(`debts/${id}`);
+      const urlDebtEngineCommits = environment.rcn_node_api.url.concat(`debts/${ id }`);
       try {
         const responseDebtEngine: any = await this.http.get(urlDebtEngineCommits).toPromise();
-        commitsDebtEngine = responseDebtEngine.content.commits;
+        commitsDebtEngine = responseDebtEngine.content;
       } catch (err) {
         commitsDebtEngine = [];
         console.info('ERROR', err);

@@ -20,8 +20,6 @@ import { TxService, Tx } from './../../tx.service';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { environment } from '../../../environments/environment';
 import { Web3Service } from '../../services/web3.service';
-import { CivicService } from '../../services/civic.service';
-import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
@@ -52,7 +50,6 @@ export class LendButtonComponent implements OnInit {
     private contractsService: ContractsService,
     private txService: TxService,
     private web3Service: Web3Service,
-    private civicService: CivicService,
     private countriesService: CountriesService,
     private eventsService: EventsService,
     public dialog: MatDialog,
@@ -113,7 +110,6 @@ export class LendButtonComponent implements OnInit {
 
     try {
       const engineApproved = await this.contractsService.isApproved(this.loan.address);
-      const civicApproved = await this.civicService.status();
       const balance = await this.contractsService.getUserBalanceRCNWei();
       console.info('balance', Number(balance));
       const required = await this.contractsService.estimateLendAmount(this.loan);
@@ -122,11 +118,6 @@ export class LendButtonComponent implements OnInit {
 
       if (!await engineApproved) {
         this.showApproveDialog();
-        return;
-      }
-
-      if (!await civicApproved) {
-        this.showCivicDialog();
         return;
       }
 
@@ -177,6 +168,11 @@ export class LendButtonComponent implements OnInit {
           'loan #' + this.loan.id
         );
 
+        if (this.loan.network === Network.Basalt) {
+          this.txService.registerLendTx(tx, environment.contracts.basaltEngine, this.loan);
+        } else {
+          this.txService.registerLendTx(tx, environment.contracts.diaspore.loanManager, this.loan);
+        }
         this.retrievePendingTx();
       } else {
         this.eventsService.trackEvent(
@@ -256,15 +252,11 @@ export class LendButtonComponent implements OnInit {
     this.pendingTx = this.txService.getLastPendingLend(this.loan);
   }
 
-  showCivicDialog() {
-    const dialogRef: MatDialogRef<CivicAuthComponent> = this.dialog.open(CivicAuthComponent, {
-      width: '800px'
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.handleLend(true);
-      } else {
-        this.cancelOperation();
+  showInsufficientFundsDialog(required: number, funds: number) {
+    this.dialog.open(DialogInsufficientfundsComponent, {
+      data: {
+        required: required,
+        balance: funds
       }
     });
   }
@@ -276,6 +268,7 @@ export class LendButtonComponent implements OnInit {
         balance: funds
       }
     });
+
     this.cancelOperation();
   }
 

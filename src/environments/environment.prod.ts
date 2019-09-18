@@ -27,7 +27,10 @@ export const environment = {
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   gaTracking: 'UA-122615331-3',
   rcn_node: {
-    loan: 'https://rnode.rcn.loans/v1/loans/$id'
+    loan: 'https://rnode.rcn.loans/v1/commits?id_loan=$id'
+  },
+  rcn_node_api: {
+    url: 'https://diaspore-rnode.rcn.loans/v4/'
   },
   rcn_node_api: {
     url: 'http://localhost:8000/v4/'
@@ -42,7 +45,7 @@ export const environment = {
       address: 'https://etherscan.io/address/${address}',
       tx: 'https://etherscan.io/tx/${tx}'
     },
-    provider: 'https://node.rcn.loans/'
+    provider: 'https://mainnet.infura.io/v3/acf3c538f57040839369e7c1b023c3c6'
   },
   contracts: {
     rcnToken: '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6',
@@ -50,9 +53,10 @@ export const environment = {
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
     oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf', // FIXME: Ropsten oracle
     diaspore: {
-      debtEngine: '0xe4BfBBB04844cdEbd6b7814183f92E0703257d48',
-      loanManager: '0x978ef6D2bd7559181e6Ac82fFa5C875364d9071b',
+      debtEngine: '0x80db22675dad70e44b64029510778583187faddb',
+      loanManager: '0xb55b0f33d6a2a03a275ca85d58e9357e1a141187',
       viewRequets: '0x7edb5117f91514579e3c8d39eed71e6be278632a',
+      collateral: '0x7c5bb57001eb5bebeb0359e584dc5f29675061f2', // FIXME: Ropsten collateral
       filters: {
         debtCreator: '0x998a67ce5827cb372fe07942561006c7a76cf06f',
         isLender: '0x22a87c89dd8d8d0abe94062eba672f088e808d49',

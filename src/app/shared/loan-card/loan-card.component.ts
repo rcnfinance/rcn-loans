@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Loan, Network, Status } from '../../models/loan.model';
 import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
+import { Loan, Network, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Web3Service } from '../../services/web3.service';
 
@@ -78,6 +79,10 @@ export class LoanCardComponent implements OnInit {
       data: { loan: this.loan }
     };
     this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
+  }
+
+  getInterestRate(): string {
+    return this.loan.descriptor.interestRate.toFixed(2);
   }
 
   getInterestRate(): string {

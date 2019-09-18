@@ -33,7 +33,6 @@ export class LoanDetailComponent implements OnInit {
 
   loanConfigData = [];
   loanStatusData = [];
-  interestMiddleText: string;
   isExpired: boolean;
   isRequest: boolean;
   isOngoing: boolean;
@@ -45,11 +44,26 @@ export class LoanDetailComponent implements OnInit {
   canLend: boolean;
 
   hasHistory: boolean;
+  generatedByUser: boolean;
 
   totalDebt: string;
   pendingAmount: string;
   expectedReturn: string;
   paid: string;
+
+  interest: string;
+  duration: string;
+  nextInstallment: {
+    installment: string,
+    amount: string,
+    dueDate: string,
+    dueTime: string
+  };
+  lendDate: string;
+  dueDate: string;
+  liquidationRatio: string;
+  balanceRatio: string;
+  punitory: string;
 
   // Loan Oracle
   oracle: string;
@@ -66,14 +80,19 @@ export class LoanDetailComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private brandingService: BrandingService,
     public dialog: MatDialog
+    private brandingService: BrandingService
   ) { }
 
   ngOnInit() {
     this.spinner.show();
     this.loadAccount();
-    this.route.params.subscribe(params => {
-      const id = params['id']; // (+) converts string 'id' to a number
-      this.contractsService.getLoan(id).then(loan => {
+
+
+    this.route.params.subscribe(async params => {
+      const id = params.id;
+
+      try {
+        const loan = await this.contractsService.getLoan(id);
         this.loan = loan;
         this.hasHistory = true;
         this.brand = this.brandingService.getBrand(this.loan);
@@ -85,16 +104,17 @@ export class LoanDetailComponent implements OnInit {
         this.isOngoing = this.loan.status === Status.Ongoing;
         this.isExpired = this.loan.status === Status.Expired;
 
+        this.checkLoanGenerator();
         this.loadDetail();
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
 
         this.spinner.hide();
-      }).catch((e: Error) => {
+      } catch (e) {
         console.error(e);
-        console.info('Loan', this.loan.id, 'not found');
+        console.info('Loan', this.loan, 'not found');
         this.router.navigate(['/404/'], { skipLocationChange: true });
-      });
+      }
     });
   }
 
@@ -106,38 +126,34 @@ export class LoanDetailComponent implements OnInit {
     return view === this.viewDetail;
   }
 
-  openLender(address: string) {
-    window.open('/address/' + address, '_blank');
+
+  checkLoanGenerator() {
+    this.generatedByUser = this.cosignerService.getCosigner(this.loan) === undefined;
   }
 
-  openDialog() {
-    // const dialogConfig = new MatDialogConfig();
-    const dialogConfig = {
-      data: { loan: this.loan }
-    };
-    this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
-  }
-
+  /**
+   * Load user account
+   */
   private async loadAccount() {
-    this.web3Service.getAccount().then((account) => {
-      this.userAccount = account;
-      this.loadUserActions();
-    });
+    const account = await this.web3Service.getAccount();
+    this.userAccount = account;
+    this.loadUserActions();
   }
 
-  private loadIdentity() {
-    this.identityService.getIdentity(this.loan).then((identity) => {
-      this.identityName = identity !== undefined ? identity.short : 'Unknown';
-    });
-    return 'Unknown';
+  /**
+   * Load borrower identity
+   */
+  private async loadIdentity() {
+    const identity = await this.identityService.getIdentity(this.loan);
+    this.identityName = identity ? identity.short : 'Unknown';
   }
 
   private defaultDetail(): string {
-    if (this.cosignerService.getCosigner(this.loan) !== undefined) {
-      return 'cosigner';
+    if (this.generatedByUser) {
+      return 'collateral';
     }
 
-    return 'identity';
+    return 'cosigner';
   }
 
   private loadDetail() {
@@ -145,14 +161,55 @@ export class LoanDetailComponent implements OnInit {
       // Load config data
       const interest = this.loan.descriptor.interestRate.toFixed(2);
       const interestPunnitory = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
+      const currency = this.loan.currency;
+      const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
+
       this.loanConfigData = [
-        ['Currency', this.loan.currency],
+        ['Currency', currency],
         ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
-        ['Duration', Utils.formatDelta(this.loan.descriptor.duration)]
+        ['Duration', duration]
       ];
 
-      this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
+      // Template data
+      this.interest = `~ ${ interest }%`;
+      this.punitory = `~ ${ interestPunnitory }%`;
+      this.duration = duration;
 
+      this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
+    } else {
+      const currency = this.loan.currency;
+      const lendDate: string = this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration);
+      const dueDate: string = this.formatTimestamp(this.loan.debt.model.dueTime);
+      const deadline: string = this.formatTimestamp(this.loan.debt.model.dueTime);
+      const remaning: string = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2);
+      const interest: string = this.formatInterest(
+        this.loan.status === Status.Indebt ? this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate
+      );
+
+      // Show ongoing loan detail
+      this.loanStatusData = [
+        ['Lend date', lendDate], // TODO
+        ['Due date', dueDate],
+        ['Deadline', deadline],
+        ['Remaining', remaning]
+      ];
+
+      // Template data
+      this.interest = '~ ' + interest + ' %';
+      this.lendDate = dueDate;
+      this.dueDate = dueDate;
+
+      // Load status data
+      const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
+      this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
+      this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
+      this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
+    }
+
+    this.isDiaspore = this.loan.network === Network.Diaspore;
+
+    if (this.isDiaspore) {
+      this.loadInstallments();
     } else {
       const currency = this.loan.currency;
       // Show ongoing loan detail
@@ -229,6 +286,34 @@ export class LoanDetailComponent implements OnInit {
     }
   }
 
+  /**
+   * Load next installment data
+   */
+  private loadInstallments() {
+    const installments: number = this.loan.descriptor.installments;
+    const installmentDuration: string = Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments);
+    const installmentAmount: number = this.loan.currency.fromUnit(this.loan.descriptor.firstObligation);
+    const installmentCurrency: string = this.loan.currency.symbol;
+    const nextInstallment: number = this.isRequest ? 1 : 1; // TODO - Next installment
+    const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+
+    this.diasporeData = [
+      ['Installments', 'Duration', 'Cuota'],
+      [
+        installments,
+        installmentDuration,
+        `${ installmentAmount } ${ installmentCurrency }`
+      ]
+    ];
+
+    this.nextInstallment = {
+      installment: `${ nextInstallment + addSuffix(nextInstallment) } Pay`,
+      amount: `${ Utils.formatAmount(installmentAmount) } ${ installmentCurrency }`,
+      dueDate: installmentDuration,
+      dueTime: null
+    };
+  }
+
   private invalidActions() {
     this.canLend = false;
     this.canPay = false;
@@ -248,11 +333,21 @@ export class LoanDetailComponent implements OnInit {
 
   private loanStatusRequest() {
     if (this.userAccount) {
-      const isBorrower = this.loan.borrower.toUpperCase() === this.userAccount.toUpperCase();
+      const isBorrower = this.isBorrower();
       this.canLend = !isBorrower;
       this.canPay = false;
       this.canTransfer = false;
       this.canCancel = isBorrower;
+    }
+  }
+
+  /**
+   * Check if the loan borrower is the current account
+   * @return Boolean if is borrower
+   */
+  private isBorrower() {
+    if (this.userAccount) {
+      return this.loan.borrower.toUpperCase() === this.userAccount.toUpperCase();
     }
   }
 

@@ -25,9 +25,12 @@ export const environment = {
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
   buyLink: 'https://www.bancor.network/communities/5a92b438583f4a0001f75f42/about',
   version_verbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
-  sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
+  sentry: 'http://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   rcn_node: {
-    loan: 'https://ropsten-rnode.rcn.loans/v1/loans/$id'
+    loan: 'https://ropsten-rnode.rcn.loans/v1/commits?id_loan=$id'
+  },
+  rcn_node_api: {
+    url: 'https://diaspore-ropsten-rnode.rcn.loans/v4/'
   },
   rcn_node_api: {
     url: 'https://diaspore-ropsten-rnode.rcn.loans/v4/'
@@ -42,7 +45,7 @@ export const environment = {
       address: 'https://ropsten.etherscan.io/address/${address}',
       tx: 'https://ropsten.etherscan.io/tx/${tx}'
     },
-    provider: 'https://ropsten-node.rcn.loans/'
+    provider: 'https://ropsten.infura.io/v3/acf3c538f57040839369e7c1b023c3c6'
   },
   contracts: {
     rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
@@ -50,9 +53,10 @@ export const environment = {
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
     oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf',
     diaspore: {
-      debtEngine: '0x50c544d5d44d603695ed221421b8cb5a78681f15',
-      loanManager: '0x2694a6274906f488defc6ab2093342cddcdbdc5c',
+      debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
+      loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae',
       viewRequets: '0x7edb5117f91514579e3c8d39eed71e6be278632a',
+      collateral: '0x7c5bb57001eb5bebeb0359e584dc5f29675061f2',
       filters: {
         debtCreator: '0x998a67ce5827cb372fe07942561006c7a76cf06f',
         isLender: '0x22a87c89dd8d8d0abe94062eba672f088e808d49',
