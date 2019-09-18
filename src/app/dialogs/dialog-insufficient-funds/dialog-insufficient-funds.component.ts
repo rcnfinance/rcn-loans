@@ -11,6 +11,7 @@ export class DialogInsufficientfundsComponent implements OnInit {
   required: number;
   balance: number;
   link: string;
+  currency = 'RCN';
 
   constructor(
     public dialogRef: MatDialogRef<DialogInsufficientfundsComponent>,
@@ -20,6 +21,7 @@ export class DialogInsufficientfundsComponent implements OnInit {
   ngOnInit() {
     this.required = this.data.required / 10 ** 18;
     this.balance = this.data.balance / 10 ** 18;
+    this.currency = this.data.currency;
     this.link = environment.buyLink;
   }
 }
