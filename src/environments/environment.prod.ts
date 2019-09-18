@@ -32,6 +32,12 @@ export const environment = {
   rcn_node_api: {
     url: 'https://diaspore-rnode.rcn.loans/v4/'
   },
+  rcn_node_api: {
+    url: 'http://localhost:8000/v4/'
+  },
+  rcn_oracle: {
+    url: 'https://oracle.ripio.com/rate/'
+  },
   network: {
     id: '1',
     name: 'Main',
@@ -45,6 +51,7 @@ export const environment = {
     rcnToken: '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6',
     basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
+    oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf', // FIXME: Ropsten oracle
     diaspore: {
       debtEngine: '0x80db22675dad70e44b64029510778583187faddb',
       loanManager: '0xb55b0f33d6a2a03a275ca85d58e9357e1a141187',
@@ -62,6 +69,7 @@ export const environment = {
       converterRamp: '0x56783153d0a8ccb009dcb79df5337835ed1a9d6c',
       tokenConverter: '0x3b81db7c9fe71a2c6d78f9ae2fe4df4c92272622',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      uniswapProxy: '0x0c295fe65e94cd4eaffe906ad1c77d9e35923b05',
       params: {
         marginSpend: 5000,
         maxSpend: 0,

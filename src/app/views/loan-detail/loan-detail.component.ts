@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MatDialog } from '@angular/material';
+import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
@@ -48,6 +50,7 @@ export class LoanDetailComponent implements OnInit {
   pendingAmount: string;
   expectedReturn: string;
   paid: string;
+
   interest: string;
   duration: string;
   nextInstallment: {
@@ -75,12 +78,15 @@ export class LoanDetailComponent implements OnInit {
     private router: Router,
     private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
+    private brandingService: BrandingService,
+    public dialog: MatDialog
     private brandingService: BrandingService
   ) { }
 
   ngOnInit() {
     this.spinner.show();
     this.loadAccount();
+
 
     this.route.params.subscribe(async params => {
       const id = params.id;
@@ -120,12 +126,13 @@ export class LoanDetailComponent implements OnInit {
     return view === this.viewDetail;
   }
 
+
   checkLoanGenerator() {
     this.generatedByUser = this.cosignerService.getCosigner(this.loan) === undefined;
   }
 
   /**
-   *
+   * Load user account
    */
   private async loadAccount() {
     const account = await this.web3Service.getAccount();
@@ -203,8 +210,43 @@ export class LoanDetailComponent implements OnInit {
 
     if (this.isDiaspore) {
       this.loadInstallments();
+    } else {
+      const currency = this.loan.currency;
+      // Show ongoing loan detail
+      this.loanStatusData = [
+        ['Lend date', this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration)], // TODO
+        ['Due date', this.formatTimestamp(this.loan.debt.model.dueTime)],
+        ['Deadline', this.formatTimestamp(this.loan.debt.model.dueTime)],
+        ['Remaining', Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2)]
+      ];
+
+      // Interest middle text
+      this.interestMiddleText = '~ ' + this.formatInterest(this.loan.status === Status.Indebt ?
+        this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate) + ' %';
+
+      // Load status data
+
+      const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
+
+      this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
+      this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
+
+      this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
+
     }
 
+    this.isDiaspore = this.loan.network === Network.Diaspore;
+
+    if (this.loan.network === Network.Diaspore) {
+      this.diasporeData = [
+        ['Installments', 'Duration', 'Cuota'],
+        [
+          this.loan.descriptor.installments,
+          Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments),
+          this.loan.currency.fromUnit(this.loan.descriptor.firstObligation) + ' ' + this.loan.currency.symbol
+        ]
+      ];
+    }
     this.loadUserActions();
   }
 
