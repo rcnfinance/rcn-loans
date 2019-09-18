@@ -108,10 +108,19 @@ export const environment = {
   },
   usableCurrencies: [
     {
-      id: 1,
-      name: 'RCN',
+      symbol: 'RCN',
       img: 'assets/rcn.png',
       address: RCN_TOKEN
+    },
+    {
+      symbol: 'DAI',
+      img: 'assets/dai.png',
+      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
+    },
+    {
+      symbol: 'ETH',
+      img: 'assets/eth.png',
+      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
     }
   ]
 };
