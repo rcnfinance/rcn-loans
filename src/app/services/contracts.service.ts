@@ -22,6 +22,7 @@ const loanManagerAbi = require('../contracts/LoanManager.json');
 const debtEngineAbi = require('../contracts/DebtEngine.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
+const oracleFactoryAbi = require('../contracts/OracleFactory.json');
 // const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
@@ -35,6 +36,8 @@ export class ContractsService {
   private _debtEngine: any;
   private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
   private _rcnConverterRamp: any;
+  private _oracleFactoryAddress: string = environment.contracts.oracleFactory;
+  private _oracleFactory: any;
 
   constructor(
     private http: HttpClient,
@@ -48,6 +51,7 @@ export class ContractsService {
     this._debtEngine = this.makeContract(debtEngineAbi, environment.contracts.diaspore.debtEngine);
     this._rcnExtension = this.makeContract(extensionAbi.abi, this._rcnExtensionAddress);
     this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
+    this._oracleFactory = this.makeContract(oracleFactoryAbi.abi, this._oracleFactoryAddress);
   }
 
   /**
