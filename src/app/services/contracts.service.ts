@@ -553,6 +553,24 @@ export class ContractsService {
     return url;
   }
 
+  /**
+   * Get oracle address from currency symbol
+   * @param symbol Currency symbol
+   * @return Oracle address
+   */
+  async symbolToOracle(symbol: string) {
+    return await promisify(this._oracleFactory.symbolToOracle.call, [symbol]);
+  }
+
+  /**
+   * Get currency symbol from oracle address
+   * @param oracle Oracle address
+   * @return Currency symbol
+   */
+  async oracleToSymbol(oracle: string) {
+    return await promisify(this._oracleFactory.oracleToSymbol.call, [oracle]);
+  }
+
   async getLoan(id: string): Promise<Loan> {
     if (id.startsWith('0x')) {
       // Load Diaspore loan
