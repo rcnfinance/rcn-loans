@@ -21,8 +21,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
   // lend
   lendAmount: any;
   lendExpectedReturn: string;
-  selectedCurrency: string; // currency code
-  exchangeDefault = 1;
+  selectedCurrency: string;
   exchangeRcn;
   exchangeToken;
   lendPayload: {
@@ -43,7 +42,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
 
   constructor(
     private contractsService: ContractsService,
-    private web3: Web3Service,
+    private web3Service: Web3Service,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
@@ -59,15 +58,15 @@ export class DialogSelectCurrencyComponent implements OnInit {
     }
 
     this.availableCurrencies = environment.usableCurrencies;
-    const web3 = this.web3.web3;
+    const web3 = this.web3Service.web3;
     const currency: Currency = this.loan.currency;
     const loanAmount = new web3.BigNumber(currency.fromUnit(this.loan.amount), 10);
     const loanExpectedReturn = new web3.BigNumber(currency.fromUnit(this.loan.descriptor.totalObligation), 10);
-    const account = await this.web3.getAccount();
+    const account = await this.web3Service.getAccount();
     this.account = Utils.shortAddress(account);
 
     this.setLoanValues(loanAmount, loanExpectedReturn);
-    await this.getTokenRate();
+    await this.loadExchange();
   }
 
   /**
@@ -84,14 +83,12 @@ export class DialogSelectCurrencyComponent implements OnInit {
    * Calculate new amounts when the currency select is toggled
    */
   async onChangeCurrency() {
-    const selectedCurrency: string = this.selectedCurrency;
-
     this.exchangeToken = null;
     this.lendAmount = '0';
     this.lendExpectedReturn = '0';
 
     try {
-      this.calculateAmounts(selectedCurrency);
+      this.calculateAmounts();
     } catch (e) {
       throw Error('error calculating currency amounts');
     }
@@ -99,71 +96,67 @@ export class DialogSelectCurrencyComponent implements OnInit {
 
   /**
    * Calculate the exchange token rate, lend amount and expected return amount in token
-   * @param selectedCurrencyCode Selected currency code
    */
-  async calculateAmounts(selectedCurrencyCode) {
-    const web3 = this.web3.web3;
+  async calculateAmounts() {
+    const web3: any = this.web3Service.web3;
+    const loan: Loan = this.loan;
+    const loanAmount: number = loan.currency.fromUnit(loan.amount);
+    const loanExpectedReturn: number = loan.currency.fromUnit(loan.descriptor.totalObligation);
+    const ethAddress: string = environment.contracts.converter.ethAddress;
 
-    // get RCN rate and amount
-    const currency: Currency = this.loan.currency;
-    const loanAmount = new web3.BigNumber(currency.fromUnit(this.loan.amount), 10);
-    const loanReturn = new web3.BigNumber(currency.fromUnit(this.loan.descriptor.totalObligation), 10);
-    const rcnRate: any = new web3.BigNumber(await this.getTokenRate(), 10);
-    const costInRcn: any = new web3.BigNumber(rcnRate).mul(loanAmount);
+    // set rate values
+    const rates = await this.loadExchange();
+    const rcnRate = rates.exchangeLoanCurrency;
+    const rcnAmount = web3.toWei(loanAmount * rcnRate);
+    const rcnExpectedReturn = web3.toWei(loanExpectedReturn * rcnRate);
 
-    // get selected currency address
-    const selectedCurrency = this.getCurrencyByCode(selectedCurrencyCode);
-    const tokenAddress = selectedCurrency.address;
+    // set amount in selected currency
+    const symbol: string = this.selectedCurrency;
+    const fromToken: string = environment.contracts.rcnToken;
+    const toToken: string = this.getCurrencyByCode(symbol).address;
 
-    // set conversion values
-    const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
-    const fromToken: any = tokenAddress;
-    const token: any = environment.contracts.rcnToken;
-    let tokenRate;
-    let requiredAmount;
-    let expectedReturnAmount;
-    let tokenCost;
-    let etherCost;
+    let lendAmount: number;
+    let lendExpectedReturn: number;
+    let payableAmount: number;
 
-    // get lend amount in another currency
-    if (fromToken === token) {
-      // RCN -> RCN
-      tokenRate = rcnRate;
-      requiredAmount = costInRcn;
-      expectedReturnAmount = new web3.BigNumber(tokenRate).mul(loanReturn);
+    if (fromToken === toToken) {
+      // rcn -> rcn
+      lendAmount = rcnAmount;
+      lendExpectedReturn = rcnExpectedReturn;
     } else {
-      // Currency -> RCN
-      const selectedTokenRate = await this.contractsService.getCost(
-        web3.toWei(costInRcn),
-        uniswapProxy,
+      // rcn -> currency
+      lendAmount = await this.contractsService.getPriceConvertFrom(
         fromToken,
-        token
+        toToken,
+        rcnAmount
       );
-      tokenCost = new web3.BigNumber(selectedTokenRate[0]);
-      etherCost = new web3.BigNumber(selectedTokenRate[1]);
-
-      if (tokenCost.isZero()) {
-        requiredAmount = web3.fromWei(etherCost);
-      } else {
-        requiredAmount = web3.fromWei(tokenCost);
+      lendExpectedReturn = await this.contractsService.getPriceConvertFrom(
+        fromToken,
+        toToken,
+        rcnExpectedReturn
+      );
+      // rcn -> eth
+      if (toToken === ethAddress) {
+        payableAmount = lendAmount;
       }
-
-      tokenRate = new web3.BigNumber(requiredAmount).div(loanAmount);
-      expectedReturnAmount = new web3.BigNumber(tokenRate).mul(loanReturn);
     }
+
+    // set ui values
+    this.lendAmount = Utils.formatAmount(
+      Number(web3.fromWei(lendAmount))
+    );
+    this.lendExpectedReturn = Utils.formatAmount(
+      Number(web3.fromWei(lendExpectedReturn))
+    );
 
     // set lend data
     this.lendPayload = {
-      payableAmount: etherCost,
-      converter: uniswapProxy,
-      fromToken: fromToken,
-      oracleData: null,
-      amountInToken: requiredAmount
+      payableAmount: payableAmount,
+      converter: null, // TODO: - unnecessary
+      fromToken: fromToken, // TODO: - rename to "token"
+      oracleData: null, // TODO: - send oracle data
+      amountInToken: rcnAmount
     };
-
-    this.exchangeToken = Utils.formatAmount(tokenRate);
-    this.lendAmount = Utils.formatAmount(requiredAmount);
-    this.lendExpectedReturn = Utils.formatAmount(expectedReturnAmount);
   }
 
   /**
@@ -181,18 +174,53 @@ export class DialogSelectCurrencyComponent implements OnInit {
   }
 
   /**
-   * Get amount in RCN token
-   * @return RCN rate
+   * Load rates and exchange values
+   * @return Raw exchange loan and selected currency amount
    */
-  async getTokenRate() {
-    const web3 = this.web3.web3;
-    const rcnAmount = await this.contractsService.estimateLendAmount(this.loan);
-    const currency = this.loan.currency;
-    const loanAmount = new web3.BigNumber(currency.fromUnit(this.loan.amount), 10);
-    const exchangeRcn = new web3.BigNumber(web3.fromWei(rcnAmount)).div(loanAmount);
-    this.exchangeRcn = Utils.formatAmount(exchangeRcn);
+  async loadExchange(): Promise<{
+    exchangeLoanCurrency: number,
+    exchangeSelectedCurrency: number
+  }> {
+    const loanCurrency: any = this.loan.currency;
+    const selectedCurrency: string = this.selectedCurrency;
 
-    return exchangeRcn;
+    let rateLoanCurrency: number;
+    let rateSelectedCurrency: number;
+    let exchangeLoanCurrency: number;
+    let exchangeSelectedCurrency: number;
+
+    // rcn exchange value
+    rateLoanCurrency = await this.getParsedRate(loanCurrency);
+    exchangeLoanCurrency = 1 / rateLoanCurrency;
+    this.exchangeRcn = Utils.formatAmount(exchangeLoanCurrency);
+
+    // selected currency exchange value
+    if (selectedCurrency) {
+      rateSelectedCurrency = await this.getParsedRate(
+        new Currency(selectedCurrency)
+      );
+      exchangeSelectedCurrency = rateSelectedCurrency / rateLoanCurrency;
+      this.exchangeToken = Utils.formatAmount(exchangeSelectedCurrency);
+    }
+
+    return {
+      exchangeLoanCurrency,
+      exchangeSelectedCurrency
+    };
+  }
+
+  /**
+   * Get rate with parsed decimals
+   * @param oracleAddress Oracle address
+   * @param currency Currency model
+   */
+  private async getParsedRate(
+    currency: Currency
+  ) {
+    const oracle = await this.contractsService.symbolToOracle(currency.toString());
+    const rate = await this.contractsService.getRate(oracle);
+
+    return currency.fromUnit(rate);
   }
 
 }
