@@ -414,20 +414,23 @@ export class ContractsService {
     }
   }
 
-  async getRate(loan: any): Promise<BigNumber> {
-    // TODO: Calculate and add cost of the cosigner
-    if (loan.oracle === Utils.address0x) {
-      return loan.rawAmount;
+  /**
+   * Get oracle rate
+   * @param oracleAddress Oracle address
+   * @return Token equivalent in wei
+   */
+  async getRate(oracleAddress: string): Promise<any> {
+    const web3: any = this.web3.web3;
+    if (oracleAddress === Utils.address0x) {
+      return web3.toWei(1);
     }
-    const oracleData = await this.getOracleData(loan.oracle);
-    console.info('Loan oracle address', loan.oracle.address);
-    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
-    const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
-    const rate = oracleRate[0];
-    const decimals = oracleRate[1];
-    console.info('Oracle rate obtained', rate, decimals);
-    const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
-    console.info('Estimated required rcn is', required);
+
+    const oracle = this.makeContract(oracleAbi.abi, oracleAddress);
+    const oracleRate = await promisify(oracle.readSample.call, []);
+    const tokens = oracleRate[0];
+    const equivalent = oracleRate[1];
+    const rate = 1 / new web3.BigNumber(tokens).div(equivalent) * 10 ** 18;
+
     return rate;
   }
 
