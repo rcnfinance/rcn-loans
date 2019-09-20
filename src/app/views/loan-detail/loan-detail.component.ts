@@ -35,6 +35,7 @@ export class LoanDetailComponent implements OnInit {
   loanStatusData = [];
   isExpired: boolean;
   isRequest: boolean;
+  isCanceled: boolean;
   isOngoing: boolean;
   isInDebt: boolean;
 
@@ -166,6 +167,8 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private loadDetail() {
+    const currency = this.loan.currency;
+
     switch (this.loan.status) {
       case Status.Expired:
         throw Error('Loan expired');
@@ -173,29 +176,28 @@ export class LoanDetailComponent implements OnInit {
       case Status.Destroyed:
       case Status.Request:
         // Load config data
-        const interest = this.loan.descriptor.interestRate.toFixed(2);
-        const interestPunnitory = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
-        const currency = this.loan.currency;
+        const interestRate = this.loan.descriptor.interestRate.toFixed(2);
+        const interestRatePunitive = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
         const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
         this.loanConfigData = [
           ['Currency', currency],
-          ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
+          ['Interest / Punitory', '~ ' + interestRate + ' % / ~ ' + interestRatePunitive + ' %'],
           ['Duration', duration]
         ];
 
         // Template data
         this.interest = `~ ${ interest }%`;
-        this.punitory = `~ ${ interestPunnitory }%`;
+        this.punitory = `~ ${ interestRatePunitive }%`;
         this.duration = duration;
         this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
         break;
+      case Status.Indebt:
       case Status.Ongoing:
-        const currency = this.loan.currency;
         const lendDate: string = this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration);
         const dueDate: string = this.formatTimestamp(this.loan.debt.model.dueTime);
         const deadline: string = this.formatTimestamp(this.loan.debt.model.dueTime);
         const remaning: string = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2);
-        const interest: string = this.formatInterest(
+        const currentInterestRate: string = this.formatInterest(
           this.loan.status === Status.Indebt ? this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate
         );
 
@@ -208,7 +210,7 @@ export class LoanDetailComponent implements OnInit {
         ];
 
         // Template data
-        this.interest = '~ ' + interest + ' %';
+        this.interest = '~ ' + currentInterestRate + ' %';
         this.lendDate = lendDate;
         this.dueDate = dueDate;
 

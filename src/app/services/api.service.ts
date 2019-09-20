@@ -153,7 +153,7 @@ export class ApiService {
     let page = 0;
     try {
 
-      const data: any = await this.http.get(this.url.concat('loans?open=true&approved=true&page=' + page
+      const data: any = await this.http.get(this.url.concat('loans?open=true&canceled=false&approved=true&page=' + page
         + '&expiration__gt=' + now)).toPromise();
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
