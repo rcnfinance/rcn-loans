@@ -51,7 +51,7 @@ export const environment = {
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
     oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf',
-    oracleFactory: '0xf9d4771cbe3c3808f3dff633cd6be738f7f419ea',
+    oracleFactory: '0x55fB5427B647f364c698aA53BD72e073985D1127',
     diaspore: {
       debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
       loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae',
@@ -109,12 +109,12 @@ export const environment = {
   },
   usableCurrencies: [
     {
-      symbol: 'TEST',
+      symbol: 'RCN',
       img: 'assets/rcn.png',
       address: RCN_TOKEN
     },
     {
-      symbol: 'DEST',
+      symbol: 'DAI',
       img: 'assets/dai.png',
       address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
     },
