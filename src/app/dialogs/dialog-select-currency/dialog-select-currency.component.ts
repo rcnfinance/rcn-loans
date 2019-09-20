@@ -26,8 +26,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
   exchangeToken;
   lendPayload: {
     payableAmount: number,
-    converter: string,
-    fromToken: string,
+    lendToken: string,
     oracleData: any,
     amountInToken: string
   };
@@ -152,8 +151,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
     // set lend data
     this.lendPayload = {
       payableAmount: payableAmount,
-      converter: null, // TODO: - unnecessary
-      fromToken: fromToken, // TODO: - rename to "token"
+      lendToken: toToken,
       oracleData: null, // TODO: - send oracle data
       amountInToken: rcnAmount
     };

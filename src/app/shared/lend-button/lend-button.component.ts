@@ -37,8 +37,7 @@ export class LendButtonComponent implements OnInit {
   @Input() loan: Loan;
   @Input() lendPayload: {
     payableAmount: number,
-    converter: string,
-    fromToken: string,
+    lendToken: string,
     oracleData: any,
     amountInToken: number
   };
@@ -121,30 +120,23 @@ export class LendButtonComponent implements OnInit {
       }
 
       // validate and set value in specified token
-      const balance = await this.contractsService.getUserBalanceInToken(inputLendPayload.fromToken);
+      const balance = await this.contractsService.getUserBalanceInToken(inputLendPayload.lendToken);
       let required = await this.contractsService.estimateLendAmount(this.loan);
       let contractAddress: string;
 
-      if (inputLendPayload.fromToken === environment.contracts.rcnToken) {
+      if (inputLendPayload.lendToken === environment.contracts.rcnToken) {
         contractAddress = this.loan.address;
       } else {
         contractAddress = environment.contracts.converter.converterRamp;
-        required = web3.toWei(inputLendPayload.amountInToken);
+        required = inputLendPayload.amountInToken;
       }
 
       // validate token / contract approved
-      const engineApproved = await this.contractsService.isApproved(contractAddress, inputLendPayload.fromToken);
+      const engineApproved = await this.contractsService.isApproved(contractAddress, inputLendPayload.lendToken);
       if (!await engineApproved) {
         this.showApproveDialog(contractAddress);
         return;
       }
-
-      // validate civic approve
-      // const civicApproved = await this.civicService.status();
-      // if (!await civicApproved) {
-      //   this.showCivicDialog();
-      //   return;
-      // }
 
       // validate balance amount
       if (Number(balance) > Number(required)) {
@@ -159,21 +151,22 @@ export class LendButtonComponent implements OnInit {
             break;
 
           case Network.Diaspore:
-            if (inputLendPayload.fromToken === environment.contracts.rcnToken) {
+            if (inputLendPayload.lendToken === environment.contracts.rcnToken) {
               tx = await this.contractsService.lendLoan(this.loan);
             } else {
+              const tokenConverter = environment.contracts.converter.uniswapProxy;
+
               tx = await this.contractsService.converterRampLend(
                 inputLendPayload.payableAmount,
-                inputLendPayload.converter,
-                inputLendPayload.fromToken,
-                environment.contracts.diaspore.loanManager,
+                tokenConverter,
+                inputLendPayload.lendToken,
+                required,
                 Utils.address0x,
-                environment.contracts.diaspore.debtEngine,
                 this.loan.id,
                 oracleData,
-                '0x0',
-                account,
-                Utils.address0x
+                '0x',
+                '0x',
+                account
               );
             }
             this.txService.registerLendTx(tx, environment.contracts.diaspore.loanManager, this.loan);
@@ -198,7 +191,7 @@ export class LendButtonComponent implements OnInit {
           required
         );
 
-        const currency = environment.usableCurrencies.filter(token => token.address === inputLendPayload.fromToken)[0];
+        const currency = environment.usableCurrencies.filter(token => token.address === inputLendPayload.lendToken)[0];
         this.showInsufficientFundsDialog(required, balance, currency.symbol);
       }
     } catch (e) {
@@ -247,7 +240,7 @@ export class LendButtonComponent implements OnInit {
   showApproveDialog(contract: string) {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
     dialogRef.componentInstance.onlyAddress = contract;
-    dialogRef.componentInstance.onlyToken = this.lendPayload.fromToken;
+    dialogRef.componentInstance.onlyToken = this.lendPayload.lendToken;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.handleLend(true);

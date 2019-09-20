@@ -96,7 +96,6 @@ export class ContractsService {
   /**
    * Get user balance in selected token
    * @param tokenAddress Token address
-   * @param inWei Amount in wei
    * @return Balance amount
    */
   async getUserBalanceInToken(
@@ -260,9 +259,8 @@ export class ContractsService {
    * @param payableAmount Ether amount
    * @param converter Converter address
    * @param fromToken From token address
-   * @param loanManager Loan Manager address
+   * @param maxSpend Max fromToken to spend during lend
    * @param cosigner Cosigner address
-   * @param debtEngine Debt Engine address
    * @param loanId Loan ID
    * @param oracleData Oracle data
    * @param cosignerData Cosigner data
@@ -273,22 +271,20 @@ export class ContractsService {
     payableAmount: number,
     converter: string,
     fromToken: string,
-    loanManager: string,
+    maxSpend: number,
     cosigner: string,
-    debtEngine: string,
     loanId: string,
     oracleData: string,
     cosignerData: string,
-    account: string,
-    callbackData: string
+    callbackData: string,
+    account: string
   ) {
     const web3 = this.web3.opsWeb3;
     return await promisify(this.loadAltContract(web3, this._rcnConverterRamp).lend, [
       converter,
       fromToken,
-      loanManager,
+      maxSpend,
       cosigner,
-      debtEngine,
       loanId,
       oracleData,
       cosignerData,
