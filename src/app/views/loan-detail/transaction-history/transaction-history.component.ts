@@ -171,6 +171,16 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': true,
       'display': ['approved_by']
     },
+    'canceled_loan_manager': {
+      'title': 'Request Canceled',
+      'message': 'Request Canceled',
+      'status': 'active',
+      'materialClass': 'material-icons',
+      'icon': 'delete',
+      'color': 'red',
+      'inserted': true,
+      'display': ['canceler']
+    },
     'lent_loan_manager': {
       'title': 'Lent',
       'message': 'Lent',
