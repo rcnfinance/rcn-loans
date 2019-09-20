@@ -419,9 +419,13 @@ export class ContractsService {
 
     const oracle = this.makeContract(oracleAbi.abi, oracleAddress);
     const oracleRate = await promisify(oracle.readSample.call, []);
+    const amount = web3.toWei(1);
     const tokens = oracleRate[0];
     const equivalent = oracleRate[1];
-    const rate = 1 / new web3.BigNumber(tokens).div(equivalent) * 10 ** 18;
+
+    let rate = new web3.BigNumber(tokens).div(equivalent);
+    rate = new web3.BigNumber(1).div(rate);
+    rate = rate.mul(amount);
 
     return rate;
   }
