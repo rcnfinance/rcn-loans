@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Loan, Network, Oracle, Descriptor, Debt, Model } from '../models/loan.model';
+import { Loan, Network, Oracle, Descriptor, Debt, Model, Status } from '../models/loan.model';
 import { Utils } from '../utils/utils';
 import { LoanUtils } from '../utils/loan-utils';
 import { Web3Service } from './web3.service';
@@ -241,6 +241,8 @@ export class ApiService {
       );
     }
 
+    const status = loan.canceled ? Status.Destroyed : Number(loan.status);
+
     const newLoan = new Loan(
       Network.Diaspore,
       loan.id,
@@ -250,13 +252,12 @@ export class ApiService {
       descriptor,
       loan.borrower,
       loan.creator,
-      Number(loan.status),
+      status,
       Number(loan.expiration),
       loan.model,
       loan.cosigner,
       debt
     );
-
     return newLoan;
   }
 }

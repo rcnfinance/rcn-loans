@@ -26,15 +26,15 @@
         </div>
       </div>
       <div class="paddingleft15 paddingright15">
-        <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.currency.fromUnit(loan.amount)" [amountRight]="isRequest ? expectedReturn : totalDebt"></app-conversion-graphic>
+        <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ||  isCanceled ? 'Estimated return' : 'Return']" [amountLeft]="loan.currency.fromUnit(loan.amount)" [amountRight]="isRequest ||  isCanceled ? expectedReturn : totalDebt"></app-conversion-graphic>
       </div>
       <div class="paddingleft15 paddingright15">
-        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interest" [amountLeft]="paid" *ngIf="!isRequest"></app-conversion-graphic>
+        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interest" [amountLeft]="paid" *ngIf="!isRequest && !isCanceled"></app-conversion-graphic>
       </div>
 
       <div class="margintop20"></div>
       <app-detail-table [data]="diasporeData" *ngIf="isDiaspore"></app-detail-table>
-      <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
+      <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled"></app-detail-table>
       <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
 
       <div class="table-responsive" *ngIf='availableOracle'>
@@ -68,7 +68,7 @@
         </table>
       </div>
       <div class="table-responsive">
-        <table class="table" (click)="openLender(loan.owner)" *ngIf="!isRequest && !isExpired">
+        <table class="table" (click)="openLender(loan.owner)" *ngIf="loan.debt">
           <thead>
             <tr>
               <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
