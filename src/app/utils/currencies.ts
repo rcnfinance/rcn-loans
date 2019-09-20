@@ -9,12 +9,8 @@ export class Currency {
   static getDecimals(currency: string): number {
     switch (currency.toUpperCase()) {
       case 'ARS':
+      case 'USD':
         return 2;
-
-      case 'MANA':
-      case 'ETH':
-      case 'RCN':
-        return 18;
 
       case 'MANA':
       case 'ETH':

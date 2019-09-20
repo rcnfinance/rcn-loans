@@ -1,6 +1,7 @@
 import {} from 'jasmine';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MaterialModule } from '../../material/material.module';
 import { Web3Service } from '../../services/web3.service';
 import { Loan } from '../../models/loan.model';
 import { LoanCardComponent } from './loan-card.component';
@@ -12,6 +13,7 @@ describe('BannerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ MaterialModule ],
       declarations: [ LoanCardComponent ],
       schemas: [ NO_ERRORS_SCHEMA ],
       providers: [ Web3Service ]

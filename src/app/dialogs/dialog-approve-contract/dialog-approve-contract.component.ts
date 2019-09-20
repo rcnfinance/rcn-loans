@@ -1,16 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 // App Component
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { EventsService, Category } from '../../services/events.service';
 import { environment } from '../../../environments/environment';
 
 class Contract {
-  isApproved: boolean;
+  isApproved = {};
   constructor(
     public name: string,
     public address: string
+  ) { }
+}
+
+class TokenContracts {
+  constructor(
+    public address: string,
+    public contracts: Contract[]
   ) { }
 }
 
@@ -21,34 +28,79 @@ class Contract {
 })
 export class DialogApproveContractComponent implements OnInit {
   onlyAddress: string;
+  onlyToken: string;
   account: string;
+  currencies: any[];
   contracts: Contract[] = [
     new Contract('Diaspore Loan manager', environment.contracts.diaspore.loanManager),
     new Contract('Diaspore Debt mananger', environment.contracts.diaspore.debtEngine),
+    new Contract('Diaspore Converter ramp', environment.contracts.converter.converterRamp),
     new Contract('Basalt engine', environment.contracts.basaltEngine)
   ];
+  tokenContracts = {};
 
   constructor(
     private web3Service: Web3Service,
     private contractsService: ContractsService,
     private eventsService: EventsService,
-    public dialog: MatDialog,
-    private dialogRef: MatDialogRef<DialogApproveContractComponent>
+    public dialog: MatDialog
   ) { }
 
+  async ngOnInit() {
+    await this.loadAccount();
+    await this.loadCurrencies();
+    this.loadApproved();
+  }
+
+  /**
+   * Set account address
+   */
   async loadAccount() {
     this.account = await this.web3Service.getAccount();
   }
+
+  /**
+   * Load currencies
+   */
+  loadCurrencies() {
+    const ethAddress = environment.contracts.converter.ethAddress;
+    this.currencies = environment.usableCurrencies.filter(
+      currency => currency.address !== ethAddress
+    );
+
+    // set contracts by token
+    this.tokenContracts = this.currencies.reduce((accumulator, item) => ({
+      ...accumulator,
+      [item.symbol]: new TokenContracts(
+        item.address,
+        this.loadContracts(item.address)
+      )
+    }), {});
+  }
+
   async loadApproved(): Promise<any> {
     const promises = [];
-    this.contracts.forEach(c => {
+
+    const isContractApproved = (contract, currency) => {
       promises.push(
         new Promise(async () => {
-          c.isApproved = await this.contractsService.isApproved(c.address);
-          console.info(c.name, c.address, 'Approved', c.isApproved);
+          contract.isApproved[currency.address] = await this.contractsService.isApproved(contract.address, currency.address);
+          console.info(
+            contract.name,
+            contract.address,
+            'Approved',
+            contract.isApproved[currency.address],
+            'for Token',
+            currency.address
+          );
         })
       );
+    };
+
+    this.currencies.map(currency => {
+      this.contracts.map(contract => isContractApproved(contract, currency));
     });
+
     await Promise.all(promises);
   }
 
@@ -56,21 +108,21 @@ export class DialogApproveContractComponent implements OnInit {
     return contract.isApproved !== undefined;
   }
 
-  async clickCheck(contract: Contract, event: any) {
+  async clickCheck(contract: Contract, event: any, tokenAddress: string) {
     let action;
     let actionCode;
 
     try {
       if (!event.checked) {
-        actionCode = 'disapprove' + contract.name;
-        action = this.contractsService.disapprove(contract.address);
+        actionCode = `disapprove${ contract.name }`;
+        action = this.contractsService.disapprove(contract.address, tokenAddress);
       } else {
-        actionCode = 'approve-' + contract.name;
-        action = await this.contractsService.approve(contract.address);
+        actionCode = `disapprove${ contract.name }`;
+        action = this.contractsService.approve(contract.address, tokenAddress);
       }
 
       this.eventsService.trackEvent(
-        'click-' + actionCode + '-basalt-rcn',
+        `click-${ actionCode }-basalt-rcn`,
         Category.Account,
         environment.contracts.basaltEngine
       );
@@ -78,17 +130,13 @@ export class DialogApproveContractComponent implements OnInit {
       await action;
 
       this.eventsService.trackEvent(
-        actionCode + '-rcn',
+        `${ actionCode }-rcn`,
         Category.Account,
         environment.contracts.basaltEngine
       );
 
-      if (this.onlyAddress) {
-        this.dialogRef.close(event.checked);
-      }
-
     } catch (e) {
-      console.info('Approve rejected');
+      console.info('Approve rejected', e);
       event.source.checked = !event.checked;
       return;
     } finally {
@@ -96,8 +144,20 @@ export class DialogApproveContractComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.loadAccount();
-    this.loadApproved();
+  /**
+   * Load contracts for the specified token
+   * @param token Token address
+   * @return Contracts array
+   */
+  private loadContracts(token: string) {
+    const rcnToken = environment.contracts.rcnToken;
+
+    if (token !== rcnToken) {
+      return this.contracts.filter(
+        contract => contract.address !== environment.contracts.basaltEngine
+      );
+    }
+
+    return this.contracts;
   }
 }

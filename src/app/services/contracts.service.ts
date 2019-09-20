@@ -21,129 +21,361 @@ const oracleAbi = require('../contracts/Oracle.json');
 const loanManagerAbi = require('../contracts/LoanManager.json');
 const debtEngineAbi = require('../contracts/DebtEngine.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
-// const converterRampAbi = require('../contracts/ConverterRamp.json');
+const converterRampAbi = require('../contracts/ConverterRamp.json');
 // const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
 export class ContractsService {
-  private _rcnContract: any;
-  private _rcnContractAddress: string = environment.contracts.rcnToken;
+  private _oracleAddress: string = environment.contracts.oracle;
   private _rcnEngine: any;
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
   private _rcnExtension: any;
   private _rcnExtensionAddress: string = environment.contracts.engineExtension;
   private _loanManager: any;
   private _debtEngine: any;
-  // private _rcnConverterRamp: any;
-  // private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
-  // private _requestsView: any;
+  private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
+  private _rcnConverterRamp: any;
 
   constructor(
+    private http: HttpClient,
     private web3: Web3Service,
     private txService: TxService,
     private cosignerService: CosignerService,
-    private http: HttpClient,
     private apiService: ApiService
   ) {
-    this._rcnContract = this.web3.web3.eth.contract(tokenAbi.abi).at(this._rcnContractAddress);
-    this._rcnEngine = this.web3.web3.eth.contract(engineAbi.abi).at(this._rcnEngineAddress);
-    this._loanManager = this.web3.web3.eth.contract(loanManagerAbi).at(environment.contracts.diaspore.loanManager);
-    this._debtEngine = this.web3.web3.eth.contract(debtEngineAbi).at(environment.contracts.diaspore.debtEngine);
-    this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-    this._rcnExtension = this.web3.web3.eth.contract(extensionAbi.abi).at(this._rcnExtensionAddress);
-    // this._requestsView = this.web3.web3.eth.contract(requestsAbi).at(environment.contracts.diaspore.viewRequets);
-    // this._rcnConverterRamp = this.web3.web3.eth.contract(converterRampAbi.abi).at(this._rcnConverterRampAddress);
+    this._rcnEngine = this.makeContract(engineAbi.abi, this._rcnEngineAddress);
+    this._loanManager = this.makeContract(loanManagerAbi, environment.contracts.diaspore.loanManager);
+    this._debtEngine = this.makeContract(debtEngineAbi, environment.contracts.diaspore.debtEngine);
+    this._rcnExtension = this.makeContract(extensionAbi.abi, this._rcnExtensionAddress);
+    this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
   }
 
-  async getUserBalanceETHWei(): Promise<BigNumber> {
-    const account = await this.web3.getAccount();
-    const balance = await this.web3.web3.eth.getBalance(account);
-    return new Promise((resolve) => {
-      resolve(balance);
-    }) as Promise<BigNumber>;
+  /**
+   * Make contract private variable
+   * @param abi Contract ABI
+   * @param address Contract address
+   * @return Contract object
+   */
+  makeContract(abi: string, address: string) {
+    return this.web3.web3.eth.contract(abi).at(address);
   }
 
+  /**
+   * Get user ETH balance
+   * @return Balance in wei
+   */
+  async getUserBalanceETHWei(): Promise<number> {
+    return await this.getUserBalanceInToken(environment.contracts.converter.ethAddress);
+  }
+
+  /**
+   * Get user RCN balance
+   * @return Balance in wei
+   */
   async getUserBalanceRCNWei(): Promise<number> {
+    return await this.getUserBalanceInToken(environment.contracts.rcnToken);
+  }
+
+  /**
+   * Get user RCN balance
+   * @return Balance
+   */
+  async getUserBalanceRCN(): Promise<number> {
+    const balance = await this.getUserBalanceInToken(environment.contracts.rcnToken);
+    return this.web3.web3.fromWei(balance);
+  }
+
+  /**
+   * Get user balance in selected token
+   * @param tokenAddress Token address
+   * @param inWei Amount in wei
+   * @return Balance amount
+   */
+  async getUserBalanceInToken(
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<number> {
     const account = await this.web3.getAccount();
-    return new Promise((resolve, reject) => {
-      this._rcnContract.balanceOf.call(account, function (err, result) {
+
+    return new Promise(async (resolve, reject) => {
+      const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+
+      if (!this.tokenIsValid(tokenAddress)) {
+        reject('The currency does not exist');
+      }
+
+      if (tokenAddress === environment.contracts.converter.ethAddress) {
+        const ethBalance = await this.web3.web3.eth.getBalance(account);
+        resolve(ethBalance);
+      }
+
+      tokenContract.balanceOf.call(account, (err, balance) => {
         if (err != null) {
           reject(err);
         }
-        resolve(result);
+        resolve(balance);
       });
     }) as Promise<number>;
   }
 
-  async getUserBalanceRCN(): Promise<number> {
-    return new Promise((resolve) => {
-      this.getUserBalanceRCNWei().then((balance) => {
-        resolve(this.web3.web3.fromWei(balance));
-      });
-    }) as Promise<number>;
-  }
+  /**
+   * Check if the contract is approved for operate with ERC20 token
+   * @param contract Contract address
+   * @param tokenAddress Token address
+   * @return Pending tx or boolean
+   */
+  async isApproved(
+    contract: string,
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<boolean> {
+    const pending = this.txService.getLastPendingApprove(tokenAddress, contract);
+    const ethAddress = environment.contracts.converter.ethAddress;
 
-  async isApproved(contract: string): Promise<boolean> {
-    const pending = this.txService.getLastPendingApprove(this._rcnContract.address, contract);
     if (pending !== undefined) {
       return pending;
     }
-    const result = await promisify(this._rcnContract.allowance.call, [await this.web3.getAccount(), contract]);
-    return result >= this.web3.web3.toWei(1000000000);
+
+    switch (tokenAddress) {
+      // eth does not require approve
+      case ethAddress:
+        return true;
+
+      // check if token is valid and approved
+      default:
+        const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+        const result: number = await promisify(tokenContract.allowance.call, [
+          await this.web3.getAccount(),
+          contract
+        ]);
+        return result >= this.web3.web3.toWei(1000000000);
+    }
   }
 
-  async approve(contract: string): Promise<string> {
-
+  /**
+   * Approve contract for operate with token
+   * @param contract Contract address
+   * @param tokenAddress Token address
+   * @return Tx hash
+   */
+  async approve(
+    contract: string,
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<string> {
     const account = await this.web3.getAccount();
     const web3 = this.web3.opsWeb3;
 
-    const result = await promisify(this.loadAltContract(web3, this._rcnContract).approve,
-      [contract, web3.toWei(10 ** 32), { from: account }]);
+    if (!this.tokenIsValid(tokenAddress)) {
+      throw Error('The currency does not exist');
+    }
 
-    this.txService.registerApproveTx(result, this._rcnContract.address, contract, true);
+    const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+    const result = await promisify(this.loadAltContract(web3, tokenContract).approve, [
+      contract,
+      web3.toWei(10 ** 32),
+      {
+        from: account
+      }
+    ]);
 
+    this.txService.registerApproveTx(result, tokenAddress, contract, true);
     return result;
   }
 
-  async disapprove(contract: string): Promise<string> {
-
+  /**
+   * Disapprove contract for operate with token
+   * @param contract Contract address
+   * @param tokenAddress Token address
+   * @return Tx hash
+   */
+  async disapprove(
+    contract: string,
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<string> {
     const account = await this.web3.getAccount();
     const web3 = this.web3.opsWeb3;
 
-    const result = await promisify(this.loadAltContract(web3, this._rcnContract).approve,
-      [contract, 0, { from: account }]);
+    if (!this.tokenIsValid(tokenAddress)) {
+      throw Error('The currency does not exist');
+    }
 
-    this.txService.registerApproveTx(result, this._rcnContract.address, contract, false);
+    const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+    const result = await promisify(this.loadAltContract(web3, tokenContract).approve, [
+      contract,
+      0,
+      { from: account }
+    ]);
 
+    this.txService.registerApproveTx(result, tokenAddress, contract, false);
     return result;
   }
 
+  /**
+   * Return estimated lend amount in RCN
+   * @param loan Loan payload
+   * @return Required amount
+   */
   async estimateLendAmount(loan: Loan): Promise<number> {
-
     if (loan.oracle.address === Utils.address0x) {
       return loan.amount;
     }
 
-    const oracleData = await this.getOracleData(loan.oracle);
+    let oracleAddress: string = loan.oracle.address;
+    environment.blacklist.map(element => {
+      if (element.forbidden.includes(oracleAddress)) {
+        oracleAddress = this._oracleAddress;
+      }
+    });
+    let oracle: any;
 
-    if (loan.network === Network.Basalt) {
-      const legacyOracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
-      const oracleRate = await promisify(legacyOracle.getRate, [loan.oracle.code, oracleData]);
-      const rate = oracleRate[0];
-      const decimals = oracleRate[1];
-      console.info('Oracle rate obtained', rate, decimals);
-      const required = (rate * loan.amount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
-      console.info('Estimated required rcn is', required);
-      return required;
+    switch (loan.network) {
+      case Network.Basalt:
+        oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(oracleAddress);
+        break;
+
+      case Network.Diaspore:
+        oracle = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracleAddress);
+        break;
+
+      default:
+        break;
     }
 
-    const oracle = this.web3.web3.eth.contract(diasporeOracleAbi).at(loan.oracle.address);
-    const oracleResult = await promisify(oracle.readSample.call, [oracleData]);
+    const oracleData = await this.getOracleData(loan.oracle);
+    const oracleRate = await promisify(oracle.readSample.call, [oracleData]);
+    const rate = oracleRate[0];
+    const decimals = oracleRate[1];
+    const required: number = (rate * loan.amount) / decimals;
+    return required;
+  }
 
-    const tokens = oracleResult[0];
+  /**
+   * Lend loan using ConverterRamp
+   * @param payableAmount Ether amount
+   * @param converter Converter address
+   * @param fromToken From token address
+   * @param loanManager Loan Manager address
+   * @param cosigner Cosigner address
+   * @param debtEngine Debt Engine address
+   * @param loanId Loan ID
+   * @param oracleData Oracle data
+   * @param cosignerData Cosigner data
+   * @param account Account address
+   * @return Required amount
+   */
+  async converterRampLend(
+    payableAmount: number,
+    converter: string,
+    fromToken: string,
+    loanManager: string,
+    cosigner: string,
+    debtEngine: string,
+    loanId: string,
+    oracleData: string,
+    cosignerData: string,
+    account: string,
+    callbackData: string
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._rcnConverterRamp).lend, [
+      converter,
+      fromToken,
+      loanManager,
+      cosigner,
+      debtEngine,
+      loanId,
+      oracleData,
+      cosignerData,
+      callbackData,
+      {
+        from: account,
+        value: payableAmount
+      }
+    ]);
+  }
 
-    const equivalent = oracleResult[1];
-    return (tokens * loan.amount) / equivalent;
+  /**
+   * Pay loan using ConverterRamp
+   * @param payableAmount Ether amount
+   * @param converter TokenConverter address
+   * @param fromToken From token address
+   * @param loanManager Loan Manager address
+   * @param debtEngine Debt Engine address
+   * @param loanId Loan ID
+   * @param oracleData Oracle data
+   * @param account Account address
+   * @return Required amount
+   */
+  async converterRampPay(
+    payableAmount: number,
+    converter: string,
+    fromToken: string,
+    loanManager: string,
+    debtEngine: string,
+    loanId: string,
+    oracleData: string,
+    account: string
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._rcnConverterRamp).pay, [
+      payableAmount,
+      converter,
+      fromToken,
+      loanManager,
+      debtEngine,
+      account,
+      loanId,
+      oracleData,
+      { from: account }
+    ]);
+  }
+
+  /**
+   * Get cost in rcn
+   * @param amount Amount to calculate cost
+   * @param fromToken Token to convert
+   * @return Token cost in wei
+   */
+  async getCostInToken(amount: number, token: string) {
+    const web3: any = this.web3.web3;
+    const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
+    const fromToken: any = environment.contracts.rcnToken;
+    amount = new web3.BigNumber(amount);
+
+    if (token === fromToken) {
+      return web3.toWei(amount);
+    }
+
+    const rate = await this.getCost(
+      web3.toWei(amount),
+      uniswapProxy,
+      fromToken,
+      token
+    );
+    const tokenCost = new web3.BigNumber(rate[0]);
+    const etherCost = new web3.BigNumber(rate[1]);
+
+    return tokenCost.isZero() ? etherCost : tokenCost;
+  }
+
+  /**
+   * Get the cost, in wei, of making a convertion using the value specified
+   * @param amount Amount to calculate cost
+   * @param converter Converter address to use for swap
+   * @param fromToken Token to convert
+   * @param token RCN Token address
+   * @return _tokenCost and _etherCost
+   */
+  async getCost(
+    amount: number,
+    converter: string,
+    fromToken: string,
+    token: string
+  ) {
+    return await promisify(this._rcnConverterRamp.getCost, [
+      amount,
+      converter,
+      fromToken,
+      token
+    ]);
   }
 
   async lendLoan(loan: Loan): Promise<string> {
@@ -170,13 +402,29 @@ export class ContractsService {
           [loan.id, oracleData, cosignerAddr, cosignerData, { from: account }]);
 
       case Network.Diaspore:
-        console.info('data to send', [loan.id, oracleData, cosignerAddr, 0, cosignerData, callbackData, { from: account }]);
         return await promisify(this.loadAltContract(web3, this._loanManager).lend,
           [loan.id, oracleData, cosignerAddr, 0, cosignerData, callbackData, { from: account }]);
 
       default:
         throw Error('Unknown network');
     }
+  }
+
+  async getRate(loan: any): Promise<BigNumber> {
+    // TODO: Calculate and add cost of the cosigner
+    if (loan.oracle === Utils.address0x) {
+      return loan.rawAmount;
+    }
+    const oracleData = await this.getOracleData(loan.oracle);
+    console.info('Loan oracle address', loan.oracle.address);
+    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
+    const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
+    const rate = oracleRate[0];
+    const decimals = oracleRate[1];
+    console.info('Oracle rate obtained', rate, decimals);
+    const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+    console.info('Estimated required rcn is', required);
+    return rate;
   }
 
   async estimatePayAmount(loan: Loan, amount: number): Promise<number> {
@@ -254,31 +502,53 @@ export class ContractsService {
       [diasporeIdLoans, account, { from: account }]);
   }
 
+  /**
+   * Get oracle object data
+   * @param oracle Oracle
+   * @return Oracle data
+   */
   async getOracleData(oracle?: Oracle): Promise<string> {
     if (oracle.address === Utils.address0x) {
       return '0x';
     }
 
     const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
-    const url = await promisify(oracleContract.url.call, []);
+    const oracleUrlRcn: any = environment.rcn_oracle.url;
+    let oracleUrl = await promisify(oracleContract.url.call, []);
 
-    console.info('Url oracle contract', url);
+    environment.blacklist.map(element => {
+      if (element.forbidden.includes(oracleUrl)) {
+        oracleUrl = oracleUrlRcn;
+      }
+    });
 
-    if (url === '') { return '0x'; }
-    const oracleResponse = (await this.http.get(url).toPromise()) as any[];
-    console.info('Searching currency', oracle.currency, oracleResponse);
+    if (oracleUrl === '') {
+      return '0x';
+    }
+
+    const oracleResponse = (await this.http.get(oracleUrl).toPromise()) as any[];
+    console.info('Searching currency', oracle.code, oracleResponse);
+
     let data;
     oracleResponse.forEach(e => {
       if (e.currency === oracle.code) {
         data = e.data;
-        console.info('Oracle data found', data);
+        console.info('Oracle data found', e);
       }
     });
     if (data === undefined) {
       throw new Error('Oracle did not provide data');
     }
+
     return data;
   }
+
+  async getOracleUrl(oracle?: Oracle): Promise<string> {
+    const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
+    const url = await promisify(oracleContract.url.call, []);
+    return url;
+  }
+
   async getLoan(id: string): Promise<Loan> {
     if (id.startsWith('0x')) {
       // Load Diaspore loan
@@ -336,6 +606,7 @@ export class ContractsService {
         if (err != null) {
           reject(err);
         }
+
         resolve(LoanCurator.curateLoans(this.parseBasaltBytes(result)));
       });
     }) as Promise<Loan[]>;
@@ -384,7 +655,6 @@ export class ContractsService {
 
     const pdiaspore = await this.apiService.getLoansOfLender(lender);
     return (pdiaspore).concat(LoanCurator.curateLoans(this.parseBasaltBytes(pbasalt)));
-
     // return await pdiaspore;
   }
 
@@ -414,6 +684,22 @@ export class ContractsService {
         resolve(this.readPendingWithdraws(loans));
       });
     }) as Promise<[number, number[], number, number[]]>;
+  }
+
+  /**
+   * Check if token is valid
+   * @param tokenAddress Token address
+   * @return Boolean
+   */
+  private tokenIsValid(tokenAddress): boolean {
+    const currencies = environment.usableCurrencies;
+    const currency = currencies.filter(token => token.address === tokenAddress);
+
+    if (currency.length) {
+      return true;
+    }
+
+    return false;
   }
 
   private parseBasaltBytes(bytes: any): Loan[] {

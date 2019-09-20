@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MatDialog } from '@angular/material';
+import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
@@ -48,6 +50,7 @@ export class LoanDetailComponent implements OnInit {
   pendingAmount: string;
   expectedReturn: string;
   paid: string;
+
   interest: string;
   duration: string;
   nextInstallment: {
@@ -75,7 +78,8 @@ export class LoanDetailComponent implements OnInit {
     private router: Router,
     private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
-    private brandingService: BrandingService
+    private brandingService: BrandingService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -125,7 +129,17 @@ export class LoanDetailComponent implements OnInit {
   }
 
   /**
-   *
+   * Open choose currency dialog
+   */
+  openLendDialog() {
+    const dialogConfig = {
+      data: { loan: this.loan }
+    };
+    this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
+  }
+
+  /**
+   * Load user account
    */
   private async loadAccount() {
     const account = await this.web3Service.getAccount();
@@ -150,13 +164,16 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private loadDetail() {
+    if (this.loan.status === Status.Expired) {
+      throw Error('Loan expired');
+    }
+
     if (this.loan.status === Status.Request) {
       // Load config data
       const interest = this.loan.descriptor.interestRate.toFixed(2);
       const interestPunnitory = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
       const currency = this.loan.currency;
       const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
-
       this.loanConfigData = [
         ['Currency', currency],
         ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
@@ -167,7 +184,6 @@ export class LoanDetailComponent implements OnInit {
       this.interest = `~ ${ interest }%`;
       this.punitory = `~ ${ interestPunnitory }%`;
       this.duration = duration;
-
       this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
     } else {
       const currency = this.loan.currency;
@@ -189,7 +205,7 @@ export class LoanDetailComponent implements OnInit {
 
       // Template data
       this.interest = '~ ' + interest + ' %';
-      this.lendDate = dueDate;
+      this.lendDate = lendDate;
       this.dueDate = dueDate;
 
       // Load status data

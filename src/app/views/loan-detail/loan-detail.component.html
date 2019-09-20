@@ -29,7 +29,7 @@
         <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.currency.fromUnit(loan.amount)" [amountRight]="isRequest ? expectedReturn : totalDebt"></app-conversion-graphic>
       </div>
       <div class="paddingleft15 paddingright15">
-        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" [amountLeft]="paid" *ngIf="!isRequest"></app-conversion-graphic>
+        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountRight]="pendingAmount" [textMiddle]="interest" [amountLeft]="paid" *ngIf="!isRequest"></app-conversion-graphic>
       </div>
 
       <div class="margintop20"></div>
@@ -97,7 +97,7 @@
       </div>
       <div class="paddingleft15 paddingright15 paddingbottom15" *ngIf="canLend || canTransfer || canPay">
         <app-pay-button [loan]=loan *ngIf="canPay"></app-pay-button>
-        <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
+        <button mat-raised-button class="button button-primary lend" (click)="openLendDialog()" *ngIf="canLend">Lend</button>
         <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="canLend"></app-risk-indicator>
         <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
       </div>

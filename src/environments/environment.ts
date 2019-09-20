@@ -15,6 +15,8 @@ declare let require: any;
 
 const p = require('../../package.json') as any;
 
+const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
+
 export const environment = {
   version: p.version,
   version_name: p.version_name,
@@ -33,6 +35,9 @@ export const environment = {
   rcn_node_api: {
     url: 'https://diaspore-ropsten-rnode.rcn.loans/v4/'
   },
+  rcn_oracle: {
+    url: 'https://oracle.ripio.com/rate/'
+  },
   network: {
     id: '3',
     name: 'Ropsten',
@@ -40,15 +45,16 @@ export const environment = {
       address: 'https://ropsten.etherscan.io/address/${address}',
       tx: 'https://ropsten.etherscan.io/tx/${tx}'
     },
-    provider: 'https://ropsten-node.rcn.loans/'
+    provider: 'https://ropsten.infura.io/v3/acf3c538f57040839369e7c1b023c3c6'
   },
   contracts: {
-    rcnToken: '0x2f45b6fb2f28a73f110400386da31044b2e953d4',
+    rcnToken: RCN_TOKEN,
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
+    oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf',
     diaspore: {
-      debtEngine: '0x17f910234fe7d4cb6c54601bf0cf5599b545084b',
-      loanManager: '0x2694a6274906f488defc6ab2093342cddcdbdc5c',
+      debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
+      loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae',
       viewRequets: '0x7edb5117f91514579e3c8d39eed71e6be278632a',
       collateral: '0x7c5bb57001eb5bebeb0359e584dc5f29675061f2',
       filters: {
@@ -60,9 +66,10 @@ export const environment = {
       }
     },
     converter: {
-      converterRamp: '0xeaf063101ae319a18330ff78fdd81d992bf83349',
+      converterRamp: '0x01f8c610ec9dab9986735f6e3068aaaf555e9937',
       tokenConverter: '0xc4b1b3083174716542ef387326e58293917bf3bf',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      uniswapProxy: '0x0c295fe65e94cd4eaffe906ad1c77d9e35923b05',
       params: {
         marginSpend: 5000,
         maxSpend: 0,
@@ -79,7 +86,14 @@ export const environment = {
     {
       key: 'oracle',
       forbidden: [
-        '0x0ac18b74b5616fdeaeff809713d07ed1486d0128'
+        '0x0ac18b74b5616fdeaeff809713d07ed1486d0128',
+        '0x4931d0621360187199de494a1469165079b31bfc'
+      ]
+    },
+    {
+      key: 'oracleUrl',
+      forbidden: [
+        'http://ec2-54-233-188-146.sa-east-1.compute.amazonaws.com/rate/'
       ]
     }
   ],
@@ -93,5 +107,22 @@ export const environment = {
   dir: {
     '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioCreator,
     '0xfeac8e490fe7f0760a10225e7dccda1e22ad8daa': Agent.WenanceCreator
-  }
+  },
+  usableCurrencies: [
+    {
+      symbol: 'RCN',
+      img: 'assets/rcn.png',
+      address: RCN_TOKEN
+    },
+    {
+      symbol: 'DAI',
+      img: 'assets/dai.png',
+      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
+    },
+    {
+      symbol: 'ETH',
+      img: 'assets/eth.png',
+      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+    }
+  ]
 };
