@@ -66,7 +66,7 @@ export const environment = {
       }
     },
     converter: {
-      converterRamp: '0x935d87676a113d4709c6b208509b592931edaaf6',
+      converterRamp: '0x9cd2b5ffd2c4d3d2d47ecbecf19ec588900901ec',
       tokenConverter: '0xc4b1b3083174716542ef387326e58293917bf3bf',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       uniswapProxy: '0x79e680e613ed32f64da9e5a09ed8613c8e9ce3a7',
