@@ -38,7 +38,6 @@ export class LendButtonComponent implements OnInit {
   @Input() lendPayload: {
     payableAmount: number,
     lendToken: string,
-    oracleData: any,
     amountInToken: number
   };
   pendingTx: Tx = undefined;

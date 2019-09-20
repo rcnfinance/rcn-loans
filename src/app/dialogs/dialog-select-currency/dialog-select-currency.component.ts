@@ -27,7 +27,6 @@ export class DialogSelectCurrencyComponent implements OnInit {
   lendPayload: {
     payableAmount: number,
     lendToken: string,
-    oracleData: any,
     amountInToken: string
   };
   // general
@@ -152,7 +151,6 @@ export class DialogSelectCurrencyComponent implements OnInit {
     this.lendPayload = {
       payableAmount: payableAmount,
       lendToken: toToken,
-      oracleData: null, // TODO: - send oracle data
       amountInToken: rcnAmount
     };
   }
