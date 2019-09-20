@@ -23,6 +23,14 @@ export class BrandingService {
       '',
       'Ripio',
       undefined
+    ),
+    wenance: new Brand(
+      'Wenance',
+      '#009BDE',
+      './assets/logos/wenance.png',
+      '',
+      'Wenance',
+      undefined
     )
   };
   constructor(
