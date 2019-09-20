@@ -512,16 +512,14 @@ export class ContractsService {
     }
 
     const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
-    const oracleUrlRcn: any = environment.rcn_oracle.url;
-    let oracleUrl = await promisify(oracleContract.url.call, []);
-
-    environment.blacklist.map(element => {
-      if (element.forbidden.includes(oracleUrl)) {
-        oracleUrl = oracleUrlRcn;
-      }
-    });
+    const oracleUrl = await promisify(oracleContract.url.call, []);
 
     if (oracleUrl === '') {
+      const oracleRate = await promisify(oracleContract.readSample.call, []);
+
+      // TODO: encode oracle data
+      console.info(oracleRate);
+
       return '0x';
     }
 
