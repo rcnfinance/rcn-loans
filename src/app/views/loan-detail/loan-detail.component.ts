@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
+import { environment } from 'environments/environment';
 import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
@@ -125,7 +126,8 @@ export class LoanDetailComponent implements OnInit {
   }
 
   checkLoanGenerator() {
-    this.generatedByUser = this.cosignerService.getCosigner(this.loan) === undefined;
+    this.generatedByUser = this.cosignerService.getCosigner(this.loan) === undefined &&
+      environment.dir[this.loan.borrower.toLowerCase()] === undefined;
   }
 
   /**
@@ -160,7 +162,7 @@ export class LoanDetailComponent implements OnInit {
       return 'collateral';
     }
 
-    return 'cosigner';
+    return 'identity';
   }
 
   private loadDetail() {
