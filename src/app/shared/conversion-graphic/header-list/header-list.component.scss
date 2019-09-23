@@ -15,10 +15,22 @@
 
     &:nth-child(2) {
       text-align: center;
+      @extend %font-bold;
+      font-size: 1.5em;
     }
 
     &:nth-child(3) {
       text-align: right;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .properties-block {
+    &__title {
+      &:nth-child(2) {
+        font-size: 2em;
+      }
     }
   }
 }

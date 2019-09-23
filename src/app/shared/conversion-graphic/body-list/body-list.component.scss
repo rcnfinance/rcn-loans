@@ -18,7 +18,10 @@
     &:nth-child(2){
       display: flex;
       @extend %font-regular;
-      i{ margin: 0 auto; }
+      i {
+        margin: 0 auto;
+        transform: rotate(180deg);
+      }
       &.feature{
         display: block;
         font-size: 18px;
@@ -30,6 +33,19 @@
       color: $primary;
       text-align: right;
       @extend .font30;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .conversion-block {
+    div {
+      &:nth-child(2) {
+        i {
+          font-size: 2.5em;
+          height: 2em;
+        }
+      }
     }
   }
 }
