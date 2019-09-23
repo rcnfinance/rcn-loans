@@ -153,15 +153,20 @@ export class ApiService {
     let page = 0;
     try {
 
-      const data: any = await this.http.get(this.url.concat('loans?open=true&canceled=false&approved=true&page=' + page
+      const data: any = await this.http.get(this.url.concat('loans?open=true&approved=true&page=' + page
         + '&expiration__gt=' + now)).toPromise();
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
 
       const loansRequests = await this.getAllCompleteLoans(data.content);
-      const notExpiredResquestLoans = loansRequests.filter(loan => loan.model !== this.installmentModelAddress);
-      allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
+      const filteredLoans = loansRequests
+        .filter(loan =>
+          loan.model !== this.installmentModelAddress &&
+          loan.status !== Status.Destroyed
+        );
+
+      allRequestLoans = allRequestLoans.concat(filteredLoans);
       page++;
     } catch (err) {
       console.info('Error', err);

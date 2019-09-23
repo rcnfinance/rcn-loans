@@ -186,7 +186,7 @@ export class LoanDetailComponent implements OnInit {
         ];
 
         // Template data
-        this.interest = `~ ${ interest }%`;
+        this.interest = `~ ${ interestRate }%`;
         this.punitory = `~ ${ interestRatePunitive }%`;
         this.duration = duration;
         this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
