@@ -19,14 +19,16 @@
         </div>
       </div>
       <div class="col-sm-12 col-md-7">
+        <div class="title main-h2 mb-3">
+          Tokens
+        </div>
         <ng-container *ngFor="let token of tokenContracts | keyvalue">
           <div
             class="row mb-3"
             *ngIf="!onlyToken || onlyToken == token.value.address"
           >
             <div class="col-sm-12">
-              <div class="margintop20 d-none d-md-none"></div>
-              <div class="title main-h2 marginbottom20">
+              <div class="title main-h3 mb-3">
                 {{ token.key }}
               </div>
               <div
