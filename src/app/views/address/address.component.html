@@ -3,19 +3,21 @@
   <div class="row">
     <div class="col-sm-12 d-none d-lg-block">
       <div class="title main-h1">lent by</div>
-      <div class="title main-h5 ellipsis">{{ address }}</div>
+      <div class="title main-h4 ellipsis my-2">
+        {{ address }}
+      </div>
       <mat-chip-list>
         <mat-chip class="margintop30 marginright15" selected="true">{{ loans.length }} LENT</mat-chip>
       </mat-chip-list>
     </div>
   </div>
-  <div class="row">
+  <div class="loan-container row">
 
     <div class="col-sm-12 text-center margintop30" *ngIf='!availableLoans'>
       <div class="title main-h1">This address is not a lender</div>
     </div>
 
-    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col" 
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col"
     *ngFor='let loan of loans; let i of index'>
       <app-loan-card [loan]="loan"></app-loan-card>
     </div>

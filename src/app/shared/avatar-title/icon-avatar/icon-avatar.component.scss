@@ -1,8 +1,8 @@
-@import '../../../../scss/_variables.scss'; //variables
+@import '../../../../scss/variables';
 
 .avatar-container {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -15,15 +15,15 @@
   &.paid{background-color: $gray7;}
   &.destroyed{background-color: $red;}
   &.expired{background-color: $red;}
-  i{
+  i {
     margin: 0 auto;
   }
-  .title{
+  .title {
     font-size: 18px;
     color: $secondary;
     @extend %font-black;
   }
-  img{
+  img {
     width: 50px;
     border-radius: 50%;
     box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);

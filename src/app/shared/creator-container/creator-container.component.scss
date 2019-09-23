@@ -4,8 +4,8 @@
     height: 70px;
     position: relative;
     background-color: #333333;
-    margin-left: -15px;
-    margin-right: -15px;
+    margin-left: -20px;
+    margin-right: -20px;
     .creator-title{
       position: absolute;
       top: 50%;
@@ -37,6 +37,6 @@
 
 @media (min-width: 768px){
   .creator-container {
-    height: 100px;    
+    height: 100px;
   }
 }
