@@ -17,5 +17,5 @@
 
 a {
   color: white;
-  font-style: italic;
+  @extend %roboto-medium;
 }
