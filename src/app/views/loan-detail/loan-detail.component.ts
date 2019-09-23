@@ -157,7 +157,7 @@ export class LoanDetailComponent implements OnInit {
 
   private defaultDetail(): string {
     if (this.generatedByUser) {
-      return 'collateral';
+      return 'identity';
     }
 
     return 'cosigner';

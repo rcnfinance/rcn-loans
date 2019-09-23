@@ -12,7 +12,7 @@ $gray7: #333333;
 $gray8: #101010;
 $gray9: #0c0c0c;
 $red: #f44136;
-$green: #71b464;
+$green: #6EB548;
 $orange: #da7d3a;
 $orange-hover: #d47734;
 $primary: #4155ff;
@@ -24,7 +24,7 @@ $fifth: #0c0c0c;
 
 $gray0: #f9f9f9;
 $gray1: #eeeeee;
-$gray2: #C7C7C7;
+$gray2: #D8D8D8;
 $gray3: #AFAFAF;
 $gray4: #949494;
 $gray5: #585858;
@@ -36,28 +36,28 @@ $gray9: #0c0c0c;
 // Typography variables
 // --------------------------------------------------
 
-%font-thin{font-weight: 100;}
-%font-extra-light{font-weight: 200;}
-%font-light{font-weight: 300;}
-%font-regular{font-weight: 400;}
-%font-medium{font-weight: 500;}
-%font-semi-bold{font-weight: 600;}
-%font-bold{font-weight: 700;}
-%font-extra-bold{font-weight: 800;}
-%font-black{font-weight: 900;}
+%font-thin{font-weight: 100; font-family: 'Raleway', sans-serif;}
+%font-extra-light{font-weight: 200; font-family: 'Raleway', sans-serif;}
+%font-light{font-weight: 300; font-family: 'Raleway', sans-serif;}
+%font-regular{font-weight: 400; font-family: 'Raleway', sans-serif;}
+%font-medium{font-weight: 500; font-family: 'Raleway', sans-serif;}
+%font-semi-bold{font-weight: 600; font-family: 'Raleway', sans-serif;}
+%font-bold{font-weight: 700; font-family: 'Raleway', sans-serif;}
+%font-extra-bold{font-weight: 800; font-family: 'Raleway', sans-serif;}
+%font-black{font-weight: 900; font-family: 'Raleway', sans-serif;}
 
-%roboto-thin{font-weight: 100; font-family: 'Roboto', sans-serif}
-%roboto-extra-light{font-weight: 200; font-family: 'Roboto', sans-serif}
-%roboto-light{font-weight: 300; font-family: 'Roboto', sans-serif}
-%roboto-regular{font-weight: 400; font-family: 'Roboto', sans-serif}
-%roboto-medium{font-weight: 500; font-family: 'Roboto', sans-serif}
-%roboto-semi-bold{font-weight: 600; font-family: 'Roboto', sans-serif}
-%roboto-bold{font-weight: 700; font-family: 'Roboto', sans-serif}
-%roboto-extra-bold{font-weight: 800; font-family: 'Roboto', sans-serif}
-%roboto-black{font-weight: 900; font-family: 'Roboto', sans-serif}
+%roboto-thin{font-weight: 100; font-family: 'Roboto', sans-serif;}
+%roboto-extra-light{font-weight: 200; font-family: 'Roboto', sans-serif;}
+%roboto-light{font-weight: 300; font-family: 'Roboto', sans-serif;}
+%roboto-regular{font-weight: 400; font-family: 'Roboto', sans-serif;}
+%roboto-medium{font-weight: 500; font-family: 'Roboto', sans-serif;}
+%roboto-semi-bold{font-weight: 600; font-family: 'Roboto', sans-serif;}
+%roboto-bold{font-weight: 700; font-family: 'Roboto', sans-serif;}
+%roboto-extra-bold{font-weight: 800; font-family: 'Roboto', sans-serif;}
+%roboto-black{font-weight: 900; font-family: 'Roboto', sans-serif;}
 
-%propiety-title {font-size: 11px; text-transform: uppercase; @extend %font-light;}
-%propiety-subtitle {font-size: 15px; @extend %font-medium;}
+%propiety-title {font-size: 13px; text-transform: uppercase; @extend %font-regular;}
+%propiety-subtitle {font-size: 18px; @extend %roboto-medium;}
 
 /*MIXINS*/
 // -------------------------
@@ -226,7 +226,7 @@ $default-transition--delay: all 0.3s ease-out;
   }
 }
 %flex-item-01{
-  &:nth-child(1){ 
+  &:nth-child(1){
     order: 1; // By default, items have a value of 0, but we can use this property to set it to a positive or negative integer value.
   }
 }
