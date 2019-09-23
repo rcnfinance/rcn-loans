@@ -1,5 +1,5 @@
-@import '../../../../scss/_variables.scss'; //variables
-      
+@import '../../../../scss/_variables';
+
 .overlay-setup{
   position: absolute;
   left: 50%;
@@ -42,14 +42,14 @@
             text-align: center;
           }
         }
-  
+
         &.property-wrapper{
           &:last-child{
             padding-bottom: 10px;
           }
         }
       }
-      
+
       .line{
         position: absolute;
         top: 4px;
@@ -71,7 +71,7 @@
       .fa-chevron-right {
         display: none;
         position: absolute;
-        top: 40px; 
+        top: 40px;
         right: 30px;
         @include transition();
         @include transform(translate(0%, -50%));
@@ -118,18 +118,18 @@
         color: #fff;
       }
       .property{
-        white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
-        font-size: 13px;
+        white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
+        font-size: 15px;
         color: #ffffff;
         text-align: center;
         @extend %font-thin;
       }
       .value{
         flex: 1;
-        white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
-        font-size: 13px;
+        white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
+        font-size: 15px;
         padding-left: 15px;
-        @extend %font-bold;
+        @extend %roboto-medium;
       }
 
       &.background-active{
@@ -224,4 +224,3 @@
     }
   }
 }
-
