@@ -20,7 +20,7 @@ export class AvatarTitleComponent implements OnInit {
         this.status = 'Request';
         break;
       case Status.Destroyed:
-        this.status = 'Destroyed';
+        this.status = 'Canceled';
         break;
       case Status.Paid:
         this.status = 'Paid';

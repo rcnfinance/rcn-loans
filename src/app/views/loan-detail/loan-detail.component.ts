@@ -35,6 +35,7 @@ export class LoanDetailComponent implements OnInit {
   loanStatusData = [];
   isExpired: boolean;
   isRequest: boolean;
+  isCanceled: boolean;
   isOngoing: boolean;
   isInDebt: boolean;
 
@@ -98,6 +99,8 @@ export class LoanDetailComponent implements OnInit {
         this.currency = this.loan.oracle ? this.loan.oracle.currency : 'RCN';
         this.availableOracle = this.loan.oracle.currency !== 'RCN';
 
+        // TODO: Replace with flags to display each section
+        this.isCanceled = this.loan.status === Status.Destroyed;
         this.isRequest = this.loan.status === Status.Request;
         this.isOngoing = this.loan.status === Status.Ongoing;
         this.isExpired = this.loan.status === Status.Expired;
@@ -164,55 +167,61 @@ export class LoanDetailComponent implements OnInit {
   }
 
   private loadDetail() {
-    if (this.loan.status === Status.Expired) {
-      throw Error('Loan expired');
-    }
+    const currency = this.loan.currency;
 
-    if (this.loan.status === Status.Request) {
-      // Load config data
-      const interest = this.loan.descriptor.interestRate.toFixed(2);
-      const interestPunnitory = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
-      const currency = this.loan.currency;
-      const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
-      this.loanConfigData = [
-        ['Currency', currency],
-        ['Interest / Punitory', '~ ' + interest + ' % / ~ ' + interestPunnitory + ' %'],
-        ['Duration', duration]
-      ];
+    switch (this.loan.status) {
+      case Status.Expired:
+        throw Error('Loan expired');
+        break;
+      case Status.Destroyed:
+      case Status.Request:
+        // Load config data
+        const interestRate = this.loan.descriptor.interestRate.toFixed(2);
+        const interestRatePunitive = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
+        const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
+        this.loanConfigData = [
+          ['Currency', currency],
+          ['Interest / Punitory', '~ ' + interestRate + ' % / ~ ' + interestRatePunitive + ' %'],
+          ['Duration', duration]
+        ];
 
-      // Template data
-      this.interest = `~ ${ interest }%`;
-      this.punitory = `~ ${ interestPunnitory }%`;
-      this.duration = duration;
-      this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
-    } else {
-      const currency = this.loan.currency;
-      const lendDate: string = this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration);
-      const dueDate: string = this.formatTimestamp(this.loan.debt.model.dueTime);
-      const deadline: string = this.formatTimestamp(this.loan.debt.model.dueTime);
-      const remaning: string = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2);
-      const interest: string = this.formatInterest(
-        this.loan.status === Status.Indebt ? this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate
-      );
+        // Template data
+        this.interest = `~ ${ interestRate }%`;
+        this.punitory = `~ ${ interestRatePunitive }%`;
+        this.duration = duration;
+        this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
+        break;
+      case Status.Indebt:
+      case Status.Ongoing:
+        const lendDate: string = this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration);
+        const dueDate: string = this.formatTimestamp(this.loan.debt.model.dueTime);
+        const deadline: string = this.formatTimestamp(this.loan.debt.model.dueTime);
+        const remaning: string = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2);
+        const currentInterestRate: string = this.formatInterest(
+          this.loan.status === Status.Indebt ? this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate
+        );
 
-      // Show ongoing loan detail
-      this.loanStatusData = [
-        ['Lend date', lendDate], // TODO
-        ['Due date', dueDate],
-        ['Deadline', deadline],
-        ['Remaining', remaning]
-      ];
+        // Show ongoing loan detail
+        this.loanStatusData = [
+          ['Lend date', lendDate], // TODO
+          ['Due date', dueDate],
+          ['Deadline', deadline],
+          ['Remaining', remaning]
+        ];
 
-      // Template data
-      this.interest = '~ ' + interest + ' %';
-      this.lendDate = lendDate;
-      this.dueDate = dueDate;
+        // Template data
+        this.interest = '~ ' + currentInterestRate + ' %';
+        this.lendDate = lendDate;
+        this.dueDate = dueDate;
 
-      // Load status data
-      const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
-      this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
-      this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
-      this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
+        // Load status data
+        const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
+        this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
+        this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
+        this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
+        break;
+      default:
+        break;
     }
 
     this.isDiaspore = this.loan.network === Network.Diaspore;
