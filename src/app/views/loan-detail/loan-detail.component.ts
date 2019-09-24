@@ -85,7 +85,6 @@ export class LoanDetailComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.show();
-    this.loadAccount();
 
     this.route.params.subscribe(async params => {
       const id = params.id;
@@ -93,6 +92,8 @@ export class LoanDetailComponent implements OnInit {
       try {
         const loan = await this.contractsService.getLoan(id);
         this.loan = loan;
+        this.loadAccount();
+
         this.hasHistory = true;
         this.brand = this.brandingService.getBrand(this.loan);
         this.oracle = this.loan.oracle ? this.loan.oracle.address : undefined;
@@ -172,7 +173,7 @@ export class LoanDetailComponent implements OnInit {
     switch (this.loan.status) {
       case Status.Expired:
         throw Error('Loan expired');
-        break;
+
       case Status.Destroyed:
       case Status.Request:
         // Load config data
@@ -321,6 +322,8 @@ export class LoanDetailComponent implements OnInit {
       this.canPay = false;
       this.canTransfer = false;
       this.canCancel = isBorrower;
+    } else {
+      this.canLend = true;
     }
   }
 
