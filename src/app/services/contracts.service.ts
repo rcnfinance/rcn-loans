@@ -28,7 +28,6 @@ const oracleFactoryAbi = require('../contracts/OracleFactory.json');
 
 @Injectable()
 export class ContractsService {
-  private _oracleAddress: string = environment.contracts.oracle;
   private _rcnEngine: any;
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
   private _rcnExtension: any;
@@ -218,40 +217,40 @@ export class ContractsService {
   /**
    * Return estimated lend amount in RCN
    * @param loan Loan payload
+   * @param tokenAddress Amount in the selected token
    * @return Required amount
    */
-  async estimateLendAmount(loan: Loan): Promise<number> {
-    if (loan.oracle.address === Utils.address0x) {
-      return loan.amount;
+  async estimateLendAmount(
+    loan: Loan,
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<number> {
+    const rcnToken = environment.contracts.rcnToken;
+
+    let required: number;
+    required = loan.amount;
+
+    if (loan.oracle.address !== Utils.address0x) {
+      const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
+      const oracleData = await this.getOracleData(loan.oracle);
+      const oracleRate = await promisify(oracle.readSample.call, [oracleData]);
+      const rate = oracleRate[0];
+      const decimals = oracleRate[1];
+      required = (rate * loan.amount) / decimals;
     }
 
-    let oracleAddress: string = loan.oracle.address;
-    environment.blacklist.map(element => {
-      if (element.forbidden.includes(oracleAddress)) {
-        oracleAddress = this._oracleAddress;
-      }
-    });
-    let oracle: any;
-
-    switch (loan.network) {
-      case Network.Basalt:
-        oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(oracleAddress);
-        break;
-
-      case Network.Diaspore:
-        oracle = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracleAddress);
-        break;
-
-      default:
-        break;
+    // amount in rcn
+    if (tokenAddress === rcnToken) {
+      return required;
     }
 
-    const oracleData = await this.getOracleData(loan.oracle);
-    const oracleRate = await promisify(oracle.readSample.call, [oracleData]);
-    const rate = oracleRate[0];
-    const decimals = oracleRate[1];
-    const required: number = (rate * loan.amount) / decimals;
-    return required;
+    // amount in currency
+    const requiredInToken = await this.getPriceConvertFrom(
+      rcnToken,
+      tokenAddress,
+      required
+    );
+
+    return requiredInToken;
   }
 
   /**
@@ -513,13 +512,7 @@ export class ContractsService {
 
     const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
     const oracleUrl = await promisify(oracleContract.url.call, []);
-
     if (oracleUrl === '') {
-      const oracleRate = await promisify(oracleContract.readSample.call, []);
-
-      // TODO: encode oracle data
-      console.info(oracleRate);
-
       return '0x';
     }
 
