@@ -26,10 +26,10 @@
         </div>
         <div class="row">
           <mat-form-field>
-            <mat-label *ngIf="!selectedCurrency" id="label">
+            <mat-label *ngIf="!lendCurrency" id="label">
               Select Token
             </mat-label>
-            <mat-select [(value)]="selectedCurrency" (selectionChange)="onChangeCurrency()">
+            <mat-select [(value)]="lendCurrency" (selectionChange)="onChangeCurrency()">
               <mat-option *ngFor="let item of availableCurrencies" [value]="item.symbol">
                 <div class="row align-items-center">
                   <div class="icon-box item">
@@ -62,7 +62,7 @@
               {{ lendAmount }}
             </span>
             <span class="data--currency-style">
-              {{ selectedCurrency || '-' }}
+              {{ lendCurrency || '-' }}
             </span>
           </div>
           <div class="col-sm-1 no-gutters --auto"></div>
@@ -71,9 +71,9 @@
               {{ lendExpectedReturn }}
             </span>
             <span class="data--currency-style">
-              {{ selectedCurrency || '-' }}
+              {{ lendCurrency || '-' }}
             </span>
-            <i *ngIf="selectedCurrency" class="fas fa-exclamation-triangle margin-left triangle"></i>
+            <i *ngIf="lendCurrency" class="fas fa-exclamation-triangle margin-left triangle"></i>
           </div>
         </div>
         <div class="margintop10"></div>
@@ -99,7 +99,7 @@
               <span class="margin-left">
                 {{ loan.currency }}
               </span>
-              <i *ngIf="selectedCurrency" class="fas fa-check-circle check margin-left"></i>
+              <i *ngIf="lendCurrency" class="fas fa-check-circle check margin-left"></i>
             </div>
           </div>
         </div>
@@ -115,11 +115,11 @@
     <div>
       <div class="inline rate padding-2">
         Exchange Rate 1 {{ loan.currency }}
-        <ng-container *ngIf="selectedCurrency !== 'RCN' && loan.currency.toString() !== 'RCN'">
+        <ng-container *ngIf="loan.currency.toString() !== 'RCN'">
           = {{ exchangeRcn }} RCN
         </ng-container>
-        <ng-container *ngIf="exchangeToken && loan.currency.toString() !== selectedCurrency">
-          = {{ exchangeToken }} {{ selectedCurrency }}
+        <ng-container *ngIf="exchangeToken && loan.currency.toString() !== lendCurrency">
+          = {{ exchangeToken }} {{ lendCurrency }}
         </ng-container>
       </div>
     </div>
@@ -134,7 +134,7 @@
     <div class="col-sm-12 col-md-6">
       <div class="row justify-content-end no-gutters">
         <div class="col-sm-12 col-md-3 right">
-          <app-lend-button [loan]="loan" [lendPayload]="lendPayload" *ngIf="canLend"></app-lend-button>
+          <app-lend-button [loan]="loan" [lendToken]="lendToken" *ngIf="canLend"></app-lend-button>
         </div>
         <div class="col-sm-0 col-md-3">
           <button mat-raised-button matDialogClose href="https://metamask.io/" target="_blank" class="button button-secondary cancel">
