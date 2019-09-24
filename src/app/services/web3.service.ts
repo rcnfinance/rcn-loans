@@ -21,18 +21,25 @@ export class Web3Service {
     if (typeof window.web3 !== 'undefined') {
       // Use Mist/MetaMask's provider
       console.info('Web3 provider detected');
+
       const candWeb3 = new Web3(window.web3.currentProvider);
-      if (candWeb3.version.network === environment.network.id) {
-        candWeb3.eth.getAccounts((err, result) => {
-          if (!err && result && result.length > 0) {
-            console.info('Logged in');
-            this._web3account = candWeb3;
-            this.loginEvent.emit(true);
-          }
-        });
-      } else {
-        console.info('Mismatch provider network ID', candWeb3.version.network, environment.network.id);
-      }
+      const expectedNetworkId = environment.network.id;
+
+      candWeb3.version.getNetwork((err, networkId) => {
+        if (!err && networkId === expectedNetworkId) {
+
+          candWeb3.eth.getAccounts((err2, result) => {
+            if (!err2 && result && result.length > 0) {
+              console.info('Logged in');
+              this._web3account = candWeb3;
+              this.loginEvent.emit(true);
+            }
+          });
+
+        } else {
+          console.info('Mismatch provider network ID', networkId, environment.network.id);
+        }
+      });
     }
   }
 
@@ -56,13 +63,18 @@ export class Web3Service {
     if (window.ethereum) {
       try {
         const candWeb3 = new Web3(window.ethereum);
-        if (candWeb3.version.network !== environment.network.id) {
-          console.info('Mismatch provider network ID', candWeb3.version.network, environment.network.id);
-          return false;
-        }
-        await window.ethereum.enable();
-        this._web3account = candWeb3;
-        this.loginEvent.emit(true);
+        const expectedNetworkId = environment.network.id;
+
+        candWeb3.version.getNetwork(async (err, networkId) => {
+          if (err || networkId !== expectedNetworkId) {
+            console.info('Mismatch provider network ID', expectedNetworkId, environment.network.id);
+            return false;
+          }
+          await window.ethereum.enable();
+          this._web3account = candWeb3;
+          this.loginEvent.emit(true);
+        });
+
         return true;
       } catch (e) {
         this.loginEvent.emit(false);
@@ -70,6 +82,7 @@ export class Web3Service {
         return false;
       }
     }
+    return false;
   }
 
   async getAccount(): Promise<string> {
