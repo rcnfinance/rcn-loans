@@ -73,7 +73,8 @@ export const environment = {
       params: {
         marginSpend: 5000,
         maxSpend: 0,
-        rebuyThreshold: 40000000000000000000
+        rebuyThreshold: 40000000000000000000,
+        aditionalSlippage: '2'
       }
     },
     decentraland: {
