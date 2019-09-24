@@ -35,11 +35,7 @@ import { DecentralandCosignerProvider } from './../../providers/cosigners/decent
 })
 export class LendButtonComponent implements OnInit {
   @Input() loan: Loan;
-  @Input() lendPayload: {
-    payableAmount: number,
-    lendToken: string,
-    amountInToken: number
-  };
+  @Input() lendToken: string;
   pendingTx: Tx = undefined;
   lendEnabled: Boolean;
   opPending = false;
@@ -111,35 +107,57 @@ export class LendButtonComponent implements OnInit {
     this.startOperation();
 
     try {
-      // validate inputs
+      // set input lend token
       const web3: any = this.web3Service.web3;
-      const inputLendPayload = this.lendPayload;
-      if (!inputLendPayload) {
+      const lendToken: string = this.lendToken;
+      if (!lendToken) {
         throw Error('Please choose a currency');
       }
 
-      // validate and set value in specified token
-      const balance = await this.contractsService.getUserBalanceInToken(inputLendPayload.lendToken);
-      let required = await this.contractsService.estimateLendAmount(this.loan);
+      // set value in specified token
+      const balance = await this.contractsService.getUserBalanceInToken(lendToken);
+      let required: any = await this.contractsService.estimateLendAmount(this.loan, lendToken);
       let contractAddress: string;
+      let payableAmount: number;
 
-      if (inputLendPayload.lendToken === environment.contracts.rcnToken) {
-        contractAddress = this.loan.address;
-      } else {
-        contractAddress = environment.contracts.converter.converterRamp;
-        required = inputLendPayload.amountInToken;
+      // set slippage
+      const aditionalSlippage = new web3.BigNumber(
+        environment.contracts.converter.params.aditionalSlippage
+      );
+      required = required.mul(
+        new web3.BigNumber(100).add(aditionalSlippage)
+      ).div(
+        new web3.BigNumber(100)
+      );
+      required = Number(required);
+
+      // set lend contract
+      switch (lendToken) {
+        case environment.contracts.rcnToken:
+          contractAddress = this.loan.address;
+          break;
+
+        case environment.contracts.converter.ethAddress:
+          contractAddress = environment.contracts.converter.converterRamp;
+          payableAmount = required;
+          break;
+
+        default:
+          contractAddress = environment.contracts.converter.converterRamp;
+          break;
       }
 
-      // validate token / contract approved
-      const engineApproved = await this.contractsService.isApproved(contractAddress, inputLendPayload.lendToken);
+      // validate approve
+      const engineApproved = await this.contractsService.isApproved(contractAddress, lendToken);
       if (!await engineApproved) {
         this.showApproveDialog(contractAddress);
         return;
       }
 
       // validate balance amount
-      if (Number(balance) > Number(required)) {
+      if (Number(balance) > required) {
         let tx: string;
+
         let account: string = await this.web3Service.getAccount();
         account = web3.toChecksumAddress(account);
 
@@ -150,15 +168,15 @@ export class LendButtonComponent implements OnInit {
             break;
 
           case Network.Diaspore:
-            if (inputLendPayload.lendToken === environment.contracts.rcnToken) {
+            if (lendToken === environment.contracts.rcnToken) {
               tx = await this.contractsService.lendLoan(this.loan);
             } else {
               const tokenConverter = environment.contracts.converter.uniswapProxy;
 
               tx = await this.contractsService.converterRampLend(
-                inputLendPayload.payableAmount,
+                payableAmount,
                 tokenConverter,
-                inputLendPayload.lendToken,
+                lendToken,
                 required,
                 Utils.address0x,
                 this.loan.id,
@@ -190,12 +208,12 @@ export class LendButtonComponent implements OnInit {
           required
         );
 
-        const currency = environment.usableCurrencies.filter(token => token.address === inputLendPayload.lendToken)[0];
+        const currency = environment.usableCurrencies.filter(token => token.address === lendToken)[0];
         this.showInsufficientFundsDialog(required, balance, currency.symbol);
       }
     } catch (e) {
       // Don't show 'User denied transaction signature' error
-      if (e.message.indexOf('User denied transaction signature') < 0) {
+      if (e.stack.indexOf('User denied transaction signature') < 0) {
         this.dialog.open(DialogGenericErrorComponent, {
           data: { error: e }
         });
@@ -239,7 +257,7 @@ export class LendButtonComponent implements OnInit {
   showApproveDialog(contract: string) {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
     dialogRef.componentInstance.onlyAddress = contract;
-    dialogRef.componentInstance.onlyToken = this.lendPayload.lendToken;
+    dialogRef.componentInstance.onlyToken = this.lendToken;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.handleLend(true);
