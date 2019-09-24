@@ -128,19 +128,18 @@ export class DialogSelectCurrencyComponent implements OnInit {
         rcnExpectedReturn
       );
 
-      // set lending currency rate
-      let lendCurrencyRate = new web3.BigNumber(web3.fromWei(lendAmount / loanAmount));
-
       // set slippage
       const aditionalSlippage = new web3.BigNumber(
         environment.contracts.converter.params.aditionalSlippage
       );
-      lendCurrencyRate = lendCurrencyRate.mul(
+      lendAmount = new web3.BigNumber(lendAmount).mul(
         new web3.BigNumber(100).add(aditionalSlippage)
       ).div(
         new web3.BigNumber(100)
       );
 
+      // set lending currency rate
+      const lendCurrencyRate = new web3.BigNumber(web3.fromWei(lendAmount / loanAmount));
       this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 7);
     }
 

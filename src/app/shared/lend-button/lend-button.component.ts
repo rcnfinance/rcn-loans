@@ -124,7 +124,7 @@ export class LendButtonComponent implements OnInit {
       const aditionalSlippage = new web3.BigNumber(
         environment.contracts.converter.params.aditionalSlippage
       );
-      required = required.mul(
+      required = new web3.BigNumber(required, 10).mul(
         new web3.BigNumber(100).add(aditionalSlippage)
       ).div(
         new web3.BigNumber(100)
