@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Loan, Network, Status } from '../../models/loan.model';
 import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
+import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { Utils } from '../../utils/utils';
 import { Web3Service } from '../../services/web3.service';
 
@@ -73,11 +74,34 @@ export class LoanCardComponent implements OnInit {
     }
   }
 
-  openDialog() {
-    const dialogConfig = {
-      data: { loan: this.loan }
+  /**
+   * Open lend dialog
+   */
+  async lend() {
+    // open dialog
+    const openLendDialog = () => {
+      const dialogConfig = {
+        data: { loan: this.loan }
+      };
+      this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
     };
-    this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
+
+    // check user account
+    if (!this.web3Service.loggedIn) {
+      const hasClient = await this.web3Service.requestLogin();
+
+      if (this.web3Service.loggedIn) {
+        openLendDialog();
+        return;
+      }
+
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
+      return;
+    }
+
+    openLendDialog();
   }
 
   getInterestRate(): string {
