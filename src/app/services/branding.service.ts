@@ -23,6 +23,14 @@ export class BrandingService {
       '',
       'Ripio',
       undefined
+    ),
+    wenance: new Brand(
+      'Wenance',
+      '#009BDE',
+      './assets/logos/wenance.png',
+      '',
+      'Wenance',
+      undefined
     )
   };
   constructor(
@@ -34,8 +42,12 @@ export class BrandingService {
       return this.staticBrands.decentraland_mortgage;
     }
 
-    if (environment.dir[loan.creator.toLowerCase()] === Agent.RipioCreator) {
-      return this.staticBrands.ripio;
+    switch (environment.dir[loan.creator.toLowerCase()]) {
+      case Agent.RipioCreator:
+        return this.staticBrands.ripio;
+      case Agent.WenanceCreator:
+        return this.staticBrands.wenance;
+      default:
     }
 
     if (loan.borrower === loan.creator) {
