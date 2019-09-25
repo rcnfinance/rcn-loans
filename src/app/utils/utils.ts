@@ -45,7 +45,7 @@ export class Utils {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  static formatDelta(totalSeconds: number, display: number = 2, showSeconds = true): string {
+  static formatDelta(totalSeconds: number, display: number = 2, showSeconds = false): string {
     let result = '';
     let visible = 0;
 
