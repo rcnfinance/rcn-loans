@@ -47,12 +47,12 @@
       <div class="col-sm-1"></div>
       <div class="col-sm-8">
         <div class="small-table-row row">
-          <div class="col title-3 --auto no-pad-left">
-            LENDING AMOUNT
+          <div class="col title-3 --auto pl-0 uppercase">
+            Lending amount
           </div>
           <div class="col-sm-1 no-gutters --auto"></div>
-          <div class="col title-3 --auto">
-            RETURN
+          <div class="col title-3 --auto uppercase">
+            {{ isRequest || isCanceled ? 'Estimated return' : 'Return' }}
           </div>
         </div>
         <div class="margintop15"></div>
@@ -73,7 +73,13 @@
             <span class="data--currency-style">
               {{ lendCurrency || '-' }}
             </span>
-            <i *ngIf="lendCurrency" class="fas fa-exclamation-triangle margin-left triangle"></i>
+            <div
+              class="d-inline"
+              matTooltip="Lorem ipsum dolor sit amet"
+              *ngIf="lendCurrency && expectedReturnWarning"
+            >
+              <i class="fas fa-exclamation-triangle margin-left triangle"></i>
+            </div>
           </div>
         </div>
         <div class="margintop10"></div>
@@ -99,7 +105,9 @@
               <span class="margin-left">
                 {{ loan.currency }}
               </span>
-              <i *ngIf="lendCurrency" class="fas fa-check-circle check margin-left"></i>
+              <div class="d-inline" *ngIf="lendCurrency">
+                <i class="fas fa-check-circle check margin-left"></i>
+              </div>
             </div>
           </div>
         </div>
@@ -113,13 +121,23 @@
 
   <div class="exchange">
     <div>
-      <div class="inline rate padding-2">
-        Exchange Rate 1 {{ loan.currency }}
-        <ng-container *ngIf="loan.currency.toString() !== 'RCN'">
+      <div class="rate d-flex align-items-center padding-2">
+        <span class="mr-1">
+          Exchange Rate 1 {{ loan.currency }}
+        </span>
+        <span class="mr-1" *ngIf="loan.currency.toString() !== 'RCN'">
           = {{ exchangeRcn }} RCN
-        </ng-container>
+        </span>
         <ng-container *ngIf="exchangeToken && loan.currency.toString() !== lendCurrency">
-          = {{ exchangeToken }} {{ lendCurrency }}
+          <span>
+            = {{ exchangeToken }} {{ lendCurrency }}
+          </span>
+          <i
+            class="material-icons ml-2"
+            matTooltip="Lorem ipsum dolor sit amet"
+          >
+            info
+          </i>
         </ng-container>
       </div>
     </div>
