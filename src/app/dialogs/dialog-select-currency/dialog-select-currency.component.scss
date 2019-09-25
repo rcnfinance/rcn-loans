@@ -16,7 +16,7 @@
 }
 
 .no-pad-left {
-  padding-left: 0; 
+  padding-left: 0;
 }
 
 .padding {
@@ -101,7 +101,7 @@
 }
 
 .icon-box {
-    width: 35px; 
+    width: 35px;
     height: 35px;
     display: flex;
     align-items: center;
@@ -117,7 +117,7 @@
             max-height: 100%;
         }
     }
-    
+
 }
 
 .--highlight {
@@ -155,14 +155,18 @@
 }
 
 .exchange {
-    background-color: none;
-    height: auto;
-    display: flex;
-    align-items: center;
-    .rate {
-      font-size: 12px;
-      color: #6D6E6F;
-    }
+  background-color: none;
+  height: auto;
+  display: flex;
+  align-items: center;
+  .rate {
+    font-size: 12px;
+    color: #6D6E6F;
+  }
+  i {
+    cursor: pointer;
+    font-size: 1.5em;
+  }
 }
 
 img {
@@ -285,7 +289,7 @@ img {
   width: 100%;
 }
 .pad-left {
-  padding-left: 0; 
+  padding-left: 0;
 }
 
 .fa-arrow-left {
@@ -314,6 +318,7 @@ img {
 .triangle {
   font-size: 16px;
   color: #EAA219;
+  cursor: pointer;
 }
 
 .end {
@@ -384,7 +389,7 @@ img {
   .account {
     display: block;
   }
-  
+
   .title {
     font-size: 18px;
   }
@@ -415,7 +420,7 @@ img {
   .mobile {
     display: none;
   }
-  
+
   .desktop {
     display: block;
   }
@@ -425,5 +430,5 @@ img {
     display: flex;
     align-content: flex-end;
   }
- 
+
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Loan } from '../../models/loan.model';
+import { Loan, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 import { environment } from '../../../environments/environment';
@@ -18,13 +18,15 @@ export class DialogSelectCurrencyComponent implements OnInit {
   loanAmount: string;
   loanExpectedReturn: any;
   loanCurrency: string;
+  isRequest: boolean;
+  isCanceled: boolean;
   // lend
   lendAmount: any;
   lendExpectedReturn: string;
   lendCurrency: string;
   lendToken: string;
-  exchangeRcn;
-  exchangeToken;
+  exchangeRcn: string;
+  exchangeToken: string;
   // general
   account: string;
   canLend: boolean;
@@ -33,6 +35,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
     img: string,
     address: string
   }> = [];
+  expectedReturnWarning: boolean;
 
   constructor(
     private contractsService: ContractsService,
@@ -68,6 +71,10 @@ export class DialogSelectCurrencyComponent implements OnInit {
     this.loanAmount = Utils.formatAmount(loanAmount);
     this.loanExpectedReturn = Utils.formatAmount(loanExpectedReturn);
     this.exchangeRcn = Utils.formatAmount(rate);
+
+    // set loan status
+    this.isCanceled = this.loan.status === Status.Destroyed;
+    this.isRequest = this.loan.status === Status.Request;
   }
 
   /**
@@ -93,6 +100,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
     const loanAmount: number = loan.currency.fromUnit(loan.amount);
+    const loanCurrency: string = loan.currency.toString();
     const loanExpectedReturn: number = loan.currency.fromUnit(
       loan.descriptor.totalObligation
     );
@@ -115,6 +123,13 @@ export class DialogSelectCurrencyComponent implements OnInit {
       // rcn -> rcn
       lendAmount = rcnAmount;
       lendExpectedReturn = rcnExpectedReturn;
+
+      // set expected return warn
+      if (loanCurrency === 'RCN') {
+        this.expectedReturnWarning = false;
+      } else {
+        this.expectedReturnWarning = true;
+      }
     } else {
       // rcn -> currency
       lendAmount = await this.contractsService.getPriceConvertFrom(
@@ -141,6 +156,9 @@ export class DialogSelectCurrencyComponent implements OnInit {
       // set lending currency rate
       const lendCurrencyRate = new web3.BigNumber(web3.fromWei(lendAmount / loanAmount));
       this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 7);
+
+      // set expected return warn
+      this.expectedReturnWarning = true;
     }
 
     // set ui values
