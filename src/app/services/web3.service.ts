@@ -12,8 +12,9 @@ export class Web3Service {
   private _web3: any;
 
   // Account properties
-  private _web3account: any;
-  private _account: string = null;
+  private web3account: any;
+  private account: string = null;
+  private isLogging: boolean;
 
   constructor() {
     this._web3 = this.buildWeb3();
@@ -33,7 +34,7 @@ export class Web3Service {
           const accounts = await promisify(candWeb3.eth.getAccounts, []);
           if (accounts && accounts.length) {
             console.info('Logged in');
-            this._web3account = candWeb3;
+            this.web3account = candWeb3;
             this.loginEvent.emit(true);
           }
 
@@ -50,11 +51,11 @@ export class Web3Service {
   }
 
   get opsWeb3(): any {
-    return this._web3account;
+    return this.web3account;
   }
 
   get loggedIn(): boolean {
-    return this._web3account !== undefined;
+    return this.web3account !== undefined;
   }
 
   /**
@@ -63,7 +64,7 @@ export class Web3Service {
    * @return User has wallet
    */
   async requestLogin(): Promise<boolean> {
-    if (this.loggedIn) {
+    if (this.loggedIn || this.isLogging) {
       return true;
     }
     if (!window.ethereum) {
@@ -82,14 +83,17 @@ export class Web3Service {
 
     // handle wallet connection
     try {
+      this.isLogging = true;
       await window.ethereum.enable();
     } catch (e) {
       console.info('User rejected login');
+      this.isLogging = false;
       this.loginEvent.emit(false);
       return true;
     }
 
-    this._web3account = candWeb3;
+    this.isLogging = false;
+    this.web3account = candWeb3;
     this.loginEvent.emit(true);
     return true;
   }
@@ -102,16 +106,16 @@ export class Web3Service {
     if (!this.loggedIn) {
       return;
     }
-    if (this._account) {
-      return this._account;
+    if (this.account) {
+      return this.account;
     }
 
-    const accounts = await promisify(this._web3account.eth.getAccounts, []);
+    const accounts = await promisify(this.web3account.eth.getAccounts, []);
     if (!accounts || accounts.length === 0) {
       return;
     }
 
-    this._account = accounts[0];
+    this.account = accounts[0];
     return accounts[0];
   }
 
