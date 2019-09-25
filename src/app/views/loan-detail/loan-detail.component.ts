@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
 import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
+import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
@@ -85,7 +86,6 @@ export class LoanDetailComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.show();
-    this.loadAccount();
 
     this.route.params.subscribe(async params => {
       const id = params.id;
@@ -93,6 +93,8 @@ export class LoanDetailComponent implements OnInit {
       try {
         const loan = await this.contractsService.getLoan(id);
         this.loan = loan;
+        this.loadAccount();
+
         this.hasHistory = true;
         this.brand = this.brandingService.getBrand(this.loan);
         this.oracle = this.loan.oracle ? this.loan.oracle.address : undefined;
@@ -132,13 +134,31 @@ export class LoanDetailComponent implements OnInit {
   }
 
   /**
-   * Open choose currency dialog
+   * Open lend dialog
    */
-  openLendDialog() {
-    const dialogConfig = {
-      data: { loan: this.loan }
+  async lend() {
+    // open dialog
+    const openLendDialog = () => {
+      const dialogConfig = {
+        data: { loan: this.loan }
+      };
+      this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
     };
-    this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
+
+    // check user account
+    if (!this.web3Service.loggedIn) {
+      const hasClient = await this.web3Service.requestLogin();
+      if (this.web3Service.loggedIn) {
+        openLendDialog();
+        return;
+      }
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
+      return;
+    }
+
+    openLendDialog();
   }
 
   /**
@@ -172,7 +192,7 @@ export class LoanDetailComponent implements OnInit {
     switch (this.loan.status) {
       case Status.Expired:
         throw Error('Loan expired');
-        break;
+
       case Status.Destroyed:
       case Status.Request:
         // Load config data
@@ -321,6 +341,8 @@ export class LoanDetailComponent implements OnInit {
       this.canPay = false;
       this.canTransfer = false;
       this.canCancel = isBorrower;
+    } else {
+      this.canLend = true;
     }
   }
 

@@ -48,12 +48,14 @@ export class PayButtonComponent implements OnInit {
     if (this.opPending && !forze) { return; }
 
     if (!this.web3Service.loggedIn) {
-      if (await this.web3Service.requestLogin()) {
+      const hasClient = await this.web3Service.requestLogin();
+      if (this.web3Service.loggedIn) {
         this.handlePay();
         return;
       }
-
-      this.dialog.open(DialogClientAccountComponent);
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
       return;
     }
 
