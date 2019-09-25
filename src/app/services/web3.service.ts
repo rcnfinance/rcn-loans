@@ -22,24 +22,26 @@ export class Web3Service {
       // Use Mist/MetaMask's provider
       console.info('Web3 provider detected');
 
+      // validate network id
       const candWeb3 = new Web3(window.web3.currentProvider);
       const expectedNetworkId = environment.network.id;
 
-      candWeb3.version.getNetwork((err, networkId) => {
+      candWeb3.version.getNetwork(async (err, networkId) => {
         if (!err && networkId === expectedNetworkId) {
 
-          candWeb3.eth.getAccounts((err2, result) => {
-            if (!err2 && result && result.length > 0) {
-              console.info('Logged in');
-              this._web3account = candWeb3;
-              this.loginEvent.emit(true);
-            }
-          });
+          // set web3 account
+          const accounts = await promisify(candWeb3.eth.getAccounts, []);
+          if (accounts && accounts.length) {
+            console.info('Logged in');
+            this._web3account = candWeb3;
+            this.loginEvent.emit(true);
+          }
 
         } else {
           console.info('Mismatch provider network ID', networkId, environment.network.id);
         }
       });
+
     }
   }
 
@@ -55,48 +57,51 @@ export class Web3Service {
     return this._web3account !== undefined;
   }
 
+  /**
+   * Request wallet login and approve connection
+   * @fires loginEvent Boolean login event
+   * @return User has wallet
+   */
   async requestLogin(): Promise<boolean> {
     if (this.loggedIn) {
       return true;
     }
-
-    if (window.ethereum) {
-      try {
-        const candWeb3 = new Web3(window.ethereum);
-        const expectedNetworkId = environment.network.id;
-
-        candWeb3.version.getNetwork(async (err, networkId) => {
-          if (err || networkId !== expectedNetworkId) {
-            console.info('Mismatch provider network ID', expectedNetworkId, environment.network.id);
-            return false;
-          }
-          await window.ethereum.enable();
-          this._web3account = candWeb3;
-          this.loginEvent.emit(true);
-        });
-
-        return true;
-      } catch (e) {
-        this.loginEvent.emit(false);
-        console.info('User rejected login');
-        return false;
-      }
+    if (!window.ethereum) {
+      return false;
     }
-    return false;
+
+    // validate network id
+    const candWeb3 = new Web3(window.ethereum);
+    const expectedNetworkId = environment.network.id;
+    const networkId = await promisify(candWeb3.version.getNetwork, []);
+
+    if (networkId !== expectedNetworkId) {
+      console.info('Mismatch provider network ID', expectedNetworkId, environment.network.id);
+      return false;
+    }
+
+    // handle wallet connection
+    try {
+      await window.ethereum.enable();
+    } catch (e) {
+      console.info('User rejected login');
+      this.loginEvent.emit(false);
+      return true;
+    }
+
+    this._web3account = candWeb3;
+    this.loginEvent.emit(true);
+    return true;
   }
 
+  /**
+   * Get wallet account
+   * @return Account address
+   */
   async getAccount(): Promise<string> {
     if (!this.loggedIn) {
-      try {
-        await this.requestLogin();
-        if (!this.loggedIn) {
-          throw Error;
-        }
-      } catch (e) {
-        return;
-      }
+      return;
     }
-
     if (this._account) {
       return this._account;
     }
