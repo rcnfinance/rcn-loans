@@ -7,7 +7,16 @@
     </div>
     <div class="flex-item">
       <div class="creator-container">
-        <div class="creator-title">{{ brand.header }}</div>
+        <ng-container *ngIf="brand.headerImage; else headerTitle">
+          <div class="creator-image">
+            <img [src]="brand.headerImage" [alt]="brand.headerTitle">
+          </div>
+        </ng-container>
+        <ng-template #headerTitle>
+          <div class="creator-title">
+            {{ brand.headerTitle }}
+          </div>
+        </ng-template>
       </div>
     </div>
     <div class="flex-item">

@@ -14,6 +14,7 @@ export class BrandingService {
       'https://avatars1.githubusercontent.com/u/12685795?s=400&v=4',
       '',
       'Decentraland',
+      undefined,
       undefined
     ),
     ripio: new Brand(
@@ -22,6 +23,7 @@ export class BrandingService {
       './assets/ripio.png',
       '',
       'Ripio',
+      undefined,
       undefined
     ),
     wenance: new Brand(
@@ -30,6 +32,7 @@ export class BrandingService {
       './assets/logos/wenance.png',
       '',
       'Wenance',
+      './assets/logos/wenance-brand.png',
       undefined
     )
   };
@@ -57,6 +60,7 @@ export class BrandingService {
         undefined,
         'borrower',
         'Unknown',
+        undefined,
         this.getBlockiesOptions(loan)
       );
     }
@@ -67,6 +71,7 @@ export class BrandingService {
       undefined,
       '',
       'Unknown',
+      undefined,
       this.getBlockiesOptions(loan)
     );
   }

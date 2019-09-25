@@ -8,9 +8,10 @@ export class Identity {
 export class CompanyIdentity extends Identity {
   constructor(
         public name: string,
+        public slogan: string,
         public description: string,
         public logo: string,
-        public foundation: string
+        public brand: string
     ) {
     super(name);
   }

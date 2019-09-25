@@ -1,12 +1,18 @@
 <div class="empty-container" *ngIf="class === 'company'">
   <div class="empty-row">
-    <div class="title main-h3">Company: {{ identity.name }}</div>
+    <div class="title main-h3">
+      Company
+    </div>
     <div class="margintop20"></div>
-    <img [src]="identity.logo" class="img-responsive img-center">
+    <img [src]="identity.brand" class="img-responsive img-center">
     <div class="marginbottom20"></div>
-    <div class="title main-h4">{{ identity.description }}</div>
+    <div class="title mb-5">
+      {{ identity.slogan }}
+    </div>
+    <div class="title main-h4">
+      {{ identity.description }}
+    </div>
     <div class="margintop10"></div>
-    <div class="title main-h6">Foundation: {{ identity.foundation }}</div>
   </div>
 </div>
 
@@ -18,7 +24,7 @@
     <div class="title main-h3">The borrower of this loan is anonymous</div>
     <div class="margintop10"></div>
     <div class="title main-h4">
-      The address is 
+      The address is
       <a target="_blank" href="{{ borrowerLinkExplorer }}">{{ loan.borrower }}</a>
       , but we have no information about its identity</div>
   </div>
