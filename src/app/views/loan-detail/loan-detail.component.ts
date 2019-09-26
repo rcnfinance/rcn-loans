@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Models
@@ -22,7 +23,7 @@ import { BrandingService } from './../../services/branding.service';
   templateUrl: './loan-detail.component.html',
   styleUrls: ['./loan-detail.component.scss']
 })
-export class LoanDetailComponent implements OnInit {
+export class LoanDetailComponent implements OnInit, OnDestroy {
   loan: Loan;
   identityName = '...';
   viewDetail = undefined;
@@ -72,6 +73,9 @@ export class LoanDetailComponent implements OnInit {
   availableOracle: boolean;
   currency: string;
 
+  // subscriptions
+  subscriptionAccount: Subscription;
+
   constructor(
     private identityService: IdentityService,
     private route: ActivatedRoute,
@@ -112,6 +116,7 @@ export class LoanDetailComponent implements OnInit {
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
 
+        this.handleLoginEvents();
         this.spinner.hide();
       } catch (e) {
         console.error(e);
@@ -119,6 +124,17 @@ export class LoanDetailComponent implements OnInit {
         this.router.navigate(['/404/'], { skipLocationChange: true });
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.subscriptionAccount.unsubscribe();
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  handleLoginEvents() {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(() => this.loadAccount());
   }
 
   openDetail(view: string) {

@@ -43,6 +43,7 @@ export class Web3Service {
         }
       });
 
+      this.listenAccountUpdates();
     }
   }
 
@@ -117,6 +118,28 @@ export class Web3Service {
 
     this.account = accounts[0];
     return accounts[0];
+  }
+
+  /**
+   * Listen account updates
+   */
+  private listenAccountUpdates() {
+    window.ethereum.on('accountsChanged', async (accounts) => {
+
+      if (accounts && accounts.length) {
+        console.info('Accounts changed', accounts[0]);
+        const loggedIn = this.loggedIn;
+
+        this.account = accounts[0];
+        this.loginEvent.emit(loggedIn);
+        return;
+      }
+
+      console.info('Logout');
+      this.account = null;
+      this.web3account = undefined;
+      this.loginEvent.emit(false);
+    });
   }
 
   private buildWeb3(): any {
