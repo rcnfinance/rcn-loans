@@ -120,7 +120,7 @@ export class LendButtonComponent implements OnInit {
       const balance = await this.contractsService.getUserBalanceInToken(lendToken);
       let required: any = await this.contractsService.estimateLendAmount(this.loan, lendToken);
       let contractAddress: string;
-      let payableAmount: number;
+      let payableAmount: any;
 
       // set slippage
       const aditionalSlippage = new web3.BigNumber(
@@ -141,6 +141,8 @@ export class LendButtonComponent implements OnInit {
 
         case environment.contracts.converter.ethAddress:
           contractAddress = environment.contracts.converter.converterRamp;
+
+          required = Number(required).toFixed(0);
           payableAmount = required;
           break;
 
@@ -157,7 +159,7 @@ export class LendButtonComponent implements OnInit {
       }
 
       // validate balance amount
-      if (Number(balance) > required) {
+      if (Number(balance) > Number(required)) {
         let tx: string;
 
         let account: string = await this.web3Service.getAccount();
