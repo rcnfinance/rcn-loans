@@ -15,6 +15,24 @@
   }
 }
 
+.img-box {
+  width: 250px;
+}
+
+//Typography
+.main-title {
+  font-family: 'Raleway', sans-serif;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.main-sub-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+}
+
 a {
   color: white;
   @extend %roboto-medium;
