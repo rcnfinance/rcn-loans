@@ -26,7 +26,7 @@
               <div class="marginright20" routerLink='/requests'>Requests</div>
               <div class="marginright20" routerLink='/activity'>Activity</div>
               <div class="marginright20" routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</div>
-              <div class="marginright20" (click)="openDialog()" *ngIf="!hasAccount">Login</div>
+              <div class="marginright20" (click)="login()" *ngIf="!hasAccount">Login</div>
               <ng-container *ngIf="hasAccount">
                 <div class="separator">|</div>
                 <app-icon-group-header></app-icon-group-header>
@@ -35,7 +35,7 @@
                 <div class="separator">|</div>
               </ng-container>
               <!-- Balance section -->
-              <div (click)="openDialog();">
+              <div (click)="openDialogApprove();">
                 <div class="flex-container" *ngIf="hasAccount">
                   <div class="flex-item">
                     <div class="list-avatar">
