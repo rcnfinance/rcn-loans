@@ -58,7 +58,9 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptionAccount.unsubscribe();
+    if (this.subscriptionAccount) {
+      this.subscriptionAccount.unsubscribe();
+    }
   }
 
   /**
