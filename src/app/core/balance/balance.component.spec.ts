@@ -56,8 +56,15 @@ describe('BalanceComponent', () => {
     expect(displayAvailable).toBe(3000);
   });
 
-  it('should hide withdraw button', async(() => {
+  it('should hide withdraw button', async () => {
+    const thisComponent: any = component;
+
+    // set default withdraw amount
+    await thisComponent.updateDisplay();
+    fixture.detectChanges();
+
+    // ui expect
     const withdrawPayments = readComponent(fixture, '.pending');
-    expect(withdrawPayments).toBeUndefined();
-  }));
+    expect(withdrawPayments).toBeDefined();
+  });
 });
