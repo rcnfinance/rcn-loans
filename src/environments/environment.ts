@@ -108,6 +108,13 @@ export const environment = {
   dir: {
     '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioCreator
   },
+  filterCurrencies: [
+    'RCN',
+    'DEST',
+    'MANA',
+    'ARS',
+    'USD'
+  ],
   usableCurrencies: [
     {
       symbol: 'RCN',
