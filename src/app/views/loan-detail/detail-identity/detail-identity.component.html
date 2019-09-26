@@ -13,6 +13,11 @@
       {{ identity.description }}
     </div>
     <div class="margintop10"></div>
+    <app-item-feature
+      *ngFor="let feature of identity.features"
+      [feature]="feature"
+    >
+    </app-item-feature>
   </div>
 </div>
 
