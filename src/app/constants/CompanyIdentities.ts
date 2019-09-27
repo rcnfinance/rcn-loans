@@ -26,43 +26,43 @@ export const companyIdentities = {
     './assets/logos/wenance-brand.png',
     [
       {
-        icon: 'url',
+        icon: 'fas fa-link',
         title: 'Website',
         description: null,
         url: 'www.wenance.com'
       },
       {
-        icon: 'calendar',
+        icon: 'fas fa-calendar-alt',
         title: 'Founding date',
         description: '2014'
       },
       {
-        icon: 'pin',
+        icon: 'fas fa-map-marker-alt',
         title: 'Country',
         description: 'Argentina, Uruguay & Spain'
       },
       {
-        icon: 'person',
+        icon: 'fas fa-users',
         title: 'Employees',
         description: '400'
       },
       {
-        icon: 'currency',
+        icon: 'fas fa-coins',
         title: 'Currency',
         description: 'USD & ARS'
       },
       {
-        icon: 'calendar',
+        icon: 'fas fa-money-bill-wave',
         title: 'Loans originated',
         description: 'ARS 3,200 MM'
       },
       {
-        icon: 'calendar',
+        icon: 'fas fa-suitcase',
         title: 'Current portfolio',
         description: 'ARS 1,600 MM'
       },
       {
-        icon: 'calendar',
+        icon: '../../../../assets/rcn-logo.png',
         title: 'Total debt on RCN',
         description: 'USD 50,000'
       }

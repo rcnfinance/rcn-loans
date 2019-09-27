@@ -1,0 +1,20 @@
+// @import '../../../../assets/rcn-logo.png';
+.icon-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 45px;
+  width: 45px;
+  border-radius: 50px;
+  background-color: gray;
+}
+
+.rcn-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.icon {
+  font-size: 16px;
+  color: black;
+}
