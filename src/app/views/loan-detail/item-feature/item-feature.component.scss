@@ -1,20 +1,36 @@
-// @import '../../../../assets/rcn-logo.png';
+
 .icon-box {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 45px;
-  width: 45px;
+  min-width: 45px;
   border-radius: 50px;
-  background-color: gray;
+  background-color: #565759;
+  margin-right: 10px;
 }
 
 .rcn-icon {
   width: 28px;
   height: 28px;
+  filter: grayscale(100%) contrast(295%);
 }
 
 .icon {
-  font-size: 16px;
-  color: black;
+  font-size: 17px;
+  color: #262629;
+}
+
+a {
+  color: #4155ff;
+  font-weight: 600;
+}
+
+.details-box {
+  text-align: left;
+}
+
+.description {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
 }

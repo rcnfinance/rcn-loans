@@ -15,8 +15,30 @@
   }
 }
 
+.content {
+  border-bottom: solid #565759 1px;
+  padding-bottom: 40px;
+}
+
 .img-box {
   width: 280px;
+}
+
+.feature-box {
+  margin: 10px 0;
+}
+
+.disclaimer-box {
+  width: 100%;
+  color: #BABABA;
+  @extend %roboto-medium;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 13px;
+  margin-top: 10px;
+  .fa-info-circle {
+    margin-right: 5px;
+  }
 }
 
 //Typography

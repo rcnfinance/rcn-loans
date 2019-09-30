@@ -1,8 +1,9 @@
 <article class="d-flex">
   <div class="icon-box">
+      <!-- TODO: Find a better way to display the rcn logo. -->
       <i class="{{ feature.icon }} icon"><img src="{{ feature.icon }}" alt="" class="rcn-icon"></i>
   </div>
-  <div>
+  <div class="details-box">
     <p>
       {{ feature.title }}
     </p>
@@ -12,7 +13,7 @@
       </a>
     </ng-container>
     <ng-template #itemDescription>
-      <p>
+      <p class="description">
         {{ feature.description }}
       </p>
     </ng-template>

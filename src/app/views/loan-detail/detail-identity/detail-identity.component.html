@@ -1,26 +1,37 @@
 <div class="empty-container" *ngIf="class === 'company'">
   <div class="empty-row">
-    <div class="main-title">
-      Company
+
+      <div class="main-title">
+        Company
+      </div>
+      <div class="margintop20"></div>
+      <div class="img-box">
+        <img [src]="identity.brand" class="img-responsive img-center" />
+      </div>
+      <div class="marginbottom10"></div>
+      <div class="main-sub-title">
+        {{ identity.slogan }}
+      </div>
+      <div class="marginbottom30"></div>
+
+      <div class="main-text">
+        {{ identity.description }}
+      </div>
+      <div class="margintop10"></div>
+      <div class="content">
+      <div class="row">
+        <app-item-feature
+          *ngFor="let feature of identity.features"
+          [feature]="feature"
+          class="col-xs-12 col-md-4 feature-box"
+        >
+        </app-item-feature>
+      </div>
     </div>
-    <div class="margintop20"></div>
-    <div class="img-box">
-      <img [src]="identity.brand" class="img-responsive img-center" />
+    <div class="d-flex justify-content-start align-items-center disclaimer-box">
+        <i class="fas fa-info-circle"></i> <span>Legal Disclaimer</span>
     </div>
-    <div class="marginbottom10"></div>
-    <div class="main-sub-title">
-      {{ identity.slogan }}
-    </div>
-    <div class="marginbottom30"></div>
-    <div class="main-text">
-      {{ identity.description }}
-    </div>
-    <div class="margintop10"></div>
-    <app-item-feature
-      *ngFor="let feature of identity.features"
-      [feature]="feature"
-    >
-    </app-item-feature>
+
   </div>
 </div>
 
