@@ -77,7 +77,7 @@ export class PayButtonComponent implements OnInit {
       }
 
       if (!engineApproved) {
-        this.showApproveDialog();
+        await this.showApproveDialog();
         return;
       }
 
@@ -88,7 +88,9 @@ export class PayButtonComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe(async amount => {
         if (amount) {
-          amount = amount * 10 ** Currency.getDecimals(this.loan.oracle.currency);
+          const currency = this.loan.oracle.currency;
+          amount = amount * 10 ** Currency.getDecimals(currency);
+
           const requiredTokens = await this.contractsService.estimatePayAmount(this.loan, amount);
           if (balance < requiredTokens) {
             this.eventsService.trackEvent(
@@ -97,7 +99,7 @@ export class PayButtonComponent implements OnInit {
               'loan #' + this.loan.id,
               requiredTokens
             );
-            this.showInsufficientFundsDialog(requiredTokens, balance);
+            this.showInsufficientFundsDialog(requiredTokens, balance, currency);
             return;
           }
 
@@ -133,29 +135,40 @@ export class PayButtonComponent implements OnInit {
     }
   }
 
-  showInsufficientFundsDialog(required: number, funds: number) {
+  showInsufficientFundsDialog(required: number, balance: number, currency: string) {
     this.dialog.open(DialogInsufficientfundsComponent, { data: {
-      required: required,
-      balance: funds
+      required,
+      balance,
+      currency
     }});
     this.cancelOperation();
   }
 
-  showApproveDialog() {
-    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
+  async showApproveDialog() {
+    const onlyToken: string = environment.contracts.rcnToken;
+    let onlyAddress: string;
 
     switch (this.loan.network) {
       case Network.Basalt:
-        dialogRef.componentInstance.onlyAddress = this.loan.address;
+        onlyAddress = this.loan.address;
         break;
       case Network.Diaspore:
         const debtEngineAddress = environment.contracts.diaspore.debtEngine;
-        dialogRef.componentInstance.onlyAddress = debtEngineAddress;
+        onlyAddress = debtEngineAddress;
         break;
       default:
         this.cancelOperation();
         break;
     }
+
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
+      DialogApproveContractComponent, {
+        data: {
+          onlyToken,
+          onlyAddress
+        }
+      }
+    );
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
