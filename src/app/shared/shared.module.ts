@@ -55,10 +55,10 @@ import { EventsService } from './../services/events.service';
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
-    BlockiesModule,
+    FormsModule,
     ReactiveFormsModule,
-    FormsModule
+    MaterialModule,
+    BlockiesModule
   ],
   declarations: [
     LoanCardComponent,
@@ -116,6 +116,8 @@ import { EventsService } from './../services/events.service';
     EventsService
   ],
   exports: [
+    FormsModule,
+    ReactiveFormsModule,
     LoanCardComponent,
 
     CreatorContainerComponent,
