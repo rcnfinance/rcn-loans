@@ -81,7 +81,11 @@ export class PayButtonComponent implements OnInit {
         return;
       }
 
-      const dialogRef = this.dialog.open(DialogLoanPayComponent);
+      const dialogRef = this.dialog.open(DialogLoanPayComponent, {
+        data: {
+          loan: this.loan
+        }
+      });
       dialogRef.afterClosed().subscribe(async amount => {
         if (amount) {
           amount = amount * 10 ** Currency.getDecimals(this.loan.oracle.currency);
