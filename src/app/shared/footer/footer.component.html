@@ -1,0 +1,64 @@
+<footer>
+  <div class="nav-mobile">
+    <ul>
+      <li routerLink='/requests'
+        [ngClass]="{'active': id === 0 }"
+        (click)='addClass(0); newTitle(0); navmobileClose();'>
+        <i class="fas fa-coins"></i>
+        <div class="available-loans">{{ available }}</div>
+      </li>
+      <li routerLink='/activity'
+        [ngClass]="{'active': id === 1 }"
+        (click)='addClass(1); newTitle(1); navmobileClose();'>
+        <i class="fas fa-wallet"></i>
+        <div class="available-loans">{{ available }}</div>
+      </li>
+      <li routerLink='/address/{{ account }}/'
+        [ngClass]="{'active': id === 2 }"
+        (click)='addClass(2); newTitle(2); navmobileClose();'
+        *ngIf="hasAccount">
+        <i class="fas fa-exchange-alt"></i>
+        <div class="available-loans">{{ available }}</div>
+      </li>
+      <li [ngClass]="{'active': id === 4 }"
+        (click)='addClass(4); newTitle(4); navmobileClose(); openDialogClient()'
+        *ngIf="!hasAccount">
+        <i class="fas fa-user-circle"></i>
+      </li>
+      <li [ngClass]="{'active': id === 3 }" (click)='addClass(3); newTitle(3); navmobileToggle()'>
+        <button type="button"
+          class="nav-toggle">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </li>
+    </ul>
+  </div>
+  <div class="container-fluid d-none d-lg-block">
+    <div class="row">
+      <div class="col-sm-12 col-lg-6 left">
+        <div class="txt">© 2019 Ripio Credit Network</div>
+      </div>
+      <div class="col-sm-12 col-lg-6 right">
+        <a class="icon inline marginright15" matTooltip="Basalt engine contract {{contract}}" matTooltipPosition="above" href="{{linkContract}}" target="_blank">
+          <i class="fas fa-link fa-lg"></i>
+        </a>
+        <div class="icon version">
+          <a href="https://github.com/ripio/rcn-loans/releases" matTooltip="Version {{versionString}}" matTooltipPosition="above" target="_blank">
+            <i class="fas fa-code-branch fa-lg"></i> {{ version }}
+          </a>
+        </div>
+        <div class="button-group inline">
+          <div class="icon"><a href="https://www.facebook.com/ripiocredit.network/" matTooltip="Facebook" matTooltipPosition="above" target="_blank"><i class="fab fa-facebook-f fa-lg"></i></a></div>
+          <div class="icon"><a href="https://twitter.com/rcn_token?lang=en" matTooltip="Twitter" matTooltipPosition="above" target="_blank"><i class="fab fa-twitter fa-lg"></i></a></div>
+          <div class="icon"><a href="https://t.me/RCNtalk" matTooltip="Telegram" matTooltipPosition="above" target="_blank"><i class="fab fa-telegram-plane fa-lg"></i></a></div>
+          <div class="icon"><a href="https://www.linkedin.com/company/ripio-credit-network/" matTooltip="Linkedin" matTooltipPosition="above" target="_blank"><i class="fab fa-linkedin-in fa-lg"></i></a></div>
+          <div class="icon"><a href="https://www.reddit.com/r/rcn_token/" matTooltip="Reddit" matTooltipPosition="above" target="_blank"><i class="fab fa-reddit fa-lg"></i></a></div>
+          <div class="icon"><a href="https://github.com/ripio/rcn.loans" matTooltip="Github" matTooltipPosition="above" target="_blank"><i class="fab fa-github fa-lg"></i></a></div>
+          <div class="icon"><a href="https://discord.gg/62UCxbS" matTooltip="Discord" matTooltipPosition="above" target="_blank"><i class="fab fa-discord fa-lg"></i></a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
