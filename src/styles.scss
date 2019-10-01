@@ -736,7 +736,7 @@ mat-checkbox{
 virtual-scroller {
   width: 100vw;
 
-  /deep/ .scrollable-content {
+  .scrollable-content {
     display: flex;
     flex-wrap: wrap;
   }
