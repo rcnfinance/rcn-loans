@@ -50,6 +50,14 @@
   }
 }
 
+.dialog-footer {
+  app-lend-button {
+    /deep/ a {
+      width: 100%;
+    }
+  }
+}
+
 .small-table-row {
   height: 20px;
 }
@@ -324,10 +332,6 @@ img {
 .end {
   display: flex;
   align-items: baseline;
-}
-
-.right {
-  margin-right: 12px;
 }
 
 @media (min-width: 768px){

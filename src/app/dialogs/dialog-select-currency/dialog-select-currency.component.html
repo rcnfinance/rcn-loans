@@ -145,16 +145,16 @@
 
   <div class="margintop20"></div>
 
-  <div class="row padding justify-content-between align-items-center">
+  <div class="dialog-footer row padding justify-content-between align-items-center">
     <div class=" col-sm-12 col-md-6 inline account">
       Lending from your {{ account }} account.
     </div>
     <div class="col-sm-12 col-md-6">
       <div class="row justify-content-end no-gutters">
-        <div class="col-sm-12 col-md-3 right">
+        <div class="col-sm-12 col-md-3">
           <app-lend-button [loan]="loan" [lendToken]="lendToken" *ngIf="canLend"></app-lend-button>
         </div>
-        <div class="col-sm-0 col-md-3">
+        <div class="col-sm-0 col-md-3 ml-3">
           <button mat-raised-button matDialogClose href="https://metamask.io/" target="_blank" class="button button-secondary cancel">
             Cancel
           </button>
