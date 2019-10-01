@@ -25,7 +25,7 @@
       <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
       <div class="block-title">{{ rightValue }}</div>
     </div>
-    <button mat-raised-button class="button button-primary lend" (click)="openDialog()" *ngIf="canLend">Lend</button>
+    <button mat-raised-button class="button button-primary lend" (click)="lend()" *ngIf="canLend">Lend</button>
     <app-detail-button [loan]=loan></app-detail-button>
   </div>
 </div>

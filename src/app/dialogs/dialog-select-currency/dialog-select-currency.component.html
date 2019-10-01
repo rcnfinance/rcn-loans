@@ -26,10 +26,10 @@
         </div>
         <div class="row">
           <mat-form-field>
-            <mat-label *ngIf="!selectedCurrency" id="label">
+            <mat-label *ngIf="!lendCurrency" id="label">
               Select Token
             </mat-label>
-            <mat-select [(value)]="selectedCurrency" (selectionChange)="onChangeCurrency()">
+            <mat-select [(value)]="lendCurrency" (selectionChange)="onChangeCurrency()">
               <mat-option *ngFor="let item of availableCurrencies" [value]="item.symbol">
                 <div class="row align-items-center">
                   <div class="icon-box item">
@@ -47,12 +47,12 @@
       <div class="col-sm-1"></div>
       <div class="col-sm-8">
         <div class="small-table-row row">
-          <div class="col title-3 --auto no-pad-left">
-            LENDING AMOUNT
+          <div class="col title-3 --auto pl-0 uppercase">
+            Lending amount
           </div>
           <div class="col-sm-1 no-gutters --auto"></div>
-          <div class="col title-3 --auto">
-            RETURN
+          <div class="col title-3 --auto uppercase">
+            {{ isRequest || isCanceled ? 'Estimated return' : 'Return' }}
           </div>
         </div>
         <div class="margintop15"></div>
@@ -62,7 +62,7 @@
               {{ lendAmount }}
             </span>
             <span class="data--currency-style">
-              {{ selectedCurrency || '-' }}
+              {{ lendCurrency || '-' }}
             </span>
           </div>
           <div class="col-sm-1 no-gutters --auto"></div>
@@ -71,9 +71,15 @@
               {{ lendExpectedReturn }}
             </span>
             <span class="data--currency-style">
-              {{ selectedCurrency || '-' }}
+              {{ lendCurrency || '-' }}
             </span>
-            <i *ngIf="selectedCurrency" class="fas fa-exclamation-triangle margin-left triangle"></i>
+            <div
+              class="d-inline"
+              matTooltip="Lorem ipsum dolor sit amet"
+              *ngIf="lendCurrency && expectedReturnWarning"
+            >
+              <i class="fas fa-exclamation-triangle margin-left triangle"></i>
+            </div>
           </div>
         </div>
         <div class="margintop10"></div>
@@ -99,7 +105,9 @@
               <span class="margin-left">
                 {{ loan.currency }}
               </span>
-              <i *ngIf="selectedCurrency" class="fas fa-check-circle check margin-left"></i>
+              <div class="d-inline" *ngIf="lendCurrency">
+                <i class="fas fa-check-circle check margin-left"></i>
+              </div>
             </div>
           </div>
         </div>
@@ -113,13 +121,23 @@
 
   <div class="exchange">
     <div>
-      <div class="inline rate padding-2">
-        Exchange Rate 1 {{ loan.currency }}
-        <ng-container *ngIf="selectedCurrency !== 'RCN' && loan.currency.toString() !== 'RCN'">
+      <div class="rate d-flex align-items-center padding-2">
+        <span class="mr-1">
+          Exchange Rate 1 {{ loan.currency }}
+        </span>
+        <span class="mr-1" *ngIf="loan.currency.toString() !== 'RCN'">
           = {{ exchangeRcn }} RCN
-        </ng-container>
-        <ng-container *ngIf="exchangeToken && loan.currency.toString() !== selectedCurrency">
-          = {{ exchangeToken }} {{ selectedCurrency }}
+        </span>
+        <ng-container *ngIf="exchangeToken && loan.currency.toString() !== lendCurrency">
+          <span>
+            = {{ exchangeToken }} {{ lendCurrency }}
+          </span>
+          <i
+            class="material-icons ml-2"
+            matTooltip="Lorem ipsum dolor sit amet"
+          >
+            info
+          </i>
         </ng-container>
       </div>
     </div>
@@ -134,7 +152,7 @@
     <div class="col-sm-12 col-md-6">
       <div class="row justify-content-end no-gutters">
         <div class="col-sm-12 col-md-3 right">
-          <app-lend-button [loan]="loan" [lendPayload]="lendPayload" *ngIf="canLend"></app-lend-button>
+          <app-lend-button [loan]="loan" [lendToken]="lendToken" *ngIf="canLend"></app-lend-button>
         </div>
         <div class="col-sm-0 col-md-3">
           <button mat-raised-button matDialogClose href="https://metamask.io/" target="_blank" class="button button-secondary cancel">

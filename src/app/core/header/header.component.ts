@@ -1,7 +1,5 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { BehaviorSubject } from 'rxjs';
 // App Component
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
@@ -15,47 +13,61 @@ import { TitleService } from '../../services/title.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit, AfterViewInit {
+export class HeaderComponent implements OnInit {
+  hasAccount: boolean;
   account: string;
   makeRotate = false;
-  profile: boolean;
   title: string;
 
-  isOpen$: BehaviorSubject<boolean>;
   navToggle: boolean; // Navbar toggled
 
   constructor(
-    public dialog: MatDialog,
-    private router: Router,
+    private cdRef: ChangeDetectorRef,
     private web3Service: Web3Service,
     private sidebarService: SidebarService,
+    public dialog: MatDialog,
     public titleService: TitleService
   ) {}
 
-  // Toggle Navbar
+  ngOnInit() {
+    this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
+    this.titleService.currentTitle.subscribe(title => this.title = title);
+    this.handleLoginEvents();
+  }
+
+  /**
+   * Toggle navbar
+   */
   sidebarToggle() {
     this.sidebarService.toggleService(this.navToggle = !this.navToggle);
   }
 
-  handleProfile() {
-    this.profile = !this.profile;
-    if (this.profile) {
-      this.router.navigate(['/profile/']);
-    } else {
-      this.router.navigate(['/requests/']);
-    }
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  handleLoginEvents() {
+    this.web3Service.loginEvent.subscribe(async (loggedIn) => {
+      if (loggedIn) {
+        this.account = await this.web3Service.getAccount();
+      } else {
+        this.account = undefined;
+      }
+      this.hasAccount = loggedIn;
+      this.cdRef.detectChanges();
+    });
   }
 
-  // Open Approve Dialog
+  /**
+   * Open Approve Dialog
+   */
   openDialogApprove() {
     this.dialog.open(DialogApproveContractComponent, {});
   }
-  // Open Client Dialog
-  openDialogClient() {
-    this.dialog.open(DialogClientAccountComponent, {});
-  }
-  // Open Approve Dialog
-  async openDialog() {
+
+  /**
+   * Open Client Dialog or connect with the dapp
+   */
+  async login() {
     if (this.hasAccount) {
       const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
       this.makeRotate = true;
@@ -65,26 +77,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     } else if (await this.web3Service.requestLogin()) {
       return;
     } else {
-      this.openDialogClient();
+      this.dialog.open(DialogClientAccountComponent, {});
     }
   }
 
-  get hasAccount(): boolean {
-    return this.account !== undefined;
-  }
-
-  async loadLogin() {
-    if (!this.hasAccount) {
-      this.account = await this.web3Service.getAccount();
-    }
-  }
-
-  ngOnInit() {
-    this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
-    this.titleService.currentTitle.subscribe(title => this.title = title);
-    this.web3Service.loginEvent.subscribe(() => this.loadLogin());
-    this.loadLogin();
-  }
-
-  ngAfterViewInit(): any {}
 }

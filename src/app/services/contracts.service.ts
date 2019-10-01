@@ -22,11 +22,12 @@ const loanManagerAbi = require('../contracts/LoanManager.json');
 const debtEngineAbi = require('../contracts/DebtEngine.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
+const uniswapConverterAbi = require('../contracts/UniswapConverter.json');
+const oracleFactoryAbi = require('../contracts/OracleFactory.json');
 // const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
 export class ContractsService {
-  private _oracleAddress: string = environment.contracts.oracle;
   private _rcnEngine: any;
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
   private _rcnExtension: any;
@@ -35,6 +36,10 @@ export class ContractsService {
   private _debtEngine: any;
   private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
   private _rcnConverterRamp: any;
+  private _uniswapConverterAddress: string = environment.contracts.converter.uniswapProxy;
+  private _uniswapConverter: any;
+  private _oracleFactoryAddress: string = environment.contracts.oracleFactory;
+  private _oracleFactory: any;
 
   constructor(
     private http: HttpClient,
@@ -48,6 +53,8 @@ export class ContractsService {
     this._debtEngine = this.makeContract(debtEngineAbi, environment.contracts.diaspore.debtEngine);
     this._rcnExtension = this.makeContract(extensionAbi.abi, this._rcnExtensionAddress);
     this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
+    this._uniswapConverter = this.makeContract(uniswapConverterAbi.abi, this._uniswapConverterAddress);
+    this._oracleFactory = this.makeContract(oracleFactoryAbi.abi, this._oracleFactoryAddress);
   }
 
   /**
@@ -88,7 +95,6 @@ export class ContractsService {
   /**
    * Get user balance in selected token
    * @param tokenAddress Token address
-   * @param inWei Amount in wei
    * @return Balance amount
    */
   async getUserBalanceInToken(
@@ -211,40 +217,40 @@ export class ContractsService {
   /**
    * Return estimated lend amount in RCN
    * @param loan Loan payload
+   * @param tokenAddress Amount in the selected token
    * @return Required amount
    */
-  async estimateLendAmount(loan: Loan): Promise<number> {
-    if (loan.oracle.address === Utils.address0x) {
-      return loan.amount;
+  async estimateLendAmount(
+    loan: Loan,
+    tokenAddress: string = environment.contracts.rcnToken
+  ): Promise<number> {
+    const rcnToken = environment.contracts.rcnToken;
+
+    let required: number;
+    required = loan.amount;
+
+    if (loan.oracle.address !== Utils.address0x) {
+      const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
+      const oracleData = await this.getOracleData(loan.oracle);
+      const oracleRate = await promisify(oracle.readSample.call, [oracleData]);
+      const rate = oracleRate[0];
+      const decimals = oracleRate[1];
+      required = (rate * loan.amount) / decimals;
     }
 
-    let oracleAddress: string = loan.oracle.address;
-    environment.blacklist.map(element => {
-      if (element.forbidden.includes(oracleAddress)) {
-        oracleAddress = this._oracleAddress;
-      }
-    });
-    let oracle: any;
-
-    switch (loan.network) {
-      case Network.Basalt:
-        oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(oracleAddress);
-        break;
-
-      case Network.Diaspore:
-        oracle = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracleAddress);
-        break;
-
-      default:
-        break;
+    // amount in rcn
+    if (tokenAddress === rcnToken) {
+      return required;
     }
 
-    const oracleData = await this.getOracleData(loan.oracle);
-    const oracleRate = await promisify(oracle.readSample.call, [oracleData]);
-    const rate = oracleRate[0];
-    const decimals = oracleRate[1];
-    const required: number = (rate * loan.amount) / decimals;
-    return required;
+    // amount in currency
+    const requiredInToken = await this.getPriceConvertFrom(
+      rcnToken,
+      tokenAddress,
+      required
+    );
+
+    return requiredInToken;
   }
 
   /**
@@ -252,9 +258,8 @@ export class ContractsService {
    * @param payableAmount Ether amount
    * @param converter Converter address
    * @param fromToken From token address
-   * @param loanManager Loan Manager address
+   * @param maxSpend Max fromToken to spend during lend
    * @param cosigner Cosigner address
-   * @param debtEngine Debt Engine address
    * @param loanId Loan ID
    * @param oracleData Oracle data
    * @param cosignerData Cosigner data
@@ -265,22 +270,20 @@ export class ContractsService {
     payableAmount: number,
     converter: string,
     fromToken: string,
-    loanManager: string,
+    maxSpend: number,
     cosigner: string,
-    debtEngine: string,
     loanId: string,
     oracleData: string,
     cosignerData: string,
-    account: string,
-    callbackData: string
+    callbackData: string,
+    account: string
   ) {
     const web3 = this.web3.opsWeb3;
     return await promisify(this.loadAltContract(web3, this._rcnConverterRamp).lend, [
       converter,
       fromToken,
-      loanManager,
+      maxSpend,
       cosigner,
-      debtEngine,
       loanId,
       oracleData,
       cosignerData,
@@ -329,52 +332,40 @@ export class ContractsService {
   }
 
   /**
-   * Get cost in rcn
-   * @param amount Amount to calculate cost
-   * @param fromToken Token to convert
-   * @return Token cost in wei
+   * Get the cost, in wei, of making a convertion using the value specified
+   * @param fromToken From token address
+   * @param toToken To token address
+   * @param fromAmount Amount to convert
+   * @return Receive amount
    */
-  async getCostInToken(amount: number, token: string) {
-    const web3: any = this.web3.web3;
-    const uniswapProxy: any = environment.contracts.converter.uniswapProxy;
-    const fromToken: any = environment.contracts.rcnToken;
-    amount = new web3.BigNumber(amount);
-
-    if (token === fromToken) {
-      return web3.toWei(amount);
-    }
-
-    const rate = await this.getCost(
-      web3.toWei(amount),
-      uniswapProxy,
+  async getPriceConvertFrom(
+    fromToken: string,
+    toToken: string,
+    fromAmount: number
+  ) {
+    return await promisify(this._uniswapConverter.getPriceConvertFrom, [
       fromToken,
-      token
-    );
-    const tokenCost = new web3.BigNumber(rate[0]);
-    const etherCost = new web3.BigNumber(rate[1]);
-
-    return tokenCost.isZero() ? etherCost : tokenCost;
+      toToken,
+      fromAmount
+    ]);
   }
 
   /**
    * Get the cost, in wei, of making a convertion using the value specified
-   * @param amount Amount to calculate cost
-   * @param converter Converter address to use for swap
-   * @param fromToken Token to convert
-   * @param token RCN Token address
-   * @return _tokenCost and _etherCost
+   * @param fromToken From token address
+   * @param toToken To token address
+   * @param amount Amount to convert
+   * @return Spend amount
    */
-  async getCost(
-    amount: number,
-    converter: string,
+  async getPriceConvertTo(
     fromToken: string,
-    token: string
+    toToken: string,
+    toAmount: number
   ) {
-    return await promisify(this._rcnConverterRamp.getCost, [
-      amount,
-      converter,
+    return await promisify(this._uniswapConverter.getPriceConvertTo, [
       fromToken,
-      token
+      toToken,
+      toAmount
     ]);
   }
 
@@ -410,20 +401,27 @@ export class ContractsService {
     }
   }
 
-  async getRate(loan: any): Promise<BigNumber> {
-    // TODO: Calculate and add cost of the cosigner
-    if (loan.oracle === Utils.address0x) {
-      return loan.rawAmount;
+  /**
+   * Get oracle rate
+   * @param oracleAddress Oracle address
+   * @return Token equivalent in wei
+   */
+  async getRate(oracleAddress: string): Promise<any> {
+    const web3: any = this.web3.web3;
+    if (oracleAddress === Utils.address0x) {
+      return web3.toWei(1);
     }
-    const oracleData = await this.getOracleData(loan.oracle);
-    console.info('Loan oracle address', loan.oracle.address);
-    const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
-    const oracleRate = await promisify(oracle.getRate, [loan.currency, oracleData]);
-    const rate = oracleRate[0];
-    const decimals = oracleRate[1];
-    console.info('Oracle rate obtained', rate, decimals);
-    const required = (rate * loan.rawAmount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
-    console.info('Estimated required rcn is', required);
+
+    const oracle = this.makeContract(oracleAbi.abi, oracleAddress);
+    const oracleRate = await promisify(oracle.readSample.call, []);
+    const amount = web3.toWei(1);
+    const tokens = oracleRate[0];
+    const equivalent = oracleRate[1];
+
+    let rate = new web3.BigNumber(tokens).div(equivalent);
+    rate = new web3.BigNumber(1).div(rate);
+    rate = rate.mul(amount);
+
     return rate;
   }
 
@@ -513,15 +511,7 @@ export class ContractsService {
     }
 
     const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
-    const oracleUrlRcn: any = environment.rcn_oracle.url;
-    let oracleUrl = await promisify(oracleContract.url.call, []);
-
-    environment.blacklist.map(element => {
-      if (element.forbidden.includes(oracleUrl)) {
-        oracleUrl = oracleUrlRcn;
-      }
-    });
-
+    const oracleUrl = await promisify(oracleContract.url.call, []);
     if (oracleUrl === '') {
       return '0x';
     }
@@ -547,6 +537,24 @@ export class ContractsService {
     const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
     const url = await promisify(oracleContract.url.call, []);
     return url;
+  }
+
+  /**
+   * Get oracle address from currency symbol
+   * @param symbol Currency symbol
+   * @return Oracle address
+   */
+  async symbolToOracle(symbol: string) {
+    return await promisify(this._oracleFactory.symbolToOracle.call, [symbol]);
+  }
+
+  /**
+   * Get currency symbol from oracle address
+   * @param oracle Oracle address
+   * @return Currency symbol
+   */
+  async oracleToSymbol(oracle: string) {
+    return await promisify(this._oracleFactory.oracleToSymbol.call, [oracle]);
   }
 
   async getLoan(id: string): Promise<Loan> {
@@ -665,10 +673,10 @@ export class ContractsService {
     let totalDiaspore = 0;
 
     loans.forEach(loan => {
-      if (loan.debt.balance > 0 && loan.network === Network.Basalt) {
+      if (loan.debt && loan.debt.balance > 0 && loan.network === Network.Basalt) {
         totalBasalt += loan.debt.balance;
         pendingBasaltLoans.push(loan.id);
-      } else if (loan.debt.balance > 0 && loan.network === Network.Diaspore) {
+      } else if (loan.debt && loan.debt.balance > 0 && loan.network === Network.Diaspore) {
         totalDiaspore += loan.debt.balance;
         pendingDiasporeLoans.push(loan.id);
       }

@@ -1,7 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { Loan, Network, Status } from '../../models/loan.model';
 import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
+import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { Utils } from '../../utils/utils';
 import { Web3Service } from '../../services/web3.service';
 
@@ -10,7 +12,7 @@ import { Web3Service } from '../../services/web3.service';
   templateUrl: './loan-card.component.html',
   styleUrls: ['./loan-card.component.scss']
 })
-export class LoanCardComponent implements OnInit {
+export class LoanCardComponent implements OnInit, OnDestroy {
   @Input() loan: Loan;
 
   leftLabel: string;
@@ -24,6 +26,9 @@ export class LoanCardComponent implements OnInit {
 
   account: string;
   shortAddress = Utils.shortAddress;
+
+  // subscriptions
+  subscriptionAccount: Subscription;
 
   constructor(
     public dialog: MatDialog,
@@ -56,6 +61,25 @@ export class LoanCardComponent implements OnInit {
       }
     }
 
+    this.loadAccount();
+    this.handleLoginEvents();
+  }
+
+  ngOnDestroy() {
+    this.subscriptionAccount.unsubscribe();
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  handleLoginEvents() {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(() => this.loadAccount());
+  }
+
+  /**
+   * Load user account
+   */
+  async loadAccount() {
     const web3 = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
     this.account = web3.toChecksumAddress(account);
@@ -73,11 +97,34 @@ export class LoanCardComponent implements OnInit {
     }
   }
 
-  openDialog() {
-    const dialogConfig = {
-      data: { loan: this.loan }
+  /**
+   * Open lend dialog
+   */
+  async lend() {
+    // open dialog
+    const openLendDialog = () => {
+      const dialogConfig = {
+        data: { loan: this.loan }
+      };
+      this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
     };
-    this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
+
+    // check user account
+    if (!this.web3Service.loggedIn) {
+      const hasClient = await this.web3Service.requestLogin();
+
+      if (this.web3Service.loggedIn) {
+        openLendDialog();
+        return;
+      }
+
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
+      return;
+    }
+
+    openLendDialog();
   }
 
   getInterestRate(): string {

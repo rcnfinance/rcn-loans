@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, Input } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { Utils } from '../../utils/utils';
+// App Services
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Tx, TxService } from '../../tx.service';
-import { environment } from '../../../environments/environment';
-import { Utils } from '../../utils/utils';
 
 @Component({
   selector: 'app-component-balance',
   templateUrl: './balance.component.html',
   styleUrls: ['./balance.component.scss']
 })
-export class BalanceComponent implements OnInit {
-  private account: string;
+export class BalanceComponent implements OnChanges {
+  @Input() account: string;
 
   private rcnBalance: number;
   private rcnAvailable: number;
@@ -31,12 +32,22 @@ export class BalanceComponent implements OnInit {
     private web3Service: Web3Service,
     private contractService: ContractsService,
     private txService: TxService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {
-    this.loadLogin();
+  ngOnChanges(changes) {
+    const web3: any = this.web3Service.web3;
+    const { account } = changes;
+
+    if (account.currentValue) {
+      this.account = web3.toChecksumAddress(account.currentValue);
+      this.loadRcnBalance();
+      this.loadWithdrawBalance();
+    }
   }
 
+  /**
+   * Update balance and withdraw amount
+   */
   updateDisplay() {
     if (this.rcnBalance) {
       this.displayBalance = Utils.formatAmount(this.rcnBalance);
@@ -62,14 +73,10 @@ export class BalanceComponent implements OnInit {
     }
   }
 
-  async loadLogin() {
-    if (!this.account) {
-      this.account = await this.web3Service.getAccount();
-      this.loadRcnBalance();
-      this.loadWithdrawBalance();
-    }
-  }
-
+  /**
+   * Load basalt and diaspore balance withdraw amounts. Then, add all the values
+   * ​​and show the total available
+   */
   async loadWithdrawBalance() {
     const pendingWithdraws = await this.contractService.getPendingWithdraws();
     this.basaltRcnAvailable = pendingWithdraws[0] / 10 ** 18;
@@ -81,11 +88,17 @@ export class BalanceComponent implements OnInit {
     this.updateDisplay();
   }
 
+  /**
+   * Show the user balance in rcn
+   */
   async loadRcnBalance() {
     this.rcnBalance = (await this.contractService.getUserBalanceRCN() as any).toNumber();
     this.updateDisplay();
   }
 
+  /**
+   * Load the pending withdraw
+   */
   loadOngoingWithdraw() {
     this.ongoingBasaltWithdraw = this.txService.getLastWithdraw(
       environment.contracts.basaltEngine,
@@ -97,6 +110,9 @@ export class BalanceComponent implements OnInit {
     );
   }
 
+  /**
+   * Handle click on withdraw
+   */
   async clickWithdraw() {
     if (this.canWithdraw) {
       if (this.basaltLoansWithBalance.length > 0) {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Loan, Network, Oracle, Descriptor, Debt, Model } from '../models/loan.model';
+import { Loan, Network, Oracle, Descriptor, Debt, Model, Status } from '../models/loan.model';
 import { Utils } from '../utils/utils';
 import { LoanUtils } from '../utils/loan-utils';
 import { Web3Service } from './web3.service';
@@ -153,15 +153,20 @@ export class ApiService {
     let page = 0;
     try {
 
-      const data: any = await this.http.get(this.url.concat('loans?open=true&approved=true&page=' + page
+      const data: any = await this.http.get(this.url.concat('loans?open=true&canceled=false&approved=true&page=' + page
         + '&expiration__gt=' + now)).toPromise();
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
 
       const loansRequests = await this.getAllCompleteLoans(data.content);
-      const notExpiredResquestLoans = loansRequests.filter(loan => loan.model !== this.installmentModelAddress);
-      allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
+      const filteredLoans = loansRequests
+        .filter(loan =>
+          loan.model !== this.installmentModelAddress &&
+          loan.status !== Status.Destroyed
+        );
+
+      allRequestLoans = allRequestLoans.concat(filteredLoans);
       page++;
     } catch (err) {
       console.info('Error', err);
@@ -169,7 +174,7 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const url = this.url.concat('loans?open=true&approved=true&page=' + page
+      const url = this.url.concat('loans?open=true&canceled=false&approved=true&page=' + page
         + '&expiration__gt=' + now);
       urls.push(url);
     }
@@ -241,6 +246,8 @@ export class ApiService {
       );
     }
 
+    const status = loan.canceled ? Status.Destroyed : Number(loan.status);
+
     const newLoan = new Loan(
       Network.Diaspore,
       loan.id,
@@ -250,13 +257,12 @@ export class ApiService {
       descriptor,
       loan.borrower,
       loan.creator,
-      Number(loan.status),
+      status,
       Number(loan.expiration),
       loan.model,
       loan.cosigner,
       debt
     );
-
     return newLoan;
   }
 }

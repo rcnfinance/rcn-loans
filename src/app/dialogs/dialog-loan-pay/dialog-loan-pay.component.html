@@ -1,11 +1,125 @@
 <mat-dialog-content>
   <div class="navbar-container">
     <div class="creator-container">
-      <div class="creator-title">Loan Pay</div>
+      <div class="creator-title">
+        <button
+          matDialogClose
+          class="d-md-none creator-container__back"
+        >
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        Loan pay
+      </div>
     </div>
   </div>
-  <div class="col-sm-12 dialog-padding">
-    <div class="title main-h2">You're Paying a Loan</div>
-    <app-pay-form (submitTransfer)='submit($event)'></app-pay-form>
-  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submitForm()">
+    <div class="container">
+      <div class="dialog-content dialog-padding">
+        <div class="row mb-4 mt-4 mt-md-0">
+          <div class="col col-12 item item--address">
+            <p class="ellipsis">
+              Your loan
+              <strong class="ml-3">
+                {{ loan?.id }}
+              </strong>
+            </p>
+          </div>
+        </div>
+        <div class="row mb-4 mb-md-4">
+          <!-- <div class="col col-12 col-md-3 item item--installment">
+            <p class="item__key">
+              Installment
+            </p>
+            <p class="item__value">
+              3th Pay
+            </p>
+          </div>
+          <div class="col col-12 col-md-3 item item--amount">
+            <p class="item__key">
+              Amount to pay
+            </p>
+            <p class="item__value">
+              866 DAI
+            </p>
+          </div>
+          <div class="col col-12 col-md-6 item item--due-date">
+            <p class="item__key">
+              Due date <span>(Today)</span>
+            </p>
+            <p class="item__value">
+              09/15/2019 10:00 PM - GMT
+            </p>
+          </div> -->
+        </div>
+        <div class="row">
+          <div class="col col-12 col-md-4 item item--want-to-pay">
+            <p class="item__key uppercase">
+              Amount you want to pay
+            </p>
+            <mat-form-field class="mt-2">
+              <input
+                matInput
+                formControlName="amount"
+                type="number"
+                min='0'
+                step="any"
+                placeholder="Set amount"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col col-12 col-md-6 offset-md-2 mt-3 mt-md-0 item item--left-to-pay">
+            <p class="item__key uppercase">
+              Left to pay
+            </p>
+            <p class="item__value">
+              <strong>{{ pendingAmount }}</strong> {{ currency?.symbol }}
+            </p>
+            <!-- TODO: Add this disclaimer
+            <p class="disclaimer">
+              <i class="fas fa-exclamation-triangle mr-1"></i>
+              You are paying an amount less than the corresponding, this will
+              affect your payment schedule.
+            </p>
+            -->
+          </div>
+        </div>
+      </div>
+
+      <div class="margintop15"></div>
+
+      <div class="dialog-divisor dialog-padding py-0 mt-4 mt-md-0 row">
+        <div class="dialog-divisor__content col-sm-12">
+          <i class="material-icons mr-2">
+            info
+          </i>
+          The value of the payments it's going to be converted to RCN.
+        </div>
+      </div>
+
+      <div class="margintop20"></div>
+
+      <div class="dialog-footer dialog-padding pt-0 pb-3 row">
+        <div class="dialog-footer__label col-sm-12 col-md-6">
+          <p>
+            Paying from your <strong>{{ shortAccount }}</strong> account.
+          </p>
+        </div>
+        <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1">
+          <button
+            type="submit"
+            mat-raised-button
+            class="button button-primary"
+            [class.button-disabled]="loading || !form?.valid"
+          >
+            {{ submitButtonText }}
+          </button>
+          <button mat-raised-button class="button button-clear-dark mat-elevation-z" [mat-dialog-close]='false'>
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </form>
 </mat-dialog-content>

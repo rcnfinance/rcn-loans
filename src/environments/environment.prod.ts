@@ -51,6 +51,7 @@ export const environment = {
     basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
     oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf', // FIXME: Ropsten oracle
+    oracleFactory: '0xe8e49d772b106e2acfc7f821cbd77b97a728aaac', // FIXME: Ropsten oracle factory
     diaspore: {
       debtEngine: '0x80db22675dad70e44b64029510778583187faddb',
       loanManager: '0xb55b0f33d6a2a03a275ca85d58e9357e1a141187',
@@ -72,7 +73,8 @@ export const environment = {
       params: {
         marginSpend: 5000,
         maxSpend: 0,
-        rebuyThreshold: 40000000000000000000
+        rebuyThreshold: 40000000000000000000,
+        aditionalSlippage: '2'
       }
     },
     decentraland: {
@@ -93,6 +95,13 @@ export const environment = {
   dir: {
     '0x263231ed9b51084816a44e18d16c0f6d0727491f': Agent.RipioCreator
   },
+  filterCurrencies: [
+    'RCN',
+    'DAI',
+    'MANA',
+    'ARS',
+    'USD'
+  ],
   usableCurrencies: [
     {
       symbol: 'RCN',
