@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
+import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
@@ -16,6 +17,7 @@ export class ActiveLoansComponent implements OnInit {
   available: any;
   availableLoans = true;
   loans = [];
+  private virtualScroller: VirtualScrollerComponent;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -36,6 +38,9 @@ export class ActiveLoansComponent implements OnInit {
       if (this.loans.length <= 0) {
         this.availableLoans = false;
       }
+      setTimeout(() => {
+        this.afterResize();
+      }, 3000);
     });
   }
 
@@ -45,5 +50,10 @@ export class ActiveLoansComponent implements OnInit {
 
     // Available Loans service
     this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
+  }
+
+  // call this function after resize + animation end
+  afterResize() {
+    this.virtualScroller.refresh();
   }
 }
