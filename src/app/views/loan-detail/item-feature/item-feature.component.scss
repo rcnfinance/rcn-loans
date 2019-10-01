@@ -3,8 +3,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 45px;
-  min-width: 45px;
+  height: 40px;
+  min-width: 40px;
   border-radius: 50px;
   background-color: #565759;
   margin-right: 10px;
@@ -13,21 +13,28 @@
 .rcn-icon {
   width: 28px;
   height: 28px;
-  filter: grayscale(100%) contrast(295%);
+  filter: grayscale(100%) contrast(500%);
 }
 
 .icon {
-  font-size: 17px;
-  color: #262629;
+  font-size: 18px;
+  color: #101010;
 }
 
 a {
   color: #4155ff;
   font-weight: 600;
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
 }
 
 a:hover {
   color: #4155ff;
+}
+
+.title {
+  text-transform: uppercase;
+  font-size: 13px;
 }
 
 .details-box {
@@ -37,4 +44,5 @@ a:hover {
 .description {
   font-family: 'Roboto', sans-serif;
   font-weight: 600;
+  font-size: 15px;
 }

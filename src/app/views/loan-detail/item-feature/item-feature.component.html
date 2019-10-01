@@ -1,10 +1,12 @@
 <article class="d-flex">
   <div class="icon-box">
-      <!-- TODO: Find a better way to display the rcn logo. -->
-      <i class="{{ feature.icon }} icon"><img src="{{ feature.icon }}" alt="" class="rcn-icon"></i>
+    <!-- TODO: Find a better way to display the rcn logo. -->
+    <i class="{{ feature.icon }} icon"
+      ><img src="{{ feature.icon }}" alt="" class="rcn-icon"
+    /></i>
   </div>
   <div class="details-box">
-    <p>
+    <p class="title">
       {{ feature.title }}
     </p>
     <ng-container *ngIf="feature.url; else itemDescription">
@@ -13,8 +15,16 @@
       </a>
     </ng-container>
     <ng-template #itemDescription>
-      <p class="description">
-        {{ feature.description }}
+      <p
+        class="description"
+        matTooltip="{{ feature.description }}"
+        [matTooltipDisabled]="feature.description.length < 20"
+      >
+        {{
+          feature.description.length > 18
+            ? (feature.description | slice: 0:18) + "..."
+            : feature.description
+        }}
       </p>
     </ng-template>
   </div>
