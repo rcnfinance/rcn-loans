@@ -105,7 +105,7 @@
   padding: 0 15px;
 }
 
-@media (min-width: 992px) { 
+@media (min-width: 992px) {
   .loan-detail{
     width: 970px;
     margin-left: auto;
@@ -123,11 +123,9 @@
     &.flex-container{
       flex-direction: row;
       .left{
-        width: 50%;
         flex: 1;
-      } 
+      }
       .right{
-        width: 50%;
         display: initial;
       }
     }
@@ -137,7 +135,7 @@
   }
 }
 
-@media (min-width: 1200px) { 
+@media (min-width: 1200px) {
   .loan-detail{
     width: 1170px;
   }
@@ -154,4 +152,3 @@
     }
   }
 }
-

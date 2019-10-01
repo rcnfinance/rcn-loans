@@ -16,7 +16,7 @@
   </div>
 
   <div class="loan-description flex-container">
-    <div class="left col-md-5 col-xs-12">
+    <div class="left px-0 col-xs-12 col-md-5">
       <div class="avatar-information">
         <div class="flex-item">
           <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
@@ -103,7 +103,7 @@
       </div>
     </div>
 
-    <div class="right col-md-7 col-xs-12">
+    <div class="right px-0 col-xs-12 col-md-7">
       <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
       <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
     </div>
