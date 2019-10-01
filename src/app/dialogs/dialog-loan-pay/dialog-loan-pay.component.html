@@ -16,11 +16,11 @@
   <form [formGroup]="form" (ngSubmit)="submitForm()">
     <div class="container">
       <div class="dialog-content dialog-padding">
-        <div class="row mb-4 mt-4 mt-md-0">
+        <div class="row mb-3 mt-4 mt-md-0">
           <div class="col col-12 item item--address">
             <p class="ellipsis">
               Your loan
-              <strong class="ml-3">
+              <strong class="ml-2">
                 {{ loan?.id }}
               </strong>
             </p>
@@ -105,7 +105,7 @@
             Paying from your <strong>{{ shortAccount }}</strong> account.
           </p>
         </div>
-        <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1">
+        <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
           <button
             type="submit"
             mat-raised-button
@@ -114,7 +114,11 @@
           >
             {{ submitButtonText }}
           </button>
-          <button mat-raised-button class="button button-clear-dark mat-elevation-z" [mat-dialog-close]='false'>
+          <button
+            mat-raised-button
+            class="button button-clear-dark mat-elevation-z d-none d-md-inline-block"
+            [mat-dialog-close]='false'
+          >
             Close
           </button>
         </div>
