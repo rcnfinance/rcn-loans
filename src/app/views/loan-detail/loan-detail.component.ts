@@ -128,7 +128,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     if (this.subscriptionAccount) {
-      this.subscriptionAccount.unsubscribe();
+      try {
+        this.subscriptionAccount.unsubscribe();
+      } catch (e) { }
     }
   }
 
