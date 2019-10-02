@@ -3,6 +3,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
+import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
 import { FilterLoansService } from '../../services/filter-loans.service';
@@ -29,9 +30,10 @@ export class RequestedLoanComponent implements OnInit {
   filtersOpen = undefined;
 
   constructor(
-    private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
+    private titleService: TitleService,
     private availableLoansService: AvailableLoansService,
+    private contractsService: ContractsService,
     private filterLoansService: FilterLoansService
   ) { }
 
@@ -66,10 +68,12 @@ export class RequestedLoanComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.spinner.show(); // Initialize spinner
+    this.titleService.changeTitle('Requests');
+    this.spinner.show();
     this.loadLoans();
 
     // Available Loans service
+    // FIXME: add unsubscribe
     this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
   }
 }

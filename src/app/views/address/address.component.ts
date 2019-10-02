@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
+import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
 import { Web3Service } from '../../services/web3.service';
@@ -22,14 +23,17 @@ export class AddressComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
+    private titleService: TitleService,
+    private contractsService: ContractsService,
     private availableLoansService: AvailableLoansService,
     private web3Service: Web3Service
   ) {}
 
   ngOnInit() {
-    this.spinner.show(); // Initialize spinner
+    this.titleService.changeTitle('Address');
+    this.spinner.show();
+
     this.route.params.subscribe(params => {
       const web3 = this.web3Service.web3;
       this.address = web3.toChecksumAddress(params['address']);
@@ -37,6 +41,7 @@ export class AddressComponent implements OnInit {
     });
 
     // Available Loans service
+    // FIXME: add unsubscribe
     this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
   }
 
