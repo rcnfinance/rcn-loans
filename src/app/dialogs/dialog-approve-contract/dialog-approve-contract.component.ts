@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 // App Component
 import { Web3Service } from '../../services/web3.service';
@@ -47,8 +47,14 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     private web3Service: Web3Service,
     private contractsService: ContractsService,
     private eventsService: EventsService,
-    public dialog: MatDialog
-  ) { }
+    public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    if (this.data) {
+      this.onlyAddress = this.data.onlyAddress;
+      this.onlyToken = this.data.onlyToken;
+    }
+  }
 
   async ngOnInit() {
     await this.loadCurrencies();

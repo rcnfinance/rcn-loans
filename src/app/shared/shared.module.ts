@@ -60,8 +60,10 @@ import { EventsService } from './../services/events.service';
     RouterModule,
     MaterialModule,
     BlockiesModule,
+    FormsModule,
     ReactiveFormsModule,
-    FormsModule
+    MaterialModule,
+    BlockiesModule
   ],
   declarations: [
     FooterComponent,
@@ -120,9 +122,10 @@ import { EventsService } from './../services/events.service';
     EventsService
   ],
   exports: [
+    FormsModule,
+    ReactiveFormsModule,
     FooterComponent,
     LoanCardComponent,
-
     CreatorContainerComponent,
     AvatarComponent,
     LoanAvatarComponent,
