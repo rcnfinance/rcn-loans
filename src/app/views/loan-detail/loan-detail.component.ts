@@ -136,8 +136,6 @@ export class LoanDetailComponent implements OnInit {
       ['Duration', Utils.formatDelta(this.loan.duration)]
     ];
 
-    // da
-
     // Interest middle text
     this.interestMiddleText =
       '~ ' + this.formatInterest(this.loan.status === Status.Indebt ? this.loan.annualPunitoryInterest : this.loan.annualInterest) + ' %';
