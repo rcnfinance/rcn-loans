@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
-import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
@@ -19,7 +18,6 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
   available: any;
   availableLoans = true;
   loans = [];
-  private virtualScroller: VirtualScrollerComponent;
 
   // subscriptions
   subscriptionAvailable: Subscription;
@@ -70,16 +68,5 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
     } else {
       this.availableLoans = true;
     }
-
-    setTimeout(() => {
-      this.afterResize();
-    }, 3000);
-  }
-
-  /**
-   * Call this function after resize + animation end
-   */
-  afterResize() {
-    this.virtualScroller.refresh();
   }
 }
