@@ -11,11 +11,11 @@
     <div class="profile-container" *ngIf='hasAccount'>
       <div class="spacing-container-top" *ngIf='!hasAccount'></div>
       <div class="profile-row">
-        <app-avatar [seed]=lender></app-avatar>
+        <app-avatar [seed]=account></app-avatar>
         <div class="title title-centered">Wallet address</div>
       </div>
       <div class="profile-row">
-        <div class="title margintop5 ellipsis">{{ lender }}</div>
+        <div class="title margintop5 ellipsis">{{ account }}</div>
       </div>
     </div>
     <div class="balance-container" *ngIf='hasAccount'>
@@ -48,11 +48,11 @@
         <div class="profile-container animation-opacity" *ngIf='hasAccount'>
           <div class="spacing-container-top" *ngIf='!hasAccount'></div>
           <div class="profile-row">
-            <app-avatar [seed]=lender></app-avatar>
+            <app-avatar [seed]=account></app-avatar>
             <div class="title title-centered">Wallet address</div>
           </div>
           <div class="profile-row">
-            <div class="title margintop5 ellipsis">{{ lender }}</div>
+            <div class="title margintop5 ellipsis">{{ account }}</div>
           </div>
         </div>
         <div class="balance-container animation-opacity" *ngIf='hasAccount'>
