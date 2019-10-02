@@ -6,6 +6,10 @@
 
 - Improving Restricted Region Dialog
 
+### Fix:
+
+- Show "in debt for" instead of "remaining" after a loan is due
+
 ## **0.0.13** Avocados - 2019/02/15
 
 ### Feature:
