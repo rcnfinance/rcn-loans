@@ -1,4 +1,8 @@
-<div class="requested-wrapper" [ngClass]="{'active': filtersOpen, 'disabled': filtersOpen === false}">
+<div
+  class="body-scrollable requested-wrapper"
+  [ngClass]="{'active': filtersOpen, 'disabled': filtersOpen === false}"
+  #scrollingBlock
+>
   <ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
   <div class="container">
     <div class="row">
@@ -26,9 +30,23 @@
         <div class="title main-h1">There are no available Loans</div>
       </div>
 
-      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2 card-col" *ngFor='let loan of loans; let i of index'>
-        <app-loan-card [loan]="loan"></app-loan-card>
-      </div>
+      <virtual-scroller
+        #scroll
+        [items]="loans"
+        [parentScroll]="scrollingBlock"
+        [bufferAmount]="4"
+        [scrollThrottlingTime]="500"
+      >
+        <div
+          class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
+          *ngFor="let loan of scroll.viewPortItems"
+        >
+          <app-loan-card [loan]="loan"></app-loan-card>
+        </div>
+      </virtual-scroller>
+
     </div>
   </div>
+
+  <app-footer></app-footer>
 </div>

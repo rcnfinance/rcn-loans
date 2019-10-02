@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // App Modules
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from './../../material/material.module';
 // App Services
@@ -16,6 +17,7 @@ import { RequestedLoanComponent } from './requested-loan.component';
   imports: [
     CommonModule,
     NgxSpinnerModule,
+    VirtualScrollerModule,
     MaterialModule,
     SharedModule,
     ReactiveFormsModule,
