@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material';
 // App Components
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Services
@@ -14,25 +14,25 @@ import { AvailableLoansService } from '../../services/available-loans.service';
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent implements OnInit, OnDestroy {
   account: string;
   version: string;
   versionString: string;
   linkContract: string;
   contract: string;
   title: string;
-  lastTitle: string;
-  previousTitle: string;
-  oldestTitle: string;  // Defines oldest for profile unlogged case
-  titles = ['Requests', 'Activity', 'Loans', 'Menu', 'Profile'];
   available: any;
+
   // Nav Mobile toggled
-  activeButton = true;
   navmobileToggled = false;
-  id = 0;
-  lastId = 0;
-  previousLast: number;
-  oldestId: number;  // Defines oldest for profile unlogged case
+
+  // subscriptions
+  subscriptions = {
+    account: null,
+    sidebar: null,
+    title: null,
+    available: null
+  };
 
   constructor(
     public dialog: MatDialog,
@@ -42,60 +42,7 @@ export class FooterComponent implements OnInit {
     private availableLoansService: AvailableLoansService
   ) {}
 
-  // Toggle Menu
-  navmobileToggle() {
-    this.sidebarService.navmobileService(this.navmobileToggled = !this.navmobileToggled);
-  }
-  navmobileClose() {
-    this.sidebarService.navmobileService(this.navmobileToggled = false);
-  }
-  navmobileOpen() {
-    this.sidebarService.navmobileService(this.navmobileToggled = true);
-  }
-
-  addClass(clickedId) {
-    this.lastId = this.id;
-    this.id = clickedId;
-    if (clickedId !== 3 || this.lastId !== 3) { // If i dont click on menu & dont click it twice
-      this.oldestId = this.previousLast; // Defines oldest for profile unlogged case
-      this.previousLast = this.lastId;
-    } else { // I click on menu & click it twice
-      this.id = this.previousLast;
-      this.sidebarService.navmobileService(this.navmobileToggled = true);
-    }
-  }
-
-  newTitle(clickedTitle) {
-    this.lastTitle = this.title;
-    this.title = clickedTitle;
-    if (clickedTitle !== 3 || this.lastTitle !== 'Menu') { // If i dont click on menu & dont click it twice
-      this.oldestTitle = this.previousTitle; // Defines oldest for profile unlogged case
-      this.previousTitle = this.lastTitle;
-      this.titleService.changeTitle(this.titles[clickedTitle]);
-    } else { // I click on menu & click it twice
-      this.title = this.previousTitle;
-      this.titleService.changeTitle(this.title);
-    }
-  }
-
-  // Open Client Dialog
-  openDialogClient() {
-    const dialogRef: MatDialogRef<DialogClientAccountComponent> = this.dialog.open(DialogClientAccountComponent, {});
-    dialogRef.afterClosed().subscribe(() => {
-      if (this.lastId !== 3 || this.lastTitle !== 'Menu') { // If i dont click on menu & dont click it twice
-        this.addClass(this.lastId);
-        this.titleService.changeTitle(this.lastTitle);
-      } else {
-        this.addClass(this.oldestId);
-        this.titleService.changeTitle(this.oldestTitle);
-      }
-    });
-  }
-  get hasAccount(): boolean {
-    return this.account !== undefined;
-  }
-
-  ngOnInit() {
+  async ngOnInit() {
     const env = environment;
     this.contract = env.contracts.basaltEngine;
     this.version = env.version;
@@ -103,15 +50,66 @@ export class FooterComponent implements OnInit {
     this.linkContract = env.network.explorer.address.replace('${address}', env.contracts.basaltEngine);
 
     // Service subscriber
-    this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
-    this.titleService.currentTitle.subscribe(title => this.title = title);
+    this.subscriptions.sidebar = this.sidebarService.currentNavmobile.subscribe(
+      navmobileToggled => this.navmobileToggled = navmobileToggled
+    );
+    this.subscriptions.title = this.titleService.currentTitle.subscribe(
+      title => this.title = title
+    );
+    this.subscriptions.account = this.web3Service.loginEvent.subscribe(
+      () => this.loadAccount()
+    );
+    this.subscriptions.available = this.availableLoansService.currentAvailable.subscribe(
+      available => this.available = available
+    );
 
-    // Available Loans service
-    this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
+    // Initial account
+    await this.loadAccount();
+  }
 
-    // Account info
-    this.web3Service.getAccount().then((account) => {
-      this.account = account;
-    });
+  ngOnDestroy() {
+    try {
+      this.subscriptions.sidebar.unsubscribe();
+      this.subscriptions.title.unsubscribe();
+      this.subscriptions.account.unsubscribe();
+      this.subscriptions.available.unsubscribe();
+    } catch (e) { }
+  }
+
+  /**
+   * Toggle navbar menu
+   */
+  navmobileToggle() {
+    this.sidebarService.navmobileService(this.navmobileToggled = !this.navmobileToggled);
+  }
+
+  /**
+   * Close navbar menu
+   */
+  navmobileClose() {
+    this.sidebarService.navmobileService(this.navmobileToggled = false);
+  }
+
+  /**
+   * Open Client Dialog
+   */
+  openDialogClient() {
+    this.dialog.open(DialogClientAccountComponent, {});
+  }
+
+  /**
+   * User is logged in
+   * @return Account address
+   */
+  get hasAccount(): boolean {
+    return this.account !== undefined;
+  }
+
+  /**
+   * Load user account
+   */
+  private async loadAccount() {
+    const account = await this.web3Service.getAccount();
+    this.account = account;
   }
 }

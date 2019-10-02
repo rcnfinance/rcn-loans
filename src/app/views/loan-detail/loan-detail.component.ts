@@ -12,6 +12,7 @@ import { Brand } from '../../models/brand.model';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Services
+import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
@@ -77,18 +78,20 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   subscriptionAccount: Subscription;
 
   constructor(
-    private identityService: IdentityService,
     private route: ActivatedRoute,
-    private cosignerService: CosignerService,
-    private contractsService: ContractsService,
     private router: Router,
-    private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
+    private titleService: TitleService,
+    private contractsService: ContractsService,
+    private cosignerService: CosignerService,
+    private identityService: IdentityService,
+    private web3Service: Web3Service,
     private brandingService: BrandingService,
     public dialog: MatDialog
   ) { }
 
   ngOnInit() {
+    this.titleService.changeTitle('Loan detail');
     this.spinner.show();
 
     this.route.params.subscribe(async params => {

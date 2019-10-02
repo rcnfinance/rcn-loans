@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
+import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
 import { Web3Service } from '../../services/web3.service';
@@ -14,22 +16,28 @@ import { Web3Service } from '../../services/web3.service';
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss']
 })
-export class AddressComponent implements OnInit {
+export class AddressComponent implements OnInit, OnDestroy {
   address: string;
   available: any;
   loans = [];
   availableLoans = true;
 
+  // subscriptions
+  subscriptionAvailable: Subscription;
+
   constructor(
     private route: ActivatedRoute,
-    private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
+    private titleService: TitleService,
+    private contractsService: ContractsService,
     private availableLoansService: AvailableLoansService,
     private web3Service: Web3Service
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.spinner.show(); // Initialize spinner
+    this.titleService.changeTitle('Address');
+    this.spinner.show();
+
     this.route.params.subscribe(params => {
       const web3 = this.web3Service.web3;
       this.address = web3.toChecksumAddress(params['address']);
@@ -37,16 +45,28 @@ export class AddressComponent implements OnInit {
     });
 
     // Available Loans service
-    this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
+    this.subscriptionAvailable = this.availableLoansService.currentAvailable.subscribe(
+      available => this.available = available
+    );
+  }
+
+  ngOnDestroy() {
+    try {
+      this.subscriptionAvailable.unsubscribe();
+    } catch (e) { }
   }
 
   private async loadLoans(address: string) {
     try {
-      const result: Loan[] = await this.contractsService.getLoansOfLender(address);
-      this.loans = result;
+      const loans: Loan[] = await this.contractsService.getLoansOfLender(address);
+      this.loans = loans;
+
       this.upgradeAvaiblable();
       this.spinner.hide();
-      if (this.loans.length <= 0) {
+
+      if (this.loans.length) {
+        this.availableLoans = true;
+      } else {
         this.availableLoans = false;
       }
 
@@ -56,7 +76,9 @@ export class AddressComponent implements OnInit {
     }
   }
 
-  // Available Loans service
+  /**
+   * Update available loans number
+   */
   private upgradeAvaiblable() {
     this.availableLoansService.updateAvailable(this.loans.length);
   }
