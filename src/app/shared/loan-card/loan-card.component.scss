@@ -9,7 +9,6 @@
 .card-container{
   position: relative;
   padding: 15px 20px;
-  margin: 0px 5px;
   font-family: 'Raleway', sans-serif;
   border-radius: 2px;
   background-color: $fifth;
@@ -111,11 +110,17 @@
   }
 }
 
-@media (min-width: 768px){
-  .card-col{
+@media (min-width: 768px) {
+  .card-col {
     margin-top: 30px;
   }
-  .card-container{
+  .card-container {
     margin-top: 0px;
+  }
+}
+
+@media (min-width: 992px) {
+  .card-container {
+    margin: 0px 5px;
   }
 }

@@ -361,7 +361,8 @@ mat-sidenav-container.mat-drawer-container {
         position: absolute;
         bottom: 0;
         left: 0;
-        padding: 4px 22px;
+        min-width: auto;
+        padding: 0 22px;
         font-size: .8em;
         color: white;
       }
@@ -545,8 +546,12 @@ mat-checkbox{
     }
   }
   //Dialog
-  .mat-dialog-content{
-    min-width: 550px;
+  .cdk-global-overlay-wrapper {
+    .mat-dialog-content{
+      min-width: 550px;
+      height: auto;
+      max-height: 65vh;
+    }
   }
   //Sidebar
   mat-sidenav-container.mat-drawer-container {
@@ -561,8 +566,6 @@ mat-checkbox{
   .cdk-global-overlay-wrapper {
     .mat-dialog-content {
       min-width: 750px;
-      height: auto;
-      max-height: 65vh;
     }
   }
 }
@@ -738,8 +741,6 @@ mat-checkbox{
 // Loan container
 .loan-container {
   padding-top: 30px;
-  margin-left: -20px;
-  margin-right: -20px;
 }
 
 // Layout
@@ -847,7 +848,14 @@ footer {
   }
 }
 
-@media (min-width: 992px){
+@media (min-width: 992px) {
+  .container {
+    max-width: 1300px;
+  }
+  .loan-container {
+    margin-left: -20px;
+    margin-right: -20px;
+  }
   footer {
     height: auto;
     position: absolute;
@@ -890,12 +898,5 @@ footer {
     .txt{
       line-height: 1.9;
     }
-  }
-}
-
-
-@media (min-width: 992px) {
-  .container {
-    max-width: 1300px;
   }
 }
