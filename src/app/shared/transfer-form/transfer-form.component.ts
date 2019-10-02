@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 // App Component
 import { Web3Service } from '../../services/web3.service';
 
@@ -11,12 +11,31 @@ import { Web3Service } from '../../services/web3.service';
 export class TransferFormComponent implements OnInit {
   @Output() submitTransfer = new EventEmitter<any>();
   invalidAddress = false;
+
+  form: FormGroup;
+
   constructor(
     private web3Service: Web3Service
   ) { }
-  onSubmit(event: any, form: NgForm) {
-    event.preventDefault();
-    const to = form.value;
+
+  ngOnInit() {
+    this.form = new FormGroup({
+      address: new FormControl(null, Validators.required)
+    });
+  }
+
+  /**
+   * Called when form is submitted
+   */
+  onSubmit() {
+    const form: FormGroup = this.form;
+
+    if (!form.valid) {
+      return;
+    }
+
+    const to = form.value.address;
+
     if (this.isAddress(to)) {
       this.invalidAddress = false;
       this.submitTransfer.emit(to);
@@ -24,8 +43,12 @@ export class TransferFormComponent implements OnInit {
       this.invalidAddress = true;
     }
   }
-  ngOnInit() {
-  }
+
+  /**
+   * Check if an address is valid
+   * @param address Address to check
+   * @return Boolean
+   */
   private isAddress(address: string): boolean {
     const web3 = this.web3Service.web3;
 
