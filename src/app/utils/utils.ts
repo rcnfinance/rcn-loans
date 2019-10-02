@@ -41,7 +41,11 @@ export class Utils {
     return address.substr(0, 4) + '...' + address.substr(-4);
   }
 
-  static formatDelta(totalSeconds: number, display: number = 2): string {
+  static capFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  static formatDelta(totalSeconds: number, display: number = 2, showSeconds = true): string {
     let result = '';
     let visible = 0;
 
@@ -52,10 +56,9 @@ export class Utils {
       }
     }
 
-    let prefix = '';
+    const prefix = '';
 
     if (totalSeconds < 0) {
-      prefix = '- ';
       totalSeconds *= -1;
     }
 
@@ -72,8 +75,11 @@ export class Utils {
     totalSeconds %= 3600;
     const minutes = Math.floor(totalSeconds / 60);
     timeToStr(minutes, ' minutes, ');
-    const seconds = totalSeconds % 60;
-    timeToStr(seconds, ' seconds, ');
+
+    if (showSeconds) {
+      const seconds = totalSeconds % 60;
+      timeToStr(seconds, ' seconds, ');
+    }
 
     return prefix + result.slice(0, -2);
   }

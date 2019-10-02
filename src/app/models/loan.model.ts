@@ -18,27 +18,27 @@ function calculateInterest(timeDelta: number, interestRate: number, amount: numb
 
 export class Loan {
   constructor(
-        public engine: string,
-        public id: number,
-        public oracle: string,
-        public statusFlag: number,
-        public borrower: string,
-        public creator: string,
-        public rawAmount: number,
-        public duration: number,
-        public rawAnnualInterest: number,
-        public rawAnnualPunitoryInterest: number,
-        public currencyRaw: string,
-        public rawPaid: number,
-        public cumulatedInterest: number,
-        public cumulatedPunnitoryInterest: number,
-        public interestTimestamp: number,
-        public dueTimestamp: number,
-        public lenderBalance: number,
-        public expirationRequest: number,
-        public owner: string,
-        public cosigner: string
-    ) { }
+    public engine: string,
+    public id: number,
+    public oracle: string,
+    public statusFlag: number,
+    public borrower: string,
+    public creator: string,
+    public rawAmount: number,
+    public duration: number,
+    public rawAnnualInterest: number,
+    public rawAnnualPunitoryInterest: number,
+    public currencyRaw: string,
+    public rawPaid: number,
+    public cumulatedInterest: number,
+    public cumulatedPunnitoryInterest: number,
+    public interestTimestamp: number,
+    public dueTimestamp: number,
+    public lenderBalance: number,
+    public expirationRequest: number,
+    public owner: string,
+    public cosigner: string
+  ) { }
 
   get status(): Status {
     if (this.statusFlag === Status.Ongoing && timestamp() > this.dueTimestamp) {
@@ -134,7 +134,13 @@ export class Loan {
   }
 
   get expectedReturn(): number {
+    // Loan is in running normally so this calculate pendingAmount with AnnualInterest
     return ((this.amount * 100000 * this.duration) / this.rawAnnualInterest) + this.amount;
+  }
+
+  get expectedPunitoryReturn(): number {
+    // Loan is in debt so this calculate pendingAmount with PunitoryInterest
+    return this.total - this.paid;
   }
 
   get borrowerShort(): string {

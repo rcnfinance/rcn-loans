@@ -4,21 +4,21 @@
   <app-creator-container [loan]=loan></app-creator-container>
   <div class="card-row">
     <div class="card-property">
-      <div class="title">{{ 'Borrower' }}</div>
+      <div class="title"><h4 class="hStyle">{{ 'Borrower' }}</h4></div>
       <div class="paragraph">{{ loan.borrowerShort }}</div>
     </div>
     <div class="card-property">
-      <div class="title">{{ durationLabel }}</div>
+      <div class="title"><h4 class="hStyle">{{ durationLabel }}</h4></div>
       <div class="paragraph">{{ durationValue }}</div>
     </div>
     <div class="card-property">
-      <div class="title">{{ 'Annual Interest / Punitory' }}</div>
+      <div class="title"><h4 class="hStyle">{{ 'Annual Interest / Punitory' }}</h4></div>
       <div class="paragraph"> ~ {{ formatInterest(loan.annualInterest) }} % /  ~ {{ formatInterest(loan.annualPunitoryInterest) }} %</div>
     </div>
     <div class="properties-block">
-      <div class="title">{{ leftLabel }}</div>
+      <div class="title"><h4 class="hStyle">{{ leftLabel }}</h4></div>
       <div class="currency">{{ loan.currency }}</div>
-      <div class="title">{{ rightLabel }}</div>
+      <div class="title"><h4 class="hStyle">{{ rightLabel }}</h4></div>
     </div>
     <div class="conversion-block">
       <div class="block-title">{{ leftValue }}</div>

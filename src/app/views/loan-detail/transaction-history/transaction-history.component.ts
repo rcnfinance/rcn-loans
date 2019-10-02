@@ -48,7 +48,7 @@ export class TransactionHistoryComponent implements OnInit {
   timelinesProperties: object = {
     'loan_request': {
       'title': 'Requested',
-      'messege': 'Requested',
+      'message': 'Requested',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'code',
@@ -58,7 +58,7 @@ export class TransactionHistoryComponent implements OnInit {
     },
     'approved_loan': {
       'title': 'Loan Approved',
-      'messege': 'Loan Approved',
+      'message': 'Loan Approved',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'done',
@@ -68,7 +68,7 @@ export class TransactionHistoryComponent implements OnInit {
     },
     'lent': {
       'title': 'Lent',
-      'messege': 'Lent',
+      'message': 'Lent',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'trending_up',
@@ -78,7 +78,7 @@ export class TransactionHistoryComponent implements OnInit {
     },
     'partial_payment': {
       'title': 'Pay',
-      'messege': 'Pay',
+      'message': 'Pay',
       'status': 'active',
       'awesomeClass': 'fas fa-coins',
       'color': 'green',
@@ -87,7 +87,7 @@ export class TransactionHistoryComponent implements OnInit {
     },
     'total_payment': {
       'title': 'Completed',
-      'messege': 'Completed',
+      'message': 'Completed',
       'status': 'active',
       'awesomeClass': 'fas fa-check',
       'color': 'gray7',
@@ -96,7 +96,7 @@ export class TransactionHistoryComponent implements OnInit {
     },
     'loan_in_debt': {
       'title': 'In Debt',
-      'messege': 'In Debt',
+      'message': 'In Debt',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'error_outline',
@@ -106,7 +106,7 @@ export class TransactionHistoryComponent implements OnInit {
     },
     'withdraw': {
       'title': 'Withdraw',
-      'messege': 'Withdraw',
+      'message': 'Withdraw',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'call_made',
@@ -116,7 +116,7 @@ export class TransactionHistoryComponent implements OnInit {
     },
     'transfer': {
       'title': 'Transfer',
-      'messege': 'Transfer',
+      'message': 'Transfer',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'swap_horiz',
@@ -127,7 +127,7 @@ export class TransactionHistoryComponent implements OnInit {
     },
     'loan_expired': {
       'title': 'Expired',
-      'messege': 'Expired',
+      'message': 'Expired',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'snooze',
@@ -138,7 +138,7 @@ export class TransactionHistoryComponent implements OnInit {
     },
     'destroyed_loan': {
       'title': 'Destroyed',
-      'messege': 'Destroyed',
+      'message': 'Destroyed',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'delete',

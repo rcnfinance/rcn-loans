@@ -1,0 +1,12 @@
+<div class="notifications-container" [ngClass]="{'scrollOn': oNotifications.length > 10}" 
+[@anmNotifications]="viewDetail === 'notifications' ? 'open' : 'closed'">
+  <ul>
+    <li>Notifications</li>
+    <li *ngFor='let notification of oNotifications; let i of index'>
+      <app-notification-item [notification]='notification'></app-notification-item>
+    </li>
+    <li class='unavailable' *ngIf='oNotifications.length === 0'>
+      There is no available Notifications
+    </li>
+  </ul>
+</div>

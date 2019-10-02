@@ -1,0 +1,25 @@
+@import './../../../../scss/_variables.scss'; //variables
+
+.button-group{
+  position: relative;
+  .button{
+    cursor: pointer;
+    &.active{i,svg{color: $primary;}};
+    i,
+    svg{ font-size: 22px; @include transition(); }
+    .available-notifications {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      right: -8px;
+      top: -5px;
+      padding: 0 4px;
+      font-size: 11px;
+      border-radius: 2px;
+      background-color: $red;
+      @extend %roboto-regular;
+      @include transition(all 0.1s ease-out);
+    }
+  }
+}

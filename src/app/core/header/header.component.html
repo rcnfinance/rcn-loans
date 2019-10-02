@@ -14,10 +14,12 @@
             </button>
 
             <a class="button-img" routerLink='/requests' (click)="this.titleService.changeTitle('Requests')">
-              <img src="../../assets/isologo.svg" alt="rcn-image">
-              <img src="../../assets/isologotypo.svg" alt="rcn-image">
+              <img src="assets/isologo.svg" alt="rcn-image">
+              <img src="assets/isologotypo.svg" alt="rcn-image">
             </a>
             <div class="header-title">{{ title }}</div>
+            <h1 class="hide">RCN / Ripio credit network</h1>
+            <h2 class="header-title">{{ title }}</h2>
 
             <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
               <!-- Menu section -->
@@ -25,7 +27,9 @@
               <div class="marginright20" routerLink='/activity'>Activity</div>
               <div class="marginright20" routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</div>
               <div class="marginright20" (click)="openDialog()" *ngIf="!hasAccount">Login</div>
-              <div class="separator">|</div>
+              <div class="separator" *ngIf='hasAccount'>|</div>
+              <app-icon-group-header *ngIf='hasAccount'></app-icon-group-header>
+              <div class="separator" *ngIf='hasAccount'>|</div>
               <app-component-balance *ngIf='hasAccount'></app-component-balance>
               <div class="separator" *ngIf="hasAccount">|</div>
               <!-- Balance section -->

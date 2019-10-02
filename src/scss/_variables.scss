@@ -23,7 +23,7 @@ $quaternary: #101010;
 $fifth: #0c0c0c;
 
 $gray0: #f9f9f9;
-$gray1: #E9E9E9;
+$gray1: #eeeeee;
 $gray2: #C7C7C7;
 $gray3: #AFAFAF;
 $gray4: #949494;
@@ -132,12 +132,12 @@ $default-transition--delay: all 0.3s ease-out;
 
 
 // Animations CSS3
-@mixin animation($name, $duration, $ease, $delay, $direction) {
-  -webkit-animation: $name $duration $ease $delay $direction;
-  -moz-animation: $name $duration $ease $delay $direction;
-  -o-animation: $name $duration $ease $delay $direction;
-  -ms-animation: $name $duration $ease $delay $direction;
-  animation: $name $duration $ease $delay $direction;
+@mixin animation($name, $duration, $ease, $delay, $direction, $fill-mode) {
+  -webkit-animation: $name $duration $ease $delay $direction $fill-mode;
+  -moz-animation: $name $duration $ease $delay $direction $fill-mode;
+  -o-animation: $name $duration $ease $delay $direction $fill-mode;
+  -ms-animation: $name $duration $ease $delay $direction $fill-mode;
+  animation: $name $duration $ease $delay $direction $fill-mode;
 }
 @mixin keyframes($name) {
   @-webkit-keyframes #{$name} { @content; }
@@ -148,10 +148,10 @@ $default-transition--delay: all 0.3s ease-out;
 }
 
 .anm-fadeout{
-  @include animation(fadeout, 2s, ease-in-out, 1s, forwards);
+  @include animation(fadeout, 2s, ease-in-out, 1s, forwards, both);
 }
 .anm-rotate{
-  @include animation(rotate, 6s, ease-in-out, 1s, forwards);
+  @include animation(rotate, 6s, ease-in-out, 1s, forwards, both);
 }
 
 @include keyframes(fadeout) {

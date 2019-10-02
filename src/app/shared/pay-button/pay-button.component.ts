@@ -21,6 +21,7 @@ import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/
 import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 
 @Component({
   selector: 'app-pay-button',
@@ -167,6 +168,10 @@ export class PayButtonComponent implements OnInit {
   }
 
   clickPay() {
+    if (!this.lendEnabled) {
+      this.dialog.open(DialogWrongCountryComponent);
+      return;
+    }
     if (this.pendingTx === undefined) {
       this.eventsService.trackEvent(
         'click-lend',
