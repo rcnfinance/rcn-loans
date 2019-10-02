@@ -41,7 +41,7 @@ export class TransferButtonComponent implements OnInit {
         Category.Loan,
         'loan #' + this.loan.id + ' to ' + to
       );
-      this.contractService.transferLoan(this.loan, to).then((tx) => {
+      this.contractService.transferLoan(this.loan, to).then(() => {
         this.eventsService.trackEvent(
           'transfer-loan',
           Category.Loan,

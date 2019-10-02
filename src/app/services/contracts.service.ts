@@ -256,8 +256,6 @@ export class ContractsService {
           if (err != null) {
             reject(err);
           } else {
-            console.log(txService);
-            console.log(result);
             txService.registerLendTx(loan, result, account);
             resolve(result);
           }

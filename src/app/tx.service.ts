@@ -117,7 +117,7 @@ export class TxService {
       .find(tx => tx.type === Type.lend && tx.data === loan.id && loan.engine === tx.to);
   }
 
-  registerApproveTx(tx: string, token: string, contract: string, action: boolean, from: string ) {
+  registerApproveTx(tx: string, token: string, contract: string, action: boolean, from: string) {
     const data = { contract: contract, action: action };
     this.registerTx(new Tx(tx, token, from, false, Type.approve, data));
   }

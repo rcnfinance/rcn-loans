@@ -97,7 +97,7 @@ export class PayButtonComponent implements OnInit {
             'loan #' + this.loan.id + ' of ' + amount
           );
 
-          this.contractsService.payLoan(this.loan, amount).then((tx) => {
+          this.contractsService.payLoan(this.loan, amount).then(() => {
             this.eventsService.trackEvent(
               'pay-loan',
               Category.Loan,

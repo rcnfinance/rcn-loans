@@ -150,19 +150,14 @@ export class NotificationsComponent implements OnInit {
 
   // Render Tx[]
   getLastestTx(txMemory: Tx[]): Tx[] { // Get the last 8 Txs
-
-    console.info('txMemory:', txMemory);
-    console.log(this.account);
-
     const txMemoryAccount = txMemory.filter(tx => tx.from === this.account);
-
-    console.info('txMemoryAccount:', txMemoryAccount);
-
-    const allTxMemery: number = txMemoryAccount.length;
-
-    const loansToRender: number = allTxMemery - 8; // Set the number of tx you want to render on NotifComponent
-    return txMemoryAccount.slice(loansToRender, allTxMemery);
+    const allTxMememory: number = txMemoryAccount.length;
+    // Set the number of tx you want to render on NotifComponent
+    // TODO: This may break if allTxMemory is below 8
+    const loansToRender: number = allTxMememory - 8;
+    return txMemoryAccount.slice(loansToRender, allTxMememory);
   }
+
   renderLastestTx(txMemory: Tx[]) { // Render the last 8 Txs
 
     const lastestTx: Tx[] = this.getLastestTx(txMemory);
