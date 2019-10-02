@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import {
   trigger,
   state,
@@ -50,6 +50,7 @@ export class NotificationsComponent implements OnInit {
   oNotifications: Array<Notification> = [];
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private txService: TxService,
     public notificationsService: NotificationsService
   ) { }
@@ -172,6 +173,7 @@ export class NotificationsComponent implements OnInit {
   ngOnInit() {
     this.notificationsService.currentDetail.subscribe(detail => {
       this.viewDetail = detail;
+      this.cdRef.detectChanges();
     }); // Subscribe to detail from Notifications Service
     this.txService.subscribeNewTx((tx: Tx) => { this.addNewNotification(tx); });
     this.txService.subscribeConfirmedTx((tx: Tx) => { this.setTxFinished(tx); });
