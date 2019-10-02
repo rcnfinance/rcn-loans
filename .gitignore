@@ -45,6 +45,7 @@ Thumbs.db
 
 # Security suggestion
 package-lock.json
+config.js
 
 # Build info
 /src/environments/build-info.ts

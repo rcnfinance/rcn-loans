@@ -214,6 +214,26 @@ jobs:
             command: |
                 aws s3 sync ./dist s3://rcn-loans-ropsten/ --acl public-read
 
+    deploy-ipfs:
+        working_directory: ~/project
+        docker:
+            - image: circleci/node:8.12
+        steps:
+            # Checkout the code from the branch into the working_directory
+            - checkout
+            - attach_workspace:
+                at: ~/project
+            # Restore local dependencies from cache
+            - restore_cache:
+                keys:
+                - v2-dependencies-{{ checksum "package.json" }}
+                - v2-dependencies-    
+            # Run deploy ipfs script    
+            - run:
+                name: Deploy Ipfs
+                command: npm run-script ipfs-deploy -- ${PINATA_API_KEY} ${PINATA_SECRET_API_KEY}  
+      
+
 workflows:
     version: 2
     # The build and deploy workflow
@@ -229,9 +249,6 @@ workflows:
             - lint:
                 requires:
                     - install
-            - e2e-tests:
-                requires:
-                    - install
             - unit-tests:
                 requires:
                     - install
@@ -240,8 +257,17 @@ workflows:
                     - lint
                     - build-ropsten
                     - build-mainnet
-                    - e2e-tests
                     - unit-tests
                 filters:
                     branches:
                         only: master
+            - deploy-ipfs:
+                requires:
+                    - lint
+                    - build-ropsten
+                    - build-mainnet
+                    - unit-tests
+                filters:
+                    branches:
+                        only: master
+
