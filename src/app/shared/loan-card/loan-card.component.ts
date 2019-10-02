@@ -66,7 +66,9 @@ export class LoanCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptionAccount.unsubscribe();
+    if (this.subscriptionAccount) {
+      this.subscriptionAccount.unsubscribe();
+    }
   }
 
   /**

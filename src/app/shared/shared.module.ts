@@ -1,11 +1,13 @@
 // Angular Core
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // App Modules
 import { MaterialModule } from '../material/material.module';
 // App Component
+import { FooterComponent } from './footer/footer.component';
 import { LoanCardComponent } from './loan-card/loan-card.component';
 import { CreatorContainerComponent } from './creator-container/creator-container.component';
 import { AvatarTitleComponent } from './avatar-title/avatar-title.component';
@@ -55,12 +57,16 @@ import { EventsService } from './../services/events.service';
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
     MaterialModule,
     BlockiesModule,
+    FormsModule,
     ReactiveFormsModule,
-    FormsModule
+    MaterialModule,
+    BlockiesModule
   ],
   declarations: [
+    FooterComponent,
     LoanCardComponent,
     CreatorContainerComponent,
     AvatarComponent,
@@ -116,8 +122,10 @@ import { EventsService } from './../services/events.service';
     EventsService
   ],
   exports: [
+    FormsModule,
+    ReactiveFormsModule,
+    FooterComponent,
     LoanCardComponent,
-
     CreatorContainerComponent,
     AvatarComponent,
     LoanAvatarComponent,

@@ -1,4 +1,4 @@
-<div class="empty-container" *ngIf="class === 'company'">
+<div class="empty-container px-3" *ngIf="class === 'company'">
   <div class="empty-row">
     <div class="title main-h3">Company: {{ identity.name }}</div>
     <div class="margintop20"></div>
@@ -11,14 +11,14 @@
 </div>
 
 
-<div class="empty-container filter" *ngIf="hasIdentity() == undefined">
+<div class="empty-container p-3 py-md-0 filter" *ngIf="hasIdentity() == undefined">
   <div class="empty-row">
     <i class="fas fa-id-badge gray7 font90"></i>
     <div class="margintop20"></div>
     <div class="title main-h3">The borrower of this loan is anonymous</div>
     <div class="margintop10"></div>
     <div class="title main-h4">
-      The address is 
+      The address is
       <a target="_blank" href="{{ borrowerLinkExplorer }}">{{ loan.borrower }}</a>
       , but we have no information about its identity</div>
   </div>

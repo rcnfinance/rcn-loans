@@ -77,7 +77,6 @@ import {
   ],
   declarations: [],
   exports: [
-    CommonModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,

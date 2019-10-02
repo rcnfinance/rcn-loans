@@ -3,7 +3,10 @@
   <div class="navbar-container">
     <div class="creator-container">
       <div class="creator-title">
-        <button matDialogClose class="arrow col-sm-1 title main-h6 --auto in pad-left">
+        <button
+          matDialogClose
+          class="d-md-none creator-container__back"
+        >
           <i class="fas fa-arrow-left"></i>
         </button>
         Checkout process
@@ -145,18 +148,22 @@
 
   <div class="margintop20"></div>
 
-  <div class="row padding justify-content-between align-items-center">
+  <div class="dialog-footer row padding justify-content-between align-items-center">
     <div class=" col-sm-12 col-md-6 inline account">
       Lending from your {{ account }} account.
     </div>
-    <div class="col-sm-12 col-md-6">
+    <div class="col-sm-12 col-md-6 px-0">
       <div class="row justify-content-end no-gutters">
-        <div class="col-sm-12 col-md-3 right">
+        <div class="col-sm-12 col-md-3">
           <app-lend-button [loan]="loan" [lendToken]="lendToken" *ngIf="canLend"></app-lend-button>
         </div>
-        <div class="col-sm-0 col-md-3">
-          <button mat-raised-button matDialogClose href="https://metamask.io/" target="_blank" class="button button-secondary cancel">
-            Cancel
+        <div class="d-none d-md-block col-sm-0 col-md-3 ml-2">
+          <button
+            mat-raised-button
+            class="button button-clear-dark mat-elevation-z d-none d-md-inline-block"
+            [mat-dialog-close]='false'
+          >
+            Close
           </button>
         </div>
       </div>

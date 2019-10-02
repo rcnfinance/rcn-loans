@@ -338,7 +338,7 @@ mat-sidenav-container.mat-drawer-container {
   z-index: 999;
 }
 
-  //Dialog
+// Dialog
 .mat-dialog-container{
   color: $secondary;
   background-color: $gray7;
@@ -353,8 +353,22 @@ mat-sidenav-container.mat-drawer-container {
     position: relative;
     margin: 0;
     padding: 0;
+    max-height: 100vh;
+    height: 100vh;
+
+    .creator-container {
+      &__back {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 4px 22px;
+        font-size: .8em;
+        color: white;
+      }
+    }
   }
 }
+
   //Menu
 .mat-menu-panel {
   margin-top: 70px;
@@ -543,9 +557,13 @@ mat-checkbox{
   }
 }
 
-@media (min-width: 992px){
-  .mat-dialog-content {
-    min-width: 750px;
+@media (min-width: 992px) {
+  .cdk-global-overlay-wrapper {
+    .mat-dialog-content {
+      min-width: 750px;
+      height: auto;
+      max-height: 65vh;
+    }
   }
 }
 
@@ -719,11 +737,37 @@ mat-checkbox{
 
 // Loan container
 .loan-container {
+  padding-top: 30px;
   margin-left: -20px;
   margin-right: -20px;
 }
 
+// Layout
+.body-scrollable {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  padding: 115px 0px 130px;
+}
+virtual-scroller {
+  width: 100vw;
+
+  .scrollable-content {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
 // Footer
+app-footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
 footer {
   height: 50px;
   position: fixed;
@@ -805,7 +849,7 @@ footer {
 
 @media (min-width: 992px){
   footer {
-    height: inherit;
+    height: auto;
     position: absolute;
     bottom: 0;
     right: 0;

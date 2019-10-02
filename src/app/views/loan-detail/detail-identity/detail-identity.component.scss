@@ -18,4 +18,5 @@
 a {
   color: white;
   @extend %roboto-medium;
+  word-break: break-all;
 }
