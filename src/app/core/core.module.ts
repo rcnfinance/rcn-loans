@@ -12,7 +12,6 @@ import { BalanceComponent } from './balance/balance.component';
 import { IconGroupHeaderComponent } from './header/icon-group-header/icon-group-header.component';
 import { NotificationsComponent } from './header/notifications/notifications.component';
 import { NotificationItemComponent } from './header/notifications/notification-item/notification-item.component';
-import { FooterComponent } from './footer/footer.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
 // App Directives
 import { ClickOutsideDirective } from '../directives/click-outside.directive';
@@ -38,7 +37,6 @@ import { NotificationsService } from '../services/notifications.service';
     ClickOutsideDirective,
     NotificationsComponent,
     NotificationItemComponent,
-    FooterComponent,
     SocialContainerComponent
   ],
   providers: [
@@ -51,7 +49,6 @@ import { NotificationsService } from '../services/notifications.service';
     ContentWrapperComponent,
     HeaderComponent,
     BalanceComponent,
-    FooterComponent,
     SocialContainerComponent
   ]
 })

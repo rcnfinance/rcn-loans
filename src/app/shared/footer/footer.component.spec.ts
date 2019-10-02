@@ -2,9 +2,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { APP_BASE_HREF } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from '../../material/material.module';
 import { FooterComponent } from './footer.component';
+import { Web3Service } from './../../services/web3.service';
+import { SidebarService } from './../../services/sidebar.service';
+import { TitleService } from './../../services/title.service';
+import { AvailableLoansService } from './../../services/available-loans.service';
 
 describe('FooterComponent', () => {
   let component: FooterComponent;
@@ -14,12 +17,15 @@ describe('FooterComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterModule.forRoot([]),
-        SharedModule,
         MaterialModule,
         HttpClientModule
       ],
       declarations: [ FooterComponent ],
       providers: [
+        Web3Service,
+        SidebarService,
+        TitleService,
+        AvailableLoansService,
         {
           provide: APP_BASE_HREF, useValue: '/'
         }

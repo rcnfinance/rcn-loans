@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs';
 // App Component
-import { MatDialog } from '@angular/material';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { EventsService, Category } from '../../services/events.service';
@@ -27,7 +27,7 @@ class TokenContracts {
   templateUrl: './dialog-approve-contract.component.html',
   styleUrls: ['./dialog-approve-contract.component.scss']
 })
-export class DialogApproveContractComponent implements OnInit {
+export class DialogApproveContractComponent implements OnInit, OnDestroy {
   onlyAddress: string;
   onlyToken: string;
   account: string;
@@ -39,6 +39,9 @@ export class DialogApproveContractComponent implements OnInit {
     new Contract('Basalt engine', environment.contracts.basaltEngine)
   ];
   tokenContracts = {};
+
+  // subscriptions
+  subscriptionAccount: Subscription;
 
   constructor(
     private web3Service: Web3Service,
@@ -54,9 +57,31 @@ export class DialogApproveContractComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.loadAccount();
     await this.loadCurrencies();
+    await this.loadAccount();
     this.loadApproved();
+    this.handleLoginEvents();
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptionAccount) {
+      this.subscriptionAccount.unsubscribe();
+    }
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  handleLoginEvents() {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(async (loggedIn: boolean) => {
+      if (!loggedIn) {
+        this.dialog.closeAll();
+        return;
+      }
+
+      await this.loadAccount();
+      this.loadApproved();
+    });
   }
 
   /**
