@@ -57,18 +57,22 @@ export class NotificationsComponent implements OnInit {
 
   getTxMessage(tx: Tx): string { // Return the TxObject Message to render the Notification
     if (tx.type === 'approve') {
-      if (tx.data.contract === environment.contracts.basaltEngine) {
-        return 'the Basalt Engine contract';
-      }
+      switch (tx.data.contract) {
+        case environment.contracts.basaltEngine:
+          return 'the Basalt Engine contract';
 
-      if (tx.data.contract === environment.contracts.diaspore.loanManager) {
-        return 'the Diaspore Loan Manager Contract';
-      }
+        case environment.contracts.diaspore.loanManager:
+          return 'the Loan Manager Contract';
 
-      if (tx.data.contract === environment.contracts.diaspore.debtEngine) {
-        return 'the Diaspore Debt Manager Contract';
+        case environment.contracts.diaspore.debtEngine:
+          return 'the Debt Engine Contract';
+
+        case environment.contracts.converter.converterRamp:
+          return 'the Converter Ramp Contract';
+
+        default:
+          return 'the contract ' + tx.data.contract;
       }
-      return 'the contract ' + tx.data.contract;
     }
 
     if (tx.type === 'withdraw') {
