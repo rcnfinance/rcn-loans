@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material';
 // App Components
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
@@ -75,6 +75,11 @@ export class ContentWrapperComponent implements OnInit {
     public dialog: MatDialog,
     private countriesService: CountriesService
   ) {}
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.winHeight = event.target.innerHeight;
+  }
 
   // Toggle Navbar
   sidebarToggle() {
