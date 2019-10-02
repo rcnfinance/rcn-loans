@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
@@ -15,11 +16,14 @@ import { Web3Service } from '../../services/web3.service';
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss']
 })
-export class AddressComponent implements OnInit {
+export class AddressComponent implements OnInit, OnDestroy {
   address: string;
   available: any;
   loans = [];
   availableLoans = true;
+
+  // subscriptions
+  subscriptionAvailable: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,7 +32,7 @@ export class AddressComponent implements OnInit {
     private contractsService: ContractsService,
     private availableLoansService: AvailableLoansService,
     private web3Service: Web3Service
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.titleService.changeTitle('Address');
@@ -41,17 +45,28 @@ export class AddressComponent implements OnInit {
     });
 
     // Available Loans service
-    // FIXME: add unsubscribe
-    this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
+    this.subscriptionAvailable = this.availableLoansService.currentAvailable.subscribe(
+      available => this.available = available
+    );
+  }
+
+  ngOnDestroy() {
+    try {
+      this.subscriptionAvailable.unsubscribe();
+    } catch (e) { }
   }
 
   private async loadLoans(address: string) {
     try {
-      const result: Loan[] = await this.contractsService.getLoansOfLender(address);
-      this.loans = result;
+      const loans: Loan[] = await this.contractsService.getLoansOfLender(address);
+      this.loans = loans;
+
       this.upgradeAvaiblable();
       this.spinner.hide();
-      if (this.loans.length <= 0) {
+
+      if (this.loans.length) {
+        this.availableLoans = true;
+      } else {
         this.availableLoans = false;
       }
 
@@ -61,7 +76,9 @@ export class AddressComponent implements OnInit {
     }
   }
 
-  // Available Loans service
+  /**
+   * Update available loans number
+   */
   private upgradeAvaiblable() {
     this.availableLoansService.updateAvailable(this.loans.length);
   }
