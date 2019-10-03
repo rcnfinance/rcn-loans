@@ -1,11 +1,11 @@
-<article class="d-flex">
+<article class="d-flex" *ngIf="feature">
   <div class="icon-box">
     <!-- TODO: Find a better way to display the rcn logo. -->
     <i class="{{ feature.icon }} icon"
       ><img src="{{ feature.icon }}" alt="" class="rcn-icon"
     /></i>
   </div>
-  <div class="details-box">
+  <div class="details-box ellipsis">
     <p class="title">
       {{ feature.title }}
     </p>
@@ -15,16 +15,8 @@
       </a>
     </ng-container>
     <ng-template #itemDescription>
-      <p
-        class="description"
-        matTooltip="{{ feature.description }}"
-        [matTooltipDisabled]="feature.description.length < 20"
-      >
-        {{
-          feature.description.length > 18
-            ? (feature.description | slice: 0:18) + "..."
-            : feature.description
-        }}
+      <p class="description ellipsis">
+        {{ feature.description }}
       </p>
     </ng-template>
   </div>

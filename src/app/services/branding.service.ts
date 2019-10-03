@@ -29,7 +29,7 @@ export class BrandingService {
     wenance: new Brand(
       'Wenance',
       '#009BDE',
-      './assets/logos/wenance.png',
+      './assets/logos/wenance.svg',
       '',
       'Wenance',
       './assets/logos/wenance-brand.svg',
