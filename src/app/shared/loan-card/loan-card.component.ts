@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { Loan, Network, Status } from '../../models/loan.model';
 import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
@@ -11,7 +12,7 @@ import { Web3Service } from '../../services/web3.service';
   templateUrl: './loan-card.component.html',
   styleUrls: ['./loan-card.component.scss']
 })
-export class LoanCardComponent implements OnInit {
+export class LoanCardComponent implements OnInit, OnDestroy {
   @Input() loan: Loan;
 
   leftLabel: string;
@@ -25,6 +26,9 @@ export class LoanCardComponent implements OnInit {
 
   account: string;
   shortAddress = Utils.shortAddress;
+
+  // subscriptions
+  subscriptionAccount: Subscription;
 
   constructor(
     public dialog: MatDialog,
@@ -57,6 +61,27 @@ export class LoanCardComponent implements OnInit {
       }
     }
 
+    this.loadAccount();
+    this.handleLoginEvents();
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptionAccount) {
+      this.subscriptionAccount.unsubscribe();
+    }
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  handleLoginEvents() {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(() => this.loadAccount());
+  }
+
+  /**
+   * Load user account
+   */
+  async loadAccount() {
     const web3 = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
     this.account = web3.toChecksumAddress(account);

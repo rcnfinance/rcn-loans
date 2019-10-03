@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
 import { environment } from 'environments/environment';
+import { Subscription } from 'rxjs';
 import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Models
@@ -12,6 +13,7 @@ import { Brand } from '../../models/brand.model';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Services
+import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
@@ -23,7 +25,7 @@ import { BrandingService } from './../../services/branding.service';
   templateUrl: './loan-detail.component.html',
   styleUrls: ['./loan-detail.component.scss']
 })
-export class LoanDetailComponent implements OnInit {
+export class LoanDetailComponent implements OnInit, OnDestroy {
   loan: Loan;
   identityName = '...';
   viewDetail = undefined;
@@ -73,19 +75,24 @@ export class LoanDetailComponent implements OnInit {
   availableOracle: boolean;
   currency: string;
 
+  // subscriptions
+  subscriptionAccount: Subscription;
+
   constructor(
-    private identityService: IdentityService,
     private route: ActivatedRoute,
-    private cosignerService: CosignerService,
-    private contractsService: ContractsService,
     private router: Router,
-    private web3Service: Web3Service,
     private spinner: NgxSpinnerService,
+    private titleService: TitleService,
+    private contractsService: ContractsService,
+    private cosignerService: CosignerService,
+    private identityService: IdentityService,
+    private web3Service: Web3Service,
     private brandingService: BrandingService,
     public dialog: MatDialog
   ) { }
 
   ngOnInit() {
+    this.titleService.changeTitle('Loan detail');
     this.spinner.show();
 
     this.route.params.subscribe(async params => {
@@ -113,6 +120,7 @@ export class LoanDetailComponent implements OnInit {
         this.loadIdentity();
         this.viewDetail = this.defaultDetail();
 
+        this.handleLoginEvents();
         this.spinner.hide();
       } catch (e) {
         console.error(e);
@@ -120,6 +128,21 @@ export class LoanDetailComponent implements OnInit {
         this.router.navigate(['/404/'], { skipLocationChange: true });
       }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptionAccount) {
+      try {
+        this.subscriptionAccount.unsubscribe();
+      } catch (e) { }
+    }
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  handleLoginEvents() {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(() => this.loadAccount());
   }
 
   openDetail(view: string) {

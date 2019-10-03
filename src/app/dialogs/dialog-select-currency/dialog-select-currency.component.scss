@@ -11,7 +11,7 @@
   height: auto;
 }
 .dialog-padding{
-  padding: 25px 25px;
+  padding: 25px 15px;
   text-align: left;
 }
 
@@ -46,6 +46,14 @@
       padding: 0 15px;
       @extend %font-black;
       @include transform(translate(-50%, -50%));
+    }
+  }
+}
+
+.dialog-footer {
+  app-lend-button {
+    /deep/ a {
+      width: 100%;
     }
   }
 }
@@ -324,10 +332,6 @@ img {
 .end {
   display: flex;
   align-items: baseline;
-}
-
-.right {
-  margin-right: 12px;
 }
 
 @media (min-width: 768px){

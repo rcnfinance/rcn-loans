@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs';
 // App Component
-import { MatDialog } from '@angular/material';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { EventsService, Category } from '../../services/events.service';
@@ -26,7 +27,7 @@ class TokenContracts {
   templateUrl: './dialog-approve-contract.component.html',
   styleUrls: ['./dialog-approve-contract.component.scss']
 })
-export class DialogApproveContractComponent implements OnInit {
+export class DialogApproveContractComponent implements OnInit, OnDestroy {
   onlyAddress: string;
   onlyToken: string;
   account: string;
@@ -39,17 +40,48 @@ export class DialogApproveContractComponent implements OnInit {
   ];
   tokenContracts = {};
 
+  // subscriptions
+  subscriptionAccount: Subscription;
+
   constructor(
     private web3Service: Web3Service,
     private contractsService: ContractsService,
     private eventsService: EventsService,
-    public dialog: MatDialog
-  ) { }
+    public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    if (this.data) {
+      this.onlyAddress = this.data.onlyAddress;
+      this.onlyToken = this.data.onlyToken;
+    }
+  }
 
   async ngOnInit() {
-    await this.loadAccount();
     await this.loadCurrencies();
+    await this.loadAccount();
     this.loadApproved();
+    this.handleLoginEvents();
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptionAccount) {
+      this.subscriptionAccount.unsubscribe();
+    }
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  handleLoginEvents() {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(async (loggedIn: boolean) => {
+      if (!loggedIn) {
+        this.dialog.closeAll();
+        return;
+      }
+
+      await this.loadAccount();
+      this.loadApproved();
+    });
   }
 
   /**

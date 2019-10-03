@@ -40,8 +40,8 @@
     }
     .subtitle {
       line-height: 1.2em;
-      @extend %font-bold;
-      @extend .font13;
+      @extend %font-medium;
+      @extend .font14;
     }
   }
 }

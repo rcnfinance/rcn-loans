@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import {
   trigger,
   state,
@@ -50,24 +50,29 @@ export class NotificationsComponent implements OnInit {
   oNotifications: Array<Notification> = [];
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private txService: TxService,
     public notificationsService: NotificationsService
   ) { }
 
   getTxMessage(tx: Tx): string { // Return the TxObject Message to render the Notification
     if (tx.type === 'approve') {
-      if (tx.data.contract === environment.contracts.basaltEngine) {
-        return 'the Basalt Engine contract';
-      }
+      switch (tx.data.contract) {
+        case environment.contracts.basaltEngine:
+          return 'the Basalt Engine contract';
 
-      if (tx.data.contract === environment.contracts.diaspore.loanManager) {
-        return 'the Diaspore Loan Manager Contract';
-      }
+        case environment.contracts.diaspore.loanManager:
+          return 'the Loan Manager Contract';
 
-      if (tx.data.contract === environment.contracts.diaspore.debtEngine) {
-        return 'the Diaspore Debt Manager Contract';
+        case environment.contracts.diaspore.debtEngine:
+          return 'the Debt Engine Contract';
+
+        case environment.contracts.converter.converterRamp:
+          return 'the Converter Ramp Contract';
+
+        default:
+          return 'the contract ' + tx.data.contract;
       }
-      return 'the contract ' + tx.data.contract;
     }
 
     if (tx.type === 'withdraw') {
@@ -172,6 +177,7 @@ export class NotificationsComponent implements OnInit {
   ngOnInit() {
     this.notificationsService.currentDetail.subscribe(detail => {
       this.viewDetail = detail;
+      this.cdRef.detectChanges();
     }); // Subscribe to detail from Notifications Service
     this.txService.subscribeNewTx((tx: Tx) => { this.addNewNotification(tx); });
     this.txService.subscribeConfirmedTx((tx: Tx) => { this.setTxFinished(tx); });

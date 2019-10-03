@@ -1,15 +1,24 @@
-<div class="requested-wrapper" [ngClass]="{'active': filtersOpen, 'disabled': filtersOpen === false}">
-  <ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
+<div
+  class="body-scrollable requested-wrapper"
+  [ngClass]="{'active': filtersOpen, 'disabled': filtersOpen === false}"
+  #scrollingBlock
+>
+  <ngx-spinner
+    bdColor="rgba(0,0,0,.3)"
+    size="medium"
+    color="#fff"
+    type="ball-clip-rotate-multiple"
+  ></ngx-spinner>
   <div class="container">
     <div class="row">
       <div class="col-sm-12 d-none d-lg-block">
         <div class="title main-h1 marginbottom30">Requests</div>
       </div>
-      <div class="col-sm-12 flex-between margintop10 marginbottom10">
+      <div class="col-sm-12 d-flex justify-content-between margintop10 marginbottom10">
         <mat-chip-list>
           <mat-chip selected="true">{{ loans.length }} AVAILABLE</mat-chip>
         </mat-chip-list>
-        <button mat-button class='paddingright30' (click)="openFilters()">
+        <button mat-button class="paddingright30" (click)="openFilters()">
           FILTERS
           <mat-icon class="icon-active">filter_list</mat-icon>
           <mat-icon class="icon-disabled">expand_more</mat-icon>
@@ -18,17 +27,32 @@
     </div>
 
     <div class="filters anm-01">
-      <app-filter-loans [filters]="filters" (filtered)='onFiltered()'></app-filter-loans>
+      <app-filter-loans [filters]="filters" (filtered)="onFiltered()">
+      </app-filter-loans>
     </div>
 
     <div class="loan-container row">
-      <div class="col-sm-12 text-center" *ngIf='!availableLoans'>
-        <div class="title main-h1">There are no available Loans</div>
+      <div class="col-sm-12 text-center py-4 px-4" *ngIf="!availableLoans">
+        <div class="title main-h2">There are no available Loans</div>
       </div>
 
-      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2 card-col" *ngFor='let loan of loans; let i of index'>
-        <app-loan-card [loan]="loan"></app-loan-card>
-      </div>
+      <virtual-scroller
+        #scroll
+        [items]="loans"
+        [parentScroll]="scrollingBlock"
+        [bufferAmount]="4"
+        [scrollThrottlingTime]="500"
+      >
+        <div
+          class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
+          *ngFor="let loan of scroll.viewPortItems"
+        >
+          <app-loan-card [loan]="loan"></app-loan-card>
+        </div>
+      </virtual-scroller>
+
     </div>
   </div>
+
+  <app-footer></app-footer>
 </div>
