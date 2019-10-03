@@ -21,6 +21,7 @@ export class CompanyIdentity extends Identity {
       public description: string,
       public logo: string,
       public brand: string,
+      public disclaimer: string,
       public features: Feature[]
     ) {
     super(name);
