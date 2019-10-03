@@ -31,7 +31,7 @@ export const companyIdentities = {
         icon: 'fas fa-link',
         title: 'Website',
         description: null,
-        url: 'www.wenance.com'
+        url: 'https://www.wenance.com'
       },
       {
         icon: 'fas fa-calendar-alt',
