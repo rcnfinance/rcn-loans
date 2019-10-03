@@ -1,34 +1,28 @@
 <div class="empty-container" *ngIf="class === 'company'">
   <div class="empty-row">
-
-      <div class="main-title">
-        Company
-      </div>
-      <div class="margintop30"></div>
-      <div class="img-box">
-        <img [src]="identity.brand" class="img-responsive img-center" />
-      </div>
-      <div class="marginbottom10"></div>
-      <div class="main-sub-title">
-        {{ identity.slogan }}
-      </div>
-      <div class="marginbottom50"></div>
-      <div class="main-text">
-        {{ identity.description }}
-      </div>
-      <div class="margintop40"></div>
-      <div class="content">
+    <div class="main-title mt-4 mb-5">
+      Company
+    </div>
+    <div class="img-box mb-5">
+      <img [src]="identity.brand" class="img-responsive img-center" />
+    </div>
+    <div class="main-text">
+      {{ identity.description }}
+    </div>
+    <div class="content mt-3">
       <div class="row">
         <app-item-feature
           *ngFor="let feature of identity.features"
           [feature]="feature"
-          class="col-xs-12 col-md-4 feature-box"
+          class="col-xs-12 col-md-4 feature-box my-3"
         >
         </app-item-feature>
       </div>
     </div>
-    <div class="d-flex justify-content-start align-items-center disclaimer-box">
-      <span class="tooltip-box" matTooltip="Legal disclaimer information"><i class="fas fa-info-circle"></i></span><span>Legal Disclaimer</span>
+    <div class="d-flex justify-content-start align-items-center disclaimer-box mt-3 pt-1">
+      <span>
+        <i class="fas fa-info-circle"></i> Legal disclaimer: This is a loan requested solely by Lending Solutions S.A., a Ripio company. Lender will be entitled to the interest rate specified in the loan request as published, which will be paid for by Lending Solutions S.A. The published interest rate is net of any taxes and costs that Lending Solutions S.A. may be required by law to levy on interest, but it is not net of Ethereum Network’s transaction costs, Uniswap costs, fees and slippage. Gross interest rate is XXXX%. Wenance S.A. is not a company of the Ripio Group, will not be receiving any money from the loan hereunder and will not pay any interests whatsoever to the lender. The inclusion of the Wenance brand has the sole and exclusive purpose of indicating that Lending Solutions S.A. has made an investment of its own money in one of Wenance’s investment vehicles. Wenance is a registered trademark of Wenance S.A. Lender acknowledges that funding this loan gives it no rights whatsoever against Wenance S.A. or any of its affiliates.
+      </span>
     </div>
 
   </div>

@@ -20,10 +20,10 @@ export class BrandingService {
     ripio: new Brand(
       'Ripio',
       '#009BDE',
-      './assets/ripio.png',
+      './assets/logos/ripio.png',
       '',
       'Ripio',
-      undefined,
+      './assets/logos/logo-ripio-white.svg',
       undefined
     ),
     wenance: new Brand(
@@ -32,7 +32,7 @@ export class BrandingService {
       './assets/logos/wenance.png',
       '',
       'Wenance',
-      './assets/logos/wenance-brand.png',
+      './assets/logos/wenance-brand.svg',
       undefined
     )
   };

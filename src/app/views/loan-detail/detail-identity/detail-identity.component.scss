@@ -22,11 +22,12 @@
 }
 
 .img-box {
-  width: 280px;
-}
+  width: 100%;
 
-.feature-box {
-  margin: 20px 0;
+  img {
+    max-width: 100%;
+    max-height: 70px;
+  }
 }
 
 .disclaimer-box {
@@ -36,7 +37,8 @@
   font-style: italic;
   font-weight: 400;
   font-size: 13px;
-  margin-top: 10px;
+  text-align: left;
+
   .fa-info-circle {
     margin-right: 5px;
   }

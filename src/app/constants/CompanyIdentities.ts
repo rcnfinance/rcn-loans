@@ -8,8 +8,8 @@ export const companyIdentities = {
     'Ripio',
     '--',
     'Ripio is now one of the main Blockchain companies in Latin America. Ripio main product is their mobile wallet that operates on Bitcoin, Ether and local currency: users can receive, store, buy / sell and send cryptocurrency, and also make digital payments from their mobile phones, and also request micro-loans to finance their purchases.',
+    './assets/logos/ripio.png',
     './assets/logos/logo-ripio-white.svg',
-    './assets/logos/logo-ripio-white-brand.svg',
     [
       {
         icon: 'fas fa-calendar-alt',
@@ -21,9 +21,9 @@ export const companyIdentities = {
   [Agent.WenanceCreator]: new CompanyIdentity(
     'Wenance',
     'fintech people',
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-    './assets/logos/wenance.png',
-    './assets/logos/wenance-brand.png',
+    'Ripio and Wenance are doing exciting things together! Wenance is Argentina’s leading fintech lending company. Founded in 2014 by building on 20 years of experience in the traditional finance ecosystem, the firm reinvented itself as a digital organization to provide simple, secure and efficient lending solutions to its more than 80,000 users. Since 2017, the company has expanded its operations to Uruguay and Spain, with Brazil, Mexico and Peru as its next target markets.',
+    './assets/logos/wenance.svg',
+    './assets/logos/wenance-brand.svg',
     [
       {
         icon: 'fas fa-link',

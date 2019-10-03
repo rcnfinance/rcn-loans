@@ -17,8 +17,11 @@
       @extend %font-black;
     }
     .creator-image {
-      height: 30px;
+      width: 250px;
+      max-width: 100%;
+      height: 45px;
       img {
+        width: 100%;
         max-height: 100%;
       }
     }
