@@ -55,33 +55,19 @@ export const environment = {
     oracleFactory: '0xe8e49d772b106e2acfc7f821cbd77b97a728aaac', // FIXME: Ropsten oracle factory
     diaspore: {
       debtEngine: '0x80db22675dad70e44b64029510778583187faddb',
-      loanManager: '0xb55b0f33d6a2a03a275ca85d58e9357e1a141187',
-      viewRequets: '0x7edb5117f91514579e3c8d39eed71e6be278632a',
-      collateral: '0x7c5bb57001eb5bebeb0359e584dc5f29675061f2', // FIXME: Ropsten collateral
-      filters: {
-        debtCreator: '0x998a67ce5827cb372fe07942561006c7a76cf06f',
-        isLender: '0x22a87c89dd8d8d0abe94062eba672f088e808d49',
-        isBorrower: '0x11dad1b4b85b4ca7d03847231554571f5e7db726',
-        isStatus: '0x43c6c2ae47a31e5850b820f09520310ec0481600',
-        notExpired: '0xada8797ece7e2bda72140a26d13185a788a636cb'
-      }
+      loanManager: '0xb55b0f33d6a2a03a275ca85d58e9357e1a141187'
     },
     converter: {
       converterRamp: '0xe41ada0fb01F147c6385F93DEC78914F32e45061',
-      tokenConverter: '0x7173E7C8c35EF0FA6DF11B23bB717F886fBD50B5',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      uniswapProxy: '0x7173E7C8c35EF0FA6DF11B23bB717F886fBD50B5',
+      tokenConverter: '0x7173E7C8c35EF0FA6DF11B23bB717F886fBD50B5',
       params: {
-        marginSpend: 5000,
-        maxSpend: 0,
-        rebuyThreshold: 40000000000000000000,
         aditionalSlippage: '2'
       }
     },
     decentraland: {
       mortgageCreator: '0x90263Ea5C57Dc6603CA7202920735A6E31235bB9',
-      mortgageManager: '0x9ABf1295086aFA0E49C60e95c437aa400c5333B8',
-      landMarket: '0xb3bca6f5052c7e24726b44da7403b56a8a1b98f8'
+      mortgageManager: '0x9ABf1295086aFA0E49C60e95c437aa400c5333B8'
     }
   },
   blacklist: [],
@@ -90,8 +76,7 @@ export const environment = {
     nonExpired: '0x56a65418a09aa5cd0cb79d437cb1d318037817d7',
     validMortgage: '0x7c9ee6f211093351612345fce308cbf86e562b69',
     lenderIn: '0x5ef16f3412e7c01e5c9803caae1322b28596d0bd',
-    ongoing: '0x3b80f3028af6ab654b6b0188e651667ade313e1b',
-    stub: '0xc7fb7d6fb0c787d5454cbd1b8140ec9624519668'
+    ongoing: '0x3b80f3028af6ab654b6b0188e651667ade313e1b'
   },
   dir: {
     '0x263231ed9b51084816a44e18d16c0f6d0727491f': Agent.RipioCreator,
