@@ -7,7 +7,8 @@ import { getBuild } from './build';
 export enum Agent {
   MortgageCreator,
   MortgageManager,
-  RipioCreator
+  RipioCreator,
+  WenanceCreator
 }
 
 declare let require: any;
@@ -93,7 +94,8 @@ export const environment = {
     stub: '0xc7fb7d6fb0c787d5454cbd1b8140ec9624519668'
   },
   dir: {
-    '0x263231ed9b51084816a44e18d16c0f6d0727491f': Agent.RipioCreator
+    '0x263231ed9b51084816a44e18d16c0f6d0727491f': Agent.RipioCreator,
+    '0xfeac8e490fe7f0760a10225e7dccda1e22ad8daa': Agent.WenanceCreator // FIXME - Ropsten address
   },
   usableCurrencies: [
     {
