@@ -4,7 +4,8 @@ export class Brand {
     public color: string,
     public icon: string,
     public shortName: string,
-    public header: string,
+    public headerTitle: string,
+    public headerImage: string,
     public blockies: Object
   ) {}
 }

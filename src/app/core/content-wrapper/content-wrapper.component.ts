@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { Utils } from '../../utils/utils';
 // App Components
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
@@ -18,7 +19,6 @@ import { CountriesService } from '../../services/countries.service';
   styleUrls: ['./content-wrapper.component.scss']
 })
 export class ContentWrapperComponent implements OnInit {
-  // Get Balance
   get hasAccount(): boolean {
     return this.account !== undefined;
   }
@@ -26,13 +26,13 @@ export class ContentWrapperComponent implements OnInit {
     if (this.rcnBalance === undefined) {
       return '...';
     }
-    return this.removeTrailingZeros(this.rcnBalance.toFixed(18));
+    return Utils.removeTrailingZeros(this.rcnBalance.toFixed(18));
   }
   get available(): string {
     if (this.rcnAvailable === undefined) {
       return '...';
     }
-    return this.removeTrailingZeros((this.rcnAvailable / this.ethWei).toFixed(18));
+    return Utils.removeTrailingZeros((this.rcnAvailable / this.ethWei).toFixed(18));
   }
   get withdrawEnabled(): boolean {
     return this.basaltLoansWithBalance !== undefined || this.diasporeLoansWithBalance !== undefined &&
@@ -40,10 +40,8 @@ export class ContentWrapperComponent implements OnInit {
     this.pendingBasaltWithdraw === undefined || this.pendingDiasporeWithdraw === undefined;
   }
   winHeight: number = window.innerHeight;
-  events: string[] = [];
   account: string;
   version: string = environment.version;
-  lender: string;
   lendEnabled: Boolean;
 
   private ethWei = new BigNumber(10).pow(new BigNumber(18));
@@ -59,9 +57,6 @@ export class ContentWrapperComponent implements OnInit {
   pendingBasaltWithdraw: Tx;
   pendingDiasporeWithdraw: Tx;
 
-  autoClose: boolean;
-  isApproved: boolean;
-
   navToggle: boolean; // Navbar toggled
   navmobileToggled = false; // Nav Mobile toggled
 
@@ -75,44 +70,6 @@ export class ContentWrapperComponent implements OnInit {
     public dialog: MatDialog,
     private countriesService: CountriesService
   ) {}
-
-  // Toggle Navbar
-  sidebarToggle() {
-    this.sidebarService.toggleService(this.navToggle = !this.navToggle);
-  }
-  // Toggle Sidebar Class
-  onClose() {
-    this.sidebarService.toggleService(this.navToggle = false);
-  }
-
-  // Open Client Dialog
-  async openDialogClient() {
-    if (await this.web3Service.requestLogin()) {
-      return;
-    }
-
-    this.dialog.open(DialogClientAccountComponent, {});
-  }
-
-  onOpen() {
-    this.sidebarService.toggleService(this.navToggle = true);
-  }
-
-  async clickWithdraw() {
-    if (!this.withdrawEnabled) {
-      window.open(environment.network.explorer.tx.replace('${tx}', this.pendingWithdraw.tx));
-    } else {
-      if (this.basaltLoansWithBalance.length > 0) {
-        const tx = await this.contractService.withdrawFundsBasalt(this.basaltLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.basaltLoansWithBalance);
-      }
-      if (this.diasporeLoansWithBalance.length > 0) {
-        const tx = await this.contractService.withdrawFundsDiaspore(this.diasporeLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, environment.contracts.diaspore.debtEngine, this.diasporeLoansWithBalance);
-      }
-      this.loadWithdrawBalance();
-    }
-  }
 
   ngOnInit() {
     // Navbar toggled
@@ -129,6 +86,80 @@ export class ContentWrapperComponent implements OnInit {
     this.canLend();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.winHeight = event.target.innerHeight;
+  }
+
+  /**
+   * Toggle Navbar
+   */
+  sidebarToggle() {
+    this.sidebarService.toggleService(this.navToggle = !this.navToggle);
+  }
+
+  /**
+   * Toggle Sidebar Class
+   */
+  onClose() {
+    this.sidebarService.toggleService(this.navToggle = false);
+  }
+
+  /**
+   * Open Client Dialog
+   */
+  async openDialogClient() {
+    if (await this.web3Service.requestLogin()) {
+      return;
+    }
+
+    this.dialog.open(DialogClientAccountComponent, {});
+  }
+
+  /**
+   * Method called when sidenav is opened
+   */
+  onOpen() {
+    this.sidebarService.toggleService(this.navToggle = true);
+  }
+
+  /**
+   * Handle click on withdraw
+   */
+  async clickWithdraw() {
+    if (!this.withdrawEnabled) {
+      window.open(environment.network.explorer.tx.replace(
+        '${tx}',
+        this.pendingWithdraw.tx
+      ));
+    } else {
+      if (this.basaltLoansWithBalance.length > 0) {
+        const tx = await this.contractService.withdrawFundsBasalt(
+          this.basaltLoansWithBalance
+        );
+        this.txService.registerWithdrawTx(
+          tx,
+          environment.contracts.basaltEngine,
+          this.basaltLoansWithBalance
+        );
+      }
+      if (this.diasporeLoansWithBalance.length > 0) {
+        const tx = await this.contractService.withdrawFundsDiaspore(
+          this.diasporeLoansWithBalance
+        );
+        this.txService.registerWithdrawTx(
+          tx,
+          environment.contracts.diaspore.debtEngine,
+          this.diasporeLoansWithBalance
+        );
+      }
+      this.loadWithdrawBalance();
+    }
+  }
+
+  /**
+   * Check if the user's country is available
+   */
   async canLend() {
     this.lendEnabled = await this.countriesService.lendEnabled();
     if (!this.lendEnabled) {
@@ -137,26 +168,20 @@ export class ContentWrapperComponent implements OnInit {
     }
   }
 
+  /**
+   * Load user account
+   */
   async loadAccount() {
     if (!this.hasAccount) {
       this.account = await this.web3Service.getAccount();
-      this.loadLender();
       this.loadRcnBalance();
       this.loadWithdrawBalance();
     }
   }
 
-  private removeTrailingZeros(value) {
-    value = value.toString();
-    if (value.indexOf('.') === -1) {
-      return value;
-    }
-    while ((value.slice(-1) === '0' || value.slice(-1) === '.') && value.indexOf('.') !== -1) {
-      value = value.substr(0, value.length - 1);
-    }
-    return value;
-  }
-
+  /**
+   * Load all pending withdraw
+   */
   private loadPendingWithdraw() {
     this.pendingBasaltWithdraw = this.txService.getLastWithdraw(
       environment.contracts.basaltEngine,
@@ -168,16 +193,17 @@ export class ContentWrapperComponent implements OnInit {
     );
   }
 
-  private async loadLender() {
-    const lender: string = await this.web3Service.getAccount();
-    this.lender = lender;
-  }
-
+  /**
+   * Load rcn balance
+   */
   private async loadRcnBalance() {
     const balance: number = await this.contractService.getUserBalanceRCN();
     this.rcnBalance = balance;
   }
 
+  /**
+   * Load withdraw balance adding basalt and diaspore amounts
+   */
   private async loadWithdrawBalance() {
     const pendingWithdraws = await this.contractService.getPendingWithdraws();
     this.basaltRcnAvailable = pendingWithdraws[0] / 10 ** 18;

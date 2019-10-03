@@ -1,14 +1,21 @@
-<div class="wrapper" [ngClass]="{'sidebar-toggled': navToggle , 'navmobile-toggled': navmobileToggled}" [style.min-height.px]="winHeight">
+<div
+  class="wrapper"
+  [ngClass]="{
+    'sidebar-toggled': navToggle,
+    'navmobile-toggled': navmobileToggled
+  }"
+  [ngStyle]="{'min-height': winHeight + 'px'}"
+>
   <app-header></app-header>
   <div class="navmobile-menu">
     <div class="profile-container" *ngIf='hasAccount'>
       <div class="spacing-container-top" *ngIf='!hasAccount'></div>
       <div class="profile-row">
-        <app-avatar [seed]=lender></app-avatar>
+        <app-avatar [seed]=account></app-avatar>
         <div class="title title-centered">Wallet address</div>
       </div>
       <div class="profile-row">
-        <div class="title margintop5 ellipsis">{{ lender }}</div>
+        <div class="title margintop5 ellipsis">{{ account }}</div>
       </div>
     </div>
     <div class="balance-container" *ngIf='hasAccount'>
@@ -37,15 +44,15 @@
       [opened]="navToggle"
       (closed)="onClose()"
       (opened)="onOpen()">
-      <div class="relative" [style.height.px]="winHeight - 60">
+      <div class="relative" [ngStyle]="{'height': (winHeight - 60) + 'px'}">
         <div class="profile-container animation-opacity" *ngIf='hasAccount'>
           <div class="spacing-container-top" *ngIf='!hasAccount'></div>
           <div class="profile-row">
-            <app-avatar [seed]=lender></app-avatar>
+            <app-avatar [seed]=account></app-avatar>
             <div class="title title-centered">Wallet address</div>
           </div>
           <div class="profile-row">
-            <div class="title margintop5 ellipsis">{{ lender }}</div>
+            <div class="title margintop5 ellipsis">{{ account }}</div>
           </div>
         </div>
         <div class="balance-container animation-opacity" *ngIf='hasAccount'>
@@ -59,25 +66,42 @@
           </div>
         </div>
         <ul class="border-top-bottom animation-opacity">
-          <li routerLink='/requests' (click)='sidebarToggle()' class='animation-left'>
+          <li
+            routerLink='/requests'
+            (click)='sidebarToggle()'
+            class='animation-left'
+          >
             <div class="li-container">
               <i class="fas fa-coins"></i>
               <div class="txt">Requests</div>
             </div>
           </li>
-          <li routerLink='/activity' (click)='sidebarToggle()' class='animation-left'>
+          <li
+            routerLink='/activity'
+            (click)='sidebarToggle()'
+            class='animation-left'
+          >
             <div class="li-container">
               <i class="fas fa-exchange-alt"></i>
               <div class="txt">Activity</div>
             </div>
           </li>
-          <li routerLink='/address/{{ account }}/' (click)='sidebarToggle()' *ngIf='hasAccount' class='animation-left'>
+          <li
+            routerLink='/address/{{ account }}/'
+            (click)='sidebarToggle()'
+            *ngIf='hasAccount'
+            class='animation-left'
+          >
             <div class="li-container">
               <i class="fas fa-wallet"></i>
               <div class="txt">Loans</div>
             </div>
           </li>
-          <li (click)="sidebarToggle(); openDialogClient();" *ngIf="!hasAccount" class='animation-left'>
+          <li
+            (click)="sidebarToggle(); openDialogClient();"
+            *ngIf="!hasAccount"
+            class='animation-left'
+          >
             <div class="li-container">
               <i class="fas fa-user-circle"></i>
               <div class="txt">Login</div>
@@ -89,7 +113,7 @@
         </div>
       </div>
     </mat-sidenav>
-    <mat-sidenav-content [style.min-height.px]="winHeight">
+    <mat-sidenav-content [ngStyle]="{'min-height': winHeight + 'px'}">
       <div id="page-content-wrapper">
         <router-outlet></router-outlet>
       </div>

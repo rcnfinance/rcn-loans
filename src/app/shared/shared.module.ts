@@ -16,7 +16,7 @@ import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.comp
 import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
 import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector.component';
 import { FilterLoansComponent } from './filter-loans/filter-loans.component';
-
+import { InfiniteProgressBarComponent } from './infinite-progress-bar/infinite-progress-bar.component';
 import { ConversionGraphicComponent } from './conversion-graphic/conversion-graphic.component';
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
@@ -87,14 +87,14 @@ import { EventsService } from './../services/events.service';
     CivicAuthComponent,
     PayFormComponent,
     FilterLoansComponent,
+    InfiniteProgressBarComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
-    DialogSelectCurrencyComponent,
-    FilterLoansComponent
+    DialogSelectCurrencyComponent
   ],
   entryComponents: [
     CivicAuthComponent,
@@ -145,6 +145,7 @@ import { EventsService } from './../services/events.service';
     CivicAuthComponent,
     PayFormComponent,
     FilterLoansComponent,
+    InfiniteProgressBarComponent,
     DialogWrongCountryComponent
   ]
 })

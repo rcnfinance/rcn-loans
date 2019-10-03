@@ -151,16 +151,16 @@ export class LendButtonComponent implements OnInit {
           break;
       }
 
-      // validate approve
-      const engineApproved = await this.contractsService.isApproved(contractAddress, lendToken);
-      if (!await engineApproved) {
-        this.showApproveDialog(contractAddress);
-        return;
-      }
-
       // validate balance amount
       if (Number(balance) > Number(required)) {
         let tx: string;
+
+        // validate approve
+        const engineApproved = await this.contractsService.isApproved(contractAddress, lendToken);
+        if (!await engineApproved) {
+          this.showApproveDialog(contractAddress);
+          return;
+        }
 
         let account: string = await this.web3Service.getAccount();
         account = web3.toChecksumAddress(account);
@@ -175,7 +175,7 @@ export class LendButtonComponent implements OnInit {
             if (lendToken === environment.contracts.rcnToken) {
               tx = await this.contractsService.lendLoan(this.loan);
             } else {
-              const tokenConverter = environment.contracts.converter.uniswapProxy;
+              const tokenConverter = environment.contracts.converter.tokenConverter;
 
               tx = await this.contractsService.converterRampLend(
                 payableAmount,
