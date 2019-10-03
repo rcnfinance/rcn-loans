@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // App Modules
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from './../../material/material.module';
 // App Services
@@ -14,6 +15,7 @@ import { AddressComponent } from './address.component';
   imports: [
     CommonModule,
     NgxSpinnerModule,
+    VirtualScrollerModule,
     MaterialModule,
     SharedModule
   ],
