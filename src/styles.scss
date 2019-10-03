@@ -370,7 +370,16 @@ mat-sidenav-container.mat-drawer-container {
   }
 }
 
-  //Menu
+// Chip
+// TODO: For specific cases of color only. Implement custom theme.
+mat-chip.mat-chip {
+  @extend %roboto-regular;
+  &--gray {
+    background: $gray7 !important;
+  }
+}
+
+// Menu
 .mat-menu-panel {
   margin-top: 70px;
   border-top-right-radius: 0px !important;
@@ -772,6 +781,7 @@ app-footer {
   position: fixed;
   bottom: 0;
   left: 0;
+  z-index: 500;
 }
 
 footer {
