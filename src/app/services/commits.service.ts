@@ -21,7 +21,8 @@ export class CommitsService {
       commits = data.content;
 
     } else {
-      const urlLoanManagerCommits = environment.rcn_node_api.url.concat(`commits?id_loan=${ id }`);
+      const urlLoanManagerCommits = environment.rcn_node_api.url.concat(`commits?id_loan=${ id }&page_size=100`);
+      // TODO: add commits paginator
 
       try {
         const responseLoanManager: any = await this.http.get(urlLoanManagerCommits).toPromise();
