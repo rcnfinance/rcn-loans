@@ -175,7 +175,7 @@ export class LendButtonComponent implements OnInit {
             if (lendToken === environment.contracts.rcnToken) {
               tx = await this.contractsService.lendLoan(this.loan);
             } else {
-              const tokenConverter = environment.contracts.converter.uniswapProxy;
+              const tokenConverter = environment.contracts.converter.tokenConverter;
 
               tx = await this.contractsService.converterRampLend(
                 payableAmount,

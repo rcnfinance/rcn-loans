@@ -6,14 +6,27 @@
     background-color: #333333;
     margin-left: -20px;
     margin-right: -20px;
-    .creator-title{
+    .creator-title,
+    .creator-image {
       position: absolute;
       top: 50%;
       left: 50%;
+      @include transform(translate(-50%, -50%));
+    }
+    .creator-title {
       color: $fifth;
       font-size: 36px;
       @extend %font-black;
-      @include transform(translate(-50%, -50%));
+    }
+    .creator-image {
+      width: 100%;
+      max-width: 250px;
+      height: 45px;
+      img {
+        max-width: 90%;
+        max-height: 100%;
+        margin: 0 auto;
+      }
     }
     .go-back {
       width: 70px;

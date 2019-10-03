@@ -22,7 +22,7 @@ const loanManagerAbi = require('../contracts/LoanManager.json');
 const debtEngineAbi = require('../contracts/DebtEngine.json');
 const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
-const uniswapConverterAbi = require('../contracts/UniswapConverter.json');
+const tokenConverterAbi = require('../contracts/TokenConverter.json');
 const oracleFactoryAbi = require('../contracts/OracleFactory.json');
 // const requestsAbi = require('../contracts/RequestsView.json');
 
@@ -36,8 +36,8 @@ export class ContractsService {
   private _debtEngine: any;
   private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
   private _rcnConverterRamp: any;
-  private _uniswapConverterAddress: string = environment.contracts.converter.uniswapProxy;
-  private _uniswapConverter: any;
+  private _tokenConverterAddress: string = environment.contracts.converter.tokenConverter;
+  private _tokenConverter: any;
   private _oracleFactoryAddress: string = environment.contracts.oracleFactory;
   private _oracleFactory: any;
 
@@ -53,7 +53,7 @@ export class ContractsService {
     this._debtEngine = this.makeContract(debtEngineAbi, environment.contracts.diaspore.debtEngine);
     this._rcnExtension = this.makeContract(extensionAbi.abi, this._rcnExtensionAddress);
     this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
-    this._uniswapConverter = this.makeContract(uniswapConverterAbi.abi, this._uniswapConverterAddress);
+    this._tokenConverter = this.makeContract(tokenConverterAbi.abi, this._tokenConverterAddress);
     this._oracleFactory = this.makeContract(oracleFactoryAbi.abi, this._oracleFactoryAddress);
   }
 
@@ -343,7 +343,7 @@ export class ContractsService {
     toToken: string,
     fromAmount: number
   ) {
-    return await promisify(this._uniswapConverter.getPriceConvertFrom, [
+    return await promisify(this._tokenConverter.getPriceConvertFrom, [
       fromToken,
       toToken,
       fromAmount
@@ -362,7 +362,7 @@ export class ContractsService {
     toToken: string,
     toAmount: number
   ) {
-    return await promisify(this._uniswapConverter.getPriceConvertTo, [
+    return await promisify(this._tokenConverter.getPriceConvertTo, [
       fromToken,
       toToken,
       toAmount
