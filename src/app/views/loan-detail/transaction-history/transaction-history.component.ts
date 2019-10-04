@@ -200,6 +200,15 @@ export class TransactionHistoryComponent implements OnInit {
       'inserted': true,
       'display': ['sender', 'from', 'amount']
     },
+    'full_payment_loan_manager': {
+      'title': 'Completed',
+      'message': 'Completed',
+      'status': 'active',
+      'awesomeClass': 'fas fa-check',
+      'color': 'gray7',
+      'inserted': true,
+      'display': []
+    },
     'transfer': {
       'title': 'Transfer',
       'message': 'Transfer',
@@ -245,10 +254,46 @@ export class TransactionHistoryComponent implements OnInit {
     return commits.sort((objA, objB) => objA.timestamp - objB.timestamp);
   }
 
+  /**
+   * Sometimes the events have an identical timestamp, in those cases apply
+   * this sort method for order commits by event priority
+   * @param commits Commits array
+   * @return Sorted commits
+   */
+  sortByEventType(commits: Commit[]) {
+    commits.map((commit: Commit, i: number) => {
+      if (i === commits.length) {
+        return commit;
+      }
+
+      if (commit.opcode === 'full_payment_loan_manager') {
+        commits.splice(i, 1);
+        commits.push(commit);
+      }
+    });
+
+    return commits;
+  }
+
   buildDataEntries(commit): DataEntry[] {
     const capitalize = (target: string) => {
       return target.charAt(0).toUpperCase() + target.substr(1);
     };
+
+    const badEntries = {
+      'paid': 'amount'
+    };
+
+    // Replace data entry keys
+    Object.keys(commit.data).map(key => {
+      if (badEntries.hasOwnProperty(key)) {
+        const newProperty = badEntries[key];
+        commit.data[newProperty] = commit.data[key];
+
+        delete commit.data[key];
+      }
+    });
+
     const showOrder = this.get_properties_by_opcode(commit.opcode)['display'];
     const dataEntries = Object.entries(commit.data).sort(([key1], [key2]) => showOrder.indexOf(key1) - showOrder.indexOf(key2));
     const result: DataEntry[] = [];
@@ -316,7 +361,11 @@ export class TransactionHistoryComponent implements OnInit {
 
     const timeEvents: object[] = [];
 
-    this.sort_by_timestamp(commits); // Order commits by timestamp
+    // Order commits by timestamp
+    this.sort_by_timestamp(commits);
+
+    // Order commits by event type
+    this.sortByEventType(commits);
 
     for (const commit of commits) {
       if (this.filterCommit(commit)) {
