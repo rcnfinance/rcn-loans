@@ -249,6 +249,21 @@ export class TransactionHistoryComponent implements OnInit {
     const capitalize = (target: string) => {
       return target.charAt(0).toUpperCase() + target.substr(1);
     };
+
+    const badEntries = {
+      'paid': 'amount'
+    };
+
+    // Replace data entry keys
+    Object.keys(commit.data).map(key => {
+      if (badEntries.hasOwnProperty(key)) {
+        const newProperty = badEntries[key];
+        commit.data[newProperty] = commit.data[key];
+
+        delete commit.data[key];
+      }
+    });
+
     const showOrder = this.get_properties_by_opcode(commit.opcode)['display'];
     const dataEntries = Object.entries(commit.data).sort(([key1], [key2]) => showOrder.indexOf(key1) - showOrder.indexOf(key2));
     const result: DataEntry[] = [];
