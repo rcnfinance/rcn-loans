@@ -42,6 +42,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   isCanceled: boolean;
   isOngoing: boolean;
   isInDebt: boolean;
+  isPaid: boolean;
 
   canTransfer = false;
   canCancel: boolean;
@@ -114,6 +115,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.isRequest = this.loan.status === Status.Request;
         this.isOngoing = this.loan.status === Status.Ongoing;
         this.isExpired = this.loan.status === Status.Expired;
+        this.isPaid = this.loan.status === Status.Paid;
 
         this.checkLoanGenerator();
         this.loadDetail();
@@ -265,6 +267,11 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
         this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
         break;
+
+      case Status.Paid:
+        this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
+        break;
+
       default:
         break;
     }
