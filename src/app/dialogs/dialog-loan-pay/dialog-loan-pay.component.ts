@@ -3,9 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Loan } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
-
+// App services
 import { Web3Service } from './../../services/web3.service';
-import { Tx } from '../../tx.service';
 
 @Component({
   selector: 'app-dialog-loan-pay',
@@ -22,9 +21,7 @@ export class DialogLoanPayComponent implements OnInit {
   shortAccount: string;
   pendingAmount: string;
   currency: any;
-  payPendingTx: Tx;
 
-  txSubscription: boolean;
   startProgress: boolean;
   finishProgress: boolean;
 
@@ -94,17 +91,7 @@ export class DialogLoanPayComponent implements OnInit {
     this.finishProgress = false;
     this.loading = false;
 
-    this.dialogRef.close();
+    this.dialogRef.close(true);
   }
 
-  /**
-   * Get submit button text
-   * @return Button text
-   */
-  get submitButtonText(): string {
-    if (!this.loading) {
-      return 'Pay';
-    }
-    return 'Paying...';
-  }
 }
