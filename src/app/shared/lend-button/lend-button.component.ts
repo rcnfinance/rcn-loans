@@ -96,7 +96,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    * Track tx
    */
   trackLendTx(tx: Tx) {
-    if (tx.type === Type.pay && tx.data.id === this.loan.id) {
+    if (tx.type === Type.lend && tx.data.id === this.loan.id) {
       this.endLend.emit();
     }
   }
