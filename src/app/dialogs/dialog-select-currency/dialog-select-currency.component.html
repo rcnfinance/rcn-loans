@@ -83,11 +83,11 @@
               {{ lendExpectedReturn }}
             </span>
             <span class="data--currency-style">
-              {{ lendCurrency || '-' }}
+              {{ lendCurrency ? 'RCN' : '-' }}
             </span>
             <div
               class="d-inline"
-              matTooltip="Lorem ipsum dolor sit amet"
+              matTooltip="Expected return"
               *ngIf="lendCurrency && expectedReturnWarning"
             >
               <i class="fas fa-exclamation-triangle margin-left triangle"></i>
@@ -117,7 +117,11 @@
               <span class="margin-left">
                 {{ loan.currency }}
               </span>
-              <div class="d-inline" *ngIf="lendCurrency">
+              <div
+                class="d-inline"
+                matTooltip="Guaranteed return"
+                *ngIf="lendCurrency"
+              >
                 <i class="fas fa-check-circle check margin-left"></i>
               </div>
             </div>
