@@ -5,6 +5,7 @@ import { Loan } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 
 import { Web3Service } from './../../services/web3.service';
+import { Tx } from '../../tx.service';
 
 @Component({
   selector: 'app-dialog-loan-pay',
@@ -21,6 +22,11 @@ export class DialogLoanPayComponent implements OnInit {
   shortAccount: string;
   pendingAmount: string;
   currency: any;
+  payPendingTx: Tx;
+
+  txSubscription: boolean;
+  startProgress: boolean;
+  finishProgress: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<any>,
@@ -34,6 +40,7 @@ export class DialogLoanPayComponent implements OnInit {
     this.dialogRef.updateSize('auto', 'auto');
     this.buildForm();
     this.loadDetail();
+
     await this.loadAccount();
   }
 
@@ -72,22 +79,22 @@ export class DialogLoanPayComponent implements OnInit {
   }
 
   /**
-   * Submit form
-   * @param form Form group
-   * @fires submitAdd
+   * Show loading progress bar
    */
-  submitForm() {
-    const form: FormGroup = this.form;
-    const amount = form.value.amount;
+  showProgressbar() {
+    this.startProgress = true;
+    this.loading = true;
+  }
 
-    if (!form.valid) {
-      // TODO: Ux tip - show snackbar with error description
-      return;
-    }
-    if (this.loading) {
-      return;
-    }
-    this.dialogRef.close(amount);
+  /**
+   * Hide progressbar and close dialog
+   */
+  hideProgressbar() {
+    this.startProgress = false;
+    this.finishProgress = false;
+    this.loading = false;
+
+    this.dialogRef.close();
   }
 
   /**

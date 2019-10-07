@@ -355,7 +355,15 @@ mat-sidenav-container.mat-drawer-container {
     padding: 0;
     max-height: 100vh;
     height: 100vh;
-
+    .navbar-container {
+      position: relative;
+      app-infinite-progress-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+      }
+    }
     .creator-container {
       &__back {
         position: absolute;

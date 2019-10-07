@@ -82,7 +82,7 @@ export class TxService {
   }
 
   unsubscribeConfirmedTx(cb: (tx: Tx) => void) {
-    this.confirmedTxSubscribers = this.confirmedTxSubscribers.filter(c => c !== cb);
+    this.confirmedTxSubscribers = this.confirmedTxSubscribers.filter(c => c.toString() !== cb.toString());
   }
 
   registerTx(tx: Tx) {
