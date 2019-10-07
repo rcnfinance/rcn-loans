@@ -128,8 +128,20 @@
         </table>
       </div>
       <div class="px-3 pb-3" *ngIf="canLend || canTransfer || canPay">
-        <app-pay-button [loan]=loan *ngIf="canPay"></app-pay-button>
-        <button mat-raised-button class="button button-primary lend" (click)="lend()" *ngIf="canLend">Lend</button>
+        <app-pay-button
+          [loan]="loan"
+          [showPayDialog]="true"
+          (endPay)="onPayUpdate()"
+          *ngIf="canPay"
+        ></app-pay-button>
+        <button
+          mat-raised-button
+          class="button button-primary lend"
+          (click)="openDialog('lend')"
+          *ngIf="canLend"
+        >
+          Lend
+        </button>
         <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="canLend"></app-risk-indicator>
         <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
       </div>
