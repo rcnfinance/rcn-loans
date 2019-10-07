@@ -73,7 +73,8 @@
     &:nth-child(2){
       text-align: center;
       @extend %propiety-subtitle;
-      @extend .font20;
+      font-size: 24px;
+      font-weight: 700;
     }
     &:nth-child(3){
       text-align: right;

@@ -684,8 +684,9 @@ mat-checkbox{
       font-family: 'Roboto', sans-serif;
       @extend %font-bold;
       .currency{
-        font-size: 18px;
+        font-size: 24px;
         @extend %font-regular;
+        font-weight: 700;
       }
     }
   }
