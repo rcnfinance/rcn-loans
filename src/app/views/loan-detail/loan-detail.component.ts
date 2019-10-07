@@ -195,10 +195,11 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Refresh loan when payment is updated
+   * Refresh loan when payment or lending status is updated
    */
-  onPayUpdate() {
-    const miliseconds = 6000;
+  onUserAction(action: 'lend' | 'pay') {
+    const miliseconds = 7000;
+    console.info('user action detected', action);
 
     setTimeout(async() => {
       const loan: Loan = this.loan;

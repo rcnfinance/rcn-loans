@@ -37,6 +37,10 @@ export class DialogSelectCurrencyComponent implements OnInit {
   }> = [];
   expectedReturnWarning: boolean;
 
+  loading: boolean;
+  startProgress: boolean;
+  finishProgress: boolean;
+
   constructor(
     private contractsService: ContractsService,
     private web3Service: Web3Service,
@@ -198,6 +202,25 @@ export class DialogSelectCurrencyComponent implements OnInit {
     rate = 1 / currency.fromUnit(rate);
 
     return rate;
+  }
+
+  /**
+   * Show loading progress bar
+   */
+  showProgressbar() {
+    this.startProgress = true;
+    this.loading = true;
+  }
+
+  /**
+   * Hide progressbar and close dialog
+   */
+  hideProgressbar() {
+    this.startProgress = false;
+    this.finishProgress = false;
+    this.loading = false;
+
+    this.dialogRef.close();
   }
 
 }

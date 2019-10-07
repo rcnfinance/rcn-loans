@@ -131,17 +131,15 @@
         <app-pay-button
           [loan]="loan"
           [showPayDialog]="true"
-          (endPay)="onPayUpdate()"
+          (endPay)="onUserAction('pay')"
           *ngIf="canPay"
         ></app-pay-button>
-        <button
-          mat-raised-button
-          class="button button-primary lend"
-          (click)="openDialog('lend')"
+        <app-lend-button
+          [loan]="loan"
+          [showLendDialog]="true"
+          (endLend)="onUserAction('lend')"
           *ngIf="canLend"
-        >
-          Lend
-        </button>
+        ></app-lend-button>
         <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="canLend"></app-risk-indicator>
         <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
       </div>
