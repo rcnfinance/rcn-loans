@@ -27,7 +27,7 @@ export class BrandingService {
       undefined
     ),
     wenance: new Brand(
-      'Wenance',
+      '0xfeAc8e490Fe7F0760a10225E7DCCDA1E22Ad8dAa',
       '#009BDE',
       './assets/logos/wenance.svg',
       '',

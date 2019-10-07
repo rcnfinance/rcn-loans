@@ -9,7 +9,7 @@
     flex: 1;
     @extend %propiety-title;
     @extend .font13;
-
+    font-family: 'Roboto', sans-serif;
     &:nth-child(1) {
       text-align: left;
     }
