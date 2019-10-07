@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { environment } from './../../../environments/environment';
 
 interface Filters {
   currency: string;
@@ -29,34 +30,22 @@ export class FilterLoansComponent implements OnInit {
     }),
     annualInterest: new FormControl()
   });
-  currencies: string[] = ['RCN', 'MANA', 'ARS'];
+  currencies: string[];
   daySeconds = 24 * 60 * 60;
 
   constructor() {
   }
 
-  get annualInterest() {
-    return this.formGroup.get('annualInterest');
-  }
-  get currency() {
-    return this.formGroup.get('currency');
-  }
-  get amountStart() {
-    return this.formGroup.get('amountStart');
-  }
-  get amountEnd() {
-    return this.formGroup.get('amountEnd');
+  ngOnInit() {
+    this.getCurrencies();
+    this.setControlsDisable();
+    this.onFilterChange();
   }
 
-  setControlsDisable() {
-    this.currency.disable();
-    this.amountStart.disable();
-    this.amountEnd.disable();
-    this.formGroup.controls.duration.disable();
-    this.annualInterest.disable();
-  }
-
-  onChanges(): void {
+  /**
+   * Form input subscriptions
+   */
+  onFilterChange(): void {
     this.currency.valueChanges.subscribe(val => {
       if (this.filters.currency !== val && val !== null) {
         this.filters.currency = val;
@@ -105,9 +94,32 @@ export class FilterLoansComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.setControlsDisable();
-    this.onChanges();
+  /**
+   * Get environment filter currencies
+   */
+  getCurrencies() {
+    this.currencies = environment.filterCurrencies;
+  }
+
+  setControlsDisable() {
+    this.currency.disable();
+    this.amountStart.disable();
+    this.amountEnd.disable();
+    this.formGroup.controls.duration.disable();
+    this.annualInterest.disable();
+  }
+
+  get annualInterest() {
+    return this.formGroup.get('annualInterest');
+  }
+  get currency() {
+    return this.formGroup.get('currency');
+  }
+  get amountStart() {
+    return this.formGroup.get('amountStart');
+  }
+  get amountEnd() {
+    return this.formGroup.get('amountEnd');
   }
 
 }

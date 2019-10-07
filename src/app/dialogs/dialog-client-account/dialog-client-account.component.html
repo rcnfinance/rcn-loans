@@ -1,7 +1,16 @@
 <mat-dialog-content>
   <div class="navbar-container">
     <div class="creator-container">
-      <div class="creator-title">Missing Ether Client</div>
+      <div class="creator-title">
+        <button
+          matDialogClose
+          mat-button
+          class="d-md-none creator-container__back"
+        >
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        Missing Ether Client
+      </div>
     </div>
   </div>
   <div class="col-sm-12 dialog-padding">
@@ -12,14 +21,10 @@
       <div class='col-sm-12'>
         <img src="https://metamask.io/img/metamask.png" alt="ether-client">
         <div class="title main-h1 margintop10">Metamask</div>
-        <button mat-raised-button href="https://metamask.io/"  target="_blank" class="button button-primary margintop20">GET</button>
+        <a href="https://metamask.io/" target="_blank">
+          <button mat-raised-button class="button button-primary margintop20">GET</button>
+        </a>
       </div>
-      <!-- <div class="col-sm-12 col-md-6">
-        <div class="margintop20 d-none d-md-none"></div>
-        <img src="https://www.myetherwallet.com/images/myetherwallet-logo-square.png" alt="ether-client">
-        <div class="title main-h1 margintop10">My Ether Wallet</div>
-        <a mat-raised-button href="https://www.myetherwallet.com/"  target="_blank" class="button button-primary margintop20">GET</a>
-      </div> -->
     </div>
   </div>
 </mat-dialog-content>

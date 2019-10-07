@@ -7,7 +7,16 @@
     </div>
     <div class="flex-item">
       <div class="creator-container">
-        <div class="creator-title">{{ brand.header }}</div>
+        <ng-container *ngIf="brand.headerImage; else headerTitle">
+          <div class="creator-image d-flex justify-content-center align-items-center">
+            <img [src]="brand.headerImage" [alt]="brand.headerTitle">
+          </div>
+        </ng-container>
+        <ng-template #headerTitle>
+          <div class="creator-title">
+            {{ brand.headerTitle }}
+          </div>
+        </ng-template>
       </div>
     </div>
     <div class="flex-item">
@@ -16,8 +25,8 @@
   </div>
 
   <div class="loan-description flex-container">
-    <div class="left">
-      <div class="avatar-information">
+    <div class="left px-0 col-xs-12 col-md-5">
+      <div class="avatar-information pb-4 pt-2 py-md-0">
         <div class="flex-item">
           <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
         </div>
@@ -25,15 +34,39 @@
           <app-avatar-title [loan]=loan></app-avatar-title>
         </div>
       </div>
-      <div class="paddingleft15 paddingright15">
-        <app-conversion-graphic [headers]="['Lend', loan.currency, isRequest ? 'Estimated return' : 'Return']" [amountLeft]="loan.amount" [amountRight]="loan.expectedReturn"></app-conversion-graphic>
-      </div>
-      <div class="paddingleft15 paddingright15">
-        <app-conversion-graphic [headers]="['Paid', 'Interest', 'Debt']" [amountLeft]="loan.paid" [amountRight]="pendingAmount" [textMiddle]="interestMiddleText" *ngIf="!isRequest"></app-conversion-graphic>
-      </div>
+
+      <ng-container *ngIf="!isPaid; else paidGraphic">
+        <div class="px-3 pt-1">
+          <app-conversion-graphic
+            [headers]="['Lend', loan.currency, isRequest || isCanceled ? 'Estimated return' : 'Return']"
+            [amountLeft]="loan.currency.fromUnit(loan.amount)"
+            [amountRight]="isRequest ||  isCanceled ? expectedReturn : totalDebt"
+          ></app-conversion-graphic>
+        </div>
+        <div class="px-3">
+          <app-conversion-graphic
+            [headers]="['Paid', 'Interest', 'Debt']"
+            [amountRight]="pendingAmount"
+            [textMiddle]="interest"
+            [amountLeft]="paid"
+            *ngIf="!isRequest && !isCanceled"
+          ></app-conversion-graphic>
+        </div>
+      </ng-container>
+
+      <ng-template #paidGraphic>
+        <div class="px-3 pt-1">
+          <app-conversion-graphic
+            [headers]="['Lent', loan.currency, 'Paid']"
+            [amountLeft]="loan.currency.fromUnit(loan.amount)"
+            [amountRight]="paid"
+          ></app-conversion-graphic>
+        </div>
+      </ng-template>
 
       <div class="margintop20"></div>
-      <app-detail-table [data]="loanConfigData" *ngIf="isRequest"></app-detail-table>
+      <app-detail-table [data]="diasporeData" *ngIf="isDiaspore"></app-detail-table>
+      <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled"></app-detail-table>
       <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
 
       <div class="table-responsive" *ngIf='availableOracle'>
@@ -67,7 +100,7 @@
         </table>
       </div>
       <div class="table-responsive">
-        <table class="table" (click)="openLender(loan.owner)" *ngIf="!isRequest && !isExpired">
+        <table class="table" (click)="openLender(loan.owner)" *ngIf="loan.debt">
           <thead>
             <tr>
               <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
@@ -75,7 +108,7 @@
           </thead>
           <tbody>
             <tr>
-              <td style='cursor: pointer'>{{ loan.owner }}</td>
+              <td style='cursor: pointer'>{{ loan.debt.owner }}</td>
             </tr>
           </tbody>
         </table>
@@ -94,24 +127,28 @@
           </tbody>
         </table>
       </div>
-      <div class="paddingleft15 paddingright15 paddingbottom15" *ngIf="canLend || canTransfer || canPay">
+      <div class="px-3 pb-3" *ngIf="canLend || canTransfer || canPay">
         <app-pay-button [loan]=loan *ngIf="canPay"></app-pay-button>
-        <app-lend-button [loan]=loan *ngIf="canLend"></app-lend-button>
+        <button mat-raised-button class="button button-primary lend" (click)="lend()" *ngIf="canLend">Lend</button>
         <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="canLend"></app-risk-indicator>
         <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
       </div>
     </div>
 
-    <div class="right">
+    <div class="right px-0 col-xs-12 col-md-7">
       <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
       <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
     </div>
 
   </div>
 
-  <div class="margintop40"></div>
-  <div class="title main-h1 feature-padding">History</div>
-  <div class="paddingleft15 paddingright15">
-    <app-transaction-history [loan]=loan></app-transaction-history>
+  <div *ngIf="hasHistory">
+    <div class="margintop60"></div>
+    <div class="title main-h1 feature-padding">History</div>
+    <div class="px-3">
+      <app-transaction-history [loan]=loan></app-transaction-history>
+    </div>
   </div>
 </div>
+
+<app-footer></app-footer>

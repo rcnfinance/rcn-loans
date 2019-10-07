@@ -4,6 +4,7 @@ import { UnknownCosigner } from './../../../models/cosigner.model';
 import { CosignerService } from '../../../services/cosigner.service';
 import { CosignerProvider } from '../../../providers/cosigner-provider';
 import { DecentralandCosignerProvider } from '../../../providers/cosigners/decentraland-cosigner-provider';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-detail-cosigner',
@@ -34,5 +35,9 @@ export class DetailCosignerComponent implements OnInit {
         console.warn('Unknown cosigner retrieved', this.cosignerProvider);
         return 'unknown';
     }
+  }
+
+  get cosignerLinkExplorer(): string {
+    return environment.network.explorer.address.replace('${address}', this.loan.cosigner);
   }
 }

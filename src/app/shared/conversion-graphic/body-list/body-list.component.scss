@@ -1,4 +1,5 @@
-@import '../../../../scss/_variables.scss'; //variables
+@import '../../../../scss/variables';
+@import '../../../../scss/fonts';
 
 .conversion-block{
   height: 50px;
@@ -9,15 +10,18 @@
   border-bottom: 1px solid black;
   div{
     flex: 1;
-    @extend %roboto-black;
+    @extend %roboto-bold;
     &:nth-child(1){
       text-align: left;
-      font-size: 26px;
+      @extend .font30;
     }
     &:nth-child(2){
       display: flex;
       @extend %font-regular;
-      i{ margin: 0 auto; }
+      i {
+        margin: 0 auto;
+        transform: rotate(180deg);
+      }
       &.feature{
         display: block;
         font-size: 18px;
@@ -27,8 +31,20 @@
     }
     &:nth-child(3){
       color: $primary;
-      font-size: 26px;
       text-align: right;
+      @extend .font30;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .conversion-block {
+    div {
+      &:nth-child(2) {
+        i {
+          font-size: 2.5em;
+        }
+      }
     }
   }
 }

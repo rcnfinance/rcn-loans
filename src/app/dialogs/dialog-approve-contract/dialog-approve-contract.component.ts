@@ -1,75 +1,195 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs';
 // App Component
-import { MatDialog, MatDialogRef } from '@angular/material';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { EventsService, Category } from '../../services/events.service';
 import { environment } from '../../../environments/environment';
+
+class Contract {
+  isApproved = {};
+  constructor(
+    public name: string,
+    public address: string
+  ) { }
+}
+
+class TokenContracts {
+  constructor(
+    public address: string,
+    public contracts: Contract[]
+  ) { }
+}
 
 @Component({
   selector: 'app-dialog-approve-contract',
   templateUrl: './dialog-approve-contract.component.html',
   styleUrls: ['./dialog-approve-contract.component.scss']
 })
-export class DialogApproveContractComponent implements OnInit {
-  autoClose: boolean;
-  lender: string;
-  isApproved: boolean;
+export class DialogApproveContractComponent implements OnInit, OnDestroy {
+  onlyAddress: string;
+  onlyToken: string;
+  account: string;
+  currencies: any[];
+  contracts: Contract[] = [
+    new Contract('Diaspore Loan manager', environment.contracts.diaspore.loanManager),
+    new Contract('Diaspore Debt mananger', environment.contracts.diaspore.debtEngine),
+    new Contract('Diaspore Converter ramp', environment.contracts.converter.converterRamp),
+    new Contract('Basalt engine', environment.contracts.basaltEngine)
+  ];
+  tokenContracts = {};
+
+  // subscriptions
+  subscriptionAccount: Subscription;
 
   constructor(
     private web3Service: Web3Service,
-    private contracts: ContractsService,
+    private contractsService: ContractsService,
     private eventsService: EventsService,
     public dialog: MatDialog,
-    private dialogRef: MatDialogRef<DialogApproveContractComponent>
-  ) { }
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    if (this.data) {
+      this.onlyAddress = this.data.onlyAddress;
+      this.onlyToken = this.data.onlyToken;
+    }
+  }
 
-  loadLender() {
-    this.web3Service.getAccount().then((resolve: string) => {
-      this.lender = resolve;
+  async ngOnInit() {
+    await this.loadCurrencies();
+    await this.loadAccount();
+    this.loadApproved();
+    this.handleLoginEvents();
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptionAccount) {
+      this.subscriptionAccount.unsubscribe();
+    }
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  handleLoginEvents() {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(async (loggedIn: boolean) => {
+      if (!loggedIn) {
+        this.dialog.closeAll();
+        return;
+      }
+
+      await this.loadAccount();
+      this.loadApproved();
     });
   }
-  loadApproved(): Promise<any> {
-    return this.contracts.isEngineApproved().then((approved) => {
-      this.isApproved = approved;
+
+  /**
+   * Set account address
+   */
+  async loadAccount() {
+    this.account = await this.web3Service.getAccount();
+  }
+
+  /**
+   * Load currencies
+   */
+  loadCurrencies() {
+    const ethAddress = environment.contracts.converter.ethAddress;
+    this.currencies = environment.usableCurrencies.filter(
+      currency => currency.address !== ethAddress
+    );
+
+    // set contracts by token
+    this.tokenContracts = this.currencies.reduce((accumulator, item) => ({
+      ...accumulator,
+      [item.symbol]: new TokenContracts(
+        item.address,
+        this.loadContracts(item.address)
+      )
+    }), {});
+  }
+
+  async loadApproved(): Promise<any> {
+    const promises = [];
+
+    const isContractApproved = (contract, currency) => {
+      promises.push(
+        new Promise(async () => {
+          contract.isApproved[currency.address] = await this.contractsService.isApproved(contract.address, currency.address);
+          console.info(
+            contract.name,
+            contract.address,
+            'Approved',
+            contract.isApproved[currency.address],
+            'for Token',
+            currency.address
+          );
+        })
+      );
+    };
+
+    this.currencies.map(currency => {
+      this.contracts.map(contract => isContractApproved(contract, currency));
     });
+
+    await Promise.all(promises);
   }
-  get isEnabled(): boolean {
-    return this.isApproved !== undefined;
+
+  isEnabled(contract: Contract): boolean {
+    return contract.isApproved !== undefined;
   }
-  clickCheck() {
+
+  async clickCheck(contract: Contract, event: any, tokenAddress: string) {
     let action;
     let actionCode;
 
-    if (this.isApproved) {
-      actionCode = 'disapprove';
-      action = this.contracts.disapproveEngine();
-    } else {
-      actionCode = 'approve';
-      action = this.contracts.approveEngine();
+    try {
+      if (!event.checked) {
+        actionCode = `disapprove${ contract.name }`;
+        action = this.contractsService.disapprove(contract.address, tokenAddress);
+      } else {
+        actionCode = `disapprove${ contract.name }`;
+        action = this.contractsService.approve(contract.address, tokenAddress);
+      }
+
+      this.eventsService.trackEvent(
+        `click-${ actionCode }-basalt-rcn`,
+        Category.Account,
+        environment.contracts.basaltEngine
+      );
+
+      await action;
+
+      this.eventsService.trackEvent(
+        `${ actionCode }-rcn`,
+        Category.Account,
+        environment.contracts.basaltEngine
+      );
+
+    } catch (e) {
+      console.info('Approve rejected', e);
+      event.source.checked = !event.checked;
+      return;
+    } finally {
+      await this.loadApproved();
+    }
+  }
+
+  /**
+   * Load contracts for the specified token
+   * @param token Token address
+   * @return Contracts array
+   */
+  private loadContracts(token: string) {
+    const rcnToken = environment.contracts.rcnToken;
+
+    if (token !== rcnToken) {
+      return this.contracts.filter(
+        contract => contract.address !== environment.contracts.basaltEngine
+      );
     }
 
-    this.eventsService.trackEvent(
-      'click-' + actionCode + '-basalt-rcn',
-      Category.Account,
-      environment.contracts.basaltEngine
-    );
-
-    action.then(() => {
-      this.loadApproved().then(() => {
-        this.eventsService.trackEvent(
-          actionCode + '-basalt-rcn',
-          Category.Account,
-          environment.contracts.basaltEngine
-        );
-        if (this.autoClose) {
-          this.dialogRef.close(this.isApproved);
-        }
-      });
-    });
-  }
-  ngOnInit() {
-    this.loadLender();
-    this.loadApproved();
+    return this.contracts;
   }
 }

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule } from '@angular/http';
 // App Services
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -27,12 +26,12 @@ import { TransferFormComponent } from './../../shared/transfer-form/transfer-for
 
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
-import { DialogInsufficientFoundsComponent } from './../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
+import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
+import { ItemFeatureComponent } from './item-feature/item-feature.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    HttpModule,
     NgxSpinnerModule,
     SharedModule,
     LoanDetailRoutingModule,
@@ -58,11 +57,12 @@ import { DialogInsufficientFoundsComponent } from './../../dialogs/dialog-insuff
     TransferFormComponent,
 
     DialogLoanTransferComponent,
-    DialogLoanPayComponent
+    DialogLoanPayComponent,
+    ItemFeatureComponent
   ],
   entryComponents: [
     DialogLoanTransferComponent,
-    DialogInsufficientFoundsComponent,
+    DialogInsufficientfundsComponent,
     DialogLoanPayComponent
   ],
   exports: [

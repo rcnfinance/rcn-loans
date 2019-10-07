@@ -37,12 +37,12 @@
       @extend %font-bold;
       @extend %absolute-center-top;
     }
-    .nav{ 
-      display: none; 
-      > div{ 
+    .nav{
+      display: none;
+      > div{
         outline: -webkit-focus-ring-color auto 0px;
         @extend %font-bold;
-      } 
+      }
     }
     .icon-hamburguer{
       cursor: pointer;
@@ -132,8 +132,8 @@
       li{
         @include transition();
         @for $i from 1 through 12 {
-          &:nth-child(#{$i}) { 
-            @include transition-delay(0.06s * $i); 
+          &:nth-child(#{$i}) {
+            @include transition-delay(0.06s * $i);
           }
         }
         opacity: 1;
@@ -161,7 +161,7 @@
   }
 }
 
-@media (min-width: 992px){
+@media (min-width: 1280px){
   .navbar{
     height: 60px;
     padding: 7px 15px;
@@ -231,7 +231,7 @@
   }
   .navbar-extension{ul{span.marginleft30{display:inline-block;}}}
   .navbar-extension{ul{span.marginleft60{display:none;}}}
-  
+
   .extension-toggled{
     .navbar-extension {
       height: 50px;
@@ -241,9 +241,6 @@
       top: 110px;
     }
   }
-}
-
-@media (min-width: 992px){
   .navbar-extension{ul{span.marginleft30{display:none;}}}
   .navbar-extension{ul{span.marginleft60{display:inline-block;}}}
 }

@@ -9,7 +9,7 @@ export class IdentityService {
   constructor() { }
   getIdentity(loan: Loan): Promise<Identity> {
     return new Promise((resolve) => {
-      resolve(companyIdentities[environment.dir[loan.borrower]]);
+      resolve(companyIdentities[environment.dir[loan.borrower.toLowerCase()]]);
     }) as Promise<Identity>;
   }
 }
