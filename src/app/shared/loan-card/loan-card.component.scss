@@ -64,6 +64,7 @@
 }
 .properties-block{
   @extend %flex-container;
+  margin-top: 40px;
   div{
     flex: 1;
     &:nth-child(1){
@@ -86,7 +87,7 @@
 
 
 .conversion-block{
-  height: 50px;
+  height: 30px;
   @extend %flex-container;
   padding: 0px 15px;
   margin: 5px -15px 25px;
