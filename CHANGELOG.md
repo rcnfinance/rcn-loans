@@ -5,6 +5,9 @@
 ### Enhancement:
 
 - Improving Restricted Region Dialog
+- Display Diaspore RCN Engine loans
+- Show Lending dialog, lend using another currency
+- Visual improvements
 
 ## **0.0.13** Avocados - 2019/02/15
 
