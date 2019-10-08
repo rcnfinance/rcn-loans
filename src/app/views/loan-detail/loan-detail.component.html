@@ -43,13 +43,12 @@
             [amountRight]="isRequest ||  isCanceled ? expectedReturn : totalDebt"
           ></app-conversion-graphic>
         </div>
-        <div class="px-3">
+        <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled">
           <app-conversion-graphic
             [headers]="['Paid', 'Interest', 'Debt']"
             [amountRight]="pendingAmount"
             [textMiddle]="interest"
             [amountLeft]="paid"
-            *ngIf="!isRequest && !isCanceled"
           ></app-conversion-graphic>
         </div>
       </ng-container>
