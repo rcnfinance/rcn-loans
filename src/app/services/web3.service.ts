@@ -1,4 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import * as Web3 from 'web3';
 import { environment } from '../../environments/environment';
 import { promisify } from '../utils/utils';
@@ -16,7 +17,9 @@ export class Web3Service {
   private account: string = null;
   private isLogging: boolean;
 
-  constructor() {
+  constructor(
+    private snackbar: MatSnackBar
+  ) {
     this._web3 = this.buildWeb3();
 
     if (typeof window.web3 !== 'undefined') {
@@ -75,11 +78,16 @@ export class Web3Service {
     // validate network id
     const candWeb3 = new Web3(window.ethereum);
     const expectedNetworkId = environment.network.id;
+    const expectedNetworkName = environment.network.name;
     const networkId = await promisify(candWeb3.version.getNetwork, []);
 
     if (networkId !== expectedNetworkId) {
       console.info('Mismatch provider network ID', expectedNetworkId, environment.network.id);
-      return false;
+      this.snackbar.open(`Please connect to the ${ expectedNetworkName } Network.`, null, {
+        duration: 4000,
+        horizontalPosition: 'center'
+      });
+      return true;
     }
 
     // handle wallet connection
