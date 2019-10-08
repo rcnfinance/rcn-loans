@@ -93,7 +93,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
   /**
    * Handle click on pay button
    */
-  clickPay() {
+  async clickPay() {
     // country validation
     if (!this.lendEnabled) {
       this.dialog.open(DialogWrongCountryComponent);
@@ -111,6 +111,29 @@ export class PayButtonComponent implements OnInit, OnDestroy {
           this.pendingTx.tx
         ), '_blank');
       }
+      return;
+    }
+    // unlogged user
+    if (!this.web3Service.loggedIn) {
+      const hasClient = await this.web3Service.requestLogin();
+      if (this.web3Service.loggedIn) {
+        this.handlePay();
+        return;
+      }
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
+      return;
+    }
+    // debt validation
+    if (!this.loan.debt) {
+      this.openSnackBar('The loan was not yet lended', '');
+      return;
+    }
+    // borrower validation
+    const account: string = await this.web3Service.getAccount();
+    if (this.loan.debt.owner.toLowerCase() === account.toLowerCase()) {
+      this.openSnackBar('The sender cannot be the same as the lender', '');
       return;
     }
 
@@ -140,18 +163,6 @@ export class PayButtonComponent implements OnInit, OnDestroy {
    */
   async handlePay(forze = false) {
     if (this.opPending && !forze) { return; }
-
-    if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (this.web3Service.loggedIn) {
-        this.handlePay();
-        return;
-      }
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-      }
-      return;
-    }
 
     try {
       const balance = await this.contractsService.getUserBalanceRCNWei();

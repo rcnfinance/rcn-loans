@@ -104,7 +104,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   /**
    * Handle click on lend button
    */
-  clickLend() {
+  async clickLend() {
     // country validation
     if (!this.lendEnabled) {
       this.dialog.open(DialogWrongCountryComponent);
@@ -122,6 +122,24 @@ export class LendButtonComponent implements OnInit, OnDestroy {
           this.pendingTx.tx
         ), '_blank');
       }
+      return;
+    }
+    // unlogged user
+    if (!this.web3Service.loggedIn) {
+      const hasClient = await this.web3Service.requestLogin();
+      if (this.web3Service.loggedIn) {
+        this.handleLend();
+        return;
+      }
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
+      return;
+    }
+    // borrower validation
+    const account: string = await this.web3Service.getAccount();
+    if (this.loan.borrower.toLowerCase() === account.toLowerCase()) {
+      this.openSnackBar('The lender cannot be the same as the borrower', '');
       return;
     }
 
@@ -151,18 +169,6 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    */
   async handleLend(forze = false) {
     if (this.opPending && !forze) {
-      return;
-    }
-
-    if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (this.web3Service.loggedIn) {
-        this.handleLend();
-        return;
-      }
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-      }
       return;
     }
 
