@@ -309,6 +309,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
         // Show ongoing loan detail
         this.loanStatusData = [
+          ['Description', 'Date'], // TODO
           ['Lend date', lendDate], // TODO
           ['Due date', dueDate],
           ['Deadline', deadline],
