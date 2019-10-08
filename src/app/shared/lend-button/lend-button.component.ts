@@ -136,11 +136,38 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       }
       return;
     }
+    // debt validation
+    if (this.loan.debt) {
+      this.openSnackBar('The loan has already been lend', '');
+      return;
+    }
     // borrower validation
     const account: string = await this.web3Service.getAccount();
     if (this.loan.borrower.toLowerCase() === account.toLowerCase()) {
       this.openSnackBar('The lender cannot be the same as the borrower', '');
       return;
+    }
+    // cosigner validation
+    const cosigner = this.cosignerService.getCosigner(this.loan);
+    if (cosigner instanceof DecentralandCosignerProvider) {
+      const isParcelStatusOpen = await cosigner.getStatusOfParcel(this.loan);
+      if (!isParcelStatusOpen) {
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: {
+            error: new Error('Not Available, Parcel is already sold')
+          }
+        });
+        return;
+      }
+      const isMortgageCancelled = await cosigner.isMortgageCancelled(this.loan);
+      if (isMortgageCancelled) {
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: {
+            error: new Error('Not Available, Mortgage has been cancelled')
+          }
+        });
+        return;
+      }
     }
 
     if (this.showLendDialog) {
@@ -172,28 +199,6 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const cosigner = this.cosignerService.getCosigner(this.loan);
-    if (cosigner instanceof DecentralandCosignerProvider) {
-      const isParcelStatusOpen = await cosigner.getStatusOfParcel(this.loan);
-      if (!isParcelStatusOpen) {
-        this.dialog.open(DialogGenericErrorComponent, {
-          data: {
-            error: new Error('Not Available, Parcel is already sold')
-          }
-        });
-        return;
-      }
-
-      const isMortgageCancelled = await cosigner.isMortgageCancelled(this.loan);
-      if (isMortgageCancelled) {
-        this.dialog.open(DialogGenericErrorComponent, {
-          data: {
-            error: new Error('Not Available, Mortgage has been cancelled')
-          }
-        });
-        return;
-      }
-    }
     const oracleData = await this.contractsService.getOracleData(this.loan.oracle);
     this.startOperation();
 
