@@ -10,8 +10,8 @@
       {{ feature.title }}
     </p>
     <ng-container *ngIf="feature.url; else itemDescription">
-      <a [href]="feature.url">
-        {{ feature.url }}
+      <a [href]="feature.url" target="_blank">
+        {{ feature.url | visualUrl }}
       </a>
     </ng-container>
     <ng-template #itemDescription>

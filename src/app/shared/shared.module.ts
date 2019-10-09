@@ -27,7 +27,6 @@ import { PayButtonComponent } from './pay-button/pay-button.component';
 import { CloseButtonComponent } from './close-button/close-button.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
-
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 import { PayFormComponent } from './pay-form/pay-form.component';
@@ -38,6 +37,8 @@ import { DialogGenericErrorComponent } from '../dialogs/dialog-generic-error/dia
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogSelectCurrencyComponent } from '../dialogs/dialog-select-currency/dialog-select-currency.component';
+// Pipes
+import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 // App Services
 import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
@@ -94,7 +95,9 @@ import { EventsService } from './../services/events.service';
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
-    DialogSelectCurrencyComponent
+    DialogSelectCurrencyComponent,
+
+    VisualUrlPipe
   ],
   entryComponents: [
     CivicAuthComponent,
@@ -146,7 +149,8 @@ import { EventsService } from './../services/events.service';
     PayFormComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
-    DialogWrongCountryComponent
+    DialogWrongCountryComponent,
+    VisualUrlPipe
   ]
 })
 export class SharedModule { }
