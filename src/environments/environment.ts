@@ -94,7 +94,7 @@ export const environment = {
   },
   dir: {
     '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioCreator,
-    '0xfeac8e490fe7f0760a10225e7dccda1e22ad8daa': Agent.WenanceCreator
+    '0xc521961b2536e2c0ab595aae25a572bfbaf7d955': Agent.WenanceCreator
   },
   filterCurrencies: [
     'RCN',
