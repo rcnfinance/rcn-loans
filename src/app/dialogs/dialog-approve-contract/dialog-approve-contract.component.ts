@@ -219,9 +219,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
       this.retrievePendingTx();
     } catch (e) {
       console.info('Approve rejected', e);
-
       event.source.checked = !event.checked;
-      this.hideProgressbar();
       return;
     } finally {
       await this.loadApproved();
