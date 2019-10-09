@@ -1,8 +1,8 @@
-<div class="map-container">
+<div class="map-container container">
   <app-decentraland-map [decentralandProvider]='cosignerProvider' [height]='mapHeight' [width]='mapWidth' [center]=parcel></app-decentraland-map>
 
-  <a href='https://market.decentraland.org/parcels/{{ firstCoordenate }}/{{ lastCoordenate }}/detail' 
-  class='icon-circle' target="_blank" 
+  <a href='https://market.decentraland.org/parcels/{{ firstCoordenate }}/{{ lastCoordenate }}/detail'
+  class='icon-circle' target="_blank"
   matTooltip="Parcel Detail" matTooltipPosition="below">
     <i class="material-icons">link</i>
   </a>
@@ -19,7 +19,7 @@
     <div class="title">{{ 'Financing' }}</div>
     <div class="txt">~ {{ financiation }} % </div>
   </div>
-  
+
   <div class="card-property">
     <div class="text-container">
       <div class="title">Context</div>
@@ -39,20 +39,14 @@
 
   <div class="legals">
     <p>
-      This loan is backed by a Decentraland parcel. The tokens involved in the lending will be used to purchase the 
-      corresponding parcel linked to this escrow smart contact: 
+      This loan is backed by a Decentraland parcel. The tokens involved in the lending will be used to purchase the
+      corresponding parcel linked to this escrow smart contact:
       <a href="https://etherscan.io/address/{{ mortgageManager }}" target='_blank'>{{ mortgageManager }}.</a>
     </p>
     <div class="text-container">
       <div class="title">{{ 'Notice:' }}</div>
     </div>
-    <p>The ownership of this parcel will be transferred to the lender in case of a default.</p> 
+    <p>The ownership of this parcel will be transferred to the lender in case of a default.</p>
     <app-claim-button [loan]='loan' [provider]='cosignerProvider'></app-claim-button>
   </div>
 </div>
-
-
-  
-  
-  
-  
