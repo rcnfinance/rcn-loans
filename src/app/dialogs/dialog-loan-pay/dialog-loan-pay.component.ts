@@ -71,7 +71,7 @@ export class DialogLoanPayComponent implements OnInit {
     this.pendingAmount = Utils.formatAmount(pendingAmount);
     this.form.controls.amount.setValidators([
       Validators.required,
-      Validators.max(pendingAmount)
+      Validators.max(Math.ceil(pendingAmount))
     ]);
   }
 
