@@ -99,10 +99,3 @@ a{
     @extend %font-black;
   }
 }
-
-@media (min-width: 768px){
-  .legals{
-    position: absolute;
-    bottom: 15px;
-  }
-}

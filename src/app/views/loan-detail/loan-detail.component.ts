@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
 import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
+import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
@@ -100,28 +101,20 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       const id = params.id;
 
       try {
-        const loan = await this.contractsService.getLoan(id);
-        this.loan = loan;
+        await this.getLoan(id);
+
+        // static loan information
+        this.loadStaticInformation();
+        this.checkLoanGenerator();
+        this.loadIdentity();
+
+        // dynamic loan information
+        this.loadStatus();
+        this.loadDetail();
         this.loadAccount();
 
-        this.hasHistory = true;
-        this.brand = this.brandingService.getBrand(this.loan);
-        this.oracle = this.loan.oracle ? this.loan.oracle.address : undefined;
-        this.currency = this.loan.oracle ? this.loan.oracle.currency : 'RCN';
-        this.availableOracle = this.loan.oracle.currency !== 'RCN';
-
-        // TODO: Replace with flags to display each section
-        this.isCanceled = this.loan.status === Status.Destroyed;
-        this.isRequest = this.loan.status === Status.Request;
-        this.isOngoing = this.loan.status === Status.Ongoing;
-        this.isExpired = this.loan.status === Status.Expired;
-        this.isPaid = this.loan.status === Status.Paid;
-
-        this.checkLoanGenerator();
-        this.loadDetail();
-        this.loadIdentity();
+        // state
         this.viewDetail = this.defaultDetail();
-
         this.handleLoginEvents();
         this.spinner.hide();
       } catch (e) {
@@ -161,22 +154,35 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Open lend dialog
+   * Open dialog
+   * @param dialog Dialog to open
    */
-  async lend() {
+  async openDialog(dialog: 'lend' | 'pay') {
     // open dialog
-    const openLendDialog = () => {
+    const openDialog = () => {
       const dialogConfig = {
         data: { loan: this.loan }
       };
-      this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
+
+      switch (dialog) {
+        case 'lend':
+          this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
+          break;
+
+        case 'pay':
+          this.dialog.open(DialogLoanPayComponent, dialogConfig);
+          break;
+
+        default:
+          break;
+      }
     };
 
     // check user account
     if (!this.web3Service.loggedIn) {
       const hasClient = await this.web3Service.requestLogin();
       if (this.web3Service.loggedIn) {
-        openLendDialog();
+        openDialog();
         return;
       }
       if (!hasClient) {
@@ -185,7 +191,60 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       return;
     }
 
-    openLendDialog();
+    openDialog();
+  }
+
+  /**
+   * Refresh loan when payment or lending status is updated
+   */
+  onUserAction(action: 'lend' | 'pay') {
+    const miliseconds = 7000;
+    console.info('user action detected', action);
+
+    setTimeout(async() => {
+      const loan: Loan = this.loan;
+      await this.getLoan(loan.id);
+
+      // dynamic loan information
+      this.loadStatus();
+      this.loadDetail();
+      this.loadAccount();
+    }, miliseconds);
+  }
+
+  /**
+   * Get loan details
+   * @param id Loan ID
+   * @return Loan
+   */
+  private async getLoan(id) {
+    const loan = await this.contractsService.getLoan(id);
+    this.loan = loan;
+
+    return loan;
+  }
+
+  /**
+   * Load static loan information
+   */
+  private loadStaticInformation() {
+    // TODO: Replace with flags to display each section
+    this.hasHistory = true;
+    this.brand = this.brandingService.getBrand(this.loan);
+    this.oracle = this.loan.oracle ? this.loan.oracle.address : undefined;
+    this.currency = this.loan.oracle ? this.loan.oracle.currency : 'RCN';
+    this.availableOracle = this.loan.oracle.currency !== 'RCN';
+  }
+
+  /**
+   * Load this.loan status
+   */
+  private loadStatus() {
+    this.isCanceled = this.loan.status === Status.Destroyed;
+    this.isRequest = this.loan.status === Status.Request;
+    this.isOngoing = this.loan.status === Status.Ongoing;
+    this.isExpired = this.loan.status === Status.Expired;
+    this.isPaid = this.loan.status === Status.Paid;
   }
 
   /**
@@ -250,6 +309,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
         // Show ongoing loan detail
         this.loanStatusData = [
+          ['Description', 'Date'], // TODO
           ['Lend date', lendDate], // TODO
           ['Due date', dueDate],
           ['Deadline', deadline],

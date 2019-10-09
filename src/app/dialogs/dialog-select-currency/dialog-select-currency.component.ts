@@ -37,6 +37,10 @@ export class DialogSelectCurrencyComponent implements OnInit {
   }> = [];
   expectedReturnWarning: boolean;
 
+  loading: boolean;
+  startProgress: boolean;
+  finishProgress: boolean;
+
   constructor(
     private contractsService: ContractsService,
     private web3Service: Web3Service,
@@ -117,12 +121,12 @@ export class DialogSelectCurrencyComponent implements OnInit {
     this.lendToken = toToken;
 
     let lendAmount: number;
-    let lendExpectedReturn: number;
+    // let lendExpectedReturn: number;
 
     if (fromToken === toToken) {
       // rcn -> rcn
       lendAmount = rcnAmount;
-      lendExpectedReturn = rcnExpectedReturn;
+      // lendExpectedReturn = rcnExpectedReturn;
 
       // set expected return warn
       if (loanCurrency === 'RCN') {
@@ -137,11 +141,12 @@ export class DialogSelectCurrencyComponent implements OnInit {
         toToken,
         rcnAmount
       );
-      lendExpectedReturn = await this.contractsService.getPriceConvertFrom(
-        fromToken,
-        toToken,
-        rcnExpectedReturn
-      );
+      // TODO: Expected return in selected currency
+      // lendExpectedReturn = await this.contractsService.getPriceConvertFrom(
+      //   fromToken,
+      //   toToken,
+      //   rcnExpectedReturn
+      // );
 
       // set slippage
       const aditionalSlippage = new web3.BigNumber(
@@ -166,7 +171,7 @@ export class DialogSelectCurrencyComponent implements OnInit {
       Number(web3.fromWei(lendAmount))
     );
     this.lendExpectedReturn = Utils.formatAmount(
-      Number(web3.fromWei(lendExpectedReturn))
+      Number(web3.fromWei(rcnExpectedReturn))
     );
   }
 
@@ -198,6 +203,25 @@ export class DialogSelectCurrencyComponent implements OnInit {
     rate = 1 / currency.fromUnit(rate);
 
     return rate;
+  }
+
+  /**
+   * Show loading progress bar
+   */
+  showProgressbar() {
+    this.startProgress = true;
+    this.loading = true;
+  }
+
+  /**
+   * Hide progressbar and close dialog
+   */
+  hideProgressbar() {
+    this.startProgress = false;
+    this.finishProgress = false;
+    this.loading = false;
+
+    this.dialogRef.close();
   }
 
 }

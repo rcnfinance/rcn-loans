@@ -1,22 +1,37 @@
 import {} from 'jasmine';
+import { APP_BASE_HREF } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from '../../material/material.module';
 import { Web3Service } from '../../services/web3.service';
+import { ContractsService } from '../../services/contracts.service';
 import { Loan } from '../../models/loan.model';
 import { LoanCardComponent } from './loan-card.component';
 import { readComponent } from '../../utils/utils.test';
 
-describe('BannerComponent', () => {
+describe('LoanCardComponent', () => {
   let component: LoanCardComponent;
   let fixture: ComponentFixture<LoanCardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ MaterialModule ],
-      declarations: [ LoanCardComponent ],
+      imports: [
+        RouterTestingModule,
+        HttpClientModule,
+        SharedModule,
+        MaterialModule
+      ],
       schemas: [ NO_ERRORS_SCHEMA ],
-      providers: [ Web3Service ]
+      providers: [
+        {
+          provide: APP_BASE_HREF, useValue: '/'
+        },
+        Web3Service,
+        ContractsService
+      ]
     })
     .compileComponents();
   }));

@@ -13,6 +13,14 @@
         Checkout process
       </div>
     </div>
+    <ng-container *ngIf="startProgress">
+      <app-infinite-progress-bar
+        [start]="true"
+        [end]="finishProgress"
+        (finish)="hideProgressbar()"
+      >
+      </app-infinite-progress-bar>
+    </ng-container>
   </div>
 
   <div class="col-sm-12 dialog-padding">
@@ -75,11 +83,11 @@
               {{ lendExpectedReturn }}
             </span>
             <span class="data--currency-style">
-              {{ lendCurrency || '-' }}
+              {{ lendCurrency ? 'RCN' : '-' }}
             </span>
             <div
               class="d-inline"
-              matTooltip="Lorem ipsum dolor sit amet"
+              matTooltip="Expected return"
               *ngIf="lendCurrency && expectedReturnWarning"
             >
               <i class="fas fa-exclamation-triangle margin-left triangle"></i>
@@ -109,7 +117,11 @@
               <span class="margin-left">
                 {{ loan.currency }}
               </span>
-              <div class="d-inline" *ngIf="lendCurrency">
+              <div
+                class="d-inline"
+                matTooltip="Guaranteed return"
+                *ngIf="lendCurrency"
+              >
                 <i class="fas fa-check-circle check margin-left"></i>
               </div>
             </div>
@@ -156,7 +168,14 @@
     <div class="col-sm-12 col-md-6 px-0">
       <div class="row justify-content-end no-gutters">
         <div class="col-sm-12 col-md-3">
-          <app-lend-button [loan]="loan" [lendToken]="lendToken" *ngIf="canLend"></app-lend-button>
+          <!-- TODO: implement [disabled] -->
+          <app-lend-button
+            [loan]="loan"
+            [lendToken]="lendToken"
+            (startLend)="showProgressbar()"
+            (endLend)="finishProgress = true"
+            *ngIf="canLend"
+          ></app-lend-button>
         </div>
         <div class="d-none d-md-block col-sm-0 col-md-3 ml-2">
           <button

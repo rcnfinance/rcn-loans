@@ -1,14 +1,16 @@
 import {
   Component,
   Input,
-  OnInit
+  OnInit,
+  OnDestroy,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
   MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatDialogConfig
+  MatSnackBarHorizontalPosition
 } from '@angular/material';
 
 import { Loan, Network } from './../../models/loan.model';
@@ -16,7 +18,7 @@ import { Utils } from '../../utils/utils';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
-import { TxService, Tx } from './../../tx.service';
+import { TxService, Tx, Type } from './../../tx.service';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { environment } from '../../../environments/environment';
 import { Web3Service } from '../../services/web3.service';
@@ -25,6 +27,8 @@ import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
+import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
 import { CosignerService } from './../../services/cosigner.service';
 import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
 
@@ -33,13 +37,19 @@ import { DecentralandCosignerProvider } from './../../providers/cosigners/decent
   templateUrl: './lend-button.component.html',
   styleUrls: ['./lend-button.component.scss']
 })
-export class LendButtonComponent implements OnInit {
+export class LendButtonComponent implements OnInit, OnDestroy {
   @Input() loan: Loan;
   @Input() lendToken: string;
+  @Input() showLendDialog: boolean;
+  @Input() disabled: boolean;
+  @Output() startLend = new EventEmitter();
+  @Output() endLend = new EventEmitter();
   pendingTx: Tx = undefined;
   lendEnabled: Boolean;
   opPending = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+
+  txSubscription: boolean;
 
   constructor(
     private contractsService: ContractsService,
@@ -53,15 +63,68 @@ export class LendButtonComponent implements OnInit {
     public decentralandCosignerProvider: DecentralandCosignerProvider
   ) { }
 
+  async ngOnInit() {
+    this.retrievePendingTx();
+
+    const lendEnabled = await this.countriesService.lendEnabled();
+    this.lendEnabled = lendEnabled;
+  }
+
+  ngOnDestroy() {
+    if (this.txSubscription && this.showLendDialog) {
+      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackLendTx(tx));
+    }
+  }
+
   /**
-   * Handle lend button click
-   * @param forze TODO: Skip some validations
+   * Retrieve pending Tx
    */
-  async handleLend(forze = false) {
-    if (this.opPending && !forze) {
-      return;
+  retrievePendingTx() {
+    this.pendingTx = this.txService.getLastPendingLend(this.loan);
+
+    if (this.pendingTx) {
+      this.startLend.emit();
     }
 
+    if (!this.txSubscription) {
+      this.txSubscription = true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackLendTx(tx));
+    }
+  }
+
+  /**
+   * Track tx
+   */
+  trackLendTx(tx: Tx) {
+    if (tx.type === Type.lend && tx.data.id === this.loan.id) {
+      this.endLend.emit();
+    }
+  }
+
+  /**
+   * Handle click on lend button
+   */
+  async clickLend() {
+    // country validation
+    if (!this.lendEnabled) {
+      this.dialog.open(DialogWrongCountryComponent);
+      return;
+    }
+    // disabled button validation
+    if (this.disabled) {
+      return;
+    }
+    // pending tx validation
+    if (this.pendingTx) {
+      if (this.pendingTx.confirmed) {
+        window.open(environment.network.explorer.tx.replace(
+          '${tx}',
+          this.pendingTx.tx
+        ), '_blank');
+      }
+      return;
+    }
+    // unlogged user
     if (!this.web3Service.loggedIn) {
       const hasClient = await this.web3Service.requestLogin();
       if (this.web3Service.loggedIn) {
@@ -73,16 +136,18 @@ export class LendButtonComponent implements OnInit {
       }
       return;
     }
-
-    if (!this.lendEnabled) {
-      this.dialog.open(DialogGenericErrorComponent, {
-        data: {
-          error: new Error('Lending is not enabled in this region')
-        }
-      });
+    // debt validation
+    if (this.loan.debt) {
+      this.openSnackBar('The loan has already been lend', '');
       return;
     }
-
+    // borrower validation
+    const account: string = await this.web3Service.getAccount();
+    if (this.loan.borrower.toLowerCase() === account.toLowerCase()) {
+      this.openSnackBar('The lender cannot be the same as the borrower', '');
+      return;
+    }
+    // cosigner validation
     const cosigner = this.cosignerService.getCosigner(this.loan);
     if (cosigner instanceof DecentralandCosignerProvider) {
       const isParcelStatusOpen = await cosigner.getStatusOfParcel(this.loan);
@@ -94,7 +159,6 @@ export class LendButtonComponent implements OnInit {
         });
         return;
       }
-
       const isMortgageCancelled = await cosigner.isMortgageCancelled(this.loan);
       if (isMortgageCancelled) {
         this.dialog.open(DialogGenericErrorComponent, {
@@ -105,6 +169,36 @@ export class LendButtonComponent implements OnInit {
         return;
       }
     }
+
+    if (this.showLendDialog) {
+      const dialogRef = this.dialog.open(DialogSelectCurrencyComponent, {
+        data: {
+          loan: this.loan
+        }
+      });
+      dialogRef.afterClosed().subscribe(() => {
+        this.retrievePendingTx();
+      });
+      return;
+    }
+
+    this.eventsService.trackEvent(
+      'click-lend',
+      Category.Loan,
+      'request #' + this.loan.id
+    );
+    this.handleLend();
+  }
+
+  /**
+   * If the validations were successful, manage the lending transaction
+   * @param forze TODO - Force lend
+   */
+  async handleLend(forze = false) {
+    if (this.opPending && !forze) {
+      return;
+    }
+
     const oracleData = await this.contractsService.getOracleData(this.loan.oracle);
     this.startOperation();
 
@@ -271,32 +365,6 @@ export class LendButtonComponent implements OnInit {
     });
   }
 
-  clickLend() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.data = {
-      loan: this.loan
-    };
-    if (this.pendingTx === undefined) {
-      // this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
-      this.eventsService.trackEvent(
-        'click-lend',
-        Category.Loan,
-        'request #' + this.loan.id
-      );
-
-      this.handleLend();
-    } else {
-      // this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
-      // Logica selección de moneda
-      window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
-    }
-  }
-
-  retrievePendingTx() {
-    this.pendingTx = this.txService.getLastPendingLend(this.loan);
-  }
-
   /**
    * Show insufficient funds dialog
    * @param required Amount required
@@ -334,19 +402,6 @@ export class LendButtonComponent implements OnInit {
       duration: 4000,
       horizontalPosition: this.horizontalPosition
     });
-  }
-
-  ngOnInit() {
-    this.retrievePendingTx();
-    this.lendEnabled = true;
-    this.countriesService.lendEnabled().then((lendEnabled) => {
-      this.lendEnabled = lendEnabled;
-    });
-    this.canLend();
-  }
-
-  async canLend() {
-    this.lendEnabled = await this.countriesService.lendEnabled();
   }
 
 }

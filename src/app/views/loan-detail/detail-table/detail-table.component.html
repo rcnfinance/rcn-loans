@@ -5,15 +5,14 @@
         <th scope="col" *ngFor='let title of data[0]'>{{ title }}</th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td *ngFor='let value of data[1]'>{{ value }}</td>
-      </tr>
-    </tbody>
-    <tbody>
-      <tr>
-        <td *ngFor='let value of data[2]'>{{ value }}</td>
-      </tr>
-    </tbody>
+    <ng-container *ngFor="let row of data; let i = index">
+      <tbody *ngIf="i > 0">
+        <tr>
+          <td *ngFor='let value of row'>
+            {{ value }}
+          </td>
+        </tr>
+      </tbody>
+    </ng-container>
   </table>
 </div>

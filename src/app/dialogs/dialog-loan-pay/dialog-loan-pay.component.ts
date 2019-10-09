@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Loan } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
-
+// App services
 import { Web3Service } from './../../services/web3.service';
 
 @Component({
@@ -22,6 +22,9 @@ export class DialogLoanPayComponent implements OnInit {
   pendingAmount: string;
   currency: any;
 
+  startProgress: boolean;
+  finishProgress: boolean;
+
   constructor(
     public dialogRef: MatDialogRef<any>,
     private web3Service: Web3Service,
@@ -34,6 +37,7 @@ export class DialogLoanPayComponent implements OnInit {
     this.dialogRef.updateSize('auto', 'auto');
     this.buildForm();
     this.loadDetail();
+
     await this.loadAccount();
   }
 
@@ -72,32 +76,22 @@ export class DialogLoanPayComponent implements OnInit {
   }
 
   /**
-   * Submit form
-   * @param form Form group
-   * @fires submitAdd
+   * Show loading progress bar
    */
-  submitForm() {
-    const form: FormGroup = this.form;
-    const amount = form.value.amount;
-
-    if (!form.valid) {
-      // TODO: Ux tip - show snackbar with error description
-      return;
-    }
-    if (this.loading) {
-      return;
-    }
-    this.dialogRef.close(amount);
+  showProgressbar() {
+    this.startProgress = true;
+    this.loading = true;
   }
 
   /**
-   * Get submit button text
-   * @return Button text
+   * Hide progressbar and close dialog
    */
-  get submitButtonText(): string {
-    if (!this.loading) {
-      return 'Pay';
-    }
-    return 'Paying...';
+  hideProgressbar() {
+    this.startProgress = false;
+    this.finishProgress = false;
+    this.loading = false;
+
+    this.dialogRef.close(true);
   }
+
 }

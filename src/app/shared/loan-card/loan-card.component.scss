@@ -64,6 +64,7 @@
 }
 .properties-block{
   @extend %flex-container;
+  margin-top: 40px;
   div{
     flex: 1;
     &:nth-child(1){
@@ -72,7 +73,8 @@
     &:nth-child(2){
       text-align: center;
       @extend %propiety-subtitle;
-      @extend .font20;
+      font-size: 24px;
+      font-weight: 700;
     }
     &:nth-child(3){
       text-align: right;
@@ -86,7 +88,7 @@
 
 
 .conversion-block{
-  height: 50px;
+  height: 30px;
   @extend %flex-container;
   padding: 0px 15px;
   margin: 5px -15px 25px;
