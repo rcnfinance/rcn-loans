@@ -160,7 +160,11 @@ export class PayButtonComponent implements OnInit, OnDestroy {
    * @param forze TODO - Force payment
    */
   async handlePay(forze = false) {
-    if (this.opPending && !forze) { return; }
+    if (this.opPending && !forze) {
+      return;
+    }
+
+    this.startOperation();
 
     try {
       const balance = await this.contractsService.getUserBalanceRCNWei();
@@ -211,38 +215,49 @@ export class PayButtonComponent implements OnInit, OnDestroy {
           'loan #' + this.loan.id + ' of ' + amount
         );
 
-        this.contractsService.payLoan(this.loan, amount).then((tx) => {
-          this.eventsService.trackEvent(
-            'pay-loan',
-            Category.Loan,
-            'loan #' + this.loan.id + ' of ' + amount
-          );
-          if (this.loan.network === Network.Basalt) {
-            this.txService.registerPayTx(
-              tx,
-              environment.contracts.basaltEngine,
-              this.loan,
-              amount
-            );
-          } else {
-            this.txService.registerPayTx(
-              tx,
-              environment.contracts.diaspore.debtEngine,
-              this.loan,
-              amount
-            );
-          }
-          this.startPay.emit();
-          this.retrievePendingTx();
-        });
+        const tx = await this.contractsService.payLoan(this.loan, amount);
+
+        this.eventsService.trackEvent(
+          'pay-loan',
+          Category.Loan,
+          'loan #' + this.loan.id + ' of ' + amount
+        );
+
+        let engine: string;
+
+        switch (this.loan.network) {
+          case Network.Basalt:
+            engine = environment.contracts.basaltEngine;
+            break;
+
+          case Network.Diaspore:
+            engine = environment.contracts.diaspore.debtEngine;
+            break;
+
+          default:
+            break;
+        }
+
+        this.txService.registerPayTx(
+          tx,
+          engine,
+          this.loan,
+          amount
+        );
+
+        this.startPay.emit();
+        this.retrievePendingTx();
       }
     } catch (e) {
       // Don't show 'User denied transaction signature' error
-      if (e.message.indexOf('User denied transaction signature') < 0) {
+      if (e.stack.indexOf('User denied transaction signature') < 0) {
         this.dialog.open(DialogGenericErrorComponent, {
           data: { error: e }
         });
       }
+      console.error(e);
+    } finally {
+      this.finishOperation();
     }
   }
 
@@ -300,10 +315,27 @@ export class PayButtonComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Start lend operation
+   */
+  startOperation() {
+    console.info('Started pay');
+    this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
+    this.opPending = true;
+  }
+
+  /**
    * Cancel pay operation
    */
   cancelOperation() {
     this.openSnackBar('Your transaction has failed', '');
+    this.opPending = false;
+  }
+
+  /**
+   * Finish current lending operation
+   */
+  finishOperation() {
+    console.info('Pay finished');
     this.opPending = false;
   }
 
