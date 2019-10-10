@@ -43,13 +43,12 @@
             [amountRight]="isRequest ||  isCanceled ? expectedReturn : totalDebt"
           ></app-conversion-graphic>
         </div>
-        <div class="px-3">
+        <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled">
           <app-conversion-graphic
             [headers]="['Paid', 'Interest', 'Debt']"
             [amountRight]="pendingAmount"
             [textMiddle]="interest"
             [amountLeft]="paid"
-            *ngIf="!isRequest && !isCanceled"
           ></app-conversion-graphic>
         </div>
       </ng-container>
@@ -94,7 +93,7 @@
           </thead>
           <tbody>
             <tr>
-              <td style='cursor: pointer'>{{ loan.borrower }} - <b>{{ identityName }}</b></td>
+              <td style='cursor: pointer'>{{ loan.borrower }}</td>
             </tr>
           </tbody>
         </table>
@@ -128,8 +127,18 @@
         </table>
       </div>
       <div class="px-3 pb-3" *ngIf="canLend || canTransfer || canPay">
-        <app-pay-button [loan]=loan *ngIf="canPay"></app-pay-button>
-        <button mat-raised-button class="button button-primary lend" (click)="lend()" *ngIf="canLend">Lend</button>
+        <app-pay-button
+          [loan]="loan"
+          [showPayDialog]="true"
+          (endPay)="onUserAction('pay')"
+          *ngIf="canPay"
+        ></app-pay-button>
+        <app-lend-button
+          [loan]="loan"
+          [showLendDialog]="true"
+          (endLend)="onUserAction('lend')"
+          *ngIf="canLend"
+        ></app-lend-button>
         <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="canLend"></app-risk-indicator>
         <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
       </div>

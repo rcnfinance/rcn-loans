@@ -37,11 +37,12 @@
       @extend %font-bold;
       @extend %absolute-center-top;
     }
-    .nav{
+    .nav {
       display: none;
-      > div{
+      &__item {
         outline: -webkit-focus-ring-color auto 0px;
         @extend %font-bold;
+        color: white;
       }
     }
     .icon-hamburguer{
@@ -183,7 +184,7 @@
       .header-title {
         display: none;
       }
-      .nav{
+      .nav {
         > * {
           padding-left: 10px;
           padding-right: 10px;
@@ -195,7 +196,7 @@
         align-items: center;
         float: right;
         @include transition;
-        > div{
+        &__item {
           // max-width: 40px;
           display: block;
           font-size: 16px;

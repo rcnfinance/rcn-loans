@@ -12,6 +12,14 @@
         Approve Contract
       </div>
     </div>
+    <ng-container *ngIf="startProgress">
+      <app-infinite-progress-bar
+        [start]="true"
+        [end]="finishProgress"
+        (finish)="hideProgressbar()"
+      >
+      </app-infinite-progress-bar>
+    </ng-container>
   </div>
   <div class="col-sm-12 dialog-padding">
     <div class="row">

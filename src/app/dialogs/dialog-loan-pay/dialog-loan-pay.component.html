@@ -12,9 +12,17 @@
         Loan pay
       </div>
     </div>
+    <ng-container *ngIf="startProgress">
+      <app-infinite-progress-bar
+        [start]="true"
+        [end]="finishProgress"
+        (finish)="hideProgressbar()"
+      >
+      </app-infinite-progress-bar>
+    </ng-container>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="submitForm()">
+  <form [formGroup]="form">
     <div class="container">
       <div class="dialog-content dialog-padding">
         <div class="row mb-3 mt-4 mt-md-0">
@@ -107,14 +115,13 @@
           </p>
         </div>
         <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
-          <button
-            type="submit"
-            mat-raised-button
-            class="button button-primary"
-            [class.button-disabled]="loading || !form?.valid"
-          >
-            {{ submitButtonText }}
-          </button>
+          <app-pay-button
+            [loan]="loan"
+            [amount]="form.value.amount"
+            [disabled]="loading || !form?.valid"
+            (startPay)="showProgressbar()"
+            (endPay)="finishProgress = true"
+          ></app-pay-button>
           <button
             mat-raised-button
             class="button button-clear-dark mat-elevation-z d-none d-md-inline-block"

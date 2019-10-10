@@ -2,10 +2,9 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { Loan, Network, Status } from '../../models/loan.model';
-import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { Utils } from '../../utils/utils';
 import { Web3Service } from '../../services/web3.service';
+import { ContractsService } from '../../services/contracts.service';
 
 @Component({
   selector: 'app-loan-card',
@@ -14,6 +13,7 @@ import { Web3Service } from '../../services/web3.service';
 })
 export class LoanCardComponent implements OnInit, OnDestroy {
   @Input() loan: Loan;
+  stateLoan: Loan;
 
   leftLabel: string;
   leftValue: string;
@@ -32,34 +32,13 @@ export class LoanCardComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialog: MatDialog,
-    private web3Service: Web3Service
+    private web3Service: Web3Service,
+    private contractsService: ContractsService
   ) { }
 
   async ngOnInit() {
-    if (this.loan.isRequest) {
-      const currency = this.loan.currency;
-      this.leftLabel = 'Lend';
-      this.leftValue = Utils.formatAmount(currency.fromUnit(this.loan.amount));
-      this.durationLabel = 'Duration';
-      this.durationValue = Utils.formatDelta(this.loan.descriptor.duration);
-      this.rightLabel = 'Return';
-      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
-    } else if (this.loan instanceof Loan) {
-      const currency = this.loan.currency;
-      this.leftLabel = 'Paid';
-      this.leftValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
-      this.durationLabel = 'Remaining';
-      this.durationValue = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000));
-      this.rightLabel = 'Pending';
-      const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
-      this.rightValue = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
-      this.canLend = false;
-      if (this.loan.status === Status.Indebt) {
-        this.durationLabel = 'In debt for';
-      } else {
-        this.durationLabel = 'Remaining';
-      }
-    }
+    this.stateLoan = this.loan;
+    await this.getLoanDetails();
 
     this.loadAccount();
     this.handleLoginEvents();
@@ -93,48 +72,18 @@ export class LoanCardComponent implements OnInit, OnDestroy {
    * Check if lend is available
    */
   checkCanLend() {
-    if (this.loan.isRequest) {
-      const isBorrower = this.loan.borrower.toUpperCase() === this.account.toUpperCase();
+    if (this.stateLoan.isRequest) {
+      const isBorrower = this.stateLoan.borrower.toUpperCase() === this.account.toUpperCase();
       this.canLend = !isBorrower;
     }
   }
 
-  /**
-   * Open lend dialog
-   */
-  async lend() {
-    // open dialog
-    const openLendDialog = () => {
-      const dialogConfig = {
-        data: { loan: this.loan }
-      };
-      this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
-    };
-
-    // check user account
-    if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-
-      if (this.web3Service.loggedIn) {
-        openLendDialog();
-        return;
-      }
-
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-      }
-      return;
-    }
-
-    openLendDialog();
-  }
-
   getInterestRate(): string {
-    return this.loan.descriptor.interestRate.toFixed(2);
+    return this.stateLoan.descriptor.interestRate.toFixed(2);
   }
 
   getPunitiveInterestRate(): string {
-    return this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
+    return this.stateLoan.descriptor.punitiveInterestRateRate.toFixed(2);
   }
 
   /**
@@ -142,7 +91,7 @@ export class LoanCardComponent implements OnInit, OnDestroy {
    */
   getInstallments(): string {
     try {
-      const installments = this.loan.descriptor.installments;
+      const installments = this.stateLoan.descriptor.installments;
 
       switch (installments) {
         case 0:
@@ -152,10 +101,61 @@ export class LoanCardComponent implements OnInit, OnDestroy {
         default:
           return `${ installments } pays`;
       }
-
-      return `${ installments } pays`;
     } catch (e) {
       return '1 pay';
     }
   }
+
+  /**
+   * Refresh loan when lending status is updated
+   */
+  onUserAction(action: 'lend') {
+    const miliseconds = 7000;
+    console.info('user action detected', action);
+
+    setTimeout(async() => {
+      await this.refreshLoan();
+
+      // dynamic loan information
+      this.loadAccount();
+    }, miliseconds);
+  }
+
+  private async refreshLoan() {
+    const loan: Loan = await this.contractsService.getLoan(this.loan.id);
+    this.stateLoan = loan;
+
+    await this.getLoanDetails();
+  }
+
+  /**
+   * Load loan details
+   */
+  private async getLoanDetails() {
+    if (this.stateLoan.isRequest) {
+      const currency = this.stateLoan.currency;
+      this.leftLabel = 'Lend';
+      this.leftValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.amount));
+      this.durationLabel = 'Duration';
+      this.durationValue = Utils.formatDelta(this.stateLoan.descriptor.duration);
+      this.rightLabel = 'Return';
+      this.rightValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.descriptor.totalObligation));
+    } else if (this.stateLoan instanceof Loan) {
+      const currency = this.stateLoan.currency;
+      this.leftLabel = 'Paid';
+      this.leftValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.debt.model.paid));
+      this.durationLabel = 'Remaining';
+      this.durationValue = Utils.formatDelta(this.stateLoan.debt.model.dueTime - (new Date().getTime() / 1000));
+      this.rightLabel = 'Pending';
+      const basaltPaid = this.stateLoan.network === Network.Basalt ? currency.fromUnit(this.stateLoan.debt.model.paid) : 0;
+      this.rightValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.debt.model.estimatedObligation) - basaltPaid);
+      this.canLend = false;
+      if (this.stateLoan.status === Status.Indebt) {
+        this.durationLabel = 'In debt for';
+      } else {
+        this.durationLabel = 'Remaining';
+      }
+    }
+  }
+
 }
