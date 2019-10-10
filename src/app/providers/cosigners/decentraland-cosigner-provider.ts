@@ -193,13 +193,19 @@ export class DecentralandCosignerProvider implements CosignerProvider {
       this.setupContracts();
       this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {
         this.managerContract.mortgages(mortgageId, (_errD, mortgageData) => {
+          const landId = this.web3.web3.toHex(mortgageData[5]);
+          const landPrice = mortgageData[6];
+          const motrgageAmount = mortgageData[6];
+          const financedAmount = (loan.amount / motrgageAmount) * 100;
+          const parcelData = undefined;
+          const mortgageStatus = mortgageData[7];
           const decentralandCosigner = new DecentralandCosigner(
-                  mortgageId, // Mortgage ID
-                  Utils.toBytes32(this.web3.web3.toHex(mortgageData[4])), // Land ID
-                  mortgageData[5], // Land price
-                  ((loan.amount / mortgageData[5]) * 100).toFixed(2), // Financed amount
-                  undefined, // Parcel data
-                  mortgageData[7] // Mortgage status
+                  mortgageId,
+                  Utils.toBytes32(landId),
+                  landPrice,
+                  financedAmount.toPrecision(2),
+                  parcelData,
+                  mortgageStatus
                 );
           this.getParcelInfo(decentralandCosigner.x, decentralandCosigner.y).then((parcel) => {
             decentralandCosigner.parcel = parcel;
