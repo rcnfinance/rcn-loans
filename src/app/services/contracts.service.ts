@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 
 import { Loan, Oracle, Network } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
-import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
 import { TxService } from '../tx.service';
@@ -16,7 +15,6 @@ declare let require: any;
 
 const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
-const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const oracleAbi = require('../contracts/Oracle.json');
 const loanManagerAbi = require('../contracts/LoanManager.json');
 const debtEngineAbi = require('../contracts/DebtEngine.json');
@@ -24,14 +22,11 @@ const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 const tokenConverterAbi = require('../contracts/TokenConverter.json');
 const oracleFactoryAbi = require('../contracts/OracleFactory.json');
-// const requestsAbi = require('../contracts/RequestsView.json');
 
 @Injectable()
 export class ContractsService {
   private _rcnEngine: any;
   private _rcnEngineAddress: string = environment.contracts.basaltEngine;
-  private _rcnExtension: any;
-  private _rcnExtensionAddress: string = environment.contracts.engineExtension;
   private _loanManager: any;
   private _debtEngine: any;
   private _rcnConverterRampAddress: string = environment.contracts.converter.converterRamp;
@@ -51,7 +46,6 @@ export class ContractsService {
     this._rcnEngine = this.makeContract(engineAbi.abi, this._rcnEngineAddress);
     this._loanManager = this.makeContract(loanManagerAbi, environment.contracts.diaspore.loanManager);
     this._debtEngine = this.makeContract(debtEngineAbi, environment.contracts.diaspore.debtEngine);
-    this._rcnExtension = this.makeContract(extensionAbi.abi, this._rcnExtensionAddress);
     this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
     this._tokenConverter = this.makeContract(tokenConverterAbi.abi, this._tokenConverterAddress);
     this._oracleFactory = this.makeContract(oracleFactoryAbi.abi, this._oracleFactoryAddress);
@@ -652,41 +646,6 @@ export class ContractsService {
     return false;
   }
 
-  private parseBasaltBytes(bytes: any): Loan[] {
-    const loans = [];
-    const total = bytes.length / 20;
-    for (let i = 0; i < total; i++) {
-      const loanBytes = bytes.slice(i * 20, i * 20 + 20);
-      loans.push(LoanUtils.parseBasaltLoan(this._rcnEngineAddress, loanBytes));
-    }
-    return loans;
-  }
-  // private parseRequestBytes(bytes: any): Loan[] {
-  //   const requests = [];
-  //   const total = bytes.length / 17;
-  //   for (let i = 0; i < total; i++) {
-  //     const loanBytes = bytes.slice(i * 17, i * 17 + 17);
-  //     requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
-  //   }
-  //   return requests;
-  // }
-  // private parseLoanBytes(bytes: any): Loan[] {
-  //   const requests = [];
-  //   const total = bytes.length / 25;
-  //   for (let i = 0; i < total; i++) {
-  //     const loanBytes = bytes.slice(i * 25, i * 25 + 25);
-  //     requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
-  //   }
-  //   return requests;
-  // }
-  private addressToBytes32(address: string): string {
-    try {
-      address = '0x000000000000000000000000' + address.replace('0x', '');
-      return address;
-    } catch (e) {
-      return null;
-    }
-  }
   private loadAltContract(web3: any, contract: any): any {
     return web3.eth.contract(contract.abi).at(contract.address);
   }
