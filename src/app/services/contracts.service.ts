@@ -577,7 +577,7 @@ export class ContractsService {
    */
   async getActiveLoans(): Promise<Loan[]> {
     const diaspore: Loan[] = await this.apiService.getActiveLoans(Network.Diaspore);
-    const basalt: Loan[] = await this.apiService.getActiveLoans(Network.Diaspore);
+    const basalt: Loan[] = await this.apiService.getActiveLoans(Network.Basalt);
 
     return diaspore.concat(LoanCurator.curateLoans(basalt));
   }
