@@ -9,14 +9,14 @@
         matInput
         (keyup)="invalidAddress = false"
       >
-      <mat-hint>Remember that transferring a Loan is an irreversible operation. Please check the address carefully</mat-hint>
+      <mat-hint><i class="fas fa-exclamation-triangle"></i>Remember that transferring a Loan is an irreversible operation. Please check the address carefully</mat-hint>
       <mat-error *ngIf="invalidAddress">This is not a valid address</mat-error>
     </mat-form-field>
     <div class="error" *ngIf="invalidAddress">This is not a valid address</div>
   </div>
-  <div class="margintop20">
+  <div class="margintop20 d-flex justify-content-end">
     <div class="margintop10"></div>
-    <button type="submit" mat-raised-button class="button button-primary">{{ 'Submit' }}</button>
-    <button mat-raised-button class="button button-secondary" [mat-dialog-close]='true'>{{ 'Cancel' }}</button>
+    <button type="submit" mat-raised-button class="button button-primary">{{ 'Transfer' }}</button>
+    <button mat-raised-button class="button button-secondary" [mat-dialog-close]='true'>{{ 'Close' }}</button>
   </div>
 </form>
