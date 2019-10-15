@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { aggregate } from '@makerdao/multicall';
 import { environment } from '../../environments/environment';
-import { Loan, Network, Oracle, Descriptor, Debt, Model, Status } from '../models/loan.model';
-import { Utils } from '../utils/utils';
+import { Loan, Network, Status } from '../models/loan.model';
 import { LoanUtils } from '../utils/loan-utils';
 import { Web3Service } from './web3.service';
 
@@ -14,6 +14,10 @@ export class ApiService {
   installmentModelAddress = '0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53';
   diasporeUrl = environment.rcn_node_api.diasporeUrl;
   basaltUrl = environment.rcn_node_api.basaltUrl;
+  multicallConfig = {
+    rpcUrl: environment.network.provider,
+    multicallAddress: '0xA457b5B859573e8eB758B6C2BFD4aE3042B422FD'
+  };
 
   constructor(
     private http: HttpClient,
@@ -143,6 +147,41 @@ export class ApiService {
 
   async getAllCompleteLoans(apiLoans: any[], network: Network) {
     try {
+
+      if (network === Network.Basalt && apiLoans.length) {
+        const query = [];
+
+        apiLoans.map((loan: any) => {
+          if (Number(loan.interest_rate) === 0) {
+            query.push({
+              'target': environment.contracts.basaltEngine,
+              'call': [
+                'getInterestRate(uint256)(uint256)',
+                loan.index
+              ],
+              'returns': [
+                [loan.index]
+              ]
+            });
+            // TODO: add getInterestRate and getInterestRatePunitory calls
+          }
+        });
+
+        if (query.length) {
+          const call = await aggregate(query, this.multicallConfig);
+          const interestRates = {};
+
+          for (const id of Object.keys(call.results)) {
+            const hexInterest: string = call.results[id]._hex;
+            interestRates[id] = parseInt(hexInterest, 16);
+          }
+
+          apiLoans.map((loan: any) => {
+            loan.interest_rate = interestRates[Number(loan.index)];
+          });
+        }
+      }
+
       const loans = await Promise.all(
         apiLoans.map(
           loan => this.completeLoanModels(loan, network)
@@ -156,6 +195,12 @@ export class ApiService {
     }
   }
 
+  /**
+   * Handle api loan response loading models
+   * @param responses Api responses
+   * @param network Selected network
+   * @return Loans array
+   */
   async getAllApiLoans(responses: any[], network: Network) {
     try {
       const activeLoans = await Promise.all(
@@ -175,7 +220,7 @@ export class ApiService {
    * Get all loans request that are open, not canceled or expired.
    * @param now Timestamp
    * @param network Selected network
-   * @return Loan
+   * @return Loans array
    */
   async getRequests(
     now: number,
@@ -189,10 +234,8 @@ export class ApiService {
 
     try {
       const data: any = await this.http.get(apiUrl.concat(
-        `loans?open=true&canceled=false&approved=true&page=${ page }&${ filterExpiration }=${ now }`
+        `loans?open=true&canceled=false&approved=true&status=0&page=${ page }&${ filterExpiration }=${ now }`
       )).toPromise();
-      // FIXME: hardcoded
-      if (network === Network.Basalt) { data.meta.resource_count = 700; }
 
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
@@ -214,7 +257,7 @@ export class ApiService {
     const urls = [];
     for (page; page < apiCalls; page++) {
       const url = apiUrl.concat(
-        `loans?open=true&canceled=false&approved=true&page=${ page }&${ filterExpiration }=${ now }`
+        `loans?open=true&canceled=false&approved=true&status=0&page=${ page }&${ filterExpiration }=${ now }`
       );
       urls.push(url);
     }
@@ -229,101 +272,39 @@ export class ApiService {
     return allRequestLoans;
   }
 
+  /**
+   * Get loans with the model prepared for the dapp.
+   * @param loan Loan data obtained from API
+   * @param network Selected network
+   * @return Loan
+   */
   async completeLoanModels(
     loan: any,
     network: Network
   ): Promise<Loan> {
-    const apiUrl: string = this.getApiUrl(network);
-    const engine = environment.contracts.diaspore.loanManager;
-
-    let oracle: Oracle;
-    if (loan.oracle !== Utils.address0x) {
-      const currency = loan.currency ? Utils.hexToAscii(loan.currency.replace(/^[0x]+|[0]+$/g, '')) : '';
-      oracle = new Oracle(
-        network,
-        loan.oracle,
-        currency,
-        loan.currency
-      );
-    } else {
-      oracle = new Oracle(
-        network,
-        loan.oracle,
-        'RCN',
-        loan.currency
-      );
-    }
-
-    let descriptor: Descriptor;
-    let debt: Debt;
-
     switch (network) {
       case Network.Basalt:
         return LoanUtils.createBasaltLoan(loan);
 
       case Network.Diaspore:
-        descriptor = new Descriptor(
-          Network.Diaspore,
-          Number(loan.descriptor.first_obligation),
-          Number(loan.descriptor.total_obligation),
-          Number(loan.descriptor.duration),
-          Number(loan.descriptor.interest_rate),
-          LoanUtils.decodeInterest(
-            Number(loan.descriptor.punitive_interest_rate)
-          ),
-          Number(loan.descriptor.frequency),
-          Number(loan.descriptor.installments)
-        );
-
-        // set debt model
+        let debtInfo: any;
         if (!loan.open && !loan.canceled && loan.status) {
-          const data: any = await this.http.get(apiUrl.concat(`model_debt_info/${loan.id}`)).toPromise();
-          const paid = data.paid;
-          const dueTime = data.due_time;
-          const estimatedObligation = data.estimated_obligation;
-          const nextObligation = data.next_obligation;
-          const currentObligation = data.current_obligation;
-          const debtBalance = data.debt_balance;
-          const owner = data.owner;
-          debt = new Debt(
-            Network.Diaspore,
-            loan.id,
-            new Model(
-              Network.Diaspore,
-              loan.model,
-              paid,
-              nextObligation,
-              currentObligation,
-              estimatedObligation,
-              dueTime
-            ),
-            debtBalance,
-            engine,
-            owner,
-            oracle
-          );
+          debtInfo = await this.getModelDebtInfo(loan.id);
         }
-        const status = loan.canceled ? Status.Destroyed : Number(loan.status);
-
-        return new Loan(
-          network,
-          loan.id,
-          engine,
-          Number(loan.amount),
-          oracle,
-          descriptor,
-          loan.borrower,
-          loan.creator,
-          status,
-          Number(loan.expiration),
-          loan.model,
-          loan.cosigner,
-          debt
-        );
+        return LoanUtils.createDiasporeLoan(loan, debtInfo);
 
       default:
         break;
     }
+  }
+
+  /**
+   * Get model debt info if exists
+   * @param loan Loan data obtained from API
+   */
+  async getModelDebtInfo(loanId: string) {
+    const apiUrl = this.diasporeUrl;
+    return await this.http.get(apiUrl.concat(`model_debt_info/${ loanId }`)).toPromise();
   }
 
   /**

@@ -27,6 +27,47 @@ interface LoanApiBasalt {
   approved_transfer: number;
 }
 
+interface LoanApiDiaspore {
+  id: string;
+  open: boolean;
+  approved: boolean;
+  position: number;
+  expiration: number;
+  amount: number;
+  cosigner: string;
+  model: string;
+  creator: string;
+  oracle: string;
+  borrower: string;
+  callback: string;
+  salt: number;
+  loanData: string;
+  created: number;
+  descriptor: {
+    first_obligation: number;
+    total_obligation: number;
+    duration: number;
+    interest_rate: number;
+    punitive_interest_rate: number;
+    frequency: number;
+    installments: number;
+  };
+  currency: string;
+  lender: string;
+  status: number;
+  canceled: boolean;
+}
+
+interface ModelDebtInfo {
+  paid: number;
+  due_time: number;
+  estimated_obligation: number;
+  next_obligation: number;
+  current_obligation: number;
+  debt_balance: number;
+  owner: string;
+}
+
 export class LoanUtils {
   static decodeInterest(raw: number): number {
     return 311040000000000 / raw;
@@ -281,7 +322,6 @@ export class LoanUtils {
 
     if (loanData.status !== Status.Request) {
       // run "basalt" model, emulate Diaspore model
-      // FIXME: check and test logic
       let pending;
       let deltaTime;
       let newInterest = loanData.interest;
@@ -336,8 +376,8 @@ export class LoanUtils {
       oracle,
       new Descriptor(
         Network.Basalt,
-        ((loanData.amount * 100000 * firstPayment) / loanData.interest_rate) + loanData.amount,
-        ((loanData.amount * 100000 * loanData.dues_in) / loanData.interest_rate) + loanData.amount,
+        ((loanData.amount * 100000 * firstPayment) / loanData.interest_rate) + Number(loanData.amount),
+        ((loanData.amount * 100000 * loanData.dues_in) / loanData.interest_rate) + Number(loanData.amount),
         loanData.dues_in,
         Utils.formatInterest(loanData.interest_rate),
         Utils.formatInterest(loanData.interest_rate_punitory),
@@ -350,6 +390,94 @@ export class LoanUtils {
       loanData.expiration_requests,
       '',
       loanData.cosigner !== Utils.address0x ? loanData.cosigner : undefined,
+      debt
+    );
+  }
+
+  /**
+   * Create diaspore loan model from the api response
+   * @param loanData Loan data obtained from API
+   * @return Loan
+   */
+  static createDiasporeLoan(loanData: LoanApiDiaspore, debtInfo: ModelDebtInfo): Loan {
+    const engine = environment.contracts.diaspore.loanManager;
+
+    let oracle: Oracle;
+    if (loanData.oracle !== Utils.address0x) {
+      const currency = loanData.currency ? Utils.hexToAscii(loanData.currency.replace(/^[0x]+|[0]+$/g, '')) : '';
+      oracle = new Oracle(
+        Network.Diaspore,
+        loanData.oracle,
+        currency,
+        loanData.currency
+      );
+    } else {
+      oracle = new Oracle(
+        Network.Diaspore,
+        loanData.oracle,
+        'RCN',
+        loanData.currency
+      );
+    }
+
+    let descriptor: Descriptor;
+    let debt: Debt;
+
+    descriptor = new Descriptor(
+      Network.Diaspore,
+      Number(loanData.descriptor.first_obligation),
+      Number(loanData.descriptor.total_obligation),
+      Number(loanData.descriptor.duration),
+      Number(loanData.descriptor.interest_rate),
+      LoanUtils.decodeInterest(
+        Number(loanData.descriptor.punitive_interest_rate)
+      ),
+      Number(loanData.descriptor.frequency),
+      Number(loanData.descriptor.installments)
+    );
+
+    // set debt model
+    if (debtInfo) {
+      const paid = debtInfo.paid;
+      const dueTime = debtInfo.due_time;
+      const estimatedObligation = debtInfo.estimated_obligation;
+      const nextObligation = debtInfo.next_obligation;
+      const currentObligation = debtInfo.current_obligation;
+      const debtBalance = debtInfo.debt_balance;
+      const owner = debtInfo.owner;
+      debt = new Debt(
+        Network.Diaspore,
+        loanData.id,
+        new Model(
+          Network.Diaspore,
+          loanData.model,
+          paid,
+          nextObligation,
+          currentObligation,
+          estimatedObligation,
+          dueTime
+        ),
+        debtBalance,
+        engine,
+        owner,
+        oracle
+      );
+    }
+    const status = loanData.canceled ? Status.Destroyed : Number(loanData.status);
+
+    return new Loan(
+      Network.Diaspore,
+      loanData.id,
+      engine,
+      Number(loanData.amount),
+      oracle,
+      descriptor,
+      loanData.borrower,
+      loanData.creator,
+      status,
+      Number(loanData.expiration),
+      loanData.model,
+      loanData.cosigner,
       debt
     );
   }
