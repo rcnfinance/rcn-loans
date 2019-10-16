@@ -36,16 +36,20 @@ export class ApiService {
   ): Promise<Loan[]> {
     const web3 = this.web3Service.web3;
     const apiUrl: string = this.getApiUrl(network);
-
     let allLoansOfLender: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
+
     try {
       lender = web3.toChecksumAddress(lender);
-      const data: any = await this.http.get(apiUrl.concat('loans?open=false&page=' + page + '&lender=' + lender)).toPromise();
+      const data: any = await this.http.get(
+        apiUrl.concat(`loans?open=false&page=${ page }&lender=${ lender }`)
+      ).toPromise();
+
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
+
       const activeLoans = await this.getAllCompleteLoans(data.content, network);
       allLoansOfLender = allLoansOfLender.concat(activeLoans);
       page++;
@@ -55,11 +59,10 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const url = apiUrl.concat('loans?open=false&page=' + page + '&lender=' + lender);
+      const url = apiUrl.concat(`loans?open=false&page=${ page }&lender=${ lender }`);
       urls.push(url);
     }
     const responses = await this.getAllUrls(urls);
-
     const allApiLoans = await this.getAllApiLoans(responses, network);
 
     for (const apiLoans of allApiLoans) {
@@ -79,27 +82,26 @@ export class ApiService {
     let allActiveLoans: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
-    try {
 
-      const data: any = await this.http.get(apiUrl.concat('loans?open=false&page=' + page)).toPromise();
+    try {
+      const data: any = await this.http.get(apiUrl.concat(`loans?open=false&canceled=false&approved=true&page=${ page }`)).toPromise();
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
       const activeLoans = await this.getAllCompleteLoans(data.content, network);
       allActiveLoans = allActiveLoans.concat(activeLoans);
       page++;
-
     } catch (err) {
       console.info('Error', err);
     }
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const url = apiUrl.concat('loans?open=false&page=' + page);
+      const url = apiUrl.concat(`loans?open=false&canceled=false&approved=true&page=${ page }`);
       urls.push(url);
     }
-    const responses = await this.getAllUrls(urls);
 
+    const responses = await this.getAllUrls(urls);
     const allApiLoans = await this.getAllApiLoans(responses, network);
 
     for (const apiLoans of allApiLoans) {
@@ -119,7 +121,7 @@ export class ApiService {
     network: Network
   ): Promise<Loan> {
     const apiUrl: string = this.getApiUrl(network);
-    const data: any = await this.http.get(apiUrl.concat(`loans/${id}`)).toPromise();
+    const data: any = await this.http.get(apiUrl.concat(`loans/${ id }`)).toPromise();
     const loan = await this.completeLoanModels(data.content, network);
     try {
       return loan;
@@ -138,7 +140,6 @@ export class ApiService {
             )));
 
       return (data);
-
     } catch (error) {
       console.info(error);
       throw (error);
@@ -147,15 +148,15 @@ export class ApiService {
 
   async getAllCompleteLoans(apiLoans: any[], network: Network) {
     try {
-
       if (network === Network.Basalt && apiLoans.length) {
         const query = [];
+        const target: string = environment.contracts.basaltEngine;
 
         apiLoans.map((loan: any) => {
           if (Number(loan.interest_rate) === 0) {
             query.push({
-              'target': environment.contracts.basaltEngine,
-              'call': [
+              target,
+              call: [
                 'getInterestRate(uint256)(uint256)',
                 loan.index
               ],
@@ -206,10 +207,9 @@ export class ApiService {
       const activeLoans = await Promise.all(
         responses.map(
           response => this.getAllCompleteLoans(response.content, network)
-        ));
-
+        )
+      );
       return (activeLoans);
-
     } catch (error) {
       console.info(error);
       throw (error);
