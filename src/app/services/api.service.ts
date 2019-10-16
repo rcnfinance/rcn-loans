@@ -25,6 +25,62 @@ export class ApiService {
   ) { }
 
   /**
+   * Get all loans request that are open, not canceled or expired.
+   * @param now Timestamp
+   * @param network Selected network
+   * @return Loans array
+   */
+  async getRequests(
+    now: number,
+    network: Network
+  ): Promise<Loan[]> {
+    const apiUrl: string = this.getApiUrl(network);
+    const filterExpiration: string = this.getApiFilterKey('expiration', network);
+    let allRequestLoans: Loan[] = [];
+    let apiCalls = 0;
+    let page = 0;
+
+    try {
+      const data: any = await this.http.get(apiUrl.concat(
+        `loans?open=true&canceled=false&approved=true&status=0&page=${ page }&${ filterExpiration }=${ now }`
+      )).toPromise();
+
+      if (page === 0) {
+        apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      }
+
+      const loansRequests = await this.getAllCompleteLoans(data.content, network);
+      const filteredLoans = loansRequests
+        .filter(loan =>
+          loan.model !== this.installmentModelAddress &&
+          loan.status !== Status.Destroyed
+        );
+
+      allRequestLoans = allRequestLoans.concat(filteredLoans);
+      page++;
+    } catch (err) {
+      console.info('Error', err);
+    }
+
+    const urls = [];
+    for (page; page < apiCalls; page++) {
+      const url = apiUrl.concat(
+        `loans?open=true&canceled=false&approved=true&status=0&page=${ page }&${ filterExpiration }=${ now }`
+      );
+      urls.push(url);
+    }
+    const responses = await this.getAllUrls(urls);
+
+    for (const response of responses) {
+      const loansRequests = await this.getAllCompleteLoans(response.content, network);
+      const notExpiredResquestLoans = loansRequests.filter(loan => loan.model !== this.installmentModelAddress);
+      allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
+    }
+
+    return allRequestLoans;
+  }
+
+  /**
    * Get all loans lent by the account that is logged in
    * @param lender Lender address
    * @param network Selected network
@@ -102,6 +158,27 @@ export class ApiService {
     }
 
     const responses = await this.getAllUrls(urls);
+
+    // FIXME: move method
+    if (network === Network.Basalt) {
+      responses.map(
+        response => {
+          response.content = response.content.filter(
+            loan => {
+              const status = Number(loan.status);
+              if (
+                status !== Status.Request &&
+                status !== Status.Destroyed &&
+                status !== Status.Expired
+              ) {
+                return true;
+              }
+            }
+          );
+        }
+      );
+    }
+
     const allApiLoans = await this.getAllApiLoans(responses, network);
 
     for (const apiLoans of allApiLoans) {
@@ -122,7 +199,13 @@ export class ApiService {
   ): Promise<Loan> {
     const apiUrl: string = this.getApiUrl(network);
     const data: any = await this.http.get(apiUrl.concat(`loans/${ id }`)).toPromise();
-    const loan = await this.completeLoanModels(data.content, network);
+    let apiLoan: any = data.content;
+
+    if (network === Network.Basalt) {
+      apiLoan = (await this.getMulticallData([apiLoan]))[0];
+    }
+
+    const loan = await this.completeLoanModels(apiLoan, network);
     try {
       return loan;
     } catch {
@@ -130,7 +213,13 @@ export class ApiService {
     }
   }
 
-  async getAllUrls(urls: any[]) {
+  /**
+   * Each and call urls
+   * @param urls URL array
+   * @return URL call response
+   */
+  private async getAllUrls(urls: any[]) {
+    // TODO: use http client module
     try {
       const data = await Promise.all(
         urls.map(
@@ -146,43 +235,17 @@ export class ApiService {
     }
   }
 
-  async getAllCompleteLoans(apiLoans: any[], network: Network) {
+  /**
+   * Parse loans data obtained from API and set loan models
+   * @param apiLoans Loans data obtained from API
+   * @param network Selected network
+   * @return Loans array
+   */
+  private async getAllCompleteLoans(apiLoans: any[], network: Network) {
     try {
-      if (network === Network.Basalt && apiLoans.length) {
-        const query = [];
-        const target: string = environment.contracts.basaltEngine;
-
-        apiLoans.map((loan: any) => {
-          if (Number(loan.interest_rate) === 0) {
-            query.push({
-              target,
-              call: [
-                'getInterestRate(uint256)(uint256)',
-                loan.index
-              ],
-              'returns': [
-                [loan.index]
-              ]
-            });
-            // TODO: add getInterestRate and getInterestRatePunitory calls
-          }
-        });
-
-        if (query.length) {
-          const call = await aggregate(query, this.multicallConfig);
-          const interestRates = {};
-
-          for (const id of Object.keys(call.results)) {
-            const hexInterest: string = call.results[id]._hex;
-            interestRates[id] = parseInt(hexInterest, 16);
-          }
-
-          apiLoans.map((loan: any) => {
-            loan.interest_rate = interestRates[Number(loan.index)];
-          });
-        }
+      if (network === Network.Basalt) {
+        apiLoans = await this.getMulticallData(apiLoans);
       }
-
       const loans = await Promise.all(
         apiLoans.map(
           loan => this.completeLoanModels(loan, network)
@@ -197,12 +260,113 @@ export class ApiService {
   }
 
   /**
+   * Check basalt loans and complete information not provided by the api
+   * @param apiLoans Loans data obtained from API
+   * @return API Loans with information completed
+   */
+  private async getMulticallData(apiLoans: any[]) {
+    const query = [];
+    const target: string = environment.contracts.basaltEngine;
+
+    apiLoans.map((loan: any) => {
+      if (Number(loan.interest) === 0) {
+        query.push({
+          target,
+          call: [
+            'getInterest(uint256)(uint256)',
+            loan.index
+          ],
+          'returns': [
+            [`interest_${ loan.index }`]
+          ]
+        });
+      }
+      if (Number(loan.interest_rate) === 0) {
+        query.push({
+          target,
+          call: [
+            'getInterestRate(uint256)(uint256)',
+            loan.index
+          ],
+          'returns': [
+            [`interestRate_${ loan.index }`]
+          ]
+        });
+      }
+      if (Number(loan.punitory_interest) === 0) {
+        query.push({
+          target,
+          call: [
+            'getPunitoryInterest(uint256)(uint256)',
+            loan.index
+          ],
+          'returns': [
+            [`punitoryInterest_${ loan.index }`]
+          ]
+        });
+      }
+      if (Number(loan.interest_timestamp) === 0) {
+        query.push({
+          target,
+          call: [
+            'getInterestTimestamp(uint256)(uint256)',
+            loan.index
+          ],
+          'returns': [
+            [`interestTimestamp_${ loan.index }`]
+          ]
+        });
+      }
+    });
+
+    if (query.length) {
+      const call = await aggregate(query, this.multicallConfig);
+      const callResults = {
+        interest: {},
+        interestRate: {},
+        punitoryInterest: {},
+        interestTimestamp: {}
+      };
+
+      for (const item of Object.keys(call.results)) {
+        const split: string[] = item.split('_');
+        const key: string = split[0];
+        const id: string = split[1];
+        const hexValue: string = call.results[item]._hex;
+
+        if (callResults[key]) {
+          callResults[key][id] = parseInt(hexValue, 16);
+        }
+      }
+
+      apiLoans.map((loan: any) => {
+        const id: number = Number(loan.index);
+
+        if (callResults.interest[id]) {
+          loan.interest = callResults.interest[id];
+        }
+        if (callResults.interestRate[id]) {
+          loan.interest_rate = callResults.interestRate[id];
+        }
+        if (callResults.punitoryInterest[id]) {
+          loan.punitory_interest = callResults.punitoryInterest[id];
+        }
+        if (callResults.interestTimestamp[id]) {
+          loan.interest_timestamp = callResults.interestTimestamp[id];
+        }
+      });
+    }
+
+    return apiLoans;
+  }
+
+  /**
    * Handle api loan response loading models
    * @param responses Api responses
    * @param network Selected network
    * @return Loans array
    */
-  async getAllApiLoans(responses: any[], network: Network) {
+  private async getAllApiLoans(responses: any[], network: Network) {
     try {
       const activeLoans = await Promise.all(
         responses.map(
@@ -217,68 +381,12 @@ export class ApiService {
   }
 
   /**
-   * Get all loans request that are open, not canceled or expired.
-   * @param now Timestamp
-   * @param network Selected network
-   * @return Loans array
-   */
-  async getRequests(
-    now: number,
-    network: Network
-  ): Promise<Loan[]> {
-    const apiUrl: string = this.getApiUrl(network);
-    const filterExpiration: string = this.getApiFilterKey('expiration', network);
-    let allRequestLoans: Loan[] = [];
-    let apiCalls = 0;
-    let page = 0;
-
-    try {
-      const data: any = await this.http.get(apiUrl.concat(
-        `loans?open=true&canceled=false&approved=true&status=0&page=${ page }&${ filterExpiration }=${ now }`
-      )).toPromise();
-
-      if (page === 0) {
-        apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
-      }
-
-      const loansRequests = await this.getAllCompleteLoans(data.content, network);
-      const filteredLoans = loansRequests
-        .filter(loan =>
-          loan.model !== this.installmentModelAddress &&
-          loan.status !== Status.Destroyed
-        );
-
-      allRequestLoans = allRequestLoans.concat(filteredLoans);
-      page++;
-    } catch (err) {
-      console.info('Error', err);
-    }
-
-    const urls = [];
-    for (page; page < apiCalls; page++) {
-      const url = apiUrl.concat(
-        `loans?open=true&canceled=false&approved=true&status=0&page=${ page }&${ filterExpiration }=${ now }`
-      );
-      urls.push(url);
-    }
-    const responses = await this.getAllUrls(urls);
-
-    for (const response of responses) {
-      const loansRequests = await this.getAllCompleteLoans(response.content, network);
-      const notExpiredResquestLoans = loansRequests.filter(loan => loan.model !== this.installmentModelAddress);
-      allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
-    }
-
-    return allRequestLoans;
-  }
-
-  /**
    * Get loans with the model prepared for the dapp.
    * @param loan Loan data obtained from API
    * @param network Selected network
    * @return Loan
    */
-  async completeLoanModels(
+  private async completeLoanModels(
     loan: any,
     network: Network
   ): Promise<Loan> {
@@ -299,10 +407,10 @@ export class ApiService {
   }
 
   /**
-   * Get model debt info if exists
+   * Get diaspore loans model debt info if exists
    * @param loan Loan data obtained from API
    */
-  async getModelDebtInfo(loanId: string) {
+  private async getModelDebtInfo(loanId: string) {
     const apiUrl = this.diasporeUrl;
     return await this.http.get(apiUrl.concat(`model_debt_info/${ loanId }`)).toPromise();
   }
