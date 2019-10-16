@@ -267,93 +267,56 @@ export class ApiService {
   private async getMulticallData(apiLoans: any[]) {
     const query = [];
     const target: string = environment.contracts.basaltEngine;
+    const SEPARATOR = '--';
+    const filterKeys = {
+      'interest': 'getInterest(uint256)(uint256)',
+      'interest_rate': 'getInterestRate(uint256)(uint256)',
+      'punitory_interest': 'getPunitoryInterest(uint256)(uint256)',
+      'interest_timestamp': 'getInterestTimestamp(uint256)(uint256)'
+    };
 
     apiLoans.map((loan: any) => {
-      if (Number(loan.interest) === 0) {
-        query.push({
-          target,
-          call: [
-            'getInterest(uint256)(uint256)',
-            loan.index
-          ],
-          'returns': [
-            [`interest_${ loan.index }`]
-          ]
-        });
-      }
-      if (Number(loan.interest_rate) === 0) {
-        query.push({
-          target,
-          call: [
-            'getInterestRate(uint256)(uint256)',
-            loan.index
-          ],
-          'returns': [
-            [`interestRate_${ loan.index }`]
-          ]
-        });
-      }
-      if (Number(loan.punitory_interest) === 0) {
-        query.push({
-          target,
-          call: [
-            'getPunitoryInterest(uint256)(uint256)',
-            loan.index
-          ],
-          'returns': [
-            [`punitoryInterest_${ loan.index }`]
-          ]
-        });
-      }
-      if (Number(loan.interest_timestamp) === 0) {
-        query.push({
-          target,
-          call: [
-            'getInterestTimestamp(uint256)(uint256)',
-            loan.index
-          ],
-          'returns': [
-            [`interestTimestamp_${ loan.index }`]
-          ]
-        });
-      }
+      Object.keys(filterKeys).map(key => {
+        if (!loan[key] || loan[key] === '0') {
+          query.push({
+            target,
+            call: [
+              filterKeys[key],
+              loan.index
+            ],
+            returns: [
+              [`${ key + SEPARATOR + loan.index }`]
+            ]
+          });
+        }
+      });
     });
 
     if (query.length) {
       const call = await aggregate(query, this.multicallConfig);
-      const callResults = {
-        interest: {},
-        interestRate: {},
-        punitoryInterest: {},
-        interestTimestamp: {}
-      };
+      const callResults = {};
 
-      for (const item of Object.keys(call.results)) {
-        const split: string[] = item.split('_');
-        const key: string = split[0];
-        const id: string = split[1];
+      Object.keys(filterKeys).map(key => {
+        callResults[key] = {};
+      });
+
+      Object.keys(call.results).map(item => {
+        const splitItem: string[] = item.split(SEPARATOR);
+        const itemKey: string = splitItem[0];
+        const itemId: string = splitItem[1];
         const hexValue: string = call.results[item]._hex;
-
-        if (callResults[key]) {
-          callResults[key][id] = parseInt(hexValue, 16);
+        if (callResults[itemKey]) {
+          callResults[itemKey][itemId] = parseInt(hexValue, 16);
         }
-      }
+      });
 
       apiLoans.map((loan: any) => {
         const id: number = Number(loan.index);
-
-        if (callResults.interest[id]) {
-          loan.interest = callResults.interest[id];
-        }
-        if (callResults.interestRate[id]) {
-          loan.interest_rate = callResults.interestRate[id];
-        }
-        if (callResults.punitoryInterest[id]) {
-          loan.punitory_interest = callResults.punitoryInterest[id];
-        }
-        if (callResults.interestTimestamp[id]) {
-          loan.interest_timestamp = callResults.interestTimestamp[id];
-        }
+        Object.keys(callResults).map(key => {
+          if (callResults[key][id]) {
+            loan[key] = callResults[key][id];
+          }
+        });
       });
     }
 
