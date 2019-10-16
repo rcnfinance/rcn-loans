@@ -16,7 +16,7 @@ export class ApiService {
   basaltUrl = environment.rcn_node_api.basaltUrl;
   multicallConfig = {
     rpcUrl: environment.network.provider,
-    multicallAddress: '0xA457b5B859573e8eB758B6C2BFD4aE3042B422FD'
+    multicallAddress: environment.contracts.multicall
   };
 
   constructor(

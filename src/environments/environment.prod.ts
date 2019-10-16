@@ -70,7 +70,8 @@ export const environment = {
     decentraland: {
       mortgageCreator: '0x90263Ea5C57Dc6603CA7202920735A6E31235bB9',
       mortgageManager: '0x9ABf1295086aFA0E49C60e95c437aa400c5333B8'
-    }
+    },
+    multicall: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441'
   },
   blacklist: [],
   filters: {
