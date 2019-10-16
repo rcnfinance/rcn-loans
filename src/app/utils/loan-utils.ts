@@ -5,6 +5,7 @@ import { environment } from './../../environments/environment';
 interface LoanApiBasalt {
   index: number;
   created: number;
+  approved: boolean;
   status: Status;
   oracle: string;
   borrower: string;
@@ -300,6 +301,15 @@ export class LoanUtils {
     const engine: string = environment.contracts.basaltEngine;
     const firstPayment: number = loanData.cancelable_at;
 
+    loanData.amount = Number(loanData.amount);
+    loanData.punitory_interest = Number(loanData.punitory_interest);
+    loanData.interest_timestamp = Number(loanData.interest_timestamp);
+    loanData.paid = Number(loanData.paid);
+    loanData.interest_rate = Number(loanData.interest_rate);
+    loanData.interest_rate_punitory = Number(loanData.interest_rate_punitory);
+    loanData.due_time = Number(loanData.due_time);
+    loanData.dues_in = Number(loanData.dues_in);
+
     let oracle: Oracle;
     if (loanData.oracle !== Utils.address0x) {
       oracle = new Oracle(
@@ -376,8 +386,8 @@ export class LoanUtils {
       oracle,
       new Descriptor(
         Network.Basalt,
-        ((loanData.amount * 100000 * firstPayment) / loanData.interest_rate) + Number(loanData.amount),
-        ((loanData.amount * 100000 * loanData.dues_in) / loanData.interest_rate) + Number(loanData.amount),
+        ((loanData.amount * 100000 * firstPayment) / loanData.interest_rate) + loanData.amount,
+        ((loanData.amount * 100000 * loanData.dues_in) / loanData.interest_rate) + loanData.amount,
         loanData.dues_in,
         Utils.formatInterest(loanData.interest_rate),
         Utils.formatInterest(loanData.interest_rate_punitory),
