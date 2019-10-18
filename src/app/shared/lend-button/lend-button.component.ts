@@ -122,27 +122,9 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     if (this.disabled) {
       return;
     }
-    // unlogged user
-    if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (this.web3Service.loggedIn) {
-        this.handleLend();
-        return;
-      }
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-      }
-      return;
-    }
     // debt validation
     if (this.loan.debt) {
       this.openSnackBar('The loan has already been lend', '');
-      return;
-    }
-    // borrower validation
-    const account: string = await this.web3Service.getAccount();
-    if (this.loan.borrower.toLowerCase() === account.toLowerCase()) {
-      this.openSnackBar('The lender cannot be the same as the borrower', '');
       return;
     }
     // cosigner validation
@@ -166,6 +148,24 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         });
         return;
       }
+    }
+    // unlogged user
+    if (!this.web3Service.loggedIn) {
+      const hasClient = await this.web3Service.requestLogin();
+      if (this.web3Service.loggedIn) {
+        this.handleLend();
+        return;
+      }
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
+      return;
+    }
+    // borrower validation
+    const account: string = await this.web3Service.getAccount();
+    if (this.loan.borrower.toLowerCase() === account.toLowerCase()) {
+      this.openSnackBar('The lender cannot be the same as the borrower', '');
+      return;
     }
 
     if (this.showLendDialog) {

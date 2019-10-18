@@ -111,6 +111,11 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     if (this.disabled) {
       return;
     }
+    // debt validation
+    if (!this.loan.debt) {
+      this.openSnackBar('The loan was not yet lended', '');
+      return;
+    }
     // unlogged user
     if (!this.web3Service.loggedIn) {
       const hasClient = await this.web3Service.requestLogin();
@@ -121,11 +126,6 @@ export class PayButtonComponent implements OnInit, OnDestroy {
       if (!hasClient) {
         this.dialog.open(DialogClientAccountComponent);
       }
-      return;
-    }
-    // debt validation
-    if (!this.loan.debt) {
-      this.openSnackBar('The loan was not yet lended', '');
       return;
     }
     // borrower validation
