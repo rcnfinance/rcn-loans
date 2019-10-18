@@ -4,6 +4,7 @@ import { aggregate } from '@makerdao/multicall';
 import { environment } from '../../environments/environment';
 import { Loan, Network, Status } from '../models/loan.model';
 import { LoanUtils } from '../utils/loan-utils';
+import { Utils } from '../utils/utils';
 import { Web3Service } from './web3.service';
 
 @Injectable({
@@ -168,8 +169,7 @@ export class ApiService {
               const status = Number(loan.status);
               if (
                 status !== Status.Request &&
-                status !== Status.Destroyed &&
-                status !== Status.Expired
+                status !== Status.Destroyed
               ) {
                 return true;
               }
@@ -269,19 +269,39 @@ export class ApiService {
     const target: string = environment.contracts.basaltEngine;
     const SEPARATOR = '--';
     const filterKeys = {
-      'interest': 'getInterest(uint256)(uint256)',
-      'interest_rate': 'getInterestRate(uint256)(uint256)',
-      'punitory_interest': 'getPunitoryInterest(uint256)(uint256)',
-      'interest_timestamp': 'getInterestTimestamp(uint256)(uint256)'
+      'interest': {
+        method: 'getInterest(uint256)(uint256)',
+        handler: (hexValue) => parseInt(hexValue, 16)
+      },
+      'interest_rate': {
+        method: 'getInterestRate(uint256)(uint256)',
+        handler: (hexValue) => parseInt(hexValue, 16)
+      },
+      'punitory_interest': {
+        method: 'getPunitoryInterest(uint256)(uint256)',
+        handler: (hexValue) => parseInt(hexValue, 16)
+      },
+      'interest_timestamp': {
+        method: 'getInterestTimestamp(uint256)(uint256)',
+        handler: (hexValue) => parseInt(hexValue, 16)
+      },
+      'cosigner': {
+        method: 'getCosigner(uint256)(uint256)',
+        handler: (hexValue) => hexValue
+      }
     };
 
     apiLoans.map((loan: any) => {
       Object.keys(filterKeys).map(key => {
-        if (!loan[key] || loan[key] === '0') {
+        if (
+          !loan[key] ||
+          loan[key] === '0' ||
+          loan[key] === Utils.address0x
+        ) {
           query.push({
             target,
             call: [
-              filterKeys[key],
+              filterKeys[key].method,
               loan.index
             ],
             returns: [
@@ -306,7 +326,7 @@ export class ApiService {
         const itemId: string = splitItem[1];
         const hexValue: string = call.results[item]._hex;
         if (callResults[itemKey]) {
-          callResults[itemKey][itemId] = parseInt(hexValue, 16);
+          callResults[itemKey][itemId] = filterKeys[itemKey].handler(hexValue);
         }
       });
 
