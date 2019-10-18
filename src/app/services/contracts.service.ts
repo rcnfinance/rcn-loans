@@ -131,7 +131,7 @@ export class ContractsService {
     const ethAddress = environment.contracts.converter.ethAddress;
 
     if (pending !== undefined) {
-      return pending;
+      return true;
     }
 
     switch (tokenAddress) {

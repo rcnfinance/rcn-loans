@@ -122,15 +122,11 @@ export class TxService {
     this.registerTx(new Tx(tx, token, false, Type.approve, data));
   }
 
-  getLastPendingApprove(token: string, contract: string): boolean {
-    const last = this.txMemory
+  getLastPendingApprove(token: string, contract: string): Tx {
+    return this.txMemory
       .filter(tx => !tx.confirmed)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
       .find(tx => tx.type === Type.approve && tx.data.contract === contract && tx.to === token);
-
-    if (last !== undefined) {
-      return last.data.action;
-    }
   }
 
   registerWithdrawTx(tx: string, engine: string, loans: number[]) {
