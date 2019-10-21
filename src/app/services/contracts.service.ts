@@ -516,21 +516,28 @@ export class ContractsService {
       return '0x';
     }
 
-    const oracleResponse = (await this.http.get(oracleUrl).toPromise()) as any[];
-    console.info('Searching currency', oracle.code, oracleResponse);
+    try {
+      const oracleResponse: any = await this.http.get(oracleUrl).toPromise();
+      console.info('Searching currency', oracle.code, oracleResponse);
 
-    let data;
-    oracleResponse.forEach(e => {
-      if (e.currency === oracle.code) {
-        data = e.data;
-        console.info('Oracle data found', e);
+      let oracleData;
+
+      oracleResponse.map(({ currency, data }) => {
+        if (currency === oracle.code) {
+          oracleData = data;
+          console.info('Oracle data found', data);
+        }
+      });
+
+      if (oracleData === undefined) {
+        throw new Error('Oracle did not provide data');
       }
-    });
-    if (data === undefined) {
-      throw new Error('Oracle did not provide data');
-    }
 
-    return data;
+      return oracleData;
+    } catch (e) {
+      console.error(e);
+      throw Error('Oracle did not provide data');
+    }
   }
 
   async getOracleUrl(oracle?: Oracle): Promise<string> {
