@@ -167,6 +167,16 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       this.openSnackBar('The lender cannot be the same as the borrower', '');
       return;
     }
+    if (this.loan.network === Network.Basalt) {
+      this.handleLend();
+      return;
+    }
+    // lend token validation
+    const token = this.lendToken;
+    if (!this.showLendDialog && !token) {
+      this.openSnackBar('Please choose a currency', '');
+      return;
+    }
 
     if (this.showLendDialog) {
       const dialogRef = this.dialog.open(DialogSelectCurrencyComponent, {
@@ -197,15 +207,16 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const oracleData = await this.contractsService.getOracleData(this.loan.oracle);
     this.startOperation();
 
     try {
+      const oracleData = await this.contractsService.getOracleData(this.loan.oracle);
+
       // set input lend token
       const web3: any = this.web3Service.web3;
-      const lendToken: string = this.lendToken;
-      if (!lendToken) {
-        throw Error('Please choose a currency');
+      let lendToken: string = this.lendToken;
+      if (this.loan.network === Network.Basalt) {
+        lendToken = environment.contracts.rcnToken;
       }
 
       // set value in specified token

@@ -128,7 +128,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
       }
       return;
     }
-    // borrower validation
+    // lender validation
     const account: string = await this.web3Service.getAccount();
     if (this.loan.debt.owner.toLowerCase() === account.toLowerCase()) {
       this.openSnackBar('The sender cannot be the same as the lender', '');
