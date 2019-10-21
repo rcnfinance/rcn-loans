@@ -13,6 +13,7 @@ import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
 // App Component
 import { AppComponent } from './app.component';
 
+
 Raven
   .config(environment.sentry, {
     release: environment.version_verbose
