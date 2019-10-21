@@ -9,6 +9,7 @@
   font-size: 36px;
   font-weight: bold;
 }
+
 .sub-title {
   font-size: 22px;
   font-family: 'Roboto', sans-serif;
@@ -18,6 +19,28 @@
 
 .img {
   width: 75%;
+}
+
+.button-1 {
+  background: #4155FF 0% 0% no-repeat padding-box;
+  border-radius: 3px;
+  border: none;
+  opacity: 1;
+  text-align: center;
+  font: Bold 14px/17px Roboto;
+  letter-spacing: 0;
+  color: #FFFFFF;
+}
+
+.button-2 {
+  border: 1px solid #4155FF;
+  border-radius: 3px;
+  opacity: 1;
+  text-align: center;
+  background-color: none !important;
+font: Bold 14px/17px Roboto;
+letter-spacing: 0;
+color: #4155FF;
 }
 // .txt-container{
 //   width: 100%;
