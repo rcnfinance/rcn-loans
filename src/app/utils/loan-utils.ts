@@ -1,63 +1,8 @@
 import { Loan, Network, Oracle, Descriptor, Debt, Status, Model } from '../models/loan.model';
+import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
+import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
 import { Utils } from './utils';
 import { environment } from './../../environments/environment';
-
-interface LoanApiBasalt {
-  index: number;
-  created: number;
-  approved: boolean;
-  status: Status;
-  oracle: string;
-  borrower: string;
-  lender?: string;
-  creator: string;
-  cosigner: string;
-  amount: number;
-  interest: number;
-  punitory_interest: number;
-  interest_timestamp: number;
-  paid: number;
-  interest_rate: number;
-  interest_rate_punitory: number;
-  due_time: number;
-  dues_in: number;
-  currency?: string;
-  cancelable_at?: number;
-  lender_balance: number;
-  expiration_requests: number;
-  approved_transfer: number;
-}
-
-interface LoanApiDiaspore {
-  id: string;
-  open: boolean;
-  approved: boolean;
-  position: number;
-  expiration: number;
-  amount: number;
-  cosigner: string;
-  model: string;
-  creator: string;
-  oracle: string;
-  borrower: string;
-  callback: string;
-  salt: number;
-  loanData: string;
-  created: number;
-  descriptor: {
-    first_obligation: number;
-    total_obligation: number;
-    duration: number;
-    interest_rate: number;
-    punitive_interest_rate: number;
-    frequency: number;
-    installments: number;
-  };
-  currency: string;
-  lender: string;
-  status: number;
-  canceled: boolean;
-}
 
 interface ModelDebtInfo {
   paid: number;

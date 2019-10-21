@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { aggregate } from '@makerdao/multicall';
 import { environment } from '../../environments/environment';
+import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
+import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
 import { Loan, Network, Status } from '../models/loan.model';
 import { LoanUtils } from '../utils/loan-utils';
 import { Utils } from '../utils/utils';
@@ -50,12 +52,14 @@ export class ApiService {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
 
-      const loansRequests = await this.getAllCompleteLoans(data.content, network);
-      const filteredLoans = loansRequests
-        .filter(loan =>
-          loan.model !== this.installmentModelAddress &&
-          loan.status !== Status.Destroyed
-        );
+      const loansRequests = await this.getAllCompleteLoans(
+        data.content as LoanApiBasalt[] | LoanApiDiaspore[],
+        network
+      );
+      const filteredLoans = loansRequests.filter(loan =>
+        loan.model !== this.installmentModelAddress &&
+        loan.status !== Status.Destroyed
+      );
 
       allRequestLoans = allRequestLoans.concat(filteredLoans);
       page++;
@@ -250,7 +254,7 @@ export class ApiService {
    * @param apiLoans Loans data obtained from API
    * @return API Loans with information completed
    */
-  private async getMulticallData(apiLoans: any[]) {
+  private async getMulticallData(apiLoans: LoanApiBasalt[]) {
     const query = [];
     const target: string = environment.contracts.basaltEngine;
     const SEPARATOR = '--';
@@ -277,7 +281,7 @@ export class ApiService {
       }
     };
 
-    apiLoans.map((loan: any) => {
+    apiLoans.map((loan: LoanApiBasalt) => {
       Object.keys(filterKeys).map(key => {
         if (
           !loan[key] ||
@@ -316,7 +320,7 @@ export class ApiService {
         }
       });
 
-      apiLoans.map((loan: any) => {
+      apiLoans.map((loan: LoanApiBasalt) => {
         const id: number = Number(loan.index);
         Object.keys(callResults).map(key => {
           if (callResults[key][id]) {
@@ -339,7 +343,10 @@ export class ApiService {
     try {
       const activeLoans = await Promise.all(
         responses.map(
-          response => this.getAllCompleteLoans(response.content, network)
+          response => this.getAllCompleteLoans(
+            response.content as LoanApiBasalt[] | LoanApiDiaspore[],
+            network
+          )
         )
       );
       return (activeLoans);
@@ -361,14 +368,14 @@ export class ApiService {
   ): Promise<Loan> {
     switch (network) {
       case Network.Basalt:
-        return LoanUtils.createBasaltLoan(loan);
+        return LoanUtils.createBasaltLoan(loan as LoanApiBasalt);
 
       case Network.Diaspore:
         let debtInfo: any;
         if (!loan.open && !loan.canceled && loan.status) {
           debtInfo = await this.getModelDebtInfo(loan.id);
         }
-        return LoanUtils.createDiasporeLoan(loan, debtInfo);
+        return LoanUtils.createDiasporeLoan(loan as LoanApiDiaspore, debtInfo);
 
       default:
         break;
