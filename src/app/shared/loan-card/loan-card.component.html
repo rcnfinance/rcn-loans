@@ -21,9 +21,21 @@
       <div class="title"><h4 class="hStyle">{{ rightLabel }}</h4></div>
     </div>
     <div class="conversion-block">
-      <div class="block-title">{{ leftValue }}</div>
+      <div
+        class="block-title"
+        [matTooltip]="leftValue?.length > 6 ? leftValue : ''"
+        matTooltipPosition="below"
+      >
+        {{ leftValue }}
+      </div>
       <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
-      <div class="block-title">{{ rightValue }}</div>
+      <div
+        class="block-title"
+        [matTooltip]="rightValue?.length > 6 ? rightValue : ''"
+        matTooltipPosition="below"
+      >
+        {{ rightValue }}
+      </div>
     </div>
     <app-lend-button
       [loan]="loan"
