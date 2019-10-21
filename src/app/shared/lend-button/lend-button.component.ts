@@ -110,18 +110,16 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       this.dialog.open(DialogWrongCountryComponent);
       return;
     }
-    // disabled button validation
-    if (this.disabled) {
-      return;
-    }
     // pending tx validation
     if (this.pendingTx) {
-      if (this.pendingTx.confirmed) {
-        window.open(environment.network.explorer.tx.replace(
-          '${tx}',
-          this.pendingTx.tx
-        ), '_blank');
-      }
+      window.open(environment.network.explorer.tx.replace(
+        '${tx}',
+        this.pendingTx.tx
+      ), '_blank');
+      return;
+    }
+    // disabled button validation
+    if (this.disabled) {
       return;
     }
     // unlogged user

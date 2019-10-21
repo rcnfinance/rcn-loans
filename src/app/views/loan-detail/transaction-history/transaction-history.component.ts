@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ViewChild } from '@angular/core';
 // App Models
 import { Loan, Network } from '../../../models/loan.model';
 import { Commit } from '../../../models/commit.model';
@@ -22,7 +22,7 @@ class DataEntry {
   styleUrls: ['./transaction-history.component.scss']
 })
 
-export class TransactionHistoryComponent implements OnInit {
+export class TransactionHistoryComponent implements OnInit, OnChanges {
   @Input() loan: Loan;
   status: string;
   selectedEvent: number;
@@ -341,6 +341,14 @@ export class TransactionHistoryComponent implements OnInit {
   ngOnInit() {
     this.myId.showSpinner = true;
     this.loadCommits(this.loan.id, this.loan.network);
+  }
+
+  ngOnChanges(changes) {
+    const { loan } = changes;
+
+    if (loan && !loan.firstChange) {
+      this.loadCommits(this.loan.id, this.loan.network);
+    }
   }
 
   private IsInTimelineProperties(commit: Commit): boolean {
