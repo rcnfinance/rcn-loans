@@ -158,25 +158,11 @@ export class ApiService {
       urls.push(url);
     }
 
-    const responses = await this.getAllUrls(urls);
+    let responses = await this.getAllUrls(urls);
 
-    // FIXME: move method
     if (network === Network.Basalt) {
-      responses.map(
-        response => {
-          response.content = response.content.filter(
-            loan => {
-              const status = Number(loan.status);
-              if (
-                status !== Status.Request &&
-                status !== Status.Destroyed
-              ) {
-                return true;
-              }
-            }
-          );
-        }
-      );
+      const filterStatus = [Status.Request, Status.Destroyed];
+      responses = this.excludeLoansWithStatus(responses, filterStatus);
     }
 
     const allApiLoans = await this.getAllApiLoans(responses, network);
@@ -414,6 +400,26 @@ export class ApiService {
       default:
         break;
     }
+  }
+
+  /**
+   * Exclude loans with the selected status
+   * @param apiLoans Loans data obtained from API
+   * @param filterStatus Status array to remove
+   * @return Loans data obtained from API excluding selected states
+   */
+  private excludeLoansWithStatus(apiLoans: any[], filterStatus: Status[]) {
+    apiLoans.map(response => {
+      response.content = response.content.filter(
+        ({ status }) => {
+          if (!filterStatus.includes(Number(status))) {
+            return true;
+          }
+        }
+      );
+    });
+
+    return apiLoans;
   }
 
   /**
