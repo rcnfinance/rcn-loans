@@ -29,7 +29,6 @@ import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 import { CivicAuthComponent } from './civic-auth/civic-auth.component';
-import { PayFormComponent } from './pay-form/pay-form.component';
 // App Dialogs
 import { DialogInsufficientfundsComponent } from '../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -86,7 +85,6 @@ import { EventsService } from './../services/events.service';
     ButtonGroupComponent,
     RiskIndicatorComponent,
     CivicAuthComponent,
-    PayFormComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
 
@@ -146,7 +144,6 @@ import { EventsService } from './../services/events.service';
     ButtonGroupComponent,
     RiskIndicatorComponent,
     CivicAuthComponent,
-    PayFormComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     DialogWrongCountryComponent,
