@@ -24,6 +24,9 @@
 }
 
 .dialog-content {
+  .title {
+    font-size: 14px;
+  }
 }
 
 .dialog-divisor {
@@ -56,8 +59,10 @@
     text-align: right;
     margin-top: 25px;
 
-    button {
-      width: 100%;
+    app-transfer-button {
+      /deep/ a {
+        width: 100%;
+      }
     }
   }
 }
@@ -73,6 +78,11 @@
   }
   .dialog-padding {
     padding: 30px 42px;
+  }
+  .dialog-content {
+    .title {
+      font-size: 18px;
+    }
   }
 }
 
