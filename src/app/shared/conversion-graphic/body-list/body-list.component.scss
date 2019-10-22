@@ -6,9 +6,11 @@
   @extend %flex-container;
   padding: 0px 15px;
   margin: 5px -15px 15px;
-  div{
+  div {
     flex: 1;
     @extend %roboto-bold;
+    max-width: 33.3%;
+
     &:nth-child(1){
       text-align: left;
       @extend .font30;
