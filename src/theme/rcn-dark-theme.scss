@@ -1,0 +1,163 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$rcn-dark-theme-primary: (
+  50: #4154FF,
+  100: #4154FF,
+  200: #4154FF,
+  300: #4154FF,
+  400: #7684FF,
+  500: #7684FF,
+  600: #7684FF,
+  700: #5C67C7,
+  800: #5C67C7,
+  900: #5C67C7,
+  A100: #4154FF,
+  A200: #4154FF,
+  A400: #7684FF,
+  A700: #5C67C7,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $light-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $light-primary-text,
+    A700: $light-primary-text,
+  )
+);
+
+$rcn-dark-theme-accent: (
+  50: #7ADDB5,
+  100: #7ADDB5,
+  200: #7ADDB5,
+  300: #7ADDB5,
+  400: #7ADDB5,
+  500: #7ADDB5,
+  600: #7ADDB5,
+  700: #7ADDB5,
+  800: #7ADDB5,
+  900: #7ADDB5,
+  A100: #7ADDB5,
+  A200: #7ADDB5,
+  A400: #7ADDB5,
+  A700: #7ADDB5,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $light-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $light-primary-text,
+    A700: $light-primary-text,
+  )
+);
+
+$rcn-dark-theme-grey: (
+  50: #A3A5A6,
+  100: #565759,
+  200: #484A4B,
+  300: #424345,
+  400: #3C3C3F,
+  500: #313134,
+  600: #262629,
+  700: #232325,
+  800: #212124,
+  900: #18181A,
+  A100: #565759,
+  A200: #484A4B,
+  A400: #3C3C3F,
+  A700: #232325,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $dark-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: $light-primary-text,
+  )
+);
+
+$rcn-dark-theme-dark: #121315;
+
+// Custom background and foreground palettes
+$rcn-dark-theme-background: (
+  status-bar: black,
+  app-bar:    map_get($rcn-dark-theme-grey, 900),
+  background: $rcn-dark-theme-dark,
+  hover:      rgba(white, 0.04),
+  card:       map_get($rcn-dark-theme-grey, 800),
+  dialog:     map_get($rcn-dark-theme-grey, 500),
+  disabled-button: rgba(white, 0.12),
+  raised-button: map-get($rcn-dark-theme-grey, 800),
+  focused-button: $light-focused,
+  selected-button: map_get($rcn-dark-theme-grey, 900),
+  selected-disabled-button: map_get($rcn-dark-theme-grey, 800),
+  disabled-button-toggle: black,
+  unselected-chip: map_get($rcn-dark-theme-grey, 700),
+  disabled-list-option: black,
+);
+
+$rcn-dark-theme-foreground: (
+  base:              white,
+  divider:           $light-dividers,
+  dividers:          $light-dividers,
+  disabled:          $light-disabled-text,
+  disabled-button:   rgba(white, 0.3),
+  disabled-text:     $light-disabled-text,
+  elevation:         black,
+  hint-text:         $light-disabled-text,
+  secondary-text:    $light-secondary-text,
+  icon:              white,
+  icons:             white,
+  text:              white,
+  slider-min:        white,
+  slider-off:        rgba(white, 0.3),
+  slider-off-active: rgba(white, 0.3),
+);
+
+// Instead of creating a theme with mat-light-theme like a sane person, we will
+// create our own theme-creating function that lets us apply our own foreground
+// and background palettes.
+@function create-wonky-theme($primary, $accent, $warn: mat-palette($mat-red)) {
+  @return (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+    is-dark: true,
+    foreground: $rcn-dark-theme-foreground,
+    background: $rcn-dark-theme-background,
+  );
+}
+
+// The rest of this is like a normal theme.scss file. The only difference being
+// that we use create-wonky-theme instead of mat-light-theme.
+$rcn-theme-primary: mat-palette($rcn-dark-theme-primary);
+$rcn-theme-accent: mat-palette($rcn-dark-theme-accent);
+$rcn-theme-warn: mat-palette($mat-red);
+
+$rcn-theme: create-wonky-theme($rcn-theme-primary, $rcn-theme-accent, $rcn-theme-warn);
+
+@include angular-material-theme($rcn-theme);
