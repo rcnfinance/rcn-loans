@@ -10,6 +10,7 @@ import { TxService } from '../tx.service';
 import { CosignerService } from './cosigner.service';
 import { ApiService } from './api.service';
 import { promisify, Utils } from './../utils/utils';
+import { LoanUtils } from './../utils/loan-utils';
 
 declare let require: any;
 
