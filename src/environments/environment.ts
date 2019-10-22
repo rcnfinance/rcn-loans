@@ -30,10 +30,12 @@ export const environment = {
   sentry: 'http://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   gaTracking: 'UA-122615331-2',
   rcn_node: {
-    loan: 'https://ropsten-rnode.rcn.loans/v1/commits?id_loan=$id'
+    loan: 'https://ropsten-rnode.rcn.loans/v1/commits?id_loan=$id' // TODO: replace by rcn_node_api.basaltUrl
   },
   rcn_node_api: {
-    url: 'https://diaspore-ropsten-rnode.rcn.loans/v4/'
+    basaltUrl: 'https://ropsten-rnode.rcn.loans/v1/',
+    diasporeUrl: 'https://diaspore-ropsten-rnode.rcn.loans/v4/',
+    url: 'https://diaspore-ropsten-rnode.rcn.loans/v4/' // TODO: replace by diasporeUrl
   },
   rcn_oracle: {
     url: 'https://oracle.ripio.com/rate/'
@@ -68,7 +70,8 @@ export const environment = {
     decentraland: {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
       mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1'
-    }
+    },
+    multicall: '0xa457b5b859573e8eb758b6c2bfd4ae3042b422fd'
   },
   blacklist: [
     {
