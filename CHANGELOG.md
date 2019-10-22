@@ -8,6 +8,8 @@
 - Display Diaspore RCN Engine loans
 - Show Lending dialog, lend using another currency
 - Visual improvements
+- Get basalt loans using the API
+- Different payment and lend flows for Basalt loans
 
 ## **0.0.13** Avocados - 2019/02/15
 
@@ -63,7 +65,7 @@
 ### Misc:
 - Display correct status on expired loans
 - Update Decentraland mortgages contracts
-- Hide the transfer button on paid loans 
+- Hide the transfer button on paid loans
 
 ## **0.0.10** Avocados - 2018/10/30
 

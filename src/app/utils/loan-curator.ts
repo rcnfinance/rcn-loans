@@ -18,8 +18,9 @@ export class LoanCurator {
       if (blacklisted) { return false; }
 
       // Check common wrong values
-      return loan.descriptor.punitiveInterestRateRate < 1000 &&
+      return loan.descriptor.interestRate > 0 &&
       loan.descriptor.interestRate < 1000 &&
+      loan.descriptor.punitiveInterestRateRate < 1000 &&
       amount < 1000000 &&
       amount > 0.00001;
     });
