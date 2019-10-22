@@ -104,8 +104,10 @@
     text-align: right;
     margin-top: 25px;
 
-    button {
-      width: 100%;
+    app-pay-button {
+      /deep/ a {
+        width: 100%;
+      }
     }
   }
 }

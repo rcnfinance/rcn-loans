@@ -115,20 +115,26 @@
           </p>
         </div>
         <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
-          <app-pay-button
-            [loan]="loan"
-            [amount]="form.value.amount"
-            [disabled]="loading || !form?.valid"
-            (startPay)="showProgressbar()"
-            (endPay)="finishProgress = true"
-          ></app-pay-button>
-          <button
-            mat-raised-button
-            class="button button-clear-dark mat-elevation-z d-none d-md-inline-block"
-            [mat-dialog-close]='false'
-          >
-            Close
-          </button>
+          <div class="row justify-content-end mx-md-0">
+            <div class="col-12 col-md-3">
+              <app-pay-button
+                [loan]="loan"
+                [amount]="form.value.amount"
+                [disabled]="loading || !form?.valid"
+                (startPay)="showProgressbar()"
+                (endPay)="finishProgress = true"
+              ></app-pay-button>
+            </div>
+            <div class="col-0 col-md-3 ml-2">
+              <button
+                mat-raised-button
+                class="button button-clear-dark mat-elevation-z d-none d-md-inline-block"
+                [mat-dialog-close]='false'
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
