@@ -111,6 +111,11 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     if (this.disabled) {
       return;
     }
+    // debt validation
+    if (!this.loan.debt) {
+      this.openSnackBar('The loan was not yet lended', '');
+      return;
+    }
     // unlogged user
     if (!this.web3Service.loggedIn) {
       const hasClient = await this.web3Service.requestLogin();
@@ -123,12 +128,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
       }
       return;
     }
-    // debt validation
-    if (!this.loan.debt) {
-      this.openSnackBar('The loan was not yet lended', '');
-      return;
-    }
-    // borrower validation
+    // lender validation
     const account: string = await this.web3Service.getAccount();
     if (this.loan.debt.owner.toLowerCase() === account.toLowerCase()) {
       this.openSnackBar('The sender cannot be the same as the lender', '');
