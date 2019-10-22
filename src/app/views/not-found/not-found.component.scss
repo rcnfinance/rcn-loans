@@ -30,6 +30,8 @@
   font: Bold 14px/17px Roboto;
   letter-spacing: 0;
   color: #FFFFFF;
+  width: 100%;
+  min-height: 36px;
 }
 
 .button-2 {
@@ -37,10 +39,12 @@
   border-radius: 3px;
   opacity: 1;
   text-align: center;
-  background-color: none !important;
-font: Bold 14px/17px Roboto;
-letter-spacing: 0;
-color: #4155FF;
+  background-color: black !important;
+  font: Bold 14px/17px Roboto;
+  letter-spacing: 0;
+  color: #4155FF;
+  width: 100%;
+  min-height: 36px;
 }
 // .txt-container{
 //   width: 100%;
