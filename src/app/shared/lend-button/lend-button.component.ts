@@ -122,27 +122,9 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     if (this.disabled) {
       return;
     }
-    // unlogged user
-    if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (this.web3Service.loggedIn) {
-        this.handleLend();
-        return;
-      }
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-      }
-      return;
-    }
     // debt validation
     if (this.loan.debt) {
       this.openSnackBar('The loan has already been lend', '');
-      return;
-    }
-    // borrower validation
-    const account: string = await this.web3Service.getAccount();
-    if (this.loan.borrower.toLowerCase() === account.toLowerCase()) {
-      this.openSnackBar('The lender cannot be the same as the borrower', '');
       return;
     }
     // cosigner validation
@@ -166,6 +148,34 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         });
         return;
       }
+    }
+    // unlogged user
+    if (!this.web3Service.loggedIn) {
+      const hasClient = await this.web3Service.requestLogin();
+      if (this.web3Service.loggedIn) {
+        this.handleLend();
+        return;
+      }
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
+      return;
+    }
+    // borrower validation
+    const account: string = await this.web3Service.getAccount();
+    if (this.loan.borrower.toLowerCase() === account.toLowerCase()) {
+      this.openSnackBar('The lender cannot be the same as the borrower', '');
+      return;
+    }
+    if (this.loan.network === Network.Basalt) {
+      this.handleLend();
+      return;
+    }
+    // lend token validation
+    const token = this.lendToken;
+    if (!this.showLendDialog && !token) {
+      this.openSnackBar('Please choose a currency', '');
+      return;
     }
 
     if (this.showLendDialog) {
@@ -197,15 +207,16 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const oracleData = await this.contractsService.getOracleData(this.loan.oracle);
     this.startOperation();
 
     try {
+      const oracleData = await this.contractsService.getOracleData(this.loan.oracle);
+
       // set input lend token
       const web3: any = this.web3Service.web3;
-      const lendToken: string = this.lendToken;
-      if (!lendToken) {
-        throw Error('Please choose a currency');
+      let lendToken: string = this.lendToken;
+      if (this.loan.network === Network.Basalt) {
+        lendToken = environment.contracts.rcnToken;
       }
 
       // set value in specified token

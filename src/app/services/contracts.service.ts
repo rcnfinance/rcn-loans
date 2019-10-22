@@ -16,9 +16,11 @@ declare let require: any;
 const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
 const oracleAbi = require('../contracts/Oracle.json');
+const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const loanManagerAbi = require('../contracts/LoanManager.json');
 const debtEngineAbi = require('../contracts/DebtEngine.json');
-const diasporeOracleAbi = require('../contracts/DiasporeOracle.json');
+const diasporeOracleAbi = require('../contracts/Oracle.json');
+const basaltOracleAbi = require('../contracts/BasaltOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 const tokenConverterAbi = require('../contracts/TokenConverter.json');
 const oracleFactoryAbi = require('../contracts/OracleFactory.json');
@@ -223,8 +225,10 @@ export class ContractsService {
     let required: number;
     required = loan.amount;
 
+    const oracleAbi = this.loanOracleAbi(loan.network);
+
     if (loan.oracle.address !== Utils.address0x) {
-      const oracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
+      const oracle = this.web3.web3.eth.contract(oracleAbi).at(loan.oracle.address);
       const oracleData = await this.getOracleData(loan.oracle);
       const oracleRate = await promisify(oracle.readSample.call, [oracleData]);
       const rate = oracleRate[0];
@@ -406,7 +410,7 @@ export class ContractsService {
       return web3.toWei(1);
     }
 
-    const oracle = this.makeContract(oracleAbi.abi, oracleAddress);
+    const oracle = this.makeContract(diasporeOracleAbi.abi, oracleAddress);
     const oracleRate = await promisify(oracle.readSample.call, []);
     const amount = web3.toWei(1);
     const tokens = oracleRate[0];
@@ -425,25 +429,33 @@ export class ContractsService {
     }
 
     const oracleData = await this.getOracleData(loan.oracle);
+    const oracleAbi = this.loanOracleAbi(loan.network);
+    const oracle = this.web3.web3.eth.contract(oracleAbi).at(loan.oracle.address);
 
-    if (loan.network === Network.Basalt) {
-      const legacyOracle = this.web3.web3.eth.contract(oracleAbi.abi).at(loan.oracle.address);
-      const oracleRate = await promisify(legacyOracle.getRate, [loan.oracle.code, oracleData]);
-      const rate = oracleRate[0];
-      const decimals = oracleRate[1];
-      console.info('Oracle rate obtained', rate, decimals);
-      const required = (rate * amount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
-      console.info('Estimated required rcn is', required);
-      return required;
+    try {
+      switch (loan.network) {
+        case Network.Basalt:
+          const oracleRate = await promisify(oracle.getRate, [loan.oracle.code, oracleData]);
+          const rate = oracleRate[0];
+          const decimals = oracleRate[1];
+          console.info('Oracle rate obtained', rate, decimals);
+          const required = (rate * amount * 10 ** (18 - decimals) / 10 ** 18) * 1.02;
+          console.info('Estimated required rcn is', required);
+          return required;
+
+        case Network.Diaspore:
+          const oracleResult = await promisify(oracle.readSample.call, [oracleData]);
+          const tokens = oracleResult[0];
+          const equivalent = oracleResult[1];
+          return (tokens * amount) / equivalent;
+
+        default:
+          break;
+      }
+    } catch (e) {
+      console.error(e);
+      throw Error('Oracle did not provide data');
     }
-
-    const oracle = this.web3.web3.eth.contract(diasporeOracleAbi).at(loan.oracle.address);
-    const oracleResult = await promisify(oracle.readSample.call, [oracleData]);
-
-    const tokens = oracleResult[0];
-
-    const equivalent = oracleResult[1];
-    return (tokens * amount) / equivalent;
   }
 
   async payLoan(loan: Loan, amount: number): Promise<string> {
@@ -504,31 +516,38 @@ export class ContractsService {
       return '0x';
     }
 
-    const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
+    const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi.abi).at(oracle.address);
     const oracleUrl = await promisify(oracleContract.url.call, []);
     if (oracleUrl === '') {
       return '0x';
     }
 
-    const oracleResponse = (await this.http.get(oracleUrl).toPromise()) as any[];
-    console.info('Searching currency', oracle.code, oracleResponse);
+    try {
+      const oracleResponse: any = await this.http.get(oracleUrl).toPromise();
+      console.info('Searching currency', oracle.code, oracleResponse);
 
-    let data;
-    oracleResponse.forEach(e => {
-      if (e.currency === oracle.code) {
-        data = e.data;
-        console.info('Oracle data found', e);
+      let oracleData;
+
+      oracleResponse.map(({ currency, data }) => {
+        if (currency === oracle.code) {
+          oracleData = data;
+          console.info('Oracle data found', data);
+        }
+      });
+
+      if (oracleData === undefined) {
+        throw new Error('Oracle did not provide data');
       }
-    });
-    if (data === undefined) {
-      throw new Error('Oracle did not provide data');
-    }
 
-    return data;
+      return oracleData;
+    } catch (e) {
+      console.error(e);
+      throw Error('Oracle did not provide data');
+    }
   }
 
   async getOracleUrl(oracle?: Oracle): Promise<string> {
-    const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi).at(oracle.address);
+    const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi.abi).at(oracle.address);
     const url = await promisify(oracleContract.url.call, []);
     return url;
   }
@@ -646,7 +665,59 @@ export class ContractsService {
     return false;
   }
 
+  private parseBasaltBytes(bytes: any): Loan[] {
+    const loans = [];
+    const total = bytes.length / 20;
+    for (let i = 0; i < total; i++) {
+      const loanBytes = bytes.slice(i * 20, i * 20 + 20);
+      loans.push(LoanUtils.parseBasaltLoan(this._rcnEngineAddress, loanBytes));
+    }
+    return loans;
+  }
+  // private parseRequestBytes(bytes: any): Loan[] {
+  //   const requests = [];
+  //   const total = bytes.length / 17;
+  //   for (let i = 0; i < total; i++) {
+  //     const loanBytes = bytes.slice(i * 17, i * 17 + 17);
+  //     requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
+  //   }
+  //   return requests;
+  // }
+  // private parseLoanBytes(bytes: any): Loan[] {
+  //   const requests = [];
+  //   const total = bytes.length / 25;
+  //   for (let i = 0; i < total; i++) {
+  //     const loanBytes = bytes.slice(i * 25, i * 25 + 25);
+  //     requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
+  //   }
+  //   return requests;
+  // }
+  private addressToBytes32(address: string): string {
+    try {
+      address = '0x000000000000000000000000' + address.replace('0x', '');
+      return address;
+    } catch (e) {
+      return null;
+    }
+  }
+
   private loadAltContract(web3: any, contract: any): any {
     return web3.eth.contract(contract.abi).at(contract.address);
+  }
+
+  /**
+   * Get expected oracle ABI
+   * @param network Loan Network
+   * @return Oracle ABI
+   */
+  private loanOracleAbi(network: Network) {
+    switch (network) {
+      case Network.Basalt:
+        return basaltOracleAbi.abi;
+
+      case Network.Diaspore:
+      default:
+        return diasporeOracleAbi.abi;
+    }
   }
 }
