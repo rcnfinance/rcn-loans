@@ -10,14 +10,11 @@ import { TxService } from '../tx.service';
 import { CosignerService } from './cosigner.service';
 import { ApiService } from './api.service';
 import { promisify, Utils } from './../utils/utils';
-import { LoanUtils } from './../utils/loan-utils';
 
 declare let require: any;
 
 const tokenAbi = require('../contracts/Token.json');
 const engineAbi = require('../contracts/NanoLoanEngine.json');
-const oracleAbi = require('../contracts/Oracle.json');
-const extensionAbi = require('../contracts/NanoLoanEngineExtension.json');
 const loanManagerAbi = require('../contracts/LoanManager.json');
 const debtEngineAbi = require('../contracts/DebtEngine.json');
 const diasporeOracleAbi = require('../contracts/Oracle.json');
@@ -664,42 +661,6 @@ export class ContractsService {
     }
 
     return false;
-  }
-
-  private parseBasaltBytes(bytes: any): Loan[] {
-    const loans = [];
-    const total = bytes.length / 20;
-    for (let i = 0; i < total; i++) {
-      const loanBytes = bytes.slice(i * 20, i * 20 + 20);
-      loans.push(LoanUtils.parseBasaltLoan(this._rcnEngineAddress, loanBytes));
-    }
-    return loans;
-  }
-  // private parseRequestBytes(bytes: any): Loan[] {
-  //   const requests = [];
-  //   const total = bytes.length / 17;
-  //   for (let i = 0; i < total; i++) {
-  //     const loanBytes = bytes.slice(i * 17, i * 17 + 17);
-  //     requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
-  //   }
-  //   return requests;
-  // }
-  // private parseLoanBytes(bytes: any): Loan[] {
-  //   const requests = [];
-  //   const total = bytes.length / 25;
-  //   for (let i = 0; i < total; i++) {
-  //     const loanBytes = bytes.slice(i * 25, i * 25 + 25);
-  //     requests.push(LoanUtils.parseLoan(environment.contracts.diaspore.loanManager, loanBytes));
-  //   }
-  //   return requests;
-  // }
-  private addressToBytes32(address: string): string {
-    try {
-      address = '0x000000000000000000000000' + address.replace('0x', '');
-      return address;
-    } catch (e) {
-      return null;
-    }
   }
 
   private loadAltContract(web3: any, contract: any): any {
