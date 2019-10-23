@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// App Modules
+import { Routes, RouterModule } from '@angular/router';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+// App Modules
 import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from './../../material/material.module';
 // App Services
@@ -11,13 +12,18 @@ import { AvailableLoansService } from '../../services/available-loans.service';
 // App Component
 import { AddressComponent } from './address.component';
 
+const routes: Routes = [
+  { path: '', component: AddressComponent }
+];
+
 @NgModule({
   imports: [
     CommonModule,
     NgxSpinnerModule,
     VirtualScrollerModule,
     MaterialModule,
-    SharedModule
+    SharedModule,
+    RouterModule.forChild(routes)
   ],
   declarations: [
     AddressComponent

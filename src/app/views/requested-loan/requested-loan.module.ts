@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Routes, RouterModule } from '@angular/router';
 // App Modules
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
@@ -13,6 +14,10 @@ import { FilterLoansService } from '../../services/filter-loans.service';
 // App Component
 import { RequestedLoanComponent } from './requested-loan.component';
 
+const routes: Routes = [
+  { path: '', component: RequestedLoanComponent }
+];
+
 @NgModule({
   imports: [
     CommonModule,
@@ -21,7 +26,8 @@ import { RequestedLoanComponent } from './requested-loan.component';
     MaterialModule,
     SharedModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    RouterModule.forChild(routes)
   ],
   declarations: [
     RequestedLoanComponent

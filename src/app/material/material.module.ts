@@ -1,7 +1,7 @@
 // Angular Core
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Angular Material
 import {
   MatAutocompleteModule,
@@ -72,8 +72,8 @@ import {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule,
-    BrowserAnimationsModule
+    MatTooltipModule
+    // BrowserAnimationsModule
   ],
   declarations: [],
   exports: [

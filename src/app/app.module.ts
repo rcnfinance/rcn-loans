@@ -1,15 +1,12 @@
-import * as Raven from 'raven-js';
-// Angular Core
 import { NgModule, ErrorHandler } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import * as Raven from 'raven-js';
 import { environment } from '../environments/environment';
 // App Modules
-import { AppRoutingModule } from './app-routing/app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
-import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
-import { ActiveLoansModule } from './views/active-loans/active-loans.module';
-import { AddressModule } from './views/address/address.module';
-import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
 // App Component
 import { AppComponent } from './app.component';
 
@@ -27,14 +24,11 @@ export class RavenErrorHandler implements ErrorHandler {
 
 @NgModule({
   imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-
-    CoreModule,
-    RequestedLoanModule,
-    ActiveLoansModule,
-    AddressModule,
-    LoanDetailModule
+    CoreModule
   ],
   declarations: [
     AppComponent

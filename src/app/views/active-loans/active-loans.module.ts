@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Routes, RouterModule } from '@angular/router';
 // App Modules
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
@@ -11,13 +12,18 @@ import { AvailableLoansService } from './../..//services/available-loans.service
 // App Component
 import { ActiveLoansComponent } from './active-loans.component';
 
+const routes: Routes = [
+  { path: '', component: ActiveLoansComponent }
+];
+
 @NgModule({
   imports: [
     CommonModule,
     NgxSpinnerModule,
     VirtualScrollerModule,
     MaterialModule,
-    SharedModule
+    SharedModule,
+    RouterModule.forChild(routes)
   ],
   declarations: [
     ActiveLoansComponent
