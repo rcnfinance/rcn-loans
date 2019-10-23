@@ -206,13 +206,13 @@
             color: #fff;
           }
           &:hover{
-            color: $primary;
+            color: var(--app-color-primary);
           }
           &.separator{
             font-weight: 300;
             cursor: default;
             &:hover{
-              color: $secondary;
+              color: var(--app-color-secondary);
             }
           }
           &:last-child{

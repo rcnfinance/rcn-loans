@@ -2,25 +2,6 @@
 // COLORS
 // -------------------------
 
-:root{
-  --blue: #4155ff;
-  --white: #ffffff;
-  --black: #000000;
-  --gray7: #333333;
-  --gray8: #232323;
-  --gray9: #1d1d1d;
-  --red: #f44136;
-  --green: #71b464;
-  --orange: #da7d3a;
-  --yellow: #ffca00;
-  --violet: #8d00ab;
-  --primary: #4155ff;
-  --secondary: #ffffff;
-  --tertiary: #000000;
-  --quaternary: #232323;
-  --fifth: #1d1d1d;
-}
-
 .blue {color: #4155ff;}
 .white {color: #ffffff;}
 .black {color: #000000;}
@@ -57,7 +38,7 @@
 .orange     {color: #da7d3a;}
 .cyan       {color: #5186FB;}
 .darkblue   {color: #031930;}
-.darkblue   {color: #192535;} 
+.darkblue   {color: #192535;}
 .green      {color: #30ad23;}
 .blue       {color: #4155ff;}
 .violet     {color: #8d00ab;}
@@ -102,7 +83,7 @@
 .bg-google      {background-color: #CC3B2A;}
 .bg-linkedin    {background-color: #0180B3;}
 .bg-tumblr      {background-color: #345270;}
-.bg-primary     {background-color: $primary !important;}
+.bg-primary     {background-color: var(--app-color-primary) !important;}
 
 /* Colors Hovers */
 .violet         {&:hover{color: #905D8E;}}
@@ -118,7 +99,5 @@
 .box-shadow {
     -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25);
     -moz-box-shadow: 0 1px 3px rgba(0,0,0,.25);
-    box-shadow: 0 1px 3px rgba(0,0,0,.25); 
+    box-shadow: 0 1px 3px rgba(0,0,0,.25);
 }
-
-
