@@ -155,7 +155,28 @@ $rcn-dark-theme-foreground: (
 $rcn-theme-primary: mat-palette($rcn-dark-theme-primary);
 $rcn-theme-accent: mat-palette($rcn-dark-theme-accent);
 $rcn-theme-warn: mat-palette($mat-red);
-
 $rcn-theme: create-wonky-theme($rcn-theme-primary, $rcn-theme-accent, $rcn-theme-warn);
 
 @include angular-material-theme($rcn-theme);
+
+// Export theme colors
+:root {
+  --app-color-primary: mat-color($rcn-theme-primary, 300);
+  --app-color-primary-light: mat-color($rcn-theme-primary, 500);
+  --app-color-primary-dark: mat-color($rcn-theme-primary, 900);
+  --app-color-accent: mat-color($rcn-theme-accent);
+  --app-color-warn: mat-color($rcn-theme-warn);
+  --app-color-red: #F06363;
+  --app-color-green: #6EB548;
+  --app-color-orange: #EAA219;
+  --app-color-gray-50: #A3A5A6;
+  --app-color-gray-100: #565759;
+  --app-color-gray-200: #424345;
+  --app-color-gray-300: #3C3C3F;
+  --app-color-gray-400: #313134;
+  --app-color-gray-500: #262629;
+  --app-color-gray-600: #232325;
+  --app-color-gray-700: #212124;
+  --app-color-gray-800: #18181A;
+  --app-color-gray-900: #121315;
+}
