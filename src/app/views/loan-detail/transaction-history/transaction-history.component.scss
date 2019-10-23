@@ -18,7 +18,7 @@
     .time-event{
       position: relative;
       padding: 20px 0;
-      color: $secondary;
+      color: var(--app-color-secondary);
       .flex-row{
         display: flex;
         flex-flow: row wrap;
@@ -133,7 +133,7 @@
       }
 
       &.background-active{
-        background-color: $tertiary;
+        background-color: var(--app-color-tertiary);
         .fa-chevron-right {
           right: 15px;
         }
@@ -175,7 +175,7 @@
           }
           a.value{
             @include transition();
-            &:hover{ color: $primary !important; }
+            &:hover{ color: var(--app-color-primary) !important; }
           }
         }
         &.true{
@@ -215,7 +215,7 @@
         }
         &:hover{
           .fa-chevron-right { right: 15px; }
-          .circle{ background-color: $primary; }
+          .circle{ background-color: var(--app-color-primary); }
           &.true{
             .icon-event{left: 28px;}
           }
