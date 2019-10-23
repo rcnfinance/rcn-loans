@@ -70,18 +70,18 @@ $rcn-dark-theme-accent: (
 $rcn-dark-theme-grey: (
   50: #A3A5A6,
   100: #565759,
-  200: #484A4B,
-  300: #424345,
-  400: #3C3C3F,
-  500: #313134,
-  600: #262629,
-  700: #232325,
-  800: #212124,
-  900: #18181A,
+  200: #424345,
+  300: #3C3C3F,
+  400: #313134,
+  500: #262629,
+  600: #232325,
+  700: #212124,
+  800: #18181A,
+  900: #121315,
   A100: #565759,
-  A200: #484A4B,
-  A400: #3C3C3F,
-  A700: #232325,
+  A200: #424345,
+  A400: #313134,
+  A700: #212124,
   contrast: (
     50: $dark-primary-text,
     100: $dark-primary-text,
@@ -100,16 +100,14 @@ $rcn-dark-theme-grey: (
   )
 );
 
-$rcn-dark-theme-dark: #121315;
-
 // Custom background and foreground palettes
 $rcn-dark-theme-background: (
   status-bar: black,
-  app-bar:    map_get($rcn-dark-theme-grey, 900),
-  background: $rcn-dark-theme-dark,
+  app-bar:    map_get($rcn-dark-theme-grey, 500),
+  background: map_get($rcn-dark-theme-grey, 900),
   hover:      rgba(white, 0.04),
-  card:       map_get($rcn-dark-theme-grey, 800),
-  dialog:     map_get($rcn-dark-theme-grey, 500),
+  card:       map_get($rcn-dark-theme-grey, 700),
+  dialog:     map_get($rcn-dark-theme-grey, 400),
   disabled-button: rgba(white, 0.12),
   raised-button: map-get($rcn-dark-theme-grey, 800),
   focused-button: $light-focused,

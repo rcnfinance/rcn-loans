@@ -407,8 +407,6 @@ mat-chip.mat-chip {
   // Snackbar
 snack-bar-container.mat-snack-bar-container{
   margin: 15px;
-  color: $secondary;
-  button{ &.mat-button{ color: $primary; text-transform: uppercase } }
 }
 
   //Forms
