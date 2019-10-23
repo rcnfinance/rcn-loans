@@ -9,7 +9,7 @@
     color="#fff"
     type="ball-clip-rotate-multiple"
   ></ngx-spinner>
-  <div *ngIf="availableLoans">
+  <div *ngIf="!availableLoans">
     <div class="container">
       <div class="row">
         <div class="col-sm-12 d-none d-lg-block">
@@ -21,7 +21,7 @@
       </div>
     </div>
   </div>
-  <div  *ngIf="!availableLoans" class="container">
+  <div  *ngIf="availableLoans" class="container">
     <div class="row">
       <div class="col-sm-12 d-none d-lg-block">
         <div class="title main-h1 marginbottom30">Requests</div>
