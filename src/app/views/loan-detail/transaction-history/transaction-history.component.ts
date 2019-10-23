@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, Input, ViewChild } from '@angular/core';
 // App Models
 import { Loan, Network } from '../../../models/loan.model';
-import { Commit } from '../../../models/commit.model';
+import { Commit } from '../../../interfaces/commit.interface';
 // App Services
 import { CommitsService } from '../../../services/commits.service';
 import { environment } from '../../../../environments/environment';
