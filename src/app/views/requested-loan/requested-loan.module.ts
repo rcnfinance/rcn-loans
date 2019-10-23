@@ -12,6 +12,7 @@ import { ApiService } from './../../services/api.service';
 import { FilterLoansService } from '../../services/filter-loans.service';
 // App Component
 import { RequestedLoanComponent } from './requested-loan.component';
+import { NoAvailableLoansComponent } from './no-available-loans/no-available-loans.component';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { RequestedLoanComponent } from './requested-loan.component';
     FormsModule
   ],
   declarations: [
-    RequestedLoanComponent
+    RequestedLoanComponent,
+    NoAvailableLoansComponent
   ],
   providers: [
     NgxSpinnerService,
