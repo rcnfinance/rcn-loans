@@ -4,7 +4,7 @@
   width: 70px;
   display: flex;
   align-items: center;
-  color: $secondary;
+  color: var(--app-color-secondary);
   padding-left: 20px;
   cursor: pointer;
   @include transition;
