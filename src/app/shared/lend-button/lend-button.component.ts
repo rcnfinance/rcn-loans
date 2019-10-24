@@ -18,7 +18,7 @@ import { Utils } from '../../utils/utils';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
-import { TxService, Tx, Type } from './../../tx.service';
+import { TxService, Tx, Type } from './../../services/tx.service';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { environment } from '../../../environments/environment';
 import { Web3Service } from '../../services/web3.service';

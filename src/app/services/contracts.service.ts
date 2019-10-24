@@ -6,7 +6,7 @@ import { Loan, Oracle, Network } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
 import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
-import { TxService } from '../tx.service';
+import { TxService } from '../services/tx.service';
 import { CosignerService } from './cosigner.service';
 import { ApiService } from './api.service';
 import { promisify, Utils } from './../utils/utils';

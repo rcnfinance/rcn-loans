@@ -42,7 +42,7 @@ import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 // App Services
 import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
-import { TxService } from './../tx.service';
+import { TxService } from './../services/tx.service';
 import { BrandingService } from './../services/branding.service';
 import { CosignerService } from './../services/cosigner.service';
 import { Web3Service } from './../services/web3.service';

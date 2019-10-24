@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 import { SidebarService } from '../../services/sidebar.service';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
-import { Tx, TxService } from '../../tx.service';
+import { Tx, TxService } from '../../services/tx.service';
 import { CountriesService } from '../../services/countries.service';
 
 @Component({

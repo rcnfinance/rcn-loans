@@ -3,7 +3,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 // App Service
 import { EventsService, Category } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
-import { TxService, Tx } from '../../tx.service';
+import { TxService, Tx } from '../../services/tx.service';
 // App Component
 import { environment } from '../../../environments/environment';
 import { Loan } from '../../models/loan.model';

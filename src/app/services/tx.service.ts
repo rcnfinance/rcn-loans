@@ -2,9 +2,9 @@ declare let window: any;
 
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { Loan } from './models/loan.model';
-import { Web3Service } from './services/web3.service';
-import { EventsService, Category } from './services/events.service';
+import { Loan } from './../models/loan.model';
+import { Web3Service } from './web3.service';
+import { EventsService, Category } from './events.service';
 
 export enum Type {
   lend = 'lend',
