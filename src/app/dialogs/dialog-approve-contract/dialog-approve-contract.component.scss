@@ -45,14 +45,14 @@
     top: 0px;
     left: 0px;
     border-radius: 50%;
-    background-color: $primary;
+    background-color: var(--app-color-primary);
     box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
     .title{
       position: absolute;
       top: 50%;
       left: 50%;
       font-size: 18px;
-      color: $secondary;
+      color: var(--app-color-secondary);
       @extend %roboto-black;
       @include transform(translate(-50%, -50%));
     }
