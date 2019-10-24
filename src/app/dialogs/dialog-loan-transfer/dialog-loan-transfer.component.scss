@@ -84,6 +84,19 @@
       font-size: 18px;
     }
   }
+  .dialog-footer {
+    &__label {
+      text-align: left;
+    }
+    &__buttons {
+      margin-top: 0;
+      app-transfer-button {
+        /deep/ a {
+          width: auto;
+        }
+      }
+    }
+  }
 }
 
 @media (min-width: 992px) {
@@ -98,18 +111,6 @@
     &--left-to-pay {
       .item__value {
         margin: 20px 0 10px;
-      }
-    }
-  }
-
-  .dialog-footer {
-    &__label {
-      text-align: left;
-    }
-    &__buttons {
-      margin-top: 0;
-      button {
-        width: auto;
       }
     }
   }

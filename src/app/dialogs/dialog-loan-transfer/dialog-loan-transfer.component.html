@@ -71,8 +71,8 @@
           </p>
         </div>
         <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
-          <div class="row justify-content-end mx-md-0">
-            <div class="col-12 col-md-3">
+          <div class="row justify-content-end">
+            <div class="col-md-12">
               <app-transfer-button
                 [loan]="loan"
                 [address]="form.value.address"
@@ -80,8 +80,6 @@
                 (startTransfer)="showProgressbar()"
                 (endTransfer)="finishProgress = true"
               ></app-transfer-button>
-            </div>
-            <div class="col-0 col-md-3 ml-2">
               <button
                 mat-raised-button
                 class="button button-clear-dark mat-elevation-z d-none d-md-inline-block"
