@@ -5,7 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
-import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
+import { DialogLoanLendComponent } from '../../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Models
@@ -166,7 +166,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
       switch (dialog) {
         case 'lend':
-          this.dialog.open(DialogSelectCurrencyComponent, dialogConfig);
+          this.dialog.open(DialogLoanLendComponent, dialogConfig);
           break;
 
         case 'pay':

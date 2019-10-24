@@ -36,7 +36,7 @@ import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contra
 import { DialogGenericErrorComponent } from '../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
-import { DialogSelectCurrencyComponent } from '../dialogs/dialog-select-currency/dialog-select-currency.component';
+import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 // App Services
@@ -95,7 +95,7 @@ import { EventsService } from './../services/events.service';
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
-    DialogSelectCurrencyComponent,
+    DialogLoanLendComponent,
 
     VisualUrlPipe
   ],
@@ -106,7 +106,7 @@ import { EventsService } from './../services/events.service';
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
-    DialogSelectCurrencyComponent
+    DialogLoanLendComponent
   ],
   providers: [
     DecentralandCosignerProvider,
