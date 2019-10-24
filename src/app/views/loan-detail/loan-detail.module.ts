@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
 // App Modules
 import { SharedModule } from '../../shared/shared.module';
-import { MaterialModule } from '../../material/material.module';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
@@ -35,7 +34,6 @@ const routes: Routes = [
     CommonModule,
     NgxSpinnerModule,
     SharedModule,
-    MaterialModule,
     RouterModule.forChild(routes)
   ],
   providers: [

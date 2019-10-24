@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // App Modules
-import { MaterialModule } from '../material/material.module';
+import { MaterialModule } from './../material.module';
 // App Component
 import { FooterComponent } from './footer/footer.component';
 import { LoanCardComponent } from './loan-card/loan-card.component';
@@ -63,7 +63,6 @@ import { EventsService } from './../services/events.service';
     BlockiesModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule,
     BlockiesModule
   ],
   declarations: [
@@ -127,6 +126,7 @@ import { EventsService } from './../services/events.service';
   exports: [
     FormsModule,
     ReactiveFormsModule,
+    MaterialModule,
     FooterComponent,
     LoanCardComponent,
     CreatorContainerComponent,

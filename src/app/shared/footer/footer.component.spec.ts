@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { APP_BASE_HREF } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { MaterialModule } from '../../material/material.module';
+import { MaterialModule } from '../../material.module';
 import { FooterComponent } from './footer.component';
 import { Web3Service } from './../../services/web3.service';
 import { SidebarService } from './../../services/sidebar.service';
@@ -17,8 +17,8 @@ describe('FooterComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterModule.forRoot([]),
-        MaterialModule,
-        HttpClientModule
+        HttpClientModule,
+        MaterialModule
       ],
       declarations: [ FooterComponent ],
       providers: [

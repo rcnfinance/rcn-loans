@@ -2,7 +2,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../material/material.module';
 import { SharedModule } from '../../../shared/shared.module';
 import { NotificationsComponent } from './notifications.component';
 import { NotificationsService } from '../../../services/notifications.service';
@@ -115,7 +114,6 @@ describe('NotificationsComponent', () => {
       imports: [
         RouterModule,
         BrowserAnimationsModule,
-        MaterialModule,
         SharedModule
       ],
       declarations: [

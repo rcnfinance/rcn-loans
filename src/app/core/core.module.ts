@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 // App Modules
 import { SharedModule } from '../shared/shared.module';
-import { MaterialModule } from '../material/material.module';
 // App Component
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 import { HeaderComponent } from './header/header.component';
@@ -24,7 +23,6 @@ import { NotificationsService } from '../services/notifications.service';
   imports: [
     CommonModule,
     SharedModule,
-    MaterialModule,
     RouterModule
   ],
   declarations: [

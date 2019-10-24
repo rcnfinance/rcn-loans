@@ -5,7 +5,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 // App Modules
 import { SharedModule } from '../../shared/shared.module';
-import { MaterialModule } from './../../material/material.module';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
@@ -21,7 +20,6 @@ const routes: Routes = [
     CommonModule,
     NgxSpinnerModule,
     VirtualScrollerModule,
-    MaterialModule,
     SharedModule,
     RouterModule.forChild(routes)
   ],
