@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Loan } from '../../models/loan.model';
@@ -26,6 +26,7 @@ export class DialogLoanPayComponent implements OnInit {
   finishProgress: boolean;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<any>,
     private web3Service: Web3Service,
     @Inject(MAT_DIALOG_DATA) public data
@@ -73,6 +74,14 @@ export class DialogLoanPayComponent implements OnInit {
       Validators.required,
       Validators.max(Math.ceil(pendingAmount))
     ]);
+  }
+
+  /**
+   * Method called when the transaction was completed
+   */
+  endPay() {
+    this.finishProgress = true;
+    this.cdRef.detectChanges();
   }
 
   /**

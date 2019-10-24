@@ -5,9 +5,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
-import { DialogLoanLendComponent } from '../../dialogs/dialog-loan-lend/dialog-loan-lend.component';
-import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
@@ -154,50 +151,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Open dialog
-   * @param dialog Dialog to open
-   */
-  async openDialog(dialog: 'lend' | 'pay') {
-    // open dialog
-    const openDialog = () => {
-      const dialogConfig = {
-        data: { loan: this.loan }
-      };
-
-      switch (dialog) {
-        case 'lend':
-          this.dialog.open(DialogLoanLendComponent, dialogConfig);
-          break;
-
-        case 'pay':
-          this.dialog.open(DialogLoanPayComponent, dialogConfig);
-          break;
-
-        default:
-          break;
-      }
-    };
-
-    // check user account
-    if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (this.web3Service.loggedIn) {
-        openDialog();
-        return;
-      }
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-      }
-      return;
-    }
-
-    openDialog();
-  }
-
-  /**
    * Refresh loan when payment or lending status is updated
    */
-  onUserAction(action: 'lend' | 'pay') {
+  onUserAction(action: 'lend' | 'pay' | 'transfer') {
     const miliseconds = 7000;
     console.info('user action detected', action);
 
