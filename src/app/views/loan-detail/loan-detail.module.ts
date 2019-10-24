@@ -1,16 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { NgxSpinnerModule } from 'ngx-spinner';
+// App Modules
+import { SharedModule } from '../../shared/shared.module';
+import { MaterialModule } from '../../material/material.module';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { CommitsService } from './../../services/commits.service';
 import { PreviousRouteService } from './../../services/previousRoute.service';
-// App Modules
-import { SharedModule } from '../../shared/shared.module';
-import { MaterialModule } from '../../material/material.module';
 // App Component
 import { LoanDetailComponent } from './loan-detail.component';
 import { DetailTableComponent } from './detail-table/detail-table.component';
@@ -42,7 +41,6 @@ const routes: Routes = [
   providers: [
     ContractsService,
     CosignerService,
-    NgxSpinnerService,
     CommitsService,
     PreviousRouteService
   ],

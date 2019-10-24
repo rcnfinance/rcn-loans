@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
-// App Modules
-import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+// App Modules
 import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from './../../material/material.module';
 // App Services
@@ -33,7 +33,6 @@ const routes: Routes = [
     RequestedLoanComponent
   ],
   providers: [
-    NgxSpinnerService,
     ContractsService,
     ApiService,
     FilterLoansService

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 // App Modules
 import { SharedModule } from '../../shared/shared.module';
@@ -29,7 +29,6 @@ const routes: Routes = [
     AddressComponent
   ],
   providers: [
-    NgxSpinnerService,
     ContractsService,
     AvailableLoansService
   ],
