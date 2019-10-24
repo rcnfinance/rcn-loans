@@ -2,26 +2,6 @@
 // FONTS
 // -------------------------
 
-.material-icons.md-18 { font-size: 18px; }
-.material-icons.md-20 { font-size: 20px; }
-.material-icons.md-22 { font-size: 22px; }
-.material-icons.md-24 { font-size: 24px; }
-.material-icons.md-26 { font-size: 26px; }
-.material-icons.md-28 { font-size: 28px; }
-.material-icons.md-30 { font-size: 30px; }
-.material-icons.md-32 { font-size: 32px; }
-.material-icons.md-34 { font-size: 34px; }
-.material-icons.md-36 { font-size: 36px; }
-.material-icons.md-38 { font-size: 38px; }
-.material-icons.md-40 { font-size: 40px; }
-.material-icons.md-42 { font-size: 42px; }
-.material-icons.md-44 { font-size: 44px; }
-.material-icons.md-46 { font-size: 46px; }
-.material-icons.md-48 { font-size: 48px; }
-.material-icons.md-50 { font-size: 50px; }
-.material-icons.md-52 { font-size: 52px; }
-.material-icons.md-54 { font-size: 54px; }
-
 .light{ @extend %font-light; }
 .regular{ @extend %font-regular; }
 .medium{ @extend %font-medium; }
@@ -30,7 +10,9 @@
 
 .font12{font-size: 12px;}
 .font13{font-size: 13px;}
+.font14{font-size: 14px;}
 .font15{font-size: 15px;}
+.font16{font-size: 16px;}
 .font17{font-size: 17px;}
 .font18{font-size: 18px;}
 .font19{font-size: 19px;}
@@ -45,36 +27,3 @@
 .font28{font-size: 28px;}
 .font29{font-size: 29px;}
 .font30{font-size: 30px;}
-
-.font140 {font-size:140px;line-height: 1.1;}
-.font130 {font-size:130px;line-height: 1.1;}
-.font125 {font-size:125px;line-height: 1.1;}
-.font120 {font-size:120px;line-height: 1.1;}
-.font115 {font-size:115px;line-height: 1.1;}
-.font110 {font-size:110px;line-height: 1.1;}
-.font100 {font-size:100px;line-height: 1.1;}
-.font98 {font-size:98px;line-height: 1.1;}
-.font96 {font-size:96px;line-height: 1.1;}
-.font90 {font-size:90px;line-height: 1.1;}
-.font84 {font-size:84px;line-height: 1.1;}
-.font78 {font-size:78px;line-height: 1.1;}
-.font72 {font-size:72px;line-height: 1.1;}
-.font52 {font-size:52px;line-height: 1.1;}
-.font48 {font-size:48px;line-height: 1.1;}
-.font42 {font-size:42px;line-height: 1.1;}
-.font36 {font-size:36px;line-height: 1.1;}
-.font32 {font-size:32px;line-height: 1.1;}
-.font28 {font-size:28px;line-height: 1.1;}
-.font26 {font-size:26px;line-height: 1.1;}
-.font24 {font-size:24px;line-height: 1.1;}
-.font20 {font-size:20px;line-height: 1.3;}
-.font18 {font-size:18px;}
-.font16 {font-size:16px;}
-.font15 {font-size:15px;}
-.font14 {font-size:14px;}
-.font13 {font-size:13px;}
-.font12 {font-size:12px;}
-.font11 {font-size:11px;}
-.font10 {font-size:10px;}
-.font9  {font-size:9px;}
-
