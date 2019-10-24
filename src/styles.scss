@@ -11,7 +11,7 @@ $material-icons-font-path: '~material-icons/iconfont/'; // Material Icons
 
 // General
 html { height: 0; }
-body{
+body {
   position: relative;
   margin: 0;
   font-size: 14px;
@@ -51,13 +51,6 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
 }
 
 // Buttons
-.btn{
-  border-color: var(--app-color-primary);
-  background-color: var(--app-color-primary);
-  border-radius: 2px;
-  text-transform: uppercase;
-  @extend %font-medium;
-}
 .mat-fab.mat-accent[disabled],
 .mat-fab.mat-primary[disabled],
 .mat-fab.mat-warn[disabled],
@@ -79,18 +72,6 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
     cursor: not-allowed;
     background-color: rgba(51, 51, 51,.7);
   }
-}
-
-.mat-radio-button {
-  color: white !important;
-}
-
-.mat-radio-outer-circle {
-  border-color: white;
-}
-
-.mat-expansion-indicator::after {
-  color: #717171 !important;
 }
 
 .button{
