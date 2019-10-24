@@ -11,7 +11,9 @@ export class IdentityService {
     [Agent.RipioCreator]: new CompanyIdentity(
       'Ripio',
       '--',
-      'Ripio is now one of the main Blockchain companies in Latin America. Ripio main product is their mobile wallet that operates on Bitcoin, Ether and local currency: users can receive, store, buy / sell and send cryptocurrency, and also make digital payments from their mobile phones, and also request micro-loans to finance their purchases.',
+      `Ripio is now one of the main Blockchain companies in Latin America. Ripio main product is their mobile wallet that operates on
+      Bitcoin, Ether and local currency: users can receive, store, buy / sell and send cryptocurrency, and also make digital payments
+      from their mobile phones, and also request micro-loans to finance their purchases.`,
       './assets/logos/ripio.png',
       './assets/logos/logo-ripio-white.svg',
       'Legal disclaimer: This is a loan requested solely by Lending Solutions S.A., a Ripio company.',
@@ -26,10 +28,20 @@ export class IdentityService {
     [Agent.WenanceCreator]: new CompanyIdentity(
       'Wenance',
       'fintech people',
-      'Ripio and Wenance are doing exciting things together! Wenance is Argentina’s leading fintech lending company. Founded in 2014 by building on 20 years of experience in the traditional finance ecosystem, the firm reinvented itself as a digital organization to provide simple, secure and efficient lending solutions to its more than 80,000 users. Since 2017, the company has expanded its operations to Uruguay and Spain, with Brazil, Mexico and Peru as its next target markets.',
+      `Ripio and Wenance are doing exciting things together! Wenance is Argentina’s leading fintech lending company. Founded in 2014 by
+      building on 20 years of experience in the traditional finance ecosystem, the firm reinvented itself as a digital organization to
+      provide simple, secure and efficient lending solutions to its more than 80,000 users. Since 2017, the company has expanded its
+      operations to Uruguay and Spain, with Brazil, Mexico and Peru as its next target markets.`,
       './assets/logos/wenance.svg',
       './assets/logos/wenance-brand.svg',
-      'Legal disclaimer: This is a loan requested solely by Lending Solutions S.A., a Ripio company. Lender will be entitled to the interest rate specified in the loan request as published, which will be paid for by Lending Solutions S.A. The published interest rate is net of any taxes and costs that Lending Solutions S.A. may be required by law to levy on interest, but it is not net of Ethereum Network’s transaction costs, Uniswap costs, fees and slippage. Gross interest rate is XXXX%. Wenance S.A. is not a company of the Ripio Group, will not be receiving any money from the loan hereunder and will not pay any interests whatsoever to the lender. The inclusion of the Wenance brand has the sole and exclusive purpose of indicating that Lending Solutions S.A. has made an investment of its own money in one of Wenance’s investment vehicles. Wenance is a registered trademark of Wenance S.A. Lender acknowledges that funding this loan gives it no rights whatsoever against Wenance S.A. or any of its affiliates.',
+      `Legal disclaimer: This is a loan requested solely by Lending Solutions S.A., a Ripio company. Lender will be entitled to the
+      interest rate specified in the loan request as published, which will be paid for by Lending Solutions S.A. The published interest
+      rate is net of any taxes and costs that Lending Solutions S.A. may be required by law to levy on interest, but it is not net of
+      Ethereum Network’s transaction costs, Uniswap costs, fees and slippage. Gross interest rate is XXXX%. Wenance S.A. is not a company
+      of the Ripio Group, will not be receiving any money from the loan hereunder and will not pay any interests whatsoever to the lender.
+      The inclusion of the Wenance brand has the sole and exclusive purpose of indicating that Lending Solutions S.A. has made an
+      investment of its own money in one of Wenance’s investment vehicles. Wenance is a registered trademark of Wenance S.A. Lender
+      acknowledges that funding this loan gives it no rights whatsoever against Wenance S.A. or any of its affiliates.`,
       [
         {
           icon: 'fas fa-link',
