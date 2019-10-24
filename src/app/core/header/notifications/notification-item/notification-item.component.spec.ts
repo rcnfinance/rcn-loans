@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { APP_BASE_HREF } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from '../../../../material/material.module';
+import { SharedModule } from '../../../../shared/shared.module';
 import { NotificationItemComponent } from './../notification-item/notification-item.component';
 import { Notification } from '../../../../models/notification.model';
 import { readComponent } from '../../../../utils/utils.test';
@@ -30,7 +30,7 @@ describe('NotificationItemComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterModule.forRoot([]),
-        MaterialModule
+        SharedModule
       ],
       declarations: [
         NotificationItemComponent

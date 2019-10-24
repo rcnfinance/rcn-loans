@@ -4,7 +4,7 @@ import { Utils } from '../../utils/utils';
 // App Services
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
-import { Tx, TxService } from '../../tx.service';
+import { Tx, TxService } from '../../services/tx.service';
 
 @Component({
   selector: 'app-component-balance',

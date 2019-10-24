@@ -8,11 +8,11 @@ import { ContractsService } from '../../services/contracts.service';
 import { Web3Service } from '../../services/web3.service';
 
 @Component({
-  selector: 'app-dialog-select-currency',
-  templateUrl: './dialog-select-currency.component.html',
-  styleUrls: ['./dialog-select-currency.component.scss']
+  selector: 'app-dialog-loan-lend',
+  templateUrl: './dialog-loan-lend.component.html',
+  styleUrls: ['./dialog-loan-lend.component.scss']
 })
-export class DialogSelectCurrencyComponent implements OnInit {
+export class DialogLoanLendComponent implements OnInit {
   // loan
   loan: Loan;
   loanAmount: string;

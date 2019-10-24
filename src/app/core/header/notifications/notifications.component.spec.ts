@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from '../../../material/material.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from '../../../shared/shared.module';
 import { NotificationsComponent } from './notifications.component';
 import { NotificationsService } from '../../../services/notifications.service';
-import { Tx } from '../../../tx.service';
+import { Tx } from '../../../services/tx.service';
 import { readComponent } from '../../../utils/utils.test';
 
 describe('NotificationsComponent', () => {
@@ -113,7 +113,7 @@ describe('NotificationsComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterModule,
-        MaterialModule,
+        BrowserAnimationsModule,
         SharedModule
       ],
       declarations: [

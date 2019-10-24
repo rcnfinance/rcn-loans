@@ -9,7 +9,7 @@ import {
 import { environment } from '../../../../environments/environment';
 import { Notification, TxObject } from '../../../models/notification.model';
 import { NotificationsService } from '../../../services/notifications.service';
-import { TxService, Tx } from '../../../tx.service';
+import { TxService, Tx } from '../../../services/tx.service';
 import { Utils } from '../../../utils/utils';
 
 @Component({

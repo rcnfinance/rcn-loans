@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // App Modules
-import { MaterialModule } from '../material/material.module';
+import { MaterialModule } from './../material.module';
 // App Component
 import { FooterComponent } from './footer/footer.component';
 import { LoanCardComponent } from './loan-card/loan-card.component';
@@ -35,13 +35,13 @@ import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contra
 import { DialogGenericErrorComponent } from '../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
-import { DialogSelectCurrencyComponent } from '../dialogs/dialog-select-currency/dialog-select-currency.component';
+import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 // App Services
 import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
-import { TxService } from './../tx.service';
+import { TxService } from './../services/tx.service';
 import { BrandingService } from './../services/branding.service';
 import { CosignerService } from './../services/cosigner.service';
 import { Web3Service } from './../services/web3.service';
@@ -62,7 +62,6 @@ import { EventsService } from './../services/events.service';
     BlockiesModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule,
     BlockiesModule
   ],
   declarations: [
@@ -93,7 +92,7 @@ import { EventsService } from './../services/events.service';
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
-    DialogSelectCurrencyComponent,
+    DialogLoanLendComponent,
 
     VisualUrlPipe
   ],
@@ -104,7 +103,7 @@ import { EventsService } from './../services/events.service';
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
-    DialogSelectCurrencyComponent
+    DialogLoanLendComponent
   ],
   providers: [
     DecentralandCosignerProvider,
@@ -125,6 +124,7 @@ import { EventsService } from './../services/events.service';
   exports: [
     FormsModule,
     ReactiveFormsModule,
+    MaterialModule,
     FooterComponent,
     LoanCardComponent,
     CreatorContainerComponent,
