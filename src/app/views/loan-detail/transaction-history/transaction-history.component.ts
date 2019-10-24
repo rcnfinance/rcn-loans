@@ -28,7 +28,7 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
   selectedEvent: number;
   id = 0;
   explorerTx = environment.network.explorer.tx;
-  @ViewChild('spinner') myId: any;
+  @ViewChild('spinner', { static: true }) myId: any;
 
   winHeight: any = window.innerWidth;
 
