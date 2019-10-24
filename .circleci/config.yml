@@ -6,7 +6,7 @@ jobs:
     install:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12
+            - image: circleci/node:12.13.0
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -33,7 +33,7 @@ jobs:
     lint:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12
+            - image: circleci/node:12.13.0
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -55,7 +55,7 @@ jobs:
     build-mainnet:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12
+            - image: circleci/node:12.13.0
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -72,7 +72,7 @@ jobs:
             - run:
                 name: Build
                 command: npm run build
-            
+
             # Load version name
             - run:
                 name: Reading version
@@ -90,7 +90,7 @@ jobs:
     build-ropsten:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12
+            - image: circleci/node:12.13.0
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -108,7 +108,7 @@ jobs:
             - run:
                 name: Build
                 command: npm run-script build-ropsten
-            
+
             # Load version name
             - run:
                 name: Reading version
@@ -126,11 +126,11 @@ jobs:
             # Save build
             - store_artifacts:
                 path: ropsten-build.tar.gz
-    
+
     e2e-tests:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12-browsers
+            - image: circleci/node:12.13.0-browsers
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -166,7 +166,7 @@ jobs:
     unit-tests:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12-browsers
+            - image: circleci/node:12.13.0-browsers
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -195,7 +195,7 @@ jobs:
             - store_artifacts:
                 path: coverage
 
-    deploy-ropsten:  
+    deploy-ropsten:
         docker:
         - image: circleci/python:3.6.1
         environment:
@@ -217,7 +217,7 @@ jobs:
     deploy-ipfs:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12
+            - image: circleci/node:12.13.0
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -227,12 +227,12 @@ jobs:
             - restore_cache:
                 keys:
                 - v2-dependencies-{{ checksum "package.json" }}
-                - v2-dependencies-    
-            # Run deploy ipfs script    
+                - v2-dependencies-
+            # Run deploy ipfs script
             - run:
                 name: Deploy Ipfs
-                command: npm run-script ipfs-deploy -- ${PINATA_API_KEY} ${PINATA_SECRET_API_KEY}  
-      
+                command: npm run-script ipfs-deploy -- ${PINATA_API_KEY} ${PINATA_SECRET_API_KEY}
+
 
 workflows:
     version: 2
@@ -270,4 +270,3 @@ workflows:
                 filters:
                     branches:
                         only: master
-
