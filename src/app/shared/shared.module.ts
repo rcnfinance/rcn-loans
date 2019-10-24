@@ -28,7 +28,6 @@ import { CloseButtonComponent } from './close-button/close-button.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
-import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 // App Dialogs
 import { DialogInsufficientfundsComponent } from '../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -47,7 +46,6 @@ import { CosignerService } from './../services/cosigner.service';
 import { Web3Service } from './../services/web3.service';
 import { IdentityService } from './../services/identity.service';
 import { RiskService } from './../services/risk.service';
-import { CivicService } from './../services/civic.service';
 import { SidebarService } from './../services/sidebar.service';
 import { TitleService } from './../services/title.service';
 import { AvailableLoansService } from './../services/available-loans.service';
@@ -83,7 +81,6 @@ import { EventsService } from './../services/events.service';
     ClaimButtonComponent,
     ButtonGroupComponent,
     RiskIndicatorComponent,
-    CivicAuthComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
 
@@ -97,7 +94,6 @@ import { EventsService } from './../services/events.service';
     VisualUrlPipe
   ],
   entryComponents: [
-    CivicAuthComponent,
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
@@ -114,7 +110,6 @@ import { EventsService } from './../services/events.service';
     Web3Service,
     IdentityService,
     RiskService,
-    CivicService,
     SidebarService,
     TitleService,
     AvailableLoansService,
@@ -143,7 +138,6 @@ import { EventsService } from './../services/events.service';
     ClaimButtonComponent,
     ButtonGroupComponent,
     RiskIndicatorComponent,
-    CivicAuthComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     DialogWrongCountryComponent,
