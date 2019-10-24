@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Loan } from '../../models/loan.model';
@@ -27,6 +27,7 @@ export class DialogLoanTransferComponent implements OnInit {
   finishProgress: boolean;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<any>,
     private web3Service: Web3Service,
     @Inject(MAT_DIALOG_DATA) public data
@@ -58,6 +59,14 @@ export class DialogLoanTransferComponent implements OnInit {
 
     this.account = web3.toChecksumAddress(account);
     this.shortAccount = Utils.shortAddress(this.account);
+  }
+
+  /**
+   * Method called when the transaction was completed
+   */
+  endTransfer() {
+    this.finishProgress = true;
+    this.cdRef.detectChanges();
   }
 
   /**

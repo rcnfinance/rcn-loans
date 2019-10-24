@@ -78,7 +78,7 @@
                 [address]="form.value.address"
                 [disabled]="loading || !form?.valid"
                 (startTransfer)="showProgressbar()"
-                (endTransfer)="finishProgress = true"
+                (endTransfer)="endTransfer()"
               ></app-transfer-button>
               <button
                 mat-raised-button

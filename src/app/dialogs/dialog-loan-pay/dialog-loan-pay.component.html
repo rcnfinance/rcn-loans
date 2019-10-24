@@ -122,7 +122,7 @@
                 [amount]="form.value.amount"
                 [disabled]="loading || !form?.valid"
                 (startPay)="showProgressbar()"
-                (endPay)="finishProgress = true"
+                (endPay)="endPay()"
               ></app-pay-button>
               <button
                 mat-raised-button
