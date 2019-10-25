@@ -1,26 +1,15 @@
+<app-dialog-header title="Approve Contract">
+</app-dialog-header>
+
 <mat-dialog-content>
-  <div class="navbar-container">
-    <div class="creator-container">
-      <div class="creator-title">
-        <button
-          matDialogClose
-          mat-button
-          class="d-md-none creator-container__back"
-        >
-          <i class="fas fa-arrow-left"></i>
-        </button>
-        Approve Contract
-      </div>
-    </div>
-    <ng-container *ngIf="startProgress">
-      <app-infinite-progress-bar
-        [start]="true"
-        [end]="finishProgress"
-        (finish)="hideProgressbar()"
-      >
-      </app-infinite-progress-bar>
-    </ng-container>
-  </div>
+  <app-infinite-progress-bar
+    *ngIf="startProgress"
+    [start]="true"
+    [end]="finishProgress"
+    (finish)="hideProgressbar()"
+  >
+  </app-infinite-progress-bar>
+
   <div class="col-sm-12 dialog-padding">
     <div class="row">
       <div class="col-sm-12 col-md-5">

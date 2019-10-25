@@ -17,28 +17,6 @@ a {
   font-size: 1.3em;
   color: gray;
 }
-.navbar-container {
-  height: 70px;
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #333333;
-  .creator-container {
-    .creator-title{
-      width: 100%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      color: $fifth;
-      font-size: 22px;
-      text-align: center;
-      padding: 0 15px;
-      @extend %font-black;
-      @include transform(translate(-50%, -50%));
-    }
-  }
-}
 .img-container{
   text-align: center;
   margin-top: 20px;
@@ -57,13 +35,5 @@ svg{
   }
   .dialog-padding{
     padding: 30px;
-  }
-  .navbar-container {
-    height: 100px;
-    .creator-container {
-      .creator-title{
-        font-size: 36px;
-      }
-    }
   }
 }
