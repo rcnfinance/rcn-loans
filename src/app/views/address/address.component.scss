@@ -5,7 +5,7 @@
 }
 
 virtual-scroller {
-  /deep/ .scrollable-content {
+  ::ng-deep .scrollable-content {
     height: auto;
   }
 }

@@ -52,7 +52,7 @@
 
 .dialog-footer {
   app-lend-button {
-    /deep/ a {
+    ::ng-deep a {
       width: 100%;
     }
   }

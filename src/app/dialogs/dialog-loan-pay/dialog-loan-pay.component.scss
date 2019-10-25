@@ -105,7 +105,7 @@
     margin-top: 25px;
 
     app-pay-button {
-      /deep/ a {
+      ::ng-deep a {
         width: 100%;
       }
     }
@@ -131,7 +131,7 @@
     &__buttons {
       margin-top: 0;
       app-pay-button {
-        /deep/ a {
+        ::ng-deep a {
           width: auto;
         }
       }

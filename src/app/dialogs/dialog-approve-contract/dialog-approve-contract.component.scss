@@ -2,7 +2,7 @@
 @import '../../../scss/fonts';
 
 // Background border
-/deep/ .mat-checkbox .mat-checkbox-frame {
+::ng-deep .mat-checkbox .mat-checkbox-frame {
   border-color: gray;
 }
 .checkbox {
