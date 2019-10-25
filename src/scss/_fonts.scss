@@ -1,3 +1,5 @@
+@import './variables';
+
 // -------------------------
 // FONTS
 // -------------------------
@@ -27,3 +29,60 @@
 .font28{font-size: 28px;}
 .font29{font-size: 29px;}
 .font30{font-size: 30px;}
+
+@mixin styled-font ($family, $weight, $size, $style: 'normal') {
+  font-family: $family, sans-serif;
+  font-weight: $weight;
+  font-size: $size;
+  font-style: $style;
+}
+
+@mixin typography-headline ($variation) {
+  @if $variation == 1 {
+    @include styled-font('Roboto', 400, 34px);
+  } @else if $variation == 2 {
+    @include styled-font('Raleway', 900, 36px);
+  } @else if $variation == 3 {
+    @include styled-font('Roboto', 700, 26px);
+  } @else if $variation == 4 {
+    @include styled-font('Raleway', 400, 24px);
+  } @else if $variation == 5 {
+    @include styled-font('Raleway', 700, 18px);
+  } @else if $variation == 6 {
+    @include styled-font('Raleway', 400, 14px);
+  }
+}
+
+@mixin typography-subtitle ($variation) {
+  @if $variation == 1 {
+    @include styled-font('Roboto', 800, 30px);
+  } @else if $variation == 2 {
+    @include styled-font('Raleway', 700, 18px);
+  } @else if $variation == 3 {
+    @include styled-font('Roboto', 700, 15px);
+  }
+}
+
+@mixin typography-body ($variation) {
+  @if $variation == 1 {
+    @include styled-font('Raleway', 400, 16px);
+  } @else if $variation == 2 {
+    @include styled-font('Raleway', 700, 14px);
+  } @else if $variation == 3 {
+    @include styled-font('Roboto', 400, 14px);
+  }
+}
+
+@mixin typography-button ($variation) {
+  @if $variation == 1 {
+    @include styled-font('Raleway', 700, 14px);
+  }
+}
+
+@mixin typography-caption ($variation) {
+  @if $variation == 1 {
+    @include styled-font('Roboto', 400, 13px);
+  } @else if $variation == 2 {
+    @include styled-font('Roboto', 400, 13px, 'italic');
+  }
+}
