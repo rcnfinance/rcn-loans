@@ -20,6 +20,7 @@ import { InfiniteProgressBarComponent } from './infinite-progress-bar/infinite-p
 import { ConversionGraphicComponent } from './conversion-graphic/conversion-graphic.component';
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
+import { DialogHeaderComponent } from './dialog-header/dialog-header.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -72,6 +73,7 @@ import { EventsService } from './../services/events.service';
     ConversionGraphicComponent,
     HeaderListComponent,
     BodyListComponent,
+    DialogHeaderComponent,
     AvatarTitleComponent,
     IconAvatarComponent,
     LendButtonComponent,
@@ -129,6 +131,7 @@ import { EventsService } from './../services/events.service';
     ConversionGraphicComponent,
     HeaderListComponent,
     BodyListComponent,
+    DialogHeaderComponent,
     AvatarTitleComponent,
     IconAvatarComponent,
     LendButtonComponent,
