@@ -1,89 +1,245 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import {
+  MatSnackBar,
+  MatDialog,
+  MatSnackBarHorizontalPosition
+} from '@angular/material';
 // App Service
 import { EventsService, Category } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
-import { TxService, Tx } from '../../tx.service';
+import { TxService, Tx, Type } from '../../tx.service';
 // App Component
 import { environment } from '../../../environments/environment';
 import { Loan } from '../../models/loan.model';
+import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
+import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-transfer-button',
   templateUrl: './transfer-button.component.html',
   styleUrls: ['./transfer-button.component.scss']
 })
-export class TransferButtonComponent implements OnInit {
+export class TransferButtonComponent implements OnInit, OnDestroy {
   @Input() loan: Loan;
+  @Input() address: string;
+  @Input() showTransferDialog: boolean;
+  @Input() disabled: boolean;
+  @Output() startTransfer = new EventEmitter();
+  @Output() endTransfer = new EventEmitter();
+
   pendingTx: Tx = undefined;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   opPending = false;
+
+  txSubscription: boolean;
 
   constructor(
     private contractService: ContractsService,
     private txService: TxService,
     private eventsService: EventsService,
+    private web3Service: Web3Service,
+    public snackBar: MatSnackBar,
     public dialog: MatDialog
   ) { }
 
-  loanTransfer() {
-    const dialogConfig = new MatDialogConfig();
+  ngOnInit() {
+    this.retrievePendingTx();
+  }
 
-    dialogConfig.data = {
-      loan: this.loan
-    };
+  ngOnDestroy() {
+    if (this.txSubscription && this.showTransferDialog) {
+      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackTransferTx(tx));
+    }
+  }
 
-    const dialogRef = this.dialog.open(DialogLoanTransferComponent, dialogConfig);
+  /**
+   * Track tx
+   */
+  trackTransferTx(tx: Tx) {
+    // FIXME: review data: { id }
+    if (tx.type === Type.transfer) {
+      this.endTransfer.emit();
+    }
+  }
 
-    dialogRef.afterClosed().subscribe(to => {
+  /**
+   * Retrieve pending Tx
+   */
+  retrievePendingTx() {
+    this.pendingTx = this.txService.getLastPendingTransfer(
+      environment.contracts.basaltEngine,
+      this.loan
+    );
+
+    if (this.pendingTx) {
+      this.startTransfer.emit();
+    }
+
+    if (!this.txSubscription) {
+      this.txSubscription = true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackTransferTx(tx));
+    }
+  }
+
+  /**
+   * Handle click on transfer button
+   */
+  async clickTransfer() {
+    // disabled button validation
+    if (this.disabled) {
+      return;
+    }
+    // pending tx validation
+    if (this.pendingTx) {
+      if (this.pendingTx.confirmed) {
+        window.open(environment.network.explorer.tx.replace(
+          '${tx}',
+          this.pendingTx.tx
+        ), '_blank');
+      }
+      return;
+    }
+    // unlogged user
+    if (!this.web3Service.loggedIn) {
+      const hasClient = await this.web3Service.requestLogin();
+      if (this.web3Service.loggedIn) {
+        this.handleTransfer();
+        return;
+      }
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
+      return;
+    }
+    // borrower validation
+    const account: string = await this.web3Service.getAccount();
+    if (this.loan.debt.owner.toLowerCase() !== account.toLowerCase()) {
+      this.openSnackBar('The owner is not authorized', '');
+      return;
+    }
+    // address validation
+    const web3 = this.web3Service.web3;
+    if (!this.showTransferDialog && !web3.isAddress(this.address)) {
+      this.openSnackBar('The address is not valid', '');
+      return;
+    }
+
+    if (this.showTransferDialog) {
+      const dialogRef = this.dialog.open(DialogLoanTransferComponent, {
+        data: {
+          loan: this.loan
+        }
+      });
+      dialogRef.afterClosed().subscribe(() => {
+        this.retrievePendingTx();
+      });
+      return;
+    }
+
+    this.eventsService.trackEvent(
+      'click-transfer-loan',
+      Category.Loan,
+      'loan #' + this.loan.id
+    );
+    this.handleTransfer();
+  }
+
+  /**
+   * If the validations were successful, manage the transfer transaction
+   */
+  async handleTransfer() {
+    const to: string = this.address;
+
+    this.eventsService.trackEvent(
+      'set-to-transfer-loan',
+      Category.Loan,
+      'loan #' + this.loan.id + ' to ' + to
+    );
+
+    this.startOperation();
+
+    try {
+      const tx = await this.contractService.transferLoan(this.loan, to);
+
       this.eventsService.trackEvent(
-        'set-to-transfer-loan',
+        'transfer-loan',
         Category.Loan,
         'loan #' + this.loan.id + ' to ' + to
       );
 
-      this.contractService.transferLoan(this.loan, to).then((tx) => {
-        this.eventsService.trackEvent(
-          'transfer-loan',
-          Category.Loan,
-          'loan #' + this.loan.id + ' to ' + to
-        );
-        this.txService.registerTransferTx(tx, environment.contracts.basaltEngine, this.loan, to);
-        this.retrievePendingTx();
-      });
-    });
-  }
-
-  clickTransfer() {
-    if (this.pendingTx === undefined) {
-      this.eventsService.trackEvent(
-        'click-transfer-loan',
-        Category.Loan,
-        'loan #' + this.loan.id
+      this.txService.registerTransferTx(
+        tx,
+        environment.contracts.basaltEngine,
+        this.loan,
+        to
       );
 
-      this.loanTransfer();
-    } else {
-      window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
+      this.startTransfer.emit();
+      this.retrievePendingTx();
+    } catch (e) {
+      // Don't show 'User denied transaction signature' error
+      if (e.stack.indexOf('User denied transaction signature') < 0) {
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: { error: e }
+        });
+      }
+      console.error(e);
+    } finally {
+      this.finishOperation();
     }
   }
 
-  retrievePendingTx() {
-    this.pendingTx = this.txService.getLastPendingTransfer(environment.contracts.basaltEngine, this.loan);
+  /**
+   * Start transfer operation
+   */
+  startOperation() {
+    console.info('Started transfer');
+    this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
+    this.opPending = true;
   }
 
+  /**
+   * Cancel transfer operation
+   */
+  cancelOperation() {
+    this.openSnackBar('Your transaction has failed', '');
+    this.opPending = false;
+  }
+
+  /**
+   * Finish current transfer operation
+   */
+  finishOperation() {
+    console.info('Transfer finished');
+    this.opPending = false;
+  }
+
+  /**
+   * Opens a snackbar with a message and an optional action
+   * @param message The message to show in the snackbar
+   * @param action The label for the snackbar action
+   */
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message , action, {
+      duration: 4000,
+      horizontalPosition: this.horizontalPosition
+    });
+  }
+
+  /**
+   * Transfer button text
+   * @return Button text
+   */
   get buttonText(): string {
     const tx = this.pendingTx;
     if (tx === undefined) {
       return 'Transfer';
     }
     if (tx.confirmed) {
-      return 'Transfer completed';
+      return 'Transferred';
     }
-    return 'Transfer Pending...';
-  }
-
-  ngOnInit() {
-    this.retrievePendingTx();
+    return 'Transferring...';
   }
 }

@@ -140,7 +140,12 @@
           *ngIf="canLend"
         ></app-lend-button>
         <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="canLend"></app-risk-indicator>
-        <app-transfer-button [loan]="loan" *ngIf="canTransfer"></app-transfer-button>
+        <app-transfer-button
+          [loan]="loan"
+          [showTransferDialog]="true"
+          (endTransfer)="onUserAction('transfer')"
+          *ngIf="canTransfer"
+          ></app-transfer-button>
       </div>
     </div>
 

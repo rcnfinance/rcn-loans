@@ -8,7 +8,7 @@
   cursor: pointer;
   width: 70px;
   align-items: center;
-  color: $secondary;
+  color: var(--app-color-secondary);
   @include transition;
   i, 
   svg{
@@ -19,7 +19,7 @@
     }
   }
   &:hover{
-    background-color: $tertiary;
+    background-color: var(--app-color-tertiary);
   }
 }
 button{
@@ -40,7 +40,7 @@ button{
 .button-options,
 .mat-menu-item{
   &.active{
-    color: $primary;
+    color: var(--app-color-primary);
     &:hover{
       background-color: transparent;
     }

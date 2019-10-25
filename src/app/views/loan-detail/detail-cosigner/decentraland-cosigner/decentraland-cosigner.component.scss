@@ -2,10 +2,10 @@
 
 .map-container{ text-align: left; }
 a{
-  color: $secondary;
+  color: var(--app-color-secondary);
   @include transition;
   &:hover{
-    color: $primary;
+    color: var(--app-color-primary);
   }
 }
 
@@ -17,7 +17,7 @@ a{
     i,
     svg{
       font-size: 2em;
-      color: $primary;
+      color: var(--app-color-primary);
     }
   }
   .txt {
@@ -84,7 +84,7 @@ a{
   align-items: center;
   overflow: hidden;
   border-radius: 50%;
-  background-color: $primary;
+  background-color: var(--app-color-primary);
   box-shadow: 0 0 6px #00000029, 0 6px 12px rgba(0,0,0,.32);
   @include transition;
   &:hover{
@@ -95,7 +95,7 @@ a{
   }
   .title{
     font-size: 18px;
-    color: $secondary;
+    color: var(--app-color-secondary);
     @extend %font-black;
   }
 }

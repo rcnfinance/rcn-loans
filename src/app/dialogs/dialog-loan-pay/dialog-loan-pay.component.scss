@@ -104,8 +104,10 @@
     text-align: right;
     margin-top: 25px;
 
-    button {
-      width: 100%;
+    app-pay-button {
+      /deep/ a {
+        width: 100%;
+      }
     }
   }
 }
@@ -122,6 +124,19 @@
   .dialog-padding {
     padding: 30px 42px;
   }
+  .dialog-footer {
+    &__label {
+      text-align: left;
+    }
+    &__buttons {
+      margin-top: 0;
+      app-pay-button {
+        /deep/ a {
+          width: auto;
+        }
+      }
+    }
+  }
 }
 
 @media (min-width: 992px) {
@@ -136,18 +151,6 @@
     &--left-to-pay {
       .item__value {
         margin: 20px 0 10px;
-      }
-    }
-  }
-
-  .dialog-footer {
-    &__label {
-      text-align: left;
-    }
-    &__buttons {
-      margin-top: 0;
-      button {
-        width: auto;
       }
     }
   }

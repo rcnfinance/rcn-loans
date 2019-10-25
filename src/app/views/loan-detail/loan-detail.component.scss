@@ -108,10 +108,10 @@
       >th {
         @include transition;
         &:active{
-          background-color: $primary;
+          background-color: var(--app-color-primary);
         }
         &.background-active{
-          background-color: $primary;
+          background-color: var(--app-color-primary);
         }
       }
     }

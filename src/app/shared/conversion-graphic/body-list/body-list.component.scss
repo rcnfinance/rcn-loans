@@ -30,7 +30,7 @@
       }
     }
     &:nth-child(3){
-      color: $primary;
+      color: var(--app-color-primary);
       text-align: right;
       @extend .font30;
     }
