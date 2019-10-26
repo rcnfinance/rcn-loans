@@ -49,6 +49,8 @@
     }
     .title{
       @extend %propiety-title;
+      margin: 0;
+      font-weight: inherit;
     }
     .paragraph{
       min-height: 21px;

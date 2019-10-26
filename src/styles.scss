@@ -216,15 +216,12 @@ ngx-spinner .black-overlay.ng-star-inserted {
 }
 @media screen and (max-width: 767px){.table-responsive {border: 0px;}}
 
-// Material Angular
-  // Backgrounds
-.cdk-overlay-dark-backdrop {cursor: pointer; background: rgba(0,0,0,.5);}
-.cdk-overlay-transparent-backdrop{
+.cdk-overlay-dark-backdrop,
+.cdk-overlay-transparent-backdrop {
   cursor: pointer;
-  &.cdk-overlay-backdrop-showing{
-    background-color: rgba(0, 0, 0, 0.4);
-  }
+  background: rgba(black, .5);
 }
+
 @media (max-width: 768px){.cdk-overlay-pane{max-width: 100vw !important;}}
 
   //Sidebar
@@ -306,42 +303,15 @@ mat-sidenav-container.mat-drawer-container {
 }
 
 // Dialog
-.mat-dialog-container{
-  color: var(--app-color-secondary);
-  background-color: $gray7;
-}
 .cdk-global-overlay-wrapper{
   .mat-dialog-container{
-    color: var(--app-color-secondary);
     padding: 0px;
-    background-color: $fifth;
   }
   .mat-dialog-content{
-    position: relative;
     margin: 0;
     padding: 0;
-    max-height: 100vh;
-    height: 100vh;
-    .navbar-container {
-      position: relative;
-      app-infinite-progress-bar {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-      }
-    }
-    .creator-container {
-      &__back {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        min-width: auto;
-        padding: 0 22px;
-        font-size: .8em;
-        color: white;
-      }
-    }
+    max-height: calc(100vh - 70px);
+    height: calc(100vh - 70px);
   }
 }
 
@@ -431,76 +401,6 @@ mat-form-field{
 
 .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
   color: rgba(255,255,255,.8);
-}
-
-mat-checkbox{
-  .mat-checkbox-frame{
-    border-color: var(--app-color-secondary);
-  }
-  .mat-ripple-element {
-    background: var(--app-color-primary);
-  }
-  &.mat-checkbox-checked.mat-accent .mat-checkbox-background,
-  &.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-    background-color: var(--app-color-primary);
-  }
-  &.mat-checkbox-checked{
-    .mat-checkbox-background{
-      background-color: var(--app-color-primary);
-    }
-  }
-}
-
-//Stepper
-.mat-stepper-horizontal,
-.mat-stepper-vertical{
-  background-color: transparent;
-  .mat-vertical-content { padding: 0 24px 24px 15px; }
-  .mat-vertical-content-container { margin-left: 20px; }
-  .mat-stepper-vertical-line::before { border-left-color: rgba(255, 255, 255, 0.5); }
-  .mat-step-header {
-    padding: 25px 0px;
-    max-height: 50px;
-    .mat-step-label {
-      color: inherit;
-      font-weight: 700;
-    }
-    .mat-step-optional{ color: rgba(255,255,255,.6); }
-    .mat-step-icon-not-touched {
-      background-color: #333333;
-    }
-    .mat-step-icon,
-    .mat-step-icon-not-touched {
-      height: 40px;
-      width: 40px;
-      .mat-step-icon-content{ font-weight: 900; }
-    }
-    .mat-step-icon{ background-color: var(--app-color-primary); }
-  }
-}
-.mat-slide-toggle{
-  .mat-slide-toggle-bar{
-    background-color: $gray7;
-    &:focus {
-      outline: -webkit-focus-ring-color auto 0px;
-    }
-  }
-  &.mat-checked:not(.mat-disabled){
-    .mat-slide-toggle-bar{
-      background-color: var(--app-color-secondary);
-    }
-    .mat-slide-toggle-thumb{
-      background-color: var(--app-color-primary);
-    }
-  }
-}
-
-.hStyle {
-  margin: 0;
-  padding: 0;
-  font-style: inherit;
-  font-size: inherit;
-  font-weight: inherit;
 }
 
 @media (min-width: 768px){
