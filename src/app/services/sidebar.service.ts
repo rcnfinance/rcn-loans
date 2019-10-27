@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SidebarService {
   private toggleSource$ = new BehaviorSubject<boolean>(false);
   private navmobileSource$ = new BehaviorSubject<boolean>(false);

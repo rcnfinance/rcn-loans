@@ -47,7 +47,6 @@ import { CosignerService } from './../services/cosigner.service';
 import { Web3Service } from './../services/web3.service';
 import { IdentityService } from './../services/identity.service';
 import { RiskService } from './../services/risk.service';
-import { SidebarService } from './../services/sidebar.service';
 import { TitleService } from './../services/title.service';
 import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
@@ -112,7 +111,6 @@ import { EventsService } from './../services/events.service';
     Web3Service,
     IdentityService,
     RiskService,
-    SidebarService,
     TitleService,
     AvailableLoansService,
     CountriesService,

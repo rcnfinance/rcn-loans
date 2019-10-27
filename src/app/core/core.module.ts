@@ -15,7 +15,6 @@ import { SocialContainerComponent } from './social-container/social-container.co
 import { ClickOutsideDirective } from '../directives/click-outside.directive';
 // App Services
 import { Web3Service } from '../services/web3.service';
-import { SidebarService } from '../services/sidebar.service';
 import { TitleService } from '../services/title.service';
 import { NotificationsService } from '../services/notifications.service';
 
@@ -37,7 +36,6 @@ import { NotificationsService } from '../services/notifications.service';
   ],
   providers: [
     Web3Service,
-    SidebarService,
     TitleService,
     NotificationsService
   ],
