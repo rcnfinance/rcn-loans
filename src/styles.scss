@@ -643,27 +643,6 @@ virtual-scroller {
   }
 }
 
-// Footer
-app-footer {
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 500;
-}
-
-footer {
-  height: 50px;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  z-index: 1000;
-  min-height: 0px;
-  background-color: #121212;
-  padding: 15px 0;
-}
-
 .nav-mobile{
   ul{
     margin: 0 auto;
@@ -741,48 +720,5 @@ footer {
   }
   .body-scrollable {
     padding-top: 115px;
-  }
-  footer {
-    height: auto;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    z-index: 1000;
-    min-height: 0px;
-    background-color: #121212;
-    padding: 15px 30px;
-    .icon{
-      margin-top: 0;
-      line-height: 1.9;
-      cursor: pointer;
-      padding-right: 15px;
-      display: inline-block;
-      &.version{
-        margin-right: 15px;
-      }
-    }
-    .nav-mobile{
-      display: none;
-    }
-    a{
-      color: var(--app-color-secondary);
-      @include transition();
-      &:hover{
-        color: var(--app-color-primary);
-      }
-    }
-    .left{
-      text-align: left;
-    }
-    .center{
-      text-align: center;
-    }
-    .right{
-      text-align: right;
-    }
-    .txt{
-      line-height: 1.9;
-    }
   }
 }
