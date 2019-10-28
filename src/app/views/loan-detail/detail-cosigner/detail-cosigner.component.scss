@@ -14,6 +14,7 @@
     align-content: center;
     i {
       font-size: 90px;
+      color: var(--app-color-gray-100);
     }
   }
 }
@@ -21,4 +22,12 @@
 a {
   color: white;
   @extend %roboto-medium;
+}
+
+@media (min-width: 992px) {
+  .empty-container {
+    .empty-row {
+      padding: 0 56px;
+    }
+  }
 }

@@ -10,10 +10,6 @@
   @include transition;
 }
 
-.go-back:hover {
-  background-color: #333333;
-}
-
 @media (min-width: 992px){
   .go-back { height: 100px; }
 }

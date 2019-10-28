@@ -1,9 +1,8 @@
 @import '../../../scss/variables';
 @import '../../../scss/fonts';
 
-// Background border
-::ng-deep .mat-checkbox .mat-checkbox-frame {
-  border-color: gray;
+::ng-deep .mat-checkbox-label {
+  white-space: pre-wrap;
 }
 .checkbox {
   margin-bottom: 12px;

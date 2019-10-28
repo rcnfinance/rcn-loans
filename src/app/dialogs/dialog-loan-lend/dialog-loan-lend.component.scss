@@ -106,7 +106,7 @@
 }
 
 .--highlight {
-  background-color: #171717;
+  background-color: var(--app-color-gray-600);
   height: 35px;
   display: flex;
   align-items: center;
@@ -320,7 +320,8 @@ img {
   }
 
   .exchange {
-    background-color: #2C2C2C;
+    background-color: var(--app-color-gray-600);
+    border-bottom: 1px solid var(--app-color-gray-100);
     height: 40px;
     display: flex;
     align-items: center;

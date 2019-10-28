@@ -1,7 +1,7 @@
 <ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
 
 <div class="loan-detail" *ngIf="loan !== undefined">
-  <div class="header-container flex-container">
+  <div class="header-container flex-container mat-elevation-z5">
     <div class="flex-item">
       <app-goback-button></app-goback-button>
     </div>
@@ -18,6 +18,7 @@
           </div>
         </ng-template>
       </div>
+      <!-- <app-creator-container [loan]=loan></app-creator-container> -->
     </div>
     <div class="flex-item">
       <app-button-group (view)="openDetail($event)" [viewDetail]=viewDetail></app-button-group>

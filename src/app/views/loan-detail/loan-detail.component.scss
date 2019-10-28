@@ -10,9 +10,10 @@
 
 .header-container{
   position: relative;
+  z-index: 2;
   .creator-container {
     .creator-title{
-      color: $fifth;
+      color: var(--app-color-gray-100);
       font-size: 36px;
       @extend %font-black;
     }
@@ -29,7 +30,7 @@
   &.flex-container{
     height: 70px;
     @extend %flex-container;
-    background-color: $gray7;
+    background-color: var(--app-color-gray-400);
     > .flex-item {
       display: flex;
       align-items: center;
@@ -40,7 +41,7 @@
       &:nth-child(1){
         order: 1;
         &:hover{
-          background-color: $fifth;
+          background-color: var(--app-color-gray-500);
         }
       }
       &:nth-child(2){ order: 2; cursor: default; @extend %position-center; }
@@ -57,7 +58,7 @@
     .left {
       width: 100%;
       flex: 1;
-      background-color: #0c0c0c;
+      background-color: var(--app-color-gray-700);
       .avatar-information {
         @extend %flex-display;
         justify-content: space-around;
@@ -90,7 +91,7 @@
       text-align: center;
       justify-content: center;
       padding: 15px;
-      background-color: #101010;
+      background-color: var(--app-color-gray-500);
     }
 
   }
@@ -108,10 +109,10 @@
       >th {
         @include transition;
         &:active{
-          background-color: var(--app-color-primary);
+          background-color: var(--app-color-primary-dark);
         }
         &.background-active{
-          background-color: var(--app-color-primary);
+          background-color: var(--app-color-primary-dark);
         }
       }
     }

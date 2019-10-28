@@ -18,7 +18,7 @@ body {
   line-height: 1.42857143;
   font-family: 'Raleway', sans-serif;
   color: var(--app-color-secondary);
-  background-color: black;
+  background-color: var(--app-color-gray-900);
   &::-webkit-scrollbar { width: 1.2em; }
   &::-webkit-scrollbar-thumb {
     color: $gray6; background-color: $gray6; background-clip: content-box;
@@ -75,6 +75,16 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
 }
 
 .button{
+  &.button-primary,
+  &.button-secondary,
+  &.button-tertiary,
+  &.button-clear,
+  &.button-clear-dark,
+  &.button-transfer {
+    min-width: 88px;
+    border-radius: 3px;
+  }
+
   &.button-primary{
     color: var(--app-color-secondary);
     background-color: var(--app-color-primary);
@@ -89,12 +99,12 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
   }
   &.button-secondary{
     color: var(--app-color-secondary);
-    background-color: $gray7;
+    background-color: var(--app-color-gray-100);
     &:hover,
     &:active,
     &:visited,
     &:focus {
-      background-color: #292929;
+      background-color: var(--app-color-gray-200);
     }
   }
   &.button-tertiary{
@@ -193,14 +203,23 @@ ngx-spinner .black-overlay.ng-star-inserted {
   z-index: 9 !important;
 }
 
+// Tooltip
+mat-tooltip-component .mat-tooltip {
+  background: var(--app-color-gray-50);
+  color: var(--app-color-gray-900);
+  font-weight: 500;
+  font-size: .85em;
+}
+
 // Tables
 .table{
   >thead{
     >tr{
       >th {
         border: 0px;
-        background-color: #333333;
+        background-color: var(--app-color-gray-400);
         @extend %propiety-title;
+        color: #EDEDED; // TODO: define in material
       }
     }
   }
@@ -306,6 +325,7 @@ mat-sidenav-container.mat-drawer-container {
 .cdk-global-overlay-wrapper{
   .mat-dialog-container{
     padding: 0px;
+    border-radius: 2px;
   }
   .mat-dialog-content{
     margin: 0;

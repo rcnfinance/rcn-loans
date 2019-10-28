@@ -52,7 +52,8 @@
 }
 
 .dialog-divisor {
-  background: $gray7;
+  background: var(--app-color-gray-600);
+  border-bottom: 1px solid var(--app-color-gray-100);
 
   &__content {
     width: 100%;
