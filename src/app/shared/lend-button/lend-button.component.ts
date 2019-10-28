@@ -261,7 +261,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         // validate approve
         const engineApproved = await this.contractsService.isApproved(contractAddress, lendToken);
         if (!await engineApproved) {
-          this.showApproveDialog(contractAddress);
+          this.showApproveDialog(contractAddress, this.lendToken);
           return;
         }
 
@@ -360,11 +360,12 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   /**
    * Show approve dialog
    * @param contract Contract address
+   * @param token Token address
    */
-  showApproveDialog(contract: string) {
+  showApproveDialog(contract: string, token: string = environment.contracts.rcnToken) {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
     dialogRef.componentInstance.onlyAddress = contract;
-    dialogRef.componentInstance.onlyToken = this.lendToken;
+    dialogRef.componentInstance.onlyToken = token;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.handleLend(true);
