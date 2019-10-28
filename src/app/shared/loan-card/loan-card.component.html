@@ -42,13 +42,21 @@
       </div>
     </div>
     <div class="loan-card__property loan-card__property--conversion">
-      <div class="loan-card__property-title">
+      <div
+        class="loan-card__property-title"
+        [matTooltip]="leftValue?.length > 6 ? leftValue : ''"
+        matTooltipPosition="below"
+      >
         {{ leftValue }}
       </div>
       <div class="loan-card__property-currency">
         <i class="material-icons" style="font-size: 2em">arrow_forward</i>
       </div>
-      <div class="loan-card__property-title">
+      <div
+        class="loan-card__property-title"
+        [matTooltip]="rightValue?.length > 6 ? rightValue : ''"
+        matTooltipPosition="below"
+      >
         {{ rightValue }}
       </div>
     </div>
