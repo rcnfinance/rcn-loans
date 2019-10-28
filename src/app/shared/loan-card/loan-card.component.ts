@@ -23,6 +23,9 @@ export class LoanCardComponent implements OnInit, OnDestroy {
   durationValue: string;
   canLend: boolean;
   network: string;
+  installments: string;
+  interestRate: string;
+  punitiveInterestRateRate: string;
 
   account: string;
   shortAddress = Utils.shortAddress;
@@ -78,34 +81,6 @@ export class LoanCardComponent implements OnInit, OnDestroy {
     }
   }
 
-  getInterestRate(): string {
-    return this.stateLoan.descriptor.interestRate.toFixed(2);
-  }
-
-  getPunitiveInterestRate(): string {
-    return this.stateLoan.descriptor.punitiveInterestRateRate.toFixed(2);
-  }
-
-  /**
-   * Return installments quantity text
-   */
-  getInstallments(): string {
-    try {
-      const installments = this.stateLoan.descriptor.installments;
-
-      switch (installments) {
-        case 0:
-        case 1:
-          return `1 pay`;
-
-        default:
-          return `${ installments } pays`;
-      }
-    } catch (e) {
-      return '1 pay';
-    }
-  }
-
   /**
    * Refresh loan when lending status is updated
    */
@@ -155,6 +130,29 @@ export class LoanCardComponent implements OnInit, OnDestroy {
       } else {
         this.durationLabel = 'Remaining';
       }
+    }
+    this.installments = this.getInstallments();
+    this.interestRate = this.stateLoan.descriptor.interestRate.toFixed(2);
+    this.punitiveInterestRateRate = this.stateLoan.descriptor.punitiveInterestRateRate.toFixed(2);
+  }
+
+  /**
+   * Return installments quantity text
+   */
+  private getInstallments(): string {
+    try {
+      const installments = this.stateLoan.descriptor.installments;
+
+      switch (installments) {
+        case 0:
+        case 1:
+          return `1 pay`;
+
+        default:
+          return `${ installments } pays`;
+      }
+    } catch (e) {
+      return '1 pay';
     }
   }
 
