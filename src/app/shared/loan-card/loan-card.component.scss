@@ -95,6 +95,9 @@
   padding: 0px 15px;
   margin: 5px -15px 25px;
   div{
+    max-width: 33.3%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     flex: 1;
     @extend %roboto-black;
     &:nth-child(1){
