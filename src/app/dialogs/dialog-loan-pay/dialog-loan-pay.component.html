@@ -114,13 +114,7 @@
                 (startPay)="showProgressbar()"
                 (endPay)="endPay()"
               ></app-pay-button>
-              <button
-                mat-raised-button
-                class="button button-clear-dark mat-elevation-z d-none d-md-inline-block"
-                [mat-dialog-close]='false'
-              >
-                Close
-              </button>
+              <app-close-button class="d-none d-md-inline"></app-close-button>
             </div>
           </div>
         </div>

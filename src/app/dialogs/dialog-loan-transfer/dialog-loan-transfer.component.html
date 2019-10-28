@@ -70,13 +70,7 @@
                 (startTransfer)="showProgressbar()"
                 (endTransfer)="endTransfer()"
               ></app-transfer-button>
-              <button
-                mat-raised-button
-                class="button button-clear-dark mat-elevation-z d-none d-md-inline-block"
-                [mat-dialog-close]='false'
-              >
-                Close
-              </button>
+              <app-close-button></app-close-button>
             </div>
           </div>
         </div>

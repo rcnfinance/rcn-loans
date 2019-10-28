@@ -1,18 +1,15 @@
-@import '../../../scss/_variables.scss'; //variables
 img,
-canvas{
+canvas {
   width: 50px;
   border-radius: 50%;
-  box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+  box-shadow: 0 0 6px rgba(black,.16), 0 6px 12px rgba(black,.32);
 }
 
 .avatar-container {
   width: 30px;
   height: 30px;
   overflow: hidden;
-  top: 0px;
-  left: 0px;
   border-radius: 50%;
   background-color: var(--app-color-primary);
-  box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+  box-shadow: 0 0 6px rgba(black,.16), 0 6px 12px rgba(black,.32);
 }
