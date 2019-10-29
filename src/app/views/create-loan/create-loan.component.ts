@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-create-loan',
   templateUrl: './create-loan.component.html',
   styleUrls: ['./create-loan.component.scss']
 })
-export class CreateLoanComponent {
+export class CreateLoanComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() { }
 
 }

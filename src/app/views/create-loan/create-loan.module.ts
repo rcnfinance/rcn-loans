@@ -6,6 +6,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
 // App Component
 import { CreateLoanComponent } from './create-loan.component';
+import { StepCreateLoanComponent } from './step-create-loan/step-create-loan.component';
 
 const routes: Routes = [
   { path: '', component: CreateLoanComponent },
@@ -20,7 +21,8 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [
-    CreateLoanComponent
+    CreateLoanComponent,
+    StepCreateLoanComponent
   ]
 })
 export class CreateLoanModule { }
