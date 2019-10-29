@@ -13,7 +13,7 @@
     "prebuild": "node version.js",
     "prebuild-ropsten": "node version.js",
     "prestart": "node version.js",
-    "preinstall": "npm rebuild node-sass"
+    "preinstall": "npm rebuild node-sass",
     "postinstall": "node patch-crypto.js",
     "e2e": "jest"
   },
