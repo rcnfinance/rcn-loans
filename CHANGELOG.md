@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Fix:
+
+- Fix loans filter in Activity view
+- Netlify build, use Node 12
+
 ### Enhancement:
 
 - Improving Restricted Region Dialog
