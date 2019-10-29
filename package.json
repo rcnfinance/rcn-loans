@@ -13,7 +13,7 @@
     "prebuild": "node version.js",
     "prebuild-ropsten": "node version.js",
     "prestart": "node version.js",
-    "preinstall": "bash ./bin/preinstall.sh",
+    "preinstall": "npm rebuild node-sass",
     "postinstall": "node patch-crypto.js",
     "e2e": "jest",
     "ipfs-deploy": "node ipfs-deploy.js"
