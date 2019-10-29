@@ -15,7 +15,7 @@
   margin-bottom: 0px;
   margin-left: auto;
   padding: 10px 0px;
-  background-color: black;
+  background-color: var(--app-color-gray-900);
   // -webkit-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
   // -moz-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
   // box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
@@ -37,12 +37,13 @@
       @extend %font-bold;
       @extend %absolute-center-top;
     }
-    .nav{ 
-      display: none; 
-      > div{ 
+    .nav {
+      display: none;
+      &__item {
         outline: -webkit-focus-ring-color auto 0px;
         @extend %font-bold;
-      } 
+        color: white;
+      }
     }
     .icon-hamburguer{
       cursor: pointer;
@@ -132,8 +133,8 @@
       li{
         @include transition();
         @for $i from 1 through 12 {
-          &:nth-child(#{$i}) { 
-            @include transition-delay(0.06s * $i); 
+          &:nth-child(#{$i}) {
+            @include transition-delay(0.06s * $i);
           }
         }
         opacity: 1;
@@ -151,21 +152,23 @@
   }
 }
 
+.hide {
+  display: none;
+}
+
 @media (min-width: 768px){
   .navbar-header {
     float: none;
   }
 }
 
-@media (min-width: 992px){
+@media (min-width: 1280px){
   .navbar{
     height: 60px;
     padding: 7px 15px;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
-    background-image: -webkit-linear-gradient(270deg, rgba(0, 0, 0, .99), transparent);
-    background-image: linear-gradient(180deg, rgba(0, 0, 0, .99), transparent);
     .navbar-header{
       width: 100%;
       height: 45px;
@@ -179,7 +182,7 @@
       .header-title {
         display: none;
       }
-      .nav{
+      .nav {
         > * {
           padding-left: 10px;
           padding-right: 10px;
@@ -191,7 +194,7 @@
         align-items: center;
         float: right;
         @include transition;
-        > div{
+        &__item {
           // max-width: 40px;
           display: block;
           font-size: 16px;
@@ -201,13 +204,13 @@
             color: #fff;
           }
           &:hover{
-            color: $primary;
+            color: var(--app-color-primary);
           }
           &.separator{
             font-weight: 300;
             cursor: default;
             &:hover{
-              color: $secondary;
+              color: var(--app-color-secondary);
             }
           }
           &:last-child{
@@ -227,7 +230,7 @@
   }
   .navbar-extension{ul{span.marginleft30{display:inline-block;}}}
   .navbar-extension{ul{span.marginleft60{display:none;}}}
-  
+
   .extension-toggled{
     .navbar-extension {
       height: 50px;
@@ -237,9 +240,6 @@
       top: 110px;
     }
   }
-}
-
-@media (min-width: 992px){
   .navbar-extension{ul{span.marginleft30{display:none;}}}
   .navbar-extension{ul{span.marginleft60{display:inline-block;}}}
 }

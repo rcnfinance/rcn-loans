@@ -10,11 +10,11 @@ div {
     padding-right: 3px;
     &.plus {
       font-size: 14px;
-      color: $primary;
+      color: var(--app-color-primary);
     }
     &.pending {
       cursor: pointer;        
-      color: $primary;
+      color: var(--app-color-primary);
       padding-left: 0;
     }
   }

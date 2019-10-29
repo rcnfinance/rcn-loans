@@ -1,27 +1,64 @@
+<app-dialog-header title="Approve Contract">
+</app-dialog-header>
+
 <mat-dialog-content>
-  <div class="navbar-container">
-    <div class="creator-container">
-      <div class="creator-title">Approve Contract</div>
-    </div>
-  </div>
+  <app-infinite-progress-bar
+    *ngIf="startProgress"
+    [start]="true"
+    [end]="finishProgress"
+    (finish)="hideProgressbar()"
+  >
+  </app-infinite-progress-bar>
+
   <div class="col-sm-12 dialog-padding">
     <div class="row">
-      <div class="col-sm-12 col-md-6">
-        <div class="title main-h1 marginbottom20">Account Information</div>
+      <div class="col-sm-12 col-md-5">
+        <div class="title main-h2 marginbottom20">Account Information</div>
         <div class="list-avatar">
           <div class="avatar-container">
-            <app-avatar [seed]=lender></app-avatar>
+            <app-avatar [seed]=account></app-avatar>
           </div>
           <div class="txt-container">
             <div class="subtitle">Wallet address</div>
-            <div class="title ellipsis">{{ lender }}</div>
+            <div class="title ellipsis">{{ account }}</div>
           </div>
         </div>
       </div>
-      <div class="col-sm-12 col-md-6">
-        <div class="margintop20 d-none d-md-none"></div>
-        <div class="title main-h1 marginbottom20">Authorize</div>
-        <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Loan Engine contract to operate RCN on your behalf
+      <div class="col-sm-12 col-md-7">
+        <div class="title main-h2 mb-3">
+          Tokens
+        </div>
+        <ng-container *ngFor="let token of tokenContracts | keyvalue">
+          <div
+            class="row mb-3"
+            *ngIf="!onlyToken || onlyToken == token.value.address"
+          >
+            <div class="col-sm-12">
+              <div class="title main-h3 mb-3">
+                {{ token.key }}
+              </div>
+              <div
+                class="checkbox"
+                *ngFor="let contract of token.value.contracts"
+              >
+                <mat-checkbox
+                  color="primary"
+                  [disabled]="!isEnabled(contract)"
+                  [checked]="contract.isApproved ? contract.isApproved[token.value.address] : false"
+                  (change)="clickCheck(contract, $event, token.value.address)"
+                  *ngIf="!onlyAddress || onlyAddress == contract.address"
+                >
+                  Authorize the <b>{{ contract.name }}</b> contract to operate {{ token.key }} on your behalf
+                </mat-checkbox>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 mb-3 d-flex justify-content-end">
+        <app-close-button></app-close-button>
       </div>
     </div>
   </div>

@@ -27,7 +27,7 @@ export class PreviousRouteService {
       this.router.navigate(['/', 'requests']).then(err => {
         console.error(err); // when there's an error
       });
-    } else if (previousUrl && previousUrl.includes('rcn.loans') || previousUrl.includes('localhost')) {
+    } else if (previousUrl) {
       this.location.back();
     }
   }

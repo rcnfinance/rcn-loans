@@ -1,0 +1,69 @@
+<footer>
+  <div class="nav-mobile">
+    <ul>
+      <li
+        routerLink='/requests'
+        routerLinkActive="active"
+        (click)='navmobileClose();'
+      >
+        <i class="fas fa-coins"></i>
+        <div class="available-loans">{{ available }}</div>
+      </li>
+      <li
+        routerLink='/activity'
+        routerLinkActive="active"
+        (click)='navmobileClose();'
+      >
+        <i class="fas fa-wallet"></i>
+        <div class="available-loans">{{ available }}</div>
+      </li>
+      <li
+        routerLink='/address/{{ account }}/'
+        routerLinkActive="active"
+        (click)='navmobileClose();'
+        *ngIf="hasAccount"
+      >
+        <i class="fas fa-exchange-alt"></i>
+        <div class="available-loans">{{ available }}</div>
+      </li>
+      <li
+        (click)='navmobileClose(); openDialogClient()'
+        *ngIf="!hasAccount"
+      >
+        <i class="fas fa-user-circle"></i>
+      </li>
+      <li [class.active]="navmobileToggled" (click)='navmobileToggle()'>
+        <button
+          type="button"
+          class="nav-toggle"
+        >
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </li>
+    </ul>
+  </div>
+  <div class="container-fluid d-none d-lg-block">
+    <div class="row">
+      <div class="col-sm-12 col-lg-6 col--left">
+        <div class="txt">© 2019 Ripio Credit Network</div>
+      </div>
+      <div class="col-sm-12 col-lg-6 col--right">
+        <div class="d-flex justify-content-end">
+          <div class="icon ml-3" *ngFor="let icon of socialIcons">
+            <a
+              [href]="icon.url"
+              [matTooltip]="icon.label"
+              matTooltipPosition="above"
+              target="_blank"
+            >
+              <i class="fa-lg" [ngClass]="icon.class"></i>
+              {{ icon.text }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

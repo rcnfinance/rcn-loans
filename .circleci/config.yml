@@ -6,7 +6,7 @@ jobs:
     install:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12
+            - image: circleci/node:12.13.0
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -17,15 +17,15 @@ jobs:
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
-                - v2-dependencies-{{ checksum "package.json" }}
-                - v2-dependencies-
+                - v4-dependencies-{{ checksum "package.json" }}
+                - v4-dependencies-
             # Install project dependencies
             - run:
                 name: Install local dependencies
                 command: npm install
             # Cache local dependencies if they don't exist
             - save_cache:
-                key: v2-dependencies-{{ checksum "package.json" }}
+                key: v4-dependencies-{{ checksum "package.json" }}
                 paths:
                     - node_modules
 
@@ -33,7 +33,7 @@ jobs:
     lint:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12
+            - image: circleci/node:12.13.0
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -44,8 +44,8 @@ jobs:
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
-                - v2-dependencies-{{ checksum "package.json" }}
-                - v2-dependencies-
+                - v4-dependencies-{{ checksum "package.json" }}
+                - v4-dependencies-
             # Run lint
             - run:
                 name: Lint
@@ -55,7 +55,7 @@ jobs:
     build-mainnet:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12
+            - image: circleci/node:12.13.0
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -66,13 +66,13 @@ jobs:
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
-                - v2-dependencies-{{ checksum "package.json" }}
-                - v2-dependencies-
+                - v4-dependencies-{{ checksum "package.json" }}
+                - v4-dependencies-
             # Build the project
             - run:
                 name: Build
                 command: npm run build
-            
+
             # Load version name
             - run:
                 name: Reading version
@@ -90,7 +90,7 @@ jobs:
     build-ropsten:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12
+            - image: circleci/node:12.13.0
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -101,14 +101,14 @@ jobs:
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
-                - v2-dependencies-{{ checksum "package.json" }}
-                - v2-dependencies-
+                - v4-dependencies-{{ checksum "package.json" }}
+                - v4-dependencies-
 
             # Build the project
             - run:
                 name: Build
                 command: npm run-script build-ropsten
-            
+
             # Load version name
             - run:
                 name: Reading version
@@ -126,11 +126,11 @@ jobs:
             # Save build
             - store_artifacts:
                 path: ropsten-build.tar.gz
-    
+
     e2e-tests:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12-browsers
+            - image: circleci/node:12.13.0-browsers
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -141,8 +141,8 @@ jobs:
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
-                - v2-dependencies-{{ checksum "package.json" }}
-                - v2-dependencies-
+                - v4-dependencies-{{ checksum "package.json" }}
+                - v4-dependencies-
             # Start web server
             - run:
                 name: Start server
@@ -166,7 +166,7 @@ jobs:
     unit-tests:
         working_directory: ~/project
         docker:
-            - image: circleci/node:8.12-browsers
+            - image: circleci/node:12.13.0-browsers
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
@@ -177,8 +177,8 @@ jobs:
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
-                - v2-dependencies-{{ checksum "package.json" }}
-                - v2-dependencies-
+                - v4-dependencies-{{ checksum "package.json" }}
+                - v4-dependencies-
             # Stamp version
             - run:
                 name: Read version
@@ -194,30 +194,10 @@ jobs:
             # Save artifacts
             - store_artifacts:
                 path: coverage
-
-    deploy-ropsten:  
-        docker:
-        - image: circleci/python:3.6.1
-        environment:
-        AWS_DEFAULT_OUTPUT: json
-        AWS_DEFAULT_REGION: us-east-2
-        steps:
-        - checkout
-        - run:
-            name: Install awscli
-            command: |
-                sudo pip install awscli
-        - attach_workspace:
-            at: ~/project
-        - run:
-            name: Upload to S3
-            command: |
-                aws s3 sync ./dist s3://rcn-loans-ropsten/ --acl public-read
-
 workflows:
     version: 2
-    # The build and deploy workflow
-    build_and_deploy:
+    # The build workflow
+    build:
         jobs:
             - install
             - build-mainnet:
@@ -232,12 +212,4 @@ workflows:
             - unit-tests:
                 requires:
                     - install
-            - deploy-ropsten:
-                requires:
-                    - lint
-                    - build-ropsten
-                    - build-mainnet
-                    - unit-tests
-                filters:
-                    branches:
-                        only: master
+

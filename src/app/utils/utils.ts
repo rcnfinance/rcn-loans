@@ -45,7 +45,7 @@ export class Utils {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  static formatDelta(totalSeconds: number, display: number = 2, showSeconds = true): string {
+  static formatDelta(totalSeconds: number, display: number = 2, showSeconds = false): string {
     let result = '';
     let visible = 0;
 
@@ -56,10 +56,9 @@ export class Utils {
       }
     }
 
-    let prefix = '';
+    const prefix = '';
 
     if (totalSeconds < 0) {
-      prefix = '- ';
       totalSeconds *= -1;
     }
 
@@ -79,7 +78,7 @@ export class Utils {
 
     if (showSeconds) {
       const seconds = totalSeconds % 60;
-      timeToStr(seconds, ' seconds, ');
+      timeToStr(seconds.toFixed(0), ' seconds, ');
     }
 
     return prefix + result.slice(0, -2);

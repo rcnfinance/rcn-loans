@@ -8,9 +8,9 @@
   cursor: pointer;
   width: 70px;
   align-items: center;
-  color: $secondary;
+  color: var(--app-color-secondary);
   @include transition;
-  i, 
+  i,
   svg{
     margin: 0 auto;
     &.fas,
@@ -19,7 +19,7 @@
     }
   }
   &:hover{
-    background-color: $tertiary;
+    background-color: var(--app-color-gray-500);
   }
 }
 button{
@@ -28,7 +28,7 @@ button{
     height: 70px;
   }
   &.mat-menu-item {
-    i, 
+    i,
     svg{
       margin-right: 15px;
       min-width: 15px;
@@ -40,14 +40,14 @@ button{
 .button-options,
 .mat-menu-item{
   &.active{
-    color: $primary;
+    color: var(--app-color-primary-dark);
     &:hover{
       background-color: transparent;
     }
   }
 }
 
-@media (min-width: 992px) { 
+@media (min-width: 992px) {
   .button-group{
     height: 100px;
     display: flex;

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Utils } from '../../../utils/utils';
 
 @Component({
   selector: 'app-body-list',
@@ -12,10 +11,5 @@ export class BodyListComponent implements OnInit {
   @Input() textMiddle: string;
   constructor() { }
 
-  ngOnInit() {
-  }
-
-  formatAmount(amount: number): string {
-    return Utils.formatAmount(amount);
-  }
+  ngOnInit() {}
 }

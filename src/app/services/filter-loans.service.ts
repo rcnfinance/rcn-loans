@@ -66,10 +66,10 @@ export class FilterLoansService {
   }
 
   checkFilters(loan: Loan) {
-    return this.checkCurrency(loan.currency) &&
+    return this.checkCurrency(loan.currency.symbol) &&
       this.checkAmountRange(loan.amount) &&
-      this.checkDuration(loan.duration) &&
-      this.checkInterestRate(loan.annualInterest);
+      this.checkDuration(loan.descriptor.duration) &&
+      this.checkInterestRate(loan.descriptor.interestRate);
   }
 
   filterLoans(loans: Loan[], filters: Filters) {

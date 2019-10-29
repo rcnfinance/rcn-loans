@@ -1,30 +1,14 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/variables';
+@import '../../../scss/fonts';
 
-
+::ng-deep .mat-checkbox-label {
+  white-space: pre-wrap;
+}
+.checkbox {
+  margin-bottom: 12px;
+}
 .dialog-padding{
   padding: 30px;
-}
-.navbar-container {
-  height: 70px;
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #333333;
-  .creator-container {
-    .creator-title{
-      width: 100%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      color: $fifth;
-      font-size: 22px;
-      text-align: center;
-      padding: 0 15px;
-      @extend %font-black;
-      @include transform(translate(-50%, -50%));
-    }
-  }
 }
 .list-avatar {
   height: 55px;
@@ -38,15 +22,15 @@
     top: 0px;
     left: 0px;
     border-radius: 50%;
-    background-color: $primary;
+    background-color: var(--app-color-primary);
     box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
     .title{
       position: absolute;
       top: 50%;
       left: 50%;
       font-size: 18px;
-      color: $secondary;
-      @extend %font-black;
+      color: var(--app-color-secondary);
+      @extend %roboto-black;
       @include transform(translate(-50%, -50%));
     }
     img,
@@ -57,26 +41,15 @@
     }
   }
   .txt-container{
-    .title{
-      line-height: 1.4;
-      font-size: 16px;
-      @extend %font-medium;
+    .title {
+      line-height: 1.4em;
+      @extend %roboto-medium;
+      @extend .font18;
     }
-    .subtitle{
-      line-height: 1.4;
-      font-size: 12px;
+    .subtitle {
+      line-height: 1em;
       @extend %font-medium;
-    }
-  }
-}
-
-@media (min-width: 768px){
-  .navbar-container {
-    height: 100px;
-    .creator-container {
-      .creator-title{
-        font-size: 36px;
-      }
+      @extend .font14;
     }
   }
 }
