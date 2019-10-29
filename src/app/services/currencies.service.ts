@@ -90,7 +90,7 @@ export class CurrenciesService {
 
   /**
    * Return the best interest rate for the selected currency
-   * @return Currencies
+   * @return BestInterestRate
    */
   getBestInterest(symbol: string): BestInterestRate {
     const bestInterest = this.bestInterestRates[symbol];
