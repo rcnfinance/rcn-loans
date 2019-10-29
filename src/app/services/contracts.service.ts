@@ -22,6 +22,7 @@ const basaltOracleAbi = require('../contracts/BasaltOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 const tokenConverterAbi = require('../contracts/TokenConverter.json');
 const oracleFactoryAbi = require('../contracts/OracleFactory.json');
+const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
 
 @Injectable()
 export class ContractsService {
@@ -35,6 +36,8 @@ export class ContractsService {
   private _tokenConverter: any;
   private _oracleFactoryAddress: string = environment.contracts.oracleFactory;
   private _oracleFactory: any;
+  private _installmentsModelAddress: string = environment.contracts.models.installments;
+  private _installmentsModel: any;
 
   constructor(
     private http: HttpClient,
@@ -49,6 +52,7 @@ export class ContractsService {
     this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
     this._tokenConverter = this.makeContract(tokenConverterAbi.abi, this._tokenConverterAddress);
     this._oracleFactory = this.makeContract(oracleFactoryAbi.abi, this._oracleFactoryAddress);
+    this._installmentsModel = this.makeContract(installmentsModelAbi.abi, this._installmentsModelAddress);
   }
 
   /**
@@ -645,6 +649,60 @@ export class ContractsService {
         resolve(this.readPendingWithdraws(loans));
       });
     }) as Promise<[number, number[], number, number[]]>;
+  }
+
+  /**
+   * Encode installments data
+   * @param cuota Installment amount
+   * @param interestRate Interest rate
+   * @param installments Number of installments
+   * @param duration Installment duration in seconds
+   * @param timeUnit Time unit (seconds)
+   * @return Encoded installments data
+   */
+  async encodeInstallmentsData(
+    cuota: number,
+    interestRate: number,
+    installments: number,
+    duration: number,
+    timeUnit: number
+  ) {
+    return new Promise((resolve, reject) => {
+      this._installmentsModel.encodeData(
+        cuota,
+        interestRate,
+        installments,
+        duration,
+        timeUnit,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Check encoded installments data
+   * @param encodedData Array of bytes
+   * @return True if can validate the data
+   */
+  async validateEncodedData(encodedData: string) {
+    return new Promise((resolve, reject) => {
+      this._installmentsModel.validate(
+        encodedData,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
   }
 
   /**
