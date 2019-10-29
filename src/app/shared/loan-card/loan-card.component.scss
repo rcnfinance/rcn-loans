@@ -1,4 +1,6 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/variables';
+@import '../../../scss/fonts';
+@import '../../../scss/helpers';
 
 //CARDS
 .card-col{
@@ -6,8 +8,7 @@
 }
 .card-container{
   position: relative;
-  padding: 15px;
-  margin-top: 15px;
+  padding: 15px 20px;
   font-family: 'Raleway', sans-serif;
   border-radius: 2px;
   background-color: $fifth;
@@ -17,8 +18,8 @@
     height: 35px;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
-    background-color: $primary;
-    background: 
+    background-color: var(--app-color-primary);
+    background:
     linear-gradient(
       to bottom,
       rgba(65, 85, 255, 1),
@@ -26,7 +27,7 @@
     );
     padding: 10px;
     .title{
-      color: $secondary;
+      color: var(--app-color-secondary);
       @extend %font-bold;
     }
   }
@@ -41,16 +42,18 @@
     @include background-size(cover);
   }
   .card-row{
-    margin-top: 15px;
-    color: $secondary;
+    margin-top: 20px;
+    color: var(--app-color-secondary);
     .card-property{
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
     .title{
       @extend %propiety-title;
     }
     .paragraph{
+      min-height: 21px;
       @extend %propiety-subtitle;
+      @extend .ellipsis;
     }
     .btn{
       @include transition(all .3s ease-out);
@@ -61,6 +64,7 @@
 }
 .properties-block{
   @extend %flex-container;
+  margin-top: 40px;
   div{
     flex: 1;
     &:nth-child(1){
@@ -69,6 +73,8 @@
     &:nth-child(2){
       text-align: center;
       @extend %propiety-subtitle;
+      font-size: 24px;
+      font-weight: 700;
     }
     &:nth-child(3){
       text-align: right;
@@ -82,12 +88,10 @@
 
 
 .conversion-block{
-  height: 50px;
+  height: 30px;
   @extend %flex-container;
   padding: 0px 15px;
-  margin: 5px -15px 15px;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  margin: 5px -15px 25px;
   div{
     flex: 1;
     @extend %roboto-black;
@@ -101,18 +105,24 @@
       i{ margin: 0 auto; }
     }
     &:nth-child(3){
-      color: $primary;
+      color: var(--app-color-primary);
       text-align: right;
       font-size: 24px;
     }
   }
 }
 
-@media (min-width: 768px){
-  .card-col{
+@media (min-width: 768px) {
+  .card-col {
     margin-top: 30px;
   }
-  .card-container{
-    margin-top: 30px;
+  .card-container {
+    margin-top: 0px;
+  }
+}
+
+@media (min-width: 992px) {
+  .card-container {
+    margin: 0px 5px;
   }
 }

@@ -4,10 +4,14 @@
   width: 70px;
   display: flex;
   align-items: center;
-  color: $secondary;
+  color: var(--app-color-secondary);
   padding-left: 20px;
   cursor: pointer;
   @include transition;
+}
+
+.go-back:hover {
+  background-color: #333333;
 }
 
 @media (min-width: 992px){

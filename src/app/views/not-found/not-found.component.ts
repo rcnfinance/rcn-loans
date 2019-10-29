@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+// App Services
+import { TitleService } from '../../services/title.service';
 
 @Component({
   selector: 'app-not-found',
@@ -8,9 +10,12 @@ import { Component, OnInit } from '@angular/core';
 export class NotFoundComponent implements OnInit {
   winHeight: any = window.innerHeight - 118;
 
-  constructor() { }
+  constructor(
+    private titleService: TitleService
+  ) { }
 
   ngOnInit() {
+    this.titleService.changeTitle('Not found');
   }
 
 }

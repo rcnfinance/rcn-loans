@@ -1,11 +1,97 @@
 <mat-dialog-content>
   <div class="navbar-container">
     <div class="creator-container">
-      <div class="creator-title">Loan Transfer</div>
+      <div class="creator-title">
+        <button
+          matDialogClose
+          mat-button
+          class="d-md-none creator-container__back"
+        >
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        Loan transfer
+      </div>
     </div>
+    <ng-container *ngIf="startProgress">
+      <app-infinite-progress-bar
+        [start]="true"
+        [end]="finishProgress"
+        (finish)="hideProgressbar()"
+      >
+      </app-infinite-progress-bar>
+    </ng-container>
   </div>
-  <div class="col-sm-12 dialog-padding">
-    <div class="title main-h2">You're transfering a Loan</div>
-    <app-transfer-form (submitTransfer)='submit($event)'></app-transfer-form>
-  </div>
+
+  <form [formGroup]="form">
+    <div class="container">
+      <div class="dialog-content dialog-padding">
+        <div class="row mb-3 mt-4 mt-md-0">
+          <div class="col col-12">
+            <div class="title main-h3">
+              You're transfering a Loan
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-12">
+            <mat-form-field class="mt-2">
+              <input
+                formControlName="address"
+                type="text"
+                placeholder="Recipient address"
+                matInput
+                (keyup)="checkInvalidAddress()"
+              >
+              <mat-error *ngIf="invalidAddress">
+                This is not a valid address
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div class="margintop15"></div>
+
+      <div class="dialog-divisor dialog-padding py-0 mt-4 mt-md-0 row">
+        <div class="dialog-divisor__content col-sm-12">
+          <i class="material-icons mr-2">
+            warning
+          </i>
+          Remember that transferring a Loan is an irreversible operation.
+          Please check the address carefully.
+        </div>
+      </div>
+
+      <div class="margintop20"></div>
+
+      <div class="dialog-footer dialog-padding pt-0 pb-3 row">
+        <div class="dialog-footer__label col-sm-12 col-md-6">
+          <p>
+            Transfer from your <strong>{{ shortAccount }}</strong> account.
+          </p>
+        </div>
+        <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
+          <div class="row justify-content-end">
+            <div class="col-md-12">
+              <app-transfer-button
+                [loan]="loan"
+                [address]="form.value.address"
+                [disabled]="loading || !form?.valid"
+                (startTransfer)="showProgressbar()"
+                (endTransfer)="endTransfer()"
+              ></app-transfer-button>
+              <button
+                mat-raised-button
+                class="button button-clear-dark mat-elevation-z d-none d-md-inline-block"
+                [mat-dialog-close]='false'
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
 </mat-dialog-content>

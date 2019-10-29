@@ -82,7 +82,7 @@ export class TxService {
   }
 
   unsubscribeConfirmedTx(cb: (tx: Tx) => void) {
-    this.confirmedTxSubscribers = this.confirmedTxSubscribers.filter(c => c !== cb);
+    this.confirmedTxSubscribers = this.confirmedTxSubscribers.filter(c => c.toString() !== cb.toString());
   }
 
   registerTx(tx: Tx) {
@@ -91,9 +91,12 @@ export class TxService {
     this.saveTxs();
   }
 
-  registerLendTx(loan: Loan, hash: string) {
-    const tx = new Tx(hash, loan.engine, false, Type.lend, loan.id);
-    this.registerTx(tx);
+  registerLendTx(tx: string, engine: string, loan: Loan) {
+    const data = {
+      engine: engine,
+      id: loan.id
+    };
+    this.registerTx(new Tx(tx, engine, false, Type.lend, data));
   }
 
   getPendingTxs(): Tx[] {
@@ -107,11 +110,11 @@ export class TxService {
       .slice(0, count);
   }
 
-  getLastLend(loan: Loan): Tx {
+  getLastPendingLend(loan: Loan): Tx {
     return this.txMemory
       .filter(tx => !tx.confirmed)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
-      .find(tx => tx.type === Type.lend && tx.data === loan.id && loan.engine === tx.to);
+      .find(tx => tx.type === Type.lend && tx.data.id === loan.id && loan.address === tx.to);
   }
 
   registerApproveTx(tx: string, token: string, contract: string, action: boolean) {
@@ -119,15 +122,11 @@ export class TxService {
     this.registerTx(new Tx(tx, token, false, Type.approve, data));
   }
 
-  getLastPendingApprove(token: string, contract: string): boolean {
-    const last = this.txMemory
+  getLastPendingApprove(token: string, contract: string): Tx {
+    return this.txMemory
       .filter(tx => !tx.confirmed)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
       .find(tx => tx.type === Type.approve && tx.data.contract === contract && tx.to === token);
-
-    if (last !== undefined) {
-      return last.data.action;
-    }
   }
 
   registerWithdrawTx(tx: string, engine: string, loans: number[]) {
@@ -158,7 +157,7 @@ export class TxService {
 
   registerClaimTx(tx: string, cosigner: string, loan: Loan) {
     const data = {
-      engine: loan.engine,
+      engine: loan.address,
       id: loan.id
     };
 
@@ -169,7 +168,7 @@ export class TxService {
     return this.txMemory
       .filter(tx => !tx.confirmed && tx.type === Type.claim && tx.to === cosigner)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)
-      .find(tx => tx.data.id === loan.id && tx.data.engine === loan.engine);
+      .find(tx => tx.data.id === loan.id && tx.data.engine === loan.address);
   }
 
   registerPayTx(tx: string, engine: string, loan: Loan, amount: number) {
@@ -186,8 +185,7 @@ export class TxService {
       .filter(tx =>
         !tx.confirmed &&
         tx.type === Type.pay &&
-        tx.data.id === loan.id &&
-        tx.data.engine === loan.engine)
+        tx.data.id === loan.id)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
   }
 

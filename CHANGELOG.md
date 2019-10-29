@@ -7,15 +7,28 @@
 - Fix loans filter in Activity view
 - Netlify build, use Node 12
 
---
+### Enhancement:
+
+- Improving Restricted Region Dialog
+- Display Diaspore RCN Engine loans
+- Show Lending dialog, lend using another currency
+- Visual improvements
+- Get basalt loans using the API
+- Different payment and lend flows for Basalt loans
 
 ## **0.0.13** Avocados - 2019/02/15
+
+### Feature:
+- Add support to deploy Dapp to ipfs network
+- Add ipfs-deploy script
 
 ### Fix:
 
 - Fix scrollbar style
 - Api Fix Geolocalization
 - Fix Civic QR CSS
+- Improve SEO
+- Fix activity duration title bug
 
 ## **0.0.12** Avocados - 2019/01/09
 

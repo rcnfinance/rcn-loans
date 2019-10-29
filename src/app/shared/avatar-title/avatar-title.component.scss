@@ -1,22 +1,23 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/variables';
+@import '../../../scss/fonts';
 
 .list-avatar {
-  height: 40px;
+  height: 50px;
   position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
-  .txt-container{
+  .txt-container {
     padding-left: 15px;
-    .title{
-      line-height: 1.2;
-      font-size: 16px;
-      @extend %font-medium;
+    .title {
+      line-height: 1.4em;
+      @extend %font-semi-bold;
+      @extend .font18;
     }
-    .subtitle{
-      line-height: 1.2;
-      font-size: 12px;
+    .subtitle {
+      line-height: 1em;
       @extend %font-medium;
+      @extend .font14;
     }
   }
 }

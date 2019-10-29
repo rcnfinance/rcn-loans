@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Subscription } from 'rxjs';
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
+import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
 import { FilterLoansService } from '../../services/filter-loans.service';
@@ -12,11 +14,11 @@ import { FilterLoansService } from '../../services/filter-loans.service';
   templateUrl: './requested-loan.component.html',
   styleUrls: ['./requested-loan.component.scss']
 })
-export class RequestedLoanComponent implements OnInit {
+export class RequestedLoanComponent implements OnInit, OnDestroy {
   winHeight: number = window.innerHeight;
   loading: boolean;
   available: any;
-  loans = [];
+  loans: Loan[] = [];
   availableLoans = true;
   pendingLend = [];
   filters = {
@@ -28,48 +30,71 @@ export class RequestedLoanComponent implements OnInit {
   };
   filtersOpen = undefined;
 
+  // subscriptions
+  subscriptionAvailable: Subscription;
+
   constructor(
-    private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
+    private titleService: TitleService,
     private availableLoansService: AvailableLoansService,
+    private contractsService: ContractsService,
     private filterLoansService: FilterLoansService
   ) { }
 
+  ngOnInit() {
+    this.titleService.changeTitle('Requests');
+    this.spinner.show();
+    this.loadLoans();
+
+    // Available Loans service
+    this.subscriptionAvailable = this.availableLoansService.currentAvailable.subscribe(
+      available => this.available = available
+    );
+  }
+
+  ngOnDestroy() {
+    try {
+      this.subscriptionAvailable.unsubscribe();
+    } catch (e) { }
+  }
+
+  /**
+   * Toggle filter visibility
+   */
   openFilters() {
     this.filtersOpen = !this.filtersOpen;
   }
 
+  /**
+   * Reload loans when the filter is applied
+   */
   onFiltered() {
     this.spinner.show();
     this.loadLoans();
   }
 
-  // Available Loans service
+  /**
+   * Update available loans number
+   */
   upgradeAvaiblable() {
     this.availableLoansService.updateAvailable(this.loans.length);
   }
 
-  loadLoans() {
-    this.contractsService.getOpenLoans().then((result: Loan[]) => {
+  /**
+   * Load loans
+   */
+  async loadLoans() {
+    const loans: Loan[] = await this.contractsService.getRequests();
+    const filterLoans = this.filterLoansService.filterLoans(loans, this.filters);
+    this.loans = filterLoans;
 
-      const filterLoans = this.filterLoansService.filterLoans(result, this.filters);
-      this.loans = filterLoans;
+    this.upgradeAvaiblable();
+    this.spinner.hide();
 
-      this.upgradeAvaiblable();
-      this.spinner.hide();
-      if (this.loans.length === 0) {
-        this.availableLoans = false;
-      } else {
-        this.availableLoans = true;
-      }
-    });
-  }
-
-  ngOnInit() {
-    this.spinner.show(); // Initialize spinner
-    this.loadLoans();
-
-    // Available Loans service
-    this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
+    if (this.loans.length) {
+      this.availableLoans = true;
+    } else {
+      this.availableLoans = false;
+    }
   }
 }

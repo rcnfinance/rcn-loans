@@ -1,6 +1,13 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/variables';
+@import '../../../scss/fonts';
 
-
+// Background border
+/deep/ .mat-checkbox .mat-checkbox-frame {
+  border-color: gray;
+}
+.checkbox {
+  margin-bottom: 12px;
+}
 .dialog-padding{
   padding: 30px;
 }
@@ -38,15 +45,15 @@
     top: 0px;
     left: 0px;
     border-radius: 50%;
-    background-color: $primary;
+    background-color: var(--app-color-primary);
     box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
     .title{
       position: absolute;
       top: 50%;
       left: 50%;
       font-size: 18px;
-      color: $secondary;
-      @extend %font-black;
+      color: var(--app-color-secondary);
+      @extend %roboto-black;
       @include transform(translate(-50%, -50%));
     }
     img,
@@ -57,15 +64,15 @@
     }
   }
   .txt-container{
-    .title{
-      line-height: 1.4;
-      font-size: 16px;
-      @extend %font-medium;
+    .title {
+      line-height: 1.4em;
+      @extend %roboto-medium;
+      @extend .font18;
     }
-    .subtitle{
-      line-height: 1.4;
-      font-size: 12px;
+    .subtitle {
+      line-height: 1em;
       @extend %font-medium;
+      @extend .font14;
     }
   }
 }
