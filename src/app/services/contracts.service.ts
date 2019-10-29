@@ -706,6 +706,88 @@ export class ContractsService {
   }
 
   /**
+   * Calculate loan ID
+   * @param amount Total amount
+   * @param borrower Borrower address
+   * @param creator Creator address
+   * @param model Model address
+   * @param oracle Oracle address
+   * @param callback Callback address
+   * @param salt Salt hash
+   * @param expiration Expiration timestamp
+   * @param data Model data
+   * @return Loan ID
+   */
+  async calculateLoanId(
+    amount: number,
+    borrower: string,
+    creator: string,
+    model: string,
+    oracle: string,
+    callback: string,
+    salt: string,
+    expiration: number,
+    data: any
+  ) {
+    return new Promise((resolve, reject) => {
+      this._loanManager.calcId(
+        amount,
+        borrower,
+        creator,
+        model,
+        oracle,
+        callback,
+        salt,
+        expiration,
+        data,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Request a loan
+   * @param amount Total amount
+   * @param model Model address
+   * @param oracle Oracle address
+   * @param borrower Borrower address
+   * @param callback Callback address
+   * @param salt Salt hash
+   * @param expiration Expiration timestamp
+   * @param loanData Loan model data
+   * @return Loan ID
+   */
+  async requestLoan(
+    amount: number,
+    model: string,
+    oracle: string,
+    borrower: string,
+    callback: string,
+    salt: string,
+    expiration: number,
+    loanData: any
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._loanManager).requestLoan, [
+      amount,
+      model,
+      oracle,
+      borrower,
+      callback,
+      salt,
+      expiration,
+      loanData,
+      { from: borrower }
+    ]);
+  }
+
+  /**
    * Check if token is valid
    * @param tokenAddress Token address
    * @return Boolean
