@@ -8,7 +8,6 @@
   overflow: hidden;
   border-radius: 50%;
   background-color: var(--app-color-primary);
-  box-shadow: 0 0 6px #00000029, 0 6px 12px rgba(0,0,0,.32);
   &.request{color: $black; background-color: $white;}
   &.ongoing{background-color: var(--app-color-primary);}
   &.indebt{background-color: $orange;}
@@ -26,6 +25,5 @@
   img {
     width: 50px;
     border-radius: 50%;
-    box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
   }
 }

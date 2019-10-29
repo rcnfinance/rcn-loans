@@ -1,33 +1,42 @@
 <footer>
   <div class="nav-mobile">
     <ul>
-      <li routerLink='/requests'
+      <li
+        routerLink='/requests'
         routerLinkActive="active"
-        (click)='navmobileClose();'>
+        (click)='navmobileClose();'
+      >
         <i class="fas fa-coins"></i>
         <div class="available-loans">{{ available }}</div>
       </li>
-      <li routerLink='/activity'
+      <li
+        routerLink='/activity'
         routerLinkActive="active"
-        (click)='navmobileClose();'>
+        (click)='navmobileClose();'
+      >
         <i class="fas fa-wallet"></i>
         <div class="available-loans">{{ available }}</div>
       </li>
-      <li routerLink='/address/{{ account }}/'
+      <li
+        routerLink='/address/{{ account }}/'
         routerLinkActive="active"
         (click)='navmobileClose();'
-        *ngIf="hasAccount">
+        *ngIf="hasAccount"
+      >
         <i class="fas fa-exchange-alt"></i>
         <div class="available-loans">{{ available }}</div>
       </li>
       <li
         (click)='navmobileClose(); openDialogClient()'
-        *ngIf="!hasAccount">
+        *ngIf="!hasAccount"
+      >
         <i class="fas fa-user-circle"></i>
       </li>
       <li [class.active]="navmobileToggled" (click)='navmobileToggle()'>
-        <button type="button"
-          class="nav-toggle">
+        <button
+          type="button"
+          class="nav-toggle"
+        >
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -37,26 +46,22 @@
   </div>
   <div class="container-fluid d-none d-lg-block">
     <div class="row">
-      <div class="col-sm-12 col-lg-6 left">
+      <div class="col-sm-12 col-lg-6 col--left">
         <div class="txt">© 2019 Ripio Credit Network</div>
       </div>
-      <div class="col-sm-12 col-lg-6 right">
-        <a class="icon inline marginright15" matTooltip="Basalt engine contract {{contract}}" matTooltipPosition="above" href="{{linkContract}}" target="_blank">
-          <i class="fas fa-link fa-lg"></i>
-        </a>
-        <div class="icon version">
-          <a href="https://github.com/ripio/rcn-loans/releases" matTooltip="Version {{versionString}}" matTooltipPosition="above" target="_blank">
-            <i class="fas fa-code-branch fa-lg"></i> {{ version }}
-          </a>
-        </div>
-        <div class="button-group inline">
-          <div class="icon"><a href="https://www.facebook.com/ripiocredit.network/" matTooltip="Facebook" matTooltipPosition="above" target="_blank"><i class="fab fa-facebook-f fa-lg"></i></a></div>
-          <div class="icon"><a href="https://twitter.com/rcn_token?lang=en" matTooltip="Twitter" matTooltipPosition="above" target="_blank"><i class="fab fa-twitter fa-lg"></i></a></div>
-          <div class="icon"><a href="https://t.me/RCNtalk" matTooltip="Telegram" matTooltipPosition="above" target="_blank"><i class="fab fa-telegram-plane fa-lg"></i></a></div>
-          <div class="icon"><a href="https://www.linkedin.com/company/ripio-credit-network/" matTooltip="Linkedin" matTooltipPosition="above" target="_blank"><i class="fab fa-linkedin-in fa-lg"></i></a></div>
-          <div class="icon"><a href="https://www.reddit.com/r/rcn_token/" matTooltip="Reddit" matTooltipPosition="above" target="_blank"><i class="fab fa-reddit fa-lg"></i></a></div>
-          <div class="icon"><a href="https://github.com/ripio/rcn.loans" matTooltip="Github" matTooltipPosition="above" target="_blank"><i class="fab fa-github fa-lg"></i></a></div>
-          <div class="icon"><a href="https://discord.gg/62UCxbS" matTooltip="Discord" matTooltipPosition="above" target="_blank"><i class="fab fa-discord fa-lg"></i></a></div>
+      <div class="col-sm-12 col-lg-6 col--right">
+        <div class="d-flex justify-content-end">
+          <div class="icon ml-3" *ngFor="let icon of socialIcons">
+            <a
+              [href]="icon.url"
+              [matTooltip]="icon.label"
+              matTooltipPosition="above"
+              target="_blank"
+            >
+              <i class="fa-lg" [ngClass]="icon.class"></i>
+              {{ icon.text }}
+            </a>
+          </div>
         </div>
       </div>
     </div>

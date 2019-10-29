@@ -18,7 +18,7 @@ import { Utils } from '../../utils/utils';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
-import { TxService, Tx, Type } from './../../tx.service';
+import { TxService, Tx, Type } from './../../services/tx.service';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { environment } from '../../../environments/environment';
 import { Web3Service } from '../../services/web3.service';
@@ -28,7 +28,7 @@ import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
-import { DialogSelectCurrencyComponent } from '../../dialogs/dialog-select-currency/dialog-select-currency.component';
+import { DialogLoanLendComponent } from '../../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 import { CosignerService } from './../../services/cosigner.service';
 import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
 
@@ -179,7 +179,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     }
 
     if (this.showLendDialog) {
-      const dialogRef = this.dialog.open(DialogSelectCurrencyComponent, {
+      const dialogRef = this.dialog.open(DialogLoanLendComponent, {
         data: {
           loan: this.loan
         }
@@ -261,7 +261,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         // validate approve
         const engineApproved = await this.contractsService.isApproved(contractAddress, lendToken);
         if (!await engineApproved) {
-          this.showApproveDialog(contractAddress);
+          this.showApproveDialog(contractAddress, this.lendToken);
           return;
         }
 
@@ -360,11 +360,12 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   /**
    * Show approve dialog
    * @param contract Contract address
+   * @param token Token address
    */
-  showApproveDialog(contract: string) {
+  showApproveDialog(contract: string, token: string = environment.contracts.rcnToken) {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
     dialogRef.componentInstance.onlyAddress = contract;
-    dialogRef.componentInstance.onlyToken = this.lendToken;
+    dialogRef.componentInstance.onlyToken = token;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.handleLend(true);

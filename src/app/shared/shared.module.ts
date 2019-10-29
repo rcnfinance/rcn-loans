@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // App Modules
-import { MaterialModule } from '../material/material.module';
+import { MaterialModule } from './../material.module';
 // App Component
 import { FooterComponent } from './footer/footer.component';
 import { LoanCardComponent } from './loan-card/loan-card.component';
@@ -20,6 +20,7 @@ import { InfiniteProgressBarComponent } from './infinite-progress-bar/infinite-p
 import { ConversionGraphicComponent } from './conversion-graphic/conversion-graphic.component';
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
+import { DialogHeaderComponent } from './dialog-header/dialog-header.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -28,27 +29,24 @@ import { CloseButtonComponent } from './close-button/close-button.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
-import { CivicAuthComponent } from './civic-auth/civic-auth.component';
 // App Dialogs
 import { DialogInsufficientfundsComponent } from '../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogGenericErrorComponent } from '../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
-import { DialogSelectCurrencyComponent } from '../dialogs/dialog-select-currency/dialog-select-currency.component';
+import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 // App Services
 import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
-import { TxService } from './../tx.service';
+import { TxService } from './../services/tx.service';
 import { BrandingService } from './../services/branding.service';
 import { CosignerService } from './../services/cosigner.service';
 import { Web3Service } from './../services/web3.service';
 import { IdentityService } from './../services/identity.service';
 import { RiskService } from './../services/risk.service';
-import { CivicService } from './../services/civic.service';
-import { SidebarService } from './../services/sidebar.service';
 import { TitleService } from './../services/title.service';
 import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
@@ -63,7 +61,6 @@ import { CurrenciesService } from './../services/currencies.service';
     BlockiesModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule,
     BlockiesModule
   ],
   declarations: [
@@ -76,6 +73,7 @@ import { CurrenciesService } from './../services/currencies.service';
     ConversionGraphicComponent,
     HeaderListComponent,
     BodyListComponent,
+    DialogHeaderComponent,
     AvatarTitleComponent,
     IconAvatarComponent,
     LendButtonComponent,
@@ -85,7 +83,6 @@ import { CurrenciesService } from './../services/currencies.service';
     ClaimButtonComponent,
     ButtonGroupComponent,
     RiskIndicatorComponent,
-    CivicAuthComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
 
@@ -94,18 +91,17 @@ import { CurrenciesService } from './../services/currencies.service';
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
-    DialogSelectCurrencyComponent,
+    DialogLoanLendComponent,
 
     VisualUrlPipe
   ],
   entryComponents: [
-    CivicAuthComponent,
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
-    DialogSelectCurrencyComponent
+    DialogLoanLendComponent
   ],
   providers: [
     DecentralandCosignerProvider,
@@ -116,8 +112,6 @@ import { CurrenciesService } from './../services/currencies.service';
     Web3Service,
     IdentityService,
     RiskService,
-    CivicService,
-    SidebarService,
     TitleService,
     AvailableLoansService,
     CountriesService,
@@ -127,6 +121,7 @@ import { CurrenciesService } from './../services/currencies.service';
   exports: [
     FormsModule,
     ReactiveFormsModule,
+    MaterialModule,
     FooterComponent,
     LoanCardComponent,
     CreatorContainerComponent,
@@ -136,6 +131,7 @@ import { CurrenciesService } from './../services/currencies.service';
     ConversionGraphicComponent,
     HeaderListComponent,
     BodyListComponent,
+    DialogHeaderComponent,
     AvatarTitleComponent,
     IconAvatarComponent,
     LendButtonComponent,
@@ -145,7 +141,6 @@ import { CurrenciesService } from './../services/currencies.service';
     ClaimButtonComponent,
     ButtonGroupComponent,
     RiskIndicatorComponent,
-    CivicAuthComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     DialogWrongCountryComponent,

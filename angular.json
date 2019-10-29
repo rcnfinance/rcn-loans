@@ -4,9 +4,15 @@
   "newProjectRoot": "projects",
   "projects": {
     "rcn-angular-dapp": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        },
+      },
       "root": "",
       "sourceRoot": "src",
-      "projectType": "application",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -118,16 +124,6 @@
           }
         }
       }
-    }
-  },
-  "cli": {},
-  "schematics": {
-    "@schematics/angular:component": {
-      "prefix": "app",
-      "styleext": "scss"
-    },
-    "@schematics/angular:directive": {
-      "prefix": "app"
     }
   }
 }

@@ -7,7 +7,7 @@ import {
 // App Service
 import { EventsService, Category } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
-import { TxService, Tx, Type } from '../../tx.service';
+import { TxService, Tx, Type } from '../../services/tx.service';
 // App Component
 import { environment } from '../../../environments/environment';
 import { Loan } from '../../models/loan.model';

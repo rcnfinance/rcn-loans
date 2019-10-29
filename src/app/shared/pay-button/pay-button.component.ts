@@ -7,7 +7,7 @@ import {
 } from '@angular/material';
 // App Services
 import { environment } from '../../../environments/environment';
-import { TxService, Tx, Type } from '../../tx.service';
+import { TxService, Tx, Type } from '../../services/tx.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Loan, Network } from '../../models/loan.model';
 import { Currency } from '../../utils/currencies';

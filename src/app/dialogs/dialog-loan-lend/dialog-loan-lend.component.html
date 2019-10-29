@@ -1,27 +1,16 @@
+<app-dialog-header title="Checkout process">
+</app-dialog-header>
+
 <mat-dialog-content class="dialog">
 
-  <div class="navbar-container">
-    <div class="creator-container">
-      <div class="creator-title">
-        <button
-          matDialogClose
-          mat-button
-          class="d-md-none creator-container__back"
-        >
-          <i class="fas fa-arrow-left"></i>
-        </button>
-        Checkout process
-      </div>
-    </div>
-    <ng-container *ngIf="startProgress">
-      <app-infinite-progress-bar
-        [start]="true"
-        [end]="finishProgress"
-        (finish)="hideProgressbar()"
-      >
-      </app-infinite-progress-bar>
-    </ng-container>
-  </div>
+  <ng-container *ngIf="startProgress">
+    <app-infinite-progress-bar
+      [start]="true"
+      [end]="finishProgress"
+      (finish)="hideProgressbar()"
+    >
+    </app-infinite-progress-bar>
+  </ng-container>
 
   <div class="col-sm-12 dialog-padding">
     <div class="title main-h3">
@@ -178,13 +167,7 @@
           ></app-lend-button>
         </div>
         <div class="d-none d-md-block col-sm-0 col-md-3 ml-2">
-          <button
-            mat-raised-button
-            class="button button-clear-dark mat-elevation-z d-none d-md-inline-block"
-            [mat-dialog-close]='false'
-          >
-            Close
-          </button>
+          <app-close-button></app-close-button>
         </div>
       </div>
     </div>

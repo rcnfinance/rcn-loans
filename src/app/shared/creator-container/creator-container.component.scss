@@ -3,7 +3,7 @@
 .creator-container {
     height: 70px;
     position: relative;
-    background-color: #333333;
+    background-color: var(--app-color-gray-400);
     margin-left: -20px;
     margin-right: -20px;
     .creator-title,
@@ -14,7 +14,7 @@
       @include transform(translate(-50%, -50%));
     }
     .creator-title {
-      color: $fifth;
+      color: var(--app-color-gray-100);
       font-size: 36px;
       @extend %font-black;
     }
@@ -26,23 +26,6 @@
         max-width: 90%;
         max-height: 100%;
         margin: 0 auto;
-      }
-    }
-    .go-back {
-      width: 70px;
-      height: 100%;
-      position: absolute;
-      color: var(--app-color-secondary);
-      cursor: pointer;
-      @include transition;
-      &:hover{
-        background-color: $fifth;
-      }
-      i{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        @include transform(translate(-50%, -50%));
       }
     }
   }

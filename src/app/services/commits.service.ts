@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Commit } from '../models/commit.model';
+import { Commit } from '../interfaces/commit.interface';
 import { environment } from '../../environments/environment';
 import { Network } from '../models/loan.model';
 

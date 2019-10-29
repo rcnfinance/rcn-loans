@@ -1,28 +1,5 @@
 @import '../../../scss/variables';
 
-.navbar-container {
-  height: 70px;
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #333333;
-  .creator-container {
-    .creator-title{
-      width: 100%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      color: $fifth;
-      font-size: 22px;
-      text-align: center;
-      padding: 0 15px;
-      @extend %font-black;
-      @include transform(translate(-50%, -50%));
-    }
-  }
-}
-
 .dialog-content {
   .title {
     font-size: 14px;
@@ -30,7 +7,8 @@
 }
 
 .dialog-divisor {
-  background: $gray7;
+  background: var(--app-color-gray-600);
+  border-bottom: 1px solid var(--app-color-gray-100);
 
   &__content {
     width: 100%;
@@ -60,7 +38,7 @@
     margin-top: 25px;
 
     app-transfer-button {
-      /deep/ a {
+      ::ng-deep a {
         width: 100%;
       }
     }
@@ -68,14 +46,6 @@
 }
 
 @media (min-width: 768px){
-  .navbar-container {
-    height: 100px;
-    .creator-container {
-      .creator-title{
-        font-size: 36px;
-      }
-    }
-  }
   .dialog-padding {
     padding: 30px 42px;
   }
@@ -91,7 +61,7 @@
     &__buttons {
       margin-top: 0;
       app-transfer-button {
-        /deep/ a {
+        ::ng-deep a {
           width: auto;
         }
       }

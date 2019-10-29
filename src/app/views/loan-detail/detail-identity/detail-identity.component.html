@@ -1,39 +1,36 @@
-<div class="empty-container px-3" *ngIf="class === 'company'">
-  <div class="empty-row">
-    <div class="main-title mt-4 mb-5">
-      Company
+<div class="px-3 px-md-4" *ngIf="class === 'company'">
+  <div class="main-title mt-4 mb-5">
+    Company
+  </div>
+  <div class="img-box mb-5">
+    <img [src]="identity.brand" class="img-responsive img-center" />
+  </div>
+  <div class="main-text">
+    {{ identity.description }}
+  </div>
+  <div class="content mt-3">
+    <div class="row">
+      <app-item-feature
+        *ngFor="let feature of identity.features"
+        [feature]="feature"
+        class="col-xs-12 col-md-4 feature-box my-3"
+      >
+      </app-item-feature>
     </div>
-    <div class="img-box mb-5">
-      <img [src]="identity.brand" class="img-responsive img-center" />
-    </div>
-    <div class="main-text">
-      {{ identity.description }}
-    </div>
-    <div class="content mt-3">
-      <div class="row">
-        <app-item-feature
-          *ngFor="let feature of identity.features"
-          [feature]="feature"
-          class="col-xs-12 col-md-4 feature-box my-3"
-        >
-        </app-item-feature>
-      </div>
-    </div>
-    <div
-      *ngIf="identity.disclaimer"
-      class="d-flex justify-content-start align-items-center disclaimer-box mt-3 pt-1"
-    >
-      <span>
-        <i class="fas fa-info-circle"></i> {{ identity.disclaimer }}
-      </span>
-    </div>
-
+  </div>
+  <div
+    *ngIf="identity.disclaimer"
+    class="d-flex justify-content-start align-items-center disclaimer-box mt-3 pt-1"
+  >
+    <span>
+      <i class="fas fa-info-circle"></i> {{ identity.disclaimer }}
+    </span>
   </div>
 </div>
 
 <div class="empty-container p-3 py-md-0 filter" *ngIf="hasIdentity() == undefined">
   <div class="empty-row">
-    <i class="fas fa-id-badge gray7 font90"></i>
+    <i class="fas fa-id-badge"></i>
     <div class="margintop20"></div>
     <div class="title main-h3">The borrower of this loan is anonymous</div>
     <div class="margintop10"></div>

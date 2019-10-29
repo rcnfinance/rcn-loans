@@ -1,26 +1,16 @@
+<app-dialog-header title="Loan pay">
+</app-dialog-header>
+
 <mat-dialog-content>
-  <div class="navbar-container">
-    <div class="creator-container">
-      <div class="creator-title">
-        <button
-          matDialogClose
-          mat-button
-          class="d-md-none creator-container__back"
-        >
-          <i class="fas fa-arrow-left"></i>
-        </button>
-        Loan pay
-      </div>
-    </div>
-    <ng-container *ngIf="startProgress">
-      <app-infinite-progress-bar
-        [start]="true"
-        [end]="finishProgress"
-        (finish)="hideProgressbar()"
-      >
-      </app-infinite-progress-bar>
-    </ng-container>
-  </div>
+
+  <ng-container *ngIf="startProgress">
+    <app-infinite-progress-bar
+      [start]="true"
+      [end]="finishProgress"
+      (finish)="hideProgressbar()"
+    >
+    </app-infinite-progress-bar>
+  </ng-container>
 
   <form [formGroup]="form">
     <div class="container">
@@ -124,13 +114,7 @@
                 (startPay)="showProgressbar()"
                 (endPay)="endPay()"
               ></app-pay-button>
-              <button
-                mat-raised-button
-                class="button button-clear-dark mat-elevation-z d-none d-md-inline-block"
-                [mat-dialog-close]='false'
-              >
-                Close
-              </button>
+              <app-close-button class="d-none d-md-inline"></app-close-button>
             </div>
           </div>
         </div>
