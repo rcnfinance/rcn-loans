@@ -22,23 +22,6 @@
               <span class="main-title main-title--divider">| </span>
               SET YOUR LOAN REQUIREMENTS
             </mat-panel-title>
-            <ng-container *ngIf="startProgress">
-              <app-infinite-progress-bar
-                [start]="true"
-                [end]="finishProgress"
-                [cancel]="cancelProgress"
-                (finish)="hideProgressbar('loan')"
-              >
-              </app-infinite-progress-bar>
-              <div>
-                <span class="fa fa-spinner fa-spin"></span>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="!startProgress && isCompleting">
-              <div>
-                <span class="fa fa-check" *ngIf="!init"></span>
-              </div>
-            </ng-container>
           </mat-expansion-panel-header>
           <app-step-create-loan></app-step-create-loan>
         </mat-expansion-panel>

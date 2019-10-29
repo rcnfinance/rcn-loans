@@ -40,13 +40,6 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <div
-              class="required"
-              *ngIf="requiredInvalid$"
-              [ngClass]="{
-                'required-invalid': form?.controls.currency.invalid
-              }"
-            ></div>
           </div>
         </div>
         <div class="col-sm-12 col-md-4">
@@ -202,11 +195,9 @@
       </span>
     </div>
     <div class="col-sm-12">
-      <div [ngClass]="isChecked === true ? 'message-style' : 'hide'">
-        <i class="fas fa-exclamation-triangle"></i> Payments are made
-        every 15 days and the amount thereof is determined by the
-        duration of the loan.
-      </div>
+      <i class="fas fa-exclamation-triangle"></i> Payments are made
+      every 15 days and the amount thereof is determined by the
+      duration of the loan.
     </div>
   </div>
 
@@ -245,7 +236,7 @@
         type="submit"
         class="button-reset create-button button-secondary-style"
       >
-        {{ createButtonText }}
+        Create
         <i class="fas fa-arrow-circle-right"></i>
       </button>
     </div>
