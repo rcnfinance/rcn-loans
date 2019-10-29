@@ -51,6 +51,7 @@ import { TitleService } from './../services/title.service';
 import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
+import { CurrenciesService } from './../services/currencies.service';
 
 @NgModule({
   imports: [
@@ -114,7 +115,8 @@ import { EventsService } from './../services/events.service';
     TitleService,
     AvailableLoansService,
     CountriesService,
-    EventsService
+    EventsService,
+    CurrenciesService
   ],
   exports: [
     FormsModule,
