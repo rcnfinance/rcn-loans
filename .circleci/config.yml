@@ -197,8 +197,8 @@ jobs:
 
 workflows:
     version: 2
-    # The build and deploy workflow
-    build_and_deploy:
+    # The build workflow
+    build:
         jobs:
             - install
             - build-mainnet:
