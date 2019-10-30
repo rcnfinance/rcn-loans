@@ -1,244 +1,236 @@
-<form
-  [formGroup]="form"
-  (ngSubmit)="onSubmitStep1(fStep1)"
-  #fStep1="ngForm"
->
-  <span>
-    Set yout loan requirements
-  </span>
-
-  <div class="row mt-5">
-    <div class="col-sm-11 col-md-12">
-      <div class="row">
-        <div class="col-sm-12 col-md-4">
-          <div class="title">
-            BORROW CURRENCY
-          </div>
-          <div class="currency">
-            <mat-form-field>
-              <mat-select
-                placeholder="Select a Token"
-                formControlName="currency"
-                (selectionChange)="onCurrencyChange($event.value)"
-                required
-              >
-                <mat-option>
-                  --
-                </mat-option>
-                <mat-option
-                  *ngFor="let currency of currencies"
-                  [value]="currency.symbol"
+<form [formGroup]="form" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1="ngForm">
+  <div class="content-wrapper">
+    <div class="row mt-5">
+      <div class="col-sm-11 col-md-12">
+        <div class="row">
+          <div class="col-sm-12 col-md-4 item">
+            <div class="item__title">
+              BORROW CURRENCY
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-select
+                  placeholder="Select a Token"
+                  formControlName="currency"
+                  (selectionChange)="onCurrencyChange($event.value)"
+                  required
                 >
-                  <div class="d-flex align-items-center py-1">
-                    <!-- TODO: <app-currency-logo
-                      [address]="currency.address"
-                    ></app-currency-logo> -->
-                    <span class="ml-3">
-                      {{ currency.symbol }}
-                    </span>
-                  </div>
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+                  <mat-option>
+                    --
+                  </mat-option>
+                  <mat-option
+                    *ngFor="let currency of currencies"
+                    [value]="currency.symbol"
+                  >
+                    <div class="d-flex align-items-center py-1">
+                      <!-- TODO: <app-currency-logo
+                        [address]="currency.address"
+                      ></app-currency-logo> -->
+                      <span class="ml-3">
+                        {{ currency.symbol }}
+                      </span>
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 item">
+            <div class="item__title">
+              BORROW AMOUNT
+            </div>
+            <div>
+              <mat-form-field>
+                <input
+                  matInput
+                  type="number"
+                  min="0"
+                  max="1000000"
+                  formControlName="amount"
+                  (keyup)="onRequestedChange($event.value)"
+                  pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
+                  required
+                  class="block-title"
+                  [ngClass]="
+                    amount?.value === '0' ?
+                    '' :
+                    'block-title--white'
+                  "
+                />
+                <mat-hint>
+                  <span
+                    *ngIf="
+                      amount.valid ||
+                      (amount.pristine && amount.untouched)
+                    "
+                  >
+                    Requested amount
+                  </span>
+                  <span
+                    class="red"
+                    *ngIf="
+                      amount.errors &&
+                      (amount.dirty || amount.touched)
+                    "
+                  >
+                    The minimum is 1
+                  </span>
+                </mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 item">
+            <div
+              *ngIf="
+                form?.value.currency !== undefined &&
+                form?.value.currency !== 'RCN'
+              "
+            >
+              <i class="fas fa-exclamation-triangle"></i>
+              You’re borrowing in {{ form?.value.currency }},
+              therefore the value of the pays is going to be converted to
+              RCN.
+            </div>
           </div>
         </div>
-        <div class="col-sm-12 col-md-4">
-          <div class="title">
-            BORROW AMOUNT
+
+        <div class="row mt-5">
+          <div class="col col-sm-12 item">
+            <div class="item__title">
+              Duration of the loan
+            </div>
+            <span class="item__subtitle">
+              Set the number of days you want your loan to last.
+            </span>
+            <div>
+              <mat-form-field>
+                <mat-select
+                  placeholder="Select a number"
+                  formControlName="duration"
+                  (selectionChange)="onDurationChange()"
+                  required
+                >
+                  <mat-option
+                    *ngFor="let duration of durationDays"
+                    [value]="duration"
+                  >
+                    {{ duration }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
-          <div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col col-lg-12 item">
+            <div class="item__title">
+              ANNUAL INTEREST RATE
+            </div>
+            <div class="item__subtitle">
+              Select the interest you want to pay
+            </div>
+            <div>
+              <mat-slider
+                class="percentage"
+                step="1"
+                tickInterval="1"
+                color="primary"
+                thumbLabel="true"
+                formControlName="annualInterest"
+                [disabled]="
+                  !form?.value.currency
+                "
+                [min]="selectedCurrency?.bestInterestRate.min"
+                [max]="selectedCurrency?.bestInterestRate.max"
+                (change)="onInterestRateChange()"
+              ></mat-slider>
+              <div class="slider-percentage-box">
+                <div
+                  class="slider-percentaje subtitle-style subtitle-style--number"
+                >
+                  {{ selectedCurrency?.bestInterestRate.min }}
+                </div>
+                <div
+                  class="slider-percentaje subtitle-style subtitle-style--number"
+                >
+                  {{ selectedCurrency?.bestInterestRate.max }}
+                </div>
+              </div>
+            </div>
+            <div class="message-style message-style--italic">
+              <i class="fas fa-info-circle"></i> Higher interestes are
+              more likely to be lended.
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col col-lg-12 item">
+            <div class="item__title">
+              <span>
+                INSTALLMENTS
+              </span>
+              <mat-slide-toggle
+                formControlName="hasInstallments"
+                [disabled]="!installmentsAvailable || installmentsAvailable < 2"
+                (change)="onInstallmentsChange()"
+              >
+              </mat-slide-toggle>
+            </div>
+            <div>
+              <span class="subtitle-style">
+                Do you want to pay back with installments?
+              </span>
+            </div>
+            <div>
+              <i class="fas fa-exclamation-triangle"></i> Payments are made
+              every 15 days and the amount thereof is determined by the
+              duration of the loan.
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-sm-12 item">
+            <div class="item__title">
+              Expiration date
+            </div>
+            <div class="item__subtitle">
+              If nobody takes your debt, the loan will expire after
+              certain days of being generated.
+            </div>
             <mat-form-field>
               <input
                 matInput
                 type="number"
-                min="0"
-                max="1000000"
-                formControlName="amount"
-                (keyup)="onRequestedChange($event.value)"
-                pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
+                min="1"
+                max="30"
+                formControlName="expirationDate"
+                pattern="^(?:[1-9]|[1-2][0-9]|30)$"
                 required
-                class="block-title"
-                [ngClass]="
-                  amount?.value === '0' ?
-                  '' :
-                  'block-title--white'
-                "
               />
               <mat-hint>
-                <span
-                  *ngIf="
-                    amount.valid ||
-                    (amount.pristine && amount.untouched)
-                  "
-                >
-                  Requested amount
-                </span>
-                <span
-                  class="red"
-                  *ngIf="
-                    amount.errors &&
-                    (amount.dirty || amount.touched)
-                  "
-                >
-                  The minimum is 1
-                </span>
+                days
               </mat-hint>
             </mat-form-field>
           </div>
         </div>
-      </div>
-      <div
-        *ngIf="
-          form?.value.currency !== undefined &&
-          form?.value.currency !== 'RCN'
-        "
-      >
-        <i class="fas fa-exclamation-triangle"></i>
-        You’re borrowing in {{ form?.value.currency }},
-        therefore the value of the pays is going to be converted to
-        RCN.
-      </div>
-    </div>
-  </div>
 
-  <div class="row mt-5">
-    <div class="col col-sm-12">
-      <div class="title property">
-        Duration of the loan
-      </div>
-      <span class="subtitle-style">
-        Set the number of days you want your loan to last.
-      </span>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col col-sm-12 col-md-3">
-      <mat-form-field>
-        <mat-select
-          placeholder="Select a number"
-          formControlName="duration"
-          (selectionChange)="onDurationChange()"
-          required
-        >
-          <mat-option
-            *ngFor="let duration of durationDays"
-            [value]="duration"
-          >
-            {{ duration }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="row mt-5">
-    <div class="col col-lg-12">
-      <div class="title property">
-        ANNUAL INTEREST RATE
-      </div>
-      <div class="subtitle-style">
-        Select the interest you want to pay
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <mat-slider
-            class="percentage"
-            step="1"
-            tickInterval="1"
-            color="primary"
-            thumbLabel="true"
-            formControlName="annualInterest"
-            [disabled]="
-              !form?.value.currency
-            "
-            [min]="selectedCurrency?.bestInterestRate.min"
-            [max]="selectedCurrency?.bestInterestRate.max"
-            (change)="onInterestRateChange()"
-          ></mat-slider>
-          <div class="slider-percentage-box">
-            <div
-              class="slider-percentaje subtitle-style subtitle-style--number"
+        <div class="row mt-5">
+          <div class="col-sm-12">
+            <button
+              mat-raised-button
+              type="submit"
+              class="button-reset create-button button-secondary-style"
             >
-              {{ selectedCurrency?.bestInterestRate.min }}
-            </div>
-            <div
-              class="slider-percentaje subtitle-style subtitle-style--number"
-            >
-              {{ selectedCurrency?.bestInterestRate.max }}
-            </div>
+              {{ createButtonText }}
+              <i class="fas fa-arrow-circle-right"></i>
+            </button>
           </div>
         </div>
-      </div>
-      <div class="message-style message-style--italic">
-        <i class="fas fa-info-circle"></i> Higher interestes are
-        more likely to be lended.
-      </div>
-    </div>
-  </div>
 
-  <div class="row mt-5">
-    <div class="col col-lg-12">
-      <div class="title property">
-        INSTALLMENTS
-        <mat-slide-toggle
-          formControlName="hasInstallments"
-          [disabled]="!installmentsAvailable || installmentsAvailable < 2"
-          (change)="onInstallmentsChange()"
-        >
-        </mat-slide-toggle>
       </div>
-    </div>
-    <div class="col-sm-12 col-lg-6">
-      <span class="subtitle-style">
-        Do you want to pay back with installments?
-      </span>
-    </div>
-    <div class="col-sm-12">
-      <i class="fas fa-exclamation-triangle"></i> Payments are made
-      every 15 days and the amount thereof is determined by the
-      duration of the loan.
-    </div>
-  </div>
-
-  <div class="row mt-5">
-    <div class="col-sm-12">
-      <div class="title property">
-        Expiration date
-      </div>
-      <div class="subtitle-style">
-        If nobody takes your debt, the loan will expire after
-        certain days of being generated.
-      </div>
-    </div>
-    <div class="col-sm-11 col-md-1">
-      <mat-form-field>
-        <input
-          matInput
-          type="number"
-          min="1"
-          max="30"
-          formControlName="expirationDate"
-          pattern="^(?:[1-9]|[1-2][0-9]|30)$"
-          required
-        />
-        <mat-hint>
-          days
-        </mat-hint>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="row mt-5">
-    <div class="col-sm-12">
-      <button
-        mat-raised-button
-        type="submit"
-        class="button-reset create-button button-secondary-style"
-      >
-        {{ createButtonText }}
-        <i class="fas fa-arrow-circle-right"></i>
-      </button>
     </div>
   </div>
 </form>
