@@ -21,7 +21,9 @@ export class CurrenciesService {
   bestInterestRates = {
     'RCN': { min: 0, max: 20, best: 10 },
     'DAI': { min: 10, max: 20, best: 15 },
-    'ETH': { min: 0, max: 5, best: 1 }
+    'ETH': { min: 0, max: 5, best: 1 },
+    'TEST': { min: 0, max: 20, best: 10 },
+    'DEST': { min: 10, max: 20, best: 15 }
   };
 
   constructor() {
