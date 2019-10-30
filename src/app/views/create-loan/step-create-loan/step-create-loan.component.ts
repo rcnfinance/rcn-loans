@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   MatDialog,
@@ -10,13 +12,10 @@ import { environment } from './../../../../environments/environment';
 import { DialogGenericErrorComponent } from '../../../dialogs/dialog-generic-error/dialog-generic-error.component';
 // App Services
 import { ContractsService } from './../../../services/contracts.service';
+import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
 import { Web3Service } from './../../../services/web3.service';
-
-interface CurrencyItem {
-  symbol: string;
-  address: string;
-  img: string;
-}
+import { TxService, Tx, Type } from './../../../services/tx.service';
+import { Loan, Network, Status } from './../../../models/loan.model';
 
 @Component({
   selector: 'app-step-create-loan',
@@ -31,6 +30,11 @@ export class StepCreateLoanComponent implements OnInit {
   requestMax = 1000000;
   durationDays: number[] = [15, 30, 45, 60, 75, 90];
   installmentDaysInterval = 15;
+  account: string;
+  shortAccount: string;
+  startProgress: boolean;
+  finishProgress: boolean;
+  cancelProgress: boolean;
 
   // Loan form
   form: FormGroup;
@@ -42,6 +46,8 @@ export class StepCreateLoanComponent implements OnInit {
   expirationDate: FormControl;
 
   // Loan state
+  isCompleting: boolean;
+  createPendingTx: Tx = undefined;
   selectedCurrency: CurrencyItem;
   selectedOracle: any;
   paysDetail = [];
@@ -50,28 +56,34 @@ export class StepCreateLoanComponent implements OnInit {
   installmentsData: any;
   returnValue: any = 0;
   durationLabel: any;
-  // loan: Loan;
-  account: string;
-  shortAccount: string;
+  loan: Loan;
+
+  // subscriptions
+  txSubscription: boolean;
 
   constructor(
+    private location: Location,
+    private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private contractsService: ContractsService,
-    private web3Service: Web3Service
+    private currenciesService: CurrenciesService,
+    private web3Service: Web3Service,
+    private txService: TxService
   ) { }
 
   ngOnInit() {
     this.getCurrencies();
     this.createFormControls();
     this.createForm();
+    this.generateEmptyLoan();
   }
 
   /**
    * Get available currencies for loan and collateral select
    */
   getCurrencies() {
-    this.currencies = environment.usableCurrencies;
+    this.currencies = this.currenciesService.getCurrencies();
   }
 
   /**
@@ -114,15 +126,15 @@ export class StepCreateLoanComponent implements OnInit {
 
   /**
    * Limit min/max values for amount when request amount is updated
-   * @param amount.value Requested currency as string
+   * @param amount Requested currency as string
    */
   onRequestedChange(amount) {
     const requestMinLimit = this.requestMin;
     const requestMaxLimit = this.requestMax;
 
-    if (amount.value < requestMinLimit) {
+    if (amount < requestMinLimit) {
       this.amount.patchValue(requestMinLimit);
-    } else if (amount.value > requestMaxLimit) {
+    } else if (amount > requestMaxLimit) {
       this.amount.patchValue(requestMaxLimit);
     }
 
@@ -200,7 +212,7 @@ export class StepCreateLoanComponent implements OnInit {
    */
   async updateSelectedCurrency(symbol: string) {
     const oracle: string = await this.contractsService.symbolToOracle(symbol);
-    const currency: CurrencyItem = this.getCurrencyByCode(symbol);
+    const currency: CurrencyItem = this.currenciesService.getCurrencyByKey('symbol', symbol);
 
     this.selectedCurrency = currency;
     this.selectedOracle = oracle;
@@ -210,13 +222,11 @@ export class StepCreateLoanComponent implements OnInit {
    * Update annual interest rate
    */
   updateInterestRate() {
-    // const bestInterestRate = this.selectedCurrency.bestInterestRate;
-    //
-    // this.form.patchValue({
-    //   interest: {
-    //     annualInterest: bestInterestRate.best
-    //   }
-    // });
+    const bestInterestRate = this.selectedCurrency.bestInterestRate;
+
+    this.form.patchValue({
+      annualInterest: bestInterestRate.best
+    });
   }
 
   /**
@@ -226,27 +236,28 @@ export class StepCreateLoanComponent implements OnInit {
   async onSubmitStep1(form: NgForm) {
     if (form.valid) {
       this.showMessage('Please confirm the metamask transaction. Your Loan is being processed.', 'snackbar');
-      // const pendingTx: Tx = this.createPendingTx;
+      const pendingTx: Tx = this.createPendingTx;
       const encodedData = await this.getInstallmentsData(form);
       this.installmentsData = encodedData;
 
-    //   if (pendingTx) {
-    //     if (pendingTx.confirmed) {
-    //       this.router.navigate(['/', 'loan', this.loan.id]);
-    //     }
-    //   } else {
-      await this.requestLoan(this.form);
-      // const loanId: string = this.loan.id;
-      // this.location.replaceState(`/create/${ loanId }`);
-      // this.txService.registerCreateTx(tx, {
-      //   engine: environment.contracts.diaspore.loanManager,
-      //   id: loanId,
-      //   amount: 1
-      // });
-      // this.retrievePendingTx();
-      // this.isExpanded();
-      // this.isCompleting = true;
-    //   }
+      if (pendingTx) {
+        if (pendingTx.confirmed) {
+          this.router.navigate(['/', 'loan', this.loan.id]);
+        }
+      } else {
+        const tx: string = await this.requestLoan(this.form);
+        const id: string = this.loan.id;
+        const amount = 1;
+        this.location.replaceState(`/create/${ id }`);
+        this.txService.registerCreateTx(tx, {
+          engine: environment.contracts.diaspore.loanManager,
+          id,
+          amount
+        });
+        this.retrievePendingTx();
+        // this.isExpanded();
+        this.isCompleting = true;
+      }
     }
   }
 
@@ -279,8 +290,7 @@ export class StepCreateLoanComponent implements OnInit {
         expiration,
         encodedData
       );
-      // this.loan.id = loanId;
-      console.info('loan ID', loanId);
+      this.loan.id = loanId;
 
       return await this.contractsService.requestLoan(
         amount,
@@ -309,6 +319,21 @@ export class StepCreateLoanComponent implements OnInit {
     const account = await this.web3Service.getAccount();
     this.account = web3.toChecksumAddress(account);
     this.shortAccount = Utils.shortAddress(this.account);
+  }
+
+  /**
+   * Get submit button text according to the loan creation status
+   * @return Button text
+   */
+  get createButtonText(): string {
+    const tx: Tx = this.createPendingTx;
+    if (tx === undefined) {
+      return 'Create Loan';
+    }
+    if (tx.confirmed) {
+      return 'Created';
+    }
+    return 'Creating...';
   }
 
   /**
@@ -399,6 +424,28 @@ export class StepCreateLoanComponent implements OnInit {
   }
 
   /**
+   * Generate empty loan for complete all forms and navigate to /create
+   */
+  private generateEmptyLoan() {
+    this.loan = new Loan(
+      Network.Diaspore,
+      '',
+      this.account,
+      1,
+      this.selectedOracle,
+      null,
+      this.account,
+      this.account,
+      Status.Request,
+      null,
+      null,
+      Utils.address0x
+    );
+
+    this.location.replaceState(`/create`);
+  }
+
+  /**
    * Returns number of days as seconds or date
    * @param days Number of days to add
    * @param returnFormat Expected format
@@ -419,6 +466,53 @@ export class StepCreateLoanComponent implements OnInit {
 
       default:
         return;
+    }
+  }
+
+  /**
+   * Retrieve pending Tx
+   */
+  private retrievePendingTx() {
+    this.createPendingTx = this.txService.getLastPendingCreate(this.loan);
+
+    if (this.createPendingTx !== undefined) {
+      const loanId: string = this.loan.id;
+      this.location.replaceState(`/create/${ loanId }`);
+      this.startProgress = true;
+      this.trackProgressbar();
+    }
+  }
+
+  /**
+   * Track progressbar value
+   */
+  private trackProgressbar() {
+    if (!this.txSubscription) {
+      this.txSubscription = true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) => {
+        if (tx.type === Type.create && tx.tx === this.createPendingTx.tx) {
+          this.finishLoanCreation();
+        }
+      });
+    }
+  }
+
+  /**
+   * Finish loan creation and check status
+   */
+  private async finishLoanCreation() {
+    const loanWasCreated = await this.contractsService.loanWasCreated(this.loan.id);
+
+    if (loanWasCreated) {
+      this.finishProgress = true;
+    } else {
+      this.cancelProgress = true;
+      setTimeout(() => {
+        this.showMessage('The loan could not be created', 'dialog');
+        this.startProgress = false;
+        this.createPendingTx = undefined;
+        // this.init = true;
+      }, 1000);
     }
   }
 
@@ -452,21 +546,5 @@ export class StepCreateLoanComponent implements OnInit {
         console.error(message);
         break;
     }
-  }
-
-  /**
-   * Get currency data by code
-   * @param symbol Currency symbol
-   * @return Currency data
-   */
-  private getCurrencyByCode(symbol): {
-    symbol: string,
-    img: string,
-    address: string
-  } {
-    const currency: Array<any> = this.currencies.filter(
-      item => item.symbol === symbol
-    );
-    return currency[0] || null;
   }
 }

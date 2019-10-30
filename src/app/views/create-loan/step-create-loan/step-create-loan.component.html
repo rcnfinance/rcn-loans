@@ -54,7 +54,7 @@
                 min="0"
                 max="1000000"
                 formControlName="amount"
-                (keyup)="onRequestedChange($event)"
+                (keyup)="onRequestedChange($event.value)"
                 pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
                 required
                 class="block-title"
@@ -104,7 +104,7 @@
   <div class="row mt-5">
     <div class="col col-sm-12">
       <div class="title property">
-        Duration of the loan (label: {{ durationLabel }})
+        Duration of the loan
       </div>
       <span class="subtitle-style">
         Set the number of days you want your loan to last.
@@ -142,8 +142,6 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <!-- [min]="selectedCurrency?.bestInterestRate.min" -->
-          <!-- [max]="selectedCurrency?.bestInterestRate.max" -->
           <mat-slider
             class="percentage"
             step="1"
@@ -154,9 +152,11 @@
             [disabled]="
               !form?.value.currency
             "
+            [min]="selectedCurrency?.bestInterestRate.min"
+            [max]="selectedCurrency?.bestInterestRate.max"
             (change)="onInterestRateChange()"
           ></mat-slider>
-          <!-- <div class="slider-percentage-box">
+          <div class="slider-percentage-box">
             <div
               class="slider-percentaje subtitle-style subtitle-style--number"
             >
@@ -167,7 +167,7 @@
             >
               {{ selectedCurrency?.bestInterestRate.max }}
             </div>
-          </div> -->
+          </div>
         </div>
       </div>
       <div class="message-style message-style--italic">
@@ -236,7 +236,7 @@
         type="submit"
         class="button-reset create-button button-secondary-style"
       >
-        Create
+        {{ createButtonText }}
         <i class="fas fa-arrow-circle-right"></i>
       </button>
     </div>
