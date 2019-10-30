@@ -1,3 +1,59 @@
+@import './../../../../scss/fonts';
+
 .content-wrapper {
   box-sizing: border-box;
+}
+
+.item {
+  &__title {
+    margin-bottom: 10px;
+    @include typography-body(1);
+    text-transform: uppercase;
+    color: #EDEDED;
+  }
+  &__subtitle {
+    @include typography-headline(7);
+    color: var(--app-color-gray-50);
+  }
+  &__message {
+    height: 0;
+    svg {
+      margin-right: 6px;
+    }
+    &--info {
+      font-style: italic;
+    }
+    &--warning {
+
+    }
+  }
+  &--slider {
+    .item__percentage {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin: -15px 0 0;
+
+      &-amount {
+        width: fit-content;
+        margin: 0;
+      }
+    }
+    mat-slider {
+      width: 100%;
+    }
+  }
+}
+
+.button {
+  &--submit {
+    background: none;
+    color: var(--app-color-primary);
+    margin-left: -12px;
+    font-size: 1.2em;
+
+    svg {
+      margin-left: 10px;
+    }
+  }
 }
