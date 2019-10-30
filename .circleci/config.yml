@@ -194,6 +194,7 @@ jobs:
             # Save artifacts
             - store_artifacts:
                 path: coverage
+
 workflows:
     version: 2
     # The build workflow
@@ -212,4 +213,3 @@ workflows:
             - unit-tests:
                 requires:
                     - install
-
