@@ -788,6 +788,25 @@ export class ContractsService {
   }
 
   /**
+   * Check if the loan was created
+   * @param loanId Loan ID
+   * @return Boolean if the loan exist
+   */
+  async loanWasCreated(loanId: string): Promise<boolean> {
+    try {
+      const loan = await this._loanManager.getLoanData(loanId);
+
+      if (Utils.isEmpty(loan)) {
+        throw Error('Loan does not exist');
+      }
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
    * Check if token is valid
    * @param tokenAddress Token address
    * @return Boolean
