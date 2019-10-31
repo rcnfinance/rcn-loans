@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../../shared/shared.module';
-import { MaterialModule } from '../../material/material.module';
 import { BalanceComponent } from './balance.component';
 import { readComponent } from '../../utils/utils.test';
 
@@ -12,9 +11,8 @@ describe('BalanceComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule,
-        MaterialModule,
-        HttpClientModule
+        HttpClientModule,
+        SharedModule
       ],
       declarations: [ BalanceComponent ]
     })

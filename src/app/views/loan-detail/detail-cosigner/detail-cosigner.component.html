@@ -4,9 +4,9 @@
   *ngIf="detailClass === 'decentraland_mortgage'"
 ></app-decentraland-cosigner>
 
-<div class="empty-container p3 py-md-0" *ngIf="detailClass === 'unknown'">
+<div class="empty-container p-3 px-md-4 py-md-0" *ngIf="detailClass === 'unknown'">
   <div class="empty-row">
-    <i class="material-icons gray7 font110">error_outline</i>
+    <i class="material-icons font110">error_outline</i>
     <div class="title main-h3">The cosigner of this loan is unknown</div>
     <div class="title main-h4">
       The address <a target="_blank" href="{{ cosignerLinkExplorer }}">
@@ -18,7 +18,7 @@
 
 <div class="empty-container p-3 py-md-0" *ngIf="detailClass === 'not_available'">
   <div class="empty-row">
-    <i class="material-icons gray7 font110">
+    <i class="material-icons font110">
       error_outline
     </i>
     <div class="title main-h3">

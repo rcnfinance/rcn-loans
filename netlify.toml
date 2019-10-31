@@ -1,0 +1,3 @@
+[build]
+  publish = "dist"
+  environment = { NODE_VERSION = "12", VERSION = "2" }

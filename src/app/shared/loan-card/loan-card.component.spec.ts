@@ -5,7 +5,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../../shared/shared.module';
-import { MaterialModule } from '../../material/material.module';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Loan } from '../../models/loan.model';
@@ -21,8 +20,7 @@ describe('LoanCardComponent', () => {
       imports: [
         RouterTestingModule,
         HttpClientModule,
-        SharedModule,
-        MaterialModule
+        SharedModule
       ],
       schemas: [ NO_ERRORS_SCHEMA ],
       providers: [
@@ -77,15 +75,26 @@ describe('LoanCardComponent', () => {
     const detailButton = readComponent(fixture, 'app-detail-button');
     expect(detailButton).toBeDefined();
 
-    const currencyLabel = readComponent(fixture, '.currency');
+    const currencyLabel = readComponent(
+      fixture,
+      '.loan-card__property--properties .loan-card__property-currency'
+    );
     expect(currencyLabel.innerText).toBe('RCN');
 
     expect(
-      readComponent(fixture, '.block-title', 0).innerText
+      readComponent(
+        fixture,
+        '.loan-card__property--conversion .loan-card__property-title',
+        0
+      ).innerText
     ).toBe('84859.2');
 
     expect(
-      readComponent(fixture, '.block-title', 1).innerText
+      readComponent(
+        fixture,
+        '.loan-card__property--conversion .loan-card__property-title',
+        1
+      ).innerText
     ).toBe('102240');
   });
 
@@ -150,15 +159,26 @@ describe('LoanCardComponent', () => {
     const detailButton = readComponent(fixture, 'app-detail-button');
     expect(detailButton).toBeDefined();
 
-    const currencyLabel = readComponent(fixture, '.currency');
+    const currencyLabel = readComponent(
+      fixture,
+      '.loan-card__property--properties .loan-card__property-currency'
+    );
     expect(currencyLabel.innerText).toBe('RCN');
 
     expect(
-      readComponent(fixture, '.block-title', 0).innerText
+      readComponent(
+        fixture,
+        '.loan-card__property--conversion .loan-card__property-title',
+        0
+      ).innerText
     ).toBe('10');
 
     expect(
-      readComponent(fixture, '.block-title', 1).innerText
+      readComponent(
+        fixture,
+        '.loan-card__property--conversion .loan-card__property-title',
+        1
+      ).innerText
     ).toBe('2');
   });
 });

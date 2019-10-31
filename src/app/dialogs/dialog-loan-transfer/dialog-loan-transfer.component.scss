@@ -1,76 +1,87 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/variables';
 
-.mat-dialog-content {
-  height: auto;
+.dialog-content {
+  .title {
+    font-size: 14px;
+  }
 }
-.mat-dialog-container {
-  height: 210px;
-}
-.dialog-padding{
-  padding: 30px;
-}
-.navbar-container {
-  height: 70px;
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #333333;
-  .creator-container {
-    .creator-title{
-      width: 100%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      color: $fifth;
-      font-size: 22px;
-      text-align: center;
-      padding: 0 15px;
-      @extend %font-black;
-      @include transform(translate(-50%, -50%));
+
+.dialog-divisor {
+  background: var(--app-color-gray-600);
+  border-bottom: 1px solid var(--app-color-gray-100);
+
+  &__content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    @extend %roboto-regular;
+    color: $gray2;
+    i {
+      font-size: 1.5em;
     }
   }
 }
-.currency-logo{
-  width: 35px;
-  display: inline-block;
-  margin-right: 5px;
-  margin-left: 10px;
-  margin-top: -5px;
-}
-.rcn-balance{
-  font-size: 22px;
-  @extend %font-bold;
-}
-.half-logo{
-  position: relative; left: 50%; @include transform(translate(-50%, 0%));
-  max-width: 200px;
-}
 
-.-center-top{
-  position: sticky; top: 50%; @include transform(translate(0%, -50%));
-}
+.dialog-footer {
+  align-items: center;
+  @extend %roboto-regular;
 
-.transfer-width{
-  min-width: 0px;
-}
+  &__label {
+    text-align: center;
+    color: $gray2;
+  }
+  &__buttons {
+    text-align: right;
+    margin-top: 25px;
 
-@media (min-width: 768px){
-  .navbar-container {
-    height: 100px;
-    .creator-container {
-      .creator-title{
-        font-size: 36px;
+    app-transfer-button {
+      ::ng-deep a {
+        width: 100%;
       }
     }
   }
-  .transfer-width{min-width: 600px;}
 }
 
-@media (min-width: 992px){
-  .transfer-width{min-width: 750px;}
+@media (min-width: 768px){
+  .dialog-padding {
+    padding: 30px 42px;
+  }
+  .dialog-content {
+    .title {
+      font-size: 18px;
+    }
+  }
+  .dialog-footer {
+    &__label {
+      text-align: left;
+    }
+    &__buttons {
+      margin-top: 0;
+      app-transfer-button {
+        ::ng-deep a {
+          width: auto;
+        }
+      }
+    }
+  }
 }
 
-@media (min-width: 1200px){
-  .transfer-width{min-width: 900px;}
+@media (min-width: 992px) {
+  .item {
+    &--installment,
+    &--amount,
+    &--due-date {
+      .item__value {
+        margin: 8px 0 26px;
+      }
+    }
+    &--left-to-pay {
+      .item__value {
+        margin: 20px 0 10px;
+      }
+    }
+  }
 }

@@ -1,29 +1,64 @@
-<div class="card-container">
+<div class="loan-card mat-elevation-z5">
   <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
-  <app-risk-indicator class="risk-indicator" [loan]=loan></app-risk-indicator>
+  <app-risk-indicator
+    class="loan-card__risk-indicator"
+    [loan]="loan"
+  ></app-risk-indicator>
   <app-creator-container [loan]=loan></app-creator-container>
-  <div class="card-row">
-    <div class="card-property">
-      <div class="title"><h4 class="hStyle">{{ 'Installments' }}</h4></div>
-      <div class="paragraph">{{ getInstallments() }}</div>
+  <div class="loan-card__content">
+    <div class="loan-card__property">
+      <div class="loan-card__property-title">
+        Installments
+      </div>
+      <div class="loan-card__property-paragraph">
+        {{ installments }}
+      </div>
     </div>
-    <div class="card-property">
-      <div class="title"><h4 class="hStyle">{{ durationLabel }}</h4></div>
-      <div class="paragraph">{{ durationValue }}</div>
+    <div class="loan-card__property">
+      <div class="loan-card__property-title">
+        {{ durationLabel }}
+      </div>
+      <div class="loan-card__property-paragraph">
+        {{ durationValue }}
+      </div>
     </div>
-    <div class="card-property">
-      <div class="title"><h4 class="hStyle">{{ 'Annual Interest / Punitory' }}</h4></div>
-      <div class="paragraph"> ~ {{ getInterestRate() }} % /  ~ {{ getPunitiveInterestRate() }} %</div>
+    <div class="loan-card__property">
+      <div class="loan-card__property-title">
+        Annual Interest / Punitory
+      </div>
+      <div class="loan-card__property-paragraph">
+        ~ {{ interestRate }} % /  ~ {{ punitiveInterestRateRate }} %
+      </div>
     </div>
-    <div class="properties-block">
-      <div class="title"><h4 class="hStyle">{{ leftLabel }}</h4></div>
-      <div class="currency">{{ loan.currency }}</div>
-      <div class="title"><h4 class="hStyle">{{ rightLabel }}</h4></div>
+    <div class="loan-card__property loan-card__property--properties">
+      <div class="loan-card__property-title">
+        {{ leftLabel }}
+      </div>
+      <div class="loan-card__property-currency">
+        {{ loan.currency }}
+      </div>
+      <div class="loan-card__property-title">
+        {{ rightLabel }}
+      </div>
     </div>
-    <div class="conversion-block">
-      <div class="block-title">{{ leftValue }}</div>
-      <div class="currency"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
-      <div class="block-title">{{ rightValue }}</div>
+    <div class="loan-card__property loan-card__property--conversion">
+      <div
+        class="loan-card__property-title"
+        [matTooltip]="leftValue?.length > 6 ? leftValue : ''"
+        matTooltipPosition="below"
+      >
+        {{ leftValue }}
+      </div>
+      <div class="loan-card__property-currency">
+        <i class="material-icons" style="font-size: 2em">arrow_forward</i>
+      </div>
+      <div
+        class="loan-card__property-title"
+        [matTooltip]="rightValue?.length > 6 ? rightValue : ''"
+        matTooltipPosition="below"
+      >
+        {{ rightValue }}
+      </div>
     </div>
     <app-lend-button
       [loan]="loan"

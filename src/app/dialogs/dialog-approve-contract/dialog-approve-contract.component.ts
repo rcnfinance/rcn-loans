@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { EventsService, Category } from '../../services/events.service';
-import { TxService, Tx, Type } from '../../tx.service';
+import { TxService, Tx, Type } from '../../services/tx.service';
 import { environment } from '../../../environments/environment';
 
 class Contract {

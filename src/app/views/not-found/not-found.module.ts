@@ -1,16 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Routes, RouterModule } from '@angular/router';
 // App Module
 import { SharedModule } from './../../shared/shared.module';
-import { NotFoundRoutingModule } from './not-found-routing.module';
 // App Component
 import { NotFoundComponent } from './not-found.component';
+
+const routes: Routes = [
+  { path: '', component: NotFoundComponent }
+];
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
-    NotFoundRoutingModule
+    RouterModule.forChild(routes)
   ],
   declarations: [NotFoundComponent]
 })
