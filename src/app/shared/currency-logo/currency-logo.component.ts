@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 // App services
 import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
+import { environment } from './../../../environments/environment';
 
 @Component({
   selector: 'app-currency-logo',
@@ -40,16 +41,28 @@ export class CurrencyLogoComponent implements OnInit {
   renderIcon(address?: string) {
     let url: string;
 
-    if (address) {
-      url = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${ address }/logo.png`;
-    } else {
-      url = this.defaultIcon();
+    switch (address) {
+      case environment.contracts.converter.ethAddress:
+        url = '/assets/eth.svg';
+        break;
+
+      case null:
+        url = this.defaultIcon();
+        break;
+
+      default:
+        url = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${ address }/logo.png`;
+        break;
     }
 
     this.url = url;
     return url;
   }
 
+  /**
+   * Return default icon URL
+   * @return Icon URL
+   */
   defaultIcon() {
     return `/assets/unavailable.png`;
   }
