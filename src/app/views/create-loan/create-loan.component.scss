@@ -15,9 +15,13 @@
 
   &__header {
     max-height: 46px;
-    background: var(--app-color-gray-600);
     color: var(--app-color-secondary);
     border-radius: 0;
+    &.mat-expanded,
+    &.mat-expanded:hover,
+    &.mat-expanded:focus {
+      background: var(--app-color-gray-600);
+    }
     &-wrapper {
       width: 100%;
       display: flex;

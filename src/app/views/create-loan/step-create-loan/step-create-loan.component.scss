@@ -3,10 +3,47 @@
 .content-wrapper {
   box-sizing: border-box;
 }
-
 .mat-option {
   height: auto !important;
 }
+
+@mixin mat-slider-primary() {
+  ::ng-deep {
+    .mat-slider-thumb-label {
+      width: 58px;
+      height: 24px;
+      margin-top: 2px;
+      margin-right: -15px;
+      transform: rotate(0) !important;
+      border-radius: 4px !important;
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        right: 0;
+        width: 0;
+        height: 0;
+        margin: auto;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 8px solid var(--app-color-primary-light);
+      }
+    }
+    .mat-slider-thumb {
+      transform: scale(0) !important;
+      &-label {
+        background: var(--app-color-primary-light) !important;
+        &-text {
+          transform: rotate(0) !important;
+          opacity: 1 !important;
+          @include styled-font('Roboto', 500, 15px);
+        }
+      }
+    }
+  }
+}
+
 
 .item {
   &__title {
@@ -51,7 +88,6 @@
       display: flex;
       justify-content: space-between;
       margin: -15px 0 0;
-
       &-amount {
         width: fit-content;
         margin: 0;
@@ -59,41 +95,7 @@
     }
     mat-slider {
       width: 100%;
-
-      ::ng-deep {
-        .mat-slider-thumb-label {
-          width: 58px;
-          height: 24px;
-          margin-top: 2px;
-          margin-right: -15px;
-          transform: rotate(0) !important;
-          border-radius: 4px !important;
-          &::before {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            right: 0;
-            width: 0;
-            height: 0;
-            margin: auto;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 8px solid var(--app-color-primary-light);
-          }
-        }
-        .mat-slider-thumb {
-          transform: scale(0) !important;
-        }
-        .mat-slider-thumb-label {
-          background: var(--app-color-primary-light) !important;
-        }
-        .mat-slider-thumb-label-text {
-          transform: rotate(0) !important;
-          opacity: 1 !important;
-          @include styled-font('Roboto', 500, 15px);
-        }
-      }
+      @include mat-slider-primary();
     }
   }
 }
@@ -104,7 +106,6 @@
     color: var(--app-color-primary);
     margin-left: -12px;
     font-size: 1.2em;
-
     svg {
       margin-left: 10px;
     }
