@@ -29,6 +29,7 @@ import { CloseButtonComponent } from './close-button/close-button.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
+import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
 // App Dialogs
 import { DialogInsufficientfundsComponent } from '../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -84,6 +85,7 @@ import { CurrenciesService } from './../services/currencies.service';
     RiskIndicatorComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
+    CurrencyLogoComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
@@ -141,6 +143,7 @@ import { CurrenciesService } from './../services/currencies.service';
     RiskIndicatorComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
+    CurrencyLogoComponent,
     DialogWrongCountryComponent,
     VisualUrlPipe
   ]
