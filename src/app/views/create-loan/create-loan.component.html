@@ -1,26 +1,32 @@
 <div class="container">
-  <div class="margintop10 d-lg-none d-xs-block"></div>
   <div class="row">
-    <div class="col-sm-12 col-lg-6 d-lg-block">
-      <div class="head-title">BORROW A LOAN</div>
-      <div class="head-subtitle marginbottom30">
+    <div class="col-sm-12">
+      <div class="title">
+        Borrow a collateralizated loan
+      </div>
+      <div class="subtitle">
         Create a loan according to your needs and send it to the network
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-md-8 px-0">
+    <div class="col-sm-12 col-md-8">
       <mat-accordion>
         <mat-expansion-panel
           [expanded]="true"
           [disabled]="true"
+          class="expansion-panel"
         >
-          <mat-expansion-panel-header>
+          <mat-expansion-panel-header class="expansion-panel__header">
             <mat-panel-title>
-              <span>
-                1
-              </span>
-              SET YOUR LOAN REQUIREMENTS
+              <div class="expansion-panel__header-wrapper">
+                <span class="expansion-panel__header-step">
+                  1
+                </span>
+                <span class="expansion-panel__header-label">
+                  SET YOUR LOAN REQUIREMENTS
+                </span>
+              </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <app-step-create-loan></app-step-create-loan>

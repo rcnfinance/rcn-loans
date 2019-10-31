@@ -1,9 +1,9 @@
 <form [formGroup]="form" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1="ngForm">
   <div class="content-wrapper">
-    <div class="row mt-4 pt-2">
+    <div class="row mt-4 pt-3">
       <div class="col-sm-11 col-md-12">
         <div class="row">
-          <div class="col-sm-12 col-md-4 item">
+          <div class="col-sm-12 col-md-4 mb-4 mb-lg-0 item">
             <div class="item__title">
               BORROW CURRENCY
             </div>
@@ -15,17 +15,14 @@
                   (selectionChange)="onCurrencyChange($event.value)"
                   required
                 >
-                  <mat-option>
-                    --
-                  </mat-option>
                   <mat-option
                     *ngFor="let currency of currencies"
                     [value]="currency.symbol"
                   >
                     <div class="d-flex align-items-center py-1">
-                      <!-- TODO: <app-currency-logo
+                      <app-currency-logo
                         [address]="currency.address"
-                      ></app-currency-logo> -->
+                      ></app-currency-logo>
                       <span class="ml-3">
                         {{ currency.symbol }}
                       </span>
@@ -35,7 +32,7 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="col-sm-12 col-md-4 item">
+          <div class="col-sm-12 col-md-4 item item--amount">
             <div class="item__title">
               BORROW AMOUNT
             </div>
@@ -47,15 +44,10 @@
                   min="0"
                   max="1000000"
                   formControlName="amount"
+                  placeholder="0"
                   (keyup)="onRequestedChange($event.value)"
                   pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
                   required
-                  class="block-title"
-                  [ngClass]="
-                    amount?.value === '0' ?
-                    '' :
-                    'block-title--white'
-                  "
                 />
                 <mat-hint>
                   <span
@@ -83,7 +75,7 @@
           </div>
         </div>
 
-        <div class="row mt-5 pt-4">
+        <div class="row mt-3 mt-lg-5 pt-4">
           <div class="col col-sm-12 item">
             <div class="item__title">
               Duration of the loan
@@ -113,7 +105,7 @@
           </div>
         </div>
 
-        <div class="row mt-5 pt-4">
+        <div class="row mt-3 mt-lg-5 pt-4">
           <div class="col col-lg-12 item item--slider">
             <div class="item__title">
               ANNUAL INTEREST RATE
@@ -121,7 +113,7 @@
             <div class="item__subtitle">
               Select the interest you want to pay
             </div>
-            <div class="row mt-4 mb-4">
+            <div class="row mt-4 mb-3">
               <div class="col col-sm-12 col-lg-7">
                 <mat-slider
                   class="percentage"
@@ -130,6 +122,7 @@
                   color="primary"
                   thumbLabel="true"
                   formControlName="annualInterest"
+                  [displayWith]="formatPercentage"
                   [disabled]="!form?.value.currency"
                   [min]="selectedCurrency?.bestInterestRate.min"
                   [max]="selectedCurrency?.bestInterestRate.max"
@@ -155,7 +148,7 @@
           </div>
         </div>
 
-        <div class="row mt-5 pt-4">
+        <div class="row mt-3 mt-lg-5 pt-4">
           <div class="col col-lg-12 item">
             <div class="item__title">
               <span>
@@ -170,7 +163,7 @@
               >
               </mat-slide-toggle>
             </div>
-            <div class="item__subtitle mb-4">
+            <div class="item__subtitle mb-3">
               Do you want to pay back with installments?
             </div>
             <div class="item__message item__message--warning" *ngIf="installments > 1">
@@ -181,7 +174,7 @@
           </div>
         </div>
 
-        <div class="row mt-5 pt-4">
+        <div class="row mt-3 mt-lg-5 pt-4">
           <div class="col-sm-12 item">
             <div class="item__title">
               Expiration date
@@ -211,7 +204,7 @@
           </div>
         </div>
 
-        <div class="row mt-5 pt-4 mb-2">
+        <div class="row mt-3 mt-lg-5 pt-4 mb-2">
           <div class="col-sm-12">
             <button
               mat-raised-button

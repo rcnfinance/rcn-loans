@@ -114,6 +114,15 @@ export class StepCreateLoanComponent implements OnInit {
   }
 
   /**
+   * Return value with percentage symbol
+   * @param value Percentage
+   * @return Percentage %
+   */
+  formatPercentage(value: number) {
+    return `${ value } %`;
+  }
+
+  /**
    * Update selected oracle when currency is updated
    * @param symbol Currency symbol
    */

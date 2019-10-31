@@ -1,6 +1,53 @@
-mat-expansion-panel {
-  mat-expansion-panel-header {
-    background: var(--app-color-gray-400);
+@import './../../../scss/fonts';
+
+.title {
+  @include typography-headline(1);
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+.subtitle {
+  @include typography-body(1);
+  margin-bottom: 35px;
+}
+
+.expansion-panel {
+  background: var(--app-color-gray-800);
+
+  &__header {
+    max-height: 46px;
+    background: var(--app-color-gray-600);
+    color: var(--app-color-secondary);
     border-radius: 0;
+    &-wrapper {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+    &-step {
+      @include styled-font('Roboto', 700, 18px);
+      &::after {
+        content: '';
+        display: inline-block;
+        width: 1px;
+        height: 18px;
+        background: var(--app-color-gray-100);
+        margin: 0px 15px -3px 10px;
+      }
+    }
+    &-label {
+      @include typography-body(2);
+    }
+  }
+
+  ::ng-deep .mat-expansion-panel-body {
+    padding: 0 16px 6px;
+  }
+}
+
+@media (min-width: 992px) {
+  .expansion-panel {
+    ::ng-deep .mat-expansion-panel-body {
+      padding: 0 26px 16px;
+    }
   }
 }
