@@ -8,7 +8,6 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { SharedModule } from '../../shared/shared.module';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
-import { ApiService } from './../../services/api.service';
 import { FilterLoansService } from '../../services/filter-loans.service';
 // App Component
 import { RequestedLoanComponent } from './requested-loan.component';
@@ -32,7 +31,6 @@ const routes: Routes = [
   ],
   providers: [
     ContractsService,
-    ApiService,
     FilterLoansService
   ],
   exports: [
