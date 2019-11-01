@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -6,7 +6,9 @@ import {
   MatDialog,
   MatSnackBar
 } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { Utils } from '../../../utils/utils';
+import { Loan, Network, Status } from './../../../models/loan.model';
 import { environment } from './../../../../environments/environment';
 // App Components
 import { DialogGenericErrorComponent } from '../../../dialogs/dialog-generic-error/dialog-generic-error.component';
@@ -15,14 +17,13 @@ import { ContractsService } from './../../../services/contracts.service';
 import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
 import { Web3Service } from './../../../services/web3.service';
 import { TxService, Tx, Type } from './../../../services/tx.service';
-import { Loan, Network, Status } from './../../../models/loan.model';
 
 @Component({
   selector: 'app-step-create-loan',
   templateUrl: './step-create-loan.component.html',
   styleUrls: ['./step-create-loan.component.scss']
 })
-export class StepCreateLoanComponent implements OnInit {
+export class StepCreateLoanComponent implements OnInit, OnDestroy {
 
   // Static data
   currencies = [];
@@ -57,9 +58,11 @@ export class StepCreateLoanComponent implements OnInit {
   returnValue: any = 0;
   durationLabel: any;
   loan: Loan;
+  @Output() updateLoan = new EventEmitter<any>();
 
   // subscriptions
   txSubscription: boolean;
+  subscriptionAccount: Subscription;
 
   constructor(
     private location: Location,
@@ -72,11 +75,27 @@ export class StepCreateLoanComponent implements OnInit {
     private txService: TxService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.getCurrencies();
     this.createFormControls();
     this.createForm();
     this.generateEmptyLoan();
+
+    await this.loadAccount();
+    this.handleLoginEvents();
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptionAccount) {
+      this.subscriptionAccount.unsubscribe();
+    }
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  handleLoginEvents() {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(() => this.loadAccount());
   }
 
   /**
@@ -276,7 +295,7 @@ export class StepCreateLoanComponent implements OnInit {
    */
   async requestLoan(form: FormGroup) {
     const web3 = this.web3Service.web3;
-    await this.setAccount();
+    await this.loadAccount();
 
     const account: string = this.account;
     const expiration = this.returnDaysAs(form.value.expirationDate, 'date');
@@ -323,11 +342,16 @@ export class StepCreateLoanComponent implements OnInit {
   /**
    * Set user account address
    */
-  async setAccount() {
+  async loadAccount() {
     const web3 = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
     this.account = web3.toChecksumAddress(account);
     this.shortAccount = Utils.shortAddress(this.account);
+
+    // refresh parent
+    this.loan.borrower = this.account;
+    this.loan.creator = this.account;
+    this.updateLoan.emit(this.loan);
   }
 
   /**
@@ -443,14 +467,13 @@ export class StepCreateLoanComponent implements OnInit {
       1,
       this.selectedOracle,
       null,
-      this.account,
-      this.account,
+      null,
+      null,
       Status.Request,
       null,
       null,
       Utils.address0x
     );
-
     this.location.replaceState(`/create`);
   }
 

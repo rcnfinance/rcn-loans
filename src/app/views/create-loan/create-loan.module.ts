@@ -7,6 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 // App Component
 import { CreateLoanComponent } from './create-loan.component';
 import { StepCreateLoanComponent } from './step-create-loan/step-create-loan.component';
+import { CreateLoanCardComponent } from './create-loan-card/create-loan-card.component';
 
 const routes: Routes = [
   { path: '', component: CreateLoanComponent },
@@ -22,7 +23,8 @@ const routes: Routes = [
   ],
   declarations: [
     CreateLoanComponent,
-    StepCreateLoanComponent
+    StepCreateLoanComponent,
+    CreateLoanCardComponent
   ]
 })
 export class CreateLoanModule { }

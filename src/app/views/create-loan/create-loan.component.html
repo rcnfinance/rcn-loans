@@ -29,9 +29,12 @@
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <app-step-create-loan></app-step-create-loan>
+          <app-step-create-loan (updateLoan)="detectUpdateLoan($event)"></app-step-create-loan>
         </mat-expansion-panel>
       </mat-accordion>
+    </div>
+    <div class="col-sm-12 col-md-4 pl-lg-5">
+      <app-create-loan-card *ngIf="loan" [loan]="loan"></app-create-loan-card>
     </div>
   </div>
 </div>
