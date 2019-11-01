@@ -44,14 +44,10 @@ import { DecentralandCosignerProvider } from './../providers/cosigners/decentral
 import { ContractsService } from './../services/contracts.service';
 import { BrandingService } from './../services/branding.service';
 import { CosignerService } from './../services/cosigner.service';
-import { Web3Service } from './../services/web3.service';
 import { IdentityService } from './../services/identity.service';
 import { RiskService } from './../services/risk.service';
-import { TitleService } from './../services/title.service';
-import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
-import { CurrenciesService } from './../services/currencies.service';
 
 @NgModule({
   imports: [
@@ -109,14 +105,10 @@ import { CurrenciesService } from './../services/currencies.service';
     ContractsService,
     BrandingService,
     CosignerService,
-    Web3Service,
     IdentityService,
     RiskService,
-    TitleService,
-    AvailableLoansService,
     CountriesService,
-    EventsService,
-    CurrenciesService
+    EventsService
   ],
   exports: [
     FormsModule,

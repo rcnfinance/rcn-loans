@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AvailableLoansService {
   private availableLoans$ = new BehaviorSubject(0);
   currentAvailable = this.availableLoans$.asObservable();
