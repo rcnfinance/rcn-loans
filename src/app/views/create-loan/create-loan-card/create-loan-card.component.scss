@@ -70,6 +70,7 @@
     }
     &--installments {
       .mat-expansion-panel {
+        background: none;
         ::ng-deep {
           .mat-expansion-panel-body {
             padding: 10px 0 0 !important;
@@ -129,5 +130,61 @@
   button {
     width: 100%;
     height: 45px;
+  }
+}
+
+@media (max-width: 992px) {
+  $cardHeaderHeight: 40px;
+  $cardHeight: 80vh;
+
+  .loan-card {
+    position: fixed;
+    z-index: 2;
+    bottom: - $cardHeight;
+    left: 0;
+    width: 100%;
+    height: $cardHeight;
+    overflow-y: scroll;
+    padding-top: $cardHeaderHeight;
+    padding-top: 0;
+    padding-bottom: 60px;
+    background: var(--app-color-gray-800);
+    transition: .3s;
+    &__header {
+      position: fixed;
+      background: var(--app-color-gray-600);
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: $cardHeaderHeight;
+      display: flex;
+      align-items: center;
+      border-radius: 16px 16px 0 0;
+      transition: .3s;
+    }
+    &__creator {
+      display: none;
+    }
+
+    &--expanded {
+      bottom: 0;
+      .loan-card__header {
+        bottom: $cardHeight;
+      }
+    }
+  }
+
+  .confirm-button {
+    position: fixed;
+    z-index: 4;
+    bottom: - $cardHeight;
+    left: 0;
+    width: 100%;
+    padding: 0 20px 20px;
+    transition: .3s;
+
+    &--expanded {
+      bottom: 0;
+    }
   }
 }

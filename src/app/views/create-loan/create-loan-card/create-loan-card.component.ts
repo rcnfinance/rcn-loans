@@ -9,6 +9,7 @@ import { Loan } from './../../../models/loan.model';
 export class CreateLoanCardComponent implements OnInit {
 
   @Input() loan: Loan;
+  expanded: boolean;
 
   constructor() { }
 

@@ -1,4 +1,16 @@
-<div class="loan-card mat-elevation-z5">
+<div
+  class="loan-card mat-elevation-z5"
+  [class.loan-card--expanded]="expanded"
+  (click)="expanded = !expanded"
+>
+
+  <div class="loan-card__header d-lg-none px-4">
+    <i class="fas fa-check-circle"></i>
+    <span class="ml-2">
+      Loan info
+    </span>
+  </div>
+
   <div class="loan-card__creator" *ngIf="loan?.creator">
     <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
     <app-creator-container [loan]=loan></app-creator-container>
@@ -145,7 +157,10 @@
   </div>
 </div>
 
-<div class="confirm-button">
+<div
+  class="confirm-button"
+  [class.confirm-button--expanded]="expanded"
+>
   <button
     mat-raised-button
     class="button button-primary"
