@@ -13,10 +13,6 @@ import { NotificationItemComponent } from './header/notifications/notification-i
 import { SocialContainerComponent } from './social-container/social-container.component';
 // App Directives
 import { ClickOutsideDirective } from '../directives/click-outside.directive';
-// App Services
-import { Web3Service } from '../services/web3.service';
-import { TitleService } from '../services/title.service';
-import { NotificationsService } from '../services/notifications.service';
 
 @NgModule({
   imports: [
@@ -33,11 +29,6 @@ import { NotificationsService } from '../services/notifications.service';
     NotificationsComponent,
     NotificationItemComponent,
     SocialContainerComponent
-  ],
-  providers: [
-    Web3Service,
-    TitleService,
-    NotificationsService
   ],
   exports: [
     ContentWrapperComponent,
