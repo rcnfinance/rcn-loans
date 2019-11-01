@@ -1,0 +1,155 @@
+<div class="loan-card mat-elevation-z5">
+  <div class="loan-card__creator" *ngIf="loan?.creator">
+    <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
+    <app-creator-container [loan]=loan></app-creator-container>
+  </div>
+  <div class="loan-card__content">
+    <div class="loan-card__property">
+      <div class="loan-card__property-icon">
+        <i class="far fa-calendar-alt"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Duration
+        </p>
+        <p class="loan-card__property-description">
+          15 days
+        </p>
+      </div>
+    </div>
+    <div class="loan-card__property">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-calculator"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Annual Interest
+        </p>
+        <p class="loan-card__property-description">
+          15 %
+        </p>
+      </div>
+    </div>
+    <div class="loan-card__property loan-card__property--installments">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-chart-pie"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Installments
+        </p>
+        <mat-expansion-panel class="mat-elevation-z">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              3 pays
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="installment">
+            <div class="installment__col installment__col--number">
+              1st
+            </div>
+            <div class="installment__col installment__col--date">
+              At 15 days
+            </div>
+            <div class="installment__col installment__col--amount">
+              866.67 DAI
+            </div>
+          </div>
+          <div class="installment">
+            <div class="installment__col installment__col--number">
+              2nd
+            </div>
+            <div class="installment__col installment__col--date">
+              At 30 days
+            </div>
+            <div class="installment__col installment__col--amount">
+              866.67 DAI
+            </div>
+          </div>
+          <div class="installment">
+            <div class="installment__col installment__col--number">
+              3th
+            </div>
+            <div class="installment__col installment__col--date">
+              At 45 days
+            </div>
+            <div class="installment__col installment__col--amount">
+              866.67 DAI
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </div>
+    </div>
+    <div class="loan-card__property">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-calendar-alt"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Expiration date
+        </p>
+        <p class="loan-card__property-description">
+          30 days
+        </p>
+      </div>
+    </div>
+    <div class="loan-card__property">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-coins"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Collateral amount
+        </p>
+        <p class="loan-card__property-description">
+          1 ETH
+        </p>
+      </div>
+    </div>
+    <!-- <div class="loan-card__expand">
+      <button
+        mat-raised-button
+        class="button button-clear-dark mat-elevation-z"
+      >
+        See more
+      </button>
+    </div> -->
+  </div>
+  <div class="loan-card__footer">
+    <div class="loan-card__property loan-card__property--strong">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-reply"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Borrow
+        </p>
+        <p class="loan-card__property-description">
+          -
+        </p>
+      </div>
+    </div>
+    <div class="loan-card__property loan-card__property--strong loan-card__property--primary">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-share"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Return
+        </p>
+        <p class="loan-card__property-description">
+          -
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="confirm-button">
+  <button
+    mat-raised-button
+    class="button button-primary"
+  >
+    Confirm
+  </button>
+</div>
