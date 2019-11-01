@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CreateLoanCardComponent } from './create-loan-card.component';
 
 describe('CreateLoanCardComponent', () => {
@@ -8,7 +8,8 @@ describe('CreateLoanCardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateLoanCardComponent ]
+      declarations: [ CreateLoanCardComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
     .compileComponents();
   }));
