@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TitleService {
   private titleSource$ = new BehaviorSubject('Requests');
   currentTitle = this.titleSource$.asObservable();

@@ -29,6 +29,7 @@ import { CloseButtonComponent } from './close-button/close-button.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
+import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
 // App Dialogs
 import { DialogInsufficientfundsComponent } from '../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -41,17 +42,12 @@ import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 // App Services
 import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
-import { TxService } from './../services/tx.service';
 import { BrandingService } from './../services/branding.service';
 import { CosignerService } from './../services/cosigner.service';
-import { Web3Service } from './../services/web3.service';
 import { IdentityService } from './../services/identity.service';
 import { RiskService } from './../services/risk.service';
-import { TitleService } from './../services/title.service';
-import { AvailableLoansService } from './../services/available-loans.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
-import { CurrenciesService } from './../services/currencies.service';
 
 @NgModule({
   imports: [
@@ -85,6 +81,7 @@ import { CurrenciesService } from './../services/currencies.service';
     RiskIndicatorComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
+    CurrencyLogoComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
@@ -106,17 +103,12 @@ import { CurrenciesService } from './../services/currencies.service';
   providers: [
     DecentralandCosignerProvider,
     ContractsService,
-    TxService,
     BrandingService,
     CosignerService,
-    Web3Service,
     IdentityService,
     RiskService,
-    TitleService,
-    AvailableLoansService,
     CountriesService,
-    EventsService,
-    CurrenciesService
+    EventsService
   ],
   exports: [
     FormsModule,
@@ -143,6 +135,7 @@ import { CurrenciesService } from './../services/currencies.service';
     RiskIndicatorComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
+    CurrencyLogoComponent,
     DialogWrongCountryComponent,
     VisualUrlPipe
   ]

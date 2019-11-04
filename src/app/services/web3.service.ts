@@ -6,7 +6,9 @@ import { promisify } from '../utils/utils';
 
 declare let window: any;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class Web3Service {
   loginEvent = new EventEmitter<boolean>(true);
 
