@@ -39,7 +39,9 @@ export class Tx {
   }
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TxService {
   private txKey = 'tx';
   txMemory: Tx[];

@@ -15,7 +15,9 @@ export interface CurrencyItem {
   bestInterestRate: BestInterestRate;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class CurrenciesService {
   currencies: CurrencyItem[];
   bestInterestRates = {
