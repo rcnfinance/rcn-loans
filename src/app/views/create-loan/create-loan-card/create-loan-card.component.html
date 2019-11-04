@@ -1,10 +1,12 @@
 <div
   class="loan-card mat-elevation-z5"
   [class.loan-card--expanded]="expanded"
-  (click)="expanded = !expanded"
 >
 
-  <div class="loan-card__header d-lg-none px-4">
+  <div
+    class="loan-card__header d-lg-none px-4"
+    (click)="expanded = !expanded"
+  >
     <i class="fas fa-check-circle"></i>
     <span class="ml-2">
       Loan info
@@ -25,7 +27,7 @@
           Duration
         </p>
         <p class="loan-card__property-description">
-          15 days
+          {{ durationDate || '-' }}
         </p>
       </div>
     </div>
@@ -38,7 +40,7 @@
           Annual Interest
         </p>
         <p class="loan-card__property-description">
-          15 %
+          {{ annualInterest ? annualInterest + ' %' : '-' }}
         </p>
       </div>
     </div>
@@ -50,46 +52,33 @@
         <p class="loan-card__property-title">
           Installments
         </p>
-        <mat-expansion-panel class="mat-elevation-z">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              3 pays
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="installment">
-            <div class="installment__col installment__col--number">
-              1st
+        <p
+          class="loan-card__property-description"
+          *ngIf="!installments || installments < 2; else multipleInstallments"
+        >
+          1 pay
+        </p>
+        <ng-template #multipleInstallments>
+          <mat-expansion-panel class="mat-elevation-z">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ installments }}
+                pay<ng-container *ngIf="installments > 1">s</ng-container>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="installment" *ngFor="let pay of paysDetail">
+              <div class="installment__col installment__col--number">
+                {{ pay.pay }}
+              </div>
+              <div class="installment__col installment__col--date">
+                {{ pay.time }}
+              </div>
+              <div class="installment__col installment__col--amount">
+                {{ pay.amount }}
+              </div>
             </div>
-            <div class="installment__col installment__col--date">
-              At 15 days
-            </div>
-            <div class="installment__col installment__col--amount">
-              866.67 DAI
-            </div>
-          </div>
-          <div class="installment">
-            <div class="installment__col installment__col--number">
-              2nd
-            </div>
-            <div class="installment__col installment__col--date">
-              At 30 days
-            </div>
-            <div class="installment__col installment__col--amount">
-              866.67 DAI
-            </div>
-          </div>
-          <div class="installment">
-            <div class="installment__col installment__col--number">
-              3th
-            </div>
-            <div class="installment__col installment__col--date">
-              At 45 days
-            </div>
-            <div class="installment__col installment__col--amount">
-              866.67 DAI
-            </div>
-          </div>
-        </mat-expansion-panel>
+          </mat-expansion-panel>
+        </ng-template>
       </div>
     </div>
     <div class="loan-card__property">
@@ -101,11 +90,11 @@
           Expiration date
         </p>
         <p class="loan-card__property-description">
-          30 days
+          {{ expirationDate || '-' }}
         </p>
       </div>
     </div>
-    <div class="loan-card__property">
+    <!-- <div class="loan-card__property">
       <div class="loan-card__property-icon">
         <i class="fas fa-coins"></i>
       </div>
@@ -117,7 +106,7 @@
           1 ETH
         </p>
       </div>
-    </div>
+    </div> -->
     <!-- <div class="loan-card__expand">
       <button
         mat-raised-button
@@ -137,7 +126,7 @@
           Borrow
         </p>
         <p class="loan-card__property-description">
-          -
+          {{ amount || '-' }}
         </p>
       </div>
     </div>
@@ -150,7 +139,7 @@
           Return
         </p>
         <p class="loan-card__property-description">
-          -
+          {{ expectedReturn || '-' }}
         </p>
       </div>
     </div>

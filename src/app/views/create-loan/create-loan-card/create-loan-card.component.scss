@@ -53,6 +53,9 @@
     }
     &-description {
       @include typography-subtitle(2);
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 90%;
     }
 
     &--strong {
