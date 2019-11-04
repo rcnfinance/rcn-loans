@@ -7,7 +7,6 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { SharedModule } from '../../shared/shared.module';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
-import { AvailableLoansService } from './../../services/available-loans.service';
 // App Component
 import { ActiveLoansComponent } from './active-loans.component';
 
@@ -27,8 +26,7 @@ const routes: Routes = [
     ActiveLoansComponent
   ],
   providers: [
-    ContractsService,
-    AvailableLoansService
+    ContractsService
   ],
   exports: [
     ActiveLoansComponent
