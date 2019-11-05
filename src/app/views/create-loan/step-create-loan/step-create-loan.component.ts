@@ -1,22 +1,27 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
-import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   MatDialog,
   MatSnackBar
 } from '@angular/material';
 import { Subscription } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Utils } from '../../../utils/utils';
+import { LoanUtils } from '../../../utils/loan-utils';
+import { Currency } from '../../../utils/currencies';
 import { Loan, Network, Status } from './../../../models/loan.model';
+import { LoanApiDiaspore } from './../../../interfaces/loan-api-diaspore';
 import { environment } from './../../../../environments/environment';
 // App Components
 import { DialogGenericErrorComponent } from '../../../dialogs/dialog-generic-error/dialog-generic-error.component';
+import { DialogClientAccountComponent } from '../../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Services
 import { ContractsService } from './../../../services/contracts.service';
 import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
 import { Web3Service } from './../../../services/web3.service';
-import { TxService, Tx, Type } from './../../../services/tx.service';
+import { Tx } from './../../../services/tx.service';
 
 @Component({
   selector: 'app-step-create-loan',
@@ -47,18 +52,17 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
   expirationDate: FormControl;
 
   // Loan state
-  isCompleting: boolean;
-  createPendingTx: Tx = undefined;
   selectedCurrency: CurrencyItem;
   selectedOracle: any;
-  paysDetail = [];
   installments = 1;
   installmentsAvailable: number;
   installmentsData: any;
   returnValue: any = 0;
   durationLabel: any;
   loan: Loan;
+  @Input() createPendingTx: Tx;
   @Output() updateLoan = new EventEmitter<any>();
+  @Output() createLoan = new EventEmitter<any>();
 
   // subscriptions
   txSubscription: boolean;
@@ -67,22 +71,42 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
   constructor(
     private location: Location,
     private router: Router,
+    private route: ActivatedRoute,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private spinner: NgxSpinnerService,
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
-    private web3Service: Web3Service,
-    private txService: TxService
+    private web3Service: Web3Service
   ) { }
 
   async ngOnInit() {
+    const loanId = this.route.snapshot.params.id;
+
     this.getCurrencies();
     this.createFormControls();
     this.createForm();
-    this.generateEmptyLoan();
+    this.generateEmptyLoan(loanId);
 
     await this.loadAccount();
     this.handleLoginEvents();
+
+    if (!loanId) {
+      return;
+    }
+
+    // handle existing loan
+    this.spinner.show();
+    try {
+      const loan: Loan = await this.getExistingLoan(loanId);
+      await this.autocompleteForm(loan);
+      await this.corroborateBorrower(loan);
+    } catch (e) {
+      this.showMessage('Please create a new loan', 'dialog');
+      this.generateEmptyLoan();
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   ngOnDestroy() {
@@ -133,6 +157,43 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Autocomplete form group 1
+   * @param loan Loan
+   */
+  async autocompleteForm(loan: Loan) {
+    const secondsInDay = 86400;
+    const oracle: string = loan.oracle ? loan.oracle.address : undefined;
+    const nowDate = new Date().getTime() / 1000;
+    const expiration = loan.expiration / 1000;
+
+    const currency: string = loan.currency.symbol;
+    const amount = loan.currency.fromUnit(loan.amount);
+    const duration = loan.descriptor.duration / secondsInDay;
+    const annualInterest = Number(loan.descriptor.punitiveInterestRateRate).toFixed(0);
+    const hasInstallments = loan.descriptor.installments > 1 ? true : false;
+    const expirationDate = Number((expiration - nowDate) / secondsInDay).toFixed(0);
+
+    this.installments = loan.descriptor.installments;
+    this.selectedOracle = oracle;
+    this.selectedCurrency = this.currenciesService.getCurrencyByKey('symbol', currency);
+
+    this.form.patchValue({
+      currency,
+      amount,
+      duration,
+      annualInterest,
+      hasInstallments,
+      expirationDate
+    });
+    this.loan.creator = loan.creator;
+    this.loan.borrower = loan.borrower;
+
+    this.onRequestedChange(amount);
+    this.onDurationChange();
+    this.expectedReturn();
+  }
+
+  /**
    * Return value with percentage symbol
    * @param value Percentage
    * @return Percentage %
@@ -147,9 +208,9 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
    */
   async onCurrencyChange(symbol: string) {
     await this.updateSelectedCurrency(symbol);
-    this.updateInstallmentsDetails();
     this.updateInterestRate();
     this.expectedReturn();
+    this.updateLoanModel();
   }
 
   /**
@@ -167,7 +228,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
     }
 
     this.expectedReturn();
-    this.updateInstallmentsDetails();
+    this.updateLoanModel();
   }
 
   /**
@@ -179,7 +240,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
 
     this.expectedInstallmentsAvailable();
     this.expectedReturn();
-    this.updateInstallmentsDetails();
+    this.updateLoanModel();
   }
 
   /**
@@ -187,6 +248,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
    */
   onInterestRateChange() {
     this.expectedReturn();
+    this.updateLoanModel();
   }
 
   /**
@@ -195,6 +257,14 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
   onInstallmentsChange() {
     this.expectedInstallmentsAvailable();
     this.expectedReturn();
+    this.updateLoanModel();
+  }
+
+  /**
+   * Update loan model when expiration date is updated
+   */
+  onExpirationDateChange() {
+    this.updateLoanModel();
   }
 
   /**
@@ -224,14 +294,12 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
    * Calculate the return amount
    */
   expectedReturn() {
-    if (this.annualInterest.value > 0) {
-      const installments: number = this.installments;
-      const installmentAmount: any = this.expectedInstallmentAmount();
-      const returnValue: string = Utils.formatAmount(installmentAmount * installments);
-      this.returnValue = Number(returnValue);
-    } else {
-      this.returnValue = 0;
-    }
+    const installments: number = this.installments;
+    const installmentAmount: any = this.expectedInstallmentAmount();
+    const expectedReturn: number = installmentAmount * installments;
+
+    this.returnValue = Utils.formatAmount(expectedReturn);
+    return Utils.formatAmount(expectedReturn);
   }
 
   /**
@@ -261,32 +329,22 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
    * Call the required methods when completing the first step
    * @param form Form group 1
    */
-  async onSubmitStep1(form: NgForm) {
-    if (form.valid) {
-      this.showMessage('Please confirm the metamask transaction. Your Loan is being processed.', 'snackbar');
-      const pendingTx: Tx = this.createPendingTx;
-      const encodedData = await this.getInstallmentsData(form);
-      this.installmentsData = encodedData;
-
-      if (pendingTx) {
-        if (pendingTx.confirmed) {
-          this.router.navigate(['/', 'loan', this.loan.id]);
-        }
-      } else {
-        const tx: string = await this.requestLoan(this.form);
-        const id: string = this.loan.id;
-        const amount = 1;
-        this.location.replaceState(`/create/${ id }`);
-        this.txService.registerCreateTx(tx, {
-          engine: environment.contracts.diaspore.loanManager,
-          id,
-          amount
-        });
-        this.retrievePendingTx();
-        // this.isExpanded();
-        this.isCompleting = true;
-      }
+  async onSubmitStep1(form: FormGroup) {
+    const tx: Tx = this.createPendingTx;
+    if (!form.valid) {
+      return;
     }
+    if (tx) {
+      if (tx.confirmed) {
+        this.router.navigate(['/loan', this.loan.id]);
+        return;
+      }
+      this.showMessage('Please wait for your loan to finish being created.', 'snackbar');
+      return;
+    }
+
+    this.showMessage('Please confirm the metamask transaction. Your Loan is being processed.', 'snackbar');
+    await this.requestLoan(this.form);
   }
 
   /**
@@ -302,41 +360,37 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
     const amount = new web3.BigNumber(10 ** 18).mul(form.value.amount);
     const salt = web3.toHex(new Date().getTime());
     const oracle: string = this.selectedOracle || Utils.address0x;
-    const encodedData: string = this.installmentsData;
+    const encodedData = await this.getInstallmentsData(form);
     const callback: string = Utils.address0x;
+    const model: string = environment.contracts.models.installments;
+    const loanId: any = await this.contractsService.calculateLoanId(
+      amount,
+      account,
+      account,
+      model,
+      oracle,
+      callback,
+      salt,
+      expiration,
+      encodedData
+    );
+    this.loan.id = loanId;
 
-    try {
-      const model: string = environment.contracts.models.installments;
-      const loanId: any = await this.contractsService.calculateLoanId(
-        amount,
-        account,
-        account,
-        model,
-        oracle,
-        callback,
-        salt,
-        expiration,
-        encodedData
-      );
-      this.loan.id = loanId;
+    const createLoanData = {
+      amount,
+      model,
+      oracle,
+      account,
+      callback,
+      salt,
+      expiration,
+      encodedData
+    };
 
-      return await this.contractsService.requestLoan(
-        amount,
-        model,
-        oracle,
-        account,
-        callback,
-        salt,
-        expiration,
-        encodedData
-      );
-    } catch (e) {
-      // Don't show 'User denied transaction signature' error
-      if (e.stack.indexOf('User denied transaction signature') < 0) {
-        this.showMessage('A problem occurred during loan creation', 'dialog');
-      }
-      throw Error(e);
-    }
+    this.createLoan.emit({
+      loan: this.loan,
+      form: createLoanData
+    });
   }
 
   /**
@@ -349,8 +403,11 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
     this.shortAccount = Utils.shortAddress(this.account);
 
     // refresh parent
-    this.loan.borrower = this.account;
-    this.loan.creator = this.account;
+    if (!this.loan.borrower) {
+      this.loan.borrower = this.account;
+      this.loan.creator = this.account;
+    }
+
     this.updateLoan.emit(this.loan);
   }
 
@@ -374,19 +431,29 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
    * @return Installment amount
    */
   private expectedInstallmentAmount() {
-    const installments: number = this.installments;
+    const loanAmount: number = this.amount.value;
     let installmentAmount: number;
 
-    if (installments === 1) {
+    if (this.installments === 1) {
+      const daysInYear = 360;
       const interest: number = this.annualInterest.value;
-      const annualInterest: number = (interest * this.amount.value) / 100;
-      const returnInterest: number = (this.duration.value * annualInterest) / 360;
-      installmentAmount = Number(this.amount.value) + returnInterest;
+      const annualInterest: number = (interest * loanAmount) / 100;
+      const durationInDays: number = this.duration.value;
+      const returnInterest: number = (durationInDays * annualInterest) / daysInYear;
+      installmentAmount = loanAmount + returnInterest;
     } else {
-      const amount: number = this.form.value.amount;
       const rate: number = this.annualInterest.value / 100;
       const installmentDuration: number = this.installmentDaysInterval / 360;
-      installmentAmount = - Utils.pmt(installmentDuration * rate, installments, amount, 0);
+      installmentAmount = - Utils.pmt(
+        installmentDuration * rate,
+        this.installments,
+        loanAmount,
+        0
+      );
+    }
+
+    if (!installmentAmount) {
+      return 0;
     }
 
     return Utils.formatAmount(installmentAmount);
@@ -397,7 +464,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
    * @param form Form group 1
    * @return Installments data
    */
-  private async getInstallmentsData(form: NgForm) {
+  private async getInstallmentsData(form: FormGroup) {
     const installments: number = this.installments;
     const cuotaWithInterest = Number(this.expectedInstallmentAmount()) * 10 ** 18;
     const annualInterest: number = form.value.annualInterest;
@@ -423,6 +490,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
 
     try {
       await this.contractsService.validateEncodedData(encodedData);
+      this.installmentsData = encodedData;
       return encodedData;
     } catch (e) {
       throw Error('error on installments encoded data validation');
@@ -430,41 +498,15 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Fills out installment's details
-   */
-  private updateInstallmentsDetails() {
-    // this.paysDetail = [];
-    // for (let i = 0; i < this.installmentsAvailable; i++) {
-    //   const pay = i + 1;
-    //   let payNumber;
-    //   switch (Number(pay)) {
-    //     case 1:
-    //       payNumber = 'st';
-    //       break;
-    //     case 2:
-    //       payNumber = 'nd';
-    //       break;
-    //     default:
-    //       payNumber = 'th';
-    //       break;
-    //   }
-    //   const time = pay * 15;
-    //   const amount = this.amount.value / this.installmentsAvailable;
-    //   const obj = { pay: pay + payNumber, time: time + ' days', amount: Utils.formatAmount(amount) + ' ' + this.currency.value };
-    //   this.paysDetail.push(obj);
-    //
-    // }
-  }
-
-  /**
    * Generate empty loan for complete all forms and navigate to /create
+   * @param id Loan ID
    */
-  private generateEmptyLoan() {
+  private generateEmptyLoan(id: string = '') {
     this.loan = new Loan(
       Network.Diaspore,
-      '',
-      this.account,
-      1,
+      id,
+      environment.contracts.diaspore.loanManager,
+      0,
       this.selectedOracle,
       null,
       null,
@@ -474,7 +516,124 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
       null,
       Utils.address0x
     );
-    this.location.replaceState(`/create`);
+
+    if (!id) {
+      this.location.replaceState(`/create`);
+    }
+  }
+
+  /**
+   * Update loan info model
+   * @return New loan model
+   */
+  private updateLoanModel() {
+    const web3 = this.web3Service.web3;
+    const prevLoan: Loan = this.loan;
+    const currency = new Currency(
+      this.selectedCurrency ? this.selectedCurrency.symbol : 'RCN'
+    );
+    const amountInWei = this.amount.value * (10 ** currency.decimals);
+    const totalObligation = this.returnValue * (10 ** currency.decimals);
+    const expirationAsTimestamp = this.returnDaysAs(
+      this.expirationDate.value,
+      'seconds'
+    );
+    const durationAsTimestamp = this.returnDaysAs(
+      this.duration.value,
+      'seconds'
+    );
+    const annualInterest = Utils.toInterestRate(
+      this.annualInterest.value
+    ); // TODO: check value
+
+    // installments
+    const loanData: LoanApiDiaspore = {
+      id: prevLoan.id,
+      open: true,
+      approved: true,
+      position: 0,
+      expiration: Math.round(expirationAsTimestamp),
+      amount: amountInWei,
+      cosigner: Utils.address0x,
+      model: environment.contracts.models.installments,
+      creator: this.account,
+      oracle: this.selectedOracle,
+      borrower: this.account,
+      callback: Utils.address0x,
+      salt: 0,
+      loanData: '0x',
+      created: 0,
+      descriptor: {
+        first_obligation: totalObligation / this.installments,
+        total_obligation: totalObligation,
+        duration: Math.round(durationAsTimestamp),
+        interest_rate: this.annualInterest.value,
+        punitive_interest_rate: annualInterest,
+        frequency: this.installmentDaysInterval,
+        installments: this.installments
+      },
+      currency: web3.toHex(currency.symbol),
+      lender: Utils.address0x,
+      status: 1,
+      canceled: false
+    };
+
+    const loan: Loan = LoanUtils.createDiasporeLoan(loanData, null);
+
+    this.updateLoan.emit(loan);
+    this.loan = loan;
+    return loan;
+  }
+
+  /**
+   * Check if borrower is the actual logged in account
+   * @param loan Loan
+   * @return Borrower address is valid
+   */
+  private async corroborateBorrower(loan: Loan) {
+    const checkBorrower = async () => {
+      const web3: any = this.web3Service.web3;
+      const borrower = web3.toChecksumAddress(loan.borrower);
+      const account = web3.toChecksumAddress(await this.web3Service.getAccount());
+
+      if (account !== borrower) {
+        console.info(account, borrower);
+        this.showMessage('The borrower is not authorized. Please create a new loan', 'dialog');
+        this.generateEmptyLoan();
+        return true;
+      }
+
+      return;
+    };
+
+    // unlogged user
+    if (!this.web3Service.loggedIn) {
+      const hasClient = await this.web3Service.requestLogin();
+      if (this.web3Service.loggedIn) {
+        return await checkBorrower();
+      }
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
+      return;
+    }
+    return await checkBorrower();
+  }
+
+  /**
+   * Check if load exists
+   * @param id Loan ID
+   * @return Loan
+   */
+  private async getExistingLoan(id: string): Promise<Loan> {
+    const loan: Loan = await this.contractsService.getLoan(id);
+    const isRequest = loan.status === Status.Request;
+
+    if (!isRequest) {
+      throw Error('Loan is not on request status');
+    }
+
+    return loan;
   }
 
   /**
@@ -498,53 +657,6 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
 
       default:
         return;
-    }
-  }
-
-  /**
-   * Retrieve pending Tx
-   */
-  private retrievePendingTx() {
-    this.createPendingTx = this.txService.getLastPendingCreate(this.loan);
-
-    if (this.createPendingTx !== undefined) {
-      const loanId: string = this.loan.id;
-      this.location.replaceState(`/create/${ loanId }`);
-      this.startProgress = true;
-      this.trackProgressbar();
-    }
-  }
-
-  /**
-   * Track progressbar value
-   */
-  private trackProgressbar() {
-    if (!this.txSubscription) {
-      this.txSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => {
-        if (tx.type === Type.create && tx.tx === this.createPendingTx.tx) {
-          this.finishLoanCreation();
-        }
-      });
-    }
-  }
-
-  /**
-   * Finish loan creation and check status
-   */
-  private async finishLoanCreation() {
-    const loanWasCreated = await this.contractsService.loanWasCreated(this.loan.id);
-
-    if (loanWasCreated) {
-      this.finishProgress = true;
-    } else {
-      this.cancelProgress = true;
-      setTimeout(() => {
-        this.showMessage('The loan could not be created', 'dialog');
-        this.startProgress = false;
-        this.createPendingTx = undefined;
-        // this.init = true;
-      }, 1000);
     }
   }
 

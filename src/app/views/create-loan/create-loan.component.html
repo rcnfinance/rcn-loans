@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-md-8">
+    <div class="col-sm-12 col-lg-8">
       <mat-accordion>
         <mat-expansion-panel
           [expanded]="true"
@@ -28,12 +28,34 @@
                 </span>
               </div>
             </mat-panel-title>
+            <ng-container *ngIf="startProgress">
+              <app-infinite-progress-bar
+                [start]="true"
+                [end]="finishProgress"
+                [cancel]="cancelProgress"
+                class="expansion-panel__header-progress"
+              >
+              </app-infinite-progress-bar>
+            </ng-container>
+            <div
+              *ngIf="createPendingTx && !createPendingTx.confirmed"
+              class="expansion-panel__header-spinner"
+            >
+              <span class="fa fa-spinner fa-spin"></span>
+            </div>
+            <div *ngIf="loanWasCreated" class="expansion-panel__header-check">
+              <span class="fa fa-check"></span>
+            </div>
           </mat-expansion-panel-header>
-          <app-step-create-loan (updateLoan)="detectUpdateLoan($event)"></app-step-create-loan>
+          <app-step-create-loan
+            (updateLoan)="detectUpdateLoan($event)"
+            (createLoan)="detectCreateLoan($event)"
+            [createPendingTx]="createPendingTx"
+          ></app-step-create-loan>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
-    <div class="col-sm-12 col-md-4 pl-lg-5">
+    <div class="col-sm-12 col-lg-4 pl-lg-5">
       <app-create-loan-card *ngIf="loan" [loan]="loan"></app-create-loan-card>
     </div>
   </div>
