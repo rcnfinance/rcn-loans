@@ -807,6 +807,26 @@ export class ContractsService {
   }
 
   /**
+   * Get loan debt amount value
+   * @param loanId Loan ID
+   * @return Debt amount
+   */
+  async getClosingObligation(loanId: string) {
+    return new Promise((resolve, reject) => {
+      this._loanManager.getClosingObligation(
+        loanId,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+  }
+
+  /**
    * Check if token is valid
    * @param tokenAddress Token address
    * @return Boolean
