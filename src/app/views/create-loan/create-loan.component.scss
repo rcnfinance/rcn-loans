@@ -1,7 +1,7 @@
 @import './../../../scss/fonts';
 
 .title {
-  @include typography-headline(1);
+  @include styled-font('Raleway', 400, 20px);
   text-transform: uppercase;
   margin-bottom: 15px;
 }
@@ -67,6 +67,9 @@
 }
 
 @media (min-width: 992px) {
+  .title {
+    @include typography-headline(1);
+  }
   .expansion-panel {
     ::ng-deep .mat-expansion-panel-body {
       padding: 0 26px 16px;
