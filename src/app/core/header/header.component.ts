@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 // App Component
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -23,6 +24,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private cdRef: ChangeDetectorRef,
+    private router: Router,
     private web3Service: Web3Service,
     private sidebarService: SidebarService,
     public dialog: MatDialog,
@@ -74,6 +76,18 @@ export class HeaderComponent implements OnInit {
       dialogRef.afterClosed().subscribe(() => {
         this.makeRotate = false;
       });
+    } else if (await this.web3Service.requestLogin()) {
+      return;
+    } else {
+      this.dialog.open(DialogClientAccountComponent, {});
+    }
+  }
+
+  async borrow() {
+    const openBorrow = () => this.router.navigate(['/create']);
+
+    if (this.hasAccount) {
+      openBorrow();
     } else if (await this.web3Service.requestLogin()) {
       return;
     } else {

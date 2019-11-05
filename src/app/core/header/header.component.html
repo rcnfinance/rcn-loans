@@ -22,12 +22,22 @@
 
             <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
               <!-- Menu section -->
-              <a class="nav__item nav__item--borrow mr-4" routerLink='/create'>
-                <span class="d-flex align-items-center">
-                  <i class="material-icons mr-3">add</i>
-                  <span>Borrow</span>
-                </span>
-              </a>
+              <ng-container *ngIf="hasAccount; else borrowLogin">
+                <a class="nav__item nav__item--borrow mr-4" routerLink='/create'>
+                  <span class="d-flex align-items-center">
+                    <i class="material-icons mr-3">add</i>
+                    <span>Borrow</span>
+                  </span>
+                </a>
+              </ng-container>
+              <ng-template #borrowLogin>
+                <a class="nav__item nav__item--borrow mr-4" (click)="borrow()">
+                  <span class="d-flex align-items-center">
+                    <i class="material-icons mr-3">add</i>
+                    <span>Borrow</span>
+                  </span>
+                </a>
+              </ng-template>
               <a class="nav__item mr-4" routerLink='/requests'>Requests</a>
               <a class="nav__item mr-4" routerLink='/activity'>Activity</a>
               <a class="nav__item mr-4" routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</a>
