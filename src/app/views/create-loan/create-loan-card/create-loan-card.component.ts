@@ -68,7 +68,7 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
     const installmentAmount: any = this.expectedInstallmentAmount();
     const expectedReturn: number = installmentAmount * installments;
 
-    return Utils.formatAmount(expectedReturn);
+    return expectedReturn ? Utils.formatAmount(expectedReturn) : null;
   }
 
   /**
