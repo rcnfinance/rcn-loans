@@ -21,6 +21,7 @@ import { ConversionGraphicComponent } from './conversion-graphic/conversion-grap
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
 import { DialogHeaderComponent } from './dialog-header/dialog-header.component';
+import { BorrowFabButtonComponent } from './borrow-fab-button/borrow-fab-button.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -82,6 +83,7 @@ import { EventsService } from './../services/events.service';
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
+    BorrowFabButtonComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
@@ -137,6 +139,7 @@ import { EventsService } from './../services/events.service';
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
     DialogWrongCountryComponent,
+    BorrowFabButtonComponent,
     VisualUrlPipe
   ]
 })

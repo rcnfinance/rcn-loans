@@ -71,6 +71,9 @@ export const environment = {
         aditionalSlippage: '2'
       }
     },
+    models: {
+      installments: '0x41e9d0b6a8ce88989c2e7b3cae42ecfac44c9603' // FIXME: Ropsten installments
+    },
     decentraland: {
       mortgageCreator: '0x90263Ea5C57Dc6603CA7202920735A6E31235bB9',
       mortgageManager: '0x9ABf1295086aFA0E49C60e95c437aa400c5333B8'

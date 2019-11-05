@@ -368,57 +368,7 @@ snack-bar-container.mat-snack-bar-container{
   margin: 15px;
 }
 
-  //Forms
-mat-form-field{
-  width: 100%;
-  .mat-form-field-infix{
-    width: auto;
-    color: var(--app-color-secondary);
-  }
-  .mat-form-field-label{ color: var(--app-color-secondary); }
-  .mat-hint,
-  .mat-select-arrow {
-    color: rgba(124, 81, 81, 0.5);
-  }
-}
-.mat-form-field-appearance-legacy{
-  .mat-hint{ color: var(--app-color-secondary); }
-  .mat-form-field-label{ color: rgba(255,255,255,.7); }
-  .mat-form-field-underline { background-color: rgba(255,255,255,.5); }
-  .mat-form-field-suffix .mat-datepicker-toggle-default-icon { width: 1.3em !important; }
-}
-.conversion-block{
-  .mat-form-field-appearance-legacy{
-    .mat-form-field-infix{
-      padding: 0.4375em 0 0 0 !important;
-    }
-    .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
-      width: 1.5em !important;
-    }
-  }
-}
-
-.mat-form-field-appearance-legacy.mat-form-field-disabled {
-  .mat-form-field-underline{background-color: $gray5 !important;}
-  .mat-form-field-label,
-  .mat-form-field-suffix{color: $gray5;}
-}
-
-.mat-form-field-underline{ color: var(--app-color-secondary); }
-.mat-select-arrow{ color: var(--app-color-secondary); }
-.mat-select-placeholder, .mat-select-value-text { color: #EDEDED; @extend %font-medium;}
-.mat-select-content{
-  background-color: #101010;
-  .mat-option{
-    color: var(--app-color-secondary);
-    text-transform: uppercase;
-    @include transition;
-    &:hover{
-      background-color: #404040;
-    }
-  }
-}
-
+// Forms
 .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
   color: rgba(255,255,255,.8);
 }

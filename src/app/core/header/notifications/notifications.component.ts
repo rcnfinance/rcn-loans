@@ -79,17 +79,36 @@ export class NotificationsComponent implements OnInit {
       return 'funds';
     }
 
+    if (tx.type === 'create') {
+      return 'a loan';
+    }
+
     return 'the loan';
   }
 
   getTxId(tx: Tx): String { // Return the TxObject Message to render the Notification
     let id: String;
     if (tx.data.id) { id = tx.data.id; } else { id = tx.data; } // Defines if the ID comes from data (new Loans) or data.id (past Loans)
-    if (tx.type === 'approve') {
-      id = undefined;
-    } else if (tx.type === 'withdraw') {
-      id = undefined;
+
+    switch (tx.type) {
+      case 'approve':
+      case 'withdraw':
+        id = undefined;
+        break;
+
+      case 'create':
+        if (tx.confirmed) {
+          id = tx.data.id;
+        } else {
+          id = undefined;
+        }
+        break;
+
+      default:
+        id = tx.data.id;
+        break;
     }
+
     return id;
   }
 
@@ -119,6 +138,9 @@ export class NotificationsComponent implements OnInit {
         } else {
           txObject = new TxObject(id, 'Locking', message, '', '', 'fas fa-lock', 'red');
         }
+        break;
+      case 'create':
+        txObject = new TxObject(id, 'Creating', message, '', '', 'fas fa-file-invoice-dollar', 'turquoise');
         break;
       default:
         break;
@@ -150,6 +172,9 @@ export class NotificationsComponent implements OnInit {
         } else {
           message = 'Locked';
         }
+        break;
+      case 'create':
+        message = 'Created';
         break;
       default:
         break;

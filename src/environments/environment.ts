@@ -71,6 +71,9 @@ export const environment = {
         aditionalSlippage: '2'
       }
     },
+    models: {
+      installments: '0x41e9d0b6a8ce88989c2e7b3cae42ecfac44c9603'
+    },
     decentraland: {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
       mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1'
