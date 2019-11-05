@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialog, MatSnackBar } from '@angular/material';
@@ -7,6 +7,7 @@ import { environment } from './../../../environments/environment';
 // App Components
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 // App Services
+import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx, Type } from './../../services/tx.service';
 
@@ -15,7 +16,7 @@ import { TxService, Tx, Type } from './../../services/tx.service';
   templateUrl: './create-loan.component.html',
   styleUrls: ['./create-loan.component.scss']
 })
-export class CreateLoanComponent {
+export class CreateLoanComponent implements OnInit {
 
   loan: Loan;
   loanWasCreated: boolean;
@@ -34,9 +35,14 @@ export class CreateLoanComponent {
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private titleService: TitleService,
     private contractsService: ContractsService,
     private txService: TxService
   ) { }
+
+  ngOnInit() {
+    this.titleService.changeTitle('Borrow');
+  }
 
   /**
    * Update loan
