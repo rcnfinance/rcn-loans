@@ -9,7 +9,7 @@ import {
 import { environment } from '../../../../environments/environment';
 import { Notification, TxObject } from '../../../models/notification.model';
 import { NotificationsService } from '../../../services/notifications.service';
-import { TxService, Tx } from '../../../services/tx.service';
+import { TxService, Tx, Type } from '../../../services/tx.service';
 import { Utils } from '../../../utils/utils';
 
 @Component({
@@ -56,7 +56,7 @@ export class NotificationsComponent implements OnInit {
   ) { }
 
   getTxMessage(tx: Tx): string { // Return the TxObject Message to render the Notification
-    if (tx.type === 'approve') {
+    if (tx.type === Type.approve) {
       switch (tx.data.contract) {
         case environment.contracts.basaltEngine:
           return 'the Basalt Engine contract';
@@ -70,33 +70,47 @@ export class NotificationsComponent implements OnInit {
         case environment.contracts.converter.converterRamp:
           return 'the Converter Ramp Contract';
 
+        case environment.contracts.collateral.collateral:
+          return 'the Collateral Contract';
+
         default:
           return 'the contract ' + tx.data.contract;
       }
     }
 
-    if (tx.type === 'withdraw') {
-      return 'funds';
+    switch (tx.type as Type) {
+      case Type.withdraw:
+        return 'funds';
+
+      case Type.create:
+        return 'a loan';
+
+      case Type.createCollateral:
+        return 'a collateral';
+
+      case Type.addCollateral:
+        return 'in collateral';
+
+      case Type.withdrawCollateral:
+        return 'from collateral';
+
+      default:
+        return 'the loan';
     }
 
-    if (tx.type === 'create') {
-      return 'a loan';
-    }
-
-    return 'the loan';
   }
 
   getTxId(tx: Tx): String { // Return the TxObject Message to render the Notification
     let id: String;
     if (tx.data.id) { id = tx.data.id; } else { id = tx.data; } // Defines if the ID comes from data (new Loans) or data.id (past Loans)
 
-    switch (tx.type) {
-      case 'approve':
-      case 'withdraw':
+    switch (tx.type as Type) {
+      case Type.approve:
+      case Type.withdraw:
         id = undefined;
         break;
 
-      case 'create':
+      case Type.create:
         if (tx.confirmed) {
           id = tx.data.id;
         } else {
@@ -116,31 +130,40 @@ export class NotificationsComponent implements OnInit {
     let txObject: TxObject;
     const id: String = this.getTxId(tx);
     const message: string = this.getTxMessage(tx);
-    switch (tx.type) {
-      case 'lend':
+    switch (tx.type as Type) {
+      case Type.lend:
         txObject = new TxObject(id, 'Lending', message, 'material-icons', 'trending_up', '', 'blue');
         break;
-      case 'withdraw':
+      case Type.withdraw:
         txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'call_made', '', 'white');
         break;
-      case 'transfer':
+      case Type.transfer:
         txObject = new TxObject(id, 'Transfering', message, '', '', 'fas fa-exchange-alt', 'orange');
         break;
-      case 'pay':
+      case Type.pay:
         txObject = new TxObject(id, 'Paying', message, '', '', 'fas fa-coins', 'green');
         break;
-      case 'claim':
+      case Type.claim:
         txObject = new TxObject(id, 'Claiming', message, 'material-icons', 'call_made', '', 'white');
         break;
-      case 'approve':
+      case Type.approve:
         if (tx.data.action) {
           txObject = new TxObject(id, 'Authorizing', message, '', '', 'fas fa-lock-open', 'green');
         } else {
           txObject = new TxObject(id, 'Locking', message, '', '', 'fas fa-lock', 'red');
         }
         break;
-      case 'create':
+      case Type.create:
         txObject = new TxObject(id, 'Creating', message, '', '', 'fas fa-file-invoice-dollar', 'turquoise');
+        break;
+      case Type.createCollateral:
+        txObject = new TxObject(id, 'Creating', message, '', '', 'fas fa-coins', 'violet');
+        break;
+      case Type.addCollateral:
+        txObject = new TxObject(id, 'Depositing', message, 'material-icons', 'add', '', 'violet');
+        break;
+      case Type.withdrawCollateral:
+        txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'remove', '', 'violet');
         break;
       default:
         break;
@@ -150,31 +173,38 @@ export class NotificationsComponent implements OnInit {
 
   getTxObjectConfirmed(tx: Tx): String { // Change the Tx Message onConfirmed
     let message: String;
-    switch (tx.type) {
-      case 'lend':
+    switch (tx.type as Type) {
+      case Type.lend:
         message = 'Lent';
         break;
-      case 'withdraw':
+      case Type.withdraw:
         message = 'Withdrawed';
         break;
-      case 'transfer':
+      case Type.transfer:
         message = 'Transfered';
         break;
-      case 'pay':
+      case Type.pay:
         message = 'Payed';
         break;
-      case 'claim':
+      case Type.claim:
         message = 'Claimed';
         break;
-      case 'approve':
+      case Type.approve:
         if (tx.data.action) {
           message = 'Authorized';
         } else {
           message = 'Locked';
         }
         break;
-      case 'create':
+      case Type.create:
+      case Type.createCollateral:
         message = 'Created';
+        break;
+      case Type.addCollateral:
+        message = 'Deposited';
+        break;
+      case Type.withdrawCollateral:
+        message = 'Withdrawed';
         break;
       default:
         break;
