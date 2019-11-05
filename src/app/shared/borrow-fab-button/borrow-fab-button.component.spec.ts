@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
+import { SharedModule } from './../../shared/shared.module';
 import { BorrowFabButtonComponent } from './borrow-fab-button.component';
 
 describe('BorrowFabButtonComponent', () => {
@@ -8,7 +10,11 @@ describe('BorrowFabButtonComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BorrowFabButtonComponent ]
+      imports: [
+        RouterTestingModule,
+        SharedModule
+      ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
     .compileComponents();
   }));
