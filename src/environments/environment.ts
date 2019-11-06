@@ -59,6 +59,10 @@ export const environment = {
       debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
       loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'
     },
+    collateral: {
+      collateral: '0xa9F3738643263A555faa491C524241F5Cd537B60',
+      wethManager: '0x1853cc6c9a20d31d6cbfbce4936071c049249fd3'
+    },
     converter: {
       converterRamp: '0x9cd2b5ffd2c4d3d2d47ecbecf19ec588900901ec',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',

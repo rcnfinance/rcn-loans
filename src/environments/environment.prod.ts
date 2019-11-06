@@ -59,6 +59,10 @@ export const environment = {
       debtEngine: '0x80db22675dad70e44b64029510778583187faddb',
       loanManager: '0xb55b0f33d6a2a03a275ca85d58e9357e1a141187'
     },
+    collateral: {
+      collateral: '0xa9F3738643263A555faa491C524241F5Cd537B60', // FIXME: Ropsten address
+      wethManager: '0x1853cc6c9a20d31d6cbfbce4936071c049249fd3' // FIXME: Ropsten address
+    },
     converter: {
       converterRamp: '0xe41ada0fb01F147c6385F93DEC78914F32e45061',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
