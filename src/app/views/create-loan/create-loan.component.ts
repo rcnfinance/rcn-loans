@@ -3,7 +3,13 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Loan } from './../../models/loan.model';
+import { LoanRequest } from './../../interfaces/loan-request';
 import { environment } from './../../../environments/environment';
+// App Components
+import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
+import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+// App Services
+import { Web3Service } from '../../services/web3.service';
 // App Components
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 // App Services
@@ -35,6 +41,7 @@ export class CreateLoanComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private web3Service: Web3Service,
     private titleService: TitleService,
     private contractsService: ContractsService,
     private txService: TxService
@@ -62,21 +69,50 @@ export class CreateLoanComponent implements OnInit {
     form
   }) {
     const pendingTx: Tx = this.createPendingTx;
-    this.loan = loan;
+    this.loan = loan as Loan;
 
+    // pending tx validation
     if (pendingTx && pendingTx.confirmed) {
-      this.router.navigate(['/', 'loan', this.loan.id]);
+      this.router.navigate(['/', 'loan', loan.id]);
       return;
     }
+    // unlogged user
+    if (!this.web3Service.loggedIn) {
+      const hasClient = await this.web3Service.requestLogin();
+      if (this.web3Service.loggedIn) {
+        this.handleCreateLoan(loan, form);
+        return;
+      }
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
+      return;
+    }
+
+    this.handleCreateLoan(loan, form);
+  }
+
+  /**
+   * If the validations were successful, manage the loan creation
+   * @param loan Loan model
+   * @param form Create loan form data
+   */
+  private async handleCreateLoan(
+    loan: Loan,
+    form: LoanRequest
+  ) {
+    const web3: any = this.web3Service.web3;
+    const account = web3.toChecksumAddress(await this.web3Service.getAccount());
 
     try {
       const id: string = loan.id;
       const amount: number = loan.amount;
+      const engine: string = environment.contracts.diaspore.loanManager;
       const tx: string = await this.contractsService.requestLoan(
         form.amount,
         form.model,
         form.oracle,
-        form.account,
+        account,
         form.callback,
         form.salt,
         form.expiration,
@@ -85,7 +121,7 @@ export class CreateLoanComponent implements OnInit {
 
       this.location.replaceState(`/create/${ id }`);
       this.txService.registerCreateTx(tx, {
-        engine: environment.contracts.diaspore.loanManager,
+        engine,
         id,
         amount
       });

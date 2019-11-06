@@ -97,7 +97,6 @@ export class NotificationsComponent implements OnInit {
       default:
         return 'the loan';
     }
-
   }
 
   getTxId(tx: Tx): String { // Return the TxObject Message to render the Notification

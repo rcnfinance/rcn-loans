@@ -13,6 +13,7 @@ import { LoanUtils } from '../../../utils/loan-utils';
 import { Currency } from '../../../utils/currencies';
 import { Loan, Network, Status } from './../../../models/loan.model';
 import { LoanApiDiaspore } from './../../../interfaces/loan-api-diaspore';
+import { LoanRequest } from './../../../interfaces/loan-request';
 import { environment } from './../../../../environments/environment';
 // App Components
 import { DialogGenericErrorComponent } from '../../../dialogs/dialog-generic-error/dialog-generic-error.component';
@@ -376,7 +377,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
     );
     this.loan.id = loanId;
 
-    const createLoanData = {
+    const loanRequest: LoanRequest = {
       amount,
       model,
       oracle,
@@ -389,7 +390,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
 
     this.createLoan.emit({
       loan: this.loan,
-      form: createLoanData
+      form: loanRequest
     });
   }
 
