@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS,
+  MAT_DIALOG_DATA,
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
   MAT_LABEL_GLOBAL_OPTIONS,
   MatAutocompleteModule,
@@ -112,7 +113,11 @@ import {
   providers: [
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
-      useValue: { autoFocus: false }
+      useValue: { autoFocus: false, hasBackdrop: true }
+    },
+    {
+      provide: MAT_DIALOG_DATA,
+      useValue: {}
     },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
