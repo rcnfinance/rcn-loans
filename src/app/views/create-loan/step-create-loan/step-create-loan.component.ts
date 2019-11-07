@@ -62,8 +62,9 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
   durationLabel: any;
   loan: Loan;
   @Input() createPendingTx: Tx;
-  @Output() updateLoan = new EventEmitter<any>();
-  @Output() createLoan = new EventEmitter<any>();
+  @Output() updateLoan = new EventEmitter<Loan>();
+  @Output() createLoan = new EventEmitter<{ loan: Loan, form: LoanRequest }>();
+  @Output() loanWasCreated = new EventEmitter();
 
   // subscriptions
   txSubscription: boolean;
@@ -101,7 +102,11 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
     try {
       const loan: Loan = await this.getExistingLoan(loanId);
       await this.autocompleteForm(loan);
-      await this.corroborateBorrower(loan);
+      const authorized: boolean = await this.corroborateBorrower(loan);
+      if (authorized) {
+        this.updateLoan.emit(loan);
+        this.loanWasCreated.emit();
+      }
     } catch (e) {
       this.showMessage('Please create a new loan', 'dialog');
       this.generateEmptyLoan();
@@ -601,10 +606,10 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
         console.info(account, borrower);
         this.showMessage('The borrower is not authorized. Please create a new loan', 'dialog');
         this.generateEmptyLoan();
-        return true;
+        return;
       }
 
-      return;
+      return true;
     };
 
     // unlogged user

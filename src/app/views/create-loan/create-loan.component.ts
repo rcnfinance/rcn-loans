@@ -24,6 +24,7 @@ export class CreateLoanComponent implements OnInit {
   loan: Loan;
   loanWasCreated: boolean;
   createPendingTx: Tx = undefined;
+  collateralPendingTx: Tx = undefined;
 
   // progress bar
   startProgress: boolean;
@@ -57,6 +58,14 @@ export class CreateLoanComponent implements OnInit {
   }
 
   /**
+   * Detect loan was created
+   * @param loan Loan model
+   */
+  detectLoanWasCreated() {
+    this.finishLoanCreation();
+  }
+
+  /**
    * Create loan
    * @param loan Loan model
    * @param form Create loan form data
@@ -68,11 +77,11 @@ export class CreateLoanComponent implements OnInit {
     const pendingTx: Tx = this.createPendingTx;
     this.loan = loan as Loan;
 
-    // pending tx validation
     if (pendingTx && pendingTx.confirmed) {
       this.router.navigate(['/', 'loan', loan.id]);
       return;
     }
+
     // unlogged user
     if (!this.web3Service.loggedIn) {
       const hasClient = await this.web3Service.requestLogin();

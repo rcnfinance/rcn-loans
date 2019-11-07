@@ -13,7 +13,7 @@
     <div class="col-sm-12 col-lg-8">
       <mat-accordion>
         <mat-expansion-panel
-          [expanded]="true"
+          [expanded]="!loanWasCreated"
           [disabled]="true"
           class="expansion-panel"
         >
@@ -50,9 +50,46 @@
           <app-step-create-loan
             (updateLoan)="detectUpdateLoan($event)"
             (createLoan)="detectCreateLoan($event)"
+            (loanWasCreated)="detectLoanWasCreated()"
             [createPendingTx]="createPendingTx"
           ></app-step-create-loan>
         </mat-expansion-panel>
+
+        <mat-expansion-panel
+          [expanded]="loanWasCreated"
+          [disabled]="true"
+          class="expansion-panel"
+        >
+          <mat-expansion-panel-header class="expansion-panel__header">
+            <mat-panel-title>
+              <div class="expansion-panel__header-wrapper">
+                <span class="expansion-panel__header-step">
+                  2
+                </span>
+                <span class="expansion-panel__header-label">
+                  SELECT YOUR COLLATERAL
+                </span>
+              </div>
+            </mat-panel-title>
+            <ng-container *ngIf="startProgress">
+              <app-infinite-progress-bar
+                [start]="true"
+                [end]="finishProgress"
+                [cancel]="cancelProgress"
+                class="expansion-panel__header-progress"
+              >
+              </app-infinite-progress-bar>
+            </ng-container>
+            <div
+              *ngIf="collateralPendingTx && !collateralPendingTx.confirmed"
+              class="expansion-panel__header-spinner"
+            >
+              <span class="fa fa-spinner fa-spin"></span>
+            </div>
+          </mat-expansion-panel-header>
+          <app-step-create-collateral></app-step-create-collateral>
+        </mat-expansion-panel>
+
       </mat-accordion>
     </div>
     <div class="col-sm-12 col-lg-4 pl-lg-5">
