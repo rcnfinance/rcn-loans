@@ -16,6 +16,7 @@
           [expanded]="!loanWasCreated"
           [disabled]="true"
           class="expansion-panel"
+          [class.expansion-panel--expanded]="!loanWasCreated"
         >
           <mat-expansion-panel-header class="expansion-panel__header">
             <mat-panel-title>
@@ -59,6 +60,7 @@
           [expanded]="loanWasCreated"
           [disabled]="true"
           class="expansion-panel"
+          [class.expansion-panel--expanded]="loanWasCreated"
         >
           <mat-expansion-panel-header class="expansion-panel__header">
             <mat-panel-title>

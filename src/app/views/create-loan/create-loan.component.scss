@@ -13,16 +13,24 @@
 .expansion-panel {
   background: var(--app-color-gray-800);
 
+  &--expanded {
+    .expansion-panel__header {
+      &,
+      &.mat-expanded,
+      &.mat-expanded:hover,
+      &.mat-expanded:focus {
+        background: var(--app-color-gray-600);
+        color: var(--app-color-secondary);
+      }
+    }
+  }
+
   &__header {
     position: relative;
     max-height: 46px;
-    color: var(--app-color-secondary);
+    color: var(--app-color-gray-100);
+    background: var(--app-color-gray-600);
     border-radius: 0;
-    &.mat-expanded,
-    &.mat-expanded:hover,
-    &.mat-expanded:focus {
-      background: var(--app-color-gray-600);
-    }
     &-wrapper {
       width: 100%;
       display: flex;
