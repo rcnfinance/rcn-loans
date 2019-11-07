@@ -10,9 +10,6 @@ import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Services
 import { Web3Service } from '../../services/web3.service';
-// App Components
-import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-// App Services
 import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx, Type } from './../../services/tx.service';
@@ -100,7 +97,7 @@ export class CreateLoanComponent implements OnInit {
   private async handleCreateLoan(
     loan: Loan,
     form: LoanRequest
-  ) {
+  ) {
     const web3: any = this.web3Service.web3;
     const account = web3.toChecksumAddress(await this.web3Service.getAccount());
 
