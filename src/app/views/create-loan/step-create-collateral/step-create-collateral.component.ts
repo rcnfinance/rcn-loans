@@ -116,12 +116,19 @@ export class StepCreateCollateralComponent implements OnInit {
   async onCollateralAssetChange(symbol) {
     await this.updateSelectedCurrency(symbol);
     const form: FormGroup = this.form;
-    if (!form.value.collateralAdjustment) {
-      await this.onCollateralRatioChange();
-    }
+    this.spinner.show();
 
-    await this.updateCollateralAmount();
-    this.updateRequestCollateralModel();
+    try {
+      if (!form.value.collateralAdjustment) {
+        await this.onCollateralRatioChange();
+      }
+      await this.updateCollateralAmount();
+      this.updateRequestCollateralModel();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   /**
