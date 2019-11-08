@@ -94,7 +94,7 @@
         </p>
       </div>
     </div>
-    <!-- <div class="loan-card__property">
+    <div class="loan-card__property">
       <div class="loan-card__property-icon">
         <i class="fas fa-coins"></i>
       </div>
@@ -103,18 +103,51 @@
           Collateral amount
         </p>
         <p class="loan-card__property-description">
-          1 ETH
+          {{ collateralAmount || '-' }} {{ collateralAsset }}
         </p>
       </div>
-    </div> -->
-    <!-- <div class="loan-card__expand">
+    </div>
+    <mat-expansion-panel
+      class="collateral-expansion-panel mat-elevation-z"
+      [expanded]="collateralExpanded"
+    >
+      <div class="loan-card__property">
+        <div class="loan-card__property-icon">
+          <i class="fas fa-chart-bar"></i>
+        </div>
+        <div class="loan-card__property-content">
+          <p class="loan-card__property-title">
+            Liquidation ratio
+          </p>
+          <p class="loan-card__property-description">
+            {{ liquidationRatio || '-' }}
+          </p>
+        </div>
+      </div>
+      <div class="loan-card__property">
+        <div class="loan-card__property-icon">
+          <i class="fas fa-chart-bar"></i>
+        </div>
+        <div class="loan-card__property-content">
+          <p class="loan-card__property-title">
+            Balance ratio
+          </p>
+          <p class="loan-card__property-description">
+            {{ balanceRatio || '-' }}
+          </p>
+        </div>
+      </div>
+      <!-- TODO: punitory -->
+    </mat-expansion-panel>
+    <div class="loan-card__expand">
       <button
         mat-raised-button
         class="button button-clear-dark mat-elevation-z"
+        (click)="collateralExpanded = !collateralExpanded"
       >
-        See more
+        {{ collateralExpanded ? 'See less' : 'See more' }}
       </button>
-    </div> -->
+    </div>
   </div>
   <div class="loan-card__footer">
     <div class="loan-card__property loan-card__property--strong">

@@ -126,6 +126,14 @@
     padding-top: 24px;
     padding-bottom: 7px;
   }
+
+  .collateral-expansion-panel {
+    ::ng-deep {
+      .mat-expansion-panel-body {
+        padding: 0;
+      }
+    }
+  }
 }
 
 .confirm-button {

@@ -118,6 +118,7 @@
       <app-create-loan-card
         *ngIf="loan"
         [loan]="loan"
+        [collateral]="collateral"
         [disabled]="!collateralRequest"
         [collateralPendingTx]="collateralPendingTx"
         (confirm)="detectCreateCollateral()"

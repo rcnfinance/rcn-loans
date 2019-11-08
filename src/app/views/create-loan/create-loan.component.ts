@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Loan } from './../../models/loan.model';
+import { Collateral } from './../../models/collateral.model';
 import { CollateralRequest } from './../../interfaces/collateral-request';
 import { LoanRequest } from './../../interfaces/loan-request';
 import { environment } from './../../../environments/environment';
@@ -28,9 +29,10 @@ export class CreateLoanComponent implements OnInit {
 
   loan: Loan;
   loanWasCreated: boolean;
+  createPendingTx: Tx = undefined;
+  collateral: Collateral;
   collateralRequest: CollateralRequest;
   collateralWasCreated: boolean;
-  createPendingTx: Tx = undefined;
   collateralPendingTx: Tx = undefined;
 
   // progress bar
@@ -112,7 +114,19 @@ export class CreateLoanComponent implements OnInit {
    * @param form Collateral form data
    */
   detectUpdateCollateralRequest(form: CollateralRequest) {
+    const loan: Loan = this.loan;
     this.collateralRequest = form;
+    this.collateral = new Collateral(
+      null,
+      loan.id,
+      form.oracle,
+      form.collateralToken,
+      form.collateralAmount,
+      form.liquidationRatio,
+      form.balanceRatio,
+      form.burnFee,
+      form.rewardFee
+    );
   }
 
   /**

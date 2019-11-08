@@ -1,7 +1,10 @@
 import { Component, OnInit, Output, EventEmitter, OnChanges, Input } from '@angular/core';
 import { Utils } from './../../../utils/utils';
 import { Loan } from './../../../models/loan.model';
+import { Collateral } from './../../../models/collateral.model';
 // App Services
+import { CurrenciesService } from './../../../services/currencies.service';
+import { Web3Service } from './../../../services/web3.service';
 import { Tx } from './../../../services/tx.service';
 
 @Component({
@@ -12,10 +15,12 @@ import { Tx } from './../../../services/tx.service';
 export class CreateLoanCardComponent implements OnInit, OnChanges {
 
   @Input() loan: Loan;
+  @Input() collateral: Collateral;
   @Input() disabled: boolean;
   @Input() collateralPendingTx: Tx;
   @Output() confirm = new EventEmitter();
   expanded: boolean;
+  collateralExpanded: boolean;
 
   amount: string;
   expectedReturn: string;
@@ -25,16 +30,29 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
   expirationDate: string;
   paysDetail = [];
 
-  constructor() { }
+  collateralAmount: string;
+  collateralAsset: string;
+  liquidationRatio: string;
+  balanceRatio: string;
+
+  constructor(
+    private web3Service: Web3Service,
+    private currenciesService: CurrenciesService
+  ) { }
 
   ngOnInit() { }
 
   ngOnChanges(changes) {
-    console.info('changes in loan card', changes);
-    const { loan } = changes;
+    const {
+      loan,
+      collateral
+    } = changes;
 
     if (loan && loan.currentValue) {
       this.loadDetail();
+    }
+    if (collateral && collateral.currentValue) {
+      this.loadCollateral();
     }
   }
 
@@ -73,6 +91,23 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
     this.annualInterest = null;
     this.durationDate = null;
     this.expirationDate = null;
+  }
+
+  /**
+   * Load collateral details
+   */
+  private loadCollateral() {
+    const web3: any = this.web3Service.web3;
+    const collateral: Collateral = this.collateral;
+    const liquidationRatio = new web3.BigNumber(collateral.liquidationRatio).div(100);
+
+    const balanceRatio = new web3.BigNumber(collateral.balanceRatio).div(100);
+    this.liquidationRatio = `${ Utils.formatAmount(liquidationRatio) } %`;
+    this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
+
+    const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
+    this.collateralAmount = Utils.formatAmount(Number(web3.fromWei(collateral.amount)));
+    this.collateralAsset = collateralCurrency.symbol;
   }
 
   /**

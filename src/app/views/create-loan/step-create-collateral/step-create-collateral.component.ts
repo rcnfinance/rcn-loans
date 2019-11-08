@@ -319,7 +319,7 @@ export class StepCreateCollateralComponent implements OnInit {
     collateralRatio = new web3.BigNumber(collateralRatio).div(100);
 
     // calculate amount in rcn
-    let collateralAmount = new web3.BigNumber(collateralRatio).mul(loanAmount);
+    let collateralAmount = new web3.BigNumber(collateralRatio).mul(loanAmount, 10);
     collateralAmount = collateralAmount.div(100);
 
     // convert amount to collateral asset
