@@ -61,7 +61,7 @@
       position: absolute;
       bottom: 0;
       top: 0;
-      right: 20px;
+      right: 10px;
       margin: auto;
       width: 1.2em;
       height: 1.2em;
@@ -82,6 +82,12 @@
   .expansion-panel {
     ::ng-deep .mat-expansion-panel-body {
       padding: 0 26px 16px;
+    }
+    &__header {
+      &-spinner,
+      &-check {
+        right: 20px;
+      }
     }
   }
 }
