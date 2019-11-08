@@ -37,6 +37,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     new Contract('Diaspore Loan manager', environment.contracts.diaspore.loanManager),
     new Contract('Diaspore Debt mananger', environment.contracts.diaspore.debtEngine),
     new Contract('Diaspore Converter ramp', environment.contracts.converter.converterRamp),
+    new Contract('Diaspore Collateral', environment.contracts.collateral.collateral),
     new Contract('Basalt engine', environment.contracts.basaltEngine)
   ];
   tokenContracts = {};
@@ -255,7 +256,16 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
 
     if (token !== rcnToken) {
       return this.contracts.filter(
-        contract => contract.address !== environment.contracts.basaltEngine
+        contract => {
+          switch (contract.address) {
+            case environment.contracts.converter.converterRamp:
+            case environment.contracts.collateral.collateral:
+              return true;
+
+            default:
+              return false;
+          }
+        }
       );
     }
 
