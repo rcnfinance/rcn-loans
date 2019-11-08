@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Loan } from './../../models/loan.model';
 import { CollateralRequest } from './../../interfaces/collateral-request';
@@ -10,10 +10,13 @@ import { environment } from './../../../environments/environment';
 // App Components
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 // App Services
 import { Web3Service } from '../../services/web3.service';
 import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
+import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
 import { TxService, Tx, Type } from './../../services/tx.service';
 
 @Component({
@@ -47,6 +50,7 @@ export class CreateLoanComponent implements OnInit {
     private web3Service: Web3Service,
     private titleService: TitleService,
     private contractsService: ContractsService,
+    private currenciesService: CurrenciesService,
     private txService: TxService
   ) { }
 
@@ -144,9 +148,28 @@ export class CreateLoanComponent implements OnInit {
       }
       return;
     }
-    // TODO: collateralAsset !== eth => approve ERC20
+    // check collateral asset balance
+    const balance = await this.contractsService.getUserBalanceInToken(form.collateralToken);
+    const required = form.collateralAmount;
+    if (balance < required) {
+      const currency: CurrencyItem = this.currenciesService.getCurrencyByKey(
+        'address',
+        form.collateralToken
+      );
+      this.showInsufficientFundsDialog(required, balance, currency.symbol);
+      return;
+    }
+    // validate approve
+    const contractAddress: string = environment.contracts.collateral.collateral;
+    const engineApproved = await this.contractsService.isApproved(contractAddress, form.collateralToken);
+    if (!await engineApproved) {
+      const approve = await this.showApproveDialog(contractAddress, form.collateralToken);
+      if (!approve) {
+        this.showMessage('You need to approve the collateral contract to continue.', 'snackbar');
+        return;
+      }
+    }
     // TODO: collateralAsset === eth => approve for all ERC721
-    // TODO: check balance
 
     this.showMessage('Please confirm the metamask transaction. Your Collateral is being processed.', 'snackbar');
     this.handleCreateCollateral(form);
@@ -300,6 +323,42 @@ export class CreateLoanComponent implements OnInit {
       this.spinner.hide();
       this.router.navigate(['/', 'loan', loan.id]);
     }, 3000);
+  }
+
+  /**
+   * Show approve dialog
+   * @param contract Contract address
+   * @param token Token address
+   */
+  private async showApproveDialog(contract: string, token: string = environment.contracts.rcnToken) {
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
+    dialogRef.componentInstance.onlyAddress = contract;
+    dialogRef.componentInstance.onlyToken = token;
+    return new Promise((resolve) => {
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  /**
+   * Show insufficient funds dialog
+   * @param required Amount required
+   * @param balance Actual user balance in selected currency
+   * @param currency Currency symbol
+   */
+  private showInsufficientFundsDialog(required: number, balance: number, currency: string) {
+    this.dialog.open(DialogInsufficientfundsComponent, {
+      data: {
+        required,
+        balance,
+        currency
+      }
+    });
   }
 
   /**
