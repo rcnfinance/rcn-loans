@@ -52,7 +52,7 @@
     }
     &-progress {
       position: absolute;
-      bottom: -4px;
+      bottom: 0;
       left: 0;
       width: 100%;
     }
@@ -66,6 +66,7 @@
       width: 1.2em;
       height: 1.2em;
       font-size: 1.2em;
+      color: var(--app-color-secondary);
     }
   }
 

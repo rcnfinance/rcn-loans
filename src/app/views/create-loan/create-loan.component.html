@@ -1,3 +1,10 @@
+<ngx-spinner
+  bdColor="rgba(0,0,0,.3)"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate-multiple"
+></ngx-spinner>
+
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
@@ -29,7 +36,9 @@
                 </span>
               </div>
             </mat-panel-title>
-            <ng-container *ngIf="startProgress">
+            <ng-container *ngIf="
+              startProgress && createPendingTx && !createPendingTx.confirmed
+            ">
               <app-infinite-progress-bar
                 [start]="true"
                 [end]="finishProgress"
@@ -44,7 +53,9 @@
             >
               <span class="fa fa-spinner fa-spin"></span>
             </div>
-            <div *ngIf="loanWasCreated" class="expansion-panel__header-check">
+            <div
+              *ngIf="loanWasCreated && !createPendingTx || loanWasCreated && createPendingTx?.confirmed"
+              class="expansion-panel__header-check">
               <span class="fa fa-check"></span>
             </div>
           </mat-expansion-panel-header>
@@ -73,7 +84,9 @@
                 </span>
               </div>
             </mat-panel-title>
-            <ng-container *ngIf="startProgress">
+            <ng-container *ngIf="
+              loanWasCreated && startProgress && collateralPendingTx && !collateralPendingTx.confirmed
+            ">
               <app-infinite-progress-bar
                 [start]="true"
                 [end]="finishProgress"
@@ -88,14 +101,27 @@
             >
               <span class="fa fa-spinner fa-spin"></span>
             </div>
+            <div *ngIf="collateralWasCreated" class="expansion-panel__header-check">
+              <span class="fa fa-check"></span>
+            </div>
           </mat-expansion-panel-header>
-          <app-step-create-collateral></app-step-create-collateral>
+          <app-step-create-collateral
+            *ngIf="loanWasCreated"
+            [loan]="loan"
+            (updateCollateralRequest)="detectUpdateCollateralRequest($event)"
+          ></app-step-create-collateral>
         </mat-expansion-panel>
 
       </mat-accordion>
     </div>
     <div class="col-sm-12 col-lg-4 pl-lg-5">
-      <app-create-loan-card *ngIf="loan" [loan]="loan"></app-create-loan-card>
+      <app-create-loan-card
+        *ngIf="loan"
+        [loan]="loan"
+        [disabled]="!collateralRequest"
+        [collateralPendingTx]="collateralPendingTx"
+        (confirm)="detectCreateCollateral()"
+      ></app-create-loan-card>
     </div>
   </div>
 </div>

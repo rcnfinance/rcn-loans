@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialog, MatSnackBar } from '@angular/material';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Loan } from './../../models/loan.model';
+import { CollateralRequest } from './../../interfaces/collateral-request';
 import { LoanRequest } from './../../interfaces/loan-request';
 import { environment } from './../../../environments/environment';
 // App Components
@@ -23,6 +25,8 @@ export class CreateLoanComponent implements OnInit {
 
   loan: Loan;
   loanWasCreated: boolean;
+  collateralRequest: CollateralRequest;
+  collateralWasCreated: boolean;
   createPendingTx: Tx = undefined;
   collateralPendingTx: Tx = undefined;
 
@@ -39,6 +43,7 @@ export class CreateLoanComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private spinner: NgxSpinnerService,
     private web3Service: Web3Service,
     private titleService: TitleService,
     private contractsService: ContractsService,
@@ -99,6 +104,55 @@ export class CreateLoanComponent implements OnInit {
   }
 
   /**
+   * Detect update collateral request
+   * @param form Collateral form data
+   */
+  detectUpdateCollateralRequest(form: CollateralRequest) {
+    this.collateralRequest = form;
+  }
+
+  /**
+   * Create collateral
+   */
+  async detectCreateCollateral() {
+    const loanTx: Tx = this.createPendingTx;
+    const collateralTx: Tx = this.collateralPendingTx;
+    const loan: Loan = this.loan;
+    const form: CollateralRequest = this.collateralRequest;
+
+    if (loanTx && !loanTx.confirmed) {
+      this.showMessage('Please wait for your loan to finish being created.', 'snackbar');
+      return;
+    }
+    if (collateralTx) {
+      if (collateralTx.confirmed) {
+        this.router.navigate(['/', 'loan', loan.id]);
+        return;
+      }
+      this.showMessage('Wait for the collateral to be created.', 'snackbar');
+      return;
+    }
+    // unlogged user
+    if (!this.web3Service.loggedIn) {
+      const hasClient = await this.web3Service.requestLogin();
+      if (this.web3Service.loggedIn) {
+        this.handleCreateCollateral(form);
+        return;
+      }
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
+      return;
+    }
+    // TODO: collateralAsset !== eth => approve ERC20
+    // TODO: collateralAsset === eth => approve for all ERC721
+    // TODO: check balance
+
+    this.showMessage('Please confirm the metamask transaction. Your Collateral is being processed.', 'snackbar');
+    this.handleCreateCollateral(form);
+  }
+
+  /**
    * If the validations were successful, manage the loan creation
    * @param loan Loan model
    * @param form Create loan form data
@@ -132,6 +186,7 @@ export class CreateLoanComponent implements OnInit {
         amount
       });
       this.retrievePendingTx();
+      this.loanWasCreated = true;
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.stack.indexOf('User denied transaction signature') < 0) {
@@ -142,14 +197,51 @@ export class CreateLoanComponent implements OnInit {
   }
 
   /**
+   * If the validations were successful, manage the collateral creation
+   * @param form Collateral request form data
+   */
+  private async handleCreateCollateral(form: CollateralRequest) {
+    const web3: any = this.web3Service.web3;
+    const account = web3.toChecksumAddress(await this.web3Service.getAccount());
+
+    try {
+      const tx: string = await this.contractsService.createCollateral(
+        form.loanId,
+        form.oracle,
+        form.collateralToken,
+        form.collateralAmount,
+        form.liquidationRatio,
+        form.balanceRatio,
+        form.burnFee,
+        form.rewardFee,
+        account
+      );
+      this.txService.registerCreateCollateralTx(tx, this.loan);
+      this.retrievePendingTx();
+    } catch (e) {
+      // Don't show 'User denied transaction signature' error
+      if (e.stack.indexOf('User denied transaction signature') < 0) {
+        this.showMessage('A problem occurred during collateral creation', 'snackbar');
+      }
+      throw Error(e);
+    }
+  }
+
+  /**
    * Retrieve pending Tx
    */
   private retrievePendingTx() {
     this.createPendingTx = this.txService.getLastPendingCreate(this.loan);
+    this.collateralPendingTx = this.txService.getLastPendingCreateCollateral(this.loan);
+    const loanId: string = this.loan.id;
 
     if (this.createPendingTx !== undefined) {
-      const loanId: string = this.loan.id;
       this.location.replaceState(`/create/${ loanId }`);
+      this.startProgress = true;
+      this.trackProgressbar();
+      return;
+    }
+    if (this.collateralPendingTx !== undefined) {
       this.startProgress = true;
       this.trackProgressbar();
     }
@@ -164,6 +256,11 @@ export class CreateLoanComponent implements OnInit {
       this.txService.subscribeConfirmedTx(async (tx: Tx) => {
         if (tx.type === Type.create && tx.tx === this.createPendingTx.tx) {
           this.finishLoanCreation();
+          return;
+        }
+        if (tx.type === Type.createCollateral && tx.tx === this.collateralPendingTx.tx) {
+          this.finishCollateralCreation();
+          return;
         }
       });
     }
@@ -178,6 +275,7 @@ export class CreateLoanComponent implements OnInit {
     if (loanWasCreated) {
       this.finishProgress = true;
       this.loanWasCreated = true;
+      this.startProgress = false;
     } else {
       this.cancelProgress = true;
       this.loanWasCreated = false;
@@ -187,6 +285,21 @@ export class CreateLoanComponent implements OnInit {
         this.createPendingTx = undefined;
       }, 1000);
     }
+  }
+
+  /**
+   * Finish collateral creation and redirect to the loan detail
+   */
+  private finishCollateralCreation() {
+    const loan: Loan = this.loan;
+    this.finishProgress = true;
+    this.loanWasCreated = true;
+    this.spinner.show();
+
+    setTimeout(() => {
+      this.spinner.hide();
+      this.router.navigate(['/', 'loan', loan.id]);
+    }, 3000);
   }
 
   /**

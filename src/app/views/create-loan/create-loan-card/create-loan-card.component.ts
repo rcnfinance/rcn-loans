@@ -1,6 +1,8 @@
-import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnChanges, Input } from '@angular/core';
 import { Utils } from './../../../utils/utils';
 import { Loan } from './../../../models/loan.model';
+// App Services
+import { Tx } from './../../../services/tx.service';
 
 @Component({
   selector: 'app-create-loan-card',
@@ -10,6 +12,9 @@ import { Loan } from './../../../models/loan.model';
 export class CreateLoanCardComponent implements OnInit, OnChanges {
 
   @Input() loan: Loan;
+  @Input() disabled: boolean;
+  @Input() collateralPendingTx: Tx;
+  @Output() confirm = new EventEmitter();
   expanded: boolean;
 
   amount: string;
@@ -25,6 +30,7 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
   ngOnInit() { }
 
   ngOnChanges(changes) {
+    console.info('changes in loan card', changes);
     const { loan } = changes;
 
     if (loan && loan.currentValue) {
@@ -33,9 +39,20 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
   }
 
   /**
+   * Click on confirm button
+   */
+  clickConfirm() {
+    if (this.disabled) {
+      return;
+    }
+
+    this.confirm.emit();
+  }
+
+  /**
    * Load loan details
    */
-  loadDetail() {
+  private loadDetail() {
     const loan: Loan = this.loan;
 
     const amount = loan.currency.fromUnit(loan.amount);
@@ -62,7 +79,7 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
    * Calculate the return amount
    * @return Expected return
    */
-  calculateExpectedReturn() {
+  private calculateExpectedReturn() {
     const loan: Loan = this.loan;
     const installments: number = loan.descriptor.installments;
     const installmentAmount: any = this.expectedInstallmentAmount();
@@ -146,6 +163,21 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
 
     this.paysDetail = paysDetail;
     return paysDetail;
+  }
+
+  /**
+   * Get submit button text according to the loan creation status
+   * @return Button text
+   */
+  get confirmButtonText(): string {
+    const tx: Tx = this.collateralPendingTx;
+    if (tx === undefined) {
+      return 'Confirm';
+    }
+    if (tx.confirmed) {
+      return 'Confirmed';
+    }
+    return 'Confirming...';
   }
 
 }

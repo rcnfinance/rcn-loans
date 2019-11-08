@@ -146,14 +146,17 @@
   </div>
 </div>
 
-<!-- <div
+<div
   class="confirm-button"
   [class.confirm-button--expanded]="expanded"
 >
   <button
     mat-raised-button
-    class="button button-primary"
+    class="button"
+    [ngClass]="disabled ? 'button-secondary' : 'button-primary'"
+    [disabled]="disabled"
+    (click)="clickConfirm()"
   >
-    Confirm
+    {{ confirmButtonText }}
   </button>
-</div> -->
+</div>

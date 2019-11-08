@@ -39,9 +39,6 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
   installmentDaysInterval = 15;
   account: string;
   shortAccount: string;
-  startProgress: boolean;
-  finishProgress: boolean;
-  cancelProgress: boolean;
 
   // Loan form
   form: FormGroup;
@@ -169,7 +166,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
   async autocompleteForm(loan: Loan) {
     const secondsInDay = 86400;
     const oracle: string = loan.oracle ? loan.oracle.address : undefined;
-    const nowDate = new Date().getTime() / 1000;
+    const nowDate = new Date().getTime();
     const expiration = loan.expiration / 1000;
 
     const currency: string = loan.currency.symbol;
