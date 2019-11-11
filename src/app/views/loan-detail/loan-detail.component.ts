@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
+import { Collateral } from '../../models/collateral.model';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Services
@@ -17,6 +18,9 @@ import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
+import { ApiService } from './../../services/api.service';
+import { CurrenciesService } from './../../services/currencies.service';
+import { Type } from './../../services/tx.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -46,6 +50,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   canCancel: boolean;
   canPay: boolean;
   canLend: boolean;
+  canAdjustCollateral: boolean; // TODO
 
   hasHistory: boolean;
   generatedByUser: boolean;
@@ -57,6 +62,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
   interest: string;
   duration: string;
+  collateral: Collateral;
+  collateralAmount: string;
+  collateralAsset: string;
   nextInstallment: {
     installment: string,
     amount: string,
@@ -87,6 +95,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private identityService: IdentityService,
     private web3Service: Web3Service,
     private brandingService: BrandingService,
+    private apiService: ApiService,
+    private currenciesService: CurrenciesService,
     public dialog: MatDialog
   ) { }
 
@@ -109,6 +119,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.loadStatus();
         this.loadDetail();
         this.loadAccount();
+        this.loadCollateral();
 
         // state
         this.viewDetail = this.defaultDetail();
@@ -169,6 +180,36 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Update collateral amount and reload collateral information
+   * @param event EventEmitter payload
+   * @param event.type Collateral action type
+   * @param event.amount Amount to add or withdraw in wei
+   */
+  updateCollateral(event: {
+    type: string,
+    amount: number
+  }) {
+    const web3: any = this.web3Service.web3;
+    let amount = web3.fromWei(event.amount);
+
+    switch (event.type) {
+      case Type.addCollateral:
+        amount = new web3.BigNumber(this.collateralAmount).add(amount);
+        break;
+
+      case Type.withdrawCollateral:
+        amount = new web3.BigNumber(this.collateralAmount).sub(amount);
+        break;
+
+      default:
+        break;
+    }
+
+    this.collateralAmount = Utils.formatAmount(amount);
+    setTimeout(() => this.loadCollateral(), 1500);
+  }
+
+  /**
    * Get loan details
    * @param id Loan ID
    * @return Loan
@@ -218,6 +259,56 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   private async loadIdentity() {
     const identity = await this.identityService.getIdentity(this.loan);
     this.identityName = identity ? identity.short : 'Unknown';
+  }
+
+  /**
+   * Load collateral data
+   */
+  private async loadCollateral() {
+    const loanId: string = this.loan.id;
+    const collaterals = await this.apiService.getCollateralByLoan(loanId);
+    const web3: any = this.web3Service.web3;
+
+    if (!collaterals.length) {
+      // FIXME: remove this
+      collaterals[0] = {
+        id: 9,
+        debt_id: '0x1f4771aae6b43f75f098bbbc194ff8cc10f6ed7b43d404c7c63a174322b25e02',
+        oracle: '0x702044c5572add5a13a04593bfdb669cf336759d',
+        token: '0x6710d597fd13127a5b64eebe384366b12e66fdb6',
+        amount: 25714900000000000000,
+        liquidation_ratio: 15000,
+        balance_ratio: 20000,
+        burn_fee: 500,
+        reward_fee: 500
+      };
+      // return;
+    }
+
+    const collateral = collaterals[0];
+    console.info('loan collateral', collateral);
+
+    this.collateral = new Collateral(
+      collateral.id,
+      collateral.debt_id,
+      collateral.oracle,
+      collateral.token,
+      collateral.amount,
+      collateral.liquidation_ratio,
+      collateral.balance_ratio,
+      collateral.burn_fee,
+      collateral.reward_fee
+    );
+
+    const liquidationRatio = new web3.BigNumber(collateral.liquidation_ratio).div(100);
+    const balanceRatio = new web3.BigNumber(collateral.balance_ratio).div(100);
+
+    this.liquidationRatio = `${ Utils.formatAmount(liquidationRatio) } %`;
+    this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
+
+    const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
+    this.collateralAmount = web3.fromWei(collateral.amount);
+    this.collateralAsset = collateralCurrency.symbol;
   }
 
   private defaultDetail(): string {
