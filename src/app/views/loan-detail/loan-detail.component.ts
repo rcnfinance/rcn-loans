@@ -50,7 +50,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   canCancel: boolean;
   canPay: boolean;
   canLend: boolean;
-  canAdjustCollateral: boolean; // TODO
+  canAdjustCollateral: boolean;
 
   hasHistory: boolean;
   generatedByUser: boolean;
@@ -461,15 +461,18 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     this.canPay = false;
     this.canTransfer = false;
     this.canCancel = false;
+    this.canAdjustCollateral = false;
   }
 
   private loanOnGoingorIndebt() {
     if (this.loan.debt !== undefined && this.userAccount) {
+      const isBorrower = this.isBorrower();
       const isDebtOwner = this.userAccount.toUpperCase() === this.loan.debt.owner.toUpperCase();
       this.canTransfer = isDebtOwner;
       this.canCancel = false;
       this.canPay = !isDebtOwner;
       this.canLend = false;
+      this.canAdjustCollateral = isBorrower;
     }
   }
 
@@ -480,6 +483,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       this.canPay = false;
       this.canTransfer = false;
       this.canCancel = isBorrower;
+      this.canAdjustCollateral = true;
     } else {
       this.canLend = true;
     }

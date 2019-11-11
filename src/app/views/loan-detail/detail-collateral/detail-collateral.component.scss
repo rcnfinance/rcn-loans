@@ -53,7 +53,7 @@
     }
   }
   &__footer {
-    background: rgba($gray7, .4);
+    background: var(--app-color-gray-400);
     border-radius: 4px;
     margin-top: 6px;
 
@@ -65,13 +65,13 @@
         h4 {
           @include small-title;
           @extend .font14;
-          color: var(--app-color-gray-50);
+          color: #EDEDED; // TODO: use theme color
         }
         p {
           @include small-title;
           @extend .font14;
           text-transform: none;
-          color: var(--app-color-gray-100);
+          color: var(--app-color-gray-50);
         }
         .button {
           margin-top: 18px;
@@ -100,6 +100,9 @@
           height: 1px;
           margin: 0 16px 6px;
           background: var(--app-color-gray-200);
+        }
+        .item {
+          color: #D8D8D8; // TODO: use theme color
         }
       }
     }
