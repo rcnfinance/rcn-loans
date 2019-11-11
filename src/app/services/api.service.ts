@@ -204,6 +204,22 @@ export class ApiService {
   }
 
   /**
+   * Get collateral.
+   * @param loanId Loan ID
+   * @return Collateral
+   */
+  async getCollateralByLoan(loanId: string) {
+    const uri = `collaterals?debt_id=${ loanId }`;
+    const data: any = await this.http.get(this.diasporeUrl.concat(uri)).toPromise();
+
+    try {
+      return data.content;
+    } catch {
+      throw Error('Error obtaining loan collateral');
+    }
+  }
+
+  /**
    * Each and call urls
    * @param urls URL array
    * @return URL call response
