@@ -160,7 +160,7 @@
     padding-top: $cardHeaderHeight;
     padding-top: 0;
     padding-bottom: 60px;
-    background: var(--app-color-gray-800);
+    background: var(--app-color-gray-600);
     transition: .3s;
 
     &--confirm-available {
@@ -199,8 +199,15 @@
     bottom: - $cardHeight;
     left: 0;
     width: 100%;
-    padding: 0 20px 20px;
+    padding: 26px 16px 16px;
     transition: .3s;
+    background: linear-gradient(
+      0deg,
+      var(--app-color-gray-600),
+      var(--app-color-gray-600),
+      var(--app-color-gray-600),
+      transparent
+    );
 
     &--expanded {
       bottom: 0;

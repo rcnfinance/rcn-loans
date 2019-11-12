@@ -202,10 +202,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
       }
     };
 
-    const dialogRef = action === 'add' ?
-      this.dialog.open(DialogCollateralComponent, dialogConfig) :
-      null;
-
+    const dialogRef = this.dialog.open(DialogCollateralComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(
       () => {
         this.retrievePendingTx();
