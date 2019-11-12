@@ -1,10 +1,13 @@
 import { Component, OnInit, OnDestroy, Inject, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { Loan } from '../../models/loan.model';
 import { Collateral } from '../../models/collateral.model';
 import { Utils } from '../../utils/utils';
+import { environment } from './../../../environments/environment';
+// App components
+import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 // App services
 import { Web3Service } from './../../services/web3.service';
 import { ContractsService } from './../../services/contracts.service';
@@ -22,6 +25,7 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
   collateral: Collateral;
   action: string;
   addPendingTx: Tx;
+  withdrawPendingTx: Tx;
 
   form: FormGroup;
   account: string;
@@ -35,6 +39,8 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
 
   constructor(
     private cdRef: ChangeDetectorRef,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
     public dialogRef: MatDialogRef<any>,
     private web3Service: Web3Service,
     private contractsService: ContractsService,
@@ -98,14 +104,49 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
    */
   retrievePendingTx() {
     this.addPendingTx = this.txService.getLastPendingAddCollateral(this.collateral);
-    // TODO: withdraw pending tx
+    this.withdrawPendingTx = this.txService.getLastPendingWithdrawCollateral(this.collateral);
   }
 
   /**
    * Add collateral amount
    * @param amount Amount to add
    */
-  async addCollateral(amount) {
+  async addCollateral(amount: number) {
+    // validate approve
+    const token = this.collateral.token;
+    const contract = environment.contracts.collateral.collateral;
+    const engineApproved = await this.contractsService.isApproved(contract, token);
+
+    if (!await engineApproved) {
+      const approve = await this.showApproveDialog(contract, token);
+      if (!approve) {
+        this.showMessage('You need to approve the collateral contract to continue.');
+        return;
+      }
+    }
+
+    this.handleAdd(amount);
+  }
+
+  /**
+   * Withdraw collateral amount
+   * @param amount Amount to withdraw
+   */
+  async withdrawCollateral(amount: number) {
+    const token: string = this.collateral.token;
+
+    if (token === environment.contracts.converter.ethAddress) {
+      // TODO: approve entry
+    }
+
+    this.handleWithdraw(amount);
+  }
+
+  /**
+   * If the validations were successful, manage the deposit transaction
+   * @param amount Amount to add
+   */
+  async handleAdd(amount: number) {
     const web3: any = this.web3Service.web3;
 
     const tx: string = await this.contractsService.addCollateral(
@@ -116,6 +157,28 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     );
 
     this.txService.registerAddCollateralTx(tx, this.loan, this.collateral, web3.toWei(amount));
+    this.showProgressbar();
+  }
+
+  /**
+   * If the validations were successful, manage the withdraw transaction
+   * @param amount Amount to withdraw
+   */
+  async handleWithdraw(amount: number) {
+    const web3: any = this.web3Service.web3;
+    const loan: Loan = this.loan;
+    const oracleData = await this.contractsService.getOracleData(loan.oracle);
+
+    const tx: string = await this.contractsService.withdrawCollateral(
+      this.collateral.id,
+      this.collateral.token,
+      this.account,
+      web3.toWei(amount),
+      oracleData,
+      this.account
+    );
+
+    this.txService.registerWithdrawCollateralTx(tx, this.loan, this.collateral, web3.toWei(amount));
     this.showProgressbar();
   }
 
@@ -160,4 +223,41 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Show approve dialog
+   * @param contract Contract address
+   * @param token Token address
+   * @return Promise<boolean>
+   */
+  async showApproveDialog(contract: string, token: string) {
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
+      DialogApproveContractComponent, {
+        data: {
+          onlyToken: token,
+          onlyAddress: contract
+        }
+      }
+    );
+
+    return new Promise((resolve) => {
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          resolve(true);
+        }
+
+        resolve();
+      });
+    });
+  }
+
+  /**
+   * Show snackbar with a message
+   * @param message The message to show in the snackbar
+   */
+  private showMessage(message: string) {
+    this.snackBar.open(message , null, {
+      duration: 4000,
+      horizontalPosition: 'center'
+    });
+  }
 }

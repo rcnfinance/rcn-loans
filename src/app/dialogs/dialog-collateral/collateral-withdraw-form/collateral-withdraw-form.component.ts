@@ -22,16 +22,16 @@ import { CollateralService } from '../../../services/collateral.service';
 import { CurrenciesService } from '../../../services/currencies.service';
 
 @Component({
-  selector: 'app-collateral-add-form',
-  templateUrl: './collateral-add-form.component.html',
-  styleUrls: ['./collateral-add-form.component.scss']
+  selector: 'app-collateral-withdraw-form',
+  templateUrl: './collateral-withdraw-form.component.html',
+  styleUrls: ['./collateral-withdraw-form.component.scss']
 })
-export class CollateralAddFormComponent implements OnInit, OnChanges {
+export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
   @Input() loan: Loan;
   @Input() collateral: Collateral;
   @Input() loading: boolean;
   @Input() account: string;
-  @Output() submitAdd = new EventEmitter<number>();
+  @Output() submitWithdraw = new EventEmitter<number>();
 
   form: FormGroup;
   collateralAmount: string;
@@ -46,6 +46,7 @@ export class CollateralAddFormComponent implements OnInit, OnChanges {
   collateralRatio: number;
   balanceRatio: number;
   shortAccount: string;
+  maxWithdraw: string;
 
   estimatedCollateralAmount: string;
   estimatedCollateralRatio: number;
@@ -139,6 +140,9 @@ export class CollateralAddFormComponent implements OnInit, OnChanges {
 
     const liquidationPrice = await this.calculateLiquidationPrice();
     this.liquidationPrice = Utils.formatAmount(liquidationPrice);
+
+    const maxWithdraw = this.calculateMaxWithdraw();
+    this.maxWithdraw = Utils.formatAmount(maxWithdraw);
   }
 
   /**
@@ -174,7 +178,7 @@ export class CollateralAddFormComponent implements OnInit, OnChanges {
   /**
    * Emitted when form is submitted
    * @param form Form group
-   * @fires submitAdd
+   * @fires submitWithdraw
    */
   onSubmit(form: FormGroup) {
     const collateralRatio = Number(this.estimatedCollateralRatio);
@@ -193,7 +197,25 @@ export class CollateralAddFormComponent implements OnInit, OnChanges {
       return;
     }
 
-    this.submitAdd.emit(amount);
+    this.submitWithdraw.emit(amount);
+  }
+
+  /**
+   * Set max withdraw amount
+   */
+  setMaxWithdraw() {
+    const web3: any = this.web3Service.web3;
+    const maxWithdraw: number = new web3.BigNumber(this.maxWithdraw);
+
+    if (this.loading) {
+      return;
+    }
+
+    this.form.patchValue({
+      amount: maxWithdraw
+    });
+
+    this.onAmountChange();
   }
 
   /**
@@ -216,11 +238,14 @@ export class CollateralAddFormComponent implements OnInit, OnChanges {
    */
   private calculateAmount(form: FormGroup) {
     const web3: any = this.web3Service.web3;
-    const amountToAdd: number = form.value.amount || 0;
+    const amountToWithdraw: number = form.value.amount || 0;
     const collateralAmount = new web3.BigNumber(this.collateralAmount);
 
     try {
-      const estimated: number = collateralAmount.add(amountToAdd);
+      const estimated: number = collateralAmount.sub(amountToWithdraw);
+      if (estimated < 0) {
+        return 0;
+      }
       return estimated;
     } catch (e) {
       console.error(e);
@@ -241,6 +266,21 @@ export class CollateralAddFormComponent implements OnInit, OnChanges {
   }
 
   /**
+   * Calculate the max withdraw amount
+   * @return Max amount to withdraw
+   */
+  private calculateMaxWithdraw() {
+    const web3: any = this.web3Service.web3;
+    const collateralAmount = this.collateralAmount;
+    const collateralRatio = this.calculateCollateralRatio();
+    const balanceRatio = this.balanceRatio;
+    const balanceAmount = new web3.BigNumber(balanceRatio).mul(collateralAmount).div(collateralRatio);
+    const diffAmount = new web3.BigNumber(collateralAmount).sub(balanceAmount);
+
+    return Math.floor(diffAmount.mul(1000)) / 1000;
+  }
+
+  /**
    * Show snackbar with a message
    * @param message The message to show in the snackbar
    */
@@ -257,8 +297,8 @@ export class CollateralAddFormComponent implements OnInit, OnChanges {
    */
   get submitButtonText(): string {
     if (!this.loading) {
-      return 'Add';
+      return 'Withdraw';
     }
-    return 'Adding...';
+    return 'Withdrawing...';
   }
 }

@@ -20,12 +20,13 @@
       [account]="account"
       (submitAdd)="addCollateral($event)"
     ></app-collateral-add-form>
-    <!-- <app-collateral-withdraw-form
+    <app-collateral-withdraw-form
       *ngSwitchCase="'withdraw'"
       [loan]="loan"
       [collateral]="collateral"
       [loading]="withdrawPendingTx"
+      [account]="account"
       (submitWithdraw)="withdrawCollateral($event)"
-    ></app-collateral-withdraw-form> -->
+    ></app-collateral-withdraw-form>
   </ng-container>
 </mat-dialog-content>
