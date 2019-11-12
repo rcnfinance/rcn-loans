@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
-// import { DialogCollateralComponent } from '../../../dialogs/dialog-collateral/dialog-collateral.component';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { DialogCollateralComponent } from '../../../dialogs/dialog-collateral/dialog-collateral.component';
 import { environment } from '../../../../environments/environment';
 // App Models
 import { Utils } from './../../../utils/utils';
@@ -41,6 +42,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   withdrawPendingTx: Tx;
 
   constructor(
+    private dialog: MatDialog,
     private web3Service: Web3Service,
     private contractsService: ContractsService,
     private collateralService: CollateralService,
@@ -192,8 +194,23 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
       return;
     }
 
-    // TODO: open dialog
-    console.info(action);
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        loan: this.loan,
+        collateral: this.collateral,
+        action
+      }
+    };
+
+    const dialogRef = action === 'add' ?
+      this.dialog.open(DialogCollateralComponent, dialogConfig) :
+      null;
+
+    dialogRef.afterClosed().subscribe(
+      () => {
+        this.retrievePendingTx();
+      }
+    );
   }
 
   /**
