@@ -1,0 +1,71 @@
+@import '../../../../scss/_variables.scss'; //variables
+
+.margin-spacing{
+  position: relative;
+  margin: -20px 0 -60px;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px !important;
+}
+
+.sub-title {
+  font-size: 22px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  margin: 0;
+}
+
+.text {
+  font-size: 24px;
+  font-weight: 400;
+  margin-top: 0px !important;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.bullet {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.img {
+  width: 50%;
+}
+
+.button-1 {
+  background: #4155FF 0% 0% no-repeat padding-box;
+  border-radius: 3px;
+  border: none;
+  opacity: 1;
+  text-align: center;
+  font: Bold 14px/17px Roboto;
+  letter-spacing: 0;
+  color: #FFFFFF;
+  width: 100%;
+  min-height: 36px;
+}
+
+.button-2 {
+  border: 1px solid #4155FF;
+  border-radius: 3px;
+  opacity: 1;
+  text-align: center;
+  background-color: black !important;
+  font: Bold 14px/17px Roboto;
+  letter-spacing: 0;
+  color: #4155FF;
+  width: 100%;
+  min-height: 36px;
+}
+
+@media (min-width: 992px){
+  .margin-spacing{
+    margin: -55px 0 -75px;
+    overflow: hidden;
+  }
+}
