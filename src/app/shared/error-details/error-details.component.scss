@@ -1,0 +1,32 @@
+@import './../../../scss/variables';
+@import './../../../scss/fonts';
+
+.container > .row {
+  min-height: 65vh;
+}
+
+.error-view {
+  &__label {
+    @include styled-font('Roboto', 900, 22px);
+  }
+  &__title {
+    @include typography-headline(2);
+  }
+  &__description {
+    @include typography-headline(5);
+  }
+  &__buttons {
+    button {
+      width: 120px;
+    }
+  }
+}
+
+.image-wrapper {
+  img {
+    display: inline-block;
+    margin: 0 auto;
+    max-width: 557px;
+    max-height: 277px;
+  }
+}
