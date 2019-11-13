@@ -18,6 +18,7 @@ export class ErrorDetailsComponent implements OnInit {
   @Input() description: string;
   @Input() image: string;
   @Input() buttons: ErrorButton[];
+  @Input() disclaimer: string;
 
   constructor() { }
 
