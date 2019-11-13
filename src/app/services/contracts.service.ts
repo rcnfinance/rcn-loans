@@ -613,8 +613,20 @@ export class ContractsService {
    * @return Loans array
    */
   async getLoansOfLender(lender: string): Promise<Loan[]> {
-    const basalt: Loan[] = await this.apiService.getLoansOfLender(lender, Network.Basalt);
-    const diaspore: Loan[] = await this.apiService.getLoansOfLender(lender, Network.Diaspore);
+    const basalt: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', Network.Basalt);
+    const diaspore: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', Network.Diaspore);
+
+    return diaspore.concat(LoanCurator.curateLoans(basalt));
+  }
+
+  /**
+   * Loads all loans borrowed by the specified account
+   * @param borrower Borrower address
+   * @return Loans array
+   */
+  async getLoansOfBorrower(borrower: string): Promise<Loan[]> {
+    const basalt: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(borrower, 'borrower', Network.Basalt);
+    const diaspore: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(borrower, 'borrower', Network.Diaspore);
 
     return diaspore.concat(LoanCurator.curateLoans(basalt));
   }
