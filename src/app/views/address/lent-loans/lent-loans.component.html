@@ -1,11 +1,18 @@
+<ngx-spinner
+  bdColor="rgba(0,0,0,.3)"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate-multiple"
+></ngx-spinner>
+
 <div
   class="body-scrollable activity-wrapper"
   #scrollingBlock
 >
-  <ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
   <div class="container">
-    <div class="row">
-      <div class="col-sm-12 d-none d-lg-block">
+    <div class="row align-items-center pt-2 pt-lg-0">
+
+      <div class="col-sm-12 col-lg-6 d-none d-lg-block">
         <div class="title main-h1">lent by</div>
         <div class="title main-h4 ellipsis my-2">
           {{ address }}
@@ -14,6 +21,13 @@
           <mat-chip class="mat-chip--gray margintop30 marginright15" selected="true">{{ loans.length }} LENT</mat-chip>
         </mat-chip-list>
       </div>
+
+      <div class="
+        col-sm-12 col-lg-6 d-flex justify-content-center justify-content-md-end
+      ">
+        <app-my-loans-tabs></app-my-loans-tabs>
+      </div>
+
     </div>
     <div class="loan-container row">
 
@@ -23,7 +37,7 @@
 
       <virtual-scroller
         #scroll
-        [items]="loans"
+        [items]="loans || []"
         [parentScroll]="scrollingBlock"
         [bufferAmount]="4"
         [scrollThrottlingTime]="500"
