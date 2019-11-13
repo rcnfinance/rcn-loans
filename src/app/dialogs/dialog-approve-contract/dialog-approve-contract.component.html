@@ -54,6 +54,35 @@
             </div>
           </div>
         </ng-container>
+        <div class="title main-h2 mb-3">
+          ERC 721
+        </div>
+        <ng-container *ngFor="let asset of assetContracts | keyvalue">
+          <div
+            class="row mb-3"
+            *ngIf="!onlyAsset || onlyAsset == asset.value.address"
+          >
+            <div class="col-sm-12">
+              <div class="title main-h3 mb-3">
+                {{ asset.key }}
+              </div>
+              <div
+                class="checkbox"
+                *ngFor="let contract of asset.value.contracts"
+              >
+                <mat-checkbox
+                  color="primary"
+                  [disabled]="!isEnabled(contract)"
+                  [checked]="contract.isApproved ? contract.isApproved[asset.value.address] : false"
+                  (change)="clickCheck(contract, $event, asset.value.address)"
+                  *ngIf="!onlyAddress || onlyAddress == contract.address"
+                >
+                  Authorize the <b>{{ contract.name }}</b> contract to operate {{ asset.key }} on your behalf
+                </mat-checkbox>
+              </div>
+            </div>
+          </div>
+        </ng-container>
       </div>
     </div>
     <div class="row">
