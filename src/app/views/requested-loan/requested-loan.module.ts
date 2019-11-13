@@ -11,7 +11,6 @@ import { ContractsService } from './../../services/contracts.service';
 import { FilterLoansService } from '../../services/filter-loans.service';
 // App Component
 import { RequestedLoanComponent } from './requested-loan.component';
-import { NoAvailableLoansComponent } from './no-available-loans/no-available-loans.component';
 
 const routes: Routes = [
   { path: '', component: RequestedLoanComponent }
@@ -28,8 +27,7 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [
-    RequestedLoanComponent,
-    NoAvailableLoansComponent
+    RequestedLoanComponent
   ],
   providers: [
     ContractsService,
