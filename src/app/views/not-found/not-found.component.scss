@@ -24,7 +24,9 @@
 
 .image-wrapper {
   img {
-    float: right;
-    width: 75%;
+    display: inline-block;
+    margin: 0 auto;
+    max-width: 557px;
+    max-height: 277px;
   }
 }

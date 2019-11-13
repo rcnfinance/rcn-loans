@@ -1,36 +1,17 @@
-<div class="container">
-  <div class="row d-flex align-items-center">
-    <div class="col-12 col-md-5 error-view">
-      <h4 class="error-view__label mb-0 mb-md-4 pb-3">
-        ERROR 404
-      </h4>
-      <h2 class="error-view__title mt-0 mb-3">
-        This loan doesn´t exist anymore.
-      </h2>
-      <p class="error-view__description">
-        Meanwhile you can check the Activity.
-      </p>
-      <div class="error-view__buttons mt-2 mt-md-5 pt-3">
-        <button
-          mat-raised-button
-          class="button button-primary"
-        >
-          Opc 1
-          <!-- TODO: add action -->
-        </button>
-        <button
-          mat-raised-button
-          class="button button-clear mat-elevation-z d-none d-md-inline-block"
-        >
-          Opc 2
-          <!-- TODO: add action -->
-        </button>
-      </div>
-    </div>
-    <div class="col-12 col-md-5 offset-md-2 mt-5 mt-md-0 image-wrapper">
-      <img src="../../../assets/error_no-loans.svg" alt="404" />
-    </div>
-  </div>
-</div>
+<app-error-details
+  label="ERROR 404"
+  title="This page doesn´t exists."
+  image="../../../assets/error_no-loans.svg"
+  [buttons]="[{
+    text: 'Opc 1',
+    url: '',
+    class: 'button-primary'
+  }, {
+    text: 'Opc 2',
+    url: '',
+    class: 'button-clear'
+  }]"
+>
+</app-error-details>
 
 <app-footer></app-footer>
