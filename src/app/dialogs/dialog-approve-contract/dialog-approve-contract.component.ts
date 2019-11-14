@@ -32,7 +32,6 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
   onlyAddress: string;
   onlyToken: string;
   account: string;
-  currencies: any[];
   contracts: Contract[] = [
     new Contract('Diaspore Loan manager', environment.contracts.diaspore.loanManager),
     new Contract('Diaspore Debt mananger', environment.contracts.diaspore.debtEngine),
@@ -40,7 +39,14 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     new Contract('Diaspore Collateral', environment.contracts.collateral.collateral),
     new Contract('Basalt engine', environment.contracts.basaltEngine)
   ];
+  // erc20
+  currencies: any[];
   tokenContracts = {};
+
+  // erc721
+  assets: any[];
+  assetContracts = {};
+
   pendingTx: Tx = undefined;
   txSubscription: boolean;
 
@@ -69,6 +75,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.loadCurrencies();
+    await this.loadAssets();
     await this.loadAccount();
     this.loadApproved();
     this.handleLoginEvents();
@@ -138,7 +145,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load currencies
+   * Load ERC20 tokens
    */
   loadCurrencies() {
     const ethAddress = environment.contracts.converter.ethAddress;
@@ -152,6 +159,24 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
       [item.symbol]: new TokenContracts(
         item.address,
         this.loadContracts(item.address)
+      )
+    }), {});
+  }
+
+  /**
+   * Load ERC721 assets
+   */
+  loadAssets() {
+    this.assets = this.contracts.filter(
+      (contract: Contract) => contract.address === environment.contracts.basaltEngine
+    );
+
+    // set contracts by asset
+    this.assetContracts = this.assets.reduce((accumulator, item) => ({
+      ...accumulator,
+      [item.name]: new TokenContracts(
+        item.address,
+        this.loadOperatorsERC721(item.address)
       )
     }), {});
   }
@@ -270,5 +295,16 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     }
 
     return this.contracts;
+  }
+
+  /**
+   * Load operators for the specified erc721
+   * @param asset ERC721 address
+   * @return Operators array
+   */
+  private loadOperatorsERC721(asset: string) {
+    // TODO: add ERC721 contracts
+    console.info(asset);
+    return [];
   }
 }
