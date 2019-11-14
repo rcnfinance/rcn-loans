@@ -1,0 +1,234 @@
+<ngx-spinner
+  bdColor="rgba(0,0,0,.3)"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate-multiple"
+></ngx-spinner>
+
+<form [formGroup]="form" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1="ngForm">
+  <div class="content-wrapper">
+    <div class="row mt-4 pt-3">
+      <div class="col-sm-11 col-md-12">
+        <div class="row">
+          <div class="col-sm-12 col-md-4 mb-4 mb-lg-0 item">
+            <div class="item__title">
+              Borrow currency
+            </div>
+            <div>
+              <mat-form-field floatLabel="never">
+                <mat-select
+                  placeholder="Select a Token"
+                  formControlName="currency"
+                  (selectionChange)="onCurrencyChange($event.value)"
+                  required
+                >
+                  <mat-option
+                    *ngFor="let currency of currencies"
+                    [value]="currency.symbol"
+                  >
+                    <div class="d-flex align-items-center py-1">
+                      <app-currency-logo
+                        [address]="currency.address"
+                      ></app-currency-logo>
+                      <span class="ml-3">
+                        {{ currency.symbol }}
+                      </span>
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 item item--amount">
+            <div class="item__title">
+              Borrow amount
+            </div>
+            <div>
+              <mat-form-field floatLabel="never">
+                <input
+                  matInput
+                  type="number"
+                  min="0"
+                  max="1000000"
+                  formControlName="amount"
+                  placeholder="0"
+                  (keyup)="onRequestedChange($event.value)"
+                  pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
+                  required
+                />
+                <mat-hint>
+                  <span
+                    class="red"
+                    *ngIf="
+                      amount.errors &&
+                      (amount.dirty || amount.touched)
+                    "
+                  >
+                    The minimum is 1
+                  </span>
+                </mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-12 item" *ngIf="
+            form?.value.currency &&
+            form?.value.currency !== 'RCN'
+          ">
+            <div class="item__message item__message--warning">
+              <i class="fas fa-exclamation-triangle"></i> You’re borrowing in
+              {{ form?.value.currency }}, therefore the value of the pays is going
+              to be converted to RCN.
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3 mt-lg-5 pt-4">
+          <div class="col col-sm-12 item">
+            <div class="item__title">
+              Duration of the loan
+            </div>
+            <span class="item__subtitle">
+              Set the number of days you want your loan to last.
+            </span>
+            <div class="row">
+              <div class="col-sm-12 col-lg-4">
+                <mat-form-field floatLabel="never">
+                  <mat-select
+                    placeholder="Select a number"
+                    formControlName="duration"
+                    (selectionChange)="onDurationChange()"
+                    required
+                  >
+                    <mat-option
+                      *ngFor="let duration of durationDays"
+                      [value]="duration"
+                    >
+                      {{ duration }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3 mt-lg-5 pt-4">
+          <div class="col col-lg-12 item item--slider">
+            <div class="item__title">
+              Annual interest rate
+            </div>
+            <div class="item__subtitle">
+              Select the interest you want to pay
+            </div>
+            <div class="row mt-4 mb-3">
+              <div class="col col-sm-12 col-lg-7">
+                <mat-slider
+                  class="percentage"
+                  step="1"
+                  tickInterval="1"
+                  color="primary"
+                  thumbLabel="true"
+                  formControlName="annualInterest"
+                  [displayWith]="formatPercentage"
+                  [disabled]="!form?.value.currency"
+                  [min]="selectedCurrency?.bestInterestRate.min"
+                  [max]="selectedCurrency?.bestInterestRate.max"
+                  (change)="onInterestRateChange()"
+                ></mat-slider>
+                <div class="item__percentage" *ngIf="selectedCurrency">
+                  <div class="item__percentage-amount">
+                    {{ selectedCurrency?.bestInterestRate.min }} %
+                  </div>
+                  <div class="item__percentage-amount">
+                    {{ selectedCurrency?.bestInterestRate.max }} %
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              *ngIf="selectedCurrency"
+              class="item__message item__message--info"
+            >
+              <i class="fas fa-info-circle"></i> Higher interestes are more likely
+              to be lended.
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3 mt-lg-5 pt-4">
+          <div class="col col-lg-12 item">
+            <div class="item__title">
+              <span>
+                Installments
+              </span>
+              <mat-slide-toggle
+                formControlName="hasInstallments"
+                [disabled]="!installmentsAvailable || installmentsAvailable < 2"
+                (change)="onInstallmentsChange()"
+                color="primary"
+                class="ml-2"
+              >
+              </mat-slide-toggle>
+            </div>
+            <div class="item__subtitle mb-3">
+              Do you want to pay back with installments?
+            </div>
+            <div class="item__message item__message--warning" *ngIf="installments > 1">
+              <i class="fas fa-exclamation-triangle"></i> Payments are made
+              every 15 days and the amount thereof is determined by the
+              duration of the loan.
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3 mt-lg-5 pt-4">
+          <div class="col-sm-12 item">
+            <div class="item__title">
+              Expiration date
+            </div>
+            <div class="item__subtitle">
+              If nobody takes your debt, the loan will expire after
+              certain days of being generated.
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-lg-2">
+                <mat-form-field floatLabel="never">
+                  <input
+                    matInput
+                    type="number"
+                    min="1"
+                    max="30"
+                    formControlName="expirationDate"
+                    (change)="onExpirationDateChange()"
+                    pattern="^(?:[1-9]|[1-2][0-9]|30)$"
+                    required
+                  />
+                  <mat-hint>
+                    days
+                  </mat-hint>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3 mt-lg-5 pt-4 mb-2">
+          <div class="col-sm-12">
+            <button
+              mat-raised-button
+              type="submit"
+              class="button button--submit mat-elevation-z"
+              [class.button-disabled]="
+                createPendingTx && !createPendingTx.confirmed
+              "
+            >
+              {{ createButtonText }}
+              <i class="fas fa-arrow-circle-right"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</form>

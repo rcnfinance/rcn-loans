@@ -8,11 +8,13 @@ import { SharedModule } from '../../shared/shared.module';
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { CommitsService } from './../../services/commits.service';
+import { CollateralService } from './../../services/collateral.service';
 // App Component
 import { LoanDetailComponent } from './loan-detail.component';
 import { DetailTableComponent } from './detail-table/detail-table.component';
 import { DetailIdentityComponent } from './detail-identity/detail-identity.component';
 import { DetailCosignerComponent } from './detail-cosigner/detail-cosigner.component';
+import { DetailCollateralComponent } from './detail-collateral/detail-collateral.component';
 import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
 import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
@@ -37,13 +39,15 @@ const routes: Routes = [
   providers: [
     ContractsService,
     CosignerService,
-    CommitsService
+    CommitsService,
+    CollateralService
   ],
   declarations: [
     LoanDetailComponent,
     DetailTableComponent,
     DetailIdentityComponent,
     DetailCosignerComponent,
+    DetailCollateralComponent,
     DecentralandMapComponent,
     DecentralandCosignerComponent,
     TransactionHistoryComponent,

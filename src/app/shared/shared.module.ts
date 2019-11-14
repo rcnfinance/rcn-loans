@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxSpinnerModule } from 'ngx-spinner';
 // App Modules
 import { MaterialModule } from './../material.module';
 // App Component
@@ -21,6 +22,12 @@ import { ConversionGraphicComponent } from './conversion-graphic/conversion-grap
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
 import { DialogHeaderComponent } from './dialog-header/dialog-header.component';
+import { BorrowFabButtonComponent } from './borrow-fab-button/borrow-fab-button.component';
+import { CollateralAddFormComponent } from './../dialogs/dialog-collateral/collateral-add-form/collateral-add-form.component';
+import {
+  CollateralWithdrawFormComponent
+} from './../dialogs/dialog-collateral/collateral-withdraw-form/collateral-withdraw-form.component';
+import { CollateralSliderDebtComponent } from './../dialogs/dialog-collateral/collateral-slider-debt/collateral-slider-debt.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -37,6 +44,7 @@ import { DialogGenericErrorComponent } from '../dialogs/dialog-generic-error/dia
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
+import { DialogCollateralComponent } from '../dialogs/dialog-collateral/dialog-collateral.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 // App Services
@@ -57,7 +65,8 @@ import { EventsService } from './../services/events.service';
     BlockiesModule,
     FormsModule,
     ReactiveFormsModule,
-    BlockiesModule
+    BlockiesModule,
+    NgxSpinnerModule
   ],
   declarations: [
     FooterComponent,
@@ -82,6 +91,10 @@ import { EventsService } from './../services/events.service';
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
+    BorrowFabButtonComponent,
+    CollateralAddFormComponent,
+    CollateralWithdrawFormComponent,
+    CollateralSliderDebtComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
@@ -89,6 +102,7 @@ import { EventsService } from './../services/events.service';
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
+    DialogCollateralComponent,
 
     VisualUrlPipe
   ],
@@ -98,7 +112,8 @@ import { EventsService } from './../services/events.service';
     DialogClientAccountComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
-    DialogLoanLendComponent
+    DialogLoanLendComponent,
+    DialogCollateralComponent
   ],
   providers: [
     DecentralandCosignerProvider,
@@ -137,6 +152,10 @@ import { EventsService } from './../services/events.service';
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
     DialogWrongCountryComponent,
+    BorrowFabButtonComponent,
+    CollateralAddFormComponent,
+    CollateralWithdrawFormComponent,
+    CollateralSliderDebtComponent,
     VisualUrlPipe
   ]
 })
