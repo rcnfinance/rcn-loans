@@ -118,7 +118,7 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     const engineApproved = await this.contractsService.isApproved(contract, token);
 
     if (!await engineApproved) {
-      const approve = await this.showApproveDialog(contract, token);
+      const approve = await this.showApproveDialog(contract, token, 'onlyToken');
       if (!approve) {
         this.showMessage('You need to approve the collateral contract to continue.');
         return;
@@ -136,7 +136,19 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     const token: string = this.collateral.token;
 
     if (token === environment.contracts.converter.ethAddress) {
-      // TODO: approve entry
+      const collateral = environment.contracts.collateral.collateral;
+      const operator = environment.contracts.collateral.wethManager;
+      const operatorApproved = await this.contractsService.isApprovedERC721(
+        collateral,
+        operator
+      );
+      if (!await operatorApproved) {
+        const approve = await this.showApproveDialog(operator, collateral, 'onlyAsset');
+        if (!approve) {
+          this.showMessage('You need to approve the collateral WETH manager to continue.');
+          return;
+        }
+      }
     }
 
     this.handleWithdraw(amount);
@@ -227,13 +239,18 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
    * Show approve dialog
    * @param contract Contract address
    * @param token Token address
+   * @param type ERC20 or ERC721
    * @return Promise<boolean>
    */
-  async showApproveDialog(contract: string, token: string) {
+  async showApproveDialog(
+    contract: string,
+    token: string,
+    type: 'onlyToken' | 'onlyAsset'
+  ) {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
       DialogApproveContractComponent, {
         data: {
-          onlyToken: token,
+          [type]: token,
           onlyAddress: contract
         }
       }
