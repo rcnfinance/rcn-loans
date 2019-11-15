@@ -270,19 +270,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     const web3: any = this.web3Service.web3;
 
     if (!collaterals.length) {
-      // FIXME: remove this
-      collaterals[0] = {
-        id: 9,
-        debt_id: '0x1f4771aae6b43f75f098bbbc194ff8cc10f6ed7b43d404c7c63a174322b25e02',
-        oracle: '0x702044c5572add5a13a04593bfdb669cf336759d',
-        token: '0x6710d597fd13127a5b64eebe384366b12e66fdb6',
-        amount: 25714900000000000000,
-        liquidation_ratio: 15000,
-        balance_ratio: 20000,
-        burn_fee: 500,
-        reward_fee: 500
-      };
-      // return;
+      return;
     }
 
     const collateral = collaterals[0];
