@@ -22,6 +22,9 @@ const basaltOracleAbi = require('../contracts/BasaltOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 const tokenConverterAbi = require('../contracts/TokenConverter.json');
 const oracleFactoryAbi = require('../contracts/OracleFactory.json');
+const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
+const collateralAbi = require('../contracts/Collateral.json');
+const collateralWethManagerAbi = require('../contracts/CollateralWETHManager.json');
 
 @Injectable()
 export class ContractsService {
@@ -35,6 +38,12 @@ export class ContractsService {
   private _tokenConverter: any;
   private _oracleFactoryAddress: string = environment.contracts.oracleFactory;
   private _oracleFactory: any;
+  private _installmentsModelAddress: string = environment.contracts.models.installments;
+  private _installmentsModel: any;
+  private _collateralAddress: string = environment.contracts.collateral.collateral;
+  private _collateral: any;
+  private _collateralWethManagerAddress: string = environment.contracts.collateral.wethManager;
+  private _collateralWethManager: any;
 
   constructor(
     private http: HttpClient,
@@ -49,6 +58,9 @@ export class ContractsService {
     this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
     this._tokenConverter = this.makeContract(tokenConverterAbi.abi, this._tokenConverterAddress);
     this._oracleFactory = this.makeContract(oracleFactoryAbi.abi, this._oracleFactoryAddress);
+    this._installmentsModel = this.makeContract(installmentsModelAbi.abi, this._installmentsModelAddress);
+    this._collateral = this.makeContract(collateralAbi.abi, this._collateralAddress);
+    this._collateralWethManager = this.makeContract(collateralWethManagerAbi.abi, this._collateralWethManagerAddress);
   }
 
   /**
@@ -707,6 +719,300 @@ export class ContractsService {
         resolve(this.readPendingWithdraws(loans));
       });
     }) as Promise<[number, number[], number, number[]]>;
+  }
+
+  /**
+   * Encode installments data
+   * @param cuota Installment amount
+   * @param interestRate Interest rate
+   * @param installments Number of installments
+   * @param duration Installment duration in seconds
+   * @param timeUnit Time unit (seconds)
+   * @return Encoded installments data
+   */
+  async encodeInstallmentsData(
+    cuota: number,
+    interestRate: number,
+    installments: number,
+    duration: number,
+    timeUnit: number
+  ) {
+    return new Promise((resolve, reject) => {
+      this._installmentsModel.encodeData(
+        cuota,
+        interestRate,
+        installments,
+        duration,
+        timeUnit,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Check encoded installments data
+   * @param encodedData Array of bytes
+   * @return True if can validate the data
+   */
+  async validateEncodedData(encodedData: string) {
+    return new Promise((resolve, reject) => {
+      this._installmentsModel.validate(
+        encodedData,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Calculate loan ID
+   * @param amount Total amount
+   * @param borrower Borrower address
+   * @param creator Creator address
+   * @param model Model address
+   * @param oracle Oracle address
+   * @param callback Callback address
+   * @param salt Salt hash
+   * @param expiration Expiration timestamp
+   * @param data Model data
+   * @return Loan ID
+   */
+  async calculateLoanId(
+    amount: number,
+    borrower: string,
+    creator: string,
+    model: string,
+    oracle: string,
+    callback: string,
+    salt: string,
+    expiration: number,
+    data: any
+  ) {
+    return new Promise((resolve, reject) => {
+      this._loanManager.calcId(
+        amount,
+        borrower,
+        creator,
+        model,
+        oracle,
+        callback,
+        salt,
+        expiration,
+        data,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Request a loan
+   * @param amount Total amount
+   * @param model Model address
+   * @param oracle Oracle address
+   * @param borrower Borrower address
+   * @param callback Callback address
+   * @param salt Salt hash
+   * @param expiration Expiration timestamp
+   * @param loanData Loan model data
+   * @return Loan ID
+   */
+  async requestLoan(
+    amount: number,
+    model: string,
+    oracle: string,
+    borrower: string,
+    callback: string,
+    salt: string,
+    expiration: number,
+    loanData: any
+  ) {
+    const web3 = this.web3.opsWeb3;
+    return await promisify(this.loadAltContract(web3, this._loanManager).requestLoan, [
+      amount,
+      model,
+      oracle,
+      borrower,
+      callback,
+      salt,
+      expiration,
+      loanData,
+      { from: borrower }
+    ]);
+  }
+
+  /**
+   * Check if the loan was created
+   * @param loanId Loan ID
+   * @return Boolean if the loan exist
+   */
+  async loanWasCreated(loanId: string): Promise<boolean> {
+    try {
+      const loan = await this._loanManager.getLoanData(loanId);
+
+      if (Utils.isEmpty(loan)) {
+        throw Error('Loan does not exist');
+      }
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
+   * Create loan collateral
+   * @param loanId Loan ID
+   * @param oracle Oracle address
+   * @param collateralToken Token address
+   * @param entryAmount Collateral amount
+   * @param liquidationRatio Liquidation ratio
+   * @param balanceRatio Balance ratio
+   * @param burnFee Burn fee
+   * @param rewardFee Reward fee
+   * @param account Account address
+   * @return Loan ID
+   */
+  async createCollateral(
+    loanId: string,
+    oracle: string,
+    collateralToken: string,
+    entryAmount: number,
+    liquidationRatio: number,
+    balanceRatio: number,
+    burnFee: number,
+    rewardFee: number,
+    account: string
+  ) {
+    const web3 = this.web3.opsWeb3;
+
+    if (collateralToken === environment.contracts.converter.ethAddress) {
+      return await promisify(this.loadAltContract(web3, this._collateralWethManager).create, [
+        loanId,
+        oracle,
+        liquidationRatio,
+        balanceRatio,
+        burnFee,
+        rewardFee,
+        {
+          from: account,
+          value: entryAmount
+        }
+      ]);
+    }
+
+    return await promisify(this.loadAltContract(web3, this._collateral).create, [
+      loanId,
+      oracle,
+      entryAmount,
+      liquidationRatio,
+      balanceRatio,
+      burnFee,
+      rewardFee,
+      { from: account }
+    ]);
+  }
+
+  /**
+   * Deposit tokens in collateral
+   * @param collateralId Collateral ID
+   * @param tokenAddress Collateral token address
+   * @param amount Amount to add in wei
+   * @param account Account address
+   * @return Tx hash
+   */
+  async addCollateral(
+    collateralId: number,
+    tokenAddress: string,
+    amount: number,
+    account: string
+  ) {
+    const web3 = this.web3.opsWeb3;
+
+    if (tokenAddress === environment.contracts.converter.ethAddress) {
+      return await promisify(this.loadAltContract(web3, this._collateralWethManager).deposit, [
+        collateralId,
+        {
+          from: account,
+          value: amount
+        }
+      ]);
+    }
+
+    return await promisify(this.loadAltContract(web3, this._collateral).deposit, [
+      collateralId,
+      amount,
+      { from: account }
+    ]);
+  }
+
+  /**
+   * Withdraw collateral
+   * @param collateralId Collateral ID
+   * @param to Account address
+   * @param amount Amount to add in wei
+   * @param oracleData Oracle data bytes
+   * @param account Account address
+   * @return Tx hash
+   */
+  async withdrawCollateral(
+    collateralId: number,
+    tokenAddress: string,
+    to: string,
+    amount: number,
+    oracleData: string,
+    account: string
+  ) {
+    const web3 = this.web3.opsWeb3;
+    let contract: any = this._collateral;
+
+    if (tokenAddress === environment.contracts.converter.ethAddress) {
+      contract = this._collateralWethManager;
+    }
+
+    return await promisify(this.loadAltContract(web3, contract).withdraw, [
+      collateralId,
+      to,
+      amount,
+      oracleData,
+      { from: account }
+    ]);
+  }
+
+  /**
+   * Get loan debt amount value
+   * @param loanId Loan ID
+   * @return Debt amount
+   */
+  async getClosingObligation(loanId: string) {
+    return new Promise((resolve, reject) => {
+      this._loanManager.getClosingObligation(
+        loanId,
+        (err, result) => {
+          if (err != null) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
   }
 
   /**

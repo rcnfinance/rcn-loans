@@ -47,6 +47,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     new Operator('Diaspore Loan manager', environment.contracts.diaspore.loanManager),
     new Operator('Diaspore Debt mananger', environment.contracts.diaspore.debtEngine),
     new Operator('Diaspore Converter ramp', environment.contracts.converter.converterRamp),
+    new Contract('Diaspore Collateral', environment.contracts.collateral.collateral),
     new Operator('Basalt engine', environment.contracts.basaltEngine)
   ];
   assets: Contract[];

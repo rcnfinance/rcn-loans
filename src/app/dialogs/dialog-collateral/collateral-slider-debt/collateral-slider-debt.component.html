@@ -1,0 +1,23 @@
+<div class="collateral-debt-slider">
+  <mat-slider
+    step="1"
+    tickInterval="25"
+    [min]="liquidationRatio"
+    [max]="maxRatio"
+    [value]="collateralRatio"
+    color="primary"
+    disabled
+    (change)="onSliderDrag($event)"
+  ></mat-slider>
+  <div
+    class="collateral-debt-slider__percentage"
+    [ngStyle]="{'width': disabledRatioAverage || '20%'}"
+  >
+    <div class="percentage percentage--min">
+      {{ liquidationRatio }}%
+    </div>
+    <div class="percentage percentage--max">
+      {{ balanceRatio }}%
+    </div>
+  </div>
+</div>

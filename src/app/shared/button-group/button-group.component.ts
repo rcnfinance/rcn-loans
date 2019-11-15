@@ -1,13 +1,14 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-button-group',
   templateUrl: './button-group.component.html',
   styleUrls: ['./button-group.component.scss']
 })
-export class ButtonGroupComponent implements OnInit {
+export class ButtonGroupComponent {
   @Output() view = new EventEmitter<string>();
   @Input() viewDetail;
+  @Input() generatedByUser: boolean;
 
   constructor() { }
 
@@ -15,7 +16,4 @@ export class ButtonGroupComponent implements OnInit {
     this.view.emit(view);
     this.viewDetail = view;
   }
-
-  ngOnInit() {}
-
 }

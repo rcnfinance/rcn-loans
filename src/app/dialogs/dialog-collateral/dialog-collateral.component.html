@@ -1,0 +1,32 @@
+<app-dialog-header title="Collateral adjustment">
+</app-dialog-header>
+
+<mat-dialog-content>
+
+  <ng-container *ngIf="startProgress">
+    <app-infinite-progress-bar
+      [start]="true"
+      [end]="finishProgress"
+      (finish)="hideProgressbar()"
+    >
+    </app-infinite-progress-bar>
+  </ng-container>
+  <ng-container [ngSwitch]="action">
+    <app-collateral-add-form
+      *ngSwitchCase="'add'"
+      [loan]="loan"
+      [collateral]="collateral"
+      [loading]="addPendingTx"
+      [account]="account"
+      (submitAdd)="addCollateral($event)"
+    ></app-collateral-add-form>
+    <app-collateral-withdraw-form
+      *ngSwitchCase="'withdraw'"
+      [loan]="loan"
+      [collateral]="collateral"
+      [loading]="withdrawPendingTx"
+      [account]="account"
+      (submitWithdraw)="withdrawCollateral($event)"
+    ></app-collateral-withdraw-form>
+  </ng-container>
+</mat-dialog-content>
