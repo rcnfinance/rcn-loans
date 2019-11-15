@@ -234,8 +234,7 @@ export class ContractsService {
     }
 
     const account = await this.web3.getAccount();
-    const erc721abi: any = {}; // FIXME: use real erc721 abi
-    const erc721 = this.makeContract(erc721abi, contractAddress);
+    const erc721 = this.makeContract(collateralAbi.abi, contractAddress);
     return await promisify(erc721.isApprovedForAll.call, [
       operatorAddress,
       account
@@ -251,8 +250,7 @@ export class ContractsService {
   async approveERC721(contractAddress: string, operatorAddress: string) {
     const web3 = this.web3.opsWeb3;
     const account = await this.web3.getAccount();
-    const erc721abi: any = {}; // FIXME: use real erc721 abi
-    const erc721: any = this.makeContract(erc721abi, contractAddress);
+    const erc721: any = this.makeContract(collateralAbi.abi, contractAddress);
 
     const txHash: string = await promisify(this.loadAltContract(web3, erc721).setApprovalForAll, [
       operatorAddress, true, { from: account }
@@ -271,8 +269,7 @@ export class ContractsService {
   async disapproveERC721(contractAddress: string, operatorAddress: string) {
     const web3 = this.web3.opsWeb3;
     const account = await this.web3.getAccount();
-    const erc721abi: any = {}; // FIXME: use real erc721 abi
-    const erc721: any = this.makeContract(erc721abi, contractAddress);
+    const erc721: any = this.makeContract(collateralAbi.abi, contractAddress);
 
     const txHash: string = await promisify(this.loadAltContract(web3, erc721).setApprovalForAll, [
       operatorAddress, false, { from: account }
