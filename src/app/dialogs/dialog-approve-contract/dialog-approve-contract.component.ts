@@ -230,9 +230,10 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
    * Track tx
    */
   private trackApproveTx(tx: Tx) {
+    const to: string = this.onlyToken || this.onlyAsset;
     if (
       tx.type === Type.approve &&
-      tx.to === this.onlyToken &&
+      (tx.to === to) &&
       tx.data.contract === this.onlyAddress
     ) {
       this.finishProgress = true;
