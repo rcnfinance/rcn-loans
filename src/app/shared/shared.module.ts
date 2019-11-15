@@ -65,7 +65,6 @@ import { EventsService } from './../services/events.service';
     BlockiesModule,
     FormsModule,
     ReactiveFormsModule,
-    BlockiesModule,
     NgxSpinnerModule
   ],
   declarations: [
