@@ -206,16 +206,15 @@
           &:hover{
             color: var(--app-color-primary);
           }
-          &.separator{
-            font-weight: 300;
-            cursor: default;
-            &:hover{
-              color: var(--app-color-secondary);
-            }
-          }
           &:last-child{
             margin-right: 0;
           }
+        }
+        .separator{
+          font-size: 1.4em;
+          font-weight: 300;
+          color: var(--app-color-gray-50);
+          cursor: default;
         }
       }
       .icon-hamburguer{

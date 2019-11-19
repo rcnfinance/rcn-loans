@@ -26,13 +26,13 @@
               <a class="nav__item mr-4" routerLink='/activity'>Activity</a>
               <a class="nav__item mr-4" routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</a>
               <div class="nav__item mr-4" (click)="login()" *ngIf="!hasAccount">Login</div>
-              <ng-container *ngIf="hasAccount">
-                <div class="separator">|</div>
+              <div class="d-flex align-items-center pl-0" [hidden]="!hasAccount">
+                <div class="separator pr-3">|</div>
                 <app-icon-group-header></app-icon-group-header>
-                <div class="separator">|</div>
-                <app-component-balance [account]="account"></app-component-balance>
-                <div class="separator">|</div>
-              </ng-container>
+                <div class="separator px-3">|</div>
+                <app-component-balance [account]="account">
+                </app-component-balance>
+              </div>
               <!-- Balance section -->
               <div class="nav__item" (click)="openDialogApprove();">
                 <div class="flex-container" *ngIf="hasAccount">
