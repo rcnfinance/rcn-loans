@@ -209,6 +209,68 @@ export class ContractsService {
   }
 
   /**
+   * Check if the contract is approved for operate with ERC721
+   * @param contractAddress ERC721 address
+   * @param operatorAddress address to be disapproved
+   * @return Boolean
+   */
+  async isApprovedERC721(contractAddress: string, operatorAddress: string) {
+    const pending = this.txService.getLastPendingApprove(contractAddress, operatorAddress);
+
+    if (pending !== undefined) {
+      return true;
+    }
+
+    const account = await this.web3.getAccount();
+    const erc721abi: any = {}; // FIXME: use real erc721 abi
+    const erc721 = this.makeContract(erc721abi, contractAddress);
+    return await promisify(erc721.isApprovedForAll.call, [
+      operatorAddress,
+      account
+    ]);
+  }
+
+  /**
+   * Approve contract for operate with erc721
+   * @param contractAddress ERC721 address
+   * @param operatorAddress address to be approved
+   * @return Tx hash
+   */
+  async approveERC721(contractAddress: string, operatorAddress: string) {
+    const web3 = this.web3.opsWeb3;
+    const account = await this.web3.getAccount();
+    const erc721abi: any = {}; // FIXME: use real erc721 abi
+    const erc721: any = this.makeContract(erc721abi, contractAddress);
+
+    const txHash: string = await promisify(this.loadAltContract(web3, erc721).setApprovalForAll, [
+      operatorAddress, true, { from: account }
+    ]);
+
+    this.txService.registerApproveTx(txHash, contractAddress, operatorAddress, true);
+    return txHash;
+  }
+
+  /**
+   * Disapprove contract for operate with erc721
+   * @param contractAddress ERC721 address
+   * @param operatorAddress address to be disapproved
+   * @return Tx hash
+   */
+  async disapproveERC721(contractAddress: string, operatorAddress: string) {
+    const web3 = this.web3.opsWeb3;
+    const account = await this.web3.getAccount();
+    const erc721abi: any = {}; // FIXME: use real erc721 abi
+    const erc721: any = this.makeContract(erc721abi, contractAddress);
+
+    const txHash: string = await promisify(this.loadAltContract(web3, erc721).setApprovalForAll, [
+      operatorAddress, false, { from: account }
+    ]);
+
+    this.txService.registerApproveTx(txHash, contractAddress, operatorAddress, false);
+    return txHash;
+  }
+
+  /**
    * Return estimated lend amount in RCN
    * @param loan Loan payload
    * @param tokenAddress Amount in the selected token
