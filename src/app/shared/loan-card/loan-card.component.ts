@@ -6,6 +6,12 @@ import { Utils } from '../../utils/utils';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 
+interface LoanAction {
+  handler: void;
+  title: string;
+  disabled: boolean;
+}
+
 @Component({
   selector: 'app-loan-card',
   templateUrl: './loan-card.component.html',
@@ -15,6 +21,7 @@ export class LoanCardComponent implements OnInit, OnDestroy {
   @Input() loan: Loan;
   stateLoan: Loan;
 
+  isBorrower: boolean;
   leftLabel: string;
   leftValue: string;
   rightLabel: string;
@@ -26,6 +33,7 @@ export class LoanCardComponent implements OnInit, OnDestroy {
   installments: string;
   interestRate: string;
   punitiveInterestRateRate: string;
+  loanActions: LoanAction[];
 
   account: string;
   shortAddress = Utils.shortAddress;
@@ -68,6 +76,9 @@ export class LoanCardComponent implements OnInit, OnDestroy {
     const account = await this.web3Service.getAccount();
     this.account = web3.toChecksumAddress(account);
 
+    const borrower = this.stateLoan.borrower;
+    this.isBorrower = borrower.toLowerCase() === account.toLowerCase();
+
     this.checkCanLend();
   }
 
@@ -76,8 +87,9 @@ export class LoanCardComponent implements OnInit, OnDestroy {
    */
   checkCanLend() {
     if (this.stateLoan.isRequest) {
-      const isBorrower = this.stateLoan.borrower.toUpperCase() === this.account.toUpperCase();
-      this.canLend = !isBorrower;
+      this.canLend = !this.isBorrower;
+    } else {
+      this.canLend = false;
     }
   }
 
