@@ -41,6 +41,8 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.spinner.hide();
+
     try {
       this.subscriptionAvailable.unsubscribe();
     } catch (e) { }

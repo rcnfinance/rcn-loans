@@ -123,6 +123,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.spinner.hide();
+
     if (this.subscriptionAccount) {
       try {
         this.subscriptionAccount.unsubscribe();
