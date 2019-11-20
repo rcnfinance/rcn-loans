@@ -8,8 +8,7 @@ import { SharedModule } from '../../shared/shared.module';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 // App Component
-import { BorrowedLoansComponent } from './borrowed-loans/borrowed-loans.component';
-import { LentLoansComponent } from './lent-loans/lent-loans.component';
+import { AddressComponent } from './address.component';
 import { MyLoansTabsComponent } from './my-loans-tabs/my-loans-tabs.component';
 
 const routes: Routes = [
@@ -18,12 +17,8 @@ const routes: Routes = [
     redirectTo: 'lent'
   },
   {
-    path: 'lent',
-    component: LentLoansComponent
-  },
-  {
-    path: 'borrowed',
-    component: BorrowedLoansComponent
+    path: ':tab',
+    component: AddressComponent
   }
 ];
 
@@ -36,8 +31,7 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [
-    BorrowedLoansComponent,
-    LentLoansComponent,
+    AddressComponent,
     MyLoansTabsComponent
   ],
   providers: [

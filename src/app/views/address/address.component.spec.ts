@@ -2,14 +2,14 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { SharedModule } from './../../../shared/shared.module';
-import { MaterialModule } from './../../../material.module';
-import { ContractsService } from './../../../services/contracts.service';
-import { BorrowedLoansComponent } from './borrowed-loans.component';
+import { SharedModule } from './../../shared/shared.module';
+import { MaterialModule } from './../../material.module';
+import { ContractsService } from './../../services/contracts.service';
+import { AddressComponent } from './address.component';
 
-describe('BorrowedLoansComponent', () => {
-  let component: BorrowedLoansComponent;
-  let fixture: ComponentFixture<BorrowedLoansComponent>;
+describe('AddressComponent', () => {
+  let component: AddressComponent;
+  let fixture: ComponentFixture<AddressComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -19,7 +19,7 @@ describe('BorrowedLoansComponent', () => {
         SharedModule,
         MaterialModule
       ],
-      declarations: [ BorrowedLoansComponent ],
+      declarations: [ AddressComponent ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
       providers: [ ContractsService ]
     })
@@ -27,7 +27,7 @@ describe('BorrowedLoansComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BorrowedLoansComponent);
+    fixture = TestBed.createComponent(AddressComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

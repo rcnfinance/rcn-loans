@@ -13,12 +13,20 @@
     <div class="row align-items-center pt-2 pt-lg-0">
 
       <div class="col-sm-12 col-lg-6 d-none d-lg-block">
-        <div class="title main-h1">lent by</div>
+        <div class="title main-h1">
+          {{ tab === 'borrowed' ? 'borrowed' : 'lent' }} by
+        </div>
         <div class="title main-h4 ellipsis my-2">
           {{ address }}
         </div>
         <mat-chip-list>
-          <mat-chip class="mat-chip--gray margintop30 marginright15" selected="true">{{ loans.length }} LENT</mat-chip>
+          <mat-chip
+            class="mat-chip--gray margintop30 marginright15"
+            selected="true"
+          >
+            {{ loans?.length }}
+            {{ tab === 'borrowed' ? 'BORROWED' : 'LENT' }}
+          </mat-chip>
         </mat-chip-list>
       </div>
 
@@ -32,7 +40,9 @@
     <div class="loan-container row">
 
       <div class="col-sm-12 text-center margintop30" *ngIf='!availableLoans'>
-        <div class="title main-h1">This address is not a lender</div>
+        <div class="title main-h1">
+          This address is not a {{ tab === 'borrowed' ? 'borrower' : 'lender' }}
+        </div>
       </div>
 
       <virtual-scroller
