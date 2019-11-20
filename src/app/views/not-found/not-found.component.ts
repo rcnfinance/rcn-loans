@@ -8,7 +8,6 @@ import { TitleService } from '../../services/title.service';
   styleUrls: ['./not-found.component.scss']
 })
 export class NotFoundComponent implements OnInit {
-  winHeight: any = window.innerHeight - 118;
 
   constructor(
     private titleService: TitleService
