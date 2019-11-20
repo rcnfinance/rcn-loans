@@ -22,9 +22,9 @@
 
             <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
               <!-- Menu section -->
-              <a class="nav__item mr-4" routerLink='/requests'>Requests</a>
-              <a class="nav__item mr-4" routerLink='/activity'>Activity</a>
-              <a class="nav__item mr-4" routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</a>
+              <a class="nav__item mr-4" routerLinkActive="nav__item--active" routerLink='/requests'>Requests</a>
+              <a class="nav__item mr-4" routerLinkActive="nav__item--active" routerLink='/activity'>Activity</a>
+              <a class="nav__item mr-4" routerLinkActive="nav__item--active" routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</a>
               <div class="nav__item mr-4" (click)="login()" *ngIf="!hasAccount">Login</div>
               <div
                 class="align-items-center pl-0"

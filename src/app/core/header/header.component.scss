@@ -43,6 +43,21 @@
         outline: -webkit-focus-ring-color auto 0px;
         @extend %font-bold;
         color: white;
+        position: relative;
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -5px;
+          left: 10px;
+          width: 0;
+          height: 2px;
+          background: rgba(white, 0);
+          border-radius: 2px;
+        }
+        &--active::after {
+          width: 12px;
+          background: rgba(white, 1);
+        }
       }
     }
     .icon-hamburguer{
@@ -199,12 +214,18 @@
           display: block;
           font-size: 16px;
           cursor: pointer;
-          @include transition;
           i{
             color: #fff;
           }
-          &:hover{
+          &,
+          &::after {
+            @include transition;
+          }
+          &:hover {
             color: var(--app-color-primary);
+            &.nav__item--active::after {
+              background: var(--app-color-primary);
+            }
           }
           &:last-child{
             margin-right: 0;
