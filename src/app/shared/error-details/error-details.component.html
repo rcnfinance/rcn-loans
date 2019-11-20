@@ -1,7 +1,10 @@
 <div class="container">
-  <div class="row d-flex align-items-center">
+  <div class="row d-flex flex-column-reverse flex-md-row align-items-center">
     <div class="col-12 col-md-6 error-view">
-      <h4 class="error-view__label mb-0 mb-md-4 pb-3" *ngIf="label">
+      <h4
+        class="error-view__label mb-0 mb-md-4 mt-4 py-3 mt-md-0 pt-md-0"
+        *ngIf="label"
+      >
         {{ label }}
       </h4>
       <h2 class="error-view__title mt-0 mb-3" *ngIf="title">
@@ -24,10 +27,14 @@
           {{ button.text }}
         </button>
       </div>
-      <p class="error-view__disclaimer mt-4 pt-3" [innerHTML]="disclaimer">
+      <p
+        class="error-view__disclaimer mt-4 pt-3"
+        [innerHTML]="disclaimer"
+        *ngIf="disclaimer"
+      >
       </p>
     </div>
-    <div class="col-12 col-md-6 mt-5 mt-md-0 image-wrapper">
+    <div class="col-8 col-md-6 mt-5 image-wrapper">
       <img [src]="image" alt="404" />
     </div>
   </div>

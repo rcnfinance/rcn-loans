@@ -1,10 +1,6 @@
 @import './../../../scss/variables';
 @import './../../../scss/fonts';
 
-.container > .row {
-  min-height: 65vh;
-}
-
 .error-view {
   &__label {
     @include styled-font('Roboto', 900, 22px);
@@ -35,5 +31,11 @@
     margin: 0 auto;
     max-width: 557px;
     max-height: 277px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container > .row {
+    min-height: 65vh;
   }
 }
