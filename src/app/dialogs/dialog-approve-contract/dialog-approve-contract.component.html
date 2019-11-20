@@ -31,21 +31,23 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-12 col-md-7">
+      <div class="col-sm-12 col-md-7 px-0">
 
         <ng-container *ngIf="tokens?.length && !onlyAsset">
-          <div class="title main-h2 mb-3">
+          <div class="title main-h2 mb-3 px-3 mx-1">
             Tokens
           </div>
-          <ng-container *ngFor="let token of tokens">
-            <div
-              class="row mb-3"
-              *ngIf="!onlyToken || onlyToken == token.address"
-            >
-              <div class="col-sm-12">
-                <div class="title main-h3 mb-3">
-                  {{ token.name }}
-                </div>
+          <ng-container *ngFor="let token of tokens; let i = index">
+            <mat-accordion *ngIf="!onlyToken || onlyToken == token.address">
+              <mat-expansion-panel
+                class="expansion-panel mat-elevation-z"
+                [expanded]="onlyToken || i === 0"
+              >
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ token.name }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
                 <div
                   class="checkbox"
                   *ngFor="let operator of token.operators"
@@ -59,24 +61,26 @@
                     Authorize the <b>{{ operator.name }}</b> contract to operate {{ token.name }} on your behalf
                   </mat-checkbox>
                 </div>
-              </div>
-            </div>
+              </mat-expansion-panel>
+            </mat-accordion>
           </ng-container>
         </ng-container>
 
         <ng-container *ngIf="assets?.length && !onlyToken">
-          <div class="title main-h2 mb-3">
+          <div class="title main-h2 mb-3 px-3 mx-1">
             ERC 721
           </div>
           <ng-container *ngFor="let asset of assets">
-            <div
-              class="row mb-3"
-              *ngIf="!onlyAsset || onlyAsset == asset.address"
-            >
-              <div class="col-sm-12">
-                <div class="title main-h3 mb-3">
-                  {{ asset.name }}
-                </div>
+            <mat-accordion *ngIf="!onlyAsset || onlyAsset == token.address">
+              <mat-expansion-panel
+                class="expansion-panel mat-elevation-z"
+                [expanded]="onlyAsset"
+              >
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ asset.name }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
                 <div
                   class="checkbox"
                   *ngFor="let operator of asset.operators"
@@ -90,15 +94,15 @@
                     Authorize the <b>{{ operator.name }}</b> contract to operate {{ asset.name }} on your behalf
                   </mat-checkbox>
                 </div>
-              </div>
-            </div>
+              </mat-expansion-panel>
+            </mat-accordion>
           </ng-container>
         </ng-container>
 
       </div>
     </div>
-    <div class="row">
-      <div class="col-sm-12 mb-3 d-flex justify-content-end">
+    <div class="row mt-4">
+      <div class="col-sm-12 d-flex justify-content-end">
         <app-close-button></app-close-button>
       </div>
     </div>
