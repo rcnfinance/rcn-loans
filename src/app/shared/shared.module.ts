@@ -48,6 +48,7 @@ import { IdentityService } from './../services/identity.service';
 import { RiskService } from './../services/risk.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
+import { ErrorDetailsComponent } from './error-details/error-details.component';
 
 @NgModule({
   imports: [
@@ -82,6 +83,7 @@ import { EventsService } from './../services/events.service';
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
+    ErrorDetailsComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
@@ -136,6 +138,7 @@ import { EventsService } from './../services/events.service';
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
+    ErrorDetailsComponent,
     DialogWrongCountryComponent,
     VisualUrlPipe
   ]
