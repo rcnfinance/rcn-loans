@@ -39,6 +39,7 @@ export class Web3Service {
           const accounts = await promisify(candWeb3.eth.getAccounts, []);
           if (accounts && accounts.length) {
             console.info('Logged in');
+            this.account = accounts[0];
             this.web3account = candWeb3;
             this.loginEvent.emit(true);
           }
@@ -134,7 +135,7 @@ export class Web3Service {
    * Listen account updates
    */
   private listenAccountUpdates() {
-    window.ethereum.on('accountsChanged', async (accounts) => {
+    window.ethereum.on('accountsChanged', (accounts: string[]) => {
 
       if (accounts && accounts.length) {
         console.info('Accounts changed', accounts[0]);
