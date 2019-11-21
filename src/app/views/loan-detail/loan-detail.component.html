@@ -153,6 +153,7 @@
     <div class="right px-0 col-xs-12 col-md-7">
       <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
       <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
+      <app-detail-installments *ngIf="isDetail('installments')" [loan]="loan"></app-detail-installments>
     </div>
 
   </div>

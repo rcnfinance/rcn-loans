@@ -1,0 +1,18 @@
+<ng-container *ngIf="installments; else empty">
+  <section class="installments-detail px-3 px-md-4 pt-lg-5 mt-lg-5">
+  </section>
+</ng-container>
+
+<ng-template #empty>
+  <div class="empty-container p-3 py-md-0">
+    <div class="empty-row">
+      <i class="material-icons font110">
+        error_outline
+      </i>
+      <div class="title main-h3">
+        There is no installments available
+      </div>
+      <div class="title main-h4"></div>
+    </div>
+  </div>
+</ng-template>

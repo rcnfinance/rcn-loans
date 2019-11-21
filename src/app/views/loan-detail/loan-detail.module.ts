@@ -16,6 +16,7 @@ import { DetailCosignerComponent } from './detail-cosigner/detail-cosigner.compo
 import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
 import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
+import { DetailInstallmentsComponent } from './detail-installments/detail-installments.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 import { TransferButtonComponent } from './../../shared/transfer-button/transfer-button.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
@@ -44,6 +45,7 @@ const routes: Routes = [
     DetailTableComponent,
     DetailIdentityComponent,
     DetailCosignerComponent,
+    DetailInstallmentsComponent,
     DecentralandMapComponent,
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
