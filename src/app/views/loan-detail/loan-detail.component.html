@@ -69,6 +69,76 @@
       <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled"></app-detail-table>
       <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
 
+
+
+      <div class="table-responsive" (click)="openDetail('installments');">
+        <table class="table table-clickable table--installments">
+          <thead>
+            <tr>
+              <th
+                style='cursor: pointer'
+                [ngClass]="{'background-active': isDetail('installments') }"
+                scope="col"
+              >
+                Installments
+                <i class="material-icons white more-indicator">
+                  {{ isDetail('installments') ? '' : 'unfold_more' }}
+                </i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style='cursor: pointer'>
+
+                <!-- FIXME: use installments interfaces -->
+                <div class="table__body">
+                  <div class="row table__body-header">
+                    <div class="col col-3">
+                      <span class="subtitle">
+                        Installment
+                      </span>
+                    </div>
+                    <div class="col col-4">
+                      <span class="subtitle">
+                        Amount to pay
+                      </span>
+                    </div>
+                    <div class="col col-5">
+                      <span class="subtitle">
+                        Due date
+                        <span *ngIf="nextInstallment?.daysLeft"
+                          class="due-status due-status--success">
+                          ({{ nextInstallment.daysLeft }} days left)
+                        </span>
+                        <span *ngIf="nextInstallment?.daysAgo"
+                          class="due-status due-status--error">
+                          ({{ nextInstallment.daysAgo }} days left)
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row table__body-content">
+                    <div class="col col-3">
+                      {{ nextInstallment?.installment || '-' }}
+                    </div>
+                    <div class="col col-4">
+                      {{ nextInstallment?.amount || '-' }}
+                    </div>
+                    <div class="col col-5">
+                      {{ nextInstallment?.dueDate || '-' }}
+                    </div>
+                  </div>
+                </div>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+
       <div class="table-responsive" *ngIf='availableOracle'>
         <table class="table">
           <thead>

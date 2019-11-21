@@ -1,5 +1,6 @@
-@import '../../../scss/_variables.scss'; //variables
-@import '../../../scss/_tables.scss'; //tables
+@import '../../../scss/variables';
+@import '../../../scss/tables';
+@import '../../../scss/fonts';
 
 //LOAN DETAIL
 .loan-detail{
@@ -114,6 +115,36 @@
         &.background-active{
           background-color: var(--app-color-primary-dark);
         }
+      }
+    }
+  }
+}
+
+.table {
+  &--installments {
+    .table__body {
+      &-header {
+        @include typography-body(3);
+        color: #D9D9D9;
+
+        .due-status {
+          &--success {
+            color: var(--app-color-green);
+          }
+          &--warning {
+            color: var(--app-color-orange);
+          }
+          &--error {
+            color: var(--app-color-red);
+          }
+        }
+
+        .subtitle {
+          display: inline-block;
+          margin-bottom: 10px;
+        }
+      }
+      &-content {
       }
     }
   }
