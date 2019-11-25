@@ -24,6 +24,10 @@ export class InstallmentService {
   getInstallments(loan: Loan): Installment[] {
     let installments: Installment[] = [];
 
+    if (!loan) {
+      return [];
+    }
+
     switch (loan.status) {
       case Status.Request:
         installments = this.getEstimatedInstallments(loan);
