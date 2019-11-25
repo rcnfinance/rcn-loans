@@ -87,6 +87,7 @@ export class InstallmentService {
     const startDateUnix = (loan.debt.model.dueTime - loan.descriptor.duration) * 1000;
     const today = Math.round(new Date().getTime());
     const todayTimestamp = this.unixToDate(today);
+    let hasCurrent: boolean;
 
     for (let i = 0; i < loan.descriptor.installments; i++) {
       const payNumber = i + 1;
@@ -97,7 +98,6 @@ export class InstallmentService {
         startDateUnix + (loan.descriptor.frequency * 1000 * payNumber)
       );
       const currency = loan.currency.toString();
-      const amount = loan.currency.fromUnit(loan.descriptor.firstObligation);
       const punitory = loan.descriptor.punitiveInterestRateRate;
       const totalAmount = loan.currency.fromUnit(loan.debt.model.estimatedObligation);
       const totalPaid = loan.currency.fromUnit(loan.debt.model.paid);
@@ -106,8 +106,21 @@ export class InstallmentService {
       const status = InstallmentStatus.OnTime;
 
       let isCurrent = false;
-      if (startDate < todayTimestamp && dueDate > todayTimestamp) {
+      let amount = loan.currency.fromUnit(loan.descriptor.firstObligation);
+
+      // future installments
+      if (hasCurrent) {
+        amount = loan.currency.fromUnit(loan.debt.model.nextObligation);
+      }
+
+      // previous or latest installment
+      if (
+        (startDate < todayTimestamp && dueDate > todayTimestamp) ||
+        (payNumber === loan.descriptor.installments && !hasCurrent)
+      ) {
+        hasCurrent = true;
         isCurrent = true;
+        amount = loan.currency.fromUnit(loan.debt.model.currentObligation);
       }
 
       installments.push({
@@ -123,12 +136,6 @@ export class InstallmentService {
         pays,
         status
       });
-    }
-
-    // if there is no current installment mark the last one
-    const hasCurrent = installments.filter(installment => installment.isCurrent);
-    if (!hasCurrent.length) {
-      installments[installments.length - 1].isCurrent = true;
     }
 
     return installments;
