@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
-import { Installment, InstallmentStatus } from '../../interfaces/installment';
+import { Installment } from '../../interfaces/installment';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Services
@@ -18,6 +18,7 @@ import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
+import { InstallmentService } from './../../services/installment.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -87,6 +88,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private identityService: IdentityService,
     private web3Service: Web3Service,
     private brandingService: BrandingService,
+    private installmentService: InstallmentService,
     public dialog: MatDialog
   ) { }
 
@@ -119,6 +121,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         console.info('Loan', this.loan, 'not found');
         this.router.navigate(['/404/'], { skipLocationChange: true });
       }
+
+      this.openDetail('installments');
     });
   }
 
@@ -340,105 +344,31 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   /**
    * Load the next installment data
    */
-  private loadInstallments() {
+  private async loadInstallments() {
     const loan: Loan = this.loan;
     const secondsInDay = 86400;
+    const installments: Installment[] = await this.installmentService.getInstallments(loan);
+    const installment: Installment = installments.filter(thisInstallment => thisInstallment.isCurrent)[0];
+    const addSuffix = (n: number): string => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+    const payNumber = `${ installment.payNumber + addSuffix(installment.payNumber) } Pay`;
+    const dueDate: number = new Date(installment.dueDate).getTime() / 1000;
+    const nowDate: number = new Date().getTime() / 1000;
+    const daysLeft: number = Math.round((dueDate - nowDate) / secondsInDay);
 
-    let startDateUnix: number;
-    let startDate: string;
-    let dueDate: string;
-    let dueDays: string;
-    let daysLeft: number;
-    let amount: number;
-    let totalAmount: number;
-    let totalPaid: number;
-    let payNumber: number;
-
-    const unixToDate = unix => new DatePipe('en-US').transform(unix, 'yyyy-M-dd H:mm:ss z');
-
-    switch (loan.status) {
-      case Status.Request:
-        payNumber = 1;
-        startDateUnix = new Date().getTime();
-        startDate = unixToDate(startDateUnix);
-        totalPaid = 0;
-
-        const dueInstallment = startDateUnix + ((loan.descriptor.frequency * payNumber) * 1000);
-        dueDate = unixToDate(dueInstallment);
-        amount = loan.currency.fromUnit(loan.descriptor.firstObligation);
-        totalAmount = loan.currency.fromUnit(loan.amount);
-        dueDays = Utils.formatDelta(loan.descriptor.duration / loan.descriptor.installments);
-        daysLeft = Math.round((loan.descriptor.duration / loan.descriptor.installments) / secondsInDay);
-        break;
-
-      case Status.Ongoing:
-      case Status.Indebt:
-        startDateUnix = loan.debt.model.dueTime - loan.descriptor.duration;
-        startDate = unixToDate(startDateUnix * 1000);
-        totalPaid = loan.currency.fromUnit(loan.debt.model.paid);
-        amount = loan.currency.fromUnit(loan.debt.model.currentObligation);
-        totalAmount = loan.currency.fromUnit(loan.debt.model.estimatedObligation);
-
-        const installments = loan.descriptor.installments;
-        const frequency = loan.descriptor.frequency;
-        const nowDate = Math.round(new Date().getTime() / 1000);
-
-        let installmentDate: number = startDateUnix;
-        for (let installmentNumber = 1; installmentNumber <= installments; installmentNumber++) {
-          installmentDate += frequency;
-
-          // return the next (or last) installment
-          if (installmentDate > nowDate || installmentNumber === installments) {
-            payNumber = installmentNumber;
-            dueDate = unixToDate(installmentDate * 1000);
-            dueDays = Utils.formatDelta(installmentDate - nowDate, 1);
-            daysLeft = Math.round((installmentDate - nowDate) / secondsInDay);
-          }
-        }
-
-        break;
-
-      default:
-        break;
-    }
-
-    let status: InstallmentStatus;
+    let dueDays: string = Utils.formatDelta(dueDate - nowDate, 1);
     if (daysLeft > 1) {
-      status = InstallmentStatus.OnTime;
       dueDays += ' left';
     } else if (daysLeft === 1 || daysLeft === 0) {
-      status = InstallmentStatus.Warning;
       dueDays += ' left';
     } else {
-      status = InstallmentStatus.OnDue;
       dueDays += ' ago';
     }
 
-    const addSuffix = (n: number) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
-    const isCurrent = true;
-    const punitory = loan.descriptor.punitiveInterestRateRate;
-    const pendingAmount = totalAmount - totalPaid;
-    const currency = loan.currency.toString();
-    const pays = [];
-
     this.nextInstallment = {
-      payNumber: `${ payNumber + addSuffix(payNumber) } Pay`,
+      payNumber,
       dueDays,
-      installment: {
-        isCurrent,
-        startDate,
-        payNumber,
-        dueDate,
-        currency,
-        amount,
-        punitory,
-        pendingAmount,
-        totalPaid,
-        pays,
-        status
-      }
+      installment
     };
-
   }
 
   private invalidActions() {

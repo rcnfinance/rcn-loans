@@ -8,6 +8,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { CommitsService } from './../../services/commits.service';
+import { InstallmentService } from './../../services/installment.service';
 // App Component
 import { LoanDetailComponent } from './loan-detail.component';
 import { DetailTableComponent } from './detail-table/detail-table.component';
@@ -38,7 +39,8 @@ const routes: Routes = [
   providers: [
     ContractsService,
     CosignerService,
-    CommitsService
+    CommitsService,
+    InstallmentService
   ],
   declarations: [
     LoanDetailComponent,
