@@ -1,4 +1,4 @@
-enum InstallmentStatus {
+export enum InstallmentStatus {
   OnTime,
   Warning,
   OnDue
@@ -14,6 +14,7 @@ export interface Pay {
 export interface Installment {
   isCurrent: boolean;
   payNumber: number;
+  startDate: string;
   dueDate: string;
   currency: string;
   amount: number;
