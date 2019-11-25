@@ -91,7 +91,6 @@
             <tr>
               <td style='cursor: pointer'>
 
-                <!-- FIXME: use installments interfaces -->
                 <div class="table__body">
                   <div class="row table__body-header">
                     <div class="col col-3">
@@ -107,26 +106,33 @@
                     <div class="col col-5">
                       <span class="subtitle">
                         Due date
-                        <span *ngIf="nextInstallment?.daysLeft"
-                          class="due-status due-status--success">
-                          ({{ nextInstallment.daysLeft }} days left)
-                        </span>
-                        <span *ngIf="nextInstallment?.daysAgo"
-                          class="due-status due-status--error">
-                          ({{ nextInstallment.daysAgo }} days left)
+                        <span
+                          class="due-status ml-1"
+                          [class.due-status--success]="nextInstallment?.installment.status === 0"
+                          [class.due-status--warning]="nextInstallment?.installment.status === 1"
+                          [class.due-status--error]="nextInstallment?.installment.status === 2"
+                        >
+                          ({{ nextInstallment?.dueDays }})
                         </span>
                       </span>
                     </div>
                   </div>
                   <div class="row table__body-content">
                     <div class="col col-3">
-                      {{ nextInstallment?.installment || '-' }}
+                      {{ nextInstallment?.payNumber || '-' }}
                     </div>
                     <div class="col col-4">
-                      {{ nextInstallment?.amount || '-' }}
+                      {{ nextInstallment?.installment.amount || '-' }}
+                      {{ nextInstallment?.installment.currency }}
                     </div>
                     <div class="col col-5">
-                      {{ nextInstallment?.dueDate || '-' }}
+                      {{ nextInstallment?.installment.dueDate | date: 'yyyy-MM-dd' || '-' }}
+                      <span
+                        class="ml-3"
+                        [matTooltip]="nextInstallment?.installment.dueDate | date: 'H:mm z'"
+                      >
+                        <i class="far fa-clock"></i>
+                      </span>
                     </div>
                   </div>
                 </div>

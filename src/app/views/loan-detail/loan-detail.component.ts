@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
+import { Installment, InstallmentStatus } from '../../interfaces/installment';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Services
@@ -58,10 +59,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   interest: string;
   duration: string;
   nextInstallment: {
-    installment: string,
-    amount: string,
-    dueDate: string,
-    dueTime: string
+    dueDays: string;
+    payNumber: string;
+    installment: Installment;
   };
   lendDate: string;
   dueDate: string;
@@ -338,31 +338,104 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load next installment data
+   * Load the next installment data
    */
   private loadInstallments() {
-    const installments: number = this.loan.descriptor.installments;
-    const installmentDuration: string = Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments);
-    const installmentAmount: number = this.loan.currency.fromUnit(this.loan.descriptor.firstObligation);
-    const installmentCurrency: string = this.loan.currency.symbol;
-    const nextInstallment: number = this.isRequest ? 1 : 1; // TODO - Next installment
-    const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+    const loan: Loan = this.loan;
+    const secondsInDay = 86400;
 
-    this.diasporeData = [
-      ['Installments', 'Duration', 'Cuota'],
-      [
-        installments,
-        installmentDuration,
-        `${ installmentAmount } ${ installmentCurrency }`
-      ]
-    ];
+    let startDateUnix: number;
+    let startDate: string;
+    let dueDate: string;
+    let dueDays: string;
+    let daysLeft: number;
+    let amount: number;
+    let payNumber: number;
+
+    const unixToDate = unix => new DatePipe('en-US').transform(unix, 'yyyy-M-dd H:mm:ss z');
+
+    switch (loan.status) {
+      case Status.Request:
+        payNumber = 1;
+        startDateUnix = new Date().getTime();
+        startDate = unixToDate(startDateUnix);
+
+        const dueInstallment = startDateUnix + ((loan.descriptor.frequency * payNumber) * 1000);
+        dueDate = unixToDate(dueInstallment);
+        amount = this.loan.currency.fromUnit(loan.descriptor.firstObligation);
+        dueDays = Utils.formatDelta(loan.descriptor.duration / loan.descriptor.installments);
+        daysLeft = Math.round((loan.descriptor.duration / loan.descriptor.installments) / secondsInDay);
+        break;
+
+      case Status.Ongoing:
+      case Status.Indebt:
+        startDateUnix = loan.debt.model.dueTime - loan.descriptor.duration;
+        startDate = unixToDate(startDateUnix);
+
+        // FIXME: use all payment transactions and dueDates for calculate amount + punitory
+        amount = this.loan.currency.fromUnit(loan.descriptor.firstObligation);
+
+        const installments = loan.descriptor.installments;
+        const frequency = loan.descriptor.frequency;
+        const nowDate = Math.round(new Date().getTime() / 1000);
+
+        let installmentDate: number = startDateUnix;
+        for (let installmentNumber = 1; installmentNumber <= installments; installmentNumber++) {
+          installmentDate += frequency;
+
+          // return the next (or last) installment
+          if (installmentDate > nowDate || installmentNumber === installments) {
+            payNumber = installmentNumber;
+            dueDate = unixToDate(installmentDate * 1000);
+            dueDays = Utils.formatDelta(installmentDate - nowDate, 1);
+            daysLeft = Math.round((installmentDate - nowDate) / secondsInDay);
+          }
+        }
+
+        break;
+
+      default:
+        break;
+    }
+
+    let status: InstallmentStatus;
+    if (daysLeft > 1) {
+      status = InstallmentStatus.OnTime;
+      dueDays += ' left';
+    } else if (daysLeft === 1 || daysLeft === 0) {
+      status = InstallmentStatus.Warning;
+      dueDays += ' left';
+    } else {
+      status = InstallmentStatus.OnDue;
+      dueDays += ' ago';
+    }
+
+    const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+    const isCurrent = true;
+    const totalPaid = 0; // TODO: Add total paid amount
+    const punitory = 0; // TODO: Calculate punitory
+    const pendingAmount = loan.amount - totalPaid;
+    const currency = loan.currency.toString();
+    const pays = [];
 
     this.nextInstallment = {
-      installment: `${ nextInstallment + addSuffix(nextInstallment) } Pay`,
-      amount: `${ Utils.formatAmount(installmentAmount) } ${ installmentCurrency }`,
-      dueDate: installmentDuration,
-      dueTime: null
+      payNumber: `${ payNumber + addSuffix(payNumber) } Pay`,
+      dueDays,
+      installment: {
+        isCurrent,
+        startDate,
+        payNumber,
+        dueDate,
+        currency,
+        amount,
+        punitory,
+        pendingAmount,
+        totalPaid,
+        pays,
+        status
+      }
     };
+
   }
 
   private invalidActions() {
