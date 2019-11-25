@@ -158,7 +158,7 @@ export class InstallmentService {
       const totalPaid = loan.currency.fromUnit(loan.debt.model.paid);
       const pendingAmount = totalAmount - totalPaid;
       const pays = [];
-      const status = InstallmentStatus.OnTime;
+      let status = InstallmentStatus.OnTime;
 
       let isCurrent = false;
       let amount = loan.currency.fromUnit(loan.descriptor.firstObligation);
@@ -173,6 +173,7 @@ export class InstallmentService {
         (startDate < todayTimestamp && dueDate > todayTimestamp) ||
         (payNumber === loan.descriptor.installments && !hasCurrent)
       ) {
+        status = this.getDueStatus(dueDate);
         hasCurrent = true;
         isCurrent = true;
         amount = loan.currency.fromUnit(loan.debt.model.currentObligation);
@@ -196,6 +197,31 @@ export class InstallmentService {
     return installments;
   }
 
+  /**
+   * Return due status
+   * @param dueDate Date in unix format
+   * @return Installment status
+   */
+  private getDueStatus(dueDate: string): InstallmentStatus {
+    const secondsInDay = 86400;
+    const dueTimestamp = new Date(dueDate).getTime() / 1000;
+    const nowTimestamp = new Date().getTime() / 1000;
+    const daysLeft = Math.round((dueTimestamp - nowTimestamp) / secondsInDay);
+
+    if (daysLeft > 1) {
+      return InstallmentStatus.OnTime;
+    }
+    if (daysLeft === 1 || daysLeft === 0) {
+      return InstallmentStatus.Warning;
+    }
+    return InstallmentStatus.OnDue;
+  }
+
+  /**
+   * Return date in format yyyy-M-dd H:mm:ss z
+   * @param unix Date in unix format
+   * @return Date in yyyy-M-dd H:mm:ss z format
+   */
   private unixToDate(unix: number) {
     return new DatePipe('en-US').transform(unix, 'yyyy-M-dd H:mm:ss z');
   }
