@@ -6,7 +6,7 @@ export enum InstallmentStatus {
 
 export interface Pay {
   date: string;
-  punitory: string;
+  punitory: number;
   pending: number;
   totalPaid: number;
 }

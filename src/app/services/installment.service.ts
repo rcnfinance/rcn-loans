@@ -1,12 +1,20 @@
 import { Injectable } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Loan, Status } from './../models/loan.model';
-import { Installment, InstallmentStatus } from './../interfaces/installment';
+import {
+  Installment,
+  InstallmentStatus,
+  Pay
+} from './../interfaces/installment';
+// App services
+import { CommitsService } from './commits.service';
 
 @Injectable()
 export class InstallmentService {
 
-  constructor() { }
+  constructor(
+    private commitsService: CommitsService
+  ) { }
 
   /**
    * Load installments and pay details
@@ -31,6 +39,53 @@ export class InstallmentService {
     }
 
     return installments;
+  }
+
+  /**
+   * Load pay history
+   * @param loan Loan
+   * @return Pays array
+   */
+  async getPays(loan: Loan): Promise<Pay[]> {
+    const commits = await this.commitsService.getCommits(loan.id, loan.network);
+    const payCommits = commits.filter(commit => commit.opcode === 'paid_debt_engine');
+    const pays: Pay[] = [];
+    let pending = 0;
+    let totalPaid = 0;
+
+    switch (loan.status) {
+      case Status.Request:
+        pending = Number(loan.descriptor.totalObligation);
+        break;
+
+      case Status.Ongoing:
+      case Status.Indebt:
+        pending = Number(loan.debt.model.estimatedObligation);
+        break;
+
+      default:
+        break;
+    }
+
+    payCommits.map(commit => {
+      const {
+        data,
+        timestamp
+      }: any = commit;
+      const { paid } = data;
+
+      totalPaid += Number(paid);
+      pending -= Number(totalPaid);
+
+      pays.push({
+        date: this.unixToDate(timestamp * 1000),
+        punitory: 0, // TODO: add punitory
+        pending,
+        totalPaid
+      });
+    });
+
+    return pays;
   }
 
   /**
