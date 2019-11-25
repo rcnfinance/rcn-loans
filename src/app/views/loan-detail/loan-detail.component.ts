@@ -350,6 +350,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     let dueDays: string;
     let daysLeft: number;
     let amount: number;
+    let totalAmount: number;
+    let totalPaid: number;
     let payNumber: number;
 
     const unixToDate = unix => new DatePipe('en-US').transform(unix, 'yyyy-M-dd H:mm:ss z');
@@ -359,10 +361,12 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         payNumber = 1;
         startDateUnix = new Date().getTime();
         startDate = unixToDate(startDateUnix);
+        totalPaid = 0;
 
         const dueInstallment = startDateUnix + ((loan.descriptor.frequency * payNumber) * 1000);
         dueDate = unixToDate(dueInstallment);
-        amount = this.loan.currency.fromUnit(loan.descriptor.firstObligation);
+        amount = loan.currency.fromUnit(loan.descriptor.firstObligation);
+        totalAmount = loan.currency.fromUnit(loan.amount);
         dueDays = Utils.formatDelta(loan.descriptor.duration / loan.descriptor.installments);
         daysLeft = Math.round((loan.descriptor.duration / loan.descriptor.installments) / secondsInDay);
         break;
@@ -370,10 +374,10 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       case Status.Ongoing:
       case Status.Indebt:
         startDateUnix = loan.debt.model.dueTime - loan.descriptor.duration;
-        startDate = unixToDate(startDateUnix);
-
-        // FIXME: use all payment transactions and dueDates for calculate amount + punitory
-        amount = this.loan.currency.fromUnit(loan.descriptor.firstObligation);
+        startDate = unixToDate(startDateUnix * 1000);
+        totalPaid = loan.currency.fromUnit(loan.debt.model.paid);
+        amount = loan.currency.fromUnit(loan.debt.model.currentObligation);
+        totalAmount = loan.currency.fromUnit(loan.debt.model.estimatedObligation);
 
         const installments = loan.descriptor.installments;
         const frequency = loan.descriptor.frequency;
@@ -410,11 +414,10 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       dueDays += ' ago';
     }
 
-    const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+    const addSuffix = (n: number) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
     const isCurrent = true;
-    const totalPaid = 0; // TODO: Add total paid amount
-    const punitory = 0; // TODO: Calculate punitory
-    const pendingAmount = loan.amount - totalPaid;
+    const punitory = loan.descriptor.punitiveInterestRateRate;
+    const pendingAmount = totalAmount - totalPaid;
     const currency = loan.currency.toString();
     const pays = [];
 
