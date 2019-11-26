@@ -60,7 +60,7 @@ export const environment = {
       loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'
     },
     collateral: {
-      collateral: '0xa9F3738643263A555faa491C524241F5Cd537B60',
+      collateral: '0xa9f3738643263a555faa491c524241f5cd537b60',
       wethManager: '0x1853cc6c9a20d31d6cbfbce4936071c049249fd3'
     },
     converter: {
