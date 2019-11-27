@@ -87,12 +87,14 @@ export class ApiService {
 
   /**
    * Get all loans lent by the account that is logged in
-   * @param lender Lender address
+   * @param address Lender or borrower address
+   * @param loansType Selected network
    * @param network Selected network
    * @return Loans array
    */
-  async getLoansOfLender(
-    lender: string,
+  async getLoansOfLenderOrBorrower(
+    address: string,
+    loansType: 'lender' | 'borrower',
     network: Network
   ): Promise<Loan[]> {
     const web3 = this.web3Service.web3;
@@ -102,9 +104,9 @@ export class ApiService {
     let page = 0;
 
     try {
-      lender = web3.toChecksumAddress(lender);
+      address = web3.toChecksumAddress(address);
       const data: any = await this.http.get(
-        apiUrl.concat(`loans?open=false&page=${ page }&lender=${ lender }`)
+        apiUrl.concat(`loans?open=false&page=${ page }&${ loansType }=${ address }`)
       ).toPromise();
 
       if (page === 0) {
@@ -120,7 +122,7 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const url = apiUrl.concat(`loans?open=false&page=${ page }&lender=${ lender }`);
+      const url = apiUrl.concat(`loans?open=false&page=${ page }&${ loansType }=${ address }`);
       urls.push(url);
     }
     const responses = await this.getAllUrls(urls);
@@ -200,6 +202,22 @@ export class ApiService {
       return loan;
     } catch {
       console.info('loan does not exist');
+    }
+  }
+
+  /**
+   * Get collateral.
+   * @param loanId Loan ID
+   * @return Collateral
+   */
+  async getCollateralByLoan(loanId: string) {
+    const uri = `collaterals?debt_id=${ loanId }`;
+    const data: any = await this.http.get(this.diasporeUrl.concat(uri)).toPromise();
+
+    try {
+      return data.content;
+    } catch {
+      throw Error('Error obtaining loan collateral');
     }
   }
 

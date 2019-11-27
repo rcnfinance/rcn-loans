@@ -110,6 +110,47 @@ export class Utils {
 
     return value;
   }
+
+  /**
+   * Return the interest rate based on an annual percentage
+   * @param interest Annual percentage
+   * @return Interest rate
+   */
+  static toInterestRate(interest: number) {
+    const secondsInYear = 360 * 86400;
+    const rawInterest = Math.floor(10000000 / interest);
+    return rawInterest * secondsInYear;
+  }
+
+  /**
+   * Calculates the payment for a loan based on constant payments and a constant interest rate.
+   * @param rate The interest rate
+   * @param nperiod The number of payments to be made
+   * @param pv The current value of the annuity
+   * @param fv The future value remaining after the final payment has been made
+   * @param type Whether payments are due at the end (0) or beginning (1) of each period
+   * @return Payment amount with interest
+   */
+  static pmt(rate: number, nperiod: number, pv: number, fv: number = 0, type: number = 0) {
+    if (!fv) {
+      fv = 0;
+    }
+    if (!type) {
+      type = 0;
+    }
+    if (rate === 0) {
+      return -(pv + fv) / nperiod;
+    }
+
+    const pvif = Math.pow(1 + rate, nperiod);
+    let pmt = rate / (pvif - 1) * -(pv * pvif + fv);
+
+    if (type === 1) {
+      pmt /= (1 + rate);
+    }
+
+    return pmt;
+  }
 }
 
 export function promisify(func: any, args: any): Promise<any> {

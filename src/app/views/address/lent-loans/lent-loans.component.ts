@@ -4,19 +4,20 @@ import { Subscription } from 'rxjs';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
-import { Loan } from './../../models/loan.model';
+import { Loan } from './../../../models/loan.model';
 // App Services
-import { TitleService } from '../../services/title.service';
-import { ContractsService } from './../../services/contracts.service';
-import { AvailableLoansService } from '../../services/available-loans.service';
-import { Web3Service } from '../../services/web3.service';
+import { TitleService } from '../../../services/title.service';
+import { ContractsService } from './../../../services/contracts.service';
+import { AvailableLoansService } from '../../../services/available-loans.service';
+import { Web3Service } from '../../../services/web3.service';
 
 @Component({
-  selector: 'app-address',
-  templateUrl: './address.component.html',
-  styleUrls: ['./address.component.scss']
+  selector: 'app-lent-loans',
+  templateUrl: './lent-loans.component.html',
+  styleUrls: ['./lent-loans.component.scss']
 })
-export class AddressComponent implements OnInit, OnDestroy {
+export class LentLoansComponent implements OnInit, OnDestroy {
+
   address: string;
   available: any;
   loans = [];
@@ -35,7 +36,7 @@ export class AddressComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.titleService.changeTitle('Address');
+    this.titleService.changeTitle('Lent loans');
     this.spinner.show();
 
     this.route.params.subscribe(params => {

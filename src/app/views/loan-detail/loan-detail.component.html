@@ -18,10 +18,13 @@
           </div>
         </ng-template>
       </div>
-      <!-- <app-creator-container [loan]=loan></app-creator-container> -->
     </div>
     <div class="flex-item">
-      <app-button-group (view)="openDetail($event)" [viewDetail]=viewDetail></app-button-group>
+      <app-button-group
+        [viewDetail]="viewDetail"
+        [generatedByUser]="generatedByUser"
+        (view)="openDetail($event)"
+      ></app-button-group>
     </div>
   </div>
 
@@ -113,20 +116,40 @@
           </tbody>
         </table>
       </div>
-      <div class="table-responsive" (click)="openDetail('cosigner');">
-        <table class="table table-clickable">
-          <thead>
-            <tr>
-              <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
+      <ng-container *ngIf="generatedByUser">
+        <div class="table-responsive" (click)="openDetail('collateral');">
+          <table class="table table-clickable">
+            <thead>
+              <tr>
+                <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('collateral') }" scope="col">
+                  Collateral<i class="material-icons white more-indicator">{{ isDetail('collateral') ? '' : 'unfold_more' }}</i>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style='cursor: pointer'>{{ collateralAmount || '-' }} {{ collateralAsset }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!generatedByUser">
+        <div class="table-responsive" (click)="openDetail('cosigner');">
+          <table class="table table-clickable">
+            <thead>
+              <tr>
+                <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
                   Insurance / Cosigner<i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <app-cosigner-selector [loan]=loan></app-cosigner-selector>
-          </tbody>
-        </table>
-      </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <app-cosigner-selector [loan]=loan></app-cosigner-selector>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
       <div class="px-3 pb-3" *ngIf="canLend || canTransfer || canPay">
         <app-pay-button
           [loan]="loan"
@@ -151,8 +174,21 @@
     </div>
 
     <div class="right px-0 col-xs-12 col-md-7">
-      <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
-      <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
+      <app-detail-identity
+        *ngIf="isDetail('identity')"
+        [loan]="loan"
+      ></app-detail-identity>
+      <app-detail-cosigner
+        *ngIf="isDetail('cosigner')"
+        [loan]="loan"
+      ></app-detail-cosigner>
+      <app-detail-collateral
+        *ngIf="isDetail('collateral')"
+        [loan]="loan"
+        [collateral]="collateral"
+        [canAdjust]="canAdjustCollateral"
+        (updateCollateral)="updateCollateral($event)"
+      ></app-detail-collateral>
     </div>
 
   </div>

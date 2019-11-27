@@ -46,11 +46,14 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     new Operator('Diaspore Loan manager', environment.contracts.diaspore.loanManager),
     new Operator('Diaspore Debt mananger', environment.contracts.diaspore.debtEngine),
     new Operator('Diaspore Converter ramp', environment.contracts.converter.converterRamp),
+    new Operator('Diaspore Collateral', environment.contracts.collateral.collateral),
     new Operator('Basalt engine', environment.contracts.basaltEngine)
   ];
   tokenApproves: Object[];
   assets: Contract[];
-  assetOperators: Operator[] = [];
+  assetOperators: Operator[] = [
+    new Operator('Collateral WETH Manager', environment.contracts.collateral.wethManager)
+  ];
   assetApproves: Object[];
 
   startProgress: boolean;
@@ -301,6 +304,9 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
    */
   private async loadAssets(): Promise<Contract[]> {
     const assets: Contract[] = [];
+    assets.push(
+      new Contract('Collateral', environment.contracts.collateral.collateral)
+    );
 
     // set operators
     assets.map(asset => asset.operators = this.assetOperators);
@@ -401,6 +407,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
         contract => {
           switch (contract.address) {
             case environment.contracts.converter.converterRamp:
+            case environment.contracts.collateral.collateral:
               return true;
 
             default:
@@ -410,7 +417,9 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
       );
     }
 
-    return this.tokenOperators;
+    return this.tokenOperators.filter(
+      contract => contract.address !== environment.contracts.collateral.wethManager
+    );
   }
 
   /**
