@@ -4,6 +4,7 @@
 
 ### Fix:
 
+- Fix spinners when changing pages
 - Fix loans filter in Activity view
 - Netlify build, use Node 12
 
