@@ -62,10 +62,7 @@ export const environment = {
     converter: {
       converterRamp: '0xe41ada0fb01F147c6385F93DEC78914F32e45061',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      tokenConverter: '0x7173E7C8c35EF0FA6DF11B23bB717F886fBD50B5',
-      params: {
-        aditionalSlippage: '2'
-      }
+      tokenConverter: '0x7173E7C8c35EF0FA6DF11B23bB717F886fBD50B5'
     },
     decentraland: {
       mortgageCreator: '0x90263Ea5C57Dc6603CA7202920735A6E31235bB9',
