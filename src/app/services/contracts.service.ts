@@ -219,19 +219,19 @@ export class ContractsService {
     tokenAddress: string = environment.contracts.rcnToken
   ): Promise<number> {
     const rcnToken = environment.contracts.rcnToken;
+    const web3 = this.web3.web3;
 
     let required: number;
     required = loan.amount;
 
-    const oracleAbi = this.loanOracleAbi(loan.network);
+    // const oracleAbi = this.loanOracleAbi(loan.network);
 
     if (loan.oracle.address !== Utils.address0x) {
-      const oracle = this.web3.web3.eth.contract(oracleAbi).at(loan.oracle.address);
-      const oracleData = await this.getOracleData(loan.oracle);
-      const oracleRate = await promisify(oracle.readSample.call, [oracleData]);
-      const rate = oracleRate[0];
-      const decimals = oracleRate[1];
-      required = (rate * loan.amount) / decimals;
+      const currency = loan.currency;
+      const loanAmount = loan.currency.fromUnit(loan.amount);
+      let rate = await this.getRate(loan.oracle.address);
+      rate = 1 / currency.fromUnit(rate);
+      required = web3.toWei(loanAmount * rate);
     }
 
     // amount in rcn
@@ -240,13 +240,17 @@ export class ContractsService {
     }
 
     // amount in currency
-    const requiredInToken = await this.getPriceConvertFrom(
-      rcnToken,
+    const requiredInToken = await this.getPriceConvertTo(
       tokenAddress,
+      rcnToken,
       required
     );
 
-    return requiredInToken;
+    const roundupDecimals = 6;
+    const factor = Math.pow(10, roundupDecimals);
+    const roundedUpAmount = Math.ceil((requiredInToken / web3.toWei(1)) * factor) / factor;
+
+    return web3.toWei(roundedUpAmount);
   }
 
   /**
