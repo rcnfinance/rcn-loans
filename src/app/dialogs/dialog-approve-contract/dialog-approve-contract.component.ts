@@ -11,7 +11,6 @@ import { EventsService, Category } from '../../services/events.service';
 import { TxService, Tx, Type } from '../../services/tx.service';
 
 class Operator {
-  isApproved: Promise<boolean>;
   constructor(
     public name: string,
     public address: string
@@ -50,10 +49,12 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     new Operator('Diaspore Collateral', environment.contracts.collateral.collateral),
     new Operator('Basalt engine', environment.contracts.basaltEngine)
   ];
+  tokenApproves: Object[];
   assets: Contract[];
   assetOperators: Operator[] = [
     new Operator('Collateral WETH Manager', environment.contracts.collateral.wethManager)
   ];
+  assetApproves: Object[];
 
   startProgress: boolean;
   finishProgress: boolean;
@@ -275,18 +276,23 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     tokens.map(token => token.operators = this.filterTokenOperators(token));
 
     // set isApproved
+    const promises: Promise<boolean>[] = [];
+    const approves: any = {};
+
     tokens.map(token => {
-      return token.operators.map(
-        operator => {
-          operator.isApproved = this.isApproved(
-            token.address,
-            operator.address,
-            ContractType.Token
-          );
-          return operator;
-        }
+      token.operators.map(
+        operator => this.makeApproves(
+          token.address,
+          operator.address,
+          ContractType.Token,
+          promises,
+          approves
+        )
       );
     });
+
+    await Promise.all(promises);
+    this.tokenApproves = approves;
 
     this.tokens = tokens;
     return tokens;
@@ -296,7 +302,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
    * Load ERC721 assets
    * @return ERC721 array
    */
-  private loadAssets(): Contract[] {
+  private async loadAssets(): Promise<Contract[]> {
     const assets: Contract[] = [];
     assets.push(
       new Contract('Collateral', environment.contracts.collateral.collateral)
@@ -306,21 +312,58 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     assets.map(asset => asset.operators = this.assetOperators);
 
     // set is approved
+    const promises: Promise<boolean>[] = [];
+    const approves: any = {};
+
     assets.map(asset => {
-      return asset.operators.map(
-        operator => {
-          operator.isApproved = this.isApproved(
-            asset.address,
-            operator.address,
-            ContractType.Asset
-          );
-          return operator;
-        }
+      asset.operators.map(
+        operator => this.makeApproves(
+          asset.address,
+          operator.address,
+          ContractType.Asset,
+          promises,
+          approves
+        )
       );
     });
 
+    await Promise.all(promises);
+    this.assetApproves = approves;
+
     this.assets = assets;
     return assets;
+  }
+
+  /**
+   * Make async token approves
+   * @param token Token or asset address
+   * @param operator Operator address
+   * @param contractType ERC20 or ERC721
+   * @param promises Approve promises array
+   * @param approves Approves object
+   */
+  private makeApproves(
+    token: string,
+    operator: string,
+    contractType: ContractType,
+    promises: Promise<any>[],
+    approves: Object
+  ) {
+    promises.push(
+      new Promise(async (resolve) => {
+        const isApproved = await this.isApproved(
+          token,
+          operator,
+          contractType
+        );
+
+        approves[token] ?
+        approves[token][operator] = isApproved :
+        approves[token] = { [operator]: isApproved };
+
+        resolve(isApproved);
+      })
+    );
   }
 
   /**
