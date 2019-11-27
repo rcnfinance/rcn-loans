@@ -118,7 +118,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       } catch (e) {
         console.error(e);
         console.info('Loan', this.loan, 'not found');
-        this.router.navigate(['/404/'], { skipLocationChange: true });
+        this.router.navigate(['/loan', params.id, '404'], { skipLocationChange: true });
       }
     });
   }

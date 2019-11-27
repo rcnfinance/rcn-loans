@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxSpinnerModule } from 'ngx-spinner';
 // App Modules
 import { MaterialModule } from './../material.module';
 // App Component
@@ -48,6 +49,7 @@ import { IdentityService } from './../services/identity.service';
 import { RiskService } from './../services/risk.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
+import { ErrorDetailsComponent } from './error-details/error-details.component';
 
 @NgModule({
   imports: [
@@ -57,7 +59,7 @@ import { EventsService } from './../services/events.service';
     BlockiesModule,
     FormsModule,
     ReactiveFormsModule,
-    BlockiesModule
+    NgxSpinnerModule
   ],
   declarations: [
     FooterComponent,
@@ -82,6 +84,7 @@ import { EventsService } from './../services/events.service';
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
+    ErrorDetailsComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
@@ -136,6 +139,7 @@ import { EventsService } from './../services/events.service';
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
+    ErrorDetailsComponent,
     DialogWrongCountryComponent,
     VisualUrlPipe
   ]
