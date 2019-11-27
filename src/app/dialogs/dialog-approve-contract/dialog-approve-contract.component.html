@@ -83,7 +83,7 @@
                 >
                   <mat-checkbox
                     color="primary"
-                    [checked]="tokenApproves[token.address] && tokenApproves[token.address][operator.address]"
+                    [checked]="tokenApproves[asset.address] && tokenApproves[asset.address][operator.address]"
                     (change)="clickCheck(operator, $event, asset, 'asset')"
                     *ngIf="!onlyAddress || onlyAddress == operator.address"
                   >
