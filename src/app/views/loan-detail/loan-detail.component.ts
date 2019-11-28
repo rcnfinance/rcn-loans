@@ -157,17 +157,24 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
    * Refresh loan when payment or lending status is updated
    */
   onUserAction(action: 'lend' | 'pay' | 'transfer') {
-    const miliseconds = 7000;
+    const miliseconds = 12000;
+    this.spinner.show(this.pageId);
+
+    // TODO: update specific values according to the action taken
     console.info('user action detected', action);
 
     setTimeout(async() => {
-      const loan: Loan = this.loan;
-      await this.getLoan(loan.id);
-
-      // dynamic loan information
-      this.loadStatus();
-      this.loadDetail();
-      this.loadAccount();
+      try {
+        const loan: Loan = this.loan;
+        await this.getLoan(loan.id);
+        this.loadStatus();
+        this.loadDetail();
+        this.loadAccount();
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.spinner.hide(this.pageId);
+      }
     }, miliseconds);
   }
 
