@@ -246,8 +246,10 @@ export class ContractsService {
       required
     );
 
+    // roundup
+    // TODO: Create helper for work to all numbers in the same way
     const roundupDecimals = 6;
-    const factor = Math.pow(10, roundupDecimals);
+    const factor = 10 ** roundupDecimals;
     const roundedUpAmount = Math.ceil((requiredInToken / web3.toWei(1)) * factor) / factor;
 
     return web3.toWei(roundedUpAmount);
