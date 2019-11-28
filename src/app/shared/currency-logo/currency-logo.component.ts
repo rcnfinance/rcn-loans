@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 // App services
 import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
+import { Web3Service } from '../../services/web3.service';
 import { environment } from './../../../environments/environment';
 
 @Component({
@@ -16,7 +17,8 @@ export class CurrencyLogoComponent implements OnInit {
   url: string;
 
   constructor(
-    private currenciesService: CurrenciesService
+    private currenciesService: CurrenciesService,
+    private web3Service: Web3Service
   ) { }
 
   ngOnInit() {
@@ -51,7 +53,8 @@ export class CurrencyLogoComponent implements OnInit {
         break;
 
       default:
-        url = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${ address }/logo.png`;
+        const web3: any = this.web3Service.web3;
+        url = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${ web3.toChecksumAddress(address) }/logo.png`;
         break;
     }
 

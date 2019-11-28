@@ -424,5 +424,4 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     this.account = web3.toChecksumAddress(account);
     return this.account;
   }
-
 }
