@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { Loan, Network, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Web3Service } from '../../services/web3.service';
-import { ContractsService } from '../../services/contracts.service';
 
 @Component({
   selector: 'app-loan-card',
@@ -35,8 +34,7 @@ export class LoanCardComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialog: MatDialog,
-    private web3Service: Web3Service,
-    private contractsService: ContractsService
+    private web3Service: Web3Service
   ) { }
 
   async ngOnInit() {
@@ -85,22 +83,10 @@ export class LoanCardComponent implements OnInit, OnDestroy {
    * Refresh loan when lending status is updated
    */
   onUserAction(action: 'lend') {
-    const miliseconds = 7000;
+    // TODO: update specific values according to the action taken
     console.info('user action detected', action);
 
-    setTimeout(async() => {
-      await this.refreshLoan();
-
-      // dynamic loan information
-      this.loadAccount();
-    }, miliseconds);
-  }
-
-  private async refreshLoan() {
-    const loan: Loan = await this.contractsService.getLoan(this.loan.id);
-    this.stateLoan = loan;
-
-    await this.getLoanDetails();
+    this.canLend = false;
   }
 
   /**
