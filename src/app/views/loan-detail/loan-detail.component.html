@@ -32,8 +32,8 @@
   </div>
 
   <div class="loan-description flex-container">
-    <div class="left px-0 col-xs-12 col-md-5">
-      <div class="avatar-information pb-4 pt-2 py-md-0">
+    <div class="left px-0 col-xs-12 col-lg-5">
+      <div class="avatar-information pb-4 pt-2 py-lg-0">
         <div class="flex-item">
           <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
         </div>
@@ -156,7 +156,7 @@
       </div>
     </div>
 
-    <div class="right px-0 col-xs-12 col-md-7">
+    <div class="right px-0 col-xs-12 col-lg-7">
       <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
       <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
     </div>
