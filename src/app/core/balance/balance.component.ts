@@ -5,7 +5,7 @@ import { Utils } from '../../utils/utils';
 // App Services
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
-import { Tx, TxService } from '../../services/tx.service';
+import { Tx, Type, TxService } from '../../services/tx.service';
 
 @Component({
   selector: 'app-component-balance',
@@ -28,6 +28,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   canWithdraw = false;
   displayBalance = '';
   displayAvailable = '';
+  txSubscription: boolean;
 
   // subscriptions
   subscriptionBalance: Subscription;
@@ -39,6 +40,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.retrievePendingTx();
     this.handleBalanceEvents();
   }
 
@@ -56,6 +58,9 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy() {
     if (this.subscriptionBalance) {
       this.subscriptionBalance.unsubscribe();
+    }
+    if (this.txSubscription) {
+      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
     }
   }
 
@@ -148,6 +153,26 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
         this.txService.registerWithdrawTx(tx, environment.contracts.diaspore.debtEngine, this.diasporeLoansWithBalance);
       }
       this.loadWithdrawBalance();
+      this.retrievePendingTx();
+    }
+  }
+
+  /**
+   * Retrieve pending Tx
+   */
+  retrievePendingTx() {
+    if (!this.txSubscription) {
+      this.txSubscription = true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
+    }
+  }
+
+  /**
+   * Track tx
+   */
+  trackWithdrawTx(tx: Tx) {
+    if (tx.type === Type.withdraw) {
+      this.web3Service.updateBalanceEvent.emit();
     }
   }
 }
