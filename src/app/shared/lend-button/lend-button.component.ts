@@ -98,6 +98,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   trackLendTx(tx: Tx) {
     if (tx.type === Type.lend && tx.data.id === this.loan.id) {
       this.endLend.emit();
+      this.web3Service.updateBalanceEvent.emit();
     }
   }
 

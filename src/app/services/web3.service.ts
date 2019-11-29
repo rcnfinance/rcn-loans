@@ -11,6 +11,7 @@ declare let window: any;
 })
 export class Web3Service {
   loginEvent = new EventEmitter<boolean>(true);
+  updateBalanceEvent = new EventEmitter();
 
   private _web3: any;
 
