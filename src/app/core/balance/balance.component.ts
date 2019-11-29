@@ -1,4 +1,5 @@
-import { Component, OnChanges, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Utils } from '../../utils/utils';
 // App Services
@@ -11,7 +12,7 @@ import { Tx, TxService } from '../../services/tx.service';
   templateUrl: './balance.component.html',
   styleUrls: ['./balance.component.scss']
 })
-export class BalanceComponent implements OnChanges {
+export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   @Input() account: string;
 
   private rcnBalance: number;
@@ -28,11 +29,18 @@ export class BalanceComponent implements OnChanges {
   displayBalance = '';
   displayAvailable = '';
 
+  // subscriptions
+  subscriptionBalance: Subscription;
+
   constructor(
     private web3Service: Web3Service,
     private contractService: ContractsService,
     private txService: TxService
   ) { }
+
+  ngOnInit() {
+    this.handleBalanceEvents();
+  }
 
   ngOnChanges(changes) {
     const web3: any = this.web3Service.web3;
@@ -43,6 +51,22 @@ export class BalanceComponent implements OnChanges {
       this.loadRcnBalance();
       this.loadWithdrawBalance();
     }
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptionBalance) {
+      this.subscriptionBalance.unsubscribe();
+    }
+  }
+
+  /**
+   * Listen and handle balance events for update amounts
+   */
+  handleBalanceEvents() {
+    this.subscriptionBalance = this.web3Service.updateBalanceEvent.subscribe(() => {
+      this.loadRcnBalance();
+      this.loadWithdrawBalance();
+    });
   }
 
   /**
