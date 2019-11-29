@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxSpinnerModule } from 'ngx-spinner';
 // App Modules
 import { MaterialModule } from './../material.module';
 // App Component
@@ -58,7 +59,7 @@ import { ErrorDetailsComponent } from './error-details/error-details.component';
     BlockiesModule,
     FormsModule,
     ReactiveFormsModule,
-    BlockiesModule
+    NgxSpinnerModule
   ],
   declarations: [
     FooterComponent,

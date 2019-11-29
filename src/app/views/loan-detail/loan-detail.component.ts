@@ -24,6 +24,7 @@ import { BrandingService } from './../../services/branding.service';
   styleUrls: ['./loan-detail.component.scss']
 })
 export class LoanDetailComponent implements OnInit, OnDestroy {
+  pageId = 'loan-detail';
   loan: Loan;
   identityName = '...';
   viewDetail = undefined;
@@ -92,7 +93,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.changeTitle('Loan detail');
-    this.spinner.show();
+    this.spinner.show(this.pageId);
 
     this.route.params.subscribe(async params => {
       const id = params.id;
@@ -113,7 +114,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         // state
         this.viewDetail = this.defaultDetail();
         this.handleLoginEvents();
-        this.spinner.hide();
+        this.spinner.hide(this.pageId);
       } catch (e) {
         console.error(e);
         console.info('Loan', this.loan, 'not found');
@@ -123,6 +124,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.spinner.hide(this.pageId);
+
     if (this.subscriptionAccount) {
       try {
         this.subscriptionAccount.unsubscribe();
@@ -154,17 +157,24 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
    * Refresh loan when payment or lending status is updated
    */
   onUserAction(action: 'lend' | 'pay' | 'transfer') {
-    const miliseconds = 7000;
+    const miliseconds = 12000;
+    this.spinner.show(this.pageId);
+
+    // TODO: update specific values according to the action taken
     console.info('user action detected', action);
 
     setTimeout(async() => {
-      const loan: Loan = this.loan;
-      await this.getLoan(loan.id);
-
-      // dynamic loan information
-      this.loadStatus();
-      this.loadDetail();
-      this.loadAccount();
+      try {
+        const loan: Loan = this.loan;
+        await this.getLoan(loan.id);
+        this.loadStatus();
+        this.loadDetail();
+        this.loadAccount();
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.spinner.hide(this.pageId);
+      }
     }, miliseconds);
   }
 
