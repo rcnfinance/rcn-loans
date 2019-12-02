@@ -13,6 +13,7 @@ export interface Pay {
 
 export interface Installment {
   isCurrent: boolean;
+  isLast: boolean;
   payNumber: number;
   startDate: string;
   dueDate: string;

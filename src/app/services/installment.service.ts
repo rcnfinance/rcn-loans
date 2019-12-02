@@ -127,9 +127,11 @@ export class InstallmentService {
       const totalPaid = 0;
       const pays = [];
       const status = InstallmentStatus.OnTime;
+      const isLast = payNumber === loan.descriptor.installments;
 
       installments.push({
         isCurrent,
+        isLast,
         startDate,
         payNumber,
         dueDate,
@@ -171,6 +173,7 @@ export class InstallmentService {
       const totalAmount = loan.currency.fromUnit(loan.debt.model.estimatedObligation);
       const totalPaid = loan.currency.fromUnit(loan.debt.model.paid);
       const pendingAmount = totalAmount - totalPaid;
+      const isLast = payNumber === loan.descriptor.installments;
       const pays = [];
       let status = InstallmentStatus.OnTime;
 
@@ -185,7 +188,7 @@ export class InstallmentService {
       // previous or latest installment
       if (
         (startDate < todayTimestamp && dueDate > todayTimestamp) ||
-        (payNumber === loan.descriptor.installments && !hasCurrent)
+        (isLast && !hasCurrent)
       ) {
         status = this.getDueStatus(dueDate);
         hasCurrent = true;
@@ -195,6 +198,7 @@ export class InstallmentService {
 
       installments.push({
         isCurrent,
+        isLast,
         startDate,
         payNumber,
         dueDate,
