@@ -236,11 +236,11 @@ export class InstallmentService {
   }
 
   /**
-   * Return date in format yyyy-M-dd H:mm:ss z
+   * Return date in format ISO 8061
    * @param unix Date in unix format
-   * @return Date in yyyy-M-dd H:mm:ss z format
+   * @return Date in yyyy-MM-dd'T'HH:mm:ssZ format
    */
   private unixToDate(unix: number) {
-    return new DatePipe('en-US').transform(unix, 'yyyy-M-dd H:mm:ss z');
+    return new DatePipe('en-US').transform(unix, `yyyy-MM-dd'T'HH:mm:ssZ`);
   }
 }
