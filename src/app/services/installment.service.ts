@@ -93,6 +93,16 @@ export class InstallmentService {
   }
 
   /**
+   * Get the current installment
+   * @param installments Installments array
+   * @return Current installment
+   */
+  getCurrentInstallment(loan: Loan) {
+    const installments: Installment[] = this.getInstallments(loan);
+    return installments.filter(installment => installment.isCurrent)[0];
+  }
+
+  /**
    * Return installments array with estimated information for loans in request status
    * @param loan Loan
    * @return Installments array

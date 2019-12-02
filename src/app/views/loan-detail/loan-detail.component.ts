@@ -346,9 +346,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
    */
   private async loadInstallments() {
     const loan: Loan = this.loan;
+    const installment: Installment = this.installmentService.getCurrentInstallment(loan);
     const secondsInDay = 86400;
-    const installments: Installment[] = await this.installmentService.getInstallments(loan);
-    const installment: Installment = installments.filter(thisInstallment => thisInstallment.isCurrent)[0];
     const addSuffix = (n: number): string => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
     const payNumber = `${ installment.payNumber + addSuffix(installment.payNumber) } Pay`;
     const dueDate: number = new Date(installment.dueDate).getTime() / 1000;
