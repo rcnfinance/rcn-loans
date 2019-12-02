@@ -21,7 +21,7 @@ export class InstallmentService {
    * @param loan Loan
    * @return Installments with pays array
    */
-  getInstallments(loan: Loan): Installment[] {
+  async getInstallments(loan: Loan): Promise<Installment[]> {
     let installments: Installment[] = [];
 
     if (!loan) {
@@ -35,7 +35,7 @@ export class InstallmentService {
 
       case Status.Ongoing:
       case Status.Indebt:
-        installments = this.getCurrentInstallments(loan);
+        installments = await this.getCurrentInstallments(loan);
         break;
 
       default:
@@ -48,9 +48,15 @@ export class InstallmentService {
   /**
    * Load pay history
    * @param loan Loan
+   * @param startDate Pays after this date
+   * @param endDate Pays before this date (due installment date)
    * @return Pays array
    */
-  async getPays(loan: Loan): Promise<Pay[]> {
+  async getPays(
+    loan: Loan,
+    startDate?: string,
+    endDate?: string
+  ): Promise<Pay[]> {
     const commits = await this.commitsService.getCommits(loan.id, loan.network);
     const payCommits = commits.filter(commit => commit.opcode === 'paid_debt_engine');
     const pays: Pay[] = [];
@@ -59,12 +65,12 @@ export class InstallmentService {
 
     switch (loan.status) {
       case Status.Request:
-        pending = Number(loan.descriptor.totalObligation);
+        pending = loan.currency.fromUnit(loan.descriptor.totalObligation);
         break;
 
       case Status.Ongoing:
       case Status.Indebt:
-        pending = Number(loan.debt.model.estimatedObligation);
+        pending = loan.currency.fromUnit(loan.debt.model.estimatedObligation);
         break;
 
       default:
@@ -78,7 +84,14 @@ export class InstallmentService {
       }: any = commit;
       const { paid } = data;
 
-      totalPaid += Number(paid);
+      if (startDate && startDate > this.unixToDate(timestamp * 1000)) {
+        return;
+      }
+      if (endDate && endDate < this.unixToDate(timestamp * 1000)) {
+        return;
+      }
+
+      totalPaid += loan.currency.fromUnit(paid);
       pending -= Number(totalPaid);
 
       pays.push({
@@ -97,8 +110,8 @@ export class InstallmentService {
    * @param installments Installments array
    * @return Current installment
    */
-  getCurrentInstallment(loan: Loan) {
-    const installments: Installment[] = this.getInstallments(loan);
+  async getCurrentInstallment(loan: Loan) {
+    const installments: Installment[] = await this.getInstallments(loan);
     return installments.filter(installment => installment.isCurrent)[0];
   }
 
@@ -153,7 +166,7 @@ export class InstallmentService {
    * @param loan Loan
    * @return Installments array
    */
-  private getCurrentInstallments(loan: Loan): Installment[] {
+  private async getCurrentInstallments(loan: Loan): Promise<Installment[]> {
     const installments: Installment[] = [];
     const startDateUnix = (loan.debt.model.dueTime - loan.descriptor.duration) * 1000;
     const today = Math.round(new Date().getTime());
@@ -170,11 +183,11 @@ export class InstallmentService {
       );
       const currency = loan.currency.toString();
       const punitory = loan.descriptor.punitiveInterestRateRate;
-      const totalAmount = loan.currency.fromUnit(loan.debt.model.estimatedObligation);
       const totalPaid = loan.currency.fromUnit(loan.debt.model.paid);
+      const totalAmount = totalPaid + loan.currency.fromUnit(loan.debt.model.estimatedObligation);
       const pendingAmount = totalAmount - totalPaid;
       const isLast = payNumber === loan.descriptor.installments;
-      const pays = [];
+      const pays = await this.getPays(loan, startDate, !isLast ? dueDate : null);
       let status = InstallmentStatus.OnTime;
 
       let isCurrent = false;
