@@ -229,6 +229,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   private loadDetail() {
+    const loan: Loan = this.loan;
     const currency = this.loan.currency;
 
     switch (this.loan.status) {
@@ -255,10 +256,20 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         break;
       case Status.Indebt:
       case Status.Ongoing:
-        const lendDate: string = this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration);
-        const dueDate: string = this.formatTimestamp(this.loan.debt.model.dueTime);
-        const deadline: string = this.formatTimestamp(this.loan.debt.model.dueTime);
-        const remaning: string = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2);
+        let lendDate: string;
+        let dueDate: string;
+        let remaning: string;
+
+        if (loan.network === Network.Basalt) {
+          lendDate = this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration);
+          dueDate = this.formatTimestamp(this.loan.debt.model.dueTime);
+          remaning = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2);
+        } else {
+          lendDate = this.formatTimestamp(this.loan.config.lentTime);
+          dueDate = this.formatTimestamp(this.loan.config.lentTime + this.loan.descriptor.duration);
+          remaning = Utils.formatDelta((this.loan.config.lentTime + this.loan.descriptor.duration) - (new Date().getTime() / 1000), 2);
+        }
+
         const currentInterestRate: string = this.formatInterest(
           this.loan.status === Status.Indebt ? this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate
         );
@@ -268,7 +279,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
           ['Description', 'Date'], // TODO
           ['Lend date', lendDate], // TODO
           ['Due date', dueDate],
-          ['Deadline', deadline],
           ['Remaining', remaning]
         ];
 
