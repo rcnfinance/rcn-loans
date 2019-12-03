@@ -8,6 +8,7 @@ export interface Pay {
   date: string;
   punitory: number;
   pending: number;
+  amount: number;
   totalPaid: number;
 }
 

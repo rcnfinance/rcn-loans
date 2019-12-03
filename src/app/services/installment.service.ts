@@ -83,6 +83,7 @@ export class InstallmentService {
         timestamp
       }: any = commit;
       const { paid } = data;
+      const amount = loan.currency.fromUnit(paid);
 
       if (startDate && startDate > this.unixToDate(timestamp * 1000)) {
         return;
@@ -98,6 +99,7 @@ export class InstallmentService {
         date: this.unixToDate(timestamp * 1000),
         punitory: 0, // TODO: add punitory
         pending,
+        amount,
         totalPaid
       });
     });
@@ -206,7 +208,9 @@ export class InstallmentService {
         status = this.getDueStatus(dueDate);
         hasCurrent = true;
         isCurrent = true;
-        amount = loan.currency.fromUnit(loan.debt.model.currentObligation);
+        amount = loan.currency.fromUnit(
+          loan.debt.model.currentObligation || loan.debt.model.nextObligation
+        );
       }
 
       installments.push({
@@ -224,6 +228,24 @@ export class InstallmentService {
         status
       });
     }
+
+    // check installments status
+    /*
+    installments.map(async (installment: Installment) => {
+      const dueDate = this.unixToDate(
+        startDateUnix + (loan.descriptor.frequency * 1000 * installment.payNumber)
+      );
+      const pays = await this.getPays(loan, null, dueDate);
+
+      let totalPaid = 0;
+
+      pays.map((pay: Pay) => {
+        totalPaid += pay.amount;
+      });
+
+      return installment;
+    });
+    */
 
     return installments;
   }
