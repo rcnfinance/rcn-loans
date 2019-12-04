@@ -54,6 +54,17 @@ export class Debt {
   ) { }
 }
 
+export class Config {
+  constructor(
+    public installments: number,
+    public timeUnit: number,
+    public duration: number,
+    public lentTime: number,
+    public cuota: number,
+    public interestRate: number
+  ) { }
+}
+
 export class Loan {
   constructor(
     public network: Network,
@@ -68,7 +79,8 @@ export class Loan {
     public expiration: number,
     public model: string,
     public cosigner?: string,
-    public debt?: Debt
+    public debt?: Debt,
+    public config?: Config
   ) {}
 
   get isRequest(): boolean {

@@ -308,6 +308,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   private loadDetail() {
+    const loan: Loan = this.loan;
     const currency = this.loan.currency;
 
     switch (this.loan.status) {
@@ -334,21 +335,28 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         break;
       case Status.Indebt:
       case Status.Ongoing:
-        const lendDate: string = this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration);
         const dueDate: string = this.formatTimestamp(this.loan.debt.model.dueTime);
-        const deadline: string = this.formatTimestamp(this.loan.debt.model.dueTime);
-        const remaning: string = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2);
+        let lendDate: string;
+        let deadline: string;
+
+        if (loan.network === Network.Basalt) {
+          lendDate = this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration);
+          deadline = dueDate;
+        } else {
+          lendDate = this.formatTimestamp(this.loan.config.lentTime);
+          deadline = this.formatTimestamp(this.loan.config.lentTime + this.loan.descriptor.duration);
+        }
+
         const currentInterestRate: string = this.formatInterest(
           this.loan.status === Status.Indebt ? this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate
         );
 
         // Show ongoing loan detail
         this.loanStatusData = [
-          ['Description', 'Date'], // TODO
-          ['Lend date', lendDate], // TODO
+          ['Description', 'Date'],
+          ['Lend date', lendDate],
           ['Due date', dueDate],
-          ['Deadline', deadline],
-          ['Remaining', remaning]
+          ['Deadline', deadline]
         ];
 
         // Template data
