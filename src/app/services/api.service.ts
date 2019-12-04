@@ -372,10 +372,18 @@ export class ApiService {
 
       case Network.Diaspore:
         let debtInfo: any;
+        let config: any;
+
         if (!loan.open && !loan.canceled && loan.status) {
           debtInfo = await this.getModelDebtInfo(loan.id);
+          config = await this.getModelConfig(loan.id);
         }
-        return LoanUtils.createDiasporeLoan(loan as LoanApiDiaspore, debtInfo);
+
+        return LoanUtils.createDiasporeLoan(
+          loan as LoanApiDiaspore,
+          debtInfo,
+          config
+        );
 
       default:
         break;
@@ -385,10 +393,22 @@ export class ApiService {
   /**
    * Get diaspore loans model debt info if exists
    * @param loan Loan data obtained from API
+   * @return Model debt info obtained from API
    */
   private async getModelDebtInfo(loanId: string) {
     const apiUrl = this.diasporeUrl;
     return await this.http.get(apiUrl.concat(`model_debt_info/${ loanId }`)).toPromise();
+  }
+
+  /**
+   * Get diaspore loans model configs
+   * @param loan Loan data obtained from API
+   * @return Config obtained from API
+   */
+  private async getModelConfig(loanId: string) {
+    const apiUrl = this.diasporeUrl;
+    const { content }: any = await this.http.get(apiUrl.concat(`configs/${ loanId }`)).toPromise();
+    return content.data;
   }
 
   /**
