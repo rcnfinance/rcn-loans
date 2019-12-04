@@ -256,18 +256,16 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         break;
       case Status.Indebt:
       case Status.Ongoing:
+        const dueDate: string = this.formatTimestamp(this.loan.debt.model.dueTime);
         let lendDate: string;
-        let dueDate: string;
-        let remaning: string;
+        let deadline: string;
 
         if (loan.network === Network.Basalt) {
           lendDate = this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration);
-          dueDate = this.formatTimestamp(this.loan.debt.model.dueTime);
-          remaning = Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000), 2);
+          deadline = dueDate;
         } else {
           lendDate = this.formatTimestamp(this.loan.config.lentTime);
-          dueDate = this.formatTimestamp(this.loan.config.lentTime + this.loan.descriptor.duration);
-          remaning = Utils.formatDelta((this.loan.config.lentTime + this.loan.descriptor.duration) - (new Date().getTime() / 1000), 2);
+          deadline = this.formatTimestamp(this.loan.config.lentTime + this.loan.descriptor.duration);
         }
 
         const currentInterestRate: string = this.formatInterest(
@@ -276,10 +274,10 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
         // Show ongoing loan detail
         this.loanStatusData = [
-          ['Description', 'Date'], // TODO
-          ['Lend date', lendDate], // TODO
+          ['Description', 'Date'],
+          ['Lend date', lendDate],
           ['Due date', dueDate],
-          ['Remaining', remaning]
+          ['Deadline', deadline]
         ];
 
         // Template data
