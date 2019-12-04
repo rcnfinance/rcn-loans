@@ -393,6 +393,7 @@ export class ApiService {
   /**
    * Get diaspore loans model debt info if exists
    * @param loan Loan data obtained from API
+   * @return Model debt info obtained from API
    */
   private async getModelDebtInfo(loanId: string) {
     const apiUrl = this.diasporeUrl;
@@ -402,6 +403,7 @@ export class ApiService {
   /**
    * Get diaspore loans model configs
    * @param loan Loan data obtained from API
+   * @return Config obtained from API
    */
   private async getModelConfig(loanId: string) {
     const apiUrl = this.diasporeUrl;
