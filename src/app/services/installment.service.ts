@@ -170,7 +170,12 @@ export class InstallmentService {
    */
   private async getCurrentInstallments(loan: Loan): Promise<Installment[]> {
     const installments: Installment[] = [];
-    const startDateUnix = (loan.debt.model.dueTime - loan.descriptor.duration) * 1000;
+    let startDateUnix = (loan.debt.model.dueTime - loan.descriptor.duration) * 1000;
+
+    if (loan.status === Status.Ongoing || loan.status === Status.Indebt) {
+      startDateUnix = loan.config.lentTime * 1000;
+    }
+
     const today = Math.round(new Date().getTime());
     const todayTimestamp = this.unixToDate(today);
     let hasCurrent: boolean;
