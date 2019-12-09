@@ -48,12 +48,18 @@ export class InstallmentService {
   /**
    * Load pay history
    * @param loan Loan
+   * @param isCurrent Current installment
+   * @param isPrev Prev installment
+   * @param isNext Next installment
    * @param startDate Pays after this date
    * @param endDate Pays before this date (due installment date)
    * @return Pays array
    */
   async getPays(
     loan: Loan,
+    isCurrent: boolean,
+    isPrev: boolean,
+    isNext: boolean,
     startDate?: string,
     endDate?: string
   ): Promise<Pay[]> {
@@ -65,12 +71,20 @@ export class InstallmentService {
 
     switch (loan.status) {
       case Status.Request:
-        pending = loan.currency.fromUnit(loan.descriptor.totalObligation);
+        pending = loan.currency.fromUnit(loan.descriptor.firstObligation);
         break;
 
       case Status.Ongoing:
       case Status.Indebt:
-        pending = loan.currency.fromUnit(loan.debt.model.estimatedObligation);
+        if (isCurrent) {
+          const quota = loan.descriptor.firstObligation || loan.debt.model.nextObligation;
+          pending = loan.currency.fromUnit(quota);
+          // TODO: add all results
+        } else if (isNext) {
+          pending = loan.currency.fromUnit(loan.debt.model.nextObligation);
+        } else if (isPrev) {
+          pending = loan.currency.fromUnit(loan.descriptor.firstObligation);
+        }
         break;
 
       default:
@@ -92,8 +106,8 @@ export class InstallmentService {
         return;
       }
 
-      totalPaid += loan.currency.fromUnit(paid);
-      pending -= Number(totalPaid);
+      totalPaid += Number(amount);
+      pending -= Number(amount);
 
       pays.push({
         date: this.unixToDate(timestamp * 1000),
@@ -143,10 +157,14 @@ export class InstallmentService {
       const pays = [];
       const status = InstallmentStatus.OnTime;
       const isLast = payNumber === loan.descriptor.installments;
+      const isPrev = false;
+      const isNext = true;
 
       installments.push({
         isCurrent,
         isLast,
+        isPrev,
+        isNext,
         startDate,
         payNumber,
         dueDate,
@@ -190,26 +208,30 @@ export class InstallmentService {
       );
       const currency = loan.currency.toString();
       const punitory = loan.descriptor.punitiveInterestRateRate;
-      const totalPaid = loan.currency.fromUnit(loan.debt.model.paid);
-      const totalAmount = totalPaid + loan.currency.fromUnit(loan.debt.model.estimatedObligation);
-      const pendingAmount = totalAmount - totalPaid;
       const isLast = payNumber === loan.descriptor.installments;
-      const pays = await this.getPays(loan, startDate, !isLast ? dueDate : null);
+      const isPrev = startDate < todayTimestamp;
+      const isNext = startDate > todayTimestamp;
       let status = InstallmentStatus.OnTime;
-
       let isCurrent = false;
       let amount = loan.currency.fromUnit(loan.descriptor.firstObligation);
 
       // future installments
-      if (hasCurrent) {
+      // if (hasCurrent) {
+      //   amount = loan.currency.fromUnit(loan.debt.model.nextObligation);
+      // }
+
+      if (isCurrent) {
+        const quota = loan.descriptor.firstObligation || loan.debt.model.nextObligation;
+        amount = loan.currency.fromUnit(quota);
+        // TODO: add all results
+      } else if (isNext) {
         amount = loan.currency.fromUnit(loan.debt.model.nextObligation);
+      } else if (isPrev) {
+        amount = loan.currency.fromUnit(loan.descriptor.firstObligation);
       }
 
       // previous or latest installment
-      if (
-        (startDate < todayTimestamp && dueDate > todayTimestamp) ||
-        (isLast && !hasCurrent)
-      ) {
+      if ((isPrev && dueDate > todayTimestamp) || (isLast && !hasCurrent)) {
         status = this.getDueStatus(dueDate);
         hasCurrent = true;
         isCurrent = true;
@@ -218,9 +240,29 @@ export class InstallmentService {
         );
       }
 
+      // load payment information
+      const endDate = !isLast ? dueDate : null;
+      const pays = await this.getPays(
+        loan,
+        isCurrent,
+        isPrev,
+        isNext,
+        startDate,
+        endDate
+      );
+      let totalPaid = 0;
+      pays.map((pay: Pay) => totalPaid += pay.amount);
+
+      const pendingAmount = amount - totalPaid;
+      if (isPrev && pendingAmount) {
+        status = InstallmentStatus.OnDue;
+      }
+
       installments.push({
         isCurrent,
         isLast,
+        isPrev,
+        isNext,
         startDate,
         payNumber,
         dueDate,
@@ -233,24 +275,6 @@ export class InstallmentService {
         status
       });
     }
-
-    // check installments status
-    /*
-    installments.map(async (installment: Installment) => {
-      const dueDate = this.unixToDate(
-        startDateUnix + (loan.descriptor.frequency * 1000 * installment.payNumber)
-      );
-      const pays = await this.getPays(loan, null, dueDate);
-
-      let totalPaid = 0;
-
-      pays.map((pay: Pay) => {
-        totalPaid += pay.amount;
-      });
-
-      return installment;
-    });
-    */
 
     return installments;
   }

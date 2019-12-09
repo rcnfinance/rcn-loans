@@ -11,7 +11,112 @@
 
 .installments-detail {
   width: 100%;
-  text-align: left;
+  text-align: center;
+
+  &__title {
+    text-align: left;
+    h3 {
+      @include typography-headline(5);
+      text-transform: uppercase;
+    }
+  }
+
+  .row {
+    &--header {
+      @include styled-font('Raleway', 700, 13px);
+      text-transform: uppercase;
+      color: #656565;
+    }
+    &--pay {
+      padding: 6px 0;
+    }
+  }
+
+  .installment {
+    border-radius: 0;
+
+    &,
+    &:hover {
+      background: var(--app-color-gray-400) !important;
+    }
+    &--light {
+      &,
+      &:hover {
+        background: var(--app-color-gray-300) !important;
+      }
+    }
+    &--current {
+      .mat-expansion-panel-header {
+        color: var(--app-color-primary-light) !important;
+      }
+    }
+
+    &__col {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      &--pay,
+      &--status {
+        width: 8.3%;
+        min-width: 8.3%;
+        max-width: 8.3%;
+      }
+      &--due-date,
+      &--payment-amount,
+      &--amount,
+      &--pending,
+      &--paid {
+        width: 16.6%;
+        min-width: 16.6%;
+        max-width: 16.6%;
+      }
+      &--status {
+        text-align: left;
+        color: var(--app-color-orange);
+        &-0 {
+          color: var(--app-color-green);
+        }
+      }
+    }
+  }
+
+  ::ng-deep {
+    ngx-spinner {
+      .overlay {
+        max-height: 600px;
+      }
+    }
+
+    mat-expansion-panel {
+      &-header,
+      &-body {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      &-header {
+        position: relative;
+        .mat-expansion-indicator {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 16px;
+          display: flex;
+          align-items: center;
+        }
+        &,
+        &:hover,
+        &:focus {
+          background: none !important;
+        }
+      }
+      .row {
+        width: 100%;
+        &--header {
+
+        }
+      }
+    }
+  }
+
 }
 
 .empty-container{

@@ -9,7 +9,9 @@
     [ngClass]="{'active': viewDetail === 'identity' ? true : false }" matTooltip="Identity" matTooltipPosition="below">
     <i class="fas fa-id-badge"></i>
   </div>
-  <div class="button-options"
+  <div
+    *ngIf="loan?.descriptor.installments"
+    class="button-options"
     (click)="openDetail('installments')"
     [ngClass]="{'active': viewDetail === 'installments' ? true : false }" matTooltip="Installments" matTooltipPosition="below">
     <i class="fas fa-chart-pie"></i>
@@ -28,7 +30,9 @@
       <i class="fas fa-shield-alt"></i>
       <span>Cosigner</span>
     </button>
-    <button mat-menu-item
+    <button
+      *ngIf="loan?.descriptor.installments"
+      mat-menu-item
       (click)="openDetail('installments')"
       [ngClass]="{'active': viewDetail === 'installments' ? true : false }"
     >

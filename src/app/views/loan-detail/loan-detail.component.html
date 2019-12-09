@@ -21,7 +21,12 @@
       <!-- <app-creator-container [loan]=loan></app-creator-container> -->
     </div>
     <div class="flex-item">
-      <app-button-group (view)="openDetail($event)" [viewDetail]=viewDetail></app-button-group>
+      <app-button-group
+        [loan]="loan"
+        [viewDetail]="viewDetail"
+        (view)="openDetail($event)"
+      >
+      </app-button-group>
     </div>
   </div>
 
@@ -65,13 +70,20 @@
       </ng-template>
 
       <div class="margintop20"></div>
-      <app-detail-table [data]="diasporeData" *ngIf="isDiaspore"></app-detail-table>
-      <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled"></app-detail-table>
-      <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
+      <app-detail-table [data]="diasporeData" *ngIf="isDiaspore">
+      </app-detail-table>
 
+      <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled">
+      </app-detail-table>
 
+      <app-detail-table [data]="loanStatusData" *ngIf="!isRequest">
+      </app-detail-table>
 
-      <div class="table-responsive" (click)="openDetail('installments');">
+      <div
+        class="table-responsive"
+        (click)="openDetail('installments');"
+        *ngIf="loan?.descriptor.installments"
+      >
         <table class="table table-clickable table--installments">
           <thead>
             <tr>
@@ -122,7 +134,7 @@
                       {{ nextInstallment?.payNumber || '-' }}
                     </div>
                     <div class="col col-4">
-                      {{ nextInstallment?.installment.amount || '-' }}
+                      {{ (nextInstallment?.installment.amount | formatAmount) || '-' }}
                       {{ nextInstallment?.installment.currency }}
                     </div>
                     <div class="col col-5">

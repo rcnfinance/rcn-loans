@@ -1,8 +1,10 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { DetailInstallmentsComponent } from './detail-installments.component';
 import { InstallmentService } from './../../../services/installment.service';
 import { CommitsService } from './../../../services/commits.service';
+import { FormatAmountPipe } from './../../../pipes/format-amount.pipe';
 
 describe('DetailInstallmentsComponent', () => {
   let component: DetailInstallmentsComponent;
@@ -11,8 +13,9 @@ describe('DetailInstallmentsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientModule ],
-      declarations: [ DetailInstallmentsComponent ],
-      providers: [ InstallmentService, CommitsService ]
+      declarations: [ DetailInstallmentsComponent, FormatAmountPipe ],
+      providers: [ InstallmentService, CommitsService ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
     .compileComponents();
   }));
