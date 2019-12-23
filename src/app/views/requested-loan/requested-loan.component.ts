@@ -15,6 +15,7 @@ import { FilterLoansService } from '../../services/filter-loans.service';
   styleUrls: ['./requested-loan.component.scss']
 })
 export class RequestedLoanComponent implements OnInit, OnDestroy {
+  pageId = 'requested-loan';
   winHeight: number = window.innerHeight;
   loading: boolean;
   available: any;
@@ -43,7 +44,7 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.changeTitle('Requests');
-    this.spinner.show();
+    this.spinner.show(this.pageId);
     this.loadLoans();
 
     // Available Loans service
@@ -53,6 +54,8 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.spinner.hide(this.pageId);
+
     try {
       this.subscriptionAvailable.unsubscribe();
     } catch (e) { }
@@ -69,7 +72,7 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
    * Reload loans when the filter is applied
    */
   onFiltered() {
-    this.spinner.show();
+    this.spinner.show(this.pageId);
     this.loadLoans();
   }
 
@@ -89,7 +92,7 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
     this.loans = filterLoans;
 
     this.upgradeAvaiblable();
-    this.spinner.hide();
+    this.spinner.hide(this.pageId);
 
     if (this.loans.length) {
       this.availableLoans = true;

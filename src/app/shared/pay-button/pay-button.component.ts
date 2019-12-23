@@ -88,6 +88,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     if (tx.type === Type.pay && tx.data.id === this.loan.id) {
       this.endPay.emit();
       this.web3Service.updateBalanceEvent.emit();
+      this.txSubscription = false;
     }
   }
 

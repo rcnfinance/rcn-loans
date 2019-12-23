@@ -61,6 +61,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     // FIXME: review data: { id }
     if (tx.type === Type.transfer) {
       this.endTransfer.emit();
+      this.txSubscription = false;
     }
   }
 

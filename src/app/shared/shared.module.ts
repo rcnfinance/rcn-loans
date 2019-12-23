@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxSpinnerModule } from 'ngx-spinner';
 // App Modules
 import { MaterialModule } from './../material.module';
 // App Component
@@ -39,6 +40,7 @@ import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dia
 import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
+import { FormatAmountPipe } from './../pipes/format-amount.pipe';
 // App Services
 import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
@@ -58,7 +60,7 @@ import { ErrorDetailsComponent } from './error-details/error-details.component';
     BlockiesModule,
     FormsModule,
     ReactiveFormsModule,
-    BlockiesModule
+    NgxSpinnerModule
   ],
   declarations: [
     FooterComponent,
@@ -92,7 +94,8 @@ import { ErrorDetailsComponent } from './error-details/error-details.component';
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
 
-    VisualUrlPipe
+    VisualUrlPipe,
+    FormatAmountPipe
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,
@@ -140,7 +143,8 @@ import { ErrorDetailsComponent } from './error-details/error-details.component';
     CurrencyLogoComponent,
     ErrorDetailsComponent,
     DialogWrongCountryComponent,
-    VisualUrlPipe
+    VisualUrlPipe,
+    FormatAmountPipe
   ]
 })
 export class SharedModule { }
