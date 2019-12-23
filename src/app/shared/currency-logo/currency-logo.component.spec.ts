@@ -2,6 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CurrencyLogoComponent } from './currency-logo.component';
 import { CurrenciesService } from '../../services/currencies.service';
+import { SharedModule } from '../../shared/shared.module';
+import { Web3Service } from '../../services/web3.service';
 
 describe('CurrencyLogoComponent', () => {
   let component: CurrencyLogoComponent;
@@ -9,8 +11,8 @@ describe('CurrencyLogoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CurrencyLogoComponent ],
-      providers: [ CurrenciesService ]
+      imports: [ SharedModule ],
+      providers: [ CurrenciesService, Web3Service ]
     })
     .compileComponents();
   }));

@@ -1,7 +1,7 @@
 <div class="button-group" appClickOutside (clickOutside)="openDetail('clickOutside')">
-  <div class="button" (click)="openDetail('notifications')" 
+  <div class="button" (click)="openDetail('notifications')"
   [ngClass]="{'active': isDetail('notifications')}">
-    <i class="fas fa-bell"></i>
+    <i class="fas fa-clock"></i>
     <div class="available-notifications" *ngIf='notificationsCounter'>
       {{ notificationsCounter ? notificationsCounter : '0' }}
     </div>
