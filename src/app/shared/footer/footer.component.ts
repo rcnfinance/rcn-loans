@@ -63,22 +63,22 @@ export class FooterComponent implements OnInit, OnDestroy {
         text: version
       },
       {
-        url: 'https://www.facebook.com/ripiocredit.network/',
+        url: 'https://www.facebook.com/RCN.finance',
         label: 'Facebook',
         class: 'fab fa-facebook-f'
       },
       {
-        url: 'https://twitter.com/rcn_token?lang=en',
+        url: 'https://twitter.com/RCNFinance',
         label: 'Twitter',
         class: 'fab fa-twitter'
       },
       {
-        url: 'https://t.me/RCNtalk',
+        url: 'https://t.me/RCNchat',
         label: 'Telegram',
         class: 'fab fa-telegram-plane'
       },
       {
-        url: 'https://www.linkedin.com/company/ripio-credit-network/',
+        url: 'https://www.linkedin.com/company/rcn-finance/',
         label: 'Linkedin',
         class: 'fab fa-linkedin-in'
       },
