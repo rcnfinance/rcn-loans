@@ -13,9 +13,12 @@
   <div class="container">
 
     <ng-container *ngIf="availableLoans; else noAvailableLoans">
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-sm-12 d-none d-lg-block">
-          <div class="title main-h1 marginbottom30">Requests</div>
+          <div class="title main-h1 marginbottom30">Lending marketplace</div>
+          <p>
+            Fund crypto and fiat loans using multiple currencies
+          </p>
         </div>
         <div
           class="col-sm-12 d-flex justify-content-between margintop10 marginbottom10"
@@ -26,12 +29,29 @@
             >
           </mat-chip-list>
           <button mat-button class="paddingright30" (click)="openFilters()">
-            FILTERS
+            FILTER BY
             <mat-icon class="icon-active">filter_list</mat-icon>
             <mat-icon class="icon-disabled">expand_more</mat-icon>
           </button>
         </div>
+      </div> -->
+
+      <div class="page-header">
+        <app-page-header
+          title="Lending marketplace"
+          description="Fund crypto and fiat loans using multiple currencies"
+          [hasChip]="true"
+          [chipValue]="loans.length"
+          chipLabel="REQUESTED"
+        >
+        </app-page-header>
+        <button mat-button class="paddingright30" (click)="openFilters()">
+          FILTER BY
+          <mat-icon class="icon-active">filter_list</mat-icon>
+          <mat-icon class="icon-disabled">expand_more</mat-icon>
+        </button>
       </div>
+
       <div class="filters anm-01">
         <app-filter-loans [filters]="filters" (filtered)="onFiltered()">
         </app-filter-loans>
