@@ -4,7 +4,10 @@
     class="loan-card__risk-indicator"
     [loan]="loan"
   ></app-risk-indicator>
-  <app-creator-container [loan]=loan></app-creator-container>
+  <app-creator-container
+    class="loan-card__creator"
+    [loan]="loan"
+  ></app-creator-container>
   <div class="loan-card__content">
     <div class="loan-card__property">
       <div class="loan-card__property-title">
@@ -24,7 +27,7 @@
     </div>
     <div class="loan-card__property">
       <div class="loan-card__property-title">
-        Annual Interest / Punitory
+        Annual Interest / Penalty rate
       </div>
       <div class="loan-card__property-paragraph">
         ~ {{ interestRate }} % /  ~ {{ punitiveInterestRateRate }} %

@@ -13,7 +13,7 @@ export class BrandingService {
       '#E59400',
       'https://avatars1.githubusercontent.com/u/12685795?s=400&v=4',
       '',
-      'Decentraland',
+      'Decentraland MC',
       undefined,
       undefined
     ),
