@@ -144,6 +144,14 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     this.viewDetail = view;
   }
 
+  /**
+   * Open the borrower address in etherscan
+   * @param address Borrower address
+   */
+  openBorrower(address: string) {
+    window.open(environment.network.explorer.address.replace('${address}', address));
+  }
+
   isDetail(view: string): Boolean {
     return view === this.viewDetail;
   }
@@ -253,8 +261,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         const interestRatePunitive = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
         const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
         this.loanConfigData = [
-          ['Currency', currency],
-          ['Interest / Punitory', '~ ' + interestRate + ' % / ~ ' + interestRatePunitive + ' %'],
+          ['Information', ''],
+          ['Annual rate / Penalty rate', '~ ' + interestRate + ' % / ~ ' + interestRatePunitive + ' %'],
           ['Duration', duration]
         ];
 
@@ -367,9 +375,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
 
     this.diasporeData = [
-      ['Installments', 'Duration', 'Cuota'],
+      ['Installments', 'Frequency', 'Amount'],
       [
-        installments,
+        `${ installments } ${ installments > 1 ? 'Payments' : 'Payment' }`,
         installmentDuration,
         `${ installmentAmount } ${ installmentCurrency }`
       ]
