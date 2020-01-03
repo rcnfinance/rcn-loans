@@ -55,31 +55,176 @@ export class NotificationsComponent implements OnInit {
     public notificationsService: NotificationsService
   ) { }
 
-  getTxMessage(tx: Tx): string { // Return the TxObject Message to render the Notification
+  /**
+   * Get the contract name
+   * @param contract Contract address
+   * @return Contract name
+   */
+  getContractName(contract: string) {
+    switch (contract) {
+      case environment.contracts.basaltEngine:
+        return 'Basalt Engine Contract';
+
+      case environment.contracts.diaspore.loanManager:
+        return 'Loan Manager Contract';
+
+      case environment.contracts.diaspore.debtEngine:
+        return 'Debt Engine Contract';
+
+      case environment.contracts.converter.converterRamp:
+        return 'Converter Ramp Contract';
+
+      default:
+        return `${ Utils.shortAddress(contract) } Contract`;
+    }
+  }
+
+  /**
+   * Return formatted loan ID (short and linked)
+   * @param loanId Loan ID
+   * @return Formatted loan ID
+   */
+  getFormattedLoanId(loanId, html = true) {
+    if (!loanId || !loanId.startsWith('0x')) {
+      return loanId;
+    }
+
+    const shortAddress = Utils.shortAddress(loanId);
+    if (!html) {
+      return shortAddress;
+    }
+
+    return `
+      <a href="loan/${ loanId }" target="_blank" class="supporter-txt">
+        ${ shortAddress }
+      </a>
+    `;
+  }
+
+  /**
+   * Return the TxObject Message to render the Notification
+   * @param tx Tx object
+   * @return Tx message
+   */
+  getTxMessage(tx: Tx): string {
+    // set contract name
+    let contractName: string;
     if (tx.type === 'approve') {
-      switch (tx.data.contract) {
-        case environment.contracts.basaltEngine:
-          return 'the Basalt Engine contract';
-
-        case environment.contracts.diaspore.loanManager:
-          return 'the Loan Manager Contract';
-
-        case environment.contracts.diaspore.debtEngine:
-          return 'the Debt Engine Contract';
-
-        case environment.contracts.converter.converterRamp:
-          return 'the Converter Ramp Contract';
-
-        default:
-          return 'the contract ' + tx.data.contract;
-      }
+      contractName = this.getContractName(tx.data.contract);
     }
 
-    if (tx.type === 'withdraw') {
-      return 'funds';
+    // make complete message
+    let message: string;
+    const loanId = this.getFormattedLoanId(tx.data.id);
+    switch (tx.type) {
+      case 'lend':
+        message = `Lending the ${ loanId } loan request`;
+        break;
+      case 'withdraw':
+        message = `Withdrawing funds from the Contract Balance`;
+        break;
+      case 'transfer':
+        message = `Transferring the ${ loanId } loan`;
+        break;
+      case 'pay':
+        message = `Paying the ${ loanId } loan`;
+        break;
+      case 'claim':
+        message = `Claiming the repayment of the ${ loanId } loan`;
+        break;
+      case 'approve':
+        if (tx.data.action) {
+          message = `Enabling the ${ contractName }`;
+        } else {
+          message = `Disabling the ${ contractName }`;
+        }
+        break;
+      default:
+        break;
     }
 
-    return 'the loan';
+    return message;
+  }
+
+  /**
+   * Change the Tx Title onConfirmed
+   * @param tx Tx object
+   * @return Tx title
+   */
+  getTxTitleConfirmed(tx: Tx): String {
+    switch (tx.type) {
+      case 'lend':
+        return 'Lent';
+
+      case 'withdraw':
+        return 'Withdrawn';
+
+      case 'transfer':
+        return 'Transferred';
+
+      case 'pay':
+        return 'Partially Paid';
+
+      case 'claim':
+        return 'Claimed';
+
+      case 'approve':
+        if (tx.data.action) {
+          return 'Enabled';
+        }
+        return 'Disabled';
+
+      default:
+        return;
+    }
+  }
+
+  /**
+   * Change the Tx Message onConfirmed
+   * @param tx Tx object
+   * @return Tx message
+   */
+  getTxMessageConfirmed(tx: Tx): String {
+    // set contract name
+    let contractName: string;
+    if (tx.type === 'approve') {
+      contractName = this.getContractName(tx.data.contract);
+    }
+
+    // make complete message
+    /*
+<span routerLink='loan/{{ notification.txObject.id }}' class="supporter-txt" *ngIf='notification.txObject.id'>{{ shortAddress }}</span>
+    */
+    const loanId = this.getFormattedLoanId(tx.data.id);
+    let message: string;
+    switch (tx.type) {
+      case 'lend':
+        message = `The ${ loanId } loan has been lent`;
+        break;
+      case 'withdraw':
+        message = `The funds from the Contract Balance have been withdrawn`;
+        break;
+      case 'transfer':
+        message = `The ${ loanId } loan has been transferred to ${ loanId }`;
+        break;
+      case 'pay':
+        message = `The ${ loanId } loan has been paid`;
+        break;
+      case 'claim':
+        message = `The repayment of the ${ loanId } loan has been claimed`;
+        break;
+      case 'approve':
+        if (tx.data.action) {
+          message = `The ${ contractName } have been enabled`;
+        } else {
+          message = `The ${ contractName } have been disabled`;
+        }
+        break;
+      default:
+        break;
+    }
+
+    return message;
   }
 
   getTxId(tx: Tx): String { // Return the TxObject Message to render the Notification
@@ -93,7 +238,12 @@ export class NotificationsComponent implements OnInit {
     return id;
   }
 
-  getTxObject(tx: Tx): TxObject { // Return the TxObject to render style data
+  /**
+   * Return the TxObject to render style data
+   * @param tx Tx object
+   * @return Tx object with title, icon, message, etc
+   */
+  getTxObject(tx: Tx): TxObject {
     let txObject: TxObject;
     const id: String = this.getTxId(tx);
     const message: string = this.getTxMessage(tx);
@@ -105,56 +255,25 @@ export class NotificationsComponent implements OnInit {
         txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'call_made', '', 'white');
         break;
       case 'transfer':
-        txObject = new TxObject(id, 'Transfering', message, '', '', 'fas fa-exchange-alt', 'orange');
+        txObject = new TxObject(id, 'Transferring', message, '', '', 'fas fa-exchange-alt', 'orange');
         break;
       case 'pay':
-        txObject = new TxObject(id, 'Paying', message, '', '', 'fas fa-coins', 'green');
+        txObject = new TxObject(id, 'Partially Paying', message, '', '', 'fas fa-coins', 'green');
         break;
       case 'claim':
         txObject = new TxObject(id, 'Claiming', message, 'material-icons', 'call_made', '', 'white');
         break;
       case 'approve':
         if (tx.data.action) {
-          txObject = new TxObject(id, 'Authorizing', message, '', '', 'fas fa-lock-open', 'green');
+          txObject = new TxObject(id, 'Enabling', message, '', '', 'fas fa-lock-open', 'green');
         } else {
-          txObject = new TxObject(id, 'Locking', message, '', '', 'fas fa-lock', 'red');
+          txObject = new TxObject(id, 'Disabling', message, '', '', 'fas fa-lock', 'red');
         }
         break;
       default:
         break;
     }
     return txObject;
-  }
-
-  getTxObjectConfirmed(tx: Tx): String { // Change the Tx Message onConfirmed
-    let message: String;
-    switch (tx.type) {
-      case 'lend':
-        message = 'Lent';
-        break;
-      case 'withdraw':
-        message = 'Withdrawed';
-        break;
-      case 'transfer':
-        message = 'Transfered';
-        break;
-      case 'pay':
-        message = 'Payed';
-        break;
-      case 'claim':
-        message = 'Claimed';
-        break;
-      case 'approve':
-        if (tx.data.action) {
-          message = 'Authorized';
-        } else {
-          message = 'Locked';
-        }
-        break;
-      default:
-        break;
-    }
-    return message;
   }
 
   // Render Tx[]
@@ -186,12 +305,12 @@ export class NotificationsComponent implements OnInit {
 
   private addNewNotification(tx: Tx) {
     this.oNotifications.unshift(new Notification(
-      tx.tx,                                                                       // This is the Notification hashTx
-      tx.to,                                                                       // This is the Notification starringEvent
-      Utils.shortAddress(tx.to),                                                   // This is the Notification starringEventShort
-      tx.timestamp,                                                                // This is the Notification timeEvent
-      tx.confirmed,                                                                // This is the Notification confirmedTx
-      this.getTxObject(tx)                                                         // This is the Notification txObject
+      tx.tx,                      // This is the Notification hashTx
+      tx.to,                      // This is the Notification starringEvent
+      Utils.shortAddress(tx.to),  // This is the Notification starringEventShort
+      tx.timestamp,               // This is the Notification timeEvent
+      tx.confirmed,               // This is the Notification confirmedTx
+      this.getTxObject(tx)        // This is the Notification txObject
     ));
     this.emitCounter();
   }
@@ -199,7 +318,8 @@ export class NotificationsComponent implements OnInit {
   private setTxFinished(tx: Tx) {
     const notification = this.oNotifications.find(c => c.hashTx === tx.tx);
     notification.confirmedTx = tx.confirmed;
-    notification.txObject.title = this.getTxObjectConfirmed(tx);
+    notification.txObject.title = this.getTxTitleConfirmed(tx);
+    notification.txObject.message = this.getTxMessageConfirmed(tx);
     this.emitCounter();
   }
 }
