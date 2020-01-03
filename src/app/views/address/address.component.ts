@@ -17,6 +17,7 @@ import { Web3Service } from '../../services/web3.service';
   styleUrls: ['./address.component.scss']
 })
 export class AddressComponent implements OnInit, OnDestroy {
+  pageId = 'address';
   address: string;
   available: any;
   loans = [];
@@ -36,7 +37,7 @@ export class AddressComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.changeTitle('Address');
-    this.spinner.show();
+    this.spinner.show(this.pageId);
 
     this.route.params.subscribe(params => {
       const web3 = this.web3Service.web3;
@@ -51,6 +52,8 @@ export class AddressComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.spinner.hide(this.pageId);
+
     try {
       this.subscriptionAvailable.unsubscribe();
     } catch (e) { }
@@ -62,7 +65,7 @@ export class AddressComponent implements OnInit, OnDestroy {
       this.loans = loans;
 
       this.upgradeAvaiblable();
-      this.spinner.hide();
+      this.spinner.hide(this.pageId);
 
       if (this.loans.length) {
         this.availableLoans = true;
@@ -71,7 +74,7 @@ export class AddressComponent implements OnInit, OnDestroy {
       }
 
     } catch (err) {
-      this.spinner.hide();
+      this.spinner.hide(this.pageId);
       this.availableLoans = false;
     }
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnChanges, Input } from '@angular/core';
 import { Loan, Status } from '../../models/loan.model';
 
 @Component({
@@ -6,12 +6,23 @@ import { Loan, Status } from '../../models/loan.model';
   templateUrl: './avatar-title.component.html',
   styleUrls: ['./avatar-title.component.scss']
 })
-export class AvatarTitleComponent implements OnInit {
+export class AvatarTitleComponent implements OnChanges {
   @Input() loan: Loan;
   status: string;
   constructor() { }
 
-  ngOnInit() {
+  ngOnChanges(changes) {
+    const { loan } = changes;
+
+    if (loan && loan.currentValue) {
+      this.loadStatus();
+    }
+  }
+
+  /**
+   * Load loan status
+   */
+  loadStatus() {
     switch (this.loan.status) {
       case Status.Ongoing:
         this.status = 'Ongoing';

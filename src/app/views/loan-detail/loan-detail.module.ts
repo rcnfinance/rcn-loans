@@ -22,9 +22,11 @@ import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loa
 import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { ItemFeatureComponent } from './item-feature/item-feature.component';
+import { LoanDoesNotExistComponent } from './loan-does-not-exist/loan-does-not-exist.component';
 
 const routes: Routes = [
-  { path: '', component: LoanDetailComponent }
+  { path: '', component: LoanDetailComponent },
+  { path: '404', component: LoanDoesNotExistComponent }
 ];
 
 @NgModule({
@@ -51,7 +53,8 @@ const routes: Routes = [
     TransferButtonComponent,
     DialogLoanTransferComponent,
     DialogLoanPayComponent,
-    ItemFeatureComponent
+    ItemFeatureComponent,
+    LoanDoesNotExistComponent
   ],
   entryComponents: [
     DialogLoanTransferComponent,

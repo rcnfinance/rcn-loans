@@ -1,58 +1,95 @@
 <div
   class="body-scrollable requested-wrapper"
-  [ngClass]="{'active': filtersOpen, 'disabled': filtersOpen === false}"
+  [ngClass]="{ active: filtersOpen, disabled: filtersOpen === false }"
   #scrollingBlock
 >
   <ngx-spinner
-    bdColor="rgba(0,0,0,.3)"
+    bdColor="transparent"
     size="medium"
     color="#fff"
     type="ball-clip-rotate-multiple"
+    [name]="pageId"
   ></ngx-spinner>
   <div class="container">
-    <div class="row">
-      <div class="col-sm-12 d-none d-lg-block">
-        <div class="title main-h1 marginbottom30">Requests</div>
-      </div>
-      <div class="col-sm-12 d-flex justify-content-between margintop10 marginbottom10">
-        <mat-chip-list>
-          <mat-chip class="mat-chip--gray" selected="true">{{ loans.length }} AVAILABLE</mat-chip>
-        </mat-chip-list>
-        <button mat-button class="paddingright30" (click)="openFilters()">
-          FILTERS
-          <mat-icon class="icon-active">filter_list</mat-icon>
-          <mat-icon class="icon-disabled">expand_more</mat-icon>
-        </button>
-      </div>
-    </div>
 
-    <div class="filters anm-01">
-      <app-filter-loans [filters]="filters" (filtered)="onFiltered()">
-      </app-filter-loans>
-    </div>
-
-    <div class="loan-container row">
-      <div class="col-sm-12 text-center py-4 px-4" *ngIf="!availableLoans">
-        <div class="title main-h2">There are no available Loans</div>
-      </div>
-
-      <virtual-scroller
-        #scroll
-        [items]="loans"
-        [parentScroll]="scrollingBlock"
-        [bufferAmount]="4"
-        [scrollThrottlingTime]="500"
-      >
-        <div
-          class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
-          *ngFor="let loan of scroll.viewPortItems"
-        >
-          <app-loan-card [loan]="loan"></app-loan-card>
+    <ng-container *ngIf="availableLoans; else noAvailableLoans">
+      <div class="row">
+        <div class="col-sm-12 d-none d-lg-block">
+          <div class="title main-h1 marginbottom30">Requests</div>
         </div>
-      </virtual-scroller>
+        <div
+          class="col-sm-12 d-flex justify-content-between margintop10 marginbottom10"
+        >
+          <mat-chip-list>
+            <mat-chip class="mat-chip--gray" selected="true"
+              >{{ loans.length }} AVAILABLE</mat-chip
+            >
+          </mat-chip-list>
+          <button mat-button class="paddingright30" (click)="openFilters()">
+            FILTERS
+            <mat-icon class="icon-active">filter_list</mat-icon>
+            <mat-icon class="icon-disabled">expand_more</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="filters anm-01">
+        <app-filter-loans [filters]="filters" (filtered)="onFiltered()">
+        </app-filter-loans>
+      </div>
+      <div class="loan-container row">
+        <virtual-scroller
+          #scroll
+          [items]="loans"
+          [parentScroll]="scrollingBlock"
+          [bufferAmount]="4"
+          [scrollThrottlingTime]="500"
+        >
+          <div
+            class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
+            *ngFor="let loan of scroll.viewPortItems"
+          >
+            <app-loan-card [loan]="loan"></app-loan-card>
+          </div>
+        </virtual-scroller>
+      </div>
+    </ng-container>
 
-    </div>
   </div>
-
   <app-footer></app-footer>
 </div>
+
+
+<ng-template #noAvailableLoans>
+  <div class="row">
+    <div class="col-sm-12 d-none d-lg-block">
+      <div class="col-sm-12 d-none d-lg-block paddingleft0">
+        <div class="title main-h1 marginbottom30">Requests</div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 px-0">
+      <app-error-details
+        label="Ohhh our bad"
+        title="Loans are on the way!"
+        description="Meanwhile you can check the Activity."
+        image="assets/errors/error_loans-comming.svg"
+        [buttons]="[
+          {
+            text: 'Go to Activity',
+            url: '/activity',
+            class: 'button-primary'
+          }
+        ]"
+        disclaimer="
+          If you don’t feel like going there, you can check
+          <!-- TODO: add URL -->
+          <a href='https://rcn.finance' target='_blank'>
+            what we are working on.
+          </a>
+        "
+      >
+      </app-error-details>
+    </div>
+  </div>
+</ng-template>
