@@ -45,14 +45,14 @@
       <ng-container *ngIf="!isPaid; else paidGraphic">
         <div class="px-3 pt-1">
           <app-conversion-graphic
-            [headers]="['Lend', loan.currency, isRequest || isCanceled ? 'Receive' : 'Return']"
+            [headers]="['Lend', loan.currency, 'Receive']"
             [amountLeft]="loan.currency.fromUnit(loan.amount)"
             [amountRight]="isRequest ||  isCanceled ? expectedReturn : totalDebt"
           ></app-conversion-graphic>
         </div>
         <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled">
           <app-conversion-graphic
-            [headers]="['Paid', 'Interest', 'Debt']"
+            [headers]="['Paid', 'Annual rate', 'Due']"
             [amountRight]="pendingAmount"
             [textMiddle]="interest"
             [amountLeft]="paid"
@@ -100,7 +100,7 @@
           </thead>
           <tbody>
             <tr>
-              <td style='cursor: pointer' (click)="openBorrower(loan.borrower)">
+              <td style='cursor: pointer' (click)="openAddress(loan.borrower)">
                 {{ loan.borrower }} - {{ brand.headerTitle }}
               </td>
             </tr>
@@ -108,15 +108,16 @@
         </table>
       </div>
       <div class="table-responsive">
-        <table class="table" (click)="openLender(loan.owner)" *ngIf="loan.debt">
+        <table class="table" *ngIf="loan.debt">
           <thead>
             <tr>
               <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td style='cursor: pointer'>{{ loan.debt.owner }}</td>
+            <tr style='cursor: pointer' (click)="openAddress(loan.debt.owner)">
+              <td style='cursor: pointer'>{{ loan.debt.owner }} - Unknown</td>
+              <!-- TODO: Implement lender identity description --> 
             </tr>
           </tbody>
         </table>

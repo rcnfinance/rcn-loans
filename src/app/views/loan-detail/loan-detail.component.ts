@@ -145,10 +145,10 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Open the borrower address in etherscan
+   * Open an address in etherscan
    * @param address Borrower address
    */
-  openBorrower(address: string) {
+  openAddress(address: string) {
     window.open(environment.network.explorer.address.replace('${address}', address));
   }
 
@@ -292,10 +292,10 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
         // Show ongoing loan detail
         this.loanStatusData = [
-          ['Description', 'Date'],
-          ['Lend date', lendDate],
-          ['Due date', dueDate],
-          ['Deadline', deadline]
+          ['Information', ''],
+          ['Lending date', lendDate],
+          ['Next date', dueDate],
+          ['Final due date', deadline]
         ];
 
         // Template data
@@ -435,6 +435,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   private formatTimestamp(timestamp: number): string {
-    return new DatePipe('en-US').transform(timestamp * 1000, 'dd.MM.yyyy');
+    return new DatePipe('en-US').transform(timestamp * 1000, 'dd/MM/yyyy');
   }
 }
