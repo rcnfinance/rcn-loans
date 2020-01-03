@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxSpinnerModule } from 'ngx-spinner';
 // App Modules
 import { MaterialModule } from './../material.module';
 // App Component
@@ -39,6 +40,7 @@ import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dia
 import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
+import { FormatAmountPipe } from './../pipes/format-amount.pipe';
 // App Services
 import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
@@ -48,6 +50,7 @@ import { IdentityService } from './../services/identity.service';
 import { RiskService } from './../services/risk.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
+import { ErrorDetailsComponent } from './error-details/error-details.component';
 
 @NgModule({
   imports: [
@@ -57,7 +60,7 @@ import { EventsService } from './../services/events.service';
     BlockiesModule,
     FormsModule,
     ReactiveFormsModule,
-    BlockiesModule
+    NgxSpinnerModule
   ],
   declarations: [
     FooterComponent,
@@ -82,6 +85,7 @@ import { EventsService } from './../services/events.service';
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
+    ErrorDetailsComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
@@ -90,7 +94,8 @@ import { EventsService } from './../services/events.service';
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
 
-    VisualUrlPipe
+    VisualUrlPipe,
+    FormatAmountPipe
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,
@@ -136,8 +141,10 @@ import { EventsService } from './../services/events.service';
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
+    ErrorDetailsComponent,
     DialogWrongCountryComponent,
-    VisualUrlPipe
+    VisualUrlPipe,
+    FormatAmountPipe
   ]
 })
 export class SharedModule { }

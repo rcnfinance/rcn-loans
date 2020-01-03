@@ -98,6 +98,8 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   trackLendTx(tx: Tx) {
     if (tx.type === Type.lend && tx.data.id === this.loan.id) {
       this.endLend.emit();
+      this.web3Service.updateBalanceEvent.emit();
+      this.txSubscription = false;
     }
   }
 
@@ -224,17 +226,6 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       let required: any = await this.contractsService.estimateLendAmount(this.loan, lendToken);
       let contractAddress: string;
       let payableAmount: any;
-
-      // set slippage
-      const aditionalSlippage = new web3.BigNumber(
-        environment.contracts.converter.params.aditionalSlippage
-      );
-      required = new web3.BigNumber(required, 10).mul(
-        new web3.BigNumber(100).add(aditionalSlippage)
-      ).div(
-        new web3.BigNumber(100)
-      );
-      required = Number(required);
 
       // set lend contract
       switch (lendToken) {

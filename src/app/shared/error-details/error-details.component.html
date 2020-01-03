@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="row d-flex flex-column-reverse flex-md-row align-items-center">
+    <div class="col-12 col-md-6 error-view">
+      <h4
+        class="error-view__label mb-0 mb-md-4 mt-4 py-3 mt-md-0 pt-md-0"
+        *ngIf="label"
+      >
+        {{ label }}
+      </h4>
+      <h2 class="error-view__title mt-0 mb-3" *ngIf="title">
+        {{ title }}
+      </h2>
+      <p class="error-view__description" *ngIf="description">
+        {{ description }}
+      </p>
+      <div
+        class="error-view__buttons mt-2 mt-md-5 pt-3"
+        *ngIf="buttons?.length"
+      >
+        <button
+          mat-raised-button
+          class="button"
+          [ngClass]="button.class"
+          [routerLink]="button.url"
+          *ngFor="let button of buttons"
+        >
+          {{ button.text }}
+        </button>
+      </div>
+      <p
+        class="error-view__disclaimer mt-4 pt-3"
+        [innerHTML]="disclaimer"
+        *ngIf="disclaimer"
+      >
+      </p>
+    </div>
+    <div class="col-8 col-md-6 mt-5 image-wrapper">
+      <img [src]="image" alt="404" />
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

@@ -1,3 +1,10 @@
+<ngx-spinner
+  bdColor="transparent"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate-multiple"
+></ngx-spinner>
+
 <app-dialog-header title="Approve Contract">
 </app-dialog-header>
 
@@ -24,40 +31,78 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-12 col-md-7">
-        <div class="title main-h2 mb-3">
-          Tokens
-        </div>
-        <ng-container *ngFor="let token of tokenContracts | keyvalue">
-          <div
-            class="row mb-3"
-            *ngIf="!onlyToken || onlyToken == token.value.address"
-          >
-            <div class="col-sm-12">
-              <div class="title main-h3 mb-3">
-                {{ token.key }}
-              </div>
-              <div
-                class="checkbox"
-                *ngFor="let contract of token.value.contracts"
-              >
-                <mat-checkbox
-                  color="primary"
-                  [disabled]="!isEnabled(contract)"
-                  [checked]="contract.isApproved ? contract.isApproved[token.value.address] : false"
-                  (change)="clickCheck(contract, $event, token.value.address)"
-                  *ngIf="!onlyAddress || onlyAddress == contract.address"
-                >
-                  Authorize the <b>{{ contract.name }}</b> contract to operate {{ token.key }} on your behalf
-                </mat-checkbox>
-              </div>
-            </div>
+      <div class="col-sm-12 col-md-7 px-0">
+
+        <ng-container *ngIf="tokens?.length && !onlyAsset">
+          <div class="title main-h2 mb-3 px-3 mx-1">
+            Tokens
           </div>
+          <ng-container *ngFor="let token of tokens; let i = index">
+            <mat-accordion *ngIf="!onlyToken || onlyToken == token.address">
+              <mat-expansion-panel
+                class="expansion-panel mat-elevation-z"
+                [expanded]="onlyToken || i === 0"
+              >
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ token.name }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div
+                  class="checkbox"
+                  *ngFor="let operator of token.operators"
+                >
+                  <mat-checkbox
+                    color="primary"
+                    [checked]="tokenApproves[token.address] && tokenApproves[token.address][operator.address]"
+                    (change)="clickCheck(operator, $event, token, 'token')"
+                    *ngIf="!onlyAddress || onlyAddress == operator.address"
+                  >
+                    Authorize the <b>{{ operator.name }}</b> contract to operate {{ token.name }} on your behalf
+                  </mat-checkbox>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </ng-container>
         </ng-container>
+
+        <ng-container *ngIf="assets?.length && !onlyToken">
+          <div class="title main-h2 mb-3 px-3 mx-1">
+            ERC 721
+          </div>
+          <ng-container *ngFor="let asset of assets">
+            <mat-accordion *ngIf="!onlyAsset || onlyAsset == token.address">
+              <mat-expansion-panel
+                class="expansion-panel mat-elevation-z"
+                [expanded]="onlyAsset"
+              >
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ asset.name }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div
+                  class="checkbox"
+                  *ngFor="let operator of asset.operators"
+                >
+                  <mat-checkbox
+                    color="primary"
+                    [checked]="assetApproves[asset.address] && assetApproves[asset.address][operator.address]"
+                    (change)="clickCheck(operator, $event, asset, 'asset')"
+                    *ngIf="!onlyAddress || onlyAddress == operator.address"
+                  >
+                    Authorize the <b>{{ operator.name }}</b> contract to operate {{ asset.name }} on your behalf
+                  </mat-checkbox>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </ng-container>
+        </ng-container>
+
       </div>
     </div>
-    <div class="row">
-      <div class="col-sm-12 mb-3 d-flex justify-content-end">
+    <div class="row mt-4">
+      <div class="col-sm-12 d-flex justify-content-end">
         <app-close-button></app-close-button>
       </div>
     </div>

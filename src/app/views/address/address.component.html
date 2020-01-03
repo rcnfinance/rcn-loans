@@ -1,14 +1,14 @@
-<ngx-spinner
-  bdColor="rgba(0,0,0,.3)"
-  size="medium"
-  color="#fff"
-  type="ball-clip-rotate-multiple"
-></ngx-spinner>
-
 <div
   class="body-scrollable activity-wrapper"
   #scrollingBlock
 >
+  <ngx-spinner
+    bdColor="transparent"
+    size="medium"
+    color="#fff"
+    type="ball-clip-rotate-multiple"
+    [name]="pageId"
+  ></ngx-spinner>
   <div class="container">
     <div class="row align-items-center pt-2 pt-lg-0">
 

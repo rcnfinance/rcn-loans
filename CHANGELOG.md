@@ -4,6 +4,7 @@
 
 ### Fix:
 
+- Fix spinners when changing pages
 - Fix loans filter in Activity view
 - Netlify build, use Node 12
 
@@ -15,6 +16,8 @@
 - Visual improvements
 - Get basalt loans using the API
 - Different payment and lend flows for Basalt loans
+- Updated error views (404, no more loans, conection error)
+- New material dark theme
 
 ## **0.0.13** Avocados - 2019/02/15
 

@@ -1,4 +1,4 @@
-import { Loan, Network, Oracle, Descriptor, Debt, Status, Model } from '../models/loan.model';
+import { Loan, Network, Oracle, Descriptor, Debt, Config, Status, Model } from '../models/loan.model';
 import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
 import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
 import { Utils } from './utils';
@@ -12,6 +12,15 @@ interface ModelDebtInfo {
   current_obligation: number;
   debt_balance: number;
   owner: string;
+}
+
+interface ModelConfig {
+  installments: number;
+  time_unit: number;
+  duration: number;
+  lent_time: number;
+  cuota: number;
+  interest_rate: number;
 }
 
 export class LoanUtils {
@@ -140,7 +149,11 @@ export class LoanUtils {
    * @param loanData Loan data obtained from API
    * @return Loan
    */
-  static createDiasporeLoan(loanData: LoanApiDiaspore, debtInfo: ModelDebtInfo): Loan {
+  static createDiasporeLoan(
+    loanData: LoanApiDiaspore,
+    debtInfo: ModelDebtInfo,
+    modelConfig: ModelConfig
+  ): Loan {
     const engine = environment.contracts.diaspore.loanManager;
 
     let oracle: Oracle;
@@ -163,6 +176,7 @@ export class LoanUtils {
 
     let descriptor: Descriptor;
     let debt: Debt;
+    let config: Config;
 
     descriptor = new Descriptor(
       Network.Diaspore,
@@ -206,6 +220,17 @@ export class LoanUtils {
     }
     const status = loanData.canceled ? Status.Destroyed : Number(loanData.status);
 
+    if (modelConfig) {
+      config = new Config(
+        Number(modelConfig.installments),
+        Number(modelConfig.time_unit),
+        Number(modelConfig.duration),
+        Number(modelConfig.lent_time),
+        Number(modelConfig.cuota),
+        Number(modelConfig.interest_rate)
+      );
+    }
+
     return new Loan(
       Network.Diaspore,
       loanData.id,
@@ -219,7 +244,8 @@ export class LoanUtils {
       Number(loanData.expiration),
       loanData.model,
       loanData.cosigner,
-      debt
+      debt,
+      config
     );
   }
 }

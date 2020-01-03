@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnChanges, Input } from '@angular/core';
 import { Loan, Status } from '../../../models/loan.model';
 
 @Component({
@@ -6,13 +6,24 @@ import { Loan, Status } from '../../../models/loan.model';
   templateUrl: './icon-avatar.component.html',
   styleUrls: ['./icon-avatar.component.scss']
 })
-export class IconAvatarComponent implements OnInit {
+export class IconAvatarComponent implements OnChanges {
   @Input() loan: Loan;
   class: string;
   icon: string;
   constructor() { }
 
-  ngOnInit() {
+  ngOnChanges(changes) {
+    const { loan } = changes;
+
+    if (loan && loan.currentValue) {
+      this.loadStatus();
+    }
+  }
+
+  /**
+   * Load loan status
+   */
+  loadStatus() {
     switch (this.loan.status) {
       case Status.Request:
         this.class = 'request';

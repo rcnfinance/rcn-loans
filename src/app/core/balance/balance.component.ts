@@ -1,17 +1,18 @@
-import { Component, OnChanges, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Utils } from '../../utils/utils';
 // App Services
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
-import { Tx, TxService } from '../../services/tx.service';
+import { Tx, Type, TxService } from '../../services/tx.service';
 
 @Component({
   selector: 'app-component-balance',
   templateUrl: './balance.component.html',
   styleUrls: ['./balance.component.scss']
 })
-export class BalanceComponent implements OnChanges {
+export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   @Input() account: string;
 
   private rcnBalance: number;
@@ -27,12 +28,21 @@ export class BalanceComponent implements OnChanges {
   canWithdraw = false;
   displayBalance = '';
   displayAvailable = '';
+  txSubscription: boolean;
+
+  // subscriptions
+  subscriptionBalance: Subscription;
 
   constructor(
     private web3Service: Web3Service,
     private contractService: ContractsService,
     private txService: TxService
   ) { }
+
+  ngOnInit() {
+    this.retrievePendingTx();
+    this.handleBalanceEvents();
+  }
 
   ngOnChanges(changes) {
     const web3: any = this.web3Service.web3;
@@ -43,6 +53,25 @@ export class BalanceComponent implements OnChanges {
       this.loadRcnBalance();
       this.loadWithdrawBalance();
     }
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptionBalance) {
+      this.subscriptionBalance.unsubscribe();
+    }
+    if (this.txSubscription) {
+      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
+    }
+  }
+
+  /**
+   * Listen and handle balance events for update amounts
+   */
+  handleBalanceEvents() {
+    this.subscriptionBalance = this.web3Service.updateBalanceEvent.subscribe(() => {
+      this.loadRcnBalance();
+      this.loadWithdrawBalance();
+    });
   }
 
   /**
@@ -124,6 +153,26 @@ export class BalanceComponent implements OnChanges {
         this.txService.registerWithdrawTx(tx, environment.contracts.diaspore.debtEngine, this.diasporeLoansWithBalance);
       }
       this.loadWithdrawBalance();
+      this.retrievePendingTx();
+    }
+  }
+
+  /**
+   * Retrieve pending Tx
+   */
+  retrievePendingTx() {
+    if (!this.txSubscription) {
+      this.txSubscription = true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
+    }
+  }
+
+  /**
+   * Track tx
+   */
+  trackWithdrawTx(tx: Tx) {
+    if (tx.type === Type.withdraw) {
+      this.web3Service.updateBalanceEvent.emit();
     }
   }
 }

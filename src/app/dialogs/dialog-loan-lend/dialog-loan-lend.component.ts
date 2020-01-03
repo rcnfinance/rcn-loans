@@ -135,28 +135,18 @@ export class DialogLoanLendComponent implements OnInit {
         this.expectedReturnWarning = true;
       }
     } else {
-      // rcn -> currency
-      lendAmount = await this.contractsService.getPriceConvertFrom(
-        fromToken,
+      lendAmount = await this.contractsService.getPriceConvertTo(
         toToken,
+        fromToken,
         rcnAmount
       );
+
       // TODO: Expected return in selected currency
       // lendExpectedReturn = await this.contractsService.getPriceConvertFrom(
       //   fromToken,
       //   toToken,
       //   rcnExpectedReturn
       // );
-
-      // set slippage
-      const aditionalSlippage = new web3.BigNumber(
-        environment.contracts.converter.params.aditionalSlippage
-      );
-      lendAmount = new web3.BigNumber(lendAmount).mul(
-        new web3.BigNumber(100).add(aditionalSlippage)
-      ).div(
-        new web3.BigNumber(100)
-      );
 
       // set lending currency rate
       const lendCurrencyRate = new web3.BigNumber(web3.fromWei(lendAmount / loanAmount));
