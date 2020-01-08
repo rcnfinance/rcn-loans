@@ -67,6 +67,7 @@
     "@types/jasminewd2": "~2.0.2",
     "@types/jest": "^23.3.9",
     "@types/node": "^10.5.8",
+    "@types/web3": "^1.2.2",
     "bip39": "^2.5.0",
     "codelyzer": "^4.4.3",
     "coveralls": "^3.0.2",
