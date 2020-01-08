@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import * as Web3 from 'web3';
+import Web3 from 'web3';
 import { environment } from '../../environments/environment';
 import { promisify } from '../utils/utils';
 
@@ -33,8 +33,8 @@ export class Web3Service {
       const candWeb3 = new Web3(window.web3.currentProvider);
       const expectedNetworkId = environment.network.id;
 
-      candWeb3.version.getNetwork(async (err, networkId) => {
-        if (!err && networkId === expectedNetworkId) {
+      candWeb3.eth.net.getId(async (err, networkId) => {
+        if (!err && networkId === Number(expectedNetworkId)) {
 
           // set web3 account
           const accounts = await promisify(candWeb3.eth.getAccounts, []);
@@ -83,9 +83,9 @@ export class Web3Service {
     const candWeb3 = new Web3(window.ethereum);
     const expectedNetworkId = environment.network.id;
     const expectedNetworkName = environment.network.name;
-    const networkId = await promisify(candWeb3.version.getNetwork, []);
+    const networkId = await promisify(candWeb3.eth.net.getId, []);
 
-    if (networkId !== expectedNetworkId) {
+    if (networkId !== Number(expectedNetworkId)) {
       console.info('Mismatch provider network ID', expectedNetworkId, environment.network.id);
       this.snackbar.open(`Please connect to the ${ expectedNetworkName } Network.`, null, {
         duration: 4000,
