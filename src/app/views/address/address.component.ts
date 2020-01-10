@@ -41,7 +41,7 @@ export class AddressComponent implements OnInit, OnDestroy {
 
     this.route.params.subscribe(params => {
       const web3 = this.web3Service.web3;
-      this.address = web3.toChecksumAddress(params['address']);
+      this.address = web3.utils.toChecksumAddress(params['address']);
       this.loadLoans(this.address);
     });
 

@@ -169,7 +169,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     this.startOperation();
 
     try {
-      const balance = await this.contractsService.getUserBalanceRCNWei();
+      const balance = Number(await this.contractsService.getUserBalanceRCNWei());
       let amount = this.amount;
 
       if (amount) {

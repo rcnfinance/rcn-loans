@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import * as BN from 'bn.js';
 
 import { CosignerDetail } from './../cosigner.model';
 
@@ -85,15 +85,15 @@ function decodeTokenId(_value: string): [number, number] {
   const value = _value.replace('0x', '');
   const x = value.slice(0, 32);
   const y = value.slice(32);
-  return [fixNegative(new BigNumber(x, 16)), fixNegative(new BigNumber(y, 16))];
+  return [fixNegative(new BN(x, 16)), fixNegative(new BN(y, 16))];
 }
 
-function fixNegative(value: BigNumber): number {
-  const mid = new BigNumber(2).pow(new BigNumber(64));
+function fixNegative(value: BN): number {
+  const mid = new BN(2).pow(new BN(64));
 
-  if (mid.minus(value).toNumber() <= 0) {
-    return value.minus(new BigNumber(2).pow(new BigNumber(128)));
+  if (mid.sub(value).toNumber() <= 0) {
+    return value.sub(new BN(2).pow(new BN(128))).toNumber();
   }
 
-  return value;
+  return value.toNumber();
 }

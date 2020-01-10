@@ -122,7 +122,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     }
     // address validation
     const web3 = this.web3Service.web3;
-    if (!this.showTransferDialog && !web3.isAddress(this.address)) {
+    if (!this.showTransferDialog && !web3.utils.isAddress(this.address)) {
       this.openSnackBar('The address is not valid', '');
       return;
     }

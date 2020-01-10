@@ -222,7 +222,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       }
 
       // set value in specified token
-      const balance = await this.contractsService.getUserBalanceInToken(lendToken);
+      const balance = Number(await this.contractsService.getUserBalanceInToken(lendToken));
       let required: any = await this.contractsService.estimateLendAmount(this.loan, lendToken);
       let contractAddress: string;
       let payableAmount: any;
@@ -257,7 +257,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         }
 
         let account: string = await this.web3Service.getAccount();
-        account = web3.toChecksumAddress(account);
+        account = web3.utils.toChecksumAddress(account);
 
         switch (this.loan.network) {
           case Network.Basalt:
