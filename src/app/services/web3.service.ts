@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import Web3 from 'web3';
+const Web3 = require('web3');
+
 import { environment } from '../../environments/environment';
 import { promisify } from '../utils/utils';
 
