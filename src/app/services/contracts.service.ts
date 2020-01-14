@@ -307,21 +307,22 @@ export class ContractsService {
   async estimateLendAmount(
     loan: Loan,
     tokenAddress: string = environment.contracts.rcnToken
-  ): Promise<number> {
+  ): Promise<string | BN> {
     const rcnToken = environment.contracts.rcnToken;
-    const web3 = this.web3Service.web3;
-
-    let required: number;
-    required = loan.amount;
-
+    let required: string | BN = new BN(String(loan.amount));
     // const oracleAbi = this.loanOracleAbi(loan.network);
 
     if (loan.oracle.address !== Utils.address0x) {
       const currency = loan.currency;
       const loanAmount = loan.currency.fromUnit(loan.amount);
-      let rate = await this.getRate(loan.oracle.address);
-      rate = 1 / currency.fromUnit(rate);
-      required = web3.utils.toWei(new BN(loanAmount * rate));
+
+      // let rate = await this.getRate(loan.oracle.address);
+      // rate = (10 ** 18) / currency.fromUnit(rate);
+      // required = web3.utils.toWei(new BN(loanAmount * rate)).toString();
+
+      const rawRate = await this.getRate(loan.oracle.address);
+      const rate = 10 ** 36 / currency.fromUnit(rawRate);
+      required = new BN(String(rate)).mul(new BN(String(loanAmount))).toString();
     }
 
     // amount in rcn
@@ -330,7 +331,7 @@ export class ContractsService {
     }
 
     // amount in currency
-    const requiredInToken = await this.getPriceConvertTo(
+    const requiredInToken: string | BN = await this.getPriceConvertTo(
       tokenAddress,
       rcnToken,
       required
@@ -340,9 +341,9 @@ export class ContractsService {
     // TODO: Create helper for work to all numbers in the same way
     const roundupDecimals = 6;
     const factor = 10 ** roundupDecimals;
-    const roundedUpAmount = Math.ceil((requiredInToken / web3.utils.toWei(new BN(1))) * factor) / factor;
 
-    return web3.utils.toWei(roundedUpAmount);
+    const roundedUpAmount: string | BN = String((Math.ceil((Number(requiredInToken) / 10 ** 18) * factor) / factor) * 10 ** 18);
+    return roundedUpAmount;
   }
 
   /**
@@ -440,8 +441,8 @@ export class ContractsService {
   async getPriceConvertFrom(
     fromToken: string,
     toToken: string,
-    fromAmount: number
-  ) {
+    fromAmount: string | BN
+  ): Promise<string> {
     return await this._tokenConverter.methods.getPriceConvertFrom(
       fromToken,
       toToken,
@@ -459,8 +460,8 @@ export class ContractsService {
   async getPriceConvertTo(
     fromToken: string,
     toToken: string,
-    toAmount: number
-  ) {
+    toAmount: string | BN
+  ): Promise<string> {
     return await this._tokenConverter.methods.getPriceConvertTo(
       fromToken,
       toToken,
@@ -523,9 +524,10 @@ export class ContractsService {
   /**
    * Get oracle rate
    * @param oracleAddress Oracle address
+   * @param decimals Currency decimals
    * @return Token equivalent in wei
    */
-  async getRate(oracleAddress: string): Promise<any> {
+  async getRate(oracleAddress: string, decimals = 18): Promise<any> {
     const web3: any = this.web3Service.web3;
     if (oracleAddress === Utils.address0x) {
       return web3.utils.toWei(new BN(1));
@@ -533,13 +535,12 @@ export class ContractsService {
 
     const oracle = this.makeContract(diasporeOracleAbi.abi, oracleAddress);
     const oracleRate = await oracle.methods.readSample([]).call();
-    const amount = web3.utils.toWei(new BN(1));
+    const amount = new BN('10').pow(new BN(decimals));
     const tokens = new BN(oracleRate[0]);
     const equivalent = new BN(oracleRate[1]);
+    const rate = tokens.mul(amount).div(equivalent);
 
-    const expectedRate: any = tokens.div(equivalent);
-    const rate = 1 / expectedRate;
-    return rate * amount;
+    return rate;
   }
 
   async estimatePayAmount(loan: Loan, amount: number): Promise<number> {

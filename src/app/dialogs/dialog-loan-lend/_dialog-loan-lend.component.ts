@@ -61,8 +61,10 @@ export class DialogLoanLendComponent implements OnInit {
 
     // loan currency and amounts
     const loanCurrency: Currency = this.loan.currency;
-    const loanAmount: BN = new BN(String(this.loan.amount));
-    const loanExpectedReturn = new BN(String(this.loan.descriptor.totalObligation));
+    const loanAmount: BN = new BN(loanCurrency.fromUnit(this.loan.amount), 10);
+    const loanExpectedReturn = new BN(
+      loanCurrency.fromUnit(this.loan.descriptor.totalObligation), 10
+    );
 
     // set user account
     const account: string = await this.web3Service.getAccount();
@@ -71,12 +73,8 @@ export class DialogLoanLendComponent implements OnInit {
     // set loan amount and rate
     const rate: BN = await this.getLoanRate();
 
-    this.loanAmount = Utils.formatAmount(
-      loanCurrency.fromUnit(Number(loanAmount))
-    );
-    this.loanExpectedReturn = Utils.formatAmount(
-      loanCurrency.fromUnit(Number(loanExpectedReturn))
-    );
+    this.loanAmount = Utils.formatAmount(Number(loanAmount));
+    this.loanExpectedReturn = Utils.formatAmount(Number(loanExpectedReturn));
     this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** 18); // FIXME: check
 
     // set loan status
@@ -95,6 +93,7 @@ export class DialogLoanLendComponent implements OnInit {
     try {
       await this.calculateAmounts();
     } catch (e) {
+      console.info(e);
       throw Error('error calculating currency amounts');
     }
   }
