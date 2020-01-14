@@ -1,5 +1,5 @@
 import * as BN from 'bn.js';
-
+import { Utils } from './../../utils/utils';
 import { CosignerDetail } from './../cosigner.model';
 
 export class DecentralandCosigner extends CosignerDetail {
@@ -85,14 +85,14 @@ function decodeTokenId(_value: string): [number, number] {
   const value = _value.replace('0x', '');
   const x = value.slice(0, 32);
   const y = value.slice(32);
-  return [fixNegative(new BN(x, 16)), fixNegative(new BN(y, 16))];
+  return [fixNegative(Utils.bn(x, 16)), fixNegative(Utils.bn(y, 16))];
 }
 
 function fixNegative(value: BN): number {
-  const mid = new BN(2).pow(new BN(64));
+  const mid = Utils.bn(2).pow(Utils.bn(64));
 
   if (mid.sub(value).toNumber() <= 0) {
-    return value.sub(new BN(2).pow(new BN(128))).toNumber();
+    return value.sub(Utils.bn(2).pow(Utils.bn(128))).toNumber();
   }
 
   return value.toNumber();

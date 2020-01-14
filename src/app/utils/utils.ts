@@ -116,16 +116,17 @@ export class Utils {
   /**
    * Convert the specified value to BN
    * @param value Value
+   * @param base Base
    * @return Value as BN
    */
-  static bn(value: number | string | BN) {
+  static bn(value: number | string | BN = 0, base?: number | 'hex'): BN {
     if (typeof value === 'number') {
-      return new BN(String(value));
+      return new BN(String(value), base);
     }
     if (typeof value === 'string') {
-      return new BN(value);
+      return new BN(value, base);
     }
-    return new BN(value);
+    return new BN(value, base);
   }
 }
 

@@ -109,12 +109,12 @@ export class ContractsService {
 
       if (tokenAddress === environment.contracts.converter.ethAddress) {
         const ethBalance = await this.web3Service.web3.eth.getBalance(account);
-        resolve(new BN(ethBalance));
+        resolve(Utils.bn(ethBalance));
       }
 
       try {
         const balance = await tokenContract.methods.balanceOf(account).call();
-        resolve(new BN(balance));
+        resolve(Utils.bn(balance));
       } catch (err) {
         reject(err);
       }
@@ -152,7 +152,7 @@ export class ContractsService {
           contract
         ).call();
 
-        const MIN_APPROVED_TOKENS = new BN(1000000000);
+        const MIN_APPROVED_TOKENS = Utils.bn(1000000000);
         return result >= this.web3Service.web3.utils.toWei(MIN_APPROVED_TOKENS);
     }
   }
@@ -309,7 +309,7 @@ export class ContractsService {
     tokenAddress: string = environment.contracts.rcnToken
   ): Promise<string | BN> {
     const rcnToken = environment.contracts.rcnToken;
-    let required: string | BN = new BN(String(loan.amount));
+    let required: string | BN = Utils.bn(loan.amount);
     // const oracleAbi = this.loanOracleAbi(loan.network);
 
     if (loan.oracle.address !== Utils.address0x) {
@@ -318,11 +318,11 @@ export class ContractsService {
 
       // let rate = await this.getRate(loan.oracle.address);
       // rate = (10 ** 18) / currency.fromUnit(rate);
-      // required = web3.utils.toWei(new BN(loanAmount * rate)).toString();
+      // required = web3.utils.toWei(Utils.bn(loanAmount * rate)).toString();
 
       const rawRate = await this.getRate(loan.oracle.address);
       const rate = 10 ** 36 / currency.fromUnit(rawRate);
-      required = new BN(String(rate)).mul(new BN(String(loanAmount))).toString();
+      required = Utils.bn(rate).mul(Utils.bn(loanAmount)).toString();
     }
 
     // amount in rcn
@@ -530,14 +530,14 @@ export class ContractsService {
   async getRate(oracleAddress: string, decimals = 18): Promise<any> {
     const web3: any = this.web3Service.web3;
     if (oracleAddress === Utils.address0x) {
-      return web3.utils.toWei(new BN(1));
+      return web3.utils.toWei(Utils.bn(1));
     }
 
     const oracle = this.makeContract(diasporeOracleAbi.abi, oracleAddress);
     const oracleRate = await oracle.methods.readSample([]).call();
-    const amount = new BN('10').pow(new BN(decimals));
-    const tokens = new BN(oracleRate[0]);
-    const equivalent = new BN(oracleRate[1]);
+    const amount = Utils.bn('10').pow(Utils.bn(decimals));
+    const tokens = Utils.bn(oracleRate[0]);
+    const equivalent = Utils.bn(oracleRate[1]);
     const rate = tokens.mul(amount).div(equivalent);
 
     return rate;

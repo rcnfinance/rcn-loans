@@ -44,7 +44,7 @@ export class ContentWrapperComponent implements OnInit {
   version: string = environment.version;
   lendEnabled: Boolean;
 
-  private ethWei = new BN(10).pow(new BN(18));
+  private ethWei = Utils.bn(10).pow(Utils.bn(18));
   rcnBalance: BN;
   rcnAvailable: BN;
   loansWithBalance: number[];
@@ -198,7 +198,7 @@ export class ContentWrapperComponent implements OnInit {
    */
   private async loadRcnBalance() {
     const balance: number = await this.contractService.getUserBalanceRCN();
-    this.rcnBalance = new BN(balance);
+    this.rcnBalance = Utils.bn(balance);
   }
 
   /**
@@ -208,7 +208,7 @@ export class ContentWrapperComponent implements OnInit {
     const pendingWithdraws = await this.contractService.getPendingWithdraws();
     this.basaltRcnAvailable = pendingWithdraws[0] / 10 ** 18;
     this.diasporeRcnAvailable = pendingWithdraws[2] / 10 ** 18;
-    this.rcnAvailable = new BN(this.basaltRcnAvailable).add(new BN(this.diasporeRcnAvailable));
+    this.rcnAvailable = Utils.bn(this.basaltRcnAvailable).add(Utils.bn(this.diasporeRcnAvailable));
     this.basaltLoansWithBalance = pendingWithdraws[1];
     this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadPendingWithdraw();

@@ -61,8 +61,8 @@ export class DialogLoanLendComponent implements OnInit {
 
     // loan currency and amounts
     const loanCurrency: Currency = this.loan.currency;
-    const loanAmount: BN = new BN(String(this.loan.amount));
-    const loanExpectedReturn = new BN(String(this.loan.descriptor.totalObligation));
+    const loanAmount: BN = Utils.bn(this.loan.amount);
+    const loanExpectedReturn = Utils.bn(this.loan.descriptor.totalObligation);
 
     // set user account
     const account: string = await this.web3Service.getAccount();
@@ -107,8 +107,8 @@ export class DialogLoanLendComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
     const loanCurrency: string = loan.currency.toString();
-    const loanAmount: BN = new BN(loan.currency.fromUnit(loan.amount));
-    const loanExpectedReturn: BN = new BN(loan.currency.fromUnit(
+    const loanAmount: BN = Utils.bn(loan.currency.fromUnit(loan.amount));
+    const loanExpectedReturn: BN = Utils.bn(loan.currency.fromUnit(
       loan.descriptor.totalObligation
     ));
 
@@ -152,8 +152,8 @@ export class DialogLoanLendComponent implements OnInit {
       // );
 
       // set lending currency rate
-      const lendOverAmount: BN = new BN(String(lendAmount)).div(new BN(String(loanAmount)));
-      const lendCurrencyRate: BN = web3.utils.fromWei(new BN(String(lendOverAmount)));
+      const lendOverAmount: BN = Utils.bn(lendAmount).div(Utils.bn(loanAmount));
+      const lendCurrencyRate: BN = web3.utils.fromWei(Utils.bn(lendOverAmount));
       this.exchangeToken = Utils.formatAmount(Number(lendCurrencyRate), 7);
 
       // set expected return warn
