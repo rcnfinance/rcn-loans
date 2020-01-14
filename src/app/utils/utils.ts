@@ -1,3 +1,5 @@
+import * as BN from 'bn.js';
+
 export class Utils {
   static address0x = '0x0000000000000000000000000000000000000000';
   static emptyString = '';
@@ -109,6 +111,21 @@ export class Utils {
     }
 
     return value;
+  }
+
+  /**
+   * Convert the specified value to BN
+   * @param value Value
+   * @return Value as BN
+   */
+  static bn(value: number | string | BN) {
+    if (typeof value === 'number') {
+      return new BN(String(value));
+    }
+    if (typeof value === 'string') {
+      return new BN(value);
+    }
+    return new BN(value);
   }
 }
 
