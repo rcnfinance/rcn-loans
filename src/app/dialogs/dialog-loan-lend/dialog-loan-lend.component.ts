@@ -154,19 +154,15 @@ export class DialogLoanLendComponent implements OnInit {
       // set lending currency rate
       const lendOverAmount: BN = Utils.bn(lendAmount).div(Utils.bn(loanAmount));
       const lendCurrencyRate: BN = web3.utils.fromWei(Utils.bn(lendOverAmount));
-      this.exchangeToken = Utils.formatAmount(Number(lendCurrencyRate), 7);
+      this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 7);
 
       // set expected return warn
       this.expectedReturnWarning = true;
     }
 
     // set ui values
-    this.lendAmount = Utils.formatAmount(
-      Number(web3.utils.fromWei(lendAmount))
-    );
-    this.lendExpectedReturn = Utils.formatAmount(
-      Number(web3.utils.fromWei(rcnExpectedReturn))
-    );
+    this.lendAmount = Utils.formatAmount(web3.utils.fromWei(lendAmount));
+    this.lendExpectedReturn = Utils.formatAmount(web3.utils.fromWei(rcnExpectedReturn));
   }
 
   /**

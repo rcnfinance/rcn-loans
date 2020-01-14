@@ -86,7 +86,11 @@ export class Utils {
     return prefix + result.slice(0, -2);
   }
 
-  static formatAmount(amount: Number, maxDigits = 6): string {
+  static formatAmount(amount: number | string | BN, maxDigits = 6): string {
+    if (typeof amount !== 'number') {
+      amount = Number(amount);
+    }
+
     if (amount.toString().length <= maxDigits) {
       return amount.toString();
     }
