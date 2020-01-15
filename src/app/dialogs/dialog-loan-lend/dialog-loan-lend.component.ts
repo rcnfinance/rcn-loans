@@ -71,12 +71,8 @@ export class DialogLoanLendComponent implements OnInit {
     // set loan amount and rate
     const rate: BN = await this.getLoanRate();
 
-    this.loanAmount = Utils.formatAmount(
-      loanCurrency.fromUnit(Number(loanAmount))
-    );
-    this.loanExpectedReturn = Utils.formatAmount(
-      loanCurrency.fromUnit(Number(loanExpectedReturn))
-    );
+    this.loanAmount = Utils.formatAmount(loanCurrency.fromUnit(loanAmount));
+    this.loanExpectedReturn = Utils.formatAmount(loanCurrency.fromUnit(loanExpectedReturn));
     this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** 18); // FIXME: check
 
     // set loan status
