@@ -534,9 +534,10 @@ export class ContractsService {
 
     const oracleData = await this.getOracleData(loan.oracle);
     const oracleAbi = this.loanOracleAbi(loan.network);
-    const oracle = this.web3Service.web3.eth.contract(oracleAbi).at(loan.oracle.address);
+    const oracle = this.makeContract(oracleAbi, loan.oracle.address);
 
     try {
+      // TODO: Implement BN
       switch (loan.network) {
         case Network.Basalt:
           const oracleRate = await oracle.methods.getRate(loan.oracle.code, oracleData).call();
