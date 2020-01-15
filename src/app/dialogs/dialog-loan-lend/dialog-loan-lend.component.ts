@@ -8,6 +8,7 @@ import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 
 import { ContractsService } from '../../services/contracts.service';
+import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
 import { Web3Service } from '../../services/web3.service';
 
 @Component({
@@ -19,12 +20,12 @@ export class DialogLoanLendComponent implements OnInit {
   // loan
   loan: Loan;
   loanAmount: string;
-  loanExpectedReturn: any;
+  loanExpectedReturn: string;
   loanCurrency: string;
   isRequest: boolean;
   isCanceled: boolean;
   // lend
-  lendAmount: any;
+  lendAmount: string;
   lendExpectedReturn: string;
   lendCurrency: string;
   lendToken: string;
@@ -33,11 +34,7 @@ export class DialogLoanLendComponent implements OnInit {
   // general
   account: string;
   canLend: boolean;
-  availableCurrencies: Array<{
-    symbol: string,
-    img: string,
-    address: string
-  }> = [];
+  availableCurrencies: CurrencyItem[];
   expectedReturnWarning: boolean;
 
   loading: boolean;
@@ -46,6 +43,7 @@ export class DialogLoanLendComponent implements OnInit {
 
   constructor(
     private contractsService: ContractsService,
+    private currenciesService: CurrenciesService,
     private web3Service: Web3Service,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) data
@@ -54,7 +52,7 @@ export class DialogLoanLendComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.availableCurrencies = environment.usableCurrencies;
+    this.availableCurrencies = await this.currenciesService.getCurrencies(true);
     if (this.loan.isRequest) {
       this.canLend = true;
     }
@@ -73,7 +71,7 @@ export class DialogLoanLendComponent implements OnInit {
 
     this.loanAmount = Utils.formatAmount(loanCurrency.fromUnit(loanAmount));
     this.loanExpectedReturn = Utils.formatAmount(loanCurrency.fromUnit(loanExpectedReturn));
-    this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** 18); // FIXME: check
+    this.exchangeRcn = Utils.formatAmount(rate.div(Utils.bn(10).pow(Utils.bn(18))));
 
     // set loan status
     this.isCanceled = this.loan.status === Status.Destroyed;
@@ -91,6 +89,7 @@ export class DialogLoanLendComponent implements OnInit {
     try {
       await this.calculateAmounts();
     } catch (e) {
+      console.error(e);
       throw Error('error calculating currency amounts');
     }
   }
@@ -103,20 +102,21 @@ export class DialogLoanLendComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
     const loanCurrency: string = loan.currency.toString();
-    const loanAmount: BN = Utils.bn(loan.currency.fromUnit(loan.amount));
-    const loanExpectedReturn: BN = Utils.bn(loan.currency.fromUnit(
-      loan.descriptor.totalObligation
-    ));
+    const loanAmount: BN = Utils.bn(loan.amount);
+    const loanExpectedReturn: BN = Utils.bn(loan.descriptor.totalObligation);
 
     // set rate values
     const rcnRate: BN = await this.getLoanRate();
-    const rcnAmount = loanAmount.mul(rcnRate);
-    const rcnExpectedReturn = loanExpectedReturn.mul(rcnRate);
+    const rcnAmountInWei: BN = Utils.bn(loanAmount.mul(rcnRate));
+    const rcnExpectedReturnInWei: BN = Utils.bn(loanExpectedReturn.mul(rcnRate));
+    const decimals: number = loan.currency.decimals;
+    const rcnAmount: BN = rcnAmountInWei.div(Utils.bn(10).pow(Utils.bn(decimals)));
+    const rcnExpectedReturn: BN = rcnExpectedReturnInWei.div(Utils.bn(10).pow(Utils.bn(decimals)));
 
     // set amount in selected currency
     const symbol: string = this.lendCurrency;
     const fromToken: string = environment.contracts.rcnToken;
-    const toToken: string = this.getCurrencyByCode(symbol).address;
+    const toToken: string = await this.currenciesService.getCurrencyByKey('symbol', symbol).address;
     this.lendToken = toToken;
 
     let lendAmount: BN | string;
@@ -148,7 +148,8 @@ export class DialogLoanLendComponent implements OnInit {
       // );
 
       // set lending currency rate
-      const lendOverAmount: BN = Utils.bn(lendAmount).div(Utils.bn(loanAmount));
+      const lendAmountInWei: BN = Utils.bn(lendAmount).mul(Utils.bn(10).pow(Utils.bn(decimals)));
+      const lendOverAmount: BN = Utils.bn(lendAmountInWei).div(Utils.bn(loanAmount));
       const lendCurrencyRate: BN = web3.utils.fromWei(Utils.bn(lendOverAmount));
       this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 7);
 
