@@ -307,43 +307,27 @@ export class ContractsService {
   async estimateLendAmount(
     loan: Loan,
     tokenAddress: string = environment.contracts.rcnToken
-  ): Promise<string | BN> {
-    const rcnToken = environment.contracts.rcnToken;
-    let required: string | BN = Utils.bn(loan.amount);
-    // const oracleAbi = this.loanOracleAbi(loan.network);
-
-    if (loan.oracle.address !== Utils.address0x) {
-      const currency = loan.currency;
-      const loanAmount = loan.currency.fromUnit(loan.amount);
-
-      // let rate = await this.getRate(loan.oracle.address);
-      // rate = (10 ** 18) / currency.fromUnit(rate);
-      // required = web3.utils.toWei(Utils.bn(loanAmount * rate)).toString();
-
-      const rawRate = await this.getRate(loan.oracle.address);
-      const rate = 10 ** 36 / currency.fromUnit(rawRate);
-      required = Utils.bn(rate).mul(Utils.bn(loanAmount)).toString();
-    }
+  ): Promise<BN> {
+    const loanAmount: BN = Utils.bn(loan.amount);
+    const decimals: number = loan.currency.decimals;
+    const rcnRate = await this.getRate(loan.oracle.address, decimals);
+    const rcnAmountInWei: BN = Utils.bn(loanAmount.mul(rcnRate));
+    const rcnAmount: BN = rcnAmountInWei.div(Utils.bn(10).pow(Utils.bn(decimals)));
+    const rcnToken: string = environment.contracts.rcnToken;
 
     // amount in rcn
-    if (tokenAddress === rcnToken) {
-      return required;
+    if (rcnToken === tokenAddress) {
+      return rcnAmount;
     }
 
     // amount in currency
     const requiredInToken: string | BN = await this.getPriceConvertTo(
       tokenAddress,
       rcnToken,
-      required
+      rcnAmount.toString()
     );
 
-    // roundup
-    // TODO: Create helper for work to all numbers in the same way
-    const roundupDecimals = 6;
-    const factor = 10 ** roundupDecimals;
-
-    const roundedUpAmount: string | BN = String((Math.ceil((Number(requiredInToken) / 10 ** 18) * factor) / factor) * 10 ** 18);
-    return roundedUpAmount;
+    return Utils.bn(requiredInToken);
   }
 
   /**
@@ -360,10 +344,10 @@ export class ContractsService {
    * @return Tx hash
    */
   async converterRampLend(
-    payableAmount: number,
+    payableAmount: string,
     converter: string,
     fromToken: string,
-    maxSpend: number,
+    maxSpend: string,
     cosigner: string,
     loanId: string,
     oracleData: string,
