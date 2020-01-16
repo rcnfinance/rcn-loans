@@ -1,7 +1,7 @@
-<app-dialog-header title="Loan pay">
+<app-dialog-header title="Paying Checkout">
 </app-dialog-header>
 
-<mat-dialog-content>
+<mat-dialog-content class="dialog">
 
   <ng-container *ngIf="startProgress">
     <app-infinite-progress-bar
@@ -16,13 +16,11 @@
     <div class="container">
       <div class="dialog-content dialog-padding">
         <div class="row mb-3 mt-4 mt-md-0">
-          <div class="col col-12 item item--address">
-            <p class="ellipsis">
-              Your loan
-              <strong class="ml-2">
-                {{ loan?.id }}
-              </strong>
-            </p>
+          <div class="col col-12">
+            <div class="title main-h3">
+              You're about to repay the {{ shortLoanId }} loan. Please choose the
+              amount you'd like/you want to pay.
+            </div>
           </div>
         </div>
         <div class="row mb-4 mb-md-4">
@@ -69,7 +67,7 @@
           </div>
           <div class="col col-12 col-md-6 offset-md-2 mt-3 mt-md-0 item item--left-to-pay">
             <p class="item__key uppercase">
-              Left to pay
+              Due
             </p>
             <p class="item__value">
               <strong>{{ pendingAmount }}</strong> {{ currency?.symbol }}
@@ -101,7 +99,7 @@
       <div class="dialog-footer dialog-padding pt-0 pb-3 row">
         <div class="dialog-footer__label col-sm-12 col-md-6">
           <p>
-            Paying from your <strong>{{ shortAccount }}</strong> account.
+            Paying from the address <strong>{{ shortAccount }}</strong>.
           </p>
         </div>
         <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">

@@ -14,6 +14,7 @@ import { Web3Service } from './../../services/web3.service';
 export class DialogLoanPayComponent implements OnInit {
 
   loan: Loan;
+  shortLoanId: string;
   loading: boolean;
   form: FormGroup;
 
@@ -65,8 +66,9 @@ export class DialogLoanPayComponent implements OnInit {
    * Loan payment details
    */
   loadDetail() {
-    const currency = this.loan.currency;
-    const pendingAmount = currency.fromUnit(this.loan.debt.model.estimatedObligation);
+    const loan: Loan = this.loan;
+    const currency = loan.currency;
+    const pendingAmount = currency.fromUnit(loan.debt.model.estimatedObligation);
 
     this.currency = currency;
     this.pendingAmount = Utils.formatAmount(pendingAmount);
@@ -74,6 +76,8 @@ export class DialogLoanPayComponent implements OnInit {
       Validators.required,
       Validators.max(Math.ceil(pendingAmount))
     ]);
+    this.shortLoanId =
+      this.loan.id.startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
   }
 
   /**
