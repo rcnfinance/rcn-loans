@@ -166,7 +166,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     // borrower validation
     const account: string = await this.web3Service.getAccount();
     if (this.loan.borrower.toLowerCase() === account.toLowerCase()) {
-      this.openSnackBar('The lender cannot be the same as the borrower', '');
+      this.openSnackBar('You can´t fund a loan that you have borrowed', '');
       return;
     }
     if (this.loan.network === Network.Basalt) {
@@ -335,7 +335,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    */
   startOperation() {
     console.info('Started lend');
-    this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
+    this.openSnackBar('Your transaction is being processed. This might take a few second', '');
     this.opPending = true;
   }
 
@@ -344,7 +344,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    */
   cancelOperation() {
     console.info('Cancel lend');
-    this.openSnackBar('Your transaction has failed', '');
+    this.openSnackBar('Hmm, It seems like your transaction has failed. Please try again', '');
     this.opPending = false;
   }
 

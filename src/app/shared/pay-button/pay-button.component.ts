@@ -115,7 +115,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     }
     // debt validation
     if (!this.loan.debt) {
-      this.openSnackBar('The loan was not yet lended', '');
+      this.openSnackBar('You can´t pay a loan that you have funded', '');
       return;
     }
     // unlogged user
@@ -321,7 +321,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
    */
   startOperation() {
     console.info('Started pay');
-    this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
+    this.openSnackBar('Your transaction is being processed. This might take a few seconds', '');
     this.opPending = true;
   }
 
@@ -329,7 +329,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
    * Cancel pay operation
    */
   cancelOperation() {
-    this.openSnackBar('Your transaction has failed', '');
+    this.openSnackBar('Hmm, It seems like your transaction has failed. Please try again', '');
     this.opPending = false;
   }
 

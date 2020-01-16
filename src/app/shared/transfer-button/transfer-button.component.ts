@@ -117,7 +117,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     // borrower validation
     const account: string = await this.web3Service.getAccount();
     if (this.loan.debt.owner.toLowerCase() !== account.toLowerCase()) {
-      this.openSnackBar('The owner is not authorized', '');
+      this.openSnackBar('You can´t transfer a loan that you haven´t funded.', '');
       return;
     }
     // address validation
