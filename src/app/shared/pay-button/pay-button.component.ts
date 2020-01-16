@@ -363,9 +363,9 @@ export class PayButtonComponent implements OnInit, OnDestroy {
       return 'Pay';
     }
     if (tx.confirmed) {
-      return 'Payed';
+      return 'Paid';
     }
-    return 'Paying...';
+    return 'Paying';
   }
 
 }

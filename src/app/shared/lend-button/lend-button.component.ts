@@ -136,7 +136,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       if (!isParcelStatusOpen) {
         this.dialog.open(DialogGenericErrorComponent, {
           data: {
-            error: new Error('Not Available, Parcel is already sold')
+            error: new Error('The parcel linked to this loan has already been sold.')
           }
         });
         return;
@@ -145,7 +145,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       if (isMortgageCancelled) {
         this.dialog.open(DialogGenericErrorComponent, {
           data: {
-            error: new Error('Not Available, Mortgage has been cancelled')
+            error: new Error('This mortgage loan has been cancelled.')
           }
         });
         return;
@@ -395,7 +395,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     if (tx.confirmed) {
       return 'Lent';
     }
-    return 'Lending...';
+    return 'Lending';
   }
 
   openSnackBar(message: string, action: string) {

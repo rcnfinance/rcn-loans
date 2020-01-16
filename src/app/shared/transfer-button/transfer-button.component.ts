@@ -241,6 +241,6 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     if (tx.confirmed) {
       return 'Transferred';
     }
-    return 'Transferring...';
+    return 'Transferring';
   }
 }
