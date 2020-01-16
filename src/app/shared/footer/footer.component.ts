@@ -46,14 +46,14 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     const env = environment;
-    const contract = env.contracts.basaltEngine;
+    const contract = env.contracts.diaspore.loanManager;
     const linkContract = env.network.explorer.address.replace('${address}', env.contracts.basaltEngine);
     const version = env.version;
     const versionString = env.version + '-' + env.build + ' - ' + env.version_name;
     this.socialIcons = [
       {
         url: linkContract,
-        label: `Basalt engine contract ${ contract }`,
+        label: `Loan Manager contract ${ contract }`,
         class: 'fas fa-link'
       },
       {
@@ -63,14 +63,14 @@ export class FooterComponent implements OnInit, OnDestroy {
         text: version
       },
       {
-        url: 'https://www.facebook.com/RCN.finance',
-        label: 'Facebook',
-        class: 'fab fa-facebook-f'
-      },
-      {
         url: 'https://twitter.com/RCNFinance',
         label: 'Twitter',
         class: 'fab fa-twitter'
+      },
+      {
+        url: 'https://www.facebook.com/RCN.finance',
+        label: 'Facebook',
+        class: 'fab fa-facebook-f'
       },
       {
         url: 'https://t.me/RCNchat',
@@ -83,6 +83,11 @@ export class FooterComponent implements OnInit, OnDestroy {
         class: 'fab fa-linkedin-in'
       },
       {
+        url: 'https://discord.gg/62U  CxbS',
+        label: 'Discord',
+        class: 'fab fa-discord'
+      },
+      {
         url: 'https://www.reddit.com/r/rcn_token/',
         label: 'Reddit',
         class: 'fab fa-reddit'
@@ -91,11 +96,6 @@ export class FooterComponent implements OnInit, OnDestroy {
         url: 'https://github.com/ripio/rcn.loans',
         label: 'Github',
         class: 'fab fa-github'
-      },
-      {
-        url: 'https://discord.gg/62U  CxbS',
-        label: 'Discord',
-        class: 'fab fa-discord'
       }
     ];
 
