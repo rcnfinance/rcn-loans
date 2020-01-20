@@ -3,6 +3,9 @@ import { Loan } from '../models/loan.model';
 import { Identity } from '../models/identity.model';
 import { environment, Agent } from '../../environments/environment';
 import { CompanyIdentity } from './../models/identity.model';
+import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
+
+import { CosignerService } from './../services/cosigner.service';
 
 @Injectable()
 export class IdentityService {
@@ -11,17 +14,51 @@ export class IdentityService {
     [Agent.RipioCreator]: new CompanyIdentity(
       'Ripio',
       '--',
-      `Ripio is now one of the main Blockchain companies in Latin America. Ripio main product is their mobile wallet that operates on
-      Bitcoin, Ether and local currency: users can receive, store, buy / sell and send cryptocurrency, and also make digital payments
-      from their mobile phones, and also request micro-loans to finance their purchases.`,
+      `Ripio is one of Latin America's leading Blockchain service providers. Founded in 2013 with the mission of developing and
+      strengthening the new digital economy in the region, Ripio offers storage, brokerage, exchange, OTC and lending products to
+      more than 350,000 users across Argentina, Brazil and Mexico, with current expansion plans in Colombia, Chile, Uruguay, Paraguay
+      and Peru. As an industry pioneer, Ripio has been included in selective startup accelerator programs by Google and Visa, and recognized
+      among the most innovative startups of 2018 by KPMG’s Fintech100 list.`,
       './assets/logos/ripio.png',
       './assets/logos/logo-ripio-white.svg',
-      'Legal disclaimer: This is a loan requested solely by Lending Solutions S.A., a Ripio company.',
+      `Legal disclaimer: By funding this loan request, you accept and agree to all of the following: this loan has been requested by an entity
+      within the Ripio Group. Digital assets received by the entity will be used for its own business purposes and will not be provided as credit
+      to third parties. The loan agreement entered into as a consequence of funding this loan request: (i) is unique, (ii) is neither negotiable
+      in any markets nor assignable to third parties by either lender or borrower and, for the avoidance of doubt, (iii) is not a security or any
+      equivalent instrument. You will not fund this loan request if the action of funding, or the agreement derived therefrom, would either (i)
+      violate any law applicable in your jurisdiction or (ii) would require any kind of regulatory license from your or our part in accordance with
+      any law applicable in your jurisdiction.`,
       [
+        {
+          icon: 'fas fa-link',
+          title: 'Website',
+          description: null,
+          url: 'https://www.ripio.com'
+        },
         {
           icon: 'fas fa-calendar-alt',
           title: 'Founding date',
           description: '2013'
+        },
+        {
+          icon: 'fas fa-map-marker-alt',
+          title: 'Region',
+          description: 'Latin America'
+        },
+        {
+          icon: 'fas fa-user-circle',
+          title: 'Total Users',
+          description: '360,000'
+        },
+        {
+          icon: 'fas fa-users',
+          title: 'Employees',
+          description: '90'
+        },
+        {
+          icon: 'fas fa-coins',
+          title: 'Currency',
+          description: 'ARS'
         }
       ]
     ),
@@ -85,13 +122,58 @@ export class IdentityService {
           description: 'USD 50,000'
         }
       ]
+    ),
+    [Agent.MortgageCreator]: new CompanyIdentity(
+      'Decentraland MC',
+      '--',
+      `Decentraland is an Ethereum blockchain-powered virtual world, created and owned by its users, who can create, experience, and
+      monetize content and applications. Thanks to RCN, Decentraland's users can now request loans in MANA to buy LAND parcels through
+      Decentraland's / the platform's Mortgage Creator (MC).`,
+      undefined,
+      './assets/logos/decentraland-brand.svg',
+      'Legal disclaimer: This is a loan requested solely by Lending Solutions S.A., a Ripio company.', // FIXME: see legal disclaimer
+      [
+        {
+          icon: 'fas fa-link',
+          title: 'Website',
+          description: null,
+          url: 'https://www.decentraland.org'
+        },
+        {
+          icon: 'fas fa-calendar-alt',
+          title: 'Founding date',
+          description: '2017'
+        },
+        {
+          icon: 'fas fa-map-marker-alt',
+          title: 'Country',
+          description: 'Cayman Islands'
+        },
+        {
+          icon: 'fas fa-users',
+          title: 'Employees',
+          description: '40'
+        },
+        {
+          icon: 'fas fa-coins',
+          title: 'Currency',
+          description: 'MANA'
+        }
+      ]
     )
   };
 
-  constructor() { }
+  constructor(
+    private cosignerService: CosignerService
+  ) { }
 
   getIdentity(loan: Loan): Promise<Identity> {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
+      const cosigner = await this.cosignerService.getCosigner(loan);
+      if (cosigner instanceof DecentralandCosignerProvider) {
+        resolve(this.companyIdentities[Agent.MortgageCreator]);
+      }
+
       resolve(this.companyIdentities[environment.dir[loan.borrower.toLowerCase()]]);
     }) as Promise<Identity>;
   }

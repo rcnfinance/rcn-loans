@@ -262,13 +262,13 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
         this.loanConfigData = [
           ['Information', ''],
-          ['Annual rate / Penalty rate', '~ ' + interestRate + ' % / ~ ' + interestRatePunitive + ' %'],
+          ['Annual Rate / Penalty Rate', ' ' + interestRate + ' % / ' + interestRatePunitive + ' %'],
           ['Duration', duration]
         ];
 
         // Template data
-        this.interest = `~ ${ interestRate }%`;
-        this.punitory = `~ ${ interestRatePunitive }%`;
+        this.interest = `${ interestRate }%`;
+        this.punitory = `${ interestRatePunitive }%`;
         this.duration = duration;
         this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
         break;
@@ -293,13 +293,13 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         // Show ongoing loan detail
         this.loanStatusData = [
           ['Information', ''],
-          ['Lending date', lendDate],
-          ['Next date', dueDate],
-          ['Final due date', deadline]
+          ['Lending Date', lendDate],
+          ['Next Due Date', dueDate],
+          ['Final Due Date', deadline]
         ];
 
         // Template data
-        this.interest = '~ ' + currentInterestRate + ' %';
+        this.interest = currentInterestRate + ' %';
         this.lendDate = lendDate;
         this.dueDate = dueDate;
 
