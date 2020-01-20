@@ -121,13 +121,13 @@ export class NotificationsComponent implements OnInit {
         message = `Lending the ${ loanId } loan request`;
         break;
       case 'withdraw':
-        message = `Withdrawing funds from the Contract Balance`;
+        message = `Withdrawing your Available Balance`;
         break;
       case 'transfer':
         message = `Transferring the ${ loanId } loan`;
         break;
       case 'pay':
-        message = `Paying the ${ loanId } loan`;
+        message = `Repaying the ${ loanId } loan`;
         break;
       case 'claim':
         message = `Claiming the repayment of the ${ loanId } loan`;
@@ -163,7 +163,7 @@ export class NotificationsComponent implements OnInit {
         return 'Transferred';
 
       case 'pay':
-        return 'Partially Paid';
+        return 'Repaid';
 
       case 'claim':
         return 'Claimed';
@@ -199,19 +199,19 @@ export class NotificationsComponent implements OnInit {
     let message: string;
     switch (tx.type) {
       case 'lend':
-        message = `The ${ loanId } loan has been lent`;
+        message = `You've lent the ${ loanId } loan request`;
         break;
       case 'withdraw':
-        message = `The funds from the Contract Balance have been withdrawn`;
+        message = `You've withdrawn your Available Balance`;
         break;
       case 'transfer':
-        message = `The ${ loanId } loan has been transferred to ${ loanId }`;
+        message = `You've transferred the ${ loanId } loan`;
         break;
       case 'pay':
-        message = `The ${ loanId } loan has been paid`;
+        message = `You've made a repayment to the ${ loanId } loan`;
         break;
       case 'claim':
-        message = `The repayment of the ${ loanId } loan has been claimed`;
+        message = `You've claimed a repayment of the ${ loanId } loan`;
         break;
       case 'approve':
         if (tx.data.action) {
@@ -258,7 +258,7 @@ export class NotificationsComponent implements OnInit {
         txObject = new TxObject(id, 'Transferring', message, '', '', 'fas fa-exchange-alt', 'orange');
         break;
       case 'pay':
-        txObject = new TxObject(id, 'Partially Paying', message, '', '', 'fas fa-coins', 'green');
+        txObject = new TxObject(id, 'Repaying', message, '', '', 'fas fa-coins', 'green');
         break;
       case 'claim':
         txObject = new TxObject(id, 'Claiming', message, 'material-icons', 'call_made', '', 'white');
