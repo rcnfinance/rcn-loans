@@ -95,7 +95,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
       await this.loadTokens();
       await this.loadAssets();
     } catch (e) {
-      console.error(e);
+      this.eventsService.trackError(e);
     } finally {
       this.retrievePendingTx();
       this.spinner.hide();

@@ -179,14 +179,15 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
 
       this.startTransfer.emit();
       this.retrievePendingTx();
-    } catch (e) {
+    } catch (err) {
       // Don't show 'User denied transaction signature' error
-      if (e.stack.indexOf('User denied transaction signature') < 0) {
+      if (err.stack.indexOf('User denied transaction signature') < 0) {
+        this.eventsService.trackError(err);
         this.dialog.open(DialogGenericErrorComponent, {
-          data: { error: e }
+          data: { error: err }
         });
       }
-      console.error(e);
+      console.error(err);
     } finally {
       this.finishOperation();
     }

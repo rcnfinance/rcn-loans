@@ -17,6 +17,7 @@ import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
+import { EventsService } from './../../services/events.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -88,6 +89,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private identityService: IdentityService,
     private web3Service: Web3Service,
     private brandingService: BrandingService,
+    private eventsService: EventsService,
     public dialog: MatDialog
   ) { }
 
@@ -115,9 +117,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.viewDetail = this.defaultDetail();
         this.handleLoginEvents();
         this.spinner.hide(this.pageId);
-      } catch (e) {
-        console.error(e);
-        console.info('Loan', this.loan, 'not found');
+      } catch (err) {
+        this.eventsService.trackError(err);
         this.router.navigate(['/loan', params.id, '404'], { skipLocationChange: true });
       }
     });
@@ -170,8 +171,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.loadStatus();
         this.loadDetail();
         this.loadAccount();
-      } catch (e) {
-        console.error(e);
+      } catch (err) {
+        this.eventsService.trackError(err);
       } finally {
         this.spinner.hide(this.pageId);
       }
