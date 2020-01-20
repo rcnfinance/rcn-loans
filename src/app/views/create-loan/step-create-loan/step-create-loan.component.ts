@@ -581,7 +581,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
       canceled: false
     };
 
-    const loan: Loan = LoanUtils.createDiasporeLoan(loanData, null);
+    const loan: Loan = LoanUtils.createDiasporeLoan(loanData, null, null);
 
     this.updateLoan.emit(loan);
     this.loan = loan;
