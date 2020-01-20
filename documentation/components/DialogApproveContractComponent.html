@@ -1,0 +1,2596 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>RCN Credit Marketplace - Documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">RCN Credit Marketplace - Documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>DialogApproveContractComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                    <code><a href="https://angular.io/api/core/OnDestroy" target="_blank" >OnDestroy</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-dialog-approve-contract</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./dialog-approve-contract.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./dialog-approve-contract.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#account">account</a>
+                            </li>
+                            <li>
+                                <a href="#assetApproves">assetApproves</a>
+                            </li>
+                            <li>
+                                <a href="#assetOperators">assetOperators</a>
+                            </li>
+                            <li>
+                                <a href="#assets">assets</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#data">data</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#dialog">dialog</a>
+                            </li>
+                            <li>
+                                <a href="#finishProgress">finishProgress</a>
+                            </li>
+                            <li>
+                                <a href="#loading">loading</a>
+                            </li>
+                            <li>
+                                <a href="#onlyAddress">onlyAddress</a>
+                            </li>
+                            <li>
+                                <a href="#onlyAsset">onlyAsset</a>
+                            </li>
+                            <li>
+                                <a href="#onlyToken">onlyToken</a>
+                            </li>
+                            <li>
+                                <a href="#pendingTx">pendingTx</a>
+                            </li>
+                            <li>
+                                <a href="#startProgress">startProgress</a>
+                            </li>
+                            <li>
+                                <a href="#subscriptionAccount">subscriptionAccount</a>
+                            </li>
+                            <li>
+                                <a href="#tokenApproves">tokenApproves</a>
+                            </li>
+                            <li>
+                                <a href="#tokenOperators">tokenOperators</a>
+                            </li>
+                            <li>
+                                <a href="#tokens">tokens</a>
+                            </li>
+                            <li>
+                                <a href="#txSubscription">txSubscription</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#clickCheck">clickCheck</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#filterTokenOperators">filterTokenOperators</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#handleLoginEvents">handleLoginEvents</a>
+                            </li>
+                            <li>
+                                <a href="#hideProgressbar">hideProgressbar</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#isApproved">isApproved</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#loadAccount">loadAccount</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#loadAssets">loadAssets</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#loadTokens">loadTokens</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#makeApproves">makeApproves</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy">ngOnDestroy</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#retrievePendingTx">retrievePendingTx</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#showProgressbar">showProgressbar</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#trackApproveTx">trackApproveTx</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(spinner: NgxSpinnerService, web3Service: <a href="../injectables/Web3Service.html">Web3Service</a>, contractsService: <a href="../injectables/ContractsService.html">ContractsService</a>, currenciesService: <a href="../injectables/CurrenciesService.html">CurrenciesService</a>, eventsService: <a href="../injectables/EventsService.html">EventsService</a>, txService: <a href="../injectables/TxService.html">TxService</a>, dialogRef: <a href="../classes/Contract.html">MatDialogRef<DialogApproveContractComponent></a>, dialog: MatDialog, data: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:63</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>spinner</td>
+                                                  
+                                                        <td>
+                                                                    <code>NgxSpinnerService</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>web3Service</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/Web3Service.html" target="_self" >Web3Service</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>contractsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ContractsService.html" target="_self" >ContractsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>currenciesService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CurrenciesService.html" target="_self" >CurrenciesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>eventsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/EventsService.html" target="_self" >EventsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>txService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/TxService.html" target="_self" >TxService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dialogRef</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/Contract.html" target="_self" >MatDialogRef&lt;DialogApproveContractComponent&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dialog</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatDialog</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>data</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clickCheck"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            clickCheck
+                        </b>
+                        <a href="#clickCheck"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>clickCheck(operator: <a href="../classes/Operator.html">Operator</a>, event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, contract: <a href="../classes/Contract.html">Contract</a>, type: <a href="../classes/Contract.html">ContractType</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="118"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:118</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Click for approve or disapprove operator</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>operator</td>
+                                    <td>
+                                                <code><a href="../classes/Operator.html" target="_self" >Operator</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Operator contract object</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>event</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Native click event</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>contract</td>
+                                    <td>
+                                                <code><a href="../classes/Contract.html" target="_self" >Contract</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>ERC20 or ERC721 contract object</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>type</td>
+                                    <td>
+                                                <code><a href="../classes/Contract.html" target="_self" >ContractType</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>ERC20 or ERC721</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filterTokenOperators"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            filterTokenOperators
+                        </b>
+                        <a href="#filterTokenOperators"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>filterTokenOperators(token: <a href="../classes/Contract.html">Contract</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="398"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:398</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return operators for the specified token</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>token</td>
+                                    <td>
+                                                <code><a href="../classes/Contract.html" target="_self" >Contract</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>ERC20 address</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Operator.html" target="_self" >Operator[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Operators array</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleLoginEvents"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            handleLoginEvents
+                        </b>
+                        <a href="#handleLoginEvents"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>handleLoginEvents()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="193"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:193</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Listen and handle login events for account changes and logout</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="hideProgressbar"></a>
+                    <span class="name">
+                        <b>
+                            hideProgressbar
+                        </b>
+                        <a href="#hideProgressbar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>hideProgressbar()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="182"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:182</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Hide progressbar and close dialog</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isApproved"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            isApproved
+                        </b>
+                        <a href="#isApproved"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>isApproved(contract: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, operator: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, type: <a href="../classes/Contract.html">ContractType</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="370"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:370</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Returns if the operator is approved to operate with the chosen token</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>contract</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>ERC20 or ERC721 address</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>operator</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Operator address</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>type</td>
+                                    <td>
+                                                <code><a href="../classes/Contract.html" target="_self" >ContractType</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>ERC20 or ERC721</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Boolean if is approved</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadAccount"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            loadAccount
+                        </b>
+                        <a href="#loadAccount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>loadAccount()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="420"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:420</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Set account address</p>
+</div>
+
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Account address</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadAssets"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            loadAssets
+                        </b>
+                        <a href="#loadAssets"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>loadAssets()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="302"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:302</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Load ERC721 assets</p>
+</div>
+
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Contract.html" target="_self" >Promise&lt;Contract[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>ERC721 array</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadTokens"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            loadTokens
+                        </b>
+                        <a href="#loadTokens"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>loadTokens()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="256"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:256</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Load ERC20 tokens</p>
+</div>
+
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>ERC20 array</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="makeApproves"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            makeApproves
+                        </b>
+                        <a href="#makeApproves"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>makeApproves(token: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, operator: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, contractType: <a href="../classes/Contract.html">ContractType</a>, promises: Promise<any>[], approves: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank">Object</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="339"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:339</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Make async token approves</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>token</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Token or asset address</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>operator</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Operator address</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>contractType</td>
+                                    <td>
+                                                <code><a href="../classes/Contract.html" target="_self" >ContractType</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>ERC20 or ERC721</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>promises</td>
+                                    <td>
+                                            <code>Promise&lt;any&gt;[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Approve promises array</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>approves</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" >Object</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Approves object</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <b>
+                            ngOnDestroy
+                        </b>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="105"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:105</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="89"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:89</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="retrievePendingTx"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            retrievePendingTx
+                        </b>
+                        <a href="#retrievePendingTx"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>retrievePendingTx()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="209"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:209</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Retrieve pending Tx</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showProgressbar"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            showProgressbar
+                        </b>
+                        <a href="#showProgressbar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>showProgressbar()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="247"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:247</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Show loading progress bar</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="trackApproveTx"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            trackApproveTx
+                        </b>
+                        <a href="#trackApproveTx"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>trackApproveTx(tx: <a href="../classes/Tx.html">Tx</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="233"
+                            class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:233</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Track tx</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>tx</td>
+                                    <td>
+                                                <code><a href="../classes/Tx.html" target="_self" >Tx</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="account"></a>
+                        <span class="name">
+                            <b>
+                            account</b>
+                            <a href="#account"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:42</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="assetApproves"></a>
+                        <span class="name">
+                            <b>
+                            assetApproves</b>
+                            <a href="#assetApproves"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Object[]</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:54</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="assetOperators"></a>
+                        <span class="name">
+                            <b>
+                            assetOperators</b>
+                            <a href="#assetOperators"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Operator.html" target="_self" >Operator[]</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:53</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="assets"></a>
+                        <span class="name">
+                            <b>
+                            assets</b>
+                            <a href="#assets"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Contract.html" target="_self" >Contract[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:52</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="data"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            data</b>
+                            <a href="#data"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @Inject(MAT_DIALOG_DATA)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:74</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="dialog"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            dialog</b>
+                            <a href="#dialog"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatDialog</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="73" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:73</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="finishProgress"></a>
+                        <span class="name">
+                            <b>
+                            finishProgress</b>
+                            <a href="#finishProgress"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:57</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="loading"></a>
+                        <span class="name">
+                            <b>
+                            loading</b>
+                            <a href="#loading"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:58</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="onlyAddress"></a>
+                        <span class="name">
+                            <b>
+                            onlyAddress</b>
+                            <a href="#onlyAddress"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:39</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="onlyAsset"></a>
+                        <span class="name">
+                            <b>
+                            onlyAsset</b>
+                            <a href="#onlyAsset"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:41</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="onlyToken"></a>
+                        <span class="name">
+                            <b>
+                            onlyToken</b>
+                            <a href="#onlyToken"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:40</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="pendingTx"></a>
+                        <span class="name">
+                            <b>
+                            pendingTx</b>
+                            <a href="#pendingTx"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Tx.html" target="_self" >Tx</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>undefined</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:59</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="startProgress"></a>
+                        <span class="name">
+                            <b>
+                            startProgress</b>
+                            <a href="#startProgress"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:56</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="subscriptionAccount"></a>
+                        <span class="name">
+                            <b>
+                            subscriptionAccount</b>
+                            <a href="#subscriptionAccount"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Subscription</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:63</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="tokenApproves"></a>
+                        <span class="name">
+                            <b>
+                            tokenApproves</b>
+                            <a href="#tokenApproves"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Object[]</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:51</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="tokenOperators"></a>
+                        <span class="name">
+                            <b>
+                            tokenOperators</b>
+                            <a href="#tokenOperators"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Operator.html" target="_self" >Operator[]</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[
+    new Operator(&#x27;Diaspore Loan manager&#x27;, environment.contracts.diaspore.loanManager),
+    new Operator(&#x27;Diaspore Debt mananger&#x27;, environment.contracts.diaspore.debtEngine),
+    new Operator(&#x27;Diaspore Converter ramp&#x27;, environment.contracts.converter.converterRamp),
+    new Operator(&#x27;Basalt engine&#x27;, environment.contracts.basaltEngine)
+  ]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:45</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="tokens"></a>
+                        <span class="name">
+                            <b>
+                            tokens</b>
+                            <a href="#tokens"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Contract.html" target="_self" >Contract[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:44</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="txSubscription"></a>
+                        <span class="name">
+                            <b>
+                            txSubscription</b>
+                            <a href="#txSubscription"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/dialogs/dialog-approve-contract/dialog-approve-contract.component.ts:60</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, OnDestroy, Inject } from &#x27;@angular/core&#x27;;
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from &#x27;@angular/material&#x27;;
+import { Subscription } from &#x27;rxjs&#x27;;
+import { NgxSpinnerService } from &#x27;ngx-spinner&#x27;;
+import { environment } from &#x27;../../../environments/environment&#x27;;
+// App Component
+import { Web3Service } from &#x27;../../services/web3.service&#x27;;
+import { ContractsService } from &#x27;../../services/contracts.service&#x27;;
+import { CurrenciesService } from &#x27;../../services/currencies.service&#x27;;
+import { EventsService, Category } from &#x27;../../services/events.service&#x27;;
+import { TxService, Tx, Type } from &#x27;../../services/tx.service&#x27;;
+
+class Operator {
+  constructor(
+    public name: string,
+    public address: string
+  ) { }
+}
+
+class Contract {
+  operators: Operator[] &#x3D; [];
+  constructor(
+    public name: string,
+    public address: string
+  ) { }
+}
+
+enum ContractType {
+  Asset &#x3D; &#x27;asset&#x27;,
+  Token &#x3D; &#x27;token&#x27;
+}
+
+@Component({
+  selector: &#x27;app-dialog-approve-contract&#x27;,
+  templateUrl: &#x27;./dialog-approve-contract.component.html&#x27;,
+  styleUrls: [&#x27;./dialog-approve-contract.component.scss&#x27;]
+})
+export class DialogApproveContractComponent implements OnInit, OnDestroy {
+  onlyAddress: string;
+  onlyToken: string;
+  onlyAsset: string;
+  account: string;
+
+  tokens: Contract[];
+  tokenOperators: Operator[] &#x3D; [
+    new Operator(&#x27;Diaspore Loan manager&#x27;, environment.contracts.diaspore.loanManager),
+    new Operator(&#x27;Diaspore Debt mananger&#x27;, environment.contracts.diaspore.debtEngine),
+    new Operator(&#x27;Diaspore Converter ramp&#x27;, environment.contracts.converter.converterRamp),
+    new Operator(&#x27;Basalt engine&#x27;, environment.contracts.basaltEngine)
+  ];
+  tokenApproves: Object[];
+  assets: Contract[];
+  assetOperators: Operator[] &#x3D; [];
+  assetApproves: Object[];
+
+  startProgress: boolean;
+  finishProgress: boolean;
+  loading: boolean;
+  pendingTx: Tx &#x3D; undefined;
+  txSubscription: boolean;
+
+  // subscriptions
+  subscriptionAccount: Subscription;
+
+  constructor(
+    private spinner: NgxSpinnerService,
+    private web3Service: Web3Service,
+    private contractsService: ContractsService,
+    private currenciesService: CurrenciesService,
+    private eventsService: EventsService,
+    private txService: TxService,
+    private dialogRef: MatDialogRef&lt;DialogApproveContractComponent&gt;,
+    public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    if (this.data) {
+      const {
+        onlyAddress,
+        onlyToken,
+        onlyAsset
+      } &#x3D; this.data;
+
+      this.onlyAddress &#x3D; onlyAddress;
+      this.onlyToken &#x3D; onlyToken;
+      this.onlyAsset &#x3D; onlyAsset;
+    }
+  }
+
+  async ngOnInit() {
+    await this.loadAccount();
+    this.handleLoginEvents();
+    this.spinner.show();
+
+    try {
+      await this.loadTokens();
+      await this.loadAssets();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      this.retrievePendingTx();
+      this.spinner.hide();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptionAccount) {
+      this.subscriptionAccount.unsubscribe();
+    }
+  }
+
+  /**
+   * Click for approve or disapprove operator
+   * @param operator Operator contract object
+   * @param event Native click event
+   * @param contract ERC20 or ERC721 contract object
+   * @param type ERC20 or ERC721
+   */
+  async clickCheck(
+    operator: Operator,
+    event: any,
+    contract: Contract,
+    type: ContractType
+  ) {
+    let action: Promise&lt;string&gt;;
+    let actionCode: string;
+
+    switch (type) {
+      case ContractType.Asset:
+        if (!event.checked) {
+          actionCode &#x3D; &#x60;disapprove-asset-${ operator.name }&#x60;;
+          action &#x3D; this.contractsService.disapproveERC721(contract.address, operator.address);
+        } else {
+          actionCode &#x3D; &#x60;approve-asset-${ operator.name }&#x60;;
+          action &#x3D; this.contractsService.approveERC721(contract.address, operator.address);
+        }
+        break;
+
+      case ContractType.Token:
+        if (!event.checked) {
+          actionCode &#x3D; &#x60;disapprove-token-${ operator.name }&#x60;;
+          action &#x3D; this.contractsService.disapprove(operator.address, contract.address);
+        } else {
+          actionCode &#x3D; &#x60;approve-token-${ operator.name }&#x60;;
+          action &#x3D; this.contractsService.approve(operator.address, contract.address);
+        }
+        break;
+
+      default:
+        return;
+    }
+
+    try {
+      this.eventsService.trackEvent(
+        &#x60;click-${ actionCode }&#x60;,
+        Category.Account,
+        environment.contracts.diaspore.loanManager
+      );
+
+      await action;
+
+      if ((this.onlyToken || this.onlyAsset) &amp;&amp; this.onlyAddress) {
+        this.showProgressbar();
+      }
+
+      this.eventsService.trackEvent(
+        &#x60;${ actionCode }-rcn&#x60;,
+        Category.Account,
+        environment.contracts.basaltEngine
+      );
+
+      this.retrievePendingTx();
+    } catch (e) {
+      console.info(&#x27;Approve rejected&#x27;, e);
+      event.source.checked &#x3D; !event.checked;
+      return;
+    }
+  }
+
+  /**
+   * Hide progressbar and close dialog
+   */
+  hideProgressbar() {
+    this.startProgress &#x3D; false;
+    this.finishProgress &#x3D; false;
+    this.loading &#x3D; false;
+
+    this.dialogRef.close(true);
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  private handleLoginEvents() {
+    this.subscriptionAccount &#x3D; this.web3Service.loginEvent.subscribe(async (loggedIn: boolean) &#x3D;&gt; {
+      if (!loggedIn) {
+        this.dialog.closeAll();
+        return;
+      }
+
+      await this.loadAccount();
+      this.loadTokens();
+      this.loadAssets();
+    });
+  }
+
+  /**
+   * Retrieve pending Tx
+   */
+  private retrievePendingTx() {
+    const pendingApproveTx: Tx &#x3D; this.txService.getLastPendingApprove(
+      (this.onlyToken || this.onlyAsset), this.onlyAddress
+    );
+
+    if (!pendingApproveTx) {
+      this.pendingTx &#x3D; undefined;
+    } else {
+      this.pendingTx &#x3D; pendingApproveTx;
+    }
+
+    if (
+      !this.txSubscription &amp;&amp;
+      (this.onlyToken || this.onlyAsset) &amp;&amp;
+      this.onlyAddress
+    ) {
+      this.txSubscription &#x3D; true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) &#x3D;&gt; this.trackApproveTx(tx));
+    }
+  }
+
+  /**
+   * Track tx
+   */
+  private trackApproveTx(tx: Tx) {
+    const to: string &#x3D; this.onlyToken || this.onlyAsset;
+    if (
+      tx.type &#x3D;&#x3D;&#x3D; Type.approve &amp;&amp;
+      (tx.to &#x3D;&#x3D;&#x3D; to) &amp;&amp;
+      tx.data.contract &#x3D;&#x3D;&#x3D; this.onlyAddress
+    ) {
+      this.finishProgress &#x3D; true;
+    }
+  }
+
+  /**
+   * Show loading progress bar
+   */
+  private showProgressbar() {
+    this.startProgress &#x3D; true;
+    this.loading &#x3D; true;
+  }
+
+  /**
+   * Load ERC20 tokens
+   * @return ERC20 array
+   */
+  private async loadTokens() {
+    const currencies &#x3D; this.currenciesService.getCurrencies(true);
+    const tokens: Contract[] &#x3D; [];
+
+    // set tokens
+    currencies.map(currency &#x3D;&gt; {
+      if (currency.address !&#x3D;&#x3D; environment.contracts.converter.ethAddress) {
+        tokens.push(
+          new Contract(
+            currency.symbol,
+            currency.address
+          )
+        );
+      }
+    });
+
+    // set operators
+    tokens.map(token &#x3D;&gt; token.operators &#x3D; this.filterTokenOperators(token));
+
+    // set isApproved
+    const promises: Promise&lt;boolean&gt;[] &#x3D; [];
+    const approves: any &#x3D; {};
+
+    tokens.map(token &#x3D;&gt; {
+      token.operators.map(
+        operator &#x3D;&gt; this.makeApproves(
+          token.address,
+          operator.address,
+          ContractType.Token,
+          promises,
+          approves
+        )
+      );
+    });
+
+    await Promise.all(promises);
+    this.tokenApproves &#x3D; approves;
+
+    this.tokens &#x3D; tokens;
+    return tokens;
+  }
+
+  /**
+   * Load ERC721 assets
+   * @return ERC721 array
+   */
+  private async loadAssets(): Promise&lt;Contract[]&gt; {
+    const assets: Contract[] &#x3D; [];
+
+    // set operators
+    assets.map(asset &#x3D;&gt; asset.operators &#x3D; this.assetOperators);
+
+    // set is approved
+    const promises: Promise&lt;boolean&gt;[] &#x3D; [];
+    const approves: any &#x3D; {};
+
+    assets.map(asset &#x3D;&gt; {
+      asset.operators.map(
+        operator &#x3D;&gt; this.makeApproves(
+          asset.address,
+          operator.address,
+          ContractType.Asset,
+          promises,
+          approves
+        )
+      );
+    });
+
+    await Promise.all(promises);
+    this.assetApproves &#x3D; approves;
+
+    this.assets &#x3D; assets;
+    return assets;
+  }
+
+  /**
+   * Make async token approves
+   * @param token Token or asset address
+   * @param operator Operator address
+   * @param contractType ERC20 or ERC721
+   * @param promises Approve promises array
+   * @param approves Approves object
+   */
+  private makeApproves(
+    token: string,
+    operator: string,
+    contractType: ContractType,
+    promises: Promise&lt;any&gt;[],
+    approves: Object
+  ) {
+    promises.push(
+      new Promise(async (resolve) &#x3D;&gt; {
+        const isApproved &#x3D; await this.isApproved(
+          token,
+          operator,
+          contractType
+        );
+
+        approves[token] ?
+        approves[token][operator] &#x3D; isApproved :
+        approves[token] &#x3D; { [operator]: isApproved };
+
+        resolve(isApproved);
+      })
+    );
+  }
+
+  /**
+   * Returns if the operator is approved to operate with the chosen token
+   * @param contract ERC20 or ERC721 address
+   * @param operator Operator address
+   * @param type ERC20 or ERC721
+   * @return Boolean if is approved
+   */
+  private async isApproved(
+    contract: string,
+    operator: string,
+    type: ContractType
+  ): Promise&lt;boolean&gt; {
+    switch (type) {
+      case ContractType.Token:
+        return await this.contractsService.isApproved(
+          operator,
+          contract
+        );
+
+      case ContractType.Asset:
+        return await this.contractsService.isApprovedERC721(
+          contract,
+          operator
+        );
+
+      default:
+        break;
+    }
+  }
+
+  /**
+   * Return operators for the specified token
+   * @param token ERC20 address
+   * @return Operators array
+   */
+  private filterTokenOperators(token: Contract): Operator[] {
+    if (token.address !&#x3D;&#x3D; environment.contracts.rcnToken) {
+      return this.tokenOperators.filter(
+        contract &#x3D;&gt; {
+          switch (contract.address) {
+            case environment.contracts.converter.converterRamp:
+              return true;
+
+            default:
+              return false;
+          }
+        }
+      );
+    }
+
+    return this.tokenOperators;
+  }
+
+  /**
+   * Set account address
+   * @return Account address
+   */
+  private async loadAccount(): Promise&lt;string&gt; {
+    const web3: any &#x3D; this.web3Service.web3;
+    const account &#x3D; await this.web3Service.getAccount();
+
+    this.account &#x3D; web3.toChecksumAddress(account);
+    return this.account;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;ngx-spinner
+  bdColor&#x3D;&quot;transparent&quot;
+  size&#x3D;&quot;medium&quot;
+  color&#x3D;&quot;#fff&quot;
+  type&#x3D;&quot;ball-clip-rotate-multiple&quot;
+&gt;&lt;/ngx-spinner&gt;
+
+&lt;app-dialog-header title&#x3D;&quot;Approve Contract&quot;&gt;
+&lt;/app-dialog-header&gt;
+
+&lt;mat-dialog-content&gt;
+  &lt;app-infinite-progress-bar
+    *ngIf&#x3D;&quot;startProgress&quot;
+    [start]&#x3D;&quot;true&quot;
+    [end]&#x3D;&quot;finishProgress&quot;
+    (finish)&#x3D;&quot;hideProgressbar()&quot;
+  &gt;
+  &lt;/app-infinite-progress-bar&gt;
+
+  &lt;div class&#x3D;&quot;col-sm-12 dialog-padding&quot;&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;col-sm-12 col-md-5&quot;&gt;
+        &lt;div class&#x3D;&quot;title main-h2 marginbottom20&quot;&gt;Account Information&lt;/div&gt;
+        &lt;div class&#x3D;&quot;list-avatar&quot;&gt;
+          &lt;div class&#x3D;&quot;avatar-container&quot;&gt;
+            &lt;app-avatar [seed]&#x3D;account&gt;&lt;/app-avatar&gt;
+          &lt;/div&gt;
+          &lt;div class&#x3D;&quot;txt-container&quot;&gt;
+            &lt;div class&#x3D;&quot;subtitle&quot;&gt;Wallet address&lt;/div&gt;
+            &lt;div class&#x3D;&quot;title ellipsis&quot;&gt;{{ account }}&lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;col-sm-12 col-md-7 px-0&quot;&gt;
+
+        &lt;ng-container *ngIf&#x3D;&quot;tokens?.length &amp;&amp; !onlyAsset&quot;&gt;
+          &lt;div class&#x3D;&quot;title main-h2 mb-3 px-3 mx-1&quot;&gt;
+            Tokens
+          &lt;/div&gt;
+          &lt;ng-container *ngFor&#x3D;&quot;let token of tokens; let i &#x3D; index&quot;&gt;
+            &lt;mat-accordion *ngIf&#x3D;&quot;!onlyToken || onlyToken &#x3D;&#x3D; token.address&quot;&gt;
+              &lt;mat-expansion-panel
+                class&#x3D;&quot;expansion-panel mat-elevation-z&quot;
+                [expanded]&#x3D;&quot;onlyToken || i &#x3D;&#x3D;&#x3D; 0&quot;
+              &gt;
+                &lt;mat-expansion-panel-header&gt;
+                  &lt;mat-panel-title&gt;
+                    {{ token.name }}
+                  &lt;/mat-panel-title&gt;
+                &lt;/mat-expansion-panel-header&gt;
+                &lt;div
+                  class&#x3D;&quot;checkbox&quot;
+                  *ngFor&#x3D;&quot;let operator of token.operators&quot;
+                &gt;
+                  &lt;mat-checkbox
+                    color&#x3D;&quot;primary&quot;
+                    [checked]&#x3D;&quot;tokenApproves[token.address] &amp;&amp; tokenApproves[token.address][operator.address]&quot;
+                    (change)&#x3D;&quot;clickCheck(operator, $event, token, &#x27;token&#x27;)&quot;
+                    *ngIf&#x3D;&quot;!onlyAddress || onlyAddress &#x3D;&#x3D; operator.address&quot;
+                  &gt;
+                    Authorize the &lt;b&gt;{{ operator.name }}&lt;/b&gt; contract to operate {{ token.name }} on your behalf
+                  &lt;/mat-checkbox&gt;
+                &lt;/div&gt;
+              &lt;/mat-expansion-panel&gt;
+            &lt;/mat-accordion&gt;
+          &lt;/ng-container&gt;
+        &lt;/ng-container&gt;
+
+        &lt;ng-container *ngIf&#x3D;&quot;assets?.length &amp;&amp; !onlyToken&quot;&gt;
+          &lt;div class&#x3D;&quot;title main-h2 mb-3 px-3 mx-1&quot;&gt;
+            ERC 721
+          &lt;/div&gt;
+          &lt;ng-container *ngFor&#x3D;&quot;let asset of assets&quot;&gt;
+            &lt;mat-accordion *ngIf&#x3D;&quot;!onlyAsset || onlyAsset &#x3D;&#x3D; token.address&quot;&gt;
+              &lt;mat-expansion-panel
+                class&#x3D;&quot;expansion-panel mat-elevation-z&quot;
+                [expanded]&#x3D;&quot;onlyAsset&quot;
+              &gt;
+                &lt;mat-expansion-panel-header&gt;
+                  &lt;mat-panel-title&gt;
+                    {{ asset.name }}
+                  &lt;/mat-panel-title&gt;
+                &lt;/mat-expansion-panel-header&gt;
+                &lt;div
+                  class&#x3D;&quot;checkbox&quot;
+                  *ngFor&#x3D;&quot;let operator of asset.operators&quot;
+                &gt;
+                  &lt;mat-checkbox
+                    color&#x3D;&quot;primary&quot;
+                    [checked]&#x3D;&quot;assetApproves[asset.address] &amp;&amp; assetApproves[asset.address][operator.address]&quot;
+                    (change)&#x3D;&quot;clickCheck(operator, $event, asset, &#x27;asset&#x27;)&quot;
+                    *ngIf&#x3D;&quot;!onlyAddress || onlyAddress &#x3D;&#x3D; operator.address&quot;
+                  &gt;
+                    Authorize the &lt;b&gt;{{ operator.name }}&lt;/b&gt; contract to operate {{ asset.name }} on your behalf
+                  &lt;/mat-checkbox&gt;
+                &lt;/div&gt;
+              &lt;/mat-expansion-panel&gt;
+            &lt;/mat-accordion&gt;
+          &lt;/ng-container&gt;
+        &lt;/ng-container&gt;
+
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row mt-4&quot;&gt;
+      &lt;div class&#x3D;&quot;col-sm-12 d-flex justify-content-end&quot;&gt;
+        &lt;app-close-button&gt;&lt;/app-close-button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/mat-dialog-content&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./dialog-approve-contract.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">@import &#x27;../../../scss/variables&#x27;;
+@import &#x27;../../../scss/fonts&#x27;;
+
+::ng-deep .mat-checkbox-label {
+  white-space: pre-wrap;
+}
+.checkbox {
+  margin-bottom: 12px;
+}
+.dialog-padding{
+  padding: 30px;
+}
+.list-avatar {
+  height: 55px;
+  position: relative;
+  padding-left: 45px;
+  .avatar-container {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    overflow: hidden;
+    top: 0px;
+    left: 0px;
+    border-radius: 50%;
+    background-color: var(--app-color-primary);
+    box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+    .title{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      font-size: 18px;
+      color: var(--app-color-secondary);
+      @extend %roboto-black;
+      @include transform(translate(-50%, -50%));
+    }
+    img,
+    canvas{
+      width: 50px;
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
+    }
+  }
+  .txt-container{
+    .title {
+      line-height: 1.4em;
+      @extend %roboto-medium;
+      @extend .font18;
+    }
+    .subtitle {
+      line-height: 1em;
+      @extend %font-medium;
+      @extend .font14;
+    }
+  }
+}
+.expansion-panel {
+  background: transparent;
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><ngx-spinner  bdColor="transparent"  size="medium"  color="#fff"  type="ball-clip-rotate-multiple"></ngx-spinner><app-dialog-header title="Approve Contract"></app-dialog-header><mat-dialog-content>  <app-infinite-progress-bar    *ngIf="startProgress"    [start]="true"    [end]="finishProgress"    (finish)="hideProgressbar()"  >  </app-infinite-progress-bar>  <div class="col-sm-12 dialog-padding">    <div class="row">      <div class="col-sm-12 col-md-5">        <div class="title main-h2 marginbottom20">Account Information</div>        <div class="list-avatar">          <div class="avatar-container">            <app-avatar [seed]=account></app-avatar>          </div>          <div class="txt-container">            <div class="subtitle">Wallet address</div>            <div class="title ellipsis">{{ account }}</div>          </div>        </div>      </div>      <div class="col-sm-12 col-md-7 px-0">        <ng-container *ngIf="tokens?.length && !onlyAsset">          <div class="title main-h2 mb-3 px-3 mx-1">            Tokens          </div>          <ng-container *ngFor="let token of tokens; let i = index">            <mat-accordion *ngIf="!onlyToken || onlyToken == token.address">              <mat-expansion-panel                class="expansion-panel mat-elevation-z"                [expanded]="onlyToken || i === 0"              >                <mat-expansion-panel-header>                  <mat-panel-title>                    {{ token.name }}                  </mat-panel-title>                </mat-expansion-panel-header>                <div                  class="checkbox"                  *ngFor="let operator of token.operators"                >                  <mat-checkbox                    color="primary"                    [checked]="tokenApproves[token.address] && tokenApproves[token.address][operator.address]"                    (change)="clickCheck(operator, $event, token, \'token\')"                    *ngIf="!onlyAddress || onlyAddress == operator.address"                  >                    Authorize the <b>{{ operator.name }}</b> contract to operate {{ token.name }} on your behalf                  </mat-checkbox>                </div>              </mat-expansion-panel>            </mat-accordion>          </ng-container>        </ng-container>        <ng-container *ngIf="assets?.length && !onlyToken">          <div class="title main-h2 mb-3 px-3 mx-1">            ERC 721          </div>          <ng-container *ngFor="let asset of assets">            <mat-accordion *ngIf="!onlyAsset || onlyAsset == token.address">              <mat-expansion-panel                class="expansion-panel mat-elevation-z"                [expanded]="onlyAsset"              >                <mat-expansion-panel-header>                  <mat-panel-title>                    {{ asset.name }}                  </mat-panel-title>                </mat-expansion-panel-header>                <div                  class="checkbox"                  *ngFor="let operator of asset.operators"                >                  <mat-checkbox                    color="primary"                    [checked]="assetApproves[asset.address] && assetApproves[asset.address][operator.address]"                    (change)="clickCheck(operator, $event, asset, \'asset\')"                    *ngIf="!onlyAddress || onlyAddress == operator.address"                  >                    Authorize the <b>{{ operator.name }}</b> contract to operate {{ asset.name }} on your behalf                  </mat-checkbox>                </div>              </mat-expansion-panel>            </mat-accordion>          </ng-container>        </ng-container>      </div>    </div>    <div class="row mt-4">      <div class="col-sm-12 d-flex justify-content-end">        <app-close-button></app-close-button>      </div>    </div>  </div></mat-dialog-content></div>'
+    var COMPONENTS = [{'name': 'ActiveLoansComponent', 'selector': 'app-active-loans'},{'name': 'AddressComponent', 'selector': 'app-address'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AvatarComponent', 'selector': 'app-avatar'},{'name': 'AvatarTitleComponent', 'selector': 'app-avatar-title'},{'name': 'BalanceComponent', 'selector': 'app-component-balance'},{'name': 'BodyListComponent', 'selector': 'app-body-list'},{'name': 'ButtonGroupComponent', 'selector': 'app-button-group'},{'name': 'ClaimButtonComponent', 'selector': 'app-claim-button'},{'name': 'CloseButtonComponent', 'selector': 'app-close-button'},{'name': 'ContentWrapperComponent', 'selector': 'app-content-wrapper'},{'name': 'ConversionGraphicComponent', 'selector': 'app-conversion-graphic'},{'name': 'CosignerSelectorComponent', 'selector': 'app-cosigner-selector'},{'name': 'CreatorContainerComponent', 'selector': 'app-creator-container'},{'name': 'CurrencyLogoComponent', 'selector': 'app-currency-logo'},{'name': 'DecentralandCosignerComponent', 'selector': 'app-decentraland-cosigner'},{'name': 'DecentralandMapComponent', 'selector': 'app-decentraland-map'},{'name': 'DetailButtonComponent', 'selector': 'app-detail-button'},{'name': 'DetailCosignerComponent', 'selector': 'app-detail-cosigner'},{'name': 'DetailIdentityComponent', 'selector': 'app-detail-identity'},{'name': 'DetailTableComponent', 'selector': 'app-detail-table'},{'name': 'DialogApproveContractComponent', 'selector': 'app-dialog-approve-contract'},{'name': 'DialogClientAccountComponent', 'selector': 'app-dialog-client-account'},{'name': 'DialogGenericErrorComponent', 'selector': 'app-dialog-generic-error'},{'name': 'DialogHeaderComponent', 'selector': 'app-dialog-header'},{'name': 'DialogInsufficientfundsComponent', 'selector': 'app-dialog-insufficient-funds'},{'name': 'DialogLoanLendComponent', 'selector': 'app-dialog-loan-lend'},{'name': 'DialogLoanPayComponent', 'selector': 'app-dialog-loan-pay'},{'name': 'DialogLoanTransferComponent', 'selector': 'app-dialog-loan-transfer'},{'name': 'DialogWrongCountryComponent', 'selector': 'app-dialog-wrong-country'},{'name': 'ErrorDetailsComponent', 'selector': 'app-error-details'},{'name': 'FilterLoansComponent', 'selector': 'app-filter-loans'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GobackButtonComponent', 'selector': 'app-goback-button'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HeaderListComponent', 'selector': 'app-header-list'},{'name': 'IconAvatarComponent', 'selector': 'app-icon-avatar'},{'name': 'IconGroupHeaderComponent', 'selector': 'app-icon-group-header'},{'name': 'InfiniteProgressBarComponent', 'selector': 'app-infinite-progress-bar'},{'name': 'ItemFeatureComponent', 'selector': 'app-item-feature'},{'name': 'LendButtonComponent', 'selector': 'app-lend-button'},{'name': 'LoanAvatarComponent', 'selector': 'app-loan-avatar'},{'name': 'LoanCardComponent', 'selector': 'app-loan-card'},{'name': 'LoanDetailComponent', 'selector': 'app-loan-detail'},{'name': 'LoanDoesNotExistComponent', 'selector': 'app-loan-does-not-exist'},{'name': 'NotFoundComponent', 'selector': 'app-not-found'},{'name': 'NotificationItemComponent', 'selector': 'app-notification-item'},{'name': 'NotificationsComponent', 'selector': 'app-notifications'},{'name': 'PayButtonComponent', 'selector': 'app-pay-button'},{'name': 'RequestedLoanComponent', 'selector': 'app-requested-loan'},{'name': 'RiskIndicatorComponent', 'selector': 'app-risk-indicator'},{'name': 'SocialContainerComponent', 'selector': 'app-social-container'},{'name': 'TransactionHistoryComponent', 'selector': 'app-transaction-history'},{'name': 'TransferButtonComponent', 'selector': 'app-transfer-button'}];
+    var DIRECTIVES = [{'name': 'ClickOutsideDirective', 'selector': '[appClickOutside]'}];
+    var ACTUAL_COMPONENT = {'name': 'DialogApproveContractComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'DialogApproveContractComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

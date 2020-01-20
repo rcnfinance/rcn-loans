@@ -1,0 +1,258 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>RCN Credit Marketplace - Documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+	      <link rel="stylesheet" href="./styles/style.css">
+        <link rel="stylesheet" href="./styles/material.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="./" class="navbar-brand">RCN Credit Marketplace - Documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content getting-started">
+                   <div class="content-data">
+
+<h1 id="changelog">Changelog</h1>
+<h2 id="unreleased">Unreleased</h2>
+<h3 id="fix">Fix:</h3>
+<ul>
+<li>Fix spinners when changing pages</li>
+<li>Fix loans filter in Activity view</li>
+<li>Netlify build, use Node 12</li>
+</ul>
+<h3 id="enhancement">Enhancement:</h3>
+<ul>
+<li>Improving Restricted Region Dialog</li>
+<li>Display Diaspore RCN Engine loans</li>
+<li>Show Lending dialog, lend using another currency</li>
+<li>Visual improvements</li>
+<li>Get basalt loans using the API</li>
+<li>Different payment and lend flows for Basalt loans</li>
+<li>Updated error views (404, no more loans, conection error)</li>
+<li>New material dark theme</li>
+</ul>
+<h2 id="0013-avocados---20190215"><strong>0.0.13</strong> Avocados - 2019/02/15</h2>
+<h3 id="feature">Feature:</h3>
+<ul>
+<li>Add support to deploy Dapp to ipfs network</li>
+<li>Add ipfs-deploy script</li>
+</ul>
+<h3 id="fix-1">Fix:</h3>
+<ul>
+<li>Fix scrollbar style</li>
+<li>Api Fix Geolocalization</li>
+<li>Fix Civic QR CSS</li>
+<li>Improve SEO</li>
+<li>Fix activity duration title bug</li>
+</ul>
+<h2 id="0012-avocados---20190109"><strong>0.0.12</strong> Avocados - 2019/01/09</h2>
+<h3 id="features">Features:</h3>
+<ul>
+<li>Notification Component</li>
+</ul>
+<h3 id="misc">Misc:</h3>
+<ul>
+<li>Use Roboto font for number display</li>
+<li>Increase extra ETH send from 3% to 5%</li>
+<li>Increase min rebuy to 40 RCN</li>
+</ul>
+<h3 id="fix-2">Fix:</h3>
+<ul>
+<li>Fix bug when view card-loan type visibility</li>
+<li>Fix bug when approve contract checkbox visibility</li>
+</ul>
+<h2 id="0011-avocados---20181225"><strong>0.0.11</strong> Avocados - 2018/12/25</h2>
+<h3 id="features-1">Features:</h3>
+<ul>
+<li>Added pay loan option</li>
+<li>Lend using ETH if user has no RCN balance</li>
+<li>Filter loan requests by currency, amount, interest rates and duration</li>
+<li>Added Discord to Footer Component</li>
+</ul>
+<h3 id="misc-1">Misc:</h3>
+<ul>
+<li>Setup unit tests</li>
+<li>Setup e2e tests</li>
+</ul>
+<h3 id="fix-3">Fix:</h3>
+<ul>
+<li>Fix bug when loading metamask privacy on account detail</li>
+<li>Fix try to lend an invalid mortgage request</li>
+<li>Fix bug when the request is expired, the estimated return of a loan shows an incorrect amount</li>
+<li>Fix margin &quot;This address is not a lender&quot; message</li>
+</ul>
+<h2 id="0010-d-avocados---20181114"><strong>0.0.10-D</strong> Avocados - 2018/11/14</h2>
+<h3 id="features-2">Features:</h3>
+<ul>
+<li>Added support for Metamask privacy mode</li>
+</ul>
+<h3 id="misc-2">Misc:</h3>
+<ul>
+<li>Display correct status on expired loans</li>
+<li>Update Decentraland mortgages contracts</li>
+<li>Hide the transfer button on paid loans</li>
+</ul>
+<h2 id="0010-avocados---20181030"><strong>0.0.10</strong> Avocados - 2018/10/30</h2>
+<h3 id="changes">Changes:</h3>
+<ul>
+<li>Add transfer loan ownership button</li>
+<li>New Decentraland cosigner detail</li>
+<li>Added loading spinner to transaction history</li>
+</ul>
+<h3 id="misc-3">Misc:</h3>
+<ul>
+<li>Migrated to Bootstrap V4</li>
+<li>Refactor requests component</li>
+</ul>
+<h3 id="fixes">Fixes:</h3>
+<ul>
+<li>Fix display version footer</li>
+<li>Fix transaction history display</li>
+<li>Fix display claim button, cosigner</li>
+<li>Fix validate Oracle, address(0)</li>
+<li>Fix font size, interest rate</li>
+<li>Fix transaction history icons</li>
+</ul>
+<h2 id="009-avocados---20180918"><strong>0.0.9</strong> Avocados - 2018/09/18</h2>
+<h3 id="features-3">Features:</h3>
+<ul>
+<li>Added snackbar notification for ethereum transactions</li>
+<li>Set-up Decentraland contracts</li>
+</ul>
+<h3 id="fixes-1">Fixes:</h3>
+<ul>
+<li>Fix back button in loan detail</li>
+<li>Fix 404 page not displaying</li>
+<li>Fix build number tooltip</li>
+</ul>
+<h2 id="008-avocados---20180824"><strong>0.0.8</strong> Avocados - 2018/08/24</h2>
+<h3 id="features-4">Features:</h3>
+<ul>
+<li>Display loan history</li>
+<li>New navigation loan detail</li>
+<li>Added Sentry integration</li>
+<li>Added Google Analytics integration</li>
+<li>Filter allowed countries</li>
+<li>Now using Angular 6</li>
+<li>Display error messages</li>
+<li>Show feedback performing heavy operations</li>
+</ul>
+<h3 id="fixes-2">Fixes:</h3>
+<ul>
+<li>Fix Civic dialog</li>
+<li>Responsive mobile fixes</li>
+<li>Fix production build</li>
+<li>Fix Meta OG Tracking Facebook / Twitter</li>
+<li>Fix poor visibility of the approve contract checkbox</li>
+<li>Fix limit size of the duration label</li>
+</ul>
+<h2 id="007-avocados---20180710"><strong>0.0.7</strong> Avocados - 2018/07/10</h2>
+<ul>
+<li>Not enough funds dialog</li>
+<li>404 page</li>
+<li>Show Oracle in loan detail</li>
+<li>Meta OG for sharing</li>
+<li>New Decentraland API Scheme</li>
+<li>Replaced Decentraland API URL</li>
+<li>Added new Mortgage Creator</li>
+<li>Responsive improvements</li>
+<li>Bug fixes</li>
+</ul>
+<h2 id="006-avocados---20180625"><strong>0.0.6</strong> Avocados - 2018/06/25</h2>
+<ul>
+<li>New sidebar and navigation bar</li>
+<li>Improvements in mobile navigation</li>
+<li>Ability to claim liabilities from cosigners</li>
+<li>Activity tab with all the active loans</li>
+<li>Refactor in cosigner service, created cosigner &#39;Providers&#39;</li>
+<li>Upgraded API for Decentraland</li>
+<li>Replaced Decentraland canvas by its new map API</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'getting-started';
+            var COMPODOC_CURRENT_PAGE_URL = 'changelog.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="./js/libs/custom-elements.min.js"></script>
+       <script src="./js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="./js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="./js/menu-wc.js" defer></script>
+
+       <script src="./js/libs/bootstrap-native.js"></script>
+
+       <script src="./js/libs/es6-shim.min.js"></script>
+       <script src="./js/libs/EventDispatcher.js"></script>
+       <script src="./js/libs/promise.min.js"></script>
+       <script src="./js/libs/zepto.min.js"></script>
+
+       <script src="./js/compodoc.js"></script>
+
+       <script src="./js/tabs.js"></script>
+       <script src="./js/menu.js"></script>
+       <script src="./js/libs/clipboard.min.js"></script>
+       <script src="./js/libs/prism.js"></script>
+       <script src="./js/sourceCode.js"></script>
+          <script src="./js/search/search.js"></script>
+          <script src="./js/search/lunr.min.js"></script>
+          <script src="./js/search/search-lunr.js"></script>
+          <script src="./js/search/search_index.js"></script>
+       <script src="./js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

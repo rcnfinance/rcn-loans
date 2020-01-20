@@ -1,0 +1,2150 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>RCN Credit Marketplace - Documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">RCN Credit Marketplace - Documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li>ApiService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/services/api.service.ts</code>
+        </p>
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#basaltUrl">basaltUrl</a>
+                            </li>
+                            <li>
+                                <a href="#diasporeUrl">diasporeUrl</a>
+                            </li>
+                            <li>
+                                <a href="#installmentModelAddress">installmentModelAddress</a>
+                            </li>
+                            <li>
+                                <a href="#multicallConfig">multicallConfig</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#completeLoanModels">completeLoanModels</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#excludeLoansWithStatus">excludeLoansWithStatus</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getActiveLoans">getActiveLoans</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#getAllApiLoans">getAllApiLoans</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#getAllCompleteLoans">getAllCompleteLoans</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#getAllUrls">getAllUrls</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getApiFilterKey">getApiFilterKey</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getApiUrl">getApiUrl</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getLoan">getLoan</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getLoansOfLender">getLoansOfLender</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#getModelConfig">getModelConfig</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#getModelDebtInfo">getModelDebtInfo</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#getMulticallData">getMulticallData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getRequests">getRequests</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, web3Service: <a href="../injectables/Web3Service.html">Web3Service</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/services/api.service.ts:23</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>web3Service</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/Web3Service.html" target="_self" >Web3Service</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="completeLoanModels"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            completeLoanModels
+                        </b>
+                        <a href="#completeLoanModels"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>completeLoanModels(loan: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, network: <a href="../undefineds/Network.html">Network</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="365"
+                            class="link-to-prism">src/app/services/api.service.ts:365</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Get loans with the model prepared for the dapp.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>loan</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Loan data obtained from API</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>network</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#Network" target="_self" >Network</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Selected network</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Loan.html" target="_self" >Promise&lt;Loan&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Loan</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="excludeLoansWithStatus"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            excludeLoansWithStatus
+                        </b>
+                        <a href="#excludeLoansWithStatus"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>excludeLoansWithStatus(apiLoans: any[], filterStatus: <a href="../undefineds/Status.html">Status[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="438"
+                            class="link-to-prism">src/app/services/api.service.ts:438</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Exclude loans with the selected status</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>apiLoans</td>
+                                    <td>
+                                            <code>any[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Loans data obtained from API</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>filterStatus</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#Status" target="_self" >Status[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Status array to remove</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Loans data obtained from API excluding selected states</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getActiveLoans"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            getActiveLoans
+                        </b>
+                        <a href="#getActiveLoans"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getActiveLoans(network: <a href="../undefineds/Network.html">Network</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="141"
+                            class="link-to-prism">src/app/services/api.service.ts:141</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Gets all loans that were lent and there status is ongoing. Meaning that they are not canceled or finished.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>network</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#Network" target="_self" >Network</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Selected network</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Loan.html" target="_self" >Promise&lt;Loan[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Loans array</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAllApiLoans"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            getAllApiLoans
+                        </b>
+                        <a href="#getAllApiLoans"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getAllApiLoans(responses: any[], network: <a href="../undefineds/Network.html">Network</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="342"
+                            class="link-to-prism">src/app/services/api.service.ts:342</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Handle api loan response loading models</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>responses</td>
+                                    <td>
+                                            <code>any[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Api responses</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>network</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#Network" target="_self" >Network</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Selected network</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Loans array</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAllCompleteLoans"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            getAllCompleteLoans
+                        </b>
+                        <a href="#getAllCompleteLoans"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getAllCompleteLoans(apiLoans: any[], network: <a href="../undefineds/Network.html">Network</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="234"
+                            class="link-to-prism">src/app/services/api.service.ts:234</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Parse loans data obtained from API and set loan models</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>apiLoans</td>
+                                    <td>
+                                            <code>any[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Loans data obtained from API</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>network</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#Network" target="_self" >Network</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Selected network</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Loans array</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAllUrls"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            getAllUrls
+                        </b>
+                        <a href="#getAllUrls"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getAllUrls(urls: any[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="211"
+                            class="link-to-prism">src/app/services/api.service.ts:211</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Each and call urls</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>urls</td>
+                                    <td>
+                                            <code>any[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>URL array</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>URL call response</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getApiFilterKey"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            getApiFilterKey
+                        </b>
+                        <a href="#getApiFilterKey"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getApiFilterKey(filter: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, network: <a href="../undefineds/Network.html">Network</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="457"
+                            class="link-to-prism">src/app/services/api.service.ts:457</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return the api filter key according to the chosen network</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>filter</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>network</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#Network" target="_self" >Network</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Selected network</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Api filter key</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getApiUrl"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            getApiUrl
+                        </b>
+                        <a href="#getApiUrl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getApiUrl(network: <a href="../undefineds/Network.html">Network</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="419"
+                            class="link-to-prism">src/app/services/api.service.ts:419</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return the api url according to the chosen network</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>network</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#Network" target="_self" >Network</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Selected network</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Api url</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getLoan"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            getLoan
+                        </b>
+                        <a href="#getLoan"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getLoan(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, network: <a href="../undefineds/Network.html">Network</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="186"
+                            class="link-to-prism">src/app/services/api.service.ts:186</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Gets loan by ID</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>network</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#Network" target="_self" >Network</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Selected network</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Loan.html" target="_self" >Promise&lt;Loan&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Loan</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getLoansOfLender"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            getLoansOfLender
+                        </b>
+                        <a href="#getLoansOfLender"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getLoansOfLender(lender: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, network: <a href="../undefineds/Network.html">Network</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="94"
+                            class="link-to-prism">src/app/services/api.service.ts:94</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Get all loans lent by the account that is logged in</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>lender</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Lender address</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>network</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#Network" target="_self" >Network</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Selected network</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Loan.html" target="_self" >Promise&lt;Loan[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Loans array</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getModelConfig"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            getModelConfig
+                        </b>
+                        <a href="#getModelConfig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getModelConfig(loanId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="408"
+                            class="link-to-prism">src/app/services/api.service.ts:408</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Get diaspore loans model configs</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>loanId</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Config obtained from API</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getModelDebtInfo"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            getModelDebtInfo
+                        </b>
+                        <a href="#getModelDebtInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getModelDebtInfo(loanId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="398"
+                            class="link-to-prism">src/app/services/api.service.ts:398</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Get diaspore loans model debt info if exists</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>loanId</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Model debt info obtained from API</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMulticallData"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            getMulticallData
+                        </b>
+                        <a href="#getMulticallData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getMulticallData(apiLoans: <a href="../interfaces/LoanApiBasalt.html">LoanApiBasalt[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="257"
+                            class="link-to-prism">src/app/services/api.service.ts:257</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Check basalt loans and complete information not provided by the api</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>apiLoans</td>
+                                    <td>
+                                                <code><a href="../interfaces/LoanApiBasalt.html" target="_self" >LoanApiBasalt[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Loans data obtained from API</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>API Loans with information completed</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getRequests"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            getRequests
+                        </b>
+                        <a href="#getRequests"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getRequests(now: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, network: <a href="../undefineds/Network.html">Network</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="36"
+                            class="link-to-prism">src/app/services/api.service.ts:36</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Get all loans request that are open, not canceled or expired.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>now</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Timestamp</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>network</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#Network" target="_self" >Network</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Selected network</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Loan.html" target="_self" >Promise&lt;Loan[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Loans array</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="basaltUrl"></a>
+                        <span class="name">
+                            <b>
+                            basaltUrl</b>
+                            <a href="#basaltUrl"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>environment.rcn_node_api.basaltUrl</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/services/api.service.ts:19</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="diasporeUrl"></a>
+                        <span class="name">
+                            <b>
+                            diasporeUrl</b>
+                            <a href="#diasporeUrl"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>environment.rcn_node_api.diasporeUrl</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/services/api.service.ts:18</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="installmentModelAddress"></a>
+                        <span class="name">
+                            <b>
+                            installmentModelAddress</b>
+                            <a href="#installmentModelAddress"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/services/api.service.ts:17</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="multicallConfig"></a>
+                        <span class="name">
+                            <b>
+                            multicallConfig</b>
+                            <a href="#multicallConfig"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>{
+    rpcUrl: environment.network.provider,
+    multicallAddress: environment.contracts.multicall
+  }</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/services/api.service.ts:20</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { aggregate } from &#x27;@makerdao/multicall&#x27;;
+import { environment } from &#x27;../../environments/environment&#x27;;
+import { LoanApiDiaspore } from &#x27;./../interfaces/loan-api-diaspore&#x27;;
+import { LoanApiBasalt } from &#x27;./../interfaces/loan-api-basalt&#x27;;
+import { Loan, Network, Status } from &#x27;../models/loan.model&#x27;;
+import { LoanUtils } from &#x27;../utils/loan-utils&#x27;;
+import { Utils } from &#x27;../utils/utils&#x27;;
+import { Web3Service } from &#x27;./web3.service&#x27;;
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class ApiService {
+
+  installmentModelAddress &#x3D; &#x27;0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53&#x27;;
+  diasporeUrl &#x3D; environment.rcn_node_api.diasporeUrl;
+  basaltUrl &#x3D; environment.rcn_node_api.basaltUrl;
+  multicallConfig &#x3D; {
+    rpcUrl: environment.network.provider,
+    multicallAddress: environment.contracts.multicall
+  };
+
+  constructor(
+    private http: HttpClient,
+    private web3Service: Web3Service
+  ) { }
+
+  /**
+   * Get all loans request that are open, not canceled or expired.
+   * @param now Timestamp
+   * @param network Selected network
+   * @return Loans array
+   */
+  async getRequests(
+    now: number,
+    network: Network
+  ): Promise&lt;Loan[]&gt; {
+    const apiUrl: string &#x3D; this.getApiUrl(network);
+    const filterExpiration: string &#x3D; this.getApiFilterKey(&#x27;expiration&#x27;, network);
+    let allRequestLoans: Loan[] &#x3D; [];
+    let apiCalls &#x3D; 0;
+    let page &#x3D; 0;
+
+    try {
+      const data: any &#x3D; await this.http.get(apiUrl.concat(
+        &#x60;loans?open&#x3D;true&amp;canceled&#x3D;false&amp;approved&#x3D;true&amp;status&#x3D;0&amp;page&#x3D;${ page }&amp;${ filterExpiration }&#x3D;${ now }&#x60;
+      )).toPromise();
+
+      if (page &#x3D;&#x3D;&#x3D; 0) {
+        apiCalls &#x3D; Math.ceil(data.meta.resource_count / data.meta.page_size);
+      }
+
+      const loansRequests &#x3D; await this.getAllCompleteLoans(
+        data.content as LoanApiBasalt[] | LoanApiDiaspore[],
+        network
+      );
+      const filteredLoans &#x3D; loansRequests.filter(loan &#x3D;&gt;
+        loan.model !&#x3D;&#x3D; this.installmentModelAddress &amp;&amp;
+        loan.status !&#x3D;&#x3D; Status.Destroyed
+      );
+
+      allRequestLoans &#x3D; allRequestLoans.concat(filteredLoans);
+      page++;
+    } catch (err) {
+      console.info(&#x27;Error&#x27;, err);
+    }
+
+    const urls &#x3D; [];
+    for (page; page &lt; apiCalls; page++) {
+      const url &#x3D; apiUrl.concat(
+        &#x60;loans?open&#x3D;true&amp;canceled&#x3D;false&amp;approved&#x3D;true&amp;status&#x3D;0&amp;page&#x3D;${ page }&amp;${ filterExpiration }&#x3D;${ now }&#x60;
+      );
+      urls.push(url);
+    }
+    const responses &#x3D; await this.getAllUrls(urls);
+
+    for (const response of responses) {
+      const loansRequests &#x3D; await this.getAllCompleteLoans(response.content, network);
+      const notExpiredResquestLoans &#x3D; loansRequests.filter(loan &#x3D;&gt; loan.model !&#x3D;&#x3D; this.installmentModelAddress);
+      allRequestLoans &#x3D; allRequestLoans.concat(notExpiredResquestLoans);
+    }
+
+    return allRequestLoans;
+  }
+
+  /**
+   * Get all loans lent by the account that is logged in
+   * @param lender Lender address
+   * @param network Selected network
+   * @return Loans array
+   */
+  async getLoansOfLender(
+    lender: string,
+    network: Network
+  ): Promise&lt;Loan[]&gt; {
+    const web3 &#x3D; this.web3Service.web3;
+    const apiUrl: string &#x3D; this.getApiUrl(network);
+    let allLoansOfLender: Loan[] &#x3D; [];
+    let apiCalls &#x3D; 0;
+    let page &#x3D; 0;
+
+    try {
+      lender &#x3D; web3.toChecksumAddress(lender);
+      const data: any &#x3D; await this.http.get(
+        apiUrl.concat(&#x60;loans?open&#x3D;false&amp;page&#x3D;${ page }&amp;lender&#x3D;${ lender }&#x60;)
+      ).toPromise();
+
+      if (page &#x3D;&#x3D;&#x3D; 0) {
+        apiCalls &#x3D; Math.ceil(data.meta.resource_count / data.meta.page_size);
+      }
+
+      const activeLoans &#x3D; await this.getAllCompleteLoans(data.content, network);
+      allLoansOfLender &#x3D; allLoansOfLender.concat(activeLoans);
+      page++;
+    } catch (err) {
+      console.info(&#x27;Error&#x27;, err);
+    }
+
+    const urls &#x3D; [];
+    for (page; page &lt; apiCalls; page++) {
+      const url &#x3D; apiUrl.concat(&#x60;loans?open&#x3D;false&amp;page&#x3D;${ page }&amp;lender&#x3D;${ lender }&#x60;);
+      urls.push(url);
+    }
+    const responses &#x3D; await this.getAllUrls(urls);
+    const allApiLoans &#x3D; await this.getAllApiLoans(responses, network);
+
+    for (const apiLoans of allApiLoans) {
+      allLoansOfLender &#x3D; allLoansOfLender.concat(apiLoans);
+    }
+
+    return allLoansOfLender;
+  }
+
+  /**
+   * Gets all loans that were lent and there status is ongoing. Meaning that they are not canceled or finished.
+   * @param network Selected network
+   * @return Loans array
+   */
+  async getActiveLoans(network: Network): Promise&lt;Loan[]&gt; {
+    const apiUrl: string &#x3D; this.getApiUrl(network);
+    let allActiveLoans: Loan[] &#x3D; [];
+    let apiCalls &#x3D; 0;
+    let page &#x3D; 0;
+
+    try {
+      const data: any &#x3D; await this.http.get(apiUrl.concat(&#x60;loans?open&#x3D;false&amp;canceled&#x3D;false&amp;approved&#x3D;true&amp;page&#x3D;${ page }&#x60;)).toPromise();
+      if (page &#x3D;&#x3D;&#x3D; 0) {
+        apiCalls &#x3D; Math.ceil(data.meta.resource_count / data.meta.page_size);
+      }
+      const activeLoans &#x3D; await this.getAllCompleteLoans(data.content, network);
+      allActiveLoans &#x3D; allActiveLoans.concat(activeLoans);
+      page++;
+    } catch (err) {
+      console.info(&#x27;Error&#x27;, err);
+    }
+
+    const urls &#x3D; [];
+    for (page; page &lt; apiCalls; page++) {
+      const url &#x3D; apiUrl.concat(&#x60;loans?open&#x3D;false&amp;canceled&#x3D;false&amp;approved&#x3D;true&amp;page&#x3D;${ page }&#x60;);
+      urls.push(url);
+    }
+
+    let responses &#x3D; await this.getAllUrls(urls);
+
+    if (network &#x3D;&#x3D;&#x3D; Network.Basalt) {
+      const filterStatus &#x3D; [Status.Request, Status.Destroyed];
+      responses &#x3D; this.excludeLoansWithStatus(responses, filterStatus);
+    }
+
+    const allApiLoans &#x3D; await this.getAllApiLoans(responses, network);
+
+    for (const apiLoans of allApiLoans) {
+      allActiveLoans &#x3D; allActiveLoans.concat(apiLoans);
+    }
+
+    return allActiveLoans;
+  }
+
+  /**
+   * Gets loan by ID
+   * @param network Selected network
+   * @return Loan
+   */
+  async getLoan(
+    id: string,
+    network: Network
+  ): Promise&lt;Loan&gt; {
+    const apiUrl: string &#x3D; this.getApiUrl(network);
+    const data: any &#x3D; await this.http.get(apiUrl.concat(&#x60;loans/${ id }&#x60;)).toPromise();
+    let apiLoan: any &#x3D; data.content;
+
+    if (network &#x3D;&#x3D;&#x3D; Network.Basalt) {
+      apiLoan &#x3D; (await this.getMulticallData([apiLoan]))[0];
+    }
+
+    const loan &#x3D; await this.completeLoanModels(apiLoan, network);
+    try {
+      return loan;
+    } catch {
+      console.info(&#x27;loan does not exist&#x27;);
+    }
+  }
+
+  /**
+   * Each and call urls
+   * @param urls URL array
+   * @return URL call response
+   */
+  private async getAllUrls(urls: any[]) {
+    // TODO: use http client module
+    try {
+      const data &#x3D; await Promise.all(
+        urls.map(
+          url &#x3D;&gt;
+            fetch(url).then(
+              (response) &#x3D;&gt; response.json()
+            )));
+
+      return (data);
+    } catch (error) {
+      console.info(error);
+      throw (error);
+    }
+  }
+
+  /**
+   * Parse loans data obtained from API and set loan models
+   * @param apiLoans Loans data obtained from API
+   * @param network Selected network
+   * @return Loans array
+   */
+  private async getAllCompleteLoans(apiLoans: any[], network: Network) {
+    try {
+      if (network &#x3D;&#x3D;&#x3D; Network.Basalt) {
+        apiLoans &#x3D; await this.getMulticallData(apiLoans);
+      }
+      const loans &#x3D; await Promise.all(
+        apiLoans.map(
+          loan &#x3D;&gt; this.completeLoanModels(loan, network)
+        )
+      );
+      return (loans);
+
+    } catch (error) {
+      console.info(error);
+      throw (error);
+    }
+  }
+
+  /**
+   * Check basalt loans and complete information not provided by the api
+   * @param apiLoans Loans data obtained from API
+   * @return API Loans with information completed
+   */
+  private async getMulticallData(apiLoans: LoanApiBasalt[]) {
+    const query &#x3D; [];
+    const target: string &#x3D; environment.contracts.basaltEngine;
+    const SEPARATOR &#x3D; &#x27;--&#x27;;
+    const filterKeys &#x3D; {
+      &#x27;interest&#x27;: {
+        method: &#x27;getInterest(uint256)(uint256)&#x27;,
+        handler: (hexValue) &#x3D;&gt; parseInt(hexValue, 16)
+      },
+      &#x27;interest_rate&#x27;: {
+        method: &#x27;getInterestRate(uint256)(uint256)&#x27;,
+        handler: (hexValue) &#x3D;&gt; parseInt(hexValue, 16)
+      },
+      &#x27;punitory_interest&#x27;: {
+        method: &#x27;getPunitoryInterest(uint256)(uint256)&#x27;,
+        handler: (hexValue) &#x3D;&gt; parseInt(hexValue, 16)
+      },
+      &#x27;interest_timestamp&#x27;: {
+        method: &#x27;getInterestTimestamp(uint256)(uint256)&#x27;,
+        handler: (hexValue) &#x3D;&gt; parseInt(hexValue, 16)
+      },
+      &#x27;cosigner&#x27;: {
+        method: &#x27;getCosigner(uint256)(uint256)&#x27;,
+        handler: (hexValue) &#x3D;&gt; hexValue
+      }
+    };
+
+    apiLoans.map((loan: LoanApiBasalt) &#x3D;&gt; {
+      Object.keys(filterKeys).map(key &#x3D;&gt; {
+        if (
+          !loan[key] ||
+          loan[key] &#x3D;&#x3D;&#x3D; &#x27;0&#x27; ||
+          loan[key] &#x3D;&#x3D;&#x3D; Utils.address0x
+        ) {
+          query.push({
+            target,
+            call: [
+              filterKeys[key].method,
+              loan.index
+            ],
+            returns: [
+              [&#x60;${ key + SEPARATOR + loan.index }&#x60;]
+            ]
+          });
+        }
+      });
+    });
+
+    if (query.length) {
+      const call &#x3D; await aggregate(query, this.multicallConfig);
+      const callResults &#x3D; {};
+
+      Object.keys(filterKeys).map(key &#x3D;&gt; {
+        callResults[key] &#x3D; {};
+      });
+
+      Object.keys(call.results).map(item &#x3D;&gt; {
+        const splitItem: string[] &#x3D; item.split(SEPARATOR);
+        const itemKey: string &#x3D; splitItem[0];
+        const itemId: string &#x3D; splitItem[1];
+        const hexValue: string &#x3D; call.results[item]._hex;
+        if (callResults[itemKey]) {
+          callResults[itemKey][itemId] &#x3D; filterKeys[itemKey].handler(hexValue);
+        }
+      });
+
+      apiLoans.map((loan: LoanApiBasalt) &#x3D;&gt; {
+        const id: number &#x3D; Number(loan.index);
+        Object.keys(callResults).map(key &#x3D;&gt; {
+          if (callResults[key][id]) {
+            loan[key] &#x3D; callResults[key][id];
+          }
+        });
+      });
+    }
+
+    return apiLoans;
+  }
+
+  /**
+   * Handle api loan response loading models
+   * @param responses Api responses
+   * @param network Selected network
+   * @return Loans array
+   */
+  private async getAllApiLoans(responses: any[], network: Network) {
+    try {
+      const activeLoans &#x3D; await Promise.all(
+        responses.map(
+          response &#x3D;&gt; this.getAllCompleteLoans(
+            response.content as LoanApiBasalt[] | LoanApiDiaspore[],
+            network
+          )
+        )
+      );
+      return (activeLoans);
+    } catch (error) {
+      console.info(error);
+      throw (error);
+    }
+  }
+
+  /**
+   * Get loans with the model prepared for the dapp.
+   * @param loan Loan data obtained from API
+   * @param network Selected network
+   * @return Loan
+   */
+  private async completeLoanModels(
+    loan: any,
+    network: Network
+  ): Promise&lt;Loan&gt; {
+    switch (network) {
+      case Network.Basalt:
+        return LoanUtils.createBasaltLoan(loan as LoanApiBasalt);
+
+      case Network.Diaspore:
+        let debtInfo: any;
+        let config: any;
+
+        if (!loan.open &amp;&amp; !loan.canceled &amp;&amp; loan.status) {
+          debtInfo &#x3D; await this.getModelDebtInfo(loan.id);
+          config &#x3D; await this.getModelConfig(loan.id);
+        }
+
+        return LoanUtils.createDiasporeLoan(
+          loan as LoanApiDiaspore,
+          debtInfo,
+          config
+        );
+
+      default:
+        break;
+    }
+  }
+
+  /**
+   * Get diaspore loans model debt info if exists
+   * @param loan Loan data obtained from API
+   * @return Model debt info obtained from API
+   */
+  private async getModelDebtInfo(loanId: string) {
+    const apiUrl &#x3D; this.diasporeUrl;
+    return await this.http.get(apiUrl.concat(&#x60;model_debt_info/${ loanId }&#x60;)).toPromise();
+  }
+
+  /**
+   * Get diaspore loans model configs
+   * @param loan Loan data obtained from API
+   * @return Config obtained from API
+   */
+  private async getModelConfig(loanId: string) {
+    const apiUrl &#x3D; this.diasporeUrl;
+    const { content }: any &#x3D; await this.http.get(apiUrl.concat(&#x60;configs/${ loanId }&#x60;)).toPromise();
+    return content.data;
+  }
+
+  /**
+   * Return the api url according to the chosen network
+   * @param network Selected network
+   * @return Api url
+   */
+  private getApiUrl(network: Network) {
+    switch (network) {
+      case Network.Basalt:
+        return this.basaltUrl;
+
+      case Network.Diaspore:
+        return this.diasporeUrl;
+
+      default:
+        break;
+    }
+  }
+
+  /**
+   * Exclude loans with the selected status
+   * @param apiLoans Loans data obtained from API
+   * @param filterStatus Status array to remove
+   * @return Loans data obtained from API excluding selected states
+   */
+  private excludeLoansWithStatus(apiLoans: any[], filterStatus: Status[]) {
+    apiLoans.map(response &#x3D;&gt; {
+      response.content &#x3D; response.content.filter(
+        ({ status }) &#x3D;&gt; {
+          if (!filterStatus.includes(Number(status))) {
+            return true;
+          }
+        }
+      );
+    });
+
+    return apiLoans;
+  }
+
+  /**
+   * Return the api filter key according to the chosen network
+   * @param network Selected network
+   * @return Api filter key
+   */
+  private getApiFilterKey(filter: string, network: Network) {
+    const filters &#x3D; {
+      [Network.Diaspore]: {
+        expiration: &#x27;expiration__gt&#x27;
+      },
+      [Network.Basalt]: {
+        expiration: &#x27;expiration_requests__gt&#x27;
+      }
+    };
+
+    return filters[network][filter];
+  }
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'ApiService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

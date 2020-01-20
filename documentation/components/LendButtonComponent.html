@@ -1,0 +1,2146 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>RCN Credit Marketplace - Documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">RCN Credit Marketplace - Documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>LendButtonComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/shared/lend-button/lend-button.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                    <code><a href="https://angular.io/api/core/OnDestroy" target="_blank" >OnDestroy</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-lend-button</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./lend-button.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./lend-button.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#cosignerService">cosignerService</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#decentralandCosignerProvider">decentralandCosignerProvider</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#dialog">dialog</a>
+                            </li>
+                            <li>
+                                <a href="#horizontalPosition">horizontalPosition</a>
+                            </li>
+                            <li>
+                                <a href="#lendEnabled">lendEnabled</a>
+                            </li>
+                            <li>
+                                <a href="#opPending">opPending</a>
+                            </li>
+                            <li>
+                                <a href="#pendingTx">pendingTx</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#snackBar">snackBar</a>
+                            </li>
+                            <li>
+                                <a href="#txSubscription">txSubscription</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#cancelOperation">cancelOperation</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#clickLend">clickLend</a>
+                            </li>
+                            <li>
+                                <a href="#finishOperation">finishOperation</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#handleLend">handleLend</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy">ngOnDestroy</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#openSnackBar">openSnackBar</a>
+                            </li>
+                            <li>
+                                <a href="#retrievePendingTx">retrievePendingTx</a>
+                            </li>
+                            <li>
+                                <a href="#showApproveDialog">showApproveDialog</a>
+                            </li>
+                            <li>
+                                <a href="#showInsufficientFundsDialog">showInsufficientFundsDialog</a>
+                            </li>
+                            <li>
+                                <a href="#startOperation">startOperation</a>
+                            </li>
+                            <li>
+                                <a href="#trackLendTx">trackLendTx</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#disabled">disabled</a>
+                            </li>
+                            <li>
+                                <a href="#lendToken">lendToken</a>
+                            </li>
+                            <li>
+                                <a href="#loan">loan</a>
+                            </li>
+                            <li>
+                                <a href="#showLendDialog">showLendDialog</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Outputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#endLend">endLend</a>
+                            </li>
+                            <li>
+                                <a href="#startLend">startLend</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#enabled">enabled</a>
+                                </li>
+                                <li>
+                                    <a href="#buttonText">buttonText</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(contractsService: <a href="../injectables/ContractsService.html">ContractsService</a>, txService: <a href="../injectables/TxService.html">TxService</a>, web3Service: <a href="../injectables/Web3Service.html">Web3Service</a>, countriesService: <a href="../injectables/CountriesService.html">CountriesService</a>, eventsService: <a href="../injectables/EventsService.html">EventsService</a>, dialog: MatDialog, snackBar: MatSnackBar, cosignerService: <a href="../injectables/CosignerService.html">CosignerService</a>, decentralandCosignerProvider: <a href="../injectables/DecentralandCosignerProvider.html">DecentralandCosignerProvider</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:52</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>contractsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ContractsService.html" target="_self" >ContractsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>txService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/TxService.html" target="_self" >TxService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>web3Service</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/Web3Service.html" target="_self" >Web3Service</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>countriesService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CountriesService.html" target="_self" >CountriesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>eventsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/EventsService.html" target="_self" >EventsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dialog</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatDialog</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>snackBar</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatSnackBar</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>cosignerService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CosignerService.html" target="_self" >CosignerService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>decentralandCosignerProvider</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/DecentralandCosignerProvider.html" target="_self" >DecentralandCosignerProvider</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section>
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="disabled"></a>
+                        <b>disabled</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:44</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="lendToken"></a>
+                        <b>lendToken</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:42</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="loan"></a>
+                        <b>loan</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/Loan.html" target="_self" >Loan</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:41</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="showLendDialog"></a>
+                        <b>showLendDialog</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:43</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+    <section>
+    <h3 id="outputs">Outputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="endLend"></a>
+                        <b>endLend</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://angular.io/api/core/EventEmitter" target="_blank" >EventEmitter</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:46</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="startLend"></a>
+                        <b>startLend</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://angular.io/api/core/EventEmitter" target="_blank" >EventEmitter</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:45</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cancelOperation"></a>
+                    <span class="name">
+                        <b>
+                            cancelOperation
+                        </b>
+                        <a href="#cancelOperation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cancelOperation()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="345"
+                            class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:345</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Cancel or fail lend operation</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clickLend"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            clickLend
+                        </b>
+                        <a href="#clickLend"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>clickLend()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="109"
+                            class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:109</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Handle click on lend button</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="finishOperation"></a>
+                    <span class="name">
+                        <b>
+                            finishOperation
+                        </b>
+                        <a href="#finishOperation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>finishOperation()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="328"
+                            class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:328</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Finish current lending operation</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleLend"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            handleLend
+                        </b>
+                        <a href="#handleLend"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>handleLend(forze)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="207"
+                            class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:207</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>If the validations were successful, manage the lending transaction</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                    <td>Default value</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>forze</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>false</code>
+                                    </td>
+
+                                    <td>
+                                        <p>TODO - Force lend</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <b>
+                            ngOnDestroy
+                        </b>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="73"
+                            class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:73</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="66"
+                            class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:66</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openSnackBar"></a>
+                    <span class="name">
+                        <b>
+                            openSnackBar
+                        </b>
+                        <a href="#openSnackBar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openSnackBar(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="401"
+                            class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:401</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>message</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="retrievePendingTx"></a>
+                    <span class="name">
+                        <b>
+                            retrievePendingTx
+                        </b>
+                        <a href="#retrievePendingTx"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>retrievePendingTx()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="82"
+                            class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:82</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Retrieve pending Tx</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showApproveDialog"></a>
+                    <span class="name">
+                        <b>
+                            showApproveDialog
+                        </b>
+                        <a href="#showApproveDialog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>showApproveDialog(contract: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, token: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="356"
+                            class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:356</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Show approve dialog</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Default value</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>contract</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        <p>Contract address</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>token</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>environment.contracts.rcnToken</code>
+                                    </td>
+
+                                    <td>
+                                        <p>Token address</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showInsufficientFundsDialog"></a>
+                    <span class="name">
+                        <b>
+                            showInsufficientFundsDialog
+                        </b>
+                        <a href="#showInsufficientFundsDialog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>showInsufficientFundsDialog(required: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, balance: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, currency: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="375"
+                            class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:375</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Show insufficient funds dialog</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>required</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Amount required</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>balance</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Actual user balance in selected currency</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>currency</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>Currency symbol</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="startOperation"></a>
+                    <span class="name">
+                        <b>
+                            startOperation
+                        </b>
+                        <a href="#startOperation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>startOperation()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="336"
+                            class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:336</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Start lend operation</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="trackLendTx"></a>
+                    <span class="name">
+                        <b>
+                            trackLendTx
+                        </b>
+                        <a href="#trackLendTx"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>trackLendTx(tx: <a href="../classes/Tx.html">Tx</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="98"
+                            class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:98</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Track tx</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>tx</td>
+                                    <td>
+                                                <code><a href="../classes/Tx.html" target="_self" >Tx</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cosignerService"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            cosignerService</b>
+                            <a href="#cosignerService"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../injectables/CosignerService.html" target="_self" >CosignerService</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:62</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="decentralandCosignerProvider"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            decentralandCosignerProvider</b>
+                            <a href="#decentralandCosignerProvider"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../injectables/DecentralandCosignerProvider.html" target="_self" >DecentralandCosignerProvider</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:63</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="dialog"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            dialog</b>
+                            <a href="#dialog"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatDialog</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:60</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="horizontalPosition"></a>
+                        <span class="name">
+                            <b>
+                            horizontalPosition</b>
+                            <a href="#horizontalPosition"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatSnackBarHorizontalPosition</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;center&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:50</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="lendEnabled"></a>
+                        <span class="name">
+                            <b>
+                            lendEnabled</b>
+                            <a href="#lendEnabled"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" target="_blank" >Boolean</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:48</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="opPending"></a>
+                        <span class="name">
+                            <b>
+                            opPending</b>
+                            <a href="#opPending"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:49</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="pendingTx"></a>
+                        <span class="name">
+                            <b>
+                            pendingTx</b>
+                            <a href="#pendingTx"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Tx.html" target="_self" >Tx</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>undefined</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:47</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="snackBar"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            snackBar</b>
+                            <a href="#snackBar"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatSnackBar</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:61</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="txSubscription"></a>
+                        <span class="name">
+                            <b>
+                            txSubscription</b>
+                            <a href="#txSubscription"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:52</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+    <section>
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="enabled"></a>
+                        <span class="name"><b>enabled</b><a href="#enabled"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>enabled()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="386" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:386</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="buttonText"></a>
+                        <span class="name"><b>buttonText</b><a href="#buttonText"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>buttonText()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="390" class="link-to-prism">src/app/shared/lend-button/lend-button.component.ts:390</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  Output,
+  EventEmitter
+} from &#x27;@angular/core&#x27;;
+import {
+  MatDialog,
+  MatDialogRef,
+  MatSnackBar,
+  MatSnackBarHorizontalPosition
+} from &#x27;@angular/material&#x27;;
+
+import { Loan, Network } from &#x27;./../../models/loan.model&#x27;;
+import { Utils } from &#x27;../../utils/utils&#x27;;
+
+// App Services
+import { ContractsService } from &#x27;./../../services/contracts.service&#x27;;
+import { TxService, Tx, Type } from &#x27;./../../services/tx.service&#x27;;
+import { DialogApproveContractComponent } from &#x27;../../dialogs/dialog-approve-contract/dialog-approve-contract.component&#x27;;
+import { environment } from &#x27;../../../environments/environment&#x27;;
+import { Web3Service } from &#x27;../../services/web3.service&#x27;;
+import { DialogInsufficientfundsComponent } from &#x27;../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component&#x27;;
+import { CountriesService } from &#x27;../../services/countries.service&#x27;;
+import { EventsService, Category } from &#x27;../../services/events.service&#x27;;
+import { DialogGenericErrorComponent } from &#x27;../../dialogs/dialog-generic-error/dialog-generic-error.component&#x27;;
+import { DialogClientAccountComponent } from &#x27;../../dialogs/dialog-client-account/dialog-client-account.component&#x27;;
+import { DialogWrongCountryComponent } from &#x27;../../dialogs/dialog-wrong-country/dialog-wrong-country.component&#x27;;
+import { DialogLoanLendComponent } from &#x27;../../dialogs/dialog-loan-lend/dialog-loan-lend.component&#x27;;
+import { CosignerService } from &#x27;./../../services/cosigner.service&#x27;;
+import { DecentralandCosignerProvider } from &#x27;./../../providers/cosigners/decentraland-cosigner-provider&#x27;;
+
+@Component({
+  selector: &#x27;app-lend-button&#x27;,
+  templateUrl: &#x27;./lend-button.component.html&#x27;,
+  styleUrls: [&#x27;./lend-button.component.scss&#x27;]
+})
+export class LendButtonComponent implements OnInit, OnDestroy {
+  @Input() loan: Loan;
+  @Input() lendToken: string;
+  @Input() showLendDialog: boolean;
+  @Input() disabled: boolean;
+  @Output() startLend &#x3D; new EventEmitter();
+  @Output() endLend &#x3D; new EventEmitter();
+  pendingTx: Tx &#x3D; undefined;
+  lendEnabled: Boolean;
+  opPending &#x3D; false;
+  horizontalPosition: MatSnackBarHorizontalPosition &#x3D; &#x27;center&#x27;;
+
+  txSubscription: boolean;
+
+  constructor(
+    private contractsService: ContractsService,
+    private txService: TxService,
+    private web3Service: Web3Service,
+    private countriesService: CountriesService,
+    private eventsService: EventsService,
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar,
+    public cosignerService: CosignerService,
+    public decentralandCosignerProvider: DecentralandCosignerProvider
+  ) { }
+
+  async ngOnInit() {
+    this.retrievePendingTx();
+
+    const lendEnabled &#x3D; await this.countriesService.lendEnabled();
+    this.lendEnabled &#x3D; lendEnabled;
+  }
+
+  ngOnDestroy() {
+    if (this.txSubscription &amp;&amp; this.showLendDialog) {
+      this.txService.unsubscribeConfirmedTx(async (tx: Tx) &#x3D;&gt; this.trackLendTx(tx));
+    }
+  }
+
+  /**
+   * Retrieve pending Tx
+   */
+  retrievePendingTx() {
+    this.pendingTx &#x3D; this.txService.getLastPendingLend(this.loan);
+
+    if (this.pendingTx) {
+      this.startLend.emit();
+    }
+
+    if (!this.txSubscription) {
+      this.txSubscription &#x3D; true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) &#x3D;&gt; this.trackLendTx(tx));
+    }
+  }
+
+  /**
+   * Track tx
+   */
+  trackLendTx(tx: Tx) {
+    if (tx.type &#x3D;&#x3D;&#x3D; Type.lend &amp;&amp; tx.data.id &#x3D;&#x3D;&#x3D; this.loan.id) {
+      this.endLend.emit();
+      this.web3Service.updateBalanceEvent.emit();
+      this.txSubscription &#x3D; false;
+    }
+  }
+
+  /**
+   * Handle click on lend button
+   */
+  async clickLend() {
+    // country validation
+    if (!this.lendEnabled) {
+      this.dialog.open(DialogWrongCountryComponent);
+      return;
+    }
+    // pending tx validation
+    if (this.pendingTx) {
+      window.open(environment.network.explorer.tx.replace(
+        &#x27;${tx}&#x27;,
+        this.pendingTx.tx
+      ), &#x27;_blank&#x27;);
+      return;
+    }
+    // disabled button validation
+    if (this.disabled) {
+      return;
+    }
+    // debt validation
+    if (this.loan.debt) {
+      this.openSnackBar(&#x27;The loan has already been lend&#x27;, &#x27;&#x27;);
+      return;
+    }
+    // cosigner validation
+    const cosigner &#x3D; this.cosignerService.getCosigner(this.loan);
+    if (cosigner instanceof DecentralandCosignerProvider) {
+      const isParcelStatusOpen &#x3D; await cosigner.getStatusOfParcel(this.loan);
+      if (!isParcelStatusOpen) {
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: {
+            error: new Error(&#x27;Not Available, Parcel is already sold&#x27;)
+          }
+        });
+        return;
+      }
+      const isMortgageCancelled &#x3D; await cosigner.isMortgageCancelled(this.loan);
+      if (isMortgageCancelled) {
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: {
+            error: new Error(&#x27;Not Available, Mortgage has been cancelled&#x27;)
+          }
+        });
+        return;
+      }
+    }
+    // unlogged user
+    if (!this.web3Service.loggedIn) {
+      const hasClient &#x3D; await this.web3Service.requestLogin();
+      if (this.web3Service.loggedIn) {
+        this.handleLend();
+        return;
+      }
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
+      }
+      return;
+    }
+    // borrower validation
+    const account: string &#x3D; await this.web3Service.getAccount();
+    if (this.loan.borrower.toLowerCase() &#x3D;&#x3D;&#x3D; account.toLowerCase()) {
+      this.openSnackBar(&#x27;The lender cannot be the same as the borrower&#x27;, &#x27;&#x27;);
+      return;
+    }
+    if (this.loan.network &#x3D;&#x3D;&#x3D; Network.Basalt) {
+      this.handleLend();
+      return;
+    }
+    // lend token validation
+    const token &#x3D; this.lendToken;
+    if (!this.showLendDialog &amp;&amp; !token) {
+      this.openSnackBar(&#x27;Please choose a currency&#x27;, &#x27;&#x27;);
+      return;
+    }
+
+    if (this.showLendDialog) {
+      const dialogRef &#x3D; this.dialog.open(DialogLoanLendComponent, {
+        data: {
+          loan: this.loan
+        }
+      });
+      dialogRef.afterClosed().subscribe(() &#x3D;&gt; {
+        this.retrievePendingTx();
+      });
+      return;
+    }
+
+    this.eventsService.trackEvent(
+      &#x27;click-lend&#x27;,
+      Category.Loan,
+      &#x27;request #&#x27; + this.loan.id
+    );
+    this.handleLend();
+  }
+
+  /**
+   * If the validations were successful, manage the lending transaction
+   * @param forze TODO - Force lend
+   */
+  async handleLend(forze &#x3D; false) {
+    if (this.opPending &amp;&amp; !forze) {
+      return;
+    }
+
+    this.startOperation();
+
+    try {
+      const oracleData &#x3D; await this.contractsService.getOracleData(this.loan.oracle);
+
+      // set input lend token
+      const web3: any &#x3D; this.web3Service.web3;
+      let lendToken: string &#x3D; this.lendToken;
+      if (this.loan.network &#x3D;&#x3D;&#x3D; Network.Basalt) {
+        lendToken &#x3D; environment.contracts.rcnToken;
+      }
+
+      // set value in specified token
+      const balance &#x3D; await this.contractsService.getUserBalanceInToken(lendToken);
+      let required: any &#x3D; await this.contractsService.estimateLendAmount(this.loan, lendToken);
+      let contractAddress: string;
+      let payableAmount: any;
+
+      // set lend contract
+      switch (lendToken) {
+        case environment.contracts.rcnToken:
+          contractAddress &#x3D; this.loan.address;
+          break;
+
+        case environment.contracts.converter.ethAddress:
+          contractAddress &#x3D; environment.contracts.converter.converterRamp;
+
+          required &#x3D; Number(required).toFixed(0);
+          payableAmount &#x3D; required;
+          break;
+
+        default:
+          contractAddress &#x3D; environment.contracts.converter.converterRamp;
+          break;
+      }
+
+      // validate balance amount
+      if (Number(balance) &gt; Number(required)) {
+        let tx: string;
+
+        // validate approve
+        const engineApproved &#x3D; await this.contractsService.isApproved(contractAddress, lendToken);
+        if (!await engineApproved) {
+          this.showApproveDialog(contractAddress, this.lendToken);
+          return;
+        }
+
+        let account: string &#x3D; await this.web3Service.getAccount();
+        account &#x3D; web3.toChecksumAddress(account);
+
+        switch (this.loan.network) {
+          case Network.Basalt:
+            tx &#x3D; await this.contractsService.lendLoan(this.loan);
+            this.txService.registerLendTx(tx, environment.contracts.basaltEngine, this.loan);
+            break;
+
+          case Network.Diaspore:
+            if (lendToken &#x3D;&#x3D;&#x3D; environment.contracts.rcnToken) {
+              tx &#x3D; await this.contractsService.lendLoan(this.loan);
+            } else {
+              const tokenConverter &#x3D; environment.contracts.converter.tokenConverter;
+
+              tx &#x3D; await this.contractsService.converterRampLend(
+                payableAmount,
+                tokenConverter,
+                lendToken,
+                required,
+                Utils.address0x,
+                this.loan.id,
+                oracleData,
+                &#x27;0x&#x27;,
+                &#x27;0x&#x27;,
+                account
+              );
+            }
+            this.txService.registerLendTx(tx, environment.contracts.diaspore.loanManager, this.loan);
+            break;
+
+          default:
+            break;
+        }
+
+        this.eventsService.trackEvent(
+          &#x27;lend&#x27;,
+          Category.Account,
+          &#x27;loan #&#x27; + this.loan.id
+        );
+
+        this.retrievePendingTx();
+      } else {
+        this.eventsService.trackEvent(
+          &#x27;show-insufficient-funds-lend&#x27;,
+          Category.Account,
+          &#x27;loan #&#x27; + this.loan.id,
+          required
+        );
+
+        const currency &#x3D; environment.usableCurrencies.filter(token &#x3D;&gt; token.address &#x3D;&#x3D;&#x3D; lendToken)[0];
+        this.showInsufficientFundsDialog(required, balance, currency.symbol);
+      }
+    } catch (e) {
+      // Don&#x27;t show &#x27;User denied transaction signature&#x27; error
+      if (e.stack.indexOf(&#x27;User denied transaction signature&#x27;) &lt; 0) {
+        this.dialog.open(DialogGenericErrorComponent, {
+          data: { error: e }
+        });
+      }
+      console.error(e);
+    } finally {
+      this.finishOperation();
+    }
+  }
+
+  /**
+   * Finish current lending operation
+   */
+  finishOperation() {
+    console.info(&#x27;Lend finished&#x27;);
+    this.opPending &#x3D; false;
+  }
+
+  /**
+   * Start lend operation
+   */
+  startOperation() {
+    console.info(&#x27;Started lend&#x27;);
+    this.openSnackBar(&#x27;Your transaction is being processed. It may take a few seconds&#x27;, &#x27;&#x27;);
+    this.opPending &#x3D; true;
+  }
+
+  /**
+   * Cancel or fail lend operation
+   */
+  cancelOperation() {
+    console.info(&#x27;Cancel lend&#x27;);
+    this.openSnackBar(&#x27;Your transaction has failed&#x27;, &#x27;&#x27;);
+    this.opPending &#x3D; false;
+  }
+
+  /**
+   * Show approve dialog
+   * @param contract Contract address
+   * @param token Token address
+   */
+  showApproveDialog(contract: string, token: string &#x3D; environment.contracts.rcnToken) {
+    const dialogRef: MatDialogRef&lt;DialogApproveContractComponent&gt; &#x3D; this.dialog.open(DialogApproveContractComponent);
+    dialogRef.componentInstance.onlyAddress &#x3D; contract;
+    dialogRef.componentInstance.onlyToken &#x3D; token;
+    dialogRef.afterClosed().subscribe(result &#x3D;&gt; {
+      if (result) {
+        this.handleLend(true);
+      } else {
+        this.cancelOperation();
+      }
+    });
+  }
+
+  /**
+   * Show insufficient funds dialog
+   * @param required Amount required
+   * @param balance Actual user balance in selected currency
+   * @param currency Currency symbol
+   */
+  showInsufficientFundsDialog(required: number, balance: number, currency: string) {
+    this.dialog.open(DialogInsufficientfundsComponent, {
+      data: {
+        required,
+        balance,
+        currency
+      }
+    });
+    this.cancelOperation();
+  }
+
+  get enabled(): Boolean {
+    return this.txService.getLastPendingLend(this.loan) &#x3D;&#x3D;&#x3D; undefined;
+  }
+
+  get buttonText(): string {
+    const tx &#x3D; this.pendingTx;
+    if (tx &#x3D;&#x3D;&#x3D; undefined) {
+      return &#x27;Lend&#x27;;
+    }
+    if (tx.confirmed) {
+      return &#x27;Lent&#x27;;
+    }
+    return &#x27;Lending...&#x27;;
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+      horizontalPosition: this.horizontalPosition
+    });
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;a
+  mat-raised-button
+  (click)&#x3D;&#x27;clickLend()&#x27;
+  class&#x3D;&quot;button button-primary&quot;
+  [matTooltip]&#x3D;&quot;this.lendEnabled ? &#x27;&#x27; : &#x27;This feature is not enabled in your country&#x27;&quot;
+  matTooltipPosition&#x3D;&quot;above&quot;
+&gt;
+  {{ buttonText }}
+  &lt;div
+    style&#x3D;&quot;display: inline; margin-left: 5px; vertical-align: baseline;&quot;
+    *ngIf&#x3D;&#x27;opPending&#x27;
+  &gt;
+    &lt;i class&#x3D;&quot;fa fa-circle-notch fa-spin&quot;&gt;&lt;/i&gt;
+  &lt;/div&gt;
+&lt;/a&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./lend-button.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss"></code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><a  mat-raised-button  (click)=\'clickLend()\'  class="button button-primary"  [matTooltip]="this.lendEnabled ? \'\' : \'This feature is not enabled in your country\'"  matTooltipPosition="above">  {{ buttonText }}  <div    style="display: inline; margin-left: 5px; vertical-align: baseline;"    *ngIf=\'opPending\'  >    <i class="fa fa-circle-notch fa-spin"></i>  </div></a></div>'
+    var COMPONENTS = [{'name': 'ActiveLoansComponent', 'selector': 'app-active-loans'},{'name': 'AddressComponent', 'selector': 'app-address'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AvatarComponent', 'selector': 'app-avatar'},{'name': 'AvatarTitleComponent', 'selector': 'app-avatar-title'},{'name': 'BalanceComponent', 'selector': 'app-component-balance'},{'name': 'BodyListComponent', 'selector': 'app-body-list'},{'name': 'ButtonGroupComponent', 'selector': 'app-button-group'},{'name': 'ClaimButtonComponent', 'selector': 'app-claim-button'},{'name': 'CloseButtonComponent', 'selector': 'app-close-button'},{'name': 'ContentWrapperComponent', 'selector': 'app-content-wrapper'},{'name': 'ConversionGraphicComponent', 'selector': 'app-conversion-graphic'},{'name': 'CosignerSelectorComponent', 'selector': 'app-cosigner-selector'},{'name': 'CreatorContainerComponent', 'selector': 'app-creator-container'},{'name': 'CurrencyLogoComponent', 'selector': 'app-currency-logo'},{'name': 'DecentralandCosignerComponent', 'selector': 'app-decentraland-cosigner'},{'name': 'DecentralandMapComponent', 'selector': 'app-decentraland-map'},{'name': 'DetailButtonComponent', 'selector': 'app-detail-button'},{'name': 'DetailCosignerComponent', 'selector': 'app-detail-cosigner'},{'name': 'DetailIdentityComponent', 'selector': 'app-detail-identity'},{'name': 'DetailTableComponent', 'selector': 'app-detail-table'},{'name': 'DialogApproveContractComponent', 'selector': 'app-dialog-approve-contract'},{'name': 'DialogClientAccountComponent', 'selector': 'app-dialog-client-account'},{'name': 'DialogGenericErrorComponent', 'selector': 'app-dialog-generic-error'},{'name': 'DialogHeaderComponent', 'selector': 'app-dialog-header'},{'name': 'DialogInsufficientfundsComponent', 'selector': 'app-dialog-insufficient-funds'},{'name': 'DialogLoanLendComponent', 'selector': 'app-dialog-loan-lend'},{'name': 'DialogLoanPayComponent', 'selector': 'app-dialog-loan-pay'},{'name': 'DialogLoanTransferComponent', 'selector': 'app-dialog-loan-transfer'},{'name': 'DialogWrongCountryComponent', 'selector': 'app-dialog-wrong-country'},{'name': 'ErrorDetailsComponent', 'selector': 'app-error-details'},{'name': 'FilterLoansComponent', 'selector': 'app-filter-loans'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GobackButtonComponent', 'selector': 'app-goback-button'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HeaderListComponent', 'selector': 'app-header-list'},{'name': 'IconAvatarComponent', 'selector': 'app-icon-avatar'},{'name': 'IconGroupHeaderComponent', 'selector': 'app-icon-group-header'},{'name': 'InfiniteProgressBarComponent', 'selector': 'app-infinite-progress-bar'},{'name': 'ItemFeatureComponent', 'selector': 'app-item-feature'},{'name': 'LendButtonComponent', 'selector': 'app-lend-button'},{'name': 'LoanAvatarComponent', 'selector': 'app-loan-avatar'},{'name': 'LoanCardComponent', 'selector': 'app-loan-card'},{'name': 'LoanDetailComponent', 'selector': 'app-loan-detail'},{'name': 'LoanDoesNotExistComponent', 'selector': 'app-loan-does-not-exist'},{'name': 'NotFoundComponent', 'selector': 'app-not-found'},{'name': 'NotificationItemComponent', 'selector': 'app-notification-item'},{'name': 'NotificationsComponent', 'selector': 'app-notifications'},{'name': 'PayButtonComponent', 'selector': 'app-pay-button'},{'name': 'RequestedLoanComponent', 'selector': 'app-requested-loan'},{'name': 'RiskIndicatorComponent', 'selector': 'app-risk-indicator'},{'name': 'SocialContainerComponent', 'selector': 'app-social-container'},{'name': 'TransactionHistoryComponent', 'selector': 'app-transaction-history'},{'name': 'TransferButtonComponent', 'selector': 'app-transfer-button'}];
+    var DIRECTIVES = [{'name': 'ClickOutsideDirective', 'selector': '[appClickOutside]'}];
+    var ACTUAL_COMPONENT = {'name': 'LendButtonComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'LendButtonComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
