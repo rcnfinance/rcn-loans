@@ -17,7 +17,7 @@
     "postinstall": "node patch-crypto.js",
     "e2e": "jest",
     "ipfs-deploy": "node ipfs-deploy.js",
-    "compodoc": "npx compodoc -p src/tsconfig.app.json --theme 'material'"
+    "documentation": "npx compodoc -p src/tsconfig.app.json -n \"RCN Credit Marketplace - Documentation\" --theme 'material'"
   },
   "pre-commit": [
     "lint"
