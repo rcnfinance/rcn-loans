@@ -96,8 +96,8 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
       'display': []
     },
     'loan_in_debt': {
-      'title': 'In Debt',
-      'message': 'In Debt',
+      'title': 'Overdue',
+      'message': 'Overdue',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'error_outline',
