@@ -16,7 +16,8 @@
     "preinstall": "bash ./bin/preinstall.sh",
     "postinstall": "node patch-crypto.js",
     "e2e": "jest",
-    "ipfs-deploy": "node ipfs-deploy.js"
+    "ipfs-deploy": "node ipfs-deploy.js",
+    "compodoc": "npx compodoc -p src/tsconfig.app.json --theme 'material'"
   },
   "pre-commit": [
     "lint"
@@ -63,6 +64,7 @@
     "@angular/cli": "^8.3.14",
     "@angular/compiler-cli": "^8.2.12",
     "@angular/language-service": "^8.2.12",
+    "@compodoc/compodoc": "^1.1.11",
     "@types/jasmine": "^2.8.11",
     "@types/jasminewd2": "~2.0.2",
     "@types/jest": "^23.3.9",
