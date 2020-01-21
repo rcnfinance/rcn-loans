@@ -57,7 +57,7 @@ export class DialogLoanTransferComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
 
-    this.account = web3.toChecksumAddress(account);
+    this.account = web3.utils.toChecksumAddress(account);
     this.shortAccount = Utils.shortAddress(this.account);
   }
 
@@ -95,7 +95,7 @@ export class DialogLoanTransferComponent implements OnInit {
     const web3 = this.web3Service.web3;
     const form: FormGroup = this.form;
 
-    if (web3.isAddress(form.value.address)) {
+    if (web3.utils.isAddress(form.value.address)) {
       this.invalidAddress = false;
     } else {
       this.invalidAddress = true;

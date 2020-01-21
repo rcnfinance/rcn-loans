@@ -421,7 +421,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     const web3: any = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
 
-    this.account = web3.toChecksumAddress(account);
+    this.account = web3.utils.toChecksumAddress(account);
     return this.account;
   }
 }
