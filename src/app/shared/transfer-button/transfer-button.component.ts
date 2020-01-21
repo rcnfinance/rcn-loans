@@ -187,7 +187,6 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
           data: { error: err }
         });
       }
-      console.error(err);
     } finally {
       this.finishOperation();
     }

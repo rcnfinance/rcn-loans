@@ -258,7 +258,6 @@ export class PayButtonComponent implements OnInit, OnDestroy {
           data: { error: err }
         });
       }
-      console.error(err);
     } finally {
       this.finishOperation();
     }

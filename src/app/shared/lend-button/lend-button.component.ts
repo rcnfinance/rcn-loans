@@ -317,7 +317,6 @@ export class LendButtonComponent implements OnInit, OnDestroy {
           data: { error: err }
         });
       }
-      console.error(err);
     } finally {
       this.finishOperation();
     }
