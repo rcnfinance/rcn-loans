@@ -370,8 +370,8 @@ export class StepCreateCollateralComponent implements OnInit {
     );
     const collateralToken: string = this.collateralSelectedCurrency.address;
     const collateralAmount: number = form.value.collateralAmount * (10 ** currency.decimals);
-    const liquidationRatio: number = new web3.BigNumber(form.value.liquidationRatio).mul(100);
-    const balanceRatio: number = new web3.BigNumber(form.value.balanceRatio).mul(100);
+    const liquidationRatio: number = this.ratio(form.value.liquidationRatio);
+    const balanceRatio: number = this.ratio(form.value.balanceRatio);
     const burnFee: number = new web3.BigNumber(500);
     const rewardFee: number = new web3.BigNumber(500);
     const account: string = this.account;
@@ -425,5 +425,17 @@ export class StepCreateCollateralComponent implements OnInit {
         console.error(message);
         break;
     }
+  }
+
+  /**
+   * Return ratio
+   * @param num Ratio %
+   * @return Ratio value
+   */
+  private ratio (num) {
+    const web3: any = this.web3Service.web3;
+    const bn = (n) => new web3.BigNumber(n);
+
+    return bn(num).mul(bn(2).pow(bn(32))).div(bn(100));
   }
 }

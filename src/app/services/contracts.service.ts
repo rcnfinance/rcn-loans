@@ -911,6 +911,7 @@ export class ContractsService {
   ) {
     const web3 = this.web3.opsWeb3;
 
+    // FIXME: see collateral with ETH implementation
     if (collateralToken === environment.contracts.converter.ethAddress) {
       return await promisify(this.loadAltContract(web3, this._collateralWethManager).create, [
         loanId,
@@ -932,8 +933,6 @@ export class ContractsService {
       entryAmount,
       liquidationRatio,
       balanceRatio,
-      burnFee,
-      rewardFee,
       { from: account }
     ]);
   }
