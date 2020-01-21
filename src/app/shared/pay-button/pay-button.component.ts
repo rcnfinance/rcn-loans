@@ -152,7 +152,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'click-pay',
       Category.Loan,
-      'loan #' + this.loan.id
+      'loan ' + this.loan.id
     );
     this.handlePay();
   }
@@ -182,7 +182,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
           this.eventsService.trackEvent(
             'show-insufficient-funds-lend',
             Category.Account,
-            'loan #' + this.loan.id,
+            'loan ' + this.loan.id,
             requiredTokens
           );
           this.showInsufficientFundsDialog(requiredTokens, balance, currency);
@@ -214,7 +214,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'set-to-pay-loan',
           Category.Loan,
-          'loan #' + this.loan.id + ' of ' + amount
+          'loan ' + this.loan.id + ' of ' + amount
         );
 
         const tx = await this.contractsService.payLoan(this.loan, amount);
@@ -222,7 +222,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'pay-loan',
           Category.Loan,
-          'loan #' + this.loan.id + ' of ' + amount
+          'loan ' + this.loan.id + ' of ' + amount
         );
 
         let engine: string;

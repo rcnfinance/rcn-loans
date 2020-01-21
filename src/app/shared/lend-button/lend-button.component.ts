@@ -195,7 +195,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'click-lend',
       Category.Loan,
-      'request #' + this.loan.id
+      'request ' + this.loan.id
     );
     this.handleLend();
   }
@@ -294,7 +294,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'lend',
           Category.Account,
-          'loan #' + this.loan.id
+          'loan ' + this.loan.id
         );
 
         this.retrievePendingTx();
@@ -302,7 +302,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'show-insufficient-funds-lend',
           Category.Account,
-          'loan #' + this.loan.id,
+          'loan ' + this.loan.id,
           required
         );
 

@@ -142,7 +142,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'click-transfer-loan',
       Category.Loan,
-      'loan #' + this.loan.id
+      'loan ' + this.loan.id
     );
     this.handleTransfer();
   }
@@ -156,7 +156,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'set-to-transfer-loan',
       Category.Loan,
-      'loan #' + this.loan.id + ' to ' + to
+      'loan ' + this.loan.id + ' to ' + to
     );
 
     this.startOperation();
@@ -167,7 +167,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
       this.eventsService.trackEvent(
         'transfer-loan',
         Category.Loan,
-        'loan #' + this.loan.id + ' to ' + to
+        'loan ' + this.loan.id + ' to ' + to
       );
 
       this.txService.registerTransferTx(
