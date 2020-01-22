@@ -55,6 +55,7 @@
     "recursive-fs": "^1.1.2",
     "rxjs": "^6.2.2",
     "rxjs-compat": "^6.2.2",
+    "walletlink": "^1.0.0",
     "web3": "^1.2.4",
     "xhr2-cookies": "^1.1.0",
     "zone.js": "^0.9.1"
