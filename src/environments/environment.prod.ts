@@ -16,6 +16,7 @@ declare let require: any;
 const p = require('../../package.json') as any;
 
 const RCN_TOKEN = '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6';
+const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 
 export const environment = {
   version: p.version,
@@ -47,7 +48,10 @@ export const environment = {
       address: 'https://etherscan.io/address/${address}',
       tx: 'https://etherscan.io/tx/${tx}'
     },
-    provider: 'https://mainnet.infura.io/v3/acf3c538f57040839369e7c1b023c3c6'
+    provider: {
+      id: INFURA_ID,
+      url: `https://ropsten.infura.io/v3/${ INFURA_ID }`
+    }
   },
   contracts: {
     rcnToken: RCN_TOKEN,

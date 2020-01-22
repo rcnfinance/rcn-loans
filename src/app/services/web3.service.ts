@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material';
 const Web3 = require('web3');
 const WalletLink = require('walletlink');
+import WalletConnectProvider from '@walletconnect/web3-provider';
 
 import { environment } from '../../environments/environment';
 import { promisify } from '../utils/utils';
@@ -78,7 +79,7 @@ export class Web3Service {
       return true;
     }
 
-    const wallet = window.prompt('Choose a wallet (1 = Coinbase, 2 = Metamask)');
+    const wallet = window.prompt('Choose a wallet (1 = Coinbase, 2 = Metamask, 3 = WalletConnect)');
     let walletMethod: Promise<boolean>;
 
     switch (wallet) {
@@ -89,6 +90,11 @@ export class Web3Service {
 
       case '2':
         await this.loadBrowserWallet();
+        walletMethod = this.browserLogin();
+        break;
+
+      case '3':
+        await this.loadWalletconnectWallet();
         walletMethod = this.browserLogin();
         break;
 
@@ -156,7 +162,7 @@ export class Web3Service {
   private async loadWalletlinkWallet() {
     const APP_NAME = this.title.getTitle();
     const APP_LOGO_URL = 'https://rcn.loans/assets/rcn-logo.png';
-    const ETH_JSONRPC_URL = environment.network.provider;
+    const ETH_JSONRPC_URL = environment.network.provider.url;
     const CHAIN_ID = environment.network.id;
 
     // Initialize WalletLink
@@ -170,6 +176,33 @@ export class Web3Service {
 
     // set scoped ethereum
     this._ethereum = ethereum;
+  }
+
+  /**
+   * Make web3 provider using WalletConnect
+   */
+  private async loadWalletconnectWallet() {
+    //  Create WalletConnect Provider
+    const provider = new WalletConnectProvider({
+      infuraId: environment.network.provider.id,
+      chainId: environment.network.id
+    });
+
+    //  Enable session (triggers QR Code modal)
+    await provider.enable();
+
+    //  Create Web3
+    const candWeb3 = new Web3(provider);
+    const accounts = await promisify(candWeb3.eth.getAccounts, []);
+    if (accounts && accounts.length) {
+      console.info('Logged in');
+      this.account = accounts[0];
+      this.web3account = candWeb3;
+      this.loginEvent.emit(true);
+    }
+
+    // set scoped ethereum
+    this._ethereum = provider;
   }
 
   /**
@@ -241,6 +274,6 @@ export class Web3Service {
   }
 
   private buildWeb3(): any {
-    return new Web3(new Web3.providers.HttpProvider(environment.network.provider));
+    return new Web3(new Web3.providers.HttpProvider(environment.network.provider.url));
   }
 }
