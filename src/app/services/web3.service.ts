@@ -210,6 +210,11 @@ export class Web3Service {
    * @return Successful login
    */
   private async browserLogin(): Promise<boolean> {
+    if (typeof window.web3 === 'undefined') {
+      // TODO: Open dialog for get metamask
+      throw Error('Please get Metamask');
+    }
+
     // validate network id
     const candWeb3 = new Web3(this.ethereum);
     const expectedNetworkId = environment.network.id;
