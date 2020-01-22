@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-sm-12 d-none d-lg-block">
+    <div class="title">
+      {{ title }}
+    </div>
+    <div class="subtitle">
+      {{ description }}
+    </div>
+    <mat-chip-list *ngIf="hasChip">
+      <mat-chip
+        class="mat-chip mat-chip--gray mt-4"
+        selected="true"
+      >
+        {{ chipValue }} {{ chipLabel }}
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+</div>
