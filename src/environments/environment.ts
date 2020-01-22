@@ -41,7 +41,7 @@ export const environment = {
     url: 'https://oracle.ripio.com/rate/'
   },
   network: {
-    id: '3',
+    id: 3,
     name: 'Ropsten',
     explorer: {
       address: 'https://ropsten.etherscan.io/address/${address}',

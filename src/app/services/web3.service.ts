@@ -1,6 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material';
 const Web3 = require('web3');
+const WalletLink = require('walletlink');
 
 import { environment } from '../../environments/environment';
 import { promisify } from '../utils/utils';
@@ -15,6 +17,7 @@ export class Web3Service {
   updateBalanceEvent = new EventEmitter();
 
   private _web3: any;
+  private _ethereum: any;
 
   // Account properties
   private web3account: any;
@@ -22,37 +25,14 @@ export class Web3Service {
   private isLogging: boolean;
 
   constructor(
+    private title: Title,
     private snackbar: MatSnackBar
   ) {
     this._web3 = this.buildWeb3();
+  }
 
-    if (typeof window.web3 !== 'undefined') {
-      // Use Mist/MetaMask's provider
-      console.info('Web3 provider detected');
-
-      // validate network id
-      const candWeb3 = new Web3(window.web3.currentProvider);
-      const expectedNetworkId = environment.network.id;
-
-      candWeb3.eth.net.getId(async (err, networkId) => {
-        if (!err && networkId === Number(expectedNetworkId)) {
-
-          // set web3 account
-          const accounts = await promisify(candWeb3.eth.getAccounts, []);
-          if (accounts && accounts.length) {
-            console.info('Logged in');
-            this.account = accounts[0];
-            this.web3account = candWeb3;
-            this.loginEvent.emit(true);
-          }
-
-        } else {
-          console.info('Mismatch provider network ID', networkId, environment.network.id);
-        }
-      });
-
-      this.listenAccountUpdates();
-    }
+  get ethereum(): any {
+    return this._ethereum;
   }
 
   get web3(): any {
@@ -68,51 +48,6 @@ export class Web3Service {
   }
 
   /**
-   * Request wallet login and approve connection
-   * @fires loginEvent Boolean login event
-   * @return User has wallet
-   */
-  async requestLogin(): Promise<boolean> {
-    if (this.loggedIn || this.isLogging) {
-      return true;
-    }
-    if (!window.ethereum) {
-      return false;
-    }
-
-    // validate network id
-    const candWeb3 = new Web3(window.ethereum);
-    const expectedNetworkId = environment.network.id;
-    const expectedNetworkName = environment.network.name;
-    const networkId = await promisify(candWeb3.eth.net.getId, []);
-
-    if (networkId !== Number(expectedNetworkId)) {
-      console.info('Mismatch provider network ID', expectedNetworkId, environment.network.id);
-      this.snackbar.open(`Please connect to the ${ expectedNetworkName } Network.`, null, {
-        duration: 4000,
-        horizontalPosition: 'center'
-      });
-      return true;
-    }
-
-    // handle wallet connection
-    try {
-      this.isLogging = true;
-      await window.ethereum.enable();
-    } catch (e) {
-      console.info('User rejected login');
-      this.isLogging = false;
-      this.loginEvent.emit(false);
-      return true;
-    }
-
-    this.isLogging = false;
-    this.web3account = candWeb3;
-    this.loginEvent.emit(true);
-    return true;
-  }
-
-  /**
    * Get wallet account
    * @return Account address
    */
@@ -124,7 +59,7 @@ export class Web3Service {
       return this.account;
     }
 
-    const accounts = await promisify(this.web3account.eth.getAccounts, []);
+    const accounts: string[] = await this.ethereum.send('eth_requestAccounts');
     if (!accounts || accounts.length === 0) {
       return;
     }
@@ -134,10 +69,160 @@ export class Web3Service {
   }
 
   /**
+   * Request wallet login and approve connection
+   * @fires loginEvent Boolean login event
+   * @return User has wallet
+   */
+  async requestLogin(): Promise<boolean> {
+    if (this.loggedIn || this.isLogging) {
+      return true;
+    }
+
+    const wallet = window.prompt('Choose a wallet (1 = Coinbase, 2 = Metamask)');
+    let walletMethod: Promise<boolean>;
+
+    switch (wallet) {
+      case '1':
+        await this.loadWalletlinkWallet();
+        walletMethod = this.walletlinkLogin();
+        break;
+
+      case '2':
+        await this.loadBrowserWallet();
+        walletMethod = this.browserLogin();
+        break;
+
+      default:
+        throw Error('Invalid wallet');
+    }
+
+    // start login operation
+    this.isLogging = true;
+
+    try {
+      const successfulLogin = await walletMethod;
+
+      if (successfulLogin) {
+        const candWeb3 = new Web3(this.ethereum);
+        this.web3account = candWeb3;
+        this.listenAccountUpdates();
+      }
+
+      this.loginEvent.emit(successfulLogin);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      this.isLogging = false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Make web3 provider using a browser or extension
+   */
+  private async loadBrowserWallet() {
+    if (typeof window.web3 === 'undefined') {
+      return;
+    }
+
+    // set scoped ethereum
+    this._ethereum = window.ethereum;
+    console.info('Web3 provider detected');
+
+    // validate network id
+    const candWeb3 = new Web3(window.web3.currentProvider);
+    const expectedNetworkId = environment.network.id;
+    const networkId = await promisify(candWeb3.eth.net.getId, []);
+
+    if (networkId !== expectedNetworkId) {
+      console.info('Mismatch provider network ID', networkId, expectedNetworkId);
+      return;
+    }
+
+    // set web3 account
+    const accounts = await promisify(candWeb3.eth.getAccounts, []);
+    if (accounts && accounts.length) {
+      console.info('Logged in');
+      this.account = accounts[0];
+      this.web3account = candWeb3;
+      this.loginEvent.emit(true);
+    }
+  }
+
+  /**
+   * Make web3 provider using WalletLink
+   */
+  private async loadWalletlinkWallet() {
+    const APP_NAME = this.title.getTitle();
+    const APP_LOGO_URL = 'https://rcn.loans/assets/rcn-logo.png';
+    const ETH_JSONRPC_URL = environment.network.provider;
+    const CHAIN_ID = environment.network.id;
+
+    // Initialize WalletLink
+    const walletLink = new WalletLink.WalletLink({
+      appName: APP_NAME,
+      appLogoUrl: APP_LOGO_URL
+    });
+
+    // Initialize a Web3 Provider object
+    const ethereum = walletLink.makeWeb3Provider(ETH_JSONRPC_URL, CHAIN_ID);
+
+    // set scoped ethereum
+    this._ethereum = ethereum;
+  }
+
+  /**
+   * Request dApp conection using a browser or extension
+   * @return Successful login
+   */
+  private async browserLogin(): Promise<boolean> {
+    // validate network id
+    const candWeb3 = new Web3(this.ethereum);
+    const expectedNetworkId = environment.network.id;
+    const expectedNetworkName = environment.network.name;
+    const networkId = await promisify(candWeb3.eth.net.getId, []);
+
+    if (networkId !== expectedNetworkId) {
+      this.snackbar.open(`Please connect to the ${ expectedNetworkName } Network.`, null, {
+        duration: 4000,
+        horizontalPosition: 'center'
+      });
+      return false;
+    }
+
+    // handle wallet connection
+    try {
+      await this.ethereum.enable();
+    } catch (e) {
+      console.info('User rejected login');
+      return false;
+    }
+
+    this.web3account = candWeb3;
+    return true;
+  }
+
+  /**
+   * Request dApp conection using WalletLink
+   * @return Successful login
+   */
+  private async walletlinkLogin(): Promise<boolean> {
+    // handle wallet connection
+    try {
+      await this.ethereum.send('eth_requestAccounts');
+      return true;
+    } catch (e) {
+      console.info('User rejected login');
+      return false;
+    }
+  }
+
+  /**
    * Listen account updates
    */
   private listenAccountUpdates() {
-    window.ethereum.on('accountsChanged', (accounts: string[]) => {
+    this.ethereum.on('accountsChanged', (accounts: string[]) => {
 
       if (accounts && accounts.length) {
         console.info('Accounts changed', accounts[0]);
