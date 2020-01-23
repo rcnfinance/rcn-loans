@@ -131,7 +131,7 @@ export class IdentityService {
       Decentraland's / the platform's Mortgage Creator (MC).`,
       undefined,
       './assets/logos/decentraland-brand.svg',
-      'Legal disclaimer: This is a loan requested solely by Lending Solutions S.A., a Ripio company.', // FIXME: see legal disclaimer
+      'Legal disclaimer: This loan was requested by an unknown borrower using the Decentraland Mortgage Creator',
       [
         {
           icon: 'fas fa-link',
