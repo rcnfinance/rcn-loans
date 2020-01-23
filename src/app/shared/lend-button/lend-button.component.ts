@@ -176,7 +176,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     // lend token validation
     const token = this.lendToken;
     if (!this.showLendDialog && !token) {
-      this.openSnackBar('Please choose a currency', '');
+      this.openSnackBar('You must select an currency to continue', '');
       return;
     }
 
