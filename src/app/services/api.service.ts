@@ -52,13 +52,15 @@ export class ApiService {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
 
+      const filterStatus = [Status.Destroyed, Status.Expired];
       const loansRequests = await this.getAllCompleteLoans(
         data.content as LoanApiBasalt[] | LoanApiDiaspore[],
         network
       );
-      const filteredLoans = loansRequests.filter(loan =>
-        loan.model !== this.installmentModelAddress &&
-        loan.status !== Status.Destroyed
+      const filteredLoans = this.excludeLoansWithStatus(
+        filterStatus,
+        null,
+        loansRequests
       );
 
       allRequestLoans = allRequestLoans.concat(filteredLoans);
@@ -77,8 +79,14 @@ export class ApiService {
     const responses = await this.getAllUrls(urls);
 
     for (const response of responses) {
+      const filterStatus = [Status.Destroyed, Status.Expired];
       const loansRequests = await this.getAllCompleteLoans(response.content, network);
-      const notExpiredResquestLoans = loansRequests.filter(loan => loan.model !== this.installmentModelAddress);
+      const notExpiredResquestLoans = this.excludeLoansWithStatus(
+        filterStatus,
+        null,
+        loansRequests
+      );
+
       allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
     }
 
@@ -166,7 +174,7 @@ export class ApiService {
 
     if (network === Network.Basalt) {
       const filterStatus = [Status.Request, Status.Destroyed];
-      responses = this.excludeLoansWithStatus(responses, filterStatus);
+      responses = this.excludeLoansWithStatus(filterStatus, responses);
     }
 
     const allApiLoans = await this.getAllApiLoans(responses, network);
@@ -431,22 +439,36 @@ export class ApiService {
 
   /**
    * Exclude loans with the selected status
-   * @param apiLoans Loans data obtained from API
    * @param filterStatus Status array to remove
-   * @return Loans data obtained from API excluding selected states
+   * @param apiLoans Loans data obtained from API
+   * @param loans Loans array
+   * @return Loans data obtained from API or Loans array excluding selected states
    */
-  private excludeLoansWithStatus(apiLoans: any[], filterStatus: Status[]) {
-    apiLoans.map(response => {
-      response.content = response.content.filter(
-        ({ status }) => {
-          if (!filterStatus.includes(Number(status))) {
-            return true;
+  private excludeLoansWithStatus(
+    filterStatus: Status[],
+    apiLoans?: any[],
+    loans?: Loan[]
+  ): Loan[] | any[] {
+    if (apiLoans) {
+      apiLoans.map(response => {
+        response.content = response.content.filter(
+          ({ status }) => {
+            if (!filterStatus.includes(Number(status))) {
+              return true;
+            }
           }
-        }
-      );
-    });
+        );
+      });
+      return apiLoans as any[];
+    }
 
-    return apiLoans;
+    if (loans) {
+      return loans.filter(({ status }) => {
+        if (!filterStatus.includes(status)) {
+          return true;
+        }
+      }) as Loan[];
+    }
   }
 
   /**
