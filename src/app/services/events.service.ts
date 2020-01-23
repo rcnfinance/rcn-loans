@@ -1,4 +1,4 @@
-import * as Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 
 import { Injectable } from '@angular/core';
 
@@ -18,7 +18,7 @@ export class EventsService {
     nonInteraction: boolean = false
   ) {
     // Sentry tracking
-    Raven.captureBreadcrumb({
+    Sentry.addBreadcrumb({
       message: action,
       category: category,
       data: {
@@ -41,7 +41,7 @@ export class EventsService {
   trackError(
     error: Error
   ) {
-    Raven.captureException(error);
+    Sentry.captureException(error);
     console.error(error);
   }
 }
