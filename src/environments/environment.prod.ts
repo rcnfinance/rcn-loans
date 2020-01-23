@@ -21,7 +21,7 @@ export const environment = {
   version: p.version,
   version_name: p.version_name,
   build: getBuild(),
-  production: false,
+  production: true,
   url: 'https://mainnet.rcn.loans/',
   envName: 'main',
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
