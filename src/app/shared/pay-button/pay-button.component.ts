@@ -121,14 +121,13 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     // unlogged user
     if (!this.web3Service.loggedIn) {
       const hasClient = await this.web3Service.requestLogin();
-      if (this.web3Service.loggedIn) {
-        this.handlePay();
-        return;
-      }
       if (!hasClient) {
         this.dialog.open(DialogClientAccountComponent);
+        return;
       }
-      return;
+      if (!this.web3Service.loggedIn) {
+        return;
+      }
     }
     // lender validation
     const account: string = await this.web3Service.getAccount();
