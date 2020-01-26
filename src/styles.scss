@@ -346,10 +346,7 @@ mat-chip.mat-chip {
 
 // Menu
 .mat-menu-panel {
-  margin-top: 70px;
-  border-top-right-radius: 0px !important;
-  border-top-left-radius: 0px !important;
-  background-color: $gray7;
+  background-color: var(--app-color-gray-100);
   .mat-menu-content {
     padding-top: 2px;
     padding-bottom: 2px;
@@ -359,7 +356,8 @@ mat-chip.mat-chip {
       line-height: 40px;
     }
     button {
-      color: var(--app-color-secondary);
+      @include styled-font('Raleway', 500, 19px);
+      color: white;
     }
   }
 }
@@ -433,8 +431,11 @@ mat-form-field{
   //Menu
   .mat-menu-panel {
     .mat-menu-content {
-      padding-top: 5px;
-      padding-bottom: 5px;
+      &,
+      &:not(:empty) {
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
       .mat-menu-item{
         height: 42px;
         line-height: 42px;
