@@ -11,7 +11,7 @@ import { TxService, Tx, Type } from '../../services/tx.service';
 // App Component
 import { environment } from '../../../environments/environment';
 import { Loan } from '../../models/loan.model';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogWalletSelectComponent } from '../../dialogs/dialog-wallet-select/dialog-wallet-select.component';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 import { Web3Service } from '../../services/web3.service';
@@ -104,14 +104,13 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     }
     // unlogged user
     if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-        return;
-      }
-      if (!this.web3Service.loggedIn) {
-        return;
-      }
+      const dialogRef = this.dialog.open(DialogWalletSelectComponent);
+      dialogRef.afterClosed().subscribe((loggedIn: boolean) => {
+        if (loggedIn) {
+          this.clickTransfer();
+        }
+      });
+      return;
     }
     // borrower validation
     const account: string = await this.web3Service.getAccount();

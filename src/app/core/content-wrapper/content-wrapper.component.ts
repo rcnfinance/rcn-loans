@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material';
 import * as BN from 'bn.js';
 import { Utils } from '../../utils/utils';
 // App Components
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 // App Service
 import { environment } from '../../../environments/environment';
@@ -103,17 +102,6 @@ export class ContentWrapperComponent implements OnInit {
    */
   onClose() {
     this.sidebarService.toggleService(this.navToggle = false);
-  }
-
-  /**
-   * Open Client Dialog
-   */
-  async openDialogClient() {
-    if (await this.web3Service.requestLogin()) {
-      return;
-    }
-
-    this.dialog.open(DialogClientAccountComponent, {});
   }
 
   /**

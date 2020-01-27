@@ -18,7 +18,7 @@ import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loa
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogWalletSelectComponent } from '../../dialogs/dialog-wallet-select/dialog-wallet-select.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 
 @Component({
@@ -120,14 +120,13 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     }
     // unlogged user
     if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-        return;
-      }
-      if (!this.web3Service.loggedIn) {
-        return;
-      }
+      const dialogRef = this.dialog.open(DialogWalletSelectComponent);
+      dialogRef.afterClosed().subscribe((loggedIn: boolean) => {
+        if (loggedIn) {
+          this.clickPay();
+        }
+      });
+      return;
     }
     // lender validation
     const account: string = await this.web3Service.getAccount();
