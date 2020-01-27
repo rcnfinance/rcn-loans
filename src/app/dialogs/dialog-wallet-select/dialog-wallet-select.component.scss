@@ -1,0 +1,81 @@
+@import './../../../scss/fonts';
+
+.dialog-content {
+  text-align: center;
+
+  &__logo {
+    img {
+      width: 62px;
+      margin: 22px auto 25px;
+    }
+  }
+  &__title {
+    h2 {
+      @include typography-body(2);
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      margin: 0;
+    }
+  }
+  &__description {
+    p {
+      @include typography-body(1);
+      margin: 12px 0 40px;
+    }
+  }
+  &__actions {
+    .button-connect {
+      display: block;
+      width: 230px;
+      height: 66px;
+      margin: 20px auto;
+      text-align: left;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      @include styled-font('Raleway', 700, 16px);
+      transition: .3s;
+
+      img {
+        width: 45px;
+        margin-right: 12px;
+      }
+
+      &--active {
+        background: #1F1F1F;
+        span::after {
+          content: '';
+          display: inline-block;
+          width: 6px;
+          height: 6px;
+          background: var(--app-color-green);
+          margin: 0 0 2px 15px;
+          border-radius: 50%;
+        }
+      }
+
+      &:not(.button-connect--active) {
+        background: none;
+        box-shadow: none;
+        border-color: #4A4A4A;
+        &:hover {
+          border-color: var(--app-color-primary);
+        }
+      }
+    }
+  }
+}
+
+.dialog-footer {
+  text-align: right;
+  padding: 19px 22px;
+}
+
+@media (min-width: 768px) {
+
+}
+
+@media (min-width: 992px) {
+  .dialog {
+    min-width: 485px;
+  }
+}
