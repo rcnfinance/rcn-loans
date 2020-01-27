@@ -4,9 +4,9 @@ import { MatSnackBar } from '@angular/material';
 const Web3 = require('web3');
 const WalletLink = require('walletlink');
 import WalletConnectProvider from '@walletconnect/web3-provider';
-
-import { environment } from '../../environments/environment';
-import { promisify } from '../utils/utils';
+import { environment } from './../../environments/environment';
+import { promisify } from './../utils/utils';
+import { WalletType } from './../interfaces/wallet.interface';
 
 declare let window: any;
 
@@ -71,29 +71,45 @@ export class Web3Service {
 
   /**
    * Request wallet login and approve connection
+   * @param wallet Wallet selected
    * @fires loginEvent Boolean login event
-   * @return User has wallet
+   * @return Logged in
    */
-  async requestLogin(): Promise<boolean> {
-    if (this.loggedIn || this.isLogging) {
+  async requestLogin(wallet: WalletType): Promise<boolean> {
+    if (this.loggedIn) {
       return true;
     }
 
-    const wallet = window.prompt('Choose a wallet (1 = Coinbase, 2 = Metamask, 3 = WalletConnect)');
+    return await this.handleWalletConnection(wallet);
+  }
+
+  /**
+   * Handle the dApp connection after the wallet selection
+   * @param wallet Wallet selected
+   * @return Logged in
+   */
+  private async handleWalletConnection(wallet: number) {
+    if (!wallet) {
+      return;
+    }
+    if (this.isLogging) {
+      return;
+    }
+
     let walletMethod: Promise<boolean>;
 
     switch (wallet) {
-      case '1':
+      case WalletType.WalletLink:
         await this.loadWalletlinkWallet();
         walletMethod = this.walletlinkLogin();
         break;
 
-      case '2':
+      case WalletType.Metamask:
         await this.loadBrowserWallet();
         walletMethod = this.browserLogin();
         break;
 
-      case '3':
+      case WalletType.WalletConnect:
         await this.loadWalletconnectWallet();
         walletMethod = this.browserLogin();
         break;
@@ -115,17 +131,18 @@ export class Web3Service {
       }
 
       this.loginEvent.emit(successfulLogin);
+      return true;
     } catch (err) {
       console.error(err);
+      return false;
     } finally {
       this.isLogging = false;
     }
-
-    return true;
   }
 
   /**
    * Make web3 provider using a browser or extension
+   * @return Wallet provider
    */
   private async loadBrowserWallet() {
     if (typeof window.web3 === 'undefined') {
@@ -154,10 +171,13 @@ export class Web3Service {
       this.web3account = candWeb3;
       this.loginEvent.emit(true);
     }
+
+    return this._ethereum;
   }
 
   /**
    * Make web3 provider using WalletLink
+   * @return Wallet provider
    */
   private async loadWalletlinkWallet() {
     const APP_NAME = this.title.getTitle();
@@ -176,16 +196,21 @@ export class Web3Service {
 
     // set scoped ethereum
     this._ethereum = ethereum;
+    return this._ethereum;
   }
 
   /**
    * Make web3 provider using WalletConnect
+   * @return Wallet provider
    */
   private async loadWalletconnectWallet() {
+    const INFURA_ID = environment.network.provider.id;
+    const CHAIN_ID = environment.network.id;
+
     //  Create WalletConnect Provider
     const provider = new WalletConnectProvider({
-      infuraId: environment.network.provider.id,
-      chainId: environment.network.id
+      infuraId: INFURA_ID,
+      chainId: CHAIN_ID
     });
 
     //  Enable session (triggers QR Code modal)
@@ -203,6 +228,7 @@ export class Web3Service {
 
     // set scoped ethereum
     this._ethereum = provider;
+    return this._ethereum;
   }
 
   /**

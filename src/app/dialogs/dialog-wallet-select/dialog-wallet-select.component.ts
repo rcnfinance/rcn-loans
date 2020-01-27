@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { WalletType } from './../../interfaces/wallet.interface';
+// App services
+import { Web3Service } from './../../services/web3.service';
 
 @Component({
   selector: 'app-dialog-wallet-select',
@@ -18,7 +20,8 @@ export class DialogWalletSelectComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<DialogWalletSelectComponent>,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private web3Service: Web3Service
   ) { }
 
   ngOnInit() {
@@ -27,7 +30,7 @@ export class DialogWalletSelectComponent implements OnInit {
         image: 'assets/logo-metamask.svg',
         title: 'Metamask',
         type: WalletType.Metamask,
-        active: true
+        active: false
       },
       {
         image: 'assets/logo-coinbase.png',
@@ -44,8 +47,13 @@ export class DialogWalletSelectComponent implements OnInit {
     ];
   }
 
-  selectWallet(wallet: WalletType) {
-    this.dialogRef.close(wallet);
+  /**
+   * Request login with the selected wallet
+   * @param wallet Selected wallet
+   */
+  async selectWallet(wallet: WalletType) {
+    const loggedIn = await this.web3Service.requestLogin(wallet);
+    this.dialogRef.close(loggedIn);
   }
 
 }

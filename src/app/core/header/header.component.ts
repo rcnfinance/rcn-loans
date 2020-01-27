@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material';
 // App Component
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogWalletSelectComponent } from '../../dialogs/dialog-wallet-select/dialog-wallet-select.component';
 // App Service
 import { Web3Service } from '../../services/web3.service';
 import { SidebarService } from '../../services/sidebar.service';
@@ -69,16 +69,10 @@ export class HeaderComponent implements OnInit {
    */
   async login() {
     if (this.hasAccount) {
-      const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-      this.makeRotate = true;
-      dialogRef.afterClosed().subscribe(() => {
-        this.makeRotate = false;
-      });
-    } else if (await this.web3Service.requestLogin()) {
+      this.openDialogApprove();
       return;
-    } else {
-      this.dialog.open(DialogClientAccountComponent, {});
     }
-  }
 
+    this.dialog.open(DialogWalletSelectComponent, {});
+  }
 }
