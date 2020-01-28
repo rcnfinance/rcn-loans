@@ -4,7 +4,6 @@ import * as BN from 'bn.js';
 
 import { Loan, Oracle, Network } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
-import { promisify, Utils } from './../utils/utils';
 import { environment } from '../../environments/environment';
 // App services
 import { Web3Service } from './web3.service';

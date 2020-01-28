@@ -301,7 +301,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
           'show-insufficient-funds-lend',
           Category.Account,
           'loan ' + this.loan.id,
-          required
+          Number(required)
         );
 
         const currency = environment.usableCurrencies.filter(token => token.address === lendToken)[0];
