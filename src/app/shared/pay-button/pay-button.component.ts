@@ -151,7 +151,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'click-pay',
       Category.Loan,
-      'loan #' + this.loan.id
+      'loan ' + this.loan.id
     );
     this.handlePay();
   }
@@ -181,7 +181,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
           this.eventsService.trackEvent(
             'show-insufficient-funds-lend',
             Category.Account,
-            'loan #' + this.loan.id,
+            'loan ' + this.loan.id,
             requiredTokens
           );
           this.showInsufficientFundsDialog(requiredTokens, balance, currency);
@@ -213,7 +213,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'set-to-pay-loan',
           Category.Loan,
-          'loan #' + this.loan.id + ' of ' + amount
+          'loan ' + this.loan.id + ' of ' + amount
         );
 
         const tx = await this.contractsService.payLoan(this.loan, amount);
@@ -221,7 +221,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'pay-loan',
           Category.Loan,
-          'loan #' + this.loan.id + ' of ' + amount
+          'loan ' + this.loan.id + ' of ' + amount
         );
 
         let engine: string;
@@ -249,14 +249,14 @@ export class PayButtonComponent implements OnInit, OnDestroy {
         this.startPay.emit();
         this.retrievePendingTx();
       }
-    } catch (e) {
+    } catch (err) {
       // Don't show 'User denied transaction signature' error
-      if (e.stack.indexOf('User denied transaction signature') < 0) {
+      if (err.stack.indexOf('User denied transaction signature') < 0) {
+        this.eventsService.trackError(err);
         this.dialog.open(DialogGenericErrorComponent, {
-          data: { error: e }
+          data: { error: err }
         });
       }
-      console.error(e);
     } finally {
       this.finishOperation();
     }

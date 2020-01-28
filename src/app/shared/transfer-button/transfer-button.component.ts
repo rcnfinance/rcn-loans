@@ -141,7 +141,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'click-transfer-loan',
       Category.Loan,
-      'loan #' + this.loan.id
+      'loan ' + this.loan.id
     );
     this.handleTransfer();
   }
@@ -155,7 +155,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'set-to-transfer-loan',
       Category.Loan,
-      'loan #' + this.loan.id + ' to ' + to
+      'loan ' + this.loan.id + ' to ' + to
     );
 
     this.startOperation();
@@ -166,7 +166,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
       this.eventsService.trackEvent(
         'transfer-loan',
         Category.Loan,
-        'loan #' + this.loan.id + ' to ' + to
+        'loan ' + this.loan.id + ' to ' + to
       );
 
       this.txService.registerTransferTx(
@@ -178,14 +178,14 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
 
       this.startTransfer.emit();
       this.retrievePendingTx();
-    } catch (e) {
+    } catch (err) {
       // Don't show 'User denied transaction signature' error
-      if (e.stack.indexOf('User denied transaction signature') < 0) {
+      if (err.stack.indexOf('User denied transaction signature') < 0) {
+        this.eventsService.trackError(err);
         this.dialog.open(DialogGenericErrorComponent, {
-          data: { error: e }
+          data: { error: err }
         });
       }
-      console.error(e);
     } finally {
       this.finishOperation();
     }

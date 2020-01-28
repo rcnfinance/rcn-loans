@@ -1,5 +1,7 @@
 import { Component, OnChanges, Input } from '@angular/core';
 import { Loan, Status } from '../../models/loan.model';
+// App services
+import { EventsService } from './../../services/events.service';
 
 @Component({
   selector: 'app-avatar-title',
@@ -9,7 +11,10 @@ import { Loan, Status } from '../../models/loan.model';
 export class AvatarTitleComponent implements OnChanges {
   @Input() loan: Loan;
   status: string;
-  constructor() { }
+
+  constructor(
+    private eventsService: EventsService
+  ) { }
 
   ngOnChanges(changes) {
     const { loan } = changes;
@@ -44,7 +49,8 @@ export class AvatarTitleComponent implements OnChanges {
         break;
       default:
         this.status = 'Overdue';
-        console.error('Unknown status', this.loan.status);
+        const err = new Error(`Unknown status ${ this.loan.status }`);
+        this.eventsService.trackError(err);
         break;
     }
   }

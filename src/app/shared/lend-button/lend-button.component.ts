@@ -194,7 +194,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'click-lend',
       Category.Loan,
-      'request #' + this.loan.id
+      'request ' + this.loan.id
     );
     this.handleLend();
   }
@@ -293,7 +293,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'lend',
           Category.Account,
-          'loan #' + this.loan.id
+          'loan ' + this.loan.id
         );
 
         this.retrievePendingTx();
@@ -301,21 +301,21 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'show-insufficient-funds-lend',
           Category.Account,
-          'loan #' + this.loan.id,
+          'loan ' + this.loan.id,
           required
         );
 
         const currency = environment.usableCurrencies.filter(token => token.address === lendToken)[0];
         this.showInsufficientFundsDialog(required, balance, currency.symbol);
       }
-    } catch (e) {
+    } catch (err) {
       // Don't show 'User denied transaction signature' error
-      if (e.stack.indexOf('User denied transaction signature') < 0) {
+      if (err.stack.indexOf('User denied transaction signature') < 0) {
+        this.eventsService.trackError(err);
         this.dialog.open(DialogGenericErrorComponent, {
-          data: { error: e }
+          data: { error: err }
         });
       }
-      console.error(e);
     } finally {
       this.finishOperation();
     }

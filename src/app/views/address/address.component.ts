@@ -10,6 +10,7 @@ import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
 import { Web3Service } from '../../services/web3.service';
+import { EventsService } from '../../services/events.service';
 
 @Component({
   selector: 'app-address',
@@ -37,7 +38,8 @@ export class AddressComponent implements OnInit, OnDestroy {
     private titleService: TitleService,
     private contractsService: ContractsService,
     private availableLoansService: AvailableLoansService,
-    private web3Service: Web3Service
+    private web3Service: Web3Service,
+    private eventsService: EventsService
   ) { }
 
   ngOnInit() {
@@ -102,6 +104,7 @@ export class AddressComponent implements OnInit, OnDestroy {
     } catch (err) {
       this.spinner.hide(this.pageId);
       this.availableLoans = false;
+      this.eventsService.trackError(err);
     }
   }
 

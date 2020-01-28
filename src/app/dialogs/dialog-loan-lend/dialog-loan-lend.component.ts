@@ -4,8 +4,10 @@ import { Loan, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 import { environment } from '../../../environments/environment';
+// App services
 import { ContractsService } from '../../services/contracts.service';
 import { Web3Service } from '../../services/web3.service';
+import { EventsService } from '../../services/events.service';
 
 @Component({
   selector: 'app-dialog-loan-lend',
@@ -45,6 +47,7 @@ export class DialogLoanLendComponent implements OnInit {
   constructor(
     private contractsService: ContractsService,
     private web3Service: Web3Service,
+    private eventsService: EventsService,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
@@ -98,6 +101,7 @@ export class DialogLoanLendComponent implements OnInit {
       await this.calculateAmounts();
       this.loadExchangeTooltip();
     } catch (e) {
+      this.eventsService.trackError(e);
       throw Error('error calculating currency amounts');
     }
   }

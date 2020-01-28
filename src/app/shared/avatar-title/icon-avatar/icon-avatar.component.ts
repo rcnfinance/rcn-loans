@@ -1,5 +1,7 @@
 import { Component, OnChanges, Input } from '@angular/core';
 import { Loan, Status } from '../../../models/loan.model';
+// App services
+import { EventsService } from './../../../services/events.service';
 
 @Component({
   selector: 'app-icon-avatar',
@@ -10,7 +12,10 @@ export class IconAvatarComponent implements OnChanges {
   @Input() loan: Loan;
   class: string;
   icon: string;
-  constructor() { }
+
+  constructor(
+    private eventsService: EventsService
+  ) { }
 
   ngOnChanges(changes) {
     const { loan } = changes;
@@ -50,7 +55,8 @@ export class IconAvatarComponent implements OnChanges {
         this.icon = 'error_outline';
         break;
       default:
-        console.error('Unknown status', this.loan.status);
+        const err = new Error(`Unknown status ${ this.loan.status }`);
+        this.eventsService.trackError(err);
         break;
     }
   }
