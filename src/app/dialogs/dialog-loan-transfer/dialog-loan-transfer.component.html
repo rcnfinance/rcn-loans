@@ -1,7 +1,7 @@
 <app-dialog-header title="Loan transfer">
 </app-dialog-header>
 
-<mat-dialog-content>
+<mat-dialog-content class="dialog">
 
   <ng-container *ngIf="startProgress">
     <app-infinite-progress-bar
@@ -18,7 +18,8 @@
         <div class="row mb-3 mt-4 mt-md-0">
           <div class="col col-12">
             <div class="title main-h3">
-              You're transfering a Loan
+              You're about to transfer the {{ shortLoanId }} loan. Please enter
+              the recipient's address.
             </div>
           </div>
         </div>
@@ -28,12 +29,12 @@
               <input
                 formControlName="address"
                 type="text"
-                placeholder="Recipient address"
+                placeholder="0x1234..."
                 matInput
                 (keyup)="checkInvalidAddress()"
               >
               <mat-error *ngIf="invalidAddress">
-                This is not a valid address
+                That is not a valid address. Please check it again.
               </mat-error>
             </mat-form-field>
           </div>
@@ -57,7 +58,7 @@
       <div class="dialog-footer dialog-padding pt-0 pb-3 row">
         <div class="dialog-footer__label col-sm-12 col-md-6">
           <p>
-            Transfer from your <strong>{{ shortAccount }}</strong> account.
+            Transferring from the address <strong>{{ shortAccount }}</strong>.
           </p>
         </div>
         <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">

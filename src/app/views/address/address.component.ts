@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Utils } from './../../utils/utils';
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
@@ -20,12 +20,17 @@ import { EventsService } from '../../services/events.service';
 export class AddressComponent implements OnInit, OnDestroy {
   pageId = 'address';
   address: string;
+  shortAddress: string;
   available: any;
   loans = [];
   availableLoans = true;
+  myLoans: boolean;
+  pageTitle: string;
+  pageDescription: string;
 
   // subscriptions
   subscriptionAvailable: Subscription;
+  subscriptionAccount: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,19 +43,25 @@ export class AddressComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.titleService.changeTitle('Address');
-    this.spinner.show(this.pageId);
+    this.route.params.subscribe(async params => {
+      this.spinner.show(this.pageId);
 
-    this.route.params.subscribe(params => {
       const web3 = this.web3Service.web3;
-      this.address = web3.toChecksumAddress(params['address']);
-      this.loadLoans(this.address);
+      const address = web3.toChecksumAddress(params['address']);
+      this.address = address;
+      this.shortAddress = Utils.shortAddress(address);
+
+      await this.checkMyLoans();
+      this.setPageTitle();
+      this.loadLoans(address);
     });
 
     // Available Loans service
     this.subscriptionAvailable = this.availableLoansService.currentAvailable.subscribe(
       available => this.available = available
     );
+
+    this.handleLoginEvents();
   }
 
   ngOnDestroy() {
@@ -61,6 +72,21 @@ export class AddressComponent implements OnInit, OnDestroy {
     } catch (e) { }
   }
 
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  handleLoginEvents() {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(
+      async () => {
+        await this.checkMyLoans();
+        this.setPageTitle();
+      }
+    );
+  }
+
+  /**
+   * Load address loans
+   */
   private async loadLoans(address: string) {
     try {
       const loans: Loan[] = await this.contractsService.getLoansOfLender(address);
@@ -80,6 +106,42 @@ export class AddressComponent implements OnInit, OnDestroy {
       this.availableLoans = false;
       this.eventsService.trackError(err);
     }
+  }
+
+  /**
+   * Check if the URL address is my address
+   * @return Boolean if is my loans
+   */
+  private async checkMyLoans() {
+    const web3: any = this.web3Service.web3;
+    const urlAddress = this.address;
+    const myAddress = await this.web3Service.getAccount();
+
+    this.myLoans = web3.toChecksumAddress(urlAddress) === web3.toChecksumAddress(myAddress);
+    return this.myLoans;
+  }
+
+  /**
+   * Set page title and description
+   * @return Page title and description
+   */
+  private setPageTitle() {
+    const myLoans = this.myLoans;
+
+    if (myLoans) {
+      this.pageTitle = 'My loans';
+      this.pageDescription = `Check your loans' status, payments schedule, history and more`;
+    } else {
+      this.pageTitle = 'Activity explorer';
+      this.pageDescription = `Check ${ this.address }'s active loans`;
+    }
+
+    this.titleService.changeTitle(this.pageTitle);
+
+    return {
+      title: this.pageTitle,
+      description: this.pageDescription
+    };
   }
 
   /**

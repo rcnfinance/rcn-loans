@@ -13,6 +13,7 @@ import { NotificationItemComponent } from './header/notifications/notification-i
 import { SocialContainerComponent } from './social-container/social-container.component';
 // App Directives
 import { ClickOutsideDirective } from '../directives/click-outside.directive';
+import { OpenEtherscanDirective } from '../directives/open-etherscan.directive';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { ClickOutsideDirective } from '../directives/click-outside.directive';
     BalanceComponent,
     IconGroupHeaderComponent,
     ClickOutsideDirective,
+    OpenEtherscanDirective,
     NotificationsComponent,
     NotificationItemComponent,
     SocialContainerComponent

@@ -26,12 +26,12 @@ export class RiskIndicatorComponent implements OnInit {
       switch (risk) {
         case Level.high:
           this.icon = 'warning';
-          this.tooltip = 'Warning! This may be a high risk loan';
+          this.tooltip = 'This loan is not backed by a Cosigner or any collateral';
           this.visible = true;
           break;
         case Level.low:
           this.icon = 'check';
-          this.tooltip = 'This is a low risk loan';
+          this.tooltip = 'This loan is backed by a Cosigner or any collateral';
           this.visible = true;
           break;
         default:

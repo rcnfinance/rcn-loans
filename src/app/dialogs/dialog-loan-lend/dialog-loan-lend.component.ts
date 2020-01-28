@@ -17,9 +17,9 @@ import { EventsService } from '../../services/events.service';
 export class DialogLoanLendComponent implements OnInit {
   // loan
   loan: Loan;
+  shortLoanId: string;
   loanAmount: string;
   loanExpectedReturn: any;
-  loanCurrency: string;
   isRequest: boolean;
   isCanceled: boolean;
   // lend
@@ -29,6 +29,7 @@ export class DialogLoanLendComponent implements OnInit {
   lendToken: string;
   exchangeRcn: string;
   exchangeToken: string;
+  exchangeTooltip: string;
   // general
   account: string;
   canLend: boolean;
@@ -82,6 +83,10 @@ export class DialogLoanLendComponent implements OnInit {
     // set loan status
     this.isCanceled = this.loan.status === Status.Destroyed;
     this.isRequest = this.loan.status === Status.Request;
+
+    this.loadExchangeTooltip();
+    this.shortLoanId =
+      this.loan.id.startsWith('0x') ? Utils.shortAddress(this.loan.id) : this.loan.id;
   }
 
   /**
@@ -94,6 +99,7 @@ export class DialogLoanLendComponent implements OnInit {
 
     try {
       await this.calculateAmounts();
+      this.loadExchangeTooltip();
     } catch (e) {
       this.eventsService.trackError(e);
       throw Error('error calculating currency amounts');
@@ -167,6 +173,40 @@ export class DialogLoanLendComponent implements OnInit {
     this.lendExpectedReturn = Utils.formatAmount(
       Number(web3.fromWei(rcnExpectedReturn))
     );
+  }
+
+  loadExchangeTooltip() {
+    const loanCurrency: string = this.loan.currency.toString();
+    const lendCurrency: string = this.lendCurrency;
+    const oracle = this.loan.oracle;
+    const tokenConverter = environment.contracts.converter.tokenConverter;
+
+    if (!this.exchangeToken) {
+      if (loanCurrency !== 'RCN') {
+        this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
+        the ${ oracle } oracle.`;
+        return;
+      }
+      this.exchangeTooltip = null;
+      return;
+    }
+
+    if (loanCurrency !== 'RCN' && lendCurrency !== 'RCN') {
+      this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
+      the ${ oracle } oracle. The RCN/${ lendCurrency } exchange rate for this loan is calculated
+      using the ${ tokenConverter } token converter contract.`;
+      return;
+    }
+    if (loanCurrency !== 'RCN') {
+      this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
+      the ${ oracle } oracle.`;
+      return;
+    }
+    if (lendCurrency !== 'RCN') {
+      this.exchangeTooltip = `The RCN/${ lendCurrency } exchange rate for this loan is calculated using
+      the ${ tokenConverter } token converter contract.`;
+      return;
+    }
   }
 
   /**

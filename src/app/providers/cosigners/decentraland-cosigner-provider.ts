@@ -65,7 +65,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     this.web3 = web3;
   }
   title(_loan: Loan): string {
-    return 'Decentraland Parcel Mortgage';
+    return 'Decentraland Parcel';
   }
   contract(_loan: Loan): string {
     return this.manager;

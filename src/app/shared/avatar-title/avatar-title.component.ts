@@ -30,10 +30,10 @@ export class AvatarTitleComponent implements OnChanges {
   loadStatus() {
     switch (this.loan.status) {
       case Status.Ongoing:
-        this.status = 'Ongoing';
+        this.status = 'Outstanding';
         break;
       case Status.Request:
-        this.status = 'Request';
+        this.status = 'Requested';
         break;
       case Status.Destroyed:
         this.status = 'Canceled';
@@ -42,13 +42,13 @@ export class AvatarTitleComponent implements OnChanges {
         this.status = 'Paid';
         break;
       case Status.Indebt:
-        this.status = 'In debt';
+        this.status = 'Overdue';
         break;
       case Status.Expired:
         this.status = 'Expired';
         break;
       default:
-        this.status = 'In debt';
+        this.status = 'Overdue';
         const err = new Error(`Unknown status ${ this.loan.status }`);
         this.eventsService.trackError(err);
         break;

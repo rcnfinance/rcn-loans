@@ -78,8 +78,8 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
       'display': ['lender']
     },
     'partial_payment': {
-      'title': 'Pay',
-      'message': 'Pay',
+      'title': 'Repay',
+      'message': 'Repay',
       'status': 'active',
       'awesomeClass': 'fas fa-coins',
       'color': 'green',
@@ -96,8 +96,8 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
       'display': []
     },
     'loan_in_debt': {
-      'title': 'In Debt',
-      'message': 'In Debt',
+      'title': 'Overdue',
+      'message': 'Overdue',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'error_outline',
@@ -192,8 +192,8 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
       'display': ['lender']
     },
     'paid_debt_engine': {
-      'title': 'Pay',
-      'message': 'Pay',
+      'title': 'Repay',
+      'message': 'Repay',
       'status': 'active',
       'awesomeClass': 'fas fa-coins',
       'color': 'green',

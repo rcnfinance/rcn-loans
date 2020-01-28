@@ -57,6 +57,9 @@
   &:hover{
     color: var(--app-color-primary);
   }
+  a {
+    color: white;
+  }
 }
 .action-event{
   cursor: pointer;
@@ -82,16 +85,13 @@
 .separator{margin: 0 5px;}
 .supporter-txt{
   margin-left: 5px;
-  span{
+  &::ng-deep a {
     cursor: pointer;
-    margin-left: 2px;
-    outline: none; outline-offset: 0px;
+    outline: none;
+    outline-offset: 0px;
     color: var(--app-color-secondary);
     @include transition();
     @extend %roboto-bold;
-    &:hover{
-      color: var(--app-color-primary);
-    }
   }
 }
 mat-progress-bar.mat-progress-bar{
