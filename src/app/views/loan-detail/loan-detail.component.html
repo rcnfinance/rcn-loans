@@ -45,14 +45,14 @@
       <ng-container *ngIf="!isPaid; else paidGraphic">
         <div class="px-3 pt-1">
           <app-conversion-graphic
-            [headers]="['Lend', loan.currency, isRequest || isCanceled ? 'Estimated return' : 'Return']"
+            [headers]="['Lend', loan.currency, 'Receive']"
             [amountLeft]="loan.currency.fromUnit(loan.amount)"
             [amountRight]="isRequest ||  isCanceled ? expectedReturn : totalDebt"
           ></app-conversion-graphic>
         </div>
         <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled">
           <app-conversion-graphic
-            [headers]="['Paid', 'Interest', 'Debt']"
+            [headers]="['Paid', 'Annual rate', 'Due']"
             [amountRight]="pendingAmount"
             [textMiddle]="interest"
             [amountLeft]="paid"
@@ -84,7 +84,9 @@
           </thead>
           <tbody>
             <tr>
-              <td>{{ loan.oracle }} - <b>{{ currency }}</b></td>
+              <td style="cursor: pointer" (click)="openAddress(loan.oracle)">
+                {{ loan.oracle }} - <b>{{ currency }}</b>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -94,27 +96,30 @@
           <thead>
             <tr>
               <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('identity') }" scope="col">
-                Identity<i class="material-icons white more-indicator">{{ isDetail('identity') ? '' : 'unfold_more' }}</i>
+                Borrower<i class="material-icons white more-indicator">{{ isDetail('identity') ? '' : 'unfold_more' }}</i>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td style='cursor: pointer'>{{ loan.borrower }}</td>
+              <td style='cursor: pointer' (click)="openAddress(loan.borrower)">
+                {{ loan.borrower }} - {{ brand.headerTitle }}
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="table-responsive">
-        <table class="table" (click)="openLender(loan.owner)" *ngIf="loan.debt">
+        <table class="table" *ngIf="loan.debt">
           <thead>
             <tr>
               <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td style='cursor: pointer'>{{ loan.debt.owner }}</td>
+            <tr style='cursor: pointer' (click)="openAddress(loan.debt.owner)">
+              <td style='cursor: pointer'>{{ loan.debt.owner }} - Unknown</td>
+              <!-- TODO: Implement lender identity description -->
             </tr>
           </tbody>
         </table>
@@ -124,7 +129,7 @@
           <thead>
             <tr>
               <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
-                  Insurance / Cosigner<i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
+                Collateral<i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
               </th>
             </tr>
           </thead>
@@ -146,7 +151,11 @@
           (endLend)="onUserAction('lend')"
           *ngIf="canLend"
         ></app-lend-button>
-        <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="canLend"></app-risk-indicator>
+        <app-risk-indicator
+          class='risk-indicator'
+          [loan]=loan
+          *ngIf="canLend"
+        ></app-risk-indicator>
         <app-transfer-button
           [loan]="loan"
           [showTransferDialog]="true"

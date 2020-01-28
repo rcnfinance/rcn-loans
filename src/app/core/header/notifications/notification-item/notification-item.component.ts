@@ -17,8 +17,18 @@ export class NotificationItemComponent implements OnInit {
 
   constructor() {}
 
-  openAddres() {
-    window.open(environment.network.explorer.tx.replace('${tx}', this.notification.hashTx), '_blank');
+  openTx() {
+    window.open(environment.network.explorer.tx.replace(
+      '${tx}',
+      this.notification.hashTx
+    ), '_blank');
+  }
+
+  openAddress() {
+    window.open(environment.network.explorer.address.replace(
+      '${address}',
+      this.notification.starringEvent.toString()
+    ), '_blank');
   }
 
   toDeltaFormatted(time: number): string {

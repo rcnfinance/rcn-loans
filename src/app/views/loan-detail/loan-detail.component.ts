@@ -144,6 +144,14 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     this.viewDetail = view;
   }
 
+  /**
+   * Open an address in etherscan
+   * @param address Borrower address
+   */
+  openAddress(address: string) {
+    window.open(environment.network.explorer.address.replace('${address}', address));
+  }
+
   isDetail(view: string): Boolean {
     return view === this.viewDetail;
   }
@@ -253,14 +261,14 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         const interestRatePunitive = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
         const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
         this.loanConfigData = [
-          ['Currency', currency],
-          ['Interest / Punitory', '~ ' + interestRate + ' % / ~ ' + interestRatePunitive + ' %'],
+          ['Information', ''],
+          ['Annual Rate / Penalty Rate', ' ' + interestRate + ' % / ' + interestRatePunitive + ' %'],
           ['Duration', duration]
         ];
 
         // Template data
-        this.interest = `~ ${ interestRate }%`;
-        this.punitory = `~ ${ interestRatePunitive }%`;
+        this.interest = `${ interestRate }%`;
+        this.punitory = `${ interestRatePunitive }%`;
         this.duration = duration;
         this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
         break;
@@ -284,14 +292,14 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
         // Show ongoing loan detail
         this.loanStatusData = [
-          ['Description', 'Date'],
-          ['Lend date', lendDate],
-          ['Due date', dueDate],
-          ['Deadline', deadline]
+          ['Information', ''],
+          ['Lending Date', lendDate],
+          ['Next Due Date', dueDate],
+          ['Final Due Date', deadline]
         ];
 
         // Template data
-        this.interest = '~ ' + currentInterestRate + ' %';
+        this.interest = currentInterestRate + ' %';
         this.lendDate = lendDate;
         this.dueDate = dueDate;
 
@@ -367,9 +375,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
 
     this.diasporeData = [
-      ['Installments', 'Duration', 'Cuota'],
+      ['Installments', 'Frequency', 'Amount'],
       [
-        installments,
+        `${ installments } ${ installments > 1 ? 'Payments' : 'Payment' }`,
         installmentDuration,
         `${ installmentAmount } ${ installmentCurrency }`
       ]
@@ -427,6 +435,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   private formatTimestamp(timestamp: number): string {
-    return new DatePipe('en-US').transform(timestamp * 1000, 'dd.MM.yyyy');
+    return new DatePipe('en-US').transform(timestamp * 1000, 'dd/MM/yyyy');
   }
 }

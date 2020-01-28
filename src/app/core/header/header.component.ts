@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { Utils } from './../../utils/utils';
 // App Component
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
@@ -16,6 +17,7 @@ import { TitleService } from '../../services/title.service';
 export class HeaderComponent implements OnInit {
   hasAccount: boolean;
   account: string;
+  shortAccount: string;
   makeRotate = false;
   title: string;
 
@@ -47,10 +49,14 @@ export class HeaderComponent implements OnInit {
    */
   handleLoginEvents() {
     this.web3Service.loginEvent.subscribe(async (loggedIn) => {
+      const web3 = this.web3Service.web3;
       if (loggedIn) {
-        this.account = await this.web3Service.getAccount();
+        const account = await this.web3Service.getAccount();
+        this.account = web3.toChecksumAddress(account);
+        this.shortAccount = Utils.shortAddress(this.account);
       } else {
         this.account = undefined;
+        this.shortAccount = undefined;
       }
       this.hasAccount = loggedIn;
       this.cdRef.detectChanges();

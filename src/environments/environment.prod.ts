@@ -96,14 +96,24 @@ export const environment = {
       address: RCN_TOKEN
     },
     {
+      symbol: 'ETH',
+      img: 'assets/eth.png',
+      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+    },
+    {
       symbol: 'DAI',
       img: 'assets/dai.png',
       address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
     },
     {
-      symbol: 'ETH',
-      img: 'assets/eth.png',
-      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+      symbol: 'USDC',
+      img: 'assets/usdc.png',
+      address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+    },
+    {
+      symbol: 'MANA',
+      img: 'assets/mana.png',
+      address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
     }
   ]
 };
