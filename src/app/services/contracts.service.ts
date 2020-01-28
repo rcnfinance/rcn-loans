@@ -4,13 +4,15 @@ import * as BN from 'bn.js';
 
 import { Loan, Oracle, Network } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
+import { promisify, Utils } from './../utils/utils';
 import { environment } from '../../environments/environment';
+// App services
 import { Web3Service } from './web3.service';
 import { TxService } from '../services/tx.service';
 import { CosignerService } from './cosigner.service';
 import { ApiService } from './api.service';
 import { Utils } from './../utils/utils';
-
+import { EventsService } from './events.service';
 declare let require: any;
 
 const tokenAbi = require('../contracts/Token.json');
@@ -41,7 +43,8 @@ export class ContractsService {
     private web3Service: Web3Service,
     private txService: TxService,
     private cosignerService: CosignerService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private eventsService: EventsService
   ) {
     this._rcnEngine = this.makeContract(engineAbi.abi, this._rcnEngineAddress);
     this._loanManager = this.makeContract(loanManagerAbi, environment.contracts.diaspore.loanManager);
@@ -557,8 +560,8 @@ export class ContractsService {
         default:
           break;
       }
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      this.eventsService.trackError(err);
       throw Error('Oracle did not provide data');
     }
   }
@@ -699,8 +702,8 @@ export class ContractsService {
       }
 
       return oracleData;
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      this.eventsService.trackError(err);
       throw Error('Oracle did not provide data');
     }
   }

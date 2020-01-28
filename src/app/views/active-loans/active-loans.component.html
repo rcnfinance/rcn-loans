@@ -10,14 +10,13 @@
     [name]="pageId"
   ></ngx-spinner>
   <div class="container">
-    <div class="row">
-      <div class="col-sm-12 d-none d-lg-block">
-        <div class="title main-h1">Activity</div>
-        <mat-chip-list>
-          <mat-chip class="mat-chip--gray margintop30 marginright15" selected="true">{{ loans.length }} ACTIVE LOANS</mat-chip>
-        </mat-chip-list>
-      </div>
-    </div>
+    <app-page-header
+      title="Activity explorer"
+      description="Check the Marketplace's active loans"
+      [hasChip]="true"
+      [chipValue]="loans.length"
+      chipLabel="ACTIVE"
+    ></app-page-header>
 
     <div class="loan-container row">
       <div class="col-sm-12 text-center" *ngIf='!availableLoans'>

@@ -14,8 +14,12 @@
 
   <div class="col-sm-12 dialog-padding">
     <div class="title main-h3">
-      Select the Currency you want to lend and compare with the other available currencies values.
-      <div class="i" matTooltip="The currency rates may vary during the loan terms">
+      You're about to fund the {{ shortLoanId }} loan. Please select your
+      lending currency.
+      <div
+        class="i"
+        matTooltip="Exchange rates may vary during the loan's term affecting the expected return"
+      >
         <i class="far fa-question-circle"></i>
       </div>
     </div>
@@ -28,7 +32,7 @@
         <div class="row">
           <mat-form-field>
             <mat-label *ngIf="!lendCurrency" id="label">
-              Select Token
+              Select Currency
             </mat-label>
             <mat-select [(value)]="lendCurrency" (selectionChange)="onChangeCurrency()">
               <mat-option *ngFor="let item of availableCurrencies" [value]="item.symbol">
@@ -76,7 +80,7 @@
             </span>
             <div
               class="d-inline"
-              matTooltip="Expected return"
+              matTooltip="This return is affected by exchange rate fluctuations and it can't be guaranteed"
               *ngIf="lendCurrency && expectedReturnWarning"
             >
               <i class="fas fa-exclamation-triangle margin-left triangle"></i>
@@ -108,7 +112,7 @@
               </span>
               <div
                 class="d-inline"
-                matTooltip="Guaranteed return"
+                matTooltip="This return is guaranteed and not affected by exchange rate fluctuations."
                 *ngIf="lendCurrency"
               >
                 <i class="fas fa-check-circle check margin-left"></i>
@@ -133,13 +137,13 @@
         <span class="mr-1" *ngIf="loan.currency.toString() !== 'RCN'">
           = {{ exchangeRcn }} RCN
         </span>
-        <ng-container *ngIf="exchangeToken && loan.currency.toString() !== lendCurrency">
-          <span>
-            = {{ exchangeToken }} {{ lendCurrency }}
-          </span>
+        <span *ngIf="exchangeToken && loan.currency.toString() !== lendCurrency">
+          = {{ exchangeToken }} {{ lendCurrency }}
+        </span>
+        <ng-container *ngIf="exchangeTooltip">
           <i
             class="material-icons ml-2"
-            matTooltip="Lorem ipsum dolor sit amet"
+            [matTooltip]="exchangeTooltip"
           >
             info
           </i>
@@ -152,7 +156,7 @@
 
   <div class="dialog-footer row padding justify-content-between align-items-center">
     <div class=" col-sm-12 col-md-6 inline account">
-      Lending from your {{ account }} account.
+      Lending from the address {{ account }}.
     </div>
     <div class="col-sm-12 col-md-6 px-0">
       <div class="row justify-content-end no-gutters">
