@@ -7,7 +7,9 @@ import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
 import { Loan, Network, Status } from '../models/loan.model';
 import { LoanUtils } from '../utils/loan-utils';
 import { Utils } from '../utils/utils';
+// App services
 import { Web3Service } from './web3.service';
+import { EventsService } from '../services/events.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +26,8 @@ export class ApiService {
 
   constructor(
     private http: HttpClient,
-    private web3Service: Web3Service
+    private web3Service: Web3Service,
+    private eventsService: EventsService
   ) { }
 
   /**
@@ -66,7 +69,7 @@ export class ApiService {
       allRequestLoans = allRequestLoans.concat(filteredLoans);
       page++;
     } catch (err) {
-      console.info('Error', err);
+      this.eventsService.trackError(err);
     }
 
     const urls = [];
@@ -123,7 +126,7 @@ export class ApiService {
       allLoansOfLender = allLoansOfLender.concat(activeLoans);
       page++;
     } catch (err) {
-      console.info('Error', err);
+      this.eventsService.trackError(err);
     }
 
     const urls = [];
@@ -161,7 +164,7 @@ export class ApiService {
       allActiveLoans = allActiveLoans.concat(activeLoans);
       page++;
     } catch (err) {
-      console.info('Error', err);
+      this.eventsService.trackError(err);
     }
 
     const urls = [];
@@ -227,9 +230,9 @@ export class ApiService {
             )));
 
       return (data);
-    } catch (error) {
-      console.info(error);
-      throw (error);
+    } catch (err) {
+      this.eventsService.trackError(err);
+      throw (err);
     }
   }
 
@@ -251,9 +254,9 @@ export class ApiService {
       );
       return (loans);
 
-    } catch (error) {
-      console.info(error);
-      throw (error);
+    } catch (err) {
+      this.eventsService.trackError(err);
+      throw (err);
     }
   }
 
@@ -358,9 +361,9 @@ export class ApiService {
         )
       );
       return (activeLoans);
-    } catch (error) {
-      console.info(error);
-      throw (error);
+    } catch (err) {
+      this.eventsService.trackError(err);
+      throw (err);
     }
   }
 

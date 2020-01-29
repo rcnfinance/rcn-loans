@@ -67,20 +67,20 @@ export class Utils {
     totalSeconds = Math.abs(totalSeconds);
     const secondsInYear = 86400 * 365;
     const years = Math.floor(totalSeconds / secondsInYear);
-    timeToStr(years, ' years, ');
+    timeToStr(years, ' Years, ');
     totalSeconds %= secondsInYear;
     const days = Math.floor(totalSeconds / 86400);
-    timeToStr(days, ' days, ');
+    timeToStr(days, ' Days, ');
     totalSeconds %= 86400;
     const hours = Math.floor(totalSeconds / 3600);
-    timeToStr(hours, ' hours, ');
+    timeToStr(hours, ' Hours, ');
     totalSeconds %= 3600;
     const minutes = Math.floor(totalSeconds / 60);
-    timeToStr(minutes, ' minutes, ');
+    timeToStr(minutes, ' Minutes, ');
 
     if (showSeconds) {
       const seconds = totalSeconds % 60;
-      timeToStr(seconds.toFixed(0), ' seconds, ');
+      timeToStr(seconds.toFixed(0), ' Seconds, ');
     }
 
     return prefix + result.slice(0, -2);

@@ -3,11 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { Commit } from '../interfaces/commit.interface';
 import { environment } from '../../environments/environment';
 import { Network } from '../models/loan.model';
+// App services
+import { EventsService } from './events.service';
 
 @Injectable()
 export class CommitsService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private eventsService: EventsService
+  ) { }
 
   async getCommits(id: string, network: number): Promise<Commit[]> {
     let commits: any;
@@ -29,7 +34,7 @@ export class CommitsService {
         commitsLoanManager = responseLoanManager.content;
       } catch (err) {
         commitsLoanManager = [];
-        console.info('ERROR', err);
+        this.eventsService.trackError(err);
       }
 
       const urlDebtEngineCommits = environment.rcn_node_api.url.concat(`debts/${ id }`);
@@ -38,7 +43,7 @@ export class CommitsService {
         commitsDebtEngine = responseDebtEngine.content;
       } catch (err) {
         commitsDebtEngine = [];
-        console.info('ERROR', err);
+        this.eventsService.trackError(err);
       }
 
       const diasporeCommits = commitsLoanManager.concat(commitsDebtEngine);

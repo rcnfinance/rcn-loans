@@ -72,7 +72,7 @@ describe('NotificationItemComponent', () => {
 
     timestamp = new Date().getTime() - 604800;
     deltaTime = component.toDeltaFormatted(timestamp);
-    expect(deltaTime).toBe('10 minutes');
+    expect(deltaTime).toBe('10 Minutes');
   });
 
 });

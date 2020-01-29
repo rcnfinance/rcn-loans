@@ -115,7 +115,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     // borrower validation
     const account: string = await this.web3Service.getAccount();
     if (this.loan.debt.owner.toLowerCase() !== account.toLowerCase()) {
-      this.openSnackBar('The owner is not authorized', '');
+      this.openSnackBar('You can´t transfer a loan that you haven´t funded.', '');
       return;
     }
     // address validation
@@ -140,7 +140,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'click-transfer-loan',
       Category.Loan,
-      'loan #' + this.loan.id
+      'loan ' + this.loan.id
     );
     this.handleTransfer();
   }
@@ -154,7 +154,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'set-to-transfer-loan',
       Category.Loan,
-      'loan #' + this.loan.id + ' to ' + to
+      'loan ' + this.loan.id + ' to ' + to
     );
 
     this.startOperation();
@@ -165,7 +165,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
       this.eventsService.trackEvent(
         'transfer-loan',
         Category.Loan,
-        'loan #' + this.loan.id + ' to ' + to
+        'loan ' + this.loan.id + ' to ' + to
       );
 
       this.txService.registerTransferTx(
@@ -177,14 +177,14 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
 
       this.startTransfer.emit();
       this.retrievePendingTx();
-    } catch (e) {
+    } catch (err) {
       // Don't show 'User denied transaction signature' error
-      if (e.stack.indexOf('User denied transaction signature') < 0) {
+      if (err.stack.indexOf('User denied transaction signature') < 0) {
+        this.eventsService.trackError(err);
         this.dialog.open(DialogGenericErrorComponent, {
-          data: { error: e }
+          data: { error: err }
         });
       }
-      console.error(e);
     } finally {
       this.finishOperation();
     }
@@ -239,6 +239,6 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     if (tx.confirmed) {
       return 'Transferred';
     }
-    return 'Transferring...';
+    return 'Transferring';
   }
 }
