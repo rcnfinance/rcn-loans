@@ -1,0 +1,17 @@
+@import './../../../scss/fonts';
+
+.title {
+  @include styled-font('Raleway', 400, 20px);
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+.subtitle {
+  @include typography-body(1);
+  margin-bottom: 20px;
+}
+
+@media (min-width: 992px) {
+  .title {
+    @include typography-headline(1);
+  }
+}
