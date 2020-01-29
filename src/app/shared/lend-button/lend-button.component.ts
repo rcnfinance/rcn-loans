@@ -136,7 +136,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       if (!isParcelStatusOpen) {
         this.dialog.open(DialogGenericErrorComponent, {
           data: {
-            error: new Error('Not Available, Parcel is already sold')
+            error: new Error('The parcel linked to this loan has already been sold.')
           }
         });
         return;
@@ -145,7 +145,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       if (isMortgageCancelled) {
         this.dialog.open(DialogGenericErrorComponent, {
           data: {
-            error: new Error('Not Available, Mortgage has been cancelled')
+            error: new Error('This mortgage loan has been cancelled.')
           }
         });
         return;
@@ -165,7 +165,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     // borrower validation
     const account: string = await this.web3Service.getAccount();
     if (this.loan.borrower.toLowerCase() === account.toLowerCase()) {
-      this.openSnackBar('The lender cannot be the same as the borrower', '');
+      this.openSnackBar('You can´t fund a loan that you have borrowed.', '');
       return;
     }
     if (this.loan.network === Network.Basalt) {
@@ -175,7 +175,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     // lend token validation
     const token = this.lendToken;
     if (!this.showLendDialog && !token) {
-      this.openSnackBar('Please choose a currency', '');
+      this.openSnackBar('You must select an currency to continue', '');
       return;
     }
 
@@ -194,7 +194,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'click-lend',
       Category.Loan,
-      'request #' + this.loan.id
+      'request ' + this.loan.id
     );
     this.handleLend();
   }
@@ -293,7 +293,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'lend',
           Category.Account,
-          'loan #' + this.loan.id
+          'loan ' + this.loan.id
         );
 
         this.retrievePendingTx();
@@ -301,21 +301,21 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'show-insufficient-funds-lend',
           Category.Account,
-          'loan #' + this.loan.id,
+          'loan ' + this.loan.id,
           required
         );
 
         const currency = environment.usableCurrencies.filter(token => token.address === lendToken)[0];
         this.showInsufficientFundsDialog(required, balance, currency.symbol);
       }
-    } catch (e) {
+    } catch (err) {
       // Don't show 'User denied transaction signature' error
-      if (e.stack.indexOf('User denied transaction signature') < 0) {
+      if (err.stack.indexOf('User denied transaction signature') < 0) {
+        this.eventsService.trackError(err);
         this.dialog.open(DialogGenericErrorComponent, {
-          data: { error: e }
+          data: { error: err }
         });
       }
-      console.error(e);
     } finally {
       this.finishOperation();
     }
@@ -334,7 +334,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    */
   startOperation() {
     console.info('Started lend');
-    this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
+    this.openSnackBar('Your transaction is being processed. This might take a few second', '');
     this.opPending = true;
   }
 
@@ -343,7 +343,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    */
   cancelOperation() {
     console.info('Cancel lend');
-    this.openSnackBar('Your transaction has failed', '');
+    this.openSnackBar('Hmm, It seems like your transaction has failed. Please try again.', '');
     this.opPending = false;
   }
 
@@ -394,7 +394,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     if (tx.confirmed) {
       return 'Lent';
     }
-    return 'Lending...';
+    return 'Lending';
   }
 
   openSnackBar(message: string, action: string) {

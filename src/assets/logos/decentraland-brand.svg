@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.6, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 169.8 23.5" style="enable-background:new 0 0 169.8 23.5;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:url(#world_1_);}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:url(#shadow_1_);}
+	.st2{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+	.st3{fill-rule:evenodd;clip-rule:evenodd;fill:#FF2D55;}
+	.st4{fill-rule:evenodd;clip-rule:evenodd;fill:#FC9965;}
+	.st5{fill-rule:evenodd;clip-rule:evenodd;fill:#FFBC5B;}
+	.st6{fill-rule:evenodd;clip-rule:evenodd;fill:url(#SVGID_1_);}
+	.st7{fill-rule:evenodd;clip-rule:evenodd;fill:#FFC95B;}
+	.st8{fill:#FFFFFF;}
+</style>
+<g id="ui-kit">
+	<g id="logo-copy-2" transform="translate(-58.000000, -1135.000000)">
+		<g id="Group-Copy-2" transform="translate(58.000000, 1135.000000)">
+			<g>
+				
+					<linearGradient id="world_1_" gradientUnits="userSpaceOnUse" x1="-549.9127" y1="521.5108" x2="-550.0275" y2="521.396" gradientTransform="matrix(144 0 0 -144 79222 75101)">
+					<stop  offset="0" style="stop-color:#FF2D55"/>
+					<stop  offset="1" style="stop-color:#FFBC5B"/>
+				</linearGradient>
+				<circle id="world" class="st0" cx="26.3" cy="11.7" r="11.7"/>
+				<g id="big-pyramid" transform="translate(5.760000, 46.800000)">
+					
+						<linearGradient id="shadow_1_" gradientUnits="userSpaceOnUse" x1="-547.9926" y1="469.6848" x2="-547.9926" y2="469.5224" gradientTransform="matrix(45 0 0 -54 24680.4512 25323.8008)">
+						<stop  offset="0" style="stop-color:#A524B3"/>
+						<stop  offset="1" style="stop-color:#FF2D55"/>
+					</linearGradient>
+					<polygon id="shadow" class="st1" points="17.1,-39.2 17.1,-30.4 24.4,-30.4 					"/>
+					<polygon id="light" class="st2" points="9.8,-30.4 17.1,-30.4 17.1,-39.2 					"/>
+				</g>
+				<path id="end" class="st3" d="M19.3,21.1c2,1.5,4.4,2.3,7,2.3s5.1-0.9,7-2.3H19.3z"/>
+				<path id="horizon" class="st4" d="M16.9,18.7c0.7,0.9,1.5,1.7,2.3,2.3h14c0.9-0.7,1.7-1.5,2.3-2.3H16.9z"/>
+				<path id="ground" class="st5" d="M30.3,16.4H15.6c0.4,0.8,0.8,1.6,1.4,2.3h13.4L30.3,16.4L30.3,16.4z"/>
+				<g id="small-pyramid" transform="translate(63.360000, 75.600000)">
+					
+						<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-602.5052" y1="438.3976" x2="-602.5052" y2="438.2352" gradientTransform="matrix(33.012 0 0 -39.6 19859.5137 17297.2402)">
+						<stop  offset="0" style="stop-color:#A524B3"/>
+						<stop  offset="1" style="stop-color:#FF2D55"/>
+					</linearGradient>
+					<polygon class="st6" points="-33.1,-63.3 -33.1,-56.9 -27.7,-56.9 					"/>
+					<polygon class="st2" points="-38.4,-56.9 -33.1,-56.9 -33.1,-63.3 					"/>
+				</g>
+				<circle id="big-moon" class="st7" cx="30.3" cy="7.6" r="2.9"/>
+				<circle id="small-moon" class="st7" cx="22.9" cy="4.4" r="1.5"/>
+			</g>
+			<path id="Decentraland" class="st8" d="M46.1,5.5h4.7c3.8,0,6.1,2.3,6.1,6.3s-2.3,6.4-6.1,6.4h-4.7V5.5z M48.4,7.4v8.9h2.2
+				c2.6,0,4-1.6,4-4.5c0-2.9-1.4-4.4-4-4.4H48.4z M62.7,10.2c-1.3,0-2.2,0.9-2.3,2.3H65C64.9,11.1,64,10.2,62.7,10.2z M65,15.4h2.1
+				c-0.3,1.8-2,3-4.3,3c-2.9,0-4.6-1.9-4.6-4.9s1.8-5,4.6-5c2.7,0,4.4,1.8,4.4,4.8v0.7h-6.8v0.1c0,1.6,1,2.6,2.5,2.6
+				C63.9,16.7,64.7,16.2,65,15.4z M77.1,12H75c-0.2-1-0.9-1.8-2.2-1.8c-1.5,0-2.4,1.2-2.4,3.2c0,2,1,3.2,2.4,3.2
+				c1.2,0,2-0.6,2.2-1.7h2.1c-0.2,2.1-1.8,3.5-4.3,3.5c-2.8,0-4.6-1.9-4.6-5c0-3,1.8-5,4.6-5C75.4,8.4,77,10,77.1,12z M82.6,10.2
+				c-1.3,0-2.2,0.9-2.3,2.3h4.6C84.9,11.1,84,10.2,82.6,10.2z M84.9,15.4H87c-0.3,1.8-2,3-4.3,3c-2.9,0-4.6-1.9-4.6-4.9s1.8-5,4.6-5
+				c2.7,0,4.4,1.8,4.4,4.8v0.7h-6.8v0.1c0,1.6,1,2.6,2.5,2.6C83.8,16.7,84.7,16.2,84.9,15.4z M88.6,18.2V8.6h2.1v1.7h0
+				c0.6-1.2,1.6-1.8,3-1.8c2.1,0,3.4,1.4,3.4,3.6v6.2h-2.2v-5.7c0-1.4-0.7-2.2-2-2.2c-1.4,0-2.2,1-2.2,2.4v5.5H88.6z M99.6,6.4h2.2
+				v2.2h1.8v1.7h-1.8v5.1c0,0.8,0.4,1.2,1.2,1.2c0.2,0,0.5,0,0.7,0v1.7c-0.2,0.1-0.7,0.1-1.2,0.1c-2.1,0-2.9-0.7-2.9-2.6v-5.4h-1.3
+				V8.6h1.3V6.4z M105.2,18.2V8.6h2.1v1.7h0c0.3-1.1,1.2-1.8,2.3-1.8c0.3,0,0.5,0,0.7,0.1v2c-0.2-0.1-0.5-0.1-0.9-0.1
+				c-1.3,0-2.1,0.8-2.1,2.2v5.6H105.2z M114.9,16.6c1.3,0,2.4-0.8,2.4-2v-0.7l-2.2,0.1c-1.2,0.1-1.8,0.5-1.8,1.3
+				C113.2,16.2,113.9,16.6,114.9,16.6z M114.2,18.3c-1.9,0-3.3-1.2-3.3-2.9c0-1.7,1.3-2.7,3.8-2.9l2.5-0.2v-0.7c0-1-0.7-1.6-1.9-1.6
+				c-1,0-1.7,0.5-1.9,1.3h-2c0.1-1.8,1.7-3,4-3c2.4,0,4,1.3,4,3.2v6.6h-2.1v-1.6h-0.1C116.7,17.7,115.5,18.3,114.2,18.3z
+				 M121.4,18.2V4.9h2.2v13.3H121.4z M129,16.6c1.3,0,2.4-0.8,2.4-2v-0.7l-2.2,0.1c-1.2,0.1-1.8,0.5-1.8,1.3
+				C127.3,16.2,128,16.6,129,16.6z M128.4,18.3c-1.9,0-3.3-1.2-3.3-2.9c0-1.7,1.3-2.7,3.8-2.9l2.5-0.2v-0.7c0-1-0.7-1.6-1.9-1.6
+				c-1,0-1.7,0.5-1.9,1.3h-2c0.1-1.8,1.7-3,4-3c2.4,0,4,1.3,4,3.2v6.6h-2.1v-1.6h-0.1C130.9,17.7,129.7,18.3,128.4,18.3z
+				 M135.4,18.2V8.6h2.1v1.7h0c0.6-1.2,1.6-1.8,3-1.8c2.1,0,3.4,1.4,3.4,3.6v6.2h-2.2v-5.7c0-1.4-0.7-2.2-2-2.2
+				c-1.4,0-2.2,1-2.2,2.4v5.5H135.4z M149.5,18.3c-2.4,0-4-1.9-4-4.9c0-3,1.6-4.9,4-4.9c1.4,0,2.5,0.7,3,1.7h0.1V4.9h2.2v13.3h-2.2
+				v-1.6h0C152,17.7,150.9,18.3,149.5,18.3z M150.1,10.3c-1.5,0-2.4,1.2-2.4,3.1c0,1.9,1,3.1,2.4,3.1s2.4-1.2,2.4-3.1
+				C152.5,11.5,151.6,10.3,150.1,10.3z"/>
+		</g>
+	</g>
+</g>
+</svg>

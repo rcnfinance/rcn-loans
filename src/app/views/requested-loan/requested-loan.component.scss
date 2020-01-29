@@ -3,6 +3,10 @@
 $filterHeight: 630px;
 $filterHeightDesktop: 102px;
 
+.page-header {
+  text-align: right;
+}
+
 .requested-wrapper{
   .filters{
     display: none;
@@ -61,6 +65,19 @@ $filterHeightDesktop: 102px;
     }
     .icon-disabled{
       opacity: 0; @include transform(rotate(180deg));
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .page-header {
+    text-align: inherit;
+    position: relative;
+
+    button {
+      position: absolute;
+      bottom: -4px;
+      right: 0;
     }
   }
 }

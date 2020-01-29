@@ -1,4 +1,6 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
+// App services
+import { EventsService } from './../../services/events.service';
 
 @Component({
   selector: 'app-infinite-progress-bar',
@@ -16,7 +18,9 @@ export class InfiniteProgressBarComponent implements OnInit, OnChanges {
   progress: number;
   interval: any;
 
-  constructor() { }
+  constructor(
+    private eventsService: EventsService
+  ) { }
 
   ngOnInit() {
     if (this.start) {
@@ -134,8 +138,9 @@ export class InfiniteProgressBarComponent implements OnInit, OnChanges {
   stopProgress(interval = this.interval) {
     try {
       clearInterval(interval);
-    } catch (e) {
-      throw Error(e);
+    } catch (err) {
+      this.eventsService.trackError(err);
+      throw Error(err);
     }
   }
 }
