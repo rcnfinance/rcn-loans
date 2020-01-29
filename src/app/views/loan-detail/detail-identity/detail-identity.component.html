@@ -32,12 +32,15 @@
   <div class="empty-row">
     <i class="fas fa-id-badge"></i>
     <div class="margintop20"></div>
-    <div class="title main-h3">The borrower of this loan is anonymous</div>
+    <div class="title main-h3">
+      This loan was requested by an unknown borrower
+    </div>
     <div class="margintop10"></div>
     <div class="title main-h4">
-      The address is
-      <a target="_blank" href="{{ borrowerLinkExplorer }}">{{ loan.borrower }}</a>
-      , but we have no information about its identity
+      The signing address is 
+      <a target="_blank" href="{{ borrowerLinkExplorer }}">
+        {{ loan.borrower }}
+      </a>
     </div>
   </div>
 </div>
