@@ -16,6 +16,7 @@ declare let require: any;
 const p = require('../../package.json') as any;
 
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
+const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 
 export const environment = {
   version: p.version,
@@ -41,13 +42,16 @@ export const environment = {
     url: 'https://oracle.ripio.com/rate/'
   },
   network: {
-    id: '3',
+    id: 3,
     name: 'Ropsten',
     explorer: {
       address: 'https://ropsten.etherscan.io/address/${address}',
       tx: 'https://ropsten.etherscan.io/tx/${tx}'
     },
-    provider: 'https://ropsten.infura.io/v3/acf3c538f57040839369e7c1b023c3c6'
+    provider: {
+      id: INFURA_ID,
+      url: `https://ropsten.infura.io/v3/${ INFURA_ID }`
+    }
   },
   contracts: {
     rcnToken: RCN_TOKEN,

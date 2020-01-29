@@ -20,7 +20,7 @@ export class ApiService {
   diasporeUrl = environment.rcn_node_api.diasporeUrl;
   basaltUrl = environment.rcn_node_api.basaltUrl;
   multicallConfig = {
-    rpcUrl: environment.network.provider,
+    rpcUrl: environment.network.provider.url,
     multicallAddress: environment.contracts.multicall
   };
 

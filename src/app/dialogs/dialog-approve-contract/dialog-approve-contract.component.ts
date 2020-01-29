@@ -444,6 +444,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
 
     this.account = web3.utils.toChecksumAddress(account);
     this.shortAccount = Utils.shortAddress(this.account);
+
     return this.account;
   }
 

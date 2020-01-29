@@ -43,25 +43,19 @@ export class AddressComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.route.params.subscribe(async params => {
-      this.spinner.show(this.pageId);
+    this.titleService.changeTitle('Address');
+    this.spinner.show(this.pageId);
 
+    this.route.params.subscribe(params => {
       const web3 = this.web3Service.web3;
-      const address = web3.utils.toChecksumAddress(params['address']);
-      this.address = address;
-      this.shortAddress = Utils.shortAddress(address);
-
-      await this.checkMyLoans();
-      this.setPageTitle();
-      this.loadLoans(address);
+      this.address = web3.utils.toChecksumAddress(params['address']);
+      this.loadLoans(this.address);
     });
 
     // Available Loans service
     this.subscriptionAvailable = this.availableLoansService.currentAvailable.subscribe(
       available => this.available = available
     );
-
-    this.handleLoginEvents();
   }
 
   ngOnDestroy() {
