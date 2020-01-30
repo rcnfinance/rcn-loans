@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 // App Models
 import { Loan, Status, Network } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
+import { Installment } from '../../interfaces/installment';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Services
@@ -18,6 +19,7 @@ import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
 import { EventsService } from './../../services/events.service';
+import { InstallmentService } from './../../services/installment.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -60,10 +62,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   interest: string;
   duration: string;
   nextInstallment: {
-    installment: string,
-    amount: string,
-    dueDate: string,
-    dueTime: string
+    dueDays: string;
+    payNumber: string;
+    installment: Installment;
   };
   lendDate: string;
   dueDate: string;
@@ -90,6 +91,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private web3Service: Web3Service,
     private brandingService: BrandingService,
     private eventsService: EventsService,
+    private installmentService: InstallmentService,
     public dialog: MatDialog
   ) { }
 
@@ -121,6 +123,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.eventsService.trackError(err);
         this.router.navigate(['/loan', params.id, '404'], { skipLocationChange: true });
       }
+
+      // this.openDetail('installments');
     });
   }
 
@@ -365,30 +369,31 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load next installment data
+   * Load the next installment data
    */
-  private loadInstallments() {
-    const installments: number = this.loan.descriptor.installments;
-    const installmentDuration: string = Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments);
-    const installmentAmount: number = this.loan.currency.fromUnit(this.loan.descriptor.firstObligation);
-    const installmentCurrency: string = this.loan.currency.symbol;
-    const nextInstallment: number = this.isRequest ? 1 : 1; // TODO - Next installment
-    const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+  private async loadInstallments() {
+    const loan: Loan = this.loan;
+    const installment: Installment = await this.installmentService.getCurrentInstallment(loan);
+    const secondsInDay = 86400;
+    const addSuffix = (n: number): string => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+    const payNumber = `${ installment.payNumber + addSuffix(installment.payNumber) } Pay`;
+    const dueDate: number = new Date(installment.dueDate).getTime() / 1000;
+    const nowDate: number = new Date().getTime() / 1000;
+    const daysLeft: number = Math.round((dueDate - nowDate) / secondsInDay);
 
-    this.diasporeData = [
-      ['Installments', 'Frequency', 'Amount'],
-      [
-        `${ installments } ${ installments > 1 ? 'Payments' : 'Payment' }`,
-        installmentDuration,
-        `${ installmentAmount } ${ installmentCurrency }`
-      ]
-    ];
+    let dueDays: string = Utils.formatDelta(dueDate - nowDate, 1);
+    if (daysLeft > 1) {
+      dueDays += ' left';
+    } else if (daysLeft === 1 || daysLeft === 0) {
+      dueDays += ' left';
+    } else {
+      dueDays += ' ago';
+    }
 
     this.nextInstallment = {
-      installment: `${ nextInstallment + addSuffix(nextInstallment) } Pay`,
-      amount: `${ Utils.formatAmount(installmentAmount) } ${ installmentCurrency }`,
-      dueDate: installmentDuration,
-      dueTime: null
+      payNumber,
+      dueDays,
+      installment
     };
   }
 

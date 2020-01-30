@@ -1,0 +1,127 @@
+<ng-container *ngIf="installments; else empty">
+  <section class="installments-detail px-3 px-md-4 pt-lg-5 mt-lg-5">
+    <!-- FIXME: mockup installments UI -->
+    <!-- <pre style="text-align:left">{{ installments | json }}</pre> -->
+    <div class="installments-detail__title pl-1">
+      <h3>
+        Installments
+      </h3>
+    </div>
+
+    <div class="row row--header align-items-center mx-0 mb-3">
+      <div class="col col-lg-1 px-0">
+        Pay
+      </div>
+      <div class="col col-lg-2 px-0">
+        Due date
+      </div>
+      <div class="col col-lg-2 px-0">
+        Payment
+      </div>
+      <div class="col col-lg-2 px-0">
+        Installment amount
+      </div>
+      <div class="col col-lg-2 px-0">
+        Pending
+      </div>
+      <div class="col col-lg-2 px-0">
+        Total paid
+      </div>
+      <div class="col col-lg-1 px-0">
+      </div>
+    </div>
+
+    <div class="spinner-wrapper">
+      <ngx-spinner
+        bdColor="transparent"
+        size="medium"
+        color="#fff"
+        type="ball-clip-rotate-multiple"
+        [name]="componentId"
+        [fullScreen]="false"
+      ></ngx-spinner>
+    </div>
+
+    <mat-expansion-panel
+      *ngFor="let installment of installments; let i = index"
+      [disabled]="!installment.pays?.length"
+      class="installment"
+      [class.installment--light]="i % 2 === 0"
+      [class.installment--current]="installment.isCurrent"
+      [class.installment--multiple-pays]="installment.pays?.length"
+    >
+      <mat-expansion-panel-header>
+        <div class="d-flex full-width">
+          <div class="installment__col installment__col--pay">
+            {{ installment.payNumber }}
+          </div>
+          <div class="installment__col installment__col--due-date">
+            {{ installment.dueDate | date: 'MM/dd/yyyy' }}
+          </div>
+          <div class="installment__col installment__col--payment-amount">
+
+          </div>
+          <div class="installment__col installment__col--amount">
+            {{ installment.amount | formatAmount }} {{ installment.currency }}
+          </div>
+          <div class="installment__col installment__col--pending">
+
+          </div>
+          <div class="installment__col installment__col--paid">
+            <ng-container *ngIf="installment.isPrev || installment.isCurrent">
+              {{ installment.totalPaid | formatAmount }}
+            </ng-container>
+          </div>
+          <div
+            class="installment__col installment__col--status"
+            [ngClass]="'installment__col--status-' + installment.status"
+          >
+            <span>
+              <i *ngIf="!installment.isNext"
+                class="fas"
+                [class.fa-check]="installment.status === 0"
+                [class.fa-exclamation]="
+                  installment.status === 1 || installment.status === 2
+                "
+              ></i>
+            </span>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+
+      <div class="row row--pay mx-0" *ngFor="let pay of installment.pays">
+        <div class="installment__col installment__col--pay">
+        </div>
+        <div class="installment__col installment__col--due-date">
+        </div>
+        <div class="installment__col installment__col--payment-amount">
+          {{ pay.date | date: 'MM/dd/yyyy' }}
+        </div>
+        <div class="installment__col installment__col--amount">
+        </div>
+        <div class="installment__col installment__col--pending">
+          {{ pay.pending | formatAmount }}
+        </div>
+        <div class="installment__col installment__col--paid">
+        </div>
+        <div class="installment__col installment__col--status">
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+  </section>
+</ng-container>
+
+<ng-template #empty>
+  <div class="empty-container p-3 py-md-0">
+    <div class="empty-row">
+      <i class="material-icons font110">
+        error_outline
+      </i>
+      <div class="title main-h3">
+        There is no installments available
+      </div>
+      <div class="title main-h4"></div>
+    </div>
+  </div>
+</ng-template>

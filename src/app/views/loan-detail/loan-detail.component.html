@@ -27,7 +27,12 @@
       <!-- <app-creator-container [loan]=loan></app-creator-container> -->
     </div>
     <div class="flex-item">
-      <app-button-group (view)="openDetail($event)" [viewDetail]=viewDetail></app-button-group>
+      <app-button-group
+        [loan]="loan"
+        [viewDetail]="viewDetail"
+        (view)="openDetail($event)"
+      >
+      </app-button-group>
     </div>
   </div>
 
@@ -71,9 +76,92 @@
       </ng-template>
 
       <div class="margintop20"></div>
-      <app-detail-table [data]="diasporeData" *ngIf="isDiaspore"></app-detail-table>
-      <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled"></app-detail-table>
-      <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
+      <app-detail-table [data]="diasporeData" *ngIf="isDiaspore">
+      </app-detail-table>
+
+      <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled">
+      </app-detail-table>
+
+      <app-detail-table [data]="loanStatusData" *ngIf="!isRequest">
+      </app-detail-table>
+
+      <div
+        class="table-responsive"
+        (click)="openDetail('installments');"
+        *ngIf="loan?.descriptor.installments"
+      >
+        <table class="table table-clickable table--installments">
+          <thead>
+            <tr>
+              <th
+                style='cursor: pointer'
+                [ngClass]="{'background-active': isDetail('installments') }"
+                scope="col"
+              >
+                Installments
+                <i class="material-icons white more-indicator">
+                  {{ isDetail('installments') ? '' : 'unfold_more' }}
+                </i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style='cursor: pointer'>
+
+                <div class="table__body">
+                  <div class="row table__body-header">
+                    <div class="col col-3">
+                      <span class="subtitle">
+                        Installment
+                      </span>
+                    </div>
+                    <div class="col col-4">
+                      <span class="subtitle">
+                        Amount to pay
+                      </span>
+                    </div>
+                    <div class="col col-5">
+                      <span class="subtitle">
+                        Due date
+                        <span
+                          class="due-status ml-1"
+                          [class.due-status--success]="nextInstallment?.installment.status === 0"
+                          [class.due-status--warning]="nextInstallment?.installment.status === 1"
+                          [class.due-status--error]="nextInstallment?.installment.status === 2"
+                        >
+                          ({{ nextInstallment?.dueDays }})
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row table__body-content">
+                    <div class="col col-3">
+                      {{ nextInstallment?.payNumber || '-' }}
+                    </div>
+                    <div class="col col-4">
+                      {{ (nextInstallment?.installment.amount | formatAmount) || '-' }}
+                      {{ nextInstallment?.installment.currency }}
+                    </div>
+                    <div class="col col-5">
+                      {{ nextInstallment?.installment.dueDate | date: 'yyyy-MM-dd' || '-' }}
+                      <span
+                        class="ml-3"
+                        [matTooltip]="nextInstallment?.installment.dueDate | date: 'H:mm z'"
+                      >
+                        <i class="far fa-clock"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
 
       <div class="table-responsive" *ngIf='availableOracle'>
         <table class="table">
@@ -168,6 +256,7 @@
     <div class="right px-0 col-xs-12 col-lg-7">
       <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
       <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
+      <app-detail-installments *ngIf="isDetail('installments')" [loan]="loan"></app-detail-installments>
     </div>
 
   </div>

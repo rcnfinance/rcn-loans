@@ -9,6 +9,13 @@
     [ngClass]="{'active': viewDetail === 'identity' ? true : false }" matTooltip="Borrower" matTooltipPosition="below">
     <i class="fas fa-id-badge"></i>
   </div>
+  <div
+    *ngIf="loan?.descriptor.installments"
+    class="button-options"
+    (click)="openDetail('installments')"
+    [ngClass]="{'active': viewDetail === 'installments' ? true : false }" matTooltip="Installments" matTooltipPosition="below">
+    <i class="fas fa-chart-pie"></i>
+  </div>
 
   <mat-menu #appMenu="matMenu" yPosition="below">
     <button mat-menu-item
@@ -22,6 +29,15 @@
       [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }">
       <i class="fas fa-shield-alt"></i>
       <span>Collateral</span>
+    </button>
+    <button
+      *ngIf="loan?.descriptor.installments"
+      mat-menu-item
+      (click)="openDetail('installments')"
+      [ngClass]="{'active': viewDetail === 'installments' ? true : false }"
+    >
+      <i class="fas fa-chart-pie"></i>
+      <span>Installments</span>
     </button>
   </mat-menu>
 
