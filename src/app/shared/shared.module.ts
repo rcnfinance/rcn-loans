@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxSpinnerModule } from 'ngx-spinner';
 // App Modules
 import { MaterialModule } from './../material.module';
 // App Component
@@ -37,6 +38,8 @@ import { DialogGenericErrorComponent } from '../dialogs/dialog-generic-error/dia
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
+import { ErrorDetailsComponent } from './error-details/error-details.component';
+import { PageHeaderComponent } from './page-header/page-header.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 import { FormatAmountPipe } from './../pipes/format-amount.pipe';
@@ -49,7 +52,6 @@ import { IdentityService } from './../services/identity.service';
 import { RiskService } from './../services/risk.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
-import { ErrorDetailsComponent } from './error-details/error-details.component';
 
 @NgModule({
   imports: [
@@ -59,7 +61,7 @@ import { ErrorDetailsComponent } from './error-details/error-details.component';
     BlockiesModule,
     FormsModule,
     ReactiveFormsModule,
-    BlockiesModule
+    NgxSpinnerModule
   ],
   declarations: [
     FooterComponent,
@@ -85,6 +87,7 @@ import { ErrorDetailsComponent } from './error-details/error-details.component';
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
     ErrorDetailsComponent,
+    PageHeaderComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
@@ -141,6 +144,7 @@ import { ErrorDetailsComponent } from './error-details/error-details.component';
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
     ErrorDetailsComponent,
+    PageHeaderComponent,
     DialogWrongCountryComponent,
     VisualUrlPipe,
     FormatAmountPipe

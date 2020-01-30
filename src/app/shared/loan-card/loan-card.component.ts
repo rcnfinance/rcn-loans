@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { Loan, Network, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Web3Service } from '../../services/web3.service';
-import { ContractsService } from '../../services/contracts.service';
 
 @Component({
   selector: 'app-loan-card',
@@ -35,8 +34,7 @@ export class LoanCardComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialog: MatDialog,
-    private web3Service: Web3Service,
-    private contractsService: ContractsService
+    private web3Service: Web3Service
   ) { }
 
   async ngOnInit() {
@@ -85,22 +83,10 @@ export class LoanCardComponent implements OnInit, OnDestroy {
    * Refresh loan when lending status is updated
    */
   onUserAction(action: 'lend') {
-    const miliseconds = 7000;
+    // TODO: update specific values according to the action taken
     console.info('user action detected', action);
 
-    setTimeout(async() => {
-      await this.refreshLoan();
-
-      // dynamic loan information
-      this.loadAccount();
-    }, miliseconds);
-  }
-
-  private async refreshLoan() {
-    const loan: Loan = await this.contractsService.getLoan(this.loan.id);
-    this.stateLoan = loan;
-
-    await this.getLoanDetails();
+    this.canLend = false;
   }
 
   /**
@@ -113,22 +99,22 @@ export class LoanCardComponent implements OnInit, OnDestroy {
       this.leftValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.amount));
       this.durationLabel = 'Duration';
       this.durationValue = Utils.formatDelta(this.stateLoan.descriptor.duration);
-      this.rightLabel = 'Return';
+      this.rightLabel = 'Receive';
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.descriptor.totalObligation));
     } else if (this.stateLoan instanceof Loan) {
       const currency = this.stateLoan.currency;
       this.leftLabel = 'Paid';
       this.leftValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.debt.model.paid));
-      this.durationLabel = 'Remaining';
+      this.durationLabel = 'Next payment in';
       this.durationValue = Utils.formatDelta(this.stateLoan.debt.model.dueTime - (new Date().getTime() / 1000));
-      this.rightLabel = 'Pending';
+      this.rightLabel = 'Due';
       const basaltPaid = this.stateLoan.network === Network.Basalt ? currency.fromUnit(this.stateLoan.debt.model.paid) : 0;
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.debt.model.estimatedObligation) - basaltPaid);
       this.canLend = false;
       if (this.stateLoan.status === Status.Indebt) {
-        this.durationLabel = 'In debt for';
+        this.durationLabel = 'Overdue for';
       } else {
-        this.durationLabel = 'Remaining';
+        this.durationLabel = 'Next payment in';
       }
     }
     this.installments = this.getInstallments();
@@ -146,13 +132,13 @@ export class LoanCardComponent implements OnInit, OnDestroy {
       switch (installments) {
         case 0:
         case 1:
-          return `1 pay`;
+          return `1 Payment`;
 
         default:
-          return `${ installments } pays`;
+          return `${ installments } Payments`;
       }
     } catch (e) {
-      return '1 pay';
+      return '1 Payment';
     }
   }
 

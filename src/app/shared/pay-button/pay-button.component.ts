@@ -87,6 +87,8 @@ export class PayButtonComponent implements OnInit, OnDestroy {
   trackPayTx(tx: Tx) {
     if (tx.type === Type.pay && tx.data.id === this.loan.id) {
       this.endPay.emit();
+      this.web3Service.updateBalanceEvent.emit();
+      this.txSubscription = false;
     }
   }
 
@@ -113,25 +115,24 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     }
     // debt validation
     if (!this.loan.debt) {
-      this.openSnackBar('The loan was not yet lended', '');
+      this.openSnackBar('You can´t pay this loan because it hasn´t been funded yet.', '');
       return;
     }
     // unlogged user
     if (!this.web3Service.loggedIn) {
       const hasClient = await this.web3Service.requestLogin();
-      if (this.web3Service.loggedIn) {
-        this.handlePay();
-        return;
-      }
       if (!hasClient) {
         this.dialog.open(DialogClientAccountComponent);
+        return;
       }
-      return;
+      if (!this.web3Service.loggedIn) {
+        return;
+      }
     }
     // lender validation
     const account: string = await this.web3Service.getAccount();
     if (this.loan.debt.owner.toLowerCase() === account.toLowerCase()) {
-      this.openSnackBar('The sender cannot be the same as the lender', '');
+      this.openSnackBar('You can´t pay a loan that you have funded.', '');
       return;
     }
 
@@ -150,7 +151,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'click-pay',
       Category.Loan,
-      'loan #' + this.loan.id
+      'loan ' + this.loan.id
     );
     this.handlePay();
   }
@@ -180,7 +181,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
           this.eventsService.trackEvent(
             'show-insufficient-funds-lend',
             Category.Account,
-            'loan #' + this.loan.id,
+            'loan ' + this.loan.id,
             requiredTokens
           );
           this.showInsufficientFundsDialog(requiredTokens, balance, currency);
@@ -212,7 +213,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'set-to-pay-loan',
           Category.Loan,
-          'loan #' + this.loan.id + ' of ' + amount
+          'loan ' + this.loan.id + ' of ' + amount
         );
 
         const tx = await this.contractsService.payLoan(this.loan, amount);
@@ -220,7 +221,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'pay-loan',
           Category.Loan,
-          'loan #' + this.loan.id + ' of ' + amount
+          'loan ' + this.loan.id + ' of ' + amount
         );
 
         let engine: string;
@@ -248,14 +249,14 @@ export class PayButtonComponent implements OnInit, OnDestroy {
         this.startPay.emit();
         this.retrievePendingTx();
       }
-    } catch (e) {
+    } catch (err) {
       // Don't show 'User denied transaction signature' error
-      if (e.stack.indexOf('User denied transaction signature') < 0) {
+      if (err.stack.indexOf('User denied transaction signature') < 0) {
+        this.eventsService.trackError(err);
         this.dialog.open(DialogGenericErrorComponent, {
-          data: { error: e }
+          data: { error: err }
         });
       }
-      console.error(e);
     } finally {
       this.finishOperation();
     }
@@ -319,7 +320,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
    */
   startOperation() {
     console.info('Started pay');
-    this.openSnackBar('Your transaction is being processed. It may take a few seconds', '');
+    this.openSnackBar('Your transaction is being processed. This might take a few seconds.', '');
     this.opPending = true;
   }
 
@@ -327,7 +328,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
    * Cancel pay operation
    */
   cancelOperation() {
-    this.openSnackBar('Your transaction has failed', '');
+    this.openSnackBar('Hmm, It seems like your transaction has failed. Please try again.', '');
     this.opPending = false;
   }
 
@@ -361,9 +362,9 @@ export class PayButtonComponent implements OnInit, OnDestroy {
       return 'Pay';
     }
     if (tx.confirmed) {
-      return 'Payed';
+      return 'Repaid';
     }
-    return 'Paying...';
+    return 'Repaying';
   }
 
 }

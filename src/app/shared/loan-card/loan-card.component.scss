@@ -9,6 +9,10 @@
   background-color: var(--app-color-gray-700);
   -webkit-transition: box-shadow 150ms cubic-bezier(0,0,.2,1);
 
+  &__creator {
+    text-align: center;
+  }
+
   &__risk-indicator {
     position: absolute;
     top: 25px;

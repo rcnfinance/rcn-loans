@@ -21,7 +21,7 @@ export const environment = {
   version: p.version,
   version_name: p.version_name,
   build: getBuild(),
-  production: false,
+  production: true,
   url: 'https://mainnet.rcn.loans/',
   envName: 'main',
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
@@ -62,10 +62,7 @@ export const environment = {
     converter: {
       converterRamp: '0xe41ada0fb01F147c6385F93DEC78914F32e45061',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      tokenConverter: '0x7173E7C8c35EF0FA6DF11B23bB717F886fBD50B5',
-      params: {
-        aditionalSlippage: '2'
-      }
+      tokenConverter: '0x7173E7C8c35EF0FA6DF11B23bB717F886fBD50B5'
     },
     decentraland: {
       mortgageCreator: '0x90263Ea5C57Dc6603CA7202920735A6E31235bB9',
@@ -99,14 +96,24 @@ export const environment = {
       address: RCN_TOKEN
     },
     {
+      symbol: 'ETH',
+      img: 'assets/eth.png',
+      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+    },
+    {
       symbol: 'DAI',
       img: 'assets/dai.png',
       address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
     },
     {
-      symbol: 'ETH',
-      img: 'assets/eth.png',
-      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+      symbol: 'USDC',
+      img: 'assets/usdc.png',
+      address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+    },
+    {
+      symbol: 'MANA',
+      img: 'assets/mana.png',
+      address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
     }
   ]
 };

@@ -1,4 +1,5 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/variables';
+@import '../../../scss/fonts';
 
 .navbar{
   height: 60px;
@@ -43,6 +44,21 @@
         outline: -webkit-focus-ring-color auto 0px;
         @extend %font-bold;
         color: white;
+        position: relative;
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -5px;
+          left: 10px;
+          width: 0;
+          height: 2px;
+          background: rgba(white, 0);
+          border-radius: 2px;
+        }
+        &--active::after {
+          width: 12px;
+          background: rgba(white, 1);
+        }
       }
     }
     .icon-hamburguer{
@@ -60,7 +76,7 @@
   justify-content: space-between; // Aligns items horizontally and accepts the following values:
   align-items: center; // Aligns items vertically and Determines how the items as a whole are aligned within the container
   align-content: flex-end; // Determines the spacing between lines. When there is only one line, align-content has no effect.
-  width: 130px;
+  // width: 130px;
   height: 42px;
   > .flex-item {
     &:nth-child(1){
@@ -162,7 +178,7 @@
   }
 }
 
-@media (min-width: 1280px){
+@media (min-width: 992px){
   .navbar{
     height: 60px;
     padding: 7px 15px;
@@ -199,23 +215,29 @@
           display: block;
           font-size: 16px;
           cursor: pointer;
-          @include transition;
           i{
             color: #fff;
           }
-          &:hover{
-            color: var(--app-color-primary);
+          &,
+          &::after {
+            @include transition(all 0.2s ease);
           }
-          &.separator{
-            font-weight: 300;
-            cursor: default;
-            &:hover{
-              color: var(--app-color-secondary);
+          &:hover {
+            color: var(--app-color-primary);
+            &.nav__item--active::after {
+              background: var(--app-color-primary);
             }
           }
           &:last-child{
             margin-right: 0;
+            @include styled-font('Roboto', 600, 16px);
           }
+        }
+        .separator{
+          font-size: 1.4em;
+          font-weight: 300;
+          color: var(--app-color-gray-50);
+          cursor: default;
         }
       }
       .icon-hamburguer{

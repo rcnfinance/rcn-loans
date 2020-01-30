@@ -4,8 +4,10 @@ import { Loan, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 import { environment } from '../../../environments/environment';
+// App services
 import { ContractsService } from '../../services/contracts.service';
 import { Web3Service } from '../../services/web3.service';
+import { EventsService } from '../../services/events.service';
 
 @Component({
   selector: 'app-dialog-loan-lend',
@@ -15,9 +17,9 @@ import { Web3Service } from '../../services/web3.service';
 export class DialogLoanLendComponent implements OnInit {
   // loan
   loan: Loan;
+  shortLoanId: string;
   loanAmount: string;
   loanExpectedReturn: any;
-  loanCurrency: string;
   isRequest: boolean;
   isCanceled: boolean;
   // lend
@@ -27,6 +29,7 @@ export class DialogLoanLendComponent implements OnInit {
   lendToken: string;
   exchangeRcn: string;
   exchangeToken: string;
+  exchangeTooltip: string;
   // general
   account: string;
   canLend: boolean;
@@ -44,6 +47,7 @@ export class DialogLoanLendComponent implements OnInit {
   constructor(
     private contractsService: ContractsService,
     private web3Service: Web3Service,
+    private eventsService: EventsService,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
@@ -79,6 +83,10 @@ export class DialogLoanLendComponent implements OnInit {
     // set loan status
     this.isCanceled = this.loan.status === Status.Destroyed;
     this.isRequest = this.loan.status === Status.Request;
+
+    this.loadExchangeTooltip();
+    this.shortLoanId =
+      this.loan.id.startsWith('0x') ? Utils.shortAddress(this.loan.id) : this.loan.id;
   }
 
   /**
@@ -91,7 +99,9 @@ export class DialogLoanLendComponent implements OnInit {
 
     try {
       await this.calculateAmounts();
+      this.loadExchangeTooltip();
     } catch (e) {
+      this.eventsService.trackError(e);
       throw Error('error calculating currency amounts');
     }
   }
@@ -135,28 +145,18 @@ export class DialogLoanLendComponent implements OnInit {
         this.expectedReturnWarning = true;
       }
     } else {
-      // rcn -> currency
-      lendAmount = await this.contractsService.getPriceConvertFrom(
-        fromToken,
+      lendAmount = await this.contractsService.getPriceConvertTo(
         toToken,
+        fromToken,
         rcnAmount
       );
+
       // TODO: Expected return in selected currency
       // lendExpectedReturn = await this.contractsService.getPriceConvertFrom(
       //   fromToken,
       //   toToken,
       //   rcnExpectedReturn
       // );
-
-      // set slippage
-      const aditionalSlippage = new web3.BigNumber(
-        environment.contracts.converter.params.aditionalSlippage
-      );
-      lendAmount = new web3.BigNumber(lendAmount).mul(
-        new web3.BigNumber(100).add(aditionalSlippage)
-      ).div(
-        new web3.BigNumber(100)
-      );
 
       // set lending currency rate
       const lendCurrencyRate = new web3.BigNumber(web3.fromWei(lendAmount / loanAmount));
@@ -173,6 +173,40 @@ export class DialogLoanLendComponent implements OnInit {
     this.lendExpectedReturn = Utils.formatAmount(
       Number(web3.fromWei(rcnExpectedReturn))
     );
+  }
+
+  loadExchangeTooltip() {
+    const loanCurrency: string = this.loan.currency.toString();
+    const lendCurrency: string = this.lendCurrency;
+    const oracle = this.loan.oracle;
+    const tokenConverter = environment.contracts.converter.tokenConverter;
+
+    if (!this.exchangeToken) {
+      if (loanCurrency !== 'RCN') {
+        this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
+        the ${ oracle } oracle.`;
+        return;
+      }
+      this.exchangeTooltip = null;
+      return;
+    }
+
+    if (loanCurrency !== 'RCN' && lendCurrency !== 'RCN') {
+      this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
+      the ${ oracle } oracle. The RCN/${ lendCurrency } exchange rate for this loan is calculated
+      using the ${ tokenConverter } token converter contract.`;
+      return;
+    }
+    if (loanCurrency !== 'RCN') {
+      this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
+      the ${ oracle } oracle.`;
+      return;
+    }
+    if (lendCurrency !== 'RCN') {
+      this.exchangeTooltip = `The RCN/${ lendCurrency } exchange rate for this loan is calculated using
+      the ${ tokenConverter } token converter contract.`;
+      return;
+    }
   }
 
   /**

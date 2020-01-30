@@ -1,15 +1,16 @@
 import { BigNumber } from 'bignumber.js';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { Loan, Oracle, Network } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
+import { promisify, Utils } from './../utils/utils';
 import { environment } from '../../environments/environment';
+// App services
 import { Web3Service } from './web3.service';
 import { TxService } from '../services/tx.service';
 import { CosignerService } from './cosigner.service';
 import { ApiService } from './api.service';
-import { promisify, Utils } from './../utils/utils';
+import { EventsService } from './events.service';
 
 declare let require: any;
 
@@ -41,7 +42,8 @@ export class ContractsService {
     private web3: Web3Service,
     private txService: TxService,
     private cosignerService: CosignerService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private eventsService: EventsService
   ) {
     this._rcnEngine = this.makeContract(engineAbi.abi, this._rcnEngineAddress);
     this._loanManager = this.makeContract(loanManagerAbi, environment.contracts.diaspore.loanManager);
@@ -209,6 +211,68 @@ export class ContractsService {
   }
 
   /**
+   * Check if the contract is approved for operate with ERC721
+   * @param contractAddress ERC721 address
+   * @param operatorAddress address to be disapproved
+   * @return Boolean
+   */
+  async isApprovedERC721(contractAddress: string, operatorAddress: string) {
+    const pending = this.txService.getLastPendingApprove(contractAddress, operatorAddress);
+
+    if (pending !== undefined) {
+      return true;
+    }
+
+    const account = await this.web3.getAccount();
+    const erc721abi: any = {}; // FIXME: use real erc721 abi
+    const erc721 = this.makeContract(erc721abi, contractAddress);
+    return await promisify(erc721.isApprovedForAll.call, [
+      operatorAddress,
+      account
+    ]);
+  }
+
+  /**
+   * Approve contract for operate with erc721
+   * @param contractAddress ERC721 address
+   * @param operatorAddress address to be approved
+   * @return Tx hash
+   */
+  async approveERC721(contractAddress: string, operatorAddress: string) {
+    const web3 = this.web3.opsWeb3;
+    const account = await this.web3.getAccount();
+    const erc721abi: any = {}; // FIXME: use real erc721 abi
+    const erc721: any = this.makeContract(erc721abi, contractAddress);
+
+    const txHash: string = await promisify(this.loadAltContract(web3, erc721).setApprovalForAll, [
+      operatorAddress, true, { from: account }
+    ]);
+
+    this.txService.registerApproveTx(txHash, contractAddress, operatorAddress, true);
+    return txHash;
+  }
+
+  /**
+   * Disapprove contract for operate with erc721
+   * @param contractAddress ERC721 address
+   * @param operatorAddress address to be disapproved
+   * @return Tx hash
+   */
+  async disapproveERC721(contractAddress: string, operatorAddress: string) {
+    const web3 = this.web3.opsWeb3;
+    const account = await this.web3.getAccount();
+    const erc721abi: any = {}; // FIXME: use real erc721 abi
+    const erc721: any = this.makeContract(erc721abi, contractAddress);
+
+    const txHash: string = await promisify(this.loadAltContract(web3, erc721).setApprovalForAll, [
+      operatorAddress, false, { from: account }
+    ]);
+
+    this.txService.registerApproveTx(txHash, contractAddress, operatorAddress, false);
+    return txHash;
+  }
+
+  /**
    * Return estimated lend amount in RCN
    * @param loan Loan payload
    * @param tokenAddress Amount in the selected token
@@ -219,19 +283,19 @@ export class ContractsService {
     tokenAddress: string = environment.contracts.rcnToken
   ): Promise<number> {
     const rcnToken = environment.contracts.rcnToken;
+    const web3 = this.web3.web3;
 
     let required: number;
     required = loan.amount;
 
-    const oracleAbi = this.loanOracleAbi(loan.network);
+    // const oracleAbi = this.loanOracleAbi(loan.network);
 
     if (loan.oracle.address !== Utils.address0x) {
-      const oracle = this.web3.web3.eth.contract(oracleAbi).at(loan.oracle.address);
-      const oracleData = await this.getOracleData(loan.oracle);
-      const oracleRate = await promisify(oracle.readSample.call, [oracleData]);
-      const rate = oracleRate[0];
-      const decimals = oracleRate[1];
-      required = (rate * loan.amount) / decimals;
+      const currency = loan.currency;
+      const loanAmount = loan.currency.fromUnit(loan.amount);
+      let rate = await this.getRate(loan.oracle.address);
+      rate = 1 / currency.fromUnit(rate);
+      required = web3.toWei(loanAmount * rate);
     }
 
     // amount in rcn
@@ -240,13 +304,19 @@ export class ContractsService {
     }
 
     // amount in currency
-    const requiredInToken = await this.getPriceConvertFrom(
-      rcnToken,
+    const requiredInToken = await this.getPriceConvertTo(
       tokenAddress,
+      rcnToken,
       required
     );
 
-    return requiredInToken;
+    // roundup
+    // TODO: Create helper for work to all numbers in the same way
+    const roundupDecimals = 6;
+    const factor = 10 ** roundupDecimals;
+    const roundedUpAmount = Math.ceil((requiredInToken / web3.toWei(1)) * factor) / factor;
+
+    return web3.toWei(roundedUpAmount);
   }
 
   /**
@@ -450,8 +520,8 @@ export class ContractsService {
         default:
           break;
       }
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      this.eventsService.trackError(err);
       throw Error('Oracle did not provide data');
     }
   }
@@ -538,8 +608,8 @@ export class ContractsService {
       }
 
       return oracleData;
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      this.eventsService.trackError(err);
       throw Error('Oracle did not provide data');
     }
   }
