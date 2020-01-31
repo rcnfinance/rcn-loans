@@ -63,13 +63,21 @@
         {{ rightValue }}
       </div>
     </div>
-    <app-lend-button
-      [loan]="loan"
-      [showLendDialog]="true"
-      (endLend)="onUserAction('lend')"
-      *ngIf="canLend"
-    >
-    </app-lend-button>
-    <app-detail-button [loan]=loan></app-detail-button>
+    <div class="loan-card__property loan-card__property--actions">
+      <app-lend-button
+        [loan]="loan"
+        [showLendDialog]="true"
+        (endLend)="onUserAction('lend')"
+        *ngIf="canLend"
+      >
+      </app-lend-button>
+      <app-detail-button
+        [loan]="loan"
+        *ngIf="!canLend"
+      >
+      </app-detail-button>
+    </div>
   </div>
+  <a class="loan-card__href" [routerLink]="['/loan', loan?.id]">
+  </a>
 </div>
