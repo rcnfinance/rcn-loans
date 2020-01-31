@@ -11,7 +11,7 @@
 ### Enhancement:
 - Upgrade Web3 to 1.x
 
-## **0.1.0** - 2020/01/03
+## **0.1.0** Boggart 👻 - 2020/02/03
 
 ### Feature:
 
