@@ -1,7 +1,7 @@
 {
   "name": "rcn-angular-dapp",
-  "version": "0.0.13",
-  "version_name": "Avocados",
+  "version": "0.1.0",
+  "version_name": "Boggart",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
