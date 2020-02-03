@@ -1,31 +1,29 @@
-@import '../../../../scss/_variables.scss'; //variables
+@import '../../../../scss/variables';
 
 .avatar-container {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   overflow: hidden;
   border-radius: 50%;
-  background-color: $primary;
-  box-shadow: 0 0 6px #00000029, 0 6px 12px rgba(0,0,0,.32);
+  background-color: var(--app-color-primary);
   &.request{color: $black; background-color: $white;}
-  &.ongoing{background-color: $blue;}
+  &.ongoing{background-color: var(--app-color-primary);}
   &.indebt{background-color: $orange;}
   &.paid{background-color: $gray7;}
   &.destroyed{background-color: $red;}
   &.expired{background-color: $red;}
-  i{
+  i {
     margin: 0 auto;
   }
-  .title{
+  .title {
     font-size: 18px;
-    color: $secondary;
+    color: var(--app-color-secondary);
     @extend %font-black;
   }
-  img{
+  img {
     width: 50px;
     border-radius: 50%;
-    box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
   }
 }

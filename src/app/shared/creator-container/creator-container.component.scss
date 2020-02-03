@@ -3,33 +3,29 @@
 .creator-container {
     height: 70px;
     position: relative;
-    background-color: #333333;
-    margin-left: -15px;
-    margin-right: -15px;
-    .creator-title{
+    background-color: var(--app-color-gray-400);
+    margin-left: -20px;
+    margin-right: -20px;
+    .creator-title,
+    .creator-image {
       position: absolute;
       top: 50%;
       left: 50%;
-      color: $fifth;
-      font-size: 36px;
-      @extend %font-black;
       @include transform(translate(-50%, -50%));
     }
-    .go-back {
-      width: 70px;
-      height: 100%;
-      position: absolute;
-      color: $secondary;
-      cursor: pointer;
-      @include transition;
-      &:hover{
-        background-color: $fifth;
-      }
-      i{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        @include transform(translate(-50%, -50%));
+    .creator-title {
+      color: var(--app-color-gray-100);
+      font-size: 36px;
+      @extend %font-black;
+    }
+    .creator-image {
+      width: 100%;
+      max-width: 250px;
+      height: 45px;
+      img {
+        max-width: 90%;
+        max-height: 100%;
+        margin: 0 auto;
       }
     }
   }
@@ -37,6 +33,6 @@
 
 @media (min-width: 768px){
   .creator-container {
-    height: 100px;    
+    height: 100px;
   }
 }

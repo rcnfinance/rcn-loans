@@ -1,6 +1,14 @@
 <div class="conversion-block">
-  <div class="block-title">{{ formatAmount(amountLeft) }}</div>
-  <div class="currency" *ngIf="textMiddle === undefined"><i class="material-icons" style="font-size: 2em">arrow_forward</i></div>
-  <div class="feature block-title" *ngIf="textMiddle !== undefined">{{ textMiddle }}</div>
-  <div class="block-title">{{ formatAmount(amountRight) }}</div>
+  <div class="block-title ellipsis">
+    {{ amountLeft }}
+  </div>
+  <div class="currency" *ngIf="textMiddle === undefined">
+    <i class="material-icons">keyboard_backspace</i>
+  </div>
+  <div class="feature block-title ellipsis" *ngIf="textMiddle !== undefined">
+    {{ textMiddle }}
+  </div>
+  <div class="block-title ellipsis">
+    {{ amountRight }}
+  </div>
 </div>

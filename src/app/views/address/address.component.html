@@ -1,23 +1,67 @@
-<ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
-<div class="container">
-  <div class="row">
-    <div class="col-sm-12 d-none d-lg-block">
-      <div class="title main-h1">lent by</div>
-      <div class="title main-h5 ellipsis">{{ address }}</div>
-      <mat-chip-list>
-        <mat-chip class="margintop30 marginright15" selected="true">{{ loans.length }} LENT</mat-chip>
-      </mat-chip-list>
-    </div>
-  </div>
-  <div class="row">
+<div
+  class="body-scrollable activity-wrapper"
+  #scrollingBlock
+>
+  <ngx-spinner
+    bdColor="transparent"
+    size="medium"
+    color="#fff"
+    type="ball-clip-rotate-multiple"
+    [name]="pageId"
+  ></ngx-spinner>
 
-    <div class="col-sm-12 text-center margintop30" *ngIf='!availableLoans'>
-      <div class="title main-h1">This address is not a lender</div>
-    </div>
+  <div class="container">
 
-    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col" 
-    *ngFor='let loan of loans; let i of index'>
-      <app-loan-card [loan]="loan"></app-loan-card>
-    </div>
+    <ng-container *ngIf="availableLoans; else noAvailableLoans">
+      <app-page-header
+        [title]="pageTitle"
+        [description]="pageDescription"
+        [hasChip]="true"
+        [chipValue]="loans.length"
+        chipLabel="FUNDED"
+      ></app-page-header>
+
+      <div class="loan-container row">
+
+        <virtual-scroller
+          #scroll
+          [items]="loans"
+          [parentScroll]="scrollingBlock"
+          [bufferAmount]="4"
+          [scrollThrottlingTime]="500"
+        >
+          <div
+            class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
+            *ngFor="let loan of scroll.viewPortItems"
+          >
+            <app-loan-card [loan]="loan"></app-loan-card>
+          </div>
+        </virtual-scroller>
+
+      </div>
+    </ng-container>
+
   </div>
+  <app-footer></app-footer>
 </div>
+
+
+<ng-template #noAvailableLoans>
+  <div class="row">
+    <div class="col-sm-12 px-0">
+      <app-error-details
+        title="Hmm..."
+        description="Its seems like you haven't funded any loans yet."
+        image="assets/errors/error_no-loans.svg"
+        [buttons]="[
+          {
+            text: 'Go to Lend',
+            url: '/requests',
+            class: 'button-primary'
+          }
+        ]"
+      >
+      </app-error-details>
+    </div>
+  </div>
+</ng-template>

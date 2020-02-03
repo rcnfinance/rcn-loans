@@ -1,0 +1,41 @@
+@import './../../../scss/variables';
+@import './../../../scss/fonts';
+
+.error-view {
+  &__label {
+    @include styled-font('Roboto', 900, 22px);
+  }
+  &__title {
+    @include typography-headline(2);
+  }
+  &__description {
+    @include typography-headline(5);
+  }
+  &__buttons {
+    button {
+      min-width: 120px;
+    }
+  }
+  &__disclaimer {
+    @include typography-body(1);
+    ::ng-deep a {
+      color: white;
+      text-decoration: underline !important;
+    }
+  }
+}
+
+.image-wrapper {
+  img {
+    display: inline-block;
+    margin: 0 auto;
+    max-width: 557px;
+    max-height: 277px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container > .row {
+    min-height: 65vh;
+  }
+}

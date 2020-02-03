@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -7,140 +7,305 @@ import {
 } from '@angular/material';
 // App Services
 import { environment } from '../../../environments/environment';
-import { TxService, Tx } from '../../tx.service';
+import { TxService, Tx, Type } from '../../services/tx.service';
 import { ContractsService } from '../../services/contracts.service';
-import { Loan } from '../../models/loan.model';
+import { Loan, Network } from '../../models/loan.model';
 import { Currency } from '../../utils/currencies';
 import { EventsService, Category } from '../../services/events.service';
 import { Web3Service } from '../../services/web3.service';
 import { CountriesService } from '../../services/countries.service';
-import { CivicService } from '../../services/civic.service';
-import { CivicAuthComponent } from '../civic-auth/civic-auth.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogInsufficientFoundsComponent } from '../../dialogs/dialog-insufficient-founds/dialog-insufficient-founds.component';
+import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 
 @Component({
   selector: 'app-pay-button',
   templateUrl: './pay-button.component.html',
   styleUrls: ['./pay-button.component.scss']
 })
-export class PayButtonComponent implements OnInit {
+export class PayButtonComponent implements OnInit, OnDestroy {
   @Input() loan: Loan;
   @Input() isOngoing: boolean;
+  @Input() amount: number;
+  @Input() showPayDialog: boolean;
+  @Input() disabled: boolean;
+  @Output() startPay = new EventEmitter();
+  @Output() endPay = new EventEmitter();
 
   pendingTx: Tx = undefined;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   opPending = false;
   lendEnabled: Boolean;
+
+  txSubscription: boolean;
+
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
     private eventsService: EventsService,
     private web3Service: Web3Service,
     public snackBar: MatSnackBar,
-    private civicService: CivicService,
     private countriesService: CountriesService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
-  async handlePay(forze = false) {
-    if (this.opPending && !forze) { return; }
+  async ngOnInit() {
+    this.retrievePendingTx();
 
+    const lendEnabled = await this.countriesService.lendEnabled();
+    this.lendEnabled = lendEnabled;
+  }
+
+  ngOnDestroy() {
+    if (this.txSubscription && this.showPayDialog) {
+      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackPayTx(tx));
+    }
+  }
+
+  /**
+   * Retrieve pending Tx
+   */
+  retrievePendingTx() {
+    this.pendingTx = this.txService.getLastPendingPay(this.loan);
+
+    if (this.pendingTx) {
+      this.startPay.emit();
+    }
+
+    if (!this.txSubscription) {
+      this.txSubscription = true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackPayTx(tx));
+    }
+  }
+
+  /**
+   * Track tx
+   */
+  trackPayTx(tx: Tx) {
+    if (tx.type === Type.pay && tx.data.id === this.loan.id) {
+      this.endPay.emit();
+      this.web3Service.updateBalanceEvent.emit();
+      this.txSubscription = false;
+    }
+  }
+
+  /**
+   * Handle click on pay button
+   */
+  async clickPay() {
+    // country validation
+    if (!this.lendEnabled) {
+      this.dialog.open(DialogWrongCountryComponent);
+      return;
+    }
+    // pending tx validation
+    if (this.pendingTx) {
+      window.open(environment.network.explorer.tx.replace(
+        '${tx}',
+        this.pendingTx.tx
+      ), '_blank');
+      return;
+    }
+    // disabled button validation
+    if (this.disabled) {
+      return;
+    }
+    // debt validation
+    if (!this.loan.debt) {
+      this.openSnackBar('You can´t pay this loan because it hasn´t been funded yet.', '');
+      return;
+    }
+    // unlogged user
     if (!this.web3Service.loggedIn) {
-      if (await this.web3Service.requestLogin()) {
-        this.handlePay();
+      const hasClient = await this.web3Service.requestLogin();
+      if (!hasClient) {
+        this.dialog.open(DialogClientAccountComponent);
         return;
       }
-
-      this.dialog.open(DialogClientAccountComponent);
+      if (!this.web3Service.loggedIn) {
+        return;
+      }
+    }
+    // lender validation
+    const account: string = await this.web3Service.getAccount();
+    if (this.loan.debt.owner.toLowerCase() === account.toLowerCase()) {
+      this.openSnackBar('You can´t pay a loan that you have funded.', '');
       return;
     }
 
-    try {
-      const engineApproved = await this.contractsService.isEngineApproved();
-      const civicApproved = this.civicService.status();
-      const balance = await this.contractsService.getUserBalanceRCNWei();
-
-      if (! engineApproved) {
-        this.showApproveDialog();
-        return;
-      }
-
-      if (!await civicApproved) {
-        this.showCivicDialog();
-        return;
-      }
-
-      const dialogRef = this.dialog.open(DialogLoanPayComponent);
-      dialogRef.afterClosed().subscribe(async amount => {
-        if (amount) {
-          amount = amount * 10 ** Currency.getDecimals(this.loan.currency);
-          const requiredTokens = await this.contractsService.estimatePayAmount(this.loan, amount);
-          if (balance < requiredTokens) {
-            this.eventsService.trackEvent(
-              'show-insufficient-funds-lend',
-              Category.Account,
-              'loan #' + this.loan.id,
-              requiredTokens
-            );
-            this.showInsufficientFundsDialog(requiredTokens, balance);
-            return;
-          }
-
-          this.eventsService.trackEvent(
-            'set-to-pay-loan',
-            Category.Loan,
-            'loan #' + this.loan.id + ' of ' + amount
-          );
-
-          this.contractsService.payLoan(this.loan, amount).then((tx) => {
-            this.eventsService.trackEvent(
-              'pay-loan',
-              Category.Loan,
-              'loan #' + this.loan.id + ' of ' + amount
-            );
-            this.txService.registerPayTx(tx, environment.contracts.basaltEngine, this.loan, amount);
-            this.retrievePendingTx();
-          });
+    if (this.showPayDialog) {
+      const dialogRef = this.dialog.open(DialogLoanPayComponent, {
+        data: {
+          loan: this.loan
         }
       });
-    } catch (e) {
+      dialogRef.afterClosed().subscribe(() => {
+        this.retrievePendingTx();
+      });
+      return;
+    }
+
+    this.eventsService.trackEvent(
+      'click-pay',
+      Category.Loan,
+      'loan ' + this.loan.id
+    );
+    this.handlePay();
+  }
+
+  /**
+   * If the validations were successful, manage the payment transaction
+   * @param forze TODO - Force payment
+   */
+  async handlePay(forze = false) {
+    if (this.opPending && !forze) {
+      return;
+    }
+
+    this.startOperation();
+
+    try {
+      const balance = await this.contractsService.getUserBalanceRCNWei();
+      let amount = this.amount;
+
+      if (amount) {
+        const currency = this.loan.oracle.currency;
+        amount = amount * 10 ** Currency.getDecimals(currency);
+
+        // balance validation
+        const requiredTokens = await this.contractsService.estimatePayAmount(this.loan, amount);
+        if (balance < requiredTokens) {
+          this.eventsService.trackEvent(
+            'show-insufficient-funds-lend',
+            Category.Account,
+            'loan ' + this.loan.id,
+            requiredTokens
+          );
+          this.showInsufficientFundsDialog(requiredTokens, balance, currency);
+          return;
+        }
+
+        // approve validation
+        let engineApproved: boolean;
+
+        switch (this.loan.network) {
+          case Network.Basalt:
+            engineApproved = await this.contractsService.isApproved(this.loan.address);
+            break;
+          case Network.Diaspore:
+            const debtEngineAddress = environment.contracts.diaspore.debtEngine;
+            engineApproved = await this.contractsService.isApproved(debtEngineAddress);
+            break;
+          default:
+            this.cancelOperation();
+            return;
+        }
+
+        if (!engineApproved) {
+          await this.showApproveDialog();
+          return;
+        }
+
+        // track event and pay loan
+        this.eventsService.trackEvent(
+          'set-to-pay-loan',
+          Category.Loan,
+          'loan ' + this.loan.id + ' of ' + amount
+        );
+
+        const tx = await this.contractsService.payLoan(this.loan, amount);
+
+        this.eventsService.trackEvent(
+          'pay-loan',
+          Category.Loan,
+          'loan ' + this.loan.id + ' of ' + amount
+        );
+
+        let engine: string;
+
+        switch (this.loan.network) {
+          case Network.Basalt:
+            engine = environment.contracts.basaltEngine;
+            break;
+
+          case Network.Diaspore:
+            engine = environment.contracts.diaspore.debtEngine;
+            break;
+
+          default:
+            break;
+        }
+
+        this.txService.registerPayTx(
+          tx,
+          engine,
+          this.loan,
+          amount
+        );
+
+        this.startPay.emit();
+        this.retrievePendingTx();
+      }
+    } catch (err) {
       // Don't show 'User denied transaction signature' error
-      if (e.message.indexOf('User denied transaction signature') < 0) {
+      if (err.stack.indexOf('User denied transaction signature') < 0) {
+        this.eventsService.trackError(err);
         this.dialog.open(DialogGenericErrorComponent, {
-          data: { error: e }
+          data: { error: err }
         });
       }
+    } finally {
+      this.finishOperation();
     }
   }
 
-  showCivicDialog() {
-    const dialogRef: MatDialogRef<CivicAuthComponent> = this.dialog.open(CivicAuthComponent, {
-      width: '800px'
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.handlePay(true);
-      } else {
-        this.cancelOperation();
-      }
-    });
-  }
-
-  showInsufficientFundsDialog(required: number, funds: number) {
-    this.dialog.open(DialogInsufficientFoundsComponent, { data: {
-      required: required,
-      balance: funds
+  /**
+   * Show insufficient funds dialog
+   * @param required Required amount
+   * @param balance Balance amount
+   * @param currency Pay currency
+   */
+  showInsufficientFundsDialog(required: number, balance: number, currency: string) {
+    this.dialog.open(DialogInsufficientfundsComponent, { data: {
+      required,
+      balance,
+      currency
     }});
     this.cancelOperation();
   }
 
-  showApproveDialog() {
-    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
-    dialogRef.componentInstance.autoClose = true;
+  /**
+   * Show approve contract dialog
+   */
+  async showApproveDialog() {
+    const onlyToken: string = environment.contracts.rcnToken;
+    let onlyAddress: string;
+
+    switch (this.loan.network) {
+      case Network.Basalt:
+        onlyAddress = this.loan.address;
+        break;
+      case Network.Diaspore:
+        const debtEngineAddress = environment.contracts.diaspore.debtEngine;
+        onlyAddress = debtEngineAddress;
+        break;
+      default:
+        this.cancelOperation();
+        break;
+    }
+
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
+      DialogApproveContractComponent, {
+        data: {
+          onlyToken,
+          onlyAddress
+        }
+      }
+    );
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.handlePay(true);
@@ -150,15 +315,36 @@ export class PayButtonComponent implements OnInit {
     });
   }
 
+  /**
+   * Start lend operation
+   */
+  startOperation() {
+    console.info('Started pay');
+    this.openSnackBar('Your transaction is being processed. This might take a few seconds.', '');
+    this.opPending = true;
+  }
+
+  /**
+   * Cancel pay operation
+   */
   cancelOperation() {
-    this.openSnackBar('Your transaction has failed', '');
+    this.openSnackBar('Hmm, It seems like your transaction has failed. Please try again.', '');
     this.opPending = false;
   }
 
-  retrievePendingTx() {
-    this.pendingTx = this.txService.getLastPendingPay(this.loan);
+  /**
+   * Finish current lending operation
+   */
+  finishOperation() {
+    console.info('Pay finished');
+    this.opPending = false;
   }
 
+  /**
+   * Opens a snackbar with a message and an optional action
+   * @param message The message to show in the snackbar
+   * @param action The label for the snackbar action
+   */
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message , action, {
       duration: 4000,
@@ -166,24 +352,19 @@ export class PayButtonComponent implements OnInit {
     });
   }
 
-  clickPay() {
-    if (this.pendingTx === undefined) {
-      this.eventsService.trackEvent(
-        'click-lend',
-        Category.Loan,
-        'loan #' + this.loan.id
-      );
-
-      this.handlePay();
-    } else {
-      window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx.tx), '_blank');
+  /**
+   * Pay button text
+   * @return Button text
+   */
+  get buttonText(): string {
+    const tx = this.pendingTx;
+    if (tx === undefined) {
+      return 'Pay';
     }
+    if (tx.confirmed) {
+      return 'Repaid';
+    }
+    return 'Repaying';
   }
 
-  ngOnInit() {
-    this.retrievePendingTx();
-    this.countriesService.lendEnabled().then((lendEnabled) => {
-      this.lendEnabled = lendEnabled;
-    });
-  }
 }

@@ -1,12 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Loan, Status } from './../models/loan.model';
+import { Injectable } from '@angular/core';
+import { Loan } from './../models/loan.model';
 import { cosignerOptions } from '../../environments/cosigners';
 import { CosignerProvider } from '../providers/cosigner-provider';
-import { Utils } from '../utils/utils';
 import { Web3Service } from './web3.service';
-import { UnknownCosignerProvider } from '../providers/cosigners/unknown-cosigner-provider';
 
 @Injectable()
 export class CosignerService {
@@ -16,7 +14,7 @@ export class CosignerService {
     private web3: Web3Service
   ) { }
   getCosigner(loan: Loan): CosignerProvider {
-    if (loan.status === Status.Request) {
+    if (loan.isRequest) {
       // Return a cosigner option
       const cosignerOption = cosignerOptions.find(cp => cp.isValid(loan));
 
@@ -30,9 +28,10 @@ export class CosignerService {
 
     const cosigner = cosignerOptions.find(cp => cp.isCurrent(loan));
 
-    if (loan.statusFlag !== Status.Request && loan.cosigner !== Utils.address0x && cosigner === undefined) {
-      return new UnknownCosignerProvider();
-    }
+    // TODO: Add unknown cosigner rpovider
+    // if (!loan.isRequest && loan.cosigner !== Utils.address0x && cosigner === undefined) {
+    //   return new UnknownCosignerProvider();
+    // }
 
     if (cosigner !== undefined) {
       cosigner.injectHttp(this.http);

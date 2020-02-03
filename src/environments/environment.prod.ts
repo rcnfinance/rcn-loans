@@ -7,18 +7,21 @@ import { getBuild } from './build';
 export enum Agent {
   MortgageCreator,
   MortgageManager,
-  RipioCreator
+  RipioCreator,
+  WenanceCreator
 }
 
 declare let require: any;
 
 const p = require('../../package.json') as any;
 
+const RCN_TOKEN = '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6';
+
 export const environment = {
   version: p.version,
   version_name: p.version_name,
   build: getBuild(),
-  production: false,
+  production: true,
   url: 'https://mainnet.rcn.loans/',
   envName: 'main',
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
@@ -27,7 +30,15 @@ export const environment = {
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   gaTracking: 'UA-122615331-3',
   rcn_node: {
-    loan: 'https://rnode.rcn.loans/v1/commits?id_loan=$id'
+    loan: 'https://rnode.rcn.loans/v1/commits?id_loan=$id' // TODO: replace by rcn_node_api.basaltUrl
+  },
+  rcn_node_api: {
+    basaltUrl: 'https://rnode.rcn.loans/v1/',
+    diasporeUrl: 'https://diaspore-rnode.rcn.loans/v4/',
+    url: 'https://diaspore-rnode.rcn.loans/v4/' // TODO: replace by diasporeUrl
+  },
+  rcn_oracle: {
+    url: 'https://oracle.ripio.com/rate/'
   },
   network: {
     id: '1',
@@ -36,27 +47,28 @@ export const environment = {
       address: 'https://etherscan.io/address/${address}',
       tx: 'https://etherscan.io/tx/${tx}'
     },
-    provider: 'https://node.rcn.loans/'
+    provider: 'https://mainnet.infura.io/v3/acf3c538f57040839369e7c1b023c3c6'
   },
   contracts: {
-    rcnToken: '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6',
+    rcnToken: RCN_TOKEN,
     basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
+    oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf', // FIXME: Ropsten oracle
+    oracleFactory: '0xe8e49d772b106e2acfc7f821cbd77b97a728aaac', // FIXME: Ropsten oracle factory
+    diaspore: {
+      debtEngine: '0x80db22675dad70e44b64029510778583187faddb',
+      loanManager: '0xb55b0f33d6a2a03a275ca85d58e9357e1a141187'
+    },
     converter: {
-      converterRamp: '0x56783153d0a8ccb009dcb79df5337835ed1a9d6c',
-      tokenConverter: '0x3b81db7c9fe71a2c6d78f9ae2fe4df4c92272622',
+      converterRamp: '0xe41ada0fb01F147c6385F93DEC78914F32e45061',
       ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      params: {
-        marginSpend: 5000,
-        maxSpend: 0,
-        rebuyThreshold: 40000000000000000000
-      }
+      tokenConverter: '0x7173E7C8c35EF0FA6DF11B23bB717F886fBD50B5'
     },
     decentraland: {
       mortgageCreator: '0x90263Ea5C57Dc6603CA7202920735A6E31235bB9',
-      mortgageManager: '0x9ABf1295086aFA0E49C60e95c437aa400c5333B8',
-      landMarket: '0xb3bca6f5052c7e24726b44da7403b56a8a1b98f8'
-    }
+      mortgageManager: '0x9ABf1295086aFA0E49C60e95c437aa400c5333B8'
+    },
+    multicall: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441'
   },
   blacklist: [],
   filters: {
@@ -64,10 +76,44 @@ export const environment = {
     nonExpired: '0x56a65418a09aa5cd0cb79d437cb1d318037817d7',
     validMortgage: '0x7c9ee6f211093351612345fce308cbf86e562b69',
     lenderIn: '0x5ef16f3412e7c01e5c9803caae1322b28596d0bd',
-    ongoing: '0x3b80f3028af6ab654b6b0188e651667ade313e1b',
-    stub: '0xc7fb7d6fb0c787d5454cbd1b8140ec9624519668'
+    ongoing: '0x3b80f3028af6ab654b6b0188e651667ade313e1b'
   },
   dir: {
-    '0x263231ed9b51084816a44e18d16c0f6d0727491f': Agent.RipioCreator
-  }
+    '0x263231ed9b51084816a44e18d16c0f6d0727491f': Agent.RipioCreator,
+    '0xfeac8e490fe7f0760a10225e7dccda1e22ad8daa': Agent.WenanceCreator // FIXME - Ropsten address
+  },
+  filterCurrencies: [
+    'RCN',
+    'DAI',
+    'MANA',
+    'ARS',
+    'USD'
+  ],
+  usableCurrencies: [
+    {
+      symbol: 'RCN',
+      img: 'assets/rcn.png',
+      address: RCN_TOKEN
+    },
+    {
+      symbol: 'ETH',
+      img: 'assets/eth.png',
+      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+    },
+    {
+      symbol: 'DAI',
+      img: 'assets/dai.png',
+      address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
+    },
+    {
+      symbol: 'USDC',
+      img: 'assets/usdc.png',
+      address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+    },
+    {
+      symbol: 'MANA',
+      img: 'assets/mana.png',
+      address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
+    }
+  ]
 };

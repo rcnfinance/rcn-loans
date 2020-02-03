@@ -1,4 +1,13 @@
-<a mat-raised-button (click)='clickTransfer()' class="button button-secondary">
-    {{ buttonText }}
+<a
+  mat-raised-button
+  (click)="clickTransfer()"
+  class="button button-primary"
+>
+  {{ buttonText }}
+  <div
+    style="display: inline; margin-left: 5px; vertical-align: baseline;"
+    *ngIf='opPending'
+  >
+    <i class="fa fa-circle-notch fa-spin"></i>
+  </div>
 </a>
-

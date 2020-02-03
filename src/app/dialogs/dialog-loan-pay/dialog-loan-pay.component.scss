@@ -1,37 +1,129 @@
 @import '../../../scss/_variables.scss'; //variables
 
-.dialog-padding{
-  padding: 30px;
+.dialog-content {
+  .item {
+    &--address {
+      p {
+        text-transform: uppercase;
+        font-size: 12px;
+        strong {
+          @extend %roboto-bold;
+          text-transform: none;
+          font-size: 16px;
+        }
+      }
+    }
+
+    &--installment,
+    &--amount,
+    &--due-date {
+      color: #D9D9D9;
+
+      .item__key {
+        @extend %roboto-regular;
+        font-size: 15px;
+      }
+      .item__value {
+        @extend %roboto-bold;
+        font-size: 18px;
+        margin: 6px 0 20px;
+      }
+    }
+
+    &--want-to-pay,
+    &--left-to-pay {
+      .item__key {
+        font-size: 12px;
+      }
+    }
+    &--left-to-pay {
+      .item__value {
+        @extend %roboto-regular;
+        font-size: 26px;
+        margin: 6px 0 16px;
+      }
+      .disclaimer {
+        @extend %roboto-regular;
+        font-size: 12px;
+        color: #EAA219;
+      }
+    }
+  }
 }
-.navbar-container {
-  height: 70px;
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #333333;
-  .creator-container {
-    .creator-title{
-      width: 100%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      color: $fifth;
-      font-size: 22px;
-      text-align: center;
-      padding: 0 15px;
-      @extend %font-black;
-      @include transform(translate(-50%, -50%));
+
+.dialog-divisor {
+  background: var(--app-color-gray-600);
+  border-bottom: 1px solid var(--app-color-gray-100);
+
+  &__content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    @extend %roboto-regular;
+    color: $gray2;
+    i {
+      font-size: 1.5em;
+    }
+  }
+}
+
+.dialog-footer {
+  align-items: center;
+  @extend %roboto-regular;
+
+  &__label {
+    text-align: center;
+    color: $gray2;
+  }
+  &__buttons {
+    text-align: right;
+    margin-top: 25px;
+
+    app-pay-button {
+      ::ng-deep a {
+        width: 100%;
+      }
     }
   }
 }
 
 @media (min-width: 768px){
-  .navbar-container {
-    height: 100px;
-    .creator-container {
-      .creator-title{
-        font-size: 36px;
+  .dialog-padding {
+    padding: 30px 42px;
+  }
+  .dialog-footer {
+    &__label {
+      text-align: left;
+    }
+    &__buttons {
+      margin-top: 0;
+      app-pay-button {
+        ::ng-deep a {
+          width: auto;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .dialog {
+    max-width: 800px;
+  }
+  .item {
+    &--installment,
+    &--amount,
+    &--due-date {
+      .item__value {
+        margin: 8px 0 26px;
+      }
+    }
+    &--left-to-pay {
+      .item__value {
+        margin: 20px 0 10px;
       }
     }
   }

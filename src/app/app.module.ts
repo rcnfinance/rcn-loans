@@ -1,45 +1,42 @@
-import * as Raven from 'raven-js';
-// Angular Core
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, Injectable, ErrorHandler } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import * as Sentry from '@sentry/browser';
 import { environment } from '../environments/environment';
 // App Modules
-import { AppRoutingModule } from './app-routing/app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
-import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
-import { ActiveLoansModule } from './views/active-loans/active-loans.module';
-import { AddressModule } from './views/address/address.module';
-import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
 // App Component
 import { AppComponent } from './app.component';
 
-Raven
-  .config(environment.sentry, {
-    release: environment.version_verbose
-  })
-  .install();
+Sentry.init({
+  dsn: environment.sentry,
+  release: environment.version_verbose,
+  environment: environment.envName
+});
 
-export class RavenErrorHandler implements ErrorHandler {
-  handleError(err: any): void {
-    Raven.captureException(err);
+@Injectable()
+export class SentryErrorHandler implements ErrorHandler {
+  constructor() {}
+  handleError(error: any) {
+    const eventId = Sentry.captureException(error.originalError || error);
+    Sentry.showReportDialog({ eventId });
   }
 }
 
 @NgModule({
   imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-
-    CoreModule,
-    RequestedLoanModule,
-    ActiveLoansModule,
-    AddressModule,
-    LoanDetailModule
+    CoreModule
   ],
   declarations: [
     AppComponent
   ],
-  entryComponents: [],
+  providers: [{ provide: ErrorHandler, useClass: SentryErrorHandler }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

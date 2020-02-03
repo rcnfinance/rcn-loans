@@ -1,28 +1,122 @@
+<ngx-spinner
+  bdColor="transparent"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate-multiple"
+></ngx-spinner>
+
+<app-dialog-header title="General Settings">
+</app-dialog-header>
+
 <mat-dialog-content>
-  <div class="navbar-container">
-    <div class="creator-container">
-      <div class="creator-title">Approve Contract</div>
-    </div>
-  </div>
-  <div class="col-sm-12 dialog-padding">
-    <div class="row">
-      <div class="col-sm-12 col-md-6">
-        <div class="title main-h1 marginbottom20">Account Information</div>
-        <div class="list-avatar">
-          <div class="avatar-container">
-            <app-avatar [seed]=lender></app-avatar>
-          </div>
-          <div class="txt-container">
-            <div class="subtitle">Wallet address</div>
-            <div class="title ellipsis">{{ lender }}</div>
+  <app-infinite-progress-bar
+    *ngIf="startProgress"
+    [start]="true"
+    [end]="finishProgress"
+    (finish)="hideProgressbar()"
+  >
+  </app-infinite-progress-bar>
+
+  <div class="container">
+    <div class="dialog-content dialog-padding">
+      <div class="row pb-3 mb-3 mt-4 mb-md-4 mt-md-0">
+        <div class="col col-12">
+          <div class="title main-h3">
+            {{ dialogDescription }}
           </div>
         </div>
       </div>
-      <div class="col-sm-12 col-md-6">
-        <div class="margintop20 d-none d-md-none"></div>
-        <div class="title main-h1 marginbottom20">Authorize</div>
-        <mat-checkbox [disabled]="!isEnabled" [checked]="isApproved" (click)=clickCheck()></mat-checkbox> Authorize the Loan Engine contract to operate RCN on your behalf
+      <div class="row mt-4">
+        <div class="col-sm-12 px-0">
+
+          <ng-container *ngIf="tokens?.length && !onlyAsset">
+            <!-- <div class="title main-h2 mb-3 px-3 mx-1">
+              Tokens
+            </div> -->
+            <ng-container *ngFor="let token of tokens; let i = index">
+              <mat-accordion *ngIf="!onlyToken || onlyToken == token.address">
+                <mat-expansion-panel
+                  class="expansion-panel mat-elevation-z"
+                  [expanded]="onlyToken || i === 0"
+                >
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{ token.name }}
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div
+                    class="checkbox"
+                    *ngFor="let operator of token.operators"
+                  >
+                    <mat-checkbox
+                      color="primary"
+                      [checked]="tokenApproves[token.address] && tokenApproves[token.address][operator.address]"
+                      (change)="clickCheck(operator, $event, token, 'token')"
+                      *ngIf="!onlyAddress || onlyAddress == operator.address"
+                      matTooltip="This will authorize the {{ operator.name }} contract to operate with {{ token.name }} on your behalf."
+                      matTooltipPosition="above"
+                    >
+                      Enable <b>{{ token.name }} {{ operator.action }}</b> on the Credit Marketplace.
+                    </mat-checkbox>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="assets?.length && !onlyToken">
+            <div class="title main-h2 mb-3 px-3 mx-1">
+              ERC 721
+            </div>
+            <ng-container *ngFor="let asset of assets">
+              <mat-accordion *ngIf="!onlyAsset || onlyAsset == token.address">
+                <mat-expansion-panel
+                  class="expansion-panel mat-elevation-z"
+                  [expanded]="onlyAsset"
+                >
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{ asset.name }}
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div
+                    class="checkbox"
+                    *ngFor="let operator of asset.operators"
+                  >
+                    <mat-checkbox
+                      color="primary"
+                      [checked]="assetApproves[asset.address] && assetApproves[asset.address][operator.address]"
+                      (change)="clickCheck(operator, $event, asset, 'asset')"
+                      *ngIf="!onlyAddress || onlyAddress == operator.address"
+                      matTooltip="This will authorize the {{ operator.name }} contract to operate with {{ asset.name }} on your behalf."
+                      matTooltipPosition="above"
+                    >
+                      Enable <b>{{ asset.name }} transactions</b> on the Credit Marketplace.
+                    </mat-checkbox>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </ng-container>
+          </ng-container>
+
+        </div>
       </div>
     </div>
+
+    <div class="dialog-footer dialog-padding pt-4 pb-3 row pt-md-0">
+      <div class="dialog-footer__label col-sm-12 col-md-6">
+        <p>
+          Settings for the address <strong>{{ shortAccount }}</strong>.
+        </p>
+      </div>
+      <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
+        <div class="row justify-content-end">
+          <div class="col-md-12">
+            <app-close-button class="d-none d-md-inline"></app-close-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </mat-dialog-content>

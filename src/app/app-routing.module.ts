@@ -1,0 +1,35 @@
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+
+const routes: Routes = [
+  { path: '', redirectTo: 'requests', pathMatch: 'full' },
+  {
+    path: 'activity',
+    loadChildren: () => import('./views/active-loans/active-loans.module').then(m => m.ActiveLoansModule)
+  },
+  {
+    path: 'address/:address',
+    loadChildren: () => import('./views/address/address.module').then(m => m.AddressModule)
+  },
+  {
+    path: 'loan/:id',
+    loadChildren: () => import('./views/loan-detail/loan-detail.module').then(m => m.LoanDetailModule)
+  },
+  {
+    path: 'requests',
+    loadChildren: () => import('./views/requested-loan/requested-loan.module').then(m => m.RequestedLoanModule)
+  },
+  {
+    path: '404',
+    loadChildren: () => import('./views/not-found/not-found.module').then(m => m.NotFoundModule)
+  },
+  { path: '**', redirectTo: '/404' }
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }

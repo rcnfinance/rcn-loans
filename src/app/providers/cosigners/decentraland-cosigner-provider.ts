@@ -65,17 +65,16 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     this.web3 = web3;
   }
   title(_loan: Loan): string {
-    return 'Decentraland Parcel Mortgage';
+    return 'Decentraland Parcel';
   }
   contract(_loan: Loan): string {
     return this.manager;
   }
   isValid(loan: Loan): boolean {
-    return loan.creator.toLowerCase() === this.creator.toLowerCase();
+    return loan.creator === this.creator;
   }
   isCurrent(loan: Loan): boolean {
-    return loan.status !== Status.Request
-            && loan.cosigner.toLowerCase() === this.manager.toLowerCase();
+    return !loan.isRequest && loan.cosigner === this.manager;
   }
   offer(loan: Loan): Promise<CosignerOffer> {
     return new Promise((resolve, _err) => {
@@ -169,7 +168,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
   }
   private isDefaulted(loan: Loan, detail: DecentralandCosigner): boolean {
     return (loan.status === Status.Ongoing || loan.status === Status.Indebt) // The loan should not be in debt
-            && loan.dueTimestamp + (7 * 24 * 60 * 60) < Math.floor(Date.now() / 1000) // Due time must be pased by 1 week
+            && loan.debt.model.dueTime + (7 * 24 * 60 * 60) < Math.floor(Date.now() / 1000) // Due time must be pased by 1 week
             // tslint:disable-next-line:triple-equals
             && detail.status == 1; // Detail should be ongoing
   }
@@ -194,13 +193,19 @@ export class DecentralandCosignerProvider implements CosignerProvider {
       this.setupContracts();
       this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {
         this.managerContract.mortgages(mortgageId, (_errD, mortgageData) => {
+          const landId = this.web3.web3.toHex(mortgageData[5]);
+          const landPrice = mortgageData[6];
+          const motrgageAmount = mortgageData[6];
+          const financedAmount = (loan.amount / motrgageAmount) * 100;
+          const parcelData = undefined;
+          const mortgageStatus = mortgageData[7];
           const decentralandCosigner = new DecentralandCosigner(
-                  mortgageId, // Mortgage ID
-                  Utils.toBytes32(this.web3.web3.toHex(mortgageData[5])), // Land ID
-                  mortgageData[6], // Land price
-                  ((loan.rawAmount / mortgageData[6]) * 100).toPrecision(2), // Financed amount
-                  undefined, // Parcel data
-                  mortgageData[7] // Mortgage status
+                  mortgageId,
+                  Utils.toBytes32(landId),
+                  landPrice,
+                  financedAmount.toPrecision(2),
+                  parcelData,
+                  mortgageStatus
                 );
           this.getParcelInfo(decentralandCosigner.x, decentralandCosigner.y).then((parcel) => {
             decentralandCosigner.parcel = parcel;

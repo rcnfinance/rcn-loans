@@ -8,12 +8,12 @@
   justify-content: center;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid $quaternary;
-  background-color: $gray7;
+  border-bottom: 1px solid var(--app-color-gray-600);
+  background-color: var(--app-color-gray-400);
   &.progressOn{
     padding-bottom: 10px;
-    background-color: $quaternary;
-    border-bottom: 1px solid $quaternary;
+    background-color: var(--app-color-gray-600);
+    border-bottom: 1px solid var(--app-color-gray-600);
   }
 }
 .status-container{
@@ -50,22 +50,25 @@
 .leading-txt,
 .starring-event{
   cursor: pointer;
-  color: $secondary;
+  color: var(--app-color-secondary);
   outline: none; outline-offset: 0px;
   @include transition();
   @extend %roboto-bold;
   &:hover{
-    color: $primary;
+    color: var(--app-color-primary);
+  }
+  a {
+    color: white;
   }
 }
 .action-event{
   cursor: pointer;
-  color: $secondary;
+  color: var(--app-color-secondary);
   outline: none; outline-offset: 0px;
   @include transition();
   @extend %roboto-light;
   &:hover{
-    color: $primary;
+    color: var(--app-color-primary);
   }
 }
 .time-event
@@ -82,16 +85,13 @@
 .separator{margin: 0 5px;}
 .supporter-txt{
   margin-left: 5px;
-  span{
+  &::ng-deep a {
     cursor: pointer;
-    margin-left: 2px;
-    outline: none; outline-offset: 0px;
-    color: $secondary;
+    outline: none;
+    outline-offset: 0px;
+    color: var(--app-color-secondary);
     @include transition();
     @extend %roboto-bold;
-    &:hover{
-      color: $primary;
-    }
   }
 }
 mat-progress-bar.mat-progress-bar{
@@ -100,10 +100,10 @@ mat-progress-bar.mat-progress-bar{
   bottom: 0;
   ::ng-deep{
     .mat-progress-bar-fill::after {
-      background-color: $primary;
+      background-color: var(--app-color-primary);
     }
     .mat-progress-bar-buffer {
-      background: $quaternary;
+      background: var(--app-color-gray-600);
     }
   }
 }

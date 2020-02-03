@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Subscription } from 'rxjs';
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
+import { Web3Service } from './../../services/web3.service';
+import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
 import { FilterLoansService } from '../../services/filter-loans.service';
@@ -12,11 +15,12 @@ import { FilterLoansService } from '../../services/filter-loans.service';
   templateUrl: './requested-loan.component.html',
   styleUrls: ['./requested-loan.component.scss']
 })
-export class RequestedLoanComponent implements OnInit {
+export class RequestedLoanComponent implements OnInit, OnDestroy {
+  pageId = 'requested-loan';
   winHeight: number = window.innerHeight;
   loading: boolean;
   available: any;
-  loans = [];
+  loans: Loan[] = [];
   availableLoans = true;
   pendingLend = [];
   filters = {
@@ -27,49 +31,96 @@ export class RequestedLoanComponent implements OnInit {
     duration: null
   };
   filtersOpen = undefined;
+  account: string;
+
+  // subscriptions
+  subscriptionAvailable: Subscription;
+  subscriptionAccount: Subscription;
 
   constructor(
-    private contractsService: ContractsService,
     private spinner: NgxSpinnerService,
+    private web3Service: Web3Service,
+    private titleService: TitleService,
     private availableLoansService: AvailableLoansService,
+    private contractsService: ContractsService,
     private filterLoansService: FilterLoansService
   ) { }
 
+  ngOnInit() {
+    this.titleService.changeTitle('Requests');
+    this.spinner.show(this.pageId);
+    this.loadLoans();
+    this.loadAccount();
+    this.handleLoginEvents();
+
+    // Available Loans service
+    this.subscriptionAvailable = this.availableLoansService.currentAvailable.subscribe(
+      available => this.available = available
+    );
+  }
+
+  ngOnDestroy() {
+    this.spinner.hide(this.pageId);
+
+    try {
+      this.subscriptionAvailable.unsubscribe();
+      this.subscriptionAccount.unsubscribe();
+    } catch (e) { }
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  handleLoginEvents() {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(() => this.loadAccount());
+  }
+
+  /**
+   * Toggle filter visibility
+   */
   openFilters() {
     this.filtersOpen = !this.filtersOpen;
   }
 
+  /**
+   * Reload loans when the filter is applied
+   */
   onFiltered() {
-    this.spinner.show();
+    this.spinner.show(this.pageId);
     this.loadLoans();
   }
 
-  // Available Loans service
+  /**
+   * Update available loans number
+   */
   upgradeAvaiblable() {
     this.availableLoansService.updateAvailable(this.loans.length);
   }
 
-  loadLoans() {
-    this.contractsService.getOpenLoans().then((result: Loan[]) => {
+  /**
+   * Load loans
+   */
+  async loadLoans() {
+    const loans: Loan[] = await this.contractsService.getRequests();
+    const filterLoans = this.filterLoansService.filterLoans(loans, this.filters);
+    this.loans = filterLoans;
 
-      const filterLoans = this.filterLoansService.filterLoans(result, this.filters);
-      this.loans = filterLoans;
+    this.upgradeAvaiblable();
+    this.spinner.hide(this.pageId);
 
-      this.upgradeAvaiblable();
-      this.spinner.hide();
-      if (this.loans.length === 0) {
-        this.availableLoans = false;
-      } else {
-        this.availableLoans = true;
-      }
-    });
+    if (this.loans.length) {
+      this.availableLoans = true;
+    } else {
+      this.availableLoans = false;
+    }
   }
 
-  ngOnInit() {
-    this.spinner.show(); // Initialize spinner
-    this.loadLoans();
-
-    // Available Loans service
-    this.availableLoansService.currentAvailable.subscribe(available => this.available = available);
+  /**
+   * Load user account
+   */
+  async loadAccount() {
+    const web3 = this.web3Service.web3;
+    const account = await this.web3Service.getAccount();
+    this.account = web3.toChecksumAddress(account);
   }
 }

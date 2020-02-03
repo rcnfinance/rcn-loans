@@ -1,0 +1,23 @@
+<article class="d-flex" *ngIf="feature">
+  <div class="icon-box">
+    <!-- TODO: Find a better way to display the rcn logo. -->
+    <i class="{{ feature.icon }} icon"
+      ><img src="{{ feature.icon }}" alt="" class="rcn-icon"
+    /></i>
+  </div>
+  <div class="details-box ellipsis">
+    <p class="title">
+      {{ feature.title }}
+    </p>
+    <ng-container *ngIf="feature.url; else itemDescription">
+      <a [href]="feature.url" target="_blank">
+        {{ feature.url | visualUrl }}
+      </a>
+    </ng-container>
+    <ng-template #itemDescription>
+      <p class="description ellipsis">
+        {{ feature.description }}
+      </p>
+    </ng-template>
+  </div>
+</article>

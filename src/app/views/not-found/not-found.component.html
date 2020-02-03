@@ -1,16 +1,20 @@
-<div class="margin-spacing" [style.height.px]="winHeight">
-  <div class="txt-container">
-    <div class="title">this loan does not exist</div>
-    <div class="miscellany"></div>
-    <div class="subtitle">Oooops, something went wrong</div>
-  </div>
-  <div class="img-container"></div>
-  <div id="clouds">
-    <div class="cloud x1"></div>
-    <div class="cloud x1_5"></div>
-    <div class="cloud x2"></div>
-    <div class="cloud x3"></div>
-    <div class="cloud x4"></div>
-    <div class="cloud x5"></div>
-  </div>
-</div>
+<app-error-details
+  label="ERROR 404"
+  title="This page doesn´t exist."
+  image="assets/errors/error_404.svg"
+  [buttons]="[
+    {
+      text: 'Go to Lend',
+      url: '/',
+      class: 'button-primary'
+    },
+    {
+      text: account ? 'Go to My Loans' : 'Go to Activity',
+      url: account ? ('/address/' + account) : '/activity',
+      class: 'button-clear'
+    }
+  ]"
+>
+</app-error-details>
+
+<app-footer></app-footer>

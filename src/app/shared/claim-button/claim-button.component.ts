@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Loan } from '../../models/loan.model';
 import { CosignerLiability } from '../../models/cosigner.model';
-import { TxService } from '../../tx.service';
+import { TxService } from '../../services/tx.service';
 import { CosignerProvider } from '../../providers/cosigner-provider';
 import { environment } from '../../../environments/environment';
 
