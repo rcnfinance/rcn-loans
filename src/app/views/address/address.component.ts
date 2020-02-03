@@ -110,7 +110,7 @@ export class AddressComponent implements OnInit, OnDestroy {
     const urlAddress = this.address;
     const myAddress = await this.web3Service.getAccount();
 
-    this.myLoans = web3.toChecksumAddress(urlAddress) === web3.toChecksumAddress(myAddress);
+    this.myLoans = web3.utils.toChecksumAddress(urlAddress) === web3.utils.toChecksumAddress(myAddress);
     return this.myLoans;
   }
 

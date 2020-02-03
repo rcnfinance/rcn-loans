@@ -52,7 +52,7 @@ export class HeaderComponent implements OnInit {
       const web3 = this.web3Service.web3;
       if (loggedIn) {
         const account = await this.web3Service.getAccount();
-        this.account = web3.toChecksumAddress(account);
+        this.account = web3.utils.toChecksumAddress(account);
         this.shortAccount = Utils.shortAddress(this.account);
       } else {
         this.account = undefined;
