@@ -2,6 +2,9 @@ import { NgModule, Injectable, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
+import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import * as Sentry from '@sentry/browser';
 import { environment } from '../environments/environment';
 // App Modules
@@ -30,13 +33,29 @@ export class SentryErrorHandler implements ErrorHandler {
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    ApolloModule,
+    HttpLinkModule,
     AppRoutingModule,
     CoreModule
   ],
   declarations: [
     AppComponent
   ],
-  providers: [{ provide: ErrorHandler, useClass: SentryErrorHandler }],
+  providers: [
+    { provide: ErrorHandler, useClass: SentryErrorHandler },
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory: (httpLink: HttpLink) => {
+        return {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: environment.graph.url
+          })
+        };
+      },
+      deps: [HttpLink]
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
