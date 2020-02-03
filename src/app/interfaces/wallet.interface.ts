@@ -3,3 +3,8 @@ export enum WalletType {
   Metamask,
   WalletConnect
 }
+
+export interface WalletConnection {
+  network: number;
+  wallet: WalletType;
+}

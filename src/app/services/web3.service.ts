@@ -6,7 +6,7 @@ const WalletLink = require('walletlink');
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { environment } from './../../environments/environment';
 import { promisify } from './../utils/utils';
-import { WalletType } from './../interfaces/wallet.interface';
+import { WalletType, WalletConnection } from './../interfaces/wallet.interface';
 
 declare let window: any;
 
@@ -16,6 +16,7 @@ declare let window: any;
 export class Web3Service {
   loginEvent = new EventEmitter<boolean>(true);
   updateBalanceEvent = new EventEmitter();
+  private localStorage: any;
 
   private _web3: any;
   private _ethereum: any;
@@ -29,7 +30,9 @@ export class Web3Service {
     private title: Title,
     private snackbar: MatSnackBar
   ) {
+    this.localStorage = window.localStorage;
     this._web3 = this.buildWeb3();
+    this.tryRestoreConnection();
   }
 
   get ethereum(): any {
@@ -130,6 +133,12 @@ export class Web3Service {
         this.listenAccountUpdates();
       }
 
+      const network = await promisify(this.web3.eth.net.getId, []);
+      const connection: WalletConnection = {
+        wallet,
+        network
+      };
+      this.localStorage.setItem('walletConnected', JSON.stringify(connection));
       this.loginEvent.emit(successfulLogin);
       return true;
     } catch (err) {
@@ -302,6 +311,27 @@ export class Web3Service {
       this.web3account = undefined;
       this.loginEvent.emit(false);
     });
+  }
+
+  /**
+   * Try recover the last wallet connection
+   */
+  private tryRestoreConnection() {
+    const walletConnected: any = this.localStorage.getItem('walletConnected');
+
+    try {
+      const lastConnection: WalletConnection = JSON.parse(walletConnected);
+      const { id } = environment.network;
+      const { network, wallet } = lastConnection;
+
+      if (network !== id) {
+        return;
+      }
+
+      this.handleWalletConnection(wallet);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   private buildWeb3(): any {
