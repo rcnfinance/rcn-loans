@@ -72,15 +72,25 @@ export class Web3Service {
     return accounts[0];
   }
 
+  async logout() {
+    this.account = undefined;
+    this.web3account = undefined;
+    this._ethereum = undefined;
+  }
+
   /**
    * Request wallet login and approve connection
    * @param wallet Wallet selected
+   * @param force Force new login
    * @fires loginEvent Boolean login event
    * @return Logged in
    */
-  async requestLogin(wallet: WalletType): Promise<boolean> {
-    if (this.loggedIn) {
+  async requestLogin(wallet: WalletType, force?: boolean): Promise<boolean> {
+    if (this.loggedIn && !force) {
       return true;
+    }
+    if (force) {
+      this.logout();
     }
 
     return await this.handleWalletConnection(wallet);
