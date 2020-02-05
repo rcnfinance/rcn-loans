@@ -1,12 +1,15 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 const Web3 = require('web3');
 const WalletLink = require('walletlink');
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { environment } from './../../environments/environment';
 import { promisify } from './../utils/utils';
 import { WalletType, WalletConnection } from './../interfaces/wallet.interface';
+// App Component
+// FIXME: abstract the client account component of the service
+import { DialogClientAccountComponent } from './../dialogs/dialog-client-account/dialog-client-account.component';
 
 declare let window: any;
 
@@ -28,7 +31,8 @@ export class Web3Service {
 
   constructor(
     private title: Title,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private dialog: MatDialog
   ) {
     this.localStorage = window.localStorage;
     this._web3 = this.buildWeb3();
@@ -255,6 +259,7 @@ export class Web3Service {
   private async browserLogin(): Promise<boolean> {
     if (typeof window.web3 === 'undefined') {
       // TODO: Open dialog for get metamask
+      this.dialog.open(DialogClientAccountComponent);
       throw Error('Please get Metamask');
     }
 
