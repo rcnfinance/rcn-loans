@@ -159,7 +159,9 @@ export class DialogLoanLendComponent implements OnInit {
       // );
 
       // set lending currency rate
-      const lendCurrencyRate = new web3.BigNumber(web3.fromWei(lendAmount / loanAmount));
+      const decimals = await this.contractsService.getTokenDecimals(toToken);
+      const lendCurrencyRateInWei = new web3.BigNumber(lendAmount).div(new web3.BigNumber(loanAmount));
+      const lendCurrencyRate = new web3.BigNumber(lendCurrencyRateInWei).div(new web3.BigNumber(10 ** decimals));
       this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 7);
 
       // set expected return warn

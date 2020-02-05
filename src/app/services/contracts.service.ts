@@ -621,6 +621,22 @@ export class ContractsService {
   }
 
   /**
+   * Get ERC20 decimals
+   * @param tokenAddress Token address
+   * @return Decimals
+   */
+  async getTokenDecimals(tokenAddress: string): Promise<number> {
+    const { ethAddress } = environment.contracts.converter;
+    if (tokenAddress === ethAddress) {
+      return 18;
+    }
+
+    const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+    const decimals = Number(await promisify(tokenContract.decimals.call, []));
+    return decimals;
+  }
+
+  /**
    * Get oracle address from currency symbol
    * @param symbol Currency symbol
    * @return Oracle address
