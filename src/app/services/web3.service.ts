@@ -188,7 +188,6 @@ export class Web3Service {
       console.info('Logged in');
       this.account = accounts[0];
       this.web3account = candWeb3;
-      this.loginEvent.emit(true);
     }
 
     return this._ethereum;
@@ -242,7 +241,6 @@ export class Web3Service {
       console.info('Logged in');
       this.account = accounts[0];
       this.web3account = candWeb3;
-      this.loginEvent.emit(true);
     }
 
     // set scoped ethereum
