@@ -173,7 +173,8 @@ export class PayButtonComponent implements OnInit, OnDestroy {
 
       if (amount) {
         const currency = this.loan.oracle.currency;
-        amount = amount * 10 ** Currency.getDecimals(currency);
+        const decimals = Currency.getDecimals(currency);
+        amount = amount * 10 ** decimals;
 
         // balance validation
         const requiredTokens = await this.contractsService.estimatePayAmount(this.loan, amount);
@@ -184,7 +185,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
             'loan ' + this.loan.id,
             requiredTokens
           );
-          this.showInsufficientFundsDialog(requiredTokens, balance, currency);
+          this.showInsufficientFundsDialog(requiredTokens, balance, currency, decimals);
           return;
         }
 
@@ -267,8 +268,17 @@ export class PayButtonComponent implements OnInit, OnDestroy {
    * @param required Required amount
    * @param balance Balance amount
    * @param currency Pay currency
+   * @param decimals Currency decimals
    */
-  showInsufficientFundsDialog(required: number, balance: number, currency: string) {
+  async showInsufficientFundsDialog(
+    required: number,
+    balance: number,
+    currency: string,
+    decimals: number
+  ) {
+    required = required / 10 ** decimals;
+    balance = balance / 10 ** decimals;
+
     this.dialog.open(DialogInsufficientfundsComponent, { data: {
       required,
       balance,
