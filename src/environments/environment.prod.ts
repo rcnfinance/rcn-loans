@@ -98,12 +98,12 @@ export const environment = {
     {
       symbol: 'ETH',
       img: 'assets/eth.png',
-      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
     },
     {
       symbol: 'DAI',
       img: 'assets/dai.png',
-      address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
+      address: '0x6b175474e89094c44da98b954eedeac495271d0f'
     },
     {
       symbol: 'USDC',
@@ -113,7 +113,7 @@ export const environment = {
     {
       symbol: 'MANA',
       img: 'assets/mana.png',
-      address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
+      address: '0x0f5d2fb29fb7d3cfee444a200298f468908cc942'
     }
   ]
 };

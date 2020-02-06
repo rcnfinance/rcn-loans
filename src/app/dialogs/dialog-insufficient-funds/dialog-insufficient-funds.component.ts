@@ -16,9 +16,9 @@ export class DialogInsufficientfundsComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
-  ngOnInit() {
-    this.required = this.data.required / 10 ** 18;
-    this.balance = this.data.balance / 10 ** 18;
+  async ngOnInit() {
+    this.required = this.data.required;
+    this.balance = this.data.balance;
     this.currency = this.data.currency;
   }
 }

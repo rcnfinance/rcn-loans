@@ -128,6 +128,7 @@ export class DialogLoanLendComponent implements OnInit {
     const symbol: string = this.lendCurrency;
     const fromToken: string = environment.contracts.rcnToken;
     const toToken: string = this.getCurrencyByCode(symbol).address;
+    const decimals = await this.contractsService.getTokenDecimals(toToken);
     this.lendToken = toToken;
 
     let lendAmount: number;
@@ -159,7 +160,8 @@ export class DialogLoanLendComponent implements OnInit {
       // );
 
       // set lending currency rate
-      const lendCurrencyRate = new web3.BigNumber(web3.fromWei(lendAmount / loanAmount));
+      const lendCurrencyRateInWei = new web3.BigNumber(lendAmount).div(new web3.BigNumber(loanAmount));
+      const lendCurrencyRate = new web3.BigNumber(lendCurrencyRateInWei).div(new web3.BigNumber(10 ** decimals));
       this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 7);
 
       // set expected return warn
@@ -168,7 +170,7 @@ export class DialogLoanLendComponent implements OnInit {
 
     // set ui values
     this.lendAmount = Utils.formatAmount(
-      Number(web3.fromWei(lendAmount))
+      Number(lendAmount / 10 ** decimals)
     );
     this.lendExpectedReturn = Utils.formatAmount(
       Number(web3.fromWei(rcnExpectedReturn))
