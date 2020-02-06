@@ -283,6 +283,7 @@ export class ContractsService {
     tokenAddress: string = environment.contracts.rcnToken
   ): Promise<number> {
     const rcnToken = environment.contracts.rcnToken;
+    const decimals = await this.getTokenDecimals(tokenAddress);
     const web3 = this.web3.web3;
 
     let required: number;
@@ -293,6 +294,7 @@ export class ContractsService {
     if (loan.oracle.address !== Utils.address0x) {
       const currency = loan.currency;
       const loanAmount = loan.currency.fromUnit(loan.amount);
+
       let rate = await this.getRate(loan.oracle.address);
       rate = 1 / currency.fromUnit(rate);
       required = web3.toWei(loanAmount * rate);
@@ -314,9 +316,9 @@ export class ContractsService {
     // TODO: Create helper for work to all numbers in the same way
     const roundupDecimals = 6;
     const factor = 10 ** roundupDecimals;
-    const roundedUpAmount = Math.ceil((requiredInToken / web3.toWei(1)) * factor) / factor;
+    const roundedUpAmount = Math.ceil((requiredInToken / 10 ** decimals) * factor) / factor;
 
-    return web3.toWei(roundedUpAmount);
+    return new web3.BigNumber(roundedUpAmount).mul(10 ** decimals);
   }
 
   /**
@@ -618,6 +620,22 @@ export class ContractsService {
     const oracleContract = this.web3.web3.eth.contract(diasporeOracleAbi.abi).at(oracle.address);
     const url = await promisify(oracleContract.url.call, []);
     return url;
+  }
+
+  /**
+   * Get ERC20 decimals
+   * @param tokenAddress Token address
+   * @return Decimals
+   */
+  async getTokenDecimals(tokenAddress: string): Promise<number> {
+    const { ethAddress } = environment.contracts.converter;
+    if (tokenAddress === ethAddress) {
+      return 18;
+    }
+
+    const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+    const decimals = Number(await promisify(tokenContract.decimals.call, []));
+    return decimals;
   }
 
   /**
