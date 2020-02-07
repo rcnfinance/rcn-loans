@@ -725,8 +725,8 @@ export class ContractsService {
     }
 
     const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
-    const decimals = Number(await promisify(tokenContract.decimals.call, []));
-    return decimals;
+    const decimals = await tokenContract.methods.decimals().call();
+    return Number(decimals);
   }
 
   /**
