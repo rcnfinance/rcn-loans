@@ -20,7 +20,7 @@ export class ApiService {
   diasporeUrl = environment.rcn_node_api.diasporeUrl;
   basaltUrl = environment.rcn_node_api.basaltUrl;
   multicallConfig = {
-    rpcUrl: environment.network.provider,
+    rpcUrl: environment.network.provider.url,
     multicallAddress: environment.contracts.multicall
   };
 
@@ -113,7 +113,7 @@ export class ApiService {
     let page = 0;
 
     try {
-      lender = web3.toChecksumAddress(lender);
+      lender = web3.utils.toChecksumAddress(lender);
       const data: any = await this.http.get(
         apiUrl.concat(`loans?open=false&page=${ page }&lender=${ lender }`)
       ).toPromise();

@@ -304,7 +304,7 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
         let content = value as string;
         if (this.dataTypes[key] === 'currency') {
           const currency = this.loan.currency.symbol;
-          content = currency + ' ' + new Currency(currency).fromUnit(Number(content)).toString();
+          content = currency + ' ' + new Currency(currency).fromUnit(content).toString();
         }
         result.push(new DataEntry(name, content));
       }

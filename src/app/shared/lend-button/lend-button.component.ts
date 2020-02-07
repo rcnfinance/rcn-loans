@@ -12,6 +12,7 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
+import * as BN from 'bn.js';
 
 import { Loan, Network } from './../../models/loan.model';
 import { Utils } from '../../utils/utils';
@@ -27,11 +28,11 @@ import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insuffici
 import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 import { CosignerService } from './../../services/cosigner.service';
 import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
+import { WalletConnectService } from './../../services/wallet-connect.service';
 
 @Component({
   selector: 'app-lend-button',
@@ -58,6 +59,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     private web3Service: Web3Service,
     private countriesService: CountriesService,
     private eventsService: EventsService,
+    private walletConnectService: WalletConnectService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public cosignerService: CosignerService,
@@ -153,15 +155,9 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       }
     }
     // unlogged user
-    if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-        return;
-      }
-      if (!this.web3Service.loggedIn) {
-        return;
-      }
+    const loggedIn = await this.walletConnectService.connect();
+    if (!loggedIn) {
+      return;
     }
     // borrower validation
     const account: string = await this.web3Service.getAccount();
@@ -213,19 +209,19 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
     try {
       const oracleData = await this.contractsService.getOracleData(this.loan.oracle);
+      const web3: any = this.web3Service.web3;
 
       // set input lend token
-      const web3: any = this.web3Service.web3;
       let lendToken: string = this.lendToken;
       if (this.loan.network === Network.Basalt) {
         lendToken = environment.contracts.rcnToken;
       }
 
       // set value in specified token
-      const balance = await this.contractsService.getUserBalanceInToken(lendToken);
-      let required: any = await this.contractsService.estimateLendAmount(this.loan, lendToken);
+      const balance: BN = await this.contractsService.getUserBalanceInToken(lendToken);
+      const required: BN = await this.contractsService.estimateLendAmount(this.loan, lendToken);
       let contractAddress: string;
-      let payableAmount: any;
+      let payableAmount: string;
 
       // set lend contract
       switch (lendToken) {
@@ -235,9 +231,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
         case environment.contracts.converter.ethAddress:
           contractAddress = environment.contracts.converter.converterRamp;
-
-          required = Number(required).toFixed(0);
-          payableAmount = required;
+          payableAmount = String(required);
           break;
 
         default:
@@ -246,7 +240,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       }
 
       // validate balance amount
-      if (Number(balance) > Number(required)) {
+      if (balance.gte(required)) {
         let tx: string;
 
         // validate approve
@@ -257,7 +251,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         }
 
         let account: string = await this.web3Service.getAccount();
-        account = web3.toChecksumAddress(account);
+        account = web3.utils.toChecksumAddress(account);
 
         switch (this.loan.network) {
           case Network.Basalt:
@@ -275,7 +269,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
                 payableAmount,
                 tokenConverter,
                 lendToken,
-                required,
+                String(required),
                 Utils.address0x,
                 this.loan.id,
                 oracleData,
@@ -303,7 +297,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
           'show-insufficient-funds-lend',
           Category.Account,
           'loan ' + this.loan.id,
-          required
+          Number(required)
         );
 
         const currency = environment.usableCurrencies.filter(token => token.address === lendToken)[0];
