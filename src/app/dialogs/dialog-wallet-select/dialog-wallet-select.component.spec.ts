@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from './../../material.module';
 import { DialogWalletSelectComponent } from './dialog-wallet-select.component';
+import { EventsService } from './../../services/events.service';
 
 describe('DialogWalletSelectComponent', () => {
   const mockDialogRef = {
@@ -21,7 +22,8 @@ describe('DialogWalletSelectComponent', () => {
         {
           provide: MatDialogRef,
           useValue: mockDialogRef
-        }
+        },
+        EventsService
       ]
     })
     .compileComponents();
