@@ -14,11 +14,11 @@ import { Currency } from '../../utils/currencies';
 import { EventsService, Category } from '../../services/events.service';
 import { Web3Service } from '../../services/web3.service';
 import { CountriesService } from '../../services/countries.service';
+import { WalletConnectService } from './../../services/wallet-connect.service';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogWalletSelectComponent } from '../../dialogs/dialog-wallet-select/dialog-wallet-select.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 
 @Component({
@@ -47,6 +47,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     private txService: TxService,
     private eventsService: EventsService,
     private web3Service: Web3Service,
+    private walletConnectService: WalletConnectService,
     public snackBar: MatSnackBar,
     private countriesService: CountriesService,
     public dialog: MatDialog
@@ -119,13 +120,8 @@ export class PayButtonComponent implements OnInit, OnDestroy {
       return;
     }
     // unlogged user
-    if (!this.web3Service.loggedIn) {
-      const dialogRef = this.dialog.open(DialogWalletSelectComponent);
-      dialogRef.afterClosed().subscribe((loggedIn: boolean) => {
-        if (loggedIn) {
-          this.clickPay();
-        }
-      });
+    const loggedIn = await this.walletConnectService.connect();
+    if (!loggedIn) {
       return;
     }
     // lender validation

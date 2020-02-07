@@ -27,11 +27,11 @@ import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insuffici
 import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogWalletSelectComponent } from '../../dialogs/dialog-wallet-select/dialog-wallet-select.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 import { CosignerService } from './../../services/cosigner.service';
 import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
+import { WalletConnectService } from './../../services/wallet-connect.service';
 
 @Component({
   selector: 'app-lend-button',
@@ -58,6 +58,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     private web3Service: Web3Service,
     private countriesService: CountriesService,
     private eventsService: EventsService,
+    private walletConnectService: WalletConnectService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public cosignerService: CosignerService,
@@ -153,13 +154,8 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       }
     }
     // unlogged user
-    if (!this.web3Service.loggedIn) {
-      const dialogRef = this.dialog.open(DialogWalletSelectComponent);
-      dialogRef.afterClosed().subscribe((loggedIn: boolean) => {
-        if (loggedIn) {
-          this.clickLend();
-        }
-      });
+    const loggedIn = await this.walletConnectService.connect();
+    if (!loggedIn) {
       return;
     }
     // borrower validation

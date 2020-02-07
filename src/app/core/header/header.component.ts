@@ -76,12 +76,9 @@ export class HeaderComponent implements OnInit {
    */
   async login() {
     if (this.hasAccount) {
-      this.openDialogApprove();
-      return;
+      return this.openDialogApprove();
     }
 
-    console.info('try loggin');
-    const loggedIn = await this.walletConnectService.connect();
-    console.info('logged in?', loggedIn);
+    await this.walletConnectService.connect();
   }
 }

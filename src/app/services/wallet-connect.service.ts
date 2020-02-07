@@ -2,6 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs';
 import { environment } from './../../environments/environment';
 import { Web3Service } from './web3.service';
+import { EventsService } from './events.service';
 import { WalletConnection } from './../interfaces/wallet.interface';
 
 @Injectable({
@@ -15,7 +16,8 @@ export class WalletConnectService {
   openConnectDialog$ = new EventEmitter();
 
   constructor(
-    private web3Service: Web3Service
+    private web3Service: Web3Service,
+    private eventsService: EventsService
   ) {
     this.requestConnect$ = new Subject();
     this.tryRestoreConnection();
@@ -39,8 +41,8 @@ export class WalletConnectService {
             resolve(connected || false);
           }
         },
-        (error) => {
-          console.info('error connecting wallet', error);
+        (err) => {
+          this.eventsService.trackError(err);
           resolve(false);
         }
       );
