@@ -3,9 +3,9 @@ import { MatDialog } from '@angular/material';
 import { Utils } from './../../utils/utils';
 // App Component
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogWalletSelectComponent } from '../../dialogs/dialog-wallet-select/dialog-wallet-select.component';
 // App Service
 import { Web3Service } from '../../services/web3.service';
+import { WalletConnectService } from './../../services/wallet-connect.service';
 import { SidebarService } from '../../services/sidebar.service';
 import { TitleService } from '../../services/title.service';
 
@@ -26,6 +26,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     private web3Service: Web3Service,
+    private walletConnectService: WalletConnectService,
     private sidebarService: SidebarService,
     public dialog: MatDialog,
     public titleService: TitleService
@@ -79,6 +80,8 @@ export class HeaderComponent implements OnInit {
       return;
     }
 
-    this.dialog.open(DialogWalletSelectComponent, {});
+    console.info('try loggin');
+    const loggedIn = await this.walletConnectService.connect();
+    console.info('logged in?', loggedIn);
   }
 }

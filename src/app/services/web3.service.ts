@@ -8,7 +8,6 @@ import { environment } from './../../environments/environment';
 import { promisify } from './../utils/utils';
 import { WalletType, WalletConnection } from './../interfaces/wallet.interface';
 // App Component
-// FIXME: abstract the client account component of the service
 import { DialogClientAccountComponent } from './../dialogs/dialog-client-account/dialog-client-account.component';
 
 declare let window: any;
@@ -36,7 +35,6 @@ export class Web3Service {
   ) {
     this.localStorage = window.localStorage;
     this._web3 = this.buildWeb3();
-    this.tryRestoreConnection();
   }
 
   get ethereum(): any {
@@ -140,23 +138,24 @@ export class Web3Service {
 
     try {
       const successfulLogin = await walletMethod;
-
-      if (successfulLogin) {
-        const candWeb3 = new Web3(this.ethereum);
-        this.web3account = candWeb3;
-        this.listenAccountUpdates();
+      if (!successfulLogin) {
+        throw new Error('User rejecred login');
       }
+
+      const candWeb3 = new Web3(this.ethereum);
+      this.web3account = candWeb3;
+      this.listenAccountUpdates();
 
       const network = await promisify(this.web3.eth.net.getId, []);
       const connection: WalletConnection = {
         wallet,
         network
       };
+
       this.localStorage.setItem('walletConnected', JSON.stringify(connection));
       this.loginEvent.emit(successfulLogin);
       return true;
     } catch (err) {
-      console.error(err);
       return false;
     } finally {
       this.isLogging = false;
@@ -324,27 +323,6 @@ export class Web3Service {
       this.web3account = undefined;
       this.loginEvent.emit(false);
     });
-  }
-
-  /**
-   * Try recover the last wallet connection
-   */
-  private tryRestoreConnection() {
-    const walletConnected: any = this.localStorage.getItem('walletConnected');
-
-    try {
-      const lastConnection: WalletConnection = JSON.parse(walletConnected);
-      const { id } = environment.network;
-      const { network, wallet } = lastConnection;
-
-      if (network !== id) {
-        return;
-      }
-
-      this.handleWalletConnection(wallet);
-    } catch (err) {
-      console.error(err);
-    }
   }
 
   private buildWeb3(): any {
