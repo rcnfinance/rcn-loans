@@ -124,6 +124,7 @@ export class DialogLoanLendComponent implements OnInit {
     const symbol: string = this.lendCurrency;
     const fromToken: string = environment.contracts.rcnToken;
     const toToken: string = await this.currenciesService.getCurrencyByKey('symbol', symbol).address;
+    const decimals = await this.contractsService.getTokenDecimals(toToken);
     this.lendToken = toToken;
 
     let lendAmount: BN | string;

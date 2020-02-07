@@ -16,6 +16,7 @@ import * as BN from 'bn.js';
 
 import { Loan, Network } from './../../models/loan.model';
 import { Utils } from '../../utils/utils';
+import { Currency } from '../../utils/currencies';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
@@ -300,7 +301,8 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         );
 
         const currency = environment.usableCurrencies.filter(token => token.address === lendToken)[0];
-        this.showInsufficientFundsDialog(required, balance, currency.symbol);
+        const decimals = Currency.getDecimals(currency.symbol);
+        this.showInsufficientFundsDialog(required, balance, currency.symbol, decimals);
       }
     } catch (err) {
       // Don't show 'User denied transaction signature' error
@@ -364,8 +366,17 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    * @param required Amount required
    * @param balance Actual user balance in selected currency
    * @param currency Currency symbol
+   * @param decimals Currency decimals
    */
-  showInsufficientFundsDialog(required: BN, balance: BN, currency: string) {
+  async showInsufficientFundsDialog(
+    required: number,
+    balance: number,
+    currency: string,
+    decimals: number
+  ) {
+    required = required / 10 ** decimals;
+    balance = balance / 10 ** decimals;
+
     this.dialog.open(DialogInsufficientfundsComponent, {
       data: {
         required,

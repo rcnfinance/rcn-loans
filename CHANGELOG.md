@@ -2,22 +2,47 @@
 
 ## Unreleased
 
+### Feature:
+- Show my borrowed and lent loans
+- Installments and payments details
+- Connect to the dApp with multiple wallets
+- Borrow loans with Collateral
+
+### Enhancement:
+- Upgrade Web3 to 1.x
+
+## **0.1.0** Boggart 👻 - 2020/02/03
+
+### Feature:
+
+- Display Diaspore RCN Engine loans
+- Show Lending Checkout Dialog, lend using another currency
+- New Material Dark Theme
+- Improving Restricted Region Dialog
+- Auto-generate technical documentation for each release
+- Implement the contracts TokenConverter and MultiOracle
+
+### Enhancement:
+
+- Visual improvements
+- Get basalt loans using the API
+- Different payment and lend flows for Basalt loans
+- Updated error views (404, no more loans, connection error)
+- New originators visual grid for description
+- New balance account and withdraw panel
+- New look for the payment checkout, transfer and settings dialog
+- Open all addresses in etherscan.io
+- Upgrade error and event tracking lib from Raven to Sentry
+- Upgrade Angular and CDK to 8.x
+- Implement lazy loading modules strategy
+- Implement virtual scroll for long lists
+- Update of texts and contents
+
 ### Fix:
 
 - Fix spinners when changing pages
 - Fix loans filter in Activity view
 - Netlify build, use Node 12
-
-### Enhancement:
-
-- Improving Restricted Region Dialog
-- Display Diaspore RCN Engine loans
-- Show Lending dialog, lend using another currency
-- Visual improvements
-- Get basalt loans using the API
-- Different payment and lend flows for Basalt loans
-- Updated error views (404, no more loans, conection error)
-- New material dark theme
 
 ## **0.0.13** Avocados - 2019/02/15
 
