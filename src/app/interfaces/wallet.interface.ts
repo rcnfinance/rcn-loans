@@ -11,12 +11,6 @@ export interface WalletConnection {
   wallet: WalletType;
 }
 
-export interface WalletConnectionResponse {
-  connected: boolean;
-  network?: Network;
-  wallet?: WalletType;
-}
-
 export const WalletLogo = {
   [WalletType.WalletLink]: './assets/logo-coinbase.png',
   [WalletType.Metamask]: './assets/logo-metamask.svg',
