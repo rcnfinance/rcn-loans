@@ -41,6 +41,9 @@ export const environment = {
   rcn_oracle: {
     url: 'https://oracle.ripio.com/rate/'
   },
+  graph: {
+    url: 'https://o5x5jzoo7z.sse.codesandbox.io/graphql' // FIXME: use real graphql url
+  },
   network: {
     id: '3',
     name: 'Ropsten',
