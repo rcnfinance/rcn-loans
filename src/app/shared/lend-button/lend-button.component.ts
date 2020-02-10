@@ -12,7 +12,7 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
-
+import { environment, Agent } from '../../../environments/environment';
 import { Loan, Network } from './../../models/loan.model';
 import { Utils } from '../../utils/utils';
 
@@ -20,7 +20,6 @@ import { Utils } from '../../utils/utils';
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx, Type } from './../../services/tx.service';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { environment } from '../../../environments/environment';
 import { Web3Service } from '../../services/web3.service';
 import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { CountriesService } from '../../services/countries.service';
@@ -226,6 +225,10 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       let contractAddress: string;
       let payableAmount: any;
 
+      // set cosigner
+      const creator: Agent = environment.dir[this.loan.creator.toLowerCase()];
+      const cosignerAddress: string = environment.cosigners[creator] || '0x';
+
       // set lend contract
       switch (lendToken) {
         case environment.contracts.rcnToken:
@@ -278,7 +281,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
                 Utils.address0x,
                 this.loan.id,
                 oracleData,
-                '0x',
+                cosignerAddress,
                 '0x',
                 account
               );

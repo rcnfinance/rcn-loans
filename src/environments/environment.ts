@@ -71,6 +71,9 @@ export const environment = {
     },
     multicall: '0xa457b5b859573e8eb758b6c2bfd4ae3042b422fd'
   },
+  cosigners: {
+    [Agent.RipioCreator]: '0x684977757434fee591220810cd31b6bbf99f4bdc'
+  },
   blacklist: [
     {
       key: 'oracle',
