@@ -21,7 +21,7 @@ export class SentryErrorHandler implements ErrorHandler {
   constructor() {}
   handleError(error: any) {
     const eventId = Sentry.captureException(error.originalError || error);
-    Sentry.showReportDialog({ eventId });
+    console.error({ eventId });
   }
 }
 

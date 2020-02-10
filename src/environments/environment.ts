@@ -27,7 +27,7 @@ export const environment = {
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
   buyLink: 'https://www.bancor.network/communities/5a92b438583f4a0001f75f42/about',
   version_verbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
-  sentry: 'http://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
+  sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   gaTracking: 'UA-122615331-2',
   apiCountry: 'https://ipcountry-api.rcn.loans',
   rcn_node: {
@@ -54,7 +54,6 @@ export const environment = {
     rcnToken: RCN_TOKEN,
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
-    oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf',
     oracleFactory: '0xf9d4771cbe3c3808f3dff633cd6be738f7f419ea',
     diaspore: {
       debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',

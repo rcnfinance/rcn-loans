@@ -54,8 +54,7 @@ export const environment = {
     rcnToken: RCN_TOKEN,
     basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
-    oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf', // FIXME: Ropsten oracle
-    oracleFactory: '0xe8e49d772b106e2acfc7f821cbd77b97a728aaac', // FIXME: Ropsten oracle factory
+    oracleFactory: '0x1101c52fc25dc6d2691cec4b06569cef3c83933c',
     diaspore: {
       debtEngine: '0x80db22675dad70e44b64029510778583187faddb',
       loanManager: '0xb55b0f33d6a2a03a275ca85d58e9357e1a141187'
@@ -102,12 +101,12 @@ export const environment = {
     {
       symbol: 'ETH',
       img: 'assets/eth.png',
-      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
     },
     {
       symbol: 'DAI',
       img: 'assets/dai.png',
-      address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
+      address: '0x6b175474e89094c44da98b954eedeac495271d0f'
     },
     {
       symbol: 'USDC',
@@ -117,7 +116,7 @@ export const environment = {
     {
       symbol: 'MANA',
       img: 'assets/mana.png',
-      address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
+      address: '0x0f5d2fb29fb7d3cfee444a200298f468908cc942'
     }
   ]
 };
