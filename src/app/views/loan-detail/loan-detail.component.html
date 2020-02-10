@@ -52,7 +52,7 @@
         </div>
         <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled">
           <app-conversion-graphic
-            [headers]="['Paid', 'Annual rate', 'Due']"
+            [headers]="['Paid', 'Annual rate', 'Outstanding']"
             [amountRight]="pendingAmount"
             [textMiddle]="interest"
             [amountLeft]="paid"
