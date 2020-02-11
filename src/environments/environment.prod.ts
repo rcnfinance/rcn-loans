@@ -83,7 +83,7 @@ export const environment = {
     '0xfeac8e490fe7f0760a10225e7dccda1e22ad8daa': Agent.WenanceCreator // FIXME - Ropsten address
   },
   cosigners: {
-    [Agent.RipioCreator]: '0x684977757434fee591220810cd31b6bbf99f4bdc' // FIXME - Ropsten address
+    [Agent.RipioCreator]: '0xfA7c953a07BCb4420253bFfBf586bDD64c37B670'
   },
   filterCurrencies: [
     'RCN',
