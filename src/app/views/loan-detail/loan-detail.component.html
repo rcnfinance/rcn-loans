@@ -47,10 +47,10 @@
           <app-conversion-graphic
             [headers]="['Lend', loan.currency, 'Receive']"
             [amountLeft]="loan.currency.fromUnit(loan.amount)"
-            [amountRight]="isRequest ||  isCanceled ? expectedReturn : totalDebt"
+            [amountRight]="isRequest || isCanceled || isExpired ? expectedReturn : totalDebt"
           ></app-conversion-graphic>
         </div>
-        <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled">
+        <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled && !isExpired">
           <app-conversion-graphic
             [headers]="['Paid', 'Annual rate', 'Due']"
             [amountRight]="pendingAmount"
@@ -72,7 +72,7 @@
 
       <div class="margintop20"></div>
       <app-detail-table [data]="diasporeData" *ngIf="isDiaspore"></app-detail-table>
-      <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled"></app-detail-table>
+      <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled || isExpired"></app-detail-table>
       <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
 
       <div class="table-responsive" *ngIf='availableOracle'>

@@ -253,8 +253,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
     switch (this.loan.status) {
       case Status.Expired:
-        throw Error('Loan expired');
-
       case Status.Destroyed:
       case Status.Request:
         // Load config data
