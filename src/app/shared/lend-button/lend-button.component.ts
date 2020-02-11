@@ -228,7 +228,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
       // set cosigner
       const creator: Agent = environment.dir[this.loan.creator.toLowerCase()];
-      const cosignerAddress: string = environment.cosigners[creator] || '0x';
+      const cosignerAddress: string = environment.cosigners[creator] || '0x0';
 
       // set lend contract
       switch (lendToken) {
@@ -270,7 +270,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
           case Network.Diaspore:
             if (lendToken === environment.contracts.rcnToken) {
-              tx = await this.contractsService.lendLoan(this.loan);
+              tx = await this.contractsService.lendLoan(this.loan, cosignerAddress);
             } else {
               const tokenConverter = environment.contracts.converter.tokenConverter;
 
