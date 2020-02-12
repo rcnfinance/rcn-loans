@@ -279,11 +279,11 @@ export class LendButtonComponent implements OnInit, OnDestroy {
                 tokenConverter,
                 lendToken,
                 required,
-                Utils.address0x,
+                cosignerAddress,
                 this.loan.id,
                 oracleData,
-                cosignerAddress,
-                '0x',
+                [],
+                [],
                 account
               );
             }
