@@ -47,7 +47,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     const env = environment;
     const contract = env.contracts.diaspore.loanManager;
-    const linkContract = env.network.explorer.address.replace('${address}', env.contracts.basaltEngine);
+    const linkContract = env.network.explorer.address.replace('${address}', contract);
     const version = env.version;
     const versionString = env.version + '-' + env.build + ' - ' + env.version_name;
     this.socialIcons = [
