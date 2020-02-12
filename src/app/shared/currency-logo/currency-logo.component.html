@@ -1,0 +1,12 @@
+<div class="currency-logo">
+  <img
+    #currencyLogo
+    [src]="url"
+    [alt]="'Token ' + address"
+    [ngStyle]="{
+      'width': size + 'px',
+      'height': size + 'px'
+    }"
+    (error)="currencyLogo.src = defaultIcon()"
+  />
+</div>

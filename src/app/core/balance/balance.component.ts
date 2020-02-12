@@ -1,39 +1,82 @@
-import { Component, OnInit } from '@angular/core';
-import { Web3Service } from '../../services/web3.service';
-import { ContractsService } from '../../services/contracts.service';
-import { Tx, TxService } from '../../tx.service';
+import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Utils } from '../../utils/utils';
+// App Services
+import { Web3Service } from '../../services/web3.service';
+import { ContractsService } from '../../services/contracts.service';
+import { Tx, Type, TxService } from '../../services/tx.service';
 
 @Component({
   selector: 'app-component-balance',
   templateUrl: './balance.component.html',
   styleUrls: ['./balance.component.scss']
 })
-export class BalanceComponent implements OnInit {
-  private account: string;
+export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() account: string;
 
   private rcnBalance: number;
   private rcnAvailable: number;
+  private basaltRcnAvailable: number;
+  private diasporeRcnAvailable: number;
 
-  loansWithBalance: number[]; // Balance bar
-  ongoingWithdraw: Tx;
+  basaltLoansWithBalance: number[] = [];
+  diasporeLoansWithBalance: number[] = [];
+  ongoingBasaltWithdraw: Tx;
+  ongoingDiasporeWithdraw: Tx;
 
   canWithdraw = false;
   displayBalance = '';
   displayAvailable = '';
+  txSubscription: boolean;
+
+  // subscriptions
+  subscriptionBalance: Subscription;
 
   constructor(
     private web3Service: Web3Service,
     private contractService: ContractsService,
     private txService: TxService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {
-    this.web3Service.loginEvent.subscribe(() => this.loadLogin());
-    this.loadLogin();
+  ngOnInit() {
+    this.retrievePendingTx();
+    this.handleBalanceEvents();
   }
 
+  ngOnChanges(changes) {
+    const web3: any = this.web3Service.web3;
+    const { account } = changes;
+
+    if (account.currentValue) {
+      this.account = web3.toChecksumAddress(account.currentValue);
+      this.loadRcnBalance();
+      this.loadWithdrawBalance();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptionBalance) {
+      this.subscriptionBalance.unsubscribe();
+    }
+    if (this.txSubscription) {
+      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
+    }
+  }
+
+  /**
+   * Listen and handle balance events for update amounts
+   */
+  handleBalanceEvents() {
+    this.subscriptionBalance = this.web3Service.updateBalanceEvent.subscribe(() => {
+      this.loadRcnBalance();
+      this.loadWithdrawBalance();
+    });
+  }
+
+  /**
+   * Update balance and withdraw amount
+   */
   updateDisplay() {
     if (this.rcnBalance) {
       this.displayBalance = Utils.formatAmount(this.rcnBalance);
@@ -48,49 +91,88 @@ export class BalanceComponent implements OnInit {
     }
 
     this.canWithdraw =
-      this.loansWithBalance !== undefined &&
-      this.loansWithBalance.length > 0 &&
-      this.ongoingWithdraw === undefined;
+      this.basaltLoansWithBalance !== undefined || this.diasporeLoansWithBalance !== undefined &&
+      this.basaltLoansWithBalance.length > 0 || this.diasporeLoansWithBalance.length > 0 &&
+      this.ongoingBasaltWithdraw === undefined || this.ongoingDiasporeWithdraw === undefined;
 
-    if (this.ongoingWithdraw !== undefined) {
+    if (this.ongoingBasaltWithdraw !== undefined || this.ongoingDiasporeWithdraw !== undefined) {
       this.displayBalance = Utils.formatAmount(
         this.rcnBalance + this.rcnAvailable
-      ); }
-  }
-
-  async loadLogin() {
-    if (!this.account) {
-      this.account = await this.web3Service.getAccount();
-      this.loadRcnBalance();
-      this.loadWithdrawBalance();
+      );
     }
   }
 
+  /**
+   * Load basalt and diaspore balance withdraw amounts. Then, add all the values
+   * ​​and show the total available
+   */
   async loadWithdrawBalance() {
-    const r = await this.contractService.getPendingWithdraws();
-    this.rcnAvailable = r[0] / 10 ** 18;
-    this.loansWithBalance = r[1];
+    const pendingWithdraws = await this.contractService.getPendingWithdraws();
+    this.basaltRcnAvailable = pendingWithdraws[0] / 10 ** 18;
+    this.diasporeRcnAvailable = pendingWithdraws[2] / 10 ** 18;
+    this.rcnAvailable = this.basaltRcnAvailable + this.diasporeRcnAvailable;
+    this.basaltLoansWithBalance = pendingWithdraws[1];
+    this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadOngoingWithdraw();
     this.updateDisplay();
   }
 
+  /**
+   * Show the user balance in rcn
+   */
   async loadRcnBalance() {
     this.rcnBalance = (await this.contractService.getUserBalanceRCN() as any).toNumber();
     this.updateDisplay();
   }
 
+  /**
+   * Load the pending withdraw
+   */
   loadOngoingWithdraw() {
-    this.ongoingWithdraw = this.txService.getLastWithdraw(
+    this.ongoingBasaltWithdraw = this.txService.getLastWithdraw(
       environment.contracts.basaltEngine,
-      this.loansWithBalance
+      this.basaltLoansWithBalance
+    );
+    this.ongoingDiasporeWithdraw = this.txService.getLastWithdraw(
+      environment.contracts.diaspore.debtEngine,
+      this.diasporeLoansWithBalance
     );
   }
 
+  /**
+   * Handle click on withdraw
+   */
   async clickWithdraw() {
     if (this.canWithdraw) {
-      const tx = await this.contractService.withdrawFunds(this.loansWithBalance);
-      this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.loansWithBalance);
+      if (this.basaltLoansWithBalance.length > 0) {
+        const tx = await this.contractService.withdrawFundsBasalt(this.basaltLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.basaltLoansWithBalance);
+      }
+      if (this.diasporeLoansWithBalance.length > 0) {
+        const tx = await this.contractService.withdrawFundsDiaspore(this.diasporeLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, environment.contracts.diaspore.debtEngine, this.diasporeLoansWithBalance);
+      }
       this.loadWithdrawBalance();
+      this.retrievePendingTx();
+    }
+  }
+
+  /**
+   * Retrieve pending Tx
+   */
+  retrievePendingTx() {
+    if (!this.txSubscription) {
+      this.txSubscription = true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
+    }
+  }
+
+  /**
+   * Track tx
+   */
+  trackWithdrawTx(tx: Tx) {
+    if (tx.type === Type.withdraw) {
+      this.web3Service.updateBalanceEvent.emit();
     }
   }
 }

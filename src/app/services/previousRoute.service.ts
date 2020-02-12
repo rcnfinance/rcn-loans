@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
+// App services
+import { EventsService } from './events.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PreviousRouteService {
   private previousUrl: any;
 
   constructor(
     private router: Router,
-    private location: Location
+    private location: Location,
+    private eventsService: EventsService
   ) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -21,13 +26,18 @@ export class PreviousRouteService {
     return this.previousUrl;
   }
 
-  redirectHandler() {
+  async redirectHandler() {
     const previousUrl: string = this.getPreviousUrl();
     if (!previousUrl) {
-      this.router.navigate(['/', 'requests']).then(err => {
-        console.error(err); // when there's an error
-      });
-    } else if (previousUrl && previousUrl.includes('rcn.loans') || previousUrl.includes('localhost')) {
+      try {
+        await this.router.navigate(['/', 'requests']);
+      } catch (err) {
+        this.eventsService.trackError(err);
+      }
+      return;
+    }
+
+    if (previousUrl) {
       this.location.back();
     }
   }

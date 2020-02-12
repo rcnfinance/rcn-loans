@@ -1,18 +1,34 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnChanges, Input } from '@angular/core';
 import { Loan, Status } from '../../../models/loan.model';
+// App services
+import { EventsService } from './../../../services/events.service';
 
 @Component({
   selector: 'app-icon-avatar',
   templateUrl: './icon-avatar.component.html',
   styleUrls: ['./icon-avatar.component.scss']
 })
-export class IconAvatarComponent implements OnInit {
+export class IconAvatarComponent implements OnChanges {
   @Input() loan: Loan;
   class: string;
   icon: string;
-  constructor() { }
 
-  ngOnInit() {
+  constructor(
+    private eventsService: EventsService
+  ) { }
+
+  ngOnChanges(changes) {
+    const { loan } = changes;
+
+    if (loan && loan.currentValue) {
+      this.loadStatus();
+    }
+  }
+
+  /**
+   * Load loan status
+   */
+  loadStatus() {
     switch (this.loan.status) {
       case Status.Request:
         this.class = 'request';
@@ -39,7 +55,8 @@ export class IconAvatarComponent implements OnInit {
         this.icon = 'error_outline';
         break;
       default:
-        console.error('Unknown status', this.loan.status);
+        const err = new Error(`Unknown status ${ this.loan.status }`);
+        this.eventsService.trackError(err);
         break;
     }
   }

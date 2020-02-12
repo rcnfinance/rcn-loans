@@ -5,6 +5,7 @@
 /dist-server
 /tmp
 /out-tsc
+/src/documentation
 
 # dependencies
 /node_modules
@@ -42,6 +43,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Security suggestion
+config.js
 
 # Build info
 /src/environments/build-info.ts

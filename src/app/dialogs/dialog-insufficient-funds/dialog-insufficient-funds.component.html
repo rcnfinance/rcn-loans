@@ -1,0 +1,20 @@
+<app-dialog-header title="Oh oh, you don't have enough funds">
+</app-dialog-header>
+
+<mat-dialog-content>
+  <div class="col-sm-12 dialog-padding">
+    <div class="row">
+      <div class="col-sm-12 col-lg-4">
+        <div class="icon cursor-none"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="margintop25 d-none d-md-none"></div>
+      </div>
+      <div class="col-sm-12 col-lg-8">
+        <div class="title main-h3">Your balance is {{ balance }} {{ currency }}</div>
+        <div class="margintop5"></div>
+        <div class="title main-h4">
+          You need at least {{ required }} {{ currency }} to fund this loan.
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

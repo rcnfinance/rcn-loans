@@ -1,21 +1,32 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/fonts';
 
-div {
-  cursor: auto;
+.balance {
+  @include styled-font('Roboto', 700, 16px)
   display: flex;
   align-items: center;
-  @extend %roboto-black;
-  > * {
-    padding-left: 3px;
-    padding-right: 3px;
-    &.plus {
-      font-size: 14px;
-      color: $primary;
+
+  &__amount {
+    margin-right: 16px;
+  }
+  &__withdraw {
+    display: flex;
+    align-items: center;
+    background: #8B8B8B36;
+    padding: 7px 15px 5px 10px;
+    border: 1px solid var(--app-color-primary);
+    border-radius: 8px;
+    cursor: pointer;
+
+    &-icon,
+    &-amount {
+      color: var(--app-color-primary);
     }
-    &.pending {
-      cursor: pointer;        
-      color: $primary;
-      padding-left: 0;
+    &-icon {
+      font-size: .95em;
+      margin-right: 6px;
+    }
+    &-amount {
+      margin-right: 5px;
     }
   }
 }

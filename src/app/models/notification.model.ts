@@ -11,7 +11,7 @@ export class Notification {
 
 export class TxObject {
   constructor(
-    public id: Number,
+    public id: String,
     public title: String,
     public message: String,
     public materialClass: String,

@@ -1,8 +1,19 @@
-<div class='main'>
-  <div>{{ displayBalance }}</div>
-  <div matTooltip="Withdraw payments" class="pending" (click)="clickWithdraw()" *ngIf='canWithdraw'>
-    <i class="material-icons plus">add_circle</i>
-    {{ displayAvailable }}
+<div class="balance">
+  <span class="balance__amount" matTooltip="RCN Wallet Balance">
+    {{ displayBalance }} RCN
+  </span>
+  <div
+    class="balance__withdraw"
+    (click)="clickWithdraw()"
+  >
+    <div class="balance__withdraw-icon">
+      <i class="fas fa-arrow-down"></i>
+    </div>
+    <div class="balance__withdraw-amount" matTooltip="Available Balance">
+      {{ displayAvailable || 0 }}
+    </div>
+    <div class="balance__withdraw-currency">
+      RCN
+    </div>
   </div>
-  <div>RCN</div>
 </div>

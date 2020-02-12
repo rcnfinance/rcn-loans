@@ -1,23 +1,27 @@
-@import '../../../../scss/_variables.scss'; //variables
+@import '../../../../scss/variables';
+@import '../../../../scss/fonts';
 
 .conversion-block{
-  height: 50px;
+  max-height: 50px;
   @extend %flex-container;
   padding: 0px 15px;
   margin: 5px -15px 15px;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  div{
+  div {
     flex: 1;
-    @extend %roboto-black;
+    @extend %roboto-bold;
+    max-width: 33.3%;
+
     &:nth-child(1){
       text-align: left;
-      font-size: 26px;
+      @extend .font30;
     }
     &:nth-child(2){
       display: flex;
-      @extend %font-regular;
-      i{ margin: 0 auto; }
+      @extend %roboto-regular;
+      i {
+        margin: 0 auto;
+        transform: rotate(180deg);
+      }
       &.feature{
         display: block;
         font-size: 18px;
@@ -26,9 +30,21 @@
       }
     }
     &:nth-child(3){
-      color: $primary;
-      font-size: 26px;
+      color: var(--app-color-primary);
       text-align: right;
+      @extend .font30;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .conversion-block {
+    div {
+      &:nth-child(2) {
+        i {
+          font-size: 2.5em;
+        }
+      }
     }
   }
 }

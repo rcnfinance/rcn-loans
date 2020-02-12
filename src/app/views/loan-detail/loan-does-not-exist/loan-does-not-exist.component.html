@@ -1,0 +1,18 @@
+<app-error-details
+  label="ERROR 404"
+  title="This loan doesn´t exist."
+  image="assets/errors/error_no-loans.svg"
+  [buttons]="[
+    {
+      text: 'Go to Lend',
+      url: '/',
+      class: 'button-primary'
+    },
+    {
+      text: account ? 'Go to My Loans' : 'Go to Activity',
+      url: account ? ('/address/' + account) : '/activity',
+      class: 'button-clear'
+    }
+  ]"
+>
+</app-error-details>

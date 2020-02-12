@@ -45,7 +45,7 @@ export class Utils {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  static formatDelta(totalSeconds: number, display: number = 2, showSeconds = true): string {
+  static formatDelta(totalSeconds: number, display: number = 2, showSeconds = false): string {
     let result = '';
     let visible = 0;
 
@@ -56,30 +56,29 @@ export class Utils {
       }
     }
 
-    let prefix = '';
+    const prefix = '';
 
     if (totalSeconds < 0) {
-      prefix = '- ';
       totalSeconds *= -1;
     }
 
     totalSeconds = Math.abs(totalSeconds);
     const secondsInYear = 86400 * 365;
     const years = Math.floor(totalSeconds / secondsInYear);
-    timeToStr(years, ' years, ');
+    timeToStr(years, ' Years, ');
     totalSeconds %= secondsInYear;
     const days = Math.floor(totalSeconds / 86400);
-    timeToStr(days, ' days, ');
+    timeToStr(days, ' Days, ');
     totalSeconds %= 86400;
     const hours = Math.floor(totalSeconds / 3600);
-    timeToStr(hours, ' hours, ');
+    timeToStr(hours, ' Hours, ');
     totalSeconds %= 3600;
     const minutes = Math.floor(totalSeconds / 60);
-    timeToStr(minutes, ' minutes, ');
+    timeToStr(minutes, ' Minutes, ');
 
     if (showSeconds) {
       const seconds = totalSeconds % 60;
-      timeToStr(seconds, ' seconds, ');
+      timeToStr(seconds.toFixed(0), ' Seconds, ');
     }
 
     return prefix + result.slice(0, -2);

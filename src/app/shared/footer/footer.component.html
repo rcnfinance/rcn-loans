@@ -1,0 +1,99 @@
+<footer>
+  <div class="nav-mobile">
+    <ul>
+      <li
+        routerLink='/requests'
+        routerLinkActive="active"
+        (click)='navmobileClose();'
+      >
+        <i class="fas fa-coins"></i>
+        <div class="available-loans">{{ available }}</div>
+      </li>
+      <li
+        routerLink='/activity'
+        routerLinkActive="active"
+        (click)='navmobileClose();'
+      >
+        <i class="fas fa-wallet"></i>
+        <div class="available-loans">{{ available }}</div>
+      </li>
+      <li
+        routerLink='/address/{{ account }}/'
+        routerLinkActive="active"
+        (click)='navmobileClose();'
+        *ngIf="hasAccount"
+      >
+        <i class="fas fa-exchange-alt"></i>
+        <div class="available-loans">{{ available }}</div>
+      </li>
+      <li
+        (click)='navmobileClose(); openDialogClient()'
+        *ngIf="!hasAccount"
+      >
+        <i class="fas fa-user-circle"></i>
+      </li>
+      <li [class.active]="navmobileToggled" (click)='navmobileToggle()'>
+        <button
+          type="button"
+          class="nav-toggle"
+        >
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </li>
+    </ul>
+  </div>
+  <div class="container-fluid d-none d-lg-block">
+    <div class="row">
+      <div class="col-sm-12 col-lg-4 col--left">
+        <div class="txt">© 2018 - 2020 RCN</div>
+      </div>
+      <div
+        class="col-sm-12 col-lg-8 col--right d-flex align-items-center justify-content-end"
+      >
+        <div class="d-flex mr-4">
+          <div class="nav-item">
+            <a
+              matTooltipPosition="above"
+              href="https://rcn.finance/"
+              target="_blank"
+            >
+              Website
+            </a>
+          </div>
+          <div class="nav-item">
+            <a
+              matTooltipPosition="above"
+              href="https://medium.com/rcnblog"
+              target="_blank"
+            >
+              Blog
+            </a>
+          </div>
+          <div class="nav-item">
+            <a
+              matTooltipPosition="above"
+              href="mailto:helpdesk@rcn.finance"
+            >
+              helpdesk@rcn.finance
+            </a>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="icon ml-3" *ngFor="let icon of socialIcons">
+            <a
+              [href]="icon.url"
+              [matTooltip]="icon.label"
+              matTooltipPosition="above"
+              target="_blank"
+            >
+              <i class="fa-lg" [ngClass]="icon.class"></i>
+              {{ icon.text }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

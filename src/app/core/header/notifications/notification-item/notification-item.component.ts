@@ -11,13 +11,24 @@ import { Utils } from '../../../../utils/utils';
 export class NotificationItemComponent implements OnInit {
   @Input() notification: Notification;
   deltaFormatted: string;
+  shortAddress: string;
 
   progressbarMode = 'query';
 
   constructor() {}
 
-  openAddres() {
-    window.open(environment.network.explorer.tx.replace('${tx}', this.notification.hashTx), '_blank');
+  openTx() {
+    window.open(environment.network.explorer.tx.replace(
+      '${tx}',
+      this.notification.hashTx
+    ), '_blank');
+  }
+
+  openAddress() {
+    window.open(environment.network.explorer.address.replace(
+      '${address}',
+      this.notification.starringEvent.toString()
+    ), '_blank');
   }
 
   toDeltaFormatted(time: number): string {
@@ -27,6 +38,11 @@ export class NotificationItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.deltaFormatted = this.toDeltaFormatted(this.notification.time);
+    if (this.notification) {
+      this.deltaFormatted = this.toDeltaFormatted(this.notification.time);
+      if (this.notification.txObject.id !== undefined) {
+        this.shortAddress = Utils.shortAddress(this.notification.txObject.id.toString());
+      }
+    }
   }
 }
