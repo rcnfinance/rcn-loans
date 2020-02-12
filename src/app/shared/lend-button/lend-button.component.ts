@@ -14,7 +14,6 @@ import {
 } from '@angular/material';
 import { environment, Agent } from '../../../environments/environment';
 import { Loan, Network } from './../../models/loan.model';
-import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 
 // App Services
@@ -279,11 +278,11 @@ export class LendButtonComponent implements OnInit, OnDestroy {
                 tokenConverter,
                 lendToken,
                 required,
-                Utils.address0x,
+                cosignerAddress,
                 this.loan.id,
                 oracleData,
-                cosignerAddress,
-                '0x',
+                '',
+                '',
                 account
               );
             }
