@@ -69,7 +69,7 @@ export class DecentralandCosignerComponent implements OnInit {
   }
   highlightDistance(tag: Tag): string {
     if (tag.distance === 0) {
-      return 'part of';
+      return 'Adjacent';
     }
 
     if (tag.distance === 1) {

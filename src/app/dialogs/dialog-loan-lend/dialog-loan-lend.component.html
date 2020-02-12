@@ -1,4 +1,4 @@
-<app-dialog-header title="Checkout process">
+<app-dialog-header title="Lending Checkout">
 </app-dialog-header>
 
 <mat-dialog-content class="dialog">
@@ -16,12 +16,6 @@
     <div class="title main-h3">
       You're about to fund the {{ shortLoanId }} loan. Please select your
       lending currency.
-      <div
-        class="i"
-        matTooltip="Exchange rates may vary during the loan's term affecting the expected return"
-      >
-        <i class="far fa-question-circle"></i>
-      </div>
     </div>
     <div class="margintop50"></div>
     <div class="row">
@@ -53,11 +47,11 @@
       <div class="col-sm-8">
         <div class="small-table-row row">
           <div class="col title-3 --auto pl-0 uppercase">
-            Lending amount
+            Lend
           </div>
           <div class="col-sm-1 no-gutters --auto"></div>
           <div class="col title-3 --auto uppercase">
-            {{ isRequest || isCanceled ? 'Estimated return' : 'Return' }}
+            Receive
           </div>
         </div>
         <div class="margintop15"></div>
@@ -80,7 +74,7 @@
             </span>
             <div
               class="d-inline"
-              matTooltip="This return is affected by exchange rate fluctuations and it can't be guaranteed"
+              matTooltip="This return is calculated using current exchange rates and may vary as a result of their fluctuations."
               *ngIf="lendCurrency && expectedReturnWarning"
             >
               <i class="fas fa-exclamation-triangle margin-left triangle"></i>
@@ -112,7 +106,7 @@
               </span>
               <div
                 class="d-inline"
-                matTooltip="This return is guaranteed and not affected by exchange rate fluctuations."
+                matTooltip="This return is not affected by exchange rate fluctuations."
                 *ngIf="lendCurrency"
               >
                 <i class="fas fa-check-circle check margin-left"></i>

@@ -24,10 +24,14 @@
           </div>
         </ng-template>
       </div>
-      <!-- <app-creator-container [loan]=loan></app-creator-container> -->
     </div>
     <div class="flex-item">
-      <app-button-group (view)="openDetail($event)" [viewDetail]=viewDetail></app-button-group>
+      <app-button-group
+        (view)="openDetail($event)"
+        [viewDetail]="viewDetail"
+        [loanType]="loanType"
+      >
+      </app-button-group>
     </div>
   </div>
 
@@ -52,7 +56,7 @@
         </div>
         <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled && !isExpired">
           <app-conversion-graphic
-            [headers]="['Paid', 'Annual rate', 'Due']"
+            [headers]="['Paid', 'Annual rate', 'Outstanding']"
             [amountRight]="pendingAmount"
             [textMiddle]="interest"
             [amountLeft]="paid"
@@ -96,7 +100,9 @@
           <thead>
             <tr>
               <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('identity') }" scope="col">
-                Borrower<i class="material-icons white more-indicator">{{ isDetail('identity') ? '' : 'unfold_more' }}</i>
+                <ng-container *ngIf="loanType !== 2">Borrower</ng-container>
+                <ng-container *ngIf="loanType === 2">Originator / Borrower</ng-container>
+                <i class="material-icons white more-indicator">{{ isDetail('identity') ? '' : 'unfold_more' }}</i>
               </th>
             </tr>
           </thead>
@@ -129,7 +135,9 @@
           <thead>
             <tr>
               <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
-                Collateral<i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
+                <ng-container *ngIf="loanType !== 3">Collateral</ng-container>
+                <ng-container *ngIf="loanType === 3">Guaranty</ng-container>
+                <i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
               </th>
             </tr>
           </thead>
