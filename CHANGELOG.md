@@ -11,6 +11,15 @@
 ### Enhancement:
 - Upgrade Web3 to 1.x
 
+## **0.1.1** Boggart 👻
+
+### Enhancement:
+- Update of texts and contents
+- Adjust filter component and loan detail styles
+
+### Fix:
+- Update mainnet contract addresses
+
 ## **0.1.0** Boggart 👻 - 2020/02/03
 
 ### Feature:
