@@ -282,8 +282,8 @@ export class LendButtonComponent implements OnInit, OnDestroy {
                 cosignerAddress,
                 this.loan.id,
                 oracleData,
-                [],
-                [],
+                '',
+                '',
                 account
               );
             }
