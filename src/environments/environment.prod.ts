@@ -28,7 +28,7 @@ export const environment = {
   buyLink: 'https://www.bancor.network/communities/5a92b438583f4a0001f75f42/about',
   version_verbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
-  gaTracking: 'UA-122615331-3',
+  gaTracking: 'UA-158285508-1',
   apiCountry : 'https://ipcountry-api.rcn.loans',
   rcn_node: {
     loan: 'https://rnode.rcn.loans/v1/commits?id_loan=$id' // TODO: replace by rcn_node_api.basaltUrl
