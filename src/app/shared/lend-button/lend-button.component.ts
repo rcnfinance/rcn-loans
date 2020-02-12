@@ -14,7 +14,6 @@ import {
 } from '@angular/material';
 import { environment, Agent } from '../../../environments/environment';
 import { Loan, Network } from './../../models/loan.model';
-import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 
 // App Services
