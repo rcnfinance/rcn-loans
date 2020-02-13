@@ -53,3 +53,7 @@ config.js
 
 #e2e
 /screenshots
+
+# Visal studio code
+/.vscode/
+
