@@ -21,6 +21,7 @@ const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 export const environment = {
   version: p.version,
   version_name: p.version_name,
+  version_emoji: '👻',
   build: getBuild(),
   production: true,
   url: 'https://mainnet.rcn.loans/',
