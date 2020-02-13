@@ -20,7 +20,9 @@ export class WalletConnectService {
     private eventsService: EventsService
   ) {
     this.requestConnect$ = new Subject();
+    this.loadWalletConnected();
     this.tryRestoreConnection();
+    this.handleLoginEvents();
   }
 
   /**
@@ -57,23 +59,19 @@ export class WalletConnectService {
   }
 
   /**
-   * Save wallet connection in the storage
+   * Load the wallet connection saved in the storage
    */
-  set walletConnected(wallet: WalletConnection) {
-    this.storage.setItem('walletConnected', JSON.stringify(wallet));
+  private loadWalletConnected() {
+    const walletConnected: string = this.storage.getItem('walletConnected');
+    if (walletConnected) {
+      this.storageWalletConnected = JSON.parse(walletConnected);
+    }
   }
 
   /**
    * Try recover the last wallet connection
    */
   private tryRestoreConnection() {
-    // set the wallet connected in this service
-    const walletConnected: string = this.storage.getItem('walletConnected');
-    if (walletConnected) {
-      this.storageWalletConnected = JSON.parse(walletConnected);
-    }
-
-    // valdate network and try reconnect the last wallet
     const lastConnection: WalletConnection = this.walletConnected;
     try {
       const { id } = environment.network;
@@ -84,6 +82,14 @@ export class WalletConnectService {
 
       this.web3Service.requestLogin(wallet);
     } catch (err) { }
+  }
+
+  /**
+   * Listen and handle login events for account changes and save the new wallet
+   * connected
+   */
+  private handleLoginEvents() {
+    this.web3Service.loginEvent.subscribe(() => this.loadWalletConnected());
   }
 
 }
