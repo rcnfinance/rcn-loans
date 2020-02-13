@@ -61,7 +61,7 @@ export class DialogWalletSelectComponent implements OnInit {
   async selectWallet(wallet: WalletType) {
     const loggedIn = await this.web3Service.requestLogin(wallet, true);
     if (loggedIn) {
-      timer(200).subscribe(() => this.dialogRef.close(loggedIn));
+      timer(300).subscribe(() => this.dialogRef.close(loggedIn));
     }
   }
 
@@ -85,9 +85,7 @@ export class DialogWalletSelectComponent implements OnInit {
 
     const { wallet }: WalletConnection = walletConnected;
     this.wallets.map((item) => {
-      if (wallet === item.type) {
-        item.active = true;
-      }
+      item.active = wallet === item.type || false;
     });
   }
 

@@ -41,7 +41,7 @@
       }
 
       &--active {
-        background: #1F1F1F;
+        background: var(--app-color-gray-500);
         span::after {
           content: '';
           display: inline-block;
