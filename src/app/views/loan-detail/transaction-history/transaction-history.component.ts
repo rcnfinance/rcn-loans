@@ -1,10 +1,11 @@
 import { Component, OnInit, OnChanges, Input, ViewChild } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 // App Models
 import { Loan, Network } from '../../../models/loan.model';
 import { Commit } from '../../../interfaces/commit.interface';
 // App Services
+import { Web3Service } from '../../../services/web3.service';
 import { CommitsService } from '../../../services/commits.service';
-import { environment } from '../../../../environments/environment';
 import { Utils } from '../../../utils/utils';
 import { EventsService } from '../../../services/events.service';
 import { Currency } from '../../../utils/currencies';
@@ -28,6 +29,7 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
   selectedEvent: number;
   id = 0;
   explorerTx = environment.network.explorer.tx;
+  explorerAddress = environment.network.explorer.address;
   @ViewChild('spinner', { static: true }) myId: any;
 
   winHeight: any = window.innerWidth;
@@ -58,8 +60,8 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
       'display': ['creator']
     },
     'approved_loan': {
-      'title': 'Loan Approved',
-      'message': 'Loan Approved',
+      'title': 'Approved',
+      'message': 'Approved',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'done',
@@ -84,7 +86,7 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
       'awesomeClass': 'fas fa-coins',
       'color': 'green',
       'inserted': true,
-      'display': ['sender', 'from', 'amount']
+      'display': ['from', 'amount']
     },
     'total_payment': {
       'title': 'Completed',
@@ -162,8 +164,8 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
       'display': ['creator']
     },
     'approved_loan_manager': {
-      'title': 'Loan Approved',
-      'message': 'Loan Approved',
+      'title': 'Approved',
+      'message': 'Approved',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'done',
@@ -172,8 +174,8 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
       'display': ['approved_by']
     },
     'canceled_loan_manager': {
-      'title': 'Request Canceled',
-      'message': 'Request Canceled',
+      'title': 'Canceled',
+      'message': 'Canceled',
       'status': 'active',
       'materialClass': 'material-icons',
       'icon': 'delete',
@@ -198,11 +200,11 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
       'awesomeClass': 'fas fa-coins',
       'color': 'green',
       'inserted': true,
-      'display': ['sender', 'from', 'amount']
+      'display': ['from', 'amount']
     },
     'full_payment_loan_manager': {
-      'title': 'Completed',
-      'message': 'Completed',
+      'title': 'Fully Repaid',
+      'message': 'Fully Repaid',
       'status': 'active',
       'awesomeClass': 'fas fa-check',
       'color': 'gray7',
@@ -233,9 +235,20 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
   };
 
   constructor(
+    private web3Service: Web3Service,
     private commitsService: CommitsService,
     private eventsService: EventsService
   ) { }
+
+  /**
+   * Check if the value is an address
+   * @param value Address or any
+   * @return Boolean
+   */
+  isAddress(value: string) {
+    const web3: any = this.web3Service.web3;
+    return web3.isAddress(value);
+  }
 
   get_properties_by_opcode(opcode: string): object[] { // Get the timeline event properties from timelinesProperties[]
     if (this.loan.network === Network.Basalt) {
@@ -304,7 +317,7 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
         let content = value as string;
         if (this.dataTypes[key] === 'currency') {
           const currency = this.loan.currency.symbol;
-          content = currency + ' ' + new Currency(currency).fromUnit(content).toString();
+          content = `${ new Currency(currency).fromUnit(Number(content)).toString() } ${ currency }`;
         }
         result.push(new DataEntry(name, content));
       }

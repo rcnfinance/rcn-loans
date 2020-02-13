@@ -83,8 +83,11 @@ export const environment = {
     ongoing: '0x3b80f3028af6ab654b6b0188e651667ade313e1b'
   },
   dir: {
-    '0x263231ed9b51084816a44e18d16c0f6d0727491f': Agent.RipioCreator,
+    '0xfbd5e54062619ef2b0323ad9ff874b39fd5a8d2c': Agent.RipioCreator,
     '0xfeac8e490fe7f0760a10225e7dccda1e22ad8daa': Agent.WenanceCreator // FIXME - Ropsten address
+  },
+  cosigners: {
+    [Agent.RipioCreator]: '0xfA7c953a07BCb4420253bFfBf586bDD64c37B670'
   },
   filterCurrencies: [
     'RCN',
