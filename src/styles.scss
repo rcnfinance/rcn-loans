@@ -385,7 +385,7 @@ mat-form-field{
 .mat-form-field-appearance-legacy{
   .mat-hint{ color: var(--app-color-secondary); }
   .mat-form-field-label{ color: rgba(255,255,255,.7); }
-  .mat-form-field-underline { background-color: rgba(255,255,255,.5); }
+  .mat-form-field-underline.mat-form-field-underline { background: var(--app-color-gray-100); }
   .mat-form-field-suffix .mat-datepicker-toggle-default-icon { width: 1.3em !important; }
 }
 .conversion-block{
