@@ -20,6 +20,7 @@ const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 export const environment = {
   version: p.version,
   version_name: p.version_name,
+  version_emoji: '👻',
   build: getBuild(),
   production: false,
   url: 'https://testnet.rcn.loans/',
