@@ -716,12 +716,16 @@ export class ContractsService {
   /**
    * Get ERC20 decimals
    * @param tokenAddress Token address
+   * @param loan Loan
    * @return Decimals
    */
-  async getTokenDecimals(tokenAddress: string): Promise<number> {
+  async getTokenDecimals(tokenAddress: string, loan?: Loan): Promise<number> {
     const { ethAddress } = environment.contracts.converter;
     if (tokenAddress === ethAddress) {
       return 18;
+    }
+    if (loan && loan.currency.decimals) {
+      return loan.currency.decimals;
     }
 
     const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
