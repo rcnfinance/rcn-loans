@@ -89,7 +89,7 @@
           <tbody>
             <tr>
               <td style="cursor: pointer" (click)="openAddress(loan.oracle)">
-                {{ loan.oracle }} - <b>{{ currency }}</b>
+                {{ oracle | formatAddress }} - <b>{{ currency }}</b>
               </td>
             </tr>
           </tbody>
@@ -109,7 +109,7 @@
           <tbody>
             <tr>
               <td style='cursor: pointer' (click)="openAddress(loan.borrower)">
-                {{ loan.borrower }} - {{ brand.headerTitle }}
+                {{ loan.borrower | formatAddress }} - {{ brand.headerTitle }}
               </td>
             </tr>
           </tbody>
@@ -124,7 +124,7 @@
           </thead>
           <tbody>
             <tr style='cursor: pointer' (click)="openAddress(loan.debt.owner)">
-              <td style='cursor: pointer'>{{ loan.debt.owner }} - Unknown</td>
+              <td style='cursor: pointer'>{{ loan.debt.owner | formatAddress }} - Unknown</td>
               <!-- TODO: Implement lender identity description -->
             </tr>
           </tbody>
