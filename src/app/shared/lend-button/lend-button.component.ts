@@ -128,7 +128,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     }
     // debt validation
     if (this.loan.debt) {
-      this.openSnackBar('The loan has already been lend', '');
+      this.openSnackBar('The loan has already been lend');
       return;
     }
     // cosigner validation
@@ -161,7 +161,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     // borrower validation
     const account: string = await this.web3Service.getAccount();
     if (this.loan.borrower.toLowerCase() === account.toLowerCase()) {
-      this.openSnackBar('You can´t fund a loan that you have borrowed.', '');
+      this.openSnackBar('You can´t fund a loan that you have borrowed.');
       return;
     }
     if (this.loan.network === Network.Basalt) {
@@ -171,7 +171,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     // lend token validation
     const token = this.lendToken;
     if (!this.showLendDialog && !token) {
-      this.openSnackBar('You must select an currency to continue', '');
+      this.openSnackBar('You must select an currency to continue');
       return;
     }
 
@@ -224,7 +224,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
       // set cosigner
       const creator: Agent = environment.dir[this.loan.creator.toLowerCase()];
-      const cosignerAddress: string = environment.cosigners[creator] || '0x0';
+      const cosignerAddress: string = environment.cosigners[creator] || Utils.address0x;
 
       // set lend contract
       switch (lendToken) {
@@ -276,8 +276,8 @@ export class LendButtonComponent implements OnInit, OnDestroy {
                 cosignerAddress,
                 this.loan.id,
                 oracleData,
-                '',
-                '',
+                '0x',
+                '0x',
                 account
               );
             }
@@ -333,7 +333,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    */
   startOperation() {
     console.info('Started lend');
-    this.openSnackBar('Your transaction is being processed. This might take a few second', '');
+    this.openSnackBar('Your transaction is being processed. This might take a few second');
     this.opPending = true;
   }
 
@@ -342,7 +342,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    */
   cancelOperation() {
     console.info('Cancel lend');
-    this.openSnackBar('Hmm, It seems like your transaction has failed. Please try again.', '');
+    this.openSnackBar('Hmm, It seems like your transaction has failed. Please try again.');
     this.opPending = false;
   }
 
@@ -405,7 +405,12 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     return 'Lending';
   }
 
-  openSnackBar(message: string, action: string) {
+  /**
+   * Opens a snackbar with a message and an optional action
+   * @param message The message to show in the snackbar
+   * @param action The label for the snackbar action
+   */
+  openSnackBar(message: string, action?: string) {
     this.snackBar.open(message, action, {
       duration: 4000,
       horizontalPosition: this.horizontalPosition
