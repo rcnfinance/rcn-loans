@@ -1,22 +1,21 @@
-<mat-dialog-content>
-  <div class="dialog">
-    <div class="container">
-      <div class="row justify-content-md-center align-self-center">
-        <div class="col-sm-8 col-md-3 align-self-center img">
-          <img src="../../../assets/IMG-ERROR.svg" alt="">
-        </div>
-        <div class="text col-sm-12 col-md-6 align-self-center">
-          <h6 class="dialog-new-title">
-            IT SEEMS YOU'RE OUT OF REACH!
-          </h6>
-          <p class="dialog-new-text">
-            RCN isn't available in your jurisdiction. You can access the Credit Marketplace but you can't use its features.
-          </p>
+<mat-dialog-content class="dialog dialog--small">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-5 dialog__image mb-5 mb-md-0">
+        <img src="../../../assets/IMG-ERROR.svg" alt="Wrong country">
+      </div>
+      <div class="col-12 col-md-6 dialog__content">
+        <h1 class="dialog__content-title mt-0 mb-4">
+          It seems you're out of reach!
+        </h1>
+        <p class="dialog__content-description">
+          RCN isn't available in your jurisdiction. You can access the Credit Marketplace but you can't use its features.
+        </p>
+        <div class="dialog__content-actions mt-5 mt-md-4">
           <button
             mat-raised-button
-            class="button button-primary medium"
-            type="button"
-            (click)="closeDialog()"
+            mat-dialog-close
+            class="button button-primary"
           >
             Ok
           </button>
