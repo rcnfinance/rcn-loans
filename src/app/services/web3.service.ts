@@ -65,13 +65,10 @@ export class Web3Service {
       return this.account;
     }
 
-    const accounts: string[] = await this.ethereum.send('eth_requestAccounts');
-    if (!accounts || accounts.length === 0) {
-      return;
-    }
+    const { selectedAddress } = this.ethereum;
 
-    this.account = accounts[0];
-    return accounts[0];
+    this.account = selectedAddress;
+    return selectedAddress;
   }
 
   async logout() {
@@ -318,7 +315,7 @@ export class Web3Service {
         return;
       }
 
-      console.info('Logout');
+      this.localStorage.removeItem('walletConnected');
       this.account = null;
       this.web3account = undefined;
       this.loginEvent.emit(false);

@@ -101,19 +101,16 @@ export class ContractsService {
     return new Promise(async (resolve, reject) => {
       const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
 
-      if (!account) {
-        reject('The user is not logged in');
-      }
-
       if (!this.tokenIsValid(tokenAddress)) {
         reject('The currency does not exist');
       }
-
+      if (!account) {
+        resolve(Utils.bn(0));
+      }
       if (tokenAddress === environment.contracts.converter.ethAddress) {
         const ethBalance = await this.web3Service.web3.eth.getBalance(account);
         resolve(Utils.bn(ethBalance));
       }
-
       try {
         const balance = await tokenContract.methods.balanceOf(account).call();
         resolve(Utils.bn(balance));
