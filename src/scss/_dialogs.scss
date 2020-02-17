@@ -37,6 +37,9 @@
 
     &--small {
       .dialog__content {
+        &-description{
+          min-height: 85px;
+        }
         &-actions {
           button {
             width: auto;
