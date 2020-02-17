@@ -1,0 +1,49 @@
+@import './fonts';
+
+.dialog {
+
+  &--small {
+    max-width: 678px;
+    padding: 55px 0 43px;
+    .dialog__image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        max-width: 62%;
+        width: 130px;
+      }
+    }
+    .dialog__content {
+      &-title {
+        @include typography-headline(6);
+        text-transform: uppercase;
+      }
+      &-description {
+        @include typography-body(1);
+      }
+      &-actions {
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+}
+
+@media (min-width: 768px) {
+  .dialog {
+
+    &--small {
+      .dialog__content {
+        &-actions {
+          button {
+            width: auto;
+          }
+        }
+      }
+    }
+
+  }
+}
