@@ -6,18 +6,18 @@ import { MatDialog } from '@angular/material';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
 // App Models
-import { Loan, Status, Network } from './../../models/loan.model';
+import { Loan, Status, Network, LoanType } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Services
 import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
-import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
 import { EventsService } from './../../services/events.service';
+import { LoanTypeService } from './../../services/loan-type.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -43,6 +43,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   isOngoing: boolean;
   isInDebt: boolean;
   isPaid: boolean;
+  loanType: LoanType;
 
   canTransfer = false;
   canCancel: boolean;
@@ -85,11 +86,11 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private titleService: TitleService,
     private contractsService: ContractsService,
-    private cosignerService: CosignerService,
     private identityService: IdentityService,
     private web3Service: Web3Service,
     private brandingService: BrandingService,
     private eventsService: EventsService,
+    private loanTypeService: LoanTypeService,
     public dialog: MatDialog
   ) { }
 
@@ -105,7 +106,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
         // static loan information
         this.loadStaticInformation();
-        this.checkLoanGenerator();
         this.loadIdentity();
 
         // dynamic loan information
@@ -157,11 +157,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     return view === this.viewDetail;
   }
 
-  checkLoanGenerator() {
-    this.generatedByUser = this.cosignerService.getCosigner(this.loan) === undefined &&
-      environment.dir[this.loan.borrower.toLowerCase()] === undefined;
-  }
-
   /**
    * Refresh loan when payment or lending status is updated
    */
@@ -209,6 +204,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     this.oracle = this.loan.oracle ? this.loan.oracle.address : undefined;
     this.currency = this.loan.oracle ? this.loan.oracle.currency : 'RCN';
     this.availableOracle = this.loan.oracle.currency !== 'RCN';
+    this.loanType = this.loanTypeService.getLoanType(this.loan);
   }
 
   /**
@@ -253,8 +249,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
     switch (this.loan.status) {
       case Status.Expired:
-        throw Error('Loan expired');
-
       case Status.Destroyed:
       case Status.Request:
         // Load config data

@@ -437,11 +437,11 @@ export class ContractsService {
     ]);
   }
 
-  async lendLoan(loan: Loan): Promise<string> {
+  async lendLoan(loan: Loan, providedCosigner: string = '0x0'): Promise<string> {
     const pOracleData = await this.getOracleData(loan.oracle);
     console.info('oracle Data', pOracleData);
     const cosigner = this.cosignerService.getCosigner(loan);
-    let cosignerAddr = '0x0';
+    let cosignerAddr = providedCosigner;
     let cosignerData = '0x0';
 
     if (cosigner !== undefined) {

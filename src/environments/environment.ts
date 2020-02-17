@@ -20,6 +20,7 @@ const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 export const environment = {
   version: p.version,
   version_name: p.version_name,
+  version_emoji: '👻',
   build: getBuild(),
   production: false,
   url: 'https://testnet.rcn.loans/',
@@ -69,6 +70,9 @@ export const environment = {
       mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1'
     },
     multicall: '0xa457b5b859573e8eb758b6c2bfd4ae3042b422fd'
+  },
+  cosigners: {
+    [Agent.RipioCreator]: '0x684977757434fee591220810cd31b6bbf99f4bdc'
   },
   blacklist: [
     {

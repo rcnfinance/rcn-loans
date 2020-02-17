@@ -24,10 +24,14 @@
           </div>
         </ng-template>
       </div>
-      <!-- <app-creator-container [loan]=loan></app-creator-container> -->
     </div>
     <div class="flex-item">
-      <app-button-group (view)="openDetail($event)" [viewDetail]=viewDetail></app-button-group>
+      <app-button-group
+        (view)="openDetail($event)"
+        [viewDetail]="viewDetail"
+        [loanType]="loanType"
+      >
+      </app-button-group>
     </div>
   </div>
 
@@ -47,12 +51,12 @@
           <app-conversion-graphic
             [headers]="['Lend', loan.currency, 'Receive']"
             [amountLeft]="loan.currency.fromUnit(loan.amount)"
-            [amountRight]="isRequest ||  isCanceled ? expectedReturn : totalDebt"
+            [amountRight]="isRequest || isCanceled || isExpired ? expectedReturn : totalDebt"
           ></app-conversion-graphic>
         </div>
-        <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled">
+        <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled && !isExpired">
           <app-conversion-graphic
-            [headers]="['Paid', 'Annual rate', 'Due']"
+            [headers]="['Paid', 'Annual rate', 'Outstanding']"
             [amountRight]="pendingAmount"
             [textMiddle]="interest"
             [amountLeft]="paid"
@@ -72,7 +76,7 @@
 
       <div class="margintop20"></div>
       <app-detail-table [data]="diasporeData" *ngIf="isDiaspore"></app-detail-table>
-      <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled"></app-detail-table>
+      <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled || isExpired"></app-detail-table>
       <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
 
       <div class="table-responsive" *ngIf='availableOracle'>
@@ -85,7 +89,7 @@
           <tbody>
             <tr>
               <td style="cursor: pointer" (click)="openAddress(loan.oracle)">
-                {{ loan.oracle }} - <b>{{ currency }}</b>
+                {{ oracle | formatAddress }} - <b>{{ currency }}</b>
               </td>
             </tr>
           </tbody>
@@ -96,14 +100,16 @@
           <thead>
             <tr>
               <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('identity') }" scope="col">
-                Borrower<i class="material-icons white more-indicator">{{ isDetail('identity') ? '' : 'unfold_more' }}</i>
+                <ng-container *ngIf="loanType !== 2">Borrower</ng-container>
+                <ng-container *ngIf="loanType === 2">Originator / Borrower</ng-container>
+                <i class="material-icons white more-indicator">{{ isDetail('identity') ? '' : 'unfold_more' }}</i>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td style='cursor: pointer' (click)="openAddress(loan.borrower)">
-                {{ loan.borrower }} - {{ brand.headerTitle }}
+                {{ loan.borrower | formatAddress }} - {{ brand.headerTitle }}
               </td>
             </tr>
           </tbody>
@@ -118,7 +124,7 @@
           </thead>
           <tbody>
             <tr style='cursor: pointer' (click)="openAddress(loan.debt.owner)">
-              <td style='cursor: pointer'>{{ loan.debt.owner }} - Unknown</td>
+              <td style='cursor: pointer'>{{ loan.debt.owner | formatAddress }} - Unknown</td>
               <!-- TODO: Implement lender identity description -->
             </tr>
           </tbody>
@@ -129,7 +135,9 @@
           <thead>
             <tr>
               <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
-                Collateral<i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
+                <ng-container *ngIf="loanType !== 3">Collateral</ng-container>
+                <ng-container *ngIf="loanType === 3">Guaranty</ng-container>
+                <i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
               </th>
             </tr>
           </thead>

@@ -43,6 +43,7 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 import { FormatAmountPipe } from './../pipes/format-amount.pipe';
+import { FormatAddressPipe } from './../pipes/format-address.pipe';
 // App Services
 import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
@@ -97,7 +98,8 @@ import { EventsService } from './../services/events.service';
     DialogLoanLendComponent,
 
     VisualUrlPipe,
-    FormatAmountPipe
+    FormatAmountPipe,
+    FormatAddressPipe
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,
@@ -147,7 +149,8 @@ import { EventsService } from './../services/events.service';
     PageHeaderComponent,
     DialogWrongCountryComponent,
     VisualUrlPipe,
-    FormatAmountPipe
+    FormatAmountPipe,
+    FormatAddressPipe
   ]
 })
 export class SharedModule { }
