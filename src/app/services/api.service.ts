@@ -489,11 +489,9 @@ export class ApiService {
   private excludeLoansWithKey(
     key: string,
     value: string,
-    loans?: Loan[]
+    loans: Loan[]
   ): Loan[] | any[] {
-    if (loans) {
-      return loans.filter((loan: Loan) => !loan[key] || loan[key] !== value) as Loan[];
-    }
+    return loans.filter((loan: Loan) => !loan[key] || loan[key] !== value) as Loan[];
   }
 
   /**
