@@ -475,6 +475,23 @@ export class ApiService {
   }
 
   /**
+   * Exclude loans with the selected status
+   * @param key Key to filter
+   * @param value Value to filter
+   * @param loans Loans array
+   * @return Loans array excluding those containing the key/value
+   */
+  private excludeLoansWithKey(
+    key: string,
+    value: string,
+    loans?: Loan[]
+  ): Loan[] | any[] {
+    if (loans) {
+      return loans.filter((loan: Loan) => !loan[key] || loan[key] !== value) as Loan[];
+    }
+  }
+
+  /**
    * Return the api filter key according to the chosen network
    * @param network Selected network
    * @return Api filter key
