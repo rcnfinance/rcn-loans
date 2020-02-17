@@ -93,6 +93,11 @@ export class ApiService {
       allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
     }
 
+    // TODO: remove specific creator filter
+    const FILTER_DCL_KEY = 'creator';
+    const FILTER_DCL_VALUE = environment.contracts.decentraland.mortgageCreator;
+    allRequestLoans = this.excludeLoansWithKey(FILTER_DCL_KEY, FILTER_DCL_VALUE, allRequestLoans);
+
     return allRequestLoans;
   }
 
@@ -472,6 +477,21 @@ export class ApiService {
         }
       }) as Loan[];
     }
+  }
+
+  /**
+   * Exclude loans containing the key / value
+   * @param key Key to filter
+   * @param value Value to filter
+   * @param loans Loans array
+   * @return Loans array excluding those containing the key/value
+   */
+  private excludeLoansWithKey(
+    key: string,
+    value: string,
+    loans: Loan[]
+  ): Loan[] | any[] {
+    return loans.filter((loan: Loan) => !loan[key] || loan[key] !== value) as Loan[];
   }
 
   /**
