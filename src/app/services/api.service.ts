@@ -93,6 +93,11 @@ export class ApiService {
       allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
     }
 
+    // TODO: remove specific creator filter
+    const FILTER_DCL_KEY = 'creator';
+    const FILTER_DCL_VALUE = environment.contracts.decentraland.mortgageCreator;
+    allRequestLoans = this.excludeLoansWithKey(FILTER_DCL_KEY, FILTER_DCL_VALUE, allRequestLoans);
+
     return allRequestLoans;
   }
 
