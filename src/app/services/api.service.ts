@@ -480,7 +480,7 @@ export class ApiService {
   }
 
   /**
-   * Exclude loans with the selected status
+   * Exclude loans containing the key / value
    * @param key Key to filter
    * @param value Value to filter
    * @param loans Loans array
