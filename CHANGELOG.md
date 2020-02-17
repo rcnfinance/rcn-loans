@@ -11,9 +11,15 @@
 ### Enhancement:
 - Upgrade Web3 to 1.x
 
+## **0.1.2** Boggart 👻
+
+### Enhancement:
+- Update of texts and contents
+- New UI for small dialogs (wrong country, funds, Metamask and generic)
+
 ## **0.1.1** Boggart 👻 - 2020/02/17
 
-### Feature:
+### Feature:
 - Lend Ripio Credit loans using a cosigner
 
 ### Enhancement:
