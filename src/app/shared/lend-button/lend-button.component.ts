@@ -366,19 +366,19 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
   /**
    * Show insufficient funds dialog
-   * @param required Amount required
-   * @param balance Actual user balance in selected currency
+   * @param requiredInWei Amount required
+   * @param balanceInWei Actual user balance in selected currency
    * @param currency Currency symbol
    * @param decimals Currency decimals
    */
   async showInsufficientFundsDialog(
-    required: BN,
-    balance: BN,
+    requiredInWei: BN,
+    balanceInWei: BN,
     currency: string,
     decimals: number
   ) {
-    required = required.div(Utils.bn(10).pow(Utils.bn(decimals)));
-    balance = balance.div(Utils.bn(10).pow(Utils.bn(decimals)));
+    const required = requiredInWei.toString() as any / 10 ** decimals;
+    const balance = balanceInWei.toString() as any / 10 ** decimals;
 
     this.dialog.open(DialogInsufficientfundsComponent, {
       data: {

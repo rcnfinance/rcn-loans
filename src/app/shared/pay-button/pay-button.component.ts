@@ -260,25 +260,27 @@ export class PayButtonComponent implements OnInit, OnDestroy {
 
   /**
    * Show insufficient funds dialog
-   * @param required Required amount
-   * @param balance Balance amount
+   * @param requiredInWei Required amount
+   * @param balanceInWei Balance amount
    * @param currency Pay currency
    * @param decimals Currency decimals
    */
   async showInsufficientFundsDialog(
-    required: number,
-    balance: number,
+    requiredInWei: number,
+    balanceInWei: number,
     currency: string,
     decimals: number
   ) {
-    required = required / 10 ** decimals;
-    balance = balance / 10 ** decimals;
+    const required = requiredInWei.toString() as any / 10 ** decimals;
+    const balance = balanceInWei.toString() as any / 10 ** decimals;
 
-    this.dialog.open(DialogInsufficientfundsComponent, { data: {
-      required,
-      balance,
-      currency
-    }});
+    this.dialog.open(DialogInsufficientfundsComponent, {
+      data: {
+        required,
+        balance,
+        currency
+      }
+    });
     this.cancelOperation();
   }
 
