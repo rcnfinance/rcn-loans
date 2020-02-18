@@ -142,6 +142,7 @@ export class Web3Service {
       const candWeb3 = new Web3(this.ethereum);
       this.web3account = candWeb3;
       this.listenAccountUpdates();
+      this.listenNetworkChange();
 
       const network = await promisify(this.web3.eth.net.getId, []);
       const connection: WalletConnection = {
@@ -318,6 +319,17 @@ export class Web3Service {
       this.localStorage.removeItem('walletConnected');
       this.account = null;
       this.web3account = undefined;
+      this.loginEvent.emit(false);
+    });
+  }
+
+  /**
+   * Refresh dApp when the network is changed
+   */
+  private listenNetworkChange() {
+    this.ethereum.autoRefreshOnNetworkChange = false;
+    this.ethereum.on('networkChanged', () => {
+      this.logout();
       this.loginEvent.emit(false);
     });
   }
