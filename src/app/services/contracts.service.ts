@@ -705,7 +705,7 @@ export class ContractsService {
   }
 
   async getOracleUrl(oracle?: Oracle): Promise<string> {
-    const oracleContract = this.web3Service.web3.eth.contract(diasporeOracleAbi.abi).at(oracle.address);
+    const oracleContract = new this.web3Service.web3.eth.Contract(diasporeOracleAbi.abi, oracle.address);
     const url = await oracleContract.methods.url().call();
     return url;
   }

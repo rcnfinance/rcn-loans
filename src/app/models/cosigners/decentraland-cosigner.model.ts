@@ -91,7 +91,7 @@ function decodeTokenId(_value: string): [number, number] {
 function fixNegative(value: BN): number {
   const mid = Utils.bn(2).pow(Utils.bn(64));
 
-  if (mid.sub(value).toNumber() <= 0) {
+  if (mid.sub(value).toString() <= '0') {
     return value.sub(Utils.bn(2).pow(Utils.bn(128))).toNumber();
   }
 
