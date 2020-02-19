@@ -49,7 +49,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     const { account } = changes;
 
     if (account.currentValue) {
-      this.account = web3.toChecksumAddress(account.currentValue);
+      this.account = web3.utils.toChecksumAddress(account.currentValue);
       this.loadRcnBalance();
       this.loadWithdrawBalance();
     }
@@ -121,7 +121,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Show the user balance in rcn
    */
   async loadRcnBalance() {
-    this.rcnBalance = (await this.contractService.getUserBalanceRCN() as any).toNumber();
+    this.rcnBalance = Number(await this.contractService.getUserBalanceRCN());
     this.updateDisplay();
   }
 

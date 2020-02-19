@@ -54,7 +54,7 @@ export class CurrencyLogoComponent implements OnInit {
 
       default:
         const web3: any = this.web3Service.web3;
-        url = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${ web3.toChecksumAddress(address) }/logo.png`;
+        url = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${ web3.utils.toChecksumAddress(address) }/logo.png`;
         break;
     }
 
