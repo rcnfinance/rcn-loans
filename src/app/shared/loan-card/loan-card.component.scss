@@ -91,6 +91,7 @@
       > div {
         @extend %roboto-black;
         width: 33.3%;
+        color: white;
 
         &:nth-child(1) {
           text-align: left;
