@@ -44,7 +44,9 @@ export class WalletAvatarComponent implements OnInit, OnChanges {
    * Open dialog wallet select
    */
   openWalletSelect() {
-    this.dialog.open(DialogWalletSelectComponent, {});
+    this.dialog.open(DialogWalletSelectComponent, {
+      panelClass: 'dialog-wallet-select-wrapper'
+    });
   }
 
   /**

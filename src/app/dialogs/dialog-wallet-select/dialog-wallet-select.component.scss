@@ -70,11 +70,10 @@
   padding: 19px 22px;
 }
 
-@media (min-width: 768px) {
-
-}
-
 @media (min-width: 992px) {
+  ::ng-deep .dialog-wallet-select-wrapper .mat-dialog-container {
+    border-radius: 12px;
+  }
   .dialog {
     min-width: 485px;
   }

@@ -50,7 +50,9 @@ export class AppComponent implements OnInit {
   private listenWalletConnect(): void {
     this.walletConnectService.openConnectDialog$.subscribe(
       () => {
-        const dialogRef = this.dialog.open(DialogWalletSelectComponent);
+        const dialogRef = this.dialog.open(DialogWalletSelectComponent, {
+          panelClass: 'dialog-wallet-select-wrapper'
+        });
         dialogRef.afterClosed().subscribe(
           (loggedIn: boolean) =>
             this.walletConnectService.requestConnect$.next(loggedIn || false)
