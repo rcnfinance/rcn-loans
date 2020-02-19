@@ -1,11 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Utils } from './../../utils/utils';
 // App Component
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
 import { Web3Service } from '../../services/web3.service';
+import { WalletConnectService } from './../../services/wallet-connect.service';
 import { SidebarService } from '../../services/sidebar.service';
 import { TitleService } from '../../services/title.service';
 
@@ -26,6 +26,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     private web3Service: Web3Service,
+    private walletConnectService: WalletConnectService,
     private sidebarService: SidebarService,
     public dialog: MatDialog,
     public titleService: TitleService
@@ -52,7 +53,7 @@ export class HeaderComponent implements OnInit {
       const web3 = this.web3Service.web3;
       if (loggedIn) {
         const account = await this.web3Service.getAccount();
-        this.account = web3.toChecksumAddress(account);
+        this.account = web3.utils.toChecksumAddress(account);
         this.shortAccount = Utils.shortAddress(this.account);
       } else {
         this.account = undefined;
@@ -75,16 +76,9 @@ export class HeaderComponent implements OnInit {
    */
   async login() {
     if (this.hasAccount) {
-      const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-      this.makeRotate = true;
-      dialogRef.afterClosed().subscribe(() => {
-        this.makeRotate = false;
-      });
-    } else if (await this.web3Service.requestLogin()) {
-      return;
-    } else {
-      this.dialog.open(DialogClientAccountComponent, {});
+      return this.openDialogApprove();
     }
-  }
 
+    await this.walletConnectService.connect();
+  }
 }

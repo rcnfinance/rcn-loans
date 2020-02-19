@@ -1,9 +1,8 @@
-import BigNumber from 'bignumber.js';
 import { Component, OnInit, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import * as BN from 'bn.js';
 import { Utils } from '../../utils/utils';
 // App Components
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 // App Service
 import { environment } from '../../../environments/environment';
@@ -26,13 +25,13 @@ export class ContentWrapperComponent implements OnInit {
     if (this.rcnBalance === undefined) {
       return '...';
     }
-    return Utils.removeTrailingZeros(this.rcnBalance.toFixed(18));
+    return Utils.removeTrailingZeros(String(this.rcnBalance));
   }
   get available(): string {
     if (this.rcnAvailable === undefined) {
       return '...';
     }
-    return Utils.removeTrailingZeros((this.rcnAvailable / this.ethWei).toFixed(18));
+    return Utils.removeTrailingZeros(String(this.rcnAvailable.div(this.ethWei)));
   }
   get withdrawEnabled(): boolean {
     return this.basaltLoansWithBalance !== undefined || this.diasporeLoansWithBalance !== undefined &&
@@ -44,9 +43,9 @@ export class ContentWrapperComponent implements OnInit {
   version: string = environment.version;
   lendEnabled: Boolean;
 
-  private ethWei = new BigNumber(10).pow(new BigNumber(18));
-  rcnBalance: BigNumber;
-  rcnAvailable: BigNumber;
+  private ethWei = Utils.bn(10).pow(Utils.bn(18));
+  rcnBalance: BN;
+  rcnAvailable: BN;
   loansWithBalance: number[];
 
   private basaltRcnAvailable: number;
@@ -103,17 +102,6 @@ export class ContentWrapperComponent implements OnInit {
    */
   onClose() {
     this.sidebarService.toggleService(this.navToggle = false);
-  }
-
-  /**
-   * Open Client Dialog
-   */
-  async openDialogClient() {
-    if (await this.web3Service.requestLogin()) {
-      return;
-    }
-
-    this.dialog.open(DialogClientAccountComponent, {});
   }
 
   /**
@@ -198,7 +186,7 @@ export class ContentWrapperComponent implements OnInit {
    */
   private async loadRcnBalance() {
     const balance: number = await this.contractService.getUserBalanceRCN();
-    this.rcnBalance = balance;
+    this.rcnBalance = Utils.bn(balance);
   }
 
   /**
@@ -208,7 +196,7 @@ export class ContentWrapperComponent implements OnInit {
     const pendingWithdraws = await this.contractService.getPendingWithdraws();
     this.basaltRcnAvailable = pendingWithdraws[0] / 10 ** 18;
     this.diasporeRcnAvailable = pendingWithdraws[2] / 10 ** 18;
-    this.rcnAvailable = this.basaltRcnAvailable + this.diasporeRcnAvailable;
+    this.rcnAvailable = Utils.bn(this.basaltRcnAvailable).add(Utils.bn(this.diasporeRcnAvailable));
     this.basaltLoansWithBalance = pendingWithdraws[1];
     this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadPendingWithdraw();
