@@ -5,17 +5,17 @@
 ### Feature:
 - Show my borrowed and lent loans
 - Installments and payments details
-- Connect to the dApp with multiple wallets
 - Borrow loans with Collateral
 
-### Enhancement:
-- Upgrade Web3 to 1.x
-
 ## **0.1.2** Boggart 👻
+
+### Feature:
+- Connect to the dApp with multiple wallets
 
 ### Enhancement:
 - Update of texts and contents
 - New UI for small dialogs (wrong country, funds, Metamask and generic)
+- Upgrade Web3 to 1.x
 
 ## **0.1.1** Boggart 👻 - 2020/02/17
 
