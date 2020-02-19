@@ -66,7 +66,7 @@ export const environment = {
     },
     converter: {
       converterRamp: '0xe41ada0fb01F147c6385F93DEC78914F32e45061',
-      ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       tokenConverter: '0x7173E7C8c35EF0FA6DF11B23bB717F886fBD50B5'
     },
     decentraland: {
@@ -106,7 +106,7 @@ export const environment = {
     {
       symbol: 'ETH',
       img: 'assets/eth.png',
-      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
     },
     {
       symbol: 'DAI',

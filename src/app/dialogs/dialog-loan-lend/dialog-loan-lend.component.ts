@@ -69,11 +69,11 @@ export class DialogLoanLendComponent implements OnInit {
     this.account = Utils.shortAddress(account);
 
     // set loan amount and rate
+    const web3: any = this.web3Service.web3;
     const rate: BN = await this.getLoanRate();
-
     this.loanAmount = Utils.formatAmount(loanCurrency.fromUnit(loanAmount));
     this.loanExpectedReturn = Utils.formatAmount(loanCurrency.fromUnit(loanExpectedReturn));
-    this.exchangeRcn = Utils.formatAmount(rate.div(Utils.bn(10).pow(Utils.bn(18))));
+    this.exchangeRcn = Utils.formatAmount(web3.utils.fromWei(rate));
 
     // set loan status
     this.isCanceled = this.loan.status === Status.Destroyed;
@@ -116,14 +116,15 @@ export class DialogLoanLendComponent implements OnInit {
     const rcnRate: BN = await this.getLoanRate();
     const rcnAmountInWei: BN = Utils.bn(loanAmount.mul(rcnRate));
     const rcnExpectedReturnInWei: BN = Utils.bn(loanExpectedReturn.mul(rcnRate));
-    const decimals: number = loan.currency.decimals;
-    const rcnAmount: BN = rcnAmountInWei.div(Utils.bn(10).pow(Utils.bn(decimals)));
-    const rcnExpectedReturn: BN = rcnExpectedReturnInWei.div(Utils.bn(10).pow(Utils.bn(decimals)));
+    const loanCurrencyDecimals: number = loan.currency.decimals;
+    const rcnAmount: BN = rcnAmountInWei.div(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
+    const rcnExpectedReturn: BN = rcnExpectedReturnInWei.div(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
 
     // set amount in selected currency
     const symbol: string = this.lendCurrency;
     const fromToken: string = environment.contracts.rcnToken;
     const toToken: string = await this.currenciesService.getCurrencyByKey('symbol', symbol).address;
+    const lendCurrencyDecimals: number = await this.contractsService.getTokenDecimals(toToken);
     this.lendToken = toToken;
 
     let lendAmount: BN | string;
@@ -135,11 +136,7 @@ export class DialogLoanLendComponent implements OnInit {
       // lendExpectedReturn = rcnExpectedReturn;
 
       // set expected return warn
-      if (loanCurrency === 'RCN') {
-        this.expectedReturnWarning = false;
-      } else {
-        this.expectedReturnWarning = true;
-      }
+      this.expectedReturnWarning = loanCurrency === 'RCN' || false;
     } else {
       lendAmount = await this.contractsService.getPriceConvertTo(
         toToken,
@@ -155,9 +152,9 @@ export class DialogLoanLendComponent implements OnInit {
       // );
 
       // set lending currency rate
-      const lendAmountInWei: BN = Utils.bn(lendAmount).mul(Utils.bn(10).pow(Utils.bn(decimals)));
+      const lendAmountInWei: BN = Utils.bn(lendAmount).mul(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
       const lendOverAmount: BN = Utils.bn(lendAmountInWei).div(Utils.bn(loanAmount));
-      const lendCurrencyRate: BN = web3.utils.fromWei(Utils.bn(lendOverAmount));
+      const lendCurrencyRate: number = lendOverAmount.toString() as any / 10 ** lendCurrencyDecimals;
       this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 7);
 
       // set expected return warn
@@ -165,8 +162,12 @@ export class DialogLoanLendComponent implements OnInit {
     }
 
     // set ui values
-    this.lendAmount = Utils.formatAmount(web3.utils.fromWei(lendAmount));
-    this.lendExpectedReturn = Utils.formatAmount(web3.utils.fromWei(rcnExpectedReturn));
+    this.lendAmount = Utils.formatAmount(
+      lendAmount.toString() as any / 10 ** lendCurrencyDecimals
+    );
+    this.lendExpectedReturn = Utils.formatAmount(
+      web3.utils.fromWei(rcnExpectedReturn)
+    );
   }
 
   loadExchangeTooltip() {
