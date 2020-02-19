@@ -247,7 +247,7 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
    */
   isAddress(value: string) {
     const web3: any = this.web3Service.web3;
-    return web3.isAddress(value);
+    return web3.utils.isAddress(value);
   }
 
   get_properties_by_opcode(opcode: string): object[] { // Get the timeline event properties from timelinesProperties[]

@@ -36,6 +36,7 @@ import { DialogInsufficientfundsComponent } from '../dialogs/dialog-insufficient
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogGenericErrorComponent } from '../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogWalletSelectComponent } from '../dialogs/dialog-wallet-select/dialog-wallet-select.component';
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 import { ErrorDetailsComponent } from './error-details/error-details.component';
@@ -93,6 +94,7 @@ import { EventsService } from './../services/events.service';
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
+    DialogWalletSelectComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
@@ -105,6 +107,7 @@ import { EventsService } from './../services/events.service';
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
+    DialogWalletSelectComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
     DialogLoanLendComponent

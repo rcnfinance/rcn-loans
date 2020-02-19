@@ -20,7 +20,7 @@ export class ApiService {
   diasporeUrl = environment.rcn_node_api.diasporeUrl;
   basaltUrl = environment.rcn_node_api.basaltUrl;
   multicallConfig = {
-    rpcUrl: environment.network.provider,
+    rpcUrl: environment.network.provider.url,
     multicallAddress: environment.contracts.multicall
   };
 
@@ -113,7 +113,7 @@ export class ApiService {
     let page = 0;
 
     try {
-      lender = web3.toChecksumAddress(lender);
+      lender = web3.utils.toChecksumAddress(lender);
       const data: any = await this.http.get(
         apiUrl.concat(`loans?open=false&page=${ page }&lender=${ lender }`)
       ).toPromise();
@@ -313,14 +313,17 @@ export class ApiService {
       });
     });
 
-    if (query.length) {
+    if (!query.length) {
+      return apiLoans;
+    }
+
+    try {
       const call = await aggregate(query, this.multicallConfig);
       const callResults = {};
 
       Object.keys(filterKeys).map(key => {
         callResults[key] = {};
       });
-
       Object.keys(call.results).map(item => {
         const splitItem: string[] = item.split(SEPARATOR);
         const itemKey: string = splitItem[0];
@@ -330,7 +333,6 @@ export class ApiService {
           callResults[itemKey][itemId] = filterKeys[itemKey].handler(hexValue);
         }
       });
-
       apiLoans.map((loan: LoanApiBasalt) => {
         const id: number = Number(loan.index);
         Object.keys(callResults).map(key => {
@@ -339,9 +341,11 @@ export class ApiService {
           }
         });
       });
+    } catch (err) {
+      this.eventsService.trackError(err);
+    } finally {
+      return apiLoans;
     }
-
-    return apiLoans;
   }
 
   /**

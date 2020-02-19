@@ -1,6 +1,7 @@
+import * as BN from 'bn.js';
 
 export class Currency {
-  decimals;
+  decimals: number;
   constructor(
     public symbol: string
   ) {
@@ -27,7 +28,11 @@ export class Currency {
         return 0;
     }
   }
-  fromUnit(n: number): number {
+  fromUnit(n: number | string | BN): number {
+    if (typeof n !== 'number') {
+      n = Number(n);
+    }
+
     return n / 10 ** this.decimals;
   }
   toString = (): string => this.symbol;

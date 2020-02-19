@@ -8,13 +8,13 @@ import {
 import { EventsService, Category } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
 import { TxService, Tx, Type } from '../../services/tx.service';
+import { Web3Service } from '../../services/web3.service';
+import { WalletConnectService } from './../../services/wallet-connect.service';
 // App Component
 import { environment } from '../../../environments/environment';
 import { Loan } from '../../models/loan.model';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
-import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-transfer-button',
@@ -40,6 +40,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     private txService: TxService,
     private eventsService: EventsService,
     private web3Service: Web3Service,
+    private walletConnectService: WalletConnectService,
     public snackBar: MatSnackBar,
     public dialog: MatDialog
   ) { }
@@ -103,15 +104,9 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
       return;
     }
     // unlogged user
-    if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-        return;
-      }
-      if (!this.web3Service.loggedIn) {
-        return;
-      }
+    const loggedIn = await this.walletConnectService.connect();
+    if (!loggedIn) {
+      return;
     }
     // borrower validation
     const account: string = await this.web3Service.getAccount();
@@ -121,7 +116,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     }
     // address validation
     const web3 = this.web3Service.web3;
-    if (!this.showTransferDialog && !web3.isAddress(this.address)) {
+    if (!this.showTransferDialog && !web3.utils.isAddress(this.address)) {
       this.openSnackBar('The address is not valid', '');
       return;
     }
