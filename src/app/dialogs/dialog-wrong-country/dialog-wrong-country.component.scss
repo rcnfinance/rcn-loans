@@ -7,7 +7,7 @@
     .dialog-new-title {
         width: 311px;
         height: 36px;
-        font-family: Raleway;
+        font-family: 'proxima-nova', sans-serif;
         font-size: 20px;
         font-weight: bold;
         font-style: normal;
@@ -19,7 +19,7 @@
     }
     .dialog-new-text {
         margin: 10px 0 25px 0;
-        font-family: Raleway;
+        font-family: 'proxima-nova', sans-serif;
         font-size: 16px;
         font-weight: 500;
         font-style: normal;
@@ -64,12 +64,12 @@
             margin: auto;
         }
     }
-    
+
 
     .text {
         margin-top: 30px;
     }
-    
+
     .mat-dialog-content {
         min-width: auto;
     }
