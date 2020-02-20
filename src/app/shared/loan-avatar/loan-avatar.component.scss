@@ -21,7 +21,7 @@
       left: 50%;
       font-size: 18px;
       color: var(--app-color-secondary);
-      @extend %font-black;
+      @extend %font-extra-bold;
       @include transform(translate(-50%, -50%));
     }
     img{

@@ -8,7 +8,7 @@
 .regular{ @extend %font-regular; }
 .medium{ @extend %font-medium; }
 .bold{ @extend %font-bold; }
-.black{ @extend %font-black; }
+.black{ @extend %font-extra-bold; }
 
 .font12{font-size: 12px;}
 .font13{font-size: 13px;}
@@ -39,19 +39,19 @@
 
 @mixin typography-headline ($variation) {
   @if $variation == 1 {
-    @include styled-font('Raleway', 400, 34px);
+    @include styled-font('proxima-nova', 400, 34px);
   } @else if $variation == 2 {
-    @include styled-font('Raleway', 900, 36px);
+    @include styled-font('proxima-nova', 900, 36px);
   } @else if $variation == 3 {
-    @include styled-font('Raleway', 900, 28px);
+    @include styled-font('proxima-nova', 900, 28px);
   } @else if $variation == 4 {
     @include styled-font('Roboto', 700, 26px);
   } @else if $variation == 5 {
-    @include styled-font('Raleway', 400, 24px);
+    @include styled-font('proxima-nova', 400, 24px);
   } @else if $variation == 6 {
-    @include styled-font('Raleway', 700, 18px);
+    @include styled-font('proxima-nova', 700, 18px);
   } @else if $variation == 7 {
-    @include styled-font('Raleway', 400, 14px);
+    @include styled-font('proxima-nova', 400, 14px);
   }
 }
 
@@ -67,9 +67,9 @@
 
 @mixin typography-body ($variation) {
   @if $variation == 1 {
-    @include styled-font('Raleway', 400, 16px);
+    @include styled-font('proxima-nova', 400, 16px);
   } @else if $variation == 2 {
-    @include styled-font('Raleway', 700, 14px);
+    @include styled-font('proxima-nova', 700, 14px);
   } @else if $variation == 3 {
     @include styled-font('Roboto', 400, 14px);
   }
@@ -93,7 +93,7 @@
   @if $variation == 1 {
     @include styled-font('Roboto', 700, 14px);
   } @else if $variation == 2 {
-    @include styled-font('Raleway', 700, 11px);
+    @include styled-font('proxima-nova', 700, 11px);
   } @else if $variation == 3 {
     @include styled-font('Roboto', 700, 13px);
   }
