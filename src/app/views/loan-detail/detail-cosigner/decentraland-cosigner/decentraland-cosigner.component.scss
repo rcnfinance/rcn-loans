@@ -95,6 +95,6 @@ a{
   .title{
     font-size: 18px;
     color: var(--app-color-secondary);
-    @extend %font-black;
+    @extend %font-extra-bold;
   }
 }
