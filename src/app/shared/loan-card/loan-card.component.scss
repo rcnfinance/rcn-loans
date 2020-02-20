@@ -51,6 +51,7 @@
       margin: 0;
       font-weight: inherit;
       letter-spacing: 0.46px;
+      color: #D9D9D9;
     }
     &-paragraph {
       @extend %propiety-subtitle;
@@ -90,6 +91,7 @@
       > div {
         @extend %roboto-black;
         width: 33.3%;
+        color: white;
 
         &:nth-child(1) {
           text-align: left;

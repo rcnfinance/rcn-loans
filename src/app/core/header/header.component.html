@@ -57,27 +57,36 @@
                 <app-component-balance [account]="account">
                 </app-component-balance>
               </div>
-              <!-- Balance section -->
-              <div class="nav__item" (click)="openDialogApprove();">
-                <div class="flex-container" *ngIf="hasAccount">
+              <ng-container *ngIf="hasAccount">
+                <div class="nav__item mr-2 ml-3">
                   <div class="flex-item">
                     <div class="list-avatar">
                       <div class="avatar-container">
-                        <app-avatar [seed]=account></app-avatar>
+                        <app-wallet-avatar></app-wallet-avatar>
                       </div>
                     </div>
                   </div>
-                  <div class="flex-item ml-3 mr-2">{{ shortAccount }}</div>
-                  <div class="flex-item">
-                    <i
-                      class="material-icons transition"
-                      [ngClass]="{'rotate180': makeRotate }"
+                </div>
+                <div class="nav__item">
+                  <div class="flex-container">
+                    <div
+                      class="flex-item mr-2"
+                      (click)="openDialogApprove()"
                     >
-                      expand_more
-                    </i>
+                      {{ shortAccount }}
+                    </div>
+                    <div class="flex-item">
+                      <i
+                        class="material-icons transition"
+                        [ngClass]="{'rotate180': makeRotate }"
+                        (click)="openDialogApprove()"
+                      >
+                        expand_more
+                      </i>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ng-container>
             </div>
           </div>
         </div>

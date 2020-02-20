@@ -16,6 +16,7 @@ declare let require: any;
 const p = require('../../package.json') as any;
 
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
+const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 
 export const environment = {
   version: p.version,
@@ -43,13 +44,16 @@ export const environment = {
     url: 'https://oracle.ripio.com/rate/'
   },
   network: {
-    id: '3',
+    id: 3,
     name: 'Ropsten',
     explorer: {
       address: 'https://ropsten.etherscan.io/address/${address}',
       tx: 'https://ropsten.etherscan.io/tx/${tx}'
     },
-    provider: 'https://ropsten.infura.io/v3/acf3c538f57040839369e7c1b023c3c6'
+    provider: {
+      id: INFURA_ID,
+      url: `https://ropsten.infura.io/v3/${ INFURA_ID }`
+    }
   },
   contracts: {
     rcnToken: RCN_TOKEN,
@@ -62,7 +66,7 @@ export const environment = {
     },
     converter: {
       converterRamp: '0x9cd2b5ffd2c4d3d2d47ecbecf19ec588900901ec',
-      ethAddress: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       tokenConverter: '0x79e680e613ed32f64da9e5a09ed8613c8e9ce3a7'
     },
     decentraland: {
@@ -122,7 +126,7 @@ export const environment = {
     {
       symbol: 'ETH',
       img: 'assets/eth.png',
-      address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
     }
   ]
 };

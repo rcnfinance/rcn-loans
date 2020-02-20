@@ -12,8 +12,10 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
+import * as BN from 'bn.js';
 import { environment, Agent } from '../../../environments/environment';
 import { Loan, Network } from './../../models/loan.model';
+import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 
 // App Services
@@ -25,11 +27,11 @@ import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insuffici
 import { CountriesService } from '../../services/countries.service';
 import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 import { CosignerService } from './../../services/cosigner.service';
 import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
+import { WalletConnectService } from './../../services/wallet-connect.service';
 
 @Component({
   selector: 'app-lend-button',
@@ -56,6 +58,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     private web3Service: Web3Service,
     private countriesService: CountriesService,
     private eventsService: EventsService,
+    private walletConnectService: WalletConnectService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public cosignerService: CosignerService,
@@ -125,7 +128,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     }
     // debt validation
     if (this.loan.debt) {
-      this.openSnackBar('The loan has already been lend', '');
+      this.openSnackBar('The loan has already been lend');
       return;
     }
     // cosigner validation
@@ -151,20 +154,14 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       }
     }
     // unlogged user
-    if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-        return;
-      }
-      if (!this.web3Service.loggedIn) {
-        return;
-      }
+    const loggedIn = await this.walletConnectService.connect();
+    if (!loggedIn) {
+      return;
     }
     // borrower validation
     const account: string = await this.web3Service.getAccount();
     if (this.loan.borrower.toLowerCase() === account.toLowerCase()) {
-      this.openSnackBar('You can´t fund a loan that you have borrowed.', '');
+      this.openSnackBar('You can´t fund a loan that you have borrowed.');
       return;
     }
     if (this.loan.network === Network.Basalt) {
@@ -174,7 +171,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     // lend token validation
     const token = this.lendToken;
     if (!this.showLendDialog && !token) {
-      this.openSnackBar('You must select an currency to continue', '');
+      this.openSnackBar('You must select an currency to continue');
       return;
     }
 
@@ -211,23 +208,23 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
     try {
       const oracleData = await this.contractsService.getOracleData(this.loan.oracle);
+      const web3: any = this.web3Service.web3;
 
       // set input lend token
-      const web3: any = this.web3Service.web3;
       let lendToken: string = this.lendToken;
       if (this.loan.network === Network.Basalt) {
         lendToken = environment.contracts.rcnToken;
       }
 
       // set value in specified token
-      const balance = await this.contractsService.getUserBalanceInToken(lendToken);
-      let required: any = await this.contractsService.estimateLendAmount(this.loan, lendToken);
+      const balance: BN = await this.contractsService.getUserBalanceInToken(lendToken);
+      const required: BN = await this.contractsService.estimateLendAmount(this.loan, lendToken);
       let contractAddress: string;
-      let payableAmount: any;
+      let payableAmount: string;
 
       // set cosigner
       const creator: Agent = environment.dir[this.loan.creator.toLowerCase()];
-      const cosignerAddress: string = environment.cosigners[creator] || '0x0';
+      const cosignerAddress: string = environment.cosigners[creator] || Utils.address0x;
 
       // set lend contract
       switch (lendToken) {
@@ -237,9 +234,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
         case environment.contracts.converter.ethAddress:
           contractAddress = environment.contracts.converter.converterRamp;
-
-          required = Number(required).toFixed(0);
-          payableAmount = required;
+          payableAmount = String(required);
           break;
 
         default:
@@ -248,7 +243,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       }
 
       // validate balance amount
-      if (Number(balance) > Number(required)) {
+      if (balance.gte(required)) {
         let tx: string;
 
         // validate approve
@@ -259,7 +254,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         }
 
         let account: string = await this.web3Service.getAccount();
-        account = web3.toChecksumAddress(account);
+        account = web3.utils.toChecksumAddress(account);
 
         switch (this.loan.network) {
           case Network.Basalt:
@@ -277,12 +272,12 @@ export class LendButtonComponent implements OnInit, OnDestroy {
                 payableAmount,
                 tokenConverter,
                 lendToken,
-                required,
+                String(required),
                 cosignerAddress,
                 this.loan.id,
                 oracleData,
-                '',
-                '',
+                '0x',
+                '0x',
                 account
               );
             }
@@ -305,7 +300,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
           'show-insufficient-funds-lend',
           Category.Account,
           'loan ' + this.loan.id,
-          required
+          Number(required)
         );
 
         const currency = environment.usableCurrencies.filter(token => token.address === lendToken)[0];
@@ -338,7 +333,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    */
   startOperation() {
     console.info('Started lend');
-    this.openSnackBar('Your transaction is being processed. This might take a few second', '');
+    this.openSnackBar('Your transaction is being processed. This might take a few second');
     this.opPending = true;
   }
 
@@ -347,7 +342,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    */
   cancelOperation() {
     console.info('Cancel lend');
-    this.openSnackBar('Hmm, It seems like your transaction has failed. Please try again.', '');
+    this.openSnackBar('Hmm, It seems like your transaction has failed. Please try again.');
     this.opPending = false;
   }
 
@@ -371,19 +366,19 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
   /**
    * Show insufficient funds dialog
-   * @param required Amount required
-   * @param balance Actual user balance in selected currency
+   * @param requiredInWei Amount required
+   * @param balanceInWei Actual user balance in selected currency
    * @param currency Currency symbol
    * @param decimals Currency decimals
    */
   async showInsufficientFundsDialog(
-    required: number,
-    balance: number,
+    requiredInWei: BN,
+    balanceInWei: BN,
     currency: string,
     decimals: number
   ) {
-    required = required / 10 ** decimals;
-    balance = balance / 10 ** decimals;
+    const required = requiredInWei.toString() as any / 10 ** decimals;
+    const balance = balanceInWei.toString() as any / 10 ** decimals;
 
     this.dialog.open(DialogInsufficientfundsComponent, {
       data: {
@@ -410,7 +405,12 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     return 'Lending';
   }
 
-  openSnackBar(message: string, action: string) {
+  /**
+   * Opens a snackbar with a message and an optional action
+   * @param message The message to show in the snackbar
+   * @param action The label for the snackbar action
+   */
+  openSnackBar(message: string, action?: string) {
     this.snackBar.open(message, action, {
       duration: 4000,
       horizontalPosition: this.horizontalPosition

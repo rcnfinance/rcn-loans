@@ -181,7 +181,7 @@ export class LoanUtils {
     descriptor = new Descriptor(
       Network.Diaspore,
       Number(loanData.descriptor.first_obligation),
-      Number(loanData.descriptor.total_obligation),
+      loanData.descriptor.total_obligation,
       Number(loanData.descriptor.duration),
       Number(loanData.descriptor.interest_rate),
       LoanUtils.decodeInterest(
@@ -235,7 +235,7 @@ export class LoanUtils {
       Network.Diaspore,
       loanData.id,
       engine,
-      Number(loanData.amount),
+      loanData.amount,
       oracle,
       descriptor,
       loanData.borrower,
