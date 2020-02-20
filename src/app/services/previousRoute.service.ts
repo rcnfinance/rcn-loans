@@ -30,7 +30,7 @@ export class PreviousRouteService {
     const previousUrl: string = this.getPreviousUrl();
     if (!previousUrl) {
       try {
-        await this.router.navigate(['/', 'requests']);
+        await this.router.navigate(['/', 'lend']);
       } catch (err) {
         this.eventsService.trackError(err);
       }
