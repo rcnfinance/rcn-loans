@@ -6,7 +6,11 @@ const WalletLink = require('walletlink');
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { environment } from './../../environments/environment';
 import { promisify } from './../utils/utils';
-import { WalletType, WalletConnection } from './../interfaces/wallet.interface';
+import {
+  WalletType,
+  WalletConnection,
+  WalletStorage
+} from './../interfaces/wallet.interface';
 // App Component
 import { DialogClientAccountComponent } from './../dialogs/dialog-client-account/dialog-client-account.component';
 
@@ -76,6 +80,13 @@ export class Web3Service {
     this.web3account = undefined;
     this._ethereum = undefined;
     this.loginEvent.emit(false);
+
+    // remove all connection storage data
+    Object.values(WalletStorage).map(
+      (storageKeys: string[]) => storageKeys.map(
+        (key) => this.localStorage.removeItem(key)
+      )
+    );
   }
 
   /**
