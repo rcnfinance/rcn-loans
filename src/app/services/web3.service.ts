@@ -75,6 +75,7 @@ export class Web3Service {
     this.account = undefined;
     this.web3account = undefined;
     this._ethereum = undefined;
+    this.loginEvent.emit(false);
   }
 
   /**
@@ -330,7 +331,6 @@ export class Web3Service {
     this.ethereum.autoRefreshOnNetworkChange = false;
     this.ethereum.on('networkChanged', () => {
       this.logout();
-      this.loginEvent.emit(false);
     });
   }
 
