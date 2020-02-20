@@ -19,7 +19,7 @@
         mat-raised-button
         class="button-connect"
         [class.button-connect--active]="wallet.active"
-        (click)="!wallet.active ? selectWallet(wallet.type) : ''"
+        (click)="selectWallet(wallet.type, wallet.active)"
       >
         <div class="d-flex align-items-center">
           <img [src]="wallet.image" [alt]="wallet.image">
