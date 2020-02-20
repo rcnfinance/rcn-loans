@@ -16,3 +16,12 @@ export const WalletLogo = {
   [WalletType.Metamask]: './assets/logo-metamask.svg',
   [WalletType.WalletConnect]: './assets/logo-walletconnect.svg'
 };
+
+export const WalletStorage = {
+  [WalletType.WalletLink]: [
+    '__WalletLink__:https://www.walletlink.org:SessionId',
+    '__WalletLink__:https://www.walletlink.org:Addresses'
+  ],
+  [WalletType.WalletConnect]: ['walletconnect'],
+  [WalletType.Metamask]: []
+};
