@@ -47,7 +47,7 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.titleService.changeTitle('Requests');
+    this.titleService.changeTitle('Lending Marketplace');
     this.spinner.show(this.pageId);
     this.loadLoans();
     this.loadAccount();
