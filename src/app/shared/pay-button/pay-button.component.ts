@@ -14,11 +14,11 @@ import { Currency } from '../../utils/currencies';
 import { EventsService, Category } from '../../services/events.service';
 import { Web3Service } from '../../services/web3.service';
 import { CountriesService } from '../../services/countries.service';
+import { WalletConnectService } from './../../services/wallet-connect.service';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 
 @Component({
@@ -47,6 +47,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     private txService: TxService,
     private eventsService: EventsService,
     private web3Service: Web3Service,
+    private walletConnectService: WalletConnectService,
     public snackBar: MatSnackBar,
     private countriesService: CountriesService,
     public dialog: MatDialog
@@ -119,15 +120,9 @@ export class PayButtonComponent implements OnInit, OnDestroy {
       return;
     }
     // unlogged user
-    if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-        return;
-      }
-      if (!this.web3Service.loggedIn) {
-        return;
-      }
+    const loggedIn = await this.walletConnectService.connect();
+    if (!loggedIn) {
+      return;
     }
     // lender validation
     const account: string = await this.web3Service.getAccount();
@@ -168,7 +163,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     this.startOperation();
 
     try {
-      const balance = await this.contractsService.getUserBalanceRCNWei();
+      const balance = Number(await this.contractsService.getUserBalanceRCNWei());
       let amount = this.amount;
 
       if (amount) {
@@ -265,25 +260,27 @@ export class PayButtonComponent implements OnInit, OnDestroy {
 
   /**
    * Show insufficient funds dialog
-   * @param required Required amount
-   * @param balance Balance amount
+   * @param requiredInWei Required amount
+   * @param balanceInWei Balance amount
    * @param currency Pay currency
    * @param decimals Currency decimals
    */
   async showInsufficientFundsDialog(
-    required: number,
-    balance: number,
+    requiredInWei: number,
+    balanceInWei: number,
     currency: string,
     decimals: number
   ) {
-    required = required / 10 ** decimals;
-    balance = balance / 10 ** decimals;
+    const required = requiredInWei.toString() as any / 10 ** decimals;
+    const balance = balanceInWei.toString() as any / 10 ** decimals;
 
-    this.dialog.open(DialogInsufficientfundsComponent, { data: {
-      required,
-      balance,
-      currency
-    }});
+    this.dialog.open(DialogInsufficientfundsComponent, {
+      data: {
+        required,
+        balance,
+        currency
+      }
+    });
     this.cancelOperation();
   }
 

@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Utils } from './../../utils/utils';
 // App Models
 import { Loan } from './../../models/loan.model';
 // App Services
@@ -43,25 +42,24 @@ export class AddressComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.route.params.subscribe(async params => {
-      this.spinner.show(this.pageId);
+    this.titleService.changeTitle('Activity explorer');
+    this.spinner.show(this.pageId);
+    this.handleLoginEvents();
 
+    this.route.params.subscribe(async params => {
       const web3 = this.web3Service.web3;
-      const address = web3.toChecksumAddress(params['address']);
-      this.address = address;
-      this.shortAddress = Utils.shortAddress(address);
+      this.address = web3.utils.toChecksumAddress(params.address);
+
+      this.loadLoans(this.address);
 
       await this.checkMyLoans();
       this.setPageTitle();
-      this.loadLoans(address);
     });
 
     // Available Loans service
     this.subscriptionAvailable = this.availableLoansService.currentAvailable.subscribe(
       available => this.available = available
     );
-
-    this.handleLoginEvents();
   }
 
   ngOnDestroy() {
@@ -117,7 +115,7 @@ export class AddressComponent implements OnInit, OnDestroy {
     const urlAddress = this.address;
     const myAddress = await this.web3Service.getAccount();
 
-    this.myLoans = web3.toChecksumAddress(urlAddress) === web3.toChecksumAddress(myAddress);
+    this.myLoans = web3.utils.toChecksumAddress(urlAddress) === web3.utils.toChecksumAddress(myAddress);
     return this.myLoans;
   }
 

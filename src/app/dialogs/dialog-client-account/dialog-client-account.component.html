@@ -1,26 +1,32 @@
-<app-dialog-header title="Missing Ether Client">
-</app-dialog-header>
-
-<mat-dialog-content>
-  <div class="col-sm-12 dialog-padding">
-    <div class="title main-h3">Got Metamask?</div>
-    <div class="margintop10"></div>
-    <div class="title main-h4">
-      Metamask is a third-party web-based cryptocurrency wallet that connects
-      your browser to the Ethereum network. Installation is required to
-      continue. Terms and conditions apply.
-    </div>
-    <div class="row img-container">
-      <div class='col-sm-12'>
-        <img src="https://metamask.io/img/metamask.png" alt="ether-client">
-        <div class="title main-h1 margintop10">
-          Metamask
-        </div>
-        <a href="https://metamask.io/" target="_blank">
-          <button mat-raised-button class="button button-primary margintop20">
-            GET
+<mat-dialog-content class="dialog dialog--small">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-5 dialog__image mb-5 mb-md-0">
+        <img src="https://metamask.io/img/metamask.png" alt="Metamask">
+      </div>
+      <div class="col-12 col-md-6 dialog__content">
+        <h1 class="dialog__content-title mt-0 mb-4">
+          Got Metamask?
+        </h1>
+        <p class="dialog__content-description">
+          Metamask is a third-party web-based cryptocurrency wallet that connects
+          your browser to the Ethereum network. Installation is required to
+          continue. Terms and conditions apply.
+        </p>
+        <div class="dialog__content-actions mt-5 mt-md-4">
+          <a href="https://metamask.io/" target="_blank">
+            <button mat-raised-button class="button button-primary">
+              Get
+            </button>
+          </a>
+          <button
+            mat-raised-button
+            mat-dialog-close
+            class="button button-clear-dark mat-elevation-z mt-2 mt-md-0"
+          >
+            Later
           </button>
-        </a>
+        </div>
       </div>
     </div>
   </div>

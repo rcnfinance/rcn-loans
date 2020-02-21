@@ -16,7 +16,7 @@ footer {
   footer {
     height: 54px;
     padding: 15px 30px;
-    @include styled-font('Raleway', 500, 15px);
+    @include styled-font('proxima-nova', 500, 15px);
     .nav-mobile {
       display: none;
     }

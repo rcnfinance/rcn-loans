@@ -1,7 +1,7 @@
 @import './../../../scss/fonts';
 
 .title {
-  @include styled-font('Raleway', 400, 20px);
+  @include styled-font('proxima-nova', 400, 20px);
   text-transform: uppercase;
   margin-bottom: 15px;
 }
