@@ -7,6 +7,7 @@ import {
   MatSnackBar
 } from '@angular/material';
 import { Subscription } from 'rxjs';
+import * as BN from 'bn.js';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Utils } from '../../../utils/utils';
 import { LoanUtils } from '../../../utils/loan-utils';
@@ -361,7 +362,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
 
     const account: string = this.account;
     const expiration = this.returnDaysAs(form.value.expirationDate, 'date');
-    const amount = Utils.bn(10 ** 18).mul(form.value.amount);
+    const amount = Utils.bn(10).pow(Utils.bn(18)).mul(Utils.bn(form.value.amount)).toString();
     const salt = web3.utils.toHex(new Date().getTime());
     const oracle: string = this.selectedOracle || Utils.address0x;
     const encodedData = await this.getInstallmentsData(form);
@@ -470,9 +471,9 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
    */
   private async getInstallmentsData(form: FormGroup) {
     const installments: number = this.installments;
-    const cuotaWithInterest = Number(this.expectedInstallmentAmount()) * 10 ** 18;
-    const annualInterest: number = form.value.annualInterest;
-    const interestRate: number = Utils.toInterestRate(annualInterest);
+    const cuotaWithInterest: BN = Utils.bn(this.expectedInstallmentAmount()).mul(Utils.bn(10).pow(Utils.bn(18)));
+    const annualInterest: BN = Utils.bn(form.value.annualInterest);
+    const interestRate: BN = Utils.bn(Utils.toInterestRate(Number(annualInterest)));
     const timeUnit: number = 24 * 60 * 60;
     let installmentDuration: number;
 
@@ -483,8 +484,8 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
     }
 
     const encodedData: any = await this.contractsService.encodeInstallmentsData(
-      cuotaWithInterest,
-      interestRate,
+      cuotaWithInterest.toString(),
+      interestRate.toString(),
       installments,
       installmentDuration,
       timeUnit

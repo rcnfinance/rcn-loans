@@ -866,28 +866,19 @@ export class ContractsService {
    * @return Encoded installments data
    */
   async encodeInstallmentsData(
-    cuota: number,
-    interestRate: number,
+    cuota: string | BN,
+    interestRate: string | BN,
     installments: number,
     duration: number,
     timeUnit: number
   ) {
-    return new Promise((resolve, reject) => {
-      this._installmentsModel.encodeData(
-        cuota,
-        interestRate,
-        installments,
-        duration,
-        timeUnit,
-        (err, result) => {
-          if (err != null) {
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        }
-      );
-    });
+    return await this._installmentsModel.methods.encodeData(
+      cuota,
+      interestRate,
+      installments,
+      duration,
+      timeUnit
+    ).call();
   }
 
   /**
@@ -896,18 +887,7 @@ export class ContractsService {
    * @return True if can validate the data
    */
   async validateEncodedData(encodedData: string) {
-    return new Promise((resolve, reject) => {
-      this._installmentsModel.validate(
-        encodedData,
-        (err, result) => {
-          if (err != null) {
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        }
-      );
-    });
+    return await this._installmentsModel.methods.validate(encodedData).call();
   }
 
   /**
@@ -934,26 +914,17 @@ export class ContractsService {
     expiration: number,
     data: any
   ) {
-    return new Promise((resolve, reject) => {
-      this._loanManager.calcId(
-        amount,
-        borrower,
-        creator,
-        model,
-        oracle,
-        callback,
-        salt,
-        expiration,
-        data,
-        (err, result) => {
-          if (err != null) {
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        }
-      );
-    });
+    return await this._loanManager.methods.calcId(
+      amount,
+      borrower,
+      creator,
+      model,
+      oracle,
+      callback,
+      salt,
+      expiration,
+      data
+    ).call();
   }
 
   /**
@@ -1003,7 +974,7 @@ export class ContractsService {
    */
   async loanWasCreated(loanId: string): Promise<boolean> {
     try {
-      const loan = await this._loanManager.getLoanData(loanId);
+      const loan = await this._loanManager.methods.getLoanData(loanId).call();
 
       if (Utils.isEmpty(loan)) {
         throw Error('Loan does not exist');
@@ -1149,18 +1120,7 @@ export class ContractsService {
    * @return Debt amount
    */
   async getClosingObligation(loanId: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this._loanManager.getClosingObligation(
-        loanId,
-        (err, result) => {
-          if (err != null) {
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        }
-      );
-    });
+    return await this._loanManager.methods.getClosingObligation(loanId).call();
   }
 
   /**
