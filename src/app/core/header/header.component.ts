@@ -1,11 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material';
+import { Utils } from './../../utils/utils';
 // App Component
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Service
 import { Web3Service } from '../../services/web3.service';
+import { WalletConnectService } from './../../services/wallet-connect.service';
 import { SidebarService } from '../../services/sidebar.service';
 import { TitleService } from '../../services/title.service';
 
@@ -17,6 +17,7 @@ import { TitleService } from '../../services/title.service';
 export class HeaderComponent implements OnInit {
   hasAccount: boolean;
   account: string;
+  shortAccount: string;
   makeRotate = false;
   title: string;
 
@@ -24,8 +25,8 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private router: Router,
     private web3Service: Web3Service,
+    private walletConnectService: WalletConnectService,
     private sidebarService: SidebarService,
     public dialog: MatDialog,
     public titleService: TitleService
@@ -49,10 +50,14 @@ export class HeaderComponent implements OnInit {
    */
   handleLoginEvents() {
     this.web3Service.loginEvent.subscribe(async (loggedIn) => {
+      const web3 = this.web3Service.web3;
       if (loggedIn) {
-        this.account = await this.web3Service.getAccount();
+        const account = await this.web3Service.getAccount();
+        this.account = web3.utils.toChecksumAddress(account);
+        this.shortAccount = Utils.shortAddress(this.account);
       } else {
         this.account = undefined;
+        this.shortAccount = undefined;
       }
       this.hasAccount = loggedIn;
       this.cdRef.detectChanges();
@@ -71,28 +76,11 @@ export class HeaderComponent implements OnInit {
    */
   async login() {
     if (this.hasAccount) {
-      const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent, {});
-      this.makeRotate = true;
-      dialogRef.afterClosed().subscribe(() => {
-        this.makeRotate = false;
-      });
-    } else if (await this.web3Service.requestLogin()) {
-      return;
-    } else {
-      this.dialog.open(DialogClientAccountComponent, {});
+      return this.openDialogApprove();
     }
+
+    await this.walletConnectService.connect();
   }
 
-  async borrow() {
-    const openBorrow = () => this.router.navigate(['/create']);
-
-    if (this.hasAccount) {
-      openBorrow();
-    } else if (await this.web3Service.requestLogin()) {
-      return;
-    } else {
-      this.dialog.open(DialogClientAccountComponent, {});
-    }
-  }
-
+  // TODO: add borrow method
 }

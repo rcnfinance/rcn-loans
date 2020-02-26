@@ -1,14 +1,17 @@
 @import '../../../scss/variables';
 @import '../../../scss/fonts';
 
+.dialog-content {
+  .title {
+    font-size: 14px;
+  }
+}
+
 ::ng-deep .mat-checkbox-label {
   white-space: pre-wrap;
 }
 .checkbox {
   margin-bottom: 12px;
-}
-.dialog-padding{
-  padding: 30px;
 }
 .list-avatar {
   height: 55px;
@@ -50,6 +53,42 @@
       line-height: 1em;
       @extend %font-medium;
       @extend .font14;
+    }
+  }
+}
+.expansion-panel {
+  background: transparent;
+}
+
+.dialog-footer {
+  align-items: center;
+  @extend %roboto-regular;
+
+  &__label {
+    text-align: center;
+    color: $gray2;
+  }
+  &__buttons {
+    text-align: right;
+    margin-top: 25px;
+  }
+}
+
+@media (min-width: 768px){
+  .dialog-padding {
+    padding: 30px 42px;
+  }
+  .dialog-content {
+    .title {
+      font-size: 18px;
+    }
+  }
+  .dialog-footer {
+    &__label {
+      text-align: left;
+    }
+    &__buttons {
+      margin-top: 0;
     }
   }
 }

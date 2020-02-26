@@ -9,7 +9,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ContractsService } from './../../services/contracts.service';
 // App Component
 import { BorrowedLoansComponent } from './borrowed-loans/borrowed-loans.component';
-import { LentLoansComponent } from './lent-loans/lent-loans.component';
+import { AddressComponent } from './lent-loans/lent-loans.component';
 import { MyLoansTabsComponent } from './my-loans-tabs/my-loans-tabs.component';
 
 const routes: Routes = [
@@ -19,7 +19,7 @@ const routes: Routes = [
   },
   {
     path: 'lent',
-    component: LentLoansComponent
+    component: AddressComponent
   },
   {
     path: 'borrowed',
@@ -37,7 +37,7 @@ const routes: Routes = [
   ],
   declarations: [
     BorrowedLoansComponent,
-    LentLoansComponent,
+    AddressComponent,
     MyLoansTabsComponent
   ],
   providers: [

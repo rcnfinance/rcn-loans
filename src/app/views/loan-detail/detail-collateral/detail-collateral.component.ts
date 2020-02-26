@@ -28,7 +28,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   collateralAmount: string;
   collateralAsset: string;
   collateralInRcn: string;
-  collateralRate: number;
+  collateralRate: string;
   liquidationRatio: string;
   balanceRatio: string;
 
@@ -94,11 +94,11 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
     const rcnToken: string = environment.contracts.rcnToken;
     this.collateralAsset = collateralCurrency.symbol;
-    this.collateralAmount = web3.fromWei(collateral.amount);
+    this.collateralAmount = web3.utils.fromWei(collateral.amount);
     this.collateralRate = await this.contractsService.getPriceConvertFrom(
       collateralCurrency.address,
       rcnToken,
-      10 ** 18
+      Utils.bn(10).pow(Utils.bn(18))
     );
     this.liquidationRatio = Utils.formatAmount(collateral.liquidationRatio / 100, 0);
     this.balanceRatio = Utils.formatAmount(collateral.balanceRatio / 100, 0);
@@ -117,18 +117,18 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
 
     // set loan to value
     const collateralRatio = this.calculateCollateralRatio();
-    this.currentLoanToValue = Utils.formatAmount(collateralRatio);
+    this.currentLoanToValue = Utils.formatAmount(String(collateralRatio));
 
     // set exchange rate
     // TODO: add support for more currencies than rcn
     const loanCurrency = this.currenciesService.getCurrencyByKey('symbol', this.loanCurrency);
     let rate = await this.getRate(loanCurrency.address, collateral.token);
-    rate = web3.fromWei(rate);
-    this.currentExchangeRate = Utils.formatAmount(rate);
+    rate = web3.utils.fromWei(rate);
+    this.currentExchangeRate = Utils.formatAmount(String(rate));
 
     // set liquidation price
     const liquidationPrice = await this.calculateLiquidationPrice();
-    this.currentLiquidationPrice = Utils.formatAmount(liquidationPrice);
+    this.currentLiquidationPrice = Utils.formatAmount(String(liquidationPrice));
   }
 
   /**
@@ -167,7 +167,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     collateralAsset: string
   ): Promise<Number> {
     const web3: any = this.web3Service.web3;
-    const amount = web3.toWei(new web3.BigNumber(1));
+    const amount = web3.utils.toWei(new web3.BigNumber(1));
 
     if (loanCurrency === collateralAsset) {
       return amount;

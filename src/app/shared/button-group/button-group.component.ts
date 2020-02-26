@@ -1,4 +1,6 @@
 import { Component, Output, EventEmitter, Input } from '@angular/core';
+// App models
+import { LoanType } from './../../models/loan.model';
 
 @Component({
   selector: 'app-button-group',
@@ -8,7 +10,8 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 export class ButtonGroupComponent {
   @Output() view = new EventEmitter<string>();
   @Input() viewDetail;
-  @Input() generatedByUser: boolean;
+  @Input() generatedByUser: boolean; // FIXME: replace by LoanType service
+  @Input() loanType: LoanType;
 
   constructor() { }
 
@@ -16,4 +19,5 @@ export class ButtonGroupComponent {
     this.view.emit(view);
     this.viewDetail = view;
   }
+
 }

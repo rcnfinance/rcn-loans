@@ -1,4 +1,10 @@
-<ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" type="ball-clip-rotate-multiple"></ngx-spinner>
+<ngx-spinner
+  bdColor="rgba(18,19,21,0.2)"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate-multiple"
+  [name]="pageId"
+></ngx-spinner>
 
 <div class="loan-detail" *ngIf="loan !== undefined">
   <div class="header-container flex-container mat-elevation-z5">
@@ -21,16 +27,17 @@
     </div>
     <div class="flex-item">
       <app-button-group
-        [viewDetail]="viewDetail"
-        [generatedByUser]="generatedByUser"
         (view)="openDetail($event)"
-      ></app-button-group>
+        [viewDetail]="viewDetail"
+        [loanType]="loanType"
+      >
+      </app-button-group>
     </div>
   </div>
 
   <div class="loan-description flex-container">
-    <div class="left px-0 col-xs-12 col-md-5">
-      <div class="avatar-information pb-4 pt-2 py-md-0">
+    <div class="left px-0 col-xs-12 col-lg-5">
+      <div class="avatar-information pb-4 pt-2 py-lg-0">
         <div class="flex-item">
           <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
         </div>
@@ -42,14 +49,14 @@
       <ng-container *ngIf="!isPaid; else paidGraphic">
         <div class="px-3 pt-1">
           <app-conversion-graphic
-            [headers]="['Lend', loan.currency, isRequest || isCanceled ? 'Estimated return' : 'Return']"
+            [headers]="['Lend', loan.currency, 'Receive']"
             [amountLeft]="loan.currency.fromUnit(loan.amount)"
-            [amountRight]="isRequest ||  isCanceled ? expectedReturn : totalDebt"
+            [amountRight]="isRequest || isCanceled || isExpired ? expectedReturn : totalDebt"
           ></app-conversion-graphic>
         </div>
-        <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled">
+        <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled && !isExpired">
           <app-conversion-graphic
-            [headers]="['Paid', 'Interest', 'Debt']"
+            [headers]="['Paid', 'Annual rate', 'Outstanding']"
             [amountRight]="pendingAmount"
             [textMiddle]="interest"
             [amountLeft]="paid"
@@ -69,7 +76,7 @@
 
       <div class="margintop20"></div>
       <app-detail-table [data]="diasporeData" *ngIf="isDiaspore"></app-detail-table>
-      <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled"></app-detail-table>
+      <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled || isExpired"></app-detail-table>
       <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
 
       <div class="table-responsive" *ngIf='availableOracle'>
@@ -81,7 +88,9 @@
           </thead>
           <tbody>
             <tr>
-              <td>{{ loan.oracle }} - <b>{{ currency }}</b></td>
+              <td style="cursor: pointer" (click)="openAddress(loan.oracle)">
+                {{ oracle | formatAddress }} - <b>{{ currency }}</b>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -91,65 +100,52 @@
           <thead>
             <tr>
               <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('identity') }" scope="col">
-                Identity<i class="material-icons white more-indicator">{{ isDetail('identity') ? '' : 'unfold_more' }}</i>
+                <ng-container *ngIf="loanType !== 2">Borrower</ng-container>
+                <ng-container *ngIf="loanType === 2">Originator / Borrower</ng-container>
+                <i class="material-icons white more-indicator">{{ isDetail('identity') ? '' : 'unfold_more' }}</i>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td style='cursor: pointer'>{{ loan.borrower }}</td>
+              <td style='cursor: pointer' (click)="openAddress(loan.borrower)">
+                {{ loan.borrower | formatAddress }} - {{ brand.headerTitle }}
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="table-responsive">
-        <table class="table" (click)="openLender(loan.owner)" *ngIf="loan.debt">
+        <table class="table" *ngIf="loan.debt">
           <thead>
             <tr>
               <th style='cursor: pointer' scope="col">{{ 'Lender' }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td style='cursor: pointer'>{{ loan.debt.owner }}</td>
+            <tr style='cursor: pointer' (click)="openAddress(loan.debt.owner)">
+              <td style='cursor: pointer'>{{ loan.debt.owner | formatAddress }} - Unknown</td>
+              <!-- TODO: Implement lender identity description -->
             </tr>
           </tbody>
         </table>
       </div>
-      <ng-container *ngIf="generatedByUser">
-        <div class="table-responsive" (click)="openDetail('collateral');">
-          <table class="table table-clickable">
-            <thead>
-              <tr>
-                <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('collateral') }" scope="col">
-                  Collateral<i class="material-icons white more-indicator">{{ isDetail('collateral') ? '' : 'unfold_more' }}</i>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style='cursor: pointer'>{{ collateralAmount || '-' }} {{ collateralAsset }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="!generatedByUser">
-        <div class="table-responsive" (click)="openDetail('cosigner');">
-          <table class="table table-clickable">
-            <thead>
-              <tr>
-                <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
-                  Insurance / Cosigner<i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <app-cosigner-selector [loan]=loan></app-cosigner-selector>
-            </tbody>
-          </table>
-        </div>
-      </ng-container>
+      <div class="table-responsive" (click)="openDetail('cosigner');">
+        <table class="table table-clickable">
+          <thead>
+            <tr>
+              <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
+                <ng-container *ngIf="loanType !== 3">Collateral</ng-container>
+                <ng-container *ngIf="loanType === 3">Guaranty</ng-container>
+                <i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <app-cosigner-selector [loan]=loan></app-cosigner-selector>
+          </tbody>
+        </table>
+      </div>
       <div class="px-3 pb-3" *ngIf="canLend || canTransfer || canPay">
         <app-pay-button
           [loan]="loan"
@@ -163,7 +159,11 @@
           (endLend)="onUserAction('lend')"
           *ngIf="canLend"
         ></app-lend-button>
-        <app-risk-indicator class='risk-indicator' [loan]=loan *ngIf="canLend"></app-risk-indicator>
+        <app-risk-indicator
+          class='risk-indicator'
+          [loan]=loan
+          *ngIf="canLend"
+        ></app-risk-indicator>
         <app-transfer-button
           [loan]="loan"
           [showTransferDialog]="true"
@@ -173,22 +173,9 @@
       </div>
     </div>
 
-    <div class="right px-0 col-xs-12 col-md-7">
-      <app-detail-identity
-        *ngIf="isDetail('identity')"
-        [loan]="loan"
-      ></app-detail-identity>
-      <app-detail-cosigner
-        *ngIf="isDetail('cosigner')"
-        [loan]="loan"
-      ></app-detail-cosigner>
-      <app-detail-collateral
-        *ngIf="isDetail('collateral')"
-        [loan]="loan"
-        [collateral]="collateral"
-        [canAdjust]="canAdjustCollateral"
-        (updateCollateral)="updateCollateral($event)"
-      ></app-detail-collateral>
+    <div class="right px-0 col-xs-12 col-lg-7">
+      <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
+      <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
     </div>
 
   </div>

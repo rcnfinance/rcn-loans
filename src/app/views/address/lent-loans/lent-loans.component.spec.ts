@@ -5,11 +5,11 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { SharedModule } from './../../../shared/shared.module';
 import { MaterialModule } from './../../../material.module';
 import { ContractsService } from './../../../services/contracts.service';
-import { LentLoansComponent } from './lent-loans.component';
+import { AddressComponent } from './lent-loans.component';
 
-describe('LentLoansComponent', () => {
-  let component: LentLoansComponent;
-  let fixture: ComponentFixture<LentLoansComponent>;
+describe('AddressComponent', () => {
+  let component: AddressComponent;
+  let fixture: ComponentFixture<AddressComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -19,7 +19,7 @@ describe('LentLoansComponent', () => {
         SharedModule,
         MaterialModule
       ],
-      declarations: [ LentLoansComponent ],
+      declarations: [ AddressComponent ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
       providers: [ ContractsService ]
     })
@@ -27,7 +27,7 @@ describe('LentLoansComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LentLoansComponent);
+    fixture = TestBed.createComponent(AddressComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

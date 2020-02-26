@@ -14,6 +14,7 @@ import { Web3Service } from './../../services/web3.service';
 export class DialogLoanTransferComponent implements OnInit {
 
   loan: Loan;
+  shortLoanId: string;
   loading: boolean;
   form: FormGroup;
   invalidAddress: boolean;
@@ -37,8 +38,12 @@ export class DialogLoanTransferComponent implements OnInit {
 
   async ngOnInit() {
     this.dialogRef.updateSize('auto', 'auto');
-    this.buildForm();
 
+    const loan: Loan = this.loan;
+    this.shortLoanId =
+      this.loan.id.startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
+
+    this.buildForm();
     await this.loadAccount();
   }
 
@@ -57,7 +62,7 @@ export class DialogLoanTransferComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
 
-    this.account = web3.toChecksumAddress(account);
+    this.account = web3.utils.toChecksumAddress(account);
     this.shortAccount = Utils.shortAddress(this.account);
   }
 
@@ -95,7 +100,7 @@ export class DialogLoanTransferComponent implements OnInit {
     const web3 = this.web3Service.web3;
     const form: FormGroup = this.form;
 
-    if (web3.isAddress(form.value.address)) {
+    if (web3.utils.isAddress(form.value.address)) {
       this.invalidAddress = false;
     } else {
       this.invalidAddress = true;

@@ -10,15 +10,16 @@ import { LoanRequest } from './../../interfaces/loan-request';
 import { environment } from './../../../environments/environment';
 // App Components
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 // App Services
 import { Web3Service } from '../../services/web3.service';
+import { WalletConnectService } from './../../services/wallet-connect.service';
 import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
 import { TxService, Tx, Type } from './../../services/tx.service';
+import { Utils } from './../../utils/utils';
 
 @Component({
   selector: 'app-create-loan',
@@ -50,6 +51,7 @@ export class CreateLoanComponent implements OnInit {
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
     private web3Service: Web3Service,
+    private walletConnectService: WalletConnectService,
     private titleService: TitleService,
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
@@ -95,15 +97,7 @@ export class CreateLoanComponent implements OnInit {
 
     // unlogged user
     if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (this.web3Service.loggedIn) {
-        this.handleCreateLoan(loan, form);
-        return;
-      }
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-      }
-      return;
+      await this.walletConnectService.connect();
     }
 
     this.handleCreateLoan(loan, form);
@@ -152,25 +146,17 @@ export class CreateLoanComponent implements OnInit {
     }
     // unlogged user
     if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (this.web3Service.loggedIn) {
-        this.handleCreateCollateral(form);
-        return;
-      }
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-      }
-      return;
+      await this.walletConnectService.connect();
     }
     // check collateral asset balance
     const balance = await this.contractsService.getUserBalanceInToken(form.collateralToken);
     const required = form.collateralAmount;
-    if (balance < required) {
+    if (Utils.bn(balance) < Utils.bn(required)) {
       const currency: CurrencyItem = this.currenciesService.getCurrencyByKey(
         'address',
         form.collateralToken
       );
-      this.showInsufficientFundsDialog(required, balance, currency.symbol);
+      this.showInsufficientFundsDialog(required, Number(balance), currency.symbol);
       return;
     }
     // validate approve
@@ -199,7 +185,7 @@ export class CreateLoanComponent implements OnInit {
     form: LoanRequest
   ) {
     const web3: any = this.web3Service.web3;
-    const account = web3.toChecksumAddress(await this.web3Service.getAccount());
+    const account = web3.utils.toChecksumAddress(await this.web3Service.getAccount());
 
     try {
       const id: string = loan.id;
@@ -239,7 +225,7 @@ export class CreateLoanComponent implements OnInit {
    */
   private async handleCreateCollateral(form: CollateralRequest) {
     const web3: any = this.web3Service.web3;
-    const account = web3.toChecksumAddress(await this.web3Service.getAccount());
+    const account = web3.utils.toChecksumAddress(await this.web3Service.getAccount());
 
     try {
       const tx: string = await this.contractsService.createCollateral(

@@ -17,8 +17,8 @@ import { LoanRequest } from './../../../interfaces/loan-request';
 import { environment } from './../../../../environments/environment';
 // App Components
 import { DialogGenericErrorComponent } from '../../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogClientAccountComponent } from '../../../dialogs/dialog-client-account/dialog-client-account.component';
 // App Services
+import { WalletConnectService } from './../../../services/wallet-connect.service';
 import { ContractsService } from './../../../services/contracts.service';
 import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
 import { Web3Service } from './../../../services/web3.service';
@@ -74,6 +74,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
+    private walletConnectService: WalletConnectService,
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
     private web3Service: Web3Service
@@ -361,7 +362,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
     const account: string = this.account;
     const expiration = this.returnDaysAs(form.value.expirationDate, 'date');
     const amount = new web3.BigNumber(10 ** 18).mul(form.value.amount);
-    const salt = web3.toHex(new Date().getTime());
+    const salt = web3.utils.toHex(new Date().getTime());
     const oracle: string = this.selectedOracle || Utils.address0x;
     const encodedData = await this.getInstallmentsData(form);
     const callback: string = Utils.address0x;
@@ -402,7 +403,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
   async loadAccount() {
     const web3 = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
-    this.account = web3.toChecksumAddress(account);
+    this.account = web3.utils.toChecksumAddress(account);
     this.shortAccount = Utils.shortAddress(this.account);
 
     // refresh parent
@@ -575,7 +576,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
         frequency: this.installmentDaysInterval,
         installments: this.installments
       },
-      currency: web3.toHex(currency.symbol),
+      currency: web3.utils.toHex(currency.symbol),
       lender: Utils.address0x,
       status: 1,
       canceled: false
@@ -596,8 +597,8 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
   private async corroborateBorrower(loan: Loan) {
     const checkBorrower = async () => {
       const web3: any = this.web3Service.web3;
-      const borrower = web3.toChecksumAddress(loan.borrower);
-      const account = web3.toChecksumAddress(await this.web3Service.getAccount());
+      const borrower = web3.utils.toChecksumAddress(loan.borrower);
+      const account = web3.utils.toChecksumAddress(await this.web3Service.getAccount());
 
       if (account !== borrower) {
         console.info(account, borrower);
@@ -611,14 +612,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
 
     // unlogged user
     if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (this.web3Service.loggedIn) {
-        return await checkBorrower();
-      }
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-      }
-      return;
+      await this.walletConnectService.connect();
     }
     return await checkBorrower();
   }

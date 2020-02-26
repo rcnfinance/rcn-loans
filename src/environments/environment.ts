@@ -16,10 +16,12 @@ declare let require: any;
 const p = require('../../package.json') as any;
 
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
+const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 
 export const environment = {
   version: p.version,
   version_name: p.version_name,
+  version_emoji: '👻',
   build: getBuild(),
   production: false,
   url: 'https://testnet.rcn.loans/',
@@ -27,8 +29,9 @@ export const environment = {
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
   buyLink: 'https://www.bancor.network/communities/5a92b438583f4a0001f75f42/about',
   version_verbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
-  sentry: 'http://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
+  sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   gaTracking: 'UA-122615331-2',
+  apiCountry: 'https://ipcountry-api.rcn.loans',
   rcn_node: {
     loan: 'https://ropsten-rnode.rcn.loans/v1/commits?id_loan=$id' // TODO: replace by rcn_node_api.basaltUrl
   },
@@ -41,19 +44,21 @@ export const environment = {
     url: 'https://oracle.ripio.com/rate/'
   },
   network: {
-    id: '3',
+    id: 3,
     name: 'Ropsten',
     explorer: {
       address: 'https://ropsten.etherscan.io/address/${address}',
       tx: 'https://ropsten.etherscan.io/tx/${tx}'
     },
-    provider: 'https://ropsten.infura.io/v3/acf3c538f57040839369e7c1b023c3c6'
+    provider: {
+      id: INFURA_ID,
+      url: `https://ropsten.infura.io/v3/${ INFURA_ID }`
+    }
   },
   contracts: {
     rcnToken: RCN_TOKEN,
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
-    oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf',
     oracleFactory: '0xf9d4771cbe3c3808f3dff633cd6be738f7f419ea',
     diaspore: {
       debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
@@ -66,10 +71,7 @@ export const environment = {
     converter: {
       converterRamp: '0x9cd2b5ffd2c4d3d2d47ecbecf19ec588900901ec',
       ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      tokenConverter: '0x79e680e613ed32f64da9e5a09ed8613c8e9ce3a7',
-      params: {
-        aditionalSlippage: '2'
-      }
+      tokenConverter: '0x79e680e613ed32f64da9e5a09ed8613c8e9ce3a7'
     },
     models: {
       installments: '0x41e9d0b6a8ce88989c2e7b3cae42ecfac44c9603'
@@ -79,6 +81,9 @@ export const environment = {
       mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1'
     },
     multicall: '0xa457b5b859573e8eb758b6c2bfd4ae3042b422fd'
+  },
+  cosigners: {
+    [Agent.RipioCreator]: '0x684977757434fee591220810cd31b6bbf99f4bdc'
   },
   blacklist: [
     {

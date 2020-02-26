@@ -226,7 +226,7 @@ export class StepCreateCollateralComponent implements OnInit {
         hundredPercent,
         collateralCurrency
       );
-      loanAmountInCollateral = web3.fromWei(loanAmountInCollateral);
+      loanAmountInCollateral = web3.utils.fromWei(loanAmountInCollateral);
 
       const collateralRatio = (collateralAmount.mul(100)).div(loanAmountInCollateral);
 
@@ -288,7 +288,7 @@ export class StepCreateCollateralComponent implements OnInit {
       );
 
       this.form.patchValue({
-        collateralAmount: Utils.formatAmount(web3.fromWei(amount))
+        collateralAmount: Utils.formatAmount(web3.utils.fromWei(amount))
       });
     } catch (e) {
       throw Error(e);
@@ -331,14 +331,14 @@ export class StepCreateCollateralComponent implements OnInit {
 
     // convert amount to collateral asset
     if (loanCurrency === collateralAsset) {
-      collateralAmount = new web3.toWei(collateralAmount);
+      collateralAmount = new web3.utils.toWei(collateralAmount);
     } else {
       const fromToken: any = environment.contracts.rcnToken;
       const toToken: any = this.currenciesService.getCurrencyByKey('symbol', collateralAsset).address;
       const cost = await this.contractsService.getPriceConvertFrom(
         fromToken,
         toToken,
-        web3.toWei(collateralAmount)
+        web3.utils.toWei(collateralAmount)
       );
       collateralAmount = cost;
     }
@@ -352,7 +352,7 @@ export class StepCreateCollateralComponent implements OnInit {
   async loadAccount() {
     const web3 = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
-    this.account = web3.toChecksumAddress(account);
+    this.account = web3.utils.toChecksumAddress(account);
   }
 
   /**

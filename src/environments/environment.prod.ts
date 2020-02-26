@@ -16,12 +16,14 @@ declare let require: any;
 const p = require('../../package.json') as any;
 
 const RCN_TOKEN = '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6';
+const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 
 export const environment = {
   version: p.version,
   version_name: p.version_name,
+  version_emoji: '👻',
   build: getBuild(),
-  production: false,
+  production: true,
   url: 'https://mainnet.rcn.loans/',
   envName: 'main',
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
@@ -29,6 +31,7 @@ export const environment = {
   version_verbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   gaTracking: 'UA-122615331-3',
+  apiCountry : 'https://ipcountry-api.rcn.loans',
   rcn_node: {
     loan: 'https://rnode.rcn.loans/v1/commits?id_loan=$id' // TODO: replace by rcn_node_api.basaltUrl
   },
@@ -41,20 +44,22 @@ export const environment = {
     url: 'https://oracle.ripio.com/rate/'
   },
   network: {
-    id: '1',
+    id: 1,
     name: 'Main',
     explorer: {
       address: 'https://etherscan.io/address/${address}',
       tx: 'https://etherscan.io/tx/${tx}'
     },
-    provider: 'https://mainnet.infura.io/v3/acf3c538f57040839369e7c1b023c3c6'
+    provider: {
+      id: INFURA_ID,
+      url: `https://mainnet.infura.io/v3/${ INFURA_ID }`
+    }
   },
   contracts: {
     rcnToken: RCN_TOKEN,
     basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
     engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
-    oracle: '0xd8320c70f5d5b355e1365acdf1f7c6fe4d0d92cf', // FIXME: Ropsten oracle
-    oracleFactory: '0xe8e49d772b106e2acfc7f821cbd77b97a728aaac', // FIXME: Ropsten oracle factory
+    oracleFactory: '0x1101c52fc25dc6d2691cec4b06569cef3c83933c',
     diaspore: {
       debtEngine: '0x80db22675dad70e44b64029510778583187faddb',
       loanManager: '0xb55b0f33d6a2a03a275ca85d58e9357e1a141187'
@@ -66,10 +71,7 @@ export const environment = {
     converter: {
       converterRamp: '0xe41ada0fb01F147c6385F93DEC78914F32e45061',
       ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      tokenConverter: '0x7173E7C8c35EF0FA6DF11B23bB717F886fBD50B5',
-      params: {
-        aditionalSlippage: '2'
-      }
+      tokenConverter: '0x7173E7C8c35EF0FA6DF11B23bB717F886fBD50B5'
     },
     models: {
       installments: '0x41e9d0b6a8ce88989c2e7b3cae42ecfac44c9603' // FIXME: Ropsten installments
@@ -89,8 +91,11 @@ export const environment = {
     ongoing: '0x3b80f3028af6ab654b6b0188e651667ade313e1b'
   },
   dir: {
-    '0x263231ed9b51084816a44e18d16c0f6d0727491f': Agent.RipioCreator,
+    '0xfbd5e54062619ef2b0323ad9ff874b39fd5a8d2c': Agent.RipioCreator,
     '0xfeac8e490fe7f0760a10225e7dccda1e22ad8daa': Agent.WenanceCreator // FIXME - Ropsten address
+  },
+  cosigners: {
+    [Agent.RipioCreator]: '0xfA7c953a07BCb4420253bFfBf586bDD64c37B670'
   },
   filterCurrencies: [
     'RCN',
@@ -106,14 +111,24 @@ export const environment = {
       address: RCN_TOKEN
     },
     {
-      symbol: 'DAI',
-      img: 'assets/dai.png',
-      address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
-    },
-    {
       symbol: 'ETH',
       img: 'assets/eth.png',
-      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    },
+    {
+      symbol: 'DAI',
+      img: 'assets/dai.png',
+      address: '0x6b175474e89094c44da98b954eedeac495271d0f'
+    },
+    {
+      symbol: 'USDC',
+      img: 'assets/usdc.png',
+      address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+    },
+    {
+      symbol: 'MANA',
+      img: 'assets/mana.png',
+      address: '0x0f5d2fb29fb7d3cfee444a200298f468908cc942'
     }
   ]
 };

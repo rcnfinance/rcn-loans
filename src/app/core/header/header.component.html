@@ -13,7 +13,7 @@
               <span class="icon-bar"></span>
             </button>
 
-            <a class="button-img" routerLink='/requests'>
+            <a class="button-img" routerLink='/lend'>
               <img src="assets/isologo.svg" alt="rcn-image">
               <img src="assets/isologotypo.svg" alt="rcn-image">
             </a>
@@ -21,38 +21,78 @@
             <h1 class="hide">RCN / Ripio credit network</h1>
 
             <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
-              <!-- Menu section -->
-              <a class="nav__item nav__item--borrow mr-4" routerLink='/create'>
+              <a class="nav__item nav__item--borrow mr-4" routerLink="/create">
                 <span class="d-flex align-items-center">
                   <i class="material-icons mr-3">add</i>
                   <span>Borrow</span>
                 </span>
               </a>
-              <a class="nav__item mr-4" routerLink='/requests'>Requests</a>
-              <a class="nav__item mr-4" routerLink='/activity'>Activity</a>
-              <a class="nav__item mr-4" routerLink='/address/{{ account }}/' *ngIf='hasAccount'>Loans</a>
-              <div class="nav__item mr-4" (click)="login()" *ngIf="!hasAccount">Login</div>
-              <ng-container *ngIf="hasAccount">
-                <div class="separator">|</div>
+              <!-- Menu section -->
+              <a
+                class="nav__item mr-4"
+                routerLinkActive="nav__item--active"
+                routerLink='/lend'
+              >
+                Lend
+              </a>
+              <a
+                class="nav__item mr-4"
+                routerLinkActive="nav__item--active"
+                routerLink='/activity'
+              >
+                Activity
+              </a>
+              <a
+                class="nav__item mr-4"
+                routerLinkActive="nav__item--active"
+                routerLink='/address/{{ account }}/'
+                *ngIf='hasAccount'
+              >
+                My loans
+              </a>
+              <div class="nav__item mr-4" (click)="login()" *ngIf="!hasAccount">
+                Connect
+              </div>
+              <div
+                class="align-items-center pl-0"
+                [ngClass]="hasAccount ? 'd-flex' : 'd-none'"
+              >
+                <div class="separator pr-3">|</div>
                 <app-icon-group-header></app-icon-group-header>
-                <div class="separator">|</div>
-                <app-component-balance [account]="account"></app-component-balance>
-                <div class="separator">|</div>
-              </ng-container>
-              <!-- Balance section -->
-              <div class="nav__item" (click)="openDialogApprove();">
-                <div class="flex-container" *ngIf="hasAccount">
+                <div class="separator px-3">|</div>
+                <app-component-balance [account]="account">
+                </app-component-balance>
+              </div>
+              <ng-container *ngIf="hasAccount">
+                <div class="nav__item mr-2 ml-3">
                   <div class="flex-item">
                     <div class="list-avatar">
                       <div class="avatar-container">
-                        <app-avatar [seed]=account></app-avatar>
+                        <app-wallet-avatar></app-wallet-avatar>
                       </div>
                     </div>
                   </div>
-                  <div class="flex-item">Profile</div>
-                  <div class="flex-item"><i class="material-icons transition" [ngClass]="{'rotate180': makeRotate }">expand_more</i></div>
                 </div>
-              </div>
+                <div class="nav__item">
+                  <div class="flex-container">
+                    <div
+                      class="flex-item mr-2"
+                      (click)="openDialogApprove()"
+                    >
+                      {{ shortAccount }}
+                    </div>
+                    <div class="flex-item">
+                      <i
+                        class="material-icons transition"
+                        [ngClass]="{'rotate180': makeRotate }"
+                        (click)="openDialogApprove()"
+                      >
+                        expand_more
+                      </i>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
             </div>
           </div>
         </div>

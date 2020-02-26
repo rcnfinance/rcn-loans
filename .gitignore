@@ -5,6 +5,7 @@
 /dist-server
 /tmp
 /out-tsc
+/src/documentation
 
 # dependencies
 /node_modules
@@ -52,3 +53,7 @@ config.js
 
 #e2e
 /screenshots
+
+# Visal studio code
+/.vscode/
+

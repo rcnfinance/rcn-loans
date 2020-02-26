@@ -1,25 +1,20 @@
 <div class="button-group">
-  <ng-container [ngSwitch]="generatedByUser">
-    <ng-container *ngSwitchCase="true">
-      <div class="button-options"
-        (click)="openDetail('collateral')"
-        [ngClass]="{'active': viewDetail === 'collateral' ? true : false }" matTooltip="Collateral" matTooltipPosition="below">
-        <i class="fas fa-coins"></i>
-      </div>
-    </ng-container>
-    <ng-container *ngSwitchCase="false">
-      <div class="button-options"
-        (click)="openDetail('cosigner')"
-        [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }" matTooltip="Cosigner" matTooltipPosition="below">
-        <i class="fas fa-shield-alt"></i>
-      </div>
-    </ng-container>
-    <div class="button-options"
-      (click)="openDetail('identity')"
-      [ngClass]="{'active': viewDetail === 'identity' ? true : false }" matTooltip="Identity" matTooltipPosition="below">
-      <i class="fas fa-id-badge"></i>
-    </div>
-  </ng-container>
+  <div class="button-options"
+    (click)="openDetail('cosigner')"
+    [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }"
+    [matTooltip]="loanType === 3 ? 'Guaranty' : 'Collateral'"
+    matTooltipPosition="below"
+  >
+    <i class="fas fa-shield-alt"></i>
+  </div>
+  <div class="button-options"
+    (click)="openDetail('identity')"
+    [ngClass]="{'active': viewDetail === 'identity' ? true : false }"
+    matTooltip="Borrower"
+    matTooltipPosition="below"
+  >
+    <i class="fas fa-id-badge"></i>
+  </div>
 
   <mat-menu #appMenu="matMenu" yPosition="below" [ngSwitch]="generatedByUser">
     <ng-container *ngSwitchCase="true">
@@ -48,7 +43,20 @@
       [ngClass]="{'active': viewDetail === 'identity' ? true : false }"
     >
       <i class="fas fa-id-badge"></i>
-      <span>Identity</span>
+      <span>Borrower</span>
+    </button>
+    <button mat-menu-item
+      (click)="openDetail('cosigner')"
+      [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }">
+      <i class="fas fa-shield-alt"></i>
+      <span>
+        <ng-container *ngIf="loanType !== 3">
+          Collateral
+        </ng-container>
+        <ng-container *ngIf="loanType === 3">
+          Guaranty
+        </ng-container>
+      </span>
     </button>
   </mat-menu>
 

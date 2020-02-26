@@ -1,3 +1,5 @@
+import * as BN from 'bn.js';
+
 export class Utils {
   static address0x = '0x0000000000000000000000000000000000000000';
   static emptyString = '';
@@ -65,26 +67,30 @@ export class Utils {
     totalSeconds = Math.abs(totalSeconds);
     const secondsInYear = 86400 * 365;
     const years = Math.floor(totalSeconds / secondsInYear);
-    timeToStr(years, ' years, ');
+    timeToStr(years, ' Years, ');
     totalSeconds %= secondsInYear;
     const days = Math.floor(totalSeconds / 86400);
-    timeToStr(days, ' days, ');
+    timeToStr(days, ' Days, ');
     totalSeconds %= 86400;
     const hours = Math.floor(totalSeconds / 3600);
-    timeToStr(hours, ' hours, ');
+    timeToStr(hours, ' Hours, ');
     totalSeconds %= 3600;
     const minutes = Math.floor(totalSeconds / 60);
-    timeToStr(minutes, ' minutes, ');
+    timeToStr(minutes, ' Minutes, ');
 
     if (showSeconds) {
       const seconds = totalSeconds % 60;
-      timeToStr(seconds.toFixed(0), ' seconds, ');
+      timeToStr(seconds.toFixed(0), ' Seconds, ');
     }
 
     return prefix + result.slice(0, -2);
   }
 
-  static formatAmount(amount: Number, maxDigits = 6): string {
+  static formatAmount(amount: number | string | BN, maxDigits = 6): string {
+    if (typeof amount !== 'number') {
+      amount = Number(amount);
+    }
+
     if (amount.toString().length <= maxDigits) {
       return amount.toString();
     }
@@ -150,6 +156,22 @@ export class Utils {
     }
 
     return pmt;
+  }
+
+  /**
+   * Convert the specified value to BN
+   * @param value Value
+   * @param base Base
+   * @return Value as BN
+   */
+  static bn(value: number | string | BN = 0, base?: number | 'hex'): BN {
+    if (typeof value === 'number') {
+      return new BN(String(value), base);
+    }
+    if (typeof value === 'string') {
+      return new BN(value, base);
+    }
+    return new BN(value, base);
   }
 }
 

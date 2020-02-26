@@ -95,7 +95,7 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     const web3: any = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
 
-    this.account = web3.toChecksumAddress(account);
+    this.account = web3.utils.toChecksumAddress(account);
     this.shortAccount = Utils.shortAddress(this.account);
   }
 
@@ -164,11 +164,11 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     const tx: string = await this.contractsService.addCollateral(
       this.collateral.id,
       this.collateral.token,
-      web3.toWei(amount),
+      web3.utils.toWei(amount),
       this.account
     );
 
-    this.txService.registerAddCollateralTx(tx, this.loan, this.collateral, web3.toWei(amount));
+    this.txService.registerAddCollateralTx(tx, this.loan, this.collateral, web3.utils.toWei(amount));
     this.showProgressbar();
   }
 
@@ -185,12 +185,12 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
       this.collateral.id,
       this.collateral.token,
       this.account,
-      web3.toWei(amount),
+      web3.utils.toWei(amount),
       oracleData,
       this.account
     );
 
-    this.txService.registerWithdrawCollateralTx(tx, this.loan, this.collateral, web3.toWei(amount));
+    this.txService.registerWithdrawCollateralTx(tx, this.loan, this.collateral, web3.utils.toWei(amount));
     this.showProgressbar();
   }
 

@@ -65,7 +65,7 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     this.web3 = web3;
   }
   title(_loan: Loan): string {
-    return 'Decentraland Parcel Mortgage';
+    return 'Decentraland Parcel';
   }
   contract(_loan: Loan): string {
     return this.manager;
@@ -146,24 +146,27 @@ export class DecentralandCosignerProvider implements CosignerProvider {
     }) as Promise<Boolean>;
   }
 
-  isMortgageCancelled(loan: Loan): Promise<Boolean> {
-    return new Promise((resolve, _err) => {
-      this.setupContracts();
-      this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {
-        this.managerContract.mortgages(mortgageId, (_errD, mortgageData) => {
-          const mortgageStatus = parseInt(mortgageData[7], 16);
-          if (mortgageStatus === this.mortgageStatus.Canceled) {
-            resolve(true);
-          }
-          resolve(false);
-        });
-      });
-    });
+  /**
+   * Check if mortgage is cancelled
+   * @param loan Loan
+   * @return Boolean
+   */
+  async isMortgageCancelled(loan: Loan): Promise<Boolean> {
+    try {
+      const mortgageId = await this.managerContract.methods.loanToLiability(this.engine, loan.id).call();
+      const mortgageData = await this.managerContract.methods.mortgages(mortgageId).call();
+      const mortgageStatus = parseInt(mortgageData[7], 16);
+      if (mortgageStatus === this.mortgageStatus.Canceled) {
+        return true;
+      }
+    } catch (err) {
+      return false;
+    }
   }
 
   private setupContracts() {
     if (this.managerContract === undefined) {
-      this.managerContract = this.web3.web3.eth.contract(mortgageManagerAbi).at(this.manager);
+      this.managerContract = new this.web3.web3.eth.Contract(mortgageManagerAbi, this.manager);
     }
   }
   private isDefaulted(loan: Loan, detail: DecentralandCosigner): boolean {
@@ -173,48 +176,43 @@ export class DecentralandCosignerProvider implements CosignerProvider {
             && detail.status == 1; // Detail should be ongoing
   }
   private buildClaim(loan: Loan): () => Promise<string> {
-    return () => {
-      return new Promise((resolve, reject) => {
-        const managerContract = this.web3.web3.eth.contract(mortgageManagerAbi).at(this.manager);
-        this.web3.getAccount().then((account) => {
-          managerContract.claim(this.engine, loan.id, '0x0', { from: account }, (err, result) => {
-            if (err === undefined) {
-              reject(err);
-            } else {
-              resolve(result);
-            }
-          });
-        });
-      });
+    return async () => {
+      const managerContract = new this.web3.web3.eth.Contract(mortgageManagerAbi, this.manager);
+      const account = await this.web3.getAccount();
+      const result = await managerContract.methods
+          .claim(this.engine, loan.id, '0x0')
+          .send({ from: account });
+
+      return result;
     };
   }
-  private detail(loan: Loan): Promise<DecentralandCosigner> {
-    return new Promise((resolve, _err) => {
-      this.setupContracts();
-      this.managerContract.loanToLiability(this.engine, loan.id, (_errId, mortgageId) => {
-        this.managerContract.mortgages(mortgageId, (_errD, mortgageData) => {
-          const landId = this.web3.web3.toHex(mortgageData[5]);
-          const landPrice = mortgageData[6];
-          const motrgageAmount = mortgageData[6];
-          const financedAmount = (loan.amount / motrgageAmount) * 100;
-          const parcelData = undefined;
-          const mortgageStatus = mortgageData[7];
-          const decentralandCosigner = new DecentralandCosigner(
-                  mortgageId,
-                  Utils.toBytes32(landId),
-                  landPrice,
-                  financedAmount.toPrecision(2),
-                  parcelData,
-                  mortgageStatus
-                );
-          this.getParcelInfo(decentralandCosigner.x, decentralandCosigner.y).then((parcel) => {
-            decentralandCosigner.parcel = parcel;
-            resolve(decentralandCosigner);
-          });
-        });
-      });
-    });
+
+  private async detail(loan: Loan): Promise<DecentralandCosigner> {
+    this.setupContracts();
+    const mortgageId = await this.managerContract.methods.loanToLiability(this.engine, loan.id).call();
+    const mortgageData = await this.managerContract.methods.mortgages(mortgageId).call();
+    const landId = this.web3.web3.utils.toHex(mortgageData[5]);
+    const landPrice = mortgageData[6];
+    const motrgageAmount = mortgageData[6];
+    const financedAmount = (loan.amount / motrgageAmount) * 100;
+    const parcelData = undefined;
+    const mortgageStatus = mortgageData[7];
+    const decentralandCosigner = new DecentralandCosigner(
+        mortgageId,
+        Utils.toBytes32(landId),
+        landPrice,
+        financedAmount.toPrecision(2),
+        parcelData,
+        mortgageStatus
+    );
+    const { x, y } = decentralandCosigner;
+    const parcel = await this.getParcelInfo(x, y);
+
+    decentralandCosigner.parcel = parcel;
+
+    return decentralandCosigner;
   }
+
   private buildData(index: number): string {
     const hex = index.toString(16);
     return '0x' + Array(65 - hex.length).join('0') + hex;

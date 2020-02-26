@@ -106,7 +106,7 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
     this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
 
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
-    this.collateralAmount = Utils.formatAmount(Number(web3.fromWei(collateral.amount)));
+    this.collateralAmount = Utils.formatAmount(Number(web3.utils.fromWei(collateral.amount)));
     this.collateralAsset = collateralCurrency.symbol;
   }
 

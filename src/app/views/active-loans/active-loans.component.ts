@@ -15,6 +15,7 @@ import { AvailableLoansService } from '../../services/available-loans.service';
   styleUrls: ['./active-loans.component.scss']
 })
 export class ActiveLoansComponent implements OnInit, OnDestroy {
+  pageId = 'active-loans';
   available: any;
   availableLoans = true;
   loans = [];
@@ -30,8 +31,8 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.titleService.changeTitle('Activity');
-    this.spinner.show();
+    this.titleService.changeTitle('Activity explorer');
+    this.spinner.show(this.pageId);
     this.loadLoans();
 
     // Available Loans service
@@ -41,6 +42,8 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.spinner.hide(this.pageId);
+
     try {
       this.subscriptionAvailable.unsubscribe();
     } catch (e) { }
@@ -61,7 +64,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
     this.loans = loans;
 
     this.upgradeAvaiblable();
-    this.spinner.hide();
+    this.spinner.hide(this.pageId);
 
     if (!this.loans.length) {
       this.availableLoans = false;

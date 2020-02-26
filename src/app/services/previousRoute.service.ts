@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
+// App services
+import { EventsService } from './events.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,8 @@ export class PreviousRouteService {
 
   constructor(
     private router: Router,
-    private location: Location
+    private location: Location,
+    private eventsService: EventsService
   ) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -23,13 +26,18 @@ export class PreviousRouteService {
     return this.previousUrl;
   }
 
-  redirectHandler() {
+  async redirectHandler() {
     const previousUrl: string = this.getPreviousUrl();
     if (!previousUrl) {
-      this.router.navigate(['/', 'requests']).then(err => {
-        console.error(err); // when there's an error
-      });
-    } else if (previousUrl) {
+      try {
+        await this.router.navigate(['/', 'lend']);
+      } catch (err) {
+        this.eventsService.trackError(err);
+      }
+      return;
+    }
+
+    if (previousUrl) {
       this.location.back();
     }
   }

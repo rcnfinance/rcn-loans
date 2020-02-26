@@ -7,6 +7,13 @@ export enum Network {
   Diaspore = 4
 }
 
+export enum LoanType {
+  Unknown,
+  UnknownWithCollateral,
+  NftCollateral,
+  FintechOriginator
+}
+
 export class Descriptor {
   constructor(
     public network: Network,

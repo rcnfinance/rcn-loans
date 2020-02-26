@@ -1,8 +1,8 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, Injectable, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import * as Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import { environment } from '../environments/environment';
 // App Modules
 import { AppRoutingModule } from './app-routing.module';
@@ -10,15 +10,18 @@ import { CoreModule } from './core/core.module';
 // App Component
 import { AppComponent } from './app.component';
 
-Raven
-  .config(environment.sentry, {
-    release: environment.version_verbose
-  })
-  .install();
+Sentry.init({
+  dsn: environment.sentry,
+  release: environment.version_verbose,
+  environment: environment.envName
+});
 
-export class RavenErrorHandler implements ErrorHandler {
-  handleError(err: any): void {
-    Raven.captureException(err);
+@Injectable()
+export class SentryErrorHandler implements ErrorHandler {
+  constructor() {}
+  handleError(error: any) {
+    const eventId = Sentry.captureException(error.originalError || error);
+    console.error({ eventId });
   }
 }
 
@@ -33,7 +36,7 @@ export class RavenErrorHandler implements ErrorHandler {
   declarations: [
     AppComponent
   ],
-  entryComponents: [],
+  providers: [{ provide: ErrorHandler, useClass: SentryErrorHandler }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

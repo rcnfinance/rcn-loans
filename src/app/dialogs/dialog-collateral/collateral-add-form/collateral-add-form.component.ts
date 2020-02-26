@@ -78,7 +78,7 @@ export class CollateralAddFormComponent implements OnInit, OnChanges {
     const { account } = changes;
 
     if (account && account.currentValue) {
-      this.account = web3.toChecksumAddress(account.currentValue);
+      this.account = web3.utils.toChecksumAddress(account.currentValue);
       await this.loadAccount();
     }
   }
@@ -106,12 +106,12 @@ export class CollateralAddFormComponent implements OnInit, OnChanges {
     this.loanRate = await this.contractsService.getPriceConvertFrom(
       loanCurrency.address,
       rcnToken,
-      10 ** 18
+      Utils.bn(10).pow(Utils.bn(18))
     );
     this.loanInRcn = await this.contractsService.getPriceConvertFrom(
       loanCurrency.address,
       rcnToken,
-      loan.amount
+      Utils.bn(loan.amount)
     );
   }
 
@@ -131,7 +131,7 @@ export class CollateralAddFormComponent implements OnInit, OnChanges {
     this.collateralRate = await this.contractsService.getPriceConvertFrom(
       collateralCurrency.address,
       rcnToken,
-      10 ** 18
+      Utils.bn(10).pow(Utils.bn(18))
     );
     this.balanceRatio = collateral.balanceRatio / 100;
     this.liquidationRatio = collateral.liquidationRatio / 100;
@@ -147,7 +147,7 @@ export class CollateralAddFormComponent implements OnInit, OnChanges {
   async loadAccount() {
     const web3: any = this.web3Service.web3;
     let account = await this.web3Service.getAccount();
-    account = web3.toChecksumAddress(account);
+    account = web3.utils.toChecksumAddress(account);
 
     this.shortAccount = Utils.shortAddress(account);
   }

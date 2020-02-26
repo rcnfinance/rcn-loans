@@ -1,4 +1,4 @@
-<ngx-spinner bdColor="rgba(0,0,0,.3)" size="medium" color="#fff" class="overlay-setup" type="ball-clip-rotate-multiple" id ="spinner" #spinner></ngx-spinner>
+<ngx-spinner bdColor="transparent" size="medium" color="#fff" class="overlay-setup" type="ball-clip-rotate-multiple" id ="spinner" #spinner></ngx-spinner>
 <div class="transaction-component">
   <div class="timeline">
 
@@ -12,11 +12,11 @@
         <div class="line-wrapper flex-row">
           <div class="flex-col"></div>
           <div class="flex-col">
-            <div class="line" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf='!isLast'></div> 
+            <div class="line" [ngStyle]="{'border-right': '4px solid' + event.oProperties.color }" *ngIf='!isLast'></div>
           </div>
           <div class="flex-col"></div>
         </div>
-        
+
         <div class="header-wrapper flex-row">
           <div class="flex-col"></div>
           <div class="flex-col">
@@ -43,7 +43,20 @@
         <div class="property-wrapper flex-row" *ngFor='let datapoint of event.data'>
           <div class="property flex-col">{{ datapoint.title }}</div>
           <div class="space flex-col"></div>
-          <div class="value flex-col">{{ datapoint.value }}</div>
+          <div
+            class="value flex-col"
+            *ngIf="!isAddress(datapoint.value)"
+          >
+            {{ datapoint.value }}
+          </div>
+          <a
+            class="value flex-col"
+            *ngIf="isAddress(datapoint.value)"
+            [href]="explorerAddress.replace('${address}', datapoint.value)"
+            target="_blank"
+          >
+            {{ datapoint.value }} - Unknown
+          </a>
         </div>
 
         <div class="property-wrapper flex-row" *ngIf="event.commit.proof !== null">
@@ -53,6 +66,6 @@
         </div>
 
       </div>
-    </div> 
+    </div>
   </div>
 </div>
