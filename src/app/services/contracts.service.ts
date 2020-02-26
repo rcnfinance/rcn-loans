@@ -10,7 +10,7 @@ import { Web3Service } from './web3.service';
 import { TxService } from '../services/tx.service';
 import { CosignerService } from './cosigner.service';
 import { ApiService } from './api.service';
-import { Utils, promisify } from './../utils/utils';
+import { Utils } from './../utils/utils';
 import { EventsService } from './events.service';
 declare let require: any;
 
@@ -924,7 +924,7 @@ export class ContractsService {
    * @return Loan ID
    */
   async calculateLoanId(
-    amount: number,
+    amount: BN | string,
     borrower: string,
     creator: string,
     model: string,
@@ -969,7 +969,7 @@ export class ContractsService {
    * @return Loan ID
    */
   async requestLoan(
-    amount: number,
+    amount: BN | string,
     model: string,
     oracle: string,
     borrower: string,
@@ -977,19 +977,23 @@ export class ContractsService {
     salt: string,
     expiration: number,
     loanData: any
-  ) {
+  ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
-    return await promisify(this.loadAltContract(web3, this._loanManager).requestLoan, [
-      amount,
-      model,
-      oracle,
-      borrower,
-      callback,
-      salt,
-      expiration,
-      loanData,
-      { from: borrower }
-    ]);
+    return new Promise((resolve, reject) => {
+      this.loadAltContract(web3, this._loanManager).methods.requestLoan(
+        amount,
+        model,
+        oracle,
+        borrower,
+        callback,
+        salt,
+        expiration,
+        loanData
+      )
+      .send({ from: borrower })
+      .on('transactionHash', (hash: string) => resolve(hash))
+      .on('error', (err) => reject(err));
+    });
   }
 
   /**
@@ -1028,39 +1032,42 @@ export class ContractsService {
     loanId: string,
     oracle: string,
     collateralToken: string,
-    entryAmount: number,
-    liquidationRatio: number,
-    balanceRatio: number,
-    burnFee: number,
-    rewardFee: number,
+    entryAmount: BN | string,
+    liquidationRatio: BN | string,
+    balanceRatio: BN | string,
+    burnFee: BN | string,
+    rewardFee: BN | string,
     account: string
-  ) {
+  ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
 
-    // FIXME: see collateral with ETH implementation
-    if (collateralToken === environment.contracts.converter.ethAddress) {
-      return await promisify(this.loadAltContract(web3, this._collateralWethManager).create, [
+    return new Promise((resolve, reject) => {
+      // FIXME: see collateral with ETH implementation
+      if (collateralToken === environment.contracts.converter.ethAddress) {
+        this.loadAltContract(web3, this._collateralWethManager).methods.create(
+          loanId,
+          oracle,
+          liquidationRatio,
+          balanceRatio,
+          burnFee,
+          rewardFee
+        )
+        .send({ from: account, value: entryAmount })
+        .on('transactionHash', (hash: string) => resolve(hash))
+        .on('error', (err) => reject(err));
+      }
+
+      this.loadAltContract(web3, this._collateral).methods.create(
         loanId,
         oracle,
+        entryAmount,
         liquidationRatio,
-        balanceRatio,
-        burnFee,
-        rewardFee,
-        {
-          from: account,
-          value: entryAmount
-        }
-      ]);
-    }
-
-    return await promisify(this.loadAltContract(web3, this._collateral).create, [
-      loanId,
-      oracle,
-      entryAmount,
-      liquidationRatio,
-      balanceRatio,
-      { from: account }
-    ]);
+        balanceRatio
+      )
+      .send({ from: account })
+      .on('transactionHash', (hash: string) => resolve(hash))
+      .on('error', (err) => reject(err));
+    });
   }
 
   /**
@@ -1076,24 +1083,27 @@ export class ContractsService {
     tokenAddress: string,
     amount: number,
     account: string
-  ) {
+  ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
 
-    if (tokenAddress === environment.contracts.converter.ethAddress) {
-      return await promisify(this.loadAltContract(web3, this._collateralWethManager).deposit, [
-        collateralId,
-        {
-          from: account,
-          value: amount
-        }
-      ]);
-    }
+    return new Promise((resolve, reject) => {
+      if (tokenAddress === environment.contracts.converter.ethAddress) {
+        this.loadAltContract(web3, this._collateralWethManager).methods.deposit(
+          collateralId
+        )
+        .send({ from: account, value: amount })
+        .on('transactionHash', (hash: string) => resolve(hash))
+        .on('error', (err) => reject(err));
+      }
 
-    return await promisify(this.loadAltContract(web3, this._collateral).deposit, [
-      collateralId,
-      amount,
-      { from: account }
-    ]);
+      this.loadAltContract(web3, this._collateral).methods.deposit(
+        collateralId,
+        amount
+      )
+      .send({ from: account })
+      .on('transactionHash', (hash: string) => resolve(hash))
+      .on('error', (err) => reject(err));
+    });
   }
 
   /**
@@ -1112,7 +1122,7 @@ export class ContractsService {
     amount: number,
     oracleData: string,
     account: string
-  ) {
+  ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
     let contract: any = this._collateral;
 
@@ -1120,13 +1130,17 @@ export class ContractsService {
       contract = this._collateralWethManager;
     }
 
-    return await promisify(this.loadAltContract(web3, contract).withdraw, [
-      collateralId,
-      to,
-      amount,
-      oracleData,
-      { from: account }
-    ]);
+    return new Promise((resolve, reject) => {
+      this.loadAltContract(web3, contract).methods.withdraw(
+        collateralId,
+        to,
+        amount,
+        oracleData
+      )
+      .send({ from: account })
+      .on('transactionHash', (hash: string) => resolve(hash))
+      .on('error', (err) => reject(err));
+    });
   }
 
   /**
@@ -1134,7 +1148,7 @@ export class ContractsService {
    * @param loanId Loan ID
    * @return Debt amount
    */
-  async getClosingObligation(loanId: string) {
+  async getClosingObligation(loanId: string): Promise<string> {
     return new Promise((resolve, reject) => {
       this._loanManager.getClosingObligation(
         loanId,

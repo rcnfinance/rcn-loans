@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
+import * as BN from 'bn.js';
 import { ContractsService } from './contracts.service';
-import { Web3Service } from './web3.service';
 import { Tx, Type } from '../services/tx.service';
+import { Utils } from './../utils/utils';
 
 @Injectable()
 export class CollateralService {
 
   constructor(
-    private web3Service: Web3Service,
     private contractsService: ContractsService
   ) { }
 
@@ -23,12 +23,11 @@ export class CollateralService {
     collateralAmount,
     collateralRate
   ) {
-    const web3: any = this.web3Service.web3;
-    const collateralInRcn = new web3.BigNumber(collateralRate).mul(collateralAmount);
-    const loanInRcn = new web3.BigNumber(loanAmount);
+    const collateralInRcn = Utils.bn(collateralRate).mul(collateralAmount);
+    const loanInRcn = Utils.bn(loanAmount);
 
     try {
-      const collateralRatio = collateralInRcn.mul(100).div(loanInRcn);
+      const collateralRatio = collateralInRcn.mul(Utils.bn(100)).div(loanInRcn);
       return collateralRatio;
     } catch (e) {
       return null;
@@ -49,21 +48,20 @@ export class CollateralService {
     liquidationRatio,
     loanAmountInRcn
   ) {
-    const web3: any = this.web3Service.web3;
-    collateralRate = new web3.BigNumber(collateralRate);
-    liquidationRatio = new web3.BigNumber(liquidationRatio);
+    collateralRate = Utils.bn(collateralRate);
+    liquidationRatio = Utils.bn(liquidationRatio);
 
-    let amountInRcn: number;
+    let amountInRcn: BN | string;
 
     try {
       const debt = await this.contractsService.getClosingObligation(loanId);
-      amountInRcn = new web3.BigNumber(debt || 0);
+      amountInRcn = Utils.bn(debt || 0);
     } catch (e) {
-      amountInRcn = new web3.BigNumber(loanAmountInRcn);
+      amountInRcn = Utils.bn(loanAmountInRcn);
     }
 
     try {
-      let liquidationPrice = new web3.BigNumber(liquidationRatio).mul(amountInRcn).div(100);
+      let liquidationPrice = Utils.bn(liquidationRatio).mul(amountInRcn).div(Utils.bn(100));
       liquidationPrice = liquidationPrice.div(collateralRate);
 
       return liquidationPrice;

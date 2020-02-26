@@ -1,5 +1,7 @@
+import * as BN from 'bn.js';
+
 export interface LoanRequest {
-  amount: number;
+  amount: string | BN;
   model: string;
   oracle: string;
   account: string;

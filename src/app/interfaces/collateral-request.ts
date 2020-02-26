@@ -1,11 +1,13 @@
+import * as BN from 'bn.js';
+
 export interface CollateralRequest {
   loanId: string;
   oracle: string;
   collateralToken: string;
-  collateralAmount: number;
-  liquidationRatio: number;
-  balanceRatio: number;
-  burnFee: number;
-  rewardFee: number;
+  collateralAmount: string | BN;
+  liquidationRatio: string | BN;
+  balanceRatio: string | BN;
+  burnFee: string | BN;
+  rewardFee: string | BN;
   account: string;
 }

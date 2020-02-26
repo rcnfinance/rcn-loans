@@ -9,6 +9,7 @@ import {
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as BN from 'bn.js';
 import { Utils } from '../../../utils/utils';
 import { Currency } from '../../../utils/currencies';
 import { environment } from '../../../../environments/environment';
@@ -41,15 +42,15 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
   loanCurrency: any;
   loanRate: string;
   loanInRcn: string;
-  liquidationRatio: number;
-  liquidationPrice: string;
-  collateralRatio: number;
-  balanceRatio: number;
-  shortAccount: string;
+  liquidationRatio: string | BN;
+  liquidationPrice: string | BN;
+  collateralRatio: string | BN;
+  balanceRatio: string | BN;
+  shortAccount: string | BN;
   maxWithdraw: string;
 
-  estimatedCollateralAmount: string;
-  estimatedCollateralRatio: number;
+  estimatedCollateralAmount: string | BN;
+  estimatedCollateralRatio: string | BN;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -120,11 +121,10 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
    * Get collateral parsed data
    */
   async getCollateralDetails() {
-    const web3: any = this.web3Service.web3;
     const collateral: Collateral = this.collateral;
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
     const currencyDecimals = new Currency(collateralCurrency.symbol);
-    const collateralAmount = new web3.BigNumber(currencyDecimals.fromUnit(collateral.amount), 10);
+    const collateralAmount = Utils.bn(currencyDecimals.fromUnit(collateral.amount), 10);
     const rcnToken: string = environment.contracts.rcnToken;
     this.collateralAmount = Utils.formatAmount(collateralAmount);
     this.collateralAsset = collateralCurrency;
@@ -134,8 +134,8 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
       rcnToken,
       Utils.bn(10).pow(Utils.bn(18))
     );
-    this.balanceRatio = collateral.balanceRatio / 100;
-    this.liquidationRatio = collateral.liquidationRatio / 100;
+    this.balanceRatio = Utils.bn(collateral.balanceRatio).div(Utils.bn(100));
+    this.liquidationRatio = Utils.bn(collateral.liquidationRatio).div(Utils.bn(100));
     this.collateralRatio = this.calculateCollateralRatio();
 
     const liquidationPrice = await this.calculateLiquidationPrice();
@@ -204,8 +204,7 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
    * Set max withdraw amount
    */
   setMaxWithdraw() {
-    const web3: any = this.web3Service.web3;
-    const maxWithdraw: number = new web3.BigNumber(this.maxWithdraw);
+    const maxWithdraw: BN | string = Utils.bn(this.maxWithdraw);
 
     if (this.loading) {
       return;
@@ -237,13 +236,12 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
    * @return Collateral amount
    */
   private calculateAmount(form: FormGroup) {
-    const web3: any = this.web3Service.web3;
     const amountToWithdraw: number = form.value.amount || 0;
-    const collateralAmount = new web3.BigNumber(this.collateralAmount);
+    const collateralAmount = Utils.bn(this.collateralAmount);
 
     try {
-      const estimated: number = collateralAmount.sub(amountToWithdraw);
-      if (estimated < 0) {
+      const estimated: string | BN = collateralAmount.sub(Utils.bn(amountToWithdraw));
+      if (estimated < Utils.bn(0)) {
         return 0;
       }
       return estimated;
@@ -270,14 +268,13 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
    * @return Max amount to withdraw
    */
   private calculateMaxWithdraw() {
-    const web3: any = this.web3Service.web3;
-    const collateralAmount = this.collateralAmount;
+    const collateralAmount = Utils.bn(this.collateralAmount);
     const collateralRatio = this.calculateCollateralRatio();
     const balanceRatio = this.balanceRatio;
-    const balanceAmount = new web3.BigNumber(balanceRatio).mul(collateralAmount).div(collateralRatio);
-    const diffAmount = new web3.BigNumber(collateralAmount).sub(balanceAmount);
+    const balanceAmount = Utils.bn(balanceRatio).mul(collateralAmount).div(collateralRatio);
+    const diffAmount = Utils.bn(collateralAmount).sub(balanceAmount);
 
-    return Math.floor(diffAmount.mul(1000)) / 1000;
+    return diffAmount;
   }
 
   /**

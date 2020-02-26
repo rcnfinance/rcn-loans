@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as BN from 'bn.js';
 import { Loan } from './../../models/loan.model';
 import { Collateral } from './../../models/collateral.model';
 import { CollateralRequest } from './../../interfaces/collateral-request';
@@ -156,7 +157,7 @@ export class CreateLoanComponent implements OnInit {
         'address',
         form.collateralToken
       );
-      this.showInsufficientFundsDialog(required, Number(balance), currency.symbol);
+      this.showInsufficientFundsDialog(Utils.bn(required), Number(balance), currency.symbol);
       return;
     }
     // validate approve
@@ -351,7 +352,7 @@ export class CreateLoanComponent implements OnInit {
    * @param balance Actual user balance in selected currency
    * @param currency Currency symbol
    */
-  private showInsufficientFundsDialog(required: number, balance: number, currency: string) {
+  private showInsufficientFundsDialog(required: BN | string, balance: number, currency: string) {
     this.dialog.open(DialogInsufficientfundsComponent, {
       data: {
         required,

@@ -208,11 +208,11 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
     switch (event.type) {
       case Type.addCollateral:
-        amount = new web3.BigNumber(this.collateralAmount).add(amount);
+        amount = Utils.bn(this.collateralAmount).add(amount);
         break;
 
       case Type.withdrawCollateral:
-        amount = new web3.BigNumber(this.collateralAmount).sub(amount);
+        amount = Utils.bn(this.collateralAmount).sub(amount);
         break;
 
       default:
@@ -303,8 +303,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       collateral.reward_fee
     );
 
-    const liquidationRatio = new web3.BigNumber(collateral.liquidation_ratio).div(100);
-    const balanceRatio = new web3.BigNumber(collateral.balance_ratio).div(100);
+    const liquidationRatio = Utils.bn(collateral.liquidation_ratio).div(Utils.bn(100));
+    const balanceRatio = Utils.bn(collateral.balance_ratio).div(Utils.bn(100));
 
     this.liquidationRatio = `${ Utils.formatAmount(liquidationRatio) } %`;
     this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+import * as BN from 'bn.js';
 import { DialogCollateralComponent } from '../../../dialogs/dialog-collateral/dialog-collateral.component';
 import { environment } from '../../../../environments/environment';
 // App Models
@@ -71,10 +72,9 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    * Get loan parsed data
    */
   async getLoanDetails() {
-    const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
     const loanCurrency = this.currenciesService.getCurrencyByKey('symbol', loan.currency.symbol);
-    const loanAmount = new web3.BigNumber(loan.currency.fromUnit(this.loan.amount), 10);
+    const loanAmount = Utils.bn(loan.currency.fromUnit(this.loan.amount), 10);
     const rcnToken: string = environment.contracts.rcnToken;
 
     this.loanCurrency = loanCurrency;
@@ -100,8 +100,12 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
       rcnToken,
       Utils.bn(10).pow(Utils.bn(18))
     );
-    this.liquidationRatio = Utils.formatAmount(collateral.liquidationRatio / 100, 0);
-    this.balanceRatio = Utils.formatAmount(collateral.balanceRatio / 100, 0);
+    this.liquidationRatio = Utils.formatAmount(
+      Utils.bn(collateral.liquidationRatio).div(Utils.bn(100)), 0
+    );
+    this.balanceRatio = Utils.formatAmount(
+      Utils.bn(collateral.balanceRatio).div(Utils.bn(100)), 0
+    );
   }
 
   /**
@@ -135,7 +139,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    * Calculate the new collateral ratio
    * @return Collateral ratio
    */
-  calculateCollateralRatio(): Number {
+  calculateCollateralRatio(): BN {
     return this.collateralService.calculateCollateralRatio(
       this.loanInRcn,
       this.collateralRate,
@@ -147,7 +151,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    * Calculate liquidation price
    * @return Liquidation price in collateral amount
    */
-  async calculateLiquidationPrice(): Promise<Number> {
+  async calculateLiquidationPrice(): Promise<BN> {
     return this.collateralService.calculateLiquidationPrice(
       this.loan.id,
       this.collateralRate,
@@ -165,9 +169,9 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   async getRate(
     loanCurrency: string,
     collateralAsset: string
-  ): Promise<Number> {
+  ): Promise<BN> {
     const web3: any = this.web3Service.web3;
-    const amount = web3.utils.toWei(new web3.BigNumber(1));
+    const amount = web3.utils.toWei(Utils.bn(1));
 
     if (loanCurrency === collateralAsset) {
       return amount;
@@ -179,8 +183,8 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
       collateralAsset,
       rcnToken
     );
-    const tokenCost = new web3.BigNumber(rate[0]);
-    const etherCost = new web3.BigNumber(rate[1]);
+    const tokenCost = Utils.bn(rate[0]);
+    const etherCost = Utils.bn(rate[1]);
 
     return tokenCost.isZero() ? etherCost : tokenCost;
   }

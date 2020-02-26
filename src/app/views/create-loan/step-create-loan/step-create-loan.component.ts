@@ -361,7 +361,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
 
     const account: string = this.account;
     const expiration = this.returnDaysAs(form.value.expirationDate, 'date');
-    const amount = new web3.BigNumber(10 ** 18).mul(form.value.amount);
+    const amount = Utils.bn(10 ** 18).mul(form.value.amount);
     const salt = web3.utils.toHex(new Date().getTime());
     const oracle: string = this.selectedOracle || Utils.address0x;
     const encodedData = await this.getInstallmentsData(form);

@@ -99,9 +99,9 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
   private loadCollateral() {
     const web3: any = this.web3Service.web3;
     const collateral: Collateral = this.collateral;
-    const liquidationRatio = new web3.BigNumber(collateral.liquidationRatio).div(100);
+    const liquidationRatio = Utils.bn(collateral.liquidationRatio).div(Utils.bn(100));
 
-    const balanceRatio = new web3.BigNumber(collateral.balanceRatio).div(100);
+    const balanceRatio = Utils.bn(collateral.balanceRatio).div(Utils.bn(100));
     this.liquidationRatio = `${ Utils.formatAmount(liquidationRatio) } %`;
     this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
 

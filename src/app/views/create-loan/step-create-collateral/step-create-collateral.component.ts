@@ -5,6 +5,7 @@ import {
   MatSnackBar
 } from '@angular/material';
 import { Subscription, Observable } from 'rxjs';
+import * as BN from 'bn.js';
 import { debounceTime } from 'rxjs/operators';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Utils } from '../../../utils/utils';
@@ -205,9 +206,9 @@ export class StepCreateCollateralComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
     const collateralForm: FormGroup = this.form;
-    const collateralAmount = new web3.BigNumber(collateralForm.value.collateralAmount);
-    const collateralAmountMinLimit = 0;
-    const balanceRatioMaxLimit = 5000;
+    const collateralAmount = Utils.bn(collateralForm.value.collateralAmount);
+    const collateralAmountMinLimit = Utils.bn(0);
+    const balanceRatioMaxLimit = Utils.bn(5000);
 
     if (collateralAmount <= collateralAmountMinLimit) {
       this.showMessage('Choose a bigger collateral amount', 'snackbar');
@@ -218,7 +219,7 @@ export class StepCreateCollateralComponent implements OnInit {
       const loanAmount = loan.currency.fromUnit(loan.amount);
       const loanCurrency = loan.currency.symbol;
       const collateralCurrency = this.collateralSelectedCurrency.symbol;
-      const hundredPercent = 100 * 100;
+      const hundredPercent = Utils.bn(100).mul(Utils.bn(100));
 
       let loanAmountInCollateral = await this.calculateCollateralAmount(
         loanAmount,
@@ -228,7 +229,7 @@ export class StepCreateCollateralComponent implements OnInit {
       );
       loanAmountInCollateral = web3.utils.fromWei(loanAmountInCollateral);
 
-      const collateralRatio = (collateralAmount.mul(100)).div(loanAmountInCollateral);
+      const collateralRatio = (collateralAmount.mul(Utils.bn(100))).div(loanAmountInCollateral);
 
       if (collateralRatio >= balanceRatioMaxLimit) {
         this.showMessage('Choose a smaller collateral amount', 'snackbar');
@@ -262,7 +263,7 @@ export class StepCreateCollateralComponent implements OnInit {
     const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
     const collateralForm: FormGroup = this.form;
-    const collateralRatio: any = new web3.BigNumber(collateralForm.value.collateralAdjustment);
+    const collateralRatio: any = Utils.bn(collateralForm.value.collateralAdjustment);
     const collateralRatioMinLimit = 0;
     const collateralRatioMaxLimit = 5000;
 
@@ -319,15 +320,15 @@ export class StepCreateCollateralComponent implements OnInit {
   async calculateCollateralAmount(
     loanAmount: number,
     loanCurrency: string,
-    collateralRatio: number,
+    collateralRatio: string | BN,
     collateralAsset: string
   ) {
     const web3: any = this.web3Service.web3;
-    collateralRatio = new web3.BigNumber(collateralRatio).div(100);
+    collateralRatio = Utils.bn(collateralRatio).div(Utils.bn(100));
 
     // calculate amount in rcn
-    let collateralAmount = new web3.BigNumber(collateralRatio).mul(loanAmount, 10);
-    collateralAmount = collateralAmount.div(100);
+    let collateralAmount = Utils.bn(collateralRatio).mul(Utils.bn(loanAmount));
+    collateralAmount = collateralAmount.div(Utils.bn(100));
 
     // convert amount to collateral asset
     if (loanCurrency === collateralAsset) {
@@ -340,7 +341,7 @@ export class StepCreateCollateralComponent implements OnInit {
         toToken,
         web3.utils.toWei(collateralAmount)
       );
-      collateralAmount = cost;
+      collateralAmount = Utils.bn(cost);
     }
 
     return collateralAmount;
@@ -360,7 +361,6 @@ export class StepCreateCollateralComponent implements OnInit {
    * @return New request collateral model
    */
   private updateRequestCollateralModel() {
-    const web3: any = this.web3Service.web3;
     const form: FormGroup = this.form;
     const loan: Loan = this.loan;
     const loanId: string = loan.id;
@@ -369,11 +369,11 @@ export class StepCreateCollateralComponent implements OnInit {
       this.collateralSelectedCurrency ? this.collateralSelectedCurrency.symbol : 'RCN'
     );
     const collateralToken: string = this.collateralSelectedCurrency.address;
-    const collateralAmount: number = form.value.collateralAmount * (10 ** currency.decimals);
-    const liquidationRatio: number = this.ratio(form.value.liquidationRatio);
-    const balanceRatio: number = this.ratio(form.value.balanceRatio);
-    const burnFee: number = new web3.BigNumber(500);
-    const rewardFee: number = new web3.BigNumber(500);
+    const collateralAmount: BN = Utils.bn(form.value.collateralAmount).mul(Utils.bn(10).pow(Utils.bn(currency.decimals)));
+    const liquidationRatio: BN = this.ratio(form.value.liquidationRatio);
+    const balanceRatio: BN = this.ratio(form.value.balanceRatio);
+    const burnFee: BN = Utils.bn(500);
+    const rewardFee: BN = Utils.bn(500);
     const account: string = this.account;
 
     try {
@@ -433,9 +433,7 @@ export class StepCreateCollateralComponent implements OnInit {
    * @return Ratio value
    */
   private ratio (num) {
-    const web3: any = this.web3Service.web3;
-    const bn = (n) => new web3.BigNumber(n);
-
+    const bn = (n) => Utils.bn(n);
     return bn(num).mul(bn(2).pow(bn(32))).div(bn(100));
   }
 }
