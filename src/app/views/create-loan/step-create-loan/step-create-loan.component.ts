@@ -435,24 +435,25 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
    * Calculate the installment amount
    * @return Installment amount
    */
-  private expectedInstallmentAmount() {
-    const loanAmount: number = this.amount.value;
+  private expectedInstallmentAmount(): number {
+    const decimals = Utils.bn(this.loan.currency.decimals);
+    const loanAmount: BN = Utils.bn(this.amount.value).mul(Utils.bn(10).pow(decimals));
+    const interest: BN = Utils.bn(this.annualInterest.value);
+    const daysInYear = 360;
     let installmentAmount: number;
 
     if (this.installments === 1) {
-      const daysInYear = 360;
-      const interest: number = this.annualInterest.value;
-      const annualInterest: number = (interest * loanAmount) / 100;
-      const durationInDays: number = this.duration.value;
-      const returnInterest: number = (durationInDays * annualInterest) / daysInYear;
-      installmentAmount = loanAmount + returnInterest;
+      const annualInterest: BN = interest.mul(loanAmount).div(Utils.bn(100));
+      const durationInDays: BN = Utils.bn(this.duration.value);
+      const returnInterest: BN = durationInDays.mul(annualInterest).div(Utils.bn(daysInYear));
+      installmentAmount = Number(loanAmount) + Number(returnInterest);
     } else {
-      const rate: number = this.annualInterest.value / 100;
-      const installmentDuration: number = this.installmentDaysInterval / 360;
+      const rate: number = Number(interest) / 100;
+      const installmentDuration: number = this.installmentDaysInterval / daysInYear;
       installmentAmount = - Utils.pmt(
         installmentDuration * rate,
         this.installments,
-        loanAmount,
+        Number(loanAmount),
         0
       );
     }
@@ -461,7 +462,7 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
       return 0;
     }
 
-    return Utils.formatAmount(installmentAmount);
+    return installmentAmount;
   }
 
   /**
@@ -471,10 +472,10 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
    */
   private async getInstallmentsData(form: FormGroup) {
     const installments: number = this.installments;
-    const cuotaWithInterest: BN = Utils.bn(this.expectedInstallmentAmount()).mul(Utils.bn(10).pow(Utils.bn(18)));
     const annualInterest: BN = Utils.bn(form.value.annualInterest);
     const interestRate: BN = Utils.bn(Utils.toInterestRate(Number(annualInterest)));
     const timeUnit: number = 24 * 60 * 60;
+    let cuotaWithInterest: number | BN = this.expectedInstallmentAmount();
     let installmentDuration: number;
 
     if (installments === 1) {
@@ -482,6 +483,12 @@ export class StepCreateLoanComponent implements OnInit, OnDestroy {
     } else {
       installmentDuration = this.installmentDaysInterval * timeUnit;
     }
+
+    // TODO: implement BN in all methods for remove the secure amount/decimals values
+    const decimals = this.loan.currency.decimals;
+    const secureDecimals = decimals / 2;
+    const secureAmount = cuotaWithInterest / (10 ** secureDecimals);
+    cuotaWithInterest = Utils.bn(secureAmount).mul(Utils.bn(10).pow(Utils.bn(secureDecimals)));
 
     const encodedData: any = await this.contractsService.encodeInstallmentsData(
       cuotaWithInterest.toString(),

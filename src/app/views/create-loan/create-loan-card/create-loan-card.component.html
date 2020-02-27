@@ -57,14 +57,13 @@
           class="loan-card__property-description"
           *ngIf="!installments || installments < 2; else multipleInstallments"
         >
-          1 pay
+          1 Payment
         </p>
         <ng-template #multipleInstallments>
           <mat-expansion-panel class="mat-elevation-z">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                {{ installments }}
-                pay<ng-container *ngIf="installments > 1">s</ng-container>
+                {{ installments }} Payments
               </mat-panel-title>
             </mat-expansion-panel-header>
             <div class="installment" *ngFor="let pay of paysDetail">
