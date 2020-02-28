@@ -181,7 +181,7 @@ export class ApiService {
     let responses = await this.getAllUrls(urls);
 
     if (network === Network.Basalt) {
-      const filterStatus = [Status.Request, Status.Destroyed];
+      const filterStatus = [Status.Request, Status.Destroyed, Status.Expired];
       responses = this.excludeLoansWithStatus(filterStatus, responses);
     }
 
