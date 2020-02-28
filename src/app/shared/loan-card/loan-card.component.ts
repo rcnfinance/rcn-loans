@@ -64,7 +64,7 @@ export class LoanCardComponent implements OnInit, OnDestroy {
   async loadAccount() {
     const web3 = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
-    this.account = web3.toChecksumAddress(account);
+    this.account = web3.utils.toChecksumAddress(account);
 
     this.checkCanLend();
   }
@@ -99,22 +99,22 @@ export class LoanCardComponent implements OnInit, OnDestroy {
       this.leftValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.amount));
       this.durationLabel = 'Duration';
       this.durationValue = Utils.formatDelta(this.stateLoan.descriptor.duration);
-      this.rightLabel = 'Return';
+      this.rightLabel = 'Receive';
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.descriptor.totalObligation));
     } else if (this.stateLoan instanceof Loan) {
       const currency = this.stateLoan.currency;
       this.leftLabel = 'Paid';
       this.leftValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.debt.model.paid));
-      this.durationLabel = 'Remaining';
+      this.durationLabel = 'Next payment in';
       this.durationValue = Utils.formatDelta(this.stateLoan.debt.model.dueTime - (new Date().getTime() / 1000));
-      this.rightLabel = 'Pending';
+      this.rightLabel = 'Due';
       const basaltPaid = this.stateLoan.network === Network.Basalt ? currency.fromUnit(this.stateLoan.debt.model.paid) : 0;
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.debt.model.estimatedObligation) - basaltPaid);
       this.canLend = false;
       if (this.stateLoan.status === Status.Indebt) {
-        this.durationLabel = 'In debt for';
+        this.durationLabel = 'Overdue for';
       } else {
-        this.durationLabel = 'Remaining';
+        this.durationLabel = 'Next payment in';
       }
     }
     this.installments = this.getInstallments();
@@ -132,13 +132,13 @@ export class LoanCardComponent implements OnInit, OnDestroy {
       switch (installments) {
         case 0:
         case 1:
-          return `1 pay`;
+          return `1 Payment`;
 
         default:
-          return `${ installments } pays`;
+          return `${ installments } Payments`;
       }
     } catch (e) {
-      return '1 pay';
+      return '1 Payment';
     }
   }
 

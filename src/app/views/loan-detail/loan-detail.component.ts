@@ -6,17 +6,18 @@ import { MatDialog } from '@angular/material';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
 // App Models
-import { Loan, Status, Network } from './../../models/loan.model';
+import { Loan, Status, Network, LoanType } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Services
 import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
-import { CosignerService } from './../../services/cosigner.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
+import { EventsService } from './../../services/events.service';
+import { LoanTypeService } from './../../services/loan-type.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -42,6 +43,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   isOngoing: boolean;
   isInDebt: boolean;
   isPaid: boolean;
+  loanType: LoanType;
 
   canTransfer = false;
   canCancel: boolean;
@@ -84,10 +86,11 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private titleService: TitleService,
     private contractsService: ContractsService,
-    private cosignerService: CosignerService,
     private identityService: IdentityService,
     private web3Service: Web3Service,
     private brandingService: BrandingService,
+    private eventsService: EventsService,
+    private loanTypeService: LoanTypeService,
     public dialog: MatDialog
   ) { }
 
@@ -103,7 +106,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
         // static loan information
         this.loadStaticInformation();
-        this.checkLoanGenerator();
         this.loadIdentity();
 
         // dynamic loan information
@@ -115,9 +117,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.viewDetail = this.defaultDetail();
         this.handleLoginEvents();
         this.spinner.hide(this.pageId);
-      } catch (e) {
-        console.error(e);
-        console.info('Loan', this.loan, 'not found');
+      } catch (err) {
+        this.eventsService.trackError(err);
         this.router.navigate(['/loan', params.id, '404'], { skipLocationChange: true });
       }
     });
@@ -144,13 +145,16 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     this.viewDetail = view;
   }
 
-  isDetail(view: string): Boolean {
-    return view === this.viewDetail;
+  /**
+   * Open an address in etherscan
+   * @param address Borrower address
+   */
+  openAddress(address: string) {
+    window.open(environment.network.explorer.address.replace('${address}', address));
   }
 
-  checkLoanGenerator() {
-    this.generatedByUser = this.cosignerService.getCosigner(this.loan) === undefined &&
-      environment.dir[this.loan.borrower.toLowerCase()] === undefined;
+  isDetail(view: string): Boolean {
+    return view === this.viewDetail;
   }
 
   /**
@@ -170,8 +174,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.loadStatus();
         this.loadDetail();
         this.loadAccount();
-      } catch (e) {
-        console.error(e);
+      } catch (err) {
+        this.eventsService.trackError(err);
       } finally {
         this.spinner.hide(this.pageId);
       }
@@ -200,6 +204,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     this.oracle = this.loan.oracle ? this.loan.oracle.address : undefined;
     this.currency = this.loan.oracle ? this.loan.oracle.currency : 'RCN';
     this.availableOracle = this.loan.oracle.currency !== 'RCN';
+    this.loanType = this.loanTypeService.getLoanType(this.loan);
   }
 
   /**
@@ -244,8 +249,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
     switch (this.loan.status) {
       case Status.Expired:
-        throw Error('Loan expired');
-
       case Status.Destroyed:
       case Status.Request:
         // Load config data
@@ -253,14 +256,14 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         const interestRatePunitive = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
         const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
         this.loanConfigData = [
-          ['Currency', currency],
-          ['Interest / Punitory', '~ ' + interestRate + ' % / ~ ' + interestRatePunitive + ' %'],
+          ['Information', ''],
+          ['Annual Rate / Penalty Rate', ' ' + interestRate + ' % / ' + interestRatePunitive + ' %'],
           ['Duration', duration]
         ];
 
         // Template data
-        this.interest = `~ ${ interestRate }%`;
-        this.punitory = `~ ${ interestRatePunitive }%`;
+        this.interest = `${ interestRate }%`;
+        this.punitory = `${ interestRatePunitive }%`;
         this.duration = duration;
         this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
         break;
@@ -284,14 +287,14 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
         // Show ongoing loan detail
         this.loanStatusData = [
-          ['Description', 'Date'],
-          ['Lend date', lendDate],
-          ['Due date', dueDate],
-          ['Deadline', deadline]
+          ['Information', ''],
+          ['Lending Date', lendDate],
+          ['Next Due Date', dueDate],
+          ['Final Due Date', deadline]
         ];
 
         // Template data
-        this.interest = '~ ' + currentInterestRate + ' %';
+        this.interest = currentInterestRate + ' %';
         this.lendDate = lendDate;
         this.dueDate = dueDate;
 
@@ -367,9 +370,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
 
     this.diasporeData = [
-      ['Installments', 'Duration', 'Cuota'],
+      ['Installments', 'Frequency', 'Amount'],
       [
-        installments,
+        `${ installments } ${ installments > 1 ? 'Payments' : 'Payment' }`,
         installmentDuration,
         `${ installmentAmount } ${ installmentCurrency }`
       ]
@@ -427,6 +430,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   private formatTimestamp(timestamp: number): string {
-    return new DatePipe('en-US').transform(timestamp * 1000, 'dd.MM.yyyy');
+    return new DatePipe('en-US').transform(timestamp * 1000, 'dd/MM/yyyy');
   }
 }

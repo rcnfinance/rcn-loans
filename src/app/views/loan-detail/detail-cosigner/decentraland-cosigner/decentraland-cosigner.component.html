@@ -12,17 +12,13 @@
     <div class="txt">{{ parcelId }}</div>
   </div>
   <div class="text-container">
-    <div class="title">{{ 'Parcel cost' }}</div>
-    <div class="txt">MANA {{ displayPrice }} </div>
-  </div>
-  <div class="text-container">
-    <div class="title">{{ 'Financing' }}</div>
-    <div class="txt">~ {{ financiation }} % </div>
+    <div class="title">{{ 'Cost' }}</div>
+    <div class="txt">{{ displayPrice }} MANA</div>
   </div>
 
   <div class="card-property">
     <div class="text-container">
-      <div class="title">Context</div>
+      <div class="title">Highlights</div>
     </div>
     <div class="flex-container">
       <div class="list-avatar marginright15" *ngFor='let highlight of highlights; let i of index'>
@@ -39,14 +35,11 @@
 
   <div class="legals">
     <p>
-      This loan is backed by a Decentraland parcel. The tokens involved in the lending will be used to purchase the
-      corresponding parcel linked to this escrow smart contact:
-      <a href="https://etherscan.io/address/{{ mortgageManager }}" target='_blank'>{{ mortgageManager }}.</a>
+      This loan is backed by a Decentraland parcel represented by a Non Fungible Token (NFT).
+      If a lender funds it, the borrowed MANA will be used to purchase it and lock it into the escrow smart contract
+      <a href="https://etherscan.io/address/{{ mortgageManager }}" target='_blank'>{{ mortgageManager }}</a>
+      until the debt is repaid. In case of default, the ownership of the parcel will be automatically transferred to the lender.
     </p>
-    <div class="text-container">
-      <div class="title">{{ 'Notice:' }}</div>
-    </div>
-    <p>The ownership of this parcel will be transferred to the lender in case of a default.</p>
     <app-claim-button [loan]='loan' [provider]='cosignerProvider'></app-claim-button>
   </div>
 </div>

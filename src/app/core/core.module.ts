@@ -10,9 +10,11 @@ import { BalanceComponent } from './balance/balance.component';
 import { IconGroupHeaderComponent } from './header/icon-group-header/icon-group-header.component';
 import { NotificationsComponent } from './header/notifications/notifications.component';
 import { NotificationItemComponent } from './header/notifications/notification-item/notification-item.component';
+import { WalletAvatarComponent } from './header/wallet-avatar/wallet-avatar.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
 // App Directives
 import { ClickOutsideDirective } from '../directives/click-outside.directive';
+import { OpenEtherscanDirective } from '../directives/open-etherscan.directive';
 
 @NgModule({
   imports: [
@@ -26,8 +28,10 @@ import { ClickOutsideDirective } from '../directives/click-outside.directive';
     BalanceComponent,
     IconGroupHeaderComponent,
     ClickOutsideDirective,
+    OpenEtherscanDirective,
     NotificationsComponent,
     NotificationItemComponent,
+    WalletAvatarComponent,
     SocialContainerComponent
   ],
   exports: [

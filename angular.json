@@ -25,7 +25,8 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
-              "src/_redirects"
+              "src/_redirects",
+              "src/documentation"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap-grid.min.css",
@@ -107,7 +108,8 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
-              "src/_redirects"
+              "src/_redirects",
+              "src/documentation"
             ]
           }
         },

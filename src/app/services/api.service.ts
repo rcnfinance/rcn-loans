@@ -7,7 +7,9 @@ import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
 import { Loan, Network, Status } from '../models/loan.model';
 import { LoanUtils } from '../utils/loan-utils';
 import { Utils } from '../utils/utils';
+// App services
 import { Web3Service } from './web3.service';
+import { EventsService } from '../services/events.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +20,14 @@ export class ApiService {
   diasporeUrl = environment.rcn_node_api.diasporeUrl;
   basaltUrl = environment.rcn_node_api.basaltUrl;
   multicallConfig = {
-    rpcUrl: environment.network.provider,
+    rpcUrl: environment.network.provider.url,
     multicallAddress: environment.contracts.multicall
   };
 
   constructor(
     private http: HttpClient,
-    private web3Service: Web3Service
+    private web3Service: Web3Service,
+    private eventsService: EventsService
   ) { }
 
   /**
@@ -52,19 +55,21 @@ export class ApiService {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
 
+      const filterStatus = [Status.Destroyed, Status.Expired];
       const loansRequests = await this.getAllCompleteLoans(
         data.content as LoanApiBasalt[] | LoanApiDiaspore[],
         network
       );
-      const filteredLoans = loansRequests.filter(loan =>
-        loan.model !== this.installmentModelAddress &&
-        loan.status !== Status.Destroyed
+      const filteredLoans = this.excludeLoansWithStatus(
+        filterStatus,
+        null,
+        loansRequests
       );
 
       allRequestLoans = allRequestLoans.concat(filteredLoans);
       page++;
     } catch (err) {
-      console.info('Error', err);
+      this.eventsService.trackError(err);
     }
 
     const urls = [];
@@ -77,8 +82,14 @@ export class ApiService {
     const responses = await this.getAllUrls(urls);
 
     for (const response of responses) {
+      const filterStatus = [Status.Destroyed, Status.Expired];
       const loansRequests = await this.getAllCompleteLoans(response.content, network);
-      const notExpiredResquestLoans = loansRequests.filter(loan => loan.model !== this.installmentModelAddress);
+      const notExpiredResquestLoans = this.excludeLoansWithStatus(
+        filterStatus,
+        null,
+        loansRequests
+      );
+
       allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
     }
 
@@ -117,7 +128,7 @@ export class ApiService {
       allLoansOfLender = allLoansOfLender.concat(activeLoans);
       page++;
     } catch (err) {
-      console.info('Error', err);
+      this.eventsService.trackError(err);
     }
 
     const urls = [];
@@ -155,7 +166,7 @@ export class ApiService {
       allActiveLoans = allActiveLoans.concat(activeLoans);
       page++;
     } catch (err) {
-      console.info('Error', err);
+      this.eventsService.trackError(err);
     }
 
     const urls = [];
@@ -168,7 +179,7 @@ export class ApiService {
 
     if (network === Network.Basalt) {
       const filterStatus = [Status.Request, Status.Destroyed];
-      responses = this.excludeLoansWithStatus(responses, filterStatus);
+      responses = this.excludeLoansWithStatus(filterStatus, responses);
     }
 
     const allApiLoans = await this.getAllApiLoans(responses, network);
@@ -221,9 +232,9 @@ export class ApiService {
             )));
 
       return (data);
-    } catch (error) {
-      console.info(error);
-      throw (error);
+    } catch (err) {
+      this.eventsService.trackError(err);
+      throw (err);
     }
   }
 
@@ -245,9 +256,9 @@ export class ApiService {
       );
       return (loans);
 
-    } catch (error) {
-      console.info(error);
-      throw (error);
+    } catch (err) {
+      this.eventsService.trackError(err);
+      throw (err);
     }
   }
 
@@ -304,14 +315,17 @@ export class ApiService {
       });
     });
 
-    if (query.length) {
+    if (!query.length) {
+      return apiLoans;
+    }
+
+    try {
       const call = await aggregate(query, this.multicallConfig);
       const callResults = {};
 
       Object.keys(filterKeys).map(key => {
         callResults[key] = {};
       });
-
       Object.keys(call.results).map(item => {
         const splitItem: string[] = item.split(SEPARATOR);
         const itemKey: string = splitItem[0];
@@ -321,7 +335,6 @@ export class ApiService {
           callResults[itemKey][itemId] = filterKeys[itemKey].handler(hexValue);
         }
       });
-
       apiLoans.map((loan: LoanApiBasalt) => {
         const id: number = Number(loan.index);
         Object.keys(callResults).map(key => {
@@ -330,9 +343,11 @@ export class ApiService {
           }
         });
       });
+    } catch (err) {
+      this.eventsService.trackError(err);
+    } finally {
+      return apiLoans;
     }
-
-    return apiLoans;
   }
 
   /**
@@ -352,9 +367,9 @@ export class ApiService {
         )
       );
       return (activeLoans);
-    } catch (error) {
-      console.info(error);
-      throw (error);
+    } catch (err) {
+      this.eventsService.trackError(err);
+      throw (err);
     }
   }
 
@@ -433,22 +448,36 @@ export class ApiService {
 
   /**
    * Exclude loans with the selected status
-   * @param apiLoans Loans data obtained from API
    * @param filterStatus Status array to remove
-   * @return Loans data obtained from API excluding selected states
+   * @param apiLoans Loans data obtained from API
+   * @param loans Loans array
+   * @return Loans data obtained from API or Loans array excluding selected states
    */
-  private excludeLoansWithStatus(apiLoans: any[], filterStatus: Status[]) {
-    apiLoans.map(response => {
-      response.content = response.content.filter(
-        ({ status }) => {
-          if (!filterStatus.includes(Number(status))) {
-            return true;
+  private excludeLoansWithStatus(
+    filterStatus: Status[],
+    apiLoans?: any[],
+    loans?: Loan[]
+  ): Loan[] | any[] {
+    if (apiLoans) {
+      apiLoans.map(response => {
+        response.content = response.content.filter(
+          ({ status }) => {
+            if (!filterStatus.includes(Number(status))) {
+              return true;
+            }
           }
-        }
-      );
-    });
+        );
+      });
+      return apiLoans as any[];
+    }
 
-    return apiLoans;
+    if (loans) {
+      return loans.filter(({ status }) => {
+        if (!filterStatus.includes(status)) {
+          return true;
+        }
+      }) as Loan[];
+    }
   }
 
   /**

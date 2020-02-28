@@ -36,11 +36,15 @@ import { DialogInsufficientfundsComponent } from '../dialogs/dialog-insufficient
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogGenericErrorComponent } from '../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/dialog-client-account.component';
+import { DialogWalletSelectComponent } from '../dialogs/dialog-wallet-select/dialog-wallet-select.component';
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
+import { ErrorDetailsComponent } from './error-details/error-details.component';
+import { PageHeaderComponent } from './page-header/page-header.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 import { FormatAmountPipe } from './../pipes/format-amount.pipe';
+import { FormatAddressPipe } from './../pipes/format-address.pipe';
 // App Services
 import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
@@ -50,7 +54,6 @@ import { IdentityService } from './../services/identity.service';
 import { RiskService } from './../services/risk.service';
 import { CountriesService } from './../services/countries.service';
 import { EventsService } from './../services/events.service';
-import { ErrorDetailsComponent } from './error-details/error-details.component';
 
 @NgModule({
   imports: [
@@ -86,21 +89,25 @@ import { ErrorDetailsComponent } from './error-details/error-details.component';
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
     ErrorDetailsComponent,
+    PageHeaderComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
+    DialogWalletSelectComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
 
     VisualUrlPipe,
-    FormatAmountPipe
+    FormatAmountPipe,
+    FormatAddressPipe
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
     DialogClientAccountComponent,
+    DialogWalletSelectComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
     DialogLoanLendComponent
@@ -142,9 +149,11 @@ import { ErrorDetailsComponent } from './error-details/error-details.component';
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
     ErrorDetailsComponent,
+    PageHeaderComponent,
     DialogWrongCountryComponent,
     VisualUrlPipe,
-    FormatAmountPipe
+    FormatAmountPipe,
+    FormatAddressPipe
   ]
 })
 export class SharedModule { }

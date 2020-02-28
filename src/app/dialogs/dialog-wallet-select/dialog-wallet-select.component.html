@@ -1,0 +1,34 @@
+<mat-dialog-content class="dialog">
+  <div class="dialog-content">
+    <div class="dialog-content__logo">
+      <img src="assets/isologo.svg" alt="RCN">
+    </div>
+    <div class="dialog-content__title">
+      <h2>
+        Connect your wallet
+      </h2>
+    </div>
+    <div class="dialog-content__description">
+      <p>
+        To start using the RCN platform choose one of this options.
+      </p>
+    </div>
+    <div class="dialog-content__actions">
+      <button
+        *ngFor="let wallet of wallets"
+        mat-raised-button
+        class="button-connect"
+        [class.button-connect--active]="wallet.active"
+        (click)="selectWallet(wallet.type, wallet.active)"
+      >
+        <div class="d-flex align-items-center">
+          <img [src]="wallet.image" [alt]="wallet.image">
+          <span>{{ wallet.title }}</span>
+        </div>
+      </button>
+    </div>
+  </div>
+  <div class="dialog-footer">
+    <app-close-button></app-close-button>
+  </div>
+</mat-dialog-content>

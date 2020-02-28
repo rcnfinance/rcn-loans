@@ -1,4 +1,5 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/variables';
+@import '../../../scss/fonts';
 
 .navbar{
   height: 60px;
@@ -75,7 +76,7 @@
   justify-content: space-between; // Aligns items horizontally and accepts the following values:
   align-items: center; // Aligns items vertically and Determines how the items as a whole are aligned within the container
   align-content: flex-end; // Determines the spacing between lines. When there is only one line, align-content has no effect.
-  width: 130px;
+  // width: 130px;
   height: 42px;
   > .flex-item {
     &:nth-child(1){
@@ -216,6 +217,7 @@
           cursor: pointer;
           i{
             color: #fff;
+            margin-top: 5px;
           }
           &,
           &::after {
@@ -229,6 +231,7 @@
           }
           &:last-child{
             margin-right: 0;
+            @include styled-font('Roboto', 600, 16px);
           }
         }
         .separator{

@@ -1,3 +1,5 @@
+@import './../../../scss/fonts';
+
 footer {
   position: fixed;
   width: 100%;
@@ -14,6 +16,7 @@ footer {
   footer {
     height: 54px;
     padding: 15px 30px;
+    @include styled-font('proxima-nova', 500, 15px);
     .nav-mobile {
       display: none;
     }
@@ -32,6 +35,24 @@ footer {
         text-align: right;
         .icon:nth-child(2) {
           margin-right: 10px;
+        }
+        .nav-item {
+          position: relative;
+          &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            width: 1px;
+            height: 10px;
+            background: white;
+          }
+          a {
+            margin: 2px 36px;
+          }
         }
       }
     }

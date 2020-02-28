@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { environment } from '../../../environments/environment';
+import { Utils } from './../../utils/utils';
 // App Component
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
@@ -13,7 +14,8 @@ import { TxService, Tx, Type } from '../../services/tx.service';
 class Operator {
   constructor(
     public name: string,
-    public address: string
+    public address: string,
+    public action: string
   ) { }
 }
 
@@ -40,13 +42,31 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
   onlyToken: string;
   onlyAsset: string;
   account: string;
+  shortAccount: string;
+  dialogDescription: string;
 
   tokens: Contract[];
   tokenOperators: Operator[] = [
-    new Operator('Diaspore Loan manager', environment.contracts.diaspore.loanManager),
-    new Operator('Diaspore Debt mananger', environment.contracts.diaspore.debtEngine),
-    new Operator('Diaspore Converter ramp', environment.contracts.converter.converterRamp),
-    new Operator('Basalt engine', environment.contracts.basaltEngine)
+    new Operator(
+      'Diaspore Loan manager',
+      environment.contracts.diaspore.loanManager,
+      'lending'
+    ),
+    new Operator(
+      'Diaspore Debt mananger',
+      environment.contracts.diaspore.debtEngine,
+      'payments'
+    ),
+    new Operator(
+      'Diaspore Converter ramp',
+      environment.contracts.converter.converterRamp,
+      'transactions'
+    ),
+    new Operator(
+      'Basalt engine',
+      environment.contracts.basaltEngine,
+      'transactions for Legacy Basalt loans'
+    )
   ];
   tokenApproves: Object[];
   assets: Contract[];
@@ -94,8 +114,9 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     try {
       await this.loadTokens();
       await this.loadAssets();
+      this.setDialogDescription();
     } catch (e) {
-      console.error(e);
+      this.eventsService.trackError(e);
     } finally {
       this.retrievePendingTx();
       this.spinner.hide();
@@ -421,7 +442,32 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     const web3: any = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
 
-    this.account = web3.toChecksumAddress(account);
+    this.account = web3.utils.toChecksumAddress(account);
+    this.shortAccount = Utils.shortAddress(this.account);
+
     return this.account;
+  }
+
+  /**
+   * Set dialog description for single approve or general settings
+   * @return Dialog description
+   */
+  private setDialogDescription() {
+    if (!this.onlyToken && !this.onlyAsset) {
+      this.dialogDescription = 'Please enable the features and currencies you would like to use on the Credit Marketplace.';
+      return this.dialogDescription;
+    }
+
+    const contracts: Contract[] = this.tokens.concat(this.assets || []);
+    const operators: Operator[] = this.tokenOperators.concat(this.assetOperators);
+
+    const selectedOperator = this.onlyAddress;
+    const selectedContract = this.onlyToken || this.onlyAsset;
+
+    const contract = contracts.filter((ct: Contract) => ct.address === selectedContract)[0];
+    const operator = operators.filter((op: Operator) => op.address === selectedOperator)[0];
+
+    this.dialogDescription = `To continue please enable ${ contract.name } ${ operator.action } on the Credit Marketplace.`;
+    return this.dialogDescription;
   }
 }

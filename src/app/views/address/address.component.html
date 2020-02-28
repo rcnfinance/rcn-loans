@@ -9,6 +9,7 @@
     type="ball-clip-rotate-multiple"
     [name]="pageId"
   ></ngx-spinner>
+
   <div class="container">
     <div class="row align-items-center pt-2 pt-lg-0">
 
@@ -56,12 +57,38 @@
           class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
           *ngFor="let loan of scroll.viewPortItems"
         >
-          <app-loan-card [loan]="loan"></app-loan-card>
-        </div>
-      </virtual-scroller>
+          <div
+            class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
+            *ngFor="let loan of scroll.viewPortItems"
+          >
+            <app-loan-card [loan]="loan"></app-loan-card>
+          </div>
+        </virtual-scroller>
 
-    </div>
+      </div>
+    </ng-container>
+
   </div>
-
   <app-footer></app-footer>
 </div>
+
+
+<ng-template #noAvailableLoans>
+  <div class="row">
+    <div class="col-sm-12 px-0">
+      <app-error-details
+        title="Hmm..."
+        description="Its seems like you haven't funded any loans yet."
+        image="assets/errors/error_no-loans.svg"
+        [buttons]="[
+          {
+            text: 'Go to Lend',
+            url: '/lend',
+            class: 'button-primary'
+          }
+        ]"
+      >
+      </app-error-details>
+    </div>
+  </div>
+</ng-template>

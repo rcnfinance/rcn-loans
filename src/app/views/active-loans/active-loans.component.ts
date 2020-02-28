@@ -31,7 +31,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.titleService.changeTitle('Activity');
+    this.titleService.changeTitle('Activity explorer');
     this.spinner.show(this.pageId);
     this.loadLoans();
 

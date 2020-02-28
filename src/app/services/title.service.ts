@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class TitleService {
-  private titleSource$ = new BehaviorSubject('Requests');
+  private titleSource$ = new BehaviorSubject('Lending Marketplace');
   currentTitle = this.titleSource$.asObservable();
 
   changeTitle(title: string) {

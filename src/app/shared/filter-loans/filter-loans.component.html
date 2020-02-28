@@ -5,11 +5,20 @@
           <div class="row">
 
             <div class="col-sm-12 col-lg-3">
-              <div class="title property margintop20 marginbottom10">Currency</div>
+              <div class="title property margintop20 marginbottom10">
+                Borrowing currency
+              </div>
               <mat-form-field (click)="currency.enable()">
-                <mat-select class="form-control" placeholder="Choose your Currency" formControlName="currency">
+                <mat-select
+                  class="form-control"
+                  placeholder="Select a currency"
+                  formControlName="currency"
+                >
                   <mat-option>--</mat-option>
-                  <mat-option *ngFor="let currency of currencies" [value]="currency">
+                  <mat-option
+                    *ngFor="let currency of currencies"
+                    [value]="currency"
+                  >
                     {{ currency }}
                   </mat-option>
                 </mat-select>
@@ -17,20 +26,33 @@
             </div>
 
             <div class="col-sm-12 col-lg-3">
+              <div class="title property margintop20 marginbottom10">
+                Amount
+              </div>
               <div class="row">
                 <div class="col-xs-6 col-sm-6">
-                  <div class="title property margintop20 marginbottom10">Start Amount</div>
                   <div class="form-group">
                     <mat-form-field (click)="amountStart.enable()">
-                      <input matInput  type='number' placeholder="Set amount" formControlName="amountStart" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+                      <input
+                        matInput
+                        type='number'
+                        placeholder="Set min."
+                        formControlName="amountStart"
+                        pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
+                      >
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="col-xs-6 col-sm-6">
-                  <div class="title property margintop20 marginbottom10">End Amount</div>
                   <div class="form-group">
                     <mat-form-field (click)="amountEnd.enable()">
-                      <input matInput type='number' placeholder="Set amount" formControlName="amountEnd" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+                      <input
+                        matInput
+                        type='number'
+                        placeholder="Set max."
+                        formControlName="amountEnd"
+                        pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
+                      >
                     </mat-form-field>
                   </div>
                 </div>
@@ -38,26 +60,46 @@
             </div>
 
             <div class="col-sm-12 col-lg-3">
-              <div class="title property margintop20 marginbottom10">Duration</div>
+              <div class="title property margintop20 marginbottom10">
+                Duration
+              </div>
               <div class="row">
                 <div class="col-sm-4">
                   <div class="form-group" formGroupName="duration">
                     <mat-form-field (click)="formGroup.controls.duration.enable()">
-                        <input matInput type='number' placeholder="Days" formControlName="days" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+                      <input
+                        matInput
+                        type='number'
+                        placeholder="Days"
+                        formControlName="days"
+                        pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
+                      >
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group" formGroupName="duration">
                     <mat-form-field (click)="formGroup.controls.duration.enable()">
-                        <input matInput type='number' placeholder="Months" formControlName="months" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+                      <input
+                        matInput
+                        type='number'
+                        placeholder="Months"
+                        formControlName="months"
+                        pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
+                      >
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group" formGroupName="duration">
                     <mat-form-field (click)="formGroup.controls.duration.enable()">
-                        <input matInput type='number' placeholder="Years" formControlName="years" pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+                      <input
+                        matInput
+                        type='number'
+                        placeholder="Years"
+                        formControlName="years"
+                        pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
+                      >
                     </mat-form-field>
                   </div>
                 </div>
@@ -65,11 +107,19 @@
             </div>
 
             <div class="col-sm-12 col-lg-3">
-              <div class="title property margintop20 marginbottom10">Interest</div>
+              <div class="title property margintop20 marginbottom10">
+                Annual interest rate
+              </div>
               <div class="form-group">
                 <mat-form-field (click)="annualInterest.enable()">
-                  <input matInput type='number' placeholder="Set annual interest" max='200' formControlName="annualInterest"
-                  pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'>
+                  <input
+                    matInput
+                    type='number'
+                    placeholder="Set min. rate"
+                    max='200'
+                    formControlName="annualInterest"
+                    pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
+                  >
                   <span matSuffix>%</span>
                 </mat-form-field>
               </div>

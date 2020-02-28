@@ -8,13 +8,13 @@ import {
 import { EventsService, Category } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
 import { TxService, Tx, Type } from '../../services/tx.service';
+import { Web3Service } from '../../services/web3.service';
+import { WalletConnectService } from './../../services/wallet-connect.service';
 // App Component
 import { environment } from '../../../environments/environment';
 import { Loan } from '../../models/loan.model';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
-import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-transfer-button',
@@ -40,6 +40,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     private txService: TxService,
     private eventsService: EventsService,
     private web3Service: Web3Service,
+    private walletConnectService: WalletConnectService,
     public snackBar: MatSnackBar,
     public dialog: MatDialog
   ) { }
@@ -103,26 +104,19 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
       return;
     }
     // unlogged user
-    if (!this.web3Service.loggedIn) {
-      const hasClient = await this.web3Service.requestLogin();
-      if (this.web3Service.loggedIn) {
-        this.handleTransfer();
-        return;
-      }
-      if (!hasClient) {
-        this.dialog.open(DialogClientAccountComponent);
-      }
+    const loggedIn = await this.walletConnectService.connect();
+    if (!loggedIn) {
       return;
     }
     // borrower validation
     const account: string = await this.web3Service.getAccount();
     if (this.loan.debt.owner.toLowerCase() !== account.toLowerCase()) {
-      this.openSnackBar('The owner is not authorized', '');
+      this.openSnackBar('You can´t transfer a loan that you haven´t funded.', '');
       return;
     }
     // address validation
     const web3 = this.web3Service.web3;
-    if (!this.showTransferDialog && !web3.isAddress(this.address)) {
+    if (!this.showTransferDialog && !web3.utils.isAddress(this.address)) {
       this.openSnackBar('The address is not valid', '');
       return;
     }
@@ -142,7 +136,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'click-transfer-loan',
       Category.Loan,
-      'loan #' + this.loan.id
+      'loan ' + this.loan.id
     );
     this.handleTransfer();
   }
@@ -156,7 +150,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     this.eventsService.trackEvent(
       'set-to-transfer-loan',
       Category.Loan,
-      'loan #' + this.loan.id + ' to ' + to
+      'loan ' + this.loan.id + ' to ' + to
     );
 
     this.startOperation();
@@ -167,7 +161,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
       this.eventsService.trackEvent(
         'transfer-loan',
         Category.Loan,
-        'loan #' + this.loan.id + ' to ' + to
+        'loan ' + this.loan.id + ' to ' + to
       );
 
       this.txService.registerTransferTx(
@@ -179,14 +173,14 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
 
       this.startTransfer.emit();
       this.retrievePendingTx();
-    } catch (e) {
+    } catch (err) {
       // Don't show 'User denied transaction signature' error
-      if (e.stack.indexOf('User denied transaction signature') < 0) {
+      if (err.stack.indexOf('User denied transaction signature') < 0) {
+        this.eventsService.trackError(err);
         this.dialog.open(DialogGenericErrorComponent, {
-          data: { error: e }
+          data: { error: err }
         });
       }
-      console.error(e);
     } finally {
       this.finishOperation();
     }
@@ -241,6 +235,6 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     if (tx.confirmed) {
       return 'Transferred';
     }
-    return 'Transferring...';
+    return 'Transferring';
   }
 }
