@@ -173,6 +173,16 @@ export class Utils {
     }
     return new BN(value, base);
   }
+
+  /**
+   * Math pow function with BN
+   * @param base
+   * @param exponent
+   * @return base.pow(exponent)
+   */
+  static pow(base: number | string | BN, exponent: number | string | BN) {
+    return this.bn(base).pow(this.bn(exponent));
+  }
 }
 
 export function promisify(func: any, args: any): Promise<any> {
