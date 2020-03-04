@@ -81,7 +81,7 @@ export class DialogLoanLendComponent implements OnInit {
 
     this.loadExchangeTooltip();
     this.shortLoanId =
-      this.loan.id.startsWith('0x') ? Utils.shortAddress(this.loan.id) : this.loan.id;
+      String(this.loan.id).startsWith('0x') ? Utils.shortAddress(this.loan.id) : this.loan.id;
   }
 
   /**

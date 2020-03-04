@@ -755,7 +755,7 @@ export class ContractsService {
    */
   // TODO: remove method from this service
   async getLoan(id: string): Promise<Loan> {
-    if (id.startsWith('0x')) {
+    if (String(id).startsWith('0x')) {
       return await this.apiService.getLoan(id, Network.Diaspore);
     }
 
