@@ -5,8 +5,8 @@
   type="ball-clip-rotate-multiple"
 ></ngx-spinner>
 
-<form [formGroup]="form" (ngSubmit)="onSubmitStep1(fStep1)" #fStep1="ngForm">
-  <div class="content-wrapper">
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="content-wrapper" formGroupName="formUi">
     <div class="row mt-4 pt-3">
       <div class="col-sm-11 col-md-12">
         <div class="row">
@@ -19,12 +19,11 @@
                 <mat-select
                   placeholder="Select a Token"
                   formControlName="currency"
-                  (selectionChange)="onCurrencyChange($event.value)"
                   required
                 >
                   <mat-option
                     *ngFor="let currency of currencies"
-                    [value]="currency.symbol"
+                    [value]="currency"
                   >
                     <div class="d-flex align-items-center py-1">
                       <app-currency-logo
@@ -52,7 +51,6 @@
                   max="1000000"
                   formControlName="amount"
                   placeholder="0"
-                  (keyup)="onRequestedChange($event.value)"
                   pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
                   required
                 />
@@ -60,8 +58,11 @@
                   <span
                     class="red"
                     *ngIf="
-                      amount.errors &&
-                      (amount.dirty || amount.touched)
+                      form.controls.formUi.controls.amount.errors &&
+                      (
+                        form.controls.formUi.controls.amount.dirty ||
+                        form.controls.formUi.controls.amount.touched
+                      )
                     "
                   >
                     The minimum is 1
@@ -70,14 +71,17 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="col-sm-12 item" *ngIf="
-            form?.value.currency &&
-            form?.value.currency !== 'RCN'
-          ">
+          <div
+            class="col-sm-12 item"
+            *ngIf="
+              form.value.formUi.currency &&
+              form.value.formUi.currency.symbol !== 'RCN'
+            "
+          >
             <div class="item__message item__message--warning">
               <i class="fas fa-exclamation-triangle"></i> You’re borrowing in
-              {{ form?.value.currency }}, therefore the value of the pays is going
-              to be converted to RCN.
+              {{ form.value.formUi.currency.symbol }}, therefore the value of
+              the pays is going to be converted to RCN.
             </div>
           </div>
         </div>
@@ -96,7 +100,6 @@
                   <mat-select
                     placeholder="Select a number"
                     formControlName="duration"
-                    (selectionChange)="onDurationChange()"
                     required
                   >
                     <mat-option
@@ -128,19 +131,18 @@
                   tickInterval="1"
                   color="primary"
                   thumbLabel="true"
-                  formControlName="annualInterest"
+                  formControlName="annualInterestRate"
                   [displayWith]="formatPercentage"
-                  [disabled]="!form?.value.currency"
-                  [min]="selectedCurrency?.bestInterestRate.min"
-                  [max]="selectedCurrency?.bestInterestRate.max"
-                  (change)="onInterestRateChange()"
+                  [disabled]="!form.controls.formUi.value.currency"
+                  [min]="0"
+                  [max]="100"
                 ></mat-slider>
                 <div class="item__percentage" *ngIf="selectedCurrency">
                   <div class="item__percentage-amount">
-                    {{ selectedCurrency?.bestInterestRate.min }} %
+                    0 %
                   </div>
                   <div class="item__percentage-amount">
-                    {{ selectedCurrency?.bestInterestRate.max }} %
+                    500 %
                   </div>
                 </div>
               </div>
@@ -162,9 +164,7 @@
                 Installments
               </span>
               <mat-slide-toggle
-                formControlName="hasInstallments"
-                [disabled]="!installmentsAvailable || installmentsAvailable < 2"
-                (change)="onInstallmentsChange()"
+                formControlName="installmentsActivated"
                 color="primary"
                 class="ml-2"
               >
@@ -173,7 +173,10 @@
             <div class="item__subtitle mb-3">
               Do you want to pay back with installments?
             </div>
-            <div class="item__message item__message--warning" *ngIf="installments > 1">
+            <div
+              class="item__message item__message--warning"
+              *ngIf="form.value.formModel.installments > 1"
+            >
               <i class="fas fa-exclamation-triangle"></i> Payments are made
               every 15 days and the amount thereof is determined by the
               duration of the loan.
@@ -198,8 +201,7 @@
                     type="number"
                     min="1"
                     max="30"
-                    formControlName="expirationDate"
-                    (change)="onExpirationDateChange()"
+                    formControlName="expiration"
                     pattern="^(?:[1-9]|[1-2][0-9]|30)$"
                     required
                   />
@@ -218,11 +220,8 @@
               mat-raised-button
               type="submit"
               class="button button--submit mat-elevation-z"
-              [class.button-disabled]="
-                createPendingTx && !createPendingTx.confirmed
-              "
             >
-              {{ createButtonText }}
+              Create
               <i class="fas fa-arrow-circle-right"></i>
             </button>
           </div>

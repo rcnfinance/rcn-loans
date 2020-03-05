@@ -866,11 +866,11 @@ export class ContractsService {
    * @return Encoded installments data
    */
   async encodeInstallmentsData(
-    cuota: string | BN,
-    interestRate: string | BN,
-    installments: number,
-    duration: number,
-    timeUnit: number
+    cuota: string,
+    interestRate: string,
+    installments: string,
+    duration: string,
+    timeUnit: string
   ) {
     return await this._installmentsModel.methods.encodeData(
       cuota,
