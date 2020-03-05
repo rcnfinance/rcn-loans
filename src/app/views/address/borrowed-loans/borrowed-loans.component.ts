@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 // App Spinner
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -27,6 +27,7 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
   subscriptionAvailable: Subscription;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private titleService: TitleService,
@@ -41,7 +42,11 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
 
     this.route.params.subscribe(params => {
       const web3 = this.web3Service.web3;
-      this.address = web3.utils.toChecksumAddress(params['address']);
+      const address: string = web3.utils.toChecksumAddress(params.address);
+      if (!web3.utils.isAddress(address)) {
+        return this.router.navigate(['/']);
+      }
+
       this.loadLoans(this.address);
     });
 

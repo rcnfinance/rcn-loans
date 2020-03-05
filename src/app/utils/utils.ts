@@ -137,7 +137,23 @@ export class Utils {
    * @param type Whether payments are due at the end (0) or beginning (1) of each period
    * @return Payment amount with interest
    */
-  static pmt(rate: number, nperiod: number, pv: number, fv: number = 0, type: number = 0) {
+  static pmt(
+    rate: number,
+    nperiod: number,
+    pv: number,
+    fv: number = 0,
+    type: number = 0
+  ): BN {
+    const parsedPmt = (amount: number) => {
+      try {
+        const strAmount: string =
+          amount.toLocaleString('fullwide', { useGrouping: false });
+        return Utils.bn(strAmount);
+      } catch (err) {
+        return Utils.bn(amount);
+      }
+    };
+
     if (!fv) {
       fv = 0;
     }
@@ -145,7 +161,8 @@ export class Utils {
       type = 0;
     }
     if (rate === 0) {
-      return -(pv + fv) / nperiod;
+      const amountToReturn = -(pv + fv) / nperiod;
+      return parsedPmt(amountToReturn);
     }
 
     const pvif = Math.pow(1 + rate, nperiod);
@@ -155,7 +172,7 @@ export class Utils {
       pmt /= (1 + rate);
     }
 
-    return pmt;
+    return parsedPmt(pmt);
   }
 
   /**
