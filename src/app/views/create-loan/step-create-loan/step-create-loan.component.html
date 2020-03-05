@@ -58,10 +58,10 @@
                   <span
                     class="red"
                     *ngIf="
-                      form.controls.formUi.controls.amount.errors &&
+                      form.controls.formUi.value.amount.errors &&
                       (
-                        form.controls.formUi.controls.amount.dirty ||
-                        form.controls.formUi.controls.amount.touched
+                        form.controls.formUi.value.amount.dirty ||
+                        form.controls.formUi.value.amount.touched
                       )
                     "
                   >
@@ -137,7 +137,7 @@
                   [min]="0"
                   [max]="100"
                 ></mat-slider>
-                <div class="item__percentage" *ngIf="selectedCurrency">
+                <div class="item__percentage" *ngIf="form.controls.formUi.value.currency">
                   <div class="item__percentage-amount">
                     0 %
                   </div>
@@ -148,7 +148,7 @@
               </div>
             </div>
             <div
-              *ngIf="selectedCurrency"
+              *ngIf="form.controls.formUi.value.currency"
               class="item__message item__message--info"
             >
               <i class="fas fa-info-circle"></i> Higher interestes are more likely

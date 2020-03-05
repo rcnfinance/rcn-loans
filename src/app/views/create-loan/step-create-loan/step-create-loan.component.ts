@@ -51,6 +51,13 @@ export class StepCreateLoanComponent implements OnInit {
   }
 
   /**
+   * Submit form
+   */
+  submit() {
+    // TODO: submit form
+  }
+
+  /**
    * Create form object variables
    */
   private buildForm() {
