@@ -2,11 +2,13 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as BN from 'bn.js';
 import { Utils } from '../../../utils/utils';
+import { LoanUtils } from '../../../utils/loan-utils';
 import { Currency } from '../../../utils/currencies';
-import { Loan } from './../../../models/loan.model';
+import { Loan, Network, Status, Oracle, Descriptor } from './../../../models/loan.model';
 import { LoanRequest } from './../../../interfaces/loan-request';
 import { environment } from './../../../../environments/environment';
 // App Services
+import { Web3Service } from './../../../services/web3.service';
 import { ContractsService } from './../../../services/contracts.service';
 import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
 import { Tx } from './../../../services/tx.service';
@@ -19,11 +21,11 @@ import { Tx } from './../../../services/tx.service';
 export class StepCreateLoanComponent implements OnInit {
 
   loan: Loan;
-  @Input() account: string;
-  @Input() createPendingTx: Tx;
-  @Output() updateLoan = new EventEmitter<Loan>();
-  @Output() createLoan = new EventEmitter<{ loan: Loan, form: LoanRequest }>();
-  @Output() loanWasCreated = new EventEmitter();
+  @Input() account: string; // TODO: implement
+  @Input() createPendingTx: Tx; // TODO: implement
+  @Output() updateLoan = new EventEmitter<Loan>(); // TODO: implement
+  @Output() createLoan = new EventEmitter<{ loan: Loan, form: LoanRequest }>(); // TODO: implement
+  @Output() loanWasCreated = new EventEmitter(); // TODO: implement
   durationDays: number[] = [15, 30, 45, 60, 75, 90];
   currencies: CurrencyItem[];
   daySeconds: BN = Utils.bn(60 * 60 * 24);
@@ -32,6 +34,7 @@ export class StepCreateLoanComponent implements OnInit {
   form: FormGroup;
 
   constructor(
+    private web3Service: Web3Service,
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService
   ) { }
@@ -39,6 +42,7 @@ export class StepCreateLoanComponent implements OnInit {
   async ngOnInit() {
     this.buildForm();
     this.getCurrencies();
+    this.updateLoanMockup();
   }
 
   /**
@@ -89,6 +93,7 @@ export class StepCreateLoanComponent implements OnInit {
       }),
       // form for handle the ui
       formUi: new FormGroup({
+        calculatedId: new FormControl(null),
         amount: new FormControl(null, [Validators.required, Validators.min(0)]),
         amountReturn: new FormControl(null, [Validators.required, Validators.min(0)]),
         currency: new FormControl(null, Validators.required),
@@ -112,10 +117,15 @@ export class StepCreateLoanComponent implements OnInit {
       // set oracle
       if (currency) {
         const oracle: string =
-          await this.contractsService.symbolToOracle(currency.symbol);
+          await this.contractsService.symbolToOracle(currency.symbol) ||
+          Utils.address0x;
 
         this.form.controls.formLoan.patchValue({
           oracle
+        });
+      } else {
+        this.form.controls.formLoan.patchValue({
+          oracle: null
         });
       }
 
@@ -126,6 +136,10 @@ export class StepCreateLoanComponent implements OnInit {
 
         this.form.controls.formLoan.patchValue({
           amount: amountInWei.toString()
+        });
+      } else {
+        this.form.controls.formLoan.patchValue({
+          amount: null
         });
       }
 
@@ -173,7 +187,21 @@ export class StepCreateLoanComponent implements OnInit {
           this.form.controls.formLoan.patchValue({
             loanData
           });
+        } else {
+          const loanData = '0x'; // TODO: get loanData without installments
+          this.form.controls.formLoan.patchValue({
+            loanData
+          });
         }
+      } else {
+        this.form.controls.formModel.patchValue({
+          duration: null,
+          installments: null,
+          cuota: null
+        });
+        this.form.controls.formLoan.patchValue({
+          loanData: null
+        });
       }
 
       // set annual interest rate and expected return
@@ -183,18 +211,30 @@ export class StepCreateLoanComponent implements OnInit {
         this.form.controls.formModel.patchValue({
           interestRate: Utils.bn(interestRate).toString()
         });
+      } else {
+        this.form.controls.formModel.patchValue({
+          interestRate: null
+        });
       }
 
       // set loan expiration date
       if (expiration) {
         const now: BN = Utils.bn(new Date().getTime()).div(Utils.bn(1000));
         const expirationSeconds: BN = Utils.bn(expiration).mul(DAY_SECONDS);
-        const expirationTimestamp: BN = now.add(expirationSeconds);
+        const expirationTimestamp: BN = now
+            .add(expirationSeconds)
+            .add(Utils.bn(1));
 
         this.form.controls.formLoan.patchValue({
           expiration: expirationTimestamp.toString()
         });
+      } else {
+        this.form.controls.formLoan.patchValue({
+          expiration: null
+        });
       }
+
+      await this.updateLoanMockup();
     });
   }
 
@@ -240,5 +280,60 @@ export class StepCreateLoanComponent implements OnInit {
       Number(amount),
       0
     ).neg();
+  }
+
+  private async updateLoanMockup() {
+    const LOAN_NETWORK = Network.Diaspore;
+    const LOAN_STATUS = Status.Ongoing;
+    const LOAN_MODEL = environment.contracts.models.installments;
+    const LOAN_CREATOR = Utils.address0x;
+
+    const {
+      calculatedId,
+      currency,
+      annualInterestRate
+    } = this.form.value.formUi;
+    const { amount, expiration, oracle } = this.form.value.formLoan;
+    const {
+      cuota,
+      installments,
+      duration,
+      interestRate
+    } = this.form.value.formModel;
+    const address: string = await this.web3Service.getAccount() || Utils.address0x;
+    const loanId: string = calculatedId || '0x';
+    const currencySymbol: string = currency ? currency.symbol : 'RCN';
+    const oracleModel = new Oracle(
+      LOAN_NETWORK,
+      oracle,
+      currencySymbol,
+      currencySymbol
+    );
+    const descriptor: Descriptor = new Descriptor(
+      Network.Diaspore,
+      cuota,
+      cuota,
+      duration,
+      annualInterestRate,
+      LoanUtils.decodeInterest(interestRate),
+      duration,
+      installments
+    );
+    const loan = new Loan(
+      LOAN_NETWORK,
+      loanId,
+      address,
+      amount,
+      oracleModel,
+      descriptor,
+      LOAN_CREATOR,
+      LOAN_CREATOR,
+      LOAN_STATUS,
+      expiration,
+      LOAN_MODEL
+    );
+
+    console.info(loan);
+    this.updateLoan.emit(loan);
   }
 }

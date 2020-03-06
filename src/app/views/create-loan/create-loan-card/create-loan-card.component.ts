@@ -78,10 +78,11 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
 
     if (loan.descriptor) {
       const duration = loan.descriptor.duration;
-      const expiration = loan.expiration;
+      const now = new Date().getTime() / 1000;
+      const expirationDate = now - loan.expiration;
       this.installments = loan.descriptor.installments;
       this.durationDate = duration ? Utils.formatDelta(duration, 2) : null;
-      this.expirationDate = expiration ? Utils.formatDelta(expiration, 2) : null;
+      this.expirationDate = loan.expiration ? Utils.formatDelta(expirationDate, 2) : null;
       this.annualInterest = Number(loan.descriptor.interestRate).toString();
       this.expectedReturn = this.calculateExpectedReturn();
       return;
