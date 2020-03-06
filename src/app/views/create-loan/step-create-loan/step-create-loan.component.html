@@ -58,10 +58,10 @@
                   <span
                     class="red"
                     *ngIf="
-                      form.controls.formUi.controls.amount.errors &&
+                      form.get('formUi')['controls'].amount.errors &&
                       (
-                        form.controls.formUi.controls.amount.dirty ||
-                        form.controls.formUi.controls.amount.touched
+                        form.get('formUi')['controls'].amount.dirty ||
+                        form.get('formUi')['controls'].amount.touched
                       )
                     "
                   >
