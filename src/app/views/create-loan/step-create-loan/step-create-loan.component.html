@@ -20,6 +20,7 @@
                   placeholder="Select a Token"
                   formControlName="currency"
                   required
+                  (selectionChange)="changeCurrency()"
                 >
                   <mat-option
                     *ngFor="let currency of currencies"
@@ -133,16 +134,32 @@
                   thumbLabel="true"
                   formControlName="annualInterestRate"
                   [displayWith]="formatPercentage"
-                  [disabled]="!form.controls.formUi.value.currency"
-                  [min]="0"
-                  [max]="100"
+                  [disabled]="!form.value.formUi.currency"
+                  [min]="
+                    form.value.formUi.currency ?
+                      form.value.formUi.currency.bestInterestRate.min :
+                      0
+                  "
+                  [max]="
+                    form.value.formUi.currency ?
+                      form.value.formUi.currency.bestInterestRate.max :
+                      100
+                  "
                 ></mat-slider>
                 <div class="item__percentage" *ngIf="form.controls.formUi.value.currency">
                   <div class="item__percentage-amount">
-                    0 %
+                    {{
+                      form.value.formUi.currency ?
+                        form.value.formUi.currency.bestInterestRate.min :
+                        '0'
+                    }} %
                   </div>
                   <div class="item__percentage-amount">
-                    500 %
+                    {{
+                      form.value.formUi.currency ?
+                        form.value.formUi.currency.bestInterestRate.max :
+                        '100'
+                    }} %
                   </div>
                 </div>
               </div>

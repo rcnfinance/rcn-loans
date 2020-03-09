@@ -135,6 +135,15 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     this.createLoan.emit({ loan, form });
   }
 
+  changeCurrency() {
+    const { currency } = this.form.value.formUi;
+    const annualInterestRate = currency.bestInterestRate.best;
+
+    this.form.controls.formUi.patchValue({
+      annualInterestRate
+    });
+  }
+
   /**
    * Create form object variables
    */
