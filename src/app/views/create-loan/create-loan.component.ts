@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
+import { Subscription } from 'rxjs';
 import { Loan } from './../../models/loan.model';
 import { Collateral } from './../../models/collateral.model';
 import { CollateralRequest } from './../../interfaces/collateral-request';
@@ -27,7 +28,7 @@ import { Utils } from './../../utils/utils';
   templateUrl: './create-loan.component.html',
   styleUrls: ['./create-loan.component.scss']
 })
-export class CreateLoanComponent implements OnInit {
+export class CreateLoanComponent implements OnInit, OnDestroy {
 
   loan: Loan;
   loanWasCreated: boolean;
@@ -36,6 +37,7 @@ export class CreateLoanComponent implements OnInit {
   collateralRequest: CollateralRequest;
   collateralWasCreated: boolean;
   collateralPendingTx: Tx = undefined;
+  account: string;
 
   // progress bar
   startProgress: boolean;
@@ -44,6 +46,7 @@ export class CreateLoanComponent implements OnInit {
 
   // subscriptions
   txSubscription: boolean;
+  subscriptionAccount: Subscription;
 
   constructor(
     private location: Location,
@@ -59,8 +62,16 @@ export class CreateLoanComponent implements OnInit {
     private txService: TxService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.titleService.changeTitle('Borrow');
+    this.handleLoginEvents();
+    await this.loadAccount();
+  }
+
+  ngOnDestroy() {
+    try {
+      this.subscriptionAccount.unsubscribe();
+    } catch (e) { }
   }
 
   /**
@@ -92,8 +103,7 @@ export class CreateLoanComponent implements OnInit {
     this.loan = loan as Loan;
 
     if (pendingTx && pendingTx.confirmed) {
-      this.router.navigate(['/', 'loan', loan.id]);
-      return;
+      return await this.router.navigate(['/', 'loan', loan.id]);
     }
 
     // unlogged user
@@ -214,8 +224,9 @@ export class CreateLoanComponent implements OnInit {
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.stack.indexOf('User denied transaction signature') < 0) {
-        this.showMessage('A problem occurred during loan creation', 'snackbar');
+        return this.showMessage('A problem occurred during loan creation', 'snackbar');
       }
+      console.info('err creating loan', e);
       throw Error(e);
     }
   }
@@ -245,7 +256,7 @@ export class CreateLoanComponent implements OnInit {
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.stack.indexOf('User denied transaction signature') < 0) {
-        this.showMessage('A problem occurred during collateral creation', 'snackbar');
+        return this.showMessage('A problem occurred during collateral creation', 'snackbar');
       }
       throw Error(e);
     }
@@ -324,6 +335,22 @@ export class CreateLoanComponent implements OnInit {
       this.spinner.hide();
       this.router.navigate(['/', 'loan', loan.id]);
     }, 3000);
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  private handleLoginEvents() {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(() => this.loadAccount());
+  }
+
+  /**
+   * Load user account
+   */
+  private async loadAccount() {
+    const web3: any = this.web3Service.web3;
+    const account: string = await this.web3Service.getAccount();
+    this.account = web3.utils.toChecksumAddress(account);
   }
 
   /**

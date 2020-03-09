@@ -83,7 +83,9 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
       this.installments = loan.descriptor.installments;
       this.durationDate = duration ? Utils.formatDelta(duration, 2) : null;
       this.expirationDate = loan.expiration ? Utils.formatDelta(expirationDate, 2) : null;
-      this.annualInterest = Number(loan.descriptor.interestRate).toString();
+      this.annualInterest = loan.descriptor.interestRate ?
+        Number(loan.descriptor.interestRate).toString() :
+        null;
       this.expectedReturn = this.calculateExpectedReturn();
       return;
     }
@@ -130,34 +132,17 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
    */
   private expectedInstallmentAmount() {
     const loan: Loan = this.loan;
-    const loanAmount: number = loan.currency.fromUnit(loan.amount);
-    let installmentAmount: number;
+    const amountInWei = loan.descriptor.totalObligation;
+    const decimals = loan.currency.decimals;
+    const amount = amountInWei / 10 ** decimals;
 
-    if (loan.descriptor.installments === 1) {
-      const secondsInYear = 86400;
-      const daysInYear = 360;
-      const interest: number = loan.descriptor.interestRate;
-      const annualInterest: number = (interest * loanAmount) / 100;
-      const durationInDays: number = loan.descriptor.duration / secondsInYear;
-      const returnInterest: number = (durationInDays * annualInterest) / daysInYear;
-      installmentAmount = loanAmount + returnInterest;
-    } else {
-      const rate: number = loan.descriptor.interestRate / 100;
-      const installmentDuration: number = loan.descriptor.frequency / 360;
-      installmentAmount = - Utils.pmt(
-        installmentDuration * rate,
-        loan.descriptor.installments,
-        loanAmount,
-        0
-      );
-      this.updateInstallmentsDetails();
-    }
+    this.updateInstallmentsDetails();
 
-    if (!installmentAmount) {
+    if (!amountInWei) {
       return 0;
     }
 
-    return Utils.formatAmount(installmentAmount);
+    return Utils.formatAmount(amount);
   }
 
   /**

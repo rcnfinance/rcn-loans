@@ -1,5 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
 import * as BN from 'bn.js';
 import { Utils } from '../../../utils/utils';
 import { LoanUtils } from '../../../utils/loan-utils';
@@ -18,13 +20,13 @@ import { Tx } from './../../../services/tx.service';
   templateUrl: './step-create-loan.component.html',
   styleUrls: ['./step-create-loan.component.scss']
 })
-export class StepCreateLoanComponent implements OnInit {
+export class StepCreateLoanComponent implements OnInit, OnChanges {
 
   loan: Loan;
-  @Input() account: string; // TODO: implement
+  @Input() account: string;
   @Input() createPendingTx: Tx; // TODO: implement
-  @Output() updateLoan = new EventEmitter<Loan>(); // TODO: implement
-  @Output() createLoan = new EventEmitter<{ loan: Loan, form: LoanRequest }>(); // TODO: implement
+  @Output() updateLoan = new EventEmitter<Loan>();
+  @Output() createLoan = new EventEmitter<{ loan: Loan, form: LoanRequest }>();
   @Output() loanWasCreated = new EventEmitter(); // TODO: implement
   durationDays: number[] = [15, 30, 45, 60, 75, 90];
   currencies: CurrencyItem[];
@@ -34,6 +36,8 @@ export class StepCreateLoanComponent implements OnInit {
   form: FormGroup;
 
   constructor(
+    private snackBar: MatSnackBar,
+    private router: Router,
     private web3Service: Web3Service,
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService
@@ -43,6 +47,12 @@ export class StepCreateLoanComponent implements OnInit {
     this.buildForm();
     this.getCurrencies();
     this.updateLoanMockup();
+  }
+
+  async ngOnChanges() {
+    try {
+      await this.updateLoanMockup();
+    } catch (e) { }
   }
 
   /**
@@ -57,16 +67,74 @@ export class StepCreateLoanComponent implements OnInit {
   /**
    * Submit form
    */
-  submit() {
-    // TODO: submit form
+  async submit() {
+    const { formLoan, formUi } = this.form.value;
+
+    // validate inputs
+    if (!this.form.controls.formLoan.valid) {
+      return;
+    }
+
+    // validate tx
+    const tx: Tx = this.createPendingTx;
+    if (tx && tx.confirmed) {
+      return await this.router.navigate(['/loan', formUi.calculatedId]);
+    }
+    if (tx) {
+      return this.showMessage('Please wait for your loan to finish being created.');
+    }
+
+    // validate encoded data
+    const { loanData } = formLoan;
+    let loanDataValid: boolean;
+    try {
+      loanDataValid = await this.contractsService.validateEncodedData(loanData);
+    } catch (e) { }
+    if (!loanDataValid) {
+      return this.showMessage('Please check the installments data.');
+    }
+
+    // calculate loan ID and emit form data
+    this.showMessage('Please confirm the metamask transaction. Your Loan is being processed.');
+    const account: string = this.account;
+    const { amount, model, oracle, callback, salt, expiration } = formLoan;
+    const calculatedId: string = await this.contractsService.calculateLoanId(
+      amount,
+      account,
+      account,
+      model,
+      oracle,
+      callback,
+      salt,
+      expiration,
+      loanData
+    );
+    this.form.controls.formUi.patchValue({
+      calculatedId
+    });
+
+    const loan: Loan = await this.updateLoanMockup();
+    const form: LoanRequest = {
+      amount,
+      model,
+      oracle,
+      account,
+      callback,
+      salt,
+      expiration,
+      encodedData: loanData
+    };
+    this.createLoan.emit({ loan, form });
   }
 
   /**
    * Create form object variables
    */
   private buildForm() {
-    const DEFAULT_CALLBACK = '0x';
-    const DEFAULT_SALT = new Date().getTime();
+    const web3: any = this.web3Service.web3;
+
+    const DEFAULT_CALLBACK = Utils.address0x;
+    const DEFAULT_SALT = web3.utils.randomHex(32);
     const DEFAULT_MODEL = environment.contracts.models.installments;
     const DEFAULT_INSTALLMENTS = 1;
     const DEFAULT_INSTALLMENTS_ACTIVATED = false;
@@ -95,7 +163,6 @@ export class StepCreateLoanComponent implements OnInit {
       formUi: new FormGroup({
         calculatedId: new FormControl(null),
         amount: new FormControl(null, [Validators.required, Validators.min(0)]),
-        amountReturn: new FormControl(null, [Validators.required, Validators.min(0)]),
         currency: new FormControl(null, Validators.required),
         duration: new FormControl(null, Validators.required),
         expiration: new FormControl(null, Validators.required),
@@ -120,13 +187,9 @@ export class StepCreateLoanComponent implements OnInit {
           await this.contractsService.symbolToOracle(currency.symbol) ||
           Utils.address0x;
 
-        this.form.controls.formLoan.patchValue({
-          oracle
-        });
+        this.form.controls.formLoan.patchValue({ oracle });
       } else {
-        this.form.controls.formLoan.patchValue({
-          oracle: null
-        });
+        this.form.controls.formLoan.patchValue({ oracle: null });
       }
 
       // set amount
@@ -138,9 +201,7 @@ export class StepCreateLoanComponent implements OnInit {
           amount: amountInWei.toString()
         });
       } else {
-        this.form.controls.formLoan.patchValue({
-          amount: null
-        });
+        this.form.controls.formLoan.patchValue({ amount: null });
       }
 
       // set duration or frequency timestamp
@@ -153,42 +214,45 @@ export class StepCreateLoanComponent implements OnInit {
         });
 
         // set available installemtns and replace duration by frequency
-        if (
-          Utils.bn(duration) > INSTALLMENTS_FREQUENCY &&
-          installmentsActivated &&
-          currency &&
-          amount
-        ) {
+        if (currency && amount && annualInterestRate) {
           const availableInstallments: BN = Utils.bn(duration).div(INSTALLMENTS_FREQUENCY);
-          const frequency: BN = durationSeconds.div(availableInstallments);
           const { decimals } = new Currency(currency.symbol);
           const amountInWei: BN = Utils.bn(amount).mul(Utils.pow(10, decimals));
+          const interestRate: number = Utils.toInterestRate(annualInterestRate);
+
+          let installments: BN = Utils.bn(DEFAULT_INSTALLMENTS);
+          let frequency: BN = durationSeconds;
+          if (Utils.bn(duration) > INSTALLMENTS_FREQUENCY && installmentsActivated) {
+            installments = availableInstallments;
+            frequency = durationSeconds.div(availableInstallments);
+          }
+
           const estimatedCuota: BN = this.estimateCuotaAmount(
             amountInWei,
-            availableInstallments,
+            installments,
             Utils.bn(annualInterestRate),
             Utils.bn(duration)
           );
 
-          const interestRate: number = Utils.toInterestRate(annualInterestRate);
           this.form.controls.formModel.patchValue({
             duration: frequency.toString(),
-            installments: availableInstallments.toString(),
+            installments: installments.toString(),
             cuota: estimatedCuota.toString()
           });
 
           const loanData: string = await this.contractsService.encodeInstallmentsData(
             estimatedCuota.toString(),
             Utils.bn(interestRate).toString(),
-            availableInstallments.toString(),
-            duration.toString(),
+            installments.toString(),
+            frequency.toString(),
             DAY_SECONDS.toString()
           );
+
           this.form.controls.formLoan.patchValue({
             loanData
           });
         } else {
-          const loanData = '0x'; // TODO: get loanData without installments
+          const loanData = null;
           this.form.controls.formLoan.patchValue({
             loanData
           });
@@ -229,9 +293,7 @@ export class StepCreateLoanComponent implements OnInit {
           expiration: expirationTimestamp.toString()
         });
       } else {
-        this.form.controls.formLoan.patchValue({
-          expiration: null
-        });
+        this.form.controls.formLoan.patchValue({ expiration: null });
       }
 
       await this.updateLoanMockup();
@@ -282,17 +344,17 @@ export class StepCreateLoanComponent implements OnInit {
     ).neg();
   }
 
-  private async updateLoanMockup() {
+  /**
+   * Update loan model
+   * @return Loan
+   */
+  private async updateLoanMockup(): Promise<Loan> {
     const LOAN_NETWORK = Network.Diaspore;
     const LOAN_STATUS = Status.Ongoing;
     const LOAN_MODEL = environment.contracts.models.installments;
-    const LOAN_CREATOR = Utils.address0x;
+    const LOAN_CREATOR = this.account || Utils.address0x;
 
-    const {
-      calculatedId,
-      currency,
-      annualInterestRate
-    } = this.form.value.formUi;
+    const { calculatedId, currency, annualInterestRate } = this.form.value.formUi;
     const { amount, expiration, oracle } = this.form.value.formLoan;
     const {
       cuota,
@@ -333,7 +395,18 @@ export class StepCreateLoanComponent implements OnInit {
       LOAN_MODEL
     );
 
-    console.info(loan);
     this.updateLoan.emit(loan);
+    return loan;
+  }
+
+  /**
+   * Show snackbar with a message
+   * @param message The message to show in the snackbar
+   */
+  private showMessage(message: string) {
+    this.snackBar.open(message , null, {
+      duration: 4000,
+      horizontalPosition: 'center'
+    });
   }
 }
