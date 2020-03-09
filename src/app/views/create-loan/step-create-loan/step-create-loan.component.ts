@@ -27,16 +27,15 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
   pageId = 'step-create-loan';
   durationDays: number[] = [15, 30, 45, 60, 75, 90];
   currencies: CurrencyItem[];
-  daySeconds: BN = Utils.bn(60 * 60 * 24);
-  installmentsFrequency: BN = Utils.bn(15);
+  form: FormGroup;
+  private daySeconds: BN = Utils.bn(60 * 60 * 24);
+  private installmentsFrequency: BN = Utils.bn(15);
 
   @Input() account: string;
   @Input() createPendingTx: Tx;
   @Output() updateLoan = new EventEmitter<Loan>();
   @Output() createLoan = new EventEmitter<{ loan: Loan, form: LoanRequest }>();
-  @Output() loanWasCreated = new EventEmitter(); // TODO: implement
-  loan: Loan;
-  form: FormGroup;
+  @Output() loanWasCreated = new EventEmitter();
 
   constructor(
     private snackBar: MatSnackBar,
@@ -185,6 +184,11 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     });
   }
 
+  /**
+   * Detect changes on the UI and update controls
+   * @param formUi Form UI values
+   * @return new loan state
+   */
   private async updateFormUi(formUi) {
     const amount: number = formUi.amount;
     const currency: CurrencyItem = formUi.currency;
