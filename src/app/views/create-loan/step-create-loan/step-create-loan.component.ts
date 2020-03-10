@@ -142,6 +142,9 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     this.createLoan.emit({ loan, form });
   }
 
+  /**
+   * Select the best interest rate when the user chooses another currency
+   */
   changeCurrency() {
     const { currency } = this.form.value.formUi;
     const annualInterestRate = currency.bestInterestRate.best;
