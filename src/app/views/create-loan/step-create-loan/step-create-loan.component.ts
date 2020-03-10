@@ -15,6 +15,7 @@ import { environment } from './../../../../environments/environment';
 import { Web3Service } from './../../../services/web3.service';
 import { ContractsService } from './../../../services/contracts.service';
 import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
+import { WalletConnectService } from './../../../services/wallet-connect.service';
 import { Tx } from './../../../services/tx.service';
 
 @Component({
@@ -45,6 +46,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     private spinner: NgxSpinnerService,
     private web3Service: Web3Service,
     private contractsService: ContractsService,
+    private walletConnectService: WalletConnectService,
     private currenciesService: CurrenciesService
   ) { }
 
@@ -100,6 +102,11 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     } catch (e) { }
     if (!loanDataValid) {
       return this.showMessage('Please check the installments data.');
+    }
+
+    // validate logged in
+    if (!await this.walletConnectService.connect()) {
+      return this.showMessage('Please connect your wallet to continue');
     }
 
     // calculate loan ID and emit form data

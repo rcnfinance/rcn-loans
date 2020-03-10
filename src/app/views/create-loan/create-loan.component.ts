@@ -195,39 +195,30 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     loan: Loan,
     form: LoanRequest
   ) {
-    const web3: any = this.web3Service.web3;
-    const account = web3.utils.toChecksumAddress(await this.web3Service.getAccount());
-
     try {
-      const id: string = loan.id;
-      const amount: number = loan.amount;
       const engine: string = environment.contracts.diaspore.loanManager;
       const tx: string = await this.contractsService.requestLoan(
         form.amount,
         form.model,
         form.oracle,
-        account,
+        form.account,
         form.callback,
         form.salt,
         form.expiration,
         form.encodedData
       );
 
+      const { id, amount } = loan;
+      this.txService.registerCreateTx(tx, { engine, id, amount });
       this.location.replaceState(`/create/${ id }`);
-      this.txService.registerCreateTx(tx, {
-        engine,
-        id,
-        amount
-      });
       this.retrievePendingTx();
       this.loanWasCreated = true;
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.stack.indexOf('User denied transaction signature') < 0) {
-        return this.showMessage('A problem occurred during loan creation', 'snackbar');
+        throw Error(e);
       }
-      console.info('err creating loan', e);
-      throw Error(e);
+      return this.showMessage('A problem occurred during loan creation', 'snackbar');
     }
   }
 
@@ -256,9 +247,9 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.stack.indexOf('User denied transaction signature') < 0) {
-        return this.showMessage('A problem occurred during collateral creation', 'snackbar');
+        throw Error(e);
       }
-      throw Error(e);
+      return this.showMessage('A problem occurred during collateral creation', 'snackbar');
     }
   }
 
