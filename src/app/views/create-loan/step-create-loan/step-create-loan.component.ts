@@ -82,7 +82,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
 
     // validate inputs
     if (!this.form.controls.formLoan.valid) {
-      return;
+      return this.showMessage('Please check the fields and try again.');
     }
 
     // validate tx
@@ -96,10 +96,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
 
     // validate encoded data
     const { loanData } = formLoan;
-    let loanDataValid: boolean;
-    try {
-      loanDataValid = await this.contractsService.validateEncodedData(loanData);
-    } catch (e) { }
+    const loanDataValid: boolean = await this.contractsService.validateEncodedData(loanData);
     if (!loanDataValid) {
       return this.showMessage('Please check the installments data.');
     }
