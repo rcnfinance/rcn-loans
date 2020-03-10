@@ -20,6 +20,17 @@ describe('Utils', () => {
     expect(pmtInWei.toFixed(2)).toEqual('537.08');
   });
 
+  it('should return an amount in wei', () => {
+    expect(Utils.getAmountInWei(0.5, 18).toString())
+        .toEqual(Utils.bn(0.5 * 10 ** 18).toString());
+    expect(Utils.getAmountInWei(1, 18).toString())
+        .toEqual(Utils.bn(10 ** 18).toString());
+    expect(Utils.getAmountInWei(15, 18).toString())
+        .toEqual(Utils.bn(15 * 10 ** 18).toString());
+    expect(Utils.getAmountInWei(100000, 6).toString())
+        .toEqual(Utils.bn(100000 * 10 ** 6).toString());
+  });
+
   it('should return a bn', () => {
     expect(Utils.bn(1234)).toEqual(new BN(1234));
     expect(Utils.bn(1234)).toEqual(new BN(1234));

@@ -230,7 +230,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     // set amount
     if (currency && amount) {
       const { decimals } = new Currency(currency.symbol);
-      const amountInWei: BN = this.getAmountInWei(amount, decimals);
+      const amountInWei: BN = Utils.getAmountInWei(amount, decimals);
 
       this.form.controls.formLoan.patchValue({
         amount: amountInWei.toString()
@@ -252,7 +252,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
       if (currency && amount && annualInterestRate) {
         const availableInstallments: BN = Utils.bn(duration).div(INSTALLMENTS_FREQUENCY);
         const { decimals } = new Currency(currency.symbol);
-        const amountInWei: BN = this.getAmountInWei(amount, decimals);
+        const amountInWei: BN = Utils.getAmountInWei(amount, decimals);
         const interestRate: number = Utils.toInterestRate(annualInterestRate);
 
         let installments: BN = Utils.bn(DEFAULT_INSTALLMENTS);
@@ -333,24 +333,6 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
 
     const loan: Loan = await this.updateLoanMockup();
     return loan;
-  }
-
-  /**
-   * Return an amount in wei
-   * @param amount Form raw amount
-   * @param decimals Token decimals
-   * @return amount.pow(decimals)
-   */
-  private getAmountInWei(amount: number, decimals: number) {
-    if (amount % 1 !== 0) {
-      const amountInWei: number = amount * (10 ** decimals);
-      try {
-        return Utils.bn(amountInWei.toLocaleString('fullwide', { useGrouping: false }));
-      } catch (err) {
-        return Utils.bn(amountInWei);
-      }
-    }
-    return Utils.bn(amount).mul(Utils.pow(10, decimals));
   }
 
   /**

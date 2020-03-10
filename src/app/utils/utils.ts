@@ -176,6 +176,24 @@ export class Utils {
   }
 
   /**
+   * Return an amount in wei
+   * @param amount Form raw amount
+   * @param decimals Token decimals
+   * @return amount.pow(decimals)
+   */
+  static getAmountInWei(amount: number, decimals: number): BN {
+    if (amount % 1 !== 0) {
+      const amountInWei: number = amount * (10 ** decimals);
+      try {
+        return this.bn(amountInWei.toLocaleString('fullwide', { useGrouping: false }));
+      } catch (err) {
+        return this.bn(amountInWei);
+      }
+    }
+    return this.bn(amount).mul(this.pow(10, decimals));
+  }
+
+  /**
    * Convert the specified value to BN
    * @param value Value
    * @param base Base
