@@ -214,7 +214,6 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
       this.retrievePendingTx();
       this.loanWasCreated = true;
     } catch (e) {
-      console.info('err', e);
       // Don't show 'User denied transaction signature' error
       if (e.stack.indexOf('User denied transaction signature') < 0) {
         this.showMessage('A problem occurred during loan creation', 'snackbar');
