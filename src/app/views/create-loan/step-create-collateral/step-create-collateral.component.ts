@@ -5,6 +5,7 @@ import * as BN from 'bn.js';
 import { Utils } from '../../../utils/utils';
 import { Currency } from '../../../utils/currencies';
 import { Loan } from './../../../models/loan.model';
+import { Collateral } from './../../../models/collateral.model';
 import { CollateralRequest } from './../../../interfaces/collateral-request';
 // App Services
 import { ContractsService } from './../../../services/contracts.service';
@@ -26,7 +27,10 @@ export class StepCreateCollateralComponent implements OnInit {
   @Input() account: string; // TODO implement
   @Input() createPendingTx: Tx;
   @Input() collateralPendingTx: Tx;
-  @Output() updateCollateralRequest = new EventEmitter<CollateralRequest>();
+  @Output() updateCollateralRequest = new EventEmitter<{
+    collateral: Collateral,
+    form: CollateralRequest
+  }>();
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -38,6 +42,7 @@ export class StepCreateCollateralComponent implements OnInit {
   ngOnInit() {
     this.buildForm();
     this.getCurrencies();
+    this.updateCollateralMockup();
   }
 
   /**
@@ -181,6 +186,9 @@ export class StepCreateCollateralComponent implements OnInit {
       });
       await this.onCollateralAdjustmentChange();
     }
+
+    const collateral: CollateralRequest = this.updateCollateralMockup();
+    return collateral;
   }
 
   /**
@@ -289,5 +297,40 @@ export class StepCreateCollateralComponent implements OnInit {
     this.form.controls.formUi.patchValue({ collateralAdjustment });
 
     return collateralPercentage;
+  }
+
+  /**
+   * Update collateral model
+   * @return CollateralRequest
+   */
+  private updateCollateralMockup(): CollateralRequest {
+    const form = this.form.value;
+    const { debtId, oracle, amount, liquidationRatio, balanceRatio } = form.formCollateral;
+    const request: CollateralRequest = {
+      debtId,
+      oracle,
+      amount,
+      liquidationRatio,
+      balanceRatio
+    };
+
+    const { currency } = form.formUi;
+    const token: string = currency.address;
+
+    const collateral: Collateral = new Collateral(
+      null,
+      debtId,
+      oracle,
+      token,
+      amount,
+      liquidationRatio,
+      balanceRatio
+    );
+
+    this.updateCollateralRequest.emit({
+      form: request,
+      collateral
+    });
+    return request;
   }
 }
