@@ -6,7 +6,7 @@
   [name]="pageId"
 ></ngx-spinner>
 
-<form [formGroup]="form" (ngSubmit)="submit()">
+<form [formGroup]="form">
   <div class="content-wrapper" formGroupName="formUi">
     <div class="row mt-4 pt-3">
       <div class="col-sm-11 col-md-12">
@@ -21,7 +21,7 @@
                   placeholder="Select a Token"
                   formControlName="currency"
                   required
-                  (selectionChange)="onCurrencyChange($event.value)"
+                  (selectionChange)="onCurrencyChange()"
                 >
                   <mat-option
                     *ngFor="let currency of currencies"

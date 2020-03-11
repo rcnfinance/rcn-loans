@@ -22,7 +22,6 @@ export class StepCreateCollateralComponent implements OnInit {
   pageId = 'step-create-collateral';
   currencies: CurrencyItem[];
   form: FormGroup;
-  maxCollateralAdjustment = 400;
   @Input() loan: Loan;
   @Input() account: string; // TODO implement
   @Input() createPendingTx: Tx;
@@ -167,7 +166,7 @@ export class StepCreateCollateralComponent implements OnInit {
     }
 
     // update collateral adjustment
-    const MAX_COLLATERAL_ADJUSTMENT: number = this.maxCollateralAdjustment;
+    const MAX_COLLATERAL_ADJUSTMENT = 400;
     const { balanceRatio } = this.form.value.formCollateral;
     const minAdjustment: number = this.toPercentage(balanceRatio).toNumber() + 50;
 
