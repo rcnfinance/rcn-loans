@@ -66,6 +66,11 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
       'Basalt engine',
       environment.contracts.basaltEngine,
       'transactions for Legacy Basalt loans'
+    ),
+    new Operator(
+      'Collateral',
+      environment.contracts.collateral.collateral,
+      'transactions'
     )
   ];
   tokenApproves: Object[];
@@ -476,8 +481,8 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     const selectedOperator = this.onlyAddress;
     const selectedContract = this.onlyToken || this.onlyAsset;
 
-    const contract = contracts.filter((ct: Contract) => ct.address === selectedContract)[0];
-    const operator = operators.filter((op: Operator) => op.address === selectedOperator)[0];
+    const contract = contracts.find((ct: Contract) => ct.address === selectedContract);
+    const operator = operators.find((op: Operator) => op.address === selectedOperator);
 
     this.dialogDescription = `To continue please enable ${ contract.name } ${ operator.action } on the Credit Marketplace.`;
     return this.dialogDescription;
