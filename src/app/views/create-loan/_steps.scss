@@ -1,5 +1,14 @@
 @import './../../../../scss/fonts';
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .content-wrapper {
   box-sizing: border-box;
 }
@@ -43,7 +52,6 @@
     }
   }
 }
-
 
 .item {
   &__title {
