@@ -248,7 +248,7 @@ export class ContractsService {
     }
 
     const account = await this.web3Service.getAccount();
-    const erc721abi: any = {}; // FIXME: use real erc721 abi
+    const erc721abi: any = collateralAbi.abi;
     const erc721 = this.makeContract(erc721abi, contractAddress);
 
     return await erc721.methods.isApprovedForAll(
@@ -266,7 +266,7 @@ export class ContractsService {
   async approveERC721(contractAddress: string, operatorAddress: string): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
     const account = await this.web3Service.getAccount();
-    const erc721abi: any = {}; // FIXME: use real erc721 abi
+    const erc721abi: any = collateralAbi.abi;
     const erc721: any = this.makeContract(erc721abi, contractAddress);
 
     return new Promise((resolve, reject) => {
@@ -292,7 +292,7 @@ export class ContractsService {
   async disapproveERC721(contractAddress: string, operatorAddress: string): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
     const account = await this.web3Service.getAccount();
-    const erc721abi: any = {}; // FIXME: use real erc721 abi
+    const erc721abi: any = collateralAbi.abi;
     const erc721: any = this.makeContract(erc721abi, contractAddress);
 
     return new Promise((resolve, reject) => {
