@@ -3,10 +3,11 @@
   size="medium"
   color="#fff"
   type="ball-clip-rotate-multiple"
+  [name]="pageId"
 ></ngx-spinner>
 
-<form [formGroup]="form" #formGroup="ngForm">
-  <div class="content-wrapper">
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="content-wrapper" formGroupName="formUi">
     <div class="row mt-4 pt-3">
       <div class="col-sm-11 col-md-12">
         <div class="row">
@@ -18,18 +19,17 @@
               <mat-form-field>
                 <mat-select
                   placeholder="Select a Token"
-                  formControlName="collateralAsset"
-                  (selectionChange)="onCollateralAssetChange($event.value)"
+                  formControlName="currency"
                   required
+                  (selectionChange)="onCurrencyChange($event.value)"
                 >
                   <mat-option
                     *ngFor="let currency of currencies"
-                    [value]="currency.symbol"
+                    [value]="currency"
                   >
                     <div class="d-flex align-items-center py-1">
-                      <app-currency-logo
-                        [address]="currency.address"
-                      ></app-currency-logo>
+                      <app-currency-logo [address]="currency.address">
+                      </app-currency-logo>
                       <span class="ml-3">
                         {{ currency.symbol }}
                       </span>
@@ -50,11 +50,11 @@
                   type="number"
                   min="0"
                   max="10000000"
-                  formControlName="collateralAmount"
+                  formControlName="amount"
                   placeholder="0"
-                  (keyup)="onCollateralAmountChange($event.value)"
                   pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
                   required
+                  (keyup)="onAmountChange()"
                 />
               </mat-form-field>
             </div>
@@ -70,26 +70,20 @@
                 <mat-radio-group
                   formControlName="liquidationRatio"
                   aria-label="Select an option"
-                  (change)="onLiquidationRatioChange()"
                 >
-                  <mat-radio-button
-                    color="primary"
-                    [value]="125"
-                  >
+                  <mat-radio-button color="primary" [value]="125">
                     125%
                   </mat-radio-button>
-                  <mat-radio-button
-                    color="primary"
-                    [value]="150"
-                    class="ml-4"
-                  >
+                  <mat-radio-button color="primary" [value]="150" class="ml-4">
                     150%
                   </mat-radio-button>
                 </mat-radio-group>
               </div>
             </div>
             <div class="item__message item__message--info">
-              <i class="fas fa-info-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              <i class="fas fa-info-circle"></i>
+              <!-- TODO: add real text -->
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             </div>
           </div>
         </div>
@@ -111,14 +105,14 @@
                   thumbLabel="true"
                   formControlName="collateralAdjustment"
                   [displayWith]="formatPercentage"
-                  [disabled]="!form?.value.collateralAsset"
-                  [min]="form?.value.liquidationRatio"
+                  [disabled]="!form.value.formUi.currency"
+                  [min]="form.value.formUi.liquidationRatio"
                   [max]="400"
-                  (change)="onCollateralRatioChange()"
+                  (change)="onCollateralAdjustmentChange()"
                 ></mat-slider>
                 <div class="item__percentage">
                   <div class="item__percentage-amount">
-                    {{ form?.value.liquidationRatio }} %
+                    {{ form.value.formUi.liquidationRatio }} %
                   </div>
                   <div class="item__percentage-amount">
                     400 %
@@ -127,7 +121,7 @@
               </div>
             </div>
             <div
-              *ngIf="form?.value.collateralAsset"
+              *ngIf="form.value.formUi.currency"
               class="item__message item__message--info"
             >
               <i class="fas fa-info-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit.

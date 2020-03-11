@@ -1,24 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import {
-  MatDialog,
-  MatSnackBar
-} from '@angular/material';
-import { Subscription, Observable } from 'rxjs';
-import * as BN from 'bn.js';
-import { debounceTime } from 'rxjs/operators';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as BN from 'bn.js';
 import { Utils } from '../../../utils/utils';
 import { Currency } from '../../../utils/currencies';
 import { Loan } from './../../../models/loan.model';
 import { CollateralRequest } from './../../../interfaces/collateral-request';
-import { environment } from './../../../../environments/environment';
-// App Components
-import { DialogGenericErrorComponent } from '../../../dialogs/dialog-generic-error/dialog-generic-error.component';
 // App Services
 import { ContractsService } from './../../../services/contracts.service';
 import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
-import { Web3Service } from './../../../services/web3.service';
+import { EventsService } from './../../../services/events.service';
 import { Tx } from './../../../services/tx.service';
 
 @Component({
@@ -28,45 +19,26 @@ import { Tx } from './../../../services/tx.service';
 })
 export class StepCreateCollateralComponent implements OnInit {
 
-  // Static data
-  currencies = [];
-  account: string;
-
-  // Loan form
+  pageId = 'step-create-collateral';
+  currencies: CurrencyItem[];
   form: FormGroup;
-  balanceRatio: FormControl;
-  collateralAdjustment: FormControl;
-  collateralAsset: FormControl;
-  collateralAmount: FormControl;
-  liquidationRatio: FormControl;
-
-  // Collateral state
-  collateralAmountObserver: any;
-  collateralSelectedOracle: any;
-  collateralSelectedCurrency: CurrencyItem;
-  collateralWasCreated = false;
+  maxCollateralAdjustment = 400;
   @Input() loan: Loan;
+  @Input() account: string; // TODO implement
   @Input() createPendingTx: Tx;
   @Input() collateralPendingTx: Tx;
   @Output() updateCollateralRequest = new EventEmitter<CollateralRequest>();
 
-  // subscriptions
-  txSubscription: boolean;
-  subscriptionAccount: Subscription;
-
   constructor(
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
-    private web3Service: Web3Service
+    private eventsService: EventsService
   ) { }
 
   ngOnInit() {
+    this.buildForm();
     this.getCurrencies();
-    this.createFormControls();
-    this.createForm();
   }
 
   /**
@@ -79,361 +51,244 @@ export class StepCreateCollateralComponent implements OnInit {
   }
 
   /**
-   * Get available currencies for loan and collateral select
+   * Estimate the new collateral percentage
    */
-  getCurrencies() {
-    this.currencies = this.currenciesService.getCurrencies();
+  async onAmountChange() {
+    this.spinner.show(this.pageId);
+
+    try {
+      const { currency, amount } = this.form.value.formUi;
+      await this.calculateCollateralPercentage(this.loan, currency, amount);
+    } catch (err) {
+      this.eventsService.trackError(err);
+    } finally {
+      this.spinner.hide(this.pageId);
+    }
   }
 
   /**
-   * Create form controls and define values
+   * Estimate the new collateral amount (when the rate changes)
    */
-  createFormControls() {
-    // Loan form
-    this.collateralAdjustment = new FormControl(undefined, Validators.required);
-    this.collateralAsset = new FormControl(null);
-    this.collateralAmount = new FormControl(null, Validators.required);
-    this.liquidationRatio = new FormControl(150, Validators.required);
-    this.balanceRatio = new FormControl(200, Validators.required);
+  async onCurrencyChange() {
+    await this.onCollateralAdjustmentChange();
+  }
+
+  /**
+   * Estimate the new collateral amount
+   */
+  async onCollateralAdjustmentChange() {
+    this.spinner.show(this.pageId);
+
+    try {
+      const { currency, collateralAdjustment } = this.form.value.formUi;
+      await this.calculateCollateralAmount(this.loan, currency, collateralAdjustment);
+    } catch (err) {
+      this.eventsService.trackError(err);
+    } finally {
+      this.spinner.hide(this.pageId);
+    }
   }
 
   /**
    * Create form object variables
    */
-  createForm() {
+  private buildForm() {
+    const DEFAULT_LIQUIDATION_RATIO = 150;
+    const DEFAULT_BALANCE_RATIO = 200;
+
     this.form = new FormGroup({
-      collateralAdjustment: this.collateralAdjustment,
-      collateralAsset: this.collateralAsset,
-      collateralAmount: this.collateralAmount,
-      liquidationRatio: this.liquidationRatio,
-      balanceRatio: this.balanceRatio
+      // form to send to the create method
+      formCollateral: new FormGroup({
+        debtId: new FormControl(null, Validators.required),
+        oracle: new FormControl(null, Validators.required),
+        amount: new FormControl(null, Validators.required),
+        liquidationRatio: new FormControl(DEFAULT_LIQUIDATION_RATIO, Validators.required),
+        balanceRatio: new FormControl(DEFAULT_BALANCE_RATIO, Validators.required)
+      }),
+      // form for handle the ui
+      formUi: new FormGroup({
+        currency: new FormControl(null, Validators.required),
+        amount: new FormControl(null, Validators.required),
+        liquidationRatio: new FormControl(DEFAULT_LIQUIDATION_RATIO, Validators.required),
+        collateralAdjustment: new FormControl(null, Validators.required)
+      })
+    });
+
+    this.form.controls.formUi.valueChanges.subscribe(async (formUi) => {
+      await this.updateFormUi(formUi);
     });
   }
 
   /**
-   * Change collateral asset and restore form values
-   * @param symbol Collateral asset symbol
+   * Detect changes on the UI and update controls
+   * @param formUi Form UI values
+   * @return new loan state
    */
-  async onCollateralAssetChange(symbol) {
-    await this.updateSelectedCurrency(symbol);
-    const form: FormGroup = this.form;
-    this.spinner.show();
+  private async updateFormUi(formUi) {
+    const currency: CurrencyItem = formUi.currency;
+    const amount: number = formUi.amount;
+    const liquidationRatio: number = formUi.liquidationRatio;
+    const collateralAdjustment: number = formUi.collateralAdjustment;
 
-    try {
-      if (!form.value.collateralAdjustment) {
-        await this.onCollateralRatioChange();
-      }
-      await this.updateCollateralAmount();
-      this.updateRequestCollateralModel();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.spinner.hide();
-    }
-  }
+    // set oracle
+    if (currency) {
+      const oracle: string =
+        await this.contractsService.symbolToOracle(currency.symbol) ||
+        Utils.address0x;
 
-  /**
-   * Calculate the balance ratio
-   */
-  async onCollateralAmountChange(collateralValue) {
-    if (!this.collateralAmountObserver) {
-      new Observable(observer => {
-        this.collateralAmountObserver = observer;
-      }).pipe(debounceTime(300))
-        .subscribe(async () => {
-          this.spinner.show();
-          try {
-            await this.calculateCollateralRatio();
-          } catch (e) {
-            console.error(e);
-          } finally {
-            this.spinner.hide();
-          }
-        });
-    }
-
-    this.collateralAmountObserver.next(collateralValue);
-    this.updateRequestCollateralModel();
-  }
-
-  /**
-   * Set balance ratio min value and update collateral amount input
-   */
-  async onLiquidationRatioChange() {
-    const currency: string = this.collateralAsset.value;
-    if (!currency) {
-      return;
-    }
-
-    this.updateBalanceRatio();
-    this.updateCollateralRatio();
-    await this.updateCollateralAmount();
-    this.updateRequestCollateralModel();
-  }
-
-  /**
-   * Calculate the collateral amount
-   */
-  async onCollateralRatioChange() {
-    this.updateCollateralRatio();
-    this.spinner.show();
-    try {
-      await this.updateCollateralAmount();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.spinner.hide();
-    }
-    this.updateRequestCollateralModel();
-  }
-
-  /**
-   * Update collateral ratio slider
-   */
-  updateCollateralRatio() {
-    const form: FormGroup = this.form;
-    const balanceRatio: number = form.value.balanceRatio;
-    const collateralRatio: number = form.value.collateralAdjustment;
-
-    if (collateralRatio < balanceRatio) {
-      this.form.patchValue({
-        collateralAdjustment: balanceRatio
-      });
-    }
-  }
-
-  async calculateCollateralRatio() {
-    const web3: any = this.web3Service.web3;
-    const loan: Loan = this.loan;
-    const collateralForm: FormGroup = this.form;
-    const collateralAmount = Utils.bn(collateralForm.value.collateralAmount);
-    const collateralAmountMinLimit = Utils.bn(0);
-    const balanceRatioMaxLimit = Utils.bn(5000);
-
-    if (collateralAmount <= collateralAmountMinLimit) {
-      this.showMessage('Choose a bigger collateral amount', 'snackbar');
-      return false;
-    }
-
-    try {
-      const loanAmount = loan.currency.fromUnit(loan.amount);
-      const loanCurrency = loan.currency.symbol;
-      const collateralCurrency = this.collateralSelectedCurrency.symbol;
-      const hundredPercent = Utils.bn(100).mul(Utils.bn(100));
-
-      let loanAmountInCollateral = await this.calculateCollateralAmount(
-        loanAmount,
-        loanCurrency,
-        hundredPercent,
-        collateralCurrency
-      );
-      loanAmountInCollateral = web3.utils.fromWei(loanAmountInCollateral);
-
-      const collateralRatio = (collateralAmount.mul(Utils.bn(100))).div(loanAmountInCollateral);
-
-      if (collateralRatio >= balanceRatioMaxLimit) {
-        this.showMessage('Choose a smaller collateral amount', 'snackbar');
-        return false;
-      }
-
-      this.form.patchValue({
-        collateralAdjustment: Utils.formatAmount(collateralRatio, 0)
-      });
-    } catch (e) {
-      throw Error(e);
-    }
-  }
-
-  /**
-   * Update selected oracle
-   * @param symbol Currency symbol
-   */
-  async updateSelectedCurrency(symbol: string) {
-    const oracle: string = await this.contractsService.symbolToOracle(symbol);
-    const currency: CurrencyItem = this.currenciesService.getCurrencyByKey('symbol', symbol);
-
-    this.collateralSelectedCurrency = currency;
-    this.collateralSelectedOracle = oracle;
-  }
-
-  /**
-   * Update collateral amount input
-   */
-  async updateCollateralAmount() {
-    const web3: any = this.web3Service.web3;
-    const loan: Loan = this.loan;
-    const collateralForm: FormGroup = this.form;
-    const collateralRatio: any = Utils.bn(collateralForm.value.collateralAdjustment);
-    const collateralRatioMinLimit = 0;
-    const collateralRatioMaxLimit = 5000;
-
-    if (collateralRatio <= collateralRatioMinLimit) {
-      this.showMessage('Choose a bigger collateral amount', 'snackbar');
-      return false;
-    }
-    if (collateralRatio >= collateralRatioMaxLimit) {
-      this.showMessage('Choose a smaller collateral amount', 'snackbar');
-      return false;
-    }
-
-    try {
-      const loanAmount = loan.currency.fromUnit(loan.amount);
-      const loanCurrency = loan.currency.symbol;
-      const collateralCurrency = this.collateralSelectedCurrency.symbol;
-
-      const amount = await this.calculateCollateralAmount(
-        loanAmount,
-        loanCurrency,
-        collateralRatio.mul(100),
-        collateralCurrency
-      );
-
-      this.form.patchValue({
-        collateralAmount: Utils.formatAmount(web3.utils.fromWei(amount))
-      });
-    } catch (e) {
-      throw Error(e);
-    }
-  }
-
-  /**
-   * Update balance ratio
-   */
-  updateBalanceRatio() {
-    const form: FormGroup = this.form;
-    const liquidationRatio: number = form.value.liquidationRatio;
-    const balanceRatio: number = liquidationRatio + 50;
-
-    this.form.patchValue({
-      balanceRatio
-    });
-  }
-
-  /**
-   * Calculate required amount in collateral token
-   * @param loanAmount Loan amount in rcn
-   * @param loanCurrency Loan currency symbol
-   * @param collateralRatio Collateral balance ratio
-   * @param collateralAsset Collateral currency token symbol
-   * @return Collateral amount in collateral asset
-   */
-  async calculateCollateralAmount(
-    loanAmount: number,
-    loanCurrency: string,
-    collateralRatio: string | BN,
-    collateralAsset: string
-  ) {
-    const web3: any = this.web3Service.web3;
-    collateralRatio = Utils.bn(collateralRatio).div(Utils.bn(100));
-
-    // calculate amount in rcn
-    let collateralAmount = Utils.bn(collateralRatio).mul(Utils.bn(loanAmount));
-    collateralAmount = collateralAmount.div(Utils.bn(100));
-
-    // convert amount to collateral asset
-    if (loanCurrency === collateralAsset) {
-      collateralAmount = new web3.utils.toWei(collateralAmount);
+      this.form.controls.formCollateral.patchValue({ oracle });
     } else {
-      const fromToken: any = environment.contracts.rcnToken;
-      const toToken: any = this.currenciesService.getCurrencyByKey('symbol', collateralAsset).address;
-      const cost = await this.contractsService.getPriceConvertFrom(
-        fromToken,
-        toToken,
-        web3.utils.toWei(collateralAmount)
-      );
-      collateralAmount = Utils.bn(cost);
+      this.form.controls.formCollateral.patchValue({ oracle: null });
     }
 
-    return collateralAmount;
-  }
+    // set amount
+    if (currency && amount) {
+      const { decimals } = new Currency(currency.symbol);
+      const amountInWei: BN = Utils.getAmountInWei(amount, decimals);
 
-  /**
-   * Set user account address
-   */
-  async loadAccount() {
-    const web3 = this.web3Service.web3;
-    const account = await this.web3Service.getAccount();
-    this.account = web3.utils.toChecksumAddress(account);
-  }
-
-  /**
-   * Update request collateral model
-   * @return New request collateral model
-   */
-  private updateRequestCollateralModel() {
-    const form: FormGroup = this.form;
-    const loan: Loan = this.loan;
-    const loanId: string = loan.id;
-    const oracle: string = this.collateralSelectedOracle;
-    const currency = new Currency(
-      this.collateralSelectedCurrency ? this.collateralSelectedCurrency.symbol : 'RCN'
-    );
-    const collateralToken: string = this.collateralSelectedCurrency.address;
-    const collateralAmount: BN = Utils.bn(form.value.collateralAmount).mul(Utils.bn(10).pow(Utils.bn(currency.decimals)));
-    const liquidationRatio: BN = this.ratio(form.value.liquidationRatio);
-    const balanceRatio: BN = this.ratio(form.value.balanceRatio);
-    const burnFee: BN = Utils.bn(500);
-    const rewardFee: BN = Utils.bn(500);
-    const account: string = this.account;
-
-    try {
-      const collateralRequest: CollateralRequest = {
-        loanId,
-        oracle,
-        collateralToken,
-        collateralAmount,
-        liquidationRatio,
-        balanceRatio,
-        burnFee,
-        rewardFee,
-        account
-      };
-
-      this.updateCollateralRequest.emit(collateralRequest);
-    } catch (e) {
-      throw Error('error on update request collateral');
+      this.form.controls.formCollateral.patchValue({
+        amount: amountInWei.toString()
+      });
+    } else {
+      this.form.controls.formCollateral.patchValue({ amount: null });
     }
-  }
 
-  /**
-   * Show dialog or snackbar with a message
-   * @param message The message to show in the snackbar
-   * @param type UI Format: dialog or snackbar
-   */
-  private showMessage(message: string, type: 'dialog' | 'snackbar') {
-    switch (type) {
-      case 'dialog':
-        const error: Error = {
-          name: 'Error',
-          message: message
-        };
-        this.dialog.open(DialogGenericErrorComponent, {
-          data: {
-            error
-          }
-        });
-        break;
+    // set liquidation and balance ratio
+    if (liquidationRatio) {
+      this.form.controls.formCollateral.patchValue({
+        liquidationRatio: this.toRatio(liquidationRatio).toString(),
+        balanceRatio: this.toRatio(liquidationRatio).toNumber() + 50
+      });
+    } else {
+      this.form.controls.formCollateral.patchValue({
+        liquidationRatio: null,
+        balanceRatio: null
+      });
+    }
 
-      case 'snackbar':
-        this.snackBar.open(message , null, {
-          duration: 4000,
-          horizontalPosition: 'center'
-        });
-        break;
+    // update collateral adjustment
+    const MAX_COLLATERAL_ADJUSTMENT: number = this.maxCollateralAdjustment;
+    const { balanceRatio } = this.form.value.formCollateral;
+    const minAdjustment: number = this.toPercentage(balanceRatio).toNumber() + 50;
 
-      default:
-        console.error(message);
-        break;
+    if (collateralAdjustment < minAdjustment) {
+      this.form.controls.formUi.patchValue({
+        collateralAdjustment: minAdjustment
+      });
+      await this.onCollateralAdjustmentChange();
+    } else if (collateralAdjustment > MAX_COLLATERAL_ADJUSTMENT) {
+      this.form.controls.formUi.patchValue({
+        collateralAdjustment: MAX_COLLATERAL_ADJUSTMENT
+      });
+      await this.onCollateralAdjustmentChange();
     }
   }
 
   /**
    * Return ratio
-   * @param num Ratio %
+   * @param num Percentage %
    * @return Ratio value
    */
-  private ratio (num) {
-    const bn = (n) => Utils.bn(n);
-    return bn(num).mul(bn(2).pow(bn(32))).div(bn(100));
+  private toRatio (percentage: number): BN {
+    const securePercentage: BN = Utils.bn(percentage).mul(Utils.bn(2000));
+    const secureRatio = Utils.bn(securePercentage)
+        .mul(Utils.pow(2, 32))
+        .div(Utils.bn(100));
+
+    return secureRatio.div(Utils.bn(2000));
+  }
+
+  /**
+   * Return percentage
+   * @param num Ratio %
+   * @return Percentage
+   */
+  private toPercentage (ratio: number): BN {
+    const secureRatio: BN = Utils.bn(ratio).mul(Utils.bn(2000));
+    const securePercentage = Utils.bn(secureRatio)
+        .div(Utils.pow(2, 32))
+        .mul(Utils.bn(100));
+
+    return securePercentage.div(Utils.bn(2000));
+  }
+
+  /**
+   * Get available currencies for loan and collateral select
+   */
+  private getCurrencies() {
+    this.currencies = this.currenciesService.getCurrencies();
+  }
+
+  /**
+   * Calculate required amount in collateral token
+   * @param loan Loan
+   * @param currency Collateral currency
+   * @param percentage Collateral adjustment percentage
+   * @return Collateral amount
+   */
+  private async calculateCollateralAmount(
+    loan: Loan,
+    currency: CurrencyItem,
+    percentage: number
+  ) {
+    if (!currency || !percentage) {
+      return;
+    }
+
+    const loanOracle: string = await this.contractsService.symbolToOracle(loan.currency.toString());
+    const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loan.currency.decimals);
+    const loanAmountInRcn: BN = Utils.bn(loan.amount)
+        .mul(Utils.bn(loanRate))
+        .div(Utils.pow(10, loan.currency.decimals));
+
+    const collateralOracle: string = await this.contractsService.symbolToOracle(currency.symbol);
+    const collateralDecimals: number = new Currency(currency.symbol).decimals;
+    const collateralRate: BN | string = await this.contractsService.getRate(collateralOracle, collateralDecimals);
+    const collateralAmountInRcn: BN = Utils.bn(percentage)
+        .mul(Utils.bn(loanAmountInRcn))
+        .div(Utils.bn(100));
+
+    const amount: string = Utils.formatAmount(Number(collateralAmountInRcn) / Number(collateralRate));
+    this.form.controls.formUi.patchValue({ amount });
+
+    return amount;
+  }
+
+  /**
+   * Calculate required amount in collateral token
+   * @param loan Loan
+   * @param currency Collateral currency
+   * @param amount Collateral amount
+   * @return Collateral percentage
+   */
+  private async calculateCollateralPercentage(
+    loan: Loan,
+    currency: CurrencyItem,
+    amount: number
+  ) {
+    if (!currency || !amount) {
+      return;
+    }
+    const loanOracle: string = await this.contractsService.symbolToOracle(loan.currency.toString());
+    const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loan.currency.decimals);
+    const loanAmountInRcn: BN = Utils.bn(loan.amount)
+        .mul(Utils.bn(loanRate))
+        .div(Utils.pow(10, loan.currency.decimals));
+
+    const collateralOracle: string = await this.contractsService.symbolToOracle(currency.symbol);
+    const collateralDecimals: number = new Currency(currency.symbol).decimals;
+    const collateralRate: BN | string = await this.contractsService.getRate(collateralOracle, collateralDecimals);
+    const collateralAmountInRcn: BN = Utils.bn(collateralRate)
+        .mul(Utils.bn(amount).mul(Utils.pow(10, 18)))
+        .div(Utils.pow(10, 18));
+
+    const collateralPercentage: BN = Utils.bn(collateralAmountInRcn)
+        .mul(Utils.bn(100))
+        .div(Utils.bn(loanAmountInRcn));
+
+    const collateralAdjustment: string = Utils.formatAmount(collateralPercentage);
+    this.form.controls.formUi.patchValue({ collateralAdjustment });
+
+    return collateralPercentage;
   }
 }
