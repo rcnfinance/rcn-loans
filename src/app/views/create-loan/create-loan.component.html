@@ -109,6 +109,7 @@
           <app-step-create-collateral
             *ngIf="loanWasCreated"
             [loan]="loan"
+            [account]="account"
             (updateCollateralRequest)="detectUpdateCollateralRequest($event)"
           ></app-step-create-collateral>
         </mat-expansion-panel>

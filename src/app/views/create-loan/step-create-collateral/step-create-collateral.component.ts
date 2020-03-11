@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
@@ -18,7 +18,7 @@ import { Tx } from './../../../services/tx.service';
   templateUrl: './step-create-collateral.component.html',
   styleUrls: ['./step-create-collateral.component.scss']
 })
-export class StepCreateCollateralComponent implements OnInit {
+export class StepCreateCollateralComponent implements OnInit, OnChanges {
 
   pageId = 'step-create-collateral';
   currencies: CurrencyItem[];
@@ -43,6 +43,17 @@ export class StepCreateCollateralComponent implements OnInit {
     this.buildForm();
     this.getCurrencies();
     this.updateCollateralMockup();
+  }
+
+  ngOnChanges() {
+    if (!this.form || !this.loan) {
+      return;
+    }
+
+    const { id } = this.loan;
+    this.form.controls.formCollateral.patchValue({
+      debtId: id
+    });
   }
 
   /**
@@ -304,6 +315,10 @@ export class StepCreateCollateralComponent implements OnInit {
    * @return CollateralRequest
    */
   private updateCollateralMockup(): CollateralRequest {
+    if (!this.form.valid) {
+      return;
+    }
+
     const form = this.form.value;
     const { debtId, oracle, amount, liquidationRatio, balanceRatio } = form.formCollateral;
     const request: CollateralRequest = {

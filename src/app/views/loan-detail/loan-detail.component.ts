@@ -298,9 +298,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       collateral.token,
       collateral.amount,
       collateral.liquidation_ratio,
-      collateral.balance_ratio,
-      collateral.burn_fee,
-      collateral.reward_fee
+      collateral.balance_ratio
     );
 
     const liquidationRatio = Utils.bn(collateral.liquidation_ratio).div(Utils.bn(100));

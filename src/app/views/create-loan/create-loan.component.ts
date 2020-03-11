@@ -21,6 +21,7 @@ import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
 import { TxService, Tx, Type } from './../../services/tx.service';
+import { Currency } from './../../utils/currencies';
 import { Utils } from './../../utils/utils';
 
 @Component({
@@ -98,9 +99,12 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
   async detectCreateLoan({
     loan,
     form
+  }: {
+    loan: Loan,
+    form: LoanRequest
   }) {
     const pendingTx: Tx = this.createPendingTx;
-    this.loan = loan as Loan;
+    this.loan = loan;
 
     if (pendingTx && pendingTx.confirmed) {
       return await this.router.navigate(['/', 'loan', loan.id]);
@@ -118,20 +122,15 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
    * Detect update collateral request
    * @param form Collateral form data
    */
-  detectUpdateCollateralRequest(form: CollateralRequest) {
-    const loan: Loan = this.loan;
+  detectUpdateCollateralRequest({
+    form,
+    collateral
+  }: {
+    form: CollateralRequest,
+    collateral: Collateral
+  }) {
     this.collateralRequest = form;
-    this.collateral = new Collateral(
-      null,
-      loan.id,
-      form.oracle,
-      form.collateralToken,
-      form.collateralAmount,
-      form.liquidationRatio,
-      form.balanceRatio,
-      form.burnFee,
-      form.rewardFee
-    );
+    this.collateral = collateral;
   }
 
   /**
@@ -141,6 +140,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     const loanTx: Tx = this.createPendingTx;
     const collateralTx: Tx = this.collateralPendingTx;
     const loan: Loan = this.loan;
+    const collateral: Collateral = this.collateral;
     const form: CollateralRequest = this.collateralRequest;
 
     if (loanTx && !loanTx.confirmed) {
@@ -160,21 +160,22 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
       await this.walletConnectService.connect();
     }
     // check collateral asset balance
-    const balance = await this.contractsService.getUserBalanceInToken(form.collateralToken);
-    const required = form.collateralAmount;
-    if (Utils.bn(balance) < Utils.bn(required)) {
+    const balance: BN = await this.contractsService.getUserBalanceInToken(collateral.token);
+    const required: BN = Utils.bn(form.amount);
+
+    if (required.gte(balance)) {
       const currency: CurrencyItem = this.currenciesService.getCurrencyByKey(
         'address',
-        form.collateralToken
+        collateral.token
       );
-      this.showInsufficientFundsDialog(Utils.bn(required), Number(balance), currency.symbol);
-      return;
+      const decimals = Currency.getDecimals(currency.symbol);
+      return this.showInsufficientFundsDialog(required, balance, currency.symbol, decimals);
     }
     // validate approve
     const contractAddress: string = environment.contracts.collateral.collateral;
-    const engineApproved = await this.contractsService.isApproved(contractAddress, form.collateralToken);
+    const engineApproved = await this.contractsService.isApproved(contractAddress, collateral.token);
     if (!await engineApproved) {
-      const approve = await this.showApproveDialog(contractAddress, form.collateralToken);
+      const approve = await this.showApproveDialog(contractAddress, collateral.token);
       if (!approve) {
         this.showMessage('You need to approve the collateral contract to continue.', 'snackbar');
         return;
@@ -227,19 +228,15 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
    * @param form Collateral request form data
    */
   private async handleCreateCollateral(form: CollateralRequest) {
-    const web3: any = this.web3Service.web3;
-    const account = web3.utils.toChecksumAddress(await this.web3Service.getAccount());
+    const account = await this.web3Service.getAccount();
 
     try {
       const tx: string = await this.contractsService.createCollateral(
-        form.loanId,
+        form.debtId,
         form.oracle,
-        form.collateralToken,
-        form.collateralAmount,
+        form.amount,
         form.liquidationRatio,
         form.balanceRatio,
-        form.burnFee,
-        form.rewardFee,
         account
       );
       this.txService.registerCreateCollateralTx(tx, this.loan);
@@ -353,6 +350,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
     dialogRef.componentInstance.onlyAddress = contract;
     dialogRef.componentInstance.onlyToken = token;
+
     return new Promise((resolve) => {
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
@@ -366,11 +364,20 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
 
   /**
    * Show insufficient funds dialog
-   * @param required Amount required
-   * @param balance Actual user balance in selected currency
+   * @param requiredInWei Amount required
+   * @param balanceInWei Actual user balance in selected currency
    * @param currency Currency symbol
+   * @param decimals Currency decimals
    */
-  private showInsufficientFundsDialog(required: BN | string, balance: number, currency: string) {
+  private async showInsufficientFundsDialog(
+    requiredInWei: BN,
+    balanceInWei: BN,
+    currency: string,
+    decimals: number
+  ) {
+    const required = requiredInWei.toString() as any / 10 ** decimals;
+    const balance = balanceInWei.toString() as any / 10 ** decimals;
+
     this.dialog.open(DialogInsufficientfundsComponent, {
       data: {
         required,
