@@ -1000,38 +1000,20 @@ export class ContractsService {
    * @return Loan ID
    */
   async createCollateral(
-    loanId: string,
+    debtId: string,
     oracle: string,
-    collateralToken: string,
-    entryAmount: BN | string,
+    amount: BN | string,
     liquidationRatio: BN | string,
     balanceRatio: BN | string,
-    burnFee: BN | string,
-    rewardFee: BN | string,
     account: string
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
-
     return new Promise((resolve, reject) => {
       // FIXME: see collateral with ETH implementation
-      if (collateralToken === environment.contracts.converter.ethAddress) {
-        this.loadAltContract(web3, this._collateralWethManager).methods.create(
-          loanId,
-          oracle,
-          liquidationRatio,
-          balanceRatio,
-          burnFee,
-          rewardFee
-        )
-        .send({ from: account, value: entryAmount })
-        .on('transactionHash', (hash: string) => resolve(hash))
-        .on('error', (err) => reject(err));
-      }
-
       this.loadAltContract(web3, this._collateral).methods.create(
-        loanId,
+        debtId,
         oracle,
-        entryAmount,
+        amount,
         liquidationRatio,
         balanceRatio
       )

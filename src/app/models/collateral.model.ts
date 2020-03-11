@@ -8,8 +8,6 @@ export class Collateral {
     public token: string,
     public amount: string | BN,
     public liquidationRatio: string | BN,
-    public balanceRatio: string | BN,
-    public burnFee: string | BN,
-    public rewardFee: string | BN
+    public balanceRatio: string | BN
   ) {}
 }
