@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, OnChanges, Input } from '@angular/core';
+import * as BN from 'bn.js';
 import { Utils } from './../../../utils/utils';
 import { Loan } from './../../../models/loan.model';
 import { Collateral } from './../../../models/collateral.model';
@@ -102,15 +103,28 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
   private loadCollateral() {
     const web3: any = this.web3Service.web3;
     const collateral: Collateral = this.collateral;
-    const liquidationRatio = Utils.bn(collateral.liquidationRatio).div(Utils.bn(100));
-
-    const balanceRatio = Utils.bn(collateral.balanceRatio).div(Utils.bn(100));
+    const liquidationRatio = this.toPercentage(Number(collateral.liquidationRatio));
+    const balanceRatio = this.toPercentage(Number(collateral.balanceRatio));
     this.liquidationRatio = `${ Utils.formatAmount(liquidationRatio) } %`;
     this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
 
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
     this.collateralAmount = Utils.formatAmount(Number(web3.utils.fromWei(Utils.bn(collateral.amount))));
     this.collateralAsset = collateralCurrency.symbol;
+  }
+
+  /**
+   * Return percentage
+   * @param num Ratio %
+   * @return Percentage
+   */
+  private toPercentage (ratio: number): BN {
+    const secureRatio: BN = Utils.bn(ratio).mul(Utils.bn(2000));
+    const securePercentage = Utils.bn(secureRatio)
+        .div(Utils.pow(2, 32))
+        .mul(Utils.bn(100));
+
+    return securePercentage.div(Utils.bn(2000));
   }
 
   /**

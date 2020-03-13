@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
 import { Utils } from '../../../utils/utils';
@@ -33,6 +34,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
   }>();
 
   constructor(
+    private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
@@ -43,6 +45,9 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     this.buildForm();
     this.getCurrencies();
     this.updateCollateralMockup();
+
+    const loanId: string = this.route.snapshot.params.id;
+    this.autocompleteForm(loanId);
   }
 
   ngOnChanges() {
@@ -172,7 +177,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     if (liquidationRatio) {
       this.form.controls.formCollateral.patchValue({
         liquidationRatio: this.toRatio(liquidationRatio).toString(),
-        balanceRatio: this.toRatio(liquidationRatio).toNumber() + 50
+        balanceRatio: this.toRatio(liquidationRatio + 50).toString()
       });
     } else {
       this.form.controls.formCollateral.patchValue({
@@ -200,6 +205,31 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
 
     const collateral: CollateralRequest = this.updateCollateralMockup();
     return collateral;
+  }
+
+  /**
+   * Autocomplete form for handle an existing loan
+   * @param loan Loan
+   */
+  private async autocompleteForm(id?: string) {
+    if (!id) {
+      return;
+    }
+
+    try {
+      this.spinner.show(this.pageId);
+
+      const loan: Loan = this.loan;
+      const debtId = loan.id;
+
+      this.form.controls.formCollateral.patchValue({ debtId });
+
+      await this.updateFormUi(this.form.value.formUi);
+    } catch (err) {
+      this.eventsService.trackError(err);
+    } finally {
+      this.spinner.hide(this.pageId);
+    }
   }
 
   /**
