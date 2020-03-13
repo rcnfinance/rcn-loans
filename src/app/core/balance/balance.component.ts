@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment';
 import { Utils } from '../../utils/utils';
 // App Services
 import { Web3Service } from '../../services/web3.service';
+import { EventsService } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Tx, Type, TxService } from '../../services/tx.service';
 
@@ -35,6 +36,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private web3Service: Web3Service,
+    private eventsService: EventsService,
     private contractService: ContractsService,
     private txService: TxService
   ) { }
@@ -143,6 +145,19 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Handle click on withdraw
    */
   async clickWithdraw() {
+    try {
+      await this.withdraw();
+    } catch (err) {
+      if (err.stack.indexOf('User denied transaction signature') < 0) {
+        this.eventsService.trackError(err);
+      }
+    }
+  }
+
+  /**
+   * Withdraw basalt and diaspore funds
+   */
+  async withdraw() {
     if (this.canWithdraw) {
       if (this.basaltLoansWithBalance.length > 0) {
         const tx = await this.contractService.withdrawFundsBasalt(this.basaltLoansWithBalance);
