@@ -1,7 +1,7 @@
 <div class="conversion-block">
   <div
     class="block-title ellipsis"
-    [matTooltip]="amountLeft"
+    [matTooltip]="amountLeft + ' ' + currency"
     matTooltipPosition="below"
   >
     {{ amountLeft }}
@@ -14,7 +14,7 @@
   </div>
   <div
     class="block-title ellipsis"
-    [matTooltip]="amountRight"
+    [matTooltip]="amountRight + ' ' + currency"
     matTooltipPosition="below"
   >
     {{ amountRight }}
