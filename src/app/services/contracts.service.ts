@@ -337,8 +337,10 @@ export class ContractsService {
       rcnToken,
       rcnAmount.toString()
     );
+    const additionalSpend =
+      Utils.bn(requiredInToken).mul(Utils.bn(1003)).div(Utils.bn(1000));
 
-    return Utils.bn(requiredInToken);
+    return additionalSpend;
   }
 
   /**
