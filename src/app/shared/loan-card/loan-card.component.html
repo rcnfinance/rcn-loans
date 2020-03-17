@@ -47,7 +47,11 @@
     <div class="loan-card__property loan-card__property--conversion">
       <div
         class="loan-card__property-title"
-        [matTooltip]="leftValue?.length > 6 ? leftValue : ''"
+        [matTooltip]="
+          leftValue?.length > 6 ?
+            (leftValue + ' ' + loan.currency) :
+            ''
+        "
         matTooltipPosition="below"
       >
         {{ leftValue }}
@@ -57,7 +61,11 @@
       </div>
       <div
         class="loan-card__property-title"
-        [matTooltip]="rightValue?.length > 6 ? rightValue : ''"
+        [matTooltip]="
+          rightValue?.length > 6 ?
+            (rightValue + ' ' + loan.currency) :
+            ''
+        "
         matTooltipPosition="below"
       >
         {{ rightValue }}
