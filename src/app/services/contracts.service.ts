@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as BN from 'bn.js';
 
-import { Loan, Oracle, Network } from '../models/loan.model';
+import { Loan, LoanType, Oracle, Network } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
 import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
 import { TxService } from '../services/tx.service';
 import { CosignerService } from './cosigner.service';
+import { LoanTypeService } from './loan-type.service';
 import { ApiService } from './api.service';
 import { Utils } from './../utils/utils';
 import { EventsService } from './events.service';
@@ -53,6 +54,7 @@ export class ContractsService {
     private txService: TxService,
     private cosignerService: CosignerService,
     private apiService: ApiService,
+    private loanTypeService: LoanTypeService,
     private eventsService: EventsService
   ) {
     this._rcnEngine = this.makeContract(engineAbi.abi, this._rcnEngineAddress);
@@ -800,11 +802,12 @@ export class ContractsService {
     const block = await web3.eth.getBlock('latest');
     const now = block.timestamp;
     const diaspore: Loan[] = await this.apiService.getRequests(now, Network.Diaspore);
-    const basalt: Loan[] = LoanCurator.curateLoans(await this.apiService.getRequests(now, Network.Basalt));
     const collaterals = await this.apiService.getCollateral();
     const diasporeWithCollateral = LoanUtils.completeLoansCollateral(diaspore, collaterals);
+    const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
+    const loans: Loan[] = this.loanTypeService.filterLoanByType(diasporeWithCollateral, ALLOWED_TYPES);
 
-    return diasporeWithCollateral.concat(basalt);
+    return loans;
   }
 
   /**

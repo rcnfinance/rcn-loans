@@ -250,6 +250,12 @@ export class LoanUtils {
     );
   }
 
+  /**
+   * Assign collaterals to loans
+   * @param loans Loans array
+   * @param collaterals Collaterals array
+   * @return Loans with collaterals
+   */
   static completeLoansCollateral(loans: Loan[] = [], collaterals: Collateral[] = []): Loan[] {
     const loansObj: {[loanId: number]: Collateral[]} = {};
 
@@ -273,9 +279,6 @@ export class LoanUtils {
       });
     });
 
-    console.info('L ', loans);
-    console.info('C ', collaterals);
-    console.info('L W C', loans.filter(loan => loan.collateral));
     return loans;
   }
 }
