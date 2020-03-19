@@ -819,8 +819,10 @@ export class ContractsService {
   async getLoansOfLender(lender: string): Promise<Loan[]> {
     const basalt: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', Network.Basalt);
     const diaspore: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', Network.Diaspore);
+    const collaterals = await this.apiService.getCollateral();
+    const diasporeWithCollateral = LoanUtils.completeLoansCollateral(diaspore, collaterals);
 
-    return diaspore.concat(LoanCurator.curateLoans(basalt));
+    return diasporeWithCollateral.concat(LoanCurator.curateLoans(basalt));
   }
 
   /**
