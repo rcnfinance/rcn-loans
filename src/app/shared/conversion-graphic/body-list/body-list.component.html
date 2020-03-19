@@ -1,5 +1,9 @@
 <div class="conversion-block">
-  <div class="block-title ellipsis">
+  <div
+    class="block-title ellipsis"
+    [matTooltip]="amountLeft + ' ' + currency"
+    matTooltipPosition="below"
+  >
     {{ amountLeft }}
   </div>
   <div class="currency" *ngIf="textMiddle === undefined">
@@ -8,7 +12,11 @@
   <div class="feature block-title ellipsis" *ngIf="textMiddle !== undefined">
     {{ textMiddle }}
   </div>
-  <div class="block-title ellipsis">
+  <div
+    class="block-title ellipsis"
+    [matTooltip]="amountRight + ' ' + currency"
+    matTooltipPosition="below"
+  >
     {{ amountRight }}
   </div>
 </div>
