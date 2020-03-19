@@ -773,7 +773,11 @@ export class ContractsService {
   // TODO: remove method from this service
   async getLoan(id: string): Promise<Loan> {
     if (id.startsWith('0x')) {
-      return await this.apiService.getLoan(id, Network.Diaspore);
+      const loan: Loan = await this.apiService.getLoan(id, Network.Diaspore);
+      const collaterals = await this.apiService.getCollateralByLoan(id);
+      loan.collateral = collaterals[0];
+
+      return loan;
     }
 
     return await this.apiService.getLoan(id, Network.Basalt);
@@ -788,8 +792,10 @@ export class ContractsService {
   async getActiveLoans(): Promise<Loan[]> {
     const diaspore: Loan[] = await this.apiService.getActiveLoans(Network.Diaspore);
     const basalt: Loan[] = await this.apiService.getActiveLoans(Network.Basalt);
+    const collaterals = await this.apiService.getCollateral();
+    const diasporeWithCollateral = LoanUtils.completeLoansCollateral(diaspore, collaterals);
 
-    return diaspore.concat(LoanCurator.curateLoans(basalt));
+    return diasporeWithCollateral.concat(LoanCurator.curateLoans(basalt));
   }
 
   /**

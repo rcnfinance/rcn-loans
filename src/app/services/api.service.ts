@@ -284,9 +284,22 @@ export class ApiService {
     const data: any = await this.http.get(this.diasporeUrl.concat(uri)).toPromise();
 
     try {
-      return data.content;
-    } catch {
-      throw Error('Error obtaining loan collateral');
+      const collaterals: Collateral[] = data.content.map((collateral) => {
+        const { id, debt_id, oracle, token, amount, liquidation_ratio, balance_ratio } = collateral;
+        return new Collateral(
+          id as any,
+          debt_id,
+          oracle,
+          token,
+          amount,
+          liquidation_ratio,
+          balance_ratio
+        );
+      });
+
+      return collaterals;
+    } catch (err) {
+      return [];
     }
   }
 
