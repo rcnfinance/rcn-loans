@@ -4,6 +4,7 @@ import * as BN from 'bn.js';
 
 import { Loan, Oracle, Network } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
+import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
 // App services
 import { Web3Service } from './web3.service';
@@ -799,9 +800,11 @@ export class ContractsService {
     const block = await web3.eth.getBlock('latest');
     const now = block.timestamp;
     const diaspore: Loan[] = await this.apiService.getRequests(now, Network.Diaspore);
-    const basalt: Loan[] = await this.apiService.getRequests(now, Network.Basalt);
+    const basalt: Loan[] = LoanCurator.curateLoans(await this.apiService.getRequests(now, Network.Basalt));
+    const collaterals = await this.apiService.getCollateral();
+    const diasporeWithCollateral = LoanUtils.completeLoansCollateral(diaspore, collaterals);
 
-    return diaspore.concat(LoanCurator.curateLoans(basalt));
+    return diasporeWithCollateral.concat(basalt);
   }
 
   /**

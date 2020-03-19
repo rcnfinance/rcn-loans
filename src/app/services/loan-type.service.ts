@@ -31,7 +31,9 @@ export class LoanTypeService {
       return LoanType.NftCollateral;
     }
 
-    // TODO: add LoanType.UnknownWithCollateral
+    if (loan.collateral) {
+      return LoanType.UnknownWithCollateral;
+    }
 
     return LoanType.Unknown;
   }
