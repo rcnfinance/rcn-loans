@@ -56,7 +56,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   canAdjustCollateral: boolean;
 
   hasHistory: boolean;
-  generatedByUser: boolean;
 
   totalDebt: string;
   pendingAmount: string;
@@ -287,22 +286,13 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     if (!collaterals.length) {
       return;
     }
+    // FIXME: check collateral API implementation (ratios)
 
     const collateral = collaterals[0];
-    console.info('loan collateral', collateral);
+    this.collateral = collateral;
 
-    this.collateral = new Collateral(
-      collateral.id,
-      collateral.debt_id,
-      collateral.oracle,
-      collateral.token,
-      collateral.amount,
-      collateral.liquidation_ratio,
-      collateral.balance_ratio
-    );
-
-    const liquidationRatio = Utils.bn(collateral.liquidation_ratio).div(Utils.bn(100));
-    const balanceRatio = Utils.bn(collateral.balance_ratio).div(Utils.bn(100));
+    const liquidationRatio = Utils.bn(collateral.liquidationRatio).div(Utils.bn(100));
+    const balanceRatio = Utils.bn(collateral.balanceRatio).div(Utils.bn(100));
 
     this.liquidationRatio = `${ Utils.formatAmount(liquidationRatio) } %`;
     this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
@@ -313,8 +303,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   private defaultDetail(): string {
-    if (this.generatedByUser) {
-      return 'identity';
+    if (this.loanTypeService.getLoanType(this.loan) === LoanType.UnknownWithCollateral) {
+      return 'collateral';
     }
 
     return 'identity';

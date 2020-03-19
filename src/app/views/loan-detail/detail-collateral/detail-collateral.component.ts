@@ -98,14 +98,13 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     this.collateralRate = await this.contractsService.getPriceConvertFrom(
       collateralCurrency.address,
       rcnToken,
-      Utils.bn(10).pow(Utils.bn(18))
+      Utils.pow(10, 18).toString()
     );
-    this.liquidationRatio = Utils.formatAmount(
-      Utils.bn(collateral.liquidationRatio).div(Utils.bn(100)), 0
-    );
-    this.balanceRatio = Utils.formatAmount(
-      Utils.bn(collateral.balanceRatio).div(Utils.bn(100)), 0
-    );
+
+    const liquidationRatio = this.toPercentage(Number(collateral.liquidationRatio));
+    const balanceRatio = this.toPercentage(Number(collateral.balanceRatio));
+    this.liquidationRatio = Utils.formatAmount(liquidationRatio);
+    this.balanceRatio = Utils.formatAmount(balanceRatio);
   }
 
   /**
@@ -251,5 +250,20 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    */
   get withdrawButtonText(): string {
     return 'Withdraw';
+  }
+
+  /**
+   * Return percentage
+   * @param num Ratio %
+   * @return Percentage
+   */
+  private toPercentage (ratio: number): BN {
+    // TODO: move to utils
+    const secureRatio: BN = Utils.bn(ratio).mul(Utils.bn(2000));
+    const securePercentage = Utils.bn(secureRatio)
+        .div(Utils.pow(2, 32))
+        .mul(Utils.bn(100));
+
+    return securePercentage.div(Utils.bn(2000));
   }
 }

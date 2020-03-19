@@ -10,7 +10,6 @@ import { LoanType } from './../../models/loan.model';
 export class ButtonGroupComponent {
   @Output() view = new EventEmitter<string>();
   @Input() viewDetail;
-  @Input() generatedByUser: boolean; // FIXME: replace by LoanType service
   @Input() loanType: LoanType;
 
   constructor() { }

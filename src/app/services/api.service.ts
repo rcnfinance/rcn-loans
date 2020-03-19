@@ -137,19 +137,7 @@ export class ApiService {
     const responses = await this.getAllUrls(urls);
     const allApiCollaterals = await this.getAllApiCollaterals(responses);
     apiCollaterals = apiCollaterals.concat(allApiCollaterals);
-
-    collaterals = apiCollaterals.map((collateral) => {
-      const { id, debt_id, oracle, token, amount, liquidation_ratio, balance_ratio } = collateral;
-      return new Collateral(
-        id as any,
-        debt_id,
-        oracle,
-        token,
-        amount,
-        liquidation_ratio,
-        balance_ratio
-      );
-    });
+    collaterals = this.getAllCompleteCollaterals(apiCollaterals);
 
     return collaterals;
   }
@@ -284,19 +272,7 @@ export class ApiService {
     const data: any = await this.http.get(this.diasporeUrl.concat(uri)).toPromise();
 
     try {
-      const collaterals: Collateral[] = data.content.map((collateral) => {
-        const { id, debt_id, oracle, token, amount, liquidation_ratio, balance_ratio } = collateral;
-        return new Collateral(
-          id as any,
-          debt_id,
-          oracle,
-          token,
-          amount,
-          liquidation_ratio,
-          balance_ratio
-        );
-      });
-
+      const collaterals: Collateral[] = this.getAllCompleteCollaterals(data.content as CollateralApi[]);
       return collaterals;
     } catch (err) {
       return [];
@@ -347,6 +323,30 @@ export class ApiService {
       this.eventsService.trackError(err);
       throw (err);
     }
+  }
+
+  /**
+   * Create collateral models
+   */
+  private getAllCompleteCollaterals(apiCollaterals: CollateralApi[]): Collateral[] {
+    const collaterals: Collateral[] = [];
+
+    apiCollaterals.map((apiCollateral: CollateralApi) => {
+      const { id, debt_id, oracle, token, amount, liquidation_ratio, balance_ratio } = apiCollateral;
+      const collateral: Collateral = new Collateral(
+        id as any,
+        debt_id,
+        oracle,
+        token,
+        amount,
+        liquidation_ratio,
+        balance_ratio
+      );
+
+      collaterals.push(collateral);
+    });
+
+    return collaterals;
   }
 
   /**

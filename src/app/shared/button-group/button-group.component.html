@@ -1,12 +1,27 @@
 <div class="button-group">
-  <div class="button-options"
-    (click)="openDetail('cosigner')"
-    [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }"
-    [matTooltip]="loanType === 3 ? 'Guaranty' : 'Collateral'"
-    matTooltipPosition="below"
-  >
-    <i class="fas fa-shield-alt"></i>
-  </div>
+
+  <ng-container *ngIf="[0, 1].includes(loanType)">
+    <div class="button-options"
+      (click)="openDetail('collateral')"
+      [ngClass]="{'active': viewDetail === 'collateral' ? true : false }"
+      [matTooltip]="loanType === 3 ? 'Guaranty' : 'Collateral'"
+      matTooltipPosition="below"
+    >
+      <i class="fas fa-coins"></i>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="[2, 3].includes(loanType)">
+    <div class="button-options"
+      (click)="openDetail('cosigner')"
+      [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }"
+      matTooltip="Cosigner"
+      matTooltipPosition="below"
+    >
+      <i class="fas fa-id-badge"></i>
+    </div>
+  </ng-container>
+
   <div class="button-options"
     (click)="openDetail('identity')"
     [ngClass]="{'active': viewDetail === 'identity' ? true : false }"
@@ -16,18 +31,20 @@
     <i class="fas fa-id-badge"></i>
   </div>
 
-  <mat-menu #appMenu="matMenu" yPosition="below" [ngSwitch]="generatedByUser">
-    <ng-container *ngSwitchCase="true">
+
+
+  <mat-menu #appMenu="matMenu" yPosition="below">
+    <ng-container *ngIf="[0, 1].includes(loanType)">
       <button
         mat-menu-item
         (click)="openDetail('collateral')"
         [ngClass]="{'active': viewDetail === 'collateral' ? true : false }"
       >
         <i class="fas fa-coins"></i>
-        <span>Collateral</span>
+        <span>{{ loanType === 3 ? 'Guaranty' : 'Collateral' }}</span>
       </button>
     </ng-container>
-    <ng-container *ngSwitchCase="false">
+    <ng-container *ngIf="[2, 3].includes(loanType)">
       <button
         mat-menu-item
         (click)="openDetail('cosigner')"
@@ -45,6 +62,7 @@
       <i class="fas fa-id-badge"></i>
       <span>Borrower</span>
     </button>
+    <!--
     <button mat-menu-item
       (click)="openDetail('cosigner')"
       [ngClass]="{'active': viewDetail === 'cosigner' ? true : false }">
@@ -58,6 +76,7 @@
         </ng-container>
       </span>
     </button>
+    -->
   </mat-menu>
 
   <button mat-icon-button [matMenuTriggerFor]="appMenu">
