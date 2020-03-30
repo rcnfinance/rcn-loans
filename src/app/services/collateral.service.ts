@@ -23,8 +23,8 @@ export class CollateralService {
     collateralAmount,
     collateralRate
   ) {
-    const collateralInRcn = Utils.bn(collateralRate).mul(collateralAmount);
-    const loanInRcn = Utils.bn(loanAmount);
+    const collateralInRcn: BN = Utils.bn(collateralRate).mul(Utils.bn(collateralAmount));
+    const loanInRcn: BN = Utils.bn(loanAmount);
 
     try {
       const collateralRatio = collateralInRcn.mul(Utils.bn(100)).div(loanInRcn);
@@ -93,4 +93,31 @@ export class CollateralService {
     }
   }
 
+  /**
+   * Return formatted percentage
+   * @param ratio Raw ratio
+   * @return Formatted percentage
+   */
+  rawToPercentage (ratio: number | string | BN): BN {
+    const secureRatio: BN = Utils.bn(ratio).mul(Utils.bn(2000));
+    const securePercentage = Utils.bn(secureRatio)
+        .div(Utils.pow(2, 32))
+        .mul(Utils.bn(100));
+
+    return securePercentage.div(Utils.bn(2000));
+  }
+
+  /**
+   * Return raw ratio
+   * @param num Formatted percentage
+   * @return Raw ratio value
+   */
+  percentageToRaw (percentage: number | string | BN): BN {
+    const securePercentage: BN = Utils.bn(percentage).mul(Utils.bn(2000));
+    const secureRatio = Utils.bn(securePercentage)
+        .mul(Utils.pow(2, 32))
+        .div(Utils.bn(100));
+
+    return secureRatio.div(Utils.bn(2000));
+  }
 }
