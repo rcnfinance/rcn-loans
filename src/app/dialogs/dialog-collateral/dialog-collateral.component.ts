@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Inject, ChangeDetectorRef } from '@angula
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
+import * as BN from 'bn.js';
 import { Loan } from '../../models/loan.model';
 import { Collateral } from '../../models/collateral.model';
 import { Utils } from '../../utils/utils';
@@ -109,9 +110,9 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
 
   /**
    * Add collateral amount
-   * @param amount Amount to add
+   * @param amount Amount to add in wei
    */
-  async addCollateral(amount: number) {
+  async addCollateral(amount: BN) {
     // validate approve
     const token = this.collateral.token;
     const contract = environment.contracts.collateral.collateral;
@@ -130,9 +131,9 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
 
   /**
    * Withdraw collateral amount
-   * @param amount Amount to withdraw
+   * @param amount Amount to withdraw in wei
    */
-  async withdrawCollateral(amount: number) {
+  async withdrawCollateral(amount: BN) {
     const token: string = this.collateral.token;
 
     if (token === environment.contracts.converter.ethAddress) {
@@ -156,28 +157,25 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
 
   /**
    * If the validations were successful, manage the deposit transaction
-   * @param amount Amount to add
+   * @param amount Amount to add in wei
    */
-  async handleAdd(amount: number) {
-    const web3: any = this.web3Service.web3;
-
+  async handleAdd(amount: BN) {
     const tx: string = await this.contractsService.addCollateral(
       this.collateral.id,
       this.collateral.token,
-      web3.utils.toWei(amount),
+      amount.toString(),
       this.account
     );
 
-    this.txService.registerAddCollateralTx(tx, this.loan, this.collateral, web3.utils.toWei(amount));
+    this.txService.registerAddCollateralTx(tx, this.loan, this.collateral, amount as any);
     this.showProgressbar();
   }
 
   /**
    * If the validations were successful, manage the withdraw transaction
-   * @param amount Amount to withdraw
+   * @param amount Amount to withdraw in wei
    */
-  async handleWithdraw(amount: number) {
-    const web3: any = this.web3Service.web3;
+  async handleWithdraw(amount: BN) {
     const loan: Loan = this.loan;
     const oracleData = await this.contractsService.getOracleData(loan.oracle);
 
@@ -185,12 +183,12 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
       this.collateral.id,
       this.collateral.token,
       this.account,
-      web3.utils.toWei(amount),
+      amount.toString(),
       oracleData,
       this.account
     );
 
-    this.txService.registerWithdrawCollateralTx(tx, this.loan, this.collateral, web3.utils.toWei(amount));
+    this.txService.registerWithdrawCollateralTx(tx, this.loan, this.collateral, amount.toString() as any);
     this.showProgressbar();
   }
 

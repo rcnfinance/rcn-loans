@@ -32,7 +32,7 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
   @Input() collateral: Collateral;
   @Input() loading: boolean;
   @Input() account: string;
-  @Output() submitWithdraw = new EventEmitter<number>();
+  @Output() submitWithdraw = new EventEmitter<BN>();
 
   form: FormGroup;
   collateralAmount: string;
@@ -44,13 +44,13 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
   loanInRcn: string;
   liquidationRatio: string | BN;
   liquidationPrice: string | BN;
-  collateralRatio: string | BN;
+  collateralRatio: number;
   balanceRatio: string | BN;
   shortAccount: string | BN;
-  maxWithdraw: string;
+  maxWithdraw: string | BN;
 
   estimatedCollateralAmount: string | BN;
-  estimatedCollateralRatio: string | BN;
+  estimatedCollateralRatio: number;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -108,12 +108,12 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
     this.loanRate = await this.contractsService.getPriceConvertFrom(
       loanCurrency.address,
       rcnToken,
-      Utils.bn(10).pow(Utils.bn(18))
+      Utils.bn(10).pow(Utils.bn(18)).toString()
     );
     this.loanInRcn = await this.contractsService.getPriceConvertFrom(
       loanCurrency.address,
       rcnToken,
-      Utils.bn(loan.amount)
+      Utils.bn(loan.amount).toString()
     );
   }
 
@@ -124,25 +124,28 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
     const collateral: Collateral = this.collateral;
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
     const currencyDecimals = new Currency(collateralCurrency.symbol);
-    const collateralAmount = Utils.bn(currencyDecimals.fromUnit(collateral.amount), 10);
     const rcnToken: string = environment.contracts.rcnToken;
-    this.collateralAmount = Utils.formatAmount(collateralAmount);
+
+    this.collateralAmount = collateral.amount.toString();
     this.collateralAsset = collateralCurrency;
     this.collateralSymbol = collateralCurrency.symbol;
     this.collateralRate = await this.contractsService.getPriceConvertFrom(
       collateralCurrency.address,
       rcnToken,
-      Utils.bn(10).pow(Utils.bn(18))
+      Utils.pow(10, 18).toString()
     );
-    this.balanceRatio = Utils.bn(collateral.balanceRatio).div(Utils.bn(100));
-    this.liquidationRatio = Utils.bn(collateral.liquidationRatio).div(Utils.bn(100));
-    this.collateralRatio = this.calculateCollateralRatio();
+    this.balanceRatio = this.collateralService.rawToPercentage(collateral.balanceRatio);
+    this.liquidationRatio = this.collateralService.rawToPercentage(collateral.liquidationRatio);
+
+    const ratio = this.calculateCollateralRatio();
+    this.collateralRatio = currencyDecimals.fromUnit(ratio);
 
     const liquidationPrice = await this.calculateLiquidationPrice();
     this.liquidationPrice = Utils.formatAmount(liquidationPrice);
 
+    // FIXME: verify
     const maxWithdraw = this.calculateMaxWithdraw();
-    this.maxWithdraw = Utils.formatAmount(maxWithdraw);
+    this.maxWithdraw = maxWithdraw;
   }
 
   /**
@@ -169,10 +172,13 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
     }
 
     const estimatedAmount = this.calculateAmount(form);
-    this.estimatedCollateralAmount = Utils.formatAmount(estimatedAmount);
+    this.estimatedCollateralAmount = estimatedAmount;
 
+    const collateral: Collateral = this.collateral;
+    const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
+    const currencyDecimals = new Currency(collateralCurrency.symbol);
     const newCollateralRatio = this.calculateCollateralRatio();
-    this.estimatedCollateralRatio = newCollateralRatio;
+    this.estimatedCollateralRatio = currencyDecimals.fromUnit(newCollateralRatio);
   }
 
   /**
@@ -183,7 +189,8 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
   onSubmit(form: FormGroup) {
     const collateralRatio = Number(this.estimatedCollateralRatio);
     const balanceRatio = Number(this.balanceRatio);
-    const amount = form.value.amount;
+    const decimals = new Currency(this.collateralSymbol).decimals;
+    const amount = Utils.getAmountInWei(form.value.amount, decimals);
 
     if (this.loading) {
       return;
@@ -192,7 +199,7 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
       this.showMessage(`The collateral is too low, make sure it is greater than ${ balanceRatio }%`);
       return;
     }
-    if (amount <= 0) {
+    if (amount.lte(Utils.bn(0))) {
       this.showMessage(`The collateral amount must be greater than 0`);
       return;
     }
@@ -205,13 +212,15 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
    */
   setMaxWithdraw() {
     const maxWithdraw: BN | string = Utils.bn(this.maxWithdraw);
+    const decimals = new Currency(this.loanCurrency.symbol).decimals;
+    const amount = Number(maxWithdraw) / 10 ** decimals;
 
     if (this.loading) {
       return;
     }
 
     this.form.patchValue({
-      amount: maxWithdraw
+      amount
     });
 
     this.onAmountChange();
@@ -236,15 +245,17 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
    * @return Collateral amount
    */
   private calculateAmount(form: FormGroup) {
-    const amountToWithdraw: number = form.value.amount || 0;
+    const collateral: Collateral = this.collateral;
+    const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
+    const currencyDecimals = new Currency(collateralCurrency.symbol);
+
+    const amountToAdd: number = form.value.amount || 0;
+    const amountInWei: BN = Utils.getAmountInWei(amountToAdd, currencyDecimals.decimals);
     const collateralAmount = Utils.bn(this.collateralAmount);
 
     try {
-      const estimated: string | BN = collateralAmount.sub(Utils.bn(amountToWithdraw));
-      if (estimated < Utils.bn(0)) {
-        return 0;
-      }
-      return estimated;
+      const estimated: string | BN = collateralAmount.sub(amountInWei);
+      return estimated.toString();
     } catch (e) {
       console.error(e);
       return null;
@@ -265,11 +276,12 @@ export class CollateralWithdrawFormComponent implements OnInit, OnChanges {
 
   /**
    * Calculate the max withdraw amount
-   * @return Max amount to withdraw
+   * @return Max amount to withdraw in wei
    */
   private calculateMaxWithdraw() {
     const collateralAmount = Utils.bn(this.collateralAmount);
-    const collateralRatio = this.calculateCollateralRatio();
+    const decimals = new Currency(this.collateralAsset.symbol).decimals;
+    const collateralRatio = this.calculateCollateralRatio().div(Utils.pow(10, decimals));
     const balanceRatio = this.balanceRatio;
     const balanceAmount = Utils.bn(balanceRatio).mul(collateralAmount).div(collateralRatio);
     const diffAmount = Utils.bn(collateralAmount).sub(balanceAmount);
