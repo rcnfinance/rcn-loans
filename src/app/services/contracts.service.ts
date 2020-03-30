@@ -1052,7 +1052,7 @@ export class ContractsService {
   async addCollateral(
     collateralId: number,
     tokenAddress: string,
-    amount: number,
+    amount: string,
     account: string
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
@@ -1090,7 +1090,7 @@ export class ContractsService {
     collateralId: number,
     tokenAddress: string,
     to: string,
-    amount: number,
+    amount: string,
     oracleData: string,
     account: string
   ): Promise<string> {
