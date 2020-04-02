@@ -114,7 +114,7 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
    */
   async addCollateral(amount: BN) {
     // validate approve
-    const token = this.collateral.token;
+    const token = this.collateral.token.toLowerCase();
     const contract = environment.contracts.collateral.collateral;
     const engineApproved = await this.contractsService.isApproved(contract, token);
 
