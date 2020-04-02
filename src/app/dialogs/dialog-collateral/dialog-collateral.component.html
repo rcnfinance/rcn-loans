@@ -15,7 +15,6 @@
     <app-collateral-add-form
       *ngSwitchCase="'add'"
       [loan]="loan"
-      [collateral]="collateral"
       [loading]="addPendingTx"
       [account]="account"
       (submitAdd)="addCollateral($event)"

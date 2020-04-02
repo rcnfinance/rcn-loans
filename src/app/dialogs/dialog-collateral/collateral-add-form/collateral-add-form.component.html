@@ -5,9 +5,9 @@
   type="ball-clip-rotate-multiple"
 ></ngx-spinner>
 
-<form [formGroup]="form" (ngSubmit)="onSubmit(form)">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-  <div class="container">
+  <div class="container" formGroupName="formUi">
     <div class="dialog-content dialog-padding">
       <div class="row mb-3 mt-4 mt-md-0 mb-5">
         <div class="col col-12 item item--description">
@@ -21,24 +21,21 @@
           </p>
           <mat-form-field
             class="mt-2"
-            [class.mat-form-field--empty]="
-              !form.value.amount && form.value.amount !== 0
-            "
+            [class.mat-form-field--empty]="!form?.value.formUi.entryAmount"
           >
             <input
               matInput
               type="number"
               min="0"
               max="1000000"
-              formControlName="amount"
+              formControlName="entryAmount"
               placeholder="0"
               pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-              (keyup)="onAmountChange()"
               [readonly]="loading"
               required
             />
             <span class="currency">
-              {{ collateralSymbol }}
+              {{ form?.value.formRatios.currency?.symbol }}
             </span>
           </mat-form-field>
         </div>
@@ -47,7 +44,8 @@
             Collateral amount
           </p>
           <p class="value">
-            {{ estimatedCollateralAmount || collateralAmount }} {{ collateralSymbol }}
+            {{ form?.value.formRatios.formattedAmount }}
+            {{ form?.value.formRatios.currency?.symbol }}
           </p>
         </div>
       </div>
@@ -56,11 +54,11 @@
           <p class="item__subtitle">
             Collateral to debt
           </p>
-          <div class="mt-2 px-2 px-md-0">
+          <div class="mt-2 px-2 px-md-0" *ngIf="form?.value.formRatios.balanceRatio">
             <app-collateral-slider-debt
-              [liquidationRatio]="liquidationRatio"
-              [balanceRatio]="balanceRatio"
-              [collateralRatio]="estimatedCollateralRatio || collateralRatio"
+              [liquidationRatio]="form?.value.formRatios.liquidationRatio"
+              [balanceRatio]="form?.value.formRatios.balanceRatio"
+              [collateralRatio]="form?.value.formRatios.collateralRatio"
             ></app-collateral-slider-debt>
           </div>
         </div>
@@ -74,7 +72,7 @@
         <i class="material-icons mr-2">
           info
         </i>
-        Liquidation Price: {{ liquidationPrice }} {{ collateralSymbol }}
+        Liquidation Price: {{ form?.value.formRatios.liquidationPrice }}
       </div>
     </div>
 
