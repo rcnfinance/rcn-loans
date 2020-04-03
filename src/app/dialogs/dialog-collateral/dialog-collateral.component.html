@@ -11,20 +11,13 @@
     >
     </app-infinite-progress-bar>
   </ng-container>
-  <ng-container [ngSwitch]="action">
-    <app-collateral-add-form
-      *ngSwitchCase="'add'"
-      [loan]="loan"
-      [loading]="addPendingTx"
-      [shortAccount]="shortAccount"
-      (submitAdd)="addCollateral($event)"
-    ></app-collateral-add-form>
-    <app-collateral-withdraw-form
-      *ngSwitchCase="'withdraw'"
-      [loan]="loan"
-      [loading]="withdrawPendingTx"
-      [shortAccount]="shortAccount"
-      (submitWithdraw)="withdrawCollateral($event)"
-    ></app-collateral-withdraw-form>
-  </ng-container>
+  <app-collateral-form
+    [dialogType]="action"
+    [loan]="loan"
+    [loading]="addPendingTx || withdrawPendingTx"
+    [shortAccount]="shortAccount"
+    (submitAdd)="addCollateral($event)"
+    (submitWithdraw)="withdrawCollateral($event)"
+  >
+  </app-collateral-form>
 </mat-dialog-content>

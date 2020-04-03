@@ -14,16 +14,24 @@ import { ContractsService } from '../../../services/contracts.service';
 import { CollateralService } from '../../../services/collateral.service';
 import { CurrenciesService, CurrencyItem } from '../../../services/currencies.service';
 
+enum DialogType {
+  CollateralAdd = 'add',
+  CollateralWithdraw = 'withdraw'
+}
+
 @Component({
-  selector: 'app-collateral-add-form',
-  templateUrl: './collateral-add-form.component.html',
-  styleUrls: ['./collateral-add-form.component.scss']
+  selector: 'app-collateral-form',
+  templateUrl: './collateral-form.component.html',
+  styleUrls: ['./collateral-form.component.scss']
 })
-export class CollateralAddFormComponent implements OnInit {
+export class CollateralFormComponent implements OnInit {
+
+  @Input() dialogType: DialogType;
   @Input() loan: Loan;
   @Input() loading: boolean;
   @Input() shortAccount: string;
   @Output() submitAdd = new EventEmitter<BN>();
+  @Output() submitWithdraw = new EventEmitter<BN>();
 
   form: FormGroup;
 
@@ -42,6 +50,7 @@ export class CollateralAddFormComponent implements OnInit {
     try {
       this.spinner.show();
       await this.completeForm();
+      await this.calculateMaxWithdraw();
     } catch (err) {
       this.eventsService.trackError(err);
     } finally {
@@ -52,14 +61,13 @@ export class CollateralAddFormComponent implements OnInit {
   /**
    * Emitted when form is submitted
    * @param form Form group
-   * @fires submitAdd
+   * @fires submitWithdraw
    */
   onSubmit() {
     try {
       const form: FormGroup = this.form;
       const { collateralRatio, balanceRatio, currency } = form.value.formRatios;
       const { entryAmount } = form.value.formUi;
-      const { amount } = form.value.formCollateral;
       const { decimals } = new Currency(currency.symbol);
 
       if (this.loading) {
@@ -69,18 +77,34 @@ export class CollateralAddFormComponent implements OnInit {
         this.showMessage(`The collateral is too low, make sure it is greater than ${ balanceRatio }%`);
         return;
       }
-      if (Utils.bn(amount).lte(Utils.bn(0))) {
+      if (entryAmount <= 0) {
         this.showMessage(`The collateral amount must be greater than 0`);
         return;
       }
 
       const entryAmountInWei: BN = Utils.getAmountInWei(entryAmount, decimals);
-      this.submitAdd.emit(entryAmountInWei);
+      const dialogType = this.dialogType;
+
+      if (dialogType === DialogType.CollateralAdd) {
+        this.submitAdd.emit(entryAmountInWei);
+      } else {
+        this.submitWithdraw.emit(entryAmountInWei);
+      }
     } catch (err) {
       this.eventsService.trackError(err);
     } finally {
       this.spinner.hide();
     }
+  }
+
+  /**
+   * Set max withdraw amount
+   */
+  clickMaxWithdraw() {
+    const { maxWithdraw } = this.form.value.formRatios;
+    this.form.controls.formUi.patchValue({
+      entryAmount: maxWithdraw
+    });
   }
 
   private buildForm() {
@@ -96,7 +120,8 @@ export class CollateralAddFormComponent implements OnInit {
         collateralRatio: new FormControl(null, Validators.required),
         currency: new FormControl(null, Validators.required),
         liquidationPrice: new FormControl(null, Validators.required),
-        formattedAmount: new FormControl(null, Validators.required)
+        formattedAmount: new FormControl(null, Validators.required),
+        maxWithdraw: new FormControl(null, Validators.required)
       }),
       formUi: new FormGroup({
         entryAmount: new FormControl(null, Validators.required)
@@ -165,12 +190,22 @@ export class CollateralAddFormComponent implements OnInit {
     const { amount } = collateral;
     const { entryAmount } = formUi;
     const { currency } = this.form.value.formRatios;
+    const dialogType = this.dialogType;
 
     if (entryAmount && entryAmount > 0) {
       const decimals: number = new Currency(currency.symbol).decimals;
-      const newAmount = Utils.getAmountInWei(entryAmount, decimals)
-          .add(Utils.bn(amount))
-          .toString();
+
+      let newAmount: string;
+
+      if (dialogType === DialogType.CollateralAdd) {
+        newAmount = Utils.getAmountInWei(entryAmount, decimals)
+            .add(Utils.bn(amount))
+            .toString();
+      } else {
+        newAmount = Utils.bn(amount)
+            .sub(Utils.getAmountInWei(entryAmount, decimals))
+            .toString();
+      }
 
       this.form.controls.formCollateral.patchValue({
         amount: newAmount
@@ -261,13 +296,47 @@ export class CollateralAddFormComponent implements OnInit {
   }
 
   /**
+   * Calculate the max withdraw amount
+   * @return Max amount to withdraw in wei
+   */
+  private async calculateMaxWithdraw() {
+    const { amount } = this.form.value.formCollateral;
+    const { currency, collateralRatio, balanceRatio } = this.form.value.formRatios;
+    const decimals: number = new Currency(currency.symbol).decimals;
+
+    const balanceAmount = Utils.bn(balanceRatio)
+        .mul(Utils.bn(amount))
+        .div(Utils.bn(collateralRatio));
+
+    const maxWithdraw = Utils.bn(amount).sub(balanceAmount);
+    const formattedMaxWithdraw = this.formatAmount(maxWithdraw, decimals);
+
+    this.form.controls.formRatios.patchValue({
+      maxWithdraw: Utils.formatAmount(formattedMaxWithdraw)
+    });
+
+    return maxWithdraw;
+  }
+
+  /**
    * Get submit button text
    * @return Button text
    */
-  get submitButtonText(): string {
+  get addButtonText(): string {
     if (!this.loading) {
       return 'Add';
     }
     return 'Adding...';
+  }
+
+  /**
+   * Get submit button text
+   * @return Button text
+   */
+  get withdrawButtonText(): string {
+    if (!this.loading) {
+      return 'Withdraw';
+    }
+    return 'Withdrawing...';
   }
 }

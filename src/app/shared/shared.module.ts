@@ -23,10 +23,7 @@ import { HeaderListComponent } from './conversion-graphic/header-list/header-lis
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
 import { DialogHeaderComponent } from './dialog-header/dialog-header.component';
 import { BorrowFabButtonComponent } from './borrow-fab-button/borrow-fab-button.component';
-import { CollateralAddFormComponent } from './../dialogs/dialog-collateral/collateral-add-form/collateral-add-form.component';
-import {
-  CollateralWithdrawFormComponent
-} from './../dialogs/dialog-collateral/collateral-withdraw-form/collateral-withdraw-form.component';
+import { CollateralFormComponent } from './../dialogs/dialog-collateral/collateral-form/collateral-form.component';
 import { CollateralSliderDebtComponent } from './../dialogs/dialog-collateral/collateral-slider-debt/collateral-slider-debt.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
@@ -97,8 +94,7 @@ import { EventsService } from './../services/events.service';
     CurrencyLogoComponent,
     ErrorDetailsComponent,
     BorrowFabButtonComponent,
-    CollateralAddFormComponent,
-    CollateralWithdrawFormComponent,
+    CollateralFormComponent,
     CollateralSliderDebtComponent,
     PageHeaderComponent,
 
@@ -165,8 +161,7 @@ import { EventsService } from './../services/events.service';
     PageHeaderComponent,
     DialogWrongCountryComponent,
     BorrowFabButtonComponent,
-    CollateralAddFormComponent,
-    CollateralWithdrawFormComponent,
+    CollateralFormComponent,
     CollateralSliderDebtComponent,
     VisualUrlPipe,
     FormatAmountPipe,
