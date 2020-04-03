@@ -5,9 +5,9 @@
   type="ball-clip-rotate-multiple"
 ></ngx-spinner>
 
-<form [formGroup]="form" (ngSubmit)="onSubmit(form)">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-  <div class="container">
+  <div class="container" formGroupName="formUi">
     <div class="dialog-content dialog-padding">
       <div class="row mb-3 mt-4 mt-md-0 mb-5">
         <div class="col col-12 item item--description">
@@ -21,24 +21,21 @@
           </p>
           <mat-form-field
             class="mt-2"
-            [class.mat-form-field--empty]="
-              !form.value.amount && form.value.amount !== 0
-            "
+            [class.mat-form-field--empty]="!form?.value.formUi.entryAmount"
           >
             <input
               matInput
               type="number"
               min="0"
               max="1000000"
-              formControlName="amount"
+              formControlName="entryAmount"
               placeholder="0"
               pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-              (keyup)="onAmountChange()"
               [readonly]="loading"
               required
             />
             <span class="currency">
-              {{ collateralSymbol }}
+              {{ form?.value.formRatios.currency?.symbol }}
             </span>
           </mat-form-field>
         </div>
@@ -48,14 +45,15 @@
           </p>
           <div class="d-flex align-items-center justify-content-start">
             <p class="value">
-              {{ maxWithdraw }} {{ collateralSymbol }}
+              {{ form?.value.formRatios.maxWithdraw }}
+              {{ form?.value.formRatios.currency?.symbol }}
             </p>
             <button
               type="button"
               mat-flat-button
               class="button button-clear button-rounded ml-3"
               [class.button-disabled]="loading"
-              (click)="setMaxWithdraw()"
+              (click)="clickMaxWithdraw()"
             >
               Max
             </button>
@@ -69,9 +67,9 @@
           </p>
           <div class="mt-2 px-2 px-md-0">
             <app-collateral-slider-debt
-              [liquidationRatio]="liquidationRatio"
-              [balanceRatio]="balanceRatio"
-              [collateralRatio]="estimatedCollateralRatio || collateralRatio"
+              [liquidationRatio]="form?.value.formRatios.liquidationRatio"
+              [balanceRatio]="form?.value.formRatios.balanceRatio"
+              [collateralRatio]="form?.value.formRatios.collateralRatio"
             ></app-collateral-slider-debt>
           </div>
         </div>
@@ -80,7 +78,8 @@
             Collateral amount
           </p>
           <p class="value">
-            {{ estimatedCollateralAmount || collateralAmount }} {{ collateralSymbol }}
+            {{ form?.value.formRatios.formattedAmount }}
+            {{ form?.value.formRatios.currency?.symbol }}
           </p>
         </div>
       </div>
@@ -93,7 +92,9 @@
         <i class="material-icons mr-2">
           info
         </i>
-        Liquidation Price: {{ liquidationPrice }} {{ collateralSymbol }}
+        Liquidation Price:
+        {{ form?.value.formRatios.liquidationPrice }}
+        {{ form?.value.formRatios.currency?.symbol }}
       </div>
     </div>
 
@@ -102,7 +103,7 @@
     <div class="dialog-footer dialog-padding pt-0 pb-3 row">
       <div class="dialog-footer__label col-sm-12 col-md-6">
         <p>
-          Paying from your <strong>{{ shortAccount }}</strong> account.
+          Withdrawing from your <strong>{{ shortAccount }}</strong> account.
         </p>
       </div>
       <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
