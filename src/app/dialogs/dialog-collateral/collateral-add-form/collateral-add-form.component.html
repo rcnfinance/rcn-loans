@@ -72,7 +72,9 @@
         <i class="material-icons mr-2">
           info
         </i>
-        Liquidation Price: {{ form?.value.formRatios.liquidationPrice }}
+        Liquidation Price:
+        {{ form?.value.formRatios.liquidationPrice }}
+        {{ form?.value.formRatios.currency?.symbol }}
       </div>
     </div>
 
@@ -81,7 +83,7 @@
     <div class="dialog-footer dialog-padding pt-0 pb-3 row">
       <div class="dialog-footer__label col-sm-12 col-md-6">
         <p>
-          Paying from your <strong>{{ shortAccount }}</strong> account.
+          Adding from your <strong>{{ shortAccount }}</strong> account.
         </p>
       </div>
       <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">

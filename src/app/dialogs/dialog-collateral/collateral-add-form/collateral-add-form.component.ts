@@ -22,11 +22,10 @@ import { CurrenciesService, CurrencyItem } from '../../../services/currencies.se
 export class CollateralAddFormComponent implements OnInit {
   @Input() loan: Loan;
   @Input() loading: boolean;
-  @Input() account: string;
+  @Input() shortAccount: string;
   @Output() submitAdd = new EventEmitter<BN>();
 
   form: FormGroup;
-  shortAccount: string | BN;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -89,8 +88,7 @@ export class CollateralAddFormComponent implements OnInit {
       formCollateral: new FormGroup({
         id: new FormControl(null, Validators.required),
         token: new FormControl(null, Validators.required),
-        amount: new FormControl(null, Validators.required),
-        account: new FormControl(null, Validators.required)
+        amount: new FormControl(null, Validators.required)
       }),
       formRatios: new FormGroup({
         liquidationRatio: new FormControl(null, Validators.required),
@@ -107,7 +105,6 @@ export class CollateralAddFormComponent implements OnInit {
   }
 
   private async completeForm() {
-    const account: string = this.account;
     const loan: Loan = this.loan;
     const { id, token, amount, balanceRatio, liquidationRatio }: Collateral = loan.collateral;
     const liquidationPercentage: string =
@@ -124,13 +121,13 @@ export class CollateralAddFormComponent implements OnInit {
     const liquidationPrice: BN = Utils.bn(liquidationPercentage)
         .mul(Utils.bn(amount))
         .div(Utils.bn(collateralPercentage));
-    const formattedLiquidationPrice: number = liquidationPrice as any / 10 ** decimals;
+    const formattedLiquidationPrice: string =
+      Utils.formatAmount(this.formatAmount(liquidationPrice, decimals));
 
     this.form.controls.formCollateral.patchValue({
       id,
       token,
-      amount,
-      account
+      amount
     });
 
     this.form.controls.formRatios.patchValue({
