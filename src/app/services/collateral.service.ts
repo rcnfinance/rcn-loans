@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import * as BN from 'bn.js';
 import { ContractsService } from './contracts.service';
 import { Tx, Type } from '../services/tx.service';
+import { Loan } from './../models/loan.model';
 import { Utils } from './../utils/utils';
+import { Currency } from './../utils/currencies';
+import { CurrencyItem } from './../services/currencies.service';
 
 @Injectable()
 export class CollateralService {
@@ -12,26 +15,40 @@ export class CollateralService {
   ) { }
 
   /**
-   * Calculate the collateral ratio
-   * @param loanAmount Loan amount in rcn
-   * @param collateralAmount Collateral amount in rcn
-   * @param collateralRate Collateral rate
-   * @return Collateral ratio
+   * Calculate the collateralization percentage
+   * @param loan Loan
+   * @param currency Collateral currency
+   * @param amount Collateral amount in wei
+   * @return Collateral percentage
    */
-  calculateCollateralRatio(
-    loanAmount,
-    collateralAmount,
-    collateralRate
+  async calculateCollateralPercentage(
+    loan: Loan,
+    currency: CurrencyItem,
+    amount: BN | string
   ) {
-    const collateralInRcn: BN = Utils.bn(collateralRate).mul(Utils.bn(collateralAmount));
-    const loanInRcn: BN = Utils.bn(loanAmount);
-
-    try {
-      const collateralRatio = collateralInRcn.mul(Utils.bn(100)).div(loanInRcn);
-      return collateralRatio;
-    } catch (e) {
-      return null;
+    if (!currency || !amount) {
+      return;
     }
+    const loanOracle: string = await this.contractsService.symbolToOracle(loan.currency.toString());
+    const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loan.currency.decimals);
+    const loanAmountInRcn: BN = Utils.bn(loan.amount)
+        .mul(Utils.bn(loanRate))
+        .div(Utils.pow(10, loan.currency.decimals));
+
+    const collateralOracle: string = await this.contractsService.symbolToOracle(currency.symbol);
+    const collateralDecimals: number = new Currency(currency.symbol).decimals;
+    const collateralRate: BN | string = await this.contractsService.getRate(collateralOracle, collateralDecimals);
+    const collateralAmountInRcn: BN = Utils.bn(collateralRate)
+        .mul(Utils.bn(amount))
+        .div(Utils.pow(10, 18));
+
+    const collateralPercentage: BN = Utils.bn(collateralAmountInRcn)
+        .mul(Utils.bn(100))
+        .div(Utils.bn(loanAmountInRcn));
+
+    const collateralRatio: string = Utils.formatAmount(collateralPercentage);
+
+    return collateralRatio;
   }
 
   /**

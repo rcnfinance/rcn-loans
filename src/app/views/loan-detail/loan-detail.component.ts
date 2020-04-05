@@ -480,7 +480,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       this.canPay = false;
       this.canTransfer = false;
       this.canCancel = isBorrower;
-      this.canAdjustCollateral = true;
+      this.canAdjustCollateral = isBorrower;
     } else {
       this.canLend = true;
     }

@@ -5,13 +5,14 @@ import { DialogCollateralComponent } from '../../../dialogs/dialog-collateral/di
 import { environment } from '../../../../environments/environment';
 // App Models
 import { Utils } from './../../../utils/utils';
+import { Currency } from '../../../utils/currencies';
 import { Loan } from './../../../models/loan.model';
 import { Collateral } from './../../../models/collateral.model';
 // App Services
 import { Web3Service } from './../../../services/web3.service';
 import { ContractsService } from './../../../services/contracts.service';
 import { CollateralService } from './../../../services/collateral.service';
-import { CurrenciesService } from './../../../services/currencies.service';
+import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
 import { Tx, TxService } from './../../../services/tx.service';
 
 @Component({
@@ -60,29 +61,11 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
       await this.setCollateralPanel();
 
       if (this.loan.debt) {
-        await this.getLoanDetails();
         this.setCollateralAdjustment();
       }
 
       this.retrievePendingTx();
     }
-  }
-
-  /**
-   * Get loan parsed data
-   */
-  async getLoanDetails() {
-    const loan: Loan = this.loan;
-    const loanCurrency = this.currenciesService.getCurrencyByKey('symbol', loan.currency.symbol);
-    const loanAmount = Utils.bn(loan.currency.fromUnit(this.loan.amount), 10);
-    const rcnToken: string = environment.contracts.rcnToken;
-
-    this.loanCurrency = loanCurrency;
-    this.loanInRcn = await this.contractsService.getPriceConvertFrom(
-      loanCurrency.address,
-      rcnToken,
-      loanAmount
-    );
   }
 
   /**
@@ -111,38 +94,38 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    * Set collateral adjustment values
    */
   async setCollateralAdjustment() {
-    const web3: any = this.web3Service.web3;
-    const collateral: Collateral = this.collateral;
     const loan: Loan = this.loan;
 
     // set loan currency
-    this.loanCurrency = loan.currency.toString();
+    const loanCurrency = this.currenciesService.getCurrencyByKey('symbol', loan.currency.symbol);
+    this.loanCurrency = loanCurrency;
 
     // set loan to value
-    const collateralRatio = this.calculateCollateralRatio();
+    const collateralRatio = await this.calculateCollateralRatio();
     this.currentLoanToValue = Utils.formatAmount(String(collateralRatio));
 
     // set exchange rate
     // TODO: add support for more currencies than rcn
-    const loanCurrency = this.currenciesService.getCurrencyByKey('symbol', this.loanCurrency);
-    let rate = await this.getRate(loanCurrency.address, collateral.token);
-    rate = web3.utils.fromWei(rate);
-    this.currentExchangeRate = Utils.formatAmount(String(rate));
+    const rate = await this.getRate();
+    this.currentExchangeRate = rate;
 
     // set liquidation price
     const liquidationPrice = await this.calculateLiquidationPrice();
-    this.currentLiquidationPrice = Utils.formatAmount(String(liquidationPrice));
+    this.currentLiquidationPrice = Utils.formatAmount(liquidationPrice);
   }
 
   /**
    * Calculate the new collateral ratio
    * @return Collateral ratio
    */
-  calculateCollateralRatio(): BN {
-    return this.collateralService.calculateCollateralRatio(
-      this.loanInRcn,
-      this.collateralRate,
-      this.collateralAmount
+  async calculateCollateralRatio(): Promise<string> {
+    const loan: Loan = this.loan;
+    const { token, amount } = loan.collateral;
+    const currency: CurrencyItem = this.currenciesService.getCurrencyByKey('address', token.toLowerCase());
+    return await this.collateralService.calculateCollateralPercentage(
+      loan,
+      currency,
+      amount
     );
   }
 
@@ -150,42 +133,52 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    * Calculate liquidation price
    * @return Liquidation price in collateral amount
    */
-  async calculateLiquidationPrice(): Promise<BN> {
-    return this.collateralService.calculateLiquidationPrice(
-      this.loan.id,
-      this.collateralRate,
-      this.liquidationRatio,
-      this.loanInRcn
-    );
+  async calculateLiquidationPrice(): Promise<number> {
+    const loan: Loan = this.loan;
+    const collateral: Collateral = this.collateral;
+    const { liquidationRatio, amount, token } = collateral;
+    const currency: CurrencyItem =
+      this.currenciesService.getCurrencyByKey('address', token.toLowerCase());
+    const liquidationPercentage: string =
+      this.collateralService.rawToPercentage(liquidationRatio).toString();
+    const collateralPercentage =
+      await this.collateralService.calculateCollateralPercentage(loan, currency, amount);
+
+    const decimals: number = new Currency(currency.symbol).decimals;
+    const liquidationPrice: BN = Utils.bn(liquidationPercentage)
+        .mul(Utils.bn(amount))
+        .div(Utils.bn(collateralPercentage));
+    const formattedLiquidationPrice: number =
+      (liquidationPrice as any / 10 ** decimals);
+
+    return formattedLiquidationPrice;
   }
 
   /**
    * Get rate in rcn
-   * @param loanCurrency Loan currency token address
-   * @param collateralAsset Collateral currency token address
    * @return Exchange rate
    */
-  async getRate(
-    loanCurrency: string,
-    collateralAsset: string
-  ): Promise<BN> {
-    const web3: any = this.web3Service.web3;
-    const amount = web3.utils.toWei(Utils.bn(1));
+  async getRate(): Promise<string> {
+    const loan: Loan = this.loan;
+    const { decimals } = loan.currency;
+    const amount = Utils.getAmountInWei(1, decimals);
+    const { token } = this.collateral;
+    const { symbol } = this.loan.currency;
+    const loanCurrency: CurrencyItem =
+      this.currenciesService.getCurrencyByKey('symbol', symbol);
 
-    if (loanCurrency === collateralAsset) {
-      return amount;
+    if (token === loanCurrency.address) {
+      return amount.toString();
     }
 
-    const rcnToken: any = environment.contracts.rcnToken;
     const rate = await this.contractsService.getPriceConvertFrom(
-      amount,
-      collateralAsset,
-      rcnToken
+      loanCurrency.address,
+      token,
+      amount.toString()
     );
-    const tokenCost = Utils.bn(rate[0]);
-    const etherCost = Utils.bn(rate[1]);
 
-    return tokenCost.isZero() ? etherCost : tokenCost;
+    const formattedRate = Utils.formatAmount(1 / loan.currency.fromUnit(rate));
+    return formattedRate;
   }
 
   /**

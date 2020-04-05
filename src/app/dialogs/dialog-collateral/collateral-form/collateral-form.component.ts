@@ -10,7 +10,6 @@ import { Loan } from '../../../models/loan.model';
 import { Collateral } from '../../../models/collateral.model';
 // App services
 import { EventsService } from '../../../services/events.service';
-import { ContractsService } from '../../../services/contracts.service';
 import { CollateralService } from '../../../services/collateral.service';
 import { CurrenciesService, CurrencyItem } from '../../../services/currencies.service';
 
@@ -39,7 +38,6 @@ export class CollateralFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
     private eventsService: EventsService,
-    private contractsService: ContractsService,
     private collateralService: CollateralService,
     private currenciesService: CurrenciesService
   ) { }
@@ -139,7 +137,7 @@ export class CollateralFormComponent implements OnInit {
     const currency: CurrencyItem =
       this.currenciesService.getCurrencyByKey('address', token.toLowerCase());
     const collateralPercentage =
-      await this.calculateCollateralPercentage(loan, currency, amount);
+      await this.collateralService.calculateCollateralPercentage(loan, currency, amount);
 
     const decimals: number = new Currency(currency.symbol).decimals;
     const formattedAmount: number = this.formatAmount(amount, decimals);
@@ -213,7 +211,7 @@ export class CollateralFormComponent implements OnInit {
 
       const formattedAmount = Utils.formatAmount(newAmount as any / 10 ** decimals);
       const collateralRatio: string =
-        await this.calculateCollateralPercentage(loan, currency, newAmount);
+        await this.collateralService.calculateCollateralPercentage(loan, currency, newAmount);
 
       this.form.controls.formRatios.patchValue({
         formattedAmount,
@@ -228,7 +226,7 @@ export class CollateralFormComponent implements OnInit {
         new Currency(currency.symbol).fromUnit(amount)
       );
       const originalCollateralRatio: string =
-        await this.calculateCollateralPercentage(loan, currency, amount);
+        await this.collateralService.calculateCollateralPercentage(loan, currency, amount);
 
       this.form.controls.formRatios.patchValue({
         formattedAmount: originalAmount,
@@ -256,43 +254,6 @@ export class CollateralFormComponent implements OnInit {
    */
   private formatAmount(amount: number | string | BN, decimals: number) {
     return (amount as number / 10 ** decimals);
-  }
-
-  /**
-   * Calculate required amount in collateral token
-   * @param loan Loan
-   * @param currency Collateral currency
-   * @param amount Collateral amount in wei
-   * @return Collateral percentage
-   */
-  private async calculateCollateralPercentage(
-    loan: Loan,
-    currency: CurrencyItem,
-    amount: BN | string
-  ) {
-    if (!currency || !amount) {
-      return;
-    }
-    const loanOracle: string = await this.contractsService.symbolToOracle(loan.currency.toString());
-    const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loan.currency.decimals);
-    const loanAmountInRcn: BN = Utils.bn(loan.amount)
-        .mul(Utils.bn(loanRate))
-        .div(Utils.pow(10, loan.currency.decimals));
-
-    const collateralOracle: string = await this.contractsService.symbolToOracle(currency.symbol);
-    const collateralDecimals: number = new Currency(currency.symbol).decimals;
-    const collateralRate: BN | string = await this.contractsService.getRate(collateralOracle, collateralDecimals);
-    const collateralAmountInRcn: BN = Utils.bn(collateralRate)
-        .mul(Utils.bn(amount))
-        .div(Utils.pow(10, 18));
-
-    const collateralPercentage: BN = Utils.bn(collateralAmountInRcn)
-        .mul(Utils.bn(100))
-        .div(Utils.bn(loanAmountInRcn));
-
-    const collateralRatio: string = Utils.formatAmount(collateralPercentage);
-
-    return collateralRatio;
   }
 
   /**
