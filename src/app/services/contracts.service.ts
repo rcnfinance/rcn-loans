@@ -774,7 +774,7 @@ export class ContractsService {
     const diaspore: Loan[] = await this.apiService.getActiveLoans(Network.Diaspore);
     const basalt: Loan[] = await this.apiService.getActiveLoans(Network.Basalt);
 
-    return diaspore.concat(LoanCurator.curateLoans(basalt));
+    return LoanCurator.curateLoans(diaspore).concat(LoanCurator.curateLoans(basalt));
   }
 
   /**
@@ -789,7 +789,7 @@ export class ContractsService {
     const diaspore: Loan[] = await this.apiService.getRequests(now, Network.Diaspore);
     const basalt: Loan[] = await this.apiService.getRequests(now, Network.Basalt);
 
-    return diaspore.concat(LoanCurator.curateLoans(basalt));
+    return LoanCurator.curateLoans(diaspore).concat(LoanCurator.curateLoans(basalt));
   }
 
   /**
