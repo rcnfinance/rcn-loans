@@ -47,6 +47,8 @@
   &__property {
     margin-bottom: 20px;
     &-title {
+      position: relative;
+      z-index: 2;
       @extend %propiety-title;
       margin: 0;
       font-weight: inherit;
@@ -93,11 +95,17 @@
         width: 33.3%;
         color: white;
 
+        &:nth-child(1),
+        &:nth-child(3) {
+          @extend .ellipsis;
+          width: 40%;
+        }
         &:nth-child(1) {
           text-align: left;
           font-size: 24px;
         }
         &:nth-child(2) {
+          width: 20%;
           display: flex;
           @extend %font-regular;
           i {

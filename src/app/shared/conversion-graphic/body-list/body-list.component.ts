@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class BodyListComponent implements OnInit {
   @Input() amountLeft: number;
   @Input() amountRight: number;
+  @Input() currency: string;
   @Input() textMiddle: string;
   constructor() { }
 
