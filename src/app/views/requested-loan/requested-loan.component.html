@@ -96,22 +96,22 @@
   <div class="row">
     <div class="col-sm-12 px-0 mb-5 pb-5 mb-lg-0 pb-lg-0">
       <app-error-details
-        label="STAY TUNED"
-        title="Loans are on the way."
+        label="STAY TUNED!"
+        title="More loans are on their way."
+        description="Meanwhile you can join the community to get alerts every time they arrive!"
         image="assets/errors/error_loans-comming.svg"
         [buttons]="[
           {
+            text: 'Get Loan Alerts',
+            url: 'https://t.me/RCNchat',
+            class: 'button-primary',
+            target: '_blank'
+          },
+          {
             text: 'Go to Activity',
             url: '/activity',
-            class: 'button-primary'
-          },
-          account ?
-            {
-              text: 'Go to My Loans',
-              url: '/address/' + account,
-              class: 'button-clear'
-            } :
-            {}
+            class: 'button-clear'
+          }
         ]"
         disclaimer="
           If you don’t feel like going there, you can check

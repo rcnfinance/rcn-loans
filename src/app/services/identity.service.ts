@@ -15,13 +15,13 @@ export class IdentityService {
       'Ripio',
       '--',
       `Ripio is one of Latin America's leading Blockchain service providers. Founded in 2013 with the mission of developing and
-      strengthening the new digital economy in the region, Ripio offers storage, brokerage, exchange, OTC and lending products to
-      more than 350,000 users across Argentina, Brazil and Mexico, with current expansion plans in Colombia, Chile, Uruguay, Paraguay
-      and Peru. As an industry pioneer, Ripio has been included in selective startup accelerator programs by Google and Visa, and recognized
-      among the most innovative startups of 2018 by KPMG’s Fintech100 list.`,
+      strengthening the new digital economy in the region, Ripio offers storage, brokerage, exchange and OTC products to more
+      than 400,000 users across Argentina, Brazil and Mexico, with current expansion plans in Colombia, Chile, Uruguay, Paraguay and Peru.
+      As an industry pioneer, Ripio has been included in selective startup accelerator programs by Google and Visa, and recognized among the
+      most innovative startups of 2018 by KPMG’s Fintech100 list.`,
       './assets/logos/ripio.png',
       './assets/logos/logo-ripio-white.svg',
-      `Legal disclaimer: By funding this loan request, you accept and agree to all of the following: this loan has been requested by an entity
+      `Legal Disclaimer: by funding this loan request, you accept and agree to all of the following: this loan has been requested by an entity
       within the Ripio Group. Digital assets received by the entity will be used for its own business purposes and will not be provided as credit
       to third parties. The loan agreement entered into as a consequence of funding this loan request: (i) is unique, (ii) is neither negotiable
       in any markets nor assignable to third parties by either lender or borrower and, for the avoidance of doubt, (iii) is not a security or any
@@ -48,12 +48,12 @@ export class IdentityService {
         {
           icon: 'fas fa-user-circle',
           title: 'Total Users',
-          description: '360,000'
+          description: '400,000'
         },
         {
           icon: 'fas fa-users',
           title: 'Employees',
-          description: '90'
+          description: '100'
         },
         {
           icon: 'fas fa-coins',
@@ -71,7 +71,7 @@ export class IdentityService {
       operations to Uruguay and Spain, with Brazil, Mexico and Peru as its next target markets.`,
       './assets/logos/wenance.svg',
       './assets/logos/wenance-brand.svg',
-      `Legal disclaimer: This is a loan requested solely by Lending Solutions S.A., a Ripio company. Lender will be entitled to the
+      `Legal Disclaimer: this is a loan requested solely by Lending Solutions S.A., a Ripio company. Lender will be entitled to the
       interest rate specified in the loan request as published, which will be paid for by Lending Solutions S.A. The published interest
       rate is net of any taxes and costs that Lending Solutions S.A. may be required by law to levy on interest, but it is not net of
       Ethereum Network’s transaction costs, Uniswap costs, fees and slippage. Gross interest rate is XXXX%. Wenance S.A. is not a company
@@ -131,7 +131,7 @@ export class IdentityService {
       Decentraland's / the platform's Mortgage Creator (MC).`,
       undefined,
       './assets/logos/decentraland-brand.svg',
-      'Legal disclaimer: This loan was requested by an unknown borrower using the Decentraland Mortgage Creator',
+      'Legal Disclaimer: this loan was requested by an unknown borrower using the Decentraland Mortgage Creator',
       [
         {
           icon: 'fas fa-link',

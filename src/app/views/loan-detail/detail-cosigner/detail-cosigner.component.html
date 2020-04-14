@@ -16,6 +16,17 @@
   </div>
 </div>
 
+<div class="empty-container p-3 px-md-4 py-md-0" *ngIf="detailClass === 'collateral_auction'">
+  <div class="empty-row">
+    <i class="fas fa-shield-alt mb-4"></i>
+    <div class="title main-h4">
+      In case of default this loan's repayment is guaranteed by the
+      <a target="_blank" href="{{ cosignerLinkExplorer }}">{{ shortCosignerAddress }}</a>
+      Automatic Buyback Guaranty Pool.
+    </div>
+  </div>
+</div>
+
 <div class="empty-container p-3 py-md-0" *ngIf="detailClass === 'not_available'">
   <div class="empty-row">
     <i class="material-icons font110">
