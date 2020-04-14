@@ -20,8 +20,8 @@ Sentry.init({
 export class SentryErrorHandler implements ErrorHandler {
   constructor() {}
   handleError(error: any) {
-    const eventId = Sentry.captureException(error.originalError || error);
-    console.error({ eventId });
+    Sentry.captureException(error.originalError || error);
+    console.error(error);
   }
 }
 
