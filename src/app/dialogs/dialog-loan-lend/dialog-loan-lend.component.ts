@@ -138,11 +138,7 @@ export class DialogLoanLendComponent implements OnInit {
       // set expected return warn
       this.expectedReturnWarning = loanCurrency === 'RCN' || false;
     } else {
-      lendAmount = await this.contractsService.getPriceConvertTo(
-        toToken,
-        fromToken,
-        rcnAmount.toString()
-      );
+      lendAmount = await this.contractsService.estimateLendAmount(loan, toToken);
 
       // TODO: Expected return in selected currency
       // lendExpectedReturn = await this.contractsService.getPriceConvertFrom(
