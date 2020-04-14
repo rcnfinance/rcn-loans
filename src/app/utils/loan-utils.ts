@@ -2,7 +2,7 @@ import { Loan, Network, Oracle, Descriptor, Debt, Config, Status, Model } from '
 import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
 import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
 import { Utils } from './utils';
-import { environment } from './../../environments/environment';
+import { environment, Agent } from './../../environments/environment';
 
 interface ModelDebtInfo {
   paid: number;
@@ -29,6 +29,17 @@ export class LoanUtils {
   }
   static calculateInterest(_timeDelta: number, _interestRate: number, _amount: number): number {
     return (_amount * 100000 * _timeDelta) / _interestRate;
+  }
+
+  /**
+   * Get the cosigner address (and expected address for loans in request status)
+   * @param loan Loan
+   * @return Cosigner address
+   */
+  static getCosignerAddress(loan: Loan) {
+    const creator: Agent = environment.dir[loan.creator.toLowerCase()];
+    const cosignerAddress: string = loan.isRequest ? environment.cosigners[creator] : loan.cosigner;
+    return cosignerAddress;
   }
 
   /**

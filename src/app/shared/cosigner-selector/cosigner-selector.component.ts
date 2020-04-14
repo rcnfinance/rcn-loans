@@ -2,7 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Loan, LoanType } from '../../models/loan.model';
 import { CosignerService } from '../../services/cosigner.service';
 import { LoanTypeService } from '../../services/loan-type.service';
-import { environment, Agent } from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
+import { LoanUtils } from '../../utils/loan-utils';
 import { Utils } from '../../utils/utils';
 
 @Component({
@@ -25,7 +26,7 @@ export class CosignerSelectorComponent implements OnInit {
     this.hasOptions = cosigner !== undefined;
 
     const type: LoanType = this.loanTypeService.getLoanType(this.loan);
-    const cosignerAddress: string = this.getCosignerAddress(this.loan);
+    const cosignerAddress: string = LoanUtils.getCosignerAddress(this.loan);
     if (type === LoanType.FintechOriginator && cosignerAddress !== Utils.address0x) {
       this.hasOptions = true;
       const shortAddress = Utils.shortAddress(cosignerAddress);
@@ -42,11 +43,5 @@ export class CosignerSelectorComponent implements OnInit {
       this.text = `This loan is backed by a ${ title } (${ cosignerDetail.coordinates })
           valued at value ${ this.loan.currency.toString() }.`;
     }
-  }
-
-  private getCosignerAddress(loan: Loan) {
-    const creator: Agent = environment.dir[loan.creator.toLowerCase()];
-    const cosignerAddress: string = this.loan.isRequest ? environment.cosigners[creator] : loan.cosigner;
-    return cosignerAddress;
   }
 }
