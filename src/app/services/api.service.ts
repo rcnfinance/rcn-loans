@@ -332,7 +332,7 @@ export class ApiService {
     const collaterals: Collateral[] = [];
 
     apiCollaterals.map((apiCollateral: CollateralApi) => {
-      const { id, debt_id, oracle, token, amount, liquidation_ratio, balance_ratio } = apiCollateral;
+      const { id, debt_id, oracle, token, amount, liquidation_ratio, balance_ratio, status } = apiCollateral;
       const collateral: Collateral = new Collateral(
         id as any,
         debt_id,
@@ -340,7 +340,8 @@ export class ApiService {
         token,
         amount,
         liquidation_ratio,
-        balance_ratio
+        balance_ratio,
+        status
       );
 
       collaterals.push(collateral);

@@ -285,8 +285,8 @@ export class LoanUtils {
       }
 
       loansObj[loan.id].map((collateral: Collateral) => {
-        const { id, debtId, oracle, token, amount, liquidationRatio, balanceRatio } = collateral;
-        loan.collateral = new Collateral(id, debtId, oracle, token, amount, liquidationRatio, balanceRatio);
+        const { id, debtId, oracle, token, amount, liquidationRatio, balanceRatio, status } = collateral;
+        loan.collateral = new Collateral(id, debtId, oracle, token, amount, liquidationRatio, balanceRatio, status);
       });
     });
 

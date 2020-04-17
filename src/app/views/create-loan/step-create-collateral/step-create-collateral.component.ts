@@ -6,7 +6,7 @@ import * as BN from 'bn.js';
 import { Utils } from '../../../utils/utils';
 import { Currency } from '../../../utils/currencies';
 import { Loan } from './../../../models/loan.model';
-import { Collateral } from './../../../models/collateral.model';
+import { Collateral, Status as CollateralStatus } from './../../../models/collateral.model';
 import { CollateralRequest } from './../../../interfaces/collateral-request';
 // App Services
 import { ContractsService } from './../../../services/contracts.service';
@@ -369,7 +369,8 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
       token,
       amount,
       liquidationRatio,
-      balanceRatio
+      balanceRatio,
+      CollateralStatus.Created
     );
 
     this.updateCollateralRequest.emit({
