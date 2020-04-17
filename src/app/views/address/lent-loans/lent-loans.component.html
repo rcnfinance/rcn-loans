@@ -1,10 +1,3 @@
-<ngx-spinner
-  bdColor="rgba(0,0,0,.3)"
-  size="medium"
-  color="#fff"
-  type="ball-clip-rotate-multiple"
-></ngx-spinner>
-
 <div
   class="body-scrollable activity-wrapper"
   #scrollingBlock
@@ -20,13 +13,20 @@
   <div class="container">
 
     <ng-container *ngIf="availableLoans; else noAvailableLoans">
-      <app-page-header
-        [title]="pageTitle"
-        [description]="pageDescription"
-        [hasChip]="true"
-        [chipValue]="loans.length"
-        chipLabel="FUNDED"
-      ></app-page-header>
+      <div class="full-width d-flex justify-content-between align-items-center">
+        <div>
+          <app-page-header
+            [title]="pageTitle"
+            [description]="pageDescription"
+            [hasChip]="true"
+            [chipValue]="loans.length"
+            chipLabel="FUNDED"
+          ></app-page-header>
+        </div>
+        <div>
+          <app-my-loans-tabs></app-my-loans-tabs>
+        </div>
+      </div>
 
       <div class="loan-container row">
 
