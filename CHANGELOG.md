@@ -7,6 +7,13 @@
 - Installments and payments details
 - Borrow loans with Collateral
 
+## **0.1.3** Boggart 👻
+
+### Enhancement:
+- Add copy for release
+- Update metatags
+- Exclude diaspore loans with inconsistent information from requests and activity
+
 ## **0.1.2** Boggart 👻
 
 ### Feature:

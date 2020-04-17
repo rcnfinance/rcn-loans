@@ -336,6 +336,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         break;
       case Status.Indebt:
       case Status.Ongoing:
+      case Status.Paid:
         const dueDate: string = this.formatTimestamp(this.loan.debt.model.dueTime);
         let lendDate: string;
         let deadline: string;
@@ -353,12 +354,20 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         );
 
         // Show ongoing loan detail
-        this.loanStatusData = [
-          ['Information', ''],
-          ['Lending Date', lendDate],
-          ['Next Due Date', dueDate],
-          ['Final Due Date', deadline]
-        ];
+        if (this.isPaid) {
+          this.loanStatusData = [
+            ['Information', ''],
+            ['Lending Date', lendDate],
+            ['Final Due Date', deadline]
+          ];
+        } else {
+          this.loanStatusData = [
+            ['Information', ''],
+            ['Lending Date', lendDate],
+            ['Next Due Date', dueDate],
+            ['Final Due Date', deadline]
+          ];
+        }
 
         // Template data
         this.interest = currentInterestRate + ' %';
@@ -369,10 +378,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
         this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
         this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
-        this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
-        break;
-
-      case Status.Paid:
         this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
         break;
 

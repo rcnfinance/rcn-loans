@@ -795,7 +795,7 @@ export class ContractsService {
     const collaterals = await this.apiService.getCollateral();
     const diasporeWithCollateral = LoanUtils.completeLoansCollateral(diaspore, collaterals);
 
-    return diasporeWithCollateral.concat(LoanCurator.curateLoans(basalt));
+    return LoanCurator.curateLoans(diasporeWithCollateral).concat(LoanCurator.curateLoans(basalt));
   }
 
   /**
@@ -813,7 +813,7 @@ export class ContractsService {
     const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
     const loans: Loan[] = this.loanTypeService.filterLoanByType(diasporeWithCollateral, ALLOWED_TYPES);
 
-    return loans;
+    return LoanCurator.curateLoans(loans);
   }
 
   /**

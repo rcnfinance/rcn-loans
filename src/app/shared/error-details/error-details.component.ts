@@ -4,6 +4,7 @@ interface ErrorButton {
   text: string;
   url: string;
   class: string;
+  target?: string;
 }
 
 @Component({
