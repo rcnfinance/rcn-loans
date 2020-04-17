@@ -1028,7 +1028,8 @@ export class ContractsService {
     const web3 = this.web3Service.opsWeb3;
     return new Promise((resolve, reject) => {
       // FIXME: see collateral with ETH implementation
-      this.loadAltContract(web3, this._collateral).methods.borrowCollateral(
+      this.loadAltContract(web3, this._collateral).methods.create(
+        account,
         debtId,
         oracle,
         amount,
