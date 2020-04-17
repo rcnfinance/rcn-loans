@@ -341,7 +341,7 @@ export class ApiService {
         amount,
         liquidation_ratio,
         balance_ratio,
-        status
+        Number(status)
       );
 
       collaterals.push(collateral);

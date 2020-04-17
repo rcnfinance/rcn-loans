@@ -6,4 +6,5 @@ export interface CollateralApi {
   amount: string;
   liquidation_ratio: string;
   balance_ratio: string;
+  status: string;
 }
