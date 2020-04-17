@@ -31,8 +31,22 @@ export class LoanTypeService {
       return LoanType.NftCollateral;
     }
 
-    // TODO: add LoanType.UnknownWithCollateral
+    if (loan.collateral) {
+      return LoanType.UnknownWithCollateral;
+    }
 
     return LoanType.Unknown;
+  }
+
+  /**
+   * Return only the loans with the selected LoanType
+   * @param loans Loans array
+   * @param types Acccepted LoanTypes
+   * @return Filtered loans array
+   */
+  filterLoanByType (loans: Loan[], types: LoanType[]) {
+    return loans.filter((loan: Loan) => {
+      return types.includes(this.getLoanType(loan));
+    });
   }
 }

@@ -64,10 +64,17 @@ export const environment = {
       debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
       loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'
     },
+    collateral: {
+      collateral: '0x8174c3324357ef0b681f44876caec99e0a0fdef5',
+      wethManager: '0x64682fc47155a7aedf93a5131208cc914dc98137'
+    },
     converter: {
       converterRamp: '0x9cd2b5ffd2c4d3d2d47ecbecf19ec588900901ec',
       ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       tokenConverter: '0x79e680e613ed32f64da9e5a09ed8613c8e9ce3a7'
+    },
+    models: {
+      installments: '0x41e9d0b6a8ce88989c2e7b3cae42ecfac44c9603'
     },
     decentraland: {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',

@@ -22,6 +22,9 @@ import { ConversionGraphicComponent } from './conversion-graphic/conversion-grap
 import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
 import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
 import { DialogHeaderComponent } from './dialog-header/dialog-header.component';
+import { BorrowFabButtonComponent } from './borrow-fab-button/borrow-fab-button.component';
+import { CollateralFormComponent } from './../dialogs/dialog-collateral/collateral-form/collateral-form.component';
+import { CollateralSliderDebtComponent } from './../dialogs/dialog-collateral/collateral-slider-debt/collateral-slider-debt.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -39,6 +42,7 @@ import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/d
 import { DialogWalletSelectComponent } from '../dialogs/dialog-wallet-select/dialog-wallet-select.component';
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
+import { DialogCollateralComponent } from '../dialogs/dialog-collateral/dialog-collateral.component';
 import { ErrorDetailsComponent } from './error-details/error-details.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 // Pipes
@@ -89,6 +93,9 @@ import { EventsService } from './../services/events.service';
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
     ErrorDetailsComponent,
+    BorrowFabButtonComponent,
+    CollateralFormComponent,
+    CollateralSliderDebtComponent,
     PageHeaderComponent,
 
     DialogInsufficientfundsComponent,
@@ -98,6 +105,7 @@ import { EventsService } from './../services/events.service';
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
+    DialogCollateralComponent,
 
     VisualUrlPipe,
     FormatAmountPipe,
@@ -110,7 +118,8 @@ import { EventsService } from './../services/events.service';
     DialogWalletSelectComponent,
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
-    DialogLoanLendComponent
+    DialogLoanLendComponent,
+    DialogCollateralComponent
   ],
   providers: [
     DecentralandCosignerProvider,
@@ -151,6 +160,9 @@ import { EventsService } from './../services/events.service';
     ErrorDetailsComponent,
     PageHeaderComponent,
     DialogWrongCountryComponent,
+    BorrowFabButtonComponent,
+    CollateralFormComponent,
+    CollateralSliderDebtComponent,
     VisualUrlPipe,
     FormatAmountPipe,
     FormatAddressPipe

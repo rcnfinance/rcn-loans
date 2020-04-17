@@ -12,9 +12,10 @@
       <app-goback-button></app-goback-button>
     </div>
     <div class="flex-item">
-      <div class="creator-container">
+      <!-- TODO: implement app-creator-container -->
+      <div class="creator-container" *ngIf="!loan?.collateral; else collateralTemplate">
         <ng-container *ngIf="brand.headerImage; else headerTitle">
-          <div class="creator-image d-flex justify-content-center align-items-center">
+          <div class="creator-image d-flex align-items-center">
             <img [src]="brand.headerImage" [alt]="brand.headerTitle">
           </div>
         </ng-container>
@@ -24,6 +25,14 @@
           </div>
         </ng-template>
       </div>
+
+      <ng-template #collateralTemplate>
+        <div class="creator-container">
+          <div class="creator-title">
+            Collateral {{ collateralAsset }}
+          </div>
+        </div>
+      </ng-template>
     </div>
     <div class="flex-item">
       <app-button-group
@@ -141,10 +150,21 @@
         <table class="table table-clickable">
           <thead>
             <tr>
-              <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
+              <th
+                style='cursor: pointer'
+                [ngClass]="{
+                  'background-active': isDetail('cosigner') || isDetail('collateral')
+                }"
+                scope="col"
+              >
                 <ng-container *ngIf="loanType !== 3">Collateral</ng-container>
                 <ng-container *ngIf="loanType === 3">Guaranty</ng-container>
-                <i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
+                <i class="material-icons white more-indicator">
+                  {{ isDetail('cosigner') || isDetail('collateral') ?
+                    '' :
+                    'unfold_more'
+                  }}
+                </i>
               </th>
             </tr>
           </thead>
@@ -183,6 +203,12 @@
     <div class="right px-0 col-xs-12 col-lg-7">
       <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
       <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
+      <app-detail-collateral
+        *ngIf="isDetail('collateral')"
+        [loan]="loan"
+        [collateral]="collateral"
+        [canAdjust]="canAdjustCollateral"
+      ></app-detail-collateral>
     </div>
 
   </div>

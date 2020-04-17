@@ -1,0 +1,119 @@
+<ng-container *ngIf="collateral; else empty">
+  <section class="collateral-detail px-3 px-md-4 pt-lg-5 mt-lg-5">
+    <div class="collateral-detail__head row">
+      <div class="col-12">
+        <h3>
+          Collateral status
+        </h3>
+      </div>
+    </div>
+    <div class="collateral-detail__body row">
+      <article class="item col col-12 col-md-4">
+        <span class="item__icon">
+          <i class="fa fa-coins font22"></i>
+        </span>
+        <div class="item__content">
+          <span class="item__label">
+            Collateral
+          </span>
+          <p class="item__value mt-1">
+            {{ collateralAmount }} {{ collateralAsset }}
+          </p>
+        </div>
+      </article>
+      <article class="item col col-12 col-md-4">
+        <span class="item__icon">
+          <i class="fa fa-chart-bar font22"></i>
+        </span>
+        <div class="item__content">
+          <span class="item__label">
+            Liquidation ratio
+          </span>
+          <p class="item__value mt-1">
+            {{ liquidationRatio }} %
+          </p>
+        </div>
+      </article>
+      <article class="item col col-12 col-md-4">
+        <span class="item__icon">
+          <i class="fa fa-chart-area font22"></i>
+        </span>
+        <div class="item__content">
+          <span class="item__label">
+            Balance ratio
+          </span>
+          <p class="item__value mt-1">
+            {{ balanceRatio }} %
+          </p>
+        </div>
+      </article>
+    </div>
+    <div class="collateral-detail__footer">
+      <div class="row row--header" *ngIf="canAdjust">
+        <div class="item col col-12 col-md-7">
+          <h4>
+            Adjust collateral
+          </h4>
+          <p>
+            Do you want to withdraw or add more collateral?
+          </p>
+        </div>
+        <div class="item col col-12 col-md-5 d-flex justify-content-end align-items-center">
+          <button
+            mat-raised-button
+            class="button button-primary"
+            [class.button-disabled]="addPendingTx || withdrawPendingTx"
+            (click)="openDialog('add')"
+          >
+            {{ addButtonText }}
+          </button>
+          <button
+            mat-raised-button
+            class="button button-clear"
+            [class.button-disabled]="addPendingTx || withdrawPendingTx"
+            (click)="openDialog('withdraw')"
+          >
+            {{ withdrawButtonText }}
+          </button>
+        </div>
+      </div>
+      <div class="row row--footer" [class.row--divisor]="canAdjust" *ngIf="loan?.debt">
+        <div class="item col col-12 col-md-4">
+          <i class="fa fa-percentage"></i>
+          Current Loan To Value:
+          <strong class="item__value">
+            {{ currentLoanToValue }} %
+          </strong>
+        </div>
+        <div class="item col col-12 col-md-4">
+          <i class="fa fa-retweet"></i>
+          Current Exchange Rate:
+          <strong class="item__value">
+            {{ currentExchangeRate }} {{ loanCurrency?.symbol }}/{{ collateralAsset }}
+          </strong>
+        </div>
+        <div class="item col col-12 col-md-4">
+          <i class="fa fa-chart-line"></i>
+          Current Liquidation Price:
+          <strong class="item__value">
+            {{ currentLiquidationPrice }} {{ collateralAsset }}
+          </strong>
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #empty>
+  <div class="empty-container p-3 py-md-0">
+    <div class="empty-row">
+      <i class="material-icons font110">
+        error_outline
+      </i>
+      <div class="title main-h3">
+        There is no collateral available
+      </div>
+      <div class="title main-h4"></div>
+    </div>
+  </div>
+</ng-template>

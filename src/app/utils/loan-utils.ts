@@ -1,4 +1,5 @@
 import { Loan, Network, Oracle, Descriptor, Debt, Config, Status, Model } from '../models/loan.model';
+import { Collateral } from '../models/collateral.model';
 import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
 import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
 import { Utils } from './utils';
@@ -258,5 +259,37 @@ export class LoanUtils {
       debt,
       config
     );
+  }
+
+  /**
+   * Assign collaterals to loans
+   * @param loans Loans array
+   * @param collaterals Collaterals array
+   * @return Loans with collaterals
+   */
+  static completeLoansCollateral(loans: Loan[] = [], collaterals: Collateral[] = []): Loan[] {
+    const loansObj: {[loanId: number]: Collateral[]} = {};
+
+    collaterals.map(
+      (collateral: Collateral) => {
+        if (!loansObj[collateral.debtId]) {
+          loansObj[collateral.debtId] = [];
+        }
+        loansObj[collateral.debtId].push(collateral);
+      }
+    );
+
+    loans.map((loan: Loan) => {
+      if (!loansObj[loan.id]) {
+        return loan;
+      }
+
+      loansObj[loan.id].map((collateral: Collateral) => {
+        const { id, debtId, oracle, token, amount, liquidationRatio, balanceRatio } = collateral;
+        loan.collateral = new Collateral(id, debtId, oracle, token, amount, liquidationRatio, balanceRatio);
+      });
+    });
+
+    return loans;
   }
 }

@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as BN from 'bn.js';
 
-import { Loan, Oracle, Network } from '../models/loan.model';
+import { Loan, LoanType, Oracle, Network } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
+import { LoanUtils } from './../utils/loan-utils';
 import { environment } from '../../environments/environment';
 // App services
 import { Web3Service } from './web3.service';
 import { TxService } from '../services/tx.service';
 import { CosignerService } from './cosigner.service';
+import { LoanTypeService } from './loan-type.service';
 import { ApiService } from './api.service';
 import { Utils } from './../utils/utils';
 import { EventsService } from './events.service';
@@ -23,6 +25,9 @@ const basaltOracleAbi = require('../contracts/BasaltOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 const tokenConverterAbi = require('../contracts/TokenConverter.json');
 const oracleFactoryAbi = require('../contracts/OracleFactory.json');
+const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
+const collateralAbi = require('../contracts/Collateral.json');
+const collateralWethManagerAbi = require('../contracts/CollateralWETHManager.json');
 
 @Injectable()
 export class ContractsService {
@@ -36,6 +41,12 @@ export class ContractsService {
   private _tokenConverter: any;
   private _oracleFactoryAddress: string = environment.contracts.oracleFactory;
   private _oracleFactory: any;
+  private _installmentsModelAddress: string = environment.contracts.models.installments;
+  private _installmentsModel: any;
+  private _collateralAddress: string = environment.contracts.collateral.collateral;
+  private _collateral: any;
+  private _collateralWethManagerAddress: string = environment.contracts.collateral.wethManager;
+  private _collateralWethManager: any;
 
   constructor(
     private http: HttpClient,
@@ -43,6 +54,7 @@ export class ContractsService {
     private txService: TxService,
     private cosignerService: CosignerService,
     private apiService: ApiService,
+    private loanTypeService: LoanTypeService,
     private eventsService: EventsService
   ) {
     this._rcnEngine = this.makeContract(engineAbi.abi, this._rcnEngineAddress);
@@ -51,6 +63,9 @@ export class ContractsService {
     this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
     this._tokenConverter = this.makeContract(tokenConverterAbi.abi, this._tokenConverterAddress);
     this._oracleFactory = this.makeContract(oracleFactoryAbi.abi, this._oracleFactoryAddress);
+    this._installmentsModel = this.makeContract(installmentsModelAbi.abi, this._installmentsModelAddress);
+    this._collateral = this.makeContract(collateralAbi.abi, this._collateralAddress);
+    this._collateralWethManager = this.makeContract(collateralWethManagerAbi.abi, this._collateralWethManagerAddress);
   }
 
   /**
@@ -236,7 +251,7 @@ export class ContractsService {
     }
 
     const account = await this.web3Service.getAccount();
-    const erc721abi: any = {}; // FIXME: use real erc721 abi
+    const erc721abi: any = collateralAbi.abi;
     const erc721 = this.makeContract(erc721abi, contractAddress);
 
     return await erc721.methods.isApprovedForAll(
@@ -254,7 +269,7 @@ export class ContractsService {
   async approveERC721(contractAddress: string, operatorAddress: string): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
     const account = await this.web3Service.getAccount();
-    const erc721abi: any = {}; // FIXME: use real erc721 abi
+    const erc721abi: any = collateralAbi.abi;
     const erc721: any = this.makeContract(erc721abi, contractAddress);
 
     return new Promise((resolve, reject) => {
@@ -280,7 +295,7 @@ export class ContractsService {
   async disapproveERC721(contractAddress: string, operatorAddress: string): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
     const account = await this.web3Service.getAccount();
-    const erc721abi: any = {}; // FIXME: use real erc721 abi
+    const erc721abi: any = collateralAbi.abi;
     const erc721: any = this.makeContract(erc721abi, contractAddress);
 
     return new Promise((resolve, reject) => {
@@ -758,7 +773,11 @@ export class ContractsService {
   // TODO: remove method from this service
   async getLoan(id: string): Promise<Loan> {
     if (id.startsWith('0x')) {
-      return await this.apiService.getLoan(id, Network.Diaspore);
+      const loan: Loan = await this.apiService.getLoan(id, Network.Diaspore);
+      const collaterals = await this.apiService.getCollateralByLoan(id);
+      loan.collateral = collaterals[0];
+
+      return loan;
     }
 
     return await this.apiService.getLoan(id, Network.Basalt);
@@ -773,8 +792,10 @@ export class ContractsService {
   async getActiveLoans(): Promise<Loan[]> {
     const diaspore: Loan[] = await this.apiService.getActiveLoans(Network.Diaspore);
     const basalt: Loan[] = await this.apiService.getActiveLoans(Network.Basalt);
+    const collaterals = await this.apiService.getCollateral();
+    const diasporeWithCollateral = LoanUtils.completeLoansCollateral(diaspore, collaterals);
 
-    return LoanCurator.curateLoans(diaspore).concat(LoanCurator.curateLoans(basalt));
+    return LoanCurator.curateLoans(diasporeWithCollateral).concat(LoanCurator.curateLoans(basalt));
   }
 
   /**
@@ -787,9 +808,12 @@ export class ContractsService {
     const block = await web3.eth.getBlock('latest');
     const now = block.timestamp;
     const diaspore: Loan[] = await this.apiService.getRequests(now, Network.Diaspore);
-    const basalt: Loan[] = await this.apiService.getRequests(now, Network.Basalt);
+    const collaterals = await this.apiService.getCollateral();
+    const diasporeWithCollateral = LoanUtils.completeLoansCollateral(diaspore, collaterals);
+    const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
+    const loans: Loan[] = this.loanTypeService.filterLoanByType(diasporeWithCollateral, ALLOWED_TYPES);
 
-    return LoanCurator.curateLoans(diaspore).concat(LoanCurator.curateLoans(basalt));
+    return LoanCurator.curateLoans(loans);
   }
 
   /**
@@ -799,10 +823,26 @@ export class ContractsService {
    */
   // TODO: remove method from this service
   async getLoansOfLender(lender: string): Promise<Loan[]> {
-    const basalt: Loan[] = await this.apiService.getLoansOfLender(lender, Network.Basalt);
-    const diaspore: Loan[] = await this.apiService.getLoansOfLender(lender, Network.Diaspore);
+    const basalt: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', Network.Basalt);
+    const diaspore: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', Network.Diaspore);
+    const collaterals = await this.apiService.getCollateral();
+    const diasporeWithCollateral = LoanUtils.completeLoansCollateral(diaspore, collaterals);
 
-    return diaspore.concat(LoanCurator.curateLoans(basalt));
+    return diasporeWithCollateral.concat(LoanCurator.curateLoans(basalt));
+  }
+
+  /**
+   * Loads all loans borrowed by the specified account
+   * @param borrower Borrower address
+   * @return Loans array
+   */
+  async getLoansOfBorrower(borrower: string): Promise<Loan[]> {
+    const basalt: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(borrower, 'borrower', Network.Basalt);
+    const diaspore: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(borrower, 'borrower', Network.Diaspore);
+    const collaterals = await this.apiService.getCollateral();
+    const diasporeWithCollateral = LoanUtils.completeLoansCollateral(diaspore, collaterals);
+
+    return diasporeWithCollateral.concat(LoanCurator.curateLoans(basalt));
   }
 
   readPendingWithdraws(loans: Loan[]): [number, number[], number, number[]] {
@@ -832,6 +872,255 @@ export class ContractsService {
         resolve(this.readPendingWithdraws(loans));
       });
     }) as Promise<[number, number[], number, number[]]>;
+  }
+
+  /**
+   * Encode installments data
+   * @param cuota Installment amount
+   * @param interestRate Interest rate
+   * @param installments Number of installments
+   * @param duration Installment duration in seconds
+   * @param timeUnit Time unit (seconds)
+   * @return Encoded installments data
+   */
+  async encodeInstallmentsData(
+    cuota: string,
+    interestRate: string,
+    installments: string,
+    duration: string,
+    timeUnit: string
+  ) {
+    return await this._installmentsModel.methods.encodeData(
+      cuota,
+      interestRate,
+      installments,
+      duration,
+      timeUnit
+    ).call();
+  }
+
+  /**
+   * Check encoded installments data
+   * @param encodedData Array of bytes
+   * @return True if can validate the data
+   */
+  async validateEncodedData(encodedData: string) {
+    return await this._installmentsModel.methods.validate(encodedData).call();
+  }
+
+  /**
+   * Calculate loan ID
+   * @param amount Total amount
+   * @param borrower Borrower address
+   * @param creator Creator address
+   * @param model Model address
+   * @param oracle Oracle address
+   * @param callback Callback address
+   * @param salt Salt hash
+   * @param expiration Expiration timestamp
+   * @param data Model data
+   * @return Loan ID
+   */
+  async calculateLoanId(
+    amount: BN | string,
+    borrower: string,
+    creator: string,
+    model: string,
+    oracle: string,
+    callback: string,
+    salt: string,
+    expiration: number,
+    data: any
+  ) {
+    return await this._loanManager.methods.calcId(
+      amount,
+      borrower,
+      creator,
+      model,
+      oracle,
+      callback,
+      salt,
+      expiration,
+      data
+    ).call();
+  }
+
+  /**
+   * Request a loan
+   * @param amount Total amount
+   * @param model Model address
+   * @param oracle Oracle address
+   * @param borrower Borrower address
+   * @param callback Callback address
+   * @param salt Salt hash
+   * @param expiration Expiration timestamp
+   * @param loanData Loan model data
+   * @return Loan ID
+   */
+  async requestLoan(
+    amount: BN | string,
+    model: string,
+    oracle: string,
+    borrower: string,
+    callback: string,
+    salt: string,
+    expiration: number,
+    loanData: any
+  ): Promise<string> {
+    const web3 = this.web3Service.opsWeb3;
+    return new Promise((resolve, reject) => {
+      this.loadAltContract(web3, this._loanManager).methods.requestLoan(
+        amount,
+        model,
+        oracle,
+        borrower,
+        callback,
+        salt,
+        expiration,
+        loanData
+      )
+      .send({ from: borrower })
+      .on('transactionHash', (hash: string) => resolve(hash))
+      .on('error', (err) => reject(err));
+    });
+  }
+
+  /**
+   * Check if the loan was created
+   * @param loanId Loan ID
+   * @return Boolean if the loan exist
+   */
+  async loanWasCreated(loanId: string): Promise<boolean> {
+    try {
+      const loan = await this._loanManager.methods.getLoanData(loanId).call();
+
+      if (Utils.isEmpty(loan)) {
+        throw Error('Loan does not exist');
+      }
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
+   * Create loan collateral
+   * @param loanId Loan ID
+   * @param oracle Oracle address
+   * @param collateralToken Token address
+   * @param entryAmount Collateral amount
+   * @param liquidationRatio Liquidation ratio
+   * @param balanceRatio Balance ratio
+   * @param burnFee Burn fee
+   * @param rewardFee Reward fee
+   * @param account Account address
+   * @return Loan ID
+   */
+  async createCollateral(
+    debtId: string,
+    oracle: string,
+    amount: BN | string,
+    liquidationRatio: BN | string,
+    balanceRatio: BN | string,
+    account: string
+  ): Promise<string> {
+    const web3 = this.web3Service.opsWeb3;
+    return new Promise((resolve, reject) => {
+      // FIXME: see collateral with ETH implementation
+      this.loadAltContract(web3, this._collateral).methods.create(
+        debtId,
+        oracle,
+        amount,
+        liquidationRatio,
+        balanceRatio
+      )
+      .send({ from: account })
+      .on('transactionHash', (hash: string) => resolve(hash))
+      .on('error', (err) => reject(err));
+    });
+  }
+
+  /**
+   * Deposit tokens in collateral
+   * @param collateralId Collateral ID
+   * @param tokenAddress Collateral token address
+   * @param amount Amount to add in wei
+   * @param account Account address
+   * @return Tx hash
+   */
+  async addCollateral(
+    collateralId: number,
+    tokenAddress: string,
+    amount: string,
+    account: string
+  ): Promise<string> {
+    const web3 = this.web3Service.opsWeb3;
+
+    return new Promise((resolve, reject) => {
+      if (tokenAddress === environment.contracts.converter.ethAddress) {
+        this.loadAltContract(web3, this._collateralWethManager).methods.deposit(
+          collateralId
+        )
+        .send({ from: account, value: amount })
+        .on('transactionHash', (hash: string) => resolve(hash))
+        .on('error', (err) => reject(err));
+      }
+
+      this.loadAltContract(web3, this._collateral).methods.deposit(
+        collateralId,
+        amount
+      )
+      .send({ from: account })
+      .on('transactionHash', (hash: string) => resolve(hash))
+      .on('error', (err) => reject(err));
+    });
+  }
+
+  /**
+   * Withdraw collateral
+   * @param collateralId Collateral ID
+   * @param to Account address
+   * @param amount Amount to add in wei
+   * @param oracleData Oracle data bytes
+   * @param account Account address
+   * @return Tx hash
+   */
+  async withdrawCollateral(
+    collateralId: number,
+    tokenAddress: string,
+    to: string,
+    amount: string,
+    oracleData: string,
+    account: string
+  ): Promise<string> {
+    const web3 = this.web3Service.opsWeb3;
+    let contract: any = this._collateral;
+
+    if (tokenAddress === environment.contracts.converter.ethAddress) {
+      contract = this._collateralWethManager;
+    }
+
+    return new Promise((resolve, reject) => {
+      this.loadAltContract(web3, contract).methods.withdraw(
+        collateralId,
+        to,
+        amount,
+        oracleData
+      )
+      .send({ from: account })
+      .on('transactionHash', (hash: string) => resolve(hash))
+      .on('error', (err) => reject(err));
+    });
+  }
+
+  /**
+   * Get loan debt amount value
+   * @param loanId Loan ID
+   * @return Debt amount
+   */
+  async getClosingObligation(loanId: string): Promise<string> {
+    return await this._loanManager.methods.getClosingObligation(loanId).call();
   }
 
   /**

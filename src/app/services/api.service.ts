@@ -4,7 +4,9 @@ import { aggregate } from '@makerdao/multicall';
 import { environment } from '../../environments/environment';
 import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
 import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
+import { CollateralApi } from './../interfaces/collateral-api';
 import { Loan, Network, Status } from '../models/loan.model';
+import { Collateral } from '../models/collateral.model';
 import { LoanUtils } from '../utils/loan-utils';
 import { Utils } from '../utils/utils';
 // App services
@@ -102,13 +104,54 @@ export class ApiService {
   }
 
   /**
+   * Get all loan collaterals
+   * @return Collateral array
+   */
+  async getCollateral(): Promise<Collateral[]> {
+    const apiUrl: string = this.getApiUrl(Network.Diaspore);
+    let apiCollaterals: CollateralApi[] = [];
+    let collaterals: Collateral[] = [];
+    let apiCalls = 0;
+    let page = 0;
+
+    try {
+      const data: any = await this.http.get(apiUrl.concat(
+        `collaterals?page=${ page }`
+      )).toPromise();
+
+      if (page === 0) {
+        apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      }
+
+      apiCollaterals = apiCollaterals.concat(data.content);
+      page++;
+    } catch (err) {
+      this.eventsService.trackError(err);
+    }
+
+    const urls = [];
+    for (page; page < apiCalls; page++) {
+      const url = apiUrl.concat(`collaterals?page=${ page }`);
+      urls.push(url);
+    }
+    const responses = await this.getAllUrls(urls);
+    const allApiCollaterals = await this.getAllApiCollaterals(responses);
+    apiCollaterals = apiCollaterals.concat(allApiCollaterals);
+    collaterals = this.getAllCompleteCollaterals(apiCollaterals);
+
+    return collaterals;
+  }
+
+  /**
    * Get all loans lent by the account that is logged in
-   * @param lender Lender address
+   * @param address Lender or borrower address
+   * @param loansType Selected network
    * @param network Selected network
    * @return Loans array
    */
-  async getLoansOfLender(
-    lender: string,
+  async getLoansOfLenderOrBorrower(
+    address: string,
+    loansType: 'lender' | 'borrower',
     network: Network
   ): Promise<Loan[]> {
     const web3 = this.web3Service.web3;
@@ -118,9 +161,9 @@ export class ApiService {
     let page = 0;
 
     try {
-      lender = web3.utils.toChecksumAddress(lender);
+      address = web3.utils.toChecksumAddress(address);
       const data: any = await this.http.get(
-        apiUrl.concat(`loans?open=false&page=${ page }&lender=${ lender }`)
+        apiUrl.concat(`loans?open=false&page=${ page }&${ loansType }=${ address }`)
       ).toPromise();
 
       if (page === 0) {
@@ -136,7 +179,7 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const url = apiUrl.concat(`loans?open=false&page=${ page }&lender=${ lender }`);
+      const url = apiUrl.concat(`loans?open=false&page=${ page }&${ loansType }=${ address }`);
       urls.push(url);
     }
     const responses = await this.getAllUrls(urls);
@@ -220,6 +263,23 @@ export class ApiService {
   }
 
   /**
+   * Get collateral.
+   * @param loanId Loan ID
+   * @return Collateral
+   */
+  async getCollateralByLoan(loanId: string) {
+    const uri = `collaterals?debt_id=${ loanId }`;
+    const data: any = await this.http.get(this.diasporeUrl.concat(uri)).toPromise();
+
+    try {
+      const collaterals: Collateral[] = this.getAllCompleteCollaterals(data.content as CollateralApi[]);
+      return collaterals;
+    } catch (err) {
+      return [];
+    }
+  }
+
+  /**
    * Each and call urls
    * @param urls URL array
    * @return URL call response
@@ -263,6 +323,30 @@ export class ApiService {
       this.eventsService.trackError(err);
       throw (err);
     }
+  }
+
+  /**
+   * Create collateral models
+   */
+  private getAllCompleteCollaterals(apiCollaterals: CollateralApi[]): Collateral[] {
+    const collaterals: Collateral[] = [];
+
+    apiCollaterals.map((apiCollateral: CollateralApi) => {
+      const { id, debt_id, oracle, token, amount, liquidation_ratio, balance_ratio } = apiCollateral;
+      const collateral: Collateral = new Collateral(
+        id as any,
+        debt_id,
+        oracle,
+        token,
+        amount,
+        liquidation_ratio,
+        balance_ratio
+      );
+
+      collaterals.push(collateral);
+    });
+
+    return collaterals;
   }
 
   /**
@@ -370,6 +454,22 @@ export class ApiService {
         )
       );
       return (activeLoans);
+    } catch (err) {
+      this.eventsService.trackError(err);
+      throw (err);
+    }
+  }
+
+  /**
+   * Handle api collateral response loading models
+   * @param responses Api responses
+   * @return Collaterals array
+   */
+  private async getAllApiCollaterals(responses: any[]): Promise<CollateralApi[]> {
+    try {
+      return await Promise.all(
+        responses.map((response) => response as CollateralApi)
+      );
     } catch (err) {
       this.eventsService.trackError(err);
       throw (err);
