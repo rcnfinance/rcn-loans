@@ -52,14 +52,20 @@
             [headers]="['Lend', loan.currency, 'Receive']"
             [amountLeft]="loan.currency.fromUnit(loan.amount)"
             [amountRight]="isRequest || isCanceled || isExpired ? expectedReturn : totalDebt"
+            [currency]="loan.currency"
           ></app-conversion-graphic>
         </div>
         <div class="px-3 pt-3" *ngIf="!isRequest && !isCanceled && !isExpired">
           <app-conversion-graphic
-            [headers]="['Paid', 'Annual rate', 'Outstanding']"
+            [headers]="[
+              'Repaid',
+              isInDebt ? 'Penalty rate' : 'Annual rate',
+              'Outstanding'
+            ]"
             [amountRight]="pendingAmount"
-            [textMiddle]="interest"
+            [textMiddle]="isInDebt ? punitory : interest"
             [amountLeft]="paid"
+            [currency]="loan.currency"
           ></app-conversion-graphic>
         </div>
       </ng-container>
@@ -67,9 +73,10 @@
       <ng-template #paidGraphic>
         <div class="px-3 pt-1">
           <app-conversion-graphic
-            [headers]="['Lent', loan.currency, 'Paid']"
+            [headers]="['Lent', loan.currency, 'Repaid']"
             [amountLeft]="loan.currency.fromUnit(loan.amount)"
             [amountRight]="paid"
+            [currency]="loan.currency"
           ></app-conversion-graphic>
         </div>
       </ng-template>
