@@ -33,10 +33,20 @@
     z-index: 1;
   }
 
-  &__risk-indicator {
+  &__risk-indicator,
+  &__complete {
     position: absolute;
     top: 25px;
+  }
+
+  &__risk-indicator {
     right: 25px;
+  }
+
+  &__complete {
+    right: 15px;
+    color: var(--app-color-orange);
+    font-size: 1.45em;
   }
 
   &__content {

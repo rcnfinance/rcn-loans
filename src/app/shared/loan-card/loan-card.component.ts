@@ -28,6 +28,8 @@ export class LoanCardComponent implements OnInit, OnDestroy {
 
   account: string;
   shortAddress = Utils.shortAddress;
+  myLoan: boolean;
+  isIncomplete: boolean;
 
   // subscriptions
   subscriptionAccount: Subscription;
@@ -65,8 +67,10 @@ export class LoanCardComponent implements OnInit, OnDestroy {
     const web3 = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
     this.account = web3.utils.toChecksumAddress(account);
+    this.myLoan = account.toLowerCase() === this.loan.borrower.toLowerCase();
 
     this.checkCanLend();
+    this.checkIfIsComplete();
   }
 
   /**
@@ -77,6 +81,13 @@ export class LoanCardComponent implements OnInit, OnDestroy {
       const isBorrower = this.stateLoan.borrower.toUpperCase() === this.account.toUpperCase();
       this.canLend = !isBorrower;
     }
+  }
+
+  /**
+   * Check if the loan creation is complete
+   */
+  checkIfIsComplete() {
+    this.isIncomplete = this.myLoan && !this.loan.collateral;
   }
 
   /**
