@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import * as BN from 'bn.js';
 import { Utils } from '../../utils/utils';
+import { Loan } from './../../models/loan.model';
 import { Collateral, Status } from './../../models/collateral.model';
 // App Components
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
@@ -63,6 +64,7 @@ export class ContentWrapperComponent implements OnInit {
   navmobileToggled = false; // Nav Mobile toggled
 
   pendingWithdraw: Tx;
+  needWithdraw: boolean;
 
   constructor(
     private sidebarService: SidebarService, // Navbar Service
@@ -79,15 +81,16 @@ export class ContentWrapperComponent implements OnInit {
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
     this.web3Service.loginEvent.subscribe(
-      (isLogged) => {
+      async (isLogged) => {
         if (isLogged) {
-          this.loadAccount();
+          await this.loadAccount();
+          this.checkPendingWithdraw();
         }
       }
     );
     await this.loadAccount();
-    this.canLend();
     this.checkPendingWithdraw();
+    this.canLend();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -215,13 +218,21 @@ export class ContentWrapperComponent implements OnInit {
     if (!account) {
       return;
     }
+    if (this.needWithdraw) {
+      return;
+    }
 
-    const collateralToWithdraw: Collateral[] =
-      (await this.apiService.getCollateral())
-      .filter(({ status }) => status === Status.ToWithdraw);
+    const loansToWithdraw: Loan[] =
+      (await this.contractService.getLoansOfBorrower(account))
+      .filter(({ collateral }) => collateral && collateral.status === Status.ToWithdraw);
 
-    if (collateralToWithdraw.length) {
-      this.dialog.open(DialogNeedWithdrawComponent);
+    if (loansToWithdraw.length) {
+      this.needWithdraw = true;
+      this.dialog.open(DialogNeedWithdrawComponent, {
+        data: {
+          loans: loansToWithdraw
+        }
+      });
     }
   }
 }
