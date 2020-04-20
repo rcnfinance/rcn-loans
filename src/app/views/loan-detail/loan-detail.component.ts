@@ -183,6 +183,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         await this.getLoan(loan.id);
         this.loadStatus();
         this.loadDetail();
+        this.loadCollateral();
         this.loadAccount();
       } catch (err) {
         this.eventsService.trackError(err);
