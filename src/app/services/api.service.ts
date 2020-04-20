@@ -163,7 +163,7 @@ export class ApiService {
     try {
       address = web3.utils.toChecksumAddress(address);
       const data: any = await this.http.get(
-        apiUrl.concat(`loans?open=false&page=${ page }&${ loansType }=${ address }`)
+        apiUrl.concat(`loans?page=${ page }&${ loansType }=${ address }`)
       ).toPromise();
 
       if (page === 0) {
@@ -179,7 +179,7 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const url = apiUrl.concat(`loans?open=false&page=${ page }&${ loansType }=${ address }`);
+      const url = apiUrl.concat(`loans?page=${ page }&${ loansType }=${ address }`);
       urls.push(url);
     }
     const responses = await this.getAllUrls(urls);
