@@ -25,6 +25,8 @@ import { DialogHeaderComponent } from './dialog-header/dialog-header.component';
 import { BorrowFabButtonComponent } from './borrow-fab-button/borrow-fab-button.component';
 import { CollateralFormComponent } from './../dialogs/dialog-collateral/collateral-form/collateral-form.component';
 import { CollateralSliderDebtComponent } from './../dialogs/dialog-collateral/collateral-slider-debt/collateral-slider-debt.component';
+import { ErrorDetailsComponent } from './error-details/error-details.component';
+import { PageHeaderComponent } from './page-header/page-header.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -43,8 +45,7 @@ import { DialogWalletSelectComponent } from '../dialogs/dialog-wallet-select/dia
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 import { DialogCollateralComponent } from '../dialogs/dialog-collateral/dialog-collateral.component';
-import { ErrorDetailsComponent } from './error-details/error-details.component';
-import { PageHeaderComponent } from './page-header/page-header.component';
+import { DialogNeedWithdrawComponent } from '../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 import { FormatAmountPipe } from './../pipes/format-amount.pipe';
@@ -106,6 +107,7 @@ import { EventsService } from './../services/events.service';
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
     DialogCollateralComponent,
+    DialogNeedWithdrawComponent,
 
     VisualUrlPipe,
     FormatAmountPipe,
@@ -119,7 +121,8 @@ import { EventsService } from './../services/events.service';
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
-    DialogCollateralComponent
+    DialogCollateralComponent,
+    DialogNeedWithdrawComponent
   ],
   providers: [
     DecentralandCosignerProvider,
