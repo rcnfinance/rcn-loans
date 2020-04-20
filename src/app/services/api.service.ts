@@ -201,54 +201,6 @@ export class ApiService {
     }
 
     return allActiveLoans;
-    /*
-    try {
-      const data: any = await this.http.get(apiUrl.concat(
-        `loans?open=true&canceled=false&approved=true&status=0&page=${ page }&${ filterExpiration }=${ now }`
-      )).toPromise();
-
-      if (page === 0) {
-        apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
-      }
-
-      const filterStatus = [Status.Destroyed, Status.Expired];
-      const loansRequests = await this.getAllCompleteLoans(
-        data.content as LoanApiBasalt[] | LoanApiDiaspore[],
-        network
-      );
-      const filteredLoans = this.excludeLoansWithStatus(
-        filterStatus,
-        null,
-        loansRequests
-      );
-
-      allRequestLoans = allRequestLoans.concat(filteredLoans);
-      page++;
-    } catch (err) {
-      this.eventsService.trackError(err);
-    }
-
-    const urls = [];
-    for (page; page < apiCalls; page++) {
-      const url = apiUrl.concat(
-        `loans?open=true&canceled=false&approved=true&status=0&page=${ page }&${ filterExpiration }=${ now }`
-      );
-      urls.push(url);
-    }
-    const responses = await this.getAllUrls(urls);
-
-    for (const response of responses) {
-      const filterStatus = [Status.Destroyed, Status.Expired];
-      const loansRequests = await this.getAllCompleteLoans(response.content, network);
-      const notExpiredResquestLoans = this.excludeLoansWithStatus(
-        filterStatus,
-        null,
-        loansRequests
-      );
-
-      allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
-    }
-    */
   }
 
   /**
