@@ -2,12 +2,15 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import * as BN from 'bn.js';
 import { Utils } from '../../utils/utils';
+import { Collateral, Status } from './../../models/collateral.model';
 // App Components
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
+import { DialogNeedWithdrawComponent } from '../../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
 // App Service
 import { environment } from '../../../environments/environment';
 import { SidebarService } from '../../services/sidebar.service';
 import { Web3Service } from '../../services/web3.service';
+import { ApiService } from '../../services/api.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Tx, TxService } from '../../services/tx.service';
 import { CountriesService } from '../../services/countries.service';
@@ -64,13 +67,14 @@ export class ContentWrapperComponent implements OnInit {
   constructor(
     private sidebarService: SidebarService, // Navbar Service
     private web3Service: Web3Service,
+    private apiService: ApiService,
     private contractService: ContractsService,
     private txService: TxService,
     public dialog: MatDialog,
     private countriesService: CountriesService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
@@ -81,8 +85,9 @@ export class ContentWrapperComponent implements OnInit {
         }
       }
     );
-    this.loadAccount();
+    await this.loadAccount();
     this.canLend();
+    this.checkPendingWithdraw();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -200,5 +205,23 @@ export class ContentWrapperComponent implements OnInit {
     this.basaltLoansWithBalance = pendingWithdraws[1];
     this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadPendingWithdraw();
+  }
+
+  /**
+   * Check if the user has pending collateral withdraws
+   */
+  private async checkPendingWithdraw() {
+    const account: string = this.account;
+    if (!account) {
+      return;
+    }
+
+    const collateralToWithdraw: Collateral[] =
+      (await this.apiService.getCollateral())
+      .filter(({ status }) => status === Status.ToWithdraw);
+
+    if (collateralToWithdraw.length) {
+      this.dialog.open(DialogNeedWithdrawComponent);
+    }
   }
 }
