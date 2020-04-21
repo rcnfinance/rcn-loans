@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material';
 import * as BN from 'bn.js';
 import { Utils } from '../../utils/utils';
 import { Loan } from './../../models/loan.model';
-import { Collateral, Status } from './../../models/collateral.model';
+import { Status } from './../../models/collateral.model';
 // App Components
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogNeedWithdrawComponent } from '../../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
@@ -11,7 +11,6 @@ import { DialogNeedWithdrawComponent } from '../../dialogs/dialog-need-withdraw/
 import { environment } from '../../../environments/environment';
 import { SidebarService } from '../../services/sidebar.service';
 import { Web3Service } from '../../services/web3.service';
-import { ApiService } from '../../services/api.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Tx, TxService } from '../../services/tx.service';
 import { CountriesService } from '../../services/countries.service';
@@ -69,7 +68,6 @@ export class ContentWrapperComponent implements OnInit {
   constructor(
     private sidebarService: SidebarService, // Navbar Service
     private web3Service: Web3Service,
-    private apiService: ApiService,
     private contractService: ContractsService,
     private txService: TxService,
     public dialog: MatDialog,
@@ -81,7 +79,7 @@ export class ContentWrapperComponent implements OnInit {
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
     this.web3Service.loginEvent.subscribe(
-      async (isLogged) => {
+      async (isLogged: boolean) => {
         if (isLogged) {
           await this.loadAccount();
           this.checkPendingWithdraw();
