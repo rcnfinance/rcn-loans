@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { Loan } from './../../models/loan.model';
 import { Collateral } from './../../models/collateral.model';
 import { CollateralRequest } from './../../interfaces/collateral-request';
@@ -313,16 +313,17 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
   /**
    * Finish collateral creation and redirect to the loan detail
    */
-  private finishCollateralCreation() {
+  private async finishCollateralCreation() {
     const loan: Loan = this.loan;
     this.finishProgress = true;
     this.loanWasCreated = true;
     this.spinner.show();
 
-    setTimeout(() => {
-      this.spinner.hide();
-      this.router.navigate(['/', 'loan', loan.id]);
-    }, 3000);
+    const TIME_MS = 8000;
+    await timer(TIME_MS).toPromise();
+
+    this.spinner.hide();
+    this.router.navigate(['/', 'loan', loan.id]);
   }
 
   /**
