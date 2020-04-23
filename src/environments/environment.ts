@@ -65,11 +65,11 @@ export const environment = {
       loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'
     },
     collateral: {
-      collateral: '0x8174c3324357ef0b681f44876caec99e0a0fdef5',
-      wethManager: '0x64682fc47155a7aedf93a5131208cc914dc98137'
+      collateral: '0x391720efbaea47130f198263f7c3abefc230d14b',
+      wethManager: '0xfcbfd18d28ff0ffb311e2de179f3758531128449'
     },
     converter: {
-      converterRamp: '0x9cd2b5ffd2c4d3d2d47ecbecf19ec588900901ec',
+      converterRamp: '0x935d87676a113d4709c6b208509b592931edaaf6',
       ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       tokenConverter: '0x79e680e613ed32f64da9e5a09ed8613c8e9ce3a7'
     },
