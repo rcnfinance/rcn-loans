@@ -19,8 +19,8 @@ import { EventsService } from '../services/events.service';
 export class ApiService {
 
   installmentModelAddress = '0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53';
-  diasporeUrl = environment.rcn_node_api.diasporeUrl;
-  basaltUrl = environment.rcn_node_api.basaltUrl;
+  diasporeUrl = environment.rcnApi.diasporeUrl;
+  basaltUrl = environment.rcnApi.basaltUrl;
   multicallConfig = {
     rpcUrl: environment.network.provider.url,
     multicallAddress: environment.contracts.multicall
