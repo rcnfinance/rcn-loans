@@ -37,8 +37,7 @@ export const environment = {
   },
   rcnApi: {
     basaltUrl: 'https://rnode.rcn.loans/v1/',
-    diasporeUrl: 'https://diaspore-rnode.rcn.loans/v4/',
-    url: 'https://diaspore-rnode.rcn.loans/v4/' // TODO: replace by diasporeUrl
+    diasporeUrl: 'https://diaspore-rnode.rcn.loans/v4/'
   },
   network: {
     id: 1,
