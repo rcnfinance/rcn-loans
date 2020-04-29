@@ -36,8 +36,12 @@ export const environment = {
     loan: 'https://ropsten-rnode.rcn.loans/v1/commits?id_loan=$id' // TODO: replace by rcn_node_api.basaltUrl
   },
   rcnApi: {
-    basaltUrl: 'https://ropsten-rnode.rcn.loans/v1/',
-    diasporeUrl: 'https://diaspore-ropsten-rnode.rcn.loans/v4/'
+    basalt: {
+      v1: 'https://ropsten-rnode.rcn.loans/v1/'
+    },
+    diaspore: {
+      v4: 'https://diaspore-ropsten-rnode.rcn.loans/v4/'
+    }
   },
   network: {
     id: 3,

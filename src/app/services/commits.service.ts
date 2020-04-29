@@ -26,7 +26,8 @@ export class CommitsService {
       commits = data.content;
 
     } else {
-      const urlLoanManagerCommits = environment.rcnApi.diasporeUrl.concat(`commits?id_loan=${ id }&page_size=100`);
+      const apiUrl: string = environment.rcnApi.diaspore.v4;
+      const urlLoanManagerCommits = apiUrl.concat(`commits?id_loan=${ id }&page_size=100`);
       // TODO: add commits paginator
 
       try {
@@ -37,7 +38,7 @@ export class CommitsService {
         this.eventsService.trackError(err);
       }
 
-      const urlDebtEngineCommits = environment.rcnApi.diasporeUrl.concat(`debts/${ id }`);
+      const urlDebtEngineCommits = apiUrl.concat(`debts/${ id }`);
       try {
         const responseDebtEngine: any = await this.http.get(urlDebtEngineCommits).toPromise();
         commitsDebtEngine = responseDebtEngine.content;
