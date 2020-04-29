@@ -15,10 +15,7 @@ import { EventsService } from '../services/events.service';
   providedIn: 'root'
 })
 export class ApiService {
-
   installmentModelAddress = '0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53';
-  diasporeUrl = environment.rcnApi.diaspore.v4;
-  basaltUrl = environment.rcnApi.basalt.v1;
   multicallConfig = {
     rpcUrl: environment.network.provider.url,
     multicallAddress: environment.contracts.multicall
@@ -411,8 +408,8 @@ export class ApiService {
    * @return Model debt info obtained from API
    */
   private async getModelDebtInfo(loanId: string) {
-    const apiUrl = this.diasporeUrl;
-    return await this.http.get(apiUrl.concat(`model_debt_info/${ loanId }`)).toPromise();
+    const diasporeApi = this.getApiUrl(Network.Diaspore);
+    return await this.http.get(diasporeApi.concat(`model_debt_info/${ loanId }`)).toPromise();
   }
 
   /**
@@ -421,23 +418,29 @@ export class ApiService {
    * @return Config obtained from API
    */
   private async getModelConfig(loanId: string) {
-    const apiUrl = this.diasporeUrl;
-    const { content }: any = await this.http.get(apiUrl.concat(`configs/${ loanId }`)).toPromise();
+    const diasporeApi = this.getApiUrl(Network.Diaspore);
+    const { content }: any = await this.http.get(diasporeApi.concat(`configs/${ loanId }`)).toPromise();
     return content.data;
   }
 
   /**
    * Return the api url according to the chosen network
    * @param network Selected network
+   * @param diasporeVersion API version
+   * @param basaltVersion API version
    * @return Api url
    */
-  private getApiUrl(network: Network) {
+  private getApiUrl(
+    network: Network,
+    diasporeVersion?: 'v4' | 'v5',
+    basaltVersion?: 'v1'
+  ) {
     switch (network) {
       case Network.Basalt:
-        return this.basaltUrl;
+        return environment.rcnApi.diaspore[diasporeVersion || 'v4'];
 
-      case Network.Diaspore:
-        return this.diasporeUrl;
+      case Network.Basalt:
+        return environment.rcnApi.basalt[basaltVersion || 'v1'];
 
       default:
         break;
