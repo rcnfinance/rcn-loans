@@ -436,7 +436,7 @@ export class ApiService {
     basaltVersion?: 'v1'
   ) {
     switch (network) {
-      case Network.Basalt:
+      case Network.Diaspore:
         return environment.rcnApi.diaspore[diasporeVersion || 'v4'];
 
       case Network.Basalt:
