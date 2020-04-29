@@ -17,6 +17,7 @@ const p = require('../../package.json') as any;
 
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
+const RCN_API_DIASPORE = 'https://diaspore-ropsten-rnode.rcn.loans';
 
 export const environment = {
   version: p.version,
@@ -37,7 +38,8 @@ export const environment = {
       v1: 'https://ropsten-rnode.rcn.loans/v1/'
     },
     diaspore: {
-      v4: 'https://diaspore-ropsten-rnode.rcn.loans/v4/'
+      v4: `${ RCN_API_DIASPORE }/v4/`,
+      v5: `${ RCN_API_DIASPORE }/v5/`
     }
   },
   network: {
