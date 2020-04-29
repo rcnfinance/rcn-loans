@@ -1,4 +1,4 @@
-interface LoanDescriptor {
+export interface LoanDescriptor {
   first_obligation: number;
   total_obligation: number;
   duration: number;
@@ -8,7 +8,7 @@ interface LoanDescriptor {
   installments: number;
 }
 
-interface LoanConfig {
+export interface LoanConfig {
   cuota: string;
   duration: string;
   installments: string;
@@ -17,7 +17,7 @@ interface LoanConfig {
   time_unit: string;
 }
 
-interface LoanDebt {
+export interface LoanDebt {
   balance: string;
   created: string;
   creator: string;
@@ -26,7 +26,7 @@ interface LoanDebt {
   oracle: string;
 }
 
-interface LoanState {
+export interface LoanState {
   clock: string;
   interest: string;
   last_payment: string;
