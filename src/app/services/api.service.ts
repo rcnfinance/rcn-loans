@@ -187,6 +187,42 @@ export class ApiService {
   }
 
   /**
+   * Gets all loans that were lent and there status is ongoing. Meaning that they are not canceled or finished.
+   * @param network Selected network
+   * @param page Page
+   * @param pageSize Items per page
+   * @return Loans array
+   */
+  async getPaginatedActiveLoans(network: Network, page = 0, pageSize = 20): Promise<Loan[]> {
+    const apiUrl: string = this.getApiUrl(network);
+    let allActiveLoans: Loan[] = [];
+    let apiCalls = 0;
+
+    try {
+      /*
+      const RIPIO_ADDRESS = Object.entries(environment.dir)
+        .filter((object) => object[1] === Agent.RipioCreator)
+        .map(([address]) => address)[0];
+      */
+      const data: any = await this.http.get(
+        apiUrl.concat(`loans?open=false&canceled=false&approved=true&page_size=${ pageSize }&page=${ page }`)
+      ).toPromise();
+      apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+
+      if (page > apiCalls) {
+        return [];
+      }
+
+      const activeLoans = await this.getAllCompleteLoans(data.content, network);
+      allActiveLoans = allActiveLoans.concat(activeLoans);
+
+      return allActiveLoans;
+    } catch (err) {
+      this.eventsService.trackError(err);
+    }
+  }
+
+  /**
    * Gets loan by ID
    * @param network Selected network
    * @return Loan
