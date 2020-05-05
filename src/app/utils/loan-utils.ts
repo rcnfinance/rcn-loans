@@ -243,6 +243,32 @@ export class LoanUtils {
       );
     }
 
+    const { collaterals } = loanData;
+    let collateral: Collateral;
+    if (collaterals && collaterals.length) {
+      const {
+        id,
+        debt_id,
+        oracle: collateralOracle,
+        token,
+        amount,
+        liquidation_ratio,
+        balance_ratio,
+        status: collateralStatus
+      } = collaterals[0];
+
+      collateral = new Collateral(
+        Number(id),
+        debt_id,
+        collateralOracle,
+        token,
+        amount,
+        liquidation_ratio,
+        balance_ratio,
+        Number(collateralStatus)
+      );
+    }
+
     return new Loan(
       Network.Diaspore,
       loanData.id,
@@ -257,7 +283,8 @@ export class LoanUtils {
       loanData.model,
       loanData.cosigner,
       debt,
-      config
+      config,
+      collateral
     );
   }
 

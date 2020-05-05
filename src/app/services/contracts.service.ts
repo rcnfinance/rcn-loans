@@ -808,10 +808,8 @@ export class ContractsService {
     const block = await web3.eth.getBlock('latest');
     const now = block.timestamp;
     const diaspore: Loan[] = await this.apiService.getRequests(now, Network.Diaspore);
-    const collaterals = await this.apiService.getCollateral();
-    const diasporeWithCollateral = LoanUtils.completeLoansCollateral(diaspore, collaterals);
     const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
-    const loans: Loan[] = this.loanTypeService.filterLoanByType(diasporeWithCollateral, ALLOWED_TYPES);
+    const loans: Loan[] = this.loanTypeService.filterLoanByType(diaspore, ALLOWED_TYPES);
 
     return LoanCurator.curateLoans(loans);
   }
