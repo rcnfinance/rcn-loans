@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Loan, Network } from './../../models/loan.model';
+import { Loan, LoanType, Network } from './../../models/loan.model';
 import { LoanCurator } from './../../utils/loan-curator';
 import { ApiService } from '../../services/api.service';
 import { EventsService } from '../../services/events.service';
 import { TitleService } from '../../services/title.service';
+import { LoanTypeService } from '../../services/loan-type.service';
 
 @Component({
   selector: 'app-active-loans',
@@ -24,7 +25,8 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private apiService: ApiService,
     private titleService: TitleService,
-    private eventsService: EventsService
+    private eventsService: EventsService,
+    private loanTypeService: LoanTypeService
   ) { }
 
   ngOnInit() {
@@ -57,8 +59,13 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     try {
-      const loans: Loan[] = await this.apiService.getPaginatedActiveLoans(Network.Diaspore, page);
+      const diasporeLoans: Loan[] = await this.apiService.getPaginatedActiveLoans(Network.Diaspore, page);
+      const basaltLoans: Loan[] = await this.apiService.getPaginatedActiveLoans(Network.Basalt, page);
+      const loans: Loan[] = diasporeLoans.concat(basaltLoans);
       const curatedLoans: Loan[] = LoanCurator.curateLoans(loans);
+
+      const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
+      const filteredLoans: Loan[] = this.loanTypeService.filterLoanByType(curatedLoans, ALLOWED_TYPES);
 
       // if there are no more loans
       if (!loans.length) {
@@ -68,12 +75,11 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
 
       // if there are more loans add them and continue
       if (loans.length) {
-        this.loans = this.loans.concat(curatedLoans);
+        this.loans = this.loans.concat(filteredLoans);
         this.page++;
       }
 
-      // if there are more loans but they were filtered
-      if (loans.length && !curatedLoans.length) {
+      if (loans.length && !filteredLoans.length) {
         await this.loadLoans();
       }
     } catch (err) {

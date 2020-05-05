@@ -199,11 +199,6 @@ export class ApiService {
     let apiCalls = 0;
 
     try {
-      /*
-      const RIPIO_ADDRESS = Object.entries(environment.dir)
-        .filter((object) => object[1] === Agent.RipioCreator)
-        .map(([address]) => address)[0];
-      */
       const data: any = await this.http.get(
         apiUrl.concat(`loans?open=false&canceled=false&approved=true&page_size=${ pageSize }&page=${ page }`)
       ).toPromise();
@@ -213,7 +208,12 @@ export class ApiService {
         return [];
       }
 
-      const activeLoans = await this.getAllCompleteLoans(data.content, network);
+      let activeLoans = await this.getAllCompleteLoans(data.content, network);
+      if (network === Network.Basalt) {
+        const filterStatus = [Status.Request, Status.Destroyed, Status.Expired];
+        activeLoans = this.excludeLoansWithStatus(filterStatus, null, activeLoans);
+      }
+
       allActiveLoans = allActiveLoans.concat(activeLoans);
 
       return allActiveLoans;
