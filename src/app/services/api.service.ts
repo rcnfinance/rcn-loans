@@ -121,6 +121,7 @@ export class ApiService {
       }
 
       apiCollaterals = apiCollaterals.concat(data.content);
+      collaterals = this.getAllCompleteCollaterals(apiCollaterals);
       page++;
     } catch (err) {
       this.eventsService.trackError(err);
@@ -133,8 +134,7 @@ export class ApiService {
     }
     const responses = await this.getAllUrls(urls);
     const allApiCollaterals = await this.getAllApiCollaterals(responses);
-    apiCollaterals = apiCollaterals.concat(allApiCollaterals);
-    collaterals = this.getAllCompleteCollaterals(apiCollaterals);
+    collaterals = this.getAllCompleteCollaterals(apiCollaterals).concat(allApiCollaterals);
 
     return collaterals;
   }
@@ -499,11 +499,17 @@ export class ApiService {
    * @param responses Api responses
    * @return Collaterals array
    */
-  private async getAllApiCollaterals(responses: any[]): Promise<CollateralApi[]> {
+  private async getAllApiCollaterals(responses: any[]): Promise<Collateral[]> {
     try {
-      return await Promise.all(
-        responses.map((response) => response as CollateralApi)
+      const apiCollaterals = await Promise.all(
+        responses.map(
+          response => this.getAllCompleteCollaterals(
+            response.content as CollateralApi[]
+          )
+        )
       );
+      const flatCollaterals: Collateral[] = [].concat.apply([], apiCollaterals);
+      return (flatCollaterals);
     } catch (err) {
       this.eventsService.trackError(err);
       throw (err);
