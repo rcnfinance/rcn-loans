@@ -27,15 +27,16 @@ import { CollateralFormComponent } from './../dialogs/dialog-collateral/collater
 import { CollateralSliderDebtComponent } from './../dialogs/dialog-collateral/collateral-slider-debt/collateral-slider-debt.component';
 import { ErrorDetailsComponent } from './error-details/error-details.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
+import { ButtonGroupComponent } from './button-group/button-group.component';
+import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
+import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
 import { PayButtonComponent } from './pay-button/pay-button.component';
 import { CloseButtonComponent } from './close-button/close-button.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
-import { ButtonGroupComponent } from './button-group/button-group.component';
-import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
-import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
+import { RedeemButtonComponent } from './redeem-button/redeem-button.component';
 // App Dialogs
 import { DialogInsufficientfundsComponent } from '../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { DialogApproveContractComponent } from '../dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -83,11 +84,6 @@ import { EventsService } from './../services/events.service';
     DialogHeaderComponent,
     AvatarTitleComponent,
     IconAvatarComponent,
-    LendButtonComponent,
-    DetailButtonComponent,
-    PayButtonComponent,
-    CloseButtonComponent,
-    ClaimButtonComponent,
     ButtonGroupComponent,
     RiskIndicatorComponent,
     FilterLoansComponent,
@@ -98,6 +94,13 @@ import { EventsService } from './../services/events.service';
     CollateralFormComponent,
     CollateralSliderDebtComponent,
     PageHeaderComponent,
+
+    LendButtonComponent,
+    DetailButtonComponent,
+    PayButtonComponent,
+    CloseButtonComponent,
+    ClaimButtonComponent,
+    RedeemButtonComponent,
 
     DialogInsufficientfundsComponent,
     DialogApproveContractComponent,
@@ -155,6 +158,7 @@ import { EventsService } from './../services/events.service';
     PayButtonComponent,
     CloseButtonComponent,
     ClaimButtonComponent,
+    RedeemButtonComponent,
     ButtonGroupComponent,
     RiskIndicatorComponent,
     FilterLoansComponent,
@@ -162,7 +166,6 @@ import { EventsService } from './../services/events.service';
     CurrencyLogoComponent,
     ErrorDetailsComponent,
     PageHeaderComponent,
-    DialogWrongCountryComponent,
     BorrowFabButtonComponent,
     CollateralFormComponent,
     CollateralSliderDebtComponent,

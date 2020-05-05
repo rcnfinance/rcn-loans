@@ -85,6 +85,12 @@
         </button>
       </ng-container>
       <ng-template #activeLoanActions>
+        <app-redeem-button
+          [loan]="loan"
+          (endRedeem)="onUserAction('redeem')"
+          *ngIf="canRedeem"
+        >
+        </app-redeem-button>
         <app-lend-button
           [loan]="loan"
           [showLendDialog]="true"

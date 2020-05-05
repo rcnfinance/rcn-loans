@@ -173,7 +173,16 @@
           </tbody>
         </table>
       </div>
-      <div class="px-3 pb-3" *ngIf="canLend || canTransfer || canPay">
+      <div
+        class="px-3 pb-3"
+        *ngIf="canLend || canTransfer || canPay || canRedeem"
+      >
+        <app-redeem-button
+          [loan]="loan"
+          (endRedeem)="onUserAction('redeem')"
+          *ngIf="canRedeem"
+        >
+        </app-redeem-button>
         <app-pay-button
           [loan]="loan"
           [showPayDialog]="true"

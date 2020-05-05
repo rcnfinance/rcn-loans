@@ -279,7 +279,7 @@ export class ApiService {
     id: string,
     network: Network
   ): Promise<Loan> {
-    const apiUrl: string = this.getApiUrl(network);
+    const apiUrl: string = this.getApiUrl(network, 'v5');
     const data: any = await this.http.get(apiUrl.concat(`loans/${ id }`)).toPromise();
     let apiLoan: any = data.content;
 

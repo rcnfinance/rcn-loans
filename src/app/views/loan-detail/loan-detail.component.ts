@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 // App Models
 import { Loan, Status, Network, LoanType } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
-import { Collateral } from '../../models/collateral.model';
+import { Collateral, Status as CollateralStatus } from '../../models/collateral.model';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Services
@@ -53,6 +53,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   canCancel: boolean;
   canPay: boolean;
   canLend: boolean;
+  canRedeem: boolean;
   canAdjustCollateral: boolean;
 
   hasHistory: boolean;
@@ -170,7 +171,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   /**
    * Refresh loan when payment or lending status is updated
    */
-  onUserAction(action: 'lend' | 'pay' | 'transfer') {
+  onUserAction(action: 'lend' | 'pay' | 'transfer' | 'redeem') {
     const miliseconds = 12000;
     this.spinner.show(this.pageId);
 
@@ -411,10 +412,12 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       }
       case Status.Paid: {
         this.invalidActions();
+        this.checkCanRedeem();
         break;
       }
       case Status.Expired: {
         this.invalidActions();
+        this.checkCanRedeem();
         break;
       }
       case Status.Destroyed: {
@@ -465,6 +468,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     this.canTransfer = false;
     this.canCancel = false;
     this.canAdjustCollateral = false;
+    this.canRedeem = false;
   }
 
   private loanOnGoingorIndebt() {
@@ -476,10 +480,11 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       this.canPay = !isDebtOwner;
       this.canLend = false;
       this.canAdjustCollateral = isBorrower;
+      this.canRedeem = false;
     }
   }
 
-  private loanStatusRequest() {
+  private async loanStatusRequest() {
     if (this.userAccount) {
       const isBorrower = this.isBorrower();
       this.canLend = !isBorrower;
@@ -487,8 +492,30 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       this.canTransfer = false;
       this.canCancel = isBorrower;
       this.canAdjustCollateral = isBorrower;
+      this.canRedeem = false;
     } else {
       this.canLend = true;
+      this.canRedeem = false;
+    }
+  }
+
+  /**
+   * Check if collateral can withdraw all
+   */
+  private async checkCanRedeem() {
+    const account: string = await this.web3Service.getAccount();
+    if (!account) {
+      return;
+    }
+
+    if ([Status.Paid, Status.Expired].includes(this.loan.status)) {
+      const isBorrower = this.loan.borrower.toUpperCase() === account.toUpperCase();
+      const { collateral } = this.loan;
+      this.canRedeem =
+        isBorrower &&
+        collateral &&
+        collateral.status === CollateralStatus.ToWithdraw &&
+        Number(collateral.amount) > 0;
     }
   }
 
