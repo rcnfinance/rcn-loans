@@ -39,7 +39,7 @@ export class ApiService {
     now: number,
     network: Network
   ): Promise<Loan[]> {
-    const apiUrl: string = this.getApiUrl(network);
+    const apiUrl: string = this.getApiUrl(network, 'v5');
     const filterExpiration: string = this.getApiFilterKey('expiration', network);
     let allRequestLoans: Loan[] = [];
     let apiCalls = 0;
@@ -152,7 +152,7 @@ export class ApiService {
     network: Network
   ): Promise<Loan[]> {
     const web3 = this.web3Service.web3;
-    const apiUrl: string = this.getApiUrl(network);
+    const apiUrl: string = this.getApiUrl(network, 'v5');
     let allLoansOfLender: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
@@ -242,7 +242,7 @@ export class ApiService {
    * @return Loans array
    */
   async getPaginatedActiveLoans(network: Network, page = 0, pageSize = 20): Promise<Loan[]> {
-    const apiUrl: string = this.getApiUrl(network);
+    const apiUrl: string = this.getApiUrl(network, 'v5');
     let allActiveLoans: Loan[] = [];
     let apiCalls = 0;
 
