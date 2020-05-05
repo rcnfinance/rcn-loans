@@ -2,13 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 // App Models
-import { Loan } from './../../models/loan.model';
+import { Loan, LoanType } from './../../models/loan.model';
 // App Services
 import { Web3Service } from './../../services/web3.service';
 import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
 import { FilterLoansService } from '../../services/filter-loans.service';
+import { LoanTypeService } from '../../services/loan-type.service';
 
 @Component({
   selector: 'app-requested-loan',
@@ -43,7 +44,8 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
     private titleService: TitleService,
     private availableLoansService: AvailableLoansService,
     private contractsService: ContractsService,
-    private filterLoansService: FilterLoansService
+    private filterLoansService: FilterLoansService,
+    private loanTypeService: LoanTypeService
   ) { }
 
   ngOnInit() {
@@ -103,7 +105,11 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
   async loadLoans() {
     const loans: Loan[] = await this.contractsService.getRequests();
     const filterLoans = this.filterLoansService.filterLoans(loans, this.filters);
-    this.loans = filterLoans;
+
+    const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
+    const filteredLoans: Loan[] = this.loanTypeService.filterLoanByType(filterLoans, ALLOWED_TYPES);
+
+    this.loans = filteredLoans;
 
     this.upgradeAvaiblable();
     this.spinner.hide(this.pageId);
