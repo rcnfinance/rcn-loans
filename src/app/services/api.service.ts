@@ -301,8 +301,8 @@ export class ApiService {
    * @return Collateral
    */
   async getCollateralByLoan(loanId: string) {
-    const uri = `collaterals?debt_id=${ loanId }`;
-    const data: any = await this.http.get(this.diasporeUrl.concat(uri)).toPromise();
+    const apiUrl: string = this.getApiUrl(Network.Diaspore);
+    const data: any = await this.http.get(apiUrl.concat(`collaterals?debt_id=${ loanId }`)).toPromise();
 
     try {
       const collaterals: Collateral[] = this.getAllCompleteCollaterals(data.content as CollateralApi[]);
