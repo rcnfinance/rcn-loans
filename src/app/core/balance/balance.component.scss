@@ -9,6 +9,7 @@
     margin-right: 16px;
   }
   &__withdraw {
+    position: relative;
     display: flex;
     align-items: center;
     background: #8B8B8B36;
@@ -27,6 +28,17 @@
     }
     &-amount {
       margin-right: 5px;
+    }
+    &-label {
+      position: absolute;
+      bottom: -22px;
+      left: 0;
+      width: 100%;
+      font-size: .7em;
+      font-weight: 400;
+      text-align: center;
+      color: var(--app-color-primary);
+      opacity: .9;
     }
   }
 }
