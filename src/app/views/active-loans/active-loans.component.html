@@ -1,6 +1,7 @@
 <div
   class="body-scrollable activity-wrapper"
   #scrollingBlock
+  (scroll)="onScroll($event)"
 >
   <ngx-spinner
     bdColor="transparent"
@@ -13,13 +14,11 @@
     <app-page-header
       title="Activity explorer"
       description="Check the Marketplace's active loans"
-      [hasChip]="true"
-      [chipValue]="loans.length"
       chipLabel="ACTIVE"
     ></app-page-header>
 
     <div class="loan-container row">
-      <div class="col-sm-12 text-center" *ngIf='!availableLoans'>
+      <div class="col-sm-12 text-center" *ngIf='!isAvailableLoans'>
         <div class="title main-h1">There are no active loans</div>
       </div>
 

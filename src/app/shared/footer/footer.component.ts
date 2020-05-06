@@ -49,7 +49,7 @@ export class FooterComponent implements OnInit, OnDestroy {
     const contract = env.contracts.diaspore.loanManager;
     const linkContract = env.network.explorer.address.replace('${address}', contract);
     const version = env.version;
-    const versionString = `${env.version}-${env.build} - ${env.version_name} ${env.version_emoji}`;
+    const versionString = `${env.version}-${env.build} - ${env.versionName} ${env.versionEmoji}`;
     this.socialIcons = [
       {
         url: linkContract,
