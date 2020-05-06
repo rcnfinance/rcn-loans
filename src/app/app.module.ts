@@ -12,7 +12,7 @@ import { AppComponent } from './app.component';
 
 Sentry.init({
   dsn: environment.sentry,
-  release: environment.versionVerbose,
+  release: environment.version_verbose,
   environment: environment.envName
 });
 
