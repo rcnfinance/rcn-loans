@@ -21,11 +21,8 @@
     <div class="balance-container" *ngIf='hasAccount'>
       <div class="balance-row">
         <div class="title">Account Balance</div>
-        <div class="value ellipsis"><span class="currency">RCN</span> {{ balance }}</div>
-      </div>
-      <div class="balance-row bg-primary clickeable" (click)="clickWithdraw()" *ngIf='weiAvailable > 0'>
-        <div class="title">{{ withdrawEnabled ? 'Click to claim' : 'Claim pending...' }}</div>
-        <div class="value ellipsis"><span class="currency">RCN</span> {{ available }}</div>
+        <app-component-balance [account]="account">
+        </app-component-balance>
       </div>
     </div>
     <div class="version-container">
