@@ -112,40 +112,6 @@ export class ContentWrapperComponent implements OnInit {
   }
 
   /**
-   * Handle click on withdraw
-   */
-  async clickWithdraw() {
-    if (!this.withdrawEnabled) {
-      window.open(environment.network.explorer.tx.replace(
-        '${tx}',
-        this.pendingWithdraw.tx
-      ));
-    } else {
-      if (this.basaltLoansWithBalance.length > 0) {
-        const tx = await this.contractService.withdrawFundsBasalt(
-          this.basaltLoansWithBalance
-        );
-        this.txService.registerWithdrawTx(
-          tx,
-          environment.contracts.basaltEngine,
-          this.basaltLoansWithBalance
-        );
-      }
-      if (this.diasporeLoansWithBalance.length > 0) {
-        const tx = await this.contractService.withdrawFundsDiaspore(
-          this.diasporeLoansWithBalance
-        );
-        this.txService.registerWithdrawTx(
-          tx,
-          environment.contracts.diaspore.debtEngine,
-          this.diasporeLoansWithBalance
-        );
-      }
-      this.loadWithdrawBalance();
-    }
-  }
-
-  /**
    * Check if the user's country is available
    */
   async canLend() {
