@@ -246,7 +246,7 @@ export class LoanUtils {
       Network.Diaspore,
       loanData.id,
       engine,
-      Number(loanData.amount),
+      loanData.amount,
       oracle,
       descriptor,
       loanData.borrower,

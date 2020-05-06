@@ -1,62 +1,30 @@
-export interface LoanDescriptor {
-  first_obligation: number;
-  total_obligation: number;
-  duration: number;
-  interest_rate: number;
-  punitive_interest_rate: number;
-  frequency: number;
-  installments: number;
-}
-
-export interface LoanConfig {
-  cuota: string;
-  duration: string;
-  installments: string;
-  interest_rate: string;
-  lent_time: string;
-  time_unit: string;
-}
-
-export interface LoanDebt {
-  balance: string;
-  created: string;
-  creator: string;
-  error: boolean;
-  model: string;
-  oracle: string;
-}
-
-export interface LoanState {
-  clock: string;
-  interest: string;
-  last_payment: string;
-  paid: string;
-  paid_base: string;
-  status: string;
-}
-
 export interface LoanApiDiaspore {
   id: string;
   open: boolean;
   approved: boolean;
-  position: string;
-  expiration: string;
-  amount: string;
+  position: number;
+  expiration: number;
+  amount: number;
   cosigner: string;
   model: string;
   creator: string;
   oracle: string;
   borrower: string;
   callback: string;
-  salt: string;
+  salt: number;
   loanData: string;
-  created: string;
-  config: LoanConfig;
-  debt: LoanDebt;
-  descriptor: LoanDescriptor;
+  created: number;
+  descriptor: {
+    first_obligation: number;
+    total_obligation: number;
+    duration: number;
+    interest_rate: number;
+    punitive_interest_rate: number;
+    frequency: number;
+    installments: number;
+  };
   currency: string;
   lender: string;
-  state: LoanState;
-  status: string;
+  status: number;
   canceled: boolean;
 }
