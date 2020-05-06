@@ -17,30 +17,31 @@ const p = require('../../package.json') as any;
 
 const RCN_TOKEN = '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6';
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
-const RCN_API_DIASPORE = 'https://diaspore-rnode.rcn.loans';
 
 export const environment = {
   version: p.version,
-  versionName: p.version_name,
-  versionEmoji: '👻',
+  version_name: p.version_name,
+  version_emoji: '👻',
   build: getBuild(),
   production: true,
   url: 'https://mainnet.rcn.loans/',
   envName: 'main',
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
   buyLink: 'https://www.bancor.network/communities/5a92b438583f4a0001f75f42/about',
-  versionVerbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
+  version_verbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
-  gaTracking: 'UA-122615331-3',
+  gaTracking: 'UA-158285508-1',
   apiCountry : 'https://ipcountry-api.rcn.loans',
-  rcnApi: {
-    basalt: {
-      v1: 'https://rnode.rcn.loans/v1/'
-    },
-    diaspore: {
-      v4: `${ RCN_API_DIASPORE }/v4/`,
-      v5: `${ RCN_API_DIASPORE }/v5/`
-    }
+  rcn_node: {
+    loan: 'https://rnode.rcn.loans/v1/commits?id_loan=$id' // TODO: replace by rcn_node_api.basaltUrl
+  },
+  rcn_node_api: {
+    basaltUrl: 'https://rnode.rcn.loans/v1/',
+    diasporeUrl: 'https://diaspore-rnode.rcn.loans/v4/',
+    url: 'https://diaspore-rnode.rcn.loans/v4/' // TODO: replace by diasporeUrl
+  },
+  rcn_oracle: {
+    url: 'https://oracle.ripio.com/rate/'
   },
   network: {
     id: 1,
