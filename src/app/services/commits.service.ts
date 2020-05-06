@@ -15,18 +15,19 @@ export class CommitsService {
   ) { }
 
   async getCommits(id: string, network: number): Promise<Commit[]> {
-    let commits: any;
-    let commitsLoanManager;
-    let commitsDebtEngine: any;
+    let commits: Commit[];
+    let commitsLoanManager: Commit[];
+    let commitsDebtEngine: Commit[];
 
     if (network === Network.Basalt) {
-
-      const urlBasaltCommits = environment.rcn_node.loan.replace('$id', id.toString());
+      const apiBasalt: string = environment.rcnApi.basalt.v1;
+      const urlBasaltCommits = `${ apiBasalt }commits?id_loan=${ id.toString() }`;
       const data: any = await this.http.get(urlBasaltCommits).toPromise();
       commits = data.content;
 
     } else {
-      const urlLoanManagerCommits = environment.rcn_node_api.url.concat(`commits?id_loan=${ id }&page_size=100`);
+      const apiDiaspore: string = environment.rcnApi.diaspore.v4;
+      const urlLoanManagerCommits = `${ apiDiaspore }commits?id_loan=${ id }&page_size=100`;
       // TODO: add commits paginator
 
       try {
@@ -37,7 +38,7 @@ export class CommitsService {
         this.eventsService.trackError(err);
       }
 
-      const urlDebtEngineCommits = environment.rcn_node_api.url.concat(`debts/${ id }`);
+      const urlDebtEngineCommits = `${ apiDiaspore }debts/${ id }`;
       try {
         const responseDebtEngine: any = await this.http.get(urlDebtEngineCommits).toPromise();
         commitsDebtEngine = responseDebtEngine.content;
@@ -47,9 +48,7 @@ export class CommitsService {
       }
 
       const diasporeCommits = commitsLoanManager.concat(commitsDebtEngine);
-
       commits = diasporeCommits;
-
     }
 
     return commits;
