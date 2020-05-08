@@ -90,6 +90,11 @@ export class ApiService {
       allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
     }
 
+    // TODO: remove specific creator filter
+    const FILTER_DCL_KEY = 'creator';
+    const FILTER_DCL_VALUE = environment.contracts.decentraland.mortgageCreator;
+    allRequestLoans = this.excludeLoansWithKey(FILTER_DCL_KEY, FILTER_DCL_VALUE, allRequestLoans);
+
     return allRequestLoans;
   }
 
@@ -157,7 +162,16 @@ export class ApiService {
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
-      const activeLoans = await this.getAllCompleteLoans(data.content, network);
+
+      let activeLoans = await this.getAllCompleteLoans(
+        data.content as LoanApiBasalt[] | LoanApiDiaspore[],
+        network
+      );
+      if (network === Network.Basalt) {
+        const filterStatus = [Status.Request, Status.Destroyed, Status.Expired];
+        activeLoans = this.excludeLoansWithStatus(filterStatus, null, activeLoans);
+      }
+
       allActiveLoans = allActiveLoans.concat(activeLoans);
       page++;
     } catch (err) {
@@ -173,7 +187,7 @@ export class ApiService {
     let responses = await this.getAllUrls(urls);
 
     if (network === Network.Basalt) {
-      const filterStatus = [Status.Request, Status.Destroyed];
+      const filterStatus = [Status.Request, Status.Destroyed, Status.Expired];
       responses = this.excludeLoansWithStatus(filterStatus, responses);
     }
 
@@ -515,6 +529,21 @@ export class ApiService {
         }
       }) as Loan[];
     }
+  }
+
+  /**
+   * Exclude loans containing the key / value
+   * @param key Key to filter
+   * @param value Value to filter
+   * @param loans Loans array
+   * @return Loans array excluding those containing the key/value
+   */
+  private excludeLoansWithKey(
+    key: string,
+    value: string,
+    loans: Loan[]
+  ): Loan[] | any[] {
+    return loans.filter((loan: Loan) => !loan[key] || loan[key] !== value) as Loan[];
   }
 
   /**
