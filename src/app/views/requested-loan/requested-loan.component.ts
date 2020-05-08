@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 // App Models
-import { Loan, LoanType } from './../../models/loan.model';
+import { Loan } from './../../models/loan.model';
 // App Services
 import { Web3Service } from './../../services/web3.service';
 import { TitleService } from '../../services/title.service';
@@ -106,10 +106,7 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
     const loans: Loan[] = await this.contractsService.getRequests();
     const filterLoans = this.filterLoansService.filterLoans(loans, this.filters);
 
-    const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
-    const filteredLoans: Loan[] = this.loanTypeService.filterLoanByType(filterLoans, ALLOWED_TYPES);
-
-    this.loans = filteredLoans;
+    this.loans = filterLoans;
 
     this.upgradeAvaiblable();
     this.spinner.hide(this.pageId);
