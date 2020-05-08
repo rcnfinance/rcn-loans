@@ -9,7 +9,6 @@ import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
 import { FilterLoansService } from '../../services/filter-loans.service';
-import { LoanTypeService } from '../../services/loan-type.service';
 
 @Component({
   selector: 'app-requested-loan',
@@ -44,8 +43,7 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
     private titleService: TitleService,
     private availableLoansService: AvailableLoansService,
     private contractsService: ContractsService,
-    private filterLoansService: FilterLoansService,
-    private loanTypeService: LoanTypeService
+    private filterLoansService: FilterLoansService
   ) { }
 
   ngOnInit() {
