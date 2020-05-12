@@ -1,0 +1,46 @@
+@import './../../../scss/fonts';
+
+.fixed-application-ad {
+  z-index: 5000;
+  position: fixed;
+  bottom: 57px;
+  left: 0;
+  right: 0;
+  width: 95%;
+  max-width: 1270px;
+  margin: auto;
+  text-align: center;
+  background: var(--app-color-primary);
+  padding: 10px 0;
+  border-radius: 6px;
+  &--hidden {
+    display: none;
+  }
+  &__text {
+    padding-right: 16px;
+    @include typography-headline(6);
+    color: white;
+  }
+  &__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 16px 0 0;
+    padding: 0 16px;
+    color: black;
+    cursor: pointer;
+  }
+}
+
+@media (min-width: 992px) {
+  .fixed-application-ad {
+    padding: 10px 26px;
+    &__text {
+      padding-right: 0;
+    }
+    &__close {
+      bottom: 0;
+      margin: auto 0;
+    }
+  }
+}
