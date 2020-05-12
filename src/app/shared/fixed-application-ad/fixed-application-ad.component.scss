@@ -3,7 +3,7 @@
 .fixed-application-ad {
   z-index: 5000;
   position: fixed;
-  bottom: 57px;
+  bottom: 54px;
   left: 0;
   right: 0;
   width: 95%;
@@ -12,7 +12,7 @@
   text-align: center;
   background: var(--app-color-primary);
   padding: 10px 0;
-  border-radius: 6px;
+  border-radius: 5px 5px 0 0;
   &--hidden {
     display: none;
   }
