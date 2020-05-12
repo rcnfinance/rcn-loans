@@ -1,10 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Utils } from './../../utils/utils';
+import { WalletType } from './../../interfaces/wallet.interface';
 // App Component
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 // App Service
 import { Web3Service } from '../../services/web3.service';
+import { ApplicationAdsService } from './../../services/application-ads.service';
 import { WalletConnectService } from './../../services/wallet-connect.service';
 import { SidebarService } from '../../services/sidebar.service';
 import { TitleService } from '../../services/title.service';
@@ -26,6 +28,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     private web3Service: Web3Service,
+    private applicationAdsService: ApplicationAdsService,
     private walletConnectService: WalletConnectService,
     private sidebarService: SidebarService,
     public dialog: MatDialog,
@@ -79,6 +82,18 @@ export class HeaderComponent implements OnInit {
       return this.openDialogApprove();
     }
 
-    await this.walletConnectService.connect();
+    const connected: boolean = await this.walletConnectService.connect();
+    if (!connected) {
+      return;
+    }
+
+    const { wallet } = this.walletConnectService.walletConnected;
+    if (wallet === WalletType.WalletConnect) {
+      this.applicationAdsService.toggleService(
+          `Oh oh! Some Argent users are having difficulties accessing the platform.
+          While we fix this, please log in using the other available wallets.
+          `
+      );
+    }
   }
 }
