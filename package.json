@@ -4,7 +4,7 @@
   "version_name": "Boggart",
   "license": "MIT",
   "scripts": {
-    "ng": "ng",
+    "ng": "npx ng",
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build --prod",
     "build-ropsten": "ng build --aot",
@@ -13,7 +13,7 @@
     "prebuild": "node version.js; npm run documentation",
     "prebuild-ropsten": "node version.js; npm run documentation",
     "prestart": "node version.js",
-    "preinstall": "bash ./bin/preinstall.sh",
+    "preinstall": "npm rebuild node-sass",
     "postinstall": "node patch-crypto.js",
     "e2e": "jest",
     "ipfs-deploy": "node ipfs-deploy.js",
@@ -98,6 +98,7 @@
     "tslint-eslint-rules": "^5.4.0",
     "tslint-origin-ordered-imports-rule": "^1.1.2",
     "tslint-rxjs-subject-restrictions-rule": "^1.0.4",
-    "typescript": "~3.5.3"
+    "typescript": "~3.5.3",
+    "webpack": "^4.41.2"
   }
 }

@@ -81,4 +81,6 @@ export class HeaderComponent implements OnInit {
 
     await this.walletConnectService.connect();
   }
+
+  // TODO: add borrow method
 }

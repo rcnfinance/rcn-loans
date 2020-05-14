@@ -215,7 +215,8 @@
           display: block;
           font-size: 16px;
           cursor: pointer;
-          i{
+          @include transition;
+          i {
             color: #fff;
             margin-top: 5px;
           }
@@ -232,6 +233,19 @@
           &:last-child{
             margin-right: 0;
             @include styled-font('Roboto', 600, 16px);
+          }
+          &--borrow {
+            color: var(--app-color-primary);
+            i {
+              width: 22px;
+              height: 22px;
+              border-radius: 50%;
+              background: var(--app-color-primary);
+              font-size: 1em;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
           }
         }
         .separator{

@@ -1,9 +1,16 @@
 <div class="loan-card mat-elevation-z5">
   <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
-  <app-risk-indicator
-    class="loan-card__risk-indicator"
-    [loan]="loan"
-  ></app-risk-indicator>
+  <ng-container *ngIf="isIncomplete; else completeTemplate">
+    <div class="loan-card__complete">
+      <i class="fas fa-exclamation-circle"></i>
+    </div>
+  </ng-container>
+  <ng-template #completeTemplate>
+    <app-risk-indicator
+      class="loan-card__risk-indicator"
+      [loan]="loan"
+    ></app-risk-indicator>
+  </ng-template>
   <app-creator-container
     class="loan-card__creator"
     [loan]="loan"
@@ -72,20 +79,36 @@
       </div>
     </div>
     <div class="loan-card__property loan-card__property--actions">
-      <app-lend-button
-        [loan]="loan"
-        [showLendDialog]="true"
-        (endLend)="onUserAction('lend')"
-        *ngIf="canLend"
-      >
-      </app-lend-button>
-      <app-detail-button
-        [loan]="loan"
-        *ngIf="!canLend"
-      >
-      </app-detail-button>
+      <ng-container *ngIf="isIncomplete; else activeLoanActions">
+        <button mat-raised-button class="button button-clear">
+          + Collateral
+        </button>
+      </ng-container>
+      <ng-template #activeLoanActions>
+        <app-redeem-button
+          [loan]="loan"
+          (endRedeem)="onUserAction('redeem')"
+          *ngIf="canRedeem"
+        >
+        </app-redeem-button>
+        <app-lend-button
+          [loan]="loan"
+          [showLendDialog]="true"
+          (endLend)="onUserAction('lend')"
+          *ngIf="canLend"
+        >
+        </app-lend-button>
+        <app-detail-button
+          [loan]="loan"
+          *ngIf="!canLend"
+        >
+        </app-detail-button>
+      </ng-template>
     </div>
   </div>
-  <a class="loan-card__href" [routerLink]="['/loan', loan?.id]">
+  <a
+    class="loan-card__href"
+    [routerLink]="isIncomplete ? ['/create', loan?.id] : ['/loan', loan?.id]"
+  >
   </a>
 </div>
