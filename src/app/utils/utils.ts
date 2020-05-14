@@ -125,7 +125,7 @@ export class Utils {
    */
   static bn(value: number | string | BN = 0, base?: number | 'hex'): BN {
     if (typeof value === 'number') {
-      return new BN(String(value), base);
+      return new BN(this.scientificToDecimal(value), base);
     }
     if (typeof value === 'string') {
       return new BN(value, base);
