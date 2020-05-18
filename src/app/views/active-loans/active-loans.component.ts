@@ -85,11 +85,6 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
       }
     } catch (err) {
       this.eventsService.trackError(err);
-
-      // page regression
-      if (page !== this.page) {
-        this.page--;
-      }
     } finally {
       this.loading = false;
     }
