@@ -58,7 +58,7 @@ export const environment = {
     rcnToken: RCN_TOKEN,
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
-    oracleFactory: '0xf9d4771cbe3c3808f3dff633cd6be738f7f419ea',
+    oracleFactory: '0x92072a2d46363d8c0301c5a0b94c465d9a24be63',
     diaspore: {
       debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
       loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'
@@ -116,7 +116,7 @@ export const environment = {
     'MANA',
     'ARS',
     'USD',
-    'DEST'
+    'DAI'
   ],
   usableCurrencies: [
     {
@@ -133,6 +133,16 @@ export const environment = {
       symbol: 'ETH',
       img: 'assets/eth.png',
       address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+    },
+    {
+      symbol: 'DAI',
+      img: 'assets/dai.png',
+      address: '0x902696875a718a6f9e4c9d37a8728bc17e906944'
+    },
+    {
+      symbol: 'MANA',
+      img: 'assets/mana.png',
+      address: '0x6e5B376cDaB3Cb39D068AE8AA05a53336B5D9A8e'
     }
   ]
 };
