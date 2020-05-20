@@ -217,6 +217,7 @@
         [loan]="loan"
         [collateral]="collateral"
         [canAdjust]="canAdjustCollateral"
+        (updateCollateral)="onUserAction('collateral')"
       ></app-detail-collateral>
     </div>
 

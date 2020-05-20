@@ -171,7 +171,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   /**
    * Refresh loan when payment or lending status is updated
    */
-  onUserAction(action: 'lend' | 'pay' | 'transfer' | 'redeem') {
+  onUserAction(action: 'lend' | 'pay' | 'transfer' | 'redeem' | 'collateral') {
     const miliseconds = 12000;
     this.spinner.show(this.pageId);
 
@@ -440,7 +440,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   private loadInstallments() {
     const installments: number = this.loan.descriptor.installments;
     const installmentDuration: string = Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments);
-    const installmentAmount: number = this.loan.currency.fromUnit(this.loan.descriptor.firstObligation);
+    const installmentAmount: string = Utils.formatAmount(this.loan.currency.fromUnit(this.loan.descriptor.firstObligation));
     const installmentCurrency: string = this.loan.currency.symbol;
     const nextInstallment: number = this.isRequest ? 1 : 1; // TODO - Next installment
     const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';

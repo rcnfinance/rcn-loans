@@ -469,7 +469,46 @@ export class ContractsService {
     ).call();
   }
 
-  async lendLoan(loan: Loan, providedCosigner: string = '0x0'): Promise<string> {
+  /**
+   * Lend loan using ConverterRamp
+   * @param payableAmount Ether amount
+   * @param converter Converter address
+   * @param fromToken From token address
+   * @param maxSpend Max fromToken to spend during lend
+   * @param cosigner Cosigner address
+   * @param loanId Loan ID
+   * @param oracleData Oracle data
+   * @param cosignerData Cosigner data
+   * @param account Account address
+   * @return Tx hash
+   */
+  async lendLoan(
+    cosigner: string,
+    loanId: string,
+    oracleData: string,
+    cosignerData: string,
+    callbackData: string,
+    account: string
+  ): Promise<string> {
+    const web3 = this.web3Service.opsWeb3;
+    const COSIGNER_LIMIT = 0;
+
+    return new Promise((resolve, reject) => {
+      this.loadAltContract(web3, this._loanManager).methods.lend(
+        loanId,
+        oracleData,
+        cosigner,
+        COSIGNER_LIMIT,
+        cosignerData,
+        callbackData
+      )
+      .send({ from: account })
+      .on('transactionHash', (hash: string) => resolve(hash))
+      .on('error', (err) => reject(err));
+    });
+  }
+
+  async lendBasaltLoan(loan: Loan, providedCosigner: string = '0x0'): Promise<string> {
     const pOracleData = await this.getOracleData(loan.oracle);
     console.info('oracle Data', pOracleData);
     const cosigner = this.cosignerService.getCosigner(loan);
@@ -482,42 +521,20 @@ export class ContractsService {
       cosignerData = cosignerOffer.lendData;
     }
 
-    const callbackData = '0x0';
     const oracleData = pOracleData;
     const web3 = this.web3Service.opsWeb3;
     const account = await this.web3Service.getAccount();
 
     return new Promise((resolve, reject) => {
-      switch (loan.network) {
-        case Network.Basalt:
-          this.loadAltContract(web3, this._rcnEngine).methods.lend(
-            loan.id,
-            oracleData,
-            cosignerAddr,
-            cosignerData
-          )
-          .send({ from: account })
-          .on('transactionHash', (hash: string) => resolve(hash))
-          .on('error', (err) => reject(err));
-          break;
-
-        case Network.Diaspore:
-          this.loadAltContract(web3, this._loanManager).methods.lend(
-            loan.id,
-            oracleData,
-            cosignerAddr,
-            0,
-            cosignerData,
-            callbackData
-          )
-          .send({ from: account })
-          .on('transactionHash', (hash: string) => resolve(hash))
-          .on('error', (err) => reject(err));
-          break;
-
-        default:
-          throw Error('Unknown network');
-      }
+      this.loadAltContract(web3, this._rcnEngine).methods.lend(
+        loan.id,
+        oracleData,
+        cosignerAddr,
+        cosignerData
+      )
+      .send({ from: account })
+      .on('transactionHash', (hash: string) => resolve(hash))
+      .on('error', (err) => reject(err));
     });
   }
 

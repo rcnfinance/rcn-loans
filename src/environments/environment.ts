@@ -137,12 +137,17 @@ export const environment = {
     {
       symbol: 'DAI',
       img: 'assets/dai.png',
-      address: '0x902696875a718a6f9e4c9d37a8728bc17e906944'
+      address: '0x57ac66399420f7c99f546a5a7c00e0d0ff2679e1'
+    },
+    {
+      symbol: 'USDC',
+      img: '',
+      address: '0x00558FAB062c212Dac6BDd48A3B6542563d969Aa'
     },
     {
       symbol: 'MANA',
       img: 'assets/mana.png',
-      address: '0x6e5B376cDaB3Cb39D068AE8AA05a53336B5D9A8e'
+      address: '0x1e6fd758338f59cf52c8427088077f16b60a8bd4'
     }
   ]
 };

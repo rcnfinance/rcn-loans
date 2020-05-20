@@ -271,13 +271,20 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
         switch (this.loan.network) {
           case Network.Basalt:
-            tx = await this.contractsService.lendLoan(this.loan);
+            tx = await this.contractsService.lendBasaltLoan(this.loan);
             this.txService.registerLendTx(tx, environment.contracts.basaltEngine, this.loan);
             break;
 
           case Network.Diaspore:
             if (lendToken === environment.contracts.rcnToken) {
-              tx = await this.contractsService.lendLoan(this.loan, cosignerAddress);
+              tx = await this.contractsService.lendLoan(
+                cosignerAddress,
+                this.loan.id,
+                oracleData,
+                cosignerData,
+                '0x',
+                account
+              );
             } else {
               const tokenConverter = environment.contracts.converter.tokenConverter;
 

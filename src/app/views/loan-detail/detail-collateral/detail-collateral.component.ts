@@ -72,12 +72,12 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    * Set collateral status values
    */
   async setCollateralPanel() {
-    const web3: any = this.web3Service.web3;
     const collateral: Collateral = this.collateral;
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
+    const collateralDecimals = new Currency(collateralCurrency.symbol).decimals;
     const rcnToken: string = environment.contracts.rcnToken;
     this.collateralAsset = collateralCurrency.symbol;
-    this.collateralAmount = web3.utils.fromWei(collateral.amount);
+    this.collateralAmount = Utils.formatAmount(collateral.amount as any / 10 ** collateralDecimals);
     this.collateralRate = await this.contractsService.getPriceConvertFrom(
       collateralCurrency.address,
       rcnToken,
