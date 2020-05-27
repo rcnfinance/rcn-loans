@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from '../../../shared/shared.module';
 import { WalletBalancesComponent } from './wallet-balances.component';
-import { NotificationsService } from '../../../services/notifications.service';
+import { HeaderPopoverService } from '../../../services/header-popover.service';
 
 describe('WalletBalancesComponent', () => {
   let component: WalletBalancesComponent;
@@ -23,7 +23,7 @@ describe('WalletBalancesComponent', () => {
         WalletBalancesComponent
       ],
       providers: [
-        NotificationsService
+        HeaderPopoverService
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })

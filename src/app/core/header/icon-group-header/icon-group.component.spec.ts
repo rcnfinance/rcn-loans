@@ -3,7 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
 import { IconGroupHeaderComponent } from './icon-group-header.component';
-import { NotificationsService } from '../../../services/notifications.service';
+import { HeaderPopoverService } from '../../../services/header-popover.service';
 
 describe('IconGroupHeaderComponent', () => {
   let component: IconGroupHeaderComponent;
@@ -19,7 +19,7 @@ describe('IconGroupHeaderComponent', () => {
         IconGroupHeaderComponent
       ],
       providers: [
-        NotificationsService
+        HeaderPopoverService
       ],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA

@@ -7,7 +7,7 @@ import {
   transition
 } from '@angular/animations';
 import { Utils } from './../../../utils/utils';
-import { NotificationsService } from './../../../services/notifications.service';
+import { HeaderPopoverService } from './../../../services/header-popover.service';
 import { ContractsService } from './../../../services/contracts.service';
 
 @Component({
@@ -41,12 +41,12 @@ export class WalletBalancesComponent implements OnInit {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    public notificationsService: NotificationsService,
+    public headerPopoverService: HeaderPopoverService,
     public contractsService: ContractsService
   ) { }
 
   ngOnInit() {
-    this.notificationsService.currentDetail.subscribe(async detail => {
+    this.headerPopoverService.currentDetail.subscribe(async detail => {
       this.viewDetail = detail;
       this.cdRef.detectChanges();
       await this.loadRcnBalance();
