@@ -22,4 +22,11 @@
       @include transition(all 0.1s ease-out);
     }
   }
+  .separator{
+    display: inline-block;
+    width: 1px;
+    height: 25px;
+    background: var(--app-color-gray-50);
+    cursor: default;
+  }
 }

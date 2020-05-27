@@ -21,7 +21,7 @@ export class IconGroupHeaderComponent implements OnInit {
   isDetail(view: string): Boolean { // Check viewDetail state to open/close notifications Component
     return view === this.viewDetail;
   }
-  openDetail(selection: string) { // Change viewDetail state to open/close notifications Component
+  openDetail(selection: 'clickOutside' | 'notifications' | 'balance') { // Change viewDetail state to open/close notifications Component
     this.previousSelection = this.selection;
     this.selection = selection;
     switch (selection) {
@@ -31,6 +31,9 @@ export class IconGroupHeaderComponent implements OnInit {
         } else {
           this.notificationsService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event
         }
+        break;
+      case 'balance':
+        // TODO: show wallet balances dialog
         break;
       default:
         this.notificationsService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event

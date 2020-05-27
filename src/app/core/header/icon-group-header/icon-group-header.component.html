@@ -1,10 +1,27 @@
-<div class="button-group" appClickOutside (clickOutside)="openDetail('clickOutside')">
-  <div class="button" (click)="openDetail('notifications')"
-  [ngClass]="{'active': isDetail('notifications')}">
+<div
+  class="button-group d-flex mr-3"
+  appClickOutside
+  (clickOutside)="openDetail('clickOutside')"
+>
+  <div class="separator mr-3"></div>
+  <div
+    class="button button--notifications"
+    (click)="openDetail('notifications')"
+    [ngClass]="{'active': isDetail('notifications')}"
+  >
     <i class="fas fa-clock"></i>
     <div class="available-notifications" *ngIf='notificationsCounter'>
       {{ notificationsCounter ? notificationsCounter : '0' }}
     </div>
   </div>
+  <div class="separator mx-3"></div>
+  <div
+    class="button button--balance"
+    (click)="openDetail('balance')"
+    [ngClass]="{'active': isDetail('balance')}"
+  >
+    <i class="fas fa-wallet"></i>
+  </div>
+  <div class="separator mx-3"></div>
   <app-notifications (notificationsCounter)="updateCounter($event)"></app-notifications>
 </div>

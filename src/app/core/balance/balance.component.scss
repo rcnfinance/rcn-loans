@@ -5,22 +5,17 @@
   display: flex;
   align-items: center;
 
-  &__amount {
-    margin-right: 16px;
-  }
   &__withdraw {
     position: relative;
-    display: flex;
-    align-items: center;
     background: #8B8B8B36;
-    padding: 7px 15px 5px 10px;
-    border: 1px solid var(--app-color-primary);
+    padding: 6px 10px 5px;
+    border: 1px solid var(--app-color-gray-50);
     border-radius: 8px;
     cursor: pointer;
 
     &-icon,
     &-amount {
-      color: var(--app-color-primary);
+      color: var(--app-color-gray-50);
     }
     &-icon {
       font-size: .95em;
@@ -30,15 +25,17 @@
       margin-right: 5px;
     }
     &-label {
-      position: absolute;
-      bottom: -22px;
-      left: 0;
-      width: 100%;
       font-size: .7em;
-      font-weight: 400;
-      text-align: center;
-      color: var(--app-color-primary);
-      opacity: .9;
+    }
+  }
+
+  &--active {
+    .balance__withdraw {
+      border: 1px solid var(--app-color-primary);
+      &-icon,
+      &-amount {
+        color: var(--app-color-primary);
+      }
     }
   }
 }
