@@ -26,14 +26,12 @@ export class IconGroupHeaderComponent implements OnInit {
     this.selection = selection;
     switch (selection) {
       case 'notifications':
+      case 'balance':
         if (selection !== this.previousSelection || this.viewDetail === undefined) {
           this.notificationsService.changeDetail(selection); // Change value of viewDetail from Notifications Service
         } else {
           this.notificationsService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event
         }
-        break;
-      case 'balance':
-        // TODO: show wallet balances dialog
         break;
       default:
         this.notificationsService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event

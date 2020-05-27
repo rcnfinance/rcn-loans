@@ -1,0 +1,16 @@
+<div
+  class="notifications-container"
+  [@anmNotifications]="viewDetail === 'balance' ? 'open' : 'closed'"
+>
+  <ul>
+    <li>Wallet Balance</li>
+    <li class="item d-flex justify-content-between align-items-center">
+      <div class="item__currency d-flex align-items-center">
+        <img src="assets/favicon.png" alt="RCN"> RCN
+      </div>
+      <div class="item__amount">
+        {{ rcnBalance }}
+      </div>
+    </li>
+  </ul>
+</div>
