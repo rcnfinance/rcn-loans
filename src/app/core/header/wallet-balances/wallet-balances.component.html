@@ -4,12 +4,16 @@
 >
   <ul>
     <li>Wallet Balance</li>
-    <li class="item d-flex justify-content-between align-items-center">
+    <li
+      class="item d-flex justify-content-between align-items-center"
+      *ngFor="let balance of balances"
+    >
       <div class="item__currency d-flex align-items-center">
-        <img src="assets/favicon.png" alt="RCN"> RCN
+        <img [src]="balance.currency.img" [alt]="balance.currency.symbol">
+        {{ balance.currency.symbol }}
       </div>
       <div class="item__amount">
-        {{ rcnBalance }}
+        {{ balance.balance }}
       </div>
     </li>
   </ul>
