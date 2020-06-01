@@ -459,7 +459,8 @@ export class ApiService {
    */
   private async getModelDebtInfo(loanId: string) {
     const diasporeApi = this.getApiUrl(Network.Diaspore);
-    return await this.http.get(diasporeApi.concat(`model_debt_info/${ loanId }`)).toPromise();
+    const { content }: any = await this.http.get(diasporeApi.concat(`model_debt_info/${ loanId }`)).toPromise();
+    return content;
   }
 
   /**
