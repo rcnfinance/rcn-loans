@@ -205,7 +205,16 @@ export class ApiService {
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
-      const activeLoans = await this.getAllCompleteLoans(data.content, network);
+
+      let activeLoans = await this.getAllCompleteLoans(
+        data.content as LoanApiBasalt[] | LoanApiDiaspore[],
+        network
+      );
+      if (network === Network.Basalt) {
+        const filterStatus = [Status.Request, Status.Destroyed, Status.Expired];
+        activeLoans = this.excludeLoansWithStatus(filterStatus, null, activeLoans);
+      }
+
       allActiveLoans = allActiveLoans.concat(activeLoans);
       page++;
     } catch (err) {
@@ -557,7 +566,8 @@ export class ApiService {
    */
   private async getModelDebtInfo(loanId: string) {
     const diasporeApi = this.getApiUrl(Network.Diaspore);
-    return await this.http.get(diasporeApi.concat(`model_debt_info/${ loanId }`)).toPromise();
+    const { content }: any = await this.http.get(diasporeApi.concat(`model_debt_info/${ loanId }`)).toPromise();
+    return content;
   }
 
   /**

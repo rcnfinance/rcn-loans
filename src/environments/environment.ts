@@ -58,7 +58,7 @@ export const environment = {
     rcnToken: RCN_TOKEN,
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
-    oracleFactory: '0x92072a2d46363d8c0301c5a0b94c465d9a24be63',
+    oracleFactory: '0x94681ad00256a395ad21d67e557828cbd9c8f4e9',
     diaspore: {
       debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
       loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'

@@ -91,6 +91,7 @@ export const environment = {
   },
   dir: {
     '0xfbd5e54062619ef2b0323ad9ff874b39fd5a8d2c': Agent.RipioCreator,
+    '0x520aefcaea7754e86c2a1c9367948d732607c47f': Agent.RipioCreator,
     '0xfeac8e490fe7f0760a10225e7dccda1e22ad8daa': Agent.WenanceCreator // FIXME - Ropsten address
   },
   cosigners: {

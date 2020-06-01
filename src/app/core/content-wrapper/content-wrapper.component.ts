@@ -10,6 +10,7 @@ import { DialogNeedWithdrawComponent } from '../../dialogs/dialog-need-withdraw/
 // App Service
 import { environment } from '../../../environments/environment';
 import { SidebarService } from '../../services/sidebar.service';
+import { ApplicationAdsService } from '../../services/application-ads.service';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Tx, TxService } from '../../services/tx.service';
@@ -61,12 +62,14 @@ export class ContentWrapperComponent implements OnInit {
 
   navToggle: boolean; // Navbar toggled
   navmobileToggled = false; // Nav Mobile toggled
+  showAd: string;
 
   pendingWithdraw: Tx;
   needWithdraw: boolean;
 
   constructor(
     private sidebarService: SidebarService, // Navbar Service
+    private applicationAdsService: ApplicationAdsService,
     private web3Service: Web3Service,
     private contractService: ContractsService,
     private txService: TxService,
@@ -78,6 +81,7 @@ export class ContentWrapperComponent implements OnInit {
     // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
+    this.applicationAdsService.currentAd.subscribe(showAd => this.showAd = showAd);
     this.web3Service.loginEvent.subscribe(
       async (isLogged: boolean) => {
         if (isLogged) {

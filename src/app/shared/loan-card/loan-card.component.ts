@@ -135,7 +135,9 @@ export class LoanCardComponent implements OnInit, OnDestroy {
       this.leftLabel = 'Paid';
       this.leftValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.debt.model.paid));
       this.durationLabel = 'Next payment in';
-      this.durationValue = Utils.formatDelta(this.stateLoan.debt.model.dueTime - (new Date().getTime() / 1000));
+      this.durationValue = this.stateLoan.status !== Status.Paid ?
+        Utils.formatDelta(this.stateLoan.debt.model.dueTime - (new Date().getTime() / 1000)) :
+        '-';
       this.rightLabel = 'Due';
       const basaltPaid = this.stateLoan.network === Network.Basalt ? currency.fromUnit(this.stateLoan.debt.model.paid) : 0;
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.debt.model.estimatedObligation) - basaltPaid);
