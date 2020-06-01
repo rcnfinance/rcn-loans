@@ -118,6 +118,82 @@ export class Utils {
   }
 
   /**
+   * Return the interest rate based on an annual percentage
+   * @param interest Annual percentage
+   * @return Interest rate
+   */
+  static toInterestRate(interest: number) {
+    const secondsInYear = 360 * 86400;
+    const rawInterest = Math.floor(10000000 / interest);
+    return rawInterest * secondsInYear;
+  }
+
+  /**
+   * Calculates the payment for a loan based on constant payments and a constant interest rate.
+   * @param rate The interest rate
+   * @param nperiod The number of payments to be made
+   * @param pv The current value of the annuity
+   * @param fv The future value remaining after the final payment has been made
+   * @param type Whether payments are due at the end (0) or beginning (1) of each period
+   * @return Payment amount with interest
+   */
+  static pmt(
+    rate: number,
+    nperiod: number,
+    pv: number,
+    fv: number = 0,
+    type: number = 0
+  ): BN {
+    const parsedPmt = (amount: number) => {
+      try {
+        const strAmount: string =
+          amount.toLocaleString('fullwide', { useGrouping: false });
+        return Utils.bn(strAmount);
+      } catch (err) {
+        return Utils.bn(amount);
+      }
+    };
+
+    if (!fv) {
+      fv = 0;
+    }
+    if (!type) {
+      type = 0;
+    }
+    if (rate === 0) {
+      const amountToReturn = -(pv + fv) / nperiod;
+      return parsedPmt(amountToReturn);
+    }
+
+    const pvif = Math.pow(1 + rate, nperiod);
+    let pmt = rate / (pvif - 1) * -(pv * pvif + fv);
+
+    if (type === 1) {
+      pmt /= (1 + rate);
+    }
+
+    return parsedPmt(pmt);
+  }
+
+  /**
+   * Return an amount in wei
+   * @param amount Form raw amount
+   * @param decimals Token decimals
+   * @return amount.pow(decimals)
+   */
+  static getAmountInWei(amount: number, decimals: number): BN {
+    if (amount % 1 !== 0) {
+      const amountInWei: number = amount * (10 ** decimals);
+      try {
+        return this.bn(amountInWei.toLocaleString('fullwide', { useGrouping: false }));
+      } catch (err) {
+        return this.bn(amountInWei);
+      }
+    }
+    return this.bn(amount).mul(this.pow(10, decimals));
+  }
+
+  /**
    * Convert the specified value to BN
    * @param value Value
    * @param base Base
@@ -125,12 +201,51 @@ export class Utils {
    */
   static bn(value: number | string | BN = 0, base?: number | 'hex'): BN {
     if (typeof value === 'number') {
-      return new BN(String(value), base);
+      return new BN(this.scientificToDecimal(value), base);
     }
     if (typeof value === 'string') {
       return new BN(value, base);
     }
     return new BN(value, base);
+  }
+
+  static scientificToDecimal(num) {
+    const SCIENTIFIC_NUMBER_REGEX = /\d+\.?\d*e[\+\-]*\d+/i;
+    num = String(num);
+    const numberHasSign = num.startsWith('-') || num.startsWith('+');
+    const sign = numberHasSign ? num[0] : '';
+    num = numberHasSign ? num.replace(sign, '') : num;
+
+    // if the number is in scientific notation remove it
+    if (SCIENTIFIC_NUMBER_REGEX.test(num)) {
+      const zero = '0';
+      const parts = String(num).toLowerCase().split('e'); // split into coeff and exponent
+      const e: any = parts.pop(); // store the exponential part
+      let l = Math.abs(e); // get the number of zeros
+      const regSign = e / l;
+      const coeffArray: any = parts[0].split('.');
+
+      if (regSign === -1) {
+        coeffArray[0] = Math.abs(coeffArray[0]);
+        num = zero + '.' + new Array(l).join(zero) + coeffArray.join('');
+      } else {
+        const dec = coeffArray[1];
+        if (dec) l = l - dec.length;
+        num = coeffArray.join('') + new Array(l + 1).join(zero);
+      }
+    }
+
+    return `${ sign }${ num }`;
+  }
+
+  /**
+   * Math pow function with BN
+   * @param base
+   * @param exponent
+   * @return base.pow(exponent)
+   */
+  static pow(base: number | string | BN, exponent: number | string | BN) {
+    return this.bn(base).pow(this.bn(exponent));
   }
 }
 
