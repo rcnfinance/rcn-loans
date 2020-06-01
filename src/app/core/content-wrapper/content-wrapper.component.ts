@@ -7,6 +7,7 @@ import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/
 // App Service
 import { environment } from '../../../environments/environment';
 import { SidebarService } from '../../services/sidebar.service';
+import { ApplicationAdsService } from '../../services/application-ads.service';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Tx, TxService } from '../../services/tx.service';
@@ -58,11 +59,13 @@ export class ContentWrapperComponent implements OnInit {
 
   navToggle: boolean; // Navbar toggled
   navmobileToggled = false; // Nav Mobile toggled
+  showAd: string;
 
   pendingWithdraw: Tx;
 
   constructor(
     private sidebarService: SidebarService, // Navbar Service
+    private applicationAdsService: ApplicationAdsService,
     private web3Service: Web3Service,
     private contractService: ContractsService,
     private txService: TxService,
@@ -74,6 +77,7 @@ export class ContentWrapperComponent implements OnInit {
     // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
+    this.applicationAdsService.currentAd.subscribe(showAd => this.showAd = showAd);
     this.web3Service.loginEvent.subscribe(
       (isLogged) => {
         if (isLogged) {
@@ -109,40 +113,6 @@ export class ContentWrapperComponent implements OnInit {
    */
   onOpen() {
     this.sidebarService.toggleService(this.navToggle = true);
-  }
-
-  /**
-   * Handle click on withdraw
-   */
-  async clickWithdraw() {
-    if (!this.withdrawEnabled) {
-      window.open(environment.network.explorer.tx.replace(
-        '${tx}',
-        this.pendingWithdraw.tx
-      ));
-    } else {
-      if (this.basaltLoansWithBalance.length > 0) {
-        const tx = await this.contractService.withdrawFundsBasalt(
-          this.basaltLoansWithBalance
-        );
-        this.txService.registerWithdrawTx(
-          tx,
-          environment.contracts.basaltEngine,
-          this.basaltLoansWithBalance
-        );
-      }
-      if (this.diasporeLoansWithBalance.length > 0) {
-        const tx = await this.contractService.withdrawFundsDiaspore(
-          this.diasporeLoansWithBalance
-        );
-        this.txService.registerWithdrawTx(
-          tx,
-          environment.contracts.diaspore.debtEngine,
-          this.diasporeLoansWithBalance
-        );
-      }
-      this.loadWithdrawBalance();
-    }
   }
 
   /**

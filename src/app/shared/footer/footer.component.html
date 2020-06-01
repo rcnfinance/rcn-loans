@@ -7,7 +7,6 @@
         (click)='navmobileClose();'
       >
         <i class="fas fa-coins"></i>
-        <div class="available-loans">{{ available }}</div>
       </li>
       <li
         routerLink='/activity'
@@ -15,7 +14,6 @@
         (click)='navmobileClose();'
       >
         <i class="fas fa-wallet"></i>
-        <div class="available-loans">{{ available }}</div>
       </li>
       <li
         routerLink='/address/{{ account }}/'
@@ -24,7 +22,6 @@
         *ngIf="hasAccount"
       >
         <i class="fas fa-exchange-alt"></i>
-        <div class="available-loans">{{ available }}</div>
       </li>
       <li
         (click)='navmobileClose(); openDialogClient()'

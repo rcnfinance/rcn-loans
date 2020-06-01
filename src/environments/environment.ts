@@ -17,31 +17,30 @@ const p = require('../../package.json') as any;
 
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
+const RCN_API_DIASPORE = 'https://diaspore-ropsten-rnode.rcn.loans';
 
 export const environment = {
   version: p.version,
-  version_name: p.version_name,
-  version_emoji: '👻',
+  versionName: p.version_name,
+  versionEmoji: '👻',
   build: getBuild(),
   production: false,
   url: 'https://testnet.rcn.loans/',
   envName: 'dev',
   identity: 'https://20mq9e6amd.execute-api.us-east-2.amazonaws.com/alpha/',
   buyLink: 'https://www.bancor.network/communities/5a92b438583f4a0001f75f42/about',
-  version_verbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
+  versionVerbose: p.version + '@' + getBuild() + ' - ' + p.version_name,
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   gaTracking: 'UA-122615331-2',
   apiCountry: 'https://ipcountry-api.rcn.loans',
-  rcn_node: {
-    loan: 'https://ropsten-rnode.rcn.loans/v1/commits?id_loan=$id' // TODO: replace by rcn_node_api.basaltUrl
-  },
-  rcn_node_api: {
-    basaltUrl: 'https://ropsten-rnode.rcn.loans/v1/',
-    diasporeUrl: 'https://diaspore-ropsten-rnode.rcn.loans/v4/',
-    url: 'https://diaspore-ropsten-rnode.rcn.loans/v4/' // TODO: replace by diasporeUrl
-  },
-  rcn_oracle: {
-    url: 'https://oracle.ripio.com/rate/'
+  rcnApi: {
+    basalt: {
+      v1: 'https://ropsten-rnode.rcn.loans/v1/'
+    },
+    diaspore: {
+      v4: `${ RCN_API_DIASPORE }/v4/`,
+      v5: `${ RCN_API_DIASPORE }/v5/`
+    }
   },
   network: {
     id: 3,
@@ -59,7 +58,7 @@ export const environment = {
     rcnToken: RCN_TOKEN,
     basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
     engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
-    oracleFactory: '0xf9d4771cbe3c3808f3dff633cd6be738f7f419ea',
+    oracleFactory: '0x94681ad00256a395ad21d67e557828cbd9c8f4e9',
     diaspore: {
       debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
       loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'
