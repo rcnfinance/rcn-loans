@@ -125,12 +125,41 @@ export class Utils {
    */
   static bn(value: number | string | BN = 0, base?: number | 'hex'): BN {
     if (typeof value === 'number') {
-      return new BN(String(value), base);
+      return new BN(this.scientificToDecimal(value), base);
     }
     if (typeof value === 'string') {
       return new BN(value, base);
     }
     return new BN(value, base);
+  }
+
+  static scientificToDecimal(num) {
+    const SCIENTIFIC_NUMBER_REGEX = /\d+\.?\d*e[\+\-]*\d+/i;
+    num = String(num);
+    const numberHasSign = num.startsWith('-') || num.startsWith('+');
+    const sign = numberHasSign ? num[0] : '';
+    num = numberHasSign ? num.replace(sign, '') : num;
+
+    // if the number is in scientific notation remove it
+    if (SCIENTIFIC_NUMBER_REGEX.test(num)) {
+      const zero = '0';
+      const parts = String(num).toLowerCase().split('e'); // split into coeff and exponent
+      const e: any = parts.pop(); // store the exponential part
+      let l = Math.abs(e); // get the number of zeros
+      const regSign = e / l;
+      const coeffArray: any = parts[0].split('.');
+
+      if (regSign === -1) {
+        coeffArray[0] = Math.abs(coeffArray[0]);
+        num = zero + '.' + new Array(l).join(zero) + coeffArray.join('');
+      } else {
+        const dec = coeffArray[1];
+        if (dec) l = l - dec.length;
+        num = coeffArray.join('') + new Array(l + 1).join(zero);
+      }
+    }
+
+    return `${ sign }${ num }`;
   }
 }
 
