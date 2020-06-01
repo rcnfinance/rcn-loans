@@ -58,7 +58,7 @@ export class IdentityService {
         {
           icon: 'fas fa-coins',
           title: 'Currency',
-          description: 'ARS'
+          description: 'ARS & USDC'
         }
       ]
     ),
