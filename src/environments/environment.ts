@@ -7,7 +7,8 @@ import { getBuild } from './build';
 export enum Agent {
   MortgageCreator,
   MortgageManager,
-  RipioCreator,
+  RipioArsCreator,
+  RipioUsdCreator,
   WenanceCreator
 }
 
@@ -18,6 +19,7 @@ const p = require('../../package.json') as any;
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 const RCN_API_DIASPORE = 'https://diaspore-ropsten-rnode.rcn.loans';
+const RIPIO_COSIGNER = '0x684977757434fee591220810cd31b6bbf99f4bdc';
 
 export const environment = {
   version: p.version,
@@ -75,7 +77,8 @@ export const environment = {
     multicall: '0xa457b5b859573e8eb758b6c2bfd4ae3042b422fd'
   },
   cosigners: {
-    [Agent.RipioCreator]: '0x684977757434fee591220810cd31b6bbf99f4bdc'
+    [Agent.RipioArsCreator]: RIPIO_COSIGNER,
+    [Agent.RipioUsdCreator]: RIPIO_COSIGNER
   },
   blacklist: [
     {
@@ -100,7 +103,7 @@ export const environment = {
     ongoing: '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3'
   },
   dir: {
-    '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioCreator,
+    '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioArsCreator,
     '0xc521961b2536e2c0ab595aae25a572bfbaf7d955': Agent.WenanceCreator
   },
   filterCurrencies: [
