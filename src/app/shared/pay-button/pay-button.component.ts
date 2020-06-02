@@ -11,6 +11,7 @@ import { TxService, Tx, Type } from '../../services/tx.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Loan, Network } from '../../models/loan.model';
 import { Currency } from '../../utils/currencies';
+import { Utils } from '../../utils/utils';
 import { EventsService, Category } from '../../services/events.service';
 import { Web3Service } from '../../services/web3.service';
 import { CountriesService } from '../../services/countries.service';
@@ -164,15 +165,15 @@ export class PayButtonComponent implements OnInit, OnDestroy {
 
     try {
       const balance = Number(await this.contractsService.getUserBalanceRCNWei());
-      let amount = this.amount;
+      const amount = this.amount;
 
       if (amount) {
         const currency = this.loan.oracle.currency;
         const decimals = Currency.getDecimals(currency);
-        amount = amount * 10 ** decimals;
+        const amountInWei = Utils.getAmountInWei(amount, decimals).toString();
 
         // balance validation
-        const requiredTokens = await this.contractsService.estimatePayAmount(this.loan, amount);
+        const requiredTokens = await this.contractsService.estimatePayAmount(this.loan, amountInWei as any);
         if (balance < requiredTokens) {
           this.eventsService.trackEvent(
             'show-insufficient-funds-lend',
@@ -209,15 +210,15 @@ export class PayButtonComponent implements OnInit, OnDestroy {
         this.eventsService.trackEvent(
           'set-to-pay-loan',
           Category.Loan,
-          'loan ' + this.loan.id + ' of ' + amount
+          'loan ' + this.loan.id + ' of ' + amountInWei
         );
 
-        const tx = await this.contractsService.payLoan(this.loan, amount);
+        const tx = await this.contractsService.payLoan(this.loan, amountInWei as any);
 
         this.eventsService.trackEvent(
           'pay-loan',
           Category.Loan,
-          'loan ' + this.loan.id + ' of ' + amount
+          'loan ' + this.loan.id + ' of ' + amountInWei
         );
 
         let engine: string;
@@ -239,7 +240,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
           tx,
           engine,
           this.loan,
-          amount
+          amountInWei as any
         );
 
         this.startPay.emit();

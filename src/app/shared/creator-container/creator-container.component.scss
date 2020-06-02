@@ -14,6 +14,8 @@
       @include transform(translate(-50%, -50%));
     }
     .creator-title {
+      width: 100%;
+      text-align: center;
       color: var(--app-color-gray-100);
       font-size: 36px;
       @extend %font-extra-bold;
