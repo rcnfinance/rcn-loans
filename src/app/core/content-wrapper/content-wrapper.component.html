@@ -114,6 +114,10 @@
       <div id="page-content-wrapper">
         <router-outlet></router-outlet>
       </div>
+      <app-fixed-application-ad
+        *ngIf="showAd"
+        [message]="showAd"
+      ></app-fixed-application-ad>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
