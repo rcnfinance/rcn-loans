@@ -46,7 +46,8 @@ export class BrandingService {
     }
 
     switch (environment.dir[loan.creator.toLowerCase()]) {
-      case Agent.RipioCreator:
+      case Agent.RipioArsCreator:
+      case Agent.RipioUsdCreator:
         return this.staticBrands.ripio;
       case Agent.WenanceCreator:
         return this.staticBrands.wenance;
