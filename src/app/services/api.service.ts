@@ -123,7 +123,6 @@ export class ApiService {
       lender = web3.utils.toChecksumAddress(lender);
       const url = network === Network.Basalt ? basaltUri(page, lender) : diasporeUri(page, lender);
       const data: any = await this.http.get(url).toPromise();
-      console.info('first url', url);
 
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
@@ -139,7 +138,6 @@ export class ApiService {
     const urls = [];
     for (page; page < apiCalls; page++) {
       const eachUrl = network === Network.Basalt ? basaltUri(page, lender) : diasporeUri(page, lender);
-      console.info('each url', eachUrl);
       urls.push(eachUrl);
     }
     const responses = await this.getAllUrls(urls);
