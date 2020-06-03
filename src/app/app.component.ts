@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { environment } from '../environments/environment';
 // App services
+import { ApiService } from './services/api.service';
 import { EventsService } from './services/events.service';
 import { WalletConnectService } from './services/wallet-connect.service';
 // App component
@@ -18,13 +19,15 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private dialog: MatDialog,
+    private apiService: ApiService,
     private eventsService: EventsService,
     private walletConnectService: WalletConnectService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.setupGoogleAnalytics();
     this.listenWalletConnect();
+    await this.checkApiHealth();
   }
 
   /**
@@ -59,5 +62,11 @@ export class AppComponent implements OnInit {
         );
       }
     );
+  }
+
+  private async checkApiHealth() {
+    const synchronized: boolean = await this.apiService.isSynchronized();
+    console.info('Api synchronized', synchronized);
+    // TODO: show dialog when isn't synchronized
   }
 }
