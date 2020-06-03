@@ -869,7 +869,7 @@ export class ContractsService {
     const filteredLoans: Loan[] = loans.filter((loan: Loan) => {
       try {
         const { owner } = loan.debt;
-        if (owner.toLowerCase() === lender.toLowerCase()) {
+        if (owner.toLowerCase() === borrower.toLowerCase()) {
           return true;
         }
       } catch { }

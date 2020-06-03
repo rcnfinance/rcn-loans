@@ -36,9 +36,6 @@ import { DetailButtonComponent } from './detail-button/detail-button.component';
 import { PayButtonComponent } from './pay-button/pay-button.component';
 import { CloseButtonComponent } from './close-button/close-button.component';
 import { ClaimButtonComponent } from './claim-button/claim-button.component';
-import { ButtonGroupComponent } from './button-group/button-group.component';
-import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
-import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
 import { FixedApplicationAdComponent } from './fixed-application-ad/fixed-application-ad.component';
 import { RedeemButtonComponent } from './redeem-button/redeem-button.component';
 // App Dialogs
