@@ -841,18 +841,7 @@ export class ContractsService {
     const basalt: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', Network.Basalt);
     const diaspore: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', Network.Diaspore);
     const loans: Loan[] = diaspore.concat(LoanCurator.curateLoans(basalt));
-
-    // FIXME: apply filter in the API
-    const filteredLoans: Loan[] = loans.filter((loan: Loan) => {
-      try {
-        const { owner } = loan.debt;
-        if (owner.toLowerCase() === lender.toLowerCase()) {
-          return true;
-        }
-      } catch { }
-    });
-
-    return filteredLoans;
+    return loans;
   }
 
   /**
