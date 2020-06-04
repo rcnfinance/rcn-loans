@@ -47,7 +47,11 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     private contractsService: ContractsService,
     private collateralService: CollateralService,
     private txService: TxService,
-    @Inject(MAT_DIALOG_DATA) public data
+    @Inject(MAT_DIALOG_DATA) public data: {
+      loan: Loan,
+      collateral: Collateral,
+      action: string
+    }
   ) {
     this.loan = this.data.loan;
     this.collateral = this.data.collateral;
