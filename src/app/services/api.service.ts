@@ -153,12 +153,12 @@ export class ApiService {
   ): Promise<Loan[]> {
     const web3 = this.web3Service.web3;
     const apiUrl: string = this.getApiUrl(network, 'v5');
-    const basaltUri = (apiPage: number, address: string) =>
-      apiUrl.concat(`loans?open=false&page=${ apiPage }&${ loansType }=${ address }`);
-    const diasporeUri = (apiPage: number, address: string) =>
-      apiUrl.concat(`loans?open=false&page=${ apiPage }&${ loansType === 'lender' ? 'owner' : loansType }=${ address }`);
+    const basaltUri = (apiPage: number, apiAddress: string) =>
+      apiUrl.concat(`loans?open=false&page=${ apiPage }&${ loansType }=${ apiAddress }`);
+    const diasporeUri = (apiPage: number, apiAddress: string) =>
+      apiUrl.concat(`loans?open=false&page=${ apiPage }&${ loansType === 'lender' ? 'owner' : loansType }=${ apiAddress }`);
 
-    let allLoansOfLender: Loan[] = [];
+    let allLoansOfAddress: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
 
@@ -172,7 +172,7 @@ export class ApiService {
       }
 
       const activeLoans = await this.getAllCompleteLoans(data.content, network);
-      allLoansOfLender = allLoansOfLender.concat(activeLoans);
+      allLoansOfAddress = allLoansOfAddress.concat(activeLoans);
       page++;
     } catch (err) {
       this.eventsService.trackError(err);
@@ -187,10 +187,10 @@ export class ApiService {
     const allApiLoans = await this.getAllApiLoans(responses, network);
 
     for (const apiLoans of allApiLoans) {
-      allLoansOfLender = allLoansOfLender.concat(apiLoans);
+      allLoansOfAddress = allLoansOfAddress.concat(apiLoans);
     }
 
-    return allLoansOfLender;
+    return allLoansOfAddress;
   }
 
   /**
@@ -548,6 +548,7 @@ export class ApiService {
         let config: any;
 
         if (!loan.open && !loan.canceled && loan.status) {
+          console.info('loan status: ', loan.status);
           debtInfo = await this.getModelDebtInfo(loan.id);
           config = await this.getModelConfig(loan.id);
         }
