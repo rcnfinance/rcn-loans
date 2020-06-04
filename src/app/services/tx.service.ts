@@ -3,6 +3,7 @@ declare let window: any;
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Loan } from './../models/loan.model';
+import { Collateral } from './../models/collateral.model';
 import { Web3Service } from './web3.service';
 import { EventsService, Category } from './events.service';
 
@@ -12,7 +13,11 @@ export enum Type {
   withdraw = 'withdraw',
   transfer = 'transfer',
   claim = 'claim',
-  pay = 'pay'
+  pay = 'pay',
+  create = 'create',
+  createCollateral = 'createCollateral',
+  addCollateral = 'addCollateral',
+  withdrawCollateral = 'withdrawCollateral'
 }
 
 export class Tx {
@@ -188,6 +193,82 @@ export class TxService {
         !tx.confirmed &&
         tx.type === Type.pay &&
         tx.data.id === loan.id)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
+  }
+
+  registerCreateTx(tx: string, requestLoan: any) {
+    const data = {
+      engine: requestLoan.engine,
+      id: requestLoan.id,
+      amount: requestLoan.amount
+    };
+    this.registerTx(new Tx(tx, data.engine, false, Type.create, data));
+  }
+
+  getLastPendingCreate(loan: Loan) {
+    return this.txMemory
+      .filter(tx =>
+        !tx.confirmed &&
+        tx.type === Type.create &&
+        tx.data.id === loan.id)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
+  }
+
+  registerCreateCollateralTx(tx: string, loan: Loan) {
+    const data = {
+      engine: loan.address,
+      id: loan.id,
+      amount: loan.amount
+    };
+    this.registerTx(new Tx(tx, data.engine, false, Type.createCollateral, data));
+  }
+
+  getLastPendingCreateCollateral(loan: Loan) {
+    return this.txMemory
+      .filter(tx =>
+        !tx.confirmed &&
+        tx.type === Type.createCollateral &&
+        tx.data.id === loan.id)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
+  }
+
+  registerAddCollateralTx(tx: string, loan: Loan, collateral: Collateral, amount: number) {
+    const data = {
+      engine: loan.address,
+      id: loan.id,
+      collateralId: collateral.id,
+      collateralAmount: amount
+    };
+    this.registerTx(new Tx(tx, data.engine, false, Type.addCollateral, data));
+  }
+
+  getLastPendingAddCollateral(collateral: Collateral) {
+    return this.txMemory
+      .filter(tx =>
+        !tx.confirmed &&
+        tx.type === Type.addCollateral &&
+        tx.data.collateralId === collateral.id
+      )
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
+  }
+
+  registerWithdrawCollateralTx(tx: string, loan: Loan, collateral: Collateral, amount: number) {
+    const data = {
+      engine: loan.address,
+      id: loan.id,
+      collateralId: collateral.id,
+      collateralAmount: amount
+    };
+    this.registerTx(new Tx(tx, data.engine, false, Type.withdrawCollateral, data));
+  }
+
+  getLastPendingWithdrawCollateral(collateral: Collateral) {
+    return this.txMemory
+      .filter(tx =>
+        !tx.confirmed &&
+        tx.type === Type.withdrawCollateral &&
+        tx.data.collateralId === collateral.id
+      )
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
   }
 

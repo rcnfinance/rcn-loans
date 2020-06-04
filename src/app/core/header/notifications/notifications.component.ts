@@ -74,6 +74,9 @@ export class NotificationsComponent implements OnInit {
       case environment.contracts.converter.converterRamp:
         return 'Converter Ramp Contract';
 
+      case environment.contracts.collateral.collateral:
+        return 'Collateral Contract';
+
       default:
         return `${ Utils.shortAddress(contract) } Contract`;
     }
@@ -139,6 +142,18 @@ export class NotificationsComponent implements OnInit {
           message = `Disabling the ${ contractName }`;
         }
         break;
+      case 'create':
+        message = `Creating the ${ loanId } loan`;
+        break;
+      case 'createCollateral':
+        message = `Creating the ${ tx.data.collateralId } collateral`;
+        break;
+      case 'addCollateral':
+        message = `Depositing the ${ tx.data.collateralId } collateral`;
+        break;
+      case 'withdrawCollateral':
+        message = `Withdrawing the ${ tx.data.collateralId } collateral`;
+        break;
       default:
         break;
     }
@@ -173,6 +188,16 @@ export class NotificationsComponent implements OnInit {
           return 'Enabled';
         }
         return 'Disabled';
+
+      case 'create':
+      case 'createCollateral':
+        return 'Created';
+
+      case 'addCollateral':
+        return 'Deposited';
+
+      case 'withdrawCollateral':
+        return 'Withdrawn';
 
       default:
         return;
@@ -219,6 +244,18 @@ export class NotificationsComponent implements OnInit {
         } else {
           message = `The ${ contractName } have been disabled`;
         }
+        break;
+      case 'create':
+        message = `You've created the ${ loanId } loan`;
+        break;
+      case 'createCollateral':
+        message = `You've created the ${ tx.data.collateralId } collateral`;
+        break;
+      case 'addCollateral':
+        message = `You've deposited the ${ tx.data.collateralId } collateral`;
+        break;
+      case 'withdrawCollateral':
+        message = `You've withdrawn the ${ tx.data.collateralId } collateral`;
         break;
       default:
         break;
@@ -269,6 +306,18 @@ export class NotificationsComponent implements OnInit {
         } else {
           txObject = new TxObject(id, 'Disabling', message, '', '', 'fas fa-lock', 'red');
         }
+        break;
+      case 'create':
+        txObject = new TxObject(id, 'Creating', message, '', '', 'fas fa-file-invoice-dollar', 'turquoise');
+        break;
+      case 'createCollateral':
+        txObject = new TxObject(id, 'Creating', message, '', '', 'fas fa-coins', 'violet');
+        break;
+      case 'addCollateral':
+        txObject = new TxObject(id, 'Depositing', message, 'material-icons', 'add', '', 'violet');
+        break;
+      case 'withdrawCollateral':
+        txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'remove', '', 'violet');
         break;
       default:
         break;
