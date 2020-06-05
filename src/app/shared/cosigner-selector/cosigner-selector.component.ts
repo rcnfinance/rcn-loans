@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Loan, LoanType } from '../../models/loan.model';
+import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
 import { CosignerService } from '../../services/cosigner.service';
 import { LoanTypeService } from '../../services/loan-type.service';
 import { environment } from '../../../environments/environment';
@@ -17,6 +18,7 @@ export class CosignerSelectorComponent implements OnInit {
   hasOptions: boolean;
 
   constructor(
+    private currenciesService: CurrenciesService,
     private cosignerService: CosignerService,
     private loanTypeService: LoanTypeService
   ) {}
@@ -42,6 +44,14 @@ export class CosignerSelectorComponent implements OnInit {
 
       this.text = `This loan is backed by a ${ title } (${ cosignerDetail.coordinates })
           valued at value ${ this.loan.currency.toString() }.`;
+    }
+
+    const { collateral }: Loan = this.loan;
+    if (collateral) {
+      this.hasOptions = true;
+
+      const { symbol }: CurrencyItem = this.currenciesService.getCurrencyByKey('address', collateral.token);
+      this.text = `This loan is backed by a ${ symbol } collateral`;
     }
   }
 }

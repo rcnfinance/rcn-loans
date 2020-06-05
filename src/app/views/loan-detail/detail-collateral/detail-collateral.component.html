@@ -77,7 +77,11 @@
           </button>
         </div>
       </div>
-      <div class="row row--footer" [class.row--divisor]="canAdjust" *ngIf="loan?.debt">
+      <div
+        class="row row--footer"
+        [class.row--divisor]="canAdjust"
+        *ngIf="loan?.debt && collateral?.amount !== '0'"
+      >
         <div class="item col col-12 col-md-4">
           <i class="fa fa-percentage"></i>
           Current Loan To Value:

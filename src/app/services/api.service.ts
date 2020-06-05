@@ -548,7 +548,6 @@ export class ApiService {
         let config: any;
 
         if (!loan.open && !loan.canceled && loan.status) {
-          console.info('loan status: ', loan.status);
           debtInfo = await this.getModelDebtInfo(loan.id);
           config = await this.getModelConfig(loan.id);
         }

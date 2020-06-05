@@ -146,7 +146,14 @@
           </tbody>
         </table>
       </div>
-      <div class="table-responsive" (click)="openDetail('cosigner');">
+      <div
+        class="table-responsive"
+        (click)="
+          loanType === 3 ?
+          openDetail('cosigner') :
+          openDetail('collateral')
+        "
+      >
         <table class="table table-clickable">
           <thead>
             <tr>
@@ -169,7 +176,7 @@
             </tr>
           </thead>
           <tbody>
-            <app-cosigner-selector [loan]=loan></app-cosigner-selector>
+            <app-cosigner-selector [loan]=loan ></app-cosigner-selector>
           </tbody>
         </table>
       </div>

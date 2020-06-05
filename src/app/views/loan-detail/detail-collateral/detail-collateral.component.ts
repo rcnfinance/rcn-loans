@@ -58,7 +58,8 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     if (changes.collateral && changes.collateral.currentValue) {
       await this.setCollateralPanel();
 
-      if (this.loan.debt) {
+      const { amount } = changes.collateral.currentValue;
+      if (this.loan.debt && Number(amount)) {
         this.setCollateralAdjustment();
       }
 
