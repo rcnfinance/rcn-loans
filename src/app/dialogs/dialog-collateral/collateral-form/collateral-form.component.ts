@@ -46,8 +46,9 @@ export class CollateralFormComponent implements OnInit {
     this.buildForm();
 
     try {
-      this.spinner.show();
       await this.completeForm();
+
+      this.spinner.show();
       await this.calculateMaxWithdraw();
     } catch (err) {
       this.eventsService.trackError(err);
@@ -269,8 +270,11 @@ export class CollateralFormComponent implements OnInit {
         .mul(Utils.bn(amount))
         .div(Utils.bn(collateralRatio));
 
-    const maxWithdraw = Utils.bn(amount).sub(balanceAmount);
-    const formattedMaxWithdraw = this.formatAmount(maxWithdraw, decimals);
+    const maxWithdraw: BN = Utils.bn(amount).sub(balanceAmount);
+    const formattedMaxWithdraw =
+      maxWithdraw.lte(Utils.bn(0)) ?
+      '0' :
+      this.formatAmount(maxWithdraw, decimals);
 
     this.form.controls.formRatios.patchValue({
       maxWithdraw: Utils.formatAmount(formattedMaxWithdraw)
