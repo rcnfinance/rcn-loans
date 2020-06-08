@@ -189,7 +189,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     // update collateral adjustment
     const MAX_COLLATERAL_ADJUSTMENT = 400;
     const { balanceRatio } = this.form.value.formCollateral;
-    const minAdjustment: number = this.toPercentage(balanceRatio).toNumber() + 50;
+    const minAdjustment: number = this.toPercentage(balanceRatio).toNumber();
 
     if (collateralAdjustment < minAdjustment) {
       this.form.controls.formUi.patchValue({
