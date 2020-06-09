@@ -47,7 +47,7 @@ describe('BalanceComponent', () => {
     expect(thisComponent.canWithdraw).toBeTruthy();
 
     // ui expect
-    const withdrawPayments = readComponent(fixture, '.balance__withdraw-amount');
+    const withdrawPayments = readComponent(fixture, '.balance-withdraw__amount');
     expect(withdrawPayments).toBeDefined();
 
     const displayAvailable = Number(withdrawPayments.innerText);
