@@ -36,7 +36,6 @@ export class DialogLoanLendComponent implements OnInit {
   account: string;
   canLend: boolean;
   availableCurrencies: CurrencyItem[];
-  expectedReturnWarning: boolean;
 
   loading: boolean;
   startProgress: boolean;
@@ -48,7 +47,7 @@ export class DialogLoanLendComponent implements OnInit {
     private web3Service: Web3Service,
     private eventsService: EventsService,
     public dialogRef: MatDialogRef<any>,
-    @Inject(MAT_DIALOG_DATA) data
+    @Inject(MAT_DIALOG_DATA) data: {loan: Loan}
   ) {
     this.loan = data.loan;
   }
@@ -108,7 +107,6 @@ export class DialogLoanLendComponent implements OnInit {
   async calculateAmounts() {
     const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
-    const loanCurrency: string = loan.currency.toString();
     const loanAmount: BN = Utils.bn(loan.amount);
     const loanExpectedReturn: BN = Utils.bn(loan.descriptor.totalObligation);
 
@@ -134,9 +132,6 @@ export class DialogLoanLendComponent implements OnInit {
       // rcn -> rcn
       lendAmount = rcnAmount;
       // lendExpectedReturn = rcnExpectedReturn;
-
-      // set expected return warn
-      this.expectedReturnWarning = loanCurrency === 'RCN' || false;
     } else {
       lendAmount = await this.contractsService.estimateLendAmount(loan, toToken);
 
@@ -152,9 +147,6 @@ export class DialogLoanLendComponent implements OnInit {
       const lendOverAmount: BN = Utils.bn(lendAmountInWei).div(Utils.bn(loanAmount));
       const lendCurrencyRate: number = lendOverAmount.toString() as any / 10 ** lendCurrencyDecimals;
       this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 7);
-
-      // set expected return warn
-      this.expectedReturnWarning = true;
     }
 
     // set ui values
@@ -205,7 +197,7 @@ export class DialogLoanLendComponent implements OnInit {
    * @param symbol Currency symbol
    * @return Currency data
    */
-  getCurrencyByCode(symbol): {
+  getCurrencyByCode(symbol: string): {
     symbol: string,
     img: string,
     address: string
