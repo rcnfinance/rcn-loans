@@ -10,6 +10,7 @@ import { BalanceComponent } from './balance/balance.component';
 import { IconGroupHeaderComponent } from './header/icon-group-header/icon-group-header.component';
 import { NotificationsComponent } from './header/notifications/notifications.component';
 import { NotificationItemComponent } from './header/notifications/notification-item/notification-item.component';
+import { WalletBalancesComponent } from './header/wallet-balances/wallet-balances.component';
 import { WalletAvatarComponent } from './header/wallet-avatar/wallet-avatar.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
 // App Directives
@@ -31,6 +32,7 @@ import { OpenEtherscanDirective } from '../directives/open-etherscan.directive';
     OpenEtherscanDirective,
     NotificationsComponent,
     NotificationItemComponent,
+    WalletBalancesComponent,
     WalletAvatarComponent,
     SocialContainerComponent
   ],

@@ -180,8 +180,8 @@
 
 @media (min-width: 992px){
   .navbar{
-    height: 60px;
-    padding: 7px 15px;
+    height: 65px;
+    padding: 10px 15px 7px;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -233,12 +233,6 @@
             margin-right: 0;
             @include styled-font('Roboto', 600, 16px);
           }
-        }
-        .separator{
-          font-size: 1.4em;
-          font-weight: 300;
-          color: var(--app-color-gray-50);
-          cursor: default;
         }
       }
       .icon-hamburguer{
