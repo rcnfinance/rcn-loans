@@ -5,7 +5,7 @@
   max-height: 670px;
   overflow: hidden;
   position: absolute;
-  right: -22px;
+  right: 14px;
   @extend %roboto-regular;
   @include transition();
   &.scrollOn{
@@ -29,7 +29,7 @@
         height: 30px;
         padding: 10px;
         background-color: var(--app-color-gray-500);
-        border-bottom: 1px solidvar(--app-color-gray-600);
+        border-bottom: 1px solid var(--app-color-gray-600);
       }
       &.unavailable{
         height: 64px;

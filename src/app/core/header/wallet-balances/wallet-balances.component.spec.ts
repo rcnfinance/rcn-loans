@@ -1,52 +1,42 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from '../../../shared/shared.module';
-import { IconGroupHeaderComponent } from './icon-group-header.component';
+import { WalletBalancesComponent } from './wallet-balances.component';
 import { HeaderPopoverService } from '../../../services/header-popover.service';
 
-describe('IconGroupHeaderComponent', () => {
-  let component: IconGroupHeaderComponent;
-  let fixture: ComponentFixture<IconGroupHeaderComponent>;
+describe('WalletBalancesComponent', () => {
+  let component: WalletBalancesComponent;
+  let fixture: ComponentFixture<WalletBalancesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         RouterModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
         SharedModule
       ],
       declarations: [
-        IconGroupHeaderComponent
+        WalletBalancesComponent
       ],
       providers: [
         HeaderPopoverService
       ],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-      ]
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IconGroupHeaderComponent);
+    fixture = TestBed.createComponent(WalletBalancesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should return true', () => {
-    const view = 'notifications';
-    component.viewDetail = view;
-    expect(component.isDetail(view)).toBeTruthy();
-  });
-
-  it('should update counter', () => {
-    const counter = 5;
-    component.updateCounter(counter);
-    expect(component.notificationsCounter).toEqual(counter);
   });
 });

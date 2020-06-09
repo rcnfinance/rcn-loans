@@ -91,9 +91,9 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.canWithdraw =
-      this.basaltLoansWithBalance !== undefined || this.diasporeLoansWithBalance !== undefined &&
-      this.basaltLoansWithBalance.length > 0 || this.diasporeLoansWithBalance.length > 0 &&
-      this.ongoingBasaltWithdraw === undefined || this.ongoingDiasporeWithdraw === undefined;
+      (this.basaltLoansWithBalance !== undefined || this.diasporeLoansWithBalance !== undefined) &&
+      (this.basaltLoansWithBalance.length > 0 || this.diasporeLoansWithBalance.length > 0) &&
+      (this.ongoingBasaltWithdraw === undefined || this.ongoingDiasporeWithdraw === undefined);
 
     if (this.ongoingBasaltWithdraw !== undefined || this.ongoingDiasporeWithdraw !== undefined) {
       this.displayBalance = Utils.formatAmount(
