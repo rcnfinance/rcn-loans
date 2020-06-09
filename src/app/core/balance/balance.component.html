@@ -1,22 +1,25 @@
-<div class="balance">
-  <span class="balance__amount" matTooltip="RCN Wallet Balance">
-    {{ displayBalance }} RCN
-  </span>
-  <div
-    class="balance__withdraw"
-    (click)="clickWithdraw()"
-  >
-    <div class="balance__withdraw-icon">
+<div
+  class="balance-withdraw"
+  [class.balance-withdraw--active]="canWithdraw"
+  (click)="clickWithdraw()"
+  [matTooltip]='
+    canWithdraw ?
+    "Click here to withdraw your RCN Balance" :
+    "You dont have any funds to withdraw yet"
+  '
+>
+  <div class="balance-withdraw__label">
+    Withdrawable Balance
+  </div>
+  <div class="d-flex align-items-center">
+    <div class="balance-withdraw__icon">
       <i class="fas fa-arrow-down"></i>
     </div>
-    <div class="balance__withdraw-amount" matTooltip="Available Balance">
+    <div class="balance-withdraw__amount">
       {{ displayAvailable || 0 }}
     </div>
-    <div class="balance__withdraw-currency">
+    <div class="balance-withdraw__currency">
       RCN
-    </div>
-    <div class="balance__withdraw-label d-md-none">
-      click to withdraw
     </div>
   </div>
 </div>
