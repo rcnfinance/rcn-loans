@@ -7,6 +7,18 @@
 - Installments and payments details
 - Borrow loans with Collateral
 
+## **0.1.6** Boggart 👻
+
+### Feature:
+- Add popover with wallet balances
+
+### Enhancement:
+- Update witdrawable available component UI
+- Update lending checkout icons
+
+### Fix:
+- Fix black screen when opening menu in iOS
+
 ## **0.1.5** Boggart 👻
 - Fix api model_debt_info response handling
 - Add creator address for Ripio USD loans
