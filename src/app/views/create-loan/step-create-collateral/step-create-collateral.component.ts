@@ -287,7 +287,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
 
     const loanOracle: string = await this.contractsService.symbolToOracle(loan.currency.toString());
     const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loan.currency.decimals);
-    const loanAmountInRcn: BN = Utils.bn(loan.amount)
+    const loanAmountInRcn: BN = Utils.bn(loan.descriptor.totalObligation)
         .mul(Utils.bn(loanRate))
         .div(Utils.pow(10, loan.currency.decimals));
 
