@@ -159,25 +159,16 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    */
   async getRate(): Promise<string> {
     const loan: Loan = this.loan;
-    const { decimals } = loan.currency;
-    const amount = Utils.getAmountInWei(1, decimals);
-    const { token } = this.collateral;
-    const { symbol } = this.loan.currency;
-    const loanCurrency: CurrencyItem =
-      this.currenciesService.getCurrencyByKey('symbol', symbol);
+    const loanRate: BN | string =
+      await this.contractsService.getRate(loan.oracle.address, loan.currency.decimals);
 
-    if (token === loanCurrency.address) {
-      return amount.toString();
-    }
+    const collateral: Collateral = this.collateral;
+    const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
+    const collateralDecimals: number = new Currency(collateralCurrency.symbol).decimals;
+    const collateralRate: BN | string = await this.contractsService.getRate(collateral.oracle, collateralDecimals);
 
-    const rate = await this.contractsService.getPriceConvertFrom(
-      loanCurrency.address,
-      token,
-      amount.toString()
-    );
-
-    const formattedRate = Utils.formatAmount(1 / loan.currency.fromUnit(rate));
-    return formattedRate;
+    const rate = Utils.formatAmount((loanRate as any) / (collateralRate as any));
+    return rate;
   }
 
   /**
