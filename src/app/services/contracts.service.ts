@@ -1048,19 +1048,33 @@ export class ContractsService {
     account: string
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
-    return new Promise((resolve, reject) => {
-      // FIXME: see collateral with ETH implementation
-      this.loadAltContract(web3, this._collateral).methods.create(
-        account,
-        debtId,
-        oracle,
-        amount,
-        liquidationRatio,
-        balanceRatio
-      )
-      .send({ from: account })
-      .on('transactionHash', (hash: string) => resolve(hash))
-      .on('error', (err) => reject(err));
+    return new Promise(async (resolve, reject) => {
+      const symbol = await this.oracleToSymbol(oracle);
+      const ETH_SYMBOL = 'ETH';
+
+      if (symbol === ETH_SYMBOL) {
+        this.loadAltContract(web3, this._collateralWethManager).methods.create(
+          debtId,
+          oracle,
+          liquidationRatio,
+          balanceRatio
+        )
+        .send({ from: account, value: amount })
+        .on('transactionHash', (hash: string) => resolve(hash))
+        .on('error', (err) => reject(err));
+      } else {
+        this.loadAltContract(web3, this._collateral).methods.create(
+          account,
+          debtId,
+          oracle,
+          amount,
+          liquidationRatio,
+          balanceRatio
+        )
+        .send({ from: account })
+        .on('transactionHash', (hash: string) => resolve(hash))
+        .on('error', (err) => reject(err));
+      }
     });
   }
 
@@ -1088,15 +1102,15 @@ export class ContractsService {
         .send({ from: account, value: amount })
         .on('transactionHash', (hash: string) => resolve(hash))
         .on('error', (err) => reject(err));
+      } else {
+        this.loadAltContract(web3, this._collateral).methods.deposit(
+          collateralId,
+          amount
+        )
+        .send({ from: account })
+        .on('transactionHash', (hash: string) => resolve(hash))
+        .on('error', (err) => reject(err));
       }
-
-      this.loadAltContract(web3, this._collateral).methods.deposit(
-        collateralId,
-        amount
-      )
-      .send({ from: account })
-      .on('transactionHash', (hash: string) => resolve(hash))
-      .on('error', (err) => reject(err));
     });
   }
 
