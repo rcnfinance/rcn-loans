@@ -171,17 +171,35 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
       const decimals = Currency.getDecimals(currency.symbol);
       return this.showInsufficientFundsDialog(required, balance, currency.symbol, decimals);
     }
-    // validate approve
+
+    // validate ERC20 approve
     const contractAddress: string = environment.contracts.collateral.collateral;
     const engineApproved = await this.contractsService.isApproved(contractAddress, collateral.token);
     if (!await engineApproved) {
-      const approve = await this.showApproveDialog(contractAddress, collateral.token);
+      const approve = await this.showApproveDialog(contractAddress, collateral.token, 'onlyToken');
       if (!approve) {
         this.showMessage('You need to approve the collateral contract to continue.', 'snackbar');
         return;
       }
     }
-    // TODO: collateralAsset === eth => approve for all ERC721
+
+    // validate ERC721 approve
+    const { ethAddress } = environment.contracts.converter;
+    if (collateral.token === ethAddress) {
+      const collateralAddress = environment.contracts.collateral.collateral;
+      const operator = environment.contracts.collateral.wethManager;
+      const erc721approved = await this.contractsService.isApprovedERC721(
+        collateralAddress,
+        operator
+      );
+      if (!erc721approved) {
+        const approve = await this.showApproveDialog(operator, collateralAddress, 'onlyAsset');
+        if (!approve) {
+          this.showMessage('You need to approve the collateral WETH manager to continue.', 'snackbar');
+          return;
+        }
+      }
+    }
 
     this.showMessage('Please confirm the metamask transaction. Your Collateral is being processed.', 'snackbar');
     this.handleCreateCollateral(form);
@@ -346,11 +364,21 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
    * Show approve dialog
    * @param contract Contract address
    * @param token Token address
+   * @param type ERC20 or ERC721
    */
-  private async showApproveDialog(contract: string, token: string = environment.contracts.rcnToken) {
-    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
-    dialogRef.componentInstance.onlyAddress = contract;
-    dialogRef.componentInstance.onlyToken = token;
+  private async showApproveDialog(
+    contract: string,
+    token: string,
+    type: 'onlyToken' | 'onlyAsset'
+  ) {
+    const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
+      DialogApproveContractComponent, {
+        data: {
+          [type]: token,
+          onlyAddress: contract
+        }
+      }
+    );
 
     return new Promise((resolve) => {
       dialogRef.afterClosed().subscribe(result => {
