@@ -145,7 +145,7 @@ export const environment = {
     {
       symbol: 'USDC',
       img: '',
-      address: '0x00558FAB062c212Dac6BDd48A3B6542563d969Aa'
+      address: '0x00558fab062c212dac6bdd48a3b6542563d969aa'
     },
     {
       symbol: 'MANA',
