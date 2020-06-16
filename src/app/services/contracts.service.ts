@@ -24,6 +24,7 @@ const diasporeOracleAbi = require('../contracts/Oracle.json');
 const basaltOracleAbi = require('../contracts/BasaltOracle.json');
 const converterRampAbi = require('../contracts/ConverterRamp.json');
 const tokenConverterAbi = require('../contracts/TokenConverter.json');
+const uniswapV2ConverterAbi = require('../contracts/UniswapV2Converter.json');
 const oracleFactoryAbi = require('../contracts/OracleFactory.json');
 const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
 const collateralAbi = require('../contracts/Collateral.json');
@@ -39,6 +40,8 @@ export class ContractsService {
   private _rcnConverterRamp: any;
   private _tokenConverterAddress: string = environment.contracts.converter.tokenConverter;
   private _tokenConverter: any;
+  private _uniswapConverterAddress: string = environment.contracts.converter.uniswapConverter;
+  private _uniswapConverter: any;
   private _oracleFactoryAddress: string = environment.contracts.oracleFactory;
   private _oracleFactory: any;
   private _installmentsModelAddress: string = environment.contracts.models.installments;
@@ -62,6 +65,7 @@ export class ContractsService {
     this._debtEngine = this.makeContract(debtEngineAbi, environment.contracts.diaspore.debtEngine);
     this._rcnConverterRamp = this.makeContract(converterRampAbi.abi, this._rcnConverterRampAddress);
     this._tokenConverter = this.makeContract(tokenConverterAbi.abi, this._tokenConverterAddress);
+    this._uniswapConverter = this.makeContract(uniswapV2ConverterAbi.abi, this._uniswapConverterAddress);
     this._oracleFactory = this.makeContract(oracleFactoryAbi.abi, this._oracleFactoryAddress);
     this._installmentsModel = this.makeContract(installmentsModelAbi.abi, this._installmentsModelAddress);
     this._collateral = this.makeContract(collateralAbi.abi, this._collateralAddress);
