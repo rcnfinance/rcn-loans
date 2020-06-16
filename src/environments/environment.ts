@@ -64,7 +64,7 @@ export const environment = {
       loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'
     },
     converter: {
-      converterRamp: '0x9cd2b5ffd2c4d3d2d47ecbecf19ec588900901ec',
+      converterRamp: '0x9ce962dfaa5cefcbe298c5a469487cead3a0640d',
       ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       uniswapConverter: '0x32657d6f2dcb32a5129d14db4a2e2e6fb198ce07'
     },

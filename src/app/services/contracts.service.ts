@@ -338,6 +338,7 @@ export class ContractsService {
    * @param fromToken From token address
    * @param maxSpend Max fromToken to spend during lend
    * @param cosigner Cosigner address
+   * @param cosignerLimt Cosigner limit
    * @param loanId Loan ID
    * @param oracleData Oracle data
    * @param cosignerData Cosigner data
@@ -350,6 +351,7 @@ export class ContractsService {
     fromToken: string,
     maxSpend: string,
     cosigner: string,
+    cosignerLimit: string,
     loanId: string,
     oracleData: string,
     cosignerData: string,
@@ -364,6 +366,7 @@ export class ContractsService {
         fromToken,
         maxSpend,
         cosigner,
+        cosignerLimit,
         loanId,
         oracleData,
         cosignerData,

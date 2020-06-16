@@ -64,7 +64,7 @@ export const environment = {
       loanManager: '0xb55b0f33d6a2a03a275ca85d58e9357e1a141187'
     },
     converter: {
-      converterRamp: '0xe41ada0fb01F147c6385F93DEC78914F32e45061',
+      converterRamp: '0xe41ada0fb01F147c6385F93DEC78914F32e45061', // FIXME: use last version
       ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       uniswapConverter: '0x32657d6f2dcb32a5129d14db4a2e2e6fb198ce07' // FIXME: ropsten address
     },
