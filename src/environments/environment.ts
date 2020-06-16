@@ -69,7 +69,7 @@ export const environment = {
       wethManager: '0x64682fc47155a7aedf93a5131208cc914dc98137'
     },
     converter: {
-      converterRamp: '0x9cd2b5ffd2c4d3d2d47ecbecf19ec588900901ec',
+      converterRamp: '0x9ce962dfaa5cefcbe298c5a469487cead3a0640d',
       ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       uniswapConverter: '0x32657d6f2dcb32a5129d14db4a2e2e6fb198ce07'
     },

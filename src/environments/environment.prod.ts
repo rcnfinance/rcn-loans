@@ -69,7 +69,7 @@ export const environment = {
       wethManager: '0x1853cc6c9a20d31d6cbfbce4936071c049249fd3' // FIXME: Ropsten address
     },
     converter: {
-      converterRamp: '0xe41ada0fb01F147c6385F93DEC78914F32e45061',
+      converterRamp: '0xe41ada0fb01F147c6385F93DEC78914F32e45061', // FIXME: use last version
       ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       uniswapConverter: '0x32657d6f2dcb32a5129d14db4a2e2e6fb198ce07' // FIXME: ropsten address
     },
