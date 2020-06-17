@@ -54,6 +54,19 @@ export class CurrenciesService {
   }
 
   /**
+   * Return filter currencies array
+   * @return Currencies
+   */
+  getFilterCurrencies(): Array<string> {
+    const CRYPTO_CURRENCIES: string[] =
+      this.currencies.map(({ symbol }) => symbol);
+    const FIAT_CURRENCIES: string[] =
+      ['ARS', 'USD'];
+
+    return CRYPTO_CURRENCIES.concat(FIAT_CURRENCIES);
+  }
+
+  /**
    * Return currencies array
    * @return Currencies
    */

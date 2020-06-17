@@ -99,8 +99,7 @@ export class FilterLoansComponent implements OnInit {
    * Get environment filter currencies
    */
   getCurrencies() {
-    this.currencies =
-      this.currencesService.getCurrencies().map(({ symbol }) => symbol);
+    this.currencies = this.currencesService.getFilterCurrencies();
   }
 
   setControlsDisable() {
