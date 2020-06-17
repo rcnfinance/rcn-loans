@@ -7,7 +7,8 @@ import { getBuild } from './build';
 export enum Agent {
   MortgageCreator,
   MortgageManager,
-  RipioCreator,
+  RipioArsCreator,
+  RipioUsdCreator,
   WenanceCreator
 }
 
@@ -18,6 +19,7 @@ const p = require('../../package.json') as any;
 const RCN_TOKEN = '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6';
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 const RCN_API_DIASPORE = 'https://diaspore-rnode.rcn.loans';
+const RIPIO_COSIGNER = '0xfA7c953a07BCb4420253bFfBf586bDD64c37B670';
 
 export const environment = {
   version: p.version,
@@ -83,12 +85,13 @@ export const environment = {
     ongoing: '0x3b80f3028af6ab654b6b0188e651667ade313e1b'
   },
   dir: {
-    '0xfbd5e54062619ef2b0323ad9ff874b39fd5a8d2c': Agent.RipioCreator,
-    '0x520aefcaea7754e86c2a1c9367948d732607c47f': Agent.RipioCreator,
+    '0xfbd5e54062619ef2b0323ad9ff874b39fd5a8d2c': Agent.RipioArsCreator,
+    '0x520aefcaea7754e86c2a1c9367948d732607c47f': Agent.RipioUsdCreator,
     '0xfeac8e490fe7f0760a10225e7dccda1e22ad8daa': Agent.WenanceCreator // FIXME - Ropsten address
   },
   cosigners: {
-    [Agent.RipioCreator]: '0xfA7c953a07BCb4420253bFfBf586bDD64c37B670'
+    [Agent.RipioArsCreator]: RIPIO_COSIGNER,
+    [Agent.RipioUsdCreator]: RIPIO_COSIGNER
   },
   filterCurrencies: [
     'RCN',
