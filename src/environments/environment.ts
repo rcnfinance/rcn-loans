@@ -19,7 +19,7 @@ const p = require('../../package.json') as any;
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 const RCN_API_DIASPORE = 'https://diaspore-ropsten-rnode.rcn.loans';
-const RIPIO_COSIGNER = '0x684977757434fee591220810cd31b6bbf99f4bdc';
+const RIPIO_COSIGNER = '0x5afc9fd47a5e064a7d1407c942878c4c0e3784a6';
 
 export const environment = {
   version: p.version,
