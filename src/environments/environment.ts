@@ -103,7 +103,7 @@ export const environment = {
     ongoing: '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3'
   },
   dir: {
-    '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioArsCreator,
+    '0xF7c5e867E739F5508C63c8AB22f39c44B9CaC0b5': Agent.RipioArsCreator,
     '0xc521961b2536e2c0ab595aae25a572bfbaf7d955': Agent.WenanceCreator
   },
   filterCurrencies: [
