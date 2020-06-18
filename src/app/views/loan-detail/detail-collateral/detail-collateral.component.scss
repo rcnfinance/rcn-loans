@@ -1,0 +1,150 @@
+@import '../../../../scss/variables';
+@import '../../../../scss/fonts';
+
+@mixin small-title {
+  @extend %font-light;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+
+.collateral-detail {
+  width: 100%;
+  text-align: left;
+  &__head {
+    h3 {
+      @extend %font-medium;
+      @extend .font24;
+      text-transform: uppercase;
+      margin: 0 0 40px;
+    }
+  }
+  &__body {
+    .item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      &__icon {
+        min-width: 45px;
+        min-height: 45px;
+        max-width: 45px;
+        max-height: 45px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 18px;
+        background: var(--app-color-primary-dark);
+        color: var(--app-color-gray-700);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+      }
+      &__label {
+        @include typography-headline(7);
+        text-transform: uppercase;
+        color: #EDEDED; // TODO: use theme color
+      }
+      &__value {
+        @include typography-subtitle(2);
+        color: white;
+      }
+    }
+  }
+  &__footer {
+    background: var(--app-color-gray-400);
+    border-radius: 4px;
+    margin-top: 6px;
+
+    .row {
+      margin: 0;
+      &--header {
+        padding-top: 6px;
+        padding-bottom: 20px;
+        h4 {
+          @include small-title;
+          @extend .font14;
+          color: #EDEDED; // TODO: use theme color
+        }
+        p {
+          @include small-title;
+          @extend .font14;
+          text-transform: none;
+          color: var(--app-color-gray-50);
+        }
+        .button {
+          margin-top: 18px;
+        }
+      }
+      &--footer {
+        .item {
+          @extend %roboto-light;
+          @extend .font12;
+          padding-top: 16px;
+          padding-bottom: 16px;
+          color: var(--app-color-gray-50);
+          svg {
+            margin-right: 6px;
+          }
+          .item__value {
+            @extend .font14;
+            display: block;
+          }
+        }
+      }
+      &--divisor {
+        &::before {
+          content: '';
+          width: 100%;
+          height: 1px;
+          margin: 0 16px 6px;
+          background: var(--app-color-gray-200);
+        }
+        .item {
+          color: #D8D8D8; // TODO: use theme color
+        }
+      }
+    }
+  }
+}
+
+.empty-container{
+  height: 100%;
+  .empty-row{
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    i {
+      font-size: 90px;
+      color: var(--app-color-gray-100);
+    }
+  }
+}
+
+a {
+  color: white;
+  @extend %roboto-medium;
+}
+
+@media (min-width: 992px) {
+  .collateral-detail {
+    padding-bottom: 40%;
+
+    &__footer {
+      margin-top: 15px;
+    }
+  }
+
+  .empty-container {
+    .empty-row {
+      padding: 0 56px;
+    }
+  }
+}

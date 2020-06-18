@@ -14,7 +14,7 @@
   .creator-container {
     .creator-title{
       color: var(--app-color-gray-100);
-      font-size: 36px;
+      font-size: 1.75em;
       @extend %font-extra-bold;
     }
     .creator-image {
@@ -139,6 +139,11 @@
     &.flex-container{
       height: 100px;
       > .flex-item { min-width: 70px; }
+      .creator-container {
+        .creator-title {
+          font-size: 36px;
+        }
+      }
     }
   }
 

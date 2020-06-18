@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 // App Models
 import { Loan, Status, Network, LoanType } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
+import { Collateral, Status as CollateralStatus } from '../../models/collateral.model';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Services
@@ -16,6 +17,9 @@ import { ContractsService } from './../../services/contracts.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
+import { ApiService } from './../../services/api.service';
+import { CurrenciesService } from './../../services/currencies.service';
+import { Type } from './../../services/tx.service';
 import { EventsService } from './../../services/events.service';
 import { LoanTypeService } from './../../services/loan-type.service';
 
@@ -49,9 +53,10 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   canCancel: boolean;
   canPay: boolean;
   canLend: boolean;
+  canRedeem: boolean;
+  canAdjustCollateral: boolean;
 
   hasHistory: boolean;
-  generatedByUser: boolean;
 
   totalDebt: string;
   pendingAmount: string;
@@ -60,6 +65,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
   interest: string;
   duration: string;
+  collateral: Collateral;
+  collateralAmount: string;
+  collateralAsset: string;
   nextInstallment: {
     installment: string,
     amount: string,
@@ -89,6 +97,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private identityService: IdentityService,
     private web3Service: Web3Service,
     private brandingService: BrandingService,
+    private apiService: ApiService,
+    private currenciesService: CurrenciesService,
     private eventsService: EventsService,
     private loanTypeService: LoanTypeService,
     public dialog: MatDialog
@@ -112,6 +122,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.loadStatus();
         this.loadDetail();
         this.loadAccount();
+        this.loadCollateral();
 
         // state
         this.viewDetail = this.defaultDetail();
@@ -160,7 +171,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   /**
    * Refresh loan when payment or lending status is updated
    */
-  onUserAction(action: 'lend' | 'pay' | 'transfer') {
+  onUserAction(action: 'lend' | 'pay' | 'transfer' | 'redeem' | 'collateral') {
     const miliseconds = 12000;
     this.spinner.show(this.pageId);
 
@@ -173,6 +184,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         await this.getLoan(loan.id);
         this.loadStatus();
         this.loadDetail();
+        this.loadCollateral();
         this.loadAccount();
       } catch (err) {
         this.eventsService.trackError(err);
@@ -180,6 +192,36 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.spinner.hide(this.pageId);
       }
     }, miliseconds);
+  }
+
+  /**
+   * Update collateral amount and reload collateral information
+   * @param event EventEmitter payload
+   * @param event.type Collateral action type
+   * @param event.amount Amount to add or withdraw in wei
+   */
+  updateCollateral(event: {
+    type: string,
+    amount: number
+  }) {
+    const web3: any = this.web3Service.web3;
+    let amount = web3.utils.fromWei(event.amount);
+
+    switch (event.type) {
+      case Type.addCollateral:
+        amount = Utils.bn(this.collateralAmount).add(amount);
+        break;
+
+      case Type.withdrawCollateral:
+        amount = Utils.bn(this.collateralAmount).sub(amount);
+        break;
+
+      default:
+        break;
+    }
+
+    this.collateralAmount = Utils.formatAmount(amount);
+    setTimeout(() => this.loadCollateral(), 1500);
   }
 
   /**
@@ -235,9 +277,36 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     this.identityName = identity ? identity.short : 'Unknown';
   }
 
+  /**
+   * Load collateral data
+   */
+  private async loadCollateral() {
+    const loanId: string = this.loan.id;
+    const collaterals = await this.apiService.getCollateralByLoan(loanId);
+    const web3: any = this.web3Service.web3;
+
+    if (!collaterals.length) {
+      return;
+    }
+    // FIXME: check collateral API implementation (ratios)
+
+    const collateral = collaterals[0];
+    this.collateral = collateral;
+
+    const liquidationRatio = Utils.bn(collateral.liquidationRatio).div(Utils.bn(100));
+    const balanceRatio = Utils.bn(collateral.balanceRatio).div(Utils.bn(100));
+
+    this.liquidationRatio = `${ Utils.formatAmount(liquidationRatio) } %`;
+    this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
+
+    const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
+    this.collateralAmount = web3.utils.fromWei(collateral.amount);
+    this.collateralAsset = collateralCurrency.symbol;
+  }
+
   private defaultDetail(): string {
-    if (this.generatedByUser) {
-      return 'identity';
+    if (this.loanTypeService.getLoanType(this.loan) === LoanType.UnknownWithCollateral) {
+      return 'collateral';
     }
 
     return 'identity';
@@ -343,10 +412,12 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       }
       case Status.Paid: {
         this.invalidActions();
+        this.checkCanRedeem();
         break;
       }
       case Status.Expired: {
         this.invalidActions();
+        this.checkCanRedeem();
         break;
       }
       case Status.Destroyed: {
@@ -369,7 +440,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   private loadInstallments() {
     const installments: number = this.loan.descriptor.installments;
     const installmentDuration: string = Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments);
-    const installmentAmount: number = this.loan.currency.fromUnit(this.loan.descriptor.firstObligation);
+    const installmentAmount: string = Utils.formatAmount(this.loan.currency.fromUnit(this.loan.descriptor.firstObligation));
     const installmentCurrency: string = this.loan.currency.symbol;
     const nextInstallment: number = this.isRequest ? 1 : 1; // TODO - Next installment
     const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
@@ -396,27 +467,55 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     this.canPay = false;
     this.canTransfer = false;
     this.canCancel = false;
+    this.canAdjustCollateral = false;
+    this.canRedeem = false;
   }
 
   private loanOnGoingorIndebt() {
     if (this.loan.debt !== undefined && this.userAccount) {
+      const isBorrower = this.isBorrower();
       const isDebtOwner = this.userAccount.toUpperCase() === this.loan.debt.owner.toUpperCase();
       this.canTransfer = isDebtOwner;
       this.canCancel = false;
       this.canPay = !isDebtOwner;
       this.canLend = false;
+      this.canAdjustCollateral = isBorrower;
+      this.canRedeem = false;
     }
   }
 
-  private loanStatusRequest() {
+  private async loanStatusRequest() {
     if (this.userAccount) {
       const isBorrower = this.isBorrower();
       this.canLend = !isBorrower;
       this.canPay = false;
       this.canTransfer = false;
       this.canCancel = isBorrower;
+      this.canAdjustCollateral = isBorrower;
+      this.canRedeem = false;
     } else {
       this.canLend = true;
+      this.canRedeem = false;
+    }
+  }
+
+  /**
+   * Check if collateral can withdraw all
+   */
+  private async checkCanRedeem() {
+    const account: string = await this.web3Service.getAccount();
+    if (!account) {
+      return;
+    }
+
+    if ([Status.Paid, Status.Expired].includes(this.loan.status)) {
+      const isBorrower = this.loan.borrower.toUpperCase() === account.toUpperCase();
+      const { collateral } = this.loan;
+      this.canRedeem =
+        isBorrower &&
+        collateral &&
+        collateral.status === CollateralStatus.ToWithdraw &&
+        Number(collateral.amount) > 0;
     }
   }
 

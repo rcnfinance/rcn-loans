@@ -23,7 +23,11 @@ export class CurrenciesService {
   bestInterestRates = {
     'RCN': { min: 0, max: 20, best: 10 },
     'DAI': { min: 10, max: 20, best: 15 },
-    'ETH': { min: 0, max: 5, best: 1 }
+    'USDC': { min: 10, max: 20, best: 15 },
+    'MANA': { min: 10, max: 20, best: 15 },
+    'ETH': { min: 0, max: 5, best: 1 },
+    'TEST': { min: 0, max: 20, best: 10 },
+    'DEST': { min: 10, max: 20, best: 15 }
   };
 
   constructor() {
@@ -83,9 +87,12 @@ export class CurrenciesService {
    * Return all currencies with a exception
    * @return Currencies
    */
-  getCurrenciesExcept(key: 'symbol' | 'address', value: string): Array<CurrencyItem> {
+  getCurrenciesExcept(key: 'symbol' | 'address', value: string | string[]): Array<CurrencyItem> {
+    let repulsedValues = typeof value === 'string' ? [value] : value;
+    repulsedValues = repulsedValues.map((item) => item.toLowerCase());
+
     const filteredCurrency: Array<CurrencyItem> = this.currencies.filter(
-      currency => currency[key].toLowerCase() !== value.toLowerCase()
+      currency => !repulsedValues.includes(currency[key].toLowerCase())
     );
     return filteredCurrency;
   }

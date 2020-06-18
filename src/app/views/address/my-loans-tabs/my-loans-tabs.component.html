@@ -1,0 +1,18 @@
+<a
+  class="button"
+  mat-button
+  [color]="activeTab == 'borrowed' ? 'primary' : ''"
+  routerLink="../borrowed"
+>
+  <i class="fas fa-reply mr-2"></i>
+  <span class="button-style">BORROWED</span>
+</a>
+<a
+  class="button"
+  mat-button
+  [color]="activeTab == 'lent' ? 'primary' : ''"
+  routerLink="../lent"
+>
+  <i class="fas fa-share mr-2"></i>
+  <span class="button-style">LENDED</span>
+</a>
