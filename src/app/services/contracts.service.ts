@@ -836,7 +836,6 @@ export class ContractsService {
    * @param lender Lender address
    * @return Loans array
    */
-  // TODO: remove method from this service
   async getLoansOfLender(lender: string): Promise<Loan[]> {
     const basalt: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', Network.Basalt);
     const diaspore: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', Network.Diaspore);
