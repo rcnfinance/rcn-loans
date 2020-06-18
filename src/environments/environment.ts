@@ -137,7 +137,7 @@ export const environment = {
     },
     {
       symbol: 'USDC',
-      img: '',
+      img: 'assets/usdc.png',
       address: '0x00558fab062c212dac6bdd48a3b6542563d969aa'
     },
     {
