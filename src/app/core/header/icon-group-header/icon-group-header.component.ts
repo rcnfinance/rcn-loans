@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NotificationsService } from '../../../services/notifications.service';
+import { HeaderPopoverService } from '../../../services/header-popover.service';
 
 @Component({
   selector: 'app-icon-group-header',
@@ -15,25 +15,26 @@ export class IconGroupHeaderComponent implements OnInit {
   notificationsCounter: number;
 
   constructor(
-    public notificationsService: NotificationsService
+    public headerPopoverService: HeaderPopoverService
   ) {}
 
   isDetail(view: string): Boolean { // Check viewDetail state to open/close notifications Component
     return view === this.viewDetail;
   }
-  openDetail(selection: string) { // Change viewDetail state to open/close notifications Component
+  openDetail(selection: 'clickOutside' | 'notifications' | 'balance') { // Change viewDetail state to open/close notifications Component
     this.previousSelection = this.selection;
     this.selection = selection;
     switch (selection) {
       case 'notifications':
+      case 'balance':
         if (selection !== this.previousSelection || this.viewDetail === undefined) {
-          this.notificationsService.changeDetail(selection); // Change value of viewDetail from Notifications Service
+          this.headerPopoverService.changeDetail(selection); // Change value of viewDetail from Notifications Service
         } else {
-          this.notificationsService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event
+          this.headerPopoverService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event
         }
         break;
       default:
-        this.notificationsService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event
+        this.headerPopoverService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event
         break;
     }
   }
@@ -44,7 +45,7 @@ export class IconGroupHeaderComponent implements OnInit {
 
   ngOnInit() {
     // Subscribe to detail from Notifications Service
-    this.notificationsService.currentDetail.subscribe(detail => this.viewDetail = detail);
+    this.headerPopoverService.currentDetail.subscribe(detail => this.viewDetail = detail);
   }
 
 }

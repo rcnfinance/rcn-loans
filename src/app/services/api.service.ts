@@ -109,16 +109,20 @@ export class ApiService {
     network: Network
   ): Promise<Loan[]> {
     const web3 = this.web3Service.web3;
-    const apiUrl: string = this.getApiUrl(network);
+    const apiUrl: string = this.getApiUrl(network, 'v5');
+    const basaltUri = (apiPage: number, apiLender: string) =>
+      apiUrl.concat(`loans?open=false&page=${ apiPage }&lender=${ apiLender }`);
+    const diasporeUri = (apiPage: number, apiLender: string) =>
+      apiUrl.concat(`loans?open=false&page=${ apiPage }&owner=${ apiLender }`);
+
     let allLoansOfLender: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
 
     try {
       lender = web3.utils.toChecksumAddress(lender);
-      const data: any = await this.http.get(
-        apiUrl.concat(`loans?open=false&page=${ page }&lender=${ lender }`)
-      ).toPromise();
+      const url = network === Network.Basalt ? basaltUri(page, lender) : diasporeUri(page, lender);
+      const data: any = await this.http.get(url).toPromise();
 
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
@@ -133,8 +137,8 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const url = apiUrl.concat(`loans?open=false&page=${ page }&lender=${ lender }`);
-      urls.push(url);
+      const eachUrl = network === Network.Basalt ? basaltUri(page, lender) : diasporeUri(page, lender);
+      urls.push(eachUrl);
     }
     const responses = await this.getAllUrls(urls);
     const allApiLoans = await this.getAllApiLoans(responses, network);
