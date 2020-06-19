@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationsService {
+export class HeaderPopoverService {
   private detailSource$ = new BehaviorSubject(undefined);
   currentDetail: Observable<string> = this.detailSource$.asObservable();
 
