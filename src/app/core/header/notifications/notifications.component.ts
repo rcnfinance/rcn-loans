@@ -8,7 +8,7 @@ import {
 } from '@angular/animations';
 import { environment } from '../../../../environments/environment';
 import { Notification, TxObject } from '../../../models/notification.model';
-import { NotificationsService } from '../../../services/notifications.service';
+import { HeaderPopoverService } from '../../../services/header-popover.service';
 import { TxService, Tx } from '../../../services/tx.service';
 import { Utils } from '../../../utils/utils';
 
@@ -52,7 +52,7 @@ export class NotificationsComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     private txService: TxService,
-    public notificationsService: NotificationsService
+    public headerPopoverService: HeaderPopoverService
   ) { }
 
   /**
@@ -294,7 +294,7 @@ export class NotificationsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.notificationsService.currentDetail.subscribe(detail => {
+    this.headerPopoverService.currentDetail.subscribe(detail => {
       this.viewDetail = detail;
       this.cdRef.detectChanges();
     }); // Subscribe to detail from Notifications Service

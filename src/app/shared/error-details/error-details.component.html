@@ -17,15 +17,16 @@
         class="error-view__buttons mt-2 mt-md-5 pt-3"
         *ngIf="buttons?.length"
       >
-        <button
+        <a
           mat-raised-button
           class="button"
           [ngClass]="button.class"
-          [routerLink]="button.url"
+          [href]="button.url"
+          [target]="button.target || '_self'"
           *ngFor="let button of buttons"
         >
           {{ button.text }}
-        </button>
+        </a>
       </div>
       <p
         class="error-view__disclaimer mt-4 pt-3"

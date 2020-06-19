@@ -1,32 +1,34 @@
 @import '../../../scss/fonts';
 
-.balance {
+.balance-withdraw {
   @include styled-font('Roboto', 700, 16px);
-  display: flex;
-  align-items: center;
+  position: relative;
+  background: #8B8B8B36;
+  padding: 6px 10px 5px;
+  border: 1px solid var(--app-color-gray-50);
+  border-radius: 8px;
+  cursor: pointer;
 
+  &__icon,
   &__amount {
-    margin-right: 16px;
+    color: var(--app-color-gray-50);
   }
-  &__withdraw {
-    display: flex;
-    align-items: center;
-    background: #8B8B8B36;
-    padding: 7px 15px 5px 10px;
-    border: 1px solid var(--app-color-primary);
-    border-radius: 8px;
-    cursor: pointer;
+  &__icon {
+    font-size: .95em;
+    margin-right: 6px;
+  }
+  &__amount {
+    margin-right: 5px;
+  }
+  &__label {
+    font-size: .7em;
+  }
 
-    &-icon,
-    &-amount {
+  &--active {
+    border: 1px solid var(--app-color-primary);
+    .balance-withdraw__icon,
+    .balance-withdraw__amount {
       color: var(--app-color-primary);
-    }
-    &-icon {
-      font-size: .95em;
-      margin-right: 6px;
-    }
-    &-amount {
-      margin-right: 5px;
     }
   }
 }

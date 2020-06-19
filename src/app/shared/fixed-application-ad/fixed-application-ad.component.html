@@ -1,0 +1,14 @@
+<div
+  class="fixed-application-ad"
+  [class.fixed-application-ad--hidden]="hidden"
+  (click)="hidden = true"
+>
+  <div class="container">
+    <p class="fixed-application-ad__text">
+      {{ message }}
+    </p>
+    <div class="fixed-application-ad__close d-flex align-items-center">
+      <i class="fas fa-times"></i>
+    </div>
+  </div>
+</div>

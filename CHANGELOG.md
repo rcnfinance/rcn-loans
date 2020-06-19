@@ -7,6 +7,40 @@
 - Installments and payments details
 - Borrow loans with Collateral
 
+## **0.1.6** Boggart 👻
+
+### Feature:
+- Add popover with wallet balances
+
+### Enhancement:
+- Update witdrawable available component UI
+- Update lending checkout icons
+
+### Fix:
+- Fix black screen when opening menu in iOS
+
+## **0.1.5** Boggart 👻
+- Fix api model_debt_info response handling
+- Add creator address for Ripio USD loans
+- Hide "next payment in" label for paid loans
+- Update oracle factory address in Ropsten
+
+## **0.1.4** Boggart 👻
+- Hide available loans badge on mobile
+- Fix the metamask logo in the Get Metamask dialog.
+- Add withdraw component to the mobile version
+- Add pagination to the Activity view
+- Implement API Diaspore v5
+- Show only loans with identity, cosigner or collateral
+- Visual improvements
+
+## **0.1.3** Boggart 👻
+
+### Enhancement:
+- Add copy for release
+- Update metatags
+- Exclude diaspore loans with inconsistent information from requests and activity
+
 ## **0.1.2** Boggart 👻
 
 ### Feature:

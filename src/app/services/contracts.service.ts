@@ -325,8 +325,10 @@ export class ContractsService {
       rcnToken,
       rcnAmount.toString()
     );
+    const additionalSpend =
+      Utils.bn(requiredInToken).mul(Utils.bn(1003)).div(Utils.bn(1000));
 
-    return Utils.bn(requiredInToken);
+    return additionalSpend;
   }
 
   /**
@@ -772,7 +774,7 @@ export class ContractsService {
     const diaspore: Loan[] = await this.apiService.getActiveLoans(Network.Diaspore);
     const basalt: Loan[] = await this.apiService.getActiveLoans(Network.Basalt);
 
-    return diaspore.concat(LoanCurator.curateLoans(basalt));
+    return LoanCurator.curateLoans(diaspore).concat(LoanCurator.curateLoans(basalt));
   }
 
   /**
@@ -787,7 +789,7 @@ export class ContractsService {
     const diaspore: Loan[] = await this.apiService.getRequests(now, Network.Diaspore);
     const basalt: Loan[] = await this.apiService.getRequests(now, Network.Basalt);
 
-    return diaspore.concat(LoanCurator.curateLoans(basalt));
+    return LoanCurator.curateLoans(diaspore).concat(LoanCurator.curateLoans(basalt));
   }
 
   /**
@@ -799,8 +801,8 @@ export class ContractsService {
   async getLoansOfLender(lender: string): Promise<Loan[]> {
     const basalt: Loan[] = await this.apiService.getLoansOfLender(lender, Network.Basalt);
     const diaspore: Loan[] = await this.apiService.getLoansOfLender(lender, Network.Diaspore);
-
-    return diaspore.concat(LoanCurator.curateLoans(basalt));
+    const loans: Loan[] = diaspore.concat(LoanCurator.curateLoans(basalt));
+    return loans;
   }
 
   readPendingWithdraws(loans: Loan[]): [number, number[], number, number[]] {
