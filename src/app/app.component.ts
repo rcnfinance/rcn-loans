@@ -8,6 +8,7 @@ import { EventsService } from './services/events.service';
 import { WalletConnectService } from './services/wallet-connect.service';
 // App component
 import { DialogWalletSelectComponent } from './dialogs/dialog-wallet-select/dialog-wallet-select.component';
+import { DialogApiSyncComponent } from './dialogs/dialog-api-sync/dialog-api-sync.component';
 
 @Component({
   selector: 'app-root',
@@ -66,7 +67,8 @@ export class AppComponent implements OnInit {
 
   private async checkApiHealth() {
     const synchronized: boolean = await this.apiService.isSynchronized();
-    console.info('Api synchronized', synchronized);
-    // TODO: show dialog when isn't synchronized
+    if (!synchronized) {
+      this.dialog.open(DialogApiSyncComponent);
+    }
   }
 }
