@@ -19,7 +19,7 @@ const p = require('../../package.json') as any;
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 const RCN_API_DIASPORE = 'https://diaspore-ropsten-rnode.rcn.loans';
-const RIPIO_COSIGNER = '0x684977757434fee591220810cd31b6bbf99f4bdc';
+const RIPIO_COSIGNER = '0x5afc9fd47a5e064a7d1407c942878c4c0e3784a6';
 
 export const environment = {
   version: p.version,
@@ -103,7 +103,7 @@ export const environment = {
     ongoing: '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3'
   },
   dir: {
-    '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioArsCreator,
+    '0xf7c5e867e739f5508c63c8ab22f39c44b9cac0b5': Agent.RipioArsCreator,
     '0xc521961b2536e2c0ab595aae25a572bfbaf7d955': Agent.WenanceCreator
   },
   filterCurrencies: [
@@ -128,7 +128,22 @@ export const environment = {
     {
       symbol: 'ETH',
       img: 'assets/eth.png',
-      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    },
+    {
+      symbol: 'DAI',
+      img: 'assets/dai.png',
+      address: '0x57ac66399420f7c99f546a5a7c00e0d0ff2679e1'
+    },
+    {
+      symbol: 'USDC',
+      img: 'assets/usdc.png',
+      address: '0x00558fab062c212dac6bdd48a3b6542563d969aa'
+    },
+    {
+      symbol: 'MANA',
+      img: 'assets/mana.png',
+      address: '0x1e6fd758338f59cf52c8427088077f16b60a8bd4'
     }
   ]
 };
