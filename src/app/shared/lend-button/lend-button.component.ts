@@ -46,6 +46,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   @Input() disabled: boolean;
   @Output() startLend = new EventEmitter();
   @Output() endLend = new EventEmitter();
+  @Output() closeDialog = new EventEmitter();
   pendingTx: Tx = undefined;
   lendEnabled: Boolean;
   opPending = false;
@@ -178,6 +179,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     // front running validation
     const { status } = await this.contractsService.getLoan(this.loan.id);
     if (status !== Status.Ongoing) {
+      this.closeDialog.emit();
       return this.dialog.open(DialogFrontRunningComponent);
     }
 
