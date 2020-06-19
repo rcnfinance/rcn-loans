@@ -2,8 +2,11 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import * as BN from 'bn.js';
 import { Utils } from '../../utils/utils';
+import { Loan } from './../../models/loan.model';
+import { Status } from './../../models/collateral.model';
 // App Components
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
+import { DialogNeedWithdrawComponent } from '../../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
 // App Service
 import { environment } from '../../../environments/environment';
 import { SidebarService } from '../../services/sidebar.service';
@@ -62,6 +65,7 @@ export class ContentWrapperComponent implements OnInit {
   showAd: string;
 
   pendingWithdraw: Tx;
+  needWithdraw: boolean;
 
   constructor(
     private sidebarService: SidebarService, // Navbar Service
@@ -73,19 +77,21 @@ export class ContentWrapperComponent implements OnInit {
     private countriesService: CountriesService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     // Navbar toggled
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.sidebarService.currentNavmobile.subscribe(navmobileToggled => this.navmobileToggled = navmobileToggled);
     this.applicationAdsService.currentAd.subscribe(showAd => this.showAd = showAd);
     this.web3Service.loginEvent.subscribe(
-      (isLogged) => {
+      async (isLogged: boolean) => {
         if (isLogged) {
-          this.loadAccount();
+          await this.loadAccount();
+          this.checkPendingWithdraw();
         }
       }
     );
-    this.loadAccount();
+    await this.loadAccount();
+    this.checkPendingWithdraw();
     this.canLend();
   }
 
@@ -170,5 +176,31 @@ export class ContentWrapperComponent implements OnInit {
     this.basaltLoansWithBalance = pendingWithdraws[1];
     this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadPendingWithdraw();
+  }
+
+  /**
+   * Check if the user has pending collateral withdraws
+   */
+  private async checkPendingWithdraw() {
+    const account: string = this.account;
+    if (!account) {
+      return;
+    }
+    if (this.needWithdraw) {
+      return;
+    }
+
+    const loansToWithdraw: Loan[] =
+      (await this.contractService.getLoansOfBorrower(account))
+      .filter(({ collateral }) => collateral && collateral.status === Status.ToWithdraw);
+
+    if (loansToWithdraw.length) {
+      this.needWithdraw = true;
+      this.dialog.open(DialogNeedWithdrawComponent, {
+        data: {
+          loans: loansToWithdraw
+        }
+      });
+    }
   }
 }
