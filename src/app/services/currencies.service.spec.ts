@@ -19,12 +19,17 @@ describe('CurrenciesService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should return an list of currencies', () => {
+  it('should return a list of currency symbols, including fiat', () => {
+    const result = service.getFilterCurrencies();
+    expect(result.length).toBeGreaterThan(service.currencies.length);
+  });
+
+  it('should return a list of currencies', () => {
     const result = service.getCurrencies();
     expect(result.length).toEqual(service.currencies.length);
   });
 
-  it('should return an specific currency', () => {
+  it('should return a specific currency', () => {
     const key = 'symbol';
     const rcnSymbol = 'RCN';
     const result = service.getCurrencyByKey(key, rcnSymbol);
