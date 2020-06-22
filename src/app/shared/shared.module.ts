@@ -41,6 +41,7 @@ import { DialogWalletSelectComponent } from '../dialogs/dialog-wallet-select/dia
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
 import { DialogApiSyncComponent } from '../dialogs/dialog-api-sync/dialog-api-sync.component';
+import { DialogFrontRunningComponent } from '../dialogs/dialog-front-running/dialog-front-running.component';
 import { ErrorDetailsComponent } from './error-details/error-details.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 // Pipes
@@ -102,6 +103,7 @@ import { EventsService } from './../services/events.service';
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
     DialogApiSyncComponent,
+    DialogFrontRunningComponent,
 
     VisualUrlPipe,
     FormatAmountPipe,
@@ -115,7 +117,8 @@ import { EventsService } from './../services/events.service';
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
-    DialogApiSyncComponent
+    DialogApiSyncComponent,
+    DialogFrontRunningComponent
   ],
   providers: [
     DecentralandCosignerProvider,
