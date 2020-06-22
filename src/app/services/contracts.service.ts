@@ -801,8 +801,8 @@ export class ContractsService {
   async getLoansOfLender(lender: string): Promise<Loan[]> {
     const basalt: Loan[] = await this.apiService.getLoansOfLender(lender, Network.Basalt);
     const diaspore: Loan[] = await this.apiService.getLoansOfLender(lender, Network.Diaspore);
-
-    return diaspore.concat(LoanCurator.curateLoans(basalt));
+    const loans: Loan[] = diaspore.concat(LoanCurator.curateLoans(basalt));
+    return loans;
   }
 
   readPendingWithdraws(loans: Loan[]): [number, number[], number, number[]] {
