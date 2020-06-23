@@ -309,7 +309,24 @@ export class ApiService {
   }
 
   /**
-   * Get collateral.
+   * Check if the api is synchronized
+   * @return Promise boolean
+   */
+  async isSynchronized(): Promise<boolean> {
+    const apiUrl: string = this.getApiUrl(Network.Diaspore, 'v5');
+    const { meta }: any = await this.http.get(apiUrl.concat(`loans?page_size=1`)).toPromise();
+    const apiBlock = meta.lastBlockPulled;
+    const web3: any = this.web3Service.web3;
+    const currentBlock = (await web3.eth.getBlock('latest')).number;
+
+    const ALLOWABLE_BLOCK_DIFFERENCE = 6;
+    const blockDiff = currentBlock - apiBlock;
+
+    const isSynchronized: boolean = blockDiff <= ALLOWABLE_BLOCK_DIFFERENCE;
+    return isSynchronized;
+  }
+    
+  * Get collateral.
    * @param loanId Loan ID
    * @return Collateral
    */

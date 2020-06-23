@@ -46,8 +46,13 @@ import { DialogClientAccountComponent } from '../dialogs/dialog-client-account/d
 import { DialogWalletSelectComponent } from '../dialogs/dialog-wallet-select/dialog-wallet-select.component';
 import { DialogWrongCountryComponent } from '../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../dialogs/dialog-loan-lend/dialog-loan-lend.component';
+import { DialogApiSyncComponent } from '../dialogs/dialog-api-sync/dialog-api-sync.component';
+import { DialogFrontRunningComponent } from '../dialogs/dialog-front-running/dialog-front-running.component';
 import { DialogCollateralComponent } from '../dialogs/dialog-collateral/dialog-collateral.component';
 import { DialogNeedWithdrawComponent } from '../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
+import { ErrorDetailsComponent } from './error-details/error-details.component';
+import { PageHeaderComponent } from './page-header/page-header.component';
+
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 import { FormatAmountPipe } from './../pipes/format-amount.pipe';
@@ -111,6 +116,8 @@ import { EventsService } from './../services/events.service';
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
+    DialogApiSyncComponent,
+    DialogFrontRunningComponent,
     DialogCollateralComponent,
     DialogNeedWithdrawComponent,
 
@@ -126,6 +133,8 @@ import { EventsService } from './../services/events.service';
     DialogGenericErrorComponent,
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
+    DialogApiSyncComponent,
+    DialogFrontRunningComponent
     DialogCollateralComponent,
     DialogNeedWithdrawComponent
   ],
