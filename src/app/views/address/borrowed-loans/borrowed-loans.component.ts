@@ -1,22 +1,22 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 // App Models
-import { Loan } from './../../models/loan.model';
+import { Loan } from './../../../models/loan.model';
 // App Services
-import { TitleService } from '../../services/title.service';
-import { ContractsService } from './../../services/contracts.service';
-import { AvailableLoansService } from '../../services/available-loans.service';
-import { Web3Service } from '../../services/web3.service';
-import { EventsService } from '../../services/events.service';
+import { TitleService } from '../../../services/title.service';
+import { ContractsService } from './../../../services/contracts.service';
+import { AvailableLoansService } from '../../../services/available-loans.service';
+import { Web3Service } from '../../../services/web3.service';
+import { EventsService } from '../../../services/events.service';
 
 @Component({
-  selector: 'app-address',
-  templateUrl: './address.component.html',
-  styleUrls: ['./address.component.scss']
+  selector: 'app-borrowed-loans',
+  templateUrl: './borrowed-loans.component.html',
+  styleUrls: ['./borrowed-loans.component.scss']
 })
-export class AddressComponent implements OnInit, OnDestroy {
+export class BorrowedLoansComponent implements OnInit, OnDestroy {
   pageId = 'address';
   address: string;
   shortAddress: string;
@@ -32,6 +32,7 @@ export class AddressComponent implements OnInit, OnDestroy {
   subscriptionAccount: Subscription;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private titleService: TitleService,
@@ -48,8 +49,12 @@ export class AddressComponent implements OnInit, OnDestroy {
 
     this.route.params.subscribe(async params => {
       const web3 = this.web3Service.web3;
-      this.address = web3.utils.toChecksumAddress(params.address);
+      const address: string = web3.utils.toChecksumAddress(params.address);
+      if (!web3.utils.isAddress(address)) {
+        return this.router.navigate(['/']);
+      }
 
+      this.address = address;
       this.loadLoans(this.address);
 
       await this.checkMyLoans();
@@ -87,7 +92,7 @@ export class AddressComponent implements OnInit, OnDestroy {
    */
   private async loadLoans(address: string) {
     try {
-      const loans: Loan[] = await this.contractsService.getLoansOfLender(address);
+      const loans: Loan[] = await this.contractsService.getLoansOfBorrower(address);
       this.loans = loans;
 
       this.upgradeAvaiblable();

@@ -66,11 +66,22 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
       'Basalt engine',
       environment.contracts.basaltEngine,
       'transactions for Legacy Basalt loans'
+    ),
+    new Operator(
+      'Collateral',
+      environment.contracts.collateral.collateral,
+      'transactions'
     )
   ];
   tokenApproves: Object[];
   assets: Contract[];
-  assetOperators: Operator[] = [];
+  assetOperators: Operator[] = [
+    new Operator(
+      'Collateral WETH Manager',
+      environment.contracts.collateral.wethManager,
+      'transactions'
+    )
+  ];
   assetApproves: Object[];
 
   startProgress: boolean;
@@ -322,6 +333,9 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
    */
   private async loadAssets(): Promise<Contract[]> {
     const assets: Contract[] = [];
+    assets.push(
+      new Contract('Collateral', environment.contracts.collateral.collateral)
+    );
 
     // set operators
     assets.map(asset => asset.operators = this.assetOperators);
@@ -422,6 +436,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
         contract => {
           switch (contract.address) {
             case environment.contracts.converter.converterRamp:
+            case environment.contracts.collateral.collateral:
               return true;
 
             default:
@@ -431,7 +446,9 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
       );
     }
 
-    return this.tokenOperators;
+    return this.tokenOperators.filter(
+      contract => contract.address !== environment.contracts.collateral.wethManager
+    );
   }
 
   /**
@@ -464,8 +481,8 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     const selectedOperator = this.onlyAddress;
     const selectedContract = this.onlyToken || this.onlyAsset;
 
-    const contract = contracts.filter((ct: Contract) => ct.address === selectedContract)[0];
-    const operator = operators.filter((op: Operator) => op.address === selectedOperator)[0];
+    const contract = contracts.find((ct: Contract) => ct.address === selectedContract);
+    const operator = operators.find((op: Operator) => op.address === selectedOperator);
 
     this.dialogDescription = `To continue please enable ${ contract.name } ${ operator.action } on the Credit Marketplace.`;
     return this.dialogDescription;
