@@ -128,7 +128,7 @@ export class AddressComponent implements OnInit, OnDestroy {
 
     if (myLoans) {
       this.pageTitle = 'My loans';
-      this.pageDescription = `Check your loans' status, payments schedule, history and more`;
+      this.pageDescription = `Check your loans' status, payments schedule, history and more.`;
     } else {
       this.pageTitle = 'Activity explorer';
       this.pageDescription = `Check ${ this.address }'s active loans`;
