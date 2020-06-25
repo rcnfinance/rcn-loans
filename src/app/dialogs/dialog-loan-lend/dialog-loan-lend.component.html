@@ -160,6 +160,7 @@
             [lendToken]="lendToken"
             (startLend)="showProgressbar()"
             (endLend)="finishProgress = true"
+            (closeDialog)="closeDialog()"
             *ngIf="canLend"
           ></app-lend-button>
         </div>
