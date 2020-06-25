@@ -14,7 +14,7 @@ import {
 } from '@angular/material';
 import * as BN from 'bn.js';
 import { environment, Agent } from '../../../environments/environment';
-import { Loan, Network } from './../../models/loan.model';
+import { Loan, Network, Status } from './../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 
@@ -29,6 +29,7 @@ import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../../dialogs/dialog-loan-lend/dialog-loan-lend.component';
+import { DialogFrontRunningComponent } from '../../dialogs/dialog-front-running/dialog-front-running.component';
 import { CosignerService } from './../../services/cosigner.service';
 import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
 import { WalletConnectService } from './../../services/wallet-connect.service';
@@ -45,6 +46,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   @Input() disabled: boolean;
   @Output() startLend = new EventEmitter();
   @Output() endLend = new EventEmitter();
+  @Output() closeDialog = new EventEmitter();
   pendingTx: Tx = undefined;
   lendEnabled: Boolean;
   opPending = false;
@@ -173,6 +175,12 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     if (!this.showLendDialog && !token) {
       this.openSnackBar('You must select an currency to continue');
       return;
+    }
+    // front running validation
+    const { status } = await this.contractsService.getLoan(this.loan.id);
+    if (status !== Status.Request) {
+      this.closeDialog.emit();
+      return this.dialog.open(DialogFrontRunningComponent);
     }
 
     if (this.showLendDialog) {

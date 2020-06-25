@@ -238,4 +238,10 @@ export class DialogLoanLendComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  /**
+   * Close dialog
+   */
+  closeDialog() {
+    this.dialogRef.close();
+  }
 }
