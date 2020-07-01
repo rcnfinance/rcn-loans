@@ -21,9 +21,9 @@ export interface CurrencyItem {
 export class CurrenciesService {
   currencies: CurrencyItem[];
   bestInterestRates = {
-    'RCN': { min: 0, max: 20, best: 10 },
+    'RCN': { min: 5, max: 15, best: 10 },
     'DAI': { min: 10, max: 20, best: 15 },
-    'USDC': { min: 10, max: 20, best: 15 },
+    'USDC': { min: 5, max: 10, best: 7 },
     'MANA': { min: 10, max: 20, best: 15 },
     'ETH': { min: 0, max: 5, best: 1 },
     'TEST': { min: 0, max: 20, best: 10 },
