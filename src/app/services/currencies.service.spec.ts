@@ -56,8 +56,8 @@ describe('CurrenciesService', () => {
   it('should return the interest rate of the selected currency', () => {
     const rcnSymbol = 'RCN';
     const result = service.getBestInterest(rcnSymbol);
-    expect(result.min).toEqual(0);
+    expect(result.min).toEqual(5);
     expect(result.best).toEqual(10);
-    expect(result.max).toEqual(20);
+    expect(result.max).toEqual(15);
   });
 });
