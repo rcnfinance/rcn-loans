@@ -216,18 +216,18 @@
             <div class="row">
               <div class="col-sm-12 col-lg-2">
                 <mat-form-field floatLabel="never">
-                  <input
-                    matInput
-                    type="number"
-                    min="1"
-                    max="30"
+                  <mat-select
+                    placeholder="Select a number"
                     formControlName="expiration"
-                    pattern="^(?:[1-9]|[1-2][0-9]|30)$"
                     required
-                  />
-                  <mat-hint>
-                    days
-                  </mat-hint>
+                  >
+                    <mat-option
+                      *ngFor="let day of [1,2,3,4,5]"
+                      [value]="day"
+                    >
+                      {{ day }} day{{ day === 1 ? '' : 's' }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
             </div>

@@ -163,6 +163,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     const DEFAULT_INSTALLMENTS = 1;
     const DEFAULT_INSTALLMENTS_ACTIVATED = false;
     const DEFAULT_INSTALLMENTS_TIME_UNIT = 60 * 60 * 24;
+    const DEFAULT_EXPIRATION_DAYS = 1;
 
     this.form = new FormGroup({
       // form to send to the requestLoan method
@@ -189,7 +190,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
         amount: new FormControl(null, [Validators.required, Validators.min(0)]),
         currency: new FormControl(null, Validators.required),
         duration: new FormControl(null, Validators.required),
-        expiration: new FormControl(null, Validators.required),
+        expiration: new FormControl(DEFAULT_EXPIRATION_DAYS, Validators.required),
         annualInterestRate: new FormControl(null, Validators.required),
         installmentsActivated: new FormControl(DEFAULT_INSTALLMENTS_ACTIVATED)
       })
