@@ -50,8 +50,6 @@ import { DialogApiSyncComponent } from '../dialogs/dialog-api-sync/dialog-api-sy
 import { DialogFrontRunningComponent } from '../dialogs/dialog-front-running/dialog-front-running.component';
 import { DialogCollateralComponent } from '../dialogs/dialog-collateral/dialog-collateral.component';
 import { DialogNeedWithdrawComponent } from '../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
-import { ErrorDetailsComponent } from './error-details/error-details.component';
-import { PageHeaderComponent } from './page-header/page-header.component';
 
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
@@ -134,7 +132,7 @@ import { EventsService } from './../services/events.service';
     DialogWrongCountryComponent,
     DialogLoanLendComponent,
     DialogApiSyncComponent,
-    DialogFrontRunningComponent
+    DialogFrontRunningComponent,
     DialogCollateralComponent,
     DialogNeedWithdrawComponent
   ],

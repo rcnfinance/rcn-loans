@@ -325,8 +325,8 @@ export class ApiService {
     const isSynchronized: boolean = blockDiff <= ALLOWABLE_BLOCK_DIFFERENCE;
     return isSynchronized;
   }
-    
-  * Get collateral.
+
+  /** Get collateral.
    * @param loanId Loan ID
    * @return Collateral
    */
