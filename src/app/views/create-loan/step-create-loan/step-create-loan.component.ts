@@ -406,7 +406,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
    * Get available currencies for loan and collateral select
    */
   private getCurrencies() {
-    const RESTRICTED_CURRENCES = ['TEST', 'DEST'];
+    const RESTRICTED_CURRENCES = ['TEST', 'DEST', 'ETH', 'MANA', 'DAI'];
     const currencies: CurrencyItem[] = this.currenciesService.getCurrenciesExcept('symbol', RESTRICTED_CURRENCES);
     this.currencies = currencies;
   }
