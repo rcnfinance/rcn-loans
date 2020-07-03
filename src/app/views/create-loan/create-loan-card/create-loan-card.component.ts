@@ -1,11 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, OnChanges, Input } from '@angular/core';
 import * as BN from 'bn.js';
 import { Utils } from './../../../utils/utils';
+import { Currency } from './../../../utils/currencies';
 import { Loan } from './../../../models/loan.model';
 import { Collateral } from './../../../models/collateral.model';
 // App Services
 import { CurrenciesService } from './../../../services/currencies.service';
-import { Web3Service } from './../../../services/web3.service';
 import { Tx } from './../../../services/tx.service';
 
 @Component({
@@ -37,7 +37,6 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
   balanceRatio: string;
 
   constructor(
-    private web3Service: Web3Service,
     private currenciesService: CurrenciesService
   ) { }
 
@@ -101,7 +100,6 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
    * Load collateral details
    */
   private loadCollateral() {
-    const web3: any = this.web3Service.web3;
     const collateral: Collateral = this.collateral;
     const liquidationRatio = this.toPercentage(Number(collateral.liquidationRatio));
     const balanceRatio = this.toPercentage(Number(collateral.balanceRatio));
@@ -109,7 +107,8 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
     this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
 
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
-    this.collateralAmount = Utils.formatAmount(Number(web3.utils.fromWei(Utils.bn(collateral.amount))));
+    const collateralDecimals = new Currency(collateralCurrency.symbol).decimals;
+    this.collateralAmount = Utils.formatAmount(collateral.amount as any / 10 ** collateralDecimals);
     this.collateralAsset = collateralCurrency.symbol;
   }
 
