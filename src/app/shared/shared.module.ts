@@ -63,6 +63,7 @@ import { CosignerService } from './../services/cosigner.service';
 import { IdentityService } from './../services/identity.service';
 import { RiskService } from './../services/risk.service';
 import { CountriesService } from './../services/countries.service';
+import { CollateralService } from './../services/collateral.service';
 import { EventsService } from './../services/events.service';
 
 @NgModule({
@@ -144,6 +145,7 @@ import { EventsService } from './../services/events.service';
     IdentityService,
     RiskService,
     CountriesService,
+    CollateralService,
     EventsService
   ],
   exports: [
