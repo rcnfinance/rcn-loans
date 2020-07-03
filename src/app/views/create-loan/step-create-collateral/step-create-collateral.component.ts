@@ -10,6 +10,7 @@ import { Collateral, Status as CollateralStatus } from './../../../models/collat
 import { CollateralRequest } from './../../../interfaces/collateral-request';
 // App Services
 import { ContractsService } from './../../../services/contracts.service';
+import { CollateralService } from './../../../services/collateral.service';
 import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
 import { EventsService } from './../../../services/events.service';
 import { Tx } from './../../../services/tx.service';
@@ -37,6 +38,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private contractsService: ContractsService,
+    private collateralService: CollateralService,
     private currenciesService: CurrenciesService,
     private eventsService: EventsService
   ) { }
@@ -176,8 +178,8 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     // set liquidation and balance ratio
     if (liquidationRatio) {
       this.form.controls.formCollateral.patchValue({
-        liquidationRatio: this.toRatio(liquidationRatio).toString(),
-        balanceRatio: this.toRatio(liquidationRatio + 50).toString()
+        liquidationRatio: this.collateralService.percentageToRaw(liquidationRatio).toString(),
+        balanceRatio: this.collateralService.percentageToRaw(liquidationRatio + 50).toString()
       });
     } else {
       this.form.controls.formCollateral.patchValue({
@@ -190,7 +192,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     /*
     const MAX_COLLATERAL_ADJUSTMENT = 400;
     const { balanceRatio } = this.form.value.formCollateral;
-    const minAdjustment: number = this.toPercentage(balanceRatio).toNumber();
+    const minAdjustment: number = this.collateralService.rawToPercentage(balanceRatio).toNumber();
 
     if (collateralAdjustment < minAdjustment) {
       this.form.controls.formUi.patchValue({
@@ -232,34 +234,6 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     } finally {
       this.spinner.hide(this.pageId);
     }
-  }
-
-  /**
-   * Return ratio
-   * @param num Percentage %
-   * @return Ratio value
-   */
-  private toRatio (percentage: number): BN {
-    const securePercentage: BN = Utils.bn(percentage).mul(Utils.bn(2000));
-    const secureRatio = Utils.bn(securePercentage)
-        .mul(Utils.pow(2, 32))
-        .div(Utils.bn(100));
-
-    return secureRatio.div(Utils.bn(2000));
-  }
-
-  /**
-   * Return percentage
-   * @param num Ratio %
-   * @return Percentage
-   */
-  private toPercentage (ratio: number): BN {
-    const secureRatio: BN = Utils.bn(ratio).mul(Utils.bn(2000));
-    const securePercentage = Utils.bn(secureRatio)
-        .div(Utils.pow(2, 32))
-        .mul(Utils.bn(100));
-
-    return securePercentage.div(Utils.bn(2000));
   }
 
   /**
