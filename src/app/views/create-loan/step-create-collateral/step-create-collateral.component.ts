@@ -148,7 +148,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     const currency: CurrencyItem = formUi.currency;
     const amount: number = formUi.amount;
     const liquidationRatio: number = formUi.liquidationRatio;
-    const collateralAdjustment: number = formUi.collateralAdjustment;
+    // const collateralAdjustment: number = formUi.collateralAdjustment;
 
     // set oracle
     if (currency) {
@@ -187,6 +187,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     }
 
     // update collateral adjustment
+    /*
     const MAX_COLLATERAL_ADJUSTMENT = 400;
     const { balanceRatio } = this.form.value.formCollateral;
     const minAdjustment: number = this.toPercentage(balanceRatio).toNumber();
@@ -202,6 +203,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
       });
       await this.onCollateralAdjustmentChange();
     }
+    */
 
     const collateral: CollateralRequest = this.updateCollateralMockup();
     return collateral;
