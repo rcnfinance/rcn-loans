@@ -77,13 +77,13 @@ input[type=number] {
   }
   &--amount {
     input {
-      @include styled-font('Roboto', 900, 30px);
-      margin-top: -1.15em;
+      @include styled-font('Roboto', 900, 35px);
+      margin-top: -0.45em;
     }
     ::ng-deep label {
       margin-top: -1.15em;
       span {
-        @include styled-font('Roboto', 900, 30px);
+        @include styled-font('Roboto', 900, 35px);
       }
       .mat-placeholder-required {
         display: none;
@@ -124,6 +124,11 @@ input[type=number] {
   .item {
     &__message {
       height: 0;
+    }
+    &--currency {
+      .item__title {
+        margin-bottom: 17px;
+      }
     }
   }
 }

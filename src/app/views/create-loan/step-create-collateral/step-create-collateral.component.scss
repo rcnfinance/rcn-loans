@@ -1,1 +1,69 @@
+@import './../../../../scss/fonts';
 @import './../steps';
+
+.item {
+  &__single-collateral {
+    border: 1px solid var(--app-color-gray-400);
+    padding: 10px 18px 12px 14px;
+    svg {
+      color: var(--app-color-gray-50);
+    }
+  }
+  &--ratios {
+    text-align: center;
+    .ratio {
+      padding: 10px 14px;
+      background: var(--app-color-gray-600);
+      &__title,
+      &__value {
+        @include typography-caption(1);
+        color: var(--app-color-gray-50);
+      }
+      &__value {
+        font-weight: bold;
+      }
+      &--collateral {
+        border-radius: 4px;
+        .ratio__value {
+          @include styled-font('Roboto', 900, 35px);
+          line-height: 1em;
+        }
+        &.ratio--low {
+          .ratio__value {
+            color: var(--app-color-red);
+          }
+        }
+        &.ratio--normal {
+          .ratio__value {
+            color: var(--app-color-orange);
+          }
+        }
+        &.ratio--high {
+          .ratio__value {
+            color: #99FE90;
+          }
+        }
+      }
+      &--liquidation {
+        border-radius: 4px 4px 0 0;
+      }
+      &--balance {
+        border-radius: 0 0 4px 4px;
+      }
+    }
+    .ratio-divisor {
+      width: 85%;
+      height: 1px;
+      margin: -1px auto 0;
+      background: var(--app-color-gray-400);
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .item {
+    &--ratios {
+      text-align: left;
+    }
+  }
+}

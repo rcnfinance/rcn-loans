@@ -11,12 +11,13 @@
     <div class="row mt-4 pt-3">
       <div class="col-sm-11 col-md-12">
         <div class="row">
-          <div class="col-sm-12 col-md-4 mb-4 mb-lg-0 item">
+          <div class="col-sm-12 col-md-3 mb-4 mb-lg-0 item">
             <div class="item__title">
               Collateral asset
             </div>
             <div>
-              <mat-form-field>
+              <!-- multiple collateral assets component -->
+              <mat-form-field *ngIf="currencies?.length > 1; else signleCollateralAssetTemplate">
                 <mat-select
                   placeholder="Select a Token"
                   formControlName="currency"
@@ -37,9 +38,27 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
+              <!-- single collateral asset component -->
+              <ng-template #signleCollateralAssetTemplate>
+                <div class="item__single-collateral d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center">
+                    <app-currency-logo
+                      [address]="form?.value.formUi.currency?.address"
+                      [size]="24"
+                    >
+                    </app-currency-logo>
+                    <span class="ml-2 pl-1">
+                      {{ form?.value.formUi.currency?.symbol || '-' }}
+                    </span>
+                  </div>
+                  <div>
+                    <i class="fas fa-info-circle"></i>
+                  </div>
+                </div>
+              </ng-template>
             </div>
           </div>
-          <div class="col-sm-12 col-md-4 item item--amount">
+          <div class="col-sm-12 col-md-3 item item--amount">
             <div class="item__title">
               Collateral amount
             </div>
@@ -57,6 +76,62 @@
                   (keyup)="onAmountChange()"
                 />
               </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6 pl-md-5 item item--ratios">
+            <div class="row">
+              <div class="col-12 col-md-5 pl-md-0 mt-4 mb-2 my-md-0">
+                <div
+                  class="py-2 ratio ratio--collateral"
+                  [class.ratio--low]="form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_LOW"
+                  [class.ratio--normal]="
+                    form?.value.formUi.collateralAdjustment >= COLLATERAL_AVERAGE_LOW &&
+                    form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_HIGH
+                  "
+                  [class.ratio--high]="form?.value.formUi.collateralAdjustment >= COLLATERAL_AVERAGE_HIGH"
+                >
+                  <div class="ratio__title">
+                    <i class="fa fa-chart-line"></i>
+                    <span class="ml-2">
+                      Loan to Value:
+                    </span>
+                  </div>
+                  <div class="ratio__value mt-2">
+                    {{ form?.value.formUi.collateralAdjustment || 0 }}%
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-7 pl-md-0 mb-4 my-md-0">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--liquidation">
+                      <div class="ratio__title">
+                        <i class="fa fa-chart-line"></i>
+                        <span class="ml-2">
+                          Liquidation Ratio:
+                        </span>
+                      </div>
+                      <div class="ratio__value ml-2">
+                        {{ form?.value.formUi.liquidationRatio }}%
+                      </div>
+                    </div>
+                    <div class="ratio-divisor"></div>
+                  </div>
+                  <div class="col-12">
+                    <div class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--balance">
+                      <div class="ratio__title">
+                        <i class="fa fa-chart-line"></i>
+                        <span class="ml-2">
+                          Balance Ratio:
+                        </span>
+                      </div>
+                      <div class="ratio__value ml-2">
+                        {{ form?.value.formUi.liquidationRatio + 50 }}%
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -33,6 +33,8 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     collateral: Collateral,
     form: CollateralRequest
   }>();
+  COLLATERAL_AVERAGE_LOW = 200;
+  COLLATERAL_AVERAGE_HIGH = 250;
 
   constructor(
     private route: ActivatedRoute,
@@ -50,6 +52,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
 
     const loanId: string = this.route.snapshot.params.id;
     this.autocompleteForm(loanId);
+    this.setCollateralCurrency();
   }
 
   ngOnChanges() {
@@ -318,6 +321,17 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     this.form.controls.formUi.patchValue({ collateralAdjustment });
 
     return collateralPercentage;
+  }
+
+  /**
+   * Set the first currency as selected
+   */
+  private setCollateralCurrency() {
+    const currency: CurrencyItem = this.currencies[0];
+
+    this.form.controls.formUi.patchValue({
+      currency
+    });
   }
 
   /**
