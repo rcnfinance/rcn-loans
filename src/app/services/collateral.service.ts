@@ -41,7 +41,7 @@ export class CollateralService {
     const collateralRate: BN | string = await this.contractsService.getRate(collateralOracle, collateralDecimals);
     const collateralAmountInRcn: BN = Utils.bn(collateralRate)
         .mul(Utils.bn(amount))
-        .div(Utils.pow(10, 18));
+        .div(Utils.pow(10, collateralDecimals));
 
     const collateralPercentage: BN = Utils.bn(collateralAmountInRcn)
         .mul(Utils.bn(100))
