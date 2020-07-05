@@ -135,6 +135,26 @@
             </div>
           </div>
         </div>
+        <div class="row my-3 pt-lg-4 d-none d-md-block">
+          <div class="col-12">
+            <button
+              mat-raised-button
+              class="button button-primary"
+              [class.button-disabled]="collateralPendingTx"
+              [disabled]="!form?.valid"
+              (click)="submit()"
+            >
+              <span class="d-flex align-items-center">
+                <span class="mr-2">
+                  {{ confirmButtonText }}
+                </span>
+                <div>
+                  <i class="fas fa-check-circle"></i>
+                </div>
+              </span>
+            </button>
+          </div>
+        </div>
         <!--
         <div class="row mt-3 mt-lg-5 pt-4">
           <div class="col-lg-12 item">

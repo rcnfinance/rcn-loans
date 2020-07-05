@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
 import { Utils } from '../../../utils/utils';
@@ -33,11 +34,13 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     collateral: Collateral,
     form: CollateralRequest
   }>();
+  @Output() createCollateral = new EventEmitter();
   COLLATERAL_AVERAGE_LOW = 200;
   COLLATERAL_AVERAGE_HIGH = 250;
 
   constructor(
     private route: ActivatedRoute,
+    private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
     private contractsService: ContractsService,
     private collateralService: CollateralService,
@@ -112,6 +115,25 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     } finally {
       this.spinner.hide(this.pageId);
     }
+  }
+
+  /**
+   * Click on confirm button
+   */
+  async submit() {
+    // validate inputs
+    if (!this.form.controls.formCollateral.valid) {
+      return this.showMessage('Please check the fields and try again.');
+    }
+
+    // validate min amount
+    const { COLLATERAL_AVERAGE_LOW } = this;
+    const { collateralAdjustment } = this.form.value.formUi;
+    if (collateralAdjustment < COLLATERAL_AVERAGE_LOW) {
+      return this.showMessage(`The collateral is too low, make sure it is greater than ${ COLLATERAL_AVERAGE_LOW }%`);
+    }
+
+    this.createCollateral.emit();
   }
 
   /**
@@ -372,5 +394,31 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
       collateral
     });
     return request;
+  }
+
+  /**
+   * Show snackbar with a message
+   * @param message The message to show in the snackbar
+   */
+  private showMessage(message: string) {
+    this.snackBar.open(message , null, {
+      duration: 4000,
+      horizontalPosition: 'center'
+    });
+  }
+
+  /**
+   * Get submit button text according to the loan creation status
+   * @return Button text
+   */
+  get confirmButtonText(): string {
+    const tx: Tx = this.collateralPendingTx;
+    if (tx === undefined) {
+      return 'Confirm';
+    }
+    if (tx.confirmed) {
+      return 'Confirmed';
+    }
+    return 'Confirming...';
   }
 }
