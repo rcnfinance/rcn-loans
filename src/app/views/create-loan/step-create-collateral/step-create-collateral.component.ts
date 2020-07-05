@@ -334,10 +334,11 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
 
     const collateralOracle: string = await this.contractsService.symbolToOracle(currency.symbol);
     const collateralDecimals: number = new Currency(currency.symbol).decimals;
+    const collateralAmountInWei: BN = Utils.getAmountInWei(amount, collateralDecimals);
     const collateralRate: BN | string = await this.contractsService.getRate(collateralOracle, collateralDecimals);
     const collateralAmountInRcn: BN = Utils.bn(collateralRate)
-        .mul(Utils.bn(amount).mul(Utils.pow(10, 18)))
-        .div(Utils.pow(10, 18));
+        .mul(collateralAmountInWei)
+        .div(Utils.pow(10, collateralDecimals));
 
     const collateralPercentage: BN = Utils.bn(collateralAmountInRcn)
         .mul(Utils.bn(100))
