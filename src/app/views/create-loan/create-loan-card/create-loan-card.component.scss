@@ -8,7 +8,7 @@
 
   &__creator,
   &__content,
-  &__footer {
+  &__amounts {
     padding-left: 20px;
     padding-right: 20px;
   }
@@ -19,6 +19,7 @@
 
   &__content {
     padding-top: 24px;
+    padding-bottom: 7px;
     color: var(--app-color-secondary);
   }
 
@@ -121,10 +122,9 @@
     }
   }
 
-  &__footer {
-    border-top: 1px solid var(--app-color-gray-100);
+  &__amounts {
+    border-bottom: 1px solid var(--app-color-gray-100);
     padding-top: 24px;
-    padding-bottom: 7px;
   }
 
   .collateral-expansion-panel {

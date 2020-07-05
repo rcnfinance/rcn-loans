@@ -18,6 +18,34 @@
     <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
     <app-creator-container [loan]=loan></app-creator-container>
   </div>
+  <div class="loan-card__amounts">
+    <div class="loan-card__property loan-card__property--strong">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-reply"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Borrow
+        </p>
+        <p class="loan-card__property-description">
+          {{ amount || '-' }}
+        </p>
+      </div>
+    </div>
+    <div class="loan-card__property loan-card__property--strong loan-card__property--primary">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-share"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Return
+        </p>
+        <p class="loan-card__property-description">
+          {{ expectedReturn || '-' }}
+        </p>
+      </div>
+    </div>
+  </div>
   <div class="loan-card__content">
     <div class="loan-card__property">
       <div class="loan-card__property-icon">
@@ -149,34 +177,6 @@
       </button>
     </div>
     -->
-  </div>
-  <div class="loan-card__footer">
-    <div class="loan-card__property loan-card__property--strong">
-      <div class="loan-card__property-icon">
-        <i class="fas fa-reply"></i>
-      </div>
-      <div class="loan-card__property-content">
-        <p class="loan-card__property-title">
-          Borrow
-        </p>
-        <p class="loan-card__property-description">
-          {{ amount || '-' }}
-        </p>
-      </div>
-    </div>
-    <div class="loan-card__property loan-card__property--strong loan-card__property--primary">
-      <div class="loan-card__property-icon">
-        <i class="fas fa-share"></i>
-      </div>
-      <div class="loan-card__property-content">
-        <p class="loan-card__property-title">
-          Return
-        </p>
-        <p class="loan-card__property-description">
-          {{ expectedReturn || '-' }}
-        </p>
-      </div>
-    </div>
   </div>
 </div>
 
