@@ -28,7 +28,7 @@
           Borrow
         </p>
         <p class="loan-card__property-description">
-          {{ amount || '-' }}
+          {{ amount || '-' }} {{ loan?.currency }}
         </p>
       </div>
     </div>
@@ -41,7 +41,7 @@
           Return
         </p>
         <p class="loan-card__property-description">
-          {{ expectedReturn || '-' }}
+          {{ expectedReturn || '-' }} {{ loan?.currency }}
         </p>
       </div>
     </div>
