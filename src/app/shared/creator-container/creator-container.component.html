@@ -14,7 +14,7 @@
 <ng-template #collateralTemplate>
   <div class="creator-container">
     <div class="creator-title">
-      Collateral {{ currency }}
+      Collateral {{ currency || getCollateralAsset(loan?.collateral) }}
     </div>
   </div>
 </ng-template>

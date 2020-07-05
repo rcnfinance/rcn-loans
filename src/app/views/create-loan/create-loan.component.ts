@@ -131,6 +131,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
   }) {
     this.collateralRequest = form;
     this.collateral = collateral;
+    this.loan.collateral = collateral;
   }
 
   /**

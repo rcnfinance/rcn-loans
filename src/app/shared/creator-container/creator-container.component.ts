@@ -23,6 +23,24 @@ export class CreatorContainerComponent implements OnInit, OnChanges {
   ) { }
 
   async ngOnInit() {
+    await this.loadCollateral();
+  }
+
+  async ngOnChanges() {
+    this.brand = this.brandingService.getBrand(this.loan);
+    await this.loadCollateral();
+  }
+
+  color(): string {
+    return this.brand.color ? this.brand.color : '#333333';
+  }
+
+  getCollateralAsset({ token }: Collateral) {
+    const currency = this.currenciesService.getCurrencyByKey('address', token);
+    return currency.symbol;
+  }
+
+  private async loadCollateral() {
     const collateral: Collateral = this.loan.collateral;
     this.collateral = collateral;
 
@@ -30,13 +48,5 @@ export class CreatorContainerComponent implements OnInit, OnChanges {
       const currency = await this.currenciesService.getCurrencyByKey('address', collateral.token);
       this.currency = currency.symbol;
     }
-  }
-
-  ngOnChanges() {
-    this.brand = this.brandingService.getBrand(this.loan);
-  }
-
-  color(): string {
-    return this.brand.color ? this.brand.color : '#333333';
   }
 }
