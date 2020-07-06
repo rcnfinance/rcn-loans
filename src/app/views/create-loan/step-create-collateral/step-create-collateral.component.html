@@ -149,7 +149,7 @@
                 <span class="mr-2">
                   {{ confirmButtonText }}
                 </span>
-                <div>
+                <div *ngIf="form?.valid">
                   <i class="fas fa-check-circle"></i>
                 </div>
               </span>
