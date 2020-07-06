@@ -35,6 +35,8 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     form: CollateralRequest
   }>();
   @Output() createCollateral = new EventEmitter();
+  DEFAULT_LIQUIDATION_RATIO = 150;
+  DEFAULT_BALANCE_RATIO = 200;
   COLLATERAL_AVERAGE_LOW = 200;
   COLLATERAL_AVERAGE_HIGH = 250;
 
@@ -48,14 +50,15 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     private eventsService: EventsService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.buildForm();
     this.getCurrencies();
     this.updateCollateralMockup();
 
     const loanId: string = this.route.snapshot.params.id;
     this.autocompleteForm(loanId);
-    this.setCollateralCurrency();
+
+    await this.setDefaultCollateralValues();
   }
 
   ngOnChanges() {
@@ -80,12 +83,16 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
 
   /**
    * Estimate the new collateral percentage
+   * @param amount Entry amount
    */
-  async onAmountChange() {
-    this.spinner.show(this.pageId);
+  async onAmountChange(amount: number) {
+    const { currency, amount: previousAmount } = this.form.value.formUi;
+    if (amount === previousAmount) {
+      return;
+    }
 
     try {
-      const { currency, amount } = this.form.value.formUi;
+      this.spinner.show(this.pageId);
       await this.calculateCollateralPercentage(this.loan, currency, amount);
     } catch (err) {
       this.eventsService.trackError(err);
@@ -140,8 +147,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
    * Create form object variables
    */
   private buildForm() {
-    const DEFAULT_LIQUIDATION_RATIO = 150;
-    const DEFAULT_BALANCE_RATIO = 200;
+    const { DEFAULT_LIQUIDATION_RATIO, DEFAULT_BALANCE_RATIO } = this;
 
     this.form = new FormGroup({
       // form to send to the create method
@@ -161,8 +167,15 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
       })
     });
 
+    // listen form changes
     this.form.controls.formUi.valueChanges.subscribe(async (formUi) => {
       await this.updateFormUi(formUi);
+    });
+
+    // listen collateral amount control changes
+    const groupFormUi: any = this.form.controls.formUi;
+    groupFormUi.controls.amount.valueChanges.subscribe(async (amount: number) => {
+      await this.onAmountChange(amount);
     });
   }
 
@@ -354,14 +367,21 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
   }
 
   /**
-   * Set the first currency as selected
+   * Set the first currency as selected and collateral adjustment = balance
+   * ratio
    */
-  private setCollateralCurrency() {
+  private async setDefaultCollateralValues() {
     const currency: CurrencyItem = this.currencies[0];
-
     this.form.controls.formUi.patchValue({
       currency
     });
+
+    const { DEFAULT_BALANCE_RATIO } = this;
+    this.form.controls.formUi.patchValue({
+      collateralAdjustment: DEFAULT_BALANCE_RATIO
+    });
+
+    await this.onCollateralAdjustmentChange();
   }
 
   /**
