@@ -13,23 +13,6 @@
         }
       }
     }
-
-    &--installment,
-    &--amount,
-    &--due-date {
-      color: #D9D9D9;
-
-      .item__key {
-        @extend %roboto-regular;
-        font-size: 15px;
-      }
-      .item__value {
-        @extend %roboto-bold;
-        font-size: 18px;
-        margin: 6px 0 20px;
-      }
-    }
-
     &--want-to-pay,
     &--left-to-pay {
       .item__key {
@@ -114,13 +97,6 @@
     max-width: 800px;
   }
   .item {
-    &--installment,
-    &--amount,
-    &--due-date {
-      .item__value {
-        margin: 8px 0 26px;
-      }
-    }
     &--left-to-pay {
       .item__value {
         margin: 20px 0 10px;
