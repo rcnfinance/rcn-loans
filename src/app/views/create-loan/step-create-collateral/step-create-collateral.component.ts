@@ -324,7 +324,10 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     amount: number
   ) {
     if (!currency || !amount) {
-      return;
+      const EMPTY_COLLATERAL_ADJUSTMENT = '0';
+      return this.form.controls.formUi.patchValue({
+        collateralAdjustment: EMPTY_COLLATERAL_ADJUSTMENT
+      });
     }
     const loanOracle: string = await this.contractsService.symbolToOracle(loan.currency.toString());
     const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loan.currency.decimals);
