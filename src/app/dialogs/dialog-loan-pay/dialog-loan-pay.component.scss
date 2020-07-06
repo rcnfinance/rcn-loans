@@ -1,34 +1,50 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/_variables';
+@import '../../../scss/fonts';
 
 .dialog-content {
   .item {
-    &--address {
-      p {
-        text-transform: uppercase;
-        font-size: 12px;
-        strong {
-          @extend %roboto-bold;
-          text-transform: none;
-          font-size: 16px;
+    &__subtitle {
+      @include styled-font('Raleway', 500, 12px);
+      text-transform: uppercase;
+    }
+    &--description {
+      @include typography-headline(6);
+    }
+    &--entry {
+      .currency {
+        position: absolute;
+        z-index: 2;
+        right: 0;
+        bottom: -2px;
+        padding: 10px;
+        @include styled-font('Roboto', 400, 20px);
+        background: var(--app-color-gray-400);
+        color: white;
+        user-select: none;
+      }
+      input {
+        @include styled-font('Roboto', 900, 30px);
+        margin-top: -1.15em;
+      }
+      ::ng-deep label {
+        margin-top: -1.15em;
+        span {
+          @include styled-font('Roboto', 900, 30px);
+        }
+        .mat-placeholder-required {
+          display: none;
         }
       }
     }
-    &--want-to-pay,
-    &--left-to-pay {
-      .item__key {
-        font-size: 12px;
-      }
-    }
-    &--left-to-pay {
+    &--amount {
       .item__value {
-        @extend %roboto-regular;
-        font-size: 26px;
-        margin: 6px 0 16px;
-      }
-      .disclaimer {
-        @extend %roboto-regular;
-        font-size: 12px;
-        color: #EAA219;
+        margin-top: 8px;
+        &-amount {
+          @include typography-headline(4);
+        }
+        &-currency {
+          @include styled-font('Roboto', 400, 20px);
+        }
       }
     }
   }
@@ -95,12 +111,5 @@
 @media (min-width: 992px) {
   .dialog {
     max-width: 800px;
-  }
-  .item {
-    &--left-to-pay {
-      .item__value {
-        margin: 20px 0 10px;
-      }
-    }
   }
 }
