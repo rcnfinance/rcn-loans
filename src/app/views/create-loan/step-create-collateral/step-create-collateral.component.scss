@@ -43,6 +43,11 @@
             color: #99FE90;
           }
         }
+        &.ratio--untouched {
+          .ratio__value {
+            color: var(--app-color-gray-50);
+          }
+        }
       }
       &--liquidation {
         border-radius: 4px 4px 0 0;

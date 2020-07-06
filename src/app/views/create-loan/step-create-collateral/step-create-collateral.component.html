@@ -83,6 +83,7 @@
               <div class="col-12 col-md-5 pl-md-0 mt-4 mb-2 my-md-0">
                 <div
                   class="py-2 ratio ratio--collateral"
+                  [class.ratio--untouched]="!form?.controls.formUi.controls.amount.touched"
                   [class.ratio--low]="form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_LOW"
                   [class.ratio--normal]="
                     form?.value.formUi.collateralAdjustment >= COLLATERAL_AVERAGE_LOW &&
