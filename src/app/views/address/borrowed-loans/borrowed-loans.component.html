@@ -11,64 +11,36 @@
   ></ngx-spinner>
 
   <div class="container">
-
-    <ng-container *ngIf="availableLoans; else noAvailableLoans">
-      <div class="full-width d-flex justify-content-between align-items-center">
-        <div>
-          <app-page-header
-            [title]="pageTitle"
-            [description]="pageDescription"
-            [hasChip]="true"
-            [chipValue]="loans.length"
-            chipLabel="FUNDED"
-          ></app-page-header>
-        </div>
-        <div>
-          <app-my-loans-tabs></app-my-loans-tabs>
-        </div>
+    <div class="full-width d-flex justify-content-between align-items-center">
+      <div>
+        <app-page-header
+          [title]="pageTitle"
+          [description]="pageDescription"
+          [hasChip]="true"
+          [chipValue]="loans?.length"
+          chipLabel="BORROWED"
+        ></app-page-header>
       </div>
-
-      <div class="loan-container row">
-
-        <virtual-scroller
-          #scroll
-          [items]="loans"
-          [parentScroll]="scrollingBlock"
-          [bufferAmount]="4"
-          [scrollThrottlingTime]="500"
+      <div>
+        <app-my-loans-tabs></app-my-loans-tabs>
+      </div>
+    </div>
+    <div class="loan-container row">
+      <virtual-scroller
+        #scroll
+        [items]="loans"
+        [parentScroll]="scrollingBlock"
+        [bufferAmount]="4"
+        [scrollThrottlingTime]="500"
+      >
+        <div
+          class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
+          *ngFor="let loan of scroll.viewPortItems"
         >
-          <div
-            class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
-            *ngFor="let loan of scroll.viewPortItems"
-          >
-            <app-loan-card [loan]="loan"></app-loan-card>
-          </div>
-        </virtual-scroller>
-
-      </div>
-    </ng-container>
-
+          <app-loan-card [loan]="loan"></app-loan-card>
+        </div>
+      </virtual-scroller>
+    </div>
   </div>
   <app-footer></app-footer>
 </div>
-
-
-<ng-template #noAvailableLoans>
-  <div class="row">
-    <div class="col-sm-12 px-0">
-      <app-error-details
-        title="Hmm..."
-        description="Its seems like you haven't funded any loans yet."
-        image="assets/errors/error_no-loans.svg"
-        [buttons]="[
-          {
-            text: 'Go to Lend',
-            url: '/lend',
-            class: 'button-primary'
-          }
-        ]"
-      >
-      </app-error-details>
-    </div>
-  </div>
-</ng-template>
