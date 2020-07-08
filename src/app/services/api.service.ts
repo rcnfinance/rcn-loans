@@ -156,7 +156,7 @@ export class ApiService {
     const basaltUri = (apiPage: number, apiAddress: string) =>
       apiUrl.concat(`loans?open=false&page=${ apiPage }&${ loansType }=${ apiAddress }`);
     const diasporeUri = (apiPage: number, apiAddress: string) =>
-      apiUrl.concat(`loans?open=false&page=${ apiPage }&${ loansType === 'lender' ? 'owner' : loansType }=${ apiAddress }`);
+      apiUrl.concat(`loans?page=${ apiPage }&${ loansType === 'lender' ? 'owner' : loansType }=${ apiAddress }`);
 
     let allLoansOfAddress: Loan[] = [];
     let apiCalls = 0;
@@ -189,6 +189,9 @@ export class ApiService {
     for (const apiLoans of allApiLoans) {
       allLoansOfAddress = allLoansOfAddress.concat(apiLoans);
     }
+
+    const filterStatus = [Status.Expired, Status.Destroyed];
+    allLoansOfAddress = this.excludeLoansWithStatus(filterStatus, null, allLoansOfAddress);
 
     return allLoansOfAddress;
   }
