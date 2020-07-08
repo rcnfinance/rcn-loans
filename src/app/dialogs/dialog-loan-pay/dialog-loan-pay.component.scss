@@ -1,51 +1,78 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/_variables';
+@import '../../../scss/fonts';
 
 .dialog-content {
   .item {
-    &--address {
-      p {
-        text-transform: uppercase;
-        font-size: 12px;
-        strong {
-          @extend %roboto-bold;
-          text-transform: none;
-          font-size: 16px;
+    &__subtitle {
+      @include styled-font('Raleway', 500, 12px);
+      text-transform: uppercase;
+    }
+    &__rate {
+      @include typography-subtitle(2);
+      color: var(--app-color-gray-50);
+      &-currency {
+        font-weight: 400;
+      }
+    }
+    &__actions {
+      button {
+        min-width: 0;
+        line-height: 2.2em;
+        margin-bottom: 15px;
+      }
+    }
+    &--description {
+      @include typography-headline(6);
+    }
+    &--entry {
+      .currency {
+        position: absolute;
+        z-index: 2;
+        right: 0;
+        bottom: -2px;
+        padding: 10px;
+        @include styled-font('Roboto', 400, 20px);
+        background: var(--app-color-gray-400);
+        color: white;
+        user-select: none;
+      }
+      input {
+        @include styled-font('Roboto', 900, 30px);
+        margin-top: -1.15em;
+      }
+      ::ng-deep label {
+        margin-top: -1.15em;
+        span {
+          @include styled-font('Roboto', 900, 30px);
+        }
+        .mat-placeholder-required {
+          display: none;
         }
       }
     }
-
-    &--installment,
-    &--amount,
-    &--due-date {
-      color: #D9D9D9;
-
-      .item__key {
-        @extend %roboto-regular;
-        font-size: 15px;
-      }
+    &--amount {
       .item__value {
-        @extend %roboto-bold;
-        font-size: 18px;
-        margin: 6px 0 20px;
+        margin: 12px 0;
+        &-amount {
+          @include typography-headline(4);
+        }
+        &-currency {
+          @include styled-font('Roboto', 400, 20px);
+        }
       }
-    }
-
-    &--want-to-pay,
-    &--left-to-pay {
-      .item__key {
-        font-size: 12px;
-      }
-    }
-    &--left-to-pay {
-      .item__value {
-        @extend %roboto-regular;
-        font-size: 26px;
-        margin: 6px 0 16px;
-      }
-      .disclaimer {
-        @extend %roboto-regular;
-        font-size: 12px;
-        color: #EAA219;
+      .item__message {
+        background: var(--app-color-gray-500);
+        @include styled-font('Roboto', 400, 10px);
+        padding: 10px 13px;
+        margin-top: 10px;
+        border-radius: 2px;
+        line-height: 17px;
+        &--success {
+          color: var(--app-color-green);
+        }
+        &--warning {
+          color: var(--app-color-orange);
+        }
       }
     }
   }
@@ -92,7 +119,7 @@
 
 @media (min-width: 768px){
   .dialog-padding {
-    padding: 30px 42px;
+    padding: 30px 42px 10px;
   }
   .dialog-footer {
     &__label {
@@ -112,18 +139,31 @@
 @media (min-width: 992px) {
   .dialog {
     max-width: 800px;
-  }
-  .item {
-    &--installment,
-    &--amount,
-    &--due-date {
-      .item__value {
-        margin: 8px 0 26px;
-      }
-    }
-    &--left-to-pay {
-      .item__value {
-        margin: 20px 0 10px;
+    .dialog-content {
+      .item {
+        &__actions {
+          button {
+            margin-top: 0;
+            margin-bottom: 25px;
+          }
+        }
+        &--entry {
+          .item__rate {
+            margin-top: -6px;
+            margin-bottom: 20px;
+          }
+        }
+        &--amount {
+          .item__value {
+            margin-bottom: 0;
+          }
+          .item__rate {
+            margin-top: 11px;
+          }
+          .item__message {
+            margin-top: 20px;
+          }
+        }
       }
     }
   }
