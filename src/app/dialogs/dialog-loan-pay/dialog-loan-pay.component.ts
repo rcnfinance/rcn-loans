@@ -1,9 +1,11 @@
 import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import * as BN from 'bn.js';
 import { Loan } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 // App services
+import { ContractsService } from '../../services/contracts.service';
 import { Web3Service } from './../../services/web3.service';
 
 @Component({
@@ -22,6 +24,11 @@ export class DialogLoanPayComponent implements OnInit {
   shortAccount: string;
   pendingAmount: string;
   currency: any;
+  exchangeRcn: string;
+  exchangeRcnWei: BN | string;
+  exchangeTooltip: string;
+  pendingAmountRcn: string;
+  payAmountRcn: string;
 
   startProgress: boolean;
   finishProgress: boolean;
@@ -29,6 +36,7 @@ export class DialogLoanPayComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<any>,
+    private contractsService: ContractsService,
     private web3Service: Web3Service,
     @Inject(MAT_DIALOG_DATA) public data
   ) {
@@ -38,7 +46,9 @@ export class DialogLoanPayComponent implements OnInit {
   async ngOnInit() {
     this.dialogRef.updateSize('auto', 'auto');
     this.buildForm();
-    this.loadDetail();
+
+    await this.loadDetail();
+    this.loadExchangeTooltip();
 
     await this.loadAccount();
   }
@@ -65,19 +75,24 @@ export class DialogLoanPayComponent implements OnInit {
   /**
    * Loan payment details
    */
-  loadDetail() {
+  async loadDetail() {
     const loan: Loan = this.loan;
     const currency = loan.currency;
     const pendingAmount = currency.fromUnit(loan.debt.model.estimatedObligation);
 
     this.currency = currency;
     this.pendingAmount = Utils.formatAmount(pendingAmount);
-    this.form.controls.amount.setValidators([
-      Validators.required,
-      Validators.max(Math.ceil(pendingAmount))
-    ]);
+    this.form.controls.amount.setValidators([Validators.required]);
     this.shortLoanId =
       this.loan.id.startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
+
+    // set loan amount and rate
+    const rate: BN = await this.getLoanRate();
+    this.exchangeRcnWei = rate;
+
+    const RCN_DECIMALS = 18;
+    this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** RCN_DECIMALS);
+    this.pendingAmountRcn = Utils.formatAmount(Number(this.exchangeRcn) * Number(this.pendingAmount));
   }
 
   /**
@@ -107,4 +122,44 @@ export class DialogLoanPayComponent implements OnInit {
     this.dialogRef.close(true);
   }
 
+  clickSetMaxAmount() {
+    this.form.patchValue({
+      amount: this.pendingAmount
+    });
+    this.onAmountChange();
+  }
+
+  onAmountChange() {
+    const { amount } = this.form.value;
+    if (amount <= 0) {
+      return this.payAmountRcn = '0';
+    }
+
+    const payAmountRcn = (amount * Number(this.pendingAmountRcn)) / Number(this.pendingAmount);
+    this.payAmountRcn = Utils.formatAmount(payAmountRcn);
+  }
+
+  private loadExchangeTooltip() {
+    const loanCurrency: string = this.loan.currency.toString();
+    const oracle = this.loan.oracle;
+
+    if (loanCurrency !== 'RCN') {
+      this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
+      the ${ oracle } oracle.`;
+      return;
+    }
+    this.exchangeTooltip = null;
+    return;
+  }
+
+  /**
+   * Load rates and exchange values
+   * @return Loan rate in wei
+   */
+  private async getLoanRate(): Promise<BN> {
+    const currency: any = this.loan.currency;
+    const oracle: string = this.loan.oracle.address;
+    const rate = await this.contractsService.getRate(oracle, currency.decimals);
+    return rate;
+  }
 }
