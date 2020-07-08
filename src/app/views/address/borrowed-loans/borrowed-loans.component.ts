@@ -132,7 +132,7 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
     const myLoans = this.myLoans;
 
     if (myLoans) {
-      this.pageTitle = 'My loans';
+      this.pageTitle = 'My Loans';
       this.pageDescription = `Check your loans' status, payments schedule, history and more`;
     } else {
       this.pageTitle = 'Activity explorer';
