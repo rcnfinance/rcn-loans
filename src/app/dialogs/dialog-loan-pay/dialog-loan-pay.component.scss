@@ -7,6 +7,20 @@
       @include styled-font('Raleway', 500, 12px);
       text-transform: uppercase;
     }
+    &__rate {
+      @include typography-subtitle(2);
+      color: var(--app-color-gray-50);
+      &-currency {
+        font-weight: 400;
+      }
+    }
+    &__actions {
+      button {
+        min-width: 0;
+        line-height: 2.2em;
+        margin-bottom: 15px;
+      }
+    }
     &--description {
       @include typography-headline(6);
     }
@@ -38,12 +52,26 @@
     }
     &--amount {
       .item__value {
-        margin-top: 8px;
+        margin: 12px 0;
         &-amount {
           @include typography-headline(4);
         }
         &-currency {
           @include styled-font('Roboto', 400, 20px);
+        }
+      }
+      .item__message {
+        background: var(--app-color-gray-500);
+        @include styled-font('Roboto', 400, 10px);
+        padding: 10px 13px;
+        margin-top: 10px;
+        border-radius: 2px;
+        line-height: 17px;
+        &--success {
+          color: var(--app-color-green);
+        }
+        &--warning {
+          color: var(--app-color-orange);
         }
       }
     }
@@ -91,7 +119,7 @@
 
 @media (min-width: 768px){
   .dialog-padding {
-    padding: 30px 42px;
+    padding: 30px 42px 10px;
   }
   .dialog-footer {
     &__label {
@@ -111,5 +139,32 @@
 @media (min-width: 992px) {
   .dialog {
     max-width: 800px;
+    .dialog-content {
+      .item {
+        &__actions {
+          button {
+            margin-top: 0;
+            margin-bottom: 25px;
+          }
+        }
+        &--entry {
+          .item__rate {
+            margin-top: -6px;
+            margin-bottom: 20px;
+          }
+        }
+        &--amount {
+          .item__value {
+            margin-bottom: 0;
+          }
+          .item__rate {
+            margin-top: 11px;
+          }
+          .item__message {
+            margin-top: 20px;
+          }
+        }
+      }
+    }
   }
 }

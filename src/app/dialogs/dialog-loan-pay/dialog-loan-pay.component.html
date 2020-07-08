@@ -21,7 +21,7 @@
             amount you'd like/you want to pay.
           </div>
         </div>
-        <div class="row mb-4">
+        <div class="row">
           <div class="col col-12 col-md-4 mb-3 mb-md-0 item item--entry">
             <p class="item__subtitle">
               Amount you want to pay
@@ -40,13 +40,35 @@
                 pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
                 [readonly]="loading"
                 required
+                (keyup)="onAmountChange()"
               />
               <span class="currency">
                 {{ currency?.symbol }}
               </span>
             </mat-form-field>
+            <div class="d-flex justify-content-between d-md-block">
+              <p class="item__rate" *ngIf="loan?.currency.symbol !== 'RCN'">
+                <span class="item__rate-amount">
+                  {{ payAmountRcn || '0' }}
+                </span>
+                <span class="item__rate-currency">
+                  RCN
+                </span>
+              </p>
+              <div class="item__actions">
+                <button
+                  type="button"
+                  mat-flat-button
+                  class="button button-clear button-rounded"
+                  [class.button-disabled]="loading"
+                  (click)="clickSetMaxAmount()"
+                >
+                  Pay total debt
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="col col-12 col-md-4 offset-md-4 mb-3 mb-md-0 item item--amount">
+          <div class="col col-12 col-md-6 offset-md-2 mb-3 mb-md-0 pl-md-5 item item--amount">
             <p class="item__subtitle">
               Due
             </p>
@@ -58,18 +80,61 @@
                 {{ currency?.symbol }}
               </span>
             </p>
+            <p class="item__rate" *ngIf="loan?.currency.symbol !== 'RCN'">
+              <span class="item__rate-amount">
+                {{ pendingAmountRcn || '0' }}
+              </span>
+              <span class="item__rate-currency">
+                RCN
+              </span>
+            </p>
+            <div
+              *ngIf="payAmountRcn && pendingAmountRcn"
+              class="item__message"
+              [class.item__message--success]="form?.value.amount >= pendingAmount"
+              [class.item__message--warning]="form?.value.amount < pendingAmount"
+            >
+              <p *ngIf="form?.value.amount >= pendingAmount">
+                <span>
+                  <i class="fas fa-check check mr-1"></i>
+                </span>
+                <span>
+                  You are paying the complete amount of the debt.
+                </span>
+              </p>
+              <p *ngIf="form?.value.amount < pendingAmount">
+                <span>
+                  <i class="fas fa-exclamation-triangle mr-1"></i>
+                </span>
+                <span>
+                  You are paying an amount less than the corresponding, this will affect your payment schedule.
+                </span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="margintop15"></div>
-
-      <div class="dialog-divisor dialog-padding py-0 mt-4 mt-md-0 row">
+      <div class="dialog-divisor dialog-padding py-0 mt-4 mt-md-0 row" *ngIf="exchangeTooltip">
         <div class="dialog-divisor__content col-sm-12">
+          <!--
           <i class="material-icons mr-2">
             info
           </i>
           The value of the payments it's going to be converted to RCN.
+          -->
+          <span class="mr-1">
+            Exchange Rate 1 {{ loan.currency }}
+          </span>
+          <span class="mr-1" *ngIf="loan.currency.toString() !== 'RCN'">
+            = {{ exchangeRcn }} RCN
+          </span>
+          <i
+            class="material-icons ml-2"
+            [matTooltip]="exchangeTooltip"
+          >
+            info
+          </i>
         </div>
       </div>
 
