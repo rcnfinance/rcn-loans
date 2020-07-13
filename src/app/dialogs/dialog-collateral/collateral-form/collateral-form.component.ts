@@ -266,10 +266,10 @@ export class CollateralFormComponent implements OnInit {
     const { currency, collateralRatio, balanceRatio } = this.form.value.formRatios;
     const decimals: number = new Currency(currency.symbol).decimals;
 
-    // TODO: add support for collateralRatio with decimals
+    const collateralAdjustment: number = Math.round(Number(collateralRatio));
     const balanceAmount = Utils.bn(balanceRatio)
         .mul(Utils.bn(amount))
-        .div(Utils.bn(collateralRatio));
+        .div(Utils.bn(collateralAdjustment));
 
     const maxWithdraw: BN = Utils.bn(amount).sub(balanceAmount);
     const formattedMaxWithdraw =
