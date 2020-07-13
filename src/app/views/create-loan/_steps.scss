@@ -102,13 +102,19 @@ input::-webkit-inner-spin-button {
       @include mat-slider-primary();
     }
   }
+  &--submit {
+    .item__message {
+      height: auto;
+      color: var(--app-color-gray-50);
+      font-size: 13px;
+    }
+  }
 }
 
 .button {
   &--submit {
     background: none;
     color: var(--app-color-primary);
-    margin-left: -12px;
     font-size: 1.2em;
     svg {
       margin-left: 10px;
@@ -124,6 +130,11 @@ input::-webkit-inner-spin-button {
     &--currency {
       .item__title {
         margin-bottom: 17px;
+      }
+    }
+    &--submit {
+      .item__message {
+        max-width: 320px;
       }
     }
   }

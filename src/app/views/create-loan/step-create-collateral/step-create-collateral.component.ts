@@ -137,7 +137,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     const { COLLATERAL_AVERAGE_LOW } = this;
     const { collateralAdjustment } = this.form.value.formUi;
     if (collateralAdjustment < COLLATERAL_AVERAGE_LOW) {
-      return this.showMessage(`The collateral is too low, make sure it is greater than ${ COLLATERAL_AVERAGE_LOW }%`);
+      return this.showMessage(`This amount is not enough to collateralize your loan. Please increase it until the Collateral Ratio is ${ COLLATERAL_AVERAGE_LOW }% or higher.`);
     }
 
     this.createCollateral.emit();

@@ -14,7 +14,7 @@
         </span>
         <div class="item__content">
           <span class="item__label">
-            Collateral
+            Collateral amount
           </span>
           <p class="item__value mt-1">
             {{ collateralAmount }} {{ collateralAsset }}
@@ -40,7 +40,7 @@
         </span>
         <div class="item__content">
           <span class="item__label">
-            Balance ratio
+            Safety ratio
           </span>
           <p class="item__value mt-1">
             {{ balanceRatio }} %
@@ -52,10 +52,10 @@
       <div class="row row--header" *ngIf="canAdjust">
         <div class="item col col-12 col-md-7">
           <h4>
-            Adjust collateral
+            Deposit collateral
           </h4>
           <p>
-            Do you want to withdraw or add more collateral?
+            Do you want to deposit collateral? Your loan will not be available for lending until you do.
           </p>
         </div>
         <div class="item col col-12 col-md-5 d-flex justify-content-end align-items-center">

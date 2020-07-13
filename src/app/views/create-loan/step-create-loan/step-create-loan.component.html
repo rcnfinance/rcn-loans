@@ -13,12 +13,12 @@
         <div class="row">
           <div class="col-sm-12 col-md-4 mb-4 mb-lg-0 item item--currency">
             <div class="item__title">
-              Borrow currency
+              Currency
             </div>
             <div>
               <mat-form-field floatLabel="never">
                 <mat-select
-                  placeholder="Select a Token"
+                  placeholder="Select a currency"
                   formControlName="currency"
                   required
                   (selectionChange)="changeCurrency()"
@@ -42,7 +42,7 @@
           </div>
           <div class="col-sm-12 col-md-4 item item--amount">
             <div class="item__title">
-              Borrow amount
+              Amount
             </div>
             <div>
               <mat-form-field floatLabel="never">
@@ -67,7 +67,7 @@
                       )
                     "
                   >
-                    The minimum is 1
+                    Please select a positive amount.
                   </span>
                 </mat-hint>
               </mat-form-field>
@@ -81,9 +81,8 @@
             "
           >
             <div class="item__message item__message--warning">
-              <i class="fas fa-exclamation-triangle"></i> You’re borrowing in
-              {{ form.value.formUi.currency.symbol }}, therefore the value of
-              the pays is going to be converted to RCN.
+              <i class="fas fa-exclamation-triangle"></i>
+              You'll receive all the requested funds in RCN.
             </div>
           </div>
         </div>
@@ -91,16 +90,13 @@
         <div class="row mt-3 mt-lg-5 pt-4">
           <div class="col col-sm-12 item">
             <div class="item__title">
-              Duration of the loan
+              Duration
             </div>
-            <span class="item__subtitle">
-              Set the number of days you want your loan to last.
-            </span>
             <div class="row">
               <div class="col-sm-12 col-lg-4">
                 <mat-form-field floatLabel="never">
                   <mat-select
-                    placeholder="Select a number"
+                    placeholder="Select a duration"
                     formControlName="duration"
                     required
                   >
@@ -120,10 +116,10 @@
         <div class="row mt-3 mt-lg-5 pt-4">
           <div class="col col-lg-12 item item--slider">
             <div class="item__title">
-              Annual interest rate
+              Annual rate
             </div>
             <div class="item__subtitle">
-              Select the interest you want to pay
+              Select an interest rate
             </div>
             <div class="row mt-4 mb-3">
               <div class="col col-sm-12 col-lg-7">
@@ -169,8 +165,8 @@
               *ngIf="form.controls.formUi.value.currency"
               class="item__message item__message--info"
             >
-              <i class="fas fa-info-circle"></i> Higher interestes are more likely
-              to be lended.
+              <i class="fas fa-info-circle"></i> Selecting a rate near the current
+              market average will increase your loan's chances to be funded.
             </div>
           </div>
         </div>
@@ -207,17 +203,13 @@
         <div class="row mt-3 mt-lg-5 pt-4">
           <div class="col-sm-12 item">
             <div class="item__title">
-              Expiration date
-            </div>
-            <div class="item__subtitle">
-              If nobody takes your debt, the loan will expire after
-              certain days of being generated.
+              Expiration time
             </div>
             <div class="row">
               <div class="col-sm-12 col-lg-2">
                 <mat-form-field floatLabel="never">
                   <mat-select
-                    placeholder="Select a number"
+                    placeholder="Select a timespan"
                     formControlName="expiration"
                     required
                   >
@@ -235,15 +227,21 @@
         </div>
 
         <div class="row mt-3 mt-lg-5 pt-4 mb-2">
-          <div class="col-sm-12">
-            <button
-              mat-raised-button
-              type="submit"
-              class="button button--submit mat-elevation-z"
-            >
-              Create
-              <i class="fas fa-arrow-circle-right"></i>
-            </button>
+          <div class="col-sm-12 item item--submit">
+            <div class="d-md-flex align-items-center">
+              <button
+                mat-raised-button
+                type="submit"
+                class="button button-clear button--submit mat-elevation-z mr-4"
+              >
+                Create
+                <i class="fas fa-arrow-circle-right"></i>
+              </button>
+              <div class="item__message item__message--info mt-3 mt-md-0">
+                IMPORTANT: your loan will not be available for lending until you
+                supply your collateral.
+              </div>
+            </div>
           </div>
         </div>
 

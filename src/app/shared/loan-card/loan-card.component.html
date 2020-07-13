@@ -1,7 +1,10 @@
 <div class="loan-card mat-elevation-z5">
   <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
   <ng-container *ngIf="isIncomplete; else completeTemplate">
-    <div class="loan-card__complete">
+    <div
+      class="loan-card__complete"
+      matTooltip="IMPORTANT: your loan will not be available for lending until you supply your collateral."
+    >
       <i class="fas fa-exclamation-circle"></i>
     </div>
   </ng-container>
@@ -81,7 +84,7 @@
     <div class="loan-card__property loan-card__property--actions">
       <ng-container *ngIf="isIncomplete; else activeLoanActions">
         <button mat-raised-button class="button button-clear">
-          + Collateral
+          Collateralize
         </button>
       </ng-container>
       <ng-template #activeLoanActions>

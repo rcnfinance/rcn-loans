@@ -224,7 +224,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    * @return Button text
    */
   get addButtonText(): string {
-    return 'Add more';
+    return 'Deposit';
   }
 
   /**

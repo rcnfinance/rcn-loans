@@ -29,7 +29,7 @@
       <ng-template #collateralTemplate>
         <div class="creator-container">
           <div class="creator-title">
-            Collateral {{ collateralAsset }}
+            {{ collateralAsset }} Collateral
           </div>
         </div>
       </ng-template>
@@ -58,7 +58,7 @@
       <ng-container *ngIf="!isPaid; else paidGraphic">
         <div class="px-3 pt-1">
           <app-conversion-graphic
-            [headers]="['Lend', loan.currency, 'Receive']"
+            [headers]="['Borrow', loan.currency, 'Repay']"
             [amountLeft]="loan.currency.fromUnit(loan.amount)"
             [amountRight]="isRequest || isCanceled || isExpired ? expectedReturn : totalDebt"
             [currency]="loan.currency"

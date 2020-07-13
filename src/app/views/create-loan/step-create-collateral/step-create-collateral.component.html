@@ -13,13 +13,13 @@
         <div class="row">
           <div class="col-sm-12 col-md-3 mb-4 mb-lg-0 item">
             <div class="item__title">
-              Collateral asset
+              Currency
             </div>
             <div>
               <!-- multiple collateral assets component -->
               <mat-form-field *ngIf="currencies?.length > 1; else signleCollateralAssetTemplate">
                 <mat-select
-                  placeholder="Select a Token"
+                  placeholder="Select a currency"
                   formControlName="currency"
                   required
                   (selectionChange)="onCurrencyChange()"
@@ -60,7 +60,7 @@
           </div>
           <div class="col-sm-12 col-md-3 item item--amount">
             <div class="item__title">
-              Collateral amount
+              Amount
             </div>
             <div>
               <mat-form-field>
@@ -93,7 +93,7 @@
                   <div class="ratio__title">
                     <i class="fa fa-chart-line"></i>
                     <span class="ml-2">
-                      Loan to Value:
+                      Collateral Ratio:
                     </span>
                   </div>
                   <div class="ratio__value mt-2">
@@ -122,7 +122,7 @@
                       <div class="ratio__title">
                         <i class="fa fa-chart-line"></i>
                         <span class="ml-2">
-                          Balance Ratio:
+                          Safety Ratio:
                         </span>
                       </div>
                       <div class="ratio__value ml-2">

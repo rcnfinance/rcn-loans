@@ -37,6 +37,7 @@
   &__complete {
     position: absolute;
     top: 25px;
+    z-index: 3;
   }
 
   &__risk-indicator {
