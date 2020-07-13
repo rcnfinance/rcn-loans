@@ -14,6 +14,12 @@
           <div class="col-sm-12 col-md-3 mb-4 mb-lg-0 item">
             <div class="item__title">
               Currency
+              <mat-icon
+                class="ml-2"
+                matTooltip="This is the currency you will have to deposit to supply you collateral."
+              >
+                info
+              </mat-icon>
             </div>
             <div>
               <!-- multiple collateral assets component -->
@@ -61,6 +67,12 @@
           <div class="col-sm-12 col-md-3 item item--amount">
             <div class="item__title">
               Amount
+              <mat-icon
+                class="ml-2"
+                matTooltip="This is the amount of funds you will have to deposit to supply you collateral."
+              >
+                info
+              </mat-icon>
             </div>
             <div>
               <mat-form-field>
@@ -89,6 +101,7 @@
                     form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_HIGH
                   "
                   [class.ratio--high]="form?.value.formUi.collateralAdjustment >= COLLATERAL_AVERAGE_HIGH"
+                  matTooltip="This is the proportion between the value of your collateral and the value of your borrowed funds. (If it reaches the Liquidation Ratio, your collateral will get partially or fully liquidated through a margin call.)"
                 >
                   <div class="ratio__title">
                     <i class="fa fa-chart-line"></i>
@@ -104,7 +117,10 @@
               <div class="col-12 col-md-7 pl-md-0 mb-4 my-md-0">
                 <div class="row">
                   <div class="col-12">
-                    <div class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--liquidation">
+                    <div
+                      class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--liquidation"
+                      matTooltip="If the Collateralization Ratio reaches this value your collateral will get partially or fully liquidated through a margin call."
+                    >
                       <div class="ratio__title">
                         <i class="fa fa-chart-line"></i>
                         <span class="ml-2">
@@ -118,7 +134,10 @@
                     <div class="ratio-divisor"></div>
                   </div>
                   <div class="col-12">
-                    <div class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--balance">
+                    <div
+                      class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--balance"
+                      matTooltip="If a margin call gets triggered, your collateral will get liquidated until the Collateralization Ratio reaches this value."
+                    >
                       <div class="ratio__title">
                         <i class="fa fa-chart-line"></i>
                         <span class="ml-2">

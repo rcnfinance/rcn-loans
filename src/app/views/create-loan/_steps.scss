@@ -55,6 +55,14 @@ input::-webkit-inner-spin-button {
     @include typography-body(1);
     text-transform: uppercase;
     color: #EDEDED;
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      font-size: 15px;
+      display: block;
+      margin-bottom: -8px;
+    }
   }
   &__subtitle {
     @include typography-headline(7);
