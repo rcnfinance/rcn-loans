@@ -144,9 +144,8 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
       await this.collateralService.calculateCollateralPercentage(loan, currency, amount);
 
     const decimals: number = new Currency(currency.symbol).decimals;
-    const liquidationPrice: BN = Utils.bn(liquidationPercentage)
-        .mul(Utils.bn(amount))
-        .div(Utils.bn(collateralPercentage));
+    const liquidationPrice: number = (Number(liquidationPercentage) * Number(amount)) / Number(collateralPercentage);
+
     const formattedLiquidationPrice: number =
       (liquidationPrice as any / 10 ** decimals);
 

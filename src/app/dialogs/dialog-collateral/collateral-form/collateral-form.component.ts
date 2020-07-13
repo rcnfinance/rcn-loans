@@ -142,9 +142,8 @@ export class CollateralFormComponent implements OnInit {
 
     const decimals: number = new Currency(currency.symbol).decimals;
     const formattedAmount: string = Utils.formatAmount(this.formatAmount(amount, decimals));
-    const liquidationPrice: BN = Utils.bn(liquidationPercentage)
-        .mul(Utils.bn(amount))
-        .div(Utils.bn(collateralPercentage));
+
+    const liquidationPrice: number = (Number(liquidationPercentage) * Number(amount)) / Number(collateralPercentage);
     const formattedLiquidationPrice: string =
       Utils.formatAmount(this.formatAmount(liquidationPrice, decimals));
 
