@@ -14,12 +14,6 @@
           <div class="col-sm-12 col-md-3 mb-4 mb-lg-0 item">
             <div class="item__title">
               Currency
-              <mat-icon
-                class="ml-2"
-                matTooltip="This is the currency you will have to deposit to supply you collateral."
-              >
-                info
-              </mat-icon>
             </div>
             <div>
               <!-- multiple collateral assets component -->
@@ -57,7 +51,7 @@
                       {{ form?.value.formUi.currency?.symbol || '-' }}
                     </span>
                   </div>
-                  <div>
+                  <div matTooltip="This is the currency you will have to deposit to supply you collateral.">
                     <i class="fas fa-info-circle"></i>
                   </div>
                 </div>
