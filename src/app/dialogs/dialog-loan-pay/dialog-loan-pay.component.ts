@@ -80,8 +80,12 @@ export class DialogLoanPayComponent implements OnInit {
     const currency = loan.currency;
     const pendingAmount = currency.fromUnit(loan.debt.model.estimatedObligation);
 
+    // adds 0,001% to the amount for prevent a small due
+    const additional = (0.001 * pendingAmount) / 100;
+    const securePendingAmount = pendingAmount + additional;
+
     this.currency = currency;
-    this.pendingAmount = Utils.formatAmount(pendingAmount);
+    this.pendingAmount = Utils.formatAmount(securePendingAmount);
     this.form.controls.amount.setValidators([Validators.required]);
     this.shortLoanId =
       this.loan.id.startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
@@ -93,6 +97,9 @@ export class DialogLoanPayComponent implements OnInit {
     const RCN_DECIMALS = 18;
     this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** RCN_DECIMALS);
     this.pendingAmountRcn = Utils.formatAmount(Number(this.exchangeRcn) * Number(this.pendingAmount));
+
+    console.info('pending amount', Utils.formatAmount(pendingAmount));
+    console.info('secre pending amount', Utils.formatAmount(securePendingAmount));
   }
 
   /**
