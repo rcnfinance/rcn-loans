@@ -307,7 +307,8 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
 
     const loanOracle: string = await this.contractsService.symbolToOracle(loan.currency.toString());
     const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loan.currency.decimals);
-    const loanAmountInRcn: BN = Utils.bn(loan.descriptor.totalObligation)
+    const loanAmount: number = loan.debt ? loan.debt.model.estimatedObligation : loan.amount;
+    const loanAmountInRcn: BN = Utils.bn(loanAmount)
         .mul(Utils.bn(loanRate))
         .div(Utils.pow(10, loan.currency.decimals));
 
@@ -318,7 +319,8 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
         .mul(Utils.bn(loanAmountInRcn))
         .div(Utils.bn(100));
 
-    const amount: string = Utils.formatAmount(Number(collateralAmountInRcn) / Number(collateralRate));
+    const rawAmount: number = Number(collateralAmountInRcn) / Number(collateralRate);
+    const amount = Math.ceil((rawAmount + Number.EPSILON) * 100) / 100;
     this.form.controls.formUi.patchValue({ amount });
 
     return amount;
@@ -342,25 +344,16 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
         collateralAdjustment: EMPTY_COLLATERAL_ADJUSTMENT
       });
     }
-    const loanOracle: string = await this.contractsService.symbolToOracle(loan.currency.toString());
-    const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loan.currency.decimals);
-    const loanAmountInRcn: BN = Utils.bn(loan.amount)
-        .mul(Utils.bn(loanRate))
-        .div(Utils.pow(10, loan.currency.decimals));
 
-    const collateralOracle: string = await this.contractsService.symbolToOracle(currency.symbol);
     const collateralDecimals: number = new Currency(currency.symbol).decimals;
     const collateralAmountInWei: BN = Utils.getAmountInWei(amount, collateralDecimals);
-    const collateralRate: BN | string = await this.contractsService.getRate(collateralOracle, collateralDecimals);
-    const collateralAmountInRcn: BN = Utils.bn(collateralRate)
-        .mul(collateralAmountInWei)
-        .div(Utils.pow(10, collateralDecimals));
+    const collateralPercentage = await this.collateralService.calculateCollateralPercentage(
+      loan,
+      currency,
+      collateralAmountInWei
+    );
 
-    const collateralPercentage: BN = Utils.bn(collateralAmountInRcn)
-        .mul(Utils.bn(100))
-        .div(Utils.bn(loanAmountInRcn));
-
-    const collateralAdjustment: string = Utils.formatAmount(collateralPercentage);
+    const collateralAdjustment: number = Math.round(Number(collateralPercentage));
     this.form.controls.formUi.patchValue({ collateralAdjustment });
 
     return collateralPercentage;
