@@ -37,6 +37,10 @@ export class CreatorContainerComponent implements OnInit, OnChanges {
 
   getCollateralAsset({ token }: Collateral) {
     const currency = this.currenciesService.getCurrencyByKey('address', token);
+    if (!currency) {
+      return;
+    }
+
     return currency.symbol;
   }
 
@@ -46,6 +50,10 @@ export class CreatorContainerComponent implements OnInit, OnChanges {
 
     if (collateral) {
       const currency = await this.currenciesService.getCurrencyByKey('address', collateral.token);
+      if (!currency) {
+        return;
+      }
+
       this.currency = currency.symbol;
     }
   }
