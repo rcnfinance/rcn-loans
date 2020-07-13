@@ -17,14 +17,14 @@
       <div class="dialog-content dialog-padding">
         <div class="row mb-3 mt-4 mt-md-0 mb-5">
           <div class="col col-12 item item--description">
-            You're about to repay the {{ shortLoanId }} loan. Please choose the
-            amount you'd like/you want to pay.
+            You're about to make a repayment to the {{ shortLoanId }} loan. Please
+            choose the amount you'd like to repay.
           </div>
         </div>
         <div class="row">
           <div class="col col-12 col-md-4 mb-3 mb-md-0 item item--entry">
             <p class="item__subtitle">
-              Amount you want to pay
+              Repayment amount
             </p>
             <mat-form-field
               class="mt-2"
@@ -70,7 +70,7 @@
           </div>
           <div class="col col-12 col-md-6 offset-md-2 mb-3 mb-md-0 pl-md-5 item item--amount">
             <p class="item__subtitle">
-              Due
+              Outstanding amount
             </p>
             <p class="item__value">
               <strong class="item__value-amount">
@@ -99,7 +99,7 @@
                   <i class="fas fa-check check mr-1"></i>
                 </span>
                 <span>
-                  You are paying the complete amount of the debt.
+                  You're about to repay the total Outstanding Amount.
                 </span>
               </p>
               <p *ngIf="form?.value.amount < pendingAmount">
@@ -107,7 +107,9 @@
                   <i class="fas fa-exclamation-triangle mr-1"></i>
                 </span>
                 <span>
-                  You are paying an amount less than the corresponding, this will affect your payment schedule.
+                  You're about to repay less than the total Outstanding Amount.
+                  If it is not fully repaid by the Due Date, your collateral will
+                  get partially or fully liquidated through a margin call.
                 </span>
               </p>
             </div>
@@ -124,7 +126,7 @@
           The value of the payments it's going to be converted to RCN.
           -->
           <span class="mr-1">
-            Exchange Rate 1 {{ loan.currency }}
+            Current Exchange Rate: 1 {{ loan.currency }}
           </span>
           <span class="mr-1" *ngIf="loan.currency.toString() !== 'RCN'">
             = {{ exchangeRcn }} RCN
@@ -143,7 +145,7 @@
       <div class="dialog-footer dialog-padding pt-0 pb-3 row">
         <div class="dialog-footer__label col-sm-12 col-md-6">
           <p>
-            Repaying from the address <strong>{{ shortAccount }}</strong>.
+            Repaying from the <strong>{{ shortAccount }}</strong> address.
           </p>
         </div>
         <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
