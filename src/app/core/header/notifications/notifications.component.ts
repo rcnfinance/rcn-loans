@@ -121,7 +121,7 @@ export class NotificationsComponent implements OnInit {
     const loanId = this.getFormattedLoanId(tx.data.id);
     switch (tx.type) {
       case 'lend':
-        message = `Lending the ${ loanId } loan request`;
+        message = `Funding the ${ loanId } loan request`;
         break;
       case 'withdraw':
         message = `Withdrawing your Available Balance`;
@@ -143,7 +143,7 @@ export class NotificationsComponent implements OnInit {
         }
         break;
       case 'create':
-        message = `Creating the ${ loanId } loan`;
+        message = `Requesting the ${ loanId } loan`;
         break;
       case 'createCollateral':
         message = `Creating a collateral`;
@@ -224,7 +224,7 @@ export class NotificationsComponent implements OnInit {
     let message: string;
     switch (tx.type) {
       case 'lend':
-        message = `You've lent the ${ loanId } loan request`;
+        message = `You've funded the ${ loanId } loan`;
         break;
       case 'withdraw':
         message = `You've withdrawn your Available Balance`;
@@ -246,7 +246,7 @@ export class NotificationsComponent implements OnInit {
         }
         break;
       case 'create':
-        message = `You've created the ${ loanId } loan`;
+        message = `You've requested the ${ loanId } loan`;
         break;
       case 'createCollateral':
         message = `You've created a collateral`;
@@ -286,7 +286,7 @@ export class NotificationsComponent implements OnInit {
     const message: string = this.getTxMessage(tx);
     switch (tx.type) {
       case 'lend':
-        txObject = new TxObject(id, 'Lending', message, 'material-icons', 'trending_up', '', 'blue');
+        txObject = new TxObject(id, 'Funding', message, 'material-icons', 'trending_up', '', 'blue');
         break;
       case 'withdraw':
         txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'call_made', '', 'white');
@@ -308,7 +308,7 @@ export class NotificationsComponent implements OnInit {
         }
         break;
       case 'create':
-        txObject = new TxObject(id, 'Creating', message, '', '', 'fas fa-file-invoice-dollar', 'turquoise');
+        txObject = new TxObject(id, 'Borrowing', message, '', '', 'fas fa-file-invoice-dollar', 'turquoise');
         break;
       case 'createCollateral':
         txObject = new TxObject(id, 'Creating', message, '', '', 'fas fa-coins', 'violet');
