@@ -89,7 +89,7 @@
       <div
         class="row row--footer"
         [class.row--divisor]="canAdjust"
-        *ngIf="loan?.debt && collateral?.amount !== '0'"
+        *ngIf="loan?.debt && collateral?.amount !== '0' && loan.status !== 2"
       >
         <div class="item col col-12 col-md-4">
           <i class="fa fa-percentage"></i>
