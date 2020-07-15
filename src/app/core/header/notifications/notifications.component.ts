@@ -146,7 +146,7 @@ export class NotificationsComponent implements OnInit {
         message = `Creating the ${ loanId } loan`;
         break;
       case 'createCollateral':
-        message = `Creating the ${ tx.data.collateralId } collateral`;
+        message = `Creating a collateral`;
         break;
       case 'addCollateral':
         message = `Depositing the ${ tx.data.collateralId } collateral`;
@@ -249,7 +249,7 @@ export class NotificationsComponent implements OnInit {
         message = `You've created the ${ loanId } loan`;
         break;
       case 'createCollateral':
-        message = `You've created the ${ tx.data.collateralId } collateral`;
+        message = `You've created a collateral`;
         break;
       case 'addCollateral':
         message = `You've deposited the ${ tx.data.collateralId } collateral`;
