@@ -1,4 +1,4 @@
-<app-dialog-header title="Collateral adjustment">
+<app-dialog-header title="Collateral Adjusting">
 </app-dialog-header>
 
 <mat-dialog-content>
@@ -16,6 +16,7 @@
     [loan]="loan"
     [loading]="addPendingTx || withdrawPendingTx"
     [shortAccount]="shortAccount"
+    [shortLoanId]="shortLoanId"
     (submitAdd)="addCollateral($event)"
     (submitWithdraw)="withdrawCollateral($event)"
   >

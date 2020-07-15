@@ -12,13 +12,14 @@
       <div class="dialog-content dialog-padding">
         <div class="row mb-3 mt-4 mt-md-0 mb-5">
           <div class="col col-12 item item--description">
-            Select the amount you want to withdraw to your collateral supply.
+            You're about to adjust the {{ shortLoanId }} loan's collateral. Please
+            choose the amount you'd like to withdraw.
           </div>
         </div>
         <div class="row mb-4">
           <div class="col col-12 col-md-5 mb-3 mb-md-0 item item--entry">
             <p class="item__subtitle">
-              Amount you want to withdraw
+              Withdrawn amount
             </p>
             <mat-form-field
               class="mt-2"
@@ -42,7 +43,7 @@
           </div>
           <div class="col col-12 col-md-4 offset-md-3 mb-3 mb-md-0 item item--max-withdraw">
             <p class="item__subtitle">
-              Max withdraw
+              Maximum withdrawal
             </p>
             <div class="d-flex align-items-center justify-content-start">
               <p class="value">
@@ -64,7 +65,7 @@
         <div class="row">
           <div class="col col-12 col-md-8 mb-3 mb-md-0 item item--graphic">
             <p class="item__subtitle">
-              Collateral to debt
+              Collateral ratio
             </p>
             <div class="mt-2 px-2 px-md-0">
               <app-collateral-slider-debt
@@ -90,9 +91,11 @@
 
       <div class="dialog-divisor dialog-padding py-0 mt-4 mt-md-0 row">
         <div class="dialog-divisor__content col-sm-12">
-          <i class="material-icons mr-2">
-            info
-          </i>
+          <span matTooltip="This is the Exchange Rate at which the Collateralization Ratio will reach the Liquidation Ratio, triggering a margin call.">
+            <i class="material-icons mr-2">
+              info
+            </i>
+          </span>
           Liquidation Price:
           {{ form?.value.formRatios.liquidationPrice }}
           {{ form?.value.formRatios.currency?.symbol }}
@@ -104,7 +107,7 @@
       <div class="dialog-footer dialog-padding pt-0 pb-3 row">
         <div class="dialog-footer__label col-sm-12 col-md-6">
           <p>
-            Withdrawing from your <strong>{{ shortAccount }}</strong> account.
+            Withdrawing collateral from the <strong>{{ shortAccount }}</strong> address.
           </p>
         </div>
         <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
@@ -135,13 +138,14 @@
       <div class="dialog-content dialog-padding">
         <div class="row mb-3 mt-4 mt-md-0 mb-5">
           <div class="col col-12 item item--description">
-            Select the amount you want to add to your collateral supply.
+            You're about to adjust the {{ shortLoanId }} loan's collateral. Please
+            choose the amount you'd like to deposit.
           </div>
         </div>
         <div class="row mb-4">
           <div class="col col-12 col-md-4 mb-3 mb-md-0 item item--entry">
             <p class="item__subtitle">
-              Amount you want to add
+              Deposited amount
             </p>
             <mat-form-field
               class="mt-2"
@@ -176,7 +180,7 @@
         <div class="row">
           <div class="col col-12 mb-3 mb-md-0 item item--graphic">
             <p class="item__subtitle">
-              Collateral to debt
+              Collateral ratio
             </p>
             <div class="mt-2 px-2 px-md-0">
               <app-collateral-slider-debt
@@ -193,9 +197,11 @@
 
       <div class="dialog-divisor dialog-padding py-0 mt-4 mt-md-0 row">
         <div class="dialog-divisor__content col-sm-12">
-          <i class="material-icons mr-2">
-            info
-          </i>
+          <span matTooltip="This is the Exchange Rate at which the Collateralization Ratio will reach the Liquidation Ratio, triggering a margin call.">
+            <i class="material-icons mr-2">
+              info
+            </i>
+          </span>
           Liquidation Price:
           {{ form?.value.formRatios.liquidationPrice }}
           {{ form?.value.formRatios.currency?.symbol }}
@@ -207,7 +213,7 @@
       <div class="dialog-footer dialog-padding pt-0 pb-3 row">
         <div class="dialog-footer__label col-sm-12 col-md-6">
           <p>
-            Adding from your <strong>{{ shortAccount }}</strong> account.
+            Depositing collateral from the <strong>{{ shortAccount }}</strong> address.
           </p>
         </div>
         <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">

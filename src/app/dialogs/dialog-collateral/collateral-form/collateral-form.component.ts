@@ -29,6 +29,7 @@ export class CollateralFormComponent implements OnInit {
   @Input() loan: Loan;
   @Input() loading: boolean;
   @Input() shortAccount: string;
+  @Input() shortLoanId: string;
   @Output() submitAdd = new EventEmitter<BN>();
   @Output() submitWithdraw = new EventEmitter<BN>();
 
@@ -289,9 +290,9 @@ export class CollateralFormComponent implements OnInit {
    */
   get addButtonText(): string {
     if (!this.loading) {
-      return 'Add';
+      return 'Deposit';
     }
-    return 'Adding...';
+    return 'Depositing...';
   }
 
   /**

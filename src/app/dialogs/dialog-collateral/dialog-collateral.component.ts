@@ -23,6 +23,7 @@ import { TxService, Tx } from './../../services/tx.service';
 export class DialogCollateralComponent implements OnInit, OnDestroy {
 
   loan: Loan;
+  shortLoanId: string;
   collateral: Collateral;
   action: string;
   addPendingTx: Tx;
@@ -56,6 +57,8 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     this.loan = this.data.loan;
     this.collateral = this.data.collateral;
     this.action = data.action;
+    this.shortLoanId = Utils.shortAddress(this.loan.id);
+
   }
 
   async ngOnInit() {
