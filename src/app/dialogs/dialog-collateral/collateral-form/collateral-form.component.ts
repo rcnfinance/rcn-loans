@@ -265,7 +265,7 @@ export class CollateralFormComponent implements OnInit {
     const { currency, collateralRatio, balanceRatio } = this.form.value.formRatios;
     const decimals: number = new Currency(currency.symbol).decimals;
 
-    const collateralAdjustment: number = Math.round(Number(collateralRatio));
+    const collateralAdjustment: number = Math.floor(Number(collateralRatio));
     const balanceAmount = Utils.bn(balanceRatio)
         .mul(Utils.bn(amount))
         .div(Utils.bn(collateralAdjustment));
