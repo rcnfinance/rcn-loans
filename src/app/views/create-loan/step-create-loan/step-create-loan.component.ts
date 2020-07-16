@@ -91,7 +91,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
       return await this.router.navigate(['/loan', formUi.calculatedId]);
     }
     if (tx) {
-      return this.showMessage('Please wait for your loan to finish being created.');
+      return this.showMessage('Please wait until your loan requesting transaction is completed to supply your collateral.');
     }
 
     // validate encoded data
@@ -107,7 +107,6 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     }
 
     // calculate loan ID and emit form data
-    this.showMessage('Please confirm the metamask transaction. Your Loan is being processed.');
     const account: string = this.account;
     const { amount, model, oracle, callback, salt, expiration } = formLoan;
     const calculatedId: string = await this.contractsService.calculateLoanId(

@@ -145,7 +145,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     const form: CollateralRequest = this.collateralRequest;
 
     if (loanTx && !loanTx.confirmed) {
-      this.showMessage('Please wait for your loan to finish being created.', 'snackbar');
+      this.showMessage('Please wait until your loan requesting transaction is completed to supply your collateral.', 'snackbar');
       return;
     }
     if (collateralTx) {
@@ -153,7 +153,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
         this.router.navigate(['/', 'loan', loan.id]);
         return;
       }
-      this.showMessage('Wait for the collateral to be created.', 'snackbar');
+      this.showMessage('Please wait until your collateral supplying transaction is completed.', 'snackbar');
       return;
     }
     // unlogged user
@@ -202,7 +202,6 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.showMessage('Please confirm the metamask transaction. Your Collateral is being processed.', 'snackbar');
     this.handleCreateCollateral(form);
   }
 
@@ -318,6 +317,10 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
       this.finishProgress = true;
       this.loanWasCreated = true;
       this.startProgress = false;
+      this.showMessage(
+        'Your loan request has been created. Please supply your collateral to continue the process.',
+        'snackbar'
+      );
     } else {
       this.cancelProgress = true;
       this.loanWasCreated = false;
@@ -336,6 +339,8 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     const loan: Loan = this.loan;
     this.finishProgress = true;
     this.loanWasCreated = true;
+    this.showMessage(`Congratulations! You've successfully requested a loan.`, 'snackbar');
+
     this.spinner.show();
 
     const TIME_MS = 8000;

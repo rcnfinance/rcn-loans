@@ -79,7 +79,7 @@
                       )
                     "
                   >
-                    Please select a positive amount.
+                    Please select an amount greater than zero.
                   </span>
                 </mat-hint>
               </mat-form-field>
@@ -137,7 +137,7 @@
               Annual rate
               <mat-icon
                 class="ml-2"
-                matTooltip="This is the annualized interest rate you will pay for your borrowed funds, also known as Annual Percentage Rate (APR)."
+                matTooltip="This is the annualized interest rate you will pay (also known as Annual Percentage Rate or APR), denominated in the Borrowing Currency."
               >
                 info
               </mat-icon>
@@ -189,7 +189,7 @@
               *ngIf="form.controls.formUi.value.currency"
               class="item__message item__message--info"
             >
-              <i class="fas fa-info-circle"></i> Selecting a rate near the current
+              <i class="fas fa-info-circle"></i> Selecting a rate above the current
               market average will increase your loan's chances to be funded.
             </div>
           </div>
@@ -234,6 +234,9 @@
               >
                 info
               </mat-icon>
+            </div>
+            <div class="item__subtitle">
+              Select a timespan
             </div>
             <div class="row">
               <div class="col-sm-12 col-lg-2">
