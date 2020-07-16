@@ -80,6 +80,14 @@
                   pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
                   required
                 />
+                <mat-hint
+                  *ngIf="form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_LOW"
+                >
+                  <span class="red">
+                    <i class="fas fa-exclamation-triangle mr-1"></i>
+                    Please increase the amount until the Collateral Ratio is 200% or higher.
+                  </span>
+                </mat-hint>
               </mat-form-field>
             </div>
           </div>
@@ -90,12 +98,8 @@
                   class="py-2 ratio ratio--collateral"
                   [class.ratio--untouched]="!form?.value.formUi.amount"
                   [class.ratio--low]="form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_LOW"
-                  [class.ratio--normal]="
-                    form?.value.formUi.collateralAdjustment >= COLLATERAL_AVERAGE_LOW &&
-                    form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_HIGH
-                  "
-                  [class.ratio--high]="form?.value.formUi.collateralAdjustment >= COLLATERAL_AVERAGE_HIGH"
-                  matTooltip="This is the proportion between the value of your collateral and the value of your borrowed funds. (If it reaches the Liquidation Ratio, your collateral will get partially or fully liquidated through a margin call.)"
+                  [class.ratio--high]="form?.value.formUi.collateralAdjustment >= COLLATERAL_AVERAGE_LOW"
+                  matTooltip="This is the proportion between the value of your collateral and the value of your borrowed funds. Selecting a higher value will decrease your chances of facing a collateral liquidation."
                 >
                   <div class="ratio__title">
                     <i class="fa fa-chart-line"></i>
@@ -113,7 +117,7 @@
                   <div class="col-12">
                     <div
                       class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--liquidation"
-                      matTooltip="If the Collateralization Ratio reaches this value your collateral will get partially or fully liquidated through a margin call."
+                      matTooltip="If the Collateral Ratio reaches this value your collateral will get partially or fully liquidated."
                     >
                       <div class="ratio__title">
                         <i class="fa fa-chart-line"></i>
@@ -130,7 +134,7 @@
                   <div class="col-12">
                     <div
                       class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--balance"
-                      matTooltip="If a margin call gets triggered, your collateral will get liquidated until the Collateralization Ratio reaches this value."
+                      matTooltip="If your collateral gets liquidated it will continue to do so until the Collateral Ratio reaches this value."
                     >
                       <div class="ratio__title">
                         <i class="fa fa-chart-line"></i>
