@@ -229,7 +229,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
 
       const { id, amount } = loan;
       this.txService.registerCreateTx(tx, { engine, id, amount });
-      this.location.replaceState(`/create/${ id }`);
+      this.location.replaceState(`/borrow/${ id }`);
       this.retrievePendingTx();
       this.loanWasCreated = true;
     } catch (e) {
@@ -277,7 +277,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     const loanId: string = this.loan.id;
 
     if (this.createPendingTx !== undefined) {
-      this.location.replaceState(`/create/${ loanId }`);
+      this.location.replaceState(`/borrow/${ loanId }`);
       this.startProgress = true;
       this.trackProgressbar();
       return;

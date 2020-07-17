@@ -378,7 +378,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
       this.updateLoan.emit(loan);
       this.loanWasCreated.emit();
     } catch (e) {
-      this.location.replaceState(`/create`);
+      this.location.replaceState(`/borrow`);
       this.showMessage('Please create a new loan');
       this.updateLoanMockup();
     } finally {
