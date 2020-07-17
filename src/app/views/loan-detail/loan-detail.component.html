@@ -125,7 +125,8 @@
           <tbody>
             <tr>
               <td style='cursor: pointer' (click)="openAddress(loan.borrower)">
-                {{ loan.borrower | formatAddress }} - {{ brand.headerTitle }}
+                {{ loan.borrower | formatAddress }} -
+                {{ loanType === 3 ? brand.headerTitle : 'Unknown' }}
               </td>
             </tr>
           </tbody>
