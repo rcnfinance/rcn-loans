@@ -128,6 +128,10 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         // state
         this.viewDetail = this.defaultDetail();
         this.handleLoginEvents();
+
+        // verify loan integrity
+        this.verifyIntegrity();
+
         this.spinner.hide(this.pageId);
       } catch (err) {
         this.eventsService.trackError(err);
@@ -512,6 +516,16 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         collateral &&
         collateral.status === CollateralStatus.ToWithdraw &&
         Number(collateral.amount) > 0;
+    }
+  }
+
+  /**
+   * Loan integrity validations
+   */
+  private verifyIntegrity() {
+    const loanType: LoanType = this.loanType;
+    if (loanType === LoanType.Unknown) {
+      throw Error(`Unknown loans aren't allowed`);
     }
   }
 
