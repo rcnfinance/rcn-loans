@@ -122,7 +122,7 @@
                       *ngFor="let duration of durationDays"
                       [value]="duration"
                     >
-                      {{ duration }}
+                      {{ duration }} Days
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -250,7 +250,7 @@
                       *ngFor="let day of [1,2,3,4,5]"
                       [value]="day"
                     >
-                      {{ day }} day{{ day === 1 ? '' : 's' }}
+                      {{ day }} Day{{ day === 1 ? '' : 's' }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
