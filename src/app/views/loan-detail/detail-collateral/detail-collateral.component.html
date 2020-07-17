@@ -17,7 +17,7 @@
         </span>
         <div class="item__content">
           <span class="item__label">
-            Collateral amount
+            Collateral Amount
           </span>
           <p class="item__value mt-1">
             {{ collateralAmount }} {{ collateralAsset }}
@@ -33,7 +33,7 @@
         </span>
         <div class="item__content">
           <span class="item__label">
-            Liquidation ratio
+            Liquidation Ratio
           </span>
           <p class="item__value mt-1">
             {{ liquidationRatio }} %
@@ -49,7 +49,7 @@
         </span>
         <div class="item__content">
           <span class="item__label">
-            Safety ratio
+            Safety Ratio
           </span>
           <p class="item__value mt-1">
             {{ balanceRatio }} %
@@ -64,7 +64,7 @@
             Deposit collateral
           </h4>
           <p>
-            Do you want to deposit collateral? Your loan will not be available for lending until you do.
+            Do you want to deposit or withdraw more collateral?
           </p>
         </div>
         <div class="item col col-12 col-md-5 d-flex justify-content-end align-items-center">
@@ -90,10 +90,11 @@
         class="row row--footer"
         [class.row--divisor]="canAdjust"
         *ngIf="collateral?.amount !== '0' && loan.status !== 2"
+        matTooltip="This is the proportion between the value of the collateral and the value of the borrowed funds. (If it reaches the Liquidation Ratio, the collateral will get partially or fully liquidated through a margin call.)"
       >
         <div class="item col col-12 col-md-4">
           <i class="fa fa-percentage"></i>
-          Current Loan To Value:
+          Collateral Ratio:
           <strong class="item__value">
             {{ currentLoanToValue }} %
           </strong>
@@ -105,9 +106,12 @@
             {{ currentExchangeRate }} {{ loanCurrency?.symbol }}/{{ collateralAsset }}
           </strong>
         </div>
-        <div class="item col col-12 col-md-4">
+        <div
+          class="item col col-12 col-md-4"
+          matTooltip="This is the Exchange Rate at which the Collateralization Ratio will reach the Liquidation Ratio, triggering a margin call."
+        >
           <i class="fa fa-chart-line"></i>
-          Current Liquidation Price:
+          Liquidation Price:
           <strong class="item__value">
             {{ currentLiquidationPrice }} {{ collateralAsset }}
           </strong>

@@ -367,7 +367,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
   get buttonText(): string {
     const tx = this.pendingTx;
     if (tx === undefined) {
-      return 'Pay';
+      return 'Repay';
     }
     if (tx.confirmed) {
       return 'Repaid';
