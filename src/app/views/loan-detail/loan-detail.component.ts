@@ -11,13 +11,14 @@ import { Brand } from '../../models/brand.model';
 import { Collateral, Status as CollateralStatus } from '../../models/collateral.model';
 // App Utils
 import { Utils } from './../../utils/utils';
+import { Currency } from './../../utils/currencies';
 // App Services
 import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
-import { ApiService } from './../../services/api.service';
+import { CollateralService } from './../../services/collateral.service';
 import { CurrenciesService } from './../../services/currencies.service';
 import { Type } from './../../services/tx.service';
 import { EventsService } from './../../services/events.service';
@@ -97,8 +98,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private identityService: IdentityService,
     private web3Service: Web3Service,
     private brandingService: BrandingService,
-    private apiService: ApiService,
     private currenciesService: CurrenciesService,
+    private collateralService: CollateralService,
     private eventsService: EventsService,
     private loanTypeService: LoanTypeService,
     public dialog: MatDialog
@@ -281,27 +282,22 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
    * Load collateral data
    */
   private async loadCollateral() {
-    const loanId: string = this.loan.id;
-    const collaterals = await this.apiService.getCollateralByLoan(loanId);
-    const web3: any = this.web3Service.web3;
-
-    if (!collaterals.length) {
-      return;
-    }
-    // FIXME: check collateral API implementation (ratios)
-
-    const collateral = collaterals[0];
+    const { collateral } = this.loan;
     this.collateral = collateral;
 
-    const liquidationRatio = Utils.bn(collateral.liquidationRatio).div(Utils.bn(100));
-    const balanceRatio = Utils.bn(collateral.balanceRatio).div(Utils.bn(100));
-
-    this.liquidationRatio = `${ Utils.formatAmount(liquidationRatio) } %`;
-    this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
+    if (!collateral) {
+      return;
+    }
 
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
-    this.collateralAmount = web3.utils.fromWei(collateral.amount);
+    const collateralDecimals = new Currency(collateralCurrency.symbol).decimals;
+    this.collateralAmount = Utils.formatAmount(collateral.amount as any / 10 ** collateralDecimals);
     this.collateralAsset = collateralCurrency.symbol;
+
+    const liquidationRatio = this.collateralService.rawToPercentage(Number(collateral.liquidationRatio));
+    const balanceRatio = this.collateralService.rawToPercentage(Number(collateral.balanceRatio));
+    this.liquidationRatio = Utils.formatAmount(liquidationRatio);
+    this.balanceRatio = Utils.formatAmount(balanceRatio);
   }
 
   private defaultDetail(): string {
