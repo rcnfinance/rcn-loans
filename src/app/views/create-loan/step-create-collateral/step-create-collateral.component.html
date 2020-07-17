@@ -85,7 +85,7 @@
                 >
                   <span class="red">
                     <i class="fas fa-exclamation-triangle mr-1"></i>
-                    Please increase the amount until the Collateral Ratio is 200% or higher.
+                    Please increase the amount until the Collateral Ratio is {{ COLLATERAL_AVERAGE_LOW }}% or higher.
                   </span>
                 </mat-hint>
               </mat-form-field>
@@ -134,7 +134,7 @@
                   <div class="col-12">
                     <div
                       class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--balance"
-                      matTooltip="If your collateral gets liquidated it will continue to do so until the Collateral Ratio reaches this value."
+                      matTooltip="If a collateral liquidation gets triggered, your collateral will get liquidated until the Collateral Ratio reaches this value."
                     >
                       <div class="ratio__title">
                         <i class="fa fa-chart-line"></i>
