@@ -1,0 +1,5 @@
+.button {
+  &:not(.mat-primary) {
+    color: var(--app-color-gray-50);
+  }
+}

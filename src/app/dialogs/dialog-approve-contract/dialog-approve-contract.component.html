@@ -65,11 +65,11 @@
           </ng-container>
 
           <ng-container *ngIf="assets?.length && !onlyToken">
-            <div class="title main-h2 mb-3 px-3 mx-1">
+            <div class="title main-h2 mt-4 mb-3 px-3 mx-1">
               ERC 721
             </div>
             <ng-container *ngFor="let asset of assets">
-              <mat-accordion *ngIf="!onlyAsset || onlyAsset == token.address">
+              <mat-accordion *ngIf="!onlyAsset || onlyAsset == asset.address">
                 <mat-expansion-panel
                   class="expansion-panel mat-elevation-z"
                   [expanded]="onlyAsset"
