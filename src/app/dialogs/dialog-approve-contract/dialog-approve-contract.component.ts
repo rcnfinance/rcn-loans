@@ -48,17 +48,17 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
   tokens: Contract[];
   tokenOperators: Operator[] = [
     new Operator(
-      'Diaspore Loan manager',
+      'Diaspore Loan Manager',
       environment.contracts.diaspore.loanManager,
       'lending'
     ),
     new Operator(
-      'Diaspore Debt mananger',
+      'Diaspore Debt Mananger',
       environment.contracts.diaspore.debtEngine,
       'payments'
     ),
     new Operator(
-      'Diaspore Converter ramp',
+      'Diaspore Converter Ramp',
       environment.contracts.converter.converterRamp,
       'transactions'
     ),

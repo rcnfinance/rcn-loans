@@ -88,7 +88,7 @@ export class NotificationsComponent implements OnInit {
    * @return Formatted loan ID
    */
   getFormattedLoanId(loanId, html = true) {
-    if (!loanId || !loanId.startsWith('0x')) {
+    if (!loanId || !String(loanId).startsWith('0x')) {
       return loanId;
     }
 
