@@ -1,0 +1,196 @@
+<div
+  class="loan-card mat-elevation-z5"
+  [class.loan-card--expanded]="expanded"
+  [class.loan-card--confirm-available]="!disabled"
+>
+
+  <div
+    class="loan-card__header d-lg-none px-4"
+    (click)="expanded = !expanded"
+  >
+    <i class="fas fa-check-circle"></i>
+    <span class="ml-2">
+      Loan info
+    </span>
+  </div>
+
+  <div class="loan-card__creator" *ngIf="loan?.creator">
+    <app-loan-avatar [loan]=loan [short]=true></app-loan-avatar>
+    <app-creator-container [loan]=loan></app-creator-container>
+  </div>
+  <div class="loan-card__amounts">
+    <div class="loan-card__property loan-card__property--strong">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-reply"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Borrow
+        </p>
+        <p class="loan-card__property-description">
+          {{ amount || '-' }} {{ loan?.currency }}
+        </p>
+      </div>
+    </div>
+    <div class="loan-card__property loan-card__property--strong loan-card__property--primary">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-share"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Repay
+        </p>
+        <p class="loan-card__property-description">
+          {{ expectedReturn || '-' }} {{ loan?.currency }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="loan-card__content">
+    <div class="loan-card__property">
+      <div class="loan-card__property-icon">
+        <i class="far fa-calendar-alt"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Duration
+        </p>
+        <p class="loan-card__property-description">
+          {{ durationDate || '-' }}
+        </p>
+      </div>
+    </div>
+    <div class="loan-card__property">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-calculator"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Annual Interest
+        </p>
+        <p class="loan-card__property-description">
+          {{ annualInterest ? annualInterest + ' %' : '-' }}
+        </p>
+      </div>
+    </div>
+    <div class="loan-card__property loan-card__property--installments">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-chart-pie"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Installments
+        </p>
+        <p
+          class="loan-card__property-description"
+          *ngIf="!installments || installments < 2; else multipleInstallments"
+        >
+          1 Payment
+        </p>
+        <ng-template #multipleInstallments>
+          <mat-expansion-panel class="mat-elevation-z">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ installments }} Payments
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="installment" *ngFor="let pay of paysDetail">
+              <div class="installment__col installment__col--number">
+                {{ pay.pay }}
+              </div>
+              <div class="installment__col installment__col--date">
+                {{ pay.time }}
+              </div>
+              <div class="installment__col installment__col--amount">
+                {{ pay.amount }}
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </ng-template>
+      </div>
+    </div>
+    <div class="loan-card__property">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-calendar-alt"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Expiration date
+        </p>
+        <p class="loan-card__property-description">
+          {{ expirationDate || '-' }}
+        </p>
+      </div>
+    </div>
+    <div class="loan-card__property">
+      <div class="loan-card__property-icon">
+        <i class="fas fa-coins"></i>
+      </div>
+      <div class="loan-card__property-content">
+        <p class="loan-card__property-title">
+          Collateral amount
+        </p>
+        <p class="loan-card__property-description">
+          {{ collateralAmount || '-' }} {{ collateralAsset }}
+        </p>
+      </div>
+    </div>
+    <!--
+    <mat-expansion-panel
+      class="collateral-expansion-panel mat-elevation-z"
+      [expanded]="collateralExpanded"
+    >
+      <div class="loan-card__property">
+        <div class="loan-card__property-icon">
+          <i class="fas fa-chart-bar"></i>
+        </div>
+        <div class="loan-card__property-content">
+          <p class="loan-card__property-title">
+            Liquidation ratio
+          </p>
+          <p class="loan-card__property-description">
+            {{ liquidationRatio || '-' }}
+          </p>
+        </div>
+      </div>
+      <div class="loan-card__property">
+        <div class="loan-card__property-icon">
+          <i class="fas fa-chart-bar"></i>
+        </div>
+        <div class="loan-card__property-content">
+          <p class="loan-card__property-title">
+            Balance ratio
+          </p>
+          <p class="loan-card__property-description">
+            {{ balanceRatio || '-' }}
+          </p>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <div class="loan-card__expand">
+      <button
+        mat-raised-button
+        class="button button-clear-dark mat-elevation-z"
+        (click)="collateralExpanded = !collateralExpanded"
+      >
+        {{ collateralExpanded ? 'See less' : 'See more' }}
+      </button>
+    </div>
+    -->
+  </div>
+</div>
+
+<div
+  class="confirm-button d-md-none"
+  [class.confirm-button--expanded]="expanded"
+>
+  <button
+    mat-raised-button
+    class="button"
+    [ngClass]="disabled ? 'button-secondary' : 'button-primary'"
+    [disabled]="disabled"
+    (click)="clickConfirm()"
+  >
+    {{ confirmButtonText }}
+  </button>
+</div>

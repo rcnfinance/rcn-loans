@@ -21,6 +21,12 @@
             <h1 class="hide">RCN / Ripio credit network</h1>
 
             <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
+              <a class="nav__item nav__item--borrow mr-4" routerLink="/borrow">
+                <span class="d-flex align-items-center">
+                  <i class="material-icons mr-3">add</i>
+                  <span>Borrow</span>
+                </span>
+              </a>
               <!-- Menu section -->
               <a
                 class="nav__item mr-4"
@@ -42,7 +48,7 @@
                 routerLink='/address/{{ account }}/'
                 *ngIf='hasAccount'
               >
-                My loans
+                My Loans
               </a>
               <div class="nav__item mr-4" (click)="login()" *ngIf="!hasAccount">
                 Connect

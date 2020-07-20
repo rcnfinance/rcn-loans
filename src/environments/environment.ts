@@ -65,10 +65,17 @@ export const environment = {
       debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
       loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'
     },
+    collateral: {
+      collateral: '0x391720efbaea47130f198263f7c3abefc230d14b',
+      wethManager: '0xfcbfd18d28ff0ffb311e2de179f3758531128449'
+    },
     converter: {
       converterRamp: '0x9ce962dfaa5cefcbe298c5a469487cead3a0640d',
       ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       uniswapConverter: '0x32657d6f2dcb32a5129d14db4a2e2e6fb198ce07'
+    },
+    models: {
+      installments: '0x41e9d0b6a8ce88989c2e7b3cae42ecfac44c9603'
     },
     decentraland: {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
@@ -112,7 +119,7 @@ export const environment = {
     'MANA',
     'ARS',
     'USD',
-    'DEST'
+    'DAI'
   ],
   usableCurrencies: [
     {

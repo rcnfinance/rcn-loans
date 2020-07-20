@@ -1,0 +1,46 @@
+<div
+  class="body-scrollable activity-wrapper"
+  #scrollingBlock
+>
+  <ngx-spinner
+    bdColor="transparent"
+    size="medium"
+    color="#fff"
+    type="ball-clip-rotate-multiple"
+    [name]="pageId"
+  ></ngx-spinner>
+
+  <div class="container">
+    <div class="full-width d-flex justify-content-between align-items-center">
+      <div>
+        <app-page-header
+          [title]="pageTitle"
+          [description]="pageDescription"
+          [hasChip]="true"
+          [chipValue]="loans?.length"
+          chipLabel="FUNDED"
+        ></app-page-header>
+      </div>
+      <div>
+        <app-my-loans-tabs></app-my-loans-tabs>
+      </div>
+    </div>
+    <div class="loan-container row">
+      <virtual-scroller
+        #scroll
+        [items]="loans"
+        [parentScroll]="scrollingBlock"
+        [bufferAmount]="4"
+        [scrollThrottlingTime]="500"
+      >
+        <div
+          class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
+          *ngFor="let loan of scroll.viewPortItems"
+        >
+          <app-loan-card [loan]="loan"></app-loan-card>
+        </div>
+      </virtual-scroller>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>
