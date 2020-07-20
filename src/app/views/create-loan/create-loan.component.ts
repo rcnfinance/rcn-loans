@@ -318,7 +318,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
       this.loanWasCreated = true;
       this.startProgress = false;
       this.showMessage(
-        'Your loan request has been created. Please supply your collateral to continue the process.',
+        'Your loan request has been created. Please supply your collateral to continue.',
         'snackbar'
       );
     } else {

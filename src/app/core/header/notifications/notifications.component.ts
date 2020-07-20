@@ -286,7 +286,7 @@ export class NotificationsComponent implements OnInit {
     const message: string = this.getTxMessage(tx);
     switch (tx.type) {
       case 'lend':
-        txObject = new TxObject(id, 'Funding', message, 'material-icons', 'trending_up', '', 'blue');
+        txObject = new TxObject(id, 'Lending', message, 'material-icons', 'trending_up', '', 'blue');
         break;
       case 'withdraw':
         txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'call_made', '', 'white');
