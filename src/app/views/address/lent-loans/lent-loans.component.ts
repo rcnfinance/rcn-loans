@@ -132,11 +132,7 @@ export class AddressComponent implements OnInit, OnDestroy {
     const myLoans = this.myLoans;
 
     if (myLoans) {
-<<<<<<< HEAD:src/app/views/address/address.component.ts
-      this.pageTitle = 'My loans';
-=======
       this.pageTitle = 'My Loans';
->>>>>>> feature/collateral:src/app/views/address/lent-loans/lent-loans.component.ts
       this.pageDescription = `Check your loans' status, payments schedule, history and more.`;
     } else {
       this.pageTitle = 'Activity explorer';
