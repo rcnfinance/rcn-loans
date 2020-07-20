@@ -77,7 +77,7 @@ export class DialogLoanPayComponent implements OnInit {
       Validators.max(Math.ceil(pendingAmount))
     ]);
     this.shortLoanId =
-      this.loan.id.startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
+      String(this.loan.id).startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
   }
 
   /**

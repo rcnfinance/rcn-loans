@@ -118,7 +118,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.handleLoginEvents();
         this.spinner.hide(this.pageId);
       } catch (err) {
-        this.eventsService.trackError(err);
         this.router.navigate(['/loan', params.id, '404'], { skipLocationChange: true });
       }
     });
