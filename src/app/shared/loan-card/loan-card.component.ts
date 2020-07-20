@@ -90,19 +90,17 @@ export class LoanCardComponent implements OnInit, OnDestroy {
    * Check if collateral can withdraw all
    */
   checkCanRedeem() {
-    if (!this.stateLoan) {
-      return;
-    }
-
-    if ([Status.Paid, Status.Expired].includes(this.stateLoan.status)) {
-      const isBorrower = this.stateLoan.borrower.toUpperCase() === this.account.toUpperCase();
-      const { collateral } = this.stateLoan;
-      this.canRedeem =
-        isBorrower &&
-        collateral &&
-        collateral.status === CollateralStatus.ToWithdraw &&
-        Number(collateral.amount) > 0;
-    }
+    try {
+      if ([Status.Paid, Status.Expired].includes(this.stateLoan.status)) {
+        const isBorrower = this.stateLoan.borrower.toUpperCase() === this.account.toUpperCase();
+        const { collateral } = this.stateLoan;
+        this.canRedeem =
+          isBorrower &&
+          collateral &&
+          collateral.status === CollateralStatus.ToWithdraw &&
+          Number(collateral.amount) > 0;
+      }
+    } catch { }
   }
 
   /**
