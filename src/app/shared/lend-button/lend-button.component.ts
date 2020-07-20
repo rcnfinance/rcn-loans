@@ -247,6 +247,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         cosignerData = '0x';
       }
 
+
       // set lend contract
       switch (lendToken) {
         case environment.contracts.rcnToken:
@@ -294,7 +295,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
                 account
               );
             } else {
-              const tokenConverter = environment.contracts.converter.tokenConverter;
+              const tokenConverter = environment.contracts.converter.uniswapConverter;
 
               tx = await this.contractsService.converterRampLend(
                 payableAmount,
@@ -302,6 +303,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
                 lendToken,
                 String(required),
                 cosignerAddress,
+                cosignerLimit,
                 this.loan.id,
                 oracleData,
                 cosignerData,
