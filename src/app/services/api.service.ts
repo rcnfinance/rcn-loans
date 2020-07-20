@@ -4,7 +4,9 @@ import { aggregate } from '@makerdao/multicall';
 import { environment } from '../../environments/environment';
 import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
 import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
+import { CollateralApi } from './../interfaces/collateral-api';
 import { Loan, Network, Status } from '../models/loan.model';
+import { Collateral } from '../models/collateral.model';
 import { LoanUtils } from '../utils/loan-utils';
 import { Utils } from '../utils/utils';
 // App services
@@ -37,7 +39,7 @@ export class ApiService {
     now: number,
     network: Network
   ): Promise<Loan[]> {
-    const apiUrl: string = this.getApiUrl(network);
+    const apiUrl: string = this.getApiUrl(network, 'v5');
     const filterExpiration: string = this.getApiFilterKey('expiration', network);
     let allRequestLoans: Loan[] = [];
     let apiCalls = 0;
@@ -99,37 +101,27 @@ export class ApiService {
   }
 
   /**
-   * Get all loans lent by the account that is logged in
-   * @param lender Lender address
-   * @param network Selected network
-   * @return Loans array
+   * Get all loan collaterals
+   * @return Collateral array
    */
-  async getLoansOfLender(
-    lender: string,
-    network: Network
-  ): Promise<Loan[]> {
-    const web3 = this.web3Service.web3;
-    const apiUrl: string = this.getApiUrl(network, 'v5');
-    const basaltUri = (apiPage: number, apiLender: string) =>
-      apiUrl.concat(`loans?open=false&page=${ apiPage }&lender=${ apiLender }`);
-    const diasporeUri = (apiPage: number, apiLender: string) =>
-      apiUrl.concat(`loans?open=false&page=${ apiPage }&owner=${ apiLender }`);
-
-    let allLoansOfLender: Loan[] = [];
+  async getCollateral(): Promise<Collateral[]> {
+    const apiUrl: string = this.getApiUrl(Network.Diaspore);
+    let apiCollaterals: CollateralApi[] = [];
+    let collaterals: Collateral[] = [];
     let apiCalls = 0;
     let page = 0;
 
     try {
-      lender = web3.utils.toChecksumAddress(lender);
-      const url = network === Network.Basalt ? basaltUri(page, lender) : diasporeUri(page, lender);
-      const data: any = await this.http.get(url).toPromise();
+      const data: any = await this.http.get(apiUrl.concat(
+        `collaterals?page=${ page }`
+      )).toPromise();
 
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
 
-      const activeLoans = await this.getAllCompleteLoans(data.content, network);
-      allLoansOfLender = allLoansOfLender.concat(activeLoans);
+      apiCollaterals = apiCollaterals.concat(data.content);
+      collaterals = this.getAllCompleteCollaterals(apiCollaterals);
       page++;
     } catch (err) {
       this.eventsService.trackError(err);
@@ -137,17 +129,71 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const eachUrl = network === Network.Basalt ? basaltUri(page, lender) : diasporeUri(page, lender);
+      const url = apiUrl.concat(`collaterals?page=${ page }`);
+      urls.push(url);
+    }
+    const responses = await this.getAllUrls(urls);
+    const allApiCollaterals = await this.getAllApiCollaterals(responses);
+    collaterals = this.getAllCompleteCollaterals(apiCollaterals).concat(allApiCollaterals);
+
+    return collaterals;
+  }
+
+  /**
+   * Get all loans lent by the account that is logged in
+   * @param address Lender or borrower address
+   * @param loansType Selected network
+   * @param network Selected network
+   * @return Loans array
+   */
+  async getLoansOfLenderOrBorrower(
+    address: string,
+    loansType: 'lender' | 'borrower',
+    network: Network
+  ): Promise<Loan[]> {
+    const web3 = this.web3Service.web3;
+    const apiUrl: string = this.getApiUrl(network, 'v5');
+    const basaltUri = (apiPage: number, apiAddress: string) =>
+      apiUrl.concat(`loans?open=false&page=${ apiPage }&${ loansType }=${ apiAddress }`);
+    const diasporeUri = (apiPage: number, apiAddress: string) =>
+      apiUrl.concat(`loans?page=${ apiPage }&${ loansType === 'lender' ? 'owner' : loansType }=${ apiAddress }`);
+
+    let allLoansOfAddress: Loan[] = [];
+    let apiCalls = 0;
+    let page = 0;
+
+    try {
+      address = web3.utils.toChecksumAddress(address);
+      const url = network === Network.Basalt ? basaltUri(page, address) : diasporeUri(page, address);
+      const data: any = await this.http.get(url).toPromise();
+
+      if (page === 0) {
+        apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
+      }
+
+      const activeLoans = await this.getAllCompleteLoans(data.content, network);
+      allLoansOfAddress = allLoansOfAddress.concat(activeLoans);
+      page++;
+    } catch (err) {
+      this.eventsService.trackError(err);
+    }
+
+    const urls = [];
+    for (page; page < apiCalls; page++) {
+      const eachUrl = network === Network.Basalt ? basaltUri(page, address) : diasporeUri(page, address);
       urls.push(eachUrl);
     }
     const responses = await this.getAllUrls(urls);
     const allApiLoans = await this.getAllApiLoans(responses, network);
 
     for (const apiLoans of allApiLoans) {
-      allLoansOfLender = allLoansOfLender.concat(apiLoans);
+      allLoansOfAddress = allLoansOfAddress.concat(apiLoans);
     }
 
-    return allLoansOfLender;
+    const filterStatus = [Status.Expired, Status.Destroyed];
+    allLoansOfAddress = this.excludeLoansWithStatus(filterStatus, null, allLoansOfAddress);
+
+    return allLoansOfAddress;
   }
 
   /**
@@ -212,7 +258,7 @@ export class ApiService {
    * @return Loans array
    */
   async getPaginatedActiveLoans(network: Network, page = 0, pageSize = 20): Promise<Loan[]> {
-    const apiUrl: string = this.getApiUrl(network);
+    const apiUrl: string = this.getApiUrl(network, 'v5');
     let allActiveLoans: Loan[] = [];
     let apiCalls = 0;
 
@@ -249,7 +295,7 @@ export class ApiService {
     id: string,
     network: Network
   ): Promise<Loan> {
-    const apiUrl: string = this.getApiUrl(network);
+    const apiUrl: string = this.getApiUrl(network, 'v5');
     const data: any = await this.http.get(apiUrl.concat(`loans/${ id }`)).toPromise();
     let apiLoan: any = data.content;
 
@@ -281,6 +327,22 @@ export class ApiService {
 
     const isSynchronized: boolean = blockDiff <= ALLOWABLE_BLOCK_DIFFERENCE;
     return isSynchronized;
+  }
+
+  /** Get collateral.
+   * @param loanId Loan ID
+   * @return Collateral
+   */
+  async getCollateralByLoan(loanId: string) {
+    const apiUrl: string = this.getApiUrl(Network.Diaspore);
+    const data: any = await this.http.get(apiUrl.concat(`collaterals?debt_id=${ loanId }`)).toPromise();
+
+    try {
+      const collaterals: Collateral[] = this.getAllCompleteCollaterals(data.content as CollateralApi[]);
+      return collaterals;
+    } catch (err) {
+      return [];
+    }
   }
 
   /**
@@ -327,6 +389,31 @@ export class ApiService {
       this.eventsService.trackError(err);
       throw (err);
     }
+  }
+
+  /**
+   * Create collateral models
+   */
+  private getAllCompleteCollaterals(apiCollaterals: CollateralApi[]): Collateral[] {
+    const collaterals: Collateral[] = [];
+
+    apiCollaterals.map((apiCollateral: CollateralApi) => {
+      const { id, debt_id, oracle, token, amount, liquidation_ratio, balance_ratio, status } = apiCollateral;
+      const collateral: Collateral = new Collateral(
+        id as any,
+        debt_id,
+        oracle,
+        token,
+        amount,
+        liquidation_ratio,
+        balance_ratio,
+        Number(status)
+      );
+
+      collaterals.push(collateral);
+    });
+
+    return collaterals;
   }
 
   /**
@@ -434,6 +521,28 @@ export class ApiService {
         )
       );
       return (activeLoans);
+    } catch (err) {
+      this.eventsService.trackError(err);
+      throw (err);
+    }
+  }
+
+  /**
+   * Handle api collateral response loading models
+   * @param responses Api responses
+   * @return Collaterals array
+   */
+  private async getAllApiCollaterals(responses: any[]): Promise<Collateral[]> {
+    try {
+      const apiCollaterals = await Promise.all(
+        responses.map(
+          response => this.getAllCompleteCollaterals(
+            response.content as CollateralApi[]
+          )
+        )
+      );
+      const flatCollaterals: Collateral[] = [].concat.apply([], apiCollaterals);
+      return (flatCollaterals);
     } catch (err) {
       this.eventsService.trackError(err);
       throw (err);

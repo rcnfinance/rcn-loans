@@ -1,0 +1,249 @@
+<ngx-spinner
+  bdColor="rgba(0,0,0,.3)"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate-multiple"
+  [name]="pageId"
+></ngx-spinner>
+
+<form [formGroup]="form">
+  <div class="content-wrapper" formGroupName="formUi">
+    <div class="row mt-4 pt-3">
+      <div class="col-sm-11 col-md-12">
+        <div class="row">
+          <div class="col-sm-12 col-md-3 mb-4 mb-lg-0 item">
+            <div class="item__title">
+              Currency
+            </div>
+            <div>
+              <!-- multiple collateral assets component -->
+              <mat-form-field *ngIf="currencies?.length > 1; else signleCollateralAssetTemplate">
+                <mat-select
+                  placeholder="Select a currency"
+                  formControlName="currency"
+                  required
+                  (selectionChange)="onCurrencyChange()"
+                >
+                  <mat-option
+                    *ngFor="let currency of currencies"
+                    [value]="currency"
+                  >
+                    <div class="d-flex align-items-center py-1">
+                      <app-currency-logo [address]="currency.address">
+                      </app-currency-logo>
+                      <span class="ml-3">
+                        {{ currency.symbol }}
+                      </span>
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <!-- single collateral asset component -->
+              <ng-template #signleCollateralAssetTemplate>
+                <div class="item__single-collateral d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center">
+                    <app-currency-logo
+                      [address]="form?.value.formUi.currency?.address"
+                      [size]="24"
+                    >
+                    </app-currency-logo>
+                    <span class="ml-2 pl-1">
+                      {{ form?.value.formUi.currency?.symbol || '-' }}
+                    </span>
+                  </div>
+                  <div matTooltip="This is the currency you will have to deposit to supply your collateral.">
+                    <i class="fas fa-info-circle"></i>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-3 item item--amount">
+            <div class="item__title">
+              Amount
+              <mat-icon
+                class="ml-2"
+                matTooltip="This is the amount of funds you will have to deposit to supply your collateral."
+              >
+                info
+              </mat-icon>
+            </div>
+            <div>
+              <mat-form-field>
+                <input
+                  matInput
+                  type="number"
+                  min="0"
+                  max="1000000"
+                  formControlName="amount"
+                  placeholder="0"
+                  pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
+                  required
+                />
+                <mat-hint
+                  *ngIf="form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_LOW"
+                >
+                  <span class="red">
+                    <i class="fas fa-exclamation-triangle mr-1"></i>
+                    Please increase the amount until the Collateral Ratio is {{ COLLATERAL_AVERAGE_LOW }}% or higher.
+                  </span>
+                </mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6 pl-md-4 item item--ratios">
+            <div class="row">
+              <div class="col-12 col-md-5 pl-md-0 mt-4 mb-2 my-md-0">
+                <div
+                  class="py-2 ratio ratio--collateral"
+                  [class.ratio--untouched]="!form?.value.formUi.amount"
+                  [class.ratio--low]="form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_LOW"
+                  [class.ratio--high]="form?.value.formUi.collateralAdjustment >= COLLATERAL_AVERAGE_LOW"
+                  matTooltip="This is the proportion between the value of your collateral and the value of your borrowed funds. Selecting a higher value will decrease your chances of facing a collateral liquidation."
+                >
+                  <div class="ratio__title">
+                    <i class="fa fa-chart-line"></i>
+                    <span class="ml-2">
+                      Collateral Ratio:
+                    </span>
+                  </div>
+                  <div class="ratio__value mt-2">
+                    {{ form?.value.formUi.collateralAdjustment || 0 }}%
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-7 pl-md-0 mb-4 my-md-0">
+                <div class="row">
+                  <div class="col-12">
+                    <div
+                      class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--liquidation"
+                      matTooltip="If the Collateral Ratio reaches this value your collateral will get partially or fully liquidated."
+                    >
+                      <div class="ratio__title">
+                        <i class="fa fa-chart-line"></i>
+                        <span class="ml-2">
+                          Liquidation Ratio:
+                        </span>
+                      </div>
+                      <div class="ratio__value ml-2">
+                        {{ form?.value.formUi.liquidationRatio }}%
+                      </div>
+                    </div>
+                    <div class="ratio-divisor"></div>
+                  </div>
+                  <div class="col-12">
+                    <div
+                      class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--balance"
+                      matTooltip="If a collateral liquidation gets triggered, your collateral will get liquidated until the Collateral Ratio reaches this value."
+                    >
+                      <div class="ratio__title">
+                        <i class="fa fa-chart-line"></i>
+                        <span class="ml-2">
+                          Safety Ratio:
+                        </span>
+                      </div>
+                      <div class="ratio__value ml-2">
+                        {{ form?.value.formUi.liquidationRatio + 50 }}%
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row my-3 pt-lg-4 d-none d-md-block">
+          <div class="col-12">
+            <button
+              mat-raised-button
+              class="button button-primary"
+              [class.button-disabled]="collateralPendingTx"
+              [disabled]="!form?.valid"
+              (click)="submit()"
+            >
+              <span class="d-flex align-items-center">
+                <span class="mr-2">
+                  {{ confirmButtonText }}
+                </span>
+                <div *ngIf="form?.valid">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+              </span>
+            </button>
+          </div>
+        </div>
+        <!--
+        <div class="row mt-3 mt-lg-5 pt-4">
+          <div class="col-lg-12 item">
+            <div class="item__title">
+              Liquidation Ratio
+            </div>
+            <div class="row mt-4 mb-3">
+              <div class="col col-sm-12 col-lg-8">
+                <mat-radio-group
+                  formControlName="liquidationRatio"
+                  aria-label="Select an option"
+                >
+                  <mat-radio-button color="primary" [value]="125">
+                    125%
+                  </mat-radio-button>
+                  <mat-radio-button color="primary" [value]="150" class="ml-4">
+                    150%
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="item__message item__message--info">
+              <i class="fas fa-info-circle"></i>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </div>
+          </div>
+        </div>
+        -->
+        <!--
+        <div class="row mt-3 mt-lg-5 pt-4 mb-4 pb-2">
+          <div class="col col-lg-12 item item--slider">
+            <div class="item__title">
+              Balance ratio
+            </div>
+            <div class="item__subtitle">
+              Select the interest you want to pay
+            </div>
+            <div class="row mt-4 mb-3">
+              <div class="col col-sm-12 col-lg-7">
+                <mat-slider
+                  class="percentage"
+                  step="1"
+                  tickInterval="25"
+                  color="primary"
+                  thumbLabel="true"
+                  formControlName="collateralAdjustment"
+                  [displayWith]="formatPercentage"
+                  [disabled]="!form.value.formUi.currency"
+                  [min]="form.value.formUi.liquidationRatio"
+                  [max]="400"
+                  (change)="onCollateralAdjustmentChange()"
+                ></mat-slider>
+                <div class="item__percentage">
+                  <div class="item__percentage-amount">
+                    {{ form.value.formUi.liquidationRatio }} %
+                  </div>
+                  <div class="item__percentage-amount">
+                    400 %
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              *ngIf="form.value.formUi.currency"
+              class="item__message item__message--info"
+            >
+              <i class="fas fa-info-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </div>
+          </div>
+        </div>
+        -->
+      </div>
+    </div>
+  </div>
+</form>

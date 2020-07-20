@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { Loan, Network, Status } from '../../models/loan.model';
+import { Status as CollateralStatus } from '../../models/collateral.model';
 import { Utils } from '../../utils/utils';
 import { Web3Service } from '../../services/web3.service';
 
@@ -21,6 +22,7 @@ export class LoanCardComponent implements OnInit, OnDestroy {
   durationLabel: string;
   durationValue: string;
   canLend: boolean;
+  canRedeem: boolean;
   network: string;
   installments: string;
   interestRate: string;
@@ -28,6 +30,8 @@ export class LoanCardComponent implements OnInit, OnDestroy {
 
   account: string;
   shortAddress = Utils.shortAddress;
+  myLoan: boolean;
+  isIncomplete: boolean;
 
   // subscriptions
   subscriptionAccount: Subscription;
@@ -65,8 +69,11 @@ export class LoanCardComponent implements OnInit, OnDestroy {
     const web3 = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
     this.account = web3.utils.toChecksumAddress(account);
+    this.myLoan = account && account.toLowerCase() === this.loan.borrower.toLowerCase();
 
     this.checkCanLend();
+    this.checkCanRedeem();
+    this.checkIfIsComplete();
   }
 
   /**
@@ -80,9 +87,35 @@ export class LoanCardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Check if collateral can withdraw all
+   */
+  checkCanRedeem() {
+    if (!this.stateLoan) {
+      return;
+    }
+
+    if ([Status.Paid, Status.Expired].includes(this.stateLoan.status)) {
+      const isBorrower = this.stateLoan.borrower.toUpperCase() === this.account.toUpperCase();
+      const { collateral } = this.stateLoan;
+      this.canRedeem =
+        isBorrower &&
+        collateral &&
+        collateral.status === CollateralStatus.ToWithdraw &&
+        Number(collateral.amount) > 0;
+    }
+  }
+
+  /**
+   * Check if the loan creation is complete
+   */
+  checkIfIsComplete() {
+    this.isIncomplete = this.myLoan && !this.loan.collateral;
+  }
+
+  /**
    * Refresh loan when lending status is updated
    */
-  onUserAction(action: 'lend') {
+  onUserAction(action: 'lend' | 'redeem') {
     // TODO: update specific values according to the action taken
     console.info('user action detected', action);
 
@@ -101,9 +134,9 @@ export class LoanCardComponent implements OnInit, OnDestroy {
       this.durationValue = Utils.formatDelta(this.stateLoan.descriptor.duration);
       this.rightLabel = 'Receive';
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.descriptor.totalObligation));
-    } else if (this.stateLoan instanceof Loan) {
+    } else if (this.stateLoan && this.stateLoan.debt) {
       const currency = this.stateLoan.currency;
-      this.leftLabel = 'Paid';
+      this.leftLabel = 'Repaid';
       this.leftValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.debt.model.paid));
       this.durationLabel = 'Next payment in';
       this.durationValue = this.stateLoan.status !== Status.Paid ?
