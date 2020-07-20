@@ -21,9 +21,13 @@ export interface CurrencyItem {
 export class CurrenciesService {
   currencies: CurrencyItem[];
   bestInterestRates = {
-    'RCN': { min: 0, max: 20, best: 10 },
+    'RCN': { min: 5, max: 15, best: 10 },
     'DAI': { min: 10, max: 20, best: 15 },
-    'ETH': { min: 0, max: 5, best: 1 }
+    'USDC': { min: 5, max: 10, best: 7 },
+    'MANA': { min: 10, max: 20, best: 15 },
+    'ETH': { min: 0, max: 5, best: 1 },
+    'TEST': { min: 0, max: 20, best: 10 },
+    'DEST': { min: 10, max: 20, best: 15 }
   };
 
   constructor() {
@@ -51,6 +55,19 @@ export class CurrenciesService {
     });
 
     this.currencies = currencies;
+  }
+
+  /**
+   * Return filter currencies array
+   * @return Currencies
+   */
+  getFilterCurrencies(): Array<string> {
+    const CRYPTO_CURRENCIES: string[] =
+      this.currencies.map(({ symbol }) => symbol);
+    const FIAT_CURRENCIES: string[] =
+      ['ARS', 'USD'];
+
+    return CRYPTO_CURRENCIES.concat(FIAT_CURRENCIES);
   }
 
   /**
@@ -83,9 +100,12 @@ export class CurrenciesService {
    * Return all currencies with a exception
    * @return Currencies
    */
-  getCurrenciesExcept(key: 'symbol' | 'address', value: string): Array<CurrencyItem> {
+  getCurrenciesExcept(key: 'symbol' | 'address', value: string | string[]): Array<CurrencyItem> {
+    let repulsedValues = typeof value === 'string' ? [value] : value;
+    repulsedValues = repulsedValues.map((item) => item.toLowerCase());
+
     const filteredCurrency: Array<CurrencyItem> = this.currencies.filter(
-      currency => currency[key].toLowerCase() !== value.toLowerCase()
+      currency => !repulsedValues.includes(currency[key].toLowerCase())
     );
     return filteredCurrency;
   }

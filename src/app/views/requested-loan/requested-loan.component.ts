@@ -104,17 +104,16 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
    */
   async loadLoans() {
     const loans: Loan[] = await this.contractsService.getRequests();
-    const filterLoans = this.filterLoansService.filterLoans(loans, this.filters);
-
     const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
-    const filteredLoans: Loan[] = this.loanTypeService.filterLoanByType(filterLoans, ALLOWED_TYPES);
+    const filteredLoans: Loan[] = this.loanTypeService.filterLoanByType(loans, ALLOWED_TYPES);
 
-    this.loans = filteredLoans;
+    const filterLoans = this.filterLoansService.filterLoans(filteredLoans, this.filters);
+    this.loans = filterLoans;
 
     this.upgradeAvaiblable();
     this.spinner.hide(this.pageId);
 
-    if (this.loans.length) {
+    if (filteredLoans.length) {
       this.availableLoans = true;
     } else {
       this.availableLoans = false;

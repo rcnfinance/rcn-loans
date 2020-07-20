@@ -14,12 +14,13 @@ import {
 } from '@angular/material';
 import * as BN from 'bn.js';
 import { environment, Agent } from '../../../environments/environment';
-import { Loan, Network } from './../../models/loan.model';
+import { Loan, Network, Status, LoanType } from './../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
+import { LoanTypeService } from './../../services/loan-type.service';
 import { TxService, Tx, Type } from './../../services/tx.service';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { Web3Service } from '../../services/web3.service';
@@ -29,6 +30,7 @@ import { EventsService, Category } from '../../services/events.service';
 import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from '../../dialogs/dialog-loan-lend/dialog-loan-lend.component';
+import { DialogFrontRunningComponent } from '../../dialogs/dialog-front-running/dialog-front-running.component';
 import { CosignerService } from './../../services/cosigner.service';
 import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
 import { WalletConnectService } from './../../services/wallet-connect.service';
@@ -45,6 +47,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   @Input() disabled: boolean;
   @Output() startLend = new EventEmitter();
   @Output() endLend = new EventEmitter();
+  @Output() closeDialog = new EventEmitter();
   pendingTx: Tx = undefined;
   lendEnabled: Boolean;
   opPending = false;
@@ -58,6 +61,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     private web3Service: Web3Service,
     private countriesService: CountriesService,
     private eventsService: EventsService,
+    private loanTypeService: LoanTypeService,
     private walletConnectService: WalletConnectService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
@@ -174,6 +178,12 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       this.openSnackBar('You must select an currency to continue');
       return;
     }
+    // front running validation
+    const { status } = await this.contractsService.getLoan(this.loan.id);
+    if (status !== Status.Request) {
+      this.closeDialog.emit();
+      return this.dialog.open(DialogFrontRunningComponent);
+    }
 
     if (this.showLendDialog) {
       const dialogRef = this.dialog.open(DialogLoanLendComponent, {
@@ -224,7 +234,19 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
       // set cosigner
       const creator: Agent = environment.dir[this.loan.creator.toLowerCase()];
-      const cosignerAddress: string = environment.cosigners[creator] || Utils.address0x;
+      const cosignerLimit = '0'; // TODO: implement cosigner limit
+      let cosignerAddress: string;
+      let cosignerData: string;
+
+      const loan: Loan = this.loan;
+      if (this.loanTypeService.getLoanType(loan) === LoanType.UnknownWithCollateral) {
+        const { collateral } = loan;
+        cosignerAddress = environment.contracts.collateral.collateral;
+        cosignerData = Utils.toBytes32(web3.utils.toHex(collateral.id));
+      } else {
+        cosignerAddress = environment.cosigners[creator] || Utils.address0x;
+        cosignerData = '0x';
+      }
 
       // set lend contract
       switch (lendToken) {
@@ -258,15 +280,22 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
         switch (this.loan.network) {
           case Network.Basalt:
-            tx = await this.contractsService.lendLoan(this.loan);
+            tx = await this.contractsService.lendBasaltLoan(this.loan);
             this.txService.registerLendTx(tx, environment.contracts.basaltEngine, this.loan);
             break;
 
           case Network.Diaspore:
             if (lendToken === environment.contracts.rcnToken) {
-              tx = await this.contractsService.lendLoan(this.loan, cosignerAddress);
+              tx = await this.contractsService.lendLoan(
+                cosignerAddress,
+                this.loan.id,
+                oracleData,
+                cosignerData,
+                '0x',
+                account
+              );
             } else {
-              const tokenConverter = environment.contracts.converter.tokenConverter;
+              const tokenConverter = environment.contracts.converter.uniswapConverter;
 
               tx = await this.contractsService.converterRampLend(
                 payableAmount,
@@ -274,9 +303,10 @@ export class LendButtonComponent implements OnInit, OnDestroy {
                 lendToken,
                 String(required),
                 cosignerAddress,
+                cosignerLimit,
                 this.loan.id,
                 oracleData,
-                '0x',
+                cosignerData,
                 '0x',
                 account
               );

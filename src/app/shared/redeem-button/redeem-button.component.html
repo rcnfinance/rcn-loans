@@ -1,0 +1,14 @@
+<a
+  mat-raised-button
+  (click)='clickRedeem()'
+  class="button button-primary"
+  [class.button-disabled]="disabled"
+>
+  Withdraw
+  <div
+    style="display: inline; margin-left: 5px; vertical-align: baseline;"
+    *ngIf='opPending'
+  >
+    <i class="fa fa-circle-notch fa-spin"></i>
+  </div>
+</a>

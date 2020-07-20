@@ -1,0 +1,30 @@
+<mat-dialog-content class="dialog dialog--small">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-5 dialog__image mb-5 mb-md-0">
+        <img
+          src="../../../assets/errors/api-sync.svg"
+          alt="The Credit Marketplace is getting synced"
+        >
+      </div>
+      <div class="col-12 col-md-6 dialog__content">
+        <h1 class="dialog__content-title mt-0 mb-4">
+          Just a second!
+        </h1>
+        <p class="dialog__content-description">
+          The Credit Marketplace is getting synced. If it's not done in a little while, please try refreshing your browser.
+        </p>
+        <div class="dialog__content-actions mt-5 mt-md-4">
+          <button
+            mat-raised-button
+            class="button button-primary"
+            [class.button-disabled]="countdown"
+            (click)="clickRefresh()"
+          >
+            {{ countdown || 'Refresh' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

@@ -20,6 +20,15 @@ Sentry.init({
 export class SentryErrorHandler implements ErrorHandler {
   constructor() {}
   handleError(error: any) {
+    // handle chunk-error reloading the page
+    const chunkFailedMessage = /Loading chunk [\d]+ failed/;
+    if (chunkFailedMessage.test(error.message)) {
+      try {
+        window.location.reload();
+      } catch { }
+      return;
+    }
+
     Sentry.captureException(error.originalError || error);
     console.error(error);
   }

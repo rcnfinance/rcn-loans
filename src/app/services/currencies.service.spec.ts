@@ -19,12 +19,17 @@ describe('CurrenciesService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should return an list of currencies', () => {
+  it('should return a list of currency symbols, including fiat', () => {
+    const result = service.getFilterCurrencies();
+    expect(result.length).toBeGreaterThan(service.currencies.length);
+  });
+
+  it('should return a list of currencies', () => {
     const result = service.getCurrencies();
     expect(result.length).toEqual(service.currencies.length);
   });
 
-  it('should return an specific currency', () => {
+  it('should return a specific currency', () => {
     const key = 'symbol';
     const rcnSymbol = 'RCN';
     const result = service.getCurrencyByKey(key, rcnSymbol);
@@ -40,11 +45,19 @@ describe('CurrenciesService', () => {
     expect(result.length).toEqual(service.currencies.length - 1);
   });
 
+  it('should return all currencies except two', () => {
+    const key = 'symbol';
+    const symbols = ['RCN', 'DAI'];
+    const result = service.getCurrenciesExcept(key, symbols);
+
+    expect(result.length).toEqual(service.currencies.length - 2);
+  });
+
   it('should return the interest rate of the selected currency', () => {
     const rcnSymbol = 'RCN';
     const result = service.getBestInterest(rcnSymbol);
-    expect(result.min).toEqual(0);
+    expect(result.min).toEqual(5);
     expect(result.best).toEqual(10);
-    expect(result.max).toEqual(20);
+    expect(result.max).toEqual(15);
   });
 });

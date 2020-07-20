@@ -1,22 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { Loan, LoanType } from '../../models/loan.model';
+import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
 import { CosignerService } from '../../services/cosigner.service';
 import { LoanTypeService } from '../../services/loan-type.service';
 import { environment } from '../../../environments/environment';
 import { LoanUtils } from '../../utils/loan-utils';
 import { Utils } from '../../utils/utils';
+import { Currency } from '../../utils/currencies';
 
 @Component({
   selector: 'app-cosigner-selector',
   templateUrl: './cosigner-selector.component.html',
   styleUrls: ['./cosigner-selector.component.scss']
 })
-export class CosignerSelectorComponent implements OnInit {
+export class CosignerSelectorComponent implements OnInit, OnChanges {
   @Input() loan: Loan;
   text: string;
   hasOptions: boolean;
 
   constructor(
+    private currenciesService: CurrenciesService,
     private cosignerService: CosignerService,
     private loanTypeService: LoanTypeService
   ) {}
@@ -42,6 +45,27 @@ export class CosignerSelectorComponent implements OnInit {
 
       this.text = `This loan is backed by a ${ title } (${ cosignerDetail.coordinates })
           valued at value ${ this.loan.currency.toString() }.`;
+    }
+
+    this.loadCollateral();
+  }
+
+  ngOnChanges() {
+    this.loadCollateral();
+  }
+
+  private loadCollateral() {
+    const { collateral }: Loan = this.loan;
+    if (collateral) {
+      this.hasOptions = true;
+
+      const { amount } = collateral;
+      const { symbol }: CurrencyItem = this.currenciesService.getCurrencyByKey('address', collateral.token);
+      const decimals = new Currency(symbol).decimals;
+      const formattedAmount = Number(amount) / 10 ** decimals;
+      this.text = amount && Number(amount) > 0 ?
+        `This loan is backed by ${ formattedAmount } ${ symbol } collateral.` :
+        `This loan was backed by ${ symbol }.`;
     }
   }
 }

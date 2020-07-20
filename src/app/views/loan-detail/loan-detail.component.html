@@ -12,9 +12,10 @@
       <app-goback-button></app-goback-button>
     </div>
     <div class="flex-item">
-      <div class="creator-container">
+      <!-- TODO: implement app-creator-container -->
+      <div class="creator-container" *ngIf="!loan?.collateral; else collateralTemplate">
         <ng-container *ngIf="brand.headerImage; else headerTitle">
-          <div class="creator-image d-flex justify-content-center align-items-center">
+          <div class="creator-image d-flex align-items-center">
             <img [src]="brand.headerImage" [alt]="brand.headerTitle">
           </div>
         </ng-container>
@@ -24,6 +25,14 @@
           </div>
         </ng-template>
       </div>
+
+      <ng-template #collateralTemplate>
+        <div class="creator-container">
+          <div class="creator-title">
+            {{ collateralAsset }} Collateral
+          </div>
+        </div>
+      </ng-template>
     </div>
     <div class="flex-item">
       <app-button-group
@@ -49,7 +58,7 @@
       <ng-container *ngIf="!isPaid; else paidGraphic">
         <div class="px-3 pt-1">
           <app-conversion-graphic
-            [headers]="['Lend', loan.currency, 'Receive']"
+            [headers]="['Borrow', loan.currency, 'Repay']"
             [amountLeft]="loan.currency.fromUnit(loan.amount)"
             [amountRight]="isRequest || isCanceled || isExpired ? expectedReturn : totalDebt"
             [currency]="loan.currency"
@@ -116,7 +125,8 @@
           <tbody>
             <tr>
               <td style='cursor: pointer' (click)="openAddress(loan.borrower)">
-                {{ loan.borrower | formatAddress }} - {{ brand.headerTitle }}
+                {{ loan.borrower | formatAddress }} -
+                {{ loanType === 3 ? brand.headerTitle : 'Unknown' }}
               </td>
             </tr>
           </tbody>
@@ -137,23 +147,50 @@
           </tbody>
         </table>
       </div>
-      <div class="table-responsive" (click)="openDetail('cosigner');">
+      <div
+        class="table-responsive"
+        (click)="
+          loanType === 3 ?
+          openDetail('cosigner') :
+          openDetail('collateral')
+        "
+      >
         <table class="table table-clickable">
           <thead>
             <tr>
-              <th style='cursor: pointer' [ngClass]="{'background-active': isDetail('cosigner') }" scope="col">
+              <th
+                style='cursor: pointer'
+                [ngClass]="{
+                  'background-active': isDetail('cosigner') || isDetail('collateral')
+                }"
+                scope="col"
+              >
                 <ng-container *ngIf="loanType !== 3">Collateral</ng-container>
                 <ng-container *ngIf="loanType === 3">Guaranty</ng-container>
-                <i class="material-icons white more-indicator">{{ isDetail('cosigner') ? '' : 'unfold_more' }}</i>
+                <i class="material-icons white more-indicator">
+                  {{ isDetail('cosigner') || isDetail('collateral') ?
+                    '' :
+                    'unfold_more'
+                  }}
+                </i>
               </th>
             </tr>
           </thead>
           <tbody>
-            <app-cosigner-selector [loan]=loan></app-cosigner-selector>
+            <app-cosigner-selector [loan]=loan ></app-cosigner-selector>
           </tbody>
         </table>
       </div>
-      <div class="px-3 pb-3" *ngIf="canLend || canTransfer || canPay">
+      <div
+        class="px-3 pb-3"
+        *ngIf="canLend || canTransfer || canPay || canRedeem"
+      >
+        <app-redeem-button
+          [loan]="loan"
+          (endRedeem)="onUserAction('redeem')"
+          *ngIf="canRedeem"
+        >
+        </app-redeem-button>
         <app-pay-button
           [loan]="loan"
           [showPayDialog]="true"
@@ -183,6 +220,13 @@
     <div class="right px-0 col-xs-12 col-lg-7">
       <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
       <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
+      <app-detail-collateral
+        *ngIf="isDetail('collateral')"
+        [loan]="loan"
+        [collateral]="collateral"
+        [canAdjust]="canAdjustCollateral"
+        (updateCollateral)="onUserAction('collateral')"
+      ></app-detail-collateral>
     </div>
 
   </div>

@@ -13,29 +13,6 @@
   <div class="container">
 
     <ng-container *ngIf="availableLoans; else noAvailableLoans">
-      <!-- <div class="row">
-        <div class="col-sm-12 d-none d-lg-block">
-          <div class="title main-h1 marginbottom30">Lending marketplace</div>
-          <p>
-            Fund crypto and fiat loans using multiple currencies
-          </p>
-        </div>
-        <div
-          class="col-sm-12 d-flex justify-content-between margintop10 marginbottom10"
-        >
-          <mat-chip-list>
-            <mat-chip class="mat-chip--gray" selected="true"
-              >{{ loans.length }} AVAILABLE</mat-chip
-            >
-          </mat-chip-list>
-          <button mat-button class="paddingright30" (click)="openFilters()">
-            FILTER BY
-            <mat-icon class="icon-active">filter_list</mat-icon>
-            <mat-icon class="icon-disabled">expand_more</mat-icon>
-          </button>
-        </div>
-      </div> -->
-
       <div class="page-header">
         <app-page-header
           title="Lending marketplace"
@@ -77,7 +54,6 @@
   </div>
   <app-footer></app-footer>
 </div>
-
 
 <ng-template #noAvailableLoans>
   <div class="container">
@@ -125,3 +101,6 @@
     </div>
   </div>
 </ng-template>
+
+<app-borrow-fab-button>
+</app-borrow-fab-button>
