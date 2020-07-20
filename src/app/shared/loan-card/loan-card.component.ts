@@ -132,7 +132,7 @@ export class LoanCardComponent implements OnInit, OnDestroy {
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.descriptor.totalObligation));
     } else if (this.stateLoan && this.stateLoan.debt) {
       const currency = this.stateLoan.currency;
-      this.leftLabel = 'Paid';
+      this.leftLabel = 'Repaid';
       this.leftValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.debt.model.paid));
       this.durationLabel = 'Next payment in';
       this.durationValue = this.stateLoan.status !== Status.Paid ?
