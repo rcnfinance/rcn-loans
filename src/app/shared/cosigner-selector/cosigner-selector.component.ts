@@ -63,7 +63,9 @@ export class CosignerSelectorComponent implements OnInit, OnChanges {
       const { symbol }: CurrencyItem = this.currenciesService.getCurrencyByKey('address', collateral.token);
       const decimals = new Currency(symbol).decimals;
       const formattedAmount = Number(amount) / 10 ** decimals;
-      this.text = `This loan is backed by ${ formattedAmount } ${ symbol } collateral`;
+      this.text = amount && Number(amount) > 0 ?
+        `This loan is backed by ${ formattedAmount } ${ symbol } collateral.` :
+        `This loan was backed by ${ symbol }.`;
     }
   }
 }
