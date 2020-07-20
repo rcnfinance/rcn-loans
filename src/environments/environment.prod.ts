@@ -72,7 +72,7 @@ export const environment = {
     converter: {
       converterRamp: '0x28827e6218b4b83197363945448b8869d604b2ed',
       ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      tokenConverter: '0x6a7f86c7c9dccba843287407c9db6615972c0a7d'
+      uniswapConverter: '0x6a7f86c7c9dccba843287407c9db6615972c0a7d'
     },
     models: {
       installments: '0xb2c86bcda2b845e7c61eb5443bc9bb57d48e4bb6'
