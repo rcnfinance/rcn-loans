@@ -10,7 +10,7 @@
     <div class="collateral-detail__body row">
       <article
         class="item col col-12 col-md-4"
-        matTooltip="This is the amount of funds (which are) currently collateralized."
+        matTooltip="This is the amount of funds currently collateralized."
       >
         <span class="item__icon">
           <i class="fa fa-coins font22"></i>
@@ -26,7 +26,7 @@
       </article>
       <article
         class="item col col-12 col-md-4"
-        matTooltip="If the Collateralization Ratio reaches this value the collateral will get partially or fully liquidated through a margin call."
+        matTooltip="If the Collateral(ization) Ratio reaches this value your collateral will get partially or fully liquidated."
       >
         <span class="item__icon">
           <i class="fa fa-chart-bar font22"></i>
@@ -42,7 +42,7 @@
       </article>
       <article
         class="item col col-12 col-md-4"
-        matTooltip="If a margin call gets triggered, the collateral will get liquidated until the Collateralization Ratio reaches this value."
+        matTooltip="If a collateral liquidation gets triggered, your collateral will get liquidated until the Collateralization Ratio reaches this value."
       >
         <span class="item__icon">
           <i class="fa fa-chart-area font22"></i>
@@ -64,7 +64,7 @@
             Deposit collateral
           </h4>
           <p>
-            Do you want to deposit or withdraw more collateral?
+            Do you want to deposit or withdraw collateral?
           </p>
         </div>
         <div class="item col col-12 col-md-5 d-flex justify-content-end align-items-center">
@@ -90,7 +90,7 @@
         class="row row--footer"
         [class.row--divisor]="canAdjust"
         *ngIf="collateral?.amount !== '0' && loan.status !== 2"
-        matTooltip="This is the proportion between the value of the collateral and the value of the borrowed funds. (If it reaches the Liquidation Ratio, the collateral will get partially or fully liquidated through a margin call.)"
+        matTooltip="This is the proportion between the value of the collateral and the value of the borrowed funds."
       >
         <div class="item col col-12 col-md-4">
           <i class="fa fa-percentage"></i>
@@ -108,7 +108,7 @@
         </div>
         <div
           class="item col col-12 col-md-4"
-          matTooltip="This is the Exchange Rate at which the Collateralization Ratio will reach the Liquidation Ratio, triggering a margin call."
+          matTooltip="This is the Exchange Rate at which the Collateral(ization) Ratio will reach the Liquidation Ratio, triggering a collateral liquidation."
         >
           <i class="fa fa-chart-line"></i>
           Liquidation Price:
