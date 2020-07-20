@@ -234,6 +234,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
       // set cosigner
       const creator: Agent = environment.dir[this.loan.creator.toLowerCase()];
+      const cosignerLimit = '0'; // TODO: implement cosigner limit
       let cosignerAddress: string;
       let cosignerData: string;
 
@@ -246,7 +247,6 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         cosignerAddress = environment.cosigners[creator] || Utils.address0x;
         cosignerData = '0x';
       }
-
 
       // set lend contract
       switch (lendToken) {
