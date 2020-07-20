@@ -66,16 +66,16 @@ export const environment = {
       loanManager: '0xb55b0f33d6a2a03a275ca85d58e9357e1a141187'
     },
     collateral: {
-      collateral: '0xa9f3738643263a555faa491c524241f5cd537b60', // FIXME: Ropsten address
+      collateral: '0xab2390d63f350d23f24c06329012f5933126bca1',
       wethManager: '0x1853cc6c9a20d31d6cbfbce4936071c049249fd3' // FIXME: Ropsten address
     },
     converter: {
-      converterRamp: '0xe41ada0fb01F147c6385F93DEC78914F32e45061',
+      converterRamp: '0x28827e6218b4b83197363945448b8869d604b2ed',
       ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      tokenConverter: '0x7173E7C8c35EF0FA6DF11B23bB717F886fBD50B5'
+      tokenConverter: '0x6a7f86c7c9dccba843287407c9db6615972c0a7d'
     },
     models: {
-      installments: '0x41e9d0b6a8ce88989c2e7b3cae42ecfac44c9603' // FIXME: Ropsten installments
+      installments: '0xb2c86bcda2b845e7c61eb5443bc9bb57d48e4bb6'
     },
     decentraland: {
       mortgageCreator: '0x90263Ea5C57Dc6603CA7202920735A6E31235bB9',
