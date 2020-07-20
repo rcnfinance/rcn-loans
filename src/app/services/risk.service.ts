@@ -15,6 +15,8 @@ export class RiskService {
     return new Promise((resolve) => {
       if (this.cosignerService.getCosigner(loan) !== undefined) {
         resolve(Level.low);
+      } else if (loan.collateral) {
+        resolve(Level.normal);
       } else {
         this.identityService.getIdentity(loan).then((identity) => {
           resolve(identity !== undefined ? Level.normal : Level.high);

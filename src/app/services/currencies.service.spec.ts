@@ -45,11 +45,19 @@ describe('CurrenciesService', () => {
     expect(result.length).toEqual(service.currencies.length - 1);
   });
 
+  it('should return all currencies except two', () => {
+    const key = 'symbol';
+    const symbols = ['RCN', 'DAI'];
+    const result = service.getCurrenciesExcept(key, symbols);
+
+    expect(result.length).toEqual(service.currencies.length - 2);
+  });
+
   it('should return the interest rate of the selected currency', () => {
     const rcnSymbol = 'RCN';
     const result = service.getBestInterest(rcnSymbol);
-    expect(result.min).toEqual(0);
+    expect(result.min).toEqual(5);
     expect(result.best).toEqual(10);
-    expect(result.max).toEqual(20);
+    expect(result.max).toEqual(15);
   });
 });

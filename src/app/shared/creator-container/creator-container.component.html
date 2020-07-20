@@ -1,4 +1,4 @@
-<div class="creator-container">
+<div class="creator-container" *ngIf="!loan?.collateral; else collateralTemplate">
   <ng-container *ngIf="brand.headerImage; else headerTitle">
     <div class="creator-image d-flex align-items-center">
       <img [src]="brand.headerImage" [alt]="brand.headerTitle">
@@ -10,3 +10,11 @@
     </div>
   </ng-template>
 </div>
+
+<ng-template #collateralTemplate>
+  <div class="creator-container">
+    <div class="creator-title">
+      {{ currency || getCollateralAsset(loan?.collateral) }} Collateral
+    </div>
+  </div>
+</ng-template>
