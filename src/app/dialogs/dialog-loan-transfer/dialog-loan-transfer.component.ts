@@ -41,7 +41,7 @@ export class DialogLoanTransferComponent implements OnInit {
 
     const loan: Loan = this.loan;
     this.shortLoanId =
-      this.loan.id.startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
+      String(this.loan.id).startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
 
     this.buildForm();
     await this.loadAccount();
