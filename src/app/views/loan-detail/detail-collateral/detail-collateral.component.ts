@@ -106,11 +106,11 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     // set exchange rate
     // TODO: add support for more currencies than rcn
     const rate = await this.getRate();
-    this.currentExchangeRate = rate;
+    this.currentExchangeRate = Utils.formatAmount(1 / (rate as any));
 
     // set liquidation price
     const liquidationPrice = await this.calculateLiquidationPrice();
-    this.currentLiquidationPrice = Utils.formatAmount(liquidationPrice);
+    this.currentLiquidationPrice = Utils.formatAmount(1 / liquidationPrice);
   }
 
   /**

@@ -105,7 +105,7 @@
           <i class="fa fa-retweet"></i>
           Current Exchange Rate:
           <strong class="item__value">
-            {{ currentExchangeRate }} {{ loanCurrency?.symbol }}/{{ collateralAsset }}
+            {{ currentExchangeRate }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
           </strong>
         </div>
         <div
@@ -115,7 +115,7 @@
           <i class="fa fa-chart-line"></i>
           Liquidation Price:
           <strong class="item__value">
-            {{ currentLiquidationPrice }} {{ collateralAsset }}
+            {{ currentLiquidationPrice }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
           </strong>
         </div>
       </div>
