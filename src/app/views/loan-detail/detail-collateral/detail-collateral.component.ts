@@ -110,7 +110,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
 
     // set liquidation price
     const liquidationPrice = await this.calculateLiquidationPrice();
-    this.currentLiquidationPrice = Utils.formatAmount(1 / liquidationPrice);
+    this.currentLiquidationPrice = Utils.formatAmount(1 / (rate as any) * liquidationPrice);
   }
 
   /**
@@ -153,7 +153,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   }
 
   /**
-   * Get rate in rcn
+   * Get rate loan currency / collateral currency
    * @return Exchange rate
    */
   async getRate(): Promise<string> {

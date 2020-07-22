@@ -9,6 +9,7 @@ import { Currency } from '../../../utils/currencies';
 import { Loan } from '../../../models/loan.model';
 import { Collateral } from '../../../models/collateral.model';
 // App services
+import { ContractsService } from './../../../services/contracts.service';
 import { EventsService } from '../../../services/events.service';
 import { CollateralService } from '../../../services/collateral.service';
 import { CurrenciesService, CurrencyItem } from '../../../services/currencies.service';
@@ -39,6 +40,7 @@ export class CollateralFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
     private eventsService: EventsService,
+    private contractsService: ContractsService,
     private collateralService: CollateralService,
     private currenciesService: CurrenciesService
   ) { }
@@ -74,11 +76,11 @@ export class CollateralFormComponent implements OnInit {
         return;
       }
       if (collateralRatio < balanceRatio) {
-        this.showMessage(`The collateral is too low, make sure it is greater than ${ balanceRatio }%`);
+        this.showMessage(`Please select an amount no greater than the Maximum Withdrawal.`);
         return;
       }
       if (entryAmount <= 0) {
-        this.showMessage(`The collateral amount must be greater than 0`);
+        this.showMessage(`Please select an amount greater than zero.`);
         return;
       }
 
@@ -144,9 +146,10 @@ export class CollateralFormComponent implements OnInit {
     const decimals: number = new Currency(currency.symbol).decimals;
     const formattedAmount: string = Utils.formatAmount(this.formatAmount(amount, decimals));
 
-    const liquidationPrice: number = (Number(liquidationPercentage) * Number(amount)) / Number(collateralPercentage);
-    const formattedLiquidationPrice: string =
-      Utils.formatAmount(this.formatAmount(liquidationPrice, decimals));
+    // set liquidation price
+    const rate = await this.getRate(this.loan, loan.collateral);
+    const liquidationPrice = await this.calculateLiquidationPrice(this.loan, loan.collateral);
+    const currentLiquidationPrice = Utils.formatAmount(1 / (rate as any) * liquidationPrice);
 
     this.form.controls.formCollateral.patchValue({
       id,
@@ -158,7 +161,7 @@ export class CollateralFormComponent implements OnInit {
       liquidationRatio: liquidationPercentage,
       balanceRatio: balancePercentage,
       collateralRatio: collateralPercentage,
-      liquidationPrice: formattedLiquidationPrice,
+      liquidationPrice: currentLiquidationPrice,
       currency,
       formattedAmount
     });
@@ -282,6 +285,44 @@ export class CollateralFormComponent implements OnInit {
     });
 
     return maxWithdraw;
+  }
+
+  /**
+   * Get rate loan currency / collateral currency
+   * @return Exchange rate
+   */
+  private async getRate(loan: Loan, collateral: Collateral): Promise<string> {
+    const loanRate: BN | string =
+      await this.contractsService.getRate(loan.oracle.address, loan.currency.decimals);
+
+    const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
+    const collateralDecimals: number = new Currency(collateralCurrency.symbol).decimals;
+    const collateralRate: BN | string = await this.contractsService.getRate(collateral.oracle, collateralDecimals);
+
+    const rate = Utils.formatAmount((loanRate as any) / (collateralRate as any));
+    return rate;
+  }
+
+  /**
+   * Calculate liquidation price
+   * @return Liquidation price in collateral amount
+   */
+  private async calculateLiquidationPrice(loan: Loan, collateral: Collateral): Promise<number> {
+    const { liquidationRatio, amount, token } = collateral;
+    const currency: CurrencyItem =
+      this.currenciesService.getCurrencyByKey('address', token.toLowerCase());
+    const liquidationPercentage: string =
+      this.collateralService.rawToPercentage(liquidationRatio).toString();
+    const collateralPercentage =
+      await this.collateralService.calculateCollateralPercentage(loan, currency, amount);
+
+    const decimals: number = new Currency(currency.symbol).decimals;
+    const liquidationPrice: number = (Number(liquidationPercentage) * Number(amount)) / Number(collateralPercentage);
+
+    const formattedLiquidationPrice: number =
+      (liquidationPrice as any / 10 ** decimals);
+
+    return formattedLiquidationPrice;
   }
 
   /**
