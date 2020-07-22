@@ -26,7 +26,7 @@
       </article>
       <article
         class="item col col-12 col-md-4"
-        matTooltip="If the Collateral(ization) Ratio reaches this value your collateral will get partially or fully liquidated."
+        matTooltip="If the Collateral Ratio reaches this value your collateral will get partially or fully liquidated."
       >
         <span class="item__icon">
           <i class="fa fa-chart-bar font22"></i>
@@ -90,9 +90,11 @@
         class="row row--footer"
         [class.row--divisor]="canAdjust"
         *ngIf="collateral?.amount !== '0' && loan.status !== 2"
-        matTooltip="This is the proportion between the value of the collateral and the value of the borrowed funds."
       >
-        <div class="item col col-12 col-md-4">
+        <div
+          class="item col col-12 col-md-4"
+          matTooltip="This is the proportion between the value of the collateral and the value of the borrowed funds."
+        >
           <i class="fa fa-percentage"></i>
           Collateral Ratio:
           <strong class="item__value">
@@ -108,7 +110,7 @@
         </div>
         <div
           class="item col col-12 col-md-4"
-          matTooltip="This is the Exchange Rate at which the Collateral(ization) Ratio will reach the Liquidation Ratio, triggering a collateral liquidation."
+          matTooltip="This is the Exchange Rate at which the Collateral Ratio will reach the Liquidation Ratio, triggering a collateral liquidation."
         >
           <i class="fa fa-chart-line"></i>
           Liquidation Price:
