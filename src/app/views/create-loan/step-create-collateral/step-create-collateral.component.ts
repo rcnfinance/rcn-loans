@@ -202,7 +202,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     }
 
     // set amount
-    if (currency && amount) {
+    if (currency && amount > 0) {
       const { decimals } = new Currency(currency.symbol);
       const amountInWei: BN = Utils.getAmountInWei(amount, decimals);
 
@@ -338,7 +338,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     currency: CurrencyItem,
     amount: number
   ) {
-    if (!currency || !amount) {
+    if (!currency || !amount || amount <= 0) {
       const EMPTY_COLLATERAL_ADJUSTMENT = '0';
       return this.form.controls.formUi.patchValue({
         collateralAdjustment: EMPTY_COLLATERAL_ADJUSTMENT
