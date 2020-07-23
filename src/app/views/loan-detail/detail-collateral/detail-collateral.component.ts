@@ -7,7 +7,6 @@ import { Currency } from '../../../utils/currencies';
 import { Loan } from './../../../models/loan.model';
 import { Collateral } from './../../../models/collateral.model';
 // App Services
-import { ContractsService } from './../../../services/contracts.service';
 import { CollateralService } from './../../../services/collateral.service';
 import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
 import { Tx, TxService } from './../../../services/tx.service';
@@ -41,7 +40,6 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
 
   constructor(
     private dialog: MatDialog,
-    private contractsService: ContractsService,
     private collateralService: CollateralService,
     private currenciesService: CurrenciesService,
     private txService: TxService
