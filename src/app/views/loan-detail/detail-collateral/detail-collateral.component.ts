@@ -2,7 +2,6 @@ import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angu
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import * as BN from 'bn.js';
 import { DialogCollateralComponent } from '../../../dialogs/dialog-collateral/dialog-collateral.component';
-import { environment } from '../../../../environments/environment';
 // App Models
 import { Utils } from './../../../utils/utils';
 import { Currency } from '../../../utils/currencies';
@@ -29,7 +28,6 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   collateralAmount: string;
   collateralAsset: string;
   collateralInRcn: string;
-  collateralRate: string;
   liquidationRatio: string;
   balanceRatio: string;
 
@@ -74,14 +72,8 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     const collateral: Collateral = this.collateral;
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
     const collateralDecimals = new Currency(collateralCurrency.symbol).decimals;
-    const rcnToken: string = environment.contracts.rcnToken;
     this.collateralAsset = collateralCurrency.symbol;
     this.collateralAmount = Utils.formatAmount(collateral.amount as any / 10 ** collateralDecimals);
-    this.collateralRate = await this.contractsService.getPriceConvertFrom(
-      collateralCurrency.address,
-      rcnToken,
-      Utils.pow(10, 18).toString()
-    );
 
     const liquidationRatio = this.collateralService.rawToPercentage(Number(collateral.liquidationRatio));
     const balanceRatio = this.collateralService.rawToPercentage(Number(collateral.balanceRatio));
