@@ -30,6 +30,7 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
 import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
+import { LoanListComponent } from './loan-list/loan-list.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -100,6 +101,7 @@ import { EventsService } from './../services/events.service';
     CollateralSliderDebtComponent,
     PageHeaderComponent,
     FixedApplicationAdComponent,
+    LoanListComponent,
 
     LendButtonComponent,
     DetailButtonComponent,
