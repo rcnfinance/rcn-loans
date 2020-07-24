@@ -3,9 +3,23 @@
 ## Unreleased
 
 ### Feature:
-- Show my borrowed and lent loans
 - Installments and payments details
+
+## **0.2.1** Boggart 👻
+
+### Enhancement:
+- Update of texts and contents
+
+## **0.2.0** Boggart 👻
+
+### Feature:
+- Show my borrowed and lent loans
 - Borrow loans with Collateral
+- Uniswap V2 integration
+- New collateral dialogs
+
+### Enhancement:
+- New repaying checkout dialog UI
 
 ## **0.1.6** Boggart 👻
 
