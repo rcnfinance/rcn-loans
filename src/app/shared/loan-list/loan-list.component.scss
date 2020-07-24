@@ -72,6 +72,8 @@
       border-radius: 10px 10px 0 0;
     }
     &--action {
+      position: relative;
+      z-index: 3;
       padding: 17px 0 17px 17px;
     }
 
