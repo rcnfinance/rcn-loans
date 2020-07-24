@@ -228,7 +228,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     }
 
     // set amount
-    if (currency && amount) {
+    if (currency && amount > 0) {
       const { decimals } = new Currency(currency.symbol);
       const amountInWei: BN = Utils.getAmountInWei(amount, decimals);
 

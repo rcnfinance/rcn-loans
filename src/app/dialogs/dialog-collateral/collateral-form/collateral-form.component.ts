@@ -74,11 +74,11 @@ export class CollateralFormComponent implements OnInit {
         return;
       }
       if (collateralRatio < balanceRatio) {
-        this.showMessage(`The collateral is too low, make sure it is greater than ${ balanceRatio }%`);
+        this.showMessage(`Please select an amount no greater than the Maximum Withdrawal.`);
         return;
       }
       if (entryAmount <= 0) {
-        this.showMessage(`The collateral amount must be greater than 0`);
+        this.showMessage(`Please select an amount greater than zero.`);
         return;
       }
 
@@ -144,9 +144,9 @@ export class CollateralFormComponent implements OnInit {
     const decimals: number = new Currency(currency.symbol).decimals;
     const formattedAmount: string = Utils.formatAmount(this.formatAmount(amount, decimals));
 
-    const liquidationPrice: number = (Number(liquidationPercentage) * Number(amount)) / Number(collateralPercentage);
-    const formattedLiquidationPrice: string =
-      Utils.formatAmount(this.formatAmount(liquidationPrice, decimals));
+    // set liquidation price
+    const liquidationPrice = await this.collateralService.calculateLiquidationPrice(this.loan, loan.collateral);
+    const currentLiquidationPrice = Utils.formatAmount(1 / liquidationPrice);
 
     this.form.controls.formCollateral.patchValue({
       id,
@@ -158,7 +158,7 @@ export class CollateralFormComponent implements OnInit {
       liquidationRatio: liquidationPercentage,
       balanceRatio: balancePercentage,
       collateralRatio: collateralPercentage,
-      liquidationPrice: formattedLiquidationPrice,
+      liquidationPrice: currentLiquidationPrice,
       currency,
       formattedAmount
     });
