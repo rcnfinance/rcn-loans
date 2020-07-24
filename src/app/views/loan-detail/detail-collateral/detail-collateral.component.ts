@@ -1,15 +1,12 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import * as BN from 'bn.js';
 import { DialogCollateralComponent } from '../../../dialogs/dialog-collateral/dialog-collateral.component';
-import { environment } from '../../../../environments/environment';
 // App Models
 import { Utils } from './../../../utils/utils';
 import { Currency } from '../../../utils/currencies';
 import { Loan } from './../../../models/loan.model';
 import { Collateral } from './../../../models/collateral.model';
 // App Services
-import { ContractsService } from './../../../services/contracts.service';
 import { CollateralService } from './../../../services/collateral.service';
 import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
 import { Tx, TxService } from './../../../services/tx.service';
@@ -29,7 +26,6 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   collateralAmount: string;
   collateralAsset: string;
   collateralInRcn: string;
-  collateralRate: string;
   liquidationRatio: string;
   balanceRatio: string;
 
@@ -44,7 +40,6 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
 
   constructor(
     private dialog: MatDialog,
-    private contractsService: ContractsService,
     private collateralService: CollateralService,
     private currenciesService: CurrenciesService,
     private txService: TxService
@@ -74,14 +69,8 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     const collateral: Collateral = this.collateral;
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
     const collateralDecimals = new Currency(collateralCurrency.symbol).decimals;
-    const rcnToken: string = environment.contracts.rcnToken;
     this.collateralAsset = collateralCurrency.symbol;
     this.collateralAmount = Utils.formatAmount(collateral.amount as any / 10 ** collateralDecimals);
-    this.collateralRate = await this.contractsService.getPriceConvertFrom(
-      collateralCurrency.address,
-      rcnToken,
-      Utils.pow(10, 18).toString()
-    );
 
     const liquidationRatio = this.collateralService.rawToPercentage(Number(collateral.liquidationRatio));
     const balanceRatio = this.collateralService.rawToPercentage(Number(collateral.balanceRatio));
@@ -105,11 +94,11 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
 
     // set exchange rate
     // TODO: add support for more currencies than rcn
-    const rate = await this.getRate();
-    this.currentExchangeRate = rate;
+    const rate = await this.collateralService.getCollateralRate(this.loan, this.collateral);
+    this.currentExchangeRate = Utils.formatAmount(1 / (rate as any));
 
     // set liquidation price
-    const liquidationPrice = await this.calculateLiquidationPrice();
+    const liquidationPrice = await this.collateralService.calculateLiquidationPrice(this.loan, this.collateral);
     this.currentLiquidationPrice = Utils.formatAmount(liquidationPrice);
   }
 
@@ -126,48 +115,6 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
       currency,
       amount
     );
-  }
-
-  /**
-   * Calculate liquidation price
-   * @return Liquidation price in collateral amount
-   */
-  async calculateLiquidationPrice(): Promise<number> {
-    const loan: Loan = this.loan;
-    const collateral: Collateral = this.collateral;
-    const { liquidationRatio, amount, token } = collateral;
-    const currency: CurrencyItem =
-      this.currenciesService.getCurrencyByKey('address', token.toLowerCase());
-    const liquidationPercentage: string =
-      this.collateralService.rawToPercentage(liquidationRatio).toString();
-    const collateralPercentage =
-      await this.collateralService.calculateCollateralPercentage(loan, currency, amount);
-
-    const decimals: number = new Currency(currency.symbol).decimals;
-    const liquidationPrice: number = (Number(liquidationPercentage) * Number(amount)) / Number(collateralPercentage);
-
-    const formattedLiquidationPrice: number =
-      (liquidationPrice as any / 10 ** decimals);
-
-    return formattedLiquidationPrice;
-  }
-
-  /**
-   * Get rate in rcn
-   * @return Exchange rate
-   */
-  async getRate(): Promise<string> {
-    const loan: Loan = this.loan;
-    const loanRate: BN | string =
-      await this.contractsService.getRate(loan.oracle.address, loan.currency.decimals);
-
-    const collateral: Collateral = this.collateral;
-    const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
-    const collateralDecimals: number = new Currency(collateralCurrency.symbol).decimals;
-    const collateralRate: BN | string = await this.contractsService.getRate(collateral.oracle, collateralDecimals);
-
-    const rate = Utils.formatAmount((loanRate as any) / (collateralRate as any));
-    return rate;
   }
 
   /**

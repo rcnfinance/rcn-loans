@@ -70,7 +70,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     new Operator(
       'Collateral',
       environment.contracts.collateral.collateral,
-      'transactions for Collateral'
+      'collateralization'
     )
   ];
   tokenApproves: Object[];

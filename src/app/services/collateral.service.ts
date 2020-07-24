@@ -3,15 +3,17 @@ import * as BN from 'bn.js';
 import { ContractsService } from './contracts.service';
 import { Tx, Type } from '../services/tx.service';
 import { Loan } from './../models/loan.model';
+import { Collateral } from './../models/collateral.model';
 import { Utils } from './../utils/utils';
 import { Currency } from './../utils/currencies';
-import { CurrencyItem } from './../services/currencies.service';
+import { CurrenciesService, CurrencyItem } from './../services/currencies.service';
 
 @Injectable()
 export class CollateralService {
 
   constructor(
-    private contractsService: ContractsService
+    private contractsService: ContractsService,
+    private currenciesService: CurrenciesService
   ) { }
 
   /**
@@ -52,42 +54,6 @@ export class CollateralService {
   }
 
   /**
-   * Calculate collateral liquidation price
-   * @param loanId Loan ID
-   * @param collateralRate Collateral rate
-   * @param liquidationRatio Liquidation ratio
-   * @param loanAmountInRcn Loan amount in rcn
-   * @return Liquidation price in collateral amount
-   */
-  async calculateLiquidationPrice(
-    loanId: string,
-    collateralRate,
-    liquidationRatio,
-    loanAmountInRcn
-  ) {
-    collateralRate = Utils.bn(collateralRate);
-    liquidationRatio = Utils.bn(liquidationRatio);
-
-    let amountInRcn: BN | string;
-
-    try {
-      const debt = await this.contractsService.getClosingObligation(loanId);
-      amountInRcn = Utils.bn(debt || 0);
-    } catch (e) {
-      amountInRcn = Utils.bn(loanAmountInRcn);
-    }
-
-    try {
-      let liquidationPrice = Utils.bn(liquidationRatio).mul(amountInRcn).div(Utils.bn(100));
-      liquidationPrice = liquidationPrice.div(collateralRate);
-
-      return liquidationPrice;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  /**
    * Check if the sended transaction is from the current collateral
    * @param tx Tx
    * @param collateralId Collateral ID
@@ -108,6 +74,43 @@ export class CollateralService {
       default:
         return false;
     }
+  }
+
+  /**
+   * Calculate liquidation price
+   * @return Liquidation price in collateral amount
+   */
+  async calculateLiquidationPrice(loan: Loan, collateral: Collateral): Promise<number> {
+    const { liquidationRatio, amount, token } = collateral;
+    const currency: CurrencyItem =
+      this.currenciesService.getCurrencyByKey('address', token.toLowerCase());
+    const liquidationPercentage: string =
+      this.rawToPercentage(liquidationRatio).toString();
+
+    const loanDebt =
+      loan.debt ? loan.debt.model.estimatedObligation : loan.descriptor.totalObligation;
+    const collateralAmount = new Currency(currency.symbol).fromUnit(amount);
+    const liquidationPrice = (Number(liquidationPercentage) / 100 * loanDebt) / collateralAmount;
+    const formattedLiquidationPrice: number =
+      (liquidationPrice as any / 10 ** loan.currency.decimals);
+
+    return formattedLiquidationPrice;
+  }
+
+  /**
+   * Get rate loan currency / collateral currency
+   * @return Exchange rate
+   */
+  async getCollateralRate(loan: Loan, collateral: Collateral): Promise<string> {
+    const loanRate: BN | string =
+      await this.contractsService.getRate(loan.oracle.address, loan.currency.decimals);
+
+    const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
+    const collateralDecimals: number = new Currency(collateralCurrency.symbol).decimals;
+    const collateralRate: BN | string = await this.contractsService.getRate(collateral.oracle, collateralDecimals);
+
+    const rate = Utils.formatAmount((loanRate as any) / (collateralRate as any));
+    return rate;
   }
 
   /**
