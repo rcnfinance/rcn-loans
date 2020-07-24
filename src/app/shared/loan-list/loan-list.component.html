@@ -119,7 +119,11 @@
     </div>
     <div class="loan-list__column loan-list__column--action d-flex justify-content-start justify-content-lg-end">
       <ng-container *ngIf="isIncomplete; else activeLoanActions">
-        <button mat-raised-button class="button button-clear">
+        <button
+          mat-raised-button
+          class="button button-clear"
+          [routerLink]="['/borrow', loan?.id]"
+        >
           + Collateral
         </button>
       </ng-container>
