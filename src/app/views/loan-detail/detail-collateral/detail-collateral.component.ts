@@ -99,7 +99,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
 
     // set liquidation price
     const liquidationPrice = await this.collateralService.calculateLiquidationPrice(this.loan, this.collateral);
-    this.currentLiquidationPrice = Utils.formatAmount(1 / liquidationPrice);
+    this.currentLiquidationPrice = Utils.formatAmount(liquidationPrice);
   }
 
   /**
