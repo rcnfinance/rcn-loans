@@ -8,10 +8,23 @@ import { SharedModule } from '../../shared/shared.module';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 // App Component
-import { AddressComponent } from './address.component';
+import { BorrowedLoansComponent } from './borrowed-loans/borrowed-loans.component';
+import { AddressComponent } from './lent-loans/lent-loans.component';
+import { MyLoansTabsComponent } from './my-loans-tabs/my-loans-tabs.component';
 
 const routes: Routes = [
-  { path: '', component: AddressComponent }
+  {
+    path: '',
+    redirectTo: 'lent'
+  },
+  {
+    path: 'lent',
+    component: AddressComponent
+  },
+  {
+    path: 'borrowed',
+    component: BorrowedLoansComponent
+  }
 ];
 
 @NgModule({
@@ -23,13 +36,12 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [
-    AddressComponent
+    BorrowedLoansComponent,
+    AddressComponent,
+    MyLoansTabsComponent
   ],
   providers: [
     ContractsService
-  ],
-  exports: [
-    AddressComponent
   ]
 })
 export class AddressModule { }

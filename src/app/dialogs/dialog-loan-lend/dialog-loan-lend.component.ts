@@ -80,7 +80,7 @@ export class DialogLoanLendComponent implements OnInit {
 
     this.loadExchangeTooltip();
     this.shortLoanId =
-      this.loan.id.startsWith('0x') ? Utils.shortAddress(this.loan.id) : this.loan.id;
+      String(this.loan.id).startsWith('0x') ? Utils.shortAddress(this.loan.id) : this.loan.id;
   }
 
   /**
@@ -162,7 +162,7 @@ export class DialogLoanLendComponent implements OnInit {
     const loanCurrency: string = this.loan.currency.toString();
     const lendCurrency: string = this.lendCurrency;
     const oracle = this.loan.oracle;
-    const tokenConverter = environment.contracts.converter.tokenConverter;
+    const tokenConverter = environment.contracts.converter.uniswapConverter;
 
     if (!this.exchangeToken) {
       if (loanCurrency !== 'RCN') {

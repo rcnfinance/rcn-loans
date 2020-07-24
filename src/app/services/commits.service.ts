@@ -44,7 +44,6 @@ export class CommitsService {
         commitsDebtEngine = responseDebtEngine.content;
       } catch (err) {
         commitsDebtEngine = [];
-        this.eventsService.trackError(err);
       }
 
       const diasporeCommits = commitsLoanManager.concat(commitsDebtEngine);
