@@ -146,7 +146,7 @@ export class CollateralFormComponent implements OnInit {
 
     // set liquidation price
     const liquidationPrice = await this.collateralService.calculateLiquidationPrice(this.loan, loan.collateral);
-    const currentLiquidationPrice = Utils.formatAmount(1 / liquidationPrice);
+    const currentLiquidationPrice = Utils.formatAmount(liquidationPrice);
 
     this.form.controls.formCollateral.patchValue({
       id,

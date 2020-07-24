@@ -86,14 +86,13 @@ export class CollateralService {
       this.currenciesService.getCurrencyByKey('address', token.toLowerCase());
     const liquidationPercentage: string =
       this.rawToPercentage(liquidationRatio).toString();
-    const collateralPercentage =
-      await this.calculateCollateralPercentage(loan, currency, amount);
 
-    const decimals: number = new Currency(currency.symbol).decimals;
-    const liquidationPrice: number = (Number(liquidationPercentage) * Number(amount)) / Number(collateralPercentage);
-
+    const loanDebt =
+      loan.debt ? loan.debt.model.estimatedObligation : loan.descriptor.totalObligation;
+    const collateralAmount = new Currency(currency.symbol).fromUnit(amount);
+    const liquidationPrice = (Number(liquidationPercentage) / 100 * loanDebt) / collateralAmount;
     const formattedLiquidationPrice: number =
-      (liquidationPrice as any / 10 ** decimals);
+      (liquidationPrice as any / 10 ** loan.currency.decimals);
 
     return formattedLiquidationPrice;
   }
