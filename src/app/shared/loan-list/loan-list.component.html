@@ -1,6 +1,6 @@
 <div class="loan-list-wrapper">
   <div
-    class="loan-list d-md-flex align-items-center"
+    class="loan-list d-lg-flex align-items-center"
     [class.loan-list--light]="backgroundLighter"
   >
     <div class="loan-list__column loan-list__column--amount">
@@ -41,7 +41,7 @@
         {{ rightValue }}
       </div>
     </div>
-    <div class="loan-list__column loan-list__column--type d-flex align-items-center justify-content-center d-md-block">
+    <div class="loan-list__column loan-list__column--type d-flex align-items-center justify-content-center d-lg-block">
       <ng-container *ngIf="loanType === 0">
         <div class="loan-type loan-type--collateral-pending">
           <div class="loan-type__icon">
@@ -117,7 +117,7 @@
         {{ shortAddress }}
       </span>
     </div>
-    <div class="loan-list__column loan-list__column--action d-flex justify-content-start justify-content-md-end">
+    <div class="loan-list__column loan-list__column--action d-flex justify-content-start justify-content-lg-end">
       <ng-container *ngIf="isIncomplete; else activeLoanActions">
         <button mat-raised-button class="button button-clear">
           + Collateral
