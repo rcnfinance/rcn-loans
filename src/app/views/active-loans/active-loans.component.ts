@@ -44,7 +44,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
     }
 
     const { offsetHeight, scrollTop, scrollHeight } = event.target;
-    const TOLERANCE_PX = 570; // aprox card height
+    const TOLERANCE_PX = 52; // aprox card height
     if (offsetHeight + scrollTop >= (scrollHeight - TOLERANCE_PX)) {
       await this.loadLoans(this.page);
     }

@@ -1,7 +1,4 @@
-<div
-  class="body-scrollable activity-wrapper"
-  #scrollingBlock
->
+<div class="body-scrollable activity-wrapper">
   <ngx-spinner
     bdColor="transparent"
     size="medium"
@@ -9,7 +6,6 @@
     type="ball-clip-rotate-multiple"
     [name]="pageId"
   ></ngx-spinner>
-
   <div class="container">
     <div class="full-width d-flex justify-content-between align-items-center">
       <div>
@@ -25,20 +21,18 @@
         <app-my-loans-tabs></app-my-loans-tabs>
       </div>
     </div>
-    <div class="loan-container row">
+    <div class="loan-container">
+      <app-loan-list-header></app-loan-list-header>
       <virtual-scroller
         #scroll
         [items]="loans"
-        [parentScroll]="scrollingBlock"
-        [bufferAmount]="4"
+        [bufferAmount]="12"
         [scrollThrottlingTime]="500"
       >
-        <div
-          class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
-          *ngFor="let loan of scroll.viewPortItems"
-        >
-          <app-loan-card [loan]="loan"></app-loan-card>
-        </div>
+      <div *ngFor="let loan of scroll.viewPortItems; let i = index">
+        <app-loan-list [loan]="loan" [backgroundLighter]="i % 2">
+        </app-loan-list>
+      </div>
       </virtual-scroller>
     </div>
   </div>

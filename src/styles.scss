@@ -638,12 +638,6 @@ mat-form-field{
   .navmobile-menu{display: none;}
 }
 
-// Loan container
-.loan-container {
-  padding-top: 30px;
-  padding-bottom: 90px;
-}
-
 // Layout
 .body-scrollable {
   position: absolute;
@@ -658,12 +652,7 @@ mat-form-field{
   }
 }
 virtual-scroller {
-  width: 100vw;
-
-  .scrollable-content {
-    display: flex;
-    flex-wrap: wrap;
-  }
+  height: calc(100vh - 120px);
 }
 
 .nav-mobile{
@@ -737,11 +726,10 @@ virtual-scroller {
   .container {
     max-width: 1300px;
   }
-  .loan-container {
-    margin-left: -20px;
-    margin-right: -20px;
-  }
   .body-scrollable {
     padding-top: 115px;
+  }
+  .loan-container {
+    padding-top: 30px;
   }
 }
