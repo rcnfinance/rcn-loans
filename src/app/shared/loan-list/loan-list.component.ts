@@ -196,7 +196,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
     this.collateralAsset = collateralCurrency.symbol;
 
     const collateralRatio = await this.calculateCollateralRatio();
-    this.collateralRatio = Utils.formatAmount(String(collateralRatio));
+    this.collateralRatio = Utils.formatAmount(collateralRatio);
   }
 
   /**
@@ -206,6 +206,10 @@ export class LoanListComponent implements OnInit, OnDestroy {
   private async calculateCollateralRatio(): Promise<string> {
     const loan: Loan = this.loan;
     const { token, amount } = loan.collateral;
+    if (Number(amount) === 0) {
+      return '0';
+    }
+
     const currency: CurrencyItem = this.currenciesService.getCurrencyByKey('address', token.toLowerCase());
     return await this.collateralService.calculateCollateralPercentage(
       loan,
