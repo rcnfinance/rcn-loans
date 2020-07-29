@@ -1,12 +1,12 @@
 <div class="loans-list-header d-none d-lg-flex">
   <div class="loans-list-header__column loans-list-header__column--amount">
-    {{ view === 'active-loans' ? 'Repaid' : 'Lend' }}
+    {{ ['active-loans', 'address'].includes(view) ? 'Repaid' : 'Lend' }}
   </div>
   <div class="loans-list-header__column loans-list-header__column--currency">
     Currency
   </div>
   <div class="loans-list-header__column loans-list-header__column--debt">
-    {{ view === 'active-loans' ? 'Outstanding' : 'Receive' }}
+    {{ ['active-loans', 'address'].includes(view) ? 'Outstanding' : 'Receive' }}
   </div>
   <div class="loans-list-header__column loans-list-header__column--type">
     Type
