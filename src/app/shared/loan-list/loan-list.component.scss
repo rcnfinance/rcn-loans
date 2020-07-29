@@ -99,6 +99,11 @@
       &--collateral-pending {
         text-align: center;
         color: var(--app-color-gray-100);
+        .loan-type__complete {
+          right: 15px;
+          color: var(--app-color-orange);
+          font-size: 1.45em;
+        }
       }
       &--identity {
         text-align: center;
@@ -154,6 +159,11 @@
       text-align: center;
       &-label {
         display: none;
+      }
+      &-amount {
+        margin: auto;
+        max-width: 105px;
+        text-align: left;
       }
       &--amount,
       &--debt {

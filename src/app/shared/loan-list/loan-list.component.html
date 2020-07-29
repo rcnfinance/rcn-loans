@@ -5,7 +5,7 @@
   >
     <div class="loan-list__column loan-list__column--amount">
       <div class="loan-list__column-label">
-        Lend
+        {{ leftLabel }}
       </div>
       <div
         [matTooltip]="
@@ -14,13 +14,14 @@
             ''
         "
         matTooltipPosition="below"
+        class="loan-list__column-amount"
       >
         {{ leftValue }}
       </div>
     </div>
     <div class="loan-list__column loan-list__column--currency">
       <div class="loan-list__column-label">
-        Lend
+        Currency
       </div>
       <span>
         {{ loan.currency }}
@@ -28,7 +29,7 @@
     </div>
     <div class="loan-list__column loan-list__column--debt">
       <div class="loan-list__column-label">
-        Receive
+        {{ rightLabel }}
       </div>
       <div
         [matTooltip]="
@@ -37,16 +38,22 @@
             ''
         "
         matTooltipPosition="below"
+        class="loan-list__column-amount"
       >
         {{ rightValue }}
       </div>
     </div>
     <div class="loan-list__column loan-list__column--type d-flex align-items-center justify-content-center d-lg-block">
       <ng-container *ngIf="loanType === 0">
-        <div class="loan-type loan-type--collateral-pending">
-          <div class="loan-type__icon">
-            <span matTooltip="IMPORTANT: your loan will not be available for lending until you supply your collateral.">
+        <div class="loan-type loan-type--collateral-pending d-flex align-items-center justify-content-center">
+          <div class="loan-type__icon mr-2">
+            <span>
               <i class="fas fa-coins"></i>
+            </span>
+          </div>
+          <div class="loan-type__complete">
+            <span matTooltip="IMPORTANT: your loan will not be available for lending until you supply your collateral">
+              <i class="fas fa-exclamation-circle"></i>
             </span>
           </div>
         </div>
