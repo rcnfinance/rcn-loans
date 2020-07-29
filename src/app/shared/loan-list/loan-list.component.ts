@@ -196,7 +196,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
     this.collateralAsset = collateralCurrency.symbol;
 
     const collateralRatio = await this.calculateCollateralRatio();
-    this.collateralRatio = Utils.formatAmount(collateralRatio);
+    this.collateralRatio = Utils.formatAmount(collateralRatio, 5);
   }
 
   /**
