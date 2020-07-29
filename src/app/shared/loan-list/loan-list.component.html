@@ -102,9 +102,14 @@
     </div>
     <div class="loan-list__column loan-list__column--duration">
       <div class="loan-list__column-label">
-        Duration
+        {{ durationLabel }}
       </div>
-      <span>
+      <span
+        class="loan-list__column-duration"
+        [class.loan-list__column-duration--success]="loan?.status !== 5"
+        [class.loan-list__column-duration--error]="loan?.status === 5"
+        [matTooltip]="durationTooltip"
+      >
         {{ durationValue }}
       </span>
     </div>

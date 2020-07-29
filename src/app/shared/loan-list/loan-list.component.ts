@@ -29,6 +29,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
   rightValue: string;
   durationLabel: string;
   durationValue: string;
+  durationTooltip: string;
   canLend: boolean;
   canRedeem: boolean;
   network: string;
@@ -144,6 +145,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
       this.leftValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.amount));
       this.durationLabel = 'Duration';
       this.durationValue = Utils.formatDelta(this.stateLoan.descriptor.duration);
+      this.durationTooltip = this.durationValue + ' Duration';
       this.rightLabel = 'Receive';
       this.rightValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.descriptor.totalObligation));
     } else if (this.stateLoan && this.stateLoan.debt) {
@@ -160,8 +162,10 @@ export class LoanListComponent implements OnInit, OnDestroy {
       this.canLend = false;
       if (this.stateLoan.status === Status.Indebt) {
         this.durationLabel = 'Overdue for';
+        this.durationTooltip = 'Overdue for ' + this.durationValue;
       } else {
         this.durationLabel = 'Next payment in';
+        this.durationTooltip = 'Next payment in ' + this.durationValue;
       }
     }
     this.loanType = this.loanTypeService.getLoanType(this.loan);

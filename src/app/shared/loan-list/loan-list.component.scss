@@ -20,6 +20,18 @@
       text-transform: uppercase;
       padding: 9px 0 9px 17px;
     }
+    &-duration {
+      &--success {
+        color: white;
+      }
+      &--warning {
+        color: var(--app-color-orange);
+      }
+      &--error {
+        color: var(--app-color-red);
+      }
+    }
+
     &--amount,
     &--debt {
       @include typography-subtitle(2);
@@ -75,6 +87,10 @@
       position: relative;
       z-index: 3;
       padding: 17px 0 17px 17px;
+    }
+    &--duration {
+      position: relative;
+      z-index: 3;
     }
 
     .loan-type {
