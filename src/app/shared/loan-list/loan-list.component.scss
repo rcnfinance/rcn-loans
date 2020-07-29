@@ -9,6 +9,7 @@
   position: relative;
   width: 100%;
   background: var(--app-color-gray-700);
+  border-radius: 10px;
 
   &__header {
     width: 100%;
@@ -161,6 +162,7 @@
   .loan-list {
     height: 52px;
     background: none;
+    border-radius: 0;
     transition: .3s;
 
     &:hover {
