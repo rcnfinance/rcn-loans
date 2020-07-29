@@ -6,6 +6,7 @@ import { ApiService } from '../../services/api.service';
 import { EventsService } from '../../services/events.service';
 import { TitleService } from '../../services/title.service';
 import { LoanTypeService } from '../../services/loan-type.service';
+import { DeviceService } from '../../services/device.service';
 
 @Component({
   selector: 'app-active-loans',
@@ -26,7 +27,8 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private titleService: TitleService,
     private eventsService: EventsService,
-    private loanTypeService: LoanTypeService
+    private loanTypeService: LoanTypeService,
+    private deviceService: DeviceService
   ) { }
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
     }
 
     const { offsetHeight, scrollTop, scrollHeight } = event.target;
-    const TOLERANCE_PX = 52; // aprox card height
+    const TOLERANCE_PX = this.deviceService.isMobile ? 440 : 52;
     if (offsetHeight + scrollTop >= (scrollHeight - TOLERANCE_PX)) {
       await this.loadLoans(this.page);
     }
