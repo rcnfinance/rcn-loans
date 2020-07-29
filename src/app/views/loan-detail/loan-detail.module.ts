@@ -8,7 +8,9 @@ import { SharedModule } from '../../shared/shared.module';
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
 import { CommitsService } from './../../services/commits.service';
+import { EventsService } from './../../services/events.service';
 import { CollateralService } from './../../services/collateral.service';
+import { InstallmentService } from './../../services/installment.service';
 // App Component
 import { LoanDetailComponent } from './loan-detail.component';
 import { DetailTableComponent } from './detail-table/detail-table.component';
@@ -18,6 +20,7 @@ import { DetailCollateralComponent } from './detail-collateral/detail-collateral
 import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
 import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
+import { DetailInstallmentsComponent } from './detail-installments/detail-installments.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 import { TransferButtonComponent } from './../../shared/transfer-button/transfer-button.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
@@ -42,7 +45,9 @@ const routes: Routes = [
     ContractsService,
     CosignerService,
     CommitsService,
-    CollateralService
+    EventsService,
+    CollateralService,
+    InstallmentService
   ],
   declarations: [
     LoanDetailComponent,
@@ -50,6 +55,7 @@ const routes: Routes = [
     DetailIdentityComponent,
     DetailCosignerComponent,
     DetailCollateralComponent,
+    DetailInstallmentsComponent,
     DecentralandMapComponent,
     DecentralandCosignerComponent,
     TransactionHistoryComponent,

@@ -30,6 +30,13 @@
   >
     <i class="fas fa-id-badge"></i>
   </div>
+  <div
+    *ngIf="loan?.descriptor.installments"
+    class="button-options"
+    (click)="openDetail('installments')"
+    [ngClass]="{'active': viewDetail === 'installments' ? true : false }" matTooltip="Installments" matTooltipPosition="below">
+    <i class="fas fa-chart-pie"></i>
+  </div>
 
 
 
@@ -77,6 +84,15 @@
       </span>
     </button>
     -->
+    <button
+      *ngIf="loan?.descriptor.installments"
+      mat-menu-item
+      (click)="openDetail('installments')"
+      [ngClass]="{'active': viewDetail === 'installments' ? true : false }"
+    >
+      <i class="fas fa-chart-pie"></i>
+      <span>Installments</span>
+    </button>
   </mat-menu>
 
   <button mat-icon-button [matMenuTriggerFor]="appMenu">
