@@ -380,6 +380,9 @@ mat-form-field{
   .mat-select-arrow {
     color: rgba(124, 81, 81, 0.5);
   }
+  .mat-hint {
+    line-height: 1.5em;
+  }
 }
 .mat-form-field-appearance-legacy{
   .mat-hint{ color: var(--app-color-secondary); }

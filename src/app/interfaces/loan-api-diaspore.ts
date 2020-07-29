@@ -1,3 +1,5 @@
+import { CollateralApi } from './collateral-api';
+
 export interface LoanDescriptor {
   first_obligation: number;
   total_obligation: number;
@@ -59,4 +61,5 @@ export interface LoanApiDiaspore {
   state: LoanState;
   status: string;
   canceled: boolean;
+  collaterals?: CollateralApi[];
 }

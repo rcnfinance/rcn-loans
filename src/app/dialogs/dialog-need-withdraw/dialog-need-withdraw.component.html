@@ -1,0 +1,38 @@
+<mat-dialog-content class="dialog dialog--small">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-5 dialog__image mb-5 mb-md-0">
+        <img
+          src="../../../assets/redeem-collateral.svg"
+          alt="GET THEM BACK NOW!"
+        >
+      </div>
+      <div class="col-12 col-md-6 dialog__content">
+        <h1 class="dialog__content-title mt-0 mb-4">
+          GET THEM BACK NOW!
+        </h1>
+        <p class="dialog__content-description">
+          One of your borrowed loans has already been fully repaid. Now you can
+          freely withdraw your collateralized funds on the My Loans section.
+        </p>
+        <div class="dialog__content-actions mt-5 mt-md-4">
+          <button
+            mat-raised-button
+            mat-dialog-close
+            class="button button-primary"
+            [routerLink]="['/address', address, 'borrowed']"
+          >
+            Go to My Loans
+          </button>
+          <button
+            mat-raised-button
+            mat-dialog-close
+            class="button button-clear-dark mat-elevation-z mt-2 mt-md-0"
+          >
+            Maybe Later
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

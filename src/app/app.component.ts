@@ -3,10 +3,12 @@ import { Router, NavigationEnd } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { environment } from '../environments/environment';
 // App services
+import { ApiService } from './services/api.service';
 import { EventsService } from './services/events.service';
 import { WalletConnectService } from './services/wallet-connect.service';
 // App component
 import { DialogWalletSelectComponent } from './dialogs/dialog-wallet-select/dialog-wallet-select.component';
+import { DialogApiSyncComponent } from './dialogs/dialog-api-sync/dialog-api-sync.component';
 
 @Component({
   selector: 'app-root',
@@ -18,13 +20,15 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private dialog: MatDialog,
+    private apiService: ApiService,
     private eventsService: EventsService,
     private walletConnectService: WalletConnectService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.setupGoogleAnalytics();
     this.listenWalletConnect();
+    await this.checkApiHealth();
   }
 
   /**
@@ -59,5 +63,12 @@ export class AppComponent implements OnInit {
         );
       }
     );
+  }
+
+  private async checkApiHealth() {
+    const synchronized: boolean = await this.apiService.isSynchronized();
+    if (!synchronized) {
+      this.dialog.open(DialogApiSyncComponent);
+    }
   }
 }

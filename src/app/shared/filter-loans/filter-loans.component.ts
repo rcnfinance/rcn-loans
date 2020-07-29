@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { environment } from './../../../environments/environment';
+import { CurrenciesService } from './../../services/currencies.service';
 
 interface Filters {
   currency: string;
@@ -33,8 +33,9 @@ export class FilterLoansComponent implements OnInit {
   currencies: string[];
   daySeconds = 24 * 60 * 60;
 
-  constructor() {
-  }
+  constructor(
+    private currencesService: CurrenciesService
+  ) { }
 
   ngOnInit() {
     this.getCurrencies();
@@ -98,7 +99,7 @@ export class FilterLoansComponent implements OnInit {
    * Get environment filter currencies
    */
   getCurrencies() {
-    this.currencies = environment.filterCurrencies;
+    this.currencies = this.currencesService.getFilterCurrencies();
   }
 
   setControlsDisable() {

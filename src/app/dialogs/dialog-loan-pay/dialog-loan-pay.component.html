@@ -1,4 +1,4 @@
-<app-dialog-header title="Repaying Checkout">
+<app-dialog-header title="Loan Repaying">
 </app-dialog-header>
 
 <mat-dialog-content class="dialog">
@@ -15,82 +15,128 @@
   <form [formGroup]="form">
     <div class="container">
       <div class="dialog-content dialog-padding">
-        <div class="row mb-3 mt-4 mt-md-0">
-          <div class="col col-12">
-            <div class="title main-h3">
-              You're about to repay the {{ shortLoanId }} loan. Please choose the
-              amount you'd like/you want to pay.
-            </div>
+        <div class="row mb-3 mt-4 mt-md-0 mb-5">
+          <div class="col col-12 item item--description">
+            You're about to make a repayment to the {{ shortLoanId }} loan. Please
+            choose the amount you'd like to repay.
           </div>
-        </div>
-        <div class="row mb-4 mb-md-4">
-          <!-- <div class="col col-12 col-md-3 item item--installment">
-            <p class="item__key">
-              Installment
-            </p>
-            <p class="item__value">
-              3th Pay
-            </p>
-          </div>
-          <div class="col col-12 col-md-3 item item--amount">
-            <p class="item__key">
-              Amount to pay
-            </p>
-            <p class="item__value">
-              866 DAI
-            </p>
-          </div>
-          <div class="col col-12 col-md-6 item item--due-date">
-            <p class="item__key">
-              Due date <span>(Today)</span>
-            </p>
-            <p class="item__value">
-              09/15/2019 10:00 PM - GMT
-            </p>
-          </div> -->
         </div>
         <div class="row">
-          <div class="col col-12 col-md-4 item item--want-to-pay">
-            <p class="item__key uppercase">
-              Amount you want to pay
+          <div class="col col-12 col-md-4 mb-3 mb-md-0 item item--entry">
+            <p class="item__subtitle">
+              Repayment amount
             </p>
-            <mat-form-field class="mt-2">
+            <mat-form-field
+              class="mt-2"
+              [class.mat-form-field--empty]="!form?.value.amount"
+            >
               <input
                 matInput
-                formControlName="amount"
                 type="number"
-                min='0'
-                step="any"
-                placeholder="Set amount"
+                min="0"
+                max="1000000"
+                formControlName="amount"
+                placeholder="0"
+                pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
+                [readonly]="loading"
+                required
+                (keyup)="onAmountChange()"
               />
+              <span class="currency">
+                {{ currency?.symbol }}
+              </span>
             </mat-form-field>
+            <div class="d-flex justify-content-between d-md-block">
+              <p class="item__rate" *ngIf="loan?.currency.symbol !== 'RCN'">
+                <span class="item__rate-amount">
+                  {{ payAmountRcn || '0' }}
+                </span>
+                <span class="item__rate-currency">
+                  RCN
+                </span>
+              </p>
+              <div class="item__actions">
+                <button
+                  type="button"
+                  mat-flat-button
+                  class="button button-clear button-rounded"
+                  [class.button-disabled]="loading"
+                  (click)="clickSetMaxAmount()"
+                >
+                  Repay Total
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="col col-12 col-md-6 offset-md-2 mt-3 mt-md-0 item item--left-to-pay">
-            <p class="item__key uppercase">
-              Due
+          <div class="col col-12 col-md-6 offset-md-2 mb-3 mb-md-0 pl-md-5 item item--amount">
+            <p class="item__subtitle">
+              Outstanding amount
             </p>
             <p class="item__value">
-              <strong>{{ pendingAmount }}</strong> {{ currency?.symbol }}
+              <strong class="item__value-amount">
+                {{ pendingAmount }}
+              </strong>
+              <span class="item__value-currency">
+                {{ currency?.symbol }}
+              </span>
             </p>
-            <!-- TODO: Add this disclaimer
-            <p class="disclaimer">
-              <i class="fas fa-exclamation-triangle mr-1"></i>
-              You are paying an amount less than the corresponding, this will
-              affect your payment schedule.
+            <p class="item__rate" *ngIf="loan?.currency.symbol !== 'RCN'">
+              <span class="item__rate-amount">
+                {{ pendingAmountRcn || '0' }}
+              </span>
+              <span class="item__rate-currency">
+                RCN
+              </span>
             </p>
-            -->
+            <div
+              *ngIf="payAmountRcn && pendingAmountRcn"
+              class="item__message"
+              [class.item__message--success]="form?.value.amount >= pendingAmount"
+              [class.item__message--warning]="form?.value.amount < pendingAmount"
+            >
+              <p *ngIf="form?.value.amount >= pendingAmount">
+                <span>
+                  <i class="fas fa-check check mr-1"></i>
+                </span>
+                <span>
+                  You're about to repay the total Outstanding Amount.
+                </span>
+              </p>
+              <p *ngIf="form?.value.amount < pendingAmount">
+                <span>
+                  <i class="fas fa-exclamation-triangle mr-1"></i>
+                </span>
+                <span>
+                  You're about to repay less than the total Outstanding Amount.
+                  If it is not fully repaid by the Due Date, your collateral will
+                  get partially or fully liquidated.
+                </span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="margintop15"></div>
-
-      <div class="dialog-divisor dialog-padding py-0 mt-4 mt-md-0 row">
+      <div class="dialog-divisor dialog-padding py-0 mt-4 mt-md-0 row" *ngIf="exchangeTooltip">
         <div class="dialog-divisor__content col-sm-12">
+          <!--
           <i class="material-icons mr-2">
             info
           </i>
           The value of the payments it's going to be converted to RCN.
+          -->
+          <span class="mr-1">
+            Current Exchange Rate: 1 {{ loan.currency }}
+          </span>
+          <span class="mr-1" *ngIf="loan.currency.toString() !== 'RCN'">
+            = {{ exchangeRcn }} RCN
+          </span>
+          <i
+            class="material-icons ml-2"
+            [matTooltip]="exchangeTooltip"
+          >
+            info
+          </i>
         </div>
       </div>
 
@@ -99,7 +145,7 @@
       <div class="dialog-footer dialog-padding pt-0 pb-3 row">
         <div class="dialog-footer__label col-sm-12 col-md-6">
           <p>
-            Repaying from the address <strong>{{ shortAccount }}</strong>.
+            Repaying from the <strong>{{ shortAccount }}</strong> address.
           </p>
         </div>
         <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">

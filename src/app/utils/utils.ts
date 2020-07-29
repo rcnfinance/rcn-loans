@@ -118,6 +118,82 @@ export class Utils {
   }
 
   /**
+   * Return the interest rate based on an annual percentage
+   * @param interest Annual percentage
+   * @return Interest rate
+   */
+  static toInterestRate(interest: number) {
+    const secondsInYear = 360 * 86400;
+    const rawInterest = Math.floor(10000000 / interest);
+    return rawInterest * secondsInYear;
+  }
+
+  /**
+   * Calculates the payment for a loan based on constant payments and a constant interest rate.
+   * @param rate The interest rate
+   * @param nperiod The number of payments to be made
+   * @param pv The current value of the annuity
+   * @param fv The future value remaining after the final payment has been made
+   * @param type Whether payments are due at the end (0) or beginning (1) of each period
+   * @return Payment amount with interest
+   */
+  static pmt(
+    rate: number,
+    nperiod: number,
+    pv: number,
+    fv: number = 0,
+    type: number = 0
+  ): BN {
+    const parsedPmt = (amount: number) => {
+      try {
+        const strAmount: string =
+          amount.toLocaleString('fullwide', { useGrouping: false });
+        return Utils.bn(strAmount);
+      } catch (err) {
+        return Utils.bn(amount);
+      }
+    };
+
+    if (!fv) {
+      fv = 0;
+    }
+    if (!type) {
+      type = 0;
+    }
+    if (rate === 0) {
+      const amountToReturn = -(pv + fv) / nperiod;
+      return parsedPmt(amountToReturn);
+    }
+
+    const pvif = Math.pow(1 + rate, nperiod);
+    let pmt = rate / (pvif - 1) * -(pv * pvif + fv);
+
+    if (type === 1) {
+      pmt /= (1 + rate);
+    }
+
+    return parsedPmt(pmt);
+  }
+
+  /**
+   * Return an amount in wei
+   * @param amount Form raw amount
+   * @param decimals Token decimals
+   * @return amount.pow(decimals)
+   */
+  static getAmountInWei(amount: number, decimals: number): BN {
+    if (amount % 1 !== 0) {
+      const amountInWei: number = amount * (10 ** decimals);
+      try {
+        return this.bn(amountInWei.toLocaleString('fullwide', { useGrouping: false }));
+      } catch (err) {
+        return this.bn(amountInWei);
+      }
+    }
+    return this.bn(amount).mul(this.pow(10, decimals));
+  }
+
+  /**
    * Convert the specified value to BN
    * @param value Value
    * @param base Base
@@ -160,6 +236,16 @@ export class Utils {
     }
 
     return `${ sign }${ num }`;
+  }
+
+  /**
+   * Math pow function with BN
+   * @param base
+   * @param exponent
+   * @return base.pow(exponent)
+   */
+  static pow(base: number | string | BN, exponent: number | string | BN) {
+    return this.bn(base).pow(this.bn(exponent));
   }
 }
 

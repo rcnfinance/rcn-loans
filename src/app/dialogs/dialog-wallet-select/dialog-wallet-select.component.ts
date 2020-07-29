@@ -35,7 +35,7 @@ export class DialogWalletSelectComponent implements OnInit {
     this.wallets = [
       {
         image: WalletLogo[WalletType.Metamask],
-        title: 'Metamask',
+        title: 'MetaMask',
         type: WalletType.Metamask
       },
       {

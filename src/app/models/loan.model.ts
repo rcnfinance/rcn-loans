@@ -1,4 +1,5 @@
 import { Currency } from '../utils/currencies';
+import { Collateral } from './collateral.model';
 
 export enum Status { Request, Ongoing, Paid, Destroyed, Expired, Indebt }
 
@@ -87,7 +88,8 @@ export class Loan {
     public model: string,
     public cosigner?: string,
     public debt?: Debt,
-    public config?: Config
+    public config?: Config,
+    public collateral?: Collateral
   ) {}
 
   get isRequest(): boolean {

@@ -60,7 +60,7 @@ export class BrandingService {
         undefined,
         undefined,
         'borrower',
-        'Unknown',
+        'Collateral',
         undefined,
         this.getBlockiesOptions(loan)
       );
@@ -71,7 +71,7 @@ export class BrandingService {
       undefined,
       undefined,
       '',
-      'Unknown',
+      'Collateral',
       undefined,
       this.getBlockiesOptions(loan)
     );
