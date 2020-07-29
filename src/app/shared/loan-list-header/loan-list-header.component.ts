@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+enum PageView {
+  Activity = 'active-loans',
+  Address = 'address',
+  Lend = 'requested-loans'
+}
 
 @Component({
   selector: 'app-loan-list-header',
@@ -6,6 +11,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./loan-list-header.component.scss']
 })
 export class LoanListHeaderComponent implements OnInit {
+  @Input() view: PageView;
 
   constructor() { }
 

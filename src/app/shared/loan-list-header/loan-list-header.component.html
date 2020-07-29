@@ -1,15 +1,15 @@
 <div class="loans-list-header d-none d-lg-flex">
   <div class="loans-list-header__column loans-list-header__column--amount">
-    Lend
+    {{ view === 'active-loans' ? 'Repaid' : 'Lend' }}
   </div>
   <div class="loans-list-header__column loans-list-header__column--currency">
     Currency
   </div>
   <div class="loans-list-header__column loans-list-header__column--debt">
-    Receive
+    {{ view === 'active-loans' ? 'Outstanding' : 'Receive' }}
   </div>
   <div class="loans-list-header__column loans-list-header__column--type">
-    Loan type
+    Type
   </div>
   <div class="loans-list-header__column loans-list-header__column--interest">
     Annual rate
@@ -18,7 +18,7 @@
     Penalty rate
   </div>
   <div class="loans-list-header__column loans-list-header__column--duration">
-    Duration
+    Schedule
   </div>
   <div class="loans-list-header__column loans-list-header__column--installments">
     Installments
