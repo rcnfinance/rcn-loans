@@ -97,7 +97,12 @@
         Penalty Rate
       </div>
       <span>
-        {{ punitiveInterestRateRate }}%
+        <ng-container *ngIf="loanType === 0 || loanType === 1; else punitiveRateTemplate">
+          -
+        </ng-container>
+        <ng-template #punitiveRateTemplate>
+          {{ punitiveInterestRateRate }}%
+        </ng-template>
       </span>
     </div>
     <div class="loan-list__column loan-list__column--duration">
