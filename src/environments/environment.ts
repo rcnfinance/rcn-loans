@@ -19,7 +19,7 @@ const p = require('../../package.json') as any;
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 const RCN_API_DIASPORE = 'https://diaspore-ropsten-rnode.rcn.loans';
-const RIPIO_COSIGNER = '0x684977757434fee591220810cd31b6bbf99f4bdc';
+const RIPIO_COSIGNER = '0x5afc9fd47a5e064a7d1407c942878c4c0e3784a6';
 
 export const environment = {
   version: p.version,
@@ -65,10 +65,17 @@ export const environment = {
       debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
       loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'
     },
+    collateral: {
+      collateral: '0x391720efbaea47130f198263f7c3abefc230d14b',
+      wethManager: '0xfcbfd18d28ff0ffb311e2de179f3758531128449'
+    },
     converter: {
-      converterRamp: '0x9cd2b5ffd2c4d3d2d47ecbecf19ec588900901ec',
+      converterRamp: '0x9ce962dfaa5cefcbe298c5a469487cead3a0640d',
       ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      tokenConverter: '0x79e680e613ed32f64da9e5a09ed8613c8e9ce3a7'
+      uniswapConverter: '0x32657d6f2dcb32a5129d14db4a2e2e6fb198ce07'
+    },
+    models: {
+      installments: '0x41e9d0b6a8ce88989c2e7b3cae42ecfac44c9603'
     },
     decentraland: {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
@@ -103,7 +110,7 @@ export const environment = {
     ongoing: '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3'
   },
   dir: {
-    '0xdc5fdc6d0c24573c7e2ac3896ab10e376be6da86': Agent.RipioArsCreator,
+    '0xf7c5e867e739f5508c63c8ab22f39c44b9cac0b5': Agent.RipioArsCreator,
     '0xc521961b2536e2c0ab595aae25a572bfbaf7d955': Agent.WenanceCreator
   },
   filterCurrencies: [
@@ -112,7 +119,7 @@ export const environment = {
     'MANA',
     'ARS',
     'USD',
-    'DEST'
+    'DAI'
   ],
   usableCurrencies: [
     {
@@ -128,7 +135,22 @@ export const environment = {
     {
       symbol: 'ETH',
       img: 'assets/eth.png',
-      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // FIXME
+      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    },
+    {
+      symbol: 'DAI',
+      img: 'assets/dai.png',
+      address: '0x57ac66399420f7c99f546a5a7c00e0d0ff2679e1'
+    },
+    {
+      symbol: 'USDC',
+      img: 'assets/usdc.png',
+      address: '0x00558fab062c212dac6bdd48a3b6542563d969aa'
+    },
+    {
+      symbol: 'MANA',
+      img: 'assets/mana.png',
+      address: '0x1e6fd758338f59cf52c8427088077f16b60a8bd4'
     }
   ]
 };

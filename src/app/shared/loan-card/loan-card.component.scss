@@ -33,10 +33,21 @@
     z-index: 1;
   }
 
-  &__risk-indicator {
+  &__risk-indicator,
+  &__complete {
     position: absolute;
     top: 25px;
+    z-index: 3;
+  }
+
+  &__risk-indicator {
     right: 25px;
+  }
+
+  &__complete {
+    right: 15px;
+    color: var(--app-color-orange);
+    font-size: 1.45em;
   }
 
   &__content {
@@ -124,6 +135,7 @@
       margin-bottom: 0;
 
       app-lend-button,
+      app-redeem-button,
       app-detail-button {
         position: relative;
         z-index: 2;
