@@ -1,6 +1,7 @@
 <a
   mat-raised-button
-  class="button button-clear-dark mat-elevation-z"
+  class="button"
+  [ngClass]="isMobile ? 'button-secondary' : 'button-clear-dark mat-elevation-z'"
   [routerLink]="['/loan', loan?.id]"
 >
   Details

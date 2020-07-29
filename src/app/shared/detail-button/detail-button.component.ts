@@ -1,6 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
-
+import { Component, OnInit, Input } from '@angular/core';
+import { DeviceService } from '../../services/device.service';
 import { Loan } from './../../models/loan.model';
 
 @Component({
@@ -8,10 +7,15 @@ import { Loan } from './../../models/loan.model';
   templateUrl: './detail-button.component.html',
   styleUrls: ['./detail-button.component.scss']
 })
-export class DetailButtonComponent {
+export class DetailButtonComponent implements OnInit {
   @Input() loan: Loan;
+  isMobile: boolean;
 
   constructor(
-    public snackBar: MatSnackBar
+    private deviceService: DeviceService
   ) { }
+
+  ngOnInit() {
+    this.isMobile = this.deviceService.isMobile();
+  }
 }
