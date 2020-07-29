@@ -3,6 +3,18 @@
     class="loan-list d-lg-flex align-items-center"
     [class.loan-list--light]="backgroundLighter"
   >
+    <div class="loan-list__header d-flex align-items-center justify-content-center d-lg-none">
+      <ng-container *ngIf="loanType === 0 || loanType === 1; else brandHeader">
+        <span>
+          Collateral Loan
+        </span>
+      </ng-container>
+      <ng-template #brandHeader>
+        <div class="loan-type loan-type--identity" *ngIf="brand">
+          <img [src]="brand.headerImage" [alt]="brand.headerTitle">
+        </div>
+      </ng-template>
+    </div>
     <div class="loan-list__column loan-list__column--amount">
       <div class="loan-list__column-label">
         {{ leftLabel }}
@@ -43,7 +55,10 @@
         {{ rightValue }}
       </div>
     </div>
-    <div class="loan-list__column loan-list__column--type d-flex align-items-center justify-content-center d-lg-block">
+    <div class="loan-list__column loan-list__column--type">
+      <div class="loan-list__column-label">
+        Type
+      </div>
       <ng-container *ngIf="loanType === 0">
         <div class="loan-type loan-type--collateral-pending d-flex align-items-center justify-content-center">
           <div class="loan-type__icon mr-2">
