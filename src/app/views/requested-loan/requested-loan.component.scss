@@ -109,4 +109,7 @@ $filterHeightDesktop: 102px;
     @include animation(anm-backwards, .3s, ease-in, 0s, normal, both);
     animation-fill-mode: both;
   }
+  virtual-scroller {
+    height: calc(100vh - 412px);
+  }
 }

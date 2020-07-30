@@ -1,8 +1,4 @@
-<div
-  class="body-scrollable activity-wrapper"
-  #scrollingBlock
-  (scroll)="onScroll($event)"
->
+<div class="body-scrollable activity-wrapper">
   <ngx-spinner
     bdColor="transparent"
     size="medium"
@@ -17,24 +13,24 @@
       chipLabel="ACTIVE"
     ></app-page-header>
 
-    <div class="loan-container row">
-      <div class="col-sm-12 text-center" *ngIf='!isAvailableLoans'>
+    <div class="loan-container">
+      <div class="text-center" *ngIf='!isAvailableLoans; else loanListHeader'>
         <div class="title main-h1">There are no active loans</div>
       </div>
-
+      <ng-template #loanListHeader>
+        <app-loan-list-header view="active-loans"></app-loan-list-header>
+      </ng-template>
       <virtual-scroller
         #scroll
         [items]="loans"
-        [parentScroll]="scrollingBlock"
-        [bufferAmount]="4"
+        [bufferAmount]="12"
         [scrollThrottlingTime]="500"
+        (scroll)="onScroll($event)"
       >
-        <div
-          class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
-          *ngFor="let loan of scroll.viewPortItems"
-        >
-          <app-loan-card [loan]="loan"></app-loan-card>
-        </div>
+      <div *ngFor="let loan of scroll.viewPortItems; let i = index">
+        <app-loan-list [loan]="loan" [backgroundLighter]="i % 2">
+        </app-loan-list>
+      </div>
       </virtual-scroller>
 
     </div>

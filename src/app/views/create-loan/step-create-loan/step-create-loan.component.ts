@@ -98,7 +98,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     const { loanData } = formLoan;
     const loanDataValid: boolean = await this.contractsService.validateEncodedData(loanData);
     if (!loanDataValid) {
-      return this.showMessage('Please check the installments data.');
+      return this.showMessage('Please check the instalments data.');
     }
 
     // validate logged in
