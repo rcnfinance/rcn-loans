@@ -68,11 +68,11 @@
           <app-conversion-graphic
             [headers]="[
               'Repaid',
-              isInDebt ? 'Penalty rate' : 'Annual rate',
+              (isInDebt && loanType !== 0 && loanType !== 1) ? 'Penalty rate' : 'Annual rate',
               'Outstanding'
             ]"
             [amountRight]="pendingAmount"
-            [textMiddle]="isInDebt ? punitory : interest"
+            [textMiddle]="(isInDebt && loanType !== 0 && loanType !== 1) ? punitory : interest"
             [amountLeft]="paid"
             [currency]="loan.currency"
           ></app-conversion-graphic>

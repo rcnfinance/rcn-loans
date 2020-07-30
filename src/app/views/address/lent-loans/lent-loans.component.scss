@@ -4,8 +4,8 @@
   @extend %roboto-regular;
 }
 
-virtual-scroller {
-  ::ng-deep .scrollable-content {
-    height: auto;
+@media (min-width: 992px) {
+  virtual-scroller {
+    height: calc(100vh - 412px);
   }
 }

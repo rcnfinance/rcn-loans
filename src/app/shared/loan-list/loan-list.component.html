@@ -1,0 +1,190 @@
+<div class="loan-list-wrapper">
+  <div
+    class="loan-list d-lg-flex align-items-center"
+    [class.loan-list--light]="backgroundLighter"
+  >
+    <div class="loan-list__header d-flex align-items-center justify-content-center d-lg-none">
+      <ng-container *ngIf="loanType === 0 || loanType === 1; else brandHeader">
+        <span>
+          Collateral Loan
+        </span>
+      </ng-container>
+      <ng-template #brandHeader>
+        <div class="loan-type loan-type--identity" *ngIf="brand">
+          <img [src]="brand.headerImage" [alt]="brand.headerTitle">
+        </div>
+      </ng-template>
+    </div>
+    <div class="loan-list__column loan-list__column--amount">
+      <div class="loan-list__column-label">
+        {{ leftLabel }}
+      </div>
+      <div
+        [matTooltip]="
+          leftValue?.length > 6 ?
+            (leftValue + ' ' + loan.currency) :
+            ''
+        "
+        matTooltipPosition="below"
+        class="loan-list__column-amount"
+      >
+        {{ leftValue }}
+      </div>
+    </div>
+    <div class="loan-list__column loan-list__column--currency">
+      <div class="loan-list__column-label">
+        Currency
+      </div>
+      <span>
+        {{ loan.currency }}
+      </span>
+    </div>
+    <div class="loan-list__column loan-list__column--debt">
+      <div class="loan-list__column-label">
+        {{ rightLabel }}
+      </div>
+      <div
+        [matTooltip]="
+          rightValue?.length > 6 ?
+            (rightValue + ' ' + loan.currency) :
+            ''
+        "
+        matTooltipPosition="below"
+        class="loan-list__column-amount"
+      >
+        {{ rightValue }}
+      </div>
+    </div>
+    <div class="loan-list__column loan-list__column--type">
+      <div class="loan-list__column-label">
+        Type
+      </div>
+      <ng-container *ngIf="loanType === 0">
+        <div class="loan-type loan-type--collateral-pending d-flex align-items-center justify-content-center">
+          <div class="loan-type__icon mr-2">
+            <span>
+              <i class="fas fa-coins"></i>
+            </span>
+          </div>
+          <div class="loan-type__complete">
+            <span matTooltip="IMPORTANT: your loan will not be available for lending until you supply your collateral">
+              <i class="fas fa-exclamation-circle"></i>
+            </span>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="loanType === 1">
+        <div class="loan-type loan-type--collateral d-flex justify-content-center align-items-center">
+          <div class="loan-type__icon">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="loan-type__collateral d-flex flex-column">
+            <span class="loan-type__collateral-currency">
+              {{ collateralAsset }}
+            </span>
+            <span class="loan-type__collateral-amount">
+              {{ collateralRatio || '-' }}%
+            </span>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="loanType === 2">
+        <div class="loan-type loan-type--avatar" *ngIf="brand">
+          <img src="{{ brand.icon }}" />
+        </div>
+      </ng-container>
+      <ng-container *ngIf="loanType === 3">
+        <div class="loan-type loan-type--identity" *ngIf="brand">
+          <img [src]="brand.headerImage" [alt]="brand.headerTitle">
+        </div>
+      </ng-container>
+    </div>
+    <div class="loan-list__column loan-list__column--interest">
+      <div class="loan-list__column-label">
+        Annual Rate
+      </div>
+      <span>
+        {{ interestRate }}%
+      </span>
+    </div>
+    <div class="loan-list__column loan-list__column--punitory">
+      <div class="loan-list__column-label">
+        Penalty Rate
+      </div>
+      <span>
+        <ng-container *ngIf="loanType === 0 || loanType === 1; else punitiveRateTemplate">
+          -
+        </ng-container>
+        <ng-template #punitiveRateTemplate>
+          {{ punitiveInterestRateRate }}%
+        </ng-template>
+      </span>
+    </div>
+    <div class="loan-list__column loan-list__column--duration">
+      <div class="loan-list__column-label">
+        {{ durationLabel }}
+      </div>
+      <span
+        class="loan-list__column-duration"
+        [class.loan-list__column-duration--success]="loan?.status !== 5"
+        [class.loan-list__column-duration--error]="loan?.status === 5"
+        [matTooltip]="durationTooltip"
+      >
+        {{ durationValue }}
+      </span>
+    </div>
+    <div class="loan-list__column loan-list__column--installments">
+      <div class="loan-list__column-label">
+        Instalments
+      </div>
+      <span>
+        {{ installments }}
+      </span>
+    </div>
+    <div class="loan-list__column loan-list__column--borrower">
+      <div class="loan-list__column-label">
+        Created by
+      </div>
+      <span>
+        {{ shortAddress }}
+      </span>
+    </div>
+    <div class="loan-list__column loan-list__column--action d-flex justify-content-start justify-content-lg-end">
+      <ng-container *ngIf="isIncomplete; else activeLoanActions">
+        <button
+          mat-raised-button
+          class="button button-clear"
+          [routerLink]="['/borrow', loan?.id]"
+        >
+          + Collateral
+        </button>
+      </ng-container>
+      <ng-template #activeLoanActions>
+        <app-redeem-button
+          [loan]="loan"
+          (endRedeem)="onUserAction('redeem')"
+          *ngIf="canRedeem"
+        >
+        </app-redeem-button>
+        <app-lend-button
+          [loan]="loan"
+          [showLendDialog]="true"
+          (endLend)="onUserAction('lend')"
+          *ngIf="canLend"
+        >
+        </app-lend-button>
+        <app-detail-button
+          [loan]="loan"
+          class="mr-2 pr-1"
+          *ngIf="!canLend && !canRedeem"
+        >
+        </app-detail-button>
+      </ng-template>
+    </div>
+    <a
+      class="loan-list__href"
+      [routerLink]="isIncomplete ? ['/borrow', loan?.id] : ['/loan', loan?.id]"
+    >
+    </a>
+  </div>
+</div>
