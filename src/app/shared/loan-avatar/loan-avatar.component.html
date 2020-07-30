@@ -5,7 +5,7 @@
     <angular-blockies [options]="blockies()"
       ng-hide="!hasAvatar"></angular-blockies>
   </div>
-  <div class="txt-container">
+  <div class="txt-container" *ngIf="short">
     <div class="subtitle">Created by</div>
     <div class="title ellipsis">{{ name }}</div>
   </div>

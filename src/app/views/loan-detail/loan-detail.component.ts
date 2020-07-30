@@ -445,7 +445,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
 
     this.diasporeData = [
-      ['Installments', 'Frequency', 'Amount'],
+      ['Instalments', 'Frequency', 'Amount'],
       [
         `${ installments } ${ installments > 1 ? 'Payments' : 'Payment' }`,
         installmentDuration,

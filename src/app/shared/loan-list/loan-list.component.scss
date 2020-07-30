@@ -1,0 +1,221 @@
+@import '../../../scss/fonts';
+
+.loan-list-wrapper {
+  overflow: hidden;
+  margin-bottom: 19px;
+}
+
+.loan-list {
+  position: relative;
+  width: 100%;
+  background: var(--app-color-gray-700);
+  border-radius: 10px;
+
+  &__header {
+    width: 100%;
+    height: 55px;
+    background: var(--app-color-gray-400);
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+    @include styled-font('proxima-nova', 700, 21px);
+    color: var(--app-color-gray-50);
+    img {
+      max-width: 100%;
+      height: 25px;
+      margin: auto;
+    }
+  }
+
+  &__column {
+    display: flex;
+    align-items: center;
+    &-label {
+      width: 120px;
+      @include typography-overline(2);
+      text-transform: uppercase;
+      padding: 9px 0 9px 17px;
+    }
+    &-duration {
+      &--success {
+        color: white;
+      }
+      &--warning {
+        color: var(--app-color-orange);
+      }
+      &--error {
+        color: var(--app-color-red);
+      }
+    }
+
+    &--amount,
+    &--debt {
+      @include typography-subtitle(2);
+    }
+    &--currency,
+    &--type,
+    &--interest,
+    &--punitory,
+    &--duration,
+    &--installments,
+    &--borrower,
+    &--action {
+      @include typography-body(3);
+    }
+    &--currency {
+      @include typography-subtitle(2);
+    }
+    &--debt {
+      color: var(--app-color-primary);
+      margin-bottom: 19px;
+      border-bottom: 1px solid #707070;
+    }
+
+    &--amount,
+    &--currency,
+    &--debt {
+      display: flex;
+      align-items: center;
+      height: 37px;
+      background: #1B1B1D;
+    }
+    &--amount {
+      padding-top: 15px;
+    }
+    &--debt {
+      padding-bottom: 15px;
+      margin-bottom: 19px;
+    }
+    &--currency {
+      // height: 27px;
+    }
+
+    &--action {
+      position: relative;
+      z-index: 3;
+      padding: 17px 0 17px 17px;
+    }
+    &--duration {
+      position: relative;
+      z-index: 3;
+    }
+
+    .loan-type {
+      &--collateral,
+      &--collateral-pending {
+        text-align: left;
+        .loan-type__icon {
+          font-size: 1.29em;
+          margin-right: 7px;
+        }
+        .loan-type__collateral {
+          @include typography-overline(3);
+          line-height: 1.2em;
+          &-currency {
+            color: white;
+          }
+          &-amount {
+            color: #B1B1B1;
+          }
+        }
+      }
+      &--collateral-pending {
+        text-align: center;
+        color: var(--app-color-gray-100);
+        .loan-type__complete {
+          right: 15px;
+          color: var(--app-color-orange);
+          font-size: 1.45em;
+        }
+      }
+      &--identity {
+        text-align: center;
+        img {
+          max-width: 100%;
+          height: 25px;
+          margin: auto;
+        }
+      }
+      &--avatar {
+        img {
+          width: 28px;
+          height: 28px;
+          margin: auto;
+        }
+      }
+    }
+  }
+  &__href {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+}
+
+@media (min-width: 992px) {
+  .loan-list-wrapper {
+    margin: 0;
+  }
+
+  .loan-list {
+    height: 52px;
+    background: none;
+    border-radius: 0;
+    transition: .3s;
+
+    &:hover {
+      cursor: pointer;
+      background-color: var(--app-color-gray-800);
+    }
+
+    &--light {
+      background: var(--app-color-gray-700);
+      &:hover {
+        background-color: var(--app-color-gray-600);
+      }
+    }
+    &__column {
+      display: block;
+      text-align: center;
+      &-label {
+        display: none;
+      }
+      &-amount {
+        margin: auto;
+        max-width: 105px;
+        text-align: left;
+      }
+      &--amount,
+      &--debt {
+        width: 12.2%;
+      }
+      &--currency,
+      &--type,
+      &--interest,
+      &--punitory,
+      &--duration,
+      &--installments,
+      &--borrower,
+      &--action {
+        width: 9.4%;
+      }
+
+      &--amount,
+      &--currency,
+      &--debt {
+        display: block;
+        height: auto;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      &--action {
+        padding: 0;
+      }
+    }
+  }
+}

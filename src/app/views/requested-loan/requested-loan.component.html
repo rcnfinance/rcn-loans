@@ -1,7 +1,6 @@
 <div
   class="body-scrollable requested-wrapper"
   [ngClass]="{ active: filtersOpen, disabled: filtersOpen === false }"
-  #scrollingBlock
 >
   <ngx-spinner
     bdColor="transparent"
@@ -33,19 +32,17 @@
         <app-filter-loans [filters]="filters" (filtered)="onFiltered()">
         </app-filter-loans>
       </div>
-      <div class="loan-container row">
+      <div class="loan-container">
+        <app-loan-list-header view="address"></app-loan-list-header>
         <virtual-scroller
           #scroll
           [items]="loans"
-          [parentScroll]="scrollingBlock"
-          [bufferAmount]="4"
+          [bufferAmount]="12"
           [scrollThrottlingTime]="500"
         >
-          <div
-            class="col-sm-12 col-md-6 col-lg-4 col-xl-3 card-col mb-5"
-            *ngFor="let loan of scroll.viewPortItems"
-          >
-            <app-loan-card [loan]="loan"></app-loan-card>
+          <div *ngFor="let loan of scroll.viewPortItems; let i = index">
+            <app-loan-list [loan]="loan" [backgroundLighter]="i % 2">
+            </app-loan-list>
           </div>
         </virtual-scroller>
       </div>
