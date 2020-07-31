@@ -50,7 +50,7 @@ export class CollateralFormComponent implements OnInit {
       await this.completeForm();
 
       this.spinner.show();
-      await this.calculateMaxWithdraw();
+      this.calculateMaxWithdraw();
     } catch (err) {
       this.eventsService.trackError(err);
     } finally {
@@ -101,9 +101,13 @@ export class CollateralFormComponent implements OnInit {
    * Set max withdraw amount
    */
   clickMaxWithdraw() {
-    const { maxWithdraw } = this.form.value.formRatios;
+    const { currency } = this.form.value.formRatios;
+    const decimals: number = new Currency(currency.symbol).decimals;
+    const maxWithdraw = this.calculateMaxWithdraw();
+    const entryAmount = this.formatAmount(maxWithdraw, decimals);
+
     this.form.controls.formUi.patchValue({
-      entryAmount: maxWithdraw
+      entryAmount
     });
   }
 
@@ -142,7 +146,7 @@ export class CollateralFormComponent implements OnInit {
       await this.collateralService.calculateCollateralPercentage(loan, currency, amount);
 
     const decimals: number = new Currency(currency.symbol).decimals;
-    const formattedAmount: string = Utils.formatAmount(this.formatAmount(amount, decimals), 4);
+    const formattedAmount: string = Utils.formatAmount(this.formatAmount(amount, decimals));
 
     // set liquidation price
     const liquidationPrice = await this.collateralService.calculateLiquidationPrice(this.loan, loan.collateral);
@@ -210,7 +214,7 @@ export class CollateralFormComponent implements OnInit {
         amount: newAmount
       });
 
-      const formattedAmount = Utils.formatAmount(newAmount as any / 10 ** decimals, 4);
+      const formattedAmount = Utils.formatAmount(newAmount as any / 10 ** decimals);
       const collateralRatio: string =
         await this.collateralService.calculateCollateralPercentage(loan, currency, newAmount);
 
@@ -262,7 +266,7 @@ export class CollateralFormComponent implements OnInit {
    * Calculate the max withdraw amount
    * @return Max amount to withdraw in wei
    */
-  private async calculateMaxWithdraw() {
+  private calculateMaxWithdraw() {
     const { amount } = this.form.value.formCollateral;
     const { currency, collateralRatio, balanceRatio } = this.form.value.formRatios;
     const decimals: number = new Currency(currency.symbol).decimals;
@@ -279,7 +283,7 @@ export class CollateralFormComponent implements OnInit {
       this.formatAmount(maxWithdraw, decimals);
 
     this.form.controls.formRatios.patchValue({
-      maxWithdraw: Utils.formatAmount(formattedMaxWithdraw, 4)
+      maxWithdraw: Utils.formatAmount(formattedMaxWithdraw)
     });
 
     return maxWithdraw;
