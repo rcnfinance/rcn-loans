@@ -96,6 +96,9 @@ export class Utils {
     if (typeof amount !== 'number') {
       amount = Number(amount);
     }
+    if (!amount) {
+      amount = 0;
+    }
 
     const fixedAmount: any = (amount as Number).toFixed(decimals);
     const fixedAmountWithoutRounding =
