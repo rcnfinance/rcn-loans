@@ -16,7 +16,6 @@ import { Tx, Type, TxService } from '../../services/tx.service';
 export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   @Input() account: string;
 
-  private rcnBalance: number;
   private rcnAvailable: number;
   private basaltRcnAvailable: number;
   private diasporeRcnAvailable: number;
@@ -51,7 +50,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
 
     if (account.currentValue) {
       this.account = web3.utils.toChecksumAddress(account.currentValue);
-      this.loadRcnBalance();
       this.loadWithdrawBalance();
     }
   }
@@ -70,7 +68,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    */
   handleBalanceEvents() {
     this.subscriptionBalance = this.web3Service.updateBalanceEvent.subscribe(() => {
-      this.loadRcnBalance();
       this.loadWithdrawBalance();
     });
   }
@@ -103,14 +100,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     this.basaltLoansWithBalance = pendingWithdraws[1];
     this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadOngoingWithdraw();
-    this.updateDisplay();
-  }
-
-  /**
-   * Show the user balance in rcn
-   */
-  async loadRcnBalance() {
-    this.rcnBalance = Number(await this.contractService.getUserBalanceRCN());
     this.updateDisplay();
   }
 
