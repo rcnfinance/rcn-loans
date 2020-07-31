@@ -85,7 +85,7 @@ export class DialogLoanPayComponent implements OnInit {
     const securePendingAmount = pendingAmount + additional;
 
     this.currency = currency;
-    this.pendingAmount = Utils.formatAmount(securePendingAmount);
+    this.pendingAmount = Utils.formatAmount(securePendingAmount, 4);
     this.form.controls.amount.setValidators([Validators.required]);
     this.shortLoanId =
       String(this.loan.id).startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
@@ -95,8 +95,8 @@ export class DialogLoanPayComponent implements OnInit {
     this.exchangeRcnWei = rate;
 
     const RCN_DECIMALS = 18;
-    this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** RCN_DECIMALS);
-    this.pendingAmountRcn = Utils.formatAmount(Number(this.exchangeRcn) * Number(this.pendingAmount));
+    this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** RCN_DECIMALS, 4);
+    this.pendingAmountRcn = Utils.formatAmount(Number(this.exchangeRcn) * Number(this.pendingAmount), 4);
   }
 
   /**
@@ -140,7 +140,7 @@ export class DialogLoanPayComponent implements OnInit {
     }
 
     const payAmountRcn = (amount * Number(this.pendingAmountRcn)) / Number(this.pendingAmount);
-    this.payAmountRcn = Utils.formatAmount(payAmountRcn);
+    this.payAmountRcn = Utils.formatAmount(payAmountRcn, 4);
   }
 
   private loadExchangeTooltip() {

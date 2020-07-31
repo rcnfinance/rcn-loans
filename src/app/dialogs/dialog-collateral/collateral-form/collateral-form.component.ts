@@ -142,11 +142,11 @@ export class CollateralFormComponent implements OnInit {
       await this.collateralService.calculateCollateralPercentage(loan, currency, amount);
 
     const decimals: number = new Currency(currency.symbol).decimals;
-    const formattedAmount: string = Utils.formatAmount(this.formatAmount(amount, decimals));
+    const formattedAmount: string = Utils.formatAmount(this.formatAmount(amount, decimals), 4);
 
     // set liquidation price
     const liquidationPrice = await this.collateralService.calculateLiquidationPrice(this.loan, loan.collateral);
-    const currentLiquidationPrice = Utils.formatAmount(liquidationPrice);
+    const currentLiquidationPrice = Utils.formatAmount(liquidationPrice, 4);
 
     this.form.controls.formCollateral.patchValue({
       id,
@@ -210,7 +210,7 @@ export class CollateralFormComponent implements OnInit {
         amount: newAmount
       });
 
-      const formattedAmount = Utils.formatAmount(newAmount as any / 10 ** decimals);
+      const formattedAmount = Utils.formatAmount(newAmount as any / 10 ** decimals, 4);
       const collateralRatio: string =
         await this.collateralService.calculateCollateralPercentage(loan, currency, newAmount);
 
@@ -224,7 +224,8 @@ export class CollateralFormComponent implements OnInit {
       });
 
       const originalAmount = Utils.formatAmount(
-        new Currency(currency.symbol).fromUnit(amount)
+        new Currency(currency.symbol).fromUnit(amount),
+        4
       );
       const originalCollateralRatio: string =
         await this.collateralService.calculateCollateralPercentage(loan, currency, amount);
@@ -278,7 +279,7 @@ export class CollateralFormComponent implements OnInit {
       this.formatAmount(maxWithdraw, decimals);
 
     this.form.controls.formRatios.patchValue({
-      maxWithdraw: Utils.formatAmount(formattedMaxWithdraw)
+      maxWithdraw: Utils.formatAmount(formattedMaxWithdraw, 4)
     });
 
     return maxWithdraw;

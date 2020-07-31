@@ -27,7 +27,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   ongoingDiasporeWithdraw: Tx;
 
   canWithdraw = false;
-  displayBalance = '';
   displayAvailable = '';
   txSubscription: boolean;
 
@@ -80,12 +79,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Update balance and withdraw amount
    */
   updateDisplay() {
-    if (this.rcnBalance) {
-      this.displayBalance = Utils.formatAmount(this.rcnBalance);
-    } else {
-      this.displayBalance = '0';
-    }
-
     if (this.rcnAvailable) {
       this.displayAvailable = Utils.formatAmount(this.rcnAvailable);
     } else {
@@ -96,12 +89,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
       (this.basaltLoansWithBalance !== undefined || this.diasporeLoansWithBalance !== undefined) &&
       (this.basaltLoansWithBalance.length > 0 || this.diasporeLoansWithBalance.length > 0) &&
       (this.ongoingBasaltWithdraw === undefined || this.ongoingDiasporeWithdraw === undefined);
-
-    if (this.ongoingBasaltWithdraw !== undefined || this.ongoingDiasporeWithdraw !== undefined) {
-      this.displayBalance = Utils.formatAmount(
-        this.rcnBalance + this.rcnAvailable
-      );
-    }
   }
 
   /**
