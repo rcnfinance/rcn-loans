@@ -70,8 +70,8 @@ export class DialogLoanLendComponent implements OnInit {
     // set loan amount and rate
     const web3: any = this.web3Service.web3;
     const rate: BN = await this.getLoanRate();
-    this.loanAmount = Utils.formatAmount(loanCurrency.fromUnit(loanAmount), 4);
-    this.loanExpectedReturn = Utils.formatAmount(loanCurrency.fromUnit(loanExpectedReturn), 4);
+    this.loanAmount = Utils.formatAmount(loanCurrency.fromUnit(loanAmount));
+    this.loanExpectedReturn = Utils.formatAmount(loanCurrency.fromUnit(loanExpectedReturn));
     this.exchangeRcn = Utils.formatAmount(web3.utils.fromWei(rate), 4);
 
     // set loan status
