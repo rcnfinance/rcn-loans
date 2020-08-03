@@ -16,7 +16,6 @@ import { Tx, Type, TxService } from '../../services/tx.service';
 export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   @Input() account: string;
 
-  private rcnBalance: number;
   private rcnAvailable: number;
   private basaltRcnAvailable: number;
   private diasporeRcnAvailable: number;
@@ -27,7 +26,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   ongoingDiasporeWithdraw: Tx;
 
   canWithdraw = false;
-  displayBalance = '';
   displayAvailable = '';
   txSubscription: boolean;
 
@@ -52,7 +50,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
 
     if (account.currentValue) {
       this.account = web3.utils.toChecksumAddress(account.currentValue);
-      this.loadRcnBalance();
       this.loadWithdrawBalance();
     }
   }
@@ -71,7 +68,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    */
   handleBalanceEvents() {
     this.subscriptionBalance = this.web3Service.updateBalanceEvent.subscribe(() => {
-      this.loadRcnBalance();
       this.loadWithdrawBalance();
     });
   }
@@ -80,12 +76,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Update balance and withdraw amount
    */
   updateDisplay() {
-    if (this.rcnBalance) {
-      this.displayBalance = Utils.formatAmount(this.rcnBalance);
-    } else {
-      this.displayBalance = '0';
-    }
-
     if (this.rcnAvailable) {
       this.displayAvailable = Utils.formatAmount(this.rcnAvailable);
     } else {
@@ -96,12 +86,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
       (this.basaltLoansWithBalance !== undefined || this.diasporeLoansWithBalance !== undefined) &&
       (this.basaltLoansWithBalance.length > 0 || this.diasporeLoansWithBalance.length > 0) &&
       (this.ongoingBasaltWithdraw === undefined || this.ongoingDiasporeWithdraw === undefined);
-
-    if (this.ongoingBasaltWithdraw !== undefined || this.ongoingDiasporeWithdraw !== undefined) {
-      this.displayBalance = Utils.formatAmount(
-        this.rcnBalance + this.rcnAvailable
-      );
-    }
   }
 
   /**
@@ -116,14 +100,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     this.basaltLoansWithBalance = pendingWithdraws[1];
     this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadOngoingWithdraw();
-    this.updateDisplay();
-  }
-
-  /**
-   * Show the user balance in rcn
-   */
-  async loadRcnBalance() {
-    this.rcnBalance = Number(await this.contractService.getUserBalanceRCN());
     this.updateDisplay();
   }
 
