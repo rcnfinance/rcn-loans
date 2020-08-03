@@ -67,7 +67,7 @@ export class FilterLoansService {
 
   checkFilters(loan: Loan) {
     return this.checkCurrency(loan.currency.symbol) &&
-      this.checkAmountRange(loan.amount) &&
+      this.checkAmountRange(loan.currency.fromUnit(loan.amount)) &&
       this.checkDuration(loan.descriptor.duration) &&
       this.checkInterestRate(loan.descriptor.interestRate);
   }
@@ -75,7 +75,7 @@ export class FilterLoansService {
   filterLoans(loans: Loan[], filters: Filters) {
     this.filter = filters;
 
-    const amountArray = loans.map(loan => loan.amount);
+    const amountArray = loans.map(loan => loan.currency.fromUnit(loan.amount));
     this.minAmount = Math.min.apply(null, amountArray);
     this.maxAmount = Math.max.apply(null, amountArray);
 
