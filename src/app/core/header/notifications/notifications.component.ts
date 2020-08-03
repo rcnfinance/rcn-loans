@@ -317,7 +317,7 @@ export class NotificationsComponent implements OnInit {
         txObject = new TxObject(id, 'Depositing', message, 'material-icons', 'add', '', 'violet');
         break;
       case 'withdrawCollateral':
-        txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'remove', '', 'violet');
+        txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'remove_circle_outline', '', 'violet');
         break;
       default:
         break;

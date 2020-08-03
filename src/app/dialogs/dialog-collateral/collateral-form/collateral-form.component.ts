@@ -50,7 +50,7 @@ export class CollateralFormComponent implements OnInit {
       await this.completeForm();
 
       this.spinner.show();
-      await this.calculateMaxWithdraw();
+      this.calculateMaxWithdraw();
     } catch (err) {
       this.eventsService.trackError(err);
     } finally {
@@ -101,9 +101,13 @@ export class CollateralFormComponent implements OnInit {
    * Set max withdraw amount
    */
   clickMaxWithdraw() {
-    const { maxWithdraw } = this.form.value.formRatios;
+    const { currency } = this.form.value.formRatios;
+    const decimals: number = new Currency(currency.symbol).decimals;
+    const maxWithdraw = this.calculateMaxWithdraw();
+    const entryAmount = this.formatAmount(maxWithdraw, decimals);
+
     this.form.controls.formUi.patchValue({
-      entryAmount: maxWithdraw
+      entryAmount
     });
   }
 
@@ -146,7 +150,7 @@ export class CollateralFormComponent implements OnInit {
 
     // set liquidation price
     const liquidationPrice = await this.collateralService.calculateLiquidationPrice(this.loan, loan.collateral);
-    const currentLiquidationPrice = Utils.formatAmount(liquidationPrice);
+    const currentLiquidationPrice = Utils.formatAmount(liquidationPrice, 4);
 
     this.form.controls.formCollateral.patchValue({
       id,
@@ -224,7 +228,8 @@ export class CollateralFormComponent implements OnInit {
       });
 
       const originalAmount = Utils.formatAmount(
-        new Currency(currency.symbol).fromUnit(amount)
+        new Currency(currency.symbol).fromUnit(amount),
+        4
       );
       const originalCollateralRatio: string =
         await this.collateralService.calculateCollateralPercentage(loan, currency, amount);
@@ -261,7 +266,7 @@ export class CollateralFormComponent implements OnInit {
    * Calculate the max withdraw amount
    * @return Max amount to withdraw in wei
    */
-  private async calculateMaxWithdraw() {
+  private calculateMaxWithdraw() {
     const { amount } = this.form.value.formCollateral;
     const { currency, collateralRatio, balanceRatio } = this.form.value.formRatios;
     const decimals: number = new Currency(currency.symbol).decimals;

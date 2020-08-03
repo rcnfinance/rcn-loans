@@ -320,8 +320,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       case Status.Destroyed:
       case Status.Request:
         // Load config data
-        const interestRate = this.loan.descriptor.interestRate.toFixed(2);
-        const interestRatePunitive = this.loan.descriptor.punitiveInterestRateRate.toFixed(2);
+        const interestRate = Utils.formatAmount(this.loan.descriptor.interestRate, 0);
+        const interestRatePunitive = Utils.formatAmount(this.loan.descriptor.punitiveInterestRateRate, 0);
         const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
         this.loanConfigData = [
           ['Information', ''],
@@ -333,7 +333,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.interest = `${ interestRate }%`;
         this.punitory = `${ interestRatePunitive }%`;
         this.duration = duration;
-        this.expectedReturn = this.loan.currency.fromUnit(this.loan.descriptor.totalObligation).toFixed(2);
+        this.expectedReturn = Utils.formatAmount(this.loan.currency.fromUnit(this.loan.descriptor.totalObligation));
         break;
       case Status.Indebt:
       case Status.Ongoing:
@@ -350,8 +350,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
           deadline = this.formatTimestamp(this.loan.config.lentTime + this.loan.descriptor.duration);
         }
 
-        const currentInterestRate: string = this.formatInterest(
-          this.loan.status === Status.Indebt ? this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate
+        const currentInterestRate: string = Utils.formatAmount(
+          this.loan.status === Status.Indebt ? this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate,
+          0
         );
 
         // Show ongoing loan detail
@@ -445,7 +446,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
 
     this.diasporeData = [
-      ['Installments', 'Frequency', 'Amount'],
+      ['Instalments', 'Frequency', 'Amount'],
       [
         `${ installments } ${ installments > 1 ? 'Payments' : 'Payment' }`,
         installmentDuration,
@@ -536,10 +537,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     if (this.userAccount) {
       return this.loan.borrower.toUpperCase() === this.userAccount.toUpperCase();
     }
-  }
-
-  private formatInterest(interest: number): string {
-    return Number(interest.toFixed(2)).toString();
   }
 
   private formatTimestamp(timestamp: number): string {

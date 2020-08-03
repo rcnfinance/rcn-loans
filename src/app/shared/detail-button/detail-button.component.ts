@@ -1,6 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
-
 import { Loan } from './../../models/loan.model';
 
 @Component({
@@ -10,8 +8,4 @@ import { Loan } from './../../models/loan.model';
 })
 export class DetailButtonComponent {
   @Input() loan: Loan;
-
-  constructor(
-    public snackBar: MatSnackBar
-  ) { }
 }
