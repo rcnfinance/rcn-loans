@@ -42,15 +42,11 @@ describe('BalanceComponent', () => {
     fixture.detectChanges();
 
     // logic expect
-    expect(thisComponent.displayBalance).toBe('25000.8');
-    expect(thisComponent.displayAvailable).toBe('3000');
+    expect(thisComponent.displayAvailable).toBe('3,000.00');
     expect(thisComponent.canWithdraw).toBeTruthy();
 
     // ui expect
     const withdrawPayments = readComponent(fixture, '.balance-withdraw__amount');
     expect(withdrawPayments).toBeDefined();
-
-    const displayAvailable = Number(withdrawPayments.innerText);
-    expect(displayAvailable).toBe(3000);
   });
 });

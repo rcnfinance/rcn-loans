@@ -62,6 +62,16 @@ export class DialogLoanPayComponent implements OnInit {
   }
 
   /**
+   * Returns if the chosen value is greater than or equal to the current debt
+   * @return boolean
+   */
+  get sufficientPaymentAmount() {
+    const pendingAmont = this.calculatePendingAmount();
+    const { amount } = this.form.value;
+    return amount >= pendingAmont;
+  }
+
+  /**
    * Set account address
    */
   async loadAccount() {
@@ -78,14 +88,10 @@ export class DialogLoanPayComponent implements OnInit {
   async loadDetail() {
     const loan: Loan = this.loan;
     const currency = loan.currency;
-    const pendingAmount = currency.fromUnit(loan.debt.model.estimatedObligation);
-
-    // adds 0,001% to the amount for prevent a small due
-    const additional = (0.001 * pendingAmount) / 100;
-    const securePendingAmount = pendingAmount + additional;
+    const pendingAmont = this.calculatePendingAmount();
 
     this.currency = currency;
-    this.pendingAmount = Utils.formatAmount(securePendingAmount);
+    this.pendingAmount = Utils.formatAmount(pendingAmont, 4);
     this.form.controls.amount.setValidators([Validators.required]);
     this.shortLoanId =
       String(this.loan.id).startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
@@ -95,8 +101,8 @@ export class DialogLoanPayComponent implements OnInit {
     this.exchangeRcnWei = rate;
 
     const RCN_DECIMALS = 18;
-    this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** RCN_DECIMALS);
-    this.pendingAmountRcn = Utils.formatAmount(Number(this.exchangeRcn) * Number(this.pendingAmount));
+    this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** RCN_DECIMALS, 4);
+    this.pendingAmountRcn = Utils.formatAmount(Number(this.exchangeRcn) * Number(this.pendingAmount), 4);
   }
 
   /**
@@ -127,8 +133,10 @@ export class DialogLoanPayComponent implements OnInit {
   }
 
   clickSetMaxAmount() {
+    const pendingAmont = this.calculatePendingAmount();
+
     this.form.patchValue({
-      amount: this.pendingAmount
+      amount: pendingAmont
     });
     this.onAmountChange();
   }
@@ -140,7 +148,23 @@ export class DialogLoanPayComponent implements OnInit {
     }
 
     const payAmountRcn = (amount * Number(this.pendingAmountRcn)) / Number(this.pendingAmount);
-    this.payAmountRcn = Utils.formatAmount(payAmountRcn);
+    this.payAmountRcn = Utils.formatAmount(payAmountRcn, 4);
+  }
+
+  /**
+   * Calculate the pending amount rounding up
+   * @return Pending amount
+   */
+  private calculatePendingAmount() {
+    const loan: Loan = this.loan;
+    const currency = loan.currency;
+    const pendingAmount = currency.fromUnit(loan.debt.model.estimatedObligation);
+
+    // adds 0,001% to the amount for prevent a small due
+    const additional = (0.001 * pendingAmount) / 100;
+    const securePendingAmount = pendingAmount + additional;
+
+    return securePendingAmount;
   }
 
   private loadExchangeTooltip() {

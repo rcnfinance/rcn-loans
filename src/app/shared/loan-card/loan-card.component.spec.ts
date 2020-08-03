@@ -87,7 +87,7 @@ describe('LoanCardComponent', () => {
         '.loan-card__property--conversion .loan-card__property-title',
         0
       ).innerText
-    ).toBe('84859.2');
+    ).toBe('84,859.20');
 
     expect(
       readComponent(
@@ -95,7 +95,7 @@ describe('LoanCardComponent', () => {
         '.loan-card__property--conversion .loan-card__property-title',
         1
       ).innerText
-    ).toBe('102240');
+    ).toBe('102,240.00');
   });
 
   it('should render an ongoing loan', () => {
@@ -171,7 +171,7 @@ describe('LoanCardComponent', () => {
         '.loan-card__property--conversion .loan-card__property-title',
         0
       ).innerText
-    ).toBe('10');
+    ).toBe('10.00');
 
     expect(
       readComponent(
@@ -179,6 +179,6 @@ describe('LoanCardComponent', () => {
         '.loan-card__property--conversion .loan-card__property-title',
         1
       ).innerText
-    ).toBe('2');
+    ).toBe('2.00');
   });
 });

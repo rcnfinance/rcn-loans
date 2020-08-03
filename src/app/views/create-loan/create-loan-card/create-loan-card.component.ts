@@ -134,7 +134,7 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
     const loan: Loan = this.loan;
     const installments: number = loan.descriptor.installments;
     const installmentAmount: any = this.expectedInstallmentAmount();
-    const expectedReturn: number = installmentAmount * installments;
+    const expectedReturn: number = Number(installmentAmount) * installments;
 
     return expectedReturn ? Utils.formatAmount(expectedReturn) : null;
   }
@@ -155,7 +155,7 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
       return 0;
     }
 
-    return Utils.formatAmount(amount);
+    return amount;
   }
 
   /**

@@ -86,21 +86,25 @@ export class Utils {
     return prefix + result.slice(0, -2);
   }
 
-  static formatAmount(amount: number | string | BN, maxDigits = 6): string {
+  /**
+   * Format amounts to show
+   * @param amount Amount to format
+   * @param decimals Decimals to show
+   * @return Formatted amount
+   */
+  static formatAmount(amount: number | string | BN, decimals = 2): string {
     if (typeof amount !== 'number') {
       amount = Number(amount);
     }
-
-    if (amount.toString().length <= maxDigits) {
-      return amount.toString();
+    if (!amount) {
+      amount = 0;
     }
 
-    const intDigits = amount.toFixed(0).toString().length;
-    const decDigits = maxDigits - intDigits;
+    const fixedAmount: any = (amount as Number).toFixed(decimals);
+    const fixedAmountWithoutRounding =
+      fixedAmount <= amount ? fixedAmount : (fixedAmount - Math.pow(0.1, decimals)).toFixed(decimals);
 
-    const decimals = (decDigits > 0) ? decDigits : 0;
-
-    return Number(amount.toFixed(decimals)).toString();
+    return Number(fixedAmountWithoutRounding).toLocaleString('en-US', { minimumFractionDigits: decimals });
   }
 
   static removeTrailingZeros(value: string): string {

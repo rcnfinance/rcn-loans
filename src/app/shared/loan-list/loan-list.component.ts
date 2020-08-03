@@ -171,8 +171,8 @@ export class LoanListComponent implements OnInit, OnDestroy {
     this.loanType = this.loanTypeService.getLoanType(this.loan);
     this.shortAddress = Utils.shortAddress(this.stateLoan.borrower);
     this.installments = this.getInstallments();
-    this.interestRate = this.stateLoan.descriptor.interestRate.toFixed(2);
-    this.punitiveInterestRateRate = this.stateLoan.descriptor.punitiveInterestRateRate.toFixed(2);
+    this.interestRate = Utils.formatAmount(this.stateLoan.descriptor.interestRate, 0);
+    this.punitiveInterestRateRate = Utils.formatAmount(this.stateLoan.descriptor.punitiveInterestRateRate, 0);
 
     switch (this.loanType) {
       case LoanType.UnknownWithCollateral:
@@ -200,7 +200,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
     this.collateralAsset = collateralCurrency.symbol;
 
     const collateralRatio = await this.calculateCollateralRatio();
-    this.collateralRatio = Utils.formatAmount(collateralRatio, 5);
+    this.collateralRatio = Utils.formatAmount(collateralRatio, 0);
   }
 
   /**
