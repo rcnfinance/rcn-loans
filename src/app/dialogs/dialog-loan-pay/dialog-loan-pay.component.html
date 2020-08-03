@@ -91,27 +91,34 @@
             <div
               *ngIf="payAmountRcn && pendingAmountRcn"
               class="item__message"
-              [class.item__message--success]="form?.value.amount >= pendingAmount"
-              [class.item__message--warning]="form?.value.amount < pendingAmount"
+              [ngClass]="
+                sufficientPaymentAmount ?
+                'item__message--success' :
+                'item__message--warning'
+              "
             >
-              <p *ngIf="form?.value.amount >= pendingAmount">
-                <span>
-                  <i class="fas fa-check check mr-1"></i>
-                </span>
-                <span>
-                  You're about to repay the total Outstanding Amount.
-                </span>
-              </p>
-              <p *ngIf="form?.value.amount < pendingAmount">
-                <span>
-                  <i class="fas fa-exclamation-triangle mr-1"></i>
-                </span>
-                <span>
-                  You're about to repay less than the total Outstanding Amount.
-                  If it is not fully repaid by the Due Date, your collateral will
-                  get partially or fully liquidated.
-                </span>
-              </p>
+              <ng-container *ngIf="sufficientPaymentAmount; else insufficientAmountTemplate">
+                <p>
+                  <span>
+                    <i class="fas fa-check check mr-1"></i>
+                  </span>
+                  <span>
+                    You're about to repay the total Outstanding Amount.
+                  </span>
+                </p>
+              </ng-container>
+              <ng-template #insufficientAmountTemplate>
+                <p *ngIf="form?.value.amount">
+                  <span>
+                    <i class="fas fa-exclamation-triangle mr-1"></i>
+                  </span>
+                  <span>
+                    You're about to repay less than the total Outstanding Amount.
+                    If it is not fully repaid by the Due Date, your collateral will
+                    get partially or fully liquidated.
+                  </span>
+                </p>
+              </ng-template>
             </div>
           </div>
         </div>

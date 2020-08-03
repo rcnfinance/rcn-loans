@@ -72,7 +72,7 @@ export class DialogLoanLendComponent implements OnInit {
     const rate: BN = await this.getLoanRate();
     this.loanAmount = Utils.formatAmount(loanCurrency.fromUnit(loanAmount));
     this.loanExpectedReturn = Utils.formatAmount(loanCurrency.fromUnit(loanExpectedReturn));
-    this.exchangeRcn = Utils.formatAmount(web3.utils.fromWei(rate));
+    this.exchangeRcn = Utils.formatAmount(web3.utils.fromWei(rate), 4);
 
     // set loan status
     this.isCanceled = this.loan.status === Status.Destroyed;
@@ -146,7 +146,7 @@ export class DialogLoanLendComponent implements OnInit {
       const lendAmountInWei: BN = Utils.bn(lendAmount).mul(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
       const lendOverAmount: BN = Utils.bn(lendAmountInWei).div(Utils.bn(loanAmount));
       const lendCurrencyRate: number = lendOverAmount.toString() as any / 10 ** lendCurrencyDecimals;
-      this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 7);
+      this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 4);
     }
 
     // set ui values
