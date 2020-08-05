@@ -6,6 +6,7 @@ import { environment } from '../environments/environment';
 import { ApiService } from './services/api.service';
 import { EventsService } from './services/events.service';
 import { WalletConnectService } from './services/wallet-connect.service';
+import { ApplicationAdsService } from './services/application-ads.service';
 // App component
 import { DialogWalletSelectComponent } from './dialogs/dialog-wallet-select/dialog-wallet-select.component';
 import { DialogApiSyncComponent } from './dialogs/dialog-api-sync/dialog-api-sync.component';
@@ -22,13 +23,19 @@ export class AppComponent implements OnInit {
     private dialog: MatDialog,
     private apiService: ApiService,
     private eventsService: EventsService,
-    private walletConnectService: WalletConnectService
+    private walletConnectService: WalletConnectService,
+    private applicationAdsService: ApplicationAdsService
   ) {}
 
   async ngOnInit() {
     this.setupGoogleAnalytics();
     this.listenWalletConnect();
     await this.checkApiHealth();
+
+    this.applicationAdsService.toggleService(
+        `Welcome to the RCN Credit Marketplace Legacy Version, where you can withdraw old
+        Basalt Loans' repayments. To request or fund new loans, please access rcn.market.`
+    );
   }
 
   /**
