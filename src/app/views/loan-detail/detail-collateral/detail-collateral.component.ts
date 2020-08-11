@@ -83,6 +83,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    */
   async setCollateralAdjustment() {
     const loan: Loan = this.loan;
+    const DECIMALS_TO_SHOW = 4;
 
     // set loan currency
     const loanCurrency = this.currenciesService.getCurrencyByKey('symbol', loan.currency.symbol);
@@ -90,16 +91,16 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
 
     // set loan to value
     const collateralRatio = await this.calculateCollateralRatio();
-    this.currentLoanToValue = Utils.formatAmount(String(collateralRatio));
+    this.currentLoanToValue = Utils.formatAmount(String(collateralRatio), DECIMALS_TO_SHOW);
 
     // set exchange rate
     // TODO: add support for more currencies than rcn
     const rate = await this.collateralService.getCollateralRate(this.loan, this.collateral);
-    this.currentExchangeRate = Utils.formatAmount(1 / (rate as any));
+    this.currentExchangeRate = Utils.formatAmount(1 / (rate as any), DECIMALS_TO_SHOW);
 
     // set liquidation price
     const liquidationPrice = await this.collateralService.calculateLiquidationPrice(this.loan, this.collateral);
-    this.currentLiquidationPrice = Utils.formatAmount(liquidationPrice);
+    this.currentLiquidationPrice = Utils.formatAmount(liquidationPrice, DECIMALS_TO_SHOW);
   }
 
   /**
