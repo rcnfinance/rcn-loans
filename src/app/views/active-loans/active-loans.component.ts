@@ -81,7 +81,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
         this.page++;
       }
 
-      const MINIMUN_LOANS_TO_SHOW = 4;
+      const MINIMUN_LOANS_TO_SHOW = 12;
       if (loans.length && filteredLoans.length < MINIMUN_LOANS_TO_SHOW) {
         await this.loadLoans();
       }
