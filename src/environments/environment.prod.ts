@@ -66,8 +66,8 @@ export const environment = {
       loanManager: '0xb55b0f33d6a2a03a275ca85d58e9357e1a141187'
     },
     collateral: {
-      collateral: '0xab2390d63f350d23f24c06329012f5933126bca1', // FIXME: deprecated, update
-      wethManager: '0x1853cc6c9a20d31d6cbfbce4936071c049249fd3' // FIXME: Ropsten address
+      collateral: '0xc582d9df09036ef4ba787efda0eb9e9fb2618363',
+      wethManager: '' // TODO: Add
     },
     converter: {
       converterRamp: '0x28827e6218b4b83197363945448b8869d604b2ed',
