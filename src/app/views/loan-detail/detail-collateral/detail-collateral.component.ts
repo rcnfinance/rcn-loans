@@ -91,10 +91,9 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
 
     // set loan to value
     const collateralRatio = await this.calculateCollateralRatio();
-    this.currentLoanToValue = Utils.formatAmount(String(collateralRatio), DECIMALS_TO_SHOW);
+    this.currentLoanToValue = Utils.formatAmount(String(collateralRatio));
 
     // set exchange rate
-    // TODO: add support for more currencies than rcn
     const rate = await this.collateralService.getCollateralRate(this.loan, this.collateral);
     this.currentExchangeRate = Utils.formatAmount(1 / (rate as any), DECIMALS_TO_SHOW);
 
