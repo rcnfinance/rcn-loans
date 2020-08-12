@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { DeviceService } from '../../services/device.service';
+import { Component, Input } from '@angular/core';
 import { Loan } from './../../models/loan.model';
 
 @Component({
@@ -7,15 +6,6 @@ import { Loan } from './../../models/loan.model';
   templateUrl: './detail-button.component.html',
   styleUrls: ['./detail-button.component.scss']
 })
-export class DetailButtonComponent implements OnInit {
+export class DetailButtonComponent {
   @Input() loan: Loan;
-  isMobile: boolean;
-
-  constructor(
-    private deviceService: DeviceService
-  ) { }
-
-  ngOnInit() {
-    this.isMobile = this.deviceService.isMobile();
-  }
 }

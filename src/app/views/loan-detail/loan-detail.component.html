@@ -59,7 +59,7 @@
         <div class="px-3 pt-1">
           <app-conversion-graphic
             [headers]="['Borrow', loan.currency, 'Repay']"
-            [amountLeft]="loan.currency.fromUnit(loan.amount)"
+            [amountLeft]="loan.currency.fromUnit(loan.amount) | formatAmount"
             [amountRight]="isRequest || isCanceled || isExpired ? expectedReturn : totalDebt"
             [currency]="loan.currency"
           ></app-conversion-graphic>
@@ -83,7 +83,7 @@
         <div class="px-3 pt-1">
           <app-conversion-graphic
             [headers]="['Lent', loan.currency, 'Repaid']"
-            [amountLeft]="loan.currency.fromUnit(loan.amount)"
+            [amountLeft]="loan.currency.fromUnit(loan.amount) | formatAmount"
             [amountRight]="paid"
             [currency]="loan.currency"
           ></app-conversion-graphic>

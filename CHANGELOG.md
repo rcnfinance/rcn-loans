@@ -5,6 +5,19 @@
 ### Feature:
 - Installments and payments details
 
+## **0.2.2** Boggart 👻
+
+### Enhancement:
+- Implements Google Tag Manager
+- Standardize all dApp amounts and decimals
+- Improves the Format Amount utility, add test cases
+- Visual improvements in the loan list component
+- Change the withdraw and cosigner notifications icon
+- Upgrade dependencies
+
+### Fix:
+- Fix amount in the loan filter component
+
 ## **0.2.1** Boggart 👻
 
 ### Enhancement:

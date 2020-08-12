@@ -45,4 +45,16 @@ describe('Utils', () => {
     expect(Utils.scientificToDecimal(100)).toEqual('100');
     expect(Utils.scientificToDecimal(-100)).toEqual('-100');
   });
+
+  it('should return an formatted amount', () => {
+    expect(Utils.formatAmount(1234)).toEqual('1,234.00');
+    expect(Utils.formatAmount(10000000000)).toEqual('10,000,000,000.00');
+    expect(Utils.formatAmount(-1)).toEqual('-1.00');
+    expect(Utils.formatAmount(new BN(500))).toEqual('500.00');
+    expect(Utils.formatAmount('500')).toEqual('500.00');
+    expect(Utils.formatAmount(null)).toEqual('0.00');
+    expect(Utils.formatAmount(undefined)).toEqual('0.00');
+    expect(Utils.formatAmount(NaN)).toEqual('0.00');
+    expect(Utils.formatAmount('test')).toEqual('0.00');
+  });
 });
