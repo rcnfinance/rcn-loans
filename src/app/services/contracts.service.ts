@@ -827,7 +827,7 @@ export class ContractsService {
     const web3 = await this.web3Service.web3;
     const block = await web3.eth.getBlock('latest');
     const now = block.timestamp;
-    const diaspore: Loan[] = await this.apiService.getRequests(now, Network.Diaspore);
+    const diaspore: Loan[] = await this.apiService.getRequests(now);
     const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
     const loans: Loan[] = this.loanTypeService.filterLoanByType(diaspore, ALLOWED_TYPES);
 

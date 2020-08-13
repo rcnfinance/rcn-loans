@@ -35,30 +35,23 @@ export class ApiService {
    * @param network Selected network
    * @return Loans array
    */
-  async getRequests(
-    now: number,
-    network: Network
-  ): Promise<Loan[]> {
-    const apiUrl: string = this.getApiUrl(network, 'v5');
-    const filterExpiration: string = this.getApiFilterKey('expiration', network);
+  async getRequests(now: number): Promise<Loan[]> {
+    const apiUrl: string = this.getApiUrl(Network.Diaspore, 'v5');
     let allRequestLoans: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
 
+    const requestFilters = () => `open=true&canceled=false&approved=true&status=0&page=${ page }&expiration__gt=${ now }`;
+
     try {
-      const data: any = await this.http.get(apiUrl.concat(
-        `loans?open=true&canceled=false&approved=true&status=0&page=${ page }&${ filterExpiration }=${ now }`
-      )).toPromise();
+      const data: any = await this.http.get(apiUrl.concat(`loans2?${ requestFilters() }`)).toPromise();
 
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
 
       const filterStatus = [Status.Destroyed, Status.Expired];
-      const loansRequests = await this.getAllCompleteLoans(
-        data.content as LoanApiBasalt[] | LoanApiDiaspore[],
-        network
-      );
+      const loansRequests = await this.getAllCompleteLoans(data.content as LoanApiDiaspore[], Network.Diaspore);
       const filteredLoans = this.excludeLoansWithStatus(
         filterStatus,
         null,
@@ -73,16 +66,14 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const url = apiUrl.concat(
-        `loans?open=true&canceled=false&approved=true&status=0&page=${ page }&${ filterExpiration }=${ now }`
-      );
+      const url = apiUrl.concat(`loans2?${ requestFilters() }`);
       urls.push(url);
     }
     const responses = await this.getAllUrls(urls);
 
     for (const response of responses) {
       const filterStatus = [Status.Destroyed, Status.Expired];
-      const loansRequests = await this.getAllCompleteLoans(response.content, network);
+      const loansRequests = await this.getAllCompleteLoans(response.content, Network.Diaspore);
       const notExpiredResquestLoans = this.excludeLoansWithStatus(
         filterStatus,
         null,
@@ -91,11 +82,6 @@ export class ApiService {
 
       allRequestLoans = allRequestLoans.concat(notExpiredResquestLoans);
     }
-
-    // TODO: remove specific creator filter
-    const FILTER_DCL_KEY = 'creator';
-    const FILTER_DCL_VALUE = environment.contracts.decentraland.mortgageCreator;
-    allRequestLoans = this.excludeLoansWithKey(FILTER_DCL_KEY, FILTER_DCL_VALUE, allRequestLoans);
 
     return allRequestLoans;
   }
@@ -154,9 +140,9 @@ export class ApiService {
     const web3 = this.web3Service.web3;
     const apiUrl: string = this.getApiUrl(network, 'v5');
     const basaltUri = (apiPage: number, apiAddress: string) =>
-      apiUrl.concat(`loans?open=false&page=${ apiPage }&${ loansType }=${ apiAddress }`);
+      apiUrl.concat(`loans2?open=false&page=${ apiPage }&${ loansType }=${ apiAddress }`);
     const diasporeUri = (apiPage: number, apiAddress: string) =>
-      apiUrl.concat(`loans?page=${ apiPage }&${ loansType === 'lender' ? 'owner' : loansType }=${ apiAddress }`);
+      apiUrl.concat(`loans2?page=${ apiPage }&${ loansType === 'lender' ? 'owner' : loansType }=${ apiAddress }`);
 
     let allLoansOfAddress: Loan[] = [];
     let apiCalls = 0;
@@ -208,7 +194,7 @@ export class ApiService {
     let page = 0;
 
     try {
-      const data: any = await this.http.get(apiUrl.concat(`loans?open=false&canceled=false&approved=true&page=${ page }`)).toPromise();
+      const data: any = await this.http.get(apiUrl.concat(`loans2?open=false&canceled=false&approved=true&page=${ page }`)).toPromise();
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
@@ -230,7 +216,7 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const url = apiUrl.concat(`loans?open=false&canceled=false&approved=true&page=${ page }`);
+      const url = apiUrl.concat(`loans2?open=false&canceled=false&approved=true&page=${ page }`);
       urls.push(url);
     }
 
@@ -264,7 +250,7 @@ export class ApiService {
 
     try {
       const data: any = await this.http.get(
-        apiUrl.concat(`loans?open=false&canceled=false&approved=true&page_size=${ pageSize }&page=${ page }`)
+        apiUrl.concat(`loans2?open=false&canceled=false&approved=true&page_size=${ pageSize }&page=${ page }`)
       ).toPromise();
       apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
 
@@ -317,7 +303,7 @@ export class ApiService {
    */
   async isSynchronized(): Promise<boolean> {
     const apiUrl: string = this.getApiUrl(Network.Diaspore, 'v5');
-    const { meta }: any = await this.http.get(apiUrl.concat(`loans?page_size=1`)).toPromise();
+    const { meta }: any = await this.http.get(apiUrl.concat(`loans2?page_size=1`)).toPromise();
     const apiBlock = meta.lastBlockPulled;
     const web3: any = this.web3Service.web3;
     const currentBlock = (await web3.eth.getBlock('latest')).number;
@@ -662,38 +648,4 @@ export class ApiService {
       }) as Loan[];
     }
   }
-
-  /**
-   * Exclude loans containing the key / value
-   * @param key Key to filter
-   * @param value Value to filter
-   * @param loans Loans array
-   * @return Loans array excluding those containing the key/value
-   */
-  private excludeLoansWithKey(
-    key: string,
-    value: string,
-    loans: Loan[]
-  ): Loan[] | any[] {
-    return loans.filter((loan: Loan) => !loan[key] || loan[key] !== value) as Loan[];
-  }
-
-  /**
-   * Return the api filter key according to the chosen network
-   * @param network Selected network
-   * @return Api filter key
-   */
-  private getApiFilterKey(filter: string, network: Network) {
-    const filters = {
-      [Network.Diaspore]: {
-        expiration: 'expiration__gt'
-      },
-      [Network.Basalt]: {
-        expiration: 'expiration_requests__gt'
-      }
-    };
-
-    return filters[network][filter];
-  }
-
 }
