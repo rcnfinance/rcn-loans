@@ -1,4 +1,4 @@
-export enum LoanSort {
+export enum LoanSortKey {
   FirstObligation = 'descriptor.first_obligation',
   TotalObligation = 'descriptor.total_obligation',
   Duration = 'descriptor.duration',
@@ -12,7 +12,7 @@ export enum LoanSort {
   Currency = 'currency'
 }
 
-export enum LoanOrder {
+export enum LoanSortValue {
   Asc = 'asc',
   Desc = 'desc'
 }
