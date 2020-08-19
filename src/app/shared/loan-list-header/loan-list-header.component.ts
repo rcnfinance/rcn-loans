@@ -21,7 +21,7 @@ export class LoanListHeaderComponent {
     this.sort = new EventEmitter();
   }
 
-  clickSort(key: LoanSortKey) {
+  clickSort(key: string | LoanSortKey) {
     const DEFAULT_VALUE = LoanSortValue.Desc;
     const value: LoanSortValue = this.stateSort[key] || DEFAULT_VALUE;
 
