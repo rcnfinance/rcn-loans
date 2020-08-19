@@ -18,14 +18,18 @@ export class LoanListHeaderComponent {
     key: LoanSortKey,
     value: LoanSortValue
   }>;
+  stateSort = {};
 
   constructor() {
     this.sort = new EventEmitter();
   }
 
   clickSort(key: LoanSortKey) {
-    const value: LoanSortValue = LoanSortValue.Desc;
-    // TODO: emit automatic asc/desc value
+    const DEFAULT_VALUE = LoanSortValue.Desc;
+    const value: LoanSortValue = this.stateSort[key] || DEFAULT_VALUE;
+
+    this.stateSort[key] =
+      value === LoanSortValue.Desc ? LoanSortValue.Asc : LoanSortValue.Desc;
 
     console.info(key, value);
     this.sort.emit({ key, value });
