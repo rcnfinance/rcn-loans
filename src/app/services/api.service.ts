@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { aggregate } from '@makerdao/multicall';
 import { environment } from '../../environments/environment';
 import { ApiResponse } from './../interfaces/api-response';
-import { LoanSortKey, LoanSortValue } from './../interfaces/loan-sort';
 import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
 import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
 import { CollateralApi } from './../interfaces/collateral-api';
@@ -37,10 +36,7 @@ export class ApiService {
    * @param sortValue Loan Sort Value
    * @return Loans array
    */
-  async getRequests(
-    sortKey?: LoanSortKey,
-    sortValue?: LoanSortValue
-  ): Promise<Loan[]> {
+  async getRequests(sort?: string): Promise<Loan[]> {
     const now: number = (await this.web3Service.web3.eth.getBlock('latest')).timestamp;
     const apiUrl: string = this.getApiUrl(Network.Diaspore, 'v5');
     let allRequestLoans: Loan[] = [];
@@ -48,7 +44,7 @@ export class ApiService {
     let page = 0;
 
     const requestFilters = () => `open=true&canceled=false&approved=true&status=0&page=${ page }&expiration__gt=${ now }`;
-    const requestSort = () => sortKey ? `order_by=${ sortKey }__${ sortValue }` : '';
+    const requestSort = () => sort ? `order_by=${ sort }` : '';
 
     try {
       const data: ApiResponse =
