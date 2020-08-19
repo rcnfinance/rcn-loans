@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { LoanSortKey, LoanSortValue } from './../../interfaces/loan-sort';
 
 enum PageView {
@@ -14,10 +14,7 @@ enum PageView {
 })
 export class LoanListHeaderComponent {
   @Input() view: PageView;
-  sort: EventEmitter<{
-    key: LoanSortKey,
-    value: LoanSortValue
-  }>;
+  @Output() sort: EventEmitter<string>;
   stateSort = {};
 
   constructor() {
@@ -31,7 +28,7 @@ export class LoanListHeaderComponent {
     this.stateSort[key] =
       value === LoanSortValue.Desc ? LoanSortValue.Asc : LoanSortValue.Desc;
 
-    console.info(key, value);
-    this.sort.emit({ key, value });
+    const sort = `${key}__${value}`;
+    this.sort.emit(sort);
   }
 }
