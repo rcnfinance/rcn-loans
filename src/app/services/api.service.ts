@@ -133,20 +133,20 @@ export class ApiService {
    * Get all loans lent by the account that is logged in
    * @param address Lender or borrower address
    * @param loansType Selected network
-   * @param network Selected network
+   * @param sort Order by
    * @return Loans array
    */
   async getLoansOfLenderOrBorrower(
     address: string,
     loansType: 'lender' | 'borrower',
-    network: Network
+    sort: string
   ): Promise<Loan[]> {
     const web3 = this.web3Service.web3;
-    const apiUrl: string = this.getApiUrl(network, 'v5');
-    const basaltUri = (apiPage: number, apiAddress: string) =>
-      apiUrl.concat(`loans2?open=false&page=${ apiPage }&${ loansType }=${ apiAddress }`);
-    const diasporeUri = (apiPage: number, apiAddress: string) =>
-      apiUrl.concat(`loans2?page=${ apiPage }&${ loansType === 'lender' ? 'owner' : loansType }=${ apiAddress }`);
+    const apiUrl: string = this.getApiUrl(Network.Diaspore, 'v5');
+
+    const requestFilters = (apiPage: number) =>
+      `page=${ apiPage }&${ loansType === 'lender' ? 'owner' : loansType }=${ address }`;
+    const requestSort = () => sort ? `order_by=${ sort }` : '';
 
     let allLoansOfAddress: Loan[] = [];
     let apiCalls = 0;
@@ -154,14 +154,14 @@ export class ApiService {
 
     try {
       address = web3.utils.toChecksumAddress(address);
-      const url = network === Network.Basalt ? basaltUri(page, address) : diasporeUri(page, address);
+      const url = apiUrl.concat(`loans2?${ requestFilters(page) }&${ requestSort() }`);
       const data: any = await this.http.get(url).toPromise();
 
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
 
-      const activeLoans = await this.getAllCompleteLoans(data.content, network);
+      const activeLoans = await this.getAllCompleteLoans(data.content, Network.Diaspore);
       allLoansOfAddress = allLoansOfAddress.concat(activeLoans);
       page++;
     } catch (err) {
@@ -170,11 +170,11 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const eachUrl = network === Network.Basalt ? basaltUri(page, address) : diasporeUri(page, address);
+      const eachUrl = apiUrl.concat(`loans2?${ requestFilters(page) }&${ requestSort() }`);
       urls.push(eachUrl);
     }
     const responses = await this.getAllUrls(urls);
-    const allApiLoans = await this.getAllApiLoans(responses, network);
+    const allApiLoans = await this.getAllApiLoans(responses, Network.Diaspore);
 
     for (const apiLoans of allApiLoans) {
       allLoansOfAddress = allLoansOfAddress.concat(apiLoans);
@@ -242,19 +242,22 @@ export class ApiService {
 
   /**
    * Gets all loans that were lent and there status is ongoing. Meaning that they are not canceled or finished.
-   * @param network Selected network
    * @param page Page
    * @param pageSize Items per page
+   * @param sort Order by
    * @return Loans array
    */
-  async getPaginatedActiveLoans(network: Network, page = 0, pageSize = 20): Promise<Loan[]> {
-    const apiUrl: string = this.getApiUrl(network, 'v5');
+  async getPaginatedActiveLoans(page = 0, pageSize = 20, sort?: string): Promise<Loan[]> {
+    const apiUrl: string = this.getApiUrl(Network.Diaspore, 'v5');
     let allActiveLoans: Loan[] = [];
     let apiCalls = 0;
 
+    const requestFilters = () => `open=false&canceled=false&approved=true&page_size=${ pageSize }&page=${ page }`;
+    const requestSort = () => sort ? `order_by=${ sort }` : '';
+
     try {
       const data: any = await this.http.get(
-        apiUrl.concat(`loans2?open=false&canceled=false&approved=true&page_size=${ pageSize }&page=${ page }`)
+        apiUrl.concat(`loans2?${ requestFilters() }&${ requestSort() }`)
       ).toPromise();
       apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
 
@@ -262,12 +265,7 @@ export class ApiService {
         return [];
       }
 
-      let activeLoans = await this.getAllCompleteLoans(data.content, network);
-      if (network === Network.Basalt) {
-        const filterStatus = [Status.Request, Status.Destroyed, Status.Expired];
-        activeLoans = this.excludeLoansWithStatus(filterStatus, null, activeLoans);
-      }
-
+      const activeLoans = await this.getAllCompleteLoans(data.content, Network.Diaspore);
       allActiveLoans = allActiveLoans.concat(activeLoans);
 
       return allActiveLoans;
