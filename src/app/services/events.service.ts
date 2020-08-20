@@ -28,6 +28,8 @@ export class EventsService {
       }
     });
 
+    // TODO: deprecate and implement with Google Tag Manager
+    /*
     // GA Tracking
     (window as any).ga('send', 'event', {
       eventCategory: category,
@@ -36,6 +38,7 @@ export class EventsService {
       eventValue: value,
       nonInteraction: nonInteraction
     });
+    */
   }
 
   trackError(
