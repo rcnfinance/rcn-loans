@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { environment } from '../environments/environment';
 // App services
 import { ApiService } from './services/api.service';
 import { EventsService } from './services/events.service';
@@ -35,12 +34,15 @@ export class AppComponent implements OnInit {
    * Setup the google analytics page route tracking
    */
   private setupGoogleAnalytics(): void {
-    (window as any).ga('create', environment.gaTracking, 'auto');
     this.router.events.subscribe(event => {
       try {
         if (event instanceof NavigationEnd) {
-          (window as any).ga('set', 'page', event.urlAfterRedirects);
-          (window as any).ga('send', 'pageview');
+          (window as any).dataLayer.push({
+            event: 'pageview',
+            page: {
+              path: event.urlAfterRedirects
+            }
+          });
         }
       } catch (e) {
         this.eventsService.trackError(e);
