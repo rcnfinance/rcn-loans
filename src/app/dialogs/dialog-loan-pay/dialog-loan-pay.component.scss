@@ -21,9 +21,6 @@
         margin-bottom: 15px;
       }
     }
-    &--description {
-      @include typography-headline(6);
-    }
     &--entry {
       .currency {
         position: absolute;
@@ -138,7 +135,6 @@
 
 @media (min-width: 992px) {
   .dialog {
-    max-width: 800px;
     .dialog-content {
       .item {
         &__actions {

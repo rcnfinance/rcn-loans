@@ -330,8 +330,8 @@ mat-sidenav-container.mat-drawer-container {
   .mat-dialog-content{
     margin: 0;
     padding: 0;
-    max-height: calc(100vh - 70px);
-    height: calc(100vh - 70px);
+    max-height: calc(100vh - 50px);
+    height: calc(100vh - 50px);
   }
 }
 
@@ -464,14 +464,8 @@ mat-form-field{
 @media (min-width: 992px) {
   .cdk-global-overlay-wrapper {
     .mat-dialog-content {
-      min-width: 750px;
+      width: 808px;
     }
-  }
-}
-
-@media (min-width: 1200px){
-  .mat-dialog-content {
-    min-width: 850px;
   }
 }
 
