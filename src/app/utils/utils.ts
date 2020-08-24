@@ -151,7 +151,7 @@ export class Utils {
     const parsedPmt = (amount: number) => {
       try {
         const strAmount: string =
-          amount.toLocaleString('fullwide', { useGrouping: false });
+          Math.round(amount).toLocaleString('fullwide', { useGrouping: false });
         return Utils.bn(strAmount);
       } catch (err) {
         return Utils.bn(amount);
