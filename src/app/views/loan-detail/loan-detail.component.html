@@ -96,18 +96,10 @@
       <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled || isExpired"></app-detail-table>
       <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
 
-
-
-
-
-
-
-
-
       <div
         class="table-responsive"
         (click)="openDetail('installments');"
-        *ngIf="loan?.descriptor.installments"
+        *ngIf="loan?.descriptor.installments && nextInstallment"
       >
         <table class="table table-clickable table--installments">
           <thead>
@@ -145,9 +137,10 @@
                         Due date
                         <span
                           class="due-status ml-1"
-                          [class.due-status--success]="nextInstallment?.installment.status === 0"
-                          [class.due-status--warning]="nextInstallment?.installment.status === 1"
-                          [class.due-status--error]="nextInstallment?.installment.status === 2"
+                          [class.due-status--success]="nextInstallment.installment.status === 0"
+                          [class.due-status--warning]="nextInstallment.installment.status === 1"
+                          [class.due-status--error]="nextInstallment.installment.status === 2"
+                          *ngIf="nextInstallment"
                         >
                           ({{ nextInstallment?.dueDays }})
                         </span>
@@ -159,12 +152,18 @@
                       {{ nextInstallment?.payNumber || '-' }}
                     </div>
                     <div class="col col-4">
-                      {{ (nextInstallment?.installment.amount | formatAmount) || '-' }}
-                      {{ nextInstallment?.installment.currency }}
+                      <ng-container *ngIf="nextInstallment?.installment.amount; else emptyAmount">
+                        {{ nextInstallment.installment.amount | formatAmount }}
+                        {{ nextInstallment?.installment.currency }}
+                      </ng-container>
+                      <ng-template #emptyAmount>
+                        -
+                      </ng-template>
                     </div>
                     <div class="col col-5">
-                      {{ nextInstallment?.installment.dueDate | date: 'yyyy-MM-dd' || '-' }}
+                      {{ (nextInstallment?.installment.dueDate | date: 'yyyy-MM-dd') || '-' }}
                       <span
+                        *ngIf="nextInstallment?.installment"
                         class="ml-3"
                         [matTooltip]="nextInstallment?.installment.dueDate | date: 'H:mm z'"
                       >
@@ -179,18 +178,6 @@
           </tbody>
         </table>
       </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
       <div class="table-responsive" *ngIf='availableOracle'>
         <table class="table">

@@ -32,7 +32,7 @@
   </div>
 
   <div
-    *ngIf="loan?.descriptor.installments"
+    *ngIf="[0, 1, 4, 5].includes(loan.status) && loan?.descriptor.installments"
     class="button-options"
     (click)="openDetail('installments')"
     [ngClass]="{'active': viewDetail === 'installments' ? true : false }"

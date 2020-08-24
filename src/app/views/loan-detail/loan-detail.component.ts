@@ -440,31 +440,12 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
    * Load next installment data
    */
   private async loadInstallments() {
-    // const installments: number = this.loan.descriptor.installments;
-    // const installmentDuration: string = Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments);
-    // const installmentAmount: string = Utils.formatAmount(this.loan.currency.fromUnit(this.loan.descriptor.firstObligation));
-    // const installmentCurrency: string = this.loan.currency.symbol;
-    // const nextInstallment: number = this.isRequest ? 1 : 1; // TODO - Next installment
-    // const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
-    //
-    // this.diasporeData = [
-    //   ['Instalments', 'Frequency', 'Amount'],
-    //   [
-    //     `${ installments } ${ installments > 1 ? 'Payments' : 'Payment' }`,
-    //     installmentDuration,
-    //     `${ installmentAmount } ${ installmentCurrency }`
-    //   ]
-    // ];
-    //
-    // this.nextInstallment = {
-    //   installment: `${ nextInstallment + addSuffix(nextInstallment) } Pay`,
-    //   amount: `${ Utils.formatAmount(installmentAmount) } ${ installmentCurrency }`,
-    //   dueDate: installmentDuration,
-    //   dueTime: null
-    // };
-
     const loan: Loan = this.loan;
     const installment: Installment = await this.installmentsService.getCurrentInstallment(loan);
+    if (!installment) {
+      return;
+    }
+
     const secondsInDay = 86400;
     const addSuffix = (n: number): string => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
     const payNumber = `${ installment.payNumber + addSuffix(installment.payNumber) } Pay`;
