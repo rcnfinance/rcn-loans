@@ -9,7 +9,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { MaterialModule } from './../material.module';
 // App Component
 import { FooterComponent } from './footer/footer.component';
-import { LoanCardComponent } from './loan-card/loan-card.component';
 import { CreatorContainerComponent } from './creator-container/creator-container.component';
 import { AvatarTitleComponent } from './avatar-title/avatar-title.component';
 import { AvatarComponent } from './avatar/avatar.component';
@@ -80,7 +79,6 @@ import { EventsService } from './../services/events.service';
   ],
   declarations: [
     FooterComponent,
-    LoanCardComponent,
     CreatorContainerComponent,
     AvatarComponent,
     LoanAvatarComponent,
@@ -157,7 +155,6 @@ import { EventsService } from './../services/events.service';
     ReactiveFormsModule,
     MaterialModule,
     FooterComponent,
-    LoanCardComponent,
     CreatorContainerComponent,
     AvatarComponent,
     LoanAvatarComponent,

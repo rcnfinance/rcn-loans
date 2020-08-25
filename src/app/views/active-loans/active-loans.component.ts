@@ -53,11 +53,21 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * TrackBy Loan ID
+   * @param _ Index
+   * @param loan Loan
+   * @return Loan ID
+   */
+  trackByLoanId(_: number, { id }: Loan): string {
+    return id;
+  }
+
+  /**
    * Load active loans
    * @param page Page
    * @return Loans
    */
-  async loadLoans(page: number = this.page) {
+  private async loadLoans(page: number = this.page) {
     this.loading = true;
 
     try {
@@ -75,13 +85,16 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
         this.isAvailableLoans = this.loans.length ? true : false;
       }
 
+      // set loan index as positions
+      filteredLoans.map((loan: Loan, i: number) => loan.position = i);
+
       // if there are more loans add them and continue
       if (loans.length) {
         this.loans = this.loans.concat(filteredLoans);
         this.page++;
       }
 
-      const MINIMUN_LOANS_TO_SHOW = 4;
+      const MINIMUN_LOANS_TO_SHOW = 12;
       if (loans.length && filteredLoans.length < MINIMUN_LOANS_TO_SHOW) {
         await this.loadLoans();
       }
