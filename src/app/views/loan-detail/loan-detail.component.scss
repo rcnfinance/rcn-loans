@@ -93,6 +93,12 @@
       justify-content: center;
       padding: 15px;
       background-color: var(--app-color-gray-500);
+      app-detail-identity,
+      app-detail-cosigner,
+      app-detail-collateral,
+      app-detail-installments {
+        width: 100%;
+      }
     }
 
   }
