@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { Loan, Network, Status, LoanType } from '../../models/loan.model';
+import { Loan, Status, LoanType } from '../../models/loan.model';
 import { Status as CollateralStatus } from '../../models/collateral.model';
 import { Utils } from '../../utils/utils';
 import { Brand } from '../../models/brand.model';
@@ -32,8 +32,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
   durationTooltip: string;
   canLend: boolean;
   canRedeem: boolean;
-  network: string;
-  installments: string;
+  installments: number;
   interestRate: string;
   punitiveInterestRateRate: string;
   collateralAsset: string;
@@ -139,40 +138,42 @@ export class LoanListComponent implements OnInit, OnDestroy {
    * Load loan details
    */
   private async getLoanDetails() {
-    if (this.stateLoan.isRequest) {
-      const currency = this.stateLoan.currency;
+    const loan: Loan = this.stateLoan;
+    const { currency } = loan;
+
+    if (loan.isRequest) {
+      // requested case
       this.leftLabel = 'Lend';
-      this.leftValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.amount));
-      this.durationLabel = 'Duration';
-      this.durationValue = Utils.formatDelta(this.stateLoan.descriptor.duration);
-      this.durationTooltip = this.durationValue + ' Duration';
+      this.leftValue = Utils.formatAmount(currency.fromUnit(loan.amount));
       this.rightLabel = 'Receive';
-      this.rightValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.descriptor.totalObligation));
-    } else if (this.stateLoan && this.stateLoan.debt) {
-      const currency = this.stateLoan.currency;
+      this.rightValue = Utils.formatAmount(currency.fromUnit(loan.descriptor.totalObligation));
+      this.durationLabel = 'Duration';
+      this.durationValue = Utils.formatDelta(loan.descriptor.duration);
+      this.durationTooltip = this.durationValue + ' Duration';
+    } else {
+      // ongoing/overdue/paid/expired case
       this.leftLabel = 'Repaid';
-      this.leftValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.debt.model.paid));
+      this.leftValue = Utils.formatAmount(currency.fromUnit(loan.debt.model.paid));
       this.durationLabel = 'Next payment in';
-      this.durationValue = this.stateLoan.status !== Status.Paid ?
-        Utils.formatDelta(this.stateLoan.debt.model.dueTime - (new Date().getTime() / 1000)) :
+      this.durationValue = loan.status !== Status.Paid ?
+        Utils.formatDelta(loan.debt.model.dueTime - (new Date().getTime() / 1000)) :
         '-';
       this.rightLabel = 'Due';
-      const basaltPaid = this.stateLoan.network === Network.Basalt ? currency.fromUnit(this.stateLoan.debt.model.paid) : 0;
-      this.rightValue = Utils.formatAmount(currency.fromUnit(this.stateLoan.debt.model.estimatedObligation) - basaltPaid);
+      this.rightValue = Utils.formatAmount(currency.fromUnit(loan.debt.model.estimatedObligation));
       this.canLend = false;
-      if (this.stateLoan.status === Status.Indebt) {
+      if (loan.status === Status.Indebt) {
         this.durationLabel = 'Overdue for';
-        this.durationTooltip = 'Overdue for ' + this.durationValue;
+        this.durationTooltip = `Overdue for ${ this.durationValue }`;
       } else {
         this.durationLabel = 'Next payment in';
-        this.durationTooltip = 'Next payment in ' + this.durationValue;
+        this.durationTooltip = `Next payment in ${ this.durationValue }`;
       }
     }
     this.loanType = this.loanTypeService.getLoanType(this.loan);
-    this.shortAddress = Utils.shortAddress(this.stateLoan.borrower);
-    this.installments = this.getInstallments();
-    this.interestRate = Utils.formatAmount(this.stateLoan.descriptor.interestRate, 0);
-    this.punitiveInterestRateRate = Utils.formatAmount(this.stateLoan.descriptor.punitiveInterestRateRate, 0);
+    this.shortAddress = Utils.shortAddress(loan.borrower);
+    this.interestRate = Utils.formatAmount(loan.descriptor.interestRate, 0);
+    this.punitiveInterestRateRate = Utils.formatAmount(loan.descriptor.punitiveInterestRateRate, 0);
+    this.installments = loan.descriptor.installments;
 
     switch (this.loanType) {
       case LoanType.UnknownWithCollateral:
@@ -220,26 +221,6 @@ export class LoanListComponent implements OnInit, OnDestroy {
       currency,
       amount
     );
-  }
-
-  /**
-   * Return installments quantity text
-   */
-  private getInstallments(): string {
-    try {
-      const installments = this.stateLoan.descriptor.installments;
-
-      switch (installments) {
-        case 0:
-        case 1:
-          return `1 Payment`;
-
-        default:
-          return `${ installments } Payments`;
-      }
-    } catch (e) {
-      return '1 Payment';
-    }
   }
 
 }
