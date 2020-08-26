@@ -30,8 +30,8 @@
         [scrollThrottlingTime]="500"
         (scroll)="onScroll($event)"
       >
-      <div *ngFor="let loan of scroll.viewPortItems; let i = index">
-        <app-loan-list [loan]="loan" [backgroundLighter]="i % 2">
+      <div *ngFor="let loan of scroll.viewPortItems; trackBy:trackByLoanId">
+        <app-loan-list [loan]="loan" [backgroundLighter]="loan.position % 2">
         </app-loan-list>
       </div>
       </virtual-scroller>

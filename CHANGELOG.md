@@ -1,9 +1,18 @@
 # Changelog
 
-## Unreleased
+## **0.2.3** Boggart 👻
 
 ### Feature:
 - Installments and payments details
+- Borrow loans with installments
+
+### Enhancement:
+- Improves the performance of loan listings
+- Adjust some amount decimals and improve texts
+- Remove unnecessary contracts to approve
+
+### Fix:
+- Shows correct amount when funds are insufficient to pay
 
 ## **0.2.2** Boggart 👻
 

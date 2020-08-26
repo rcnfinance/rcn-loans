@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { Loan, Status, Network, LoanType } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
 import { Collateral, Status as CollateralStatus } from '../../models/collateral.model';
+import { Installment } from '../../interfaces/installment';
 // App Utils
 import { Utils } from './../../utils/utils';
 import { Currency } from './../../utils/currencies';
@@ -23,6 +24,7 @@ import { CurrenciesService } from './../../services/currencies.service';
 import { Type } from './../../services/tx.service';
 import { EventsService } from './../../services/events.service';
 import { LoanTypeService } from './../../services/loan-type.service';
+import { InstallmentsService } from './../../services/installments.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -70,10 +72,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   collateralAmount: string;
   collateralAsset: string;
   nextInstallment: {
-    installment: string,
-    amount: string,
-    dueDate: string,
-    dueTime: string
+    installment: Installment,
+    payNumber: string,
+    dueDays: string
   };
   lendDate: string;
   dueDate: string;
@@ -102,6 +103,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private collateralService: CollateralService,
     private eventsService: EventsService,
     private loanTypeService: LoanTypeService,
+    private installmentsService: InstallmentsService,
     public dialog: MatDialog
   ) { }
 
@@ -437,28 +439,32 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   /**
    * Load next installment data
    */
-  private loadInstallments() {
-    const installments: number = this.loan.descriptor.installments;
-    const installmentDuration: string = Utils.formatDelta(this.loan.descriptor.duration / this.loan.descriptor.installments);
-    const installmentAmount: string = Utils.formatAmount(this.loan.currency.fromUnit(this.loan.descriptor.firstObligation));
-    const installmentCurrency: string = this.loan.currency.symbol;
-    const nextInstallment: number = this.isRequest ? 1 : 1; // TODO - Next installment
-    const addSuffix = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+  private async loadInstallments() {
+    const loan: Loan = this.loan;
+    const installment: Installment = await this.installmentsService.getCurrentInstallment(loan);
+    if (!installment) {
+      return;
+    }
 
-    this.diasporeData = [
-      ['Instalments', 'Frequency', 'Amount'],
-      [
-        `${ installments } ${ installments > 1 ? 'Payments' : 'Payment' }`,
-        installmentDuration,
-        `${ installmentAmount } ${ installmentCurrency }`
-      ]
-    ];
+    const secondsInDay = 86400;
+    const addSuffix = (n: number): string => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+    const payNumber = `${ installment.payNumber + addSuffix(installment.payNumber) } Pay`;
+    const dueDate: number = new Date(installment.dueDate).getTime() / 1000;
+    const nowDate: number = new Date().getTime() / 1000;
+    const daysLeft: number = Math.round((dueDate - nowDate) / secondsInDay);
 
+    let dueDays: string = Utils.formatDelta(dueDate - nowDate, 1);
+    if (daysLeft > 1) {
+      dueDays += ' left';
+    } else if (daysLeft === 1 || daysLeft === 0) {
+      dueDays += ' left';
+    } else {
+      dueDays += ' ago';
+    }
     this.nextInstallment = {
-      installment: `${ nextInstallment + addSuffix(nextInstallment) } Pay`,
-      amount: `${ Utils.formatAmount(installmentAmount) } ${ installmentCurrency }`,
-      dueDate: installmentDuration,
-      dueTime: null
+      payNumber,
+      dueDays,
+      installment
     };
   }
 
