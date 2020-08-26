@@ -3,8 +3,11 @@ import { environment } from '../../environments/environment';
 
 export class LoanCurator {
   static curateLoans(loans: Loan[]): Loan[] {
-    // return loans;
     return loans.filter(loan => {
+      if (!loan) {
+        return;
+      }
+
       const amount = loan.currency.fromUnit(loan.amount);
 
       // Check blacklist
