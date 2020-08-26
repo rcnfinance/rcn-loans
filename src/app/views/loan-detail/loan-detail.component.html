@@ -39,6 +39,7 @@
         (view)="openDetail($event)"
         [viewDetail]="viewDetail"
         [loanType]="loanType"
+        [loan]="loan"
       >
       </app-button-group>
     </div>
@@ -94,6 +95,89 @@
       <app-detail-table [data]="diasporeData" *ngIf="isDiaspore"></app-detail-table>
       <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled || isExpired"></app-detail-table>
       <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
+
+      <div
+        class="table-responsive"
+        (click)="openDetail('installments');"
+        *ngIf="loan?.descriptor.installments && nextInstallment"
+      >
+        <table class="table table-clickable table--installments">
+          <thead>
+            <tr>
+              <th
+                style='cursor: pointer'
+                [ngClass]="{'background-active': isDetail('installments') }"
+                scope="col"
+              >
+                Installments
+                <i class="material-icons white more-indicator">
+                  {{ isDetail('installments') ? '' : 'unfold_more' }}
+                </i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style='cursor: pointer'>
+
+                <div class="table__body">
+                  <div class="row table__body-header">
+                    <div class="col col-3">
+                      <span class="subtitle">
+                        Installment
+                      </span>
+                    </div>
+                    <div class="col col-4">
+                      <span class="subtitle">
+                        Amount to pay
+                      </span>
+                    </div>
+                    <div class="col col-5">
+                      <span class="subtitle">
+                        Due date
+                        <span
+                          class="due-status ml-1"
+                          [class.due-status--success]="nextInstallment.installment.status === 0"
+                          [class.due-status--warning]="nextInstallment.installment.status === 1"
+                          [class.due-status--error]="nextInstallment.installment.status === 2"
+                          *ngIf="nextInstallment"
+                        >
+                          ({{ nextInstallment?.dueDays }})
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row table__body-content">
+                    <div class="col col-3">
+                      {{ nextInstallment?.payNumber || '-' }}
+                    </div>
+                    <div class="col col-4">
+                      <ng-container *ngIf="nextInstallment?.installment.amount; else emptyAmount">
+                        {{ nextInstallment.installment.amount | formatAmount }}
+                        {{ nextInstallment?.installment.currency }}
+                      </ng-container>
+                      <ng-template #emptyAmount>
+                        -
+                      </ng-template>
+                    </div>
+                    <div class="col col-5">
+                      {{ (nextInstallment?.installment.dueDate | date: 'yyyy-MM-dd') || '-' }}
+                      <span
+                        *ngIf="nextInstallment?.installment"
+                        class="ml-3"
+                        [matTooltip]="nextInstallment?.installment.dueDate | date: 'H:mm z'"
+                      >
+                        <i class="far fa-clock"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="table-responsive" *ngIf='availableOracle'>
         <table class="table">
@@ -218,8 +302,14 @@
     </div>
 
     <div class="right px-0 col-xs-12 col-lg-7">
-      <app-detail-identity *ngIf="isDetail('identity')" [loan]="loan"></app-detail-identity>
-      <app-detail-cosigner *ngIf="isDetail('cosigner')" [loan]="loan"></app-detail-cosigner>
+      <app-detail-identity
+        *ngIf="isDetail('identity')"
+        [loan]="loan"
+      ></app-detail-identity>
+      <app-detail-cosigner
+        *ngIf="isDetail('cosigner')"
+        [loan]="loan"
+      ></app-detail-cosigner>
       <app-detail-collateral
         *ngIf="isDetail('collateral')"
         [loan]="loan"
@@ -227,6 +317,10 @@
         [canAdjust]="canAdjustCollateral"
         (updateCollateral)="onUserAction('collateral')"
       ></app-detail-collateral>
+      <app-detail-installments
+        *ngIf="isDetail('installments')"
+        [loan]="loan"
+      ></app-detail-installments>
     </div>
 
   </div>

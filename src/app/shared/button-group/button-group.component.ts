@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, Input } from '@angular/core';
 // App models
-import { LoanType } from './../../models/loan.model';
+import { Loan, LoanType } from './../../models/loan.model';
 
 @Component({
   selector: 'app-button-group',
@@ -10,6 +10,7 @@ import { LoanType } from './../../models/loan.model';
 export class ButtonGroupComponent {
   @Output() view = new EventEmitter<string>();
   @Input() viewDetail;
+  @Input() loan: Loan;
   @Input() loanType: LoanType;
 
   constructor() { }

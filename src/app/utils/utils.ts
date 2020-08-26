@@ -151,7 +151,7 @@ export class Utils {
     const parsedPmt = (amount: number) => {
       try {
         const strAmount: string =
-          amount.toLocaleString('fullwide', { useGrouping: false });
+          Math.round(amount).toLocaleString('fullwide', { useGrouping: false });
         return Utils.bn(strAmount);
       } catch (err) {
         return Utils.bn(amount);
@@ -204,11 +204,13 @@ export class Utils {
    * @return Value as BN
    */
   static bn(value: number | string | BN = 0, base?: number | 'hex'): BN {
+    // remove scientific notation
     if (typeof value === 'number') {
-      return new BN(this.scientificToDecimal(value), base);
+      value = String(this.scientificToDecimal(value));
     }
-    if (typeof value === 'string') {
-      return new BN(value, base);
+    // remove decimals
+    if (String(value).includes('.')) {
+      value = String(value).split('.')[0];
     }
     return new BN(value, base);
   }
