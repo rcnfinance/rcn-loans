@@ -6,16 +6,40 @@
     Currency
   </div>
   <div class="loans-list-header__column loans-list-header__column--debt">
-    {{ ['active-loans', 'address'].includes(view) ? 'Outstanding' : 'Receive' }}
+    <span>
+      {{ ['active-loans', 'address'].includes(view) ? 'Outstanding' : 'Receive' }}
+    </span>
+    <span
+      class="loans-list-header__column-icon"
+      (click)="clickSort('descriptor.total_obligation')"
+    >
+      <i class="fas fa-sort ml-1"></i>
+    </span>
   </div>
   <div class="loans-list-header__column loans-list-header__column--type">
     Type
   </div>
   <div class="loans-list-header__column loans-list-header__column--interest">
-    Annual rate
+    <span>
+      Annual rate
+    </span>
+    <span
+      class="loans-list-header__column-icon"
+      (click)="clickSort('descriptor.interest_rate')"
+    >
+      <i class="fas fa-sort ml-1"></i>
+    </span>
   </div>
   <div class="loans-list-header__column loans-list-header__column--punitory">
-    Penalty rate
+    <span>
+      Penalty rate
+    </span>
+    <span
+      class="loans-list-header__column-icon"
+      (click)="clickSort('descriptor.punitive_interest_rate')"
+    >
+      <i class="fas fa-sort ml-1"></i>
+    </span>
   </div>
   <div class="loans-list-header__column loans-list-header__column--duration">
     Schedule

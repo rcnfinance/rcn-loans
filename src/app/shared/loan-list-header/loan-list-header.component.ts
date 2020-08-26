@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { LoanSortKey, LoanSortValue } from './../../interfaces/loan-sort';
+
 enum PageView {
   Activity = 'active-loans',
   Address = 'address',
@@ -10,12 +12,23 @@ enum PageView {
   templateUrl: './loan-list-header.component.html',
   styleUrls: ['./loan-list-header.component.scss']
 })
-export class LoanListHeaderComponent implements OnInit {
+export class LoanListHeaderComponent {
   @Input() view: PageView;
+  @Output() sort: EventEmitter<string>;
+  stateSort = {};
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor() {
+    this.sort = new EventEmitter();
   }
 
+  clickSort(key: string | LoanSortKey) {
+    const DEFAULT_VALUE = LoanSortValue.Desc;
+    const value: LoanSortValue = this.stateSort[key] || DEFAULT_VALUE;
+
+    this.stateSort[key] =
+      value === LoanSortValue.Desc ? LoanSortValue.Asc : LoanSortValue.Desc;
+
+    const sort = `${key}__${value}`;
+    this.sort.emit(sort);
+  }
 }

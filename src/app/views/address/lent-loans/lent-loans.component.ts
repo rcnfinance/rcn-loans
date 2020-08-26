@@ -76,23 +76,22 @@ export class AddressComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Listen and handle login events for account changes and logout
+   * Sort loans
+   * @param sort Order by
    */
-  handleLoginEvents() {
-    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(
-      async () => {
-        await this.checkMyLoans();
-        this.setPageTitle();
-      }
-    );
+  async sortLoans(sort: string) {
+    this.spinner.show(this.pageId);
+    await this.loadLoans(this.address, sort);
   }
 
   /**
    * Load address loans
+   * @param address Lender address
+   * @param sort Order by
    */
-  private async loadLoans(address: string) {
+  private async loadLoans(address: string, sort?: string) {
     try {
-      const loans: Loan[] = await this.contractsService.getLoansOfLender(address);
+      const loans: Loan[] = await this.contractsService.getLoansOfLender(address, sort);
       this.loans = loans;
 
       this.upgradeAvaiblable();
@@ -122,6 +121,18 @@ export class AddressComponent implements OnInit, OnDestroy {
 
     this.myLoans = web3.utils.toChecksumAddress(urlAddress) === web3.utils.toChecksumAddress(myAddress);
     return this.myLoans;
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  private handleLoginEvents() {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(
+      async () => {
+        await this.checkMyLoans();
+        this.setPageTitle();
+      }
+    );
   }
 
   /**
