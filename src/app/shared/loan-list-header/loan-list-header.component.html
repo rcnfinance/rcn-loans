@@ -1,44 +1,83 @@
-<div class="loans-list-header d-none d-lg-flex">
+<div
+  class="loans-list-header d-none d-lg-flex"
+  [class.loan-list-header--sorting]="isSorting"
+>
   <div class="loans-list-header__column loans-list-header__column--amount">
     {{ ['active-loans', 'address'].includes(view) ? 'Repaid' : 'Lend' }}
   </div>
   <div class="loans-list-header__column loans-list-header__column--currency">
     Currency
   </div>
-  <div class="loans-list-header__column loans-list-header__column--debt">
+  <div
+    class="loans-list-header__column loans-list-header__column--debt"
+    [class.loans-list-header__column--sorting]="stateSort['descriptor.total_obligation']"
+    (click)="clickSort('descriptor.total_obligation')"
+  >
     <span>
       {{ ['active-loans', 'address'].includes(view) ? 'Outstanding' : 'Receive' }}
     </span>
     <span
       class="loans-list-header__column-icon"
-      (click)="clickSort('descriptor.total_obligation')"
+      [ngSwitch]="stateSort['descriptor.total_obligation']"
     >
-      <i class="fas fa-sort ml-1"></i>
+      <span *ngSwitchCase="'desc'">
+        <i class="fas fa-sort-down ml-1"></i>
+      </span>
+      <span *ngSwitchCase="'asc'">
+        <i class="fas fa-sort-up ml-1"></i>
+      </span>
+      <span *ngSwitchDefault>
+        <i class="fas fa-sort ml-1"></i>
+      </span>
     </span>
   </div>
   <div class="loans-list-header__column loans-list-header__column--type">
     Type
   </div>
-  <div class="loans-list-header__column loans-list-header__column--interest">
+  <div
+    class="loans-list-header__column loans-list-header__column--interest"
+    [class.loans-list-header__column--sorting]="stateSort['descriptor.interest_rate']"
+    (click)="clickSort('descriptor.interest_rate')"
+  >
     <span>
       Annual rate
     </span>
     <span
       class="loans-list-header__column-icon"
-      (click)="clickSort('descriptor.interest_rate')"
+      [ngSwitch]="stateSort['descriptor.interest_rate']"
     >
-      <i class="fas fa-sort ml-1"></i>
+      <span *ngSwitchCase="'desc'">
+        <i class="fas fa-sort-down ml-1"></i>
+      </span>
+      <span *ngSwitchCase="'asc'">
+        <i class="fas fa-sort-up ml-1"></i>
+      </span>
+      <span *ngSwitchDefault>
+        <i class="fas fa-sort ml-1"></i>
+      </span>
     </span>
   </div>
-  <div class="loans-list-header__column loans-list-header__column--punitory">
+  <div
+    class="loans-list-header__column loans-list-header__column--punitory"
+    [class.loans-list-header__column--sorting]="stateSort['descriptor.punitive_interest_rate']"
+    (click)="clickSort('descriptor.punitive_interest_rate')"
+  >
     <span>
       Penalty rate
     </span>
     <span
       class="loans-list-header__column-icon"
-      (click)="clickSort('descriptor.punitive_interest_rate')"
+      [ngSwitch]="stateSort['descriptor.punitive_interest_rate']"
     >
-      <i class="fas fa-sort ml-1"></i>
+      <span *ngSwitchCase="'desc'">
+        <i class="fas fa-sort-down ml-1"></i>
+      </span>
+      <span *ngSwitchCase="'asc'">
+        <i class="fas fa-sort-up ml-1"></i>
+      </span>
+      <span *ngSwitchDefault>
+        <i class="fas fa-sort ml-1"></i>
+      </span>
     </span>
   </div>
   <div class="loans-list-header__column loans-list-header__column--duration">

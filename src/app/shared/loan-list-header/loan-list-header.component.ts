@@ -25,10 +25,17 @@ export class LoanListHeaderComponent {
     const DEFAULT_VALUE = LoanSortValue.Desc;
     const value: LoanSortValue = this.stateSort[key] || DEFAULT_VALUE;
 
-    this.stateSort[key] =
-      value === LoanSortValue.Desc ? LoanSortValue.Asc : LoanSortValue.Desc;
+    this.stateSort = {
+      [key]: value === LoanSortValue.Desc ?
+        LoanSortValue.Asc :
+        LoanSortValue.Desc
+    };
 
     const sort = `${key}__${value}`;
     this.sort.emit(sort);
+  }
+
+  get isSorting() {
+    return Object.keys(this.sort).length > 0;
   }
 }

@@ -22,6 +22,8 @@
   }
 
   &__column {
+    transition: .1s;
+
     &--amount,
     &--debt {
       width: 12.2%;
@@ -37,8 +39,14 @@
       width: 9.4%;
     }
 
-    &-icon {
+    &--debt,
+    &--interest,
+    &--punitory {
       cursor: pointer;
+    }
+
+    &--sorting {
+      color: white;
     }
   }
 }
