@@ -48,7 +48,7 @@ export class ApiService {
 
     try {
       const data: ApiResponse =
-        (await this.http.get(apiUrl.concat(`loans2?${ requestFilters() }&${ requestSort() }`)).toPromise() as ApiResponse);
+        (await this.http.get(apiUrl.concat(`loans?${ requestFilters() }&${ requestSort() }`)).toPromise() as ApiResponse);
 
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
@@ -70,7 +70,7 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const url = apiUrl.concat(`loans2?${ requestFilters() }&${ requestSort() }`);
+      const url = apiUrl.concat(`loans?${ requestFilters() }&${ requestSort() }`);
       urls.push(url);
     }
     const responses = await this.getAllUrls(urls);
@@ -154,7 +154,7 @@ export class ApiService {
 
     try {
       address = web3.utils.toChecksumAddress(address);
-      const url = apiUrl.concat(`loans2?${ requestFilters(page) }&${ requestSort() }`);
+      const url = apiUrl.concat(`loans?${ requestFilters(page) }&${ requestSort() }`);
       const data: any = await this.http.get(url).toPromise();
 
       if (page === 0) {
@@ -170,7 +170,7 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const eachUrl = apiUrl.concat(`loans2?${ requestFilters(page) }&${ requestSort() }`);
+      const eachUrl = apiUrl.concat(`loans?${ requestFilters(page) }&${ requestSort() }`);
       urls.push(eachUrl);
     }
     const responses = await this.getAllUrls(urls);
@@ -198,7 +198,7 @@ export class ApiService {
     let page = 0;
 
     try {
-      const data: any = await this.http.get(apiUrl.concat(`loans2?open=false&canceled=false&approved=true&page=${ page }`)).toPromise();
+      const data: any = await this.http.get(apiUrl.concat(`loans?open=false&canceled=false&approved=true&page=${ page }`)).toPromise();
       if (page === 0) {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
@@ -220,7 +220,7 @@ export class ApiService {
 
     const urls = [];
     for (page; page < apiCalls; page++) {
-      const url = apiUrl.concat(`loans2?open=false&canceled=false&approved=true&page=${ page }`);
+      const url = apiUrl.concat(`loans?open=false&canceled=false&approved=true&page=${ page }`);
       urls.push(url);
     }
 
@@ -257,7 +257,7 @@ export class ApiService {
 
     try {
       const data: any = await this.http.get(
-        apiUrl.concat(`loans2?${ requestFilters() }&${ requestSort() }`)
+        apiUrl.concat(`loans?${ requestFilters() }&${ requestSort() }`)
       ).toPromise();
       apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
 
@@ -305,7 +305,7 @@ export class ApiService {
    */
   async isSynchronized(): Promise<boolean> {
     const apiUrl: string = this.getApiUrl(Network.Diaspore, 'v5');
-    const { meta }: any = await this.http.get(apiUrl.concat(`loans2?page_size=1`)).toPromise();
+    const { meta }: any = await this.http.get(apiUrl.concat(`loans?page_size=1`)).toPromise();
     const apiBlock = meta.lastBlockPulled;
     const web3: any = this.web3Service.web3;
     const currentBlock = (await web3.eth.getBlock('latest')).number;
