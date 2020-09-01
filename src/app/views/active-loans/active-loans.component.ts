@@ -61,9 +61,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     try {
-      const diasporeLoans: Loan[] = await this.apiService.getPaginatedActiveLoans(Network.Diaspore, page);
-      const basaltLoans: Loan[] = await this.apiService.getPaginatedActiveLoans(Network.Basalt, page);
-      const loans: Loan[] = diasporeLoans.concat(basaltLoans);
+      const loans: Loan[] = await this.apiService.getPaginatedActiveLoans(Network.Diaspore, page);
       const curatedLoans: Loan[] = LoanCurator.curateLoans(loans);
 
       const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];

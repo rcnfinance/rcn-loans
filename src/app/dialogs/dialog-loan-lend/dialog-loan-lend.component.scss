@@ -1,4 +1,20 @@
-@import '../../../scss/_variables.scss'; //variables
+@import './../../../scss/variables';
+@import './../../../scss/fonts';
+@import './../dialog';
+
+.dialog-content {
+  .item {
+    &__select-label {
+      @include styled-font('Roboto', 400, 12px);
+      color: #989898;
+    }
+  }
+  .accordion-details {
+    mat-expansion-panel {
+      margin-top: 35px;
+    }
+  }
+}
 
 //Dialog Client
 .dialog {
@@ -27,18 +43,6 @@
   padding: 0px 30px;
 }
 
-.dialog-footer {
-  app-lend-button {
-    ::ng-deep a {
-      width: 100%;
-    }
-  }
-}
-
-.small-table-row {
-  height: 20px;
-}
-
 // ---------------
 
 .i {
@@ -51,23 +55,10 @@
     }
 }
 
-.data-style {
-  font-family: 'Roboto', sans-serif;
-  font-weight: bold;
-  font-size: 16px;
-  color: #989898;
-}
-
+.data-style,
 .data--currency-style {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
+  @include typography-subtitle(2);
   color: #989898;
-}
-
-.row {
-    margin-right: -8px;
-    margin-left: -8px;
 }
 
 .lending {
@@ -114,18 +105,6 @@
 
 .--data-margin {
   margin-left: 10px;
-}
-
-.--lend-amount {
-  font-size: 16px;
-  font-family: 'Roboto', sans-serif;
-  font-weight: bold;
-}
-
-.--return-amount{
-  font-size: 16px;
-  font-family: 'Roboto', sans-serif;
-  font-weight: bold;
 }
 
 .item {
@@ -220,11 +199,6 @@ img {
   font-weight: 500;
 }
 
-.title-3 {
-  font-size: 12px;
-  font-weight: 500;
-}
-
 .no-gutters {
   margin-right: 0;
   margin-left: 0;
@@ -311,7 +285,21 @@ img {
   align-items: baseline;
 }
 
+.--lend-amount,
+.--lend-currency,
+.--return-amount,
+.--return-currency {
+  @include styled-font('Roboto', 700, 16px);
+}
+
 @media (min-width: 768px){
+  .dialog-content {
+    .accordion-details {
+      mat-expansion-panel {
+        margin-top: 60px;
+      }
+    }
+  }
   .arrow-space {
     display: block;
   }
@@ -331,31 +319,29 @@ img {
       margin-left: 10px;
       font-family: 'Roboto', sans-serif;
     }
-}
+  }
 
-.--lend-amount {
-  font-size: 26px;
-  font-family: 'Roboto', sans-serif;
-  font-weight: bold;
-}
+  .--lend-amount,
+  .--return-amount {
+    @include typography-headline(4);
+  }
 
-.--return-amount{
-  font-size: 38px;
-  font-family: 'Roboto', sans-serif;
-  font-weight: bold;
-}
+  .--lend-currency,
+  .--return-currency {
+    @include typography-subtitle(2);
+  }
 
-.fa-arrow-left {
-  display: none;
-}
+  .fa-arrow-left {
+    display: none;
+  }
 
-.mat-raised-button {
-  width: 88px;
-}
+  .mat-raised-button {
+    width: 88px;
+  }
 
-    .dialog {
-        max-width: 800px;
-    }
+  .dialog {
+      max-width: 800px;
+  }
   .dialog-padding{
     padding: 30px 53px;
   }

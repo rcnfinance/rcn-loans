@@ -7,232 +7,254 @@
 
 <!-- withdraw form -->
 <ng-container *ngIf="dialogType === 'withdraw'">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="container" formGroupName="formUi">
-      <div class="dialog-content dialog-padding">
-        <div class="row mb-3 mt-4 mt-md-0 mb-5">
-          <div class="col col-12 item item--description">
-            You're about to adjust the {{ shortLoanId }} loan's collateral. Please
-            choose the amount you'd like to withdraw.
-          </div>
-        </div>
-        <div class="row mb-4">
-          <div class="col col-12 col-md-5 mb-3 mb-md-0 item item--entry">
-            <p class="item__subtitle">
-              Withdrawn amount
-            </p>
-            <mat-form-field
-              class="mt-2"
-              [class.mat-form-field--empty]="!form?.value.formUi.entryAmount"
-            >
-              <input
-                matInput
-                type="number"
-                min="0"
-                max="1000000"
-                formControlName="entryAmount"
-                placeholder="0"
-                pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-                [readonly]="loading"
-                required
-              />
-              <span class="currency">
-                {{ form?.value.formRatios.currency?.symbol }}
-              </span>
-            </mat-form-field>
-          </div>
-          <div class="col col-12 col-md-4 offset-md-3 mb-3 mb-md-0 item item--max-withdraw">
-            <p class="item__subtitle">
-              Maximum withdrawal
-            </p>
-            <div class="d-flex align-items-center justify-content-start">
-              <p class="value">
-                {{ form?.value.formRatios.maxWithdraw }}
-                {{ form?.value.formRatios.currency?.symbol }}
+  <mat-dialog-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="container" formGroupName="formUi">
+        <div class="dialog-content">
+          <div class="row mb-4">
+            <div class="col col-12 col-md-5 mb-3 mb-md-0 item item--entry">
+              <p class="item__subtitle">
+                Withdrawn amount
               </p>
-              <button
-                type="button"
-                mat-flat-button
-                class="button button-clear button-rounded ml-3"
-                [class.button-disabled]="loading"
-                (click)="clickMaxWithdraw()"
+              <mat-form-field
+                class="mt-2"
+                [class.mat-form-field--empty]="!form?.value.formUi.entryAmount"
               >
-                Max
-              </button>
+                <input
+                  matInput
+                  type="number"
+                  min="0"
+                  max="1000000"
+                  formControlName="entryAmount"
+                  placeholder="0"
+                  pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
+                  [readonly]="loading"
+                  required
+                />
+                <span class="currency">
+                  {{ form?.value.formRatios.currency?.symbol }}
+                </span>
+              </mat-form-field>
+            </div>
+            <div class="col col-12 col-md-4 offset-md-3 mb-3 mb-md-0 item item--max-withdraw">
+              <p class="item__subtitle">
+                Maximum withdrawal
+              </p>
+              <p class="item__value">
+                <strong class="item__value-amount">
+                  {{ form?.value.formRatios.maxWithdraw }}
+                </strong>
+                <span class="item__value-currency">
+                  {{ form?.value.formRatios.currency?.symbol }}
+                </span>
+                <button
+                  type="button"
+                  mat-flat-button
+                  class="button button-clear button-rounded ml-3"
+                  [class.button-disabled]="loading"
+                  (click)="clickMaxWithdraw()"
+                >
+                  Max
+                </button>
+              </p>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col col-12 col-md-8 mb-3 mb-md-0 item item--graphic">
-            <p class="item__subtitle">
-              Collateral ratio
-            </p>
-            <div class="mt-2 px-2 px-md-0">
-              <app-collateral-slider-debt
-                [liquidationRatio]="form?.value.formRatios.liquidationRatio"
-                [balanceRatio]="form?.value.formRatios.balanceRatio"
-                [collateralRatio]="form?.value.formRatios.collateralRatio"
-              ></app-collateral-slider-debt>
+          <div class="row">
+            <div class="col col-12 col-md-8 mb-3 mb-md-0 item item--graphic">
+              <p class="item__subtitle">
+                Collateral ratio
+              </p>
+              <div class="mt-2 px-2 px-md-0">
+                <app-collateral-slider-debt
+                  [liquidationRatio]="form?.value.formRatios.liquidationRatio"
+                  [balanceRatio]="form?.value.formRatios.balanceRatio"
+                  [collateralRatio]="form?.value.formRatios.collateralRatio"
+                ></app-collateral-slider-debt>
+              </div>
+            </div>
+            <div class="col col-12 col-md-4 mb-3 mb-md-0 item item--amount">
+              <p class="item__subtitle">
+                Adjusted amount
+              </p>
+              <p class="item__value">
+                <strong class="item__value-amount">
+                  {{ form?.value.formRatios.formattedAmount }}
+                </strong>
+                <span class="item__value-currency">
+                  {{ form?.value.formRatios.currency?.symbol }}
+                </span>
+              </p>
             </div>
           </div>
-          <div class="col col-12 col-md-4 mb-3 mb-md-0 item item--amount">
-            <p class="item__subtitle">
-              Adjusted amount
-            </p>
-            <p class="value">
-              {{ form?.value.formRatios.formattedAmount }}
-              {{ form?.value.formRatios.currency?.symbol }}
-            </p>
-          </div>
+          <mat-accordion class="accordion-details">
+            <mat-expansion-panel class="mat-elevation-z">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  More details
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="accordion-details__item">
+                <i class="fas fa-info-circle"></i>
+                <span>
+                  Liquidation Price:
+                  {{ form?.value.formRatios.liquidationPrice }}
+                  {{ form?.value.formRatios.currency?.symbol }}/{{ loan?.currency?.symbol }}
+                </span>
+              </div>
+              <!--
+              TODO: add TX cost
+              <div class="accordion-details__item">
+                <i class="fas fa-arrows-alt-h"></i>
+                <span>
+                  Tx Cost: - USD
+                </span>
+              </div>
+              -->
+              <div class="accordion-details__item">
+                <i class="fas fa-wallet"></i>
+                <span>
+                  Withdrawing collateral from the
+                  <a
+                    [href]="explorerAddress.replace('${address}', account)"
+                    target="_blank"
+                  >
+                    {{ account | formatAddress }}
+                  </a>
+                  address.
+                </span>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
         </div>
       </div>
-
-      <div class="margintop15"></div>
-
-      <div class="dialog-divisor dialog-padding py-0 mt-4 mt-md-0 row">
-        <div class="dialog-divisor__content col-sm-12">
-          <span matTooltip="This is the Exchange Rate at which the Collateralization Ratio will reach the Liquidation Ratio, triggering a collateral liquidation.">
-            <i class="material-icons mr-2">
-              info
-            </i>
-          </span>
-          Liquidation Price:
-          {{ form?.value.formRatios.liquidationPrice }}
-          {{ form?.value.formRatios.currency?.symbol }}
-        </div>
-      </div>
-
-      <div class="margintop20"></div>
-
-      <div class="dialog-footer dialog-padding pt-0 pb-3 row">
-        <div class="dialog-footer__label col-sm-12 col-md-6">
-          <p>
-            Withdrawing collateral from the <strong>{{ shortAccount }}</strong> address.
-          </p>
-        </div>
-        <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
-          <div class="row justify-content-end">
-            <div class="col-md-12">
-              <button
-                type="submit"
-                mat-raised-button
-                class="button button-primary mr-0 mr-lg-2"
-                [class.button-disabled]="loading"
-              >
-                {{ withdrawButtonText }}
-              </button>
-              <app-close-button class="d-none d-md-inline"></app-close-button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </form>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions class="dialog-footer d-flex justify-content-end">
+    <button
+      type="submit"
+      mat-raised-button
+      class="button button-primary mr-0 mr-lg-2"
+      [class.button-disabled]="loading"
+    >
+      {{ withdrawButtonText }}
+    </button>
+    <app-close-button class="d-none d-md-inline"></app-close-button>
+  </mat-dialog-actions>
 </ng-container>
 <!-- withdraw add form -->
 
 <!-- add form -->
 <ng-container *ngIf="dialogType === 'add'">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="container" formGroupName="formUi">
-      <div class="dialog-content dialog-padding">
-        <div class="row mb-3 mt-4 mt-md-0 mb-5">
-          <div class="col col-12 item item--description">
-            You're about to adjust the {{ shortLoanId }} loan's collateral. Please
-            choose the amount you'd like to deposit.
-          </div>
-        </div>
-        <div class="row mb-4">
-          <div class="col col-12 col-md-4 mb-3 mb-md-0 item item--entry">
-            <p class="item__subtitle">
-              Deposited amount
-            </p>
-            <mat-form-field
-              class="mt-2"
-              [class.mat-form-field--empty]="!form?.value.formUi.entryAmount"
-            >
-              <input
-                matInput
-                type="number"
-                min="0"
-                max="1000000"
-                formControlName="entryAmount"
-                placeholder="0"
-                pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
-                [readonly]="loading"
-                required
-              />
-              <span class="currency">
-                {{ form?.value.formRatios.currency?.symbol }}
-              </span>
-            </mat-form-field>
-          </div>
-          <div class="col col-12 col-md-4 offset-md-4 mb-3 mb-md-0 item item--amount">
-            <p class="item__subtitle">
-              Adjusted amount
-            </p>
-            <p class="value">
-              {{ form?.value.formRatios.formattedAmount }}
-              {{ form?.value.formRatios.currency?.symbol }}
-            </p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col col-12 mb-3 mb-md-0 item item--graphic">
-            <p class="item__subtitle">
-              Collateral ratio
-            </p>
-            <div class="mt-2 px-2 px-md-0">
-              <app-collateral-slider-debt
-                [liquidationRatio]="form?.value.formRatios.liquidationRatio"
-                [balanceRatio]="form?.value.formRatios.balanceRatio"
-                [collateralRatio]="form?.value.formRatios.collateralRatio"
-              ></app-collateral-slider-debt>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="margintop15"></div>
-
-      <div class="dialog-divisor dialog-padding py-0 mt-4 mt-md-0 row">
-        <div class="dialog-divisor__content col-sm-12">
-          <span matTooltip="This is the Exchange Rate at which the Collateralization Ratio will reach the Liquidation Ratio, triggering a collateral liquidation.">
-            <i class="material-icons mr-2">
-              info
-            </i>
-          </span>
-          Liquidation Price:
-          {{ form?.value.formRatios.liquidationPrice }}
-          {{ form?.value.formRatios.currency?.symbol }}/{{ loan?.currency?.symbol }}
-        </div>
-      </div>
-
-      <div class="margintop20"></div>
-
-      <div class="dialog-footer dialog-padding pt-0 pb-3 row">
-        <div class="dialog-footer__label col-sm-12 col-md-6">
-          <p>
-            Depositing collateral from the <strong>{{ shortAccount }}</strong> address.
-          </p>
-        </div>
-        <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
-          <div class="row justify-content-end">
-            <div class="col-md-12">
-              <button
-                type="submit"
-                mat-raised-button
-                class="button button-primary mr-0 mr-lg-2"
-                [class.button-disabled]="loading"
+  <mat-dialog-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="container" formGroupName="formUi">
+        <div class="dialog-content">
+          <div class="row mb-4">
+            <div class="col col-12 col-md-4 mb-3 mb-md-0 item item--entry">
+              <p class="item__subtitle">
+                Deposited amount
+              </p>
+              <mat-form-field
+                class="mt-2"
+                [class.mat-form-field--empty]="!form?.value.formUi.entryAmount"
               >
-                {{ addButtonText }}
-              </button>
-              <app-close-button class="d-none d-md-inline"></app-close-button>
+                <input
+                  matInput
+                  type="number"
+                  min="0"
+                  max="1000000"
+                  formControlName="entryAmount"
+                  placeholder="0"
+                  pattern="^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$"
+                  [readonly]="loading"
+                  required
+                />
+                <span class="currency">
+                  {{ form?.value.formRatios.currency?.symbol }}
+                </span>
+              </mat-form-field>
+            </div>
+            <div class="col col-12 col-md-4 offset-md-4 mb-3 mb-md-0 item item--amount">
+              <p class="item__subtitle">
+                Adjusted amount
+              </p>
+              <p class="item__value">
+                <strong class="item__value-amount">
+                  {{ form?.value.formRatios.formattedAmount }}
+                </strong>
+                <span class="item__value-currency">
+                  {{ form?.value.formRatios.currency?.symbol }}
+                </span>
+              </p>
             </div>
           </div>
+          <div class="row">
+            <div class="col col-12 mb-3 mb-md-0 item item--graphic">
+              <p class="item__subtitle">
+                Collateral ratio
+              </p>
+              <div class="mt-2 px-2 px-md-0">
+                <app-collateral-slider-debt
+                  [liquidationRatio]="form?.value.formRatios.liquidationRatio"
+                  [balanceRatio]="form?.value.formRatios.balanceRatio"
+                  [collateralRatio]="form?.value.formRatios.collateralRatio"
+                ></app-collateral-slider-debt>
+              </div>
+            </div>
+          </div>
+          <mat-accordion class="accordion-details">
+            <mat-expansion-panel class="mat-elevation-z">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  More details
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="accordion-details__item">
+                <i class="fas fa-info-circle"></i>
+                <span>
+                  Liquidation Price:
+                  {{ form?.value.formRatios.liquidationPrice }}
+                  {{ form?.value.formRatios.currency?.symbol }}/{{ loan?.currency?.symbol }}
+                </span>
+              </div>
+              <!--
+              TODO: add TX cost
+              <div class="accordion-details__item">
+                <i class="fas fa-arrows-alt-h"></i>
+                <span>
+                  Tx Cost: - USD
+                </span>
+              </div>
+              -->
+              <div class="accordion-details__item">
+                <i class="fas fa-wallet"></i>
+                <span>
+                  Depositing collateral from the
+                  <a
+                    [href]="explorerAddress.replace('${address}', account)"
+                    target="_blank"
+                  >
+                    {{ account | formatAddress }}
+                  </a>
+                  address.
+                </span>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
         </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions class="dialog-footer d-flex justify-content-end">
+    <button
+      type="submit"
+      mat-raised-button
+      class="button button-primary mr-0 mr-lg-2"
+      [class.button-disabled]="loading"
+    >
+      {{ addButtonText }}
+    </button>
+    <app-close-button class="d-none d-md-inline"></app-close-button>
+  </mat-dialog-actions>
 </ng-container>
 <!-- end add form -->

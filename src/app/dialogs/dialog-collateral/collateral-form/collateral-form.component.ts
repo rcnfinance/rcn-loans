@@ -3,15 +3,16 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
-import { Utils } from '../../../utils/utils';
-import { Currency } from '../../../utils/currencies';
+import { environment } from './../../../../environments/environment';
+import { Utils } from './../../../utils/utils';
+import { Currency } from './../../../utils/currencies';
 // App models
-import { Loan } from '../../../models/loan.model';
-import { Collateral } from '../../../models/collateral.model';
+import { Loan } from './../../../models/loan.model';
+import { Collateral } from './../../../models/collateral.model';
 // App services
-import { EventsService } from '../../../services/events.service';
-import { CollateralService } from '../../../services/collateral.service';
-import { CurrenciesService, CurrencyItem } from '../../../services/currencies.service';
+import { EventsService } from './../../../services/events.service';
+import { CollateralService } from './../../../services/collateral.service';
+import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
 
 enum DialogType {
   CollateralAdd = 'add',
@@ -24,15 +25,15 @@ enum DialogType {
   styleUrls: ['./collateral-form.component.scss']
 })
 export class CollateralFormComponent implements OnInit {
-
   @Input() dialogType: DialogType;
   @Input() loan: Loan;
   @Input() loading: boolean;
-  @Input() shortAccount: string;
+  @Input() account: string;
   @Input() shortLoanId: string;
   @Output() submitAdd = new EventEmitter<BN>();
   @Output() submitWithdraw = new EventEmitter<BN>();
 
+  explorerAddress: string = environment.network.explorer.address;
   form: FormGroup;
 
   constructor(

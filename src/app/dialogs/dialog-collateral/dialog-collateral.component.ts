@@ -21,7 +21,6 @@ import { TxService, Tx } from './../../services/tx.service';
   styleUrls: ['./dialog-collateral.component.scss']
 })
 export class DialogCollateralComponent implements OnInit, OnDestroy {
-
   loan: Loan;
   shortLoanId: string;
   collateral: Collateral;
@@ -31,7 +30,6 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   account: string;
-  shortAccount: string;
   startProgress: boolean;
   finishProgress: boolean;
 
@@ -102,9 +100,7 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
   async loadAccount() {
     const web3: any = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
-
     this.account = web3.utils.toChecksumAddress(account);
-    this.shortAccount = Utils.shortAddress(this.account);
   }
 
   /**

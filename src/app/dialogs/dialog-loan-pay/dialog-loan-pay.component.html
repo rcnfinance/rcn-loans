@@ -14,7 +14,7 @@
 
   <form [formGroup]="form">
     <div class="container">
-      <div class="dialog-content dialog-padding">
+      <div class="dialog-content">
         <div class="row">
           <div class="col col-12 col-md-4 mb-3 mb-md-0 item item--entry">
             <p class="item__subtitle">
@@ -116,55 +116,66 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="dialog-divisor dialog-padding py-0 mt-4 mt-md-0 row" *ngIf="exchangeTooltip">
-        <div class="dialog-divisor__content col-sm-12">
-          <!--
-          <i class="material-icons mr-2">
-            info
-          </i>
-          The value of the payments it's going to be converted to RCN.
-          -->
-          <span class="mr-1">
-            Current Exchange Rate: 1 {{ loan.currency }}
-          </span>
-          <span class="mr-1" *ngIf="loan.currency.toString() !== 'RCN'">
-            = {{ exchangeRcn }} RCN
-          </span>
-          <i
-            class="material-icons ml-2"
-            [matTooltip]="exchangeTooltip"
-          >
-            info
-          </i>
-        </div>
-      </div>
-
-      <div class="margintop20"></div>
-
-      <div class="dialog-footer dialog-padding pt-0 pb-3 row">
-        <div class="dialog-footer__label col-sm-12 col-md-6">
-          <p>
-            Repaying from the <strong>{{ shortAccount }}</strong> address.
-          </p>
-        </div>
-        <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
-          <div class="row justify-content-end">
-            <div class="col-md-12">
-              <app-pay-button
-                [loan]="loan"
-                [amount]="form.value.amount"
-                [disabled]="loading || !form?.valid"
-                (startPay)="showProgressbar()"
-                (endPay)="endPay()"
-              ></app-pay-button>
-              <app-close-button class="d-none d-md-inline"></app-close-button>
+        <mat-accordion class="accordion-details">
+          <mat-expansion-panel class="mat-elevation-z">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                More details
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="accordion-details__item" *ngIf="exchangeTooltip">
+              <i
+                class="fas fa-exchange-alt"
+                [matTooltip]="exchangeTooltip"
+              ></i>
+              <span>
+                Current Exchange Rate: 1 {{ loan.currency }}
+              </span>
+              <span *ngIf="loan.currency.toString() !== 'RCN'">
+                = {{ exchangeRcn }} RCN
+              </span>
             </div>
-          </div>
-        </div>
+            <!--
+            TODO: add TX cost
+            <div class="accordion-details__item">
+              <i class="fas fa-arrows-alt-h"></i>
+              <span>
+                Tx Cost: - USD
+              </span>
+            </div>
+            -->
+            <div class="accordion-details__item" *ngIf="exchangeTooltip">
+              <i class="fas fa-info-circle"></i>
+              <span [innerHTML]="exchangeTooltip"></span>
+            </div>
+            <div class="accordion-details__item">
+              <i class="fas fa-wallet"></i>
+              <span>
+                Repaying from the
+                <a
+                  [href]="explorerAddress.replace('${address}', account)"
+                  target="_blank"
+                >
+                  {{ account | formatAddress }}
+                </a>
+                address.
+              </span>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
       </div>
     </div>
 
   </form>
 </mat-dialog-content>
+
+<mat-dialog-actions class="dialog-footer d-flex justify-content-end">
+  <app-pay-button
+    [loan]="loan"
+    [amount]="form.value.amount"
+    [disabled]="loading || !form?.valid"
+    (startPay)="showProgressbar()"
+    (endPay)="endPay()"
+  ></app-pay-button>
+  <app-close-button class="d-none d-md-inline"></app-close-button>
+</mat-dialog-actions>
