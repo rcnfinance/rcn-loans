@@ -89,7 +89,8 @@ export class Loan {
     public cosigner?: string,
     public debt?: Debt,
     public config?: Config,
-    public collateral?: Collateral
+    public collateral?: Collateral,
+    public position?: number
   ) {}
 
   get isRequest(): boolean {

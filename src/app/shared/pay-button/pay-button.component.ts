@@ -181,7 +181,9 @@ export class PayButtonComponent implements OnInit, OnDestroy {
             'loan ' + this.loan.id,
             requiredTokens
           );
-          this.showInsufficientFundsDialog(requiredTokens, balance, currency, decimals);
+
+          const { symbol: rcnSymbol, decimals: rcnDecimals } = new Currency('RCN');
+          this.showInsufficientFundsDialog(requiredTokens, balance, rcnSymbol, rcnDecimals);
           return;
         }
 
