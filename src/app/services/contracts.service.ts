@@ -5,7 +5,7 @@ import * as BN from 'bn.js';
 import { Loan, LoanType, Oracle, Network } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
 import { LoanUtils } from './../utils/loan-utils';
-import { environment } from '../../environments/environment';
+import { environment, Agent } from '../../environments/environment';
 // App services
 import { Web3Service } from './web3.service';
 import { TxService } from '../services/tx.service';
@@ -891,6 +891,77 @@ export class ContractsService {
         resolve(this.readPendingWithdraws(loans));
       });
     }) as Promise<[number, number[], number, number[]]>;
+  }
+
+  /**
+   * Get the params expected by the contract
+   * @param loan Loan
+   * @param lendToken Token address
+   * @return Object with params
+   */
+  async getLendParams(loan: Loan, lendToken: string): Promise<{
+    payableAmount: string,
+    tokenConverter: string,
+    lendToken: string,
+    required: string,
+    cosignerAddress: string,
+    cosignerLimit: string,
+    loanId: string,
+    oracleData: string,
+    cosignerData: string,
+    callbackData: string,
+    account: string
+  }> {
+    const oracleData = await this.getOracleData(loan.oracle);
+    const web3: any = this.web3Service.web3;
+
+    // set input lend token
+    if (loan.network === Network.Basalt) {
+      lendToken = environment.contracts.rcnToken;
+    }
+
+    // set value in specified token
+    const required = String(await this.estimateLendAmount(loan, lendToken));
+    const payableAmount = lendToken === environment.contracts.converter.ethAddress ? required : '';
+
+    // set cosigner
+    const creator: Agent = environment.dir[loan.creator.toLowerCase()];
+    const cosignerLimit = '0'; // TODO: implement cosigner limit
+    let cosignerAddress: string;
+    let cosignerData: string;
+
+    if (this.loanTypeService.getLoanType(loan) === LoanType.UnknownWithCollateral) {
+      const { collateral } = loan;
+      cosignerAddress = environment.contracts.collateral.collateral;
+      cosignerData = Utils.toBytes32(web3.utils.toHex(collateral.id));
+    } else {
+      cosignerAddress = environment.cosigners[creator] || Utils.address0x;
+      cosignerData = '0x';
+    }
+
+    let account: string = await this.web3Service.getAccount();
+    account = web3.utils.toChecksumAddress(account);
+
+    const loanId = loan.id;
+    const callbackData = '0x';
+    const tokenConverter =
+      lendToken !== environment.contracts.rcnToken ?
+      environment.contracts.converter.uniswapConverter :
+      null;
+
+    return {
+      payableAmount,
+      tokenConverter,
+      lendToken,
+      required,
+      cosignerAddress,
+      cosignerLimit,
+      loanId,
+      oracleData,
+      cosignerData,
+      callbackData,
+      account
+    };
   }
 
   /**
