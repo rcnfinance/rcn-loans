@@ -32,6 +32,7 @@ export class DialogLoanLendComponent implements OnInit {
   exchangeRcn: string;
   exchangeToken: string;
   exchangeTooltip: string;
+  txCost: string;
   // general
   account: string;
   canLend: boolean;
@@ -95,6 +96,7 @@ export class DialogLoanLendComponent implements OnInit {
     try {
       await this.calculateAmounts();
       this.loadExchangeTooltip();
+      this.loadTxCost();
     } catch (e) {
       this.eventsService.trackError(e);
       throw Error('error calculating currency amounts');
@@ -196,6 +198,13 @@ export class DialogLoanLendComponent implements OnInit {
     }
   }
 
+  async loadTxCost() {
+    this.txCost = null;
+
+    const txCost = (await this.getTxCost()) / 10 ** 18;
+    this.txCost = Utils.formatAmount(txCost, 4);
+  }
+
   /**
    * Get currency data by code
    * @param symbol Currency symbol
@@ -221,6 +230,44 @@ export class DialogLoanLendComponent implements OnInit {
     const oracle: string = this.loan.oracle.address;
     const rate = await this.contractsService.getRate(oracle, currency.decimals);
     return rate;
+  }
+
+  /**
+   * Calculate gas price * estimated gas
+   * @return Tx cost
+   */
+  async getTxCost() {
+    const {
+      payableAmount,
+      tokenConverter,
+      lendToken,
+      required,
+      cosignerAddress,
+      cosignerLimit,
+      loanId,
+      oracleData,
+      cosignerData,
+      callbackData,
+      account
+    } = await this.contractsService.getLendParams(this.loan, this.lendToken);
+    const gasPrice = await this.web3Service.web3.eth.getGasPrice();
+    const estimatedGas = await this.contractsService.converterRampLend(
+      payableAmount,
+      tokenConverter,
+      lendToken,
+      required,
+      cosignerAddress,
+      cosignerLimit,
+      loanId,
+      oracleData,
+      cosignerData,
+      callbackData,
+      account,
+      true
+    );
+    const gasLimit = Number(estimatedGas) * 110 / 100;
+    const txCost = gasLimit * gasPrice;
+    return txCost;
   }
 
   /**
