@@ -11,6 +11,7 @@ import { Loan } from './../../../models/loan.model';
 import { Collateral } from './../../../models/collateral.model';
 // App services
 import { Web3Service } from './../../../services/web3.service';
+import { ApiService } from './../../../services/api.service';
 import { EventsService } from './../../../services/events.service';
 import { ContractsService } from './../../../services/contracts.service';
 import { CollateralService } from './../../../services/collateral.service';
@@ -43,6 +44,7 @@ export class CollateralFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
     private web3Service: Web3Service,
+    private apiService: ApiService,
     private eventsService: EventsService,
     private contractsService: ContractsService,
     private collateralService: CollateralService,
@@ -300,7 +302,9 @@ export class CollateralFormComponent implements OnInit {
     this.txCost = null;
 
     const txCost = (await this.getTxCost()) / 10 ** 18;
-    this.txCost = Utils.formatAmount(txCost, 4);
+    const { USD_ETH } = await this.apiService.getRipioExchangeRates().toPromise();
+
+    this.txCost = Utils.formatAmount(txCost * USD_ETH, 4);
   }
 
   /**

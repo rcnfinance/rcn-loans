@@ -6,6 +6,7 @@ import { environment } from './../../../environments/environment';
 import { Loan } from './../../models/loan.model';
 import { Utils } from './../../utils/utils';
 // App services
+import { ApiService } from './../../services/api.service';
 import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from './../../services/web3.service';
 
@@ -38,6 +39,7 @@ export class DialogLoanPayComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<any>,
+    private apiService: ApiService,
     private contractsService: ContractsService,
     private web3Service: Web3Service,
     @Inject(MAT_DIALOG_DATA) public data
@@ -187,7 +189,9 @@ export class DialogLoanPayComponent implements OnInit {
     this.txCost = null;
 
     const txCost = (await this.getTxCost()) / 10 ** 18;
-    this.txCost = Utils.formatAmount(txCost, 4);
+    const { USD_ETH } = await this.apiService.getRipioExchangeRates().toPromise();
+
+    this.txCost = Utils.formatAmount(txCost * USD_ETH, 4);
   }
 
   /**
