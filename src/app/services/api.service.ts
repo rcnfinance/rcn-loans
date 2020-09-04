@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { aggregate } from '@makerdao/multicall';
+import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
 import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
@@ -343,6 +344,29 @@ export class ApiService {
     } catch (err) {
       return [];
     }
+  }
+
+  /**
+   * Return Ripio Exchange rates for ARS, BTL, BTC and ETH
+   * @return Observable of USD_ARS, USD_BRL, USD_BTC, USD_ETH
+   */
+  getRipioExchangeRates() {
+    // const RIPIO_EXCHANGE_URL = 'https://api.exchange.ripio.com/api/v1/usd/';
+    // return this.http.get(RIPIO_EXCHANGE_URL);
+
+    // FIXME: hardcoded rates. check API availability
+
+    return of({
+      USD_ARS: 135.5,
+      USD_BRL: 5.36,
+      USD_BTC: 11148.28,
+      USD_ETH: 433.46
+    }) as Observable<{
+      USD_ARS: number;
+      USD_BRL: number;
+      USD_BTC: number;
+      USD_ETH: number;
+    }>;
   }
 
   /**
