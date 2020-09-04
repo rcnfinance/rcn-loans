@@ -215,7 +215,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
           'loan ' + this.loan.id + ' of ' + amountInWei
         );
 
-        const tx = await this.contractsService.payLoan(this.loan, amountInWei as any);
+        const tx = await this.contractsService.payLoan(this.loan, amountInWei);
 
         this.eventsService.trackEvent(
           'pay-loan',

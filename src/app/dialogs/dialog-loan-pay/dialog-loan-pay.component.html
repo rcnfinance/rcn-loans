@@ -135,15 +135,12 @@
                 = {{ exchangeRcn }} RCN
               </span>
             </div>
-            <!--
-            TODO: add TX cost
             <div class="accordion-details__item">
               <i class="fas fa-arrows-alt-h"></i>
               <span>
-                Tx Cost: - USD
+                Tx Cost: {{ txCost ? (txCost + ' ETH') : '-' }}
               </span>
             </div>
-            -->
             <div class="accordion-details__item" *ngIf="exchangeTooltip">
               <i class="fas fa-info-circle"></i>
               <span [innerHTML]="exchangeTooltip"></span>

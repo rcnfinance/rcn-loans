@@ -30,6 +30,7 @@ export class DialogLoanPayComponent implements OnInit {
   exchangeTooltip: string;
   pendingAmountRcn: string;
   payAmountRcn: string;
+  txCost: string;
 
   startProgress: boolean;
   finishProgress: boolean;
@@ -102,6 +103,8 @@ export class DialogLoanPayComponent implements OnInit {
     const RCN_DECIMALS = 18;
     this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** RCN_DECIMALS, 4);
     this.pendingAmountRcn = Utils.formatAmount(Number(this.exchangeRcn) * Number(this.pendingAmount), 4);
+
+    await this.loadTxCost();
   }
 
   /**
@@ -178,6 +181,33 @@ export class DialogLoanPayComponent implements OnInit {
     }
     this.exchangeTooltip = null;
     return;
+  }
+
+  private async loadTxCost() {
+    this.txCost = null;
+
+    const txCost = (await this.getTxCost()) / 10 ** 18;
+    this.txCost = Utils.formatAmount(txCost, 4);
+  }
+
+  /**
+   * Calculate gas price * estimated gas
+   * @return Tx cost
+   */
+  private async getTxCost() {
+    const amount = String(this.pendingAmountRcn).replace(/,/g, '');
+    if (!amount) {
+      return;
+    }
+
+    const RCN_DECIMALS = 18;
+    const amountInWei = Utils.getAmountInWei(Number(amount), RCN_DECIMALS).toString();
+
+    const gasPrice = await this.web3Service.web3.eth.getGasPrice();
+    const estimatedGas = await this.contractsService.payLoan(this.loan, amountInWei, true);
+    const gasLimit = Number(estimatedGas) * 110 / 100;
+    const txCost = gasLimit * gasPrice;
+    return txCost;
   }
 
   /**
