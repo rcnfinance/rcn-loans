@@ -90,9 +90,14 @@ export class Utils {
    * Format amounts to show
    * @param amount Amount to format
    * @param decimals Decimals to show
+   * @param withCommas Show x,xxx.xx
    * @return Formatted amount
    */
-  static formatAmount(amount: number | string | BN, decimals = 2): string {
+  static formatAmount(
+    amount: number | string | BN,
+    decimals = 2,
+    withCommas = true
+  ): string {
     if (typeof amount !== 'number') {
       amount = Number(amount);
     }
@@ -103,6 +108,10 @@ export class Utils {
     const fixedAmount: any = (amount as Number).toFixed(decimals);
     const fixedAmountWithoutRounding =
       fixedAmount <= amount ? fixedAmount : (fixedAmount - Math.pow(0.1, decimals)).toFixed(decimals);
+
+    if (!withCommas) {
+      return Number(fixedAmountWithoutRounding).toString();
+    }
 
     return Number(fixedAmountWithoutRounding).toLocaleString('en-US', { minimumFractionDigits: decimals });
   }
