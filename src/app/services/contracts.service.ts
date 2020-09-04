@@ -616,7 +616,7 @@ export class ContractsService {
 
   async payLoan(
     loan: Loan,
-    amount: number,
+    amount: string,
     estimate?: boolean
   ): Promise<string> {
     const account = await this.web3Service.getAccount();
@@ -1152,32 +1152,51 @@ export class ContractsService {
    * @param tokenAddress Collateral token address
    * @param amount Amount to add in wei
    * @param account Account address
+   * @param estimate Estimate or send transaction
    * @return Tx hash
    */
   async addCollateral(
     collateralId: number,
     tokenAddress: string,
     amount: string,
-    account: string
+    account: string,
+    estimate?: boolean
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
+    const isEth: boolean = tokenAddress === environment.contracts.converter.ethAddress;
+    const payload = isEth ?
+      { from: account, value: amount } :
+      { from: account };
+
+    if (estimate) {
+      if (isEth) {
+        return await this.loadAltContract(web3, this._collateralWethManager)
+            .methods
+            .deposit(collateralId)
+            .estimateGas(payload);
+      }
+
+      return await this.loadAltContract(web3, this._collateral)
+          .methods
+          .deposit(collateralId, amount)
+          .estimateGas(payload);
+    }
 
     return new Promise((resolve, reject) => {
-      if (tokenAddress === environment.contracts.converter.ethAddress) {
-        this.loadAltContract(web3, this._collateralWethManager).methods.deposit(
-          collateralId
-        )
-        .send({ from: account, value: amount })
-        .on('transactionHash', (hash: string) => resolve(hash))
-        .on('error', (err) => reject(err));
+      if (isEth) {
+        this.loadAltContract(web3, this._collateralWethManager)
+            .methods
+            .deposit(collateralId)
+            .send({ from: account, value: amount })
+            .on('transactionHash', (hash: string) => resolve(hash))
+            .on('error', (err) => reject(err));
       } else {
-        this.loadAltContract(web3, this._collateral).methods.deposit(
-          collateralId,
-          amount
-        )
-        .send({ from: account })
-        .on('transactionHash', (hash: string) => resolve(hash))
-        .on('error', (err) => reject(err));
+        this.loadAltContract(web3, this._collateral)
+            .methods
+            .deposit(collateralId, amount)
+            .send({ from: account })
+            .on('transactionHash', (hash: string) => resolve(hash))
+            .on('error', (err) => reject(err));
       }
     });
   }
@@ -1189,6 +1208,7 @@ export class ContractsService {
    * @param amount Amount to add in wei
    * @param oracleData Oracle data bytes
    * @param account Account address
+   * @param estimate Estimate or send transaction
    * @return Tx hash
    */
   async withdrawCollateral(
@@ -1197,25 +1217,28 @@ export class ContractsService {
     to: string,
     amount: string,
     oracleData: string,
-    account: string
+    account: string,
+    estimate?: boolean
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
-    let contract: any = this._collateral;
+    const isEth: boolean = tokenAddress === environment.contracts.converter.ethAddress;
+    const contract: string = isEth ? this._collateralWethManager : this._collateral;
+    const payload = { from: account };
 
-    if (tokenAddress === environment.contracts.converter.ethAddress) {
-      contract = this._collateralWethManager;
+    if (estimate) {
+      return await this.loadAltContract(web3, contract)
+          .methods
+          .withdraw(collateralId, to, amount, oracleData)
+          .estimateGas(payload);
     }
 
     return new Promise((resolve, reject) => {
-      this.loadAltContract(web3, contract).methods.withdraw(
-        collateralId,
-        to,
-        amount,
-        oracleData
-      )
-      .send({ from: account })
-      .on('transactionHash', (hash: string) => resolve(hash))
-      .on('error', (err) => reject(err));
+      this.loadAltContract(web3, contract)
+          .methods
+          .withdraw(collateralId, to, amount, oracleData)
+          .send(payload)
+          .on('transactionHash', (hash: string) => resolve(hash))
+          .on('error', (err) => reject(err));
     });
   }
 

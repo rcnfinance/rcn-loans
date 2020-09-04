@@ -8,7 +8,7 @@
 <!-- withdraw form -->
 <ng-container *ngIf="dialogType === 'withdraw'">
   <mat-dialog-content>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form [formGroup]="form">
       <div class="container" formGroupName="formUi">
         <div class="dialog-content">
           <div class="row mb-4">
@@ -101,15 +101,12 @@
                   {{ form?.value.formRatios.currency?.symbol }}/{{ loan?.currency?.symbol }}
                 </span>
               </div>
-              <!--
-              TODO: add TX cost
               <div class="accordion-details__item">
                 <i class="fas fa-arrows-alt-h"></i>
                 <span>
-                  Tx Cost: - USD
+                  Tx Cost: {{ txCost ? (txCost + ' ETH') : '-' }}
                 </span>
               </div>
-              -->
               <div class="accordion-details__item">
                 <i class="fas fa-wallet"></i>
                 <span>
@@ -135,6 +132,7 @@
       mat-raised-button
       class="button button-primary mr-0 mr-lg-2"
       [class.button-disabled]="loading"
+      (click)="onSubmit()"
     >
       {{ withdrawButtonText }}
     </button>
@@ -217,15 +215,12 @@
                   {{ form?.value.formRatios.currency?.symbol }}/{{ loan?.currency?.symbol }}
                 </span>
               </div>
-              <!--
-              TODO: add TX cost
               <div class="accordion-details__item">
                 <i class="fas fa-arrows-alt-h"></i>
                 <span>
-                  Tx Cost: - USD
+                  Tx Cost: {{ txCost ? (txCost + ' ETH') : '-' }}
                 </span>
               </div>
-              -->
               <div class="accordion-details__item">
                 <i class="fas fa-wallet"></i>
                 <span>
@@ -251,6 +246,7 @@
       mat-raised-button
       class="button button-primary mr-0 mr-lg-2"
       [class.button-disabled]="loading"
+      (click)="onSubmit()"
     >
       {{ addButtonText }}
     </button>
