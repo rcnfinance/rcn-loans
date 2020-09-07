@@ -829,42 +829,36 @@ export class ContractsService {
 
   /**
    * Get all loans request that are open, not canceled or expired.
+   * @param sort Order by
    * @return Loans array
    */
   // TODO: remove method from this service
-  async getRequests(): Promise<Loan[]> {
-    const web3 = await this.web3Service.web3;
-    const block = await web3.eth.getBlock('latest');
-    const now = block.timestamp;
-    const diaspore: Loan[] = await this.apiService.getRequests(now, Network.Diaspore);
+  async getRequests(sort?: string): Promise<Loan[]> {
+    const diaspore: Loan[] = await this.apiService.getRequests(sort);
     const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
     const loans: Loan[] = this.loanTypeService.filterLoanByType(diaspore, ALLOWED_TYPES);
-
     return LoanCurator.curateLoans(loans);
   }
 
   /**
    * Loads all loans lent by the specified account
    * @param lender Lender address
+   * @param sort Order by
    * @return Loans array
    */
-  async getLoansOfLender(lender: string): Promise<Loan[]> {
-    const basalt: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', Network.Basalt);
-    const diaspore: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', Network.Diaspore);
-    const loans: Loan[] = diaspore.concat(LoanCurator.curateLoans(basalt));
+  async getLoansOfLender(lender: string, sort?: string): Promise<Loan[]> {
+    const loans: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(lender, 'lender', sort);
     return loans;
   }
 
   /**
    * Loads all loans borrowed by the specified account
    * @param borrower Borrower address
+   * @param sort Order by
    * @return Loans array
    */
-  async getLoansOfBorrower(borrower: string): Promise<Loan[]> {
-    const basalt: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(borrower, 'borrower', Network.Basalt);
-    const diaspore: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(borrower, 'borrower', Network.Diaspore);
-    const loans: Loan[] = diaspore.concat(LoanCurator.curateLoans(basalt));
-
+  async getLoansOfBorrower(borrower: string, sort?: string): Promise<Loan[]> {
+    const loans: Loan[] = await this.apiService.getLoansOfLenderOrBorrower(borrower, 'borrower', sort);
     return loans;
   }
 

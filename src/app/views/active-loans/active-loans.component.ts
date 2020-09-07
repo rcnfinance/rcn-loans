@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Loan, LoanType, Network } from './../../models/loan.model';
+import { Loan, LoanType } from './../../models/loan.model';
 import { LoanCurator } from './../../utils/loan-curator';
 import { ApiService } from '../../services/api.service';
 import { EventsService } from '../../services/events.service';
@@ -18,6 +18,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
   loans = [];
   // pagination
   page = 0;
+  sort: string;
   isLoading: boolean;
   isFullScrolled: boolean;
   isAvailableLoans = true;
@@ -38,6 +39,22 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.loading = false;
+  }
+
+  /**
+   * Sort loans
+   * @param sort Order by
+   */
+  async sortLoans(sort: string) {
+    this.sort = sort;
+
+    // restore params
+    this.page = 0;
+    this.isFullScrolled = false;
+    this.loans = [];
+
+    this.spinner.show(this.pageId);
+    await this.loadLoans(this.page, sort);
   }
 
   async onScroll(event: any) {
@@ -65,13 +82,19 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
   /**
    * Load active loans
    * @param page Page
+   * @param sort Order by
    * @return Loans
    */
-  private async loadLoans(page: number = this.page) {
+  async loadLoans(
+    page: number = this.page,
+    sort: string = this.sort,
+    currentLoadedLoans = 0
+  ) {
     this.loading = true;
 
     try {
-      const loans: Loan[] = await this.apiService.getPaginatedActiveLoans(Network.Diaspore, page);
+      const PAGE_SIZE = 20;
+      const loans: Loan[] = await this.apiService.getPaginatedActiveLoans(page, PAGE_SIZE, sort);
       const curatedLoans: Loan[] = LoanCurator.curateLoans(loans);
 
       const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
@@ -92,9 +115,12 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
         this.page++;
       }
 
+      // incrase current paginator results
+      currentLoadedLoans = currentLoadedLoans + filteredLoans.length;
+
       const MINIMUN_LOANS_TO_SHOW = 12;
-      if (loans.length && filteredLoans.length < MINIMUN_LOANS_TO_SHOW) {
-        await this.loadLoans();
+      if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
+        await this.loadLoans(this.page, this.sort, currentLoadedLoans);
       }
     } catch (err) {
       this.eventsService.trackError(err);
