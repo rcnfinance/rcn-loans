@@ -32,10 +32,12 @@ export class DialogLoanLendComponent implements OnInit {
   exchangeRcn: string;
   exchangeToken: string;
   exchangeTooltip: string;
+  txCost: string;
   // general
   account: string;
   canLend: boolean;
   availableCurrencies: CurrencyItem[];
+  explorerAddress: string = environment.network.explorer.address;
 
   loading: boolean;
   startProgress: boolean;
@@ -65,7 +67,7 @@ export class DialogLoanLendComponent implements OnInit {
 
     // set user account
     const account: string = await this.web3Service.getAccount();
-    this.account = Utils.shortAddress(account);
+    this.account = account;
 
     // set loan amount and rate
     const web3: any = this.web3Service.web3;
@@ -94,6 +96,7 @@ export class DialogLoanLendComponent implements OnInit {
     try {
       await this.calculateAmounts();
       this.loadExchangeTooltip();
+      this.loadTxCost();
     } catch (e) {
       this.eventsService.trackError(e);
       throw Error('error calculating currency amounts');
@@ -161,13 +164,15 @@ export class DialogLoanLendComponent implements OnInit {
   loadExchangeTooltip() {
     const loanCurrency: string = this.loan.currency.toString();
     const lendCurrency: string = this.lendCurrency;
-    const oracle = this.loan.oracle;
+    const oracle = this.loan.oracle.address;
     const tokenConverter = environment.contracts.converter.uniswapConverter;
+    const urlOracle = environment.network.explorer.address.replace('${address}', oracle);
+    const urlTokenConverter = environment.network.explorer.address.replace('${address}', tokenConverter);
 
     if (!this.exchangeToken) {
       if (loanCurrency !== 'RCN') {
         this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
-        the ${ oracle } oracle.`;
+        the <a href="${ urlOracle }" target="_blank">${ Utils.shortAddress(oracle) }</a> oracle.`;
         return;
       }
       this.exchangeTooltip = null;
@@ -176,20 +181,31 @@ export class DialogLoanLendComponent implements OnInit {
 
     if (loanCurrency !== 'RCN' && lendCurrency !== 'RCN') {
       this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
-      the ${ oracle } oracle. The RCN/${ lendCurrency } exchange rate for this loan is calculated
-      using the ${ tokenConverter } token converter contract.`;
+      the <a href="${ urlOracle }" target="_blank">${ Utils.shortAddress(oracle) }</a> oracle.
+      The RCN/${ lendCurrency } exchange rate for this loan is calculated using the
+      <a href="${ urlTokenConverter }" target="_blank">${ Utils.shortAddress(tokenConverter) }</a> token converter contract.`;
       return;
     }
     if (loanCurrency !== 'RCN') {
       this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
-      the ${ oracle } oracle.`;
+      the <a href="${ urlOracle }" target="_blank">${ Utils.shortAddress(oracle) }</strong> oracle.`;
       return;
     }
     if (lendCurrency !== 'RCN') {
       this.exchangeTooltip = `The RCN/${ lendCurrency } exchange rate for this loan is calculated using
-      the ${ tokenConverter } token converter contract.`;
+      the <a href="${ urlTokenConverter }" target="_blank">${ Utils.shortAddress(tokenConverter) }</strong> token converter contract.`;
       return;
     }
+  }
+
+  async loadTxCost() {
+    this.txCost = null;
+
+    const txCost = (await this.getTxCost()) / 10 ** 18;
+    const rawEthUsd = await this.contractsService.latestAnswer();
+    const ethUsd = rawEthUsd / 10 ** 8;
+
+    this.txCost = Utils.formatAmount(txCost * ethUsd, 4);
   }
 
   /**
@@ -217,6 +233,44 @@ export class DialogLoanLendComponent implements OnInit {
     const oracle: string = this.loan.oracle.address;
     const rate = await this.contractsService.getRate(oracle, currency.decimals);
     return rate;
+  }
+
+  /**
+   * Calculate gas price * estimated gas
+   * @return Tx cost
+   */
+  async getTxCost() {
+    const {
+      payableAmount,
+      tokenConverter,
+      lendToken,
+      required,
+      cosignerAddress,
+      cosignerLimit,
+      loanId,
+      oracleData,
+      cosignerData,
+      callbackData,
+      account
+    } = await this.contractsService.getLendParams(this.loan, this.lendToken);
+    const gasPrice = await this.web3Service.web3.eth.getGasPrice();
+    const estimatedGas = await this.contractsService.converterRampLend(
+      payableAmount,
+      tokenConverter,
+      lendToken,
+      required,
+      cosignerAddress,
+      cosignerLimit,
+      loanId,
+      oracleData,
+      cosignerData,
+      callbackData,
+      account,
+      true
+    );
+    const gasLimit = Number(estimatedGas) * 110 / 100;
+    const txCost = gasLimit * gasPrice;
+    return txCost;
   }
 
   /**

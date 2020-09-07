@@ -81,7 +81,12 @@ export const environment = {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
       mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1'
     },
-    multicall: '0xa457b5b859573e8eb758b6c2bfd4ae3042b422fd'
+    multicall: '0xa457b5b859573e8eb758b6c2bfd4ae3042b422fd',
+    chainlink: {
+      EACAggregatorProxy: {
+        ethUsd: '0x30b5068156688f818cea0874b580206dfe081a03'
+      }
+    }
   },
   cosigners: {
     [Agent.RipioArsCreator]: RIPIO_COSIGNER,
