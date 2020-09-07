@@ -1,0 +1,176 @@
+.dialog-content {
+  padding-top: 23px;
+  .item {
+    &__subtitle {
+      @include styled-font('Roboto', 400, 12px);
+    }
+    &--entry {
+      .currency {
+        position: absolute;
+        z-index: 2;
+        right: 0;
+        bottom: -2px;
+        padding: 8px 10px 4px;
+        @include typography-subtitle(2);
+        background: var(--app-color-gray-400);
+        color: white;
+        user-select: none;
+      }
+      input {
+        @include typography-headline(4);
+        margin-top: -1.15em;
+      }
+      ::ng-deep {
+        mat-form-field {
+          .mat-form-field-infix {
+            padding-bottom: 0;
+          }
+        }
+        label {
+          margin-top: -1.15em;
+          span {
+            @include typography-headline(4);
+          }
+          .mat-placeholder-required {
+            display: none;
+          }
+        }
+      }
+    }
+    &--amount,
+    &--max-withdraw {
+      .item__value {
+        margin: 9px 0;
+        &-amount {
+          @include typography-headline(4);
+        }
+        &-currency {
+          @include typography-subtitle(2);
+        }
+      }
+      .item__message {
+        @include styled-font('Roboto', 400, 10px);
+        margin-top: 10px;
+        border-radius: 2px;
+        line-height: 17px;
+        &--success {
+          color: var(--app-color-green);
+        }
+        &--warning {
+          color: var(--app-color-orange);
+        }
+      }
+    }
+  }
+
+  .accordion-details {
+    border-radius: 3px;
+    background: var(--app-color-gray-600);
+    mat-expansion-panel {
+      &-header {
+        height: 37px !important;
+        padding: 0 20px;
+        ::ng-deep {
+          .mat-content {
+            max-width: 77px;
+          }
+          .mat-expansion-indicator {
+            height: 1.7em;
+            &::after {
+              padding: 2.5px;
+            }
+          }
+        }
+      }
+      mat-panel-title {
+        @include styled-font('Roboto', 400, 12px);
+        margin-right: 0;
+      }
+      ::ng-deep {
+        .mat-expansion-panel-body {
+          padding-bottom: 21px;
+        }
+      }
+    }
+    &__item {
+      padding: 7px 0;
+      color: #BABABA;
+      @include styled-font('Roboto', 400, 12px);
+      svg {
+        margin-right: 9px;
+      }
+      ::ng-deep {
+        strong,
+        a {
+          color: white;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
+
+.dialog-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 17px;
+  box-shadow: 0px -5px 6px rgba(black, .3);
+  background: #313134;
+  button,
+  app-pay-button,
+  app-lend-button {
+    &,
+    ::ng-deep a {
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .dialog-content {
+    padding: 35px 42px 0;
+  }
+  .dialog-footer {
+    position: static;
+    padding: 24px 57px;
+    box-shadow: none;
+    background: none;
+    button,
+    app-pay-button,
+    app-lend-button {
+      &,
+      ::ng-deep a {
+        width: auto;
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .dialog-content {
+    .item {
+      &--entry {
+        .item__rate {
+          margin-top: -6px;
+          margin-bottom: 18px;
+        }
+      }
+      &--amount,
+      &--max-withdraw {
+        .item__value {
+          margin-bottom: 0;
+        }
+        .item__rate {
+          margin-top: 6px;
+        }
+        .item__message {
+          margin-top: 18px;
+          margin-bottom: 27px;
+        }
+      }
+    }
+  }
+}

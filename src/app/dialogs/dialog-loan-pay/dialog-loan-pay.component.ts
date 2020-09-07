@@ -2,10 +2,11 @@ import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import * as BN from 'bn.js';
-import { Loan } from '../../models/loan.model';
-import { Utils } from '../../utils/utils';
+import { environment } from './../../../environments/environment';
+import { Loan } from './../../models/loan.model';
+import { Utils } from './../../utils/utils';
 // App services
-import { ContractsService } from '../../services/contracts.service';
+import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from './../../services/web3.service';
 
 @Component({
@@ -14,11 +15,11 @@ import { Web3Service } from './../../services/web3.service';
   styleUrls: ['./dialog-loan-pay.component.scss']
 })
 export class DialogLoanPayComponent implements OnInit {
-
   loan: Loan;
   shortLoanId: string;
   loading: boolean;
   form: FormGroup;
+  explorerAddress: string = environment.network.explorer.address;
 
   account: string;
   shortAccount: string;
@@ -29,6 +30,7 @@ export class DialogLoanPayComponent implements OnInit {
   exchangeTooltip: string;
   pendingAmountRcn: string;
   payAmountRcn: string;
+  txCost: string;
 
   startProgress: boolean;
   finishProgress: boolean;
@@ -77,9 +79,7 @@ export class DialogLoanPayComponent implements OnInit {
   async loadAccount() {
     const web3: any = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
-
     this.account = web3.utils.toChecksumAddress(account);
-    this.shortAccount = Utils.shortAddress(this.account);
   }
 
   /**
@@ -103,6 +103,8 @@ export class DialogLoanPayComponent implements OnInit {
     const RCN_DECIMALS = 18;
     this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** RCN_DECIMALS, 4);
     this.pendingAmountRcn = Utils.formatAmount(Number(this.exchangeRcn) * Number(this.pendingAmount), 4);
+
+    await this.loadTxCost();
   }
 
   /**
@@ -169,15 +171,46 @@ export class DialogLoanPayComponent implements OnInit {
 
   private loadExchangeTooltip() {
     const loanCurrency: string = this.loan.currency.toString();
-    const oracle = this.loan.oracle;
+    const oracle = this.loan.oracle.address;
+    const urlOracle = environment.network.explorer.address.replace('${address}', oracle);
 
     if (loanCurrency !== 'RCN') {
       this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
-      the ${ oracle } oracle.`;
+      the <a href="${ urlOracle }" target="_blank">${ Utils.shortAddress(oracle) }</a> oracle.`;
       return;
     }
     this.exchangeTooltip = null;
     return;
+  }
+
+  private async loadTxCost() {
+    this.txCost = null;
+
+    const txCost = (await this.getTxCost()) / 10 ** 18;
+    const rawEthUsd = await this.contractsService.latestAnswer();
+    const ethUsd = rawEthUsd / 10 ** 8;
+
+    this.txCost = Utils.formatAmount(txCost * ethUsd, 4);
+  }
+
+  /**
+   * Calculate gas price * estimated gas
+   * @return Tx cost
+   */
+  private async getTxCost() {
+    const amount = String(this.pendingAmountRcn).replace(/,/g, '');
+    if (!amount) {
+      return;
+    }
+
+    const RCN_DECIMALS = 18;
+    const amountInWei = Utils.getAmountInWei(Number(amount), RCN_DECIMALS).toString();
+
+    const gasPrice = await this.web3Service.web3.eth.getGasPrice();
+    const estimatedGas = await this.contractsService.payLoan(this.loan, amountInWei, true);
+    const gasLimit = Number(estimatedGas) * 110 / 100;
+    const txCost = gasLimit * gasPrice;
+    return txCost;
   }
 
   /**

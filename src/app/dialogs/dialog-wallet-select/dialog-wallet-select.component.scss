@@ -32,7 +32,7 @@
       text-align: left;
       border-radius: 10px;
       border: 1px solid transparent;
-      @include styled-font('Raleway', 700, 16px);
+      @include styled-font('Roboto', 700, 16px);
       transition: .3s;
 
       img {
@@ -75,6 +75,7 @@
     border-radius: 12px;
   }
   .dialog {
+    width: auto;
     min-width: 485px;
   }
 }
