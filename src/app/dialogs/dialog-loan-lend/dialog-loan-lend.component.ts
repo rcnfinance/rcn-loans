@@ -6,7 +6,6 @@ import { Loan, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 // App services
-import { ApiService } from './../../services/api.service';
 import { ContractsService } from '../../services/contracts.service';
 import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
 import { Web3Service } from '../../services/web3.service';
@@ -45,7 +44,6 @@ export class DialogLoanLendComponent implements OnInit {
   finishProgress: boolean;
 
   constructor(
-    private apiService: ApiService,
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
     private web3Service: Web3Service,
@@ -204,9 +202,10 @@ export class DialogLoanLendComponent implements OnInit {
     this.txCost = null;
 
     const txCost = (await this.getTxCost()) / 10 ** 18;
-    const { USD_ETH } = await this.apiService.getRipioExchangeRates().toPromise();
+    const rawEthUsd = await this.contractsService.latestAnswer();
+    const ethUsd = rawEthUsd / 10 ** 8;
 
-    this.txCost = Utils.formatAmount(txCost * USD_ETH, 4);
+    this.txCost = Utils.formatAmount(txCost * ethUsd, 4);
   }
 
   /**
