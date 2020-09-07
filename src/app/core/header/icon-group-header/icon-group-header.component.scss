@@ -4,7 +4,13 @@
   position: relative;
   .button{
     cursor: pointer;
-    &.active{i,svg{color: var(--app-color-primary);}};
+    &.active,
+    &:hover{
+      i,
+      svg{
+        color: var(--app-color-primary);
+      }
+    };
     i,
     svg{ font-size: 22px; @include transition(); }
     .available-notifications {

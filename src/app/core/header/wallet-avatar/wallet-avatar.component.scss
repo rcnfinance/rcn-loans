@@ -1,5 +1,11 @@
 .wallet-avatar {
   position: relative;
+  &:hover {
+    img {
+      transition: .3s;
+      opacity: .6;
+    }
+  }
   img {
     width: 25px;
     height: 25px;
