@@ -67,6 +67,13 @@
           }
         }
       }
+      .separator{
+        display: inline-block;
+        width: 1px;
+        height: 13px;
+        background: var(--app-color-gray-50);
+        cursor: default;
+      }
     }
     .icon-hamburguer{
       cursor: pointer;
