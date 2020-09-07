@@ -1,6 +1,17 @@
 .wallet-avatar {
+  position: relative;
   img {
     width: 25px;
     height: 25px;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #85C36F;
   }
 }
