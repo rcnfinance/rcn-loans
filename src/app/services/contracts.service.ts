@@ -28,6 +28,7 @@ const oracleFactoryAbi = require('../contracts/OracleFactory.json');
 const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
 const collateralAbi = require('../contracts/Collateral.json');
 const collateralWethManagerAbi = require('../contracts/CollateralWETHManager.json');
+const aggregatorProxyAbi = require('../contracts/chainlink/EACAggregatorProxy.json');
 
 @Injectable()
 export class ContractsService {
@@ -47,6 +48,8 @@ export class ContractsService {
   private _collateral: any;
   private _collateralWethManagerAddress: string = environment.contracts.collateral.wethManager;
   private _collateralWethManager: any;
+  private _aggregatorProxyEthUsdAddress: string = environment.contracts.chainlink.EACAggregatorProxy.ethUsd;
+  private _aggregatorProxyEthUsd: any;
 
   constructor(
     private http: HttpClient,
@@ -66,6 +69,7 @@ export class ContractsService {
     this._installmentsModel = this.makeContract(installmentsModelAbi.abi, this._installmentsModelAddress);
     this._collateral = this.makeContract(collateralAbi.abi, this._collateralAddress);
     this._collateralWethManager = this.makeContract(collateralWethManagerAbi.abi, this._collateralWethManagerAddress);
+    this._aggregatorProxyEthUsd = this.makeContract(aggregatorProxyAbi.abi, this._aggregatorProxyEthUsdAddress);
   }
 
   /**
@@ -1249,6 +1253,14 @@ export class ContractsService {
    */
   async getClosingObligation(loanId: string): Promise<string> {
     return await this._loanManager.methods.getClosingObligation(loanId).call();
+  }
+
+  /**
+   * Get latest ETH/USD rate
+   * @return ETH/USD rate
+   */
+  async latestAnswer() {
+    return await this._aggregatorProxyEthUsd.methods.latestAnswer().call();
   }
 
   /**
