@@ -59,6 +59,20 @@
           width: 12px;
           background: rgba(white, 1);
         }
+        &--account {
+          svg {
+            width: 15px;
+            height: 15px;
+            margin-right: 8px;
+          }
+        }
+      }
+      .separator{
+        display: inline-block;
+        width: 1px;
+        height: 13px;
+        background: var(--app-color-gray-50);
+        cursor: default;
       }
     }
     .icon-hamburguer{
@@ -200,8 +214,8 @@
       }
       .nav {
         > * {
-          padding-left: 10px;
-          padding-right: 10px;
+          padding-left: 8px;
+          padding-right: 8px;
         }
         height: 45px;
         display: flex;
