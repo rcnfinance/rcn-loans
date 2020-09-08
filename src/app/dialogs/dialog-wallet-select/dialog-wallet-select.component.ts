@@ -75,6 +75,7 @@ export class DialogWalletSelectComponent implements OnInit {
   async clickLogout() {
     await this.web3Service.logout();
     this.loadActiveWallet();
+    this.walletConnectService.disconnect();
     this.dialogRef.close();
   }
 
