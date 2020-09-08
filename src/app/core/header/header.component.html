@@ -23,7 +23,7 @@
             <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
               <a class="nav__item nav__item--borrow mr-4" routerLink="/borrow">
                 <span class="d-flex align-items-center">
-                  <i class="material-icons mr-3 mt-0">add</i>
+                  <i class="material-icons mr-2 mt-0">add</i>
                   <span>Borrow</span>
                 </span>
               </a>
@@ -50,11 +50,12 @@
               >
                 My Loans
               </a>
-              <div class="nav__item mr-4" (click)="login()" *ngIf="!hasAccount">
+              <div class="separator mr-3 p-0"></div>
+              <div class="nav__item ml-2 mr-4" (click)="login()" *ngIf="!hasAccount">
                 Connect
               </div>
               <div
-                class="align-items-center pl-0"
+                class="align-items-center px-0"
                 [ngClass]="hasAccount ? 'd-flex' : 'd-none'"
               >
                 <app-icon-group-header></app-icon-group-header>
@@ -62,7 +63,7 @@
                 </app-component-balance>
               </div>
               <ng-container *ngIf="hasAccount">
-                <div class="nav__item mr-2 ml-3">
+                <div class="nav__item mx-3">
                   <div class="flex-item">
                     <div class="list-avatar">
                       <div class="avatar-container">
@@ -71,22 +72,15 @@
                     </div>
                   </div>
                 </div>
-                <div class="nav__item">
+                <div
+                  class="nav__item nav__item--account"
+                  (click)="openDialogApprove()"
+                  matTooltip="General Settings"
+                >
                   <div class="flex-container">
-                    <div
-                      class="flex-item mr-2"
-                      (click)="openDialogApprove()"
-                    >
+                    <i class="fas fa-cog"></i>
+                    <div class="flex-item mr-2">
                       {{ shortAccount }}
-                    </div>
-                    <div class="flex-item">
-                      <i
-                        class="material-icons transition"
-                        [ngClass]="{'rotate180': makeRotate }"
-                        (click)="openDialogApprove()"
-                      >
-                        expand_more
-                      </i>
                     </div>
                   </div>
                 </div>
