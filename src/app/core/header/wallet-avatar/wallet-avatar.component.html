@@ -1,3 +1,7 @@
-<div class="wallet-avatar" (click)="openWalletSelect()">
+<div
+  class="wallet-avatar"
+  (click)="openWalletSelect()"
+  [matTooltip]="'Connected to ' + label"
+>
   <img [src]="logo">
 </div>

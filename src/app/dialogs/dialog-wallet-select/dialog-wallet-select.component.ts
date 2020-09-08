@@ -16,7 +16,6 @@ import { Web3Service } from './../../services/web3.service';
   styleUrls: ['./dialog-wallet-select.component.scss']
 })
 export class DialogWalletSelectComponent implements OnInit {
-
   wallets: {
     image: string;
     title: string;
@@ -61,14 +60,23 @@ export class DialogWalletSelectComponent implements OnInit {
    */
   async selectWallet(wallet: WalletType, connected: boolean) {
     if (connected) {
-      await this.web3Service.logout();
-      return this.loadActiveWallet();
+      return;
     }
 
     const loggedIn = await this.web3Service.requestLogin(wallet, true);
     if (loggedIn) {
       timer(300).subscribe(() => this.dialogRef.close(loggedIn));
     }
+  }
+
+  /**
+   * Logout
+   */
+  async clickLogout() {
+    await this.web3Service.logout();
+    this.loadActiveWallet();
+    this.walletConnectService.disconnect();
+    this.dialogRef.close();
   }
 
   /**
@@ -105,5 +113,4 @@ export class DialogWalletSelectComponent implements OnInit {
       item.active = walletType === item.type || false;
     });
   }
-
 }
