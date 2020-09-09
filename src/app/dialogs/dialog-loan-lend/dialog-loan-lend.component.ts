@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { timer } from 'rxjs';
 import * as BN from 'bn.js';
 import { environment } from '../../../environments/environment';
 import { Loan, Status } from '../../models/loan.model';
@@ -40,8 +41,6 @@ export class DialogLoanLendComponent implements OnInit {
   explorerAddress: string = environment.network.explorer.address;
 
   loading: boolean;
-  startProgress: boolean;
-  finishProgress: boolean;
 
   constructor(
     private contractsService: ContractsService,
@@ -274,22 +273,11 @@ export class DialogLoanLendComponent implements OnInit {
   }
 
   /**
-   * Show loading progress bar
+   * Method called when the transaction was completed
    */
-  showProgressbar() {
-    this.startProgress = true;
-    this.loading = true;
-  }
-
-  /**
-   * Hide progressbar and close dialog
-   */
-  hideProgressbar() {
-    this.startProgress = false;
-    this.finishProgress = false;
-    this.loading = false;
-
-    this.dialogRef.close();
+  async endLend() {
+    await timer(1000).toPromise();
+    this.dialogRef.close(true);
   }
 
   /**

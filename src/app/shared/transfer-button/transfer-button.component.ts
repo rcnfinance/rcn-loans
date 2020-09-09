@@ -32,6 +32,8 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
   pendingTx: Tx = undefined;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   opPending = false;
+  startProgress: boolean;
+  finishProgress: boolean;
 
   txSubscription: boolean;
 
@@ -62,6 +64,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     // FIXME: review data: { id }
     if (tx.type === Type.transfer) {
       this.endTransfer.emit();
+      this.finishProgress = true;
       this.txSubscription = false;
     }
   }
@@ -77,6 +80,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
 
     if (this.pendingTx) {
       this.startTransfer.emit();
+      this.startProgress = true;
     }
 
     if (!this.txSubscription) {

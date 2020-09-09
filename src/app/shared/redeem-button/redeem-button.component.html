@@ -11,4 +11,11 @@
   >
     <i class="fa fa-circle-notch fa-spin"></i>
   </div>
+  <app-infinite-progress-bar
+    *ngIf="startProgress"
+    type="button"
+    [start]="true"
+    [end]="finishProgress"
+  >
+  </app-infinite-progress-bar>
 </a>

@@ -2,16 +2,6 @@
 </app-dialog-header>
 
 <mat-dialog-content class="dialog">
-
-  <ng-container *ngIf="startProgress">
-    <app-infinite-progress-bar
-      [start]="true"
-      [end]="finishProgress"
-      (finish)="hideProgressbar()"
-    >
-    </app-infinite-progress-bar>
-  </ng-container>
-
   <form [formGroup]="form">
     <div class="container">
       <div class="dialog-content">
@@ -171,7 +161,6 @@
     [loan]="loan"
     [amount]="form.value.amount"
     [disabled]="loading || !form?.valid"
-    (startPay)="showProgressbar()"
     (endPay)="endPay()"
   ></app-pay-button>
   <app-close-button class="d-none d-md-inline"></app-close-button>

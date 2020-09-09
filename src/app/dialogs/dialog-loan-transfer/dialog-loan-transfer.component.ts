@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { timer } from 'rxjs';
 import { Loan } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 // App services
@@ -12,7 +13,6 @@ import { Web3Service } from './../../services/web3.service';
   styleUrls: ['./dialog-loan-transfer.component.scss']
 })
 export class DialogLoanTransferComponent implements OnInit {
-
   loan: Loan;
   shortLoanId: string;
   loading: boolean;
@@ -23,9 +23,6 @@ export class DialogLoanTransferComponent implements OnInit {
   shortAccount: string;
   pendingAmount: string;
   currency: any;
-
-  startProgress: boolean;
-  finishProgress: boolean;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -69,27 +66,8 @@ export class DialogLoanTransferComponent implements OnInit {
   /**
    * Method called when the transaction was completed
    */
-  endTransfer() {
-    this.finishProgress = true;
-    this.cdRef.detectChanges();
-  }
-
-  /**
-   * Show loading progress bar
-   */
-  showProgressbar() {
-    this.startProgress = true;
-    this.loading = true;
-  }
-
-  /**
-   * Hide progressbar and close dialog
-   */
-  hideProgressbar() {
-    this.startProgress = false;
-    this.finishProgress = false;
-    this.loading = false;
-
+  async endTransfer() {
+    await timer(1000).toPromise();
     this.dialogRef.close(true);
   }
 

@@ -2,16 +2,6 @@
 </app-dialog-header>
 
 <mat-dialog-content class="dialog">
-
-  <ng-container *ngIf="startProgress">
-    <app-infinite-progress-bar
-      [start]="true"
-      [end]="finishProgress"
-      (finish)="hideProgressbar()"
-    >
-    </app-infinite-progress-bar>
-  </ng-container>
-
   <div class="container">
     <div class="dialog-content">
       <div class="row">
@@ -131,7 +121,7 @@
           <div class="accordion-details__item">
             <i class="fas fa-arrows-alt-h"></i>
             <span>
-              Tx Cost: {{ txCost ? (txCost + ' USD') : '-' }} 
+              Tx Cost: {{ txCost ? (txCost + ' USD') : '-' }}
             </span>
           </div>
           <div class="accordion-details__item" *ngIf="exchangeTooltip">
@@ -161,8 +151,7 @@
   <app-lend-button
     [loan]="loan"
     [lendToken]="lendToken"
-    (startLend)="showProgressbar()"
-    (endLend)="finishProgress = true"
+    (endLend)="endLend()"
     (closeDialog)="closeDialog()"
     *ngIf="canLend"
   ></app-lend-button>

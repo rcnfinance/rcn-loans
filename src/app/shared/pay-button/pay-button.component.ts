@@ -40,6 +40,8 @@ export class PayButtonComponent implements OnInit, OnDestroy {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   opPending = false;
   lendEnabled: Boolean;
+  startProgress: boolean;
+  finishProgress: boolean;
 
   txSubscription: boolean;
 
@@ -75,6 +77,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
 
     if (this.pendingTx) {
       this.startPay.emit();
+      this.startProgress = true;
     }
 
     if (!this.txSubscription) {
@@ -91,6 +94,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
       this.endPay.emit();
       this.web3Service.updateBalanceEvent.emit();
       this.txSubscription = false;
+      this.finishProgress = true;
     }
   }
 

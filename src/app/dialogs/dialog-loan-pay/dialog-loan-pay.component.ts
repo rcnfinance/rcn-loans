@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { timer } from 'rxjs';
 import * as BN from 'bn.js';
 import { environment } from './../../../environments/environment';
 import { Loan } from './../../models/loan.model';
@@ -32,11 +33,7 @@ export class DialogLoanPayComponent implements OnInit {
   payAmountRcn: string;
   txCost: string;
 
-  startProgress: boolean;
-  finishProgress: boolean;
-
   constructor(
-    private cdRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<any>,
     private contractsService: ContractsService,
     private web3Service: Web3Service,
@@ -110,27 +107,8 @@ export class DialogLoanPayComponent implements OnInit {
   /**
    * Method called when the transaction was completed
    */
-  endPay() {
-    this.finishProgress = true;
-    this.cdRef.detectChanges();
-  }
-
-  /**
-   * Show loading progress bar
-   */
-  showProgressbar() {
-    this.startProgress = true;
-    this.loading = true;
-  }
-
-  /**
-   * Hide progressbar and close dialog
-   */
-  hideProgressbar() {
-    this.startProgress = false;
-    this.finishProgress = false;
-    this.loading = false;
-
+  async endPay() {
+    await timer(1000).toPromise();
     this.dialogRef.close(true);
   }
 
