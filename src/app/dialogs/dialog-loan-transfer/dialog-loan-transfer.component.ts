@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { timer } from 'rxjs';
@@ -25,7 +25,6 @@ export class DialogLoanTransferComponent implements OnInit {
   currency: any;
 
   constructor(
-    private cdRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<any>,
     private web3Service: Web3Service,
     @Inject(MAT_DIALOG_DATA) public data
