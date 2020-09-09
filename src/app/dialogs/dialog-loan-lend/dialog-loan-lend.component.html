@@ -131,10 +131,13 @@
           <div class="accordion-details__item">
             <i class="fas fa-arrows-alt-h"></i>
             <span>
-              Tx Cost: {{ txCost ? (txCost + ' USD') : '-' }} 
+              Tx Cost: {{ txCost ? (txCost + ' USD') : '-' }}
             </span>
           </div>
-          <div class="accordion-details__item" *ngIf="exchangeTooltip">
+          <div
+            class="accordion-details__item"
+            *ngFor="let exchangeTooltip of exchangeTooltips"
+          >
             <i class="fas fa-info-circle"></i>
             <span [innerHTML]="exchangeTooltip"></span>
           </div>

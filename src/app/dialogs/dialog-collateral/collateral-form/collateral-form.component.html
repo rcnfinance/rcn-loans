@@ -96,6 +96,14 @@
               <div class="accordion-details__item">
                 <i class="fas fa-info-circle"></i>
                 <span>
+                  Current Price:
+                  {{ form?.value.formRatios.currentPrice }}
+                  {{ form?.value.formRatios.currency?.symbol }}/{{ loan?.currency?.symbol }}
+                </span>
+              </div>
+              <div class="accordion-details__item">
+                <i class="fas fa-info-circle"></i>
+                <span>
                   Liquidation Price:
                   {{ form?.value.formRatios.liquidationPrice }}
                   {{ form?.value.formRatios.currency?.symbol }}/{{ loan?.currency?.symbol }}
@@ -207,6 +215,14 @@
                   More details
                 </mat-panel-title>
               </mat-expansion-panel-header>
+              <div class="accordion-details__item">
+                <i class="fas fa-info-circle"></i>
+                <span>
+                  Current Price:
+                  {{ form?.value.formRatios.currentPrice }}
+                  {{ form?.value.formRatios.currency?.symbol }}/{{ loan?.currency?.symbol }}
+                </span>
+              </div>
               <div class="accordion-details__item">
                 <i class="fas fa-info-circle"></i>
                 <span>

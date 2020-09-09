@@ -38,6 +38,7 @@ export class CollateralFormComponent implements OnInit {
   explorerAddress: string = environment.network.explorer.address;
   form: FormGroup;
   txCost: string;
+  currentAmount: string;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -131,6 +132,7 @@ export class CollateralFormComponent implements OnInit {
         collateralRatio: new FormControl(null, Validators.required),
         currency: new FormControl(null, Validators.required),
         liquidationPrice: new FormControl(null, Validators.required),
+        currentPrice: new FormControl(null, Validators.required),
         formattedAmount: new FormControl(null, Validators.required),
         maxWithdraw: new FormControl(null, Validators.required)
       }),
@@ -159,6 +161,10 @@ export class CollateralFormComponent implements OnInit {
     const liquidationPrice = await this.collateralService.calculateLiquidationPrice(this.loan, loan.collateral);
     const currentLiquidationPrice = Utils.formatAmount(liquidationPrice, 4);
 
+    // set current price
+    const calculateCurrentPrice = await this.collateralService.calculateCurrentPrice(this.loan, loan.collateral);
+    const currentPrice = Utils.formatAmount(calculateCurrentPrice, 4);
+
     this.form.controls.formCollateral.patchValue({
       id,
       token,
@@ -170,6 +176,7 @@ export class CollateralFormComponent implements OnInit {
       balanceRatio: balancePercentage,
       collateralRatio: collateralPercentage,
       liquidationPrice: currentLiquidationPrice,
+      currentPrice: currentPrice,
       currency,
       formattedAmount
     });

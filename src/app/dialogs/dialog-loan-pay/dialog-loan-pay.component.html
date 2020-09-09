@@ -123,13 +123,16 @@
                 More details
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <div class="accordion-details__item" *ngIf="exchangeTooltip">
+            <div
+              class="accordion-details__item"
+              *ngIf="exchangeTooltip && loan.currency.toString() !== 'RCN'"
+            >
               <i
                 class="fas fa-exchange-alt"
                 [matTooltip]="exchangeTooltip"
               ></i>
               <span>
-                Current Exchange Rate: 1 {{ loan.currency }}
+                1 {{ loan.currency }}
               </span>
               <span *ngIf="loan.currency.toString() !== 'RCN'">
                 = {{ exchangeRcn }} RCN
