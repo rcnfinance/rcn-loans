@@ -102,6 +102,27 @@ export class CollateralService {
   }
 
   /**
+   * Calculate current price
+   * @return Current price price in collateral amount
+   */
+  async calculateCurrentPrice(loan: Loan, collateral: Collateral): Promise<number> {
+    const { amount, token } = collateral;
+    const currency: CurrencyItem =
+      this.currenciesService.getCurrencyByKey('address', token.toLowerCase());
+    const collateralPercentage: string =
+      await this.calculateCollateralPercentage(loan, currency, amount);
+
+    const loanDebt =
+      loan.debt ? loan.debt.model.estimatedObligation : loan.descriptor.totalObligation;
+    const collateralAmount = new Currency(currency.symbol).fromUnit(amount);
+    const currentPrice = (Number(collateralPercentage) / 100 * loanDebt) / collateralAmount;
+    const formattedCurrentPrice: number =
+      (currentPrice as any / 10 ** loan.currency.decimals);
+
+    return formattedCurrentPrice;
+  }
+
+  /**
    * Get rate loan currency / collateral currency
    * @return Exchange rate
    */
