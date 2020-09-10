@@ -3,26 +3,27 @@
   appClickOutside
   (clickOutside)="openDetail('clickOutside')"
 >
-  <div class="separator mr-3"></div>
   <div
-    class="button button--notifications"
+    class="button button--notifications ml-2 pl-1"
     (click)="openDetail('notifications')"
     [ngClass]="{'active': isDetail('notifications')}"
+    matTooltip="Notifications"
   >
     <i class="fas fa-clock"></i>
     <div class="available-notifications" *ngIf='notificationsCounter'>
       {{ notificationsCounter ? notificationsCounter : '0' }}
     </div>
   </div>
-  <div class="separator mx-3"></div>
+  <div class="mx-3"></div>
   <div
     class="button button--balance"
     (click)="openDetail('balance')"
     [ngClass]="{'active': isDetail('balance')}"
+    matTooltip="Wallet Balance"
   >
     <i class="fas fa-wallet"></i>
   </div>
-  <div class="separator mx-3"></div>
+  <div class="ml-3"></div>
   <app-notifications (notificationsCounter)="updateCounter($event)"></app-notifications>
   <app-wallet-balances></app-wallet-balances>
 </div>

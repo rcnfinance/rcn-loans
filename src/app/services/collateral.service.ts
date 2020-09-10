@@ -48,7 +48,11 @@ export class CollateralService {
 
     const collateralPercentage: number =
       Number(collateralAmountInRcn.toString()) * 100 / Number(loanAmountInRcn.toString());
-    const collateralRatio: string = Utils.formatAmount(collateralPercentage);
+
+    const DECIMALS_TO_SHOW = 2;
+    const WITH_COMMAS = false;
+    const collateralRatio: string =
+      Utils.formatAmount(collateralPercentage, DECIMALS_TO_SHOW, WITH_COMMAS);
 
     return collateralRatio;
   }

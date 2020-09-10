@@ -6,6 +6,7 @@ $sliderHeight: 3px;
 .collateral-debt-slider {
   width: 100%;
   max-width: 380px;
+  padding-left: 12px;
 
   ::ng-deep mat-slider {
     width: 100%;

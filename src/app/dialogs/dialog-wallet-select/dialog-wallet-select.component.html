@@ -1,4 +1,9 @@
 <mat-dialog-content class="dialog">
+  <button matDialogClose mat-button class="dialog__dismiss">
+    <mat-icon>
+      close
+    </mat-icon>
+  </button>
   <div class="dialog-content">
     <div class="dialog-content__logo">
       <img src="assets/isologo.svg" alt="RCN">
@@ -26,9 +31,16 @@
           <span>{{ wallet.title }}</span>
         </div>
       </button>
+      <button
+        mat-raised-button
+        class="button-logout"
+        (click)="clickLogout()"
+      >
+        <div class="d-flex align-items-center justify-content-center">
+          <i class="fas fa-power-off"></i>
+          <span>Logout</span>
+        </div>
+      </button>
     </div>
-  </div>
-  <div class="dialog-footer">
-    <app-close-button></app-close-button>
   </div>
 </mat-dialog-content>
