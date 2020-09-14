@@ -30,6 +30,8 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
   @Output() endRedeem = new EventEmitter();
   pendingTx: Tx = undefined;
   opPending = false;
+  startProgress: boolean;
+  finishProgress: boolean;
 
   txSubscription: boolean;
 
@@ -61,6 +63,7 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
 
     if (this.pendingTx) {
       this.startRedeem.emit();
+      this.startProgress = true;
     }
 
     if (!this.txSubscription) {
@@ -76,6 +79,7 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
     if (tx.type === Type.withdrawCollateral && tx.data.id === this.loan.id) {
       this.endRedeem.emit();
       this.txSubscription = false;
+      this.finishProgress = true;
     }
   }
 

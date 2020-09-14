@@ -14,6 +14,7 @@ export class InfiniteProgressBarComponent implements OnInit, OnChanges {
   @Input() end: boolean;
   @Input() cancel: boolean;
   @Input() mode: 'determinate' | 'indeterminate' = 'determinate';
+  @Input() type: 'button' | 'bar' = 'bar';
   @Output() finish = new EventEmitter();
   progress: number;
   interval: any;

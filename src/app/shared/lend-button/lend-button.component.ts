@@ -51,6 +51,8 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   lendEnabled: Boolean;
   opPending = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  startProgress: boolean;
+  finishProgress: boolean;
 
   txSubscription: boolean;
 
@@ -88,6 +90,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
     if (this.pendingTx) {
       this.startLend.emit();
+      this.startProgress = true;
     }
 
     if (!this.txSubscription) {
@@ -104,6 +107,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       this.endLend.emit();
       this.web3Service.updateBalanceEvent.emit();
       this.txSubscription = false;
+      this.finishProgress = true;
     }
   }
 

@@ -2,16 +2,6 @@
 </app-dialog-header>
 
 <mat-dialog-content class="dialog">
-
-  <ng-container *ngIf="startProgress">
-    <app-infinite-progress-bar
-      [start]="true"
-      [end]="finishProgress"
-      (finish)="hideProgressbar()"
-    >
-    </app-infinite-progress-bar>
-  </ng-container>
-
   <form [formGroup]="form">
     <div class="container">
       <div class="dialog-content dialog-padding">
@@ -68,7 +58,6 @@
                 [loan]="loan"
                 [address]="form.value.address"
                 [disabled]="loading || !form?.valid"
-                (startTransfer)="showProgressbar()"
                 (endTransfer)="endTransfer()"
               ></app-transfer-button>
               <app-close-button class="d-none d-md-inline"></app-close-button>
