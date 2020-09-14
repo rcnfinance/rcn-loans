@@ -22,6 +22,7 @@ export class DialogWalletSelectComponent implements OnInit {
     type: WalletType;
     active?: boolean;
   }[];
+  loggedIn: boolean;
 
   constructor(
     private dialogRef: MatDialogRef<DialogWalletSelectComponent>,
@@ -65,7 +66,8 @@ export class DialogWalletSelectComponent implements OnInit {
 
     const loggedIn = await this.web3Service.requestLogin(wallet, true);
     if (loggedIn) {
-      timer(300).subscribe(() => this.dialogRef.close(loggedIn));
+      await timer(300).toPromise();
+      this.dialogRef.close(loggedIn);
     }
   }
 
@@ -91,6 +93,8 @@ export class DialogWalletSelectComponent implements OnInit {
    */
   private loadActiveWallet() {
     const loggedIn = this.web3Service.loggedIn;
+    this.loggedIn = loggedIn;
+
     if (!loggedIn) {
       return this.setWalletConnected();
     }

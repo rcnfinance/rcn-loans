@@ -106,7 +106,7 @@
               More details
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <div class="accordion-details__item" *ngIf="exchangeTooltip">
+          <div class="accordion-details__item" *ngIf="exchangeTooltips?.length">
             <i class="fas fa-exchange-alt"></i>
             <span class="mr-1">
               Exchange Rate 1 {{ loan.currency }}
@@ -124,7 +124,10 @@
               Tx Cost: {{ txCost ? (txCost + ' USD') : '-' }}
             </span>
           </div>
-          <div class="accordion-details__item" *ngIf="exchangeTooltip">
+          <div
+            class="accordion-details__item"
+            *ngFor="let exchangeTooltip of exchangeTooltips"
+          >
             <i class="fas fa-info-circle"></i>
             <span [innerHTML]="exchangeTooltip"></span>
           </div>

@@ -153,8 +153,7 @@ export class DialogLoanPayComponent implements OnInit {
     const urlOracle = environment.network.explorer.address.replace('${address}', oracle);
 
     if (loanCurrency !== 'RCN') {
-      this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
-      the <a href="${ urlOracle }" target="_blank">${ Utils.shortAddress(oracle) }</a> oracle.`;
+      this.exchangeTooltip = `<a href="${ urlOracle }" target="_blank">RCN/${ loanCurrency }</a> Oracle.`;
       return;
     }
     this.exchangeTooltip = null;

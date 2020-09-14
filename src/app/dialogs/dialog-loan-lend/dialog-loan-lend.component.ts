@@ -32,7 +32,7 @@ export class DialogLoanLendComponent implements OnInit {
   lendToken: string;
   exchangeRcn: string;
   exchangeToken: string;
-  exchangeTooltip: string;
+  exchangeTooltips: string[];
   txCost: string;
   // general
   account: string;
@@ -167,32 +167,26 @@ export class DialogLoanLendComponent implements OnInit {
     const tokenConverter = environment.contracts.converter.uniswapConverter;
     const urlOracle = environment.network.explorer.address.replace('${address}', oracle);
     const urlTokenConverter = environment.network.explorer.address.replace('${address}', tokenConverter);
+    this.exchangeTooltips = [];
 
     if (!this.exchangeToken) {
       if (loanCurrency !== 'RCN') {
-        this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
-        the <a href="${ urlOracle }" target="_blank">${ Utils.shortAddress(oracle) }</a> oracle.`;
-        return;
+        this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">RCN/${ loanCurrency }</a> Oracle.`);
       }
-      this.exchangeTooltip = null;
       return;
     }
 
     if (loanCurrency !== 'RCN' && lendCurrency !== 'RCN') {
-      this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
-      the <a href="${ urlOracle }" target="_blank">${ Utils.shortAddress(oracle) }</a> oracle.
-      The RCN/${ lendCurrency } exchange rate for this loan is calculated using the
-      <a href="${ urlTokenConverter }" target="_blank">${ Utils.shortAddress(tokenConverter) }</a> token converter contract.`;
+      this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">RCN/${ loanCurrency }</a> Oracle.`);
+      this.exchangeTooltips.push(`<a href="${ urlTokenConverter }" target="_blank">RCN/${ lendCurrency }</a> Token Converter.`);
       return;
     }
     if (loanCurrency !== 'RCN') {
-      this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
-      the <a href="${ urlOracle }" target="_blank">${ Utils.shortAddress(oracle) }</strong> oracle.`;
+      this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">RCN/${ loanCurrency }</a> Oracle.`);
       return;
     }
     if (lendCurrency !== 'RCN') {
-      this.exchangeTooltip = `The RCN/${ lendCurrency } exchange rate for this loan is calculated using
-      the <a href="${ urlTokenConverter }" target="_blank">${ Utils.shortAddress(tokenConverter) }</strong> token converter contract.`;
+      this.exchangeTooltips.push(`<a href="${ urlTokenConverter }" target="_blank">RCN/${ lendCurrency }</a> Token Converter.`);
       return;
     }
   }
