@@ -1,13 +1,30 @@
 @import '../../../scss/variables';
 
-
-::ng-deep .mat-progress-bar {
-  height: 3px;
-
-  .mat-progress-bar-buffer {
-    background-color: #222222;
+.infinite-progress-bar {
+  &--bar {
+    &::ng-deep .mat-progress-bar {
+      height: 3px;
+      .mat-progress-bar-buffer {
+        background-color: #222222;
+      }
+      .mat-progress-bar-fill::after {
+        background-color: var(--app-color-primary);
+      }
+    }
   }
-  .mat-progress-bar-fill::after {
-    background-color: var(--app-color-primary);
+  &--button {
+    height: 100%;
+    &::ng-deep .mat-progress-bar {
+      height: 100%;
+      .mat-progress-bar-background.mat-progress-bar-element {
+        display: none;
+      }
+      .mat-progress-bar-buffer {
+        background: none;
+      }
+      .mat-progress-bar-fill::after {
+        background-color: rgba(black, .4);
+      }
+    }
   }
 }
