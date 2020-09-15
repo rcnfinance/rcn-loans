@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { timer } from 'rxjs';
 import * as BN from 'bn.js';
 import { environment } from './../../../../environments/environment';
 import { Utils } from './../../../utils/utils';
@@ -185,7 +186,7 @@ export class CollateralFormComponent implements OnInit {
 
     this.form.controls.formUi.valueChanges.subscribe(async (formUi) => {
       try {
-        this.spinner.show();
+        timer(100).subscribe(() => this.spinner.show());
         await this.updateFormUi(formUi);
       } catch (err) {
         this.eventsService.trackError(err);
