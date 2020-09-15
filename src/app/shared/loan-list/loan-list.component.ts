@@ -111,7 +111,10 @@ export class LoanListComponent implements OnInit, OnDestroy {
         this.canRedeem =
           isBorrower &&
           collateral &&
-          collateral.status === CollateralStatus.ToWithdraw &&
+          (
+            collateral.status === CollateralStatus.ToWithdraw ||
+            collateral.status === CollateralStatus.Created
+          ) &&
           Number(collateral.amount) > 0;
       }
     } catch { }
