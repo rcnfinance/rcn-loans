@@ -15,6 +15,52 @@
         margin-bottom: 15px;
       }
     }
+    &--installments {
+      margin-top: 25px;
+      .item__wrapper {
+        max-width: 237px;
+        padding: 11px 20px;
+        margin: 3px 0 10px;
+        border: 1px solid var(--app-color-gray-100);
+        border-radius: 3px;
+        transition: .3s;
+        cursor: pointer;
+        &-button {
+          svg {
+            font-size: .9em;
+            margin-bottom: 1px;
+            margin-right: 8px;
+          }
+          span {
+            @include styled-font('Roboto', 400, 12px);
+          }
+        }
+        &-details {
+          opacity: 0;
+          max-height: 0;
+          color: #BABABA;
+          transition-delay: 0;
+          transition-duration: 0;
+          .item__subtitle {
+            padding: 0 0 4px;
+            @include styled-font('Roboto', 400, 12px);
+          }
+          .item__value {
+            @include styled-font('Roboto', 700, 12px);
+          }
+        }
+        &--expanded {
+          max-width: 850px; // approached dialog with
+          .item__wrapper-details {
+            opacity: 1;
+            max-height: 100px;
+            margin-top: 13px;
+            transition-delay: .1s;
+            transition-duration: .3s;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -25,6 +71,11 @@
         button {
           margin-top: 0;
           margin-bottom: 27px;
+        }
+      }
+      &--installments {
+        .item__wrapper {
+          margin-top: -20px;
         }
       }
     }
