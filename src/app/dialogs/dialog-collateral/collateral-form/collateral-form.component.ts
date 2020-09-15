@@ -32,6 +32,8 @@ export class CollateralFormComponent implements OnInit {
   @Input() loading: boolean;
   @Input() account: string;
   @Input() shortLoanId: string;
+  @Input() startProgress: boolean;
+  @Input() finishProgress: boolean;
   @Output() submitAdd = new EventEmitter<BN>();
   @Output() submitWithdraw = new EventEmitter<BN>();
 
