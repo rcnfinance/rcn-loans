@@ -57,7 +57,6 @@ export class DialogLoanPayComponent implements OnInit {
 
     await this.loadDetail();
     this.loadExchangeTooltip();
-    this.loadInstallments();
 
     await this.loadAccount();
   }
@@ -102,6 +101,9 @@ export class DialogLoanPayComponent implements OnInit {
     this.form.controls.amount.setValidators([Validators.required]);
     this.shortLoanId =
       String(this.loan.id).startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
+
+    // load installments
+    this.loadInstallments();
 
     // set loan amount and rate
     const rate: BN = await this.getLoanRate();
