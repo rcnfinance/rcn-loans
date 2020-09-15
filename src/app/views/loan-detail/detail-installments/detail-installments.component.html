@@ -74,14 +74,11 @@
             class="installment__col installment__col--status"
             [ngClass]="'installment__col--status-' + installment.status"
           >
-            <span>
-              <i *ngIf="!installment.isNext"
-                class="fas"
-                [class.fa-check]="installment.status === 0"
-                [class.fa-exclamation]="
-                  installment.status === 1 || installment.status === 2
-                "
-              ></i>
+            <span *ngIf="!installment.isNext && installment.status === 0 && !installment.pendingAmount">
+              <i class="fas fa-check"></i>
+            </span>
+            <span *ngIf="!installment.isNext && (installment.status === 1 || installment.status === 2)">
+              <i class="fas fa-exclamation"></i>
             </span>
           </div>
         </div>
