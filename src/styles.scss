@@ -644,6 +644,19 @@ mat-form-field{
   }
 }
 
+// due status span
+.due-status {
+  &--success {
+    color: var(--app-color-green);
+  }
+  &--warning {
+    color: var(--app-color-orange);
+  }
+  &--error {
+    color: var(--app-color-red);
+  }
+}
+
 @media (min-width: 992px){
   .navmobile-menu{display: none;}
 }

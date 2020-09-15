@@ -4,10 +4,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { timer } from 'rxjs';
 import * as BN from 'bn.js';
 import { environment } from './../../../environments/environment';
+import { Installment } from '../../interfaces/installment';
 import { Loan } from './../../models/loan.model';
 import { Utils } from './../../utils/utils';
 // App services
 import { ContractsService } from './../../services/contracts.service';
+import { InstallmentsService } from './../../services/installments.service';
 import { Web3Service } from './../../services/web3.service';
 
 @Component({
@@ -32,10 +34,17 @@ export class DialogLoanPayComponent implements OnInit {
   pendingAmountRcn: string;
   payAmountRcn: string;
   txCost: string;
+  installmentsExpanded: boolean;
+  nextInstallment: {
+    installment: Installment,
+    payNumber: string,
+    dueDays: string
+  };
 
   constructor(
     public dialogRef: MatDialogRef<any>,
     private contractsService: ContractsService,
+    private installmentsService: InstallmentsService,
     private web3Service: Web3Service,
     @Inject(MAT_DIALOG_DATA) public data
   ) {
@@ -48,6 +57,7 @@ export class DialogLoanPayComponent implements OnInit {
 
     await this.loadDetail();
     this.loadExchangeTooltip();
+    this.loadInstallments();
 
     await this.loadAccount();
   }
@@ -199,5 +209,38 @@ export class DialogLoanPayComponent implements OnInit {
     const oracle: string = this.loan.oracle.address;
     const rate = await this.contractsService.getRate(oracle, currency.decimals);
     return rate;
+  }
+
+  /**
+   * Load next installment data
+   */
+  private async loadInstallments() {
+    const loan: Loan = this.loan;
+    const installment: Installment = await this.installmentsService.getCurrentInstallment(loan);
+    if (!installment) {
+      return;
+    }
+
+    const secondsInDay = 86400;
+    const addSuffix = (n: number): string => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+    const payNumber = `${ installment.payNumber + addSuffix(installment.payNumber) } Pay`;
+    const dueDate: number = new Date(installment.dueDate).getTime() / 1000;
+    const nowDate: number = new Date().getTime() / 1000;
+    const daysLeft: number = Math.round((dueDate - nowDate) / secondsInDay);
+
+    let dueDays: string = Utils.formatDelta(dueDate - nowDate, 1);
+    if (daysLeft > 1) {
+      dueDays += ' left';
+    } else if (daysLeft === 1 || daysLeft === 0) {
+      dueDays += ' left';
+    } else {
+      dueDays += ' ago';
+    }
+
+    this.nextInstallment = {
+      payNumber,
+      dueDays,
+      installment
+    };
   }
 }

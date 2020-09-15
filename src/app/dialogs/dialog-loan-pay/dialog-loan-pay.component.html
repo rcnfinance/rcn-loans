@@ -105,6 +105,58 @@
               </ng-template>
             </div>
           </div>
+          <div class="col-12 item item--installments" *ngIf="nextInstallment">
+            <div
+              class="item__wrapper"
+              [class.item__wrapper--expanded]="installmentsExpanded"
+              (click)="installmentsExpanded = !installmentsExpanded"
+            >
+              <div class="item__wrapper-button">
+                <i class="fas fa-calendar-alt"></i>
+                <span>
+                  Show instalments information
+                </span>
+              </div>
+              <div class="item__wrapper-details">
+                <div class="container-fluid pl-lg-0">
+                  <div class="row">
+                    <div class="col-2 col-lg-1 offset-lg-7 pl-0 pr-1">
+                      <p class="item__subtitle">
+                        Pay
+                      </p>
+                      <p class="item__value">
+                        {{ nextInstallment?.payNumber }}
+                      </p>
+                    </div>
+                    <div class="col-5 col-lg-2 pl-0 pr-1">
+                      <p class="item__subtitle">
+                        Instalment amount
+                      </p>
+                      <p class="item__value">
+                        {{ nextInstallment.installment.amount | formatAmount }}
+                        {{ nextInstallment?.installment.currency }}
+                      </p>
+                    </div>
+                    <div class="col-5 col-lg-2 px-0">
+                      <p class="item__subtitle">
+                        Due Date
+                      </p>
+                      <p class="item__value">
+                        <span
+                          class="due-status ml-1"
+                          [class.due-status--success]="nextInstallment.installment.status === 0"
+                          [class.due-status--warning]="nextInstallment.installment.status === 1"
+                          [class.due-status--error]="nextInstallment.installment.status === 2"
+                        >
+                          {{ nextInstallment?.dueDays }}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <mat-accordion class="accordion-details">
           <mat-expansion-panel class="mat-elevation-z">
