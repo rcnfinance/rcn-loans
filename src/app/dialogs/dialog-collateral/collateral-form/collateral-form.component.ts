@@ -343,7 +343,7 @@ export class CollateralFormComponent implements OnInit {
     if (!this.loading) {
       return 'Deposit';
     }
-    return 'Depositing...';
+    return 'Depositing';
   }
 
   /**
@@ -354,6 +354,6 @@ export class CollateralFormComponent implements OnInit {
     if (!this.loading) {
       return 'Withdraw';
     }
-    return 'Withdrawing...';
+    return 'Withdrawing';
   }
 }

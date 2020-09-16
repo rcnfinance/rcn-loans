@@ -16,7 +16,7 @@
       }
     }
     &--installments {
-      margin-top: 25px;
+      margin-top: 3px;
       .item__wrapper {
         max-width: 237px;
         padding: 11px 20px;
@@ -50,7 +50,7 @@
           }
         }
         &--expanded {
-          max-width: 850px; // approached dialog with
+          max-width: 850px;
           .item__wrapper-details {
             opacity: 1;
             max-height: 100px;
@@ -75,7 +75,12 @@
       }
       &--installments {
         .item__wrapper {
-          margin-top: -20px;
+          &--expanded {
+            max-height: 62px;
+            .item__wrapper-details {
+              margin-top: -20px;
+            }
+          }
         }
       }
     }
