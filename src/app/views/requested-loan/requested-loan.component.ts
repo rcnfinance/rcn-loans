@@ -100,10 +100,20 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load loans
+   * Sort loans
+   * @param sort Order by
    */
-  async loadLoans() {
-    const loans: Loan[] = await this.contractsService.getRequests();
+  async sortLoans(sort: string) {
+    this.spinner.show(this.pageId);
+    await this.loadLoans(sort);
+  }
+
+  /**
+   * Load loans
+   * @param sort Order by
+   */
+  async loadLoans(sort?: string) {
+    const loans: Loan[] = await this.contractsService.getRequests(sort);
     const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
     const filteredLoans: Loan[] = this.loanTypeService.filterLoanByType(loans, ALLOWED_TYPES);
 

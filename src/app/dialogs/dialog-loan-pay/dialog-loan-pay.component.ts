@@ -1,11 +1,15 @@
-import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { timer } from 'rxjs';
 import * as BN from 'bn.js';
-import { Loan } from '../../models/loan.model';
-import { Utils } from '../../utils/utils';
+import { environment } from './../../../environments/environment';
+import { Installment } from '../../interfaces/installment';
+import { Loan } from './../../models/loan.model';
+import { Utils } from './../../utils/utils';
 // App services
-import { ContractsService } from '../../services/contracts.service';
+import { ContractsService } from './../../services/contracts.service';
+import { InstallmentsService } from './../../services/installments.service';
 import { Web3Service } from './../../services/web3.service';
 
 @Component({
@@ -14,11 +18,11 @@ import { Web3Service } from './../../services/web3.service';
   styleUrls: ['./dialog-loan-pay.component.scss']
 })
 export class DialogLoanPayComponent implements OnInit {
-
   loan: Loan;
   shortLoanId: string;
   loading: boolean;
   form: FormGroup;
+  explorerAddress: string = environment.network.explorer.address;
 
   account: string;
   shortAccount: string;
@@ -29,14 +33,18 @@ export class DialogLoanPayComponent implements OnInit {
   exchangeTooltip: string;
   pendingAmountRcn: string;
   payAmountRcn: string;
-
-  startProgress: boolean;
-  finishProgress: boolean;
+  txCost: string;
+  installmentsExpanded: boolean;
+  nextInstallment: {
+    installment: Installment,
+    payNumber: string,
+    dueDays: string
+  };
 
   constructor(
-    private cdRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<any>,
     private contractsService: ContractsService,
+    private installmentsService: InstallmentsService,
     private web3Service: Web3Service,
     @Inject(MAT_DIALOG_DATA) public data
   ) {
@@ -77,9 +85,7 @@ export class DialogLoanPayComponent implements OnInit {
   async loadAccount() {
     const web3: any = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
-
     this.account = web3.utils.toChecksumAddress(account);
-    this.shortAccount = Utils.shortAddress(this.account);
   }
 
   /**
@@ -96,6 +102,9 @@ export class DialogLoanPayComponent implements OnInit {
     this.shortLoanId =
       String(this.loan.id).startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
 
+    // load installments
+    this.loadInstallments();
+
     // set loan amount and rate
     const rate: BN = await this.getLoanRate();
     this.exchangeRcnWei = rate;
@@ -103,32 +112,15 @@ export class DialogLoanPayComponent implements OnInit {
     const RCN_DECIMALS = 18;
     this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** RCN_DECIMALS, 4);
     this.pendingAmountRcn = Utils.formatAmount(Number(this.exchangeRcn) * Number(this.pendingAmount), 4);
+
+    await this.loadTxCost();
   }
 
   /**
    * Method called when the transaction was completed
    */
-  endPay() {
-    this.finishProgress = true;
-    this.cdRef.detectChanges();
-  }
-
-  /**
-   * Show loading progress bar
-   */
-  showProgressbar() {
-    this.startProgress = true;
-    this.loading = true;
-  }
-
-  /**
-   * Hide progressbar and close dialog
-   */
-  hideProgressbar() {
-    this.startProgress = false;
-    this.finishProgress = false;
-    this.loading = false;
-
+  async endPay() {
+    await timer(1000).toPromise();
     this.dialogRef.close(true);
   }
 
@@ -169,15 +161,45 @@ export class DialogLoanPayComponent implements OnInit {
 
   private loadExchangeTooltip() {
     const loanCurrency: string = this.loan.currency.toString();
-    const oracle = this.loan.oracle;
+    const oracle = this.loan.oracle.address;
+    const urlOracle = environment.network.explorer.address.replace('${address}', oracle);
 
     if (loanCurrency !== 'RCN') {
-      this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
-      the ${ oracle } oracle.`;
+      this.exchangeTooltip = `<a href="${ urlOracle }" target="_blank">RCN/${ loanCurrency }</a> Oracle.`;
       return;
     }
     this.exchangeTooltip = null;
     return;
+  }
+
+  private async loadTxCost() {
+    this.txCost = null;
+
+    const txCost = (await this.getTxCost()) / 10 ** 18;
+    const rawEthUsd = await this.contractsService.latestAnswer();
+    const ethUsd = rawEthUsd / 10 ** 8;
+
+    this.txCost = Utils.formatAmount(txCost * ethUsd, 4);
+  }
+
+  /**
+   * Calculate gas price * estimated gas
+   * @return Tx cost
+   */
+  private async getTxCost() {
+    const amount = String(this.pendingAmountRcn).replace(/,/g, '');
+    if (!amount) {
+      return;
+    }
+
+    const RCN_DECIMALS = 18;
+    const amountInWei = Utils.getAmountInWei(Number(amount), RCN_DECIMALS).toString();
+
+    const gasPrice = await this.web3Service.web3.eth.getGasPrice();
+    const estimatedGas = await this.contractsService.payLoan(this.loan, amountInWei, true);
+    const gasLimit = Number(estimatedGas) * 110 / 100;
+    const txCost = gasLimit * gasPrice;
+    return txCost;
   }
 
   /**
@@ -189,5 +211,38 @@ export class DialogLoanPayComponent implements OnInit {
     const oracle: string = this.loan.oracle.address;
     const rate = await this.contractsService.getRate(oracle, currency.decimals);
     return rate;
+  }
+
+  /**
+   * Load next installment data
+   */
+  private async loadInstallments() {
+    const loan: Loan = this.loan;
+    const installment: Installment = await this.installmentsService.getCurrentInstallment(loan);
+    if (!installment) {
+      return;
+    }
+
+    const secondsInDay = 86400;
+    const addSuffix = (n: number): string => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
+    const payNumber = `${ installment.payNumber + addSuffix(installment.payNumber) } Pay`;
+    const dueDate: number = new Date(installment.dueDate).getTime() / 1000;
+    const nowDate: number = new Date().getTime() / 1000;
+    const daysLeft: number = Math.round((dueDate - nowDate) / secondsInDay);
+
+    let dueDays: string = Utils.formatDelta(dueDate - nowDate, 1);
+    if (daysLeft > 1) {
+      dueDays += ' left';
+    } else if (daysLeft === 1 || daysLeft === 0) {
+      dueDays += ' left';
+    } else {
+      dueDays += ' ago';
+    }
+
+    this.nextInstallment = {
+      payNumber,
+      dueDays,
+      installment
+    };
   }
 }

@@ -1,18 +1,12 @@
-@import '../../../scss/_variables';
-@import '../../../scss/fonts';
+@import './../../../scss/variables';
+@import './../../../scss/fonts';
+@import './../dialog';
 
 .dialog-content {
   .item {
-    &__subtitle {
-      @include styled-font('Raleway', 500, 12px);
-      text-transform: uppercase;
-    }
     &__rate {
       @include typography-subtitle(2);
       color: var(--app-color-gray-50);
-      &-currency {
-        font-weight: 400;
-      }
     }
     &__actions {
       button {
@@ -21,115 +15,49 @@
         margin-bottom: 15px;
       }
     }
-    &--description {
-      @include typography-headline(6);
-    }
-    &--entry {
-      .currency {
-        position: absolute;
-        z-index: 2;
-        right: 0;
-        bottom: -2px;
-        padding: 10px;
-        @include styled-font('Roboto', 400, 20px);
-        background: var(--app-color-gray-400);
-        color: white;
-        user-select: none;
-      }
-      input {
-        @include styled-font('Roboto', 900, 30px);
-        margin-top: -1.15em;
-      }
-      ::ng-deep label {
-        margin-top: -1.15em;
-        span {
-          @include styled-font('Roboto', 900, 30px);
+    &--installments {
+      margin-top: 3px;
+      .item__wrapper {
+        max-width: 237px;
+        padding: 11px 20px;
+        margin: 3px 0 10px;
+        border: 1px solid var(--app-color-gray-100);
+        border-radius: 3px;
+        transition: .3s;
+        cursor: pointer;
+        &-button {
+          svg {
+            font-size: .9em;
+            margin-bottom: 1px;
+            margin-right: 8px;
+          }
+          span {
+            @include styled-font('Roboto', 400, 12px);
+          }
         }
-        .mat-placeholder-required {
-          display: none;
+        &-details {
+          opacity: 0;
+          max-height: 0;
+          color: #BABABA;
+          transition-delay: 0;
+          transition-duration: 0;
+          .item__subtitle {
+            padding: 0 0 4px;
+            @include styled-font('Roboto', 400, 12px);
+          }
+          .item__value {
+            @include styled-font('Roboto', 700, 12px);
+          }
         }
-      }
-    }
-    &--amount {
-      .item__value {
-        margin: 12px 0;
-        &-amount {
-          @include typography-headline(4);
-        }
-        &-currency {
-          @include styled-font('Roboto', 400, 20px);
-        }
-      }
-      .item__message {
-        background: var(--app-color-gray-500);
-        @include styled-font('Roboto', 400, 10px);
-        padding: 10px 13px;
-        margin-top: 10px;
-        border-radius: 2px;
-        line-height: 17px;
-        &--success {
-          color: var(--app-color-green);
-        }
-        &--warning {
-          color: var(--app-color-orange);
-        }
-      }
-    }
-  }
-}
-
-.dialog-divisor {
-  background: var(--app-color-gray-600);
-  border-bottom: 1px solid var(--app-color-gray-100);
-
-  &__content {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    @extend %roboto-regular;
-    color: $gray2;
-    i {
-      font-size: 1.5em;
-    }
-  }
-}
-
-.dialog-footer {
-  align-items: center;
-  @extend %roboto-regular;
-
-  &__label {
-    text-align: center;
-    color: $gray2;
-  }
-  &__buttons {
-    text-align: right;
-    margin-top: 25px;
-
-    app-pay-button {
-      ::ng-deep a {
-        width: 100%;
-      }
-    }
-  }
-}
-
-@media (min-width: 768px){
-  .dialog-padding {
-    padding: 30px 42px 10px;
-  }
-  .dialog-footer {
-    &__label {
-      text-align: left;
-    }
-    &__buttons {
-      margin-top: 0;
-      app-pay-button {
-        ::ng-deep a {
-          width: auto;
+        &--expanded {
+          max-width: 850px;
+          .item__wrapper-details {
+            opacity: 1;
+            max-height: 100px;
+            margin-top: 13px;
+            transition-delay: .1s;
+            transition-duration: .3s;
+          }
         }
       }
     }
@@ -137,31 +65,21 @@
 }
 
 @media (min-width: 992px) {
-  .dialog {
-    max-width: 800px;
-    .dialog-content {
-      .item {
-        &__actions {
-          button {
-            margin-top: 0;
-            margin-bottom: 25px;
-          }
+  .dialog-content {
+    .item {
+      &__actions {
+        button {
+          margin-top: 0;
+          margin-bottom: 27px;
         }
-        &--entry {
-          .item__rate {
-            margin-top: -6px;
-            margin-bottom: 20px;
-          }
-        }
-        &--amount {
-          .item__value {
-            margin-bottom: 0;
-          }
-          .item__rate {
-            margin-top: 11px;
-          }
-          .item__message {
-            margin-top: 20px;
+      }
+      &--installments {
+        .item__wrapper {
+          &--expanded {
+            max-height: 62px;
+            .item__wrapper-details {
+              margin-top: -20px;
+            }
           }
         }
       }

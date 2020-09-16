@@ -1,5 +1,25 @@
 # Changelog
 
+## **0.2.4** Boggart 👻
+
+### Feature:
+- Implements the order loans feature
+- New dialogs UI with more details
+- Estimate TX Cost
+- New loading button with progressbar
+- Show next installment in the payment dialog
+
+### Enhancement:
+- Optimizes load times and requests by partially deprecating basalt
+- Remove unused Collateral WETH approve
+- Header UI improvements
+- Dialog wallet UI improvements
+- Logout UX improvements
+
+### Fix:
+- Allow to redeem expired collateral
+- Fix installment indicator color
+
 ## **0.2.3** Boggart 👻
 
 ### Feature:

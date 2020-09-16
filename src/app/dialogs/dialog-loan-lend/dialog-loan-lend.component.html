@@ -2,30 +2,15 @@
 </app-dialog-header>
 
 <mat-dialog-content class="dialog">
-
-  <ng-container *ngIf="startProgress">
-    <app-infinite-progress-bar
-      [start]="true"
-      [end]="finishProgress"
-      (finish)="hideProgressbar()"
-    >
-    </app-infinite-progress-bar>
-  </ng-container>
-
-  <div class="col-sm-12 dialog-padding">
-    <div class="title main-h3">
-      You're about to fund the {{ shortLoanId }} loan. Please select your
-      lending currency.
-    </div>
-    <div class="margintop50"></div>
-    <div class="row">
-      <div class="col-sm-12 col-md-3 title main-h6">
-        <div class="row title-3">
-          LENDING CURRENCY
-        </div>
-        <div class="row">
+  <div class="container">
+    <div class="dialog-content">
+      <div class="row">
+        <div class="item col-sm-12 col-md-3 title main-h6">
+          <div class="item__subtitle">
+            Lending currency
+          </div>
           <mat-form-field>
-            <mat-label *ngIf="!lendCurrency" id="label">
+            <mat-label class="item__select-label" *ngIf="!lendCurrency" id="label">
               Select Currency
             </mat-label>
             <mat-select [(value)]="lendCurrency" (selectionChange)="onChangeCurrency()">
@@ -42,134 +27,136 @@
             </mat-select>
           </mat-form-field>
         </div>
-      </div>
-      <div class="col-sm-1"></div>
-      <div class="col-sm-8">
-        <div class="small-table-row row">
-          <div class="col title-3 --auto pl-0 uppercase">
-            Lend
-          </div>
-          <div class="col-sm-1 no-gutters --auto"></div>
-          <div class="col title-3 --auto uppercase">
-            Receive
-          </div>
-        </div>
-        <div class="margintop15"></div>
-        <div class="small-table-row --highlight row">
-          <div class="col --auto no-pad-left --data-margin data-style">
-            <span>
-              {{ lendAmount }}
-            </span>
-            <span class="data--currency-style">
-              {{ lendCurrency || '-' }}
-            </span>
-          </div>
-          <div class="col-sm-1 no-gutters --auto"></div>
-          <div class="col --auto --data-margin data-style">
-            <span>
-              {{ lendExpectedReturn }}
-            </span>
-            <span class="data--currency-style">
-              {{ lendCurrency ? 'RCN' : '-' }}
-            </span>
-            <div
-              class="d-inline"
-              matTooltip="This return is calculated using current exchange rates and may vary as a result of their fluctuations."
-              *ngIf="lendCurrency"
-            >
-              <i class="fas fa-exclamation-triangle margin-left triangle"></i>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-8 item">
+          <div class="small-table-row d-flex">
+            <div class="item__subtitle col --auto pl-0">
+              Lend
+            </div>
+            <div class="col-sm-1 no-gutters --auto"></div>
+            <div class="item__subtitle col --auto">
+              Receive
             </div>
           </div>
-        </div>
-        <div class="margintop10"></div>
-        <div class="small-table-row row">
-          <div class="col title-2 --auto no-pad-left --data-margin baseline">
-            <div class="--auto">
-              <span class="--lend-amount">
-                {{ loanAmount }}
+          <div class="margintop15"></div>
+          <div class="small-table-row --highlight">
+            <div class="col --auto no-pad-left --data-margin data-style">
+              <span>
+                {{ lendAmount }}
               </span>
-              <span class="margin-left">
-                {{ loan.currency }}
+              <span class="data--currency-style">
+                {{ lendCurrency || '-' }}
               </span>
             </div>
-          </div>
-          <div class="col-sm-1 no-gutters --auto vertical-center">
-            <i class="fas fa-arrow-right"></i>
-          </div>
-          <div class="col title-2 --auto --data-margin wrap baseline">
-            <div class="--auto wrap end">
-              <span id="label" class="--return-amount">
-                {{ loanExpectedReturn }}
+            <div class="col-sm-1 no-gutters --auto"></div>
+            <div class="col --auto --data-margin data-style">
+              <span>
+                {{ lendExpectedReturn }}
               </span>
-              <span class="margin-left">
-                {{ loan.currency }}
+              <span class="data--currency-style">
+                {{ lendCurrency ? 'RCN' : '-' }}
               </span>
               <div
                 class="d-inline"
-                matTooltip="This return is not affected by exchange rate fluctuations."
+                matTooltip="This return is calculated using current exchange rates and may vary as a result of their fluctuations."
+                *ngIf="lendCurrency"
               >
-                <i class="fas fa-check-circle check margin-left"></i>
+                <i class="fas fa-exclamation-triangle margin-left triangle"></i>
+              </div>
+            </div>
+          </div>
+          <div class="margintop10"></div>
+          <div class="small-table-row d-flex">
+            <div class="col title-2 --auto no-pad-left --data-margin baseline">
+              <div class="--auto">
+                <span class="--lend-amount mr-2" [innerHTML]="loanAmount">
+                </span>
+                <span class="--lend-currency" [innerHTML]="loan.currency">
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-1 no-gutters --auto vertical-center">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+            <div class="col title-2 --auto --data-margin wrap baseline">
+              <div class="--auto wrap end">
+                <span
+                  id="label"
+                  class="--return-amount mr-2"
+                  [innerHTML]="loanExpectedReturn"
+                >
+                </span>
+                <span class="--return-currency" [innerHTML]="loan.currency">
+                </span>
+                <div
+                  class="d-inline"
+                  matTooltip="This return is not affected by exchange rate fluctuations."
+                >
+                  <i class="fas fa-check-circle check margin-left"></i>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="margintop-30 mobile"></div>
-  <div class="margintop50"></div>
-  <div class="mobile"></div>
-
-  <div class="exchange">
-    <div>
-      <div class="rate d-flex align-items-center padding-2">
-        <span class="mr-1">
-          Exchange Rate 1 {{ loan.currency }}
-        </span>
-        <span class="mr-1" *ngIf="loan.currency.toString() !== 'RCN'">
-          = {{ exchangeRcn }} RCN
-        </span>
-        <span *ngIf="exchangeToken && loan.currency.toString() !== lendCurrency">
-          = {{ exchangeToken }} {{ lendCurrency }}
-        </span>
-        <ng-container *ngIf="exchangeTooltip">
-          <i
-            class="material-icons ml-2"
-            [matTooltip]="exchangeTooltip"
+      <mat-accordion class="accordion-details">
+        <mat-expansion-panel class="mat-elevation-z">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              More details
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="accordion-details__item" *ngIf="exchangeTooltips?.length">
+            <i class="fas fa-exchange-alt"></i>
+            <span class="mr-1">
+              Exchange Rate 1 {{ loan.currency }}
+            </span>
+            <span class="mr-1" *ngIf="loan.currency.toString() !== 'RCN'">
+              = {{ exchangeRcn }} RCN
+            </span>
+            <span *ngIf="exchangeToken && loan.currency.toString() !== lendCurrency">
+              = {{ exchangeToken }} {{ lendCurrency }}
+            </span>
+          </div>
+          <div class="accordion-details__item">
+            <i class="fas fa-arrows-alt-h"></i>
+            <span>
+              Tx Cost: {{ txCost ? (txCost + ' USD') : '-' }}
+            </span>
+          </div>
+          <div
+            class="accordion-details__item"
+            *ngFor="let exchangeTooltip of exchangeTooltips"
           >
-            info
-          </i>
-        </ng-container>
-      </div>
+            <i class="fas fa-info-circle"></i>
+            <span [innerHTML]="exchangeTooltip"></span>
+          </div>
+          <div class="accordion-details__item">
+            <i class="fas fa-wallet"></i>
+            <span>
+              Lending from the
+              <a
+                [href]="explorerAddress.replace('${address}', account)"
+                target="_blank"
+              >
+                {{ account | formatAddress }}
+              </a>
+              address.
+            </span>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
   </div>
-
-  <div class="margintop20"></div>
-
-  <div class="dialog-footer row padding justify-content-between align-items-center">
-    <div class=" col-sm-12 col-md-6 inline account">
-      Lending from the address {{ account }}.
-    </div>
-    <div class="col-sm-12 col-md-6 px-0">
-      <div class="row justify-content-end no-gutters">
-        <div class="col-sm-12 col-md-3">
-          <!-- TODO: implement [disabled] -->
-          <app-lend-button
-            [loan]="loan"
-            [lendToken]="lendToken"
-            (startLend)="showProgressbar()"
-            (endLend)="finishProgress = true"
-            (closeDialog)="closeDialog()"
-            *ngIf="canLend"
-          ></app-lend-button>
-        </div>
-        <div class="d-none d-md-block col-sm-0 col-md-3 ml-2">
-          <app-close-button></app-close-button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="margintop20"></div>
 </mat-dialog-content>
+
+<mat-dialog-actions class="dialog-footer d-flex justify-content-end">
+  <app-lend-button
+    [loan]="loan"
+    [lendToken]="lendToken"
+    (endLend)="endLend()"
+    (closeDialog)="closeDialog()"
+    *ngIf="canLend"
+  ></app-lend-button>
+  <app-close-button class="d-none d-md-inline"></app-close-button>
+</mat-dialog-actions>
