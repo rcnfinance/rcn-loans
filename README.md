@@ -1,7 +1,20 @@
-# rcn.loans dApp
+# RCN | Credit Marketplace
 [![CircleCI](https://circleci.com/gh/ripio/rcn-loans/tree/master.svg?style=shield)](https://circleci.com/gh/ripio/rcn-loans/tree/master)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
+RCN is an open-source global credit network that connects lenders, borrowers and loan originators on the blockchain to create frictionless, transparent and borderless debt markets.
+
+The RCN Credit Marketplace allows users to lend DeFi & CeFi Loans, borrow P2P Loans and manage it all in one place.
+
+The Credit Marketplace can be accesed from [rcn.market](https://rcn.market).
+
+
+<img src="src/assets/marketplace.png" width="80%">
+
+
+
+
+## Development information
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli).
 
 ## Development server
 
