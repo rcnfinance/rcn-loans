@@ -7,6 +7,8 @@
   [loading]="addPendingTx || withdrawPendingTx"
   [account]="account"
   [shortLoanId]="shortLoanId"
+  [startProgress]="startProgress"
+  [finishProgress]="finishProgress"
   (submitAdd)="addCollateral($event)"
   (submitWithdraw)="withdrawCollateral($event)"
 >
