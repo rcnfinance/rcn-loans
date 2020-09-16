@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Inject, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import * as BN from 'bn.js';
 import { Loan } from '../../models/loan.model';
 import { Collateral } from '../../models/collateral.model';
@@ -74,6 +74,9 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
         this.subscriptionAccount.unsubscribe();
       } catch (e) { }
     }
+    if (this.txSubscription) {
+      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackCollateralTx(tx));
+    }
   }
 
   /**
@@ -109,6 +112,20 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
   retrievePendingTx() {
     this.addPendingTx = this.txService.getLastPendingAddCollateral(this.collateral);
     this.withdrawPendingTx = this.txService.getLastPendingWithdrawCollateral(this.collateral);
+
+    if (!this.txSubscription) {
+      this.txSubscription = true;
+      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackCollateralTx(tx));
+    }
+  }
+
+  /**
+   * Track tx
+   */
+  trackCollateralTx(tx: Tx) {
+    if (this.collateralService.isCurrentCollateralTx(tx, this.collateral.id)) {
+      this.endCollateral();
+    }
   }
 
   /**
@@ -198,16 +215,18 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
   /**
    * Method called when the transaction was completed
    */
-  endAdd() {
+  async endCollateral() {
     this.finishProgress = true;
     this.cdRef.detectChanges();
+
+    await timer(1000).toPromise();
+    this.dialogRef.close();
   }
 
   /**
    * Show loading progress bar
    */
   showProgressbar() {
-    this.trackProgressbar();
     this.startProgress = true;
     this.retrievePendingTx();
   }
@@ -220,20 +239,6 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     this.finishProgress = false;
     this.retrievePendingTx();
     this.dialogRef.close();
-  }
-
-  /**
-   * Track progressbar value
-   */
-  trackProgressbar() {
-    if (!this.txSubscription) {
-      this.txSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => {
-        if (this.collateralService.isCurrentCollateralTx(tx, this.collateral.id)) {
-          this.finishProgress = true;
-        }
-      });
-    }
   }
 
   /**
