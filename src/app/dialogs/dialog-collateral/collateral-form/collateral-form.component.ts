@@ -313,7 +313,7 @@ export class CollateralFormComponent implements OnInit {
     const rawEthUsd = await this.contractsService.latestAnswer();
     const ethUsd = rawEthUsd / 10 ** 8;
 
-    this.txCost = Utils.formatAmount(txCost * ethUsd, 4);
+    this.txCost = Utils.formatAmount(txCost * ethUsd);
   }
 
   /**
