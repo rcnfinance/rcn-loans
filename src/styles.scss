@@ -21,15 +21,15 @@ body {
   background-color: var(--app-color-gray-900);
   &::-webkit-scrollbar { width: 1.2em; }
   &::-webkit-scrollbar-thumb {
-    color: $gray6;
-    background-color: $gray6;
+    color: var(--app-color-gray-600);
+    background-color: var(--app-color-gray-600);
     background-clip: content-box;
     border: 4px solid transparent;
     border-radius: 10px;
     box-shadow: inset 0 0 0 10px;
     &:hover{
-      background-color: $gray5;
-      color: $gray5;
+      background-color: var(--app-color-gray-400);
+      color: var(--app-color-gray-400);
     }
   }
   &::-webkit-scrollbar-track {
