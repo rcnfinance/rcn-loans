@@ -276,6 +276,9 @@ td {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
+  &::-webkit-scrollbar { width: 1.2em; height: 0; }
+  &::-webkit-scrollbar-corner { background-color: transparent; }
+  &::-webkit-scrollbar-button { width: 0; height: 0; display: none; }
 }
 .table-responsive > .table-bordered {
   border: 0;
