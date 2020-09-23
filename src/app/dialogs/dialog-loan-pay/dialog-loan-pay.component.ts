@@ -227,7 +227,7 @@ export class DialogLoanPayComponent implements OnInit {
     const addSuffix = (n: number): string => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
     const payNumber = `${ installment.payNumber + addSuffix(installment.payNumber) } Pay`;
     const dueDate: number = new Date(installment.dueDate).getTime() / 1000;
-    const nowDate: number = new Date().getTime() / 1000;
+    const nowDate: number = Math.floor(new Date().getTime() / 1000);
     const daysLeft: number = Math.round((dueDate - nowDate) / secondsInDay);
 
     let dueDays: string = Utils.formatDelta(dueDate - nowDate, 1);
