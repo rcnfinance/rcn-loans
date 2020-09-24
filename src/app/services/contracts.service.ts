@@ -679,21 +679,6 @@ export class ContractsService {
     });
   }
 
-  async withdrawFundsBasalt(basaltIdLoans: number[]): Promise<string> {
-    const account = await this.web3Service.getAccount();
-    const web3 = this.web3Service.opsWeb3;
-
-    return new Promise((resolve, reject) => {
-      this.loadAltContract(web3, this._rcnEngine).methods.withdrawalList(
-        basaltIdLoans,
-        account
-      )
-      .send({ from: account })
-      .on('transactionHash', (hash: string) => resolve(hash))
-      .on('error', (err) => reject(err));
-    });
-  }
-
   async withdrawFundsDiaspore(diasporeIdLoans: number[]): Promise<string> {
     const account = await this.web3Service.getAccount();
     const web3 = this.web3Service.opsWeb3;
