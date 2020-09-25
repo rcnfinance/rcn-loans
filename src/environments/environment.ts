@@ -8,8 +8,7 @@ export enum Agent {
   MortgageCreator,
   MortgageManager,
   RipioArsCreator,
-  RipioUsdCreator,
-  WenanceCreator
+  RipioUsdCreator
 }
 
 declare let require: any;
@@ -110,8 +109,7 @@ export const environment = {
     ongoing: '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3'
   },
   dir: {
-    '0xf7c5e867e739f5508c63c8ab22f39c44b9cac0b5': Agent.RipioArsCreator,
-    '0xc521961b2536e2c0ab595aae25a572bfbaf7d955': Agent.WenanceCreator
+    '0xf7c5e867e739f5508c63c8ab22f39c44b9cac0b5': Agent.RipioArsCreator
   },
   filterCurrencies: [
     'RCN',
