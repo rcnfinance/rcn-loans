@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as BN from 'bn.js';
 
-import { Loan, LoanType, Oracle, Network } from '../models/loan.model';
+import { Loan, LoanType, Oracle } from '../models/loan.model';
 import { LoanCurator } from './../utils/loan-curator';
 import { LoanUtils } from './../utils/loan-utils';
 import { environment, Agent } from '../../environments/environment';
@@ -778,7 +778,7 @@ export class ContractsService {
     let totalDiaspore = 0;
 
     loans.forEach(loan => {
-      if (loan.debt && loan.debt.balance > 0 && loan.network === Network.Diaspore) {
+      if (loan.debt && loan.debt.balance > 0) {
         totalDiaspore += loan.debt.balance;
         pendingDiasporeLoans.push(loan.id);
       }

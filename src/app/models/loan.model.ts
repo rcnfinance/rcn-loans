@@ -3,10 +3,6 @@ import { Collateral } from './collateral.model';
 
 export enum Status { Request, Ongoing, Paid, Destroyed, Expired, Indebt }
 
-export enum Network {
-  Diaspore = 4
-}
-
 export enum LoanType {
   Unknown,
   UnknownWithCollateral,
@@ -16,7 +12,6 @@ export enum LoanType {
 
 export class Descriptor {
   constructor(
-    public network: Network,
     public firstObligation: number,
     public totalObligation: number,
     public duration: number,
@@ -29,7 +24,6 @@ export class Descriptor {
 
 export class Model {
   constructor(
-    public network: Network,
     public address: string,
     public paid: number,
     public nextObligation: number,
@@ -41,7 +35,6 @@ export class Model {
 
 export class Oracle {
   constructor(
-    public network: Network,
     public address: string,
     public currency: string,
     public code: string
@@ -51,7 +44,6 @@ export class Oracle {
 
 export class Debt {
   constructor(
-    public network: Network,
     public id: string,
     public model: Model,
     public balance: number,
@@ -74,7 +66,6 @@ export class Config {
 
 export class Loan {
   constructor(
-    public network: Network,
     public id: string,
     public address: string,
     public amount: number,

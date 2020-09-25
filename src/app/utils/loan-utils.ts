@@ -1,4 +1,4 @@
-import { Loan, Network, Oracle, Descriptor, Debt, Config, Status, Model } from '../models/loan.model';
+import { Loan, Oracle, Descriptor, Debt, Config, Status, Model } from '../models/loan.model';
 import { Collateral } from '../models/collateral.model';
 import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
 import { Utils } from './utils';
@@ -58,14 +58,12 @@ export class LoanUtils {
     if (loanData.oracle !== Utils.address0x) {
       const currency = loanData.currency ? Utils.hexToAscii(loanData.currency.replace(/^[0x]+|[0]+$/g, '')) : '';
       oracle = new Oracle(
-        Network.Diaspore,
         loanData.oracle,
         currency,
         loanData.currency
       );
     } else {
       oracle = new Oracle(
-        Network.Diaspore,
         loanData.oracle,
         'RCN',
         loanData.currency
@@ -77,7 +75,6 @@ export class LoanUtils {
     let config: Config;
 
     descriptor = new Descriptor(
-      Network.Diaspore,
       Number(loanData.descriptor.first_obligation),
       loanData.descriptor.total_obligation,
       Number(loanData.descriptor.duration),
@@ -99,10 +96,8 @@ export class LoanUtils {
       const debtBalance = debtInfo.debt_balance;
       const owner = debtInfo.owner;
       debt = new Debt(
-        Network.Diaspore,
         loanData.id,
         new Model(
-          Network.Diaspore,
           loanData.model,
           paid,
           nextObligation,
@@ -156,7 +151,6 @@ export class LoanUtils {
     }
 
     return new Loan(
-      Network.Diaspore,
       loanData.id,
       engine,
       Number(loanData.amount),
