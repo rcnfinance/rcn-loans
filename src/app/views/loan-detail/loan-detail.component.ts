@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
 // App Models
-import { Loan, Status, Network, LoanType } from './../../models/loan.model';
+import { Loan, Status, LoanType } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
 import { Collateral, Status as CollateralStatus } from '../../models/collateral.model';
 import { Installment } from '../../interfaces/installment';
@@ -314,7 +314,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   private loadDetail() {
-    const loan: Loan = this.loan;
     const currency = this.loan.currency;
 
     switch (this.loan.status) {
@@ -341,16 +340,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       case Status.Ongoing:
       case Status.Paid:
         const dueDate: string = this.formatTimestamp(this.loan.debt.model.dueTime);
-        let lendDate: string;
-        let deadline: string;
-
-        if (loan.network === Network.Basalt) {
-          lendDate = this.formatTimestamp(this.loan.debt.model.dueTime - this.loan.descriptor.duration);
-          deadline = dueDate;
-        } else {
-          lendDate = this.formatTimestamp(this.loan.config.lentTime);
-          deadline = this.formatTimestamp(this.loan.config.lentTime + this.loan.descriptor.duration);
-        }
+        const lendDate: string = this.formatTimestamp(this.loan.config.lentTime);
+        const deadline: string = this.formatTimestamp(this.loan.config.lentTime + this.loan.descriptor.duration);
 
         const currentInterestRate: string = Utils.formatAmount(
           this.loan.status === Status.Indebt ? this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate,
@@ -379,9 +370,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.dueDate = dueDate;
 
         // Load status data
-        const basaltPaid = this.loan.network === Network.Basalt ? currency.fromUnit(this.loan.debt.model.paid) : 0;
         this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
-        this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation) - basaltPaid);
+        this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation));
         this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
         break;
 
@@ -389,7 +379,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         break;
     }
 
-    this.isDiaspore = this.loan.network === Network.Diaspore;
+    this.isDiaspore = true;
 
     if (this.isDiaspore) {
       this.loadInstallments();

@@ -36,9 +36,6 @@ export const environment = {
   gaTracking: 'UA-158285508-1',
   apiCountry : 'https://ipcountry-api.rcn.loans',
   rcnApi: {
-    basalt: {
-      v1: 'https://rnode.rcn.loans/v1/'
-    },
     diaspore: {
       v4: `${ RCN_API_DIASPORE }/v4/`,
       v5: `${ RCN_API_DIASPORE }/v5/`
@@ -58,8 +55,6 @@ export const environment = {
   },
   contracts: {
     rcnToken: RCN_TOKEN,
-    basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
-    engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
     oracleFactory: '0x1101c52fc25dc6d2691cec4b06569cef3c83933c',
     diaspore: {
       debtEngine: '0x80db22675dad70e44b64029510778583187faddb',

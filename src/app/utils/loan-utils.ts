@@ -1,7 +1,6 @@
 import { Loan, Network, Oracle, Descriptor, Debt, Config, Status, Model } from '../models/loan.model';
 import { Collateral } from '../models/collateral.model';
 import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
-import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
 import { Utils } from './utils';
 import { environment, Agent } from './../../environments/environment';
 
@@ -41,119 +40,6 @@ export class LoanUtils {
     const creator: Agent = environment.dir[loan.creator.toLowerCase()];
     const cosignerAddress: string = loan.isRequest ? environment.cosigners[creator] : loan.cosigner;
     return cosignerAddress;
-  }
-
-  /**
-   * Create basalt loan model from the api response
-   * @param loanData Loan data obtained from API
-   * @return Loan
-   */
-  static createBasaltLoan(loanData: LoanApiBasalt): Loan {
-    const loanCurrencyWith0x = '0x';
-    const engine: string = environment.contracts.basaltEngine;
-    const firstPayment: number = loanData.cancelable_at;
-
-    loanData.amount = Number(loanData.amount);
-    loanData.punitory_interest = Number(loanData.punitory_interest);
-    loanData.interest_timestamp = Number(loanData.interest_timestamp);
-    loanData.paid = Number(loanData.paid);
-    loanData.interest_rate = Number(loanData.interest_rate);
-    loanData.interest_rate_punitory = Number(loanData.interest_rate_punitory);
-    loanData.due_time = Number(loanData.due_time);
-    loanData.dues_in = Number(loanData.dues_in);
-
-    let oracle: Oracle;
-    if (loanData.oracle !== Utils.address0x) {
-      oracle = new Oracle(
-        Network.Basalt,
-        loanData.oracle,
-        Utils.hexToAscii(loanData.currency.replace(/^[0x]+|[0]+$/g, '')),
-        loanData.currency
-      );
-    } else {
-      oracle = new Oracle(
-        Network.Diaspore,
-        loanData.oracle,
-        'RCN',
-        loanCurrencyWith0x.concat(loanData.currency)
-      );
-    }
-
-    // build debt if not a request
-    let debt: Debt;
-
-    if (loanData.status !== Status.Request) {
-      // run "basalt" model, emulate Diaspore model
-      let pending;
-      let deltaTime;
-      let newInterest = loanData.interest;
-      let newPunitoryInterest = loanData.punitory_interest;
-      const timestamp = new Date().getTime() / 1000;
-      const endNonPunitory = Math.min(timestamp, loanData.due_time);
-      if (endNonPunitory > loanData.interest_timestamp) {
-        deltaTime = endNonPunitory - loanData.interest_timestamp;
-
-        if (loanData.paid < loanData.amount) {
-          pending = loanData.amount - loanData.paid;
-        } else {
-          pending = 0;
-        }
-
-        newInterest += this.calculateInterest(deltaTime, loanData.interest_rate, pending);
-      }
-
-      if (timestamp > loanData.due_time) {
-        const startPunitory = Math.max(loanData.due_time, loanData.interest_timestamp);
-        deltaTime = timestamp - startPunitory;
-        const debtAmount = loanData.amount + newInterest;
-        const pendingAmount = Math.min(debtAmount, (debtAmount + newPunitoryInterest) - loanData.paid);
-        newPunitoryInterest += this.calculateInterest(deltaTime, loanData.interest_rate_punitory, pendingAmount);
-      }
-      const totalAmount = loanData.amount + newInterest + newPunitoryInterest;
-
-      debt = new Debt(
-        Network.Basalt,
-        loanData.index.toString(),
-        new Model(
-          Network.Basalt,
-          engine,
-          loanData.paid,
-          totalAmount,
-          totalAmount,
-          totalAmount,
-          loanData.due_time
-        ),
-        loanData.lender_balance,
-        engine,
-        loanData.lender,
-        oracle
-      );
-    }
-
-    return new Loan(
-      Network.Basalt,
-      loanData.index.toString(),
-      engine,
-      loanData.amount,
-      oracle,
-      new Descriptor(
-        Network.Basalt,
-        ((loanData.amount * 100000 * firstPayment) / loanData.interest_rate) + loanData.amount,
-        ((loanData.amount * 100000 * loanData.dues_in) / loanData.interest_rate) + loanData.amount,
-        loanData.dues_in,
-        Utils.formatInterest(loanData.interest_rate),
-        Utils.formatInterest(loanData.interest_rate_punitory),
-        1,
-        1
-      ),
-      loanData.borrower,
-      loanData.creator,
-      loanData.status,
-      loanData.expiration_requests,
-      '',
-      loanData.cosigner !== Utils.address0x ? loanData.cosigner : undefined,
-      debt
-    );
   }
 
   /**

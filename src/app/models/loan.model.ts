@@ -4,7 +4,6 @@ import { Collateral } from './collateral.model';
 export enum Status { Request, Ongoing, Paid, Destroyed, Expired, Indebt }
 
 export enum Network {
-  Basalt = 2,
   Diaspore = 4
 }
 

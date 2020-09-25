@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { aggregate } from '@makerdao/multicall';
 import { environment } from '../../environments/environment';
 import { ApiResponse } from './../interfaces/api-response';
 import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
-import { LoanApiBasalt } from './../interfaces/loan-api-basalt';
 import { CollateralApi } from './../interfaces/collateral-api';
-import { Loan, Network, Status } from '../models/loan.model';
+import { Loan, Status } from '../models/loan.model';
 import { Collateral } from '../models/collateral.model';
 import { LoanUtils } from '../utils/loan-utils';
-import { Utils } from '../utils/utils';
 // App services
 import { Web3Service } from './web3.service';
 import { EventsService } from '../services/events.service';
@@ -38,7 +35,7 @@ export class ApiService {
    */
   async getRequests(sort?: string): Promise<Loan[]> {
     const now: number = (await this.web3Service.web3.eth.getBlock('latest')).timestamp;
-    const apiUrl: string = this.getApiUrl(Network.Diaspore, 'v5');
+    const apiUrl: string = this.getApiUrl('v5');
     let allRequestLoans: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
@@ -55,7 +52,7 @@ export class ApiService {
       }
 
       const filterStatus = [Status.Destroyed, Status.Expired];
-      const loansRequests = await this.getAllCompleteLoans(data.content as LoanApiDiaspore[], Network.Diaspore);
+      const loansRequests = await this.getAllCompleteLoans(data.content as LoanApiDiaspore[]);
       const filteredLoans = this.excludeLoansWithStatus(
         filterStatus,
         null,
@@ -77,7 +74,7 @@ export class ApiService {
 
     for (const response of responses) {
       const filterStatus = [Status.Destroyed, Status.Expired];
-      const loansRequests = await this.getAllCompleteLoans(response.content, Network.Diaspore);
+      const loansRequests = await this.getAllCompleteLoans(response.content);
       const notExpiredResquestLoans = this.excludeLoansWithStatus(
         filterStatus,
         null,
@@ -95,7 +92,7 @@ export class ApiService {
    * @return Collateral array
    */
   async getCollateral(): Promise<Collateral[]> {
-    const apiUrl: string = this.getApiUrl(Network.Diaspore);
+    const apiUrl: string = this.getApiUrl();
     let apiCollaterals: CollateralApi[] = [];
     let collaterals: Collateral[] = [];
     let apiCalls = 0;
@@ -142,7 +139,7 @@ export class ApiService {
     sort: string
   ): Promise<Loan[]> {
     const web3 = this.web3Service.web3;
-    const apiUrl: string = this.getApiUrl(Network.Diaspore, 'v5');
+    const apiUrl: string = this.getApiUrl('v5');
 
     const requestFilters = (apiPage: number) =>
       `page=${ apiPage }&${ loansType === 'lender' ? 'owner' : loansType }=${ address }`;
@@ -161,7 +158,7 @@ export class ApiService {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
 
-      const activeLoans = await this.getAllCompleteLoans(data.content, Network.Diaspore);
+      const activeLoans = await this.getAllCompleteLoans(data.content);
       allLoansOfAddress = allLoansOfAddress.concat(activeLoans);
       page++;
     } catch (err) {
@@ -174,7 +171,7 @@ export class ApiService {
       urls.push(eachUrl);
     }
     const responses = await this.getAllUrls(urls);
-    const allApiLoans = await this.getAllApiLoans(responses, Network.Diaspore);
+    const allApiLoans = await this.getAllApiLoans(responses);
 
     for (const apiLoans of allApiLoans) {
       allLoansOfAddress = allLoansOfAddress.concat(apiLoans);
@@ -188,11 +185,10 @@ export class ApiService {
 
   /**
    * Gets all loans that were lent and there status is ongoing. Meaning that they are not canceled or finished.
-   * @param network Selected network
    * @return Loans array
    */
-  async getActiveLoans(network: Network): Promise<Loan[]> {
-    const apiUrl: string = this.getApiUrl(network);
+  async getActiveLoans(): Promise<Loan[]> {
+    const apiUrl: string = this.getApiUrl();
     let allActiveLoans: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
@@ -203,14 +199,7 @@ export class ApiService {
         apiCalls = Math.ceil(data.meta.resource_count / data.meta.page_size);
       }
 
-      let activeLoans = await this.getAllCompleteLoans(
-        data.content as LoanApiBasalt[] | LoanApiDiaspore[],
-        network
-      );
-      if (network === Network.Basalt) {
-        const filterStatus = [Status.Request, Status.Destroyed, Status.Expired];
-        activeLoans = this.excludeLoansWithStatus(filterStatus, null, activeLoans);
-      }
+      const activeLoans = await this.getAllCompleteLoans(data.content as LoanApiDiaspore[]);
 
       allActiveLoans = allActiveLoans.concat(activeLoans);
       page++;
@@ -224,14 +213,8 @@ export class ApiService {
       urls.push(url);
     }
 
-    let responses = await this.getAllUrls(urls);
-
-    if (network === Network.Basalt) {
-      const filterStatus = [Status.Request, Status.Destroyed, Status.Expired];
-      responses = this.excludeLoansWithStatus(filterStatus, responses);
-    }
-
-    const allApiLoans = await this.getAllApiLoans(responses, network);
+    const responses = await this.getAllUrls(urls);
+    const allApiLoans = await this.getAllApiLoans(responses);
 
     for (const apiLoans of allApiLoans) {
       allActiveLoans = allActiveLoans.concat(apiLoans);
@@ -248,7 +231,7 @@ export class ApiService {
    * @return Loans array
    */
   async getPaginatedActiveLoans(page = 0, pageSize = 20, sort?: string): Promise<Loan[]> {
-    const apiUrl: string = this.getApiUrl(Network.Diaspore, 'v5');
+    const apiUrl: string = this.getApiUrl('v5');
     let allActiveLoans: Loan[] = [];
     let apiCalls = 0;
 
@@ -265,7 +248,7 @@ export class ApiService {
         return [];
       }
 
-      const activeLoans = await this.getAllCompleteLoans(data.content, Network.Diaspore);
+      const activeLoans = await this.getAllCompleteLoans(data.content);
       allActiveLoans = allActiveLoans.concat(activeLoans);
 
       return allActiveLoans;
@@ -276,22 +259,14 @@ export class ApiService {
 
   /**
    * Gets loan by ID
-   * @param network Selected network
+   * @param id Loan ID
    * @return Loan
    */
-  async getLoan(
-    id: string,
-    network: Network
-  ): Promise<Loan> {
-    const apiUrl: string = this.getApiUrl(network, 'v5');
+  async getLoan(id: string): Promise<Loan> {
+    const apiUrl: string = this.getApiUrl('v5');
     const data: any = await this.http.get(apiUrl.concat(`loans/${ id }`)).toPromise();
-    let apiLoan: any = data.content;
-
-    if (network === Network.Basalt) {
-      apiLoan = (await this.getMulticallData([apiLoan]))[0];
-    }
-
-    const loan = await this.completeLoanModels(apiLoan, network);
+    const apiLoan: any = data.content;
+    const loan = await this.completeLoanModels(apiLoan);
     try {
       return loan;
     } catch {
@@ -304,7 +279,7 @@ export class ApiService {
    * @return Promise boolean
    */
   async isSynchronized(): Promise<boolean> {
-    const apiUrl: string = this.getApiUrl(Network.Diaspore, 'v5');
+    const apiUrl: string = this.getApiUrl('v5');
     const { meta }: any = await this.http.get(apiUrl.concat(`loans?page_size=1`)).toPromise();
     const apiBlock = meta.lastBlockPulled;
     const web3: any = this.web3Service.web3;
@@ -322,7 +297,7 @@ export class ApiService {
    * @return Collateral
    */
   async getCollateralByLoan(loanId: string) {
-    const apiUrl: string = this.getApiUrl(Network.Diaspore);
+    const apiUrl: string = this.getApiUrl();
     const data: any = await this.http.get(apiUrl.concat(`collaterals?debt_id=${ loanId }`)).toPromise();
 
     try {
@@ -358,17 +333,13 @@ export class ApiService {
   /**
    * Parse loans data obtained from API and set loan models
    * @param apiLoans Loans data obtained from API
-   * @param network Selected network
    * @return Loans array
    */
-  private async getAllCompleteLoans(apiLoans: any[], network: Network) {
+  private async getAllCompleteLoans(apiLoans: any[]) {
     try {
-      if (network === Network.Basalt) {
-        apiLoans = await this.getMulticallData(apiLoans);
-      }
       const loans = await Promise.all(
         apiLoans.map(
-          loan => this.completeLoanModels(loan, network)
+          loan => this.completeLoanModels(loan)
         )
       );
       return (loans);
@@ -381,6 +352,7 @@ export class ApiService {
 
   /**
    * Create collateral models
+   * @param apiCollaterals Raw collaterals
    */
   private getAllCompleteCollaterals(apiCollaterals: CollateralApi[]): Collateral[] {
     const collaterals: Collateral[] = [];
@@ -405,107 +377,15 @@ export class ApiService {
   }
 
   /**
-   * Check basalt loans and complete information not provided by the api
-   * @param apiLoans Loans data obtained from API
-   * @return API Loans with information completed
-   */
-  private async getMulticallData(apiLoans: LoanApiBasalt[]) {
-    const query = [];
-    const target: string = environment.contracts.basaltEngine;
-    const SEPARATOR = '--';
-    const filterKeys = {
-      'interest': {
-        method: 'getInterest(uint256)(uint256)',
-        handler: (hexValue) => parseInt(hexValue, 16)
-      },
-      'interest_rate': {
-        method: 'getInterestRate(uint256)(uint256)',
-        handler: (hexValue) => parseInt(hexValue, 16)
-      },
-      'punitory_interest': {
-        method: 'getPunitoryInterest(uint256)(uint256)',
-        handler: (hexValue) => parseInt(hexValue, 16)
-      },
-      'interest_timestamp': {
-        method: 'getInterestTimestamp(uint256)(uint256)',
-        handler: (hexValue) => parseInt(hexValue, 16)
-      },
-      'cosigner': {
-        method: 'getCosigner(uint256)(uint256)',
-        handler: (hexValue) => hexValue
-      }
-    };
-
-    apiLoans.map((loan: LoanApiBasalt) => {
-      Object.keys(filterKeys).map(key => {
-        if (
-          !loan[key] ||
-          loan[key] === '0' ||
-          loan[key] === Utils.address0x
-        ) {
-          query.push({
-            target,
-            call: [
-              filterKeys[key].method,
-              loan.index
-            ],
-            returns: [
-              [`${ key + SEPARATOR + loan.index }`]
-            ]
-          });
-        }
-      });
-    });
-
-    if (!query.length) {
-      return apiLoans;
-    }
-
-    try {
-      const call = await aggregate(query, this.multicallConfig);
-      const callResults = {};
-
-      Object.keys(filterKeys).map(key => {
-        callResults[key] = {};
-      });
-      Object.keys(call.results).map(item => {
-        const splitItem: string[] = item.split(SEPARATOR);
-        const itemKey: string = splitItem[0];
-        const itemId: string = splitItem[1];
-        const hexValue: string = call.results[item]._hex;
-        if (callResults[itemKey]) {
-          callResults[itemKey][itemId] = filterKeys[itemKey].handler(hexValue);
-        }
-      });
-      apiLoans.map((loan: LoanApiBasalt) => {
-        const id: number = Number(loan.index);
-        Object.keys(callResults).map(key => {
-          if (callResults[key][id]) {
-            loan[key] = callResults[key][id];
-          }
-        });
-      });
-    } catch (err) {
-      this.eventsService.trackError(err);
-    } finally {
-      return apiLoans;
-    }
-  }
-
-  /**
    * Handle api loan response loading models
    * @param responses Api responses
-   * @param network Selected network
    * @return Loans array
    */
-  private async getAllApiLoans(responses: any[], network: Network) {
+  private async getAllApiLoans(responses: any[]) {
     try {
       const activeLoans = await Promise.all(
         responses.map(
-          response => this.getAllCompleteLoans(
-            response.content as LoanApiBasalt[] | LoanApiDiaspore[],
-            network
-          )
+          response => this.getAllCompleteLoans(response.content as LoanApiDiaspore[])
         )
       );
       return (activeLoans);
@@ -540,81 +420,53 @@ export class ApiService {
   /**
    * Get loans with the model prepared for the dapp.
    * @param loan Loan data obtained from API
-   * @param network Selected network
    * @return Loan
    */
-  private async completeLoanModels(
-    loan: any,
-    network: Network
-  ): Promise<Loan> {
-    switch (network) {
-      case Network.Basalt:
-        return LoanUtils.createBasaltLoan(loan as LoanApiBasalt);
+  private async completeLoanModels(loan: any): Promise<Loan> {
+    let debtInfo: any;
+    let config: any;
 
-      case Network.Diaspore:
-        let debtInfo: any;
-        let config: any;
-
-        if (!loan.open && !loan.canceled && loan.status) {
-          debtInfo = await this.getModelDebtInfo(loan.id);
-          config = await this.getModelConfig(loan.id);
-        }
-
-        return LoanUtils.createDiasporeLoan(
-          loan as LoanApiDiaspore,
-          debtInfo,
-          config
-        );
-
-      default:
-        break;
+    if (!loan.open && !loan.canceled && loan.status) {
+      debtInfo = await this.getModelDebtInfo(loan.id);
+      config = await this.getModelConfig(loan.id);
     }
+
+    return LoanUtils.createDiasporeLoan(
+      loan as LoanApiDiaspore,
+      debtInfo,
+      config
+    );
   }
 
   /**
    * Get diaspore loans model debt info if exists
-   * @param loan Loan data obtained from API
+   * @param loanId Loan ID
    * @return Model debt info obtained from API
    */
   private async getModelDebtInfo(loanId: string) {
-    const diasporeApi = this.getApiUrl(Network.Diaspore);
+    const diasporeApi = this.getApiUrl();
     const { content }: any = await this.http.get(diasporeApi.concat(`model_debt_info/${ loanId }`)).toPromise();
     return content;
   }
 
   /**
    * Get diaspore loans model configs
-   * @param loan Loan data obtained from API
+   * @param loanId Loan ID
    * @return Config obtained from API
    */
   private async getModelConfig(loanId: string) {
-    const diasporeApi = this.getApiUrl(Network.Diaspore);
+    const diasporeApi = this.getApiUrl();
     const { content }: any = await this.http.get(diasporeApi.concat(`configs/${ loanId }`)).toPromise();
     return content.data;
   }
 
   /**
    * Return the api url according to the chosen network
-   * @param network Selected network
    * @param diasporeVersion API version
-   * @param basaltVersion API version
    * @return Api url
    */
-  private getApiUrl(
-    network: Network,
-    diasporeVersion?: 'v4' | 'v5',
-    basaltVersion?: 'v1'
-  ) {
-    switch (network) {
-      case Network.Diaspore:
-        return environment.rcnApi.diaspore[diasporeVersion || 'v4'];
-
-      case Network.Basalt:
-        return environment.rcnApi.basalt[basaltVersion || 'v1'];
-
-      default:
-        break;
-    }
+  private getApiUrl(diasporeVersion?: 'v4' | 'v5') {
+    return environment.rcnApi.diaspore[diasporeVersion || 'v4'];
   }
 
   /**

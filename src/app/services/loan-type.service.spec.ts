@@ -74,26 +74,4 @@ describe('LoanTypeService', () => {
     const result = service.getLoanType(loan);
     expect(result).toEqual(LoanType.Unknown);
   });
-
-  it('should return NFT collateral type', () => {
-    const creator: string = environment.contracts.decentraland.mortgageCreator;
-    const cosigner: string = environment.contracts.decentraland.mortgageManager;
-    const loan = new Loan(
-      LOAN_NETWORK,
-      LOAN_ID,
-      LOAN_ADDRESS,
-      LOAN_AMOUNT,
-      null,
-      null,
-      creator,
-      creator,
-      LOAN_STATUS,
-      LOAN_EXPIRATION,
-      LOAN_MODEL,
-      cosigner
-    );
-
-    const result = service.getLoanType(loan);
-    expect(result).toEqual(LoanType.NftCollateral);
-  });
 });

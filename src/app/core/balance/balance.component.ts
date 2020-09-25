@@ -16,9 +16,7 @@ import { Tx, Type, TxService } from '../../services/tx.service';
 export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   @Input() account: string;
 
-  private rcnAvailable: number;
-  private diasporeRcnAvailable: number;
-
+  rcnAvailable: number;
   diasporeLoansWithBalance: number[] = [];
   ongoingDiasporeWithdraw: Tx;
 
@@ -91,8 +89,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    */
   async loadWithdrawBalance() {
     const pendingWithdraws = await this.contractService.getPendingWithdraws();
-    this.diasporeRcnAvailable = pendingWithdraws[2] / 10 ** 18;
-    this.rcnAvailable = this.diasporeRcnAvailable;
+    this.rcnAvailable = pendingWithdraws[2] / 10 ** 18;
     this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadOngoingWithdraw();
     this.updateDisplay();
@@ -122,7 +119,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
-   * Withdraw basalt and diaspore funds
+   * Withdraw diaspore funds
    */
   async withdraw() {
     if (this.canWithdraw) {
