@@ -18,7 +18,7 @@ export class CommitsService {
     let commitsLoanManager: Commit[];
     let commitsDebtEngine: Commit[];
 
-    const apiDiaspore: string = environment.rcnApi.diaspore.v4;
+    const apiDiaspore: string = environment.rcnApi.v4;
     const urlLoanManagerCommits = `${ apiDiaspore }commits?id_loan=${ id }&page_size=100`;
     // TODO: add commits paginator
 

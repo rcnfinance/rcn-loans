@@ -15,12 +15,6 @@ import { EventsService } from '../services/events.service';
   providedIn: 'root'
 })
 export class ApiService {
-  installmentModelAddress = '0x2B1d585520634b4c7aAbD54D73D34333FfFe5c53';
-  multicallConfig = {
-    rpcUrl: environment.network.provider.url,
-    multicallAddress: environment.contracts.multicall
-  };
-
   constructor(
     private http: HttpClient,
     private web3Service: Web3Service,
@@ -35,7 +29,7 @@ export class ApiService {
    */
   async getRequests(sort?: string): Promise<Loan[]> {
     const now: number = (await this.web3Service.web3.eth.getBlock('latest')).timestamp;
-    const apiUrl: string = this.getApiUrl('v5');
+    const apiUrl: string = environment.rcnApi['v5'];
     let allRequestLoans: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
@@ -92,7 +86,7 @@ export class ApiService {
    * @return Collateral array
    */
   async getCollateral(): Promise<Collateral[]> {
-    const apiUrl: string = this.getApiUrl();
+    const apiUrl: string = environment.rcnApi['v4'];
     let apiCollaterals: CollateralApi[] = [];
     let collaterals: Collateral[] = [];
     let apiCalls = 0;
@@ -139,7 +133,7 @@ export class ApiService {
     sort: string
   ): Promise<Loan[]> {
     const web3 = this.web3Service.web3;
-    const apiUrl: string = this.getApiUrl('v5');
+    const apiUrl: string = environment.rcnApi['v5'];
 
     const requestFilters = (apiPage: number) =>
       `page=${ apiPage }&${ loansType === 'lender' ? 'owner' : loansType }=${ address }`;
@@ -188,7 +182,7 @@ export class ApiService {
    * @return Loans array
    */
   async getActiveLoans(): Promise<Loan[]> {
-    const apiUrl: string = this.getApiUrl();
+    const apiUrl: string = environment.rcnApi['v4'];
     let allActiveLoans: Loan[] = [];
     let apiCalls = 0;
     let page = 0;
@@ -231,7 +225,7 @@ export class ApiService {
    * @return Loans array
    */
   async getPaginatedActiveLoans(page = 0, pageSize = 20, sort?: string): Promise<Loan[]> {
-    const apiUrl: string = this.getApiUrl('v5');
+    const apiUrl: string = environment.rcnApi['v5'];
     let allActiveLoans: Loan[] = [];
     let apiCalls = 0;
 
@@ -263,7 +257,7 @@ export class ApiService {
    * @return Loan
    */
   async getLoan(id: string): Promise<Loan> {
-    const apiUrl: string = this.getApiUrl('v5');
+    const apiUrl: string = environment.rcnApi['v5'];
     const data: any = await this.http.get(apiUrl.concat(`loans/${ id }`)).toPromise();
     const apiLoan: any = data.content;
     const loan = await this.completeLoanModels(apiLoan);
@@ -279,7 +273,7 @@ export class ApiService {
    * @return Promise boolean
    */
   async isSynchronized(): Promise<boolean> {
-    const apiUrl: string = this.getApiUrl('v5');
+    const apiUrl: string = environment.rcnApi['v5'];
     const { meta }: any = await this.http.get(apiUrl.concat(`loans?page_size=1`)).toPromise();
     const apiBlock = meta.lastBlockPulled;
     const web3: any = this.web3Service.web3;
@@ -297,7 +291,7 @@ export class ApiService {
    * @return Collateral
    */
   async getCollateralByLoan(loanId: string) {
-    const apiUrl: string = this.getApiUrl();
+    const apiUrl: string = environment.rcnApi['v4'];
     const data: any = await this.http.get(apiUrl.concat(`collaterals?debt_id=${ loanId }`)).toPromise();
 
     try {
@@ -444,7 +438,7 @@ export class ApiService {
    * @return Model debt info obtained from API
    */
   private async getModelDebtInfo(loanId: string) {
-    const diasporeApi = this.getApiUrl();
+    const diasporeApi = environment.rcnApi['v4'];
     const { content }: any = await this.http.get(diasporeApi.concat(`model_debt_info/${ loanId }`)).toPromise();
     return content;
   }
@@ -455,18 +449,9 @@ export class ApiService {
    * @return Config obtained from API
    */
   private async getModelConfig(loanId: string) {
-    const diasporeApi = this.getApiUrl();
+    const diasporeApi = environment.rcnApi['v4'];
     const { content }: any = await this.http.get(diasporeApi.concat(`configs/${ loanId }`)).toPromise();
     return content.data;
-  }
-
-  /**
-   * Return the api url according to the chosen network
-   * @param diasporeVersion API version
-   * @return Api url
-   */
-  private getApiUrl(diasporeVersion?: 'v4' | 'v5') {
-    return environment.rcnApi.diaspore[diasporeVersion || 'v4'];
   }
 
   /**

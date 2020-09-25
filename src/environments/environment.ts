@@ -35,10 +35,8 @@ export const environment = {
   gaTracking: 'UA-122615331-2',
   apiCountry: 'https://ipcountry-api.rcn.loans',
   rcnApi: {
-    diaspore: {
-      v4: `${ RCN_API_DIASPORE }/v4/`,
-      v5: `${ RCN_API_DIASPORE }/v5/`
-    }
+    v4: `${ RCN_API_DIASPORE }/v4/`,
+    v5: `${ RCN_API_DIASPORE }/v5/`
   },
   network: {
     id: 3,
@@ -75,7 +73,6 @@ export const environment = {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
       mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1'
     },
-    multicall: '0xa457b5b859573e8eb758b6c2bfd4ae3042b422fd',
     chainlink: {
       EACAggregatorProxy: {
         ethUsd: '0x30b5068156688f818cea0874b580206dfe081a03'
