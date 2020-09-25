@@ -17,7 +17,7 @@ const p = require('../../package.json') as any;
 
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
-const RCN_API_DIASPORE = 'https://diaspore-ropsten-rnode.rcn.loans';
+const RCN_API = 'https://diaspore-ropsten-rnode.rcn.loans';
 const RIPIO_COSIGNER = '0x5afc9fd47a5e064a7d1407c942878c4c0e3784a6';
 
 export const environment = {
@@ -35,8 +35,8 @@ export const environment = {
   gaTracking: 'UA-122615331-2',
   apiCountry: 'https://ipcountry-api.rcn.loans',
   rcnApi: {
-    v4: `${ RCN_API_DIASPORE }/v4/`,
-    v5: `${ RCN_API_DIASPORE }/v5/`
+    v4: `${ RCN_API }/v4/`,
+    v5: `${ RCN_API }/v5/`
   },
   network: {
     id: 3,

@@ -12,15 +12,12 @@ import { Collateral, Status as CollateralStatus } from '../../models/collateral.
 import { Installment } from '../../interfaces/installment';
 // App Utils
 import { Utils } from './../../utils/utils';
-import { Currency } from './../../utils/currencies';
 // App Services
 import { TitleService } from '../../services/title.service';
 import { ContractsService } from './../../services/contracts.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
 import { BrandingService } from './../../services/branding.service';
-import { CollateralService } from './../../services/collateral.service';
-import { CurrenciesService } from './../../services/currencies.service';
 import { Type } from './../../services/tx.service';
 import { EventsService } from './../../services/events.service';
 import { LoanTypeService } from './../../services/loan-type.service';
@@ -38,9 +35,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   viewDetail = undefined;
   userAccount: string;
   brand: Brand;
-
-  diasporeData = [];
-  isDiaspore: boolean;
 
   loanConfigData = [];
   loanStatusData = [];
@@ -99,8 +93,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private identityService: IdentityService,
     private web3Service: Web3Service,
     private brandingService: BrandingService,
-    private currenciesService: CurrenciesService,
-    private collateralService: CollateralService,
     private eventsService: EventsService,
     private loanTypeService: LoanTypeService,
     private installmentsService: InstallmentsService,
@@ -289,20 +281,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   private async loadCollateral() {
     const { collateral } = this.loan;
     this.collateral = collateral;
-
-    if (!collateral) {
-      return;
-    }
-
-    const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
-    const collateralDecimals = new Currency(collateralCurrency.symbol).decimals;
-    this.collateralAmount = Utils.formatAmount(collateral.amount as any / 10 ** collateralDecimals);
-    this.collateralAsset = collateralCurrency.symbol;
-
-    const liquidationRatio = this.collateralService.rawToPercentage(Number(collateral.liquidationRatio));
-    const balanceRatio = this.collateralService.rawToPercentage(Number(collateral.balanceRatio));
-    this.liquidationRatio = Utils.formatAmount(liquidationRatio);
-    this.balanceRatio = Utils.formatAmount(balanceRatio);
   }
 
   private defaultDetail(): string {
@@ -379,12 +357,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         break;
     }
 
-    this.isDiaspore = true;
-
-    if (this.isDiaspore) {
-      this.loadInstallments();
-    }
-
+    this.loadInstallments();
     this.loadUserActions();
   }
 
@@ -394,35 +367,28 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     }
 
     switch (this.loan.status) {
-      case Status.Request: {
+      case Status.Request:
         this.loanStatusRequest();
         break;
-      }
-      case Status.Ongoing: {
+      case Status.Ongoing:
         this.loanOnGoingorIndebt();
         break;
-      }
-      case Status.Paid: {
+      case Status.Paid:
         this.invalidActions();
         this.checkCanRedeem();
         break;
-      }
-      case Status.Expired: {
+      case Status.Expired:
         this.invalidActions();
         this.checkCanRedeem();
         break;
-      }
-      case Status.Destroyed: {
+      case Status.Destroyed:
         this.invalidActions();
         break;
-      }
-      case Status.Indebt: {
+      case Status.Indebt:
         this.loanOnGoingorIndebt();
         break;
-      }
-      default: {
+      default:
         break;
-      }
     }
   }
 
