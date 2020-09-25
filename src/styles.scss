@@ -169,6 +169,16 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
       overflow: hidden;
     }
   }
+  &--progress {
+    position: relative;
+    app-infinite-progress-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 
 // Colors
@@ -241,7 +251,12 @@ mat-tooltip-component .mat-tooltip {
   background: rgba(black, .6);
 }
 
-@media (max-width: 768px){.cdk-overlay-pane{max-width: 100vw !important;}}
+@media (max-width: 768px){
+  .cdk-overlay-pane{
+    width: 100vw !important;
+    height: 100% !important;
+  }
+}
 
   //Sidebar
 mat-sidenav-container.mat-drawer-container {
@@ -330,8 +345,8 @@ mat-sidenav-container.mat-drawer-container {
   .mat-dialog-content{
     margin: 0;
     padding: 0;
-    max-height: calc(100vh - 70px);
-    height: calc(100vh - 70px);
+    max-height: none;
+    padding-bottom: 80px;
   }
 }
 
@@ -409,7 +424,7 @@ mat-form-field{
 
 .mat-form-field-underline{ color: var(--app-color-secondary); }
 .mat-select-arrow{ color: var(--app-color-secondary); }
-.mat-select-placeholder, .mat-select-value-text { color: #EDEDED; @extend %font-medium;}
+.mat-select-placeholder, .mat-select-value-text { color: #EDEDED; @extend %font-bold;}
 .mat-select-content{
   background-color: #101010;
   .mat-option{
@@ -450,6 +465,7 @@ mat-form-field{
       min-width: 550px;
       height: auto;
       max-height: 65vh;
+      padding-bottom: 0;
     }
   }
   //Sidebar
@@ -464,14 +480,8 @@ mat-form-field{
 @media (min-width: 992px) {
   .cdk-global-overlay-wrapper {
     .mat-dialog-content {
-      min-width: 750px;
+      width: 808px;
     }
-  }
-}
-
-@media (min-width: 1200px){
-  .mat-dialog-content {
-    min-width: 850px;
   }
 }
 
@@ -631,6 +641,19 @@ mat-form-field{
   .navmobile-menu{
     opacity: 1;
     z-index: 9999;
+  }
+}
+
+// due status span
+.due-status {
+  &--success {
+    color: var(--app-color-green);
+  }
+  &--warning {
+    color: var(--app-color-orange);
+  }
+  &--error {
+    color: var(--app-color-red);
   }
 }
 

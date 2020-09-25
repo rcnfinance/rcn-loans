@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { timer } from 'rxjs';
 import * as BN from 'bn.js';
 import { environment } from '../../../environments/environment';
 import { Loan, Status } from '../../models/loan.model';
@@ -31,15 +32,15 @@ export class DialogLoanLendComponent implements OnInit {
   lendToken: string;
   exchangeRcn: string;
   exchangeToken: string;
-  exchangeTooltip: string;
+  exchangeTooltips: string[];
+  txCost: string;
   // general
   account: string;
   canLend: boolean;
   availableCurrencies: CurrencyItem[];
+  explorerAddress: string = environment.network.explorer.address;
 
   loading: boolean;
-  startProgress: boolean;
-  finishProgress: boolean;
 
   constructor(
     private contractsService: ContractsService,
@@ -65,7 +66,7 @@ export class DialogLoanLendComponent implements OnInit {
 
     // set user account
     const account: string = await this.web3Service.getAccount();
-    this.account = Utils.shortAddress(account);
+    this.account = account;
 
     // set loan amount and rate
     const web3: any = this.web3Service.web3;
@@ -94,6 +95,7 @@ export class DialogLoanLendComponent implements OnInit {
     try {
       await this.calculateAmounts();
       this.loadExchangeTooltip();
+      this.loadTxCost();
     } catch (e) {
       this.eventsService.trackError(e);
       throw Error('error calculating currency amounts');
@@ -161,35 +163,42 @@ export class DialogLoanLendComponent implements OnInit {
   loadExchangeTooltip() {
     const loanCurrency: string = this.loan.currency.toString();
     const lendCurrency: string = this.lendCurrency;
-    const oracle = this.loan.oracle;
+    const oracle = this.loan.oracle.address;
     const tokenConverter = environment.contracts.converter.uniswapConverter;
+    const urlOracle = environment.network.explorer.address.replace('${address}', oracle);
+    const urlTokenConverter = environment.network.explorer.address.replace('${address}', tokenConverter);
+    this.exchangeTooltips = [];
 
     if (!this.exchangeToken) {
       if (loanCurrency !== 'RCN') {
-        this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
-        the ${ oracle } oracle.`;
-        return;
+        this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">RCN/${ loanCurrency }</a> Oracle.`);
       }
-      this.exchangeTooltip = null;
       return;
     }
 
     if (loanCurrency !== 'RCN' && lendCurrency !== 'RCN') {
-      this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
-      the ${ oracle } oracle. The RCN/${ lendCurrency } exchange rate for this loan is calculated
-      using the ${ tokenConverter } token converter contract.`;
+      this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">RCN/${ loanCurrency }</a> Oracle.`);
+      this.exchangeTooltips.push(`<a href="${ urlTokenConverter }" target="_blank">RCN/${ lendCurrency }</a> Token Converter.`);
       return;
     }
     if (loanCurrency !== 'RCN') {
-      this.exchangeTooltip = `The RCN/${ loanCurrency } exchange rate for this loan is calculated using
-      the ${ oracle } oracle.`;
+      this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">RCN/${ loanCurrency }</a> Oracle.`);
       return;
     }
     if (lendCurrency !== 'RCN') {
-      this.exchangeTooltip = `The RCN/${ lendCurrency } exchange rate for this loan is calculated using
-      the ${ tokenConverter } token converter contract.`;
+      this.exchangeTooltips.push(`<a href="${ urlTokenConverter }" target="_blank">RCN/${ lendCurrency }</a> Token Converter.`);
       return;
     }
+  }
+
+  async loadTxCost() {
+    this.txCost = null;
+
+    const txCost = (await this.getTxCost()) / 10 ** 18;
+    const rawEthUsd = await this.contractsService.latestAnswer();
+    const ethUsd = rawEthUsd / 10 ** 8;
+
+    this.txCost = Utils.formatAmount(txCost * ethUsd);
   }
 
   /**
@@ -220,22 +229,49 @@ export class DialogLoanLendComponent implements OnInit {
   }
 
   /**
-   * Show loading progress bar
+   * Calculate gas price * estimated gas
+   * @return Tx cost
    */
-  showProgressbar() {
-    this.startProgress = true;
-    this.loading = true;
+  async getTxCost() {
+    const {
+      payableAmount,
+      tokenConverter,
+      lendToken,
+      required,
+      cosignerAddress,
+      cosignerLimit,
+      loanId,
+      oracleData,
+      cosignerData,
+      callbackData,
+      account
+    } = await this.contractsService.getLendParams(this.loan, this.lendToken);
+    const gasPrice = await this.web3Service.web3.eth.getGasPrice();
+    const estimatedGas = await this.contractsService.converterRampLend(
+      payableAmount,
+      tokenConverter,
+      lendToken,
+      required,
+      cosignerAddress,
+      cosignerLimit,
+      loanId,
+      oracleData,
+      cosignerData,
+      callbackData,
+      account,
+      true
+    );
+    const gasLimit = Number(estimatedGas) * 110 / 100;
+    const txCost = gasLimit * gasPrice;
+    return txCost;
   }
 
   /**
-   * Hide progressbar and close dialog
+   * Method called when the transaction was completed
    */
-  hideProgressbar() {
-    this.startProgress = false;
-    this.finishProgress = false;
-    this.loading = false;
-
-    this.dialogRef.close();
+  async endLend() {
+    await timer(1000).toPromise();
+    this.dialogRef.close(true);
   }
 
   /**

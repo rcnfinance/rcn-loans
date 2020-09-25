@@ -13,14 +13,13 @@ import {
   MatSnackBarHorizontalPosition
 } from '@angular/material';
 import * as BN from 'bn.js';
-import { environment, Agent } from '../../../environments/environment';
-import { Loan, Network, Status, LoanType } from './../../models/loan.model';
+import { environment } from '../../../environments/environment';
+import { Loan, Network, Status } from './../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 
 // App Services
 import { ContractsService } from './../../services/contracts.service';
-import { LoanTypeService } from './../../services/loan-type.service';
 import { TxService, Tx, Type } from './../../services/tx.service';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { Web3Service } from '../../services/web3.service';
@@ -52,6 +51,8 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   lendEnabled: Boolean;
   opPending = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  startProgress: boolean;
+  finishProgress: boolean;
 
   txSubscription: boolean;
 
@@ -61,7 +62,6 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     private web3Service: Web3Service,
     private countriesService: CountriesService,
     private eventsService: EventsService,
-    private loanTypeService: LoanTypeService,
     private walletConnectService: WalletConnectService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
@@ -90,6 +90,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
     if (this.pendingTx) {
       this.startLend.emit();
+      this.startProgress = true;
     }
 
     if (!this.txSubscription) {
@@ -106,6 +107,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       this.endLend.emit();
       this.web3Service.updateBalanceEvent.emit();
       this.txSubscription = false;
+      this.finishProgress = true;
     }
   }
 
@@ -209,7 +211,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    * If the validations were successful, manage the lending transaction
    * @param forze TODO - Force lend
    */
-  async handleLend(forze = false) {
+  private async handleLend(forze = false) {
     if (this.opPending && !forze) {
       return;
     }
@@ -217,126 +219,95 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     this.startOperation();
 
     try {
-      const oracleData = await this.contractsService.getOracleData(this.loan.oracle);
-      const web3: any = this.web3Service.web3;
-
-      // set input lend token
-      let lendToken: string = this.lendToken;
-      if (this.loan.network === Network.Basalt) {
-        lendToken = environment.contracts.rcnToken;
-      }
+      const {
+        payableAmount,
+        tokenConverter,
+        lendToken,
+        required,
+        cosignerAddress,
+        cosignerLimit,
+        loanId,
+        oracleData,
+        cosignerData,
+        callbackData,
+        account
+      } = await this.contractsService.getLendParams(this.loan, this.lendToken);
 
       // set value in specified token
       const balance: BN = await this.contractsService.getUserBalanceInToken(lendToken);
-      const required: BN = await this.contractsService.estimateLendAmount(this.loan, lendToken);
-      let contractAddress: string;
-      let payableAmount: string;
 
-      // set cosigner
-      const creator: Agent = environment.dir[this.loan.creator.toLowerCase()];
-      const cosignerLimit = '0'; // TODO: implement cosigner limit
-      let cosignerAddress: string;
-      let cosignerData: string;
-
-      const loan: Loan = this.loan;
-      if (this.loanTypeService.getLoanType(loan) === LoanType.UnknownWithCollateral) {
-        const { collateral } = loan;
-        cosignerAddress = environment.contracts.collateral.collateral;
-        cosignerData = Utils.toBytes32(web3.utils.toHex(collateral.id));
-      } else {
-        cosignerAddress = environment.cosigners[creator] || Utils.address0x;
-        cosignerData = '0x';
+      // validate balance amount
+      if (balance.lte(Utils.bn(required))) {
+        this.eventsService.trackEvent(
+          'show-insufficient-funds-lend',
+          Category.Account,
+          'loan ' + loanId,
+          Number(required)
+        );
+        const currency = environment.usableCurrencies.filter(token => token.address === lendToken)[0];
+        const decimals = Currency.getDecimals(currency.symbol);
+        this.showInsufficientFundsDialog(required, balance, currency.symbol, decimals);
+        return;
       }
+
+      let contractAddress: string;
 
       // set lend contract
       switch (lendToken) {
         case environment.contracts.rcnToken:
           contractAddress = this.loan.address;
           break;
-
         case environment.contracts.converter.ethAddress:
           contractAddress = environment.contracts.converter.converterRamp;
-          payableAmount = String(required);
           break;
-
         default:
           contractAddress = environment.contracts.converter.converterRamp;
           break;
       }
 
-      // validate balance amount
-      if (balance.gte(required)) {
-        let tx: string;
+      let tx: string;
 
-        // validate approve
-        const engineApproved = await this.contractsService.isApproved(contractAddress, lendToken);
-        if (!await engineApproved) {
-          this.showApproveDialog(contractAddress, this.lendToken);
-          return;
-        }
-
-        let account: string = await this.web3Service.getAccount();
-        account = web3.utils.toChecksumAddress(account);
-
-        switch (this.loan.network) {
-          case Network.Basalt:
-            tx = await this.contractsService.lendBasaltLoan(this.loan);
-            this.txService.registerLendTx(tx, environment.contracts.basaltEngine, this.loan);
-            break;
-
-          case Network.Diaspore:
-            if (lendToken === environment.contracts.rcnToken) {
-              tx = await this.contractsService.lendLoan(
-                cosignerAddress,
-                this.loan.id,
-                oracleData,
-                cosignerData,
-                '0x',
-                account
-              );
-            } else {
-              const tokenConverter = environment.contracts.converter.uniswapConverter;
-
-              tx = await this.contractsService.converterRampLend(
-                payableAmount,
-                tokenConverter,
-                lendToken,
-                String(required),
-                cosignerAddress,
-                cosignerLimit,
-                this.loan.id,
-                oracleData,
-                cosignerData,
-                '0x',
-                account
-              );
-            }
-            this.txService.registerLendTx(tx, environment.contracts.diaspore.loanManager, this.loan);
-            break;
-
-          default:
-            break;
-        }
-
-        this.eventsService.trackEvent(
-          'lend',
-          Category.Account,
-          'loan ' + this.loan.id
-        );
-
-        this.retrievePendingTx();
-      } else {
-        this.eventsService.trackEvent(
-          'show-insufficient-funds-lend',
-          Category.Account,
-          'loan ' + this.loan.id,
-          Number(required)
-        );
-
-        const currency = environment.usableCurrencies.filter(token => token.address === lendToken)[0];
-        const decimals = Currency.getDecimals(currency.symbol);
-        this.showInsufficientFundsDialog(required, balance, currency.symbol, decimals);
+      // validate approve
+      const engineApproved = await this.contractsService.isApproved(contractAddress, lendToken);
+      if (!await engineApproved) {
+        this.showApproveDialog(contractAddress, this.lendToken);
+        return;
       }
+
+      if (lendToken === environment.contracts.rcnToken) {
+        tx = await this.contractsService.lendLoan(
+          cosignerAddress,
+          this.loan.id,
+          oracleData,
+          cosignerData,
+          callbackData,
+          account
+        );
+      } else {
+        tx = await this.contractsService.converterRampLend(
+          payableAmount,
+          tokenConverter,
+          lendToken,
+          String(required),
+          cosignerAddress,
+          cosignerLimit,
+          this.loan.id,
+          oracleData,
+          cosignerData,
+          callbackData,
+          account
+        );
+      }
+
+      this.txService.registerLendTx(tx, environment.contracts.diaspore.loanManager, this.loan);
+
+      this.eventsService.trackEvent(
+        'lend',
+        Category.Account,
+        'loan ' + this.loan.id
+      );
+
+      this.retrievePendingTx();
     } catch (err) {
       // Don't show 'User denied transaction signature' error
       if (err.stack.indexOf('User denied transaction signature') < 0) {
@@ -353,7 +324,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   /**
    * Finish current lending operation
    */
-  finishOperation() {
+  private finishOperation() {
     console.info('Lend finished');
     this.opPending = false;
   }
@@ -361,7 +332,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   /**
    * Start lend operation
    */
-  startOperation() {
+  private startOperation() {
     console.info('Started lend');
     this.openSnackBar('Your transaction is being processed. This might take a few second');
     this.opPending = true;
@@ -370,7 +341,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   /**
    * Cancel or fail lend operation
    */
-  cancelOperation() {
+  private cancelOperation() {
     console.info('Cancel lend');
     this.openSnackBar('Hmm, It seems like your transaction has failed. Please try again.');
     this.opPending = false;
@@ -381,7 +352,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    * @param contract Contract address
    * @param token Token address
    */
-  showApproveDialog(contract: string, token: string = environment.contracts.rcnToken) {
+  private showApproveDialog(contract: string, token: string = environment.contracts.rcnToken) {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
     dialogRef.componentInstance.onlyAddress = contract;
     dialogRef.componentInstance.onlyToken = token;
@@ -401,8 +372,8 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    * @param currency Currency symbol
    * @param decimals Currency decimals
    */
-  async showInsufficientFundsDialog(
-    requiredInWei: BN,
+  private async showInsufficientFundsDialog(
+    requiredInWei: string,
     balanceInWei: BN,
     currency: string,
     decimals: number
@@ -420,6 +391,18 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     this.cancelOperation();
   }
 
+  /**
+   * Opens a snackbar with a message and an optional action
+   * @param message The message to show in the snackbar
+   * @param action The label for the snackbar action
+   */
+  private openSnackBar(message: string, action?: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+      horizontalPosition: this.horizontalPosition
+    });
+  }
+
   get enabled(): Boolean {
     return this.txService.getLastPendingLend(this.loan) === undefined;
   }
@@ -434,17 +417,4 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     }
     return 'Lending';
   }
-
-  /**
-   * Opens a snackbar with a message and an optional action
-   * @param message The message to show in the snackbar
-   * @param action The label for the snackbar action
-   */
-  openSnackBar(message: string, action?: string) {
-    this.snackBar.open(message, action, {
-      duration: 4000,
-      horizontalPosition: this.horizontalPosition
-    });
-  }
-
 }

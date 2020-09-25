@@ -48,7 +48,11 @@ export class CollateralService {
 
     const collateralPercentage: number =
       Number(collateralAmountInRcn.toString()) * 100 / Number(loanAmountInRcn.toString());
-    const collateralRatio: string = Utils.formatAmount(collateralPercentage);
+
+    const DECIMALS_TO_SHOW = 2;
+    const WITH_COMMAS = false;
+    const collateralRatio: string =
+      Utils.formatAmount(collateralPercentage, DECIMALS_TO_SHOW, WITH_COMMAS);
 
     return collateralRatio;
   }
@@ -95,6 +99,27 @@ export class CollateralService {
       (liquidationPrice as any / 10 ** loan.currency.decimals);
 
     return formattedLiquidationPrice;
+  }
+
+  /**
+   * Calculate current price
+   * @return Current price price in collateral amount
+   */
+  async calculateCurrentPrice(loan: Loan, collateral: Collateral): Promise<number> {
+    const { amount, token } = collateral;
+    const currency: CurrencyItem =
+      this.currenciesService.getCurrencyByKey('address', token.toLowerCase());
+    const collateralPercentage: string =
+      await this.calculateCollateralPercentage(loan, currency, amount);
+
+    const loanDebt =
+      loan.debt ? loan.debt.model.estimatedObligation : loan.descriptor.totalObligation;
+    const collateralAmount = new Currency(currency.symbol).fromUnit(amount);
+    const currentPrice = (Number(collateralPercentage) / 100 * loanDebt) / collateralAmount;
+    const formattedCurrentPrice: number =
+      (currentPrice as any / 10 ** loan.currency.decimals);
+
+    return formattedCurrentPrice;
   }
 
   /**

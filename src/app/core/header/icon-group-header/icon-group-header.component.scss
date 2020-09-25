@@ -4,7 +4,13 @@
   position: relative;
   .button{
     cursor: pointer;
-    &.active{i,svg{color: var(--app-color-primary);}};
+    &.active,
+    &:hover{
+      i,
+      svg{
+        color: var(--app-color-primary);
+      }
+    };
     i,
     svg{ font-size: 22px; @include transition(); }
     .available-notifications {
@@ -12,7 +18,7 @@
       align-items: center;
       justify-content: center;
       position: absolute;
-      right: 7em;
+      right: 5.5em;
       top: -5px;
       padding: 0 4px;
       font-size: 11px;
@@ -21,12 +27,5 @@
       @extend %roboto-regular;
       @include transition(all 0.1s ease-out);
     }
-  }
-  .separator{
-    display: inline-block;
-    width: 1px;
-    height: 25px;
-    background: var(--app-color-gray-50);
-    cursor: default;
   }
 }

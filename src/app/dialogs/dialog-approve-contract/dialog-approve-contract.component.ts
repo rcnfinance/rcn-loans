@@ -75,13 +75,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
   ];
   tokenApproves: Object[];
   assets: Contract[];
-  assetOperators: Operator[] = [
-    new Operator(
-      'Collateral WETH Manager',
-      environment.contracts.collateral.wethManager,
-      'transactions'
-    )
-  ];
+  assetOperators: Operator[] = []; // TODO: implement WETH manager
   assetApproves: Object[];
 
   startProgress: boolean;
@@ -332,6 +326,10 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
    * @return ERC721 array
    */
   private async loadAssets(): Promise<Contract[]> {
+    return;
+
+    // TODO: implement method
+    /*
     const assets: Contract[] = [];
     assets.push(
       new Contract('Collateral', environment.contracts.collateral.collateral)
@@ -361,6 +359,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
 
     this.assets = assets;
     return assets;
+    */
   }
 
   /**

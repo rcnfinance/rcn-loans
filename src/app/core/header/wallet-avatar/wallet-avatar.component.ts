@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { WalletLogo, WalletConnection } from './../../../interfaces/wallet.interface';
+import { WalletLogo, WalletConnection, WalletType } from './../../../interfaces/wallet.interface';
 // App Component
 import { DialogWalletSelectComponent } from './../../../dialogs/dialog-wallet-select/dialog-wallet-select.component';
 // App services
@@ -12,8 +12,8 @@ import { Web3Service } from './../../../services/web3.service';
   styleUrls: ['./wallet-avatar.component.scss']
 })
 export class WalletAvatarComponent implements OnInit, OnChanges {
-
   logo: string;
+  label: string;
 
   constructor(
     private dialog: MatDialog,
@@ -62,7 +62,21 @@ export class WalletAvatarComponent implements OnInit, OnChanges {
     const { wallet }: WalletConnection = JSON.parse(walletConnected);
     this.logo = WalletLogo[wallet];
 
-    return this.logo;
+    let label: string;
+    switch (wallet) {
+      case WalletType.Metamask:
+        label = 'MetaMask';
+        break;
+      case WalletType.WalletConnect:
+        label = 'WalletConnect';
+        break;
+      case WalletType.WalletLink:
+        label = 'WalletLink';
+        break;
+      default:
+        break;
+    }
+    this.label = label;
   }
 
 }

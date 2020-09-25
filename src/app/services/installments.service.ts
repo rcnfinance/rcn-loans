@@ -254,7 +254,9 @@ export class InstallmentsService {
       pays.map((pay: Pay) => totalPaid += pay.amount);
 
       const pendingAmount = amount - totalPaid;
-      if (isPrev && pendingAmount) {
+      const currentDate =
+        new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString();
+      if (isPrev && currentDate > dueDate && pendingAmount) {
         status = InstallmentStatus.OnDue;
       }
 

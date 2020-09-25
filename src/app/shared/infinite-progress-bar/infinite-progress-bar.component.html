@@ -1,4 +1,7 @@
-<div class="infinite-progress-bar">
+<div
+  class="infinite-progress-bar"
+  [ngClass]="'infinite-progress-bar--' + type"
+>
   <mat-progress-bar
     mode="determinate"
     [value]="progress"

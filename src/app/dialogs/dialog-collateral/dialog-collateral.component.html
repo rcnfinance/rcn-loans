@@ -1,24 +1,15 @@
 <app-dialog-header title="Collateral Adjusting">
 </app-dialog-header>
 
-<mat-dialog-content>
-
-  <ng-container *ngIf="startProgress">
-    <app-infinite-progress-bar
-      [start]="true"
-      [end]="finishProgress"
-      (finish)="hideProgressbar()"
-    >
-    </app-infinite-progress-bar>
-  </ng-container>
-  <app-collateral-form
-    [dialogType]="action"
-    [loan]="loan"
-    [loading]="addPendingTx || withdrawPendingTx"
-    [shortAccount]="shortAccount"
-    [shortLoanId]="shortLoanId"
-    (submitAdd)="addCollateral($event)"
-    (submitWithdraw)="withdrawCollateral($event)"
-  >
-  </app-collateral-form>
-</mat-dialog-content>
+<app-collateral-form
+  [dialogType]="action"
+  [loan]="loan"
+  [loading]="addPendingTx || withdrawPendingTx"
+  [account]="account"
+  [shortLoanId]="shortLoanId"
+  [startProgress]="startProgress"
+  [finishProgress]="finishProgress"
+  (submitAdd)="addCollateral($event)"
+  (submitWithdraw)="withdrawCollateral($event)"
+>
+</app-collateral-form>

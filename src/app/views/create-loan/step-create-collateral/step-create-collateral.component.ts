@@ -440,6 +440,6 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     if (tx.confirmed) {
       return 'Confirmed';
     }
-    return 'Confirming...';
+    return 'Confirming';
   }
 }

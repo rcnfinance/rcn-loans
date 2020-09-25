@@ -52,6 +52,15 @@ export class WalletConnectService {
   }
 
   /**
+   * Request wallet disconnection
+   * @return Successful
+   */
+  async disconnect(): Promise<void> {
+    this.storage.removeItem('walletConnected');
+    this.storageWalletConnected = null;
+  }
+
+  /**
    * Get actual wallet connected from the storage
    */
   get walletConnected(): WalletConnection {

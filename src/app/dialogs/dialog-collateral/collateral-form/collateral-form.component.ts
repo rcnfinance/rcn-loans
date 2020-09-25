@@ -2,16 +2,20 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { timer } from 'rxjs';
 import * as BN from 'bn.js';
-import { Utils } from '../../../utils/utils';
-import { Currency } from '../../../utils/currencies';
+import { environment } from './../../../../environments/environment';
+import { Utils } from './../../../utils/utils';
+import { Currency } from './../../../utils/currencies';
 // App models
-import { Loan } from '../../../models/loan.model';
-import { Collateral } from '../../../models/collateral.model';
+import { Loan } from './../../../models/loan.model';
+import { Collateral } from './../../../models/collateral.model';
 // App services
-import { EventsService } from '../../../services/events.service';
-import { CollateralService } from '../../../services/collateral.service';
-import { CurrenciesService, CurrencyItem } from '../../../services/currencies.service';
+import { Web3Service } from './../../../services/web3.service';
+import { EventsService } from './../../../services/events.service';
+import { ContractsService } from './../../../services/contracts.service';
+import { CollateralService } from './../../../services/collateral.service';
+import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
 
 enum DialogType {
   CollateralAdd = 'add',
@@ -24,21 +28,27 @@ enum DialogType {
   styleUrls: ['./collateral-form.component.scss']
 })
 export class CollateralFormComponent implements OnInit {
-
   @Input() dialogType: DialogType;
   @Input() loan: Loan;
   @Input() loading: boolean;
-  @Input() shortAccount: string;
+  @Input() account: string;
   @Input() shortLoanId: string;
+  @Input() startProgress: boolean;
+  @Input() finishProgress: boolean;
   @Output() submitAdd = new EventEmitter<BN>();
   @Output() submitWithdraw = new EventEmitter<BN>();
 
+  explorerAddress: string = environment.network.explorer.address;
   form: FormGroup;
+  txCost: string;
+  currentAmount: string;
 
   constructor(
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
+    private web3Service: Web3Service,
     private eventsService: EventsService,
+    private contractsService: ContractsService,
     private collateralService: CollateralService,
     private currenciesService: CurrenciesService
   ) { }
@@ -51,6 +61,7 @@ export class CollateralFormComponent implements OnInit {
 
       this.spinner.show();
       this.calculateMaxWithdraw();
+      this.loadTxCost();
     } catch (err) {
       this.eventsService.trackError(err);
     } finally {
@@ -124,6 +135,7 @@ export class CollateralFormComponent implements OnInit {
         collateralRatio: new FormControl(null, Validators.required),
         currency: new FormControl(null, Validators.required),
         liquidationPrice: new FormControl(null, Validators.required),
+        currentPrice: new FormControl(null, Validators.required),
         formattedAmount: new FormControl(null, Validators.required),
         maxWithdraw: new FormControl(null, Validators.required)
       }),
@@ -152,6 +164,10 @@ export class CollateralFormComponent implements OnInit {
     const liquidationPrice = await this.collateralService.calculateLiquidationPrice(this.loan, loan.collateral);
     const currentLiquidationPrice = Utils.formatAmount(liquidationPrice, 4);
 
+    // set current price
+    const calculateCurrentPrice = await this.collateralService.calculateCurrentPrice(this.loan, loan.collateral);
+    const currentPrice = Utils.formatAmount(calculateCurrentPrice, 4);
+
     this.form.controls.formCollateral.patchValue({
       id,
       token,
@@ -163,13 +179,14 @@ export class CollateralFormComponent implements OnInit {
       balanceRatio: balancePercentage,
       collateralRatio: collateralPercentage,
       liquidationPrice: currentLiquidationPrice,
+      currentPrice: currentPrice,
       currency,
       formattedAmount
     });
 
     this.form.controls.formUi.valueChanges.subscribe(async (formUi) => {
       try {
-        this.spinner.show();
+        timer(100).subscribe(() => this.spinner.show());
         await this.updateFormUi(formUi);
       } catch (err) {
         this.eventsService.trackError(err);
@@ -289,6 +306,35 @@ export class CollateralFormComponent implements OnInit {
     return maxWithdraw;
   }
 
+  private async loadTxCost() {
+    this.txCost = null;
+
+    const txCost = (await this.getTxCost()) / 10 ** 18;
+    const rawEthUsd = await this.contractsService.latestAnswer();
+    const ethUsd = rawEthUsd / 10 ** 8;
+
+    this.txCost = Utils.formatAmount(txCost * ethUsd);
+  }
+
+  /**
+   * Calculate gas price * estimated gas
+   * @return Tx cost
+   */
+  private async getTxCost() {
+    const { collateral } = this.loan;
+    const gasPrice = await this.web3Service.web3.eth.getGasPrice();
+    const estimatedGas = await this.contractsService.addCollateral(
+      collateral.id,
+      collateral.token,
+      collateral.amount.toString(),
+      this.account,
+      true
+    );
+    const gasLimit = Number(estimatedGas) * 110 / 100;
+    const txCost = gasLimit * gasPrice;
+    return txCost;
+  }
+
   /**
    * Get submit button text
    * @return Button text
@@ -297,7 +343,7 @@ export class CollateralFormComponent implements OnInit {
     if (!this.loading) {
       return 'Deposit';
     }
-    return 'Depositing...';
+    return 'Depositing';
   }
 
   /**
@@ -308,6 +354,6 @@ export class CollateralFormComponent implements OnInit {
     if (!this.loading) {
       return 'Withdraw';
     }
-    return 'Withdrawing...';
+    return 'Withdrawing';
   }
 }
