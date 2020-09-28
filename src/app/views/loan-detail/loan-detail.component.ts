@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
+import * as moment from 'moment';
 // App Models
 import { Loan, Status, Network, LoanType } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
@@ -449,7 +450,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     const secondsInDay = 86400;
     const addSuffix = (n: number): string => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
     const payNumber = `${ installment.payNumber + addSuffix(installment.payNumber) } Pay`;
-    const dueDate: number = new Date(installment.dueDate).getTime() / 1000;
+    const dueDate: number = new Date(moment(installment.dueDate).format()).getTime() / 1000;
     const nowDate: number = Math.floor(new Date().getTime() / 1000);
     const daysLeft: number = Math.round((dueDate - nowDate) / secondsInDay);
 
