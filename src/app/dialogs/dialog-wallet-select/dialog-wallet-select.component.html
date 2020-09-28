@@ -35,7 +35,7 @@
         mat-raised-button
         class="button-logout"
         (click)="clickLogout()"
-        *ngIf="loggedIn"
+        [class.button-logout--hidden]="!loggedIn"
       >
         <div class="d-flex align-items-center justify-content-center">
           <i class="fas fa-power-off"></i>
