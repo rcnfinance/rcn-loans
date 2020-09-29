@@ -41,7 +41,6 @@
     .nav {
       display: none;
       &__item {
-        outline: -webkit-focus-ring-color auto 0px;
         @extend %font-bold;
         color: white;
         position: relative;
