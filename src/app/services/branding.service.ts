@@ -25,15 +25,6 @@ export class BrandingService {
       'Ripio',
       './assets/logos/logo-ripio-white.svg',
       undefined
-    ),
-    wenance: new Brand(
-      '0xfeAc8e490Fe7F0760a10225E7DCCDA1E22Ad8dAa',
-      '#009BDE',
-      './assets/logos/wenance.svg',
-      '',
-      'Wenance',
-      './assets/logos/wenance-brand.svg',
-      undefined
     )
   };
   constructor(
@@ -49,8 +40,6 @@ export class BrandingService {
       case Agent.RipioArsCreator:
       case Agent.RipioUsdCreator:
         return this.staticBrands.ripio;
-      case Agent.WenanceCreator:
-        return this.staticBrands.wenance;
       default:
     }
 

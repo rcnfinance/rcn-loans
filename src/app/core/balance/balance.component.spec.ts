@@ -29,21 +29,18 @@ describe('BalanceComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display balance', async () => {
-    const thisComponent: any = component;
-
+  it('should display balance', () => {
     // set balance amount
-    thisComponent.rcnBalance = 25000.789;
-    thisComponent.rcnAvailable = 3000;
-    thisComponent.basaltLoansWithBalance = ['743'];
+    component.diasporeLoansWithBalance = [3000];
+    component.rcnAvailable = 3000;
 
     // update template
-    await thisComponent.updateDisplay();
+    component.updateDisplay();
     fixture.detectChanges();
 
     // logic expect
-    expect(thisComponent.displayAvailable).toBe('3,000.00');
-    expect(thisComponent.canWithdraw).toBeTruthy();
+    expect(component.displayAvailable).toBe('3,000.00');
+    expect(component.canWithdraw).toBeTruthy();
 
     // ui expect
     const withdrawPayments = readComponent(fixture, '.balance-withdraw__amount');

@@ -7,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../../shared/shared.module';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
-import { Loan, Status, Network } from '../../models/loan.model';
+import { Loan, Status } from '../../models/loan.model';
 import { LoanListComponent } from './loan-list.component';
 import { readComponent } from '../../utils/utils.test';
 
@@ -45,18 +45,15 @@ describe('LoanListComponent', () => {
 
   it('should render a request loan', () => {
     const loan = new Loan(
-      Network.Diaspore,
       '0xd1c9866cbd3e57fdf025e7a2eef568d834a64f5f341a550e9b19714bfbcef27b',
       '0xc78a11c729275e656fa3decc1f15aebee69d08fc',
       8.48592e+22,
       {
-        'network': Network.Diaspore,
         'address': '0x0000000000000000000000000000000000000000',
         'currency': 'RCN',
         'code': '0x0000000000000000000000000000000000000000000000000000000000000000'
       },
       {
-        'network': Network.Diaspore,
         'firstObligation': 3.408e+22,
         'totalObligation': 1.0224e+23,
         'duration': 5854446,
@@ -102,18 +99,15 @@ describe('LoanListComponent', () => {
 
   it('should render an ongoing loan', () => {
     const loan = new Loan(
-      Network.Diaspore,
       '0x212c362e33abf6e3e6354363e0634aa1300c3045a18c8c5a08f3bb2a17184768',
       '0xc78a11c729275e656fa3decc1f15aebee69d08fc',
       11000000000000000000,
       {
-        'network': Network.Diaspore,
         'address': '0x0000000000000000000000000000000000000000',
         'currency': 'RCN',
         'code': '0x0000000000000000000000000000000000000000000000000000000000000000'
       },
       {
-        'network': Network.Diaspore,
         'firstObligation': 1000000000000000000,
         'totalObligation': 12000000000000000000,
         'duration': 31104000,
@@ -129,10 +123,8 @@ describe('LoanListComponent', () => {
       '0x97d0300281C55DC6BE27Cf57343184Ab5C8dcdFF',
       '0x0000000000000000000000000000000000000000',
       {
-        'network' : Network.Diaspore,
         'id' : '0x212c362e33abf6e3e6354363e0634aa1300c3045a18c8c5a08f3bb2a17184768',
         'model' : {
-          'network' : Network.Diaspore,
           'address' : '0x97d0300281C55DC6BE27Cf57343184Ab5C8dcdFF',
           'paid' : 10000000000000000000,
           'nextObligation' : 1000000000000000000,
@@ -144,7 +136,6 @@ describe('LoanListComponent', () => {
         'creator' : '0xc78a11c729275e656fa3decc1f15aebee69d08fc',
         'owner' : '0xA5823617776f816e4AD1a26cb51Df2eF9458D0EA',
         'oracle' : {
-          'network' : Network.Diaspore,
           'address' : '0x0000000000000000000000000000000000000000',
           'currency' : 'RCN',
           'code' : '0x0000000000000000000000000000000000000000000000000000000000000000'

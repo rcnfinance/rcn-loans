@@ -8,7 +8,7 @@ import * as BN from 'bn.js';
 import { Utils } from '../../../utils/utils';
 import { LoanUtils } from '../../../utils/loan-utils';
 import { Currency } from '../../../utils/currencies';
-import { Loan, Network, Status, Oracle, Descriptor } from './../../../models/loan.model';
+import { Loan, Status, Oracle, Descriptor } from './../../../models/loan.model';
 import { LoanRequest } from './../../../interfaces/loan-request';
 import { environment } from './../../../../environments/environment';
 // App Services
@@ -453,7 +453,6 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
    * @return Loan
    */
   private async updateLoanMockup(): Promise<Loan> {
-    const LOAN_NETWORK = Network.Diaspore;
     const LOAN_STATUS = Status.Ongoing;
     const LOAN_MODEL = environment.contracts.models.installments;
     const LOAN_CREATOR = this.account || Utils.address0x;
@@ -470,13 +469,11 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     const loanId: string = calculatedId || '0x';
     const currencySymbol: string = currency ? currency.symbol : 'RCN';
     const oracleModel = new Oracle(
-      LOAN_NETWORK,
       oracle,
       currencySymbol,
       currencySymbol
     );
     const descriptor: Descriptor = new Descriptor(
-      Network.Diaspore,
       cuota,
       cuota,
       duration,
@@ -486,7 +483,6 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
       installments
     );
     const loan = new Loan(
-      LOAN_NETWORK,
       loanId,
       address,
       amount,
