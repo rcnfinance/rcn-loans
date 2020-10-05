@@ -8,8 +8,7 @@ export enum Agent {
   MortgageCreator,
   MortgageManager,
   RipioArsCreator,
-  RipioUsdCreator,
-  WenanceCreator
+  RipioUsdCreator
 }
 
 declare let require: any;
@@ -18,7 +17,7 @@ const p = require('../../package.json') as any;
 
 const RCN_TOKEN = '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6';
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
-const RCN_API_DIASPORE = 'https://diaspore-rnode.rcn.loans';
+const RCN_API = 'https://diaspore-rnode.rcn.loans';
 const RIPIO_COSIGNER = '0xfA7c953a07BCb4420253bFfBf586bDD64c37B670';
 
 export const environment = {
@@ -36,13 +35,8 @@ export const environment = {
   gaTracking: 'UA-158285508-1',
   apiCountry : 'https://ipcountry-api.rcn.loans',
   rcnApi: {
-    basalt: {
-      v1: 'https://rnode.rcn.loans/v1/'
-    },
-    diaspore: {
-      v4: `${ RCN_API_DIASPORE }/v4/`,
-      v5: `${ RCN_API_DIASPORE }/v5/`
-    }
+    v4: `${ RCN_API }/v4/`,
+    v5: `${ RCN_API }/v5/`
   },
   network: {
     id: 1,
@@ -58,8 +52,6 @@ export const environment = {
   },
   contracts: {
     rcnToken: RCN_TOKEN,
-    basaltEngine: '0xba5a17f8ad40dc2c955d95c0547f3e6318bd72e7',
-    engineExtension: '0x3143f397685daa5f48f77c5d3ea4cbe61f294d88',
     oracleFactory: '0x1101c52fc25dc6d2691cec4b06569cef3c83933c',
     diaspore: {
       debtEngine: '0x80db22675dad70e44b64029510778583187faddb',
@@ -81,7 +73,6 @@ export const environment = {
       mortgageCreator: '0x90263Ea5C57Dc6603CA7202920735A6E31235bB9',
       mortgageManager: '0x9ABf1295086aFA0E49C60e95c437aa400c5333B8'
     },
-    multicall: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441',
     chainlink: {
       EACAggregatorProxy: {
         ethUsd: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419'
@@ -98,8 +89,7 @@ export const environment = {
   },
   dir: {
     '0xfbd5e54062619ef2b0323ad9ff874b39fd5a8d2c': Agent.RipioArsCreator,
-    '0x520aefcaea7754e86c2a1c9367948d732607c47f': Agent.RipioUsdCreator,
-    '0xfeac8e490fe7f0760a10225e7dccda1e22ad8daa': Agent.WenanceCreator // FIXME - Ropsten address
+    '0x520aefcaea7754e86c2a1c9367948d732607c47f': Agent.RipioUsdCreator
   },
   cosigners: {
     [Agent.RipioArsCreator]: RIPIO_COSIGNER,

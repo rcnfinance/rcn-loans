@@ -8,8 +8,7 @@ export enum Agent {
   MortgageCreator,
   MortgageManager,
   RipioArsCreator,
-  RipioUsdCreator,
-  WenanceCreator
+  RipioUsdCreator
 }
 
 declare let require: any;
@@ -18,7 +17,7 @@ const p = require('../../package.json') as any;
 
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
-const RCN_API_DIASPORE = 'https://diaspore-ropsten-rnode.rcn.loans';
+const RCN_API = 'https://diaspore-ropsten-rnode.rcn.loans';
 const RIPIO_COSIGNER = '0x5afc9fd47a5e064a7d1407c942878c4c0e3784a6';
 
 export const environment = {
@@ -36,13 +35,8 @@ export const environment = {
   gaTracking: 'UA-122615331-2',
   apiCountry: 'https://ipcountry-api.rcn.loans',
   rcnApi: {
-    basalt: {
-      v1: 'https://ropsten-rnode.rcn.loans/v1/'
-    },
-    diaspore: {
-      v4: `${ RCN_API_DIASPORE }/v4/`,
-      v5: `${ RCN_API_DIASPORE }/v5/`
-    }
+    v4: `${ RCN_API }/v4/`,
+    v5: `${ RCN_API }/v5/`
   },
   network: {
     id: 3,
@@ -58,8 +52,6 @@ export const environment = {
   },
   contracts: {
     rcnToken: RCN_TOKEN,
-    basaltEngine: '0xbee217bfe06c6faaa2d5f2e06ebb84c5fb70d9bf',
-    engineExtension: '0x3b86e29fc3e8a626735b0194aef13c6051eb6c84',
     oracleFactory: '0x94681ad00256a395ad21d67e557828cbd9c8f4e9',
     diaspore: {
       debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
@@ -81,7 +73,6 @@ export const environment = {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
       mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1'
     },
-    multicall: '0xa457b5b859573e8eb758b6c2bfd4ae3042b422fd',
     chainlink: {
       EACAggregatorProxy: {
         ethUsd: '0x30b5068156688f818cea0874b580206dfe081a03'
@@ -115,8 +106,7 @@ export const environment = {
     ongoing: '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3'
   },
   dir: {
-    '0xf7c5e867e739f5508c63c8ab22f39c44b9cac0b5': Agent.RipioArsCreator,
-    '0xc521961b2536e2c0ab595aae25a572bfbaf7d955': Agent.WenanceCreator
+    '0xf7c5e867e739f5508c63c8ab22f39c44b9cac0b5': Agent.RipioArsCreator
   },
   filterCurrencies: [
     'RCN',

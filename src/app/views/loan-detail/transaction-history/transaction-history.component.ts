@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, Input, ViewChild } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 // App Models
-import { Loan, Network } from '../../../models/loan.model';
+import { Loan } from '../../../models/loan.model';
 import { Commit } from '../../../interfaces/commit.interface';
 // App Services
 import { Web3Service } from '../../../services/web3.service';
@@ -47,110 +47,6 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
   };
 
   noMatch = false;
-
-  basaltTimelinesProperties: object = {
-    'loan_request': {
-      'title': 'Requested',
-      'message': 'Requested',
-      'status': 'active',
-      'materialClass': 'material-icons',
-      'icon': 'code',
-      'color': 'white',
-      'inserted': false,
-      'display': ['creator']
-    },
-    'approved_loan': {
-      'title': 'Approved',
-      'message': 'Approved',
-      'status': 'active',
-      'materialClass': 'material-icons',
-      'icon': 'done',
-      'color': 'white',
-      'inserted': true,
-      'display': ['approved_by']
-    },
-    'lent': {
-      'title': 'Lent',
-      'message': 'Lent',
-      'status': 'active',
-      'materialClass': 'material-icons',
-      'icon': 'trending_up',
-      'color': 'blue',
-      'inserted': true,
-      'display': ['lender']
-    },
-    'partial_payment': {
-      'title': 'Repay',
-      'message': 'Repay',
-      'status': 'active',
-      'awesomeClass': 'fas fa-coins',
-      'color': 'green',
-      'inserted': true,
-      'display': ['from', 'amount']
-    },
-    'total_payment': {
-      'title': 'Completed',
-      'message': 'Completed',
-      'status': 'active',
-      'awesomeClass': 'fas fa-check',
-      'color': 'gray7',
-      'inserted': true,
-      'display': []
-    },
-    'loan_in_debt': {
-      'title': 'Overdue',
-      'message': 'Overdue',
-      'status': 'active',
-      'materialClass': 'material-icons',
-      'icon': 'error_outline',
-      'color': 'red',
-      'inserted': true,
-      'display': []
-    },
-    'withdraw': {
-      'title': 'Withdraw',
-      'message': 'Withdraw',
-      'status': 'active',
-      'materialClass': 'material-icons',
-      'icon': 'call_made',
-      'color': 'white',
-      'inserted': true,
-      'display': []
-    },
-    'transfer': {
-      'title': 'Transfer',
-      'message': 'Transfer',
-      'status': 'active',
-      'materialClass': 'material-icons',
-      'icon': 'swap_horiz',
-      'color': 'orange',
-      'inserted': true,
-      'hexa': '#333',
-      'display': ['from', 'to']
-    },
-    'loan_expired': {
-      'title': 'Expired',
-      'message': 'Expired',
-      'status': 'active',
-      'materialClass': 'material-icons',
-      'icon': 'snooze',
-      'color': 'red',
-      'hexa': '#333',
-      'inserted': true,
-      'display': []
-    },
-    'destroyed_loan': {
-      'title': 'Destroyed',
-      'message': 'Destroyed',
-      'status': 'active',
-      'materialClass': 'material-icons',
-      'icon': 'delete',
-      'color': 'red',
-      'hexa': '#333',
-      'inserted': false,
-      'display': []
-    }
-  };
 
   diasporeTimelinesProperties: object = {
     'requested_loan_manager': {
@@ -251,9 +147,6 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
   }
 
   get_properties_by_opcode(opcode: string): object[] { // Get the timeline event properties from timelinesProperties[]
-    if (this.loan.network === Network.Basalt) {
-      return this.basaltTimelinesProperties[opcode];
-    }
     return this.diasporeTimelinesProperties[opcode];
   }
 
@@ -337,9 +230,9 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
     this.oDataTable = this.populate_table_data(i);
   }
 
-  async loadCommits(id: string, network: number) { // Load get() API commits from the DB by id if Diaspore loans
+  async loadCommits(id: string) { // Load get() API commits from the DB by id if Diaspore loans
     try {
-      const commits = await this.commitsService.getCommits(id, network);
+      const commits = await this.commitsService.getCommits(id);
       this.oTimeline = this.load_timeEvents(commits);
       this.oDataTable = this.populate_table_data(this.id);
       this.myId.showSpinner = false;
@@ -353,14 +246,14 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.myId.showSpinner = true;
-    this.loadCommits(this.loan.id, this.loan.network);
+    this.loadCommits(this.loan.id);
   }
 
   ngOnChanges(changes) {
     const { loan } = changes;
 
     if (loan && !loan.firstChange) {
-      this.loadCommits(this.loan.id, this.loan.network);
+      this.loadCommits(this.loan.id);
     }
   }
 

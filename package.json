@@ -36,7 +36,6 @@
     "@angular/platform-server": "^8.2.12",
     "@angular/router": "^8.2.12",
     "@fortawesome/fontawesome-free-brands": "^5.0.13",
-    "@makerdao/multicall": "^0.10.0-rc.4",
     "@sentry/browser": "^5.11.1",
     "@walletconnect/web3-provider": "^1.0.0-beta.46",
     "angular": "^1.7.3",
