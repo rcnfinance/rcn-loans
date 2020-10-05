@@ -26,13 +26,13 @@ export class DialogLoanPayComponent implements OnInit {
 
   account: string;
   shortAccount: string;
-  pendingAmount: string;
+  pendingAmount: number;
   currency: any;
-  exchangeRcn: string;
+  exchangeRcn: number;
   exchangeRcnWei: BN | string;
   exchangeTooltip: string;
-  pendingAmountRcn: string;
-  payAmountRcn: string;
+  pendingAmountRcn: number;
+  payAmountRcn: number;
   txCost: string;
   installmentsExpanded: boolean;
   nextInstallment: {
@@ -97,7 +97,7 @@ export class DialogLoanPayComponent implements OnInit {
     const pendingAmont = this.calculatePendingAmount();
 
     this.currency = currency;
-    this.pendingAmount = Utils.formatAmount(pendingAmont, 4);
+    this.pendingAmount = pendingAmont;
     this.form.controls.amount.setValidators([Validators.required]);
     this.shortLoanId =
       String(this.loan.id).startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
@@ -110,8 +110,9 @@ export class DialogLoanPayComponent implements OnInit {
     this.exchangeRcnWei = rate;
 
     const RCN_DECIMALS = 18;
-    this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** RCN_DECIMALS, 4);
-    this.pendingAmountRcn = Utils.formatAmount(Number(this.exchangeRcn) * Number(this.pendingAmount), 4);
+    const exchangeRcn = Number(rate) / 10 ** RCN_DECIMALS;
+    this.exchangeRcn = exchangeRcn;
+    this.pendingAmountRcn = exchangeRcn * pendingAmont;
 
     await this.loadTxCost();
   }
@@ -136,11 +137,10 @@ export class DialogLoanPayComponent implements OnInit {
   onAmountChange() {
     const { amount } = this.form.value;
     if (amount <= 0) {
-      return this.payAmountRcn = '0';
+      return this.payAmountRcn = 0;
     }
 
-    const payAmountRcn = (amount * Number(this.pendingAmountRcn)) / Number(this.pendingAmount);
-    this.payAmountRcn = Utils.formatAmount(payAmountRcn, 4);
+    this.payAmountRcn = (amount * Number(this.pendingAmountRcn)) / Number(this.pendingAmount);
   }
 
   /**
