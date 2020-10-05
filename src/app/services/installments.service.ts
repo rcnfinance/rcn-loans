@@ -64,7 +64,7 @@ export class InstallmentsService {
     startDate?: string,
     endDate?: string
   ): Promise<Pay[]> {
-    const commits = await this.commitsService.getCommits(loan.id, loan.network);
+    const commits = await this.commitsService.getCommits(loan.id);
     const payCommits = commits.filter(commit => commit.opcode === 'paid_debt_engine');
     const pays: Pay[] = [];
     let pending = 0;

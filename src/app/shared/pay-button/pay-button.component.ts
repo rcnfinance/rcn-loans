@@ -9,7 +9,7 @@ import {
 import { environment } from '../../../environments/environment';
 import { TxService, Tx, Type } from '../../services/tx.service';
 import { ContractsService } from '../../services/contracts.service';
-import { Loan, Network } from '../../models/loan.model';
+import { Loan } from '../../models/loan.model';
 import { Currency } from '../../utils/currencies';
 import { Utils } from '../../utils/utils';
 import { EventsService, Category } from '../../services/events.service';
@@ -192,20 +192,8 @@ export class PayButtonComponent implements OnInit, OnDestroy {
         }
 
         // approve validation
-        let engineApproved: boolean;
-
-        switch (this.loan.network) {
-          case Network.Basalt:
-            engineApproved = await this.contractsService.isApproved(this.loan.address);
-            break;
-          case Network.Diaspore:
-            const debtEngineAddress = environment.contracts.diaspore.debtEngine;
-            engineApproved = await this.contractsService.isApproved(debtEngineAddress);
-            break;
-          default:
-            this.cancelOperation();
-            return;
-        }
+        const debtEngineAddress = environment.contracts.diaspore.debtEngine;
+        const engineApproved: boolean = await this.contractsService.isApproved(debtEngineAddress);
 
         if (!engineApproved) {
           await this.showApproveDialog();
@@ -227,21 +215,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
           'loan ' + this.loan.id + ' of ' + amountInWei
         );
 
-        let engine: string;
-
-        switch (this.loan.network) {
-          case Network.Basalt:
-            engine = environment.contracts.basaltEngine;
-            break;
-
-          case Network.Diaspore:
-            engine = environment.contracts.diaspore.debtEngine;
-            break;
-
-          default:
-            break;
-        }
-
+        const engine: string = environment.contracts.diaspore.debtEngine;
         this.txService.registerPayTx(
           tx,
           engine,
@@ -296,20 +270,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
    */
   async showApproveDialog() {
     const onlyToken: string = environment.contracts.rcnToken;
-    let onlyAddress: string;
-
-    switch (this.loan.network) {
-      case Network.Basalt:
-        onlyAddress = this.loan.address;
-        break;
-      case Network.Diaspore:
-        const debtEngineAddress = environment.contracts.diaspore.debtEngine;
-        onlyAddress = debtEngineAddress;
-        break;
-      default:
-        this.cancelOperation();
-        break;
-    }
+    const onlyAddress = environment.contracts.diaspore.debtEngine;
 
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
       DialogApproveContractComponent, {

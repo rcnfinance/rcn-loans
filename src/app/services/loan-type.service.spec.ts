@@ -4,14 +4,13 @@ import { SharedModule } from './../shared/shared.module';
 import { environment } from './../../environments/environment';
 import { Utils } from './../utils/utils';
 // App models
-import { Loan, Network, Status, LoanType } from './../models/loan.model';
+import { Loan, Status, LoanType } from './../models/loan.model';
 // App services
 import { CosignerService } from './cosigner.service';
 import { LoanTypeService } from './loan-type.service';
 
 describe('LoanTypeService', () => {
   let service: LoanTypeService;
-  const LOAN_NETWORK = Network.Diaspore;
   const LOAN_ID = '0x';
   const LOAN_ADDRESS = Utils.address0x;
   const LOAN_AMOUNT = 10000000000000000;
@@ -38,7 +37,6 @@ describe('LoanTypeService', () => {
   it('should return fintech originator type', () => {
     const creator: string = Object.keys(environment.dir)[0];
     const loan = new Loan(
-      LOAN_NETWORK,
       LOAN_ID,
       LOAN_ADDRESS,
       LOAN_AMOUNT,
@@ -58,7 +56,6 @@ describe('LoanTypeService', () => {
   it('should return unknown type', () => {
     const creator: string = Utils.address0x;
     const loan = new Loan(
-      LOAN_NETWORK,
       LOAN_ID,
       LOAN_ADDRESS,
       LOAN_AMOUNT,
@@ -73,27 +70,5 @@ describe('LoanTypeService', () => {
 
     const result = service.getLoanType(loan);
     expect(result).toEqual(LoanType.Unknown);
-  });
-
-  it('should return NFT collateral type', () => {
-    const creator: string = environment.contracts.decentraland.mortgageCreator;
-    const cosigner: string = environment.contracts.decentraland.mortgageManager;
-    const loan = new Loan(
-      LOAN_NETWORK,
-      LOAN_ID,
-      LOAN_ADDRESS,
-      LOAN_AMOUNT,
-      null,
-      null,
-      creator,
-      creator,
-      LOAN_STATUS,
-      LOAN_EXPIRATION,
-      LOAN_MODEL,
-      cosigner
-    );
-
-    const result = service.getLoanType(loan);
-    expect(result).toEqual(LoanType.NftCollateral);
   });
 });

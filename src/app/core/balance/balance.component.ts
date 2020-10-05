@@ -16,13 +16,8 @@ import { Tx, Type, TxService } from '../../services/tx.service';
 export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   @Input() account: string;
 
-  private rcnAvailable: number;
-  private basaltRcnAvailable: number;
-  private diasporeRcnAvailable: number;
-
-  basaltLoansWithBalance: number[] = [];
+  rcnAvailable: number;
   diasporeLoansWithBalance: number[] = [];
-  ongoingBasaltWithdraw: Tx;
   ongoingDiasporeWithdraw: Tx;
 
   canWithdraw = false;
@@ -83,21 +78,18 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.canWithdraw =
-      (this.basaltLoansWithBalance !== undefined || this.diasporeLoansWithBalance !== undefined) &&
-      (this.basaltLoansWithBalance.length > 0 || this.diasporeLoansWithBalance.length > 0) &&
-      (this.ongoingBasaltWithdraw === undefined || this.ongoingDiasporeWithdraw === undefined);
+      this.diasporeLoansWithBalance !== undefined &&
+      this.diasporeLoansWithBalance.length > 0 &&
+      this.ongoingDiasporeWithdraw === undefined;
   }
 
   /**
-   * Load basalt and diaspore balance withdraw amounts. Then, add all the values
-   * ​​and show the total available
+   * Load balance to withdraw amounts. Then, add all the values ​​and show the
+   * total available
    */
   async loadWithdrawBalance() {
     const pendingWithdraws = await this.contractService.getPendingWithdraws();
-    this.basaltRcnAvailable = pendingWithdraws[0] / 10 ** 18;
-    this.diasporeRcnAvailable = pendingWithdraws[2] / 10 ** 18;
-    this.rcnAvailable = this.basaltRcnAvailable + this.diasporeRcnAvailable;
-    this.basaltLoansWithBalance = pendingWithdraws[1];
+    this.rcnAvailable = pendingWithdraws[2] / 10 ** 18;
     this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadOngoingWithdraw();
     this.updateDisplay();
@@ -107,10 +99,6 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Load the pending withdraw
    */
   loadOngoingWithdraw() {
-    this.ongoingBasaltWithdraw = this.txService.getLastWithdraw(
-      environment.contracts.basaltEngine,
-      this.basaltLoansWithBalance
-    );
     this.ongoingDiasporeWithdraw = this.txService.getLastWithdraw(
       environment.contracts.diaspore.debtEngine,
       this.diasporeLoansWithBalance
@@ -131,14 +119,10 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
-   * Withdraw basalt and diaspore funds
+   * Withdraw diaspore funds
    */
   async withdraw() {
     if (this.canWithdraw) {
-      if (this.basaltLoansWithBalance.length > 0) {
-        const tx = await this.contractService.withdrawFundsBasalt(this.basaltLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, environment.contracts.basaltEngine, this.basaltLoansWithBalance);
-      }
       if (this.diasporeLoansWithBalance.length > 0) {
         const tx = await this.contractService.withdrawFundsDiaspore(this.diasporeLoansWithBalance);
         this.txService.registerWithdrawTx(tx, environment.contracts.diaspore.debtEngine, this.diasporeLoansWithBalance);
