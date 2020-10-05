@@ -25,7 +25,7 @@ const routes: Routes = [
     loadChildren: () => import('./views/create-loan/create-loan.module').then(m => m.CreateLoanModule)
   },
   {
-    path: 'faqs',
+    path: 'faq',
     loadChildren: () => import('./views/faqs/faqs.module').then(m => m.FaqsModule)
   },
   {
