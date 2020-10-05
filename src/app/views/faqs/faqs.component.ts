@@ -25,7 +25,7 @@ export class FaqsComponent implements OnInit {
       title: 'General',
       faqs: [{
         question: 'What is RCN?',
-        answer: 'RCN is an open-source global credit network that connects lenders, borrowers and loan originators on the blockchain to create frictionless, transparent and borderless loan markets.'
+        answer: 'RCN is an open-source global credit network that connects lenders, borrowers and originators on the blockchain to create frictionless, transparent and borderless loan markets.'
       }, {
         question: 'How does RCN work?',
         answer: `RCN is powered by an open-source blockchain lending and borrowing protocol which runs on the <a href="https://ethereum.org/en/" target="_blank">Ethereum network</a>. Composed by a modular set of smart-contracts, the protocol’s current version (named <a href="https://medium.com/rcnblog/rcn-protocol-v4-diaspore-7073739fbeda" target="_blank">RCN Protocol v4.0 “Diaspore"</a>) operates funds exclusively in RCN's native token and enables its users to lend, borrow, collateralize, transfer and repay loans. In addition, it is compatible with a wide variety of oracles, loan types and backings.`
