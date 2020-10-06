@@ -194,11 +194,14 @@ export class DialogLoanLendComponent implements OnInit {
   async loadTxCost() {
     this.txCost = null;
 
-    const txCost = (await this.getTxCost()) / 10 ** 18;
-    const rawEthUsd = await this.contractsService.latestAnswer();
-    const ethUsd = rawEthUsd / 10 ** 8;
-
-    this.txCost = Utils.formatAmount(txCost * ethUsd);
+    try {
+      const txCost = (await this.getTxCost()) / 10 ** 18;
+      const rawEthUsd = await this.contractsService.latestAnswer();
+      const ethUsd = rawEthUsd / 10 ** 8;
+      this.txCost = Utils.formatAmount(txCost * ethUsd) + ' USD';
+    } catch (err) {
+      this.txCost = 'Insufficient funds';
+    }
   }
 
   /**
