@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
 import { Loan, Status } from './../models/loan.model';
 import {
   Installment,
@@ -63,7 +64,7 @@ export class InstallmentsService {
     startDate?: string,
     endDate?: string
   ): Promise<Pay[]> {
-    const commits = await this.commitsService.getCommits(loan.id, loan.network);
+    const commits = await this.commitsService.getCommits(loan.id);
     const payCommits = commits.filter(commit => commit.opcode === 'paid_debt_engine');
     const pays: Pay[] = [];
     let pending = 0;
@@ -288,7 +289,7 @@ export class InstallmentsService {
    */
   private getDueStatus(dueDate: string): InstallmentStatus {
     const secondsInDay = 86400;
-    const dueTimestamp = new Date(dueDate).getTime() / 1000;
+    const dueTimestamp = new Date(moment(dueDate).format()).getTime() / 1000;
     const nowTimestamp = new Date().getTime() / 1000;
     const daysLeft = Math.round((dueTimestamp - nowTimestamp) / secondsInDay);
 

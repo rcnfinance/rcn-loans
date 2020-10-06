@@ -38,9 +38,9 @@ export class ContentWrapperComponent implements OnInit {
     return Utils.removeTrailingZeros(String(this.rcnAvailable.div(this.ethWei)));
   }
   get withdrawEnabled(): boolean {
-    return this.basaltLoansWithBalance !== undefined || this.diasporeLoansWithBalance !== undefined &&
-    this.basaltLoansWithBalance.length > 0 || this.diasporeLoansWithBalance.length > 0 &&
-    this.pendingBasaltWithdraw === undefined || this.pendingDiasporeWithdraw === undefined;
+    return this.diasporeLoansWithBalance !== undefined &&
+      this.diasporeLoansWithBalance.length > 0 &&
+      this.pendingDiasporeWithdraw === undefined;
   }
   winHeight: number = window.innerHeight;
   account: string;
@@ -51,13 +51,7 @@ export class ContentWrapperComponent implements OnInit {
   rcnBalance: BN;
   rcnAvailable: BN;
   loansWithBalance: number[];
-
-  private basaltRcnAvailable: number;
-  private diasporeRcnAvailable: number;
-
-  basaltLoansWithBalance: number[];
   diasporeLoansWithBalance: number[];
-  pendingBasaltWithdraw: Tx;
   pendingDiasporeWithdraw: Tx;
 
   navToggle: boolean; // Navbar toggled
@@ -147,10 +141,6 @@ export class ContentWrapperComponent implements OnInit {
    * Load all pending withdraw
    */
   private loadPendingWithdraw() {
-    this.pendingBasaltWithdraw = this.txService.getLastWithdraw(
-      environment.contracts.basaltEngine,
-      this.basaltLoansWithBalance
-    );
     this.pendingDiasporeWithdraw = this.txService.getLastWithdraw(
       environment.contracts.diaspore.debtEngine,
       this.diasporeLoansWithBalance
@@ -166,14 +156,11 @@ export class ContentWrapperComponent implements OnInit {
   }
 
   /**
-   * Load withdraw balance adding basalt and diaspore amounts
+   * Load withdraw balance adding diaspore amount
    */
   private async loadWithdrawBalance() {
     const pendingWithdraws = await this.contractService.getPendingWithdraws();
-    this.basaltRcnAvailable = pendingWithdraws[0] / 10 ** 18;
-    this.diasporeRcnAvailable = pendingWithdraws[2] / 10 ** 18;
-    this.rcnAvailable = Utils.bn(this.basaltRcnAvailable).add(Utils.bn(this.diasporeRcnAvailable));
-    this.basaltLoansWithBalance = pendingWithdraws[1];
+    this.rcnAvailable = Utils.bn(pendingWithdraws[2] / 10 ** 18);
     this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadPendingWithdraw();
   }

@@ -1,0 +1,43 @@
+<div class="activity-wrapper">
+  <div class="container pt-3 pt-lg-0">
+    <app-page-header
+      title="Frequently Asked Questions"
+      description="Find everything you need to know about RCN."
+    ></app-page-header>
+    <div class="row faqs">
+      <div
+        class="faqs__item col-12 col-lg-9"
+        *ngFor="let faqGroup of faqGroups; let groupIndex = index"
+      >
+        <h2 class="faqs__title">
+          {{ faqGroup.title }}
+        </h2>
+        <mat-accordion class="faq" multi>
+          <mat-expansion-panel
+            (opened)="panelOpenState[getId(groupIndex, faqIndex)] = true"
+            (closed)="panelOpenState[getId(groupIndex, faqIndex)] = false"
+            hideToggle
+            *ngFor="let faq of faqGroup.faqs; let faqIndex = index"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title class="faq__title">
+                {{ faq.question }}
+              </mat-panel-title>
+              <mat-panel-description>
+                <mat-icon>
+                  {{
+                    panelOpenState[getId(groupIndex, faqIndex)] ?
+                      'remove' :
+                      'add'
+                  }}
+                </mat-icon>
+              </mat-panel-description>
+              </mat-expansion-panel-header>
+              <p class="faq__description" [innerHTML]="faq.answer"></p>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

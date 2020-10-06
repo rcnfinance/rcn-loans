@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { timer } from 'rxjs';
 import * as BN from 'bn.js';
+import * as moment from 'moment';
 import { environment } from './../../../environments/environment';
 import { Installment } from '../../interfaces/installment';
 import { Loan } from './../../models/loan.model';
@@ -175,11 +176,14 @@ export class DialogLoanPayComponent implements OnInit {
   private async loadTxCost() {
     this.txCost = null;
 
-    const txCost = (await this.getTxCost()) / 10 ** 18;
-    const rawEthUsd = await this.contractsService.latestAnswer();
-    const ethUsd = rawEthUsd / 10 ** 8;
-
-    this.txCost = Utils.formatAmount(txCost * ethUsd);
+    try {
+      const txCost = (await this.getTxCost()) / 10 ** 18;
+      const rawEthUsd = await this.contractsService.latestAnswer();
+      const ethUsd = rawEthUsd / 10 ** 8;
+      this.txCost = Utils.formatAmount(txCost * ethUsd) + ' USD';
+    } catch (err) {
+      this.txCost = 'Insufficient funds';
+    }
   }
 
   /**
@@ -226,8 +230,8 @@ export class DialogLoanPayComponent implements OnInit {
     const secondsInDay = 86400;
     const addSuffix = (n: number): string => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
     const payNumber = `${ installment.payNumber + addSuffix(installment.payNumber) } Pay`;
-    const dueDate: number = new Date(installment.dueDate).getTime() / 1000;
-    const nowDate: number = new Date().getTime() / 1000;
+    const dueDate: number = new Date(moment(installment.dueDate).format()).getTime() / 1000;
+    const nowDate: number = Math.floor(new Date().getTime() / 1000);
     const daysLeft: number = Math.round((dueDate - nowDate) / secondsInDay);
 
     let dueDays: string = Utils.formatDelta(dueDate - nowDate, 1);
