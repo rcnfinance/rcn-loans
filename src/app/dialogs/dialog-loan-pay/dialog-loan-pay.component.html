@@ -33,7 +33,7 @@
             <div class="d-flex justify-content-between d-md-block">
               <p class="item__rate" *ngIf="loan?.currency.symbol !== 'RCN'">
                 <span class="item__rate-amount">
-                  {{ payAmountRcn || '0' }}
+                  {{ (payAmountRcn | formatAmount: 4) || '0' }}
                 </span>
                 <span class="item__rate-currency">
                   RCN
@@ -58,7 +58,7 @@
             </p>
             <p class="item__value">
               <strong class="item__value-amount">
-                {{ pendingAmount }}
+                {{ pendingAmount | formatAmount: 4 }}
               </strong>
               <span class="item__value-currency">
                 {{ currency?.symbol }}
@@ -66,7 +66,7 @@
             </p>
             <p class="item__rate" *ngIf="loan?.currency.symbol !== 'RCN'">
               <span class="item__rate-amount">
-                {{ pendingAmountRcn || '0' }}
+                {{ (pendingAmountRcn | formatAmount: 4) || '0' }}
               </span>
               <span class="item__rate-currency">
                 RCN
@@ -133,7 +133,7 @@
                         Instalment amount
                       </p>
                       <p class="item__value">
-                        {{ nextInstallment.installment.amount | formatAmount }}
+                        {{ nextInstallment.installment.amount | formatAmount: 4 }}
                         {{ nextInstallment?.installment.currency }}
                       </p>
                     </div>
@@ -177,13 +177,13 @@
                 1 {{ loan.currency }}
               </span>
               <span *ngIf="loan.currency.toString() !== 'RCN'">
-                = {{ exchangeRcn }} RCN
+                = {{ exchangeRcn | formatAmount: 4 }} RCN
               </span>
             </div>
             <div class="accordion-details__item">
               <i class="fas fa-arrows-alt-h"></i>
               <span>
-                Tx Cost: {{ txCost ? (txCost + ' USD') : '-' }}
+                Tx Cost: {{ txCost || '-' }}
               </span>
             </div>
             <div class="accordion-details__item" *ngIf="exchangeTooltip">

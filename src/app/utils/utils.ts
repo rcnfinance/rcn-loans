@@ -160,7 +160,7 @@ export class Utils {
     const parsedPmt = (amount: number) => {
       try {
         const strAmount: string =
-          Math.round(amount).toLocaleString('fullwide', { useGrouping: false });
+          Math.round(amount).toLocaleString('en-US', { useGrouping: false });
         return Utils.bn(strAmount);
       } catch (err) {
         return Utils.bn(amount);
@@ -198,7 +198,7 @@ export class Utils {
     if (amount % 1 !== 0) {
       const amountInWei: number = amount * (10 ** decimals);
       try {
-        return this.bn(amountInWei.toLocaleString('fullwide', { useGrouping: false }));
+        return this.bn(amountInWei.toLocaleString('en-US', { useGrouping: false }));
       } catch (err) {
         return this.bn(amountInWei);
       }
