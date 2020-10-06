@@ -92,7 +92,6 @@
       </ng-template>
 
       <div class="margintop20"></div>
-      <app-detail-table [data]="diasporeData" *ngIf="isDiaspore"></app-detail-table>
       <app-detail-table [data]="loanConfigData" *ngIf="isRequest || isCanceled || isExpired"></app-detail-table>
       <app-detail-table [data]="loanStatusData" *ngIf="!isRequest"></app-detail-table>
 

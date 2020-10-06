@@ -1,5 +1,3 @@
-import { Network } from './../models/loan.model';
-
 export enum WalletType {
   WalletLink = 1,
   Metamask,
@@ -7,7 +5,7 @@ export enum WalletType {
 }
 
 export interface WalletConnection {
-  network: Network;
+  network: number;
   wallet: WalletType;
 }
 

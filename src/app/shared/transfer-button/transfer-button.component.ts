@@ -74,7 +74,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
    */
   retrievePendingTx() {
     this.pendingTx = this.txService.getLastPendingTransfer(
-      environment.contracts.basaltEngine,
+      environment.contracts.diaspore.debtEngine,
       this.loan
     );
 
@@ -170,7 +170,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
 
       this.txService.registerTransferTx(
         tx,
-        environment.contracts.basaltEngine,
+        environment.contracts.diaspore.debtEngine,
         this.loan,
         to
       );
