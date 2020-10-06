@@ -64,6 +64,7 @@
   }
 
   .accordion-details {
+    position: relative;
     border-radius: 3px;
     background: var(--app-color-gray-600);
     mat-expansion-panel {

@@ -42,11 +42,11 @@
       margin: 20px auto;
       text-align: left;
       border-radius: 10px;
-      transition: .3s;
     }
     .button-connect {
       @include styled-font('Roboto', 700, 16px);
       border: 1px solid transparent;
+      transition: .3s;
       img {
         width: 45px;
         margin-right: 12px;
@@ -76,9 +76,13 @@
       @include typography-body(2);
       background: none;
       box-shadow: none;
-      transition: .3s;
       &:hover {
+        transition: .3s;
         opacity: .7;
+      }
+      &--hidden {
+        visibility: hidden;
+        height: 24px;
       }
       svg {
         margin-right: 10px;
