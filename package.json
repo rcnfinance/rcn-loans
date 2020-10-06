@@ -1,6 +1,6 @@
 {
   "name": "rcn-angular-dapp",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "version_name": "Boggart",
   "license": "MIT",
   "scripts": {
@@ -36,7 +36,6 @@
     "@angular/platform-server": "^8.2.12",
     "@angular/router": "^8.2.12",
     "@fortawesome/fontawesome-free-brands": "^5.0.13",
-    "@makerdao/multicall": "^0.10.0-rc.4",
     "@sentry/browser": "^5.11.1",
     "@walletconnect/web3-provider": "^1.0.0-beta.46",
     "angular": "^1.7.3",
@@ -50,6 +49,7 @@
     "git-describe": "^4.0.3",
     "hammerjs": "^2.0.8",
     "material-icons": "^0.2.3",
+    "moment": "^2.29.0",
     "ngx-spinner": "^8.0.3",
     "ngx-virtual-scroller": "^3.0.2",
     "node-sass": "^4.13.1",

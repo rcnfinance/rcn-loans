@@ -12,6 +12,6 @@ export class SocialContainerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.linkContract = environment.network.explorer.address.replace('${address}', environment.contracts.basaltEngine);
+    this.linkContract = environment.network.explorer.address.replace('${address}', environment.contracts.diaspore.loanManager);
   }
 }

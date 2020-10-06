@@ -62,9 +62,6 @@ export class NotificationsComponent implements OnInit {
    */
   getContractName(contract: string) {
     switch (contract) {
-      case environment.contracts.basaltEngine:
-        return 'Basalt Engine Contract';
-
       case environment.contracts.diaspore.loanManager:
         return 'Loan Manager Contract';
 

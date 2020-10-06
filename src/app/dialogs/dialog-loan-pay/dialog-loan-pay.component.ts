@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { timer } from 'rxjs';
 import * as BN from 'bn.js';
+import * as moment from 'moment';
 import { environment } from './../../../environments/environment';
 import { Installment } from '../../interfaces/installment';
 import { Loan } from './../../models/loan.model';
@@ -26,13 +27,13 @@ export class DialogLoanPayComponent implements OnInit {
 
   account: string;
   shortAccount: string;
-  pendingAmount: string;
+  pendingAmount: number;
   currency: any;
-  exchangeRcn: string;
+  exchangeRcn: number;
   exchangeRcnWei: BN | string;
   exchangeTooltip: string;
-  pendingAmountRcn: string;
-  payAmountRcn: string;
+  pendingAmountRcn: number;
+  payAmountRcn: number;
   txCost: string;
   installmentsExpanded: boolean;
   nextInstallment: {
@@ -97,7 +98,7 @@ export class DialogLoanPayComponent implements OnInit {
     const pendingAmont = this.calculatePendingAmount();
 
     this.currency = currency;
-    this.pendingAmount = Utils.formatAmount(pendingAmont, 4);
+    this.pendingAmount = pendingAmont;
     this.form.controls.amount.setValidators([Validators.required]);
     this.shortLoanId =
       String(this.loan.id).startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
@@ -110,8 +111,9 @@ export class DialogLoanPayComponent implements OnInit {
     this.exchangeRcnWei = rate;
 
     const RCN_DECIMALS = 18;
-    this.exchangeRcn = Utils.formatAmount(Number(rate) / 10 ** RCN_DECIMALS, 4);
-    this.pendingAmountRcn = Utils.formatAmount(Number(this.exchangeRcn) * Number(this.pendingAmount), 4);
+    const exchangeRcn = Number(rate) / 10 ** RCN_DECIMALS;
+    this.exchangeRcn = exchangeRcn;
+    this.pendingAmountRcn = exchangeRcn * pendingAmont;
 
     await this.loadTxCost();
   }
@@ -136,11 +138,10 @@ export class DialogLoanPayComponent implements OnInit {
   onAmountChange() {
     const { amount } = this.form.value;
     if (amount <= 0) {
-      return this.payAmountRcn = '0';
+      return this.payAmountRcn = 0;
     }
 
-    const payAmountRcn = (amount * Number(this.pendingAmountRcn)) / Number(this.pendingAmount);
-    this.payAmountRcn = Utils.formatAmount(payAmountRcn, 4);
+    this.payAmountRcn = (amount * Number(this.pendingAmountRcn)) / Number(this.pendingAmount);
   }
 
   /**
@@ -175,11 +176,14 @@ export class DialogLoanPayComponent implements OnInit {
   private async loadTxCost() {
     this.txCost = null;
 
-    const txCost = (await this.getTxCost()) / 10 ** 18;
-    const rawEthUsd = await this.contractsService.latestAnswer();
-    const ethUsd = rawEthUsd / 10 ** 8;
-
-    this.txCost = Utils.formatAmount(txCost * ethUsd, 4);
+    try {
+      const txCost = (await this.getTxCost()) / 10 ** 18;
+      const rawEthUsd = await this.contractsService.latestAnswer();
+      const ethUsd = rawEthUsd / 10 ** 8;
+      this.txCost = Utils.formatAmount(txCost * ethUsd) + ' USD';
+    } catch (err) {
+      this.txCost = 'Insufficient funds';
+    }
   }
 
   /**
@@ -226,8 +230,8 @@ export class DialogLoanPayComponent implements OnInit {
     const secondsInDay = 86400;
     const addSuffix = (n: number): string => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
     const payNumber = `${ installment.payNumber + addSuffix(installment.payNumber) } Pay`;
-    const dueDate: number = new Date(installment.dueDate).getTime() / 1000;
-    const nowDate: number = new Date().getTime() / 1000;
+    const dueDate: number = new Date(moment(installment.dueDate).format()).getTime() / 1000;
+    const nowDate: number = Math.floor(new Date().getTime() / 1000);
     const daysLeft: number = Math.round((dueDate - nowDate) / secondsInDay);
 
     let dueDays: string = Utils.formatDelta(dueDate - nowDate, 1);

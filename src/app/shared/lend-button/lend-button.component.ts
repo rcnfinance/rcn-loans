@@ -14,7 +14,7 @@ import {
 } from '@angular/material';
 import * as BN from 'bn.js';
 import { environment } from '../../../environments/environment';
-import { Loan, Network, Status } from './../../models/loan.model';
+import { Loan, Status } from './../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 
@@ -168,10 +168,6 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     const account: string = await this.web3Service.getAccount();
     if (this.loan.borrower.toLowerCase() === account.toLowerCase()) {
       this.openSnackBar('You can´t fund a loan that you have borrowed.');
-      return;
-    }
-    if (this.loan.network === Network.Basalt) {
-      this.handleLend();
       return;
     }
     // lend token validation

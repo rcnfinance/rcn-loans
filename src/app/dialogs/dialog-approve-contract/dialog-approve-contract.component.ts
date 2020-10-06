@@ -63,11 +63,6 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
       'transactions'
     ),
     new Operator(
-      'Basalt engine',
-      environment.contracts.basaltEngine,
-      'transactions for Legacy Basalt loans'
-    ),
-    new Operator(
       'Collateral',
       environment.contracts.collateral.collateral,
       'collateralization'
@@ -187,12 +182,6 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
       if ((this.onlyToken || this.onlyAsset) && this.onlyAddress) {
         this.showProgressbar();
       }
-
-      this.eventsService.trackEvent(
-        `${ actionCode }-rcn`,
-        Category.Account,
-        environment.contracts.basaltEngine
-      );
 
       this.retrievePendingTx();
     } catch (e) {

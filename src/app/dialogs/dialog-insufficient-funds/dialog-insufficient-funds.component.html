@@ -12,8 +12,8 @@
           Oh oh, you don't have enough funds
         </h1>
         <p class="dialog__content-description">
-          Your balance is {{ balance }} {{ currency }}. You need at least
-          {{ required }} {{ currency }} to fund this loan.
+          Your balance is {{ balance | formatAmount: 4 }} {{ currency }}. You need at least
+          {{ required | formatAmount: 4 }} {{ currency }} to fund this loan.
         </p>
         <div class="dialog__content-actions mt-5 mt-md-4">
           <button
