@@ -1,22 +1,40 @@
 # Changelog
 
+## **0.2.5** Boggart 👻
+
+### Feature:
+- FAQs section
+
+### Enhancement:
+- Improves performance by deprecating Basalt
+- Shows alert when TX Cost cannot be calculated
+- Improves mat-option styles in mobile
+- Scrollbar CSS improvements
+- Improve header buttons in safari
+- Standardize decimals in the amount of some dialogs
+
+### Fix:
+- Fix formatAmount method in cross browsers / languages
+- Fix loan pay accordion select in Safari
+- Fix next payment date in cross browser
+
 ## **0.2.4** Boggart 👻
 
-### Feature:
+### Feature:
 - Implements the order loans feature
 - New dialogs UI with more details
 - Estimate TX Cost
 - New loading button with progressbar
 - Show next installment in the payment dialog
 
-### Enhancement:
+### Enhancement:
 - Optimizes load times and requests by partially deprecating basalt
 - Remove unused Collateral WETH approve
 - Header UI improvements
 - Dialog wallet UI improvements
 - Logout UX improvements
 
-### Fix:
+### Fix:
 - Allow to redeem expired collateral
 - Fix installment indicator color
 
