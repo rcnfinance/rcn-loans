@@ -80,6 +80,9 @@
       @include transition;
     }
   }
+  &--hide-mobile {
+    display: none;
+  }
 }
 .flex-container {
   display: flex;
@@ -193,6 +196,7 @@
 
 @media (min-width: 992px){
   .navbar{
+    display: block;
     height: 65px;
     padding: 10px 15px 7px;
     -webkit-box-shadow: none;

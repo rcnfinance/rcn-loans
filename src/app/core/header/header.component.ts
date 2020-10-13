@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { Router, ActivatedRoute, NavigationEnd, Event } from '@angular/router';
 import { Utils } from './../../utils/utils';
 import { WalletType } from './../../interfaces/wallet.interface';
 // App Component
@@ -22,11 +23,14 @@ export class HeaderComponent implements OnInit {
   shortAccount: string;
   makeRotate = false;
   title: string;
+  hideMobileHeader: boolean;
 
   navToggle: boolean; // Navbar toggled
 
   constructor(
     private cdRef: ChangeDetectorRef,
+    private router: Router,
+    private route: ActivatedRoute,
     private web3Service: Web3Service,
     private applicationAdsService: ApplicationAdsService,
     private walletConnectService: WalletConnectService,
@@ -39,6 +43,7 @@ export class HeaderComponent implements OnInit {
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.titleService.currentTitle.subscribe(title => this.title = title);
     this.handleLoginEvents();
+    this.listenRouterEvents();
   }
 
   /**
@@ -96,5 +101,15 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  // TODO: add borrow method
+  /**
+   * Track all router changes
+   */
+  private listenRouterEvents() {
+    this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationEnd) {
+        const { hideMobileHeader } = this.route.snapshot.firstChild.data;
+        this.hideMobileHeader = hideMobileHeader === true;
+      }
+    });
+  }
 }

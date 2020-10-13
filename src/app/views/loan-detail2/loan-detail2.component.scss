@@ -4,7 +4,7 @@
 .page-content {
   background: var(--app-color-gray-700);
   border-radius: 3px;
-  padding: 20px 18px;
+  padding: 16px;
 }
 .page-title {
   @include typography-body(2);
@@ -29,13 +29,13 @@
 
 // custom components
 .page-header {
-  position: absolute;
+  position: fixed;
   z-index: 100;
-  top: 114px;
+  top: 0;
   left: 0;
   width: 100%;
-  padding: 8px 0;
-  background: var(--app-color-gray-900);
+  padding: 35px 0 0;
+  background: var(--app-color-gray-500);
   &__button {
     background: none;
     border: none;
@@ -45,7 +45,7 @@
     margin-right: 23px;
   }
   &__title {
-    @include typography-headline(1);
+    @include typography-headline(6);
     text-transform: uppercase;
     margin: 0;
     &,
@@ -56,40 +56,44 @@
       height: 34px;
     }
   }
-  &--fixed {
-    position: fixed;
-    top: 61px;
-    .page-header__title {
-      @include typography-headline(5);
-      img {
-        height: 24px;
+  &__tabs {
+    margin-top: 10px;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    &-content {
+      width: auto;
+      display: flex;
+      .page-title--tab {
+        padding-top: 14px;
+        padding-bottom: 14px;
+        flex-shrink: 0;
       }
     }
   }
 }
 
 .page-overview {
-  margin-top: 94px;
+  margin-top: 76px;
   margin-bottom: 60px;
   &__subtitle {
     @include typography-body(1);
-    margin: 10px 0 0;
+    margin: 0 0 7px;
     color: #B1B1B1;
   }
   &__amount {
-    // @include styled-font('Roboto', 700, 35px);
     @include styled-font('Roboto', 700, 35px);
+    margin-bottom: 13px;
   }
   &__rates {
     .card-rates {
+      width: 100%;
       min-width: 172px;
       background: var(--app-color-gray-400);
       box-shadow: 0px 3px 6px #00000029;
       border-radius: 6px;
-      margin-right: 20px;
       &__item {
         position: relative;
-        padding: 10px 18px;
+        padding: 14px 18px;
         color: #D8D8D8;
         @include typography-caption(1);
         cursor: default;
@@ -110,13 +114,12 @@
           &::after {
             content: '';
             position: absolute;
+            top: 0;
             bottom: 0;
-            left: 0;
             right: 0;
             margin: auto;
-            display: block;
-            width: calc(100% - 32px);
-            height: 0.5px;
+            width: 0.5px;
+            height: calc(100% - 28px);
             background: #646464;
           }
         }
@@ -124,7 +127,7 @@
     }
   }
   &__timeline {
-    margin-top: 87px;
+    margin-top: 52px;
     padding: 0 16px;
     .timeline {
       position: relative;
@@ -256,6 +259,11 @@
       &__item {
         padding: 7px 0 0;
         color: #D8D8D8;
+        &-wrapper {
+          &:not(:last-child) {
+            margin-bottom: 12px;
+          }
+        }
         &-icon {
           font-size: 1.1em;
         }
@@ -350,6 +358,76 @@
     }
   }
 }
-.page-history {
-  margin-top: 66px;
+.page-details {
+  margin-top: 76px;
+}
+
+
+@media (min-width: 992px) {
+  .page-content {
+    padding: 20px 18px;
+  }
+  .page-header {
+    position: absolute;
+    top: 114px;
+    padding: 8px 0;
+    background: var(--app-color-gray-900);
+    &__title {
+      @include typography-headline(1);
+    }
+    &--fixed {
+      position: fixed;
+      top: 61px;
+      .page-header__title {
+        @include typography-headline(5);
+        img {
+          height: 24px;
+        }
+      }
+    }
+  }
+  .page-overview {
+    margin-top: 94px;
+    &__subtitle {
+      margin: 10px 0 0;
+    }
+    &__amount {
+      margin: 0;
+    }
+    &__rates {
+      .card-rates {
+        width: auto;
+        margin-right: 20px;
+        &__item {
+          padding: 10px 18px;
+          &:not(:last-child) {
+            &::after {
+              left: 0;
+              right: 0;
+              bottom: 0;
+              top: auto;
+              display: block;
+              width: calc(100% - 32px);
+              height: 0.5px;
+            }
+          }
+        }
+      }
+    }
+    &__timeline {
+      margin-top: 87px;
+    }
+    &__accordion {
+      .accordion-details {
+        &__item {
+          &-wrapper {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+  .page-history {
+    margin-top: 66px;
+  }
 }

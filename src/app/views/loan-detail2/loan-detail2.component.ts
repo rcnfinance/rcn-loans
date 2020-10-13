@@ -58,6 +58,8 @@ export class LoanDetail2Component implements OnInit, OnDestroy {
 
   hasHistory: boolean;
   headerFixed: boolean;
+  isMobile: boolean;
+  isDesktop: boolean;
 
   totalDebt: string;
   pendingAmount: string;
@@ -83,6 +85,7 @@ export class LoanDetail2Component implements OnInit, OnDestroy {
   punitory: string;
   paymentDate: string[] = [];
   paymentAverage: string;
+  timelineTooltip: string;
 
   // Loan Oracle
   oracle: string;
@@ -112,6 +115,7 @@ export class LoanDetail2Component implements OnInit, OnDestroy {
   ngOnInit() {
     this.titleService.changeTitle('Loan detail');
     this.spinner.show(this.pageId);
+    this.checkIfIsMobile();
 
     this.route.params.subscribe(async params => {
       const id = params.id;
@@ -159,6 +163,11 @@ export class LoanDetail2Component implements OnInit, OnDestroy {
     const { scrollTop } = e.target.scrollingElement;
     const headerFixed = scrollTop > HEADER_FIXED_AT_PX;
     this.headerFixed = headerFixed;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize(e) {
+    this.checkIfIsMobile(e);
   }
 
   /**
@@ -244,6 +253,13 @@ export class LoanDetail2Component implements OnInit, OnDestroy {
     setTimeout(() => this.loadCollateral(), 1500);
   }
 
+  private checkIfIsMobile(e?) {
+    const MOBILE_WIDTH_PX = 992;
+    const currentDeviceWidth = e ? e.target.innerWidth : window.innerWidth;
+    this.isMobile = currentDeviceWidth <= MOBILE_WIDTH_PX;
+    this.isDesktop = currentDeviceWidth > MOBILE_WIDTH_PX;
+  }
+
   /**
    * Get loan details
    * @param id Loan ID
@@ -314,6 +330,9 @@ export class LoanDetail2Component implements OnInit, OnDestroy {
   }
 
   private defaultDetail(): string {
+    if (this.isMobile) {
+      return 'overview';
+    }
     if (this.loanTypeService.getLoanType(this.loan) === LoanType.UnknownWithCollateral) {
       return 'collateral';
     }
@@ -348,6 +367,9 @@ export class LoanDetail2Component implements OnInit, OnDestroy {
           const today = Math.floor(new Date().getTime() / 1000);
           const expiresIn = Utils.formatDelta(this.loan.expiration - today);
           this.expiresIn = expiresIn;
+          this.timelineTooltip = '< > Requested';
+        } else {
+          this.timelineTooltip = 'Expired';
         }
         break;
       case Status.Indebt:
@@ -397,6 +419,9 @@ export class LoanDetail2Component implements OnInit, OnDestroy {
         } else {
           this.durationTooltip = `Next payment in ${ durationDynamic }`;
         }
+
+        this.timelineTooltip =
+          this.loan.status === Status.Paid ? 'Fully Paid' : 'Outstanding';
         break;
 
       default:

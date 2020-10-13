@@ -34,20 +34,70 @@
 
     </h1>
   </div>
+  <div class="page-header__tabs d-lg-none">
+    <div class="page-header__tabs-content">
+      <h2
+        class="page-title page-title--tab mr-3"
+        [class.page-title--active]="isDetail('overview')"
+        (click)="openDetail('overview')"
+      >
+        Overview
+      </h2>
+      <h2
+        *ngIf="[0, 1].includes(loanType)"
+        class="page-title page-title--tab mr-3"
+        [class.page-title--active]="isDetail('collateral')"
+        (click)="openDetail('collateral')"
+      >
+        Collateral
+      </h2>
+      <h2
+        *ngIf="[2, 3].includes(loanType)"
+        class="page-title page-title--tab mr-3"
+        [class.page-title--active]="isDetail('cosigner')"
+        (click)="openDetail('cosigner')"
+      >
+        Cosigner
+      </h2>
+      <h2
+        *ngIf="identityName !== 'Unknown'"
+        class="page-title page-title--tab ml-3"
+        [class.page-title--active]="isDetail('identity')"
+        (click)="openDetail('identity')"
+      >
+        Borrower
+      </h2>
+      <h2
+        *ngIf="[0, 1, 4, 5].includes(loan?.status) && loan?.descriptor.installments"
+        class="page-title page-title--tab ml-3"
+        [class.page-title--active]="isDetail('installments')"
+        (click)="openDetail('installments')"
+      >
+        Instalments
+      </h2>
+      <h2
+        class="page-title page-title--tab ml-3"
+        [class.page-title--active]="isDetail('history')"
+        (click)="openDetail('history')"
+      >
+        Loan History
+      </h2>
+    </div>
+  </div>
 </section>
 
-<section class="page-overview" *ngIf="loan">
+<section class="page-overview" *ngIf="loan && (isDetail('overview') || isDesktop)">
   <div class="container">
     <div class="row">
       <div class="col-12 col-md-8">
-        <h2 class="page-title">
+        <h2 class="page-title d-none d-lg-inline-block">
           Overview
         </h2>
         <div class="page-content">
           <div class="row">
             <div class="col-12 col-lg-9">
               <div class="row">
-                <div class="col-6 pr-0">
+                <div class="col-12 col-lg-6 pr-lg-0">
                   <h3 class="page-overview__subtitle">
                     Borrow
                   </h3>
@@ -56,7 +106,7 @@
                     {{ loan.currency }}
                   </p>
                 </div>
-                <div class="col-6">
+                <div class="col-12 col-lg-6">
                   <h3 class="page-overview__subtitle">
                     Repay
                   </h3>
@@ -67,11 +117,11 @@
               </div>
             </div>
             <div class="page-overview__rates col-12 col-lg-3 d-flex justify-content-end">
-              <div class="card-rates">
+              <div class="card-rates d-flex d-lg-block">
                 <div class="card-rates__item">
                   <i class="card-rates__item-icon fas fa-calculator"></i>
                   <span class="card-rates__item-label">
-                    Annual rate
+                    Annual rate:
                   </span>
                   <span class="card-rates__item-value">
                     <strong>
@@ -96,12 +146,6 @@
           <div class="row">
             <div class="col-12">
               <div class="page-overview__timeline">
-                <!--
-                  Use different classes according the loan status
-                  Requested: timeline--inactive
-                  Ongoing: timeline--active
-                  Completed: timeline--completed
-                -->
                 <div
                   class="timeline"
                   [class.timeline--inactive]="isRequest"
@@ -112,7 +156,11 @@
                   </div>
                   <div class="timeline__progress" [ngStyle]="{'width': paymentAverage}">
                   </div>
-                  <div class="timeline__indicator" [ngStyle]="{'left': paymentAverage}">
+                  <div
+                    class="timeline__indicator"
+                    [ngStyle]="{'left': paymentAverage}"
+                    [matTooltip]="timelineTooltip"
+                  >
                   </div>
                   <div class="timeline__steps">
                     <div class="step" *ngFor="let date of paymentDate">
@@ -133,8 +181,8 @@
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   <div class="accordion-details__item">
-                    <div class="d-flex justify-content-between">
-                      <div>
+                    <div class="d-lg-flex justify-content-between">
+                      <div class="accordion-details__item-wrapper">
                         <i class="accordion-details__item-icon fas fa-user"></i>
                         <span class="accordion-details__item-label">
                           Borrower:
@@ -146,7 +194,7 @@
                           </a>
                         </span>
                       </div>
-                      <div>
+                      <div class="accordion-details__item-wrapper">
                         <i class="accordion-details__item-icon fas fa-user"></i>
                         <span class="accordion-details__item-label">
                           Penalty rate:
@@ -155,7 +203,7 @@
                           {{ punitory || '-' }}
                         </span>
                       </div>
-                      <div>
+                      <div class="accordion-details__item-wrapper">
                         <i class="accordion-details__item-icon fas fa-user"></i>
                         <span class="accordion-details__item-label">
                           Loan address:
@@ -166,7 +214,7 @@
                           </a>
                         </span>
                       </div>
-                      <div>
+                      <div class="accordion-details__item-wrapper">
                         <i class="accordion-details__item-icon fas fa-user"></i>
                         <span class="accordion-details__item-label">
                           Oracle:
@@ -193,7 +241,7 @@
         </div>
       </div>
 
-      <div class="col-12 col-md-4 mt-5 pt-1">
+      <div class="col-12 col-md-4 mt-3 mt-lg-5 pt-lg-1">
         <div
           class="page-overview__status page-content"
           [class.page-overview__status--request]="isRequest"
@@ -283,7 +331,7 @@
 
 <section class="page-details">
   <div class="container">
-    <div class="row">
+    <div class="row d-none d-lg-flex">
       <div class="col-12 d-flex align-items-center">
         <h2
           *ngIf="[0, 1].includes(loanType)"
@@ -320,8 +368,19 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-12 pr-lg-0">
-        <div class="page-content">
+      <div class="col-12">
+        <div
+          class="page-content"
+          *ngIf="
+            isDesktop ||
+            (
+              isDetail('collateral') ||
+              isDetail('cosigner') ||
+              isDetail('identity') ||
+              isDetail('installments')
+            )
+          "
+        >
           <div class="row">
             <div class="col-12 col-lg-8 pr-lg-0">
               <app-detail-identity
@@ -351,9 +410,12 @@
   </div>
 </section>
 
-<section class="page-history">
+<section
+  class="page-history"
+  *ngIf="isDesktop || isDetail('history')"
+>
   <div class="container">
-    <h2 class="page-title">
+    <h2 class="page-title d-none d-lg-inline-block">
       Loan history
     </h2>
     <div class="col-12" *ngIf="loan && hasHistory">
