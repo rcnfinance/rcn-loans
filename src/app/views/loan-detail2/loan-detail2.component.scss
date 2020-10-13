@@ -1,0 +1,353 @@
+@import 'src/scss/fonts';
+
+// reusable components
+.page-content {
+  background: var(--app-color-gray-700);
+  border-radius: 3px;
+  padding: 30px 18px;
+}
+.page-title {
+  @include typography-body(2);
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: white;
+  margin: 0;
+  padding: 16px 6px;
+  transition: .3s;
+  &--tab {
+    cursor: pointer;
+    padding: 16px 20px;
+    &:not(.page-title--active) {
+      color: #959595;
+      border-bottom: 1px solid transparent;
+    }
+    &.page-title--active {
+      border-bottom: 1px solid white;
+    }
+  }
+}
+
+// custom components
+.page-header {
+  position: absolute;
+  z-index: 100;
+  top: 114px;
+  left: 0;
+  width: 100%;
+  padding: 8px 0;
+  background: var(--app-color-gray-900);
+  &__button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.4em;
+    line-height: 1em;
+    margin-right: 23px;
+  }
+  &__title {
+    @include typography-headline(1);
+    text-transform: uppercase;
+    margin: 0;
+    &,
+    img {
+      transition: .2s;
+    }
+    img {
+      height: 34px;
+    }
+  }
+  &--fixed {
+    position: fixed;
+    top: 61px;
+    .page-header__title {
+      @include typography-headline(5);
+      img {
+        height: 24px;
+      }
+    }
+  }
+}
+
+.page-overview {
+  margin-top: 94px;
+  margin-bottom: 60px;
+  &__subtitle {
+    @include typography-body(1);
+    margin: 0;
+    color: #B1B1B1;
+  }
+  &__amount {
+    // @include styled-font('Roboto', 700, 35px);
+    @include styled-font('Roboto', 700, 35px);
+  }
+  &__rates {
+    .card-rates {
+      min-width: 172px;
+      background: var(--app-color-gray-400);
+      box-shadow: 0px 3px 6px #00000029;
+      border-radius: 6px;
+      margin-right: 30px;
+      &__item {
+        position: relative;
+        padding: 10px 18px;
+        color: #D8D8D8;
+        @include typography-caption(1);
+        cursor: default;
+        transition: .3s;
+        &:hover {
+          color: white;
+        }
+        &-icon {
+          margin-right: 10px;
+        }
+        &-label {
+
+        }
+        &-value {
+          font-weight: 700;
+        }
+        &:not(:last-child) {
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            display: block;
+            width: calc(100% - 32px);
+            height: 0.5px;
+            background: #646464;
+          }
+        }
+      }
+    }
+  }
+  &__timeline {
+    margin-top: 87px;
+    padding: 0 16px;
+    .timeline {
+      position: relative;
+      &__bar,
+      &__progress {
+        height: 9px;
+        border-radius: 4px;
+      }
+      &__bar {
+        width: 100%;
+        background: #151515;
+        margin-bottom: 10px;
+      }
+      &__progress {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0%; // TODO: dynamic average
+      }
+      &__indicator {
+        position: absolute;
+        top: -8px;
+        left: 0%; // TODO: dynamic average
+        width: 23px;
+        height: 23px;
+        border-radius: 50%;
+        margin-left: -11.5px;
+      }
+      &__steps {
+        width: calc(100% + 26px);
+        margin: 0 -13px;
+        display: flex;
+        justify-content: space-between;
+        .step {
+          position: relative;
+          width: 50px;
+          text-align: center;
+          color: #B1B1B1;
+          padding: 9px 0 0;
+          @include typography-caption(1);
+          &::before {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 5px;
+            background: #B1B1B1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+          }
+        }
+      }
+      &--inactive {
+        .timeline {
+          &__progress {
+            background: transparent;
+          }
+          &__indicator {
+            background: #DEDEDE;
+            border: 2px solid #8D8D8D;
+            margin-left: 0;
+          }
+        }
+      }
+      &--active {
+        .timeline {
+          &__progress {
+            background: #4155FF;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+          }
+          &__indicator {
+            background: #4155FF;
+            border: 2px solid #95A0FF;
+          }
+        }
+      }
+      &--completed {
+        .timeline {
+          &__progress {
+            background: #59B159;
+            width: 100%; // TODO: add dynamic
+          }
+          &__indicator {
+            background: #59B159;
+            border: 2px solid #94F094;
+            margin-left: -23px;
+            left: 100%; // TODO: add dynamic
+          }
+        }
+      }
+    }
+  }
+  &__accordion {
+    margin-top: 36px;
+    .accordion-details {
+      position: relative;
+      border-radius: 3px;
+      mat-expansion-panel {
+        box-shadow: 0px 3px 6px #00000029;
+        background: var(--app-color-gray-400);
+        &-header {
+          height: 37px !important;
+          padding: 0 20px;
+          ::ng-deep {
+            .mat-content {
+              max-width: 65px;
+            }
+            .mat-expansion-indicator {
+              height: 1.7em;
+              &::after {
+                padding: 2.5px;
+              }
+            }
+          }
+        }
+        mat-panel-title {
+          @include typography-caption(1);
+          margin-right: 0;
+        }
+        ::ng-deep {
+          .mat-expansion-panel-body {
+            padding-bottom: 21px;
+          }
+        }
+      }
+      &__item {
+        padding: 7px 0 0;
+        color: #D8D8D8;
+        &-icon {
+          font-size: 1.1em;
+        }
+        &-label {
+          @include typography-caption(1);
+        }
+        &-value {
+          @include typography-overline(3);
+        }
+        svg {
+          margin-right: 9px;
+        }
+        ::ng-deep {
+          strong,
+          a {
+            color: white;
+          }
+          a {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+  &__status {
+    padding: 28px 14px 26px;
+    color: #D8D8D8;
+    box-shadow: 0px 3px 6px #00000029;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    &-icon {
+      margin-right: 12px;
+    }
+    &-label {
+      @include styled-font('proxima-nova', 400, 18px);
+      margin-top: 3px;
+    }
+    &-value {
+      @include styled-font('Roboto', 700, 22px);
+    }
+    &--request {
+      .page-overview__status-icon {
+        font-size: 2.25em;
+      }
+      .page-overview__status-value {
+        color: #E25A5A;
+      }
+    }
+    &--active {
+      .page-overview__status-title {
+        @include typography-body(1);
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+      .page-overview__status-label {
+        @include typography-body(1);
+      }
+      .page-overview__status-value {
+        @include typography-subtitle(1);
+        &--paid {
+          color: var(--app-color-primary);
+          margin-bottom: 23px;
+        }
+        &--debt {
+          color: white;
+        }
+      }
+    }
+    &--paid {
+      .page-overview__status-icon {
+        font-size: 1.4em;
+        color: #94F094;
+        margin-top: 3px;
+      }
+      .page-overview__status-value {
+        @include styled-font('Roboto', 700, 35px);
+        line-height: 1em;
+        margin-left: -32px;
+        margin-top: 20px;
+        color: white;
+      }
+    }
+  }
+  &__cta {
+    padding: 0 1px;
+    ::ng-deep .button {
+      width: 100%;
+      height: 43px;
+      padding: 3px 0;
+    }
+  }
+}
+.page-history {
+  margin-top: 66px;
+}

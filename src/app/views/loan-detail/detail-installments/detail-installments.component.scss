@@ -18,6 +18,7 @@
     h3 {
       @include typography-headline(5);
       text-transform: uppercase;
+      margin: 0 0 40px;
     }
   }
 
@@ -141,7 +142,6 @@ a {
 
 @media (min-width: 992px) {
   .installments-detail {
-    padding-bottom: 40%;
     .installment {
       &__col {
         &--pay,
