@@ -1,13 +1,3 @@
-<!--
-
-TODO:
-- Add "steps" to the timeline and the completed average
-- Add CTA box for Ongoing/Paid loans
-- Add mobile version
-- Check Tabs buttons
-
--->
-
 <ngx-spinner
   bdColor="rgba(18,19,21,0.2)"
   size="medium"
@@ -296,18 +286,36 @@ TODO:
     <div class="row">
       <div class="col-12 d-flex align-items-center">
         <h2
+          *ngIf="[0, 1].includes(loanType)"
           class="page-title page-title--tab mr-3"
           [class.page-title--active]="isDetail('collateral')"
           (click)="openDetail('collateral')"
         >
-          Collateral status
+          Collateral
         </h2>
         <h2
+          *ngIf="[2, 3].includes(loanType)"
+          class="page-title page-title--tab mr-3"
+          [class.page-title--active]="isDetail('cosigner')"
+          (click)="openDetail('cosigner')"
+        >
+          Cosigner
+        </h2>
+        <h2
+          *ngIf="identityName !== 'Unknown'"
+          class="page-title page-title--tab ml-3"
+          [class.page-title--active]="isDetail('identity')"
+          (click)="openDetail('identity')"
+        >
+          Borrower
+        </h2>
+        <h2
+          *ngIf="[0, 1, 4, 5].includes(loan?.status) && loan?.descriptor.installments"
           class="page-title page-title--tab ml-3"
           [class.page-title--active]="isDetail('installments')"
           (click)="openDetail('installments')"
         >
-          Installments
+          Instalments
         </h2>
       </div>
     </div>
