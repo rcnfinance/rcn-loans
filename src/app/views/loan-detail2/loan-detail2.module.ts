@@ -15,7 +15,7 @@ import { LoanDetail2Component } from './loan-detail2.component';
 import { DetailIdentityComponent } from './../loan-detail/detail-identity/detail-identity.component';
 import { DetailCosignerComponent } from './../loan-detail/detail-cosigner/detail-cosigner.component';
 import { DetailCollateralComponent } from './detail-collateral/detail-collateral.component';
-import { DetailInstallmentsComponent } from './../loan-detail/detail-installments/detail-installments.component';
+import { DetailInstallmentsComponent } from './detail-installments/detail-installments.component';
 import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
 import { DecentralandMapComponent } from './../loan-detail/detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DecentralandCosignerComponent } from './../loan-detail/detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
