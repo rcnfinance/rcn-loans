@@ -61,7 +61,7 @@
       </h2>
       <h2
         *ngIf="identityName !== 'Unknown'"
-        class="page-title page-title--tab ml-3"
+        class="page-title page-title--tab mr-3"
         [class.page-title--active]="isDetail('identity')"
         (click)="openDetail('identity')"
       >
@@ -69,14 +69,14 @@
       </h2>
       <h2
         *ngIf="[0, 1, 4, 5].includes(loan?.status) && loan?.descriptor.installments"
-        class="page-title page-title--tab ml-3"
+        class="page-title page-title--tab mr-3"
         [class.page-title--active]="isDetail('installments')"
         (click)="openDetail('installments')"
       >
         Instalments
       </h2>
       <h2
-        class="page-title page-title--tab ml-3"
+        class="page-title page-title--tab"
         [class.page-title--active]="isDetail('history')"
         (click)="openDetail('history')"
       >
@@ -174,10 +174,10 @@
           <div class="row">
             <div class="page-overview__accordion col-12">
               <mat-accordion class="accordion-details">
-                <mat-expansion-panel class="mat-elevation-z" expanded="true">
+                <mat-expansion-panel class="mat-elevation-z">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                      More info
+                      More details
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   <div class="accordion-details__item">
@@ -381,29 +381,25 @@
             )
           "
         >
-          <div class="row">
-            <div class="col-12 col-lg-8 pr-lg-0">
-              <app-detail-identity
-                *ngIf="isDetail('identity')"
-                [loan]="loan"
-              ></app-detail-identity>
-              <app-detail-cosigner
-                *ngIf="isDetail('cosigner')"
-                [loan]="loan"
-              ></app-detail-cosigner>
-              <app-detail-collateral
-                *ngIf="isDetail('collateral')"
-                [loan]="loan"
-                [collateral]="collateral"
-                [canAdjust]="canAdjustCollateral"
-                (updateCollateral)="onUserAction('collateral')"
-              ></app-detail-collateral>
-              <app-detail-installments
-                *ngIf="isDetail('installments')"
-                [loan]="loan"
-              ></app-detail-installments>
-            </div>
-          </div>
+          <app-detail-identity
+            *ngIf="isDetail('identity')"
+            [loan]="loan"
+          ></app-detail-identity>
+          <app-detail-cosigner
+            *ngIf="isDetail('cosigner')"
+            [loan]="loan"
+          ></app-detail-cosigner>
+          <app-detail-collateral
+            *ngIf="isDetail('collateral')"
+            [loan]="loan"
+            [collateral]="collateral"
+            [canAdjust]="canAdjustCollateral"
+            (updateCollateral)="onUserAction('collateral')"
+          ></app-detail-collateral>
+          <app-detail-installments
+            *ngIf="isDetail('installments')"
+            [loan]="loan"
+          ></app-detail-installments>
         </div>
       </div>
     </div>
