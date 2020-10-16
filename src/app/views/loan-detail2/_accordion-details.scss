@@ -46,8 +46,19 @@
     &-value {
       @include typography-overline(3);
     }
-    svg {
+    svg,
+    img {
       margin-right: 9px;
+    }
+    img {
+      &.accordion-details__item-icon {
+        display: inline-block;
+        height: 1em;
+        overflow: visible;
+        vertical-align: -.125em;
+        filter: invert(1);
+        opacity: .85;
+      }
     }
     ::ng-deep {
       strong,
