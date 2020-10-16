@@ -1,4 +1,4 @@
-@import '../../../../scss/_variables.scss'; //variables
+@import '../../../../scss/fonts';
 
 .empty-container{
   height: 100%;
@@ -20,28 +20,32 @@
 }
 
 .content {
-  border-bottom: solid #383838 1px;
-  padding-bottom: 40px;
   width: 100%;
 }
 
 .img-box {
   width: 100%;
+  margin-top: 13px;
+  margin-bottom: 22px;
 
   img {
-    max-width: 100%;
-    max-height: 70px;
+    display: inline-block;
+    width: 83px;
   }
 }
 
 .disclaimer-box {
   width: 100%;
-  color: #BABABA;
-  @extend %roboto-medium;
+  color: #D8D8D8;
+  @include typography-overline(3);
   font-style: italic;
   font-weight: 400;
   font-size: 13px;
   text-align: left;
+  border-top: solid #383838 1px;
+  padding-top: 29px;
+  margin-top: 29px;
+  margin-bottom: 12px;
 
   .fa-info-circle {
     margin-right: 5px;
@@ -64,16 +68,16 @@
 }
 
 .main-text {
-  font-family: 'proxima-nova', sans-serif;
-  font-size: 16px;
-  font-weight: 400;
+  @include typography-body(1);
+  line-height: 24px;
   text-align: left;
+  color: #D8D8D8;
 }
 
 a {
-  color: white;
-  @extend %roboto-medium;
+  @include typography-subtitle(3);
   word-break: break-all;
+  color: white;
 }
 
 .tooltip-box {
@@ -85,5 +89,8 @@ a {
     .empty-row {
       padding: 0 56px;
     }
+  }
+  .content {
+    margin-top: 68px;
   }
 }

@@ -14,7 +14,10 @@ const routes: Routes = [
   },
   {
     path: 'loan/:id',
-    loadChildren: () => import('./views/loan-detail/loan-detail.module').then(m => m.LoanDetailModule)
+    loadChildren: () => import('./views/loan-detail2/loan-detail2.module').then(m => m.LoanDetail2Module),
+    data: {
+      hideMobileHeader: true
+    }
   },
   {
     path: 'lend',

@@ -1,0 +1,421 @@
+<ngx-spinner
+  bdColor="rgba(18,19,21,0.2)"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate-multiple"
+  [name]="pageId"
+></ngx-spinner>
+
+<section
+  *ngIf="loan"
+  class="page-header"
+  [class.page-header--fixed]="headerFixed"
+>
+  <div class="container d-flex align-items-center">
+    <button class="page-header__button" (click)="clickBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <h1 class="page-header__title">
+
+      <!-- cosigner/unknown case -->
+      <ng-container *ngIf="!loan?.collateral; else collateralTemplate">
+        <ng-container *ngIf="brand.headerImage; else headerTitle">
+          <img [src]="brand.headerImage" [alt]="brand.headerTitle">
+        </ng-container>
+        <ng-template #headerTitle>
+          {{ brand.headerTitle }}
+        </ng-template>
+      </ng-container>
+
+      <!-- collateral case -->
+      <ng-template #collateralTemplate>
+        {{ collateralAsset }} Collateral
+      </ng-template>
+
+    </h1>
+  </div>
+  <div class="page-header__tabs d-lg-none">
+    <div class="page-header__tabs-content">
+      <h2
+        class="page-title page-title--tab mr-3"
+        [class.page-title--active]="isDetail('overview')"
+        (click)="openDetail('overview')"
+      >
+        Overview
+      </h2>
+      <h2
+        *ngIf="[0, 1].includes(loanType)"
+        class="page-title page-title--tab mr-3"
+        [class.page-title--active]="isDetail('collateral')"
+        (click)="openDetail('collateral')"
+      >
+        Collateral
+      </h2>
+      <h2
+        *ngIf="[2, 3].includes(loanType)"
+        class="page-title page-title--tab mr-3"
+        [class.page-title--active]="isDetail('cosigner')"
+        (click)="openDetail('cosigner')"
+      >
+        Cosigner
+      </h2>
+      <h2
+        *ngIf="identityName !== 'Unknown'"
+        class="page-title page-title--tab mr-3"
+        [class.page-title--active]="isDetail('identity')"
+        (click)="openDetail('identity')"
+      >
+        Borrower
+      </h2>
+      <h2
+        *ngIf="[0, 1, 4, 5].includes(loan?.status) && loan?.descriptor.installments"
+        class="page-title page-title--tab mr-3"
+        [class.page-title--active]="isDetail('installments')"
+        (click)="openDetail('installments')"
+      >
+        Instalments
+      </h2>
+      <h2
+        class="page-title page-title--tab"
+        [class.page-title--active]="isDetail('history')"
+        (click)="openDetail('history')"
+      >
+        Loan History
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="page-overview" *ngIf="loan && (isDetail('overview') || isDesktop)">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-8">
+        <h2 class="page-title d-none d-lg-inline-block">
+          Overview
+        </h2>
+        <div class="page-content">
+          <div class="row">
+            <div class="col-12 col-lg-9">
+              <div class="row">
+                <div class="col-12 col-lg-6 pr-lg-0">
+                  <h3 class="page-overview__subtitle">
+                    Borrow
+                  </h3>
+                  <p class="page-overview__amount">
+                    {{ loan.currency.fromUnit(loan.amount) | formatAmount }}
+                    {{ loan.currency }}
+                  </p>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <h3 class="page-overview__subtitle">
+                    Repay
+                  </h3>
+                  <p class="page-overview__amount">
+                    {{ expectedReturn }} {{ loan.currency }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="page-overview__rates col-12 col-lg-3 d-flex justify-content-end">
+              <div class="card-rates d-flex d-lg-block">
+                <div class="card-rates__item">
+                  <i class="card-rates__item-icon fas fa-calculator"></i>
+                  <span class="card-rates__item-label">
+                    Annual rate:
+                  </span>
+                  <span class="card-rates__item-value">
+                    <strong>
+                      {{ interest }}
+                    </strong>
+                  </span>
+                </div>
+                <div class="card-rates__item" [matTooltip]="durationTooltip">
+                  <i class="card-rates__item-icon far fa-calendar"></i>
+                  <span class="card-rates__item-label">
+                    Schedule:
+                  </span>
+                  <span class="card-rates__item-value">
+                    <strong>
+                      {{ duration }}
+                    </strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="page-overview__timeline">
+                <div
+                  class="timeline"
+                  [class.timeline--inactive]="isRequest"
+                  [class.timeline--active]="isOngoing || isInDebt"
+                  [class.timeline--completed]="isPaid"
+                >
+                  <div class="timeline__bar">
+                  </div>
+                  <div class="timeline__progress" [ngStyle]="{'width': paymentAverage}">
+                  </div>
+                  <div
+                    class="timeline__indicator"
+                    [ngStyle]="{'left': paymentAverage}"
+                    [matTooltip]="timelineTooltip"
+                  >
+                  </div>
+                  <div class="timeline__steps">
+                    <div class="step" *ngFor="let date of paymentDate">
+                      {{ date }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="page-overview__accordion col-12">
+              <mat-accordion class="accordion-details">
+                <mat-expansion-panel class="mat-elevation-z">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      More details
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div class="accordion-details__item">
+                    <div class="d-lg-flex justify-content-between">
+                      <div class="accordion-details__item-wrapper">
+                        <i class="accordion-details__item-icon fas fa-user"></i>
+                        <span class="accordion-details__item-label">
+                          Borrower:
+                        </span>
+                        <span class="accordion-details__item-value">
+                          <a (click)="openAddress(loan.borrower)">
+                            {{ loan.borrower | formatAddress }}
+                            {{ loanType === 3 ? (' - ' + brand.headerTitle) : '' }}
+                          </a>
+                        </span>
+                      </div>
+                      <div class="accordion-details__item-wrapper">
+                        <i class="accordion-details__item-icon fa fa-percentage"></i>
+                        <span class="accordion-details__item-label">
+                          Penalty rate:
+                        </span>
+                        <span class="accordion-details__item-value">
+                          {{ punitory || '-' }}
+                        </span>
+                      </div>
+                      <div class="accordion-details__item-wrapper">
+                        <i class="accordion-details__item-icon fas fa-link"></i>
+                        <span class="accordion-details__item-label">
+                          Loan address:
+                        </span>
+                        <span class="accordion-details__item-value">
+                          <a>
+                            {{ loan.id | formatAddress }}
+                          </a>
+                        </span>
+                      </div>
+                      <div class="accordion-details__item-wrapper">
+                        <img class="accordion-details__item-icon" src="assets/crystal-ball.svg" />
+                        <span class="accordion-details__item-label">
+                          Oracle:
+                        </span>
+                        <span class="accordion-details__item-value">
+                          <ng-container *ngIf="availableOracle; else nonOracleTemplate">
+                            <a (click)="openAddress(loan.oracle.address)">
+                              {{ loan.oracle.address | formatAddress }}
+                            </a>
+                          </ng-container>
+                          <ng-template #nonOracleTemplate>
+                            <strong>
+                              -
+                            </strong>
+                          </ng-template>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4 mt-3 mt-lg-5 pt-lg-1">
+        <div
+          class="page-overview__status page-content"
+          [class.page-overview__status--request]="isRequest"
+          [class.page-overview__status--active]="isOngoing || isInDebt"
+          [class.page-overview__status--paid]="isPaid"
+        >
+          <!-- request case -->
+          <div class="d-flex" *ngIf="isRequest">
+            <div class="page-overview__status-icon">
+              <i class="far fa-clock"></i>
+            </div>
+            <div>
+              <div class="page-overview__status-label">
+                This loan expires in...
+              </div>
+              <div class="page-overview__status-value">
+                {{ expiresIn }}
+              </div>
+            </div>
+          </div>
+
+          <!-- active case -->
+          <div *ngIf="isOngoing || isInDebt">
+            <div class="page-overview__status-title">
+              Payment status
+            </div>
+            <div class="page-overview__status-label">
+              Paid
+            </div>
+            <div class="page-overview__status-value page-overview__status-value--paid">
+              {{ paid }} {{ loan.currency }}
+            </div>
+            <div class="page-overview__status-label">
+              Debt
+            </div>
+            <div class="page-overview__status-value page-overview__status-value--debt">
+              {{ pendingAmount }} {{ loan.currency }}
+            </div>
+          </div>
+
+          <!-- paid case -->
+          <div class="d-flex" *ngIf="isPaid">
+            <div class="page-overview__status-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <div>
+              <div class="page-overview__status-label">
+                Fully Paid
+              </div>
+              <div class="page-overview__status-value">
+                {{ totalDebt }} {{ loan.currency }}
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="page-overview__cta">
+          <app-redeem-button
+            [loan]="loan"
+            (endRedeem)="onUserAction('redeem')"
+            *ngIf="canRedeem"
+          >
+          </app-redeem-button>
+          <app-pay-button
+            [loan]="loan"
+            [showPayDialog]="true"
+            (endPay)="onUserAction('pay')"
+            *ngIf="canPay"
+          ></app-pay-button>
+          <app-lend-button
+            [loan]="loan"
+            [showLendDialog]="true"
+            (endLend)="onUserAction('lend')"
+            *ngIf="canLend"
+          ></app-lend-button>
+          <app-transfer-button
+            [loan]="loan"
+            [showTransferDialog]="true"
+            (endTransfer)="onUserAction('transfer')"
+            *ngIf="canTransfer"
+            ></app-transfer-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-details">
+  <div class="container">
+    <div class="row d-none d-lg-flex">
+      <div class="col-12 d-flex align-items-center">
+        <h2
+          *ngIf="[0, 1].includes(loanType)"
+          class="page-title page-title--tab mr-3"
+          [class.page-title--active]="isDetail('collateral')"
+          (click)="openDetail('collateral')"
+        >
+          Collateral
+        </h2>
+        <h2
+          *ngIf="[2, 3].includes(loanType)"
+          class="page-title page-title--tab mr-3"
+          [class.page-title--active]="isDetail('cosigner')"
+          (click)="openDetail('cosigner')"
+        >
+          Cosigner
+        </h2>
+        <h2
+          *ngIf="identityName !== 'Unknown'"
+          class="page-title page-title--tab ml-3"
+          [class.page-title--active]="isDetail('identity')"
+          (click)="openDetail('identity')"
+        >
+          Borrower
+        </h2>
+        <h2
+          *ngIf="[0, 1, 4, 5].includes(loan?.status) && loan?.descriptor.installments"
+          class="page-title page-title--tab ml-3"
+          [class.page-title--active]="isDetail('installments')"
+          (click)="openDetail('installments')"
+        >
+          Instalments
+        </h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div
+          class="page-content"
+          *ngIf="
+            isDesktop ||
+            (
+              isDetail('collateral') ||
+              isDetail('cosigner') ||
+              isDetail('identity') ||
+              isDetail('installments')
+            )
+          "
+        >
+          <app-detail-identity
+            *ngIf="isDetail('identity')"
+            [loan]="loan"
+          ></app-detail-identity>
+          <app-detail-cosigner
+            *ngIf="isDetail('cosigner')"
+            [loan]="loan"
+          ></app-detail-cosigner>
+          <app-detail-collateral
+            *ngIf="isDetail('collateral')"
+            [loan]="loan"
+            [collateral]="collateral"
+            [canAdjust]="canAdjustCollateral"
+            (updateCollateral)="onUserAction('collateral')"
+          ></app-detail-collateral>
+          <app-detail-installments
+            *ngIf="isDetail('installments')"
+            [loan]="loan"
+          ></app-detail-installments>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section
+  class="page-history"
+  *ngIf="isDesktop || isDetail('history')"
+>
+  <div class="container">
+    <h2 class="page-title d-none d-lg-inline-block">
+      Loan history
+    </h2>
+    <div class="col-12" *ngIf="loan && hasHistory">
+      <app-transaction-history [loan]=loan></app-transaction-history>
+    </div>
+  </div>
+</section>
