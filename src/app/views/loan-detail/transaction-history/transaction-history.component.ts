@@ -25,6 +25,7 @@ class DataEntry {
 
 export class TransactionHistoryComponent implements OnInit, OnChanges {
   @Input() loan: Loan;
+  componentId = 'transaction-history';
   status: string;
   selectedEvent: number;
   id = 0;

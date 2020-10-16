@@ -1,21 +1,12 @@
-@import '../../../../scss/variables';
 @import '../../../../scss/fonts';
-
-@mixin small-title {
-  @extend %font-light;
-  text-transform: uppercase;
-  display: inline-block;
-  margin-bottom: 10px;
-}
-
+@import './../accordion-details';
 
 .collateral-detail {
   width: 100%;
+  padding-top: 10px;
   text-align: left;
   &__head {
     h3 {
-      @extend %font-medium;
-      @extend .font24;
       text-transform: uppercase;
       margin: 0 0 40px;
     }
@@ -23,6 +14,7 @@
   &__body {
     .item {
       width: 100%;
+      max-width: 245px;
       display: flex;
       align-items: center;
       margin-bottom: 20px;
@@ -41,14 +33,16 @@
         justify-content: center;
         user-select: none;
       }
+      &__label,
+      &__value {
+        color: #D8D8D8;
+      }
       &__label {
         @include typography-headline(7);
         text-transform: uppercase;
-        color: #EDEDED; // TODO: use theme color
       }
       &__value {
         @include typography-subtitle(2);
-        color: white;
       }
     }
   }
@@ -56,31 +50,12 @@
     background: var(--app-color-gray-400);
     border-radius: 4px;
     margin-top: 6px;
+    margin-bottom: 20px;
 
     .row {
       margin: 0;
-      &--header {
-        padding-top: 6px;
-        padding-bottom: 20px;
-        h4 {
-          @include small-title;
-          @extend .font14;
-          color: #EDEDED; // TODO: use theme color
-        }
-        p {
-          @include small-title;
-          @extend .font14;
-          text-transform: none;
-          color: var(--app-color-gray-50);
-        }
-        .button {
-          margin-top: 18px;
-        }
-      }
       &--footer {
         .item {
-          @extend %roboto-light;
-          @extend .font12;
           padding-top: 16px;
           padding-bottom: 16px;
           color: var(--app-color-gray-50);
@@ -88,7 +63,6 @@
             margin-right: 6px;
           }
           .item__value {
-            @extend .font14;
             display: block;
           }
         }
@@ -105,6 +79,32 @@
           color: #D8D8D8; // TODO: use theme color
         }
       }
+    }
+  }
+  &__accordion {
+    margin-top: 5px;
+    margin-bottom: 20px;
+  }
+  &__actions {
+    padding: 16px 22px 22px;
+    border-radius: 6px;
+    background: #313134;
+    box-shadow: 0px 3px 6px #00000029;
+
+    &-title,
+    &-description {
+      margin-top: 0;
+    }
+    &-title {
+      @include typography-body(1);
+      text-transform: uppercase;
+      color: #D8D8D8; // TODO: use theme color
+      margin-bottom: 8px;
+    }
+    &-description {
+      margin-bottom: 20px;
+      text-transform: none;
+      color: #B1B1B1;
     }
   }
 }
@@ -130,15 +130,23 @@
 
 a {
   color: white;
-  @extend %roboto-medium;
 }
 
 @media (min-width: 992px) {
   .collateral-detail {
-    padding-bottom: 40%;
-
+    padding-top: 25px;
     &__footer {
       margin-top: 15px;
+      margin-bottom: 0;
+    }
+    &__accordion {
+      margin-top: 31px;
+      margin-bottom: 0;
+    }
+    &__actions {
+      &-description {
+        margin-bottom: 26px;
+      }
     }
   }
 

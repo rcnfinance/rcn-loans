@@ -1,0 +1,194 @@
+<ng-container *ngIf="installments; else empty">
+  <section class="installments-detail">
+    <div class="row flex-column-reverse flex-lg-row">
+      <div class="col-12 col-lg-8">
+        <div class="row row--header align-items-center mx-0">
+          <div class="col-2 col-lg-1 px-0">
+            Pay
+          </div>
+          <div class="col-4 col-lg-2 px-0">
+            Due date
+          </div>
+          <div class="col-lg-2 px-0 d-none d-lg-block">
+            Payment date
+          </div>
+          <div class="col-4 col-lg-2 px-0">
+            Amount
+          </div>
+          <div class="col-lg-2 px-0 d-none d-lg-block">
+            Pending
+          </div>
+          <div class="col-lg-2 px-0 d-none d-lg-block">
+            Total paid
+          </div>
+          <div class="col-2 col-lg-1 px-0 d-none">
+          </div>
+        </div>
+
+        <div class="spinner-wrapper">
+          <ngx-spinner
+            bdColor="transparent"
+            size="medium"
+            color="#fff"
+            type="ball-clip-rotate-multiple"
+            [name]="componentId"
+            [fullScreen]="false"
+          ></ngx-spinner>
+        </div>
+
+        <mat-expansion-panel
+          *ngFor="let installment of installments; let i = index"
+          [disabled]="!installment.pays?.length"
+          class="installment mat-elevation-z"
+          [class.installment--first]="i === 0"
+          [class.installment--last]="(i + 1) === installments.length"
+          [class.installment--current]="installment.isCurrent"
+          [class.installment--multiple-pays]="installment.pays?.length"
+        >
+          <mat-expansion-panel-header>
+            <div class="d-flex full-width">
+              <div class="installment__col installment__col--pay">
+                {{ installment.payNumber }}
+              </div>
+              <div class="installment__col installment__col--due-date">
+                {{ installment.dueDate | date: 'MM/dd/yyyy' }}
+              </div>
+              <div class="d-none d-lg-block installment__col installment__col--payment-amount">
+
+              </div>
+              <div class="installment__col installment__col--amount">
+                {{ installment.amount | formatAmount }} {{ installment.currency }}
+              </div>
+              <div class="d-none d-lg-block installment__col installment__col--pending">
+
+              </div>
+              <div class="d-none d-lg-block installment__col installment__col--paid">
+                <ng-container *ngIf="installment.isPrev || installment.isCurrent">
+                  {{ installment.totalPaid | formatAmount }}
+                </ng-container>
+              </div>
+              <div
+                class="installment__col installment__col--status"
+                [ngClass]="'installment__col--status-' + installment.status"
+              >
+                <span
+                  *ngIf="
+                    !installment.isNext &&
+                    installment.status === 0 &&
+                    !installment.totalPaid > installment.amount
+                  "
+                >
+                  <i class="fas fa-check"></i>
+                </span>
+                <span *ngIf="!installment.isNext && (installment.status === 1 || installment.status === 2)">
+                  <i class="fas fa-exclamation"></i>
+                </span>
+              </div>
+            </div>
+          </mat-expansion-panel-header>
+
+          <div class="row row--pay mx-0" *ngFor="let pay of installment.pays">
+            <div class="installment__col installment__col--pay">
+            </div>
+            <div class="installment__col installment__col--due-date">
+            </div>
+            <div class="installment__col installment__col--payment-amount">
+              {{ pay.date | date: 'MM/dd/yyyy' }}
+            </div>
+            <div class="installment__col installment__col--amount">
+            </div>
+            <div class="installment__col installment__col--pending">
+              {{ pay.pending | formatAmount }}
+            </div>
+            <div class="installment__col installment__col--paid">
+            </div>
+            <div class="installment__col installment__col--status">
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <p class="installments-detail__disclaimer">
+          <i class="fas fa-info-circle mr-1"></i>
+          <span>
+            All the values of the instalment chart are expressed in {{ loan?.currency }}.
+          </span>
+        </p>
+      </div>
+      <div class="col-12 col-lg-4">
+        <div class="next-installment">
+          <h2 class="next-installment__title">
+            Next Payment
+          </h2>
+          <div class="next-installment__item">
+            <div class="next-installment__item-icon">
+              <i class="far fa-calendar-alt"></i>
+            </div>
+            <div>
+              <div class="next-installment__item-label">
+                Instalment
+              </div>
+              <div class="next-installment__item-value">
+                {{ nextInstallment?.payNumber || '-' }}
+              </div>
+            </div>
+          </div>
+          <div class="next-installment__item">
+            <div class="next-installment__item-icon">
+              <i class="fas fa-coins"></i>
+            </div>
+            <div>
+              <div class="next-installment__item-label">
+                Amount to pay
+              </div>
+              <div class="next-installment__item-value">
+                <ng-container *ngIf="nextInstallment?.installment.amount; else emptyAmount">
+                  {{ nextInstallment.installment.amount | formatAmount }}
+                  {{ nextInstallment?.installment.currency }}
+                </ng-container>
+                <ng-template #emptyAmount>
+                  -
+                </ng-template>
+              </div>
+            </div>
+          </div>
+          <div class="next-installment__item">
+            <div class="next-installment__item-icon">
+              <i class="far fa-clock"></i>
+            </div>
+            <div>
+              <div class="next-installment__item-label">
+                Due date
+                <span
+                  *ngIf="nextInstallment"
+                  class="due-status ml-1"
+                  [class.due-status--success]="nextInstallment.installment.status === 0"
+                  [class.due-status--warning]="nextInstallment.installment.status === 1"
+                  [class.due-status--error]="nextInstallment.installment.status === 2"
+                >
+                  ({{ nextInstallment?.dueDays }})
+                </span>
+              </div>
+              <div class="next-installment__item-value">
+                {{ (nextInstallment?.installment.dueDate | date: 'yyyy-MM-dd') || '-' }}
+              </div>
+            </div>
+          </div>
+          <!-- {{ nextInstallment | json }} -->
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #empty>
+  <div class="empty-container p-3 py-md-0">
+    <div class="empty-row">
+      <i class="material-icons font110">
+        error_outline
+      </i>
+      <div class="title main-h3">
+        There is no installments available
+      </div>
+      <div class="title main-h4"></div>
+    </div>
+  </div>
+</ng-template>
