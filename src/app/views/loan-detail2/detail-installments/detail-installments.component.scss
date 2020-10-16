@@ -3,7 +3,6 @@
 .installments-detail {
   width: 100%;
   text-align: center;
-  padding-top: 23px;
 
   .row {
     &--header {
@@ -31,6 +30,7 @@
     &:hover {
       background: var(--app-color-gray-400) !important;
       .mat-expansion-panel-header {
+        @include typography-overline(3);
         color: #939393;
       }
     }
@@ -109,6 +109,43 @@
     }
   }
 
+  .next-installment {
+    padding: 15px 22px 22px;
+    margin-bottom: 42px;
+    border-radius: 6px;
+    background: var(--app-color-gray-400);
+    color: #D8D8D8;
+    box-shadow: 0px 3px 6px #0000001A;
+    text-align: left;
+    &__title {
+      @include typography-body(1);
+      text-transform: uppercase;
+      margin: 0 0 18px;
+    }
+    &__item {
+      width: 100%;
+      display: flex;
+      margin-bottom: 24px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      &-icon {
+        margin: 2px 12px 0 0;
+        font-size: 1.5em;
+      }
+      &-label,
+      &-value {
+        margin: 0;
+      }
+      &-label {
+        @include typography-body(3);
+      }
+      &-value {
+        @include typography-subtitle(2);
+      }
+    }
+  }
+
 }
 
 .empty-container{
@@ -137,6 +174,7 @@ a {
 
 @media (min-width: 992px) {
   .installments-detail {
+    padding-top: 23px;
     .installment {
       &__col {
         &--pay,
@@ -156,6 +194,11 @@ a {
         }
       }
     }
+  }
+
+  .next-installment {
+    margin-top: 40px;
+    margin-bottom: 0;
   }
 
   .empty-container {

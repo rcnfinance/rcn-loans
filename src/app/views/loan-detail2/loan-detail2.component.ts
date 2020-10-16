@@ -5,12 +5,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
-import * as moment from 'moment';
 // App Models
 import { Loan, Status, LoanType } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
 import { Collateral, Status as CollateralStatus } from '../../models/collateral.model';
-import { Installment } from '../../interfaces/installment';
 // App Utils
 import { Utils } from './../../utils/utils';
 // App Services
@@ -73,11 +71,6 @@ export class LoanDetail2Component implements OnInit, OnDestroy {
   collateral: Collateral;
   collateralAmount: string;
   collateralAsset: string;
-  nextInstallment: {
-    installment: Installment,
-    payNumber: string,
-    dueDays: string
-  };
   lendDate: string;
   dueDate: string;
   liquidationRatio: string;
@@ -468,32 +461,7 @@ export class LoanDetail2Component implements OnInit, OnDestroy {
    */
   private async loadInstallments() {
     const loan: Loan = this.loan;
-    const installment: Installment = await this.installmentsService.getCurrentInstallment(loan);
-    if (!installment) {
-      return;
-    }
-
-    const secondsInDay = 86400;
-    const addSuffix = (n: number): string => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th';
-    const payNumber = `${ installment.payNumber + addSuffix(installment.payNumber) } Pay`;
-    const dueDate: number = new Date(moment(installment.dueDate).format()).getTime() / 1000;
     const nowDate: number = Math.floor(new Date().getTime() / 1000);
-    const daysLeft: number = Math.round((dueDate - nowDate) / secondsInDay);
-
-    let dueDays: string = Utils.formatDelta(dueDate - nowDate, 1);
-    if (daysLeft > 1) {
-      dueDays += ' left';
-    } else if (daysLeft === 1 || daysLeft === 0) {
-      dueDays += ' left';
-    } else {
-      dueDays += ' ago';
-    }
-    this.nextInstallment = {
-      payNumber,
-      dueDays,
-      installment
-    };
-
     const { installments = 1, frequency } = loan.descriptor;
     const installmentDays = ['0'];
 
