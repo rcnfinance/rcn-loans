@@ -289,11 +289,15 @@
     }
   }
   &__cta {
-    padding: 0 1px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 17px;
+    background: var(--app-color-gray-400);
     ::ng-deep .button {
       width: 100%;
-      height: 43px;
-      padding: 3px 0;
+      box-shadow: none;
     }
   }
 }
@@ -355,6 +359,16 @@
     }
     &__timeline {
       margin-top: 87px;
+    }
+    &__cta {
+      position: static;
+      padding: 0 1px;
+      background: none;
+      ::ng-deep .button {
+        height: 43px;
+        padding: 3px 0;
+        box-shadow: 0px 3px 6px #00000029;
+      }
     }
   }
   .page-history {
