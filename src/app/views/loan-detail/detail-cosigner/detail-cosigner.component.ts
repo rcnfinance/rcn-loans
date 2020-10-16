@@ -1,13 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Loan, LoanType } from '../../../models/loan.model';
+import { Loan } from '../../../models/loan.model';
 import { UnknownCosigner } from './../../../models/cosigner.model';
 import { CosignerService } from '../../../services/cosigner.service';
-import { LoanTypeService } from '../../../services/loan-type.service';
 import { CosignerProvider } from '../../../providers/cosigner-provider';
 import { DecentralandCosignerProvider } from '../../../providers/cosigners/decentraland-cosigner-provider';
 import { environment } from '../../../../environments/environment';
 import { LoanUtils } from '../../../utils/loan-utils';
-import { Utils } from '../../../utils/utils';
 
 @Component({
   selector: 'app-detail-cosigner',
@@ -21,8 +19,7 @@ export class DetailCosignerComponent implements OnInit {
   shortCosignerAddress: string;
 
   constructor(
-    private cosignerService: CosignerService,
-    private loanTypeService: LoanTypeService
+    private cosignerService: CosignerService
   ) {}
   ngOnInit() {
     this.cosignerProvider = this.cosignerService.getCosigner(this.loan);
@@ -31,13 +28,6 @@ export class DetailCosignerComponent implements OnInit {
   }
 
   private buildDetailClass(): string {
-    const type: LoanType = this.loanTypeService.getLoanType(this.loan);
-    const cosignerAddress: string = LoanUtils.getCosignerAddress(this.loan);
-    if (type === LoanType.FintechOriginator && cosignerAddress !== Utils.address0x) {
-      this.shortCosignerAddress = Utils.shortAddress(cosignerAddress);
-      return 'collateral_auction';
-    }
-
     if (this.cosignerProvider === undefined) { return 'not_available'; }
     switch (this.cosignerProvider.constructor) {
       case DecentralandCosignerProvider:
