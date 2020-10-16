@@ -22,7 +22,6 @@ import { Type } from './../../services/tx.service';
 import { EventsService } from './../../services/events.service';
 import { LoanTypeService } from './../../services/loan-type.service';
 import { PreviousRouteService } from '../../services/previousRoute.service';
-import { InstallmentsService } from './../../services/installments.service';
 
 @Component({
   selector: 'app-loan-detail2',
@@ -101,7 +100,6 @@ export class LoanDetail2Component implements OnInit, OnDestroy {
     private eventsService: EventsService,
     private loanTypeService: LoanTypeService,
     private previousRouteService: PreviousRouteService,
-    private installmentsService: InstallmentsService,
     public dialog: MatDialog
   ) { }
 
