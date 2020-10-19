@@ -1,5 +1,10 @@
 # Changelog
 
+## **0.2.6** Boggart 👻
+
+### Feature:
+- New loan detail UI
+
 ## **0.2.5** Boggart 👻
 
 ### Feature:

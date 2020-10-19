@@ -1,0 +1,86 @@
+.accordion-details {
+  position: relative;
+  border-radius: 3px;
+  mat-expansion-panel {
+    box-shadow: 0px 3px 6px #00000029;
+    background: var(--app-color-gray-400);
+    &-header {
+      height: 50px !important;
+      padding: 0 20px;
+      ::ng-deep {
+        .mat-content {
+          max-width: 82px;
+        }
+        .mat-expansion-indicator {
+          height: 1.7em;
+          &::after {
+            padding: 2.5px;
+          }
+        }
+      }
+    }
+    mat-panel-title {
+      @include typography-caption(1);
+      margin-right: 0;
+    }
+    ::ng-deep {
+      .mat-expansion-panel-body {
+        padding-bottom: 21px;
+      }
+    }
+  }
+  &__item {
+    padding: 7px 0 0;
+    color: #D8D8D8;
+    &-wrapper {
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+    }
+    &-icon {
+      font-size: 1.1em;
+    }
+    &-label {
+      @include typography-caption(1);
+    }
+    &-value {
+      @include typography-overline(3);
+    }
+    svg,
+    img {
+      margin-right: 9px;
+    }
+    img {
+      &.accordion-details__item-icon {
+        display: inline-block;
+        height: 1em;
+        overflow: visible;
+        vertical-align: -.125em;
+        filter: invert(1);
+        opacity: .85;
+      }
+    }
+    ::ng-deep {
+      strong,
+      a {
+        color: white;
+      }
+      a {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .accordion-details {
+    &__item {
+      &-wrapper {
+        &,
+        &:not(:last-child) {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}

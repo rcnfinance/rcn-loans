@@ -1,0 +1,179 @@
+<ng-container *ngIf="collateral; else empty">
+  <section class="collateral-detail">
+    <div class="row">
+      <div class="col-12 col-lg-8">
+        <div class="collateral-detail__body row justify-content-between">
+          <article
+            class="item col col-12 col-md-4"
+            matTooltip="This is the amount of funds currently collateralized."
+          >
+            <span class="item__icon">
+              <i class="fa fa-coins font22"></i>
+            </span>
+            <div class="item__content">
+              <span class="item__label">
+                Collateral Amount
+              </span>
+              <p class="item__value mt-1">
+                {{ collateralAmount }} {{ collateralAsset }}
+              </p>
+            </div>
+          </article>
+          <article
+            class="item col col-12 col-md-4"
+            matTooltip="If the Collateral Ratio reaches this value your collateral will get partially or fully liquidated."
+          >
+            <span class="item__icon">
+              <i class="fa fa-chart-bar font22"></i>
+            </span>
+            <div class="item__content">
+              <span class="item__label">
+                Liquidation Ratio
+              </span>
+              <p class="item__value mt-1">
+                {{ liquidationRatio }} %
+              </p>
+            </div>
+          </article>
+          <article
+            class="item col col-12 col-md-4"
+            matTooltip="If a collateral liquidation gets triggered, your collateral will get liquidated until the Collateralization Ratio reaches this value."
+          >
+            <span class="item__icon">
+              <i class="fa fa-chart-area font22"></i>
+            </span>
+            <div class="item__content">
+              <span class="item__label">
+                Safety Ratio
+              </span>
+              <p class="item__value mt-1">
+                {{ balanceRatio }} %
+              </p>
+            </div>
+          </article>
+        </div>
+        <!--
+        <div class="collateral-detail__footer">
+          <div
+            class="row row--footer"
+            [class.row--divisor]="canAdjust"
+            *ngIf="collateral?.amount !== '0' && loan.status !== 2"
+          >
+            <div
+              class="item col col-12 col-md-4"
+              matTooltip="This is the proportion between the value of the collateral and the value of the borrowed funds."
+            >
+              <i class="fa fa-percentage"></i>
+              Collateral Ratio:
+              <strong class="item__value">
+                {{ currentLoanToValue }} %
+              </strong>
+            </div>
+            <div class="item col col-12 col-md-4">
+              <i class="fa fa-retweet"></i>
+              Current Exchange Rate:
+              <strong class="item__value">
+                {{ currentExchangeRate }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
+              </strong>
+            </div>
+            <div
+              class="item col col-12 col-md-4"
+              matTooltip="This is the Exchange Rate at which the Collateral Ratio will reach the Liquidation Ratio, triggering a collateral liquidation."
+            >
+              <i class="fa fa-chart-line"></i>
+              Liquidation Price:
+              <strong class="item__value">
+                {{ currentLiquidationPrice }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
+              </strong>
+            </div>
+          </div>
+        </div>
+        -->
+        <div class="collateral-detail__accordion">
+          <mat-accordion class="accordion-details">
+            <mat-expansion-panel class="mat-elevation-z">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  More details
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="accordion-details__item">
+                <div class="d-lg-flex justify-content-between">
+                  <div class="accordion-details__item-wrapper">
+                    <i class="accordion-details__item-icon fa fa-percentage"></i>
+                    <span class="accordion-details__item-label">
+                      Collateral Ratio:
+                    </span>
+                    <span class="accordion-details__item-value">
+                      {{ currentLoanToValue }} %
+                    </span>
+                  </div>
+                  <div class="accordion-details__item-wrapper">
+                    <i class="accordion-details__item-icon fa fa-retweet"></i>
+                    <span class="accordion-details__item-label">
+                      Current Exchange Rate:
+                    </span>
+                    <span class="accordion-details__item-value">
+                      {{ currentExchangeRate }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
+                    </span>
+                  </div>
+                  <div class="accordion-details__item-wrapper">
+                    <i class="accordion-details__item-icon fa fa-chart-line"></i>
+                    <span class="accordion-details__item-label">
+                      Liquidation Price:
+                    </span>
+                    <span class="accordion-details__item-value">
+                      {{ currentLiquidationPrice }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4">
+        <div class="collateral-detail__actions" *ngIf="canAdjust">
+          <h4 class="collateral-detail__actions-title">
+            Deposit collateral
+          </h4>
+          <p class="collateral-detail__actions-description">
+            Do you want to deposit or withdraw collateral?
+          </p>
+          <div class="d-flex align-items-center">
+            <button
+              mat-raised-button
+              class="button button-primary"
+              [class.button-disabled]="addPendingTx || withdrawPendingTx"
+              (click)="openDialog('add')"
+            >
+              {{ addButtonText }}
+            </button>
+            <button
+              mat-raised-button
+              class="button button-clear"
+              [class.button-disabled]="addPendingTx || withdrawPendingTx"
+              (click)="openDialog('withdraw')"
+            >
+              {{ withdrawButtonText }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #empty>
+  <div class="empty-container p-3 py-md-0">
+    <div class="empty-row">
+      <i class="material-icons font110">
+        error_outline
+      </i>
+      <div class="title main-h3">
+        There is no collateral available
+      </div>
+      <div class="title main-h4"></div>
+    </div>
+  </div>
+</ng-template>

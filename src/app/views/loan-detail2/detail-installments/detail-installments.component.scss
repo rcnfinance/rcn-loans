@@ -1,29 +1,13 @@
-@import '../../../../scss/variables';
 @import '../../../../scss/fonts';
-
-@mixin small-title {
-  @extend %font-light;
-  text-transform: uppercase;
-  display: inline-block;
-  margin-bottom: 10px;
-}
-
 
 .installments-detail {
   width: 100%;
   text-align: center;
 
-  &__title {
-    text-align: left;
-    h3 {
-      @include typography-headline(5);
-      text-transform: uppercase;
-    }
-  }
-
   .row {
     &--header {
-      @include styled-font('Raleway', 700, 13px);
+      margin-bottom: 23px;
+      @include styled-font('proxima-nova', 700, 12px);
       text-transform: uppercase;
       color: #656565;
     }
@@ -34,15 +18,20 @@
 
   .installment {
     border-radius: 0;
-
+    &--first {
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+    }
+    &--last {
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
     &,
     &:hover {
       background: var(--app-color-gray-400) !important;
-    }
-    &--light {
-      &,
-      &:hover {
-        background: var(--app-color-gray-300) !important;
+      .mat-expansion-panel-header {
+        @include typography-overline(3);
+        color: #939393;
       }
     }
     &--current {
@@ -73,6 +62,13 @@
         }
       }
     }
+  }
+
+  &__disclaimer {
+    @include typography-caption(2);
+    color: #B1B1B1;
+    text-align: left;
+    margin: 22px 0 6px;
   }
 
   ::ng-deep {
@@ -113,6 +109,43 @@
     }
   }
 
+  .next-installment {
+    padding: 15px 22px 22px;
+    margin-bottom: 42px;
+    border-radius: 6px;
+    background: var(--app-color-gray-400);
+    color: #D8D8D8;
+    box-shadow: 0px 3px 6px #0000001A;
+    text-align: left;
+    &__title {
+      @include typography-body(1);
+      text-transform: uppercase;
+      margin: 0 0 18px;
+    }
+    &__item {
+      width: 100%;
+      display: flex;
+      margin-bottom: 24px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      &-icon {
+        margin: 2px 12px 0 0;
+        font-size: 1.5em;
+      }
+      &-label,
+      &-value {
+        margin: 0;
+      }
+      &-label {
+        @include typography-body(3);
+      }
+      &-value {
+        @include typography-subtitle(2);
+      }
+    }
+  }
+
 }
 
 .empty-container{
@@ -141,7 +174,7 @@ a {
 
 @media (min-width: 992px) {
   .installments-detail {
-    padding-bottom: 40%;
+    padding-top: 23px;
     .installment {
       &__col {
         &--pay,
@@ -161,6 +194,11 @@ a {
         }
       }
     }
+  }
+
+  .next-installment {
+    margin-top: 40px;
+    margin-bottom: 0;
   }
 
   .empty-container {

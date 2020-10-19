@@ -1,3 +1,4 @@
+@import 'src/scss/fonts';
 
 .icon-box {
   display: flex;
@@ -6,7 +7,7 @@
   height: 40px;
   min-width: 40px;
   border-radius: 50px;
-  background-color: #565759;
+  background-color: var(--app-color-primary-dark);
   margin-right: 10px;
 }
 
@@ -22,7 +23,7 @@
 }
 
 a {
-  color: #4155ff;
+  color: white;
   font-weight: 600;
   font-family: 'Roboto', sans-serif;
   font-size: 15px;
@@ -35,6 +36,7 @@ a:hover {
 .title {
   text-transform: uppercase;
   font-size: 13px;
+  color: #D8D8D8;
 }
 
 .details-box {
@@ -42,7 +44,6 @@ a:hover {
 }
 
 .description {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 600;
-  font-size: 15px;
+  @include typography-subtitle(3);
+  color: #D8D8D8;
 }
