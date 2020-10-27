@@ -322,7 +322,7 @@ export class LoanDetail2Component implements OnInit, OnDestroy {
 
   private defaultDetail(): string {
     if (this.isMobile) {
-      return 'history';
+      return 'overview';
     }
     if (this.loanTypeService.getLoanType(this.loan) === LoanType.UnknownWithCollateral) {
       return 'collateral';
