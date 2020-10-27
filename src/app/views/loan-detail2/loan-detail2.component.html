@@ -52,7 +52,7 @@
         Collateral
       </h2>
       <h2
-        *ngIf="[2, 3].includes(loanType)"
+        *ngIf="loanType === 2"
         class="page-title page-title--tab mr-3"
         [class.page-title--active]="isDetail('cosigner')"
         (click)="openDetail('cosigner')"
@@ -342,7 +342,7 @@
           Collateral
         </h2>
         <h2
-          *ngIf="[2, 3].includes(loanType)"
+          *ngIf="loanType === 2"
           class="page-title page-title--tab mr-3"
           [class.page-title--active]="isDetail('cosigner')"
           (click)="openDetail('cosigner')"
@@ -415,7 +415,8 @@
       Loan history
     </h2>
     <div class="col-12" *ngIf="loan && hasHistory">
-      <app-transaction-history [loan]=loan></app-transaction-history>
+      <!-- <app-transaction-history [loan]=loan></app-transaction-history> -->
+      <app-detail-history></app-detail-history>
     </div>
   </div>
 </section>
