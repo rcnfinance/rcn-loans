@@ -1,0 +1,44 @@
+<div class="section-description d-lg-none">
+  <div class="row">
+    <p class="m-0">
+      Tap in any event to get more information.
+    </p>
+  </div>
+</div>
+
+<div class="detail-history">
+  <div class="detail-history__line">
+  </div>
+  <div class="detail-history__items">
+    <div
+      class="item"
+      [class.item--first]="i === 0"
+      [class.item--completed]="i <= 2"
+      [class.item--selected]="i === 0"
+      *ngFor="let item of [0,1,2,3,4,5]; let i = index"
+    >
+      <div class="item__label">
+        Request
+      </div>
+      <div class="item__circle">
+        <mat-icon>
+          person
+        </mat-icon>
+      </div>
+      <div class="item__message">
+        <div class="item__message-title">
+          Requested
+        </div>
+        <div class="item__message-details">
+          Date: 07/30/2019 17:37
+        </div>
+        <div class="item__message-details">
+          Creator: <a href="#!">0xd...a86</a> - Unknown
+        </div>
+        <div class="item__message-details">
+          Transaction: <a href="#!">0xd...a86</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

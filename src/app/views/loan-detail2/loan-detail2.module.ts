@@ -26,6 +26,7 @@ import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfe
 import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { ItemFeatureComponent } from './../loan-detail/item-feature/item-feature.component';
 import { LoanDoesNotExistComponent } from './../loan-detail/loan-does-not-exist/loan-does-not-exist.component';
+import { DetailHistoryComponent } from './detail-history/detail-history.component';
 
 const routes: Routes = [
   { path: '', component: LoanDetail2Component },
@@ -52,6 +53,7 @@ const routes: Routes = [
     DetailCosignerComponent,
     DetailCollateralComponent,
     DetailInstallmentsComponent,
+    DetailHistoryComponent,
     DecentralandMapComponent,
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
