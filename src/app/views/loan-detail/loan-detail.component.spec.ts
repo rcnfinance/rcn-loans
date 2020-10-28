@@ -6,15 +6,15 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
 import { InstallmentsService } from './../../services/installments.service';
 import { CommitsService } from './../../services/commits.service';
-import { LoanDetail2Component } from './loan-detail2.component';
+import { LoanDetailComponent } from './loan-detail.component';
 
-describe('LoanDetail2Component', () => {
-  let component: LoanDetail2Component;
-  let fixture: ComponentFixture<LoanDetail2Component>;
+describe('LoanDetailComponent', () => {
+  let component: LoanDetailComponent;
+  let fixture: ComponentFixture<LoanDetailComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoanDetail2Component ],
+      declarations: [ LoanDetailComponent ],
       imports: [
         RouterModule.forRoot([]),
         HttpClientModule,
@@ -28,7 +28,7 @@ describe('LoanDetail2Component', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoanDetail2Component);
+    fixture = TestBed.createComponent(LoanDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

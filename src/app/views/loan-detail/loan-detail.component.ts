@@ -24,11 +24,11 @@ import { LoanTypeService } from './../../services/loan-type.service';
 import { PreviousRouteService } from '../../services/previousRoute.service';
 
 @Component({
-  selector: 'app-loan-detail2',
-  templateUrl: './loan-detail2.component.html',
-  styleUrls: ['./loan-detail2.component.scss']
+  selector: 'app-loan-detail',
+  templateUrl: './loan-detail.component.html',
+  styleUrls: ['./loan-detail.component.scss']
 })
-export class LoanDetail2Component implements OnInit, OnDestroy {
+export class LoanDetailComponent implements OnInit, OnDestroy {
   pageId = 'loan-detail';
   loan: Loan;
   identityName: string;
