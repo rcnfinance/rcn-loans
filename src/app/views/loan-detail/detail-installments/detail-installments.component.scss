@@ -1,0 +1,209 @@
+@import '../../../../scss/fonts';
+
+.installments-detail {
+  width: 100%;
+  text-align: center;
+
+  .row {
+    &--header {
+      margin-bottom: 23px;
+      @include styled-font('proxima-nova', 700, 12px);
+      text-transform: uppercase;
+      color: #656565;
+    }
+    &--pay {
+      padding: 6px 0;
+    }
+  }
+
+  .installment {
+    border-radius: 0;
+    &--first {
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+    }
+    &--last {
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+    &,
+    &:hover {
+      background: var(--app-color-gray-400) !important;
+      .mat-expansion-panel-header {
+        @include typography-overline(3);
+        color: #939393;
+      }
+    }
+    &--current {
+      .mat-expansion-panel-header {
+        color: var(--app-color-primary-light) !important;
+      }
+    }
+
+    &__col {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      &--pay {
+        width: 16.66%;
+        min-width: 16.66%;
+        max-width: 16.66%;
+      }
+      &--due-date,
+      &--amount {
+        width: 33.33%;
+        min-width: 33.33%;
+        max-width: 33.33%;
+      }
+      &--status {
+        text-align: left;
+        color: var(--app-color-orange);
+        &-0 {
+          color: var(--app-color-green);
+        }
+      }
+    }
+  }
+
+  &__disclaimer {
+    @include typography-caption(2);
+    color: #B1B1B1;
+    text-align: left;
+    margin: 22px 0 6px;
+  }
+
+  ::ng-deep {
+    ngx-spinner {
+      .overlay {
+        max-height: 600px;
+      }
+    }
+
+    mat-expansion-panel {
+      &-header,
+      &-body {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      &-header {
+        position: relative;
+        .mat-expansion-indicator {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 16px;
+          display: flex;
+          align-items: center;
+        }
+        &,
+        &:hover,
+        &:focus {
+          background: none !important;
+        }
+      }
+      .row {
+        width: 100%;
+        &--header {
+
+        }
+      }
+    }
+  }
+
+  .next-installment {
+    padding: 15px 22px 22px;
+    margin-bottom: 42px;
+    border-radius: 6px;
+    background: var(--app-color-gray-400);
+    color: #D8D8D8;
+    box-shadow: 0px 3px 6px #0000001A;
+    text-align: left;
+    &__title {
+      @include typography-body(1);
+      text-transform: uppercase;
+      margin: 0 0 18px;
+    }
+    &__item {
+      width: 100%;
+      display: flex;
+      margin-bottom: 24px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      &-icon {
+        margin: 2px 12px 0 0;
+        font-size: 1.5em;
+      }
+      &-label,
+      &-value {
+        margin: 0;
+      }
+      &-label {
+        @include typography-body(3);
+      }
+      &-value {
+        @include typography-subtitle(2);
+      }
+    }
+  }
+
+}
+
+.empty-container{
+  height: 100%;
+  .empty-row{
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    i {
+      font-size: 90px;
+      color: var(--app-color-gray-100);
+    }
+  }
+}
+
+a {
+  color: white;
+  @extend %roboto-medium;
+}
+
+@media (min-width: 992px) {
+  .installments-detail {
+    padding-top: 23px;
+    .installment {
+      &__col {
+        &--pay,
+        &--status {
+          width: 8.3%;
+          min-width: 8.3%;
+          max-width: 8.3%;
+        }
+        &--due-date,
+        &--payment-amount,
+        &--amount,
+        &--pending,
+        &--paid {
+          width: 16.6%;
+          min-width: 16.6%;
+          max-width: 16.6%;
+        }
+      }
+    }
+  }
+
+  .next-installment {
+    margin-top: 40px;
+    margin-bottom: 0;
+  }
+
+  .empty-container {
+    .empty-row {
+      padding: 0 56px;
+    }
+  }
+}

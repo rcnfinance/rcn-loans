@@ -1,0 +1,158 @@
+@import '../../../../scss/fonts';
+@import './../accordion-details';
+
+.collateral-detail {
+  width: 100%;
+  padding-top: 10px;
+  text-align: left;
+  &__head {
+    h3 {
+      text-transform: uppercase;
+      margin: 0 0 40px;
+    }
+  }
+  &__body {
+    .item {
+      width: 100%;
+      max-width: 245px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      &__icon {
+        min-width: 45px;
+        min-height: 45px;
+        max-width: 45px;
+        max-height: 45px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 18px;
+        background: var(--app-color-primary-dark);
+        color: var(--app-color-gray-700);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+      }
+      &__label,
+      &__value {
+        color: #D8D8D8;
+      }
+      &__label {
+        @include typography-headline(7);
+        text-transform: uppercase;
+      }
+      &__value {
+        @include typography-subtitle(2);
+      }
+    }
+  }
+  &__footer {
+    background: var(--app-color-gray-400);
+    border-radius: 4px;
+    margin-top: 6px;
+    margin-bottom: 20px;
+
+    .row {
+      margin: 0;
+      &--footer {
+        .item {
+          padding-top: 16px;
+          padding-bottom: 16px;
+          color: var(--app-color-gray-50);
+          svg {
+            margin-right: 6px;
+          }
+          .item__value {
+            display: block;
+          }
+        }
+      }
+      &--divisor {
+        &::before {
+          content: '';
+          width: 100%;
+          height: 1px;
+          margin: 0 16px 6px;
+          background: var(--app-color-gray-200);
+        }
+        .item {
+          color: #D8D8D8; // TODO: use theme color
+        }
+      }
+    }
+  }
+  &__accordion {
+    margin-top: 5px;
+    margin-bottom: 20px;
+  }
+  &__actions {
+    padding: 16px 22px 22px;
+    border-radius: 6px;
+    background: #313134;
+    box-shadow: 0px 3px 6px #00000029;
+
+    &-title,
+    &-description {
+      margin-top: 0;
+    }
+    &-title {
+      @include typography-body(1);
+      text-transform: uppercase;
+      color: #D8D8D8; // TODO: use theme color
+      margin-bottom: 8px;
+    }
+    &-description {
+      margin-bottom: 20px;
+      text-transform: none;
+      color: #B1B1B1;
+    }
+  }
+}
+
+.empty-container{
+  height: 100%;
+  .empty-row{
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    i {
+      font-size: 90px;
+      color: var(--app-color-gray-100);
+    }
+  }
+}
+
+a {
+  color: white;
+}
+
+@media (min-width: 992px) {
+  .collateral-detail {
+    padding-top: 25px;
+    &__footer {
+      margin-top: 15px;
+      margin-bottom: 0;
+    }
+    &__accordion {
+      margin-top: 31px;
+      margin-bottom: 0;
+    }
+    &__actions {
+      &-description {
+        margin-bottom: 26px;
+      }
+    }
+  }
+
+  .empty-container {
+    .empty-row {
+      padding: 0 56px;
+    }
+  }
+}
