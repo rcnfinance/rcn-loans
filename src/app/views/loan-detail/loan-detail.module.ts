@@ -16,6 +16,7 @@ import { DetailIdentityComponent } from './detail-identity/detail-identity.compo
 import { DetailCosignerComponent } from './detail-cosigner/detail-cosigner.component';
 import { DetailCollateralComponent } from './detail-collateral/detail-collateral.component';
 import { DetailInstallmentsComponent } from './detail-installments/detail-installments.component';
+import { DetailHistoryComponent } from './detail-history/detail-history.component';
 import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
 import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
@@ -52,6 +53,7 @@ const routes: Routes = [
     DetailCosignerComponent,
     DetailCollateralComponent,
     DetailInstallmentsComponent,
+    DetailHistoryComponent,
     DecentralandMapComponent,
     DecentralandCosignerComponent,
     TransactionHistoryComponent,
