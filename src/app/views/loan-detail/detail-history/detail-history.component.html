@@ -13,30 +13,110 @@
     <div
       class="item"
       [class.item--first]="i === 0"
-      [class.item--completed]="i <= 2"
-      [class.item--selected]="i === 0"
-      *ngFor="let item of [0,1,2,3,4,5]; let i = index"
+      [class.item--completed]="historyItem.commits?.length"
+      [class.item--selected]="historyItemSelected === i"
+      *ngFor="let historyItem of historyItems; let i = index"
     >
       <div class="item__label">
-        Request
+        {{ historyItem.commitProperties.title }}
       </div>
-      <div class="item__circle">
-        <mat-icon>
-          person
-        </mat-icon>
-      </div>
+
+      <!-- circle with information -->
+      <ng-container *ngIf="historyItem.commits?.length; else emptyCircleTemplate">
+        <div
+          class="item__circle"
+          [ngStyle]="{
+            'background-color': historyItem.commitProperties.background,
+            'color': historyItem.commitProperties.color
+          }"
+          (click)="clickHistoryItemCircle(i)"
+        >
+          <mat-icon *ngIf="historyItem.commitProperties.iconType === 'material'">
+            {{ historyItem.commitProperties.icon }}
+          </mat-icon>
+          <ng-container *ngIf="historyItem.commitProperties.iconType === 'fontawesome'">
+            <span [ngClass]="historyItem.commitProperties.icon"></span>
+          </ng-container>
+          <div
+            *ngIf="historyItem.commits?.length > 1"
+            class="item__circle-badge"
+          >
+            {{ historyItem.commits.length }}
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- empty circle -->
+      <ng-template #emptyCircleTemplate>
+        <div class="item__circle">
+        </div>
+      </ng-template>
+
       <div class="item__message">
-        <div class="item__message-title">
-          Requested
-        </div>
-        <div class="item__message-details">
-          Date: 07/30/2019 17:37
-        </div>
-        <div class="item__message-details">
-          Creator: <a href="#!">0xd...a86</a> - Unknown
-        </div>
-        <div class="item__message-details">
-          Transaction: <a href="#!">0xd...a86</a>
+        <div
+          class="message"
+          [class.message--first]="commitIndex === 0"
+          [class.message--last]="(commitIndex + 1) === historyItem.commits.length"
+          *ngFor="let commit of historyItem.commits; let commitIndex = index"
+        >
+          <div class="message__title" *ngIf="commitIndex === 0">
+            {{ historyItem.commitProperties.title }}
+          </div>
+          <div
+            class="message__details"
+            *ngFor="let item of historyItem.commitProperties.handler(commit)"
+          >
+            <span class="message__details-label">
+              {{ item.label }}:
+            </span>
+            <span class="message__details-value">
+              <ng-container *ngIf="!item.isAddress && !item.isHash; else addressTemplate">
+                {{ item.value }}
+              </ng-container>
+              <ng-template #addressTemplate>
+                <a
+                  *ngIf="item.isAddress"
+                  [href]="explorerAddress.replace('${address}', item.value)"
+                  target="_blank"
+                >
+                  {{ item.value | formatAddress }}
+                </a>
+                <a
+                  *ngIf="item.isHash"
+                  [href]="explorerTx.replace('${tx}', item.value)"
+                  target="_blank"
+                >
+                  {{ item.value | formatAddress }}
+                </a>
+              </ng-template>
+            </span>
+          </div>
+          <!--
+          <div class="message__details">
+            <span class="message__details-label">
+              Date:
+            </span>
+            <span class="message__details-value">
+              07/30/2019 17:37
+            </span>
+          </div>
+          <div class="message__details">
+            <span class="message__details-label">
+              Creator:
+            </span>
+            <span class="message__details-value">
+              <a href="#!">0xd...a86</a> - Unknown
+            </span>
+          </div>
+          <div class="message__details">
+            <span class="message__details-label">
+              Transaction:
+            </span>
+            <span class="message__details-value">
+              <a href="#!">0xd...a86</a>
+            </span>
+          </div>
+          -->
         </div>
       </div>
     </div>
