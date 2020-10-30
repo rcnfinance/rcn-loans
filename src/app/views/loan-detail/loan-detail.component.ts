@@ -77,7 +77,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   punitory: string;
   paymentDate: string[] = [];
   paymentAverage: string;
+  paymentAverageAmount: number;
   timelineTooltip: string;
+  timelineIcon: string;
 
   // Loan Oracle
   oracle: string;
@@ -359,8 +361,10 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
           const expiresIn = Utils.formatDelta(this.loan.expiration - today);
           this.expiresIn = expiresIn;
           this.timelineTooltip = '< > Requested';
+          this.timelineIcon = 'code';
         } else {
           this.timelineTooltip = 'Expired';
+          this.timelineIcon = 'delete';
         }
         break;
       case Status.Indebt:
@@ -411,8 +415,13 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
           this.durationTooltip = `Next payment in ${ durationDynamic }`;
         }
 
-        this.timelineTooltip =
-          this.loan.status === Status.Paid ? 'Fully Paid' : 'Outstanding';
+        if (this.loan.status === Status.Paid) {
+          this.timelineTooltip = 'Fully Paid';
+          this.timelineIcon = 'delete';
+        } else {
+          this.timelineTooltip = 'Outstanding';
+          this.timelineIcon = 'trending_up';
+        }
         break;
 
       default:
@@ -480,6 +489,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     const diffToNowDays = (endDate - nowDate) / SECONDS_IN_DAY;
     const daysAverage = 100 - ((diffToNowDays * 100) / diffDays);
     this.paymentAverage = `${ daysAverage > MAX_AVERAGE ? MAX_AVERAGE : daysAverage }%`;
+    this.paymentAverageAmount = Math.round(daysAverage > MAX_AVERAGE ? MAX_AVERAGE : daysAverage);
   }
 
   private invalidActions() {

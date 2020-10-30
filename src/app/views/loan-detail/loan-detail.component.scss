@@ -290,6 +290,7 @@
   }
   &__cta {
     position: fixed;
+    z-index: 100;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -373,5 +374,126 @@
   }
   .page-history {
     margin-top: 66px;
+  }
+}
+
+@media (max-width: 992px) {
+  .page-overview {
+    &__timeline {
+      .timeline {
+        text-align: center;
+        $back-color: #151515;
+
+        &__bar,
+        &__progress,
+        &__indicator,
+        &__steps {
+          display: none;
+        }
+        &__steps {
+          position: relative;
+          z-index: 5;
+        }
+        &__circle {
+          position: relative;
+          z-index: 10;
+          $size: 190px;
+          background-color: $back-color;
+          border-radius: 50%;
+          display: inline-block;
+          height: $size;
+          position: relative;
+          width: $size;
+          &:before {
+            align-items: center;
+            background-color: var(--app-color-gray-700);
+            border-radius: 50%;
+            content: '';
+            display: flex;
+            font-size: 3rem;
+            justify-content: center;
+            position: absolute;
+            left: 1rem;
+            right: 1rem;
+            top:  1rem;
+            bottom: 1rem;
+            transition: transform .2s ease;
+          }
+          &:after {
+            background-color: var(--app-color-primary);
+            border-radius: 50%;
+            content: '';
+            display: inline-block;
+            height: 100%;
+            width: 100%;
+          }
+          &-status {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            color: white;
+            box-shadow: 0px 3px 6px #00000029;
+            mat-icon {
+              width: 26px;
+              height: 26px;
+              font-size: 26px;
+            }
+          }
+        }
+
+        $step: 1;
+        $loops: round(100 / $step);
+        $increment: 360 / $loops;
+        $half: round($loops / 2);
+
+        ::ng-deep {
+          @for $i from 0 through $loops {
+            .timeline__circle[data-progress='#{$i}']:after {
+              @if ($i < $half) {
+                $next-deg: 90deg + $increment * $i;
+                background-image: linear-gradient(90deg, #{$back-color} 50%, transparent 50%, transparent), linear-gradient($next-deg, #{var(--app-color-primary)} 50%, #{$back-color} 50%, #{$back-color});
+              } @else if ($i >= $half) {
+                $next-deg: 90deg + $increment * $i;
+                // background-image: linear-gradient(90deg, #{$back-color} 50%, transparent 50%, transparent), linear-gradient($next-deg, #{var(--app-color-primary)} 50%, #{$back-color} 50%, #{$back-color});
+                background-image: linear-gradient(#{$next-deg}, #{var(--app-color-primary)} 50%, transparent 50%, transparent), linear-gradient(270deg, #{var(--app-color-primary)} 50%, #{$back-color} 50%, #{$back-color});
+              } @else {
+                @error 'Test error';
+              }
+            }
+            // .timeline__circle--inactive[data-progress='#{$i}'],
+            // .timeline__circle--active[data-progress='#{$i}'] {
+            // TODO: custom color
+            // }
+            // .timeline__circle--completed {
+            // TODO: custom color
+            // }
+          }
+        }
+
+        &--inactive {
+          .timeline__circle-status {
+            background: white;
+            color: black;
+          }
+        }
+        &--active {
+          .timeline__circle-status {
+            background: var(--app-color-primary);
+          }
+        }
+        &--completed {
+          .timeline__circle-status {
+            background: #59B159;
+          }
+        }
+      }
+    }
   }
 }

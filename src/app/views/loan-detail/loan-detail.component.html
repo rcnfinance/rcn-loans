@@ -152,9 +152,26 @@
                   [class.timeline--active]="isOngoing || isInDebt"
                   [class.timeline--completed]="isPaid"
                 >
+                  <div
+                    class="timeline__circle d-lg-none"
+                    [attr.data-progress]="paymentAverageAmount"
+                  >
+                    <div
+                      class="timeline__circle-status"
+                      [matTooltip]="timelineTooltip"
+                    >
+                      <mat-icon>
+                        {{ timelineIcon }}
+                      </mat-icon>
+                    </div>
+                  </div>
+
                   <div class="timeline__bar">
                   </div>
-                  <div class="timeline__progress" [ngStyle]="{'width': paymentAverage}">
+                  <div
+                    class="timeline__progress"
+                    [ngStyle]="{'width': paymentAverage}"
+                  >
                   </div>
                   <div
                     class="timeline__indicator"
@@ -416,7 +433,7 @@
     </h2>
     <div class="col-12" *ngIf="loan && hasHistory">
       <!-- <app-transaction-history [loan]=loan></app-transaction-history> -->
-      <app-detail-history></app-detail-history>
+      <app-detail-history [loan]="loan"></app-detail-history>
     </div>
   </div>
 </section>
