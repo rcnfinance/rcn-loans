@@ -3,5 +3,5 @@ export interface Commit {
   timestamp: number;
   order: number;
   proof: string;
-  data: object;
+  data: any;
 }
