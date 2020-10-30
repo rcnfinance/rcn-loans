@@ -64,7 +64,7 @@
               </div>
               <div class="d-none d-lg-block installment__col installment__col--paid">
                 <ng-container *ngIf="installment.isPrev || installment.isCurrent">
-                  {{ installment.totalPaid | formatAmount }}
+                  {{ installment.totalPaid | formatAmount }} {{ installment.currency }}
                 </ng-container>
               </div>
               <div
