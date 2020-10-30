@@ -27,6 +27,8 @@ import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfe
 import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { ItemFeatureComponent } from './item-feature/item-feature.component';
 import { LoanDoesNotExistComponent } from './loan-does-not-exist/loan-does-not-exist.component';
+// App Pipes
+import { FormatAmountPipe } from './../../pipes/format-amount.pipe';
 
 const routes: Routes = [
   { path: '', component: LoanDetailComponent },
@@ -45,7 +47,8 @@ const routes: Routes = [
     CosignerService,
     CommitsService,
     CollateralService,
-    InstallmentsService
+    InstallmentsService,
+    FormatAmountPipe
   ],
   declarations: [
     LoanDetailComponent,
