@@ -1,6 +1,10 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 import { DetailHistoryComponent } from './detail-history.component';
+import { SharedModule } from './../../../shared/shared.module';
+import { CommitsService } from '../../../services/commits.service';
+import { FormatAmountPipe } from './../../../pipes/format-amount.pipe';
 
 describe('DetailHistoryComponent', () => {
   let component: DetailHistoryComponent;
@@ -8,8 +12,10 @@ describe('DetailHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ HttpClientModule, SharedModule ],
       declarations: [ DetailHistoryComponent ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      providers: [ FormatAmountPipe, CommitsService ]
     })
     .compileComponents();
   }));
