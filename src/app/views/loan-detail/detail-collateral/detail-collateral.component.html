@@ -52,43 +52,6 @@
             </div>
           </article>
         </div>
-        <!--
-        <div class="collateral-detail__footer">
-          <div
-            class="row row--footer"
-            [class.row--divisor]="canAdjust"
-            *ngIf="collateral?.amount !== '0' && loan.status !== 2"
-          >
-            <div
-              class="item col col-12 col-md-4"
-              matTooltip="This is the proportion between the value of the collateral and the value of the borrowed funds."
-            >
-              <i class="fa fa-percentage"></i>
-              Collateral Ratio:
-              <strong class="item__value">
-                {{ currentLoanToValue }} %
-              </strong>
-            </div>
-            <div class="item col col-12 col-md-4">
-              <i class="fa fa-retweet"></i>
-              Current Exchange Rate:
-              <strong class="item__value">
-                {{ currentExchangeRate }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
-              </strong>
-            </div>
-            <div
-              class="item col col-12 col-md-4"
-              matTooltip="This is the Exchange Rate at which the Collateral Ratio will reach the Liquidation Ratio, triggering a collateral liquidation."
-            >
-              <i class="fa fa-chart-line"></i>
-              Liquidation Price:
-              <strong class="item__value">
-                {{ currentLiquidationPrice }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
-              </strong>
-            </div>
-          </div>
-        </div>
-        -->
         <div class="collateral-detail__accordion">
           <mat-accordion class="accordion-details">
             <mat-expansion-panel class="mat-elevation-z">
