@@ -78,8 +78,11 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   paymentDate: string[] = [];
   paymentAverage: string;
   paymentAverageAmount: number;
-  timelineTooltip: string;
-  timelineIcon: string;
+  timeline: {
+    tooltip: string;
+    icon: string;
+    iconType: 'material' | 'fontawesome' | 'fontello' | 'image';
+  };
 
   // Loan Oracle
   oracle: string;
@@ -360,11 +363,17 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
           const today = Math.floor(new Date().getTime() / 1000);
           const expiresIn = Utils.formatDelta(this.loan.expiration - today);
           this.expiresIn = expiresIn;
-          this.timelineTooltip = '< > Requested';
-          this.timelineIcon = 'code';
+          this.timeline = {
+            tooltip: '< > Requested',
+            icon: 'code',
+            iconType: 'material'
+          };
         } else {
-          this.timelineTooltip = 'Expired';
-          this.timelineIcon = 'delete';
+          this.timeline = {
+            tooltip: 'Expired',
+            icon: 'delete',
+            iconType: 'material'
+          };
         }
         break;
       case Status.Indebt:
@@ -416,11 +425,17 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         }
 
         if (this.loan.status === Status.Paid) {
-          this.timelineTooltip = 'Fully Paid';
-          this.timelineIcon = 'delete';
+          this.timeline = {
+            tooltip: 'Fully Paid',
+            icon: 'icon-verified-24px',
+            iconType: 'fontello'
+          };
         } else {
-          this.timelineTooltip = 'Outstanding';
-          this.timelineIcon = 'trending_up';
+          this.timeline = {
+            tooltip: 'Outstanding',
+            icon: 'trending_up',
+            iconType: 'material'
+          };
         }
         break;
 

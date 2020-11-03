@@ -75,7 +75,6 @@
 
 .page-overview {
   margin-top: 76px;
-  margin-bottom: 60px;
   &__subtitle {
     @include typography-body(1);
     margin: 0 0 7px;
@@ -275,9 +274,10 @@
     }
     &--paid {
       .page-overview__status-icon {
-        font-size: 1.4em;
-        color: #94F094;
-        margin-top: 3px;
+        font-size: 1.5em;
+        color: #59B159;
+        margin-top: 1px;
+        margin-right: 7px;
       }
       .page-overview__status-value {
         @include styled-font('Roboto', 700, 35px);
@@ -332,6 +332,7 @@
   }
   .page-overview {
     margin-top: 94px;
+    margin-bottom: 60px;
     &__subtitle {
       margin: 10px 0 0;
     }
@@ -491,6 +492,9 @@
         &--completed {
           .timeline__circle-status {
             background: #59B159;
+            i {
+              font-size: 2em;
+            }
           }
         }
       }

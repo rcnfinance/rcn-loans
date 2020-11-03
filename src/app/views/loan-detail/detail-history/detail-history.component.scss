@@ -1,6 +1,6 @@
 @import './../../../../scss/fonts';
 
-$itemSize: 90px;
+$itemSize: 105px;
 
 .section-description {
   margin: 0 0 28px;
@@ -59,6 +59,7 @@ $itemSize: 90px;
         &,
         mat-icon,
         svg,
+        img,
         &-badge {
           transition: .3s;
           cursor: default;
@@ -71,6 +72,11 @@ $itemSize: 90px;
         }
         svg {
           font-size: 18px;
+        }
+        img {
+          width: 22px;
+          height: 22px;
+          filter: invert(1);
         }
       }
       &__message {
@@ -159,6 +165,10 @@ $itemSize: 90px;
           }
           svg {
             font-size: 25px;
+          }
+          img {
+            width: 29px;
+            height: 29px;
           }
           &-badge {
             width: 20px;

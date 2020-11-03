@@ -48,7 +48,7 @@ export class DetailHistoryComponent implements OnInit {
       show: boolean;
       title: string;
       message: string;
-      iconType?: 'material' | 'fontawesome';
+      iconType?: 'material' | 'fontawesome' | 'fontello' | 'image';
       icon?: string;
       background?: string;
       color?: string;
@@ -147,7 +147,7 @@ export class DetailHistoryComponent implements OnInit {
         'title': 'Repay',
         'message': 'Repay',
         'iconType': 'fontawesome',
-        'icon': 'fas fa-piggy-bank', // FIXME: change paya icon
+        'icon': 'fas fa-donate',
         'background': '#59B159',
         'color': 'white',
         'display': [CommitProperties.From, CommitProperties.Amount],
@@ -171,8 +171,8 @@ export class DetailHistoryComponent implements OnInit {
         'show': true,
         'title': 'Fully Repaid',
         'message': 'Fully Repaid',
-        'iconType': 'fontawesome',
-        'icon': 'fas fa-shield-alt', // FIXME: change icon
+        'iconType': 'image',
+        'icon': './assets/icons/verified-24px.svg',
         'background': '#59B159',
         'color': 'white',
         'display': [],

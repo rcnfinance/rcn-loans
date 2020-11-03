@@ -31,6 +31,16 @@
           }"
           (click)="clickHistoryItemCircle(i)"
         >
+          <img
+            *ngIf="historyItem.commitProperties.iconType === 'image'"
+            [src]="historyItem.commitProperties.icon"
+          />
+          <i
+            *ngIf="historyItem.commitProperties.iconType === 'fontello'"
+            class="fontello-icon"
+            [ngClass]="historyItem.commitProperties.icon"
+          >
+          </i>
           <mat-icon *ngIf="historyItem.commitProperties.iconType === 'material'">
             {{ historyItem.commitProperties.icon }}
           </mat-icon>
