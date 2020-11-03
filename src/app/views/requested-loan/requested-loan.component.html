@@ -17,7 +17,7 @@
           title="Lending marketplace"
           description="Fund crypto and fiat loans using multiple currencies."
           [hasChip]="true"
-          [chipValue]="loans.length"
+          [chipValue]="loans?.length"
           chipLabel="REQUESTED"
         >
         </app-page-header>
@@ -37,17 +37,29 @@
           view="requested-loans"
           (sort)="sortLoans($event)"
         ></app-loan-list-header>
-        <virtual-scroller
-          #scroll
-          [items]="loans"
-          [bufferAmount]="12"
-          [scrollThrottlingTime]="500"
-        >
-          <div *ngFor="let loan of scroll.viewPortItems; let i = index">
-            <app-loan-list [loan]="loan" [backgroundLighter]="i % 2">
-            </app-loan-list>
-          </div>
-        </virtual-scroller>
+
+        <ng-container *ngIf="loans?.length === 0; else loansTemplate">
+          <app-empty-state
+            title="Sorry! There are no loans matching your search. Please try using different filters."
+            image="./assets/empty-states/results.svg"
+          >
+          </app-empty-state>
+        </ng-container>
+
+        <ng-template #loansTemplate>
+          <virtual-scroller
+            #scroll
+            [items]="loans"
+            [bufferAmount]="12"
+            [scrollThrottlingTime]="500"
+          >
+            <div *ngFor="let loan of scroll.viewPortItems; let i = index">
+              <app-loan-list [loan]="loan" [backgroundLighter]="i % 2">
+              </app-loan-list>
+            </div>
+          </virtual-scroller>
+        </ng-template>
+
       </div>
     </ng-container>
 
