@@ -21,7 +21,7 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
   winHeight: number = window.innerHeight;
   loading: boolean;
   available: any;
-  loans: Loan[] = [];
+  loans: Loan[];
   availableLoans = true;
   pendingLend = [];
   filters = {

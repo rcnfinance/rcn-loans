@@ -31,6 +31,7 @@ import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.componen
 import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
 import { LoanListComponent } from './loan-list/loan-list.component';
 import { LoanListHeaderComponent } from './loan-list-header/loan-list-header.component';
+import { EmptyStateComponent } from './empty-state/empty-state.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -102,6 +103,7 @@ import { EventsService } from './../services/events.service';
     FixedApplicationAdComponent,
     LoanListComponent,
     LoanListHeaderComponent,
+    EmptyStateComponent,
 
     LendButtonComponent,
     DetailButtonComponent,
@@ -181,6 +183,7 @@ import { EventsService } from './../services/events.service';
     FixedApplicationAdComponent,
     LoanListComponent,
     LoanListHeaderComponent,
+    EmptyStateComponent,
     DialogWrongCountryComponent,
     BorrowFabButtonComponent,
     CollateralFormComponent,
