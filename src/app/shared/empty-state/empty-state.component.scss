@@ -1,0 +1,49 @@
+@import 'src/scss/fonts';
+
+.app-empty-state {
+  width: 100%;
+  padding: 72px 0;
+  text-align: center;
+  &__image {
+    padding-right: 40px;
+    img {
+      width: 137px;
+      min-width: 137px;
+      height: 137px;
+      min-height: 137px;
+      margin: auto;
+    }
+  }
+  &__content {
+    color: white;
+    &-title {
+      @include typography-body(2);
+      margin: 24px 0 0;
+    }
+    &-description {
+      @include typography-headline(7);
+      margin: 15px 0 0;
+      ::ng-deep a {
+        color: inherit;
+        text-decoration: underline !important;
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .app-empty-state {
+    padding: 120px 0;
+    text-align: left;
+    &__content {
+      &-title {
+        @include typography-headline(5);
+        margin: 0;
+      }
+      &-description {
+        @include typography-body(1);
+        margin: 28px 0 0;
+      }
+    }
+  }
+}
