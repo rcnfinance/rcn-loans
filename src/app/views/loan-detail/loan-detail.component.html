@@ -300,13 +300,13 @@
               Payment status
             </div>
             <div class="page-overview__status-label">
-              Paid
+              Repaid
             </div>
             <div class="page-overview__status-value page-overview__status-value--paid">
               {{ paid }} {{ loan.currency }}
             </div>
             <div class="page-overview__status-label">
-              Debt
+              Outstanding
             </div>
             <div class="page-overview__status-value page-overview__status-value--debt">
               {{ pendingAmount }} {{ loan.currency }}
@@ -320,7 +320,7 @@
             </div>
             <div>
               <div class="page-overview__status-label">
-                Fully Paid
+                Fully Repaid
               </div>
               <div class="page-overview__status-value">
                 {{ totalDebt }} {{ loan.currency }}
