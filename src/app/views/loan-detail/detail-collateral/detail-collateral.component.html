@@ -3,6 +3,19 @@
     <div class="row">
       <div class="col-12 col-lg-8">
         <div class="collateral-detail__body row justify-content-between">
+          <article class="item col col-12 col-md-4">
+            <span class="item__icon">
+              <i class="fa fa-percentage font22"></i>
+            </span>
+            <div class="item__content">
+              <span class="item__label">
+                Collateral Ratio:
+              </span>
+              <p class="item__value mt-1">
+                {{ currentLoanToValue }} %
+              </p>
+            </div>
+          </article>
           <article
             class="item col col-12 col-md-4"
             matTooltip="This is the amount of funds currently collateralized."
@@ -19,76 +32,20 @@
               </p>
             </div>
           </article>
-          <article
-            class="item col col-12 col-md-4"
-            matTooltip="If the Collateral Ratio reaches this value your collateral will get partially or fully liquidated."
-          >
+          <article class="item col col-12 col-md-4">
             <span class="item__icon">
-              <i class="fa fa-chart-bar font22"></i>
+              <i class="fa fa-chart-line font22"></i>
             </span>
             <div class="item__content">
               <span class="item__label">
-                Liquidation Ratio
+                Liquidation Price:
               </span>
               <p class="item__value mt-1">
-                {{ liquidationRatio }} %
-              </p>
-            </div>
-          </article>
-          <article
-            class="item col col-12 col-md-4"
-            matTooltip="If a collateral liquidation gets triggered, your collateral will get liquidated until the Collateralization Ratio reaches this value."
-          >
-            <span class="item__icon">
-              <i class="fa fa-chart-area font22"></i>
-            </span>
-            <div class="item__content">
-              <span class="item__label">
-                Safety Ratio
-              </span>
-              <p class="item__value mt-1">
-                {{ balanceRatio }} %
-              </p>
-            </div>
-          </article>
-        </div>
-        <!--
-        <div class="collateral-detail__footer">
-          <div
-            class="row row--footer"
-            [class.row--divisor]="canAdjust"
-            *ngIf="collateral?.amount !== '0' && loan.status !== 2"
-          >
-            <div
-              class="item col col-12 col-md-4"
-              matTooltip="This is the proportion between the value of the collateral and the value of the borrowed funds."
-            >
-              <i class="fa fa-percentage"></i>
-              Collateral Ratio:
-              <strong class="item__value">
-                {{ currentLoanToValue }} %
-              </strong>
-            </div>
-            <div class="item col col-12 col-md-4">
-              <i class="fa fa-retweet"></i>
-              Current Exchange Rate:
-              <strong class="item__value">
-                {{ currentExchangeRate }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
-              </strong>
-            </div>
-            <div
-              class="item col col-12 col-md-4"
-              matTooltip="This is the Exchange Rate at which the Collateral Ratio will reach the Liquidation Ratio, triggering a collateral liquidation."
-            >
-              <i class="fa fa-chart-line"></i>
-              Liquidation Price:
-              <strong class="item__value">
                 {{ currentLiquidationPrice }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
-              </strong>
+              </p>
             </div>
-          </div>
+          </article>
         </div>
-        -->
         <div class="collateral-detail__accordion">
           <mat-accordion class="accordion-details">
             <mat-expansion-panel class="mat-elevation-z">
@@ -100,12 +57,21 @@
               <div class="accordion-details__item">
                 <div class="d-lg-flex justify-content-between">
                   <div class="accordion-details__item-wrapper">
-                    <i class="accordion-details__item-icon fa fa-percentage"></i>
+                    <i class="accordion-details__item-icon fa fa-chart-bar"></i>
                     <span class="accordion-details__item-label">
-                      Collateral Ratio:
+                      Liquidation Ratio
                     </span>
                     <span class="accordion-details__item-value">
-                      {{ currentLoanToValue }} %
+                      {{ liquidationRatio }} %
+                    </span>
+                  </div>
+                  <div class="accordion-details__item-wrapper">
+                    <i class="accordion-details__item-icon fa fa-chart-area"></i>
+                    <span class="accordion-details__item-label">
+                      Safety Ratio:
+                    </span>
+                    <span class="accordion-details__item-value">
+                      {{ balanceRatio }} %
                     </span>
                   </div>
                   <div class="accordion-details__item-wrapper">
@@ -115,15 +81,6 @@
                     </span>
                     <span class="accordion-details__item-value">
                       {{ currentExchangeRate }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
-                    </span>
-                  </div>
-                  <div class="accordion-details__item-wrapper">
-                    <i class="accordion-details__item-icon fa fa-chart-line"></i>
-                    <span class="accordion-details__item-label">
-                      Liquidation Price:
-                    </span>
-                    <span class="accordion-details__item-value">
-                      {{ currentLiquidationPrice }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
                     </span>
                   </div>
                 </div>

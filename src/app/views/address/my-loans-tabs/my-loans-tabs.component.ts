@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Location } from '@angular/common';
 
 @Component({
@@ -6,11 +6,21 @@ import { Location } from '@angular/common';
   templateUrl: './my-loans-tabs.component.html',
   styleUrls: ['./my-loans-tabs.component.scss']
 })
-export class MyLoansTabsComponent {
+export class MyLoansTabsComponent implements OnInit {
+  isMobile: boolean;
 
   constructor(
     private location: Location
   ) { }
+
+  ngOnInit() {
+    this.checkIfIsMobile();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize(e) {
+    this.checkIfIsMobile(e);
+  }
 
   get activeTab() {
     const path = this.location.path();
@@ -18,4 +28,9 @@ export class MyLoansTabsComponent {
     if (path.includes('lent')) return 'lent';
   }
 
+  private checkIfIsMobile(e?) {
+    const MOBILE_WIDTH_PX = 992;
+    const currentDeviceWidth = e ? e.target.innerWidth : window.innerWidth;
+    this.isMobile = currentDeviceWidth <= MOBILE_WIDTH_PX;
+  }
 }

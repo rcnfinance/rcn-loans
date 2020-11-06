@@ -682,7 +682,7 @@ mat-form-field{
   }
 }
 virtual-scroller {
-  height: calc(100vh - 120px);
+  height: calc(100vh - 115px);
 }
 
 .nav-mobile{
@@ -758,6 +758,9 @@ virtual-scroller {
   }
   .body-scrollable {
     padding-top: 115px;
+  }
+  virtual-scroller {
+    height: calc(100vh - 120px);
   }
   .loan-container {
     padding-top: 30px;

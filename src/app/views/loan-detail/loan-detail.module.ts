@@ -16,16 +16,18 @@ import { DetailIdentityComponent } from './detail-identity/detail-identity.compo
 import { DetailCosignerComponent } from './detail-cosigner/detail-cosigner.component';
 import { DetailCollateralComponent } from './detail-collateral/detail-collateral.component';
 import { DetailInstallmentsComponent } from './detail-installments/detail-installments.component';
+import { DetailHistoryComponent } from './detail-history/detail-history.component';
 import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
 import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
 import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
-import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 import { TransferButtonComponent } from './../../shared/transfer-button/transfer-button.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { ItemFeatureComponent } from './item-feature/item-feature.component';
 import { LoanDoesNotExistComponent } from './loan-does-not-exist/loan-does-not-exist.component';
+// App Pipes
+import { FormatAmountPipe } from './../../pipes/format-amount.pipe';
 
 const routes: Routes = [
   { path: '', component: LoanDetailComponent },
@@ -44,7 +46,8 @@ const routes: Routes = [
     CosignerService,
     CommitsService,
     CollateralService,
-    InstallmentsService
+    InstallmentsService,
+    FormatAmountPipe
   ],
   declarations: [
     LoanDetailComponent,
@@ -52,9 +55,9 @@ const routes: Routes = [
     DetailCosignerComponent,
     DetailCollateralComponent,
     DetailInstallmentsComponent,
+    DetailHistoryComponent,
     DecentralandMapComponent,
     DecentralandCosignerComponent,
-    TransactionHistoryComponent,
     GobackButtonComponent,
     TransferButtonComponent,
     DialogLoanTransferComponent,

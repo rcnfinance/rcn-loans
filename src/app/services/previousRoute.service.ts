@@ -28,7 +28,8 @@ export class PreviousRouteService {
 
   async redirectHandler() {
     const previousUrl: string = this.getPreviousUrl();
-    if (!previousUrl) {
+    const { hostname } = window.location;
+    if (!previousUrl || previousUrl === hostname) {
       try {
         await this.router.navigate(['/', 'lend']);
       } catch (err) {

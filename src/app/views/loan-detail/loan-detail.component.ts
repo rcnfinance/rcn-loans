@@ -77,7 +77,12 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   punitory: string;
   paymentDate: string[] = [];
   paymentAverage: string;
-  timelineTooltip: string;
+  paymentAverageAmount: number;
+  timeline: {
+    tooltip: string;
+    icon: string;
+    iconType: 'material' | 'fontawesome' | 'fontello' | 'image';
+  };
 
   // Loan Oracle
   oracle: string;
@@ -358,9 +363,17 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
           const today = Math.floor(new Date().getTime() / 1000);
           const expiresIn = Utils.formatDelta(this.loan.expiration - today);
           this.expiresIn = expiresIn;
-          this.timelineTooltip = '< > Requested';
+          this.timeline = {
+            tooltip: '< > Requested',
+            icon: 'code',
+            iconType: 'material'
+          };
         } else {
-          this.timelineTooltip = 'Expired';
+          this.timeline = {
+            tooltip: 'Expired',
+            icon: 'delete',
+            iconType: 'material'
+          };
         }
         break;
       case Status.Indebt:
@@ -411,8 +424,19 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
           this.durationTooltip = `Next payment in ${ durationDynamic }`;
         }
 
-        this.timelineTooltip =
-          this.loan.status === Status.Paid ? 'Fully Paid' : 'Outstanding';
+        if (this.loan.status === Status.Paid) {
+          this.timeline = {
+            tooltip: 'Fully Paid',
+            icon: 'icon-verified-24px',
+            iconType: 'fontello'
+          };
+        } else {
+          this.timeline = {
+            tooltip: 'Outstanding',
+            icon: 'trending_up',
+            iconType: 'material'
+          };
+        }
         break;
 
       default:
@@ -480,6 +504,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     const diffToNowDays = (endDate - nowDate) / SECONDS_IN_DAY;
     const daysAverage = 100 - ((diffToNowDays * 100) / diffDays);
     this.paymentAverage = `${ daysAverage > MAX_AVERAGE ? MAX_AVERAGE : daysAverage }%`;
+    this.paymentAverageAmount = Math.round(daysAverage > MAX_AVERAGE ? MAX_AVERAGE : daysAverage);
   }
 
   private invalidActions() {
