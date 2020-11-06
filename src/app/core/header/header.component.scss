@@ -16,7 +16,7 @@
   margin-bottom: 0px;
   margin-left: auto;
   padding: 10px 0px;
-  background-color: var(--app-color-gray-900);
+  background-color: var(--app-color-gray-500);
   // -webkit-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
   // -moz-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
   // box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
@@ -202,6 +202,7 @@
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
+    background-color: var(--app-color-gray-900);
     .navbar-header{
       width: 100%;
       height: 45px;

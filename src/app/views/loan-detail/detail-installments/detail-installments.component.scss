@@ -64,13 +64,6 @@
     }
   }
 
-  &__disclaimer {
-    @include typography-caption(2);
-    color: #B1B1B1;
-    text-align: left;
-    margin: 22px 0 6px;
-  }
-
   ::ng-deep {
     ngx-spinner {
       .overlay {

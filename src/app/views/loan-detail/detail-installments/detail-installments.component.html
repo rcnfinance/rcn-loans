@@ -64,7 +64,7 @@
               </div>
               <div class="d-none d-lg-block installment__col installment__col--paid">
                 <ng-container *ngIf="installment.isPrev || installment.isCurrent">
-                  {{ installment.totalPaid | formatAmount }}
+                  {{ installment.totalPaid | formatAmount }} {{ installment.currency }}
                 </ng-container>
               </div>
               <div
@@ -98,7 +98,7 @@
             <div class="installment__col installment__col--amount">
             </div>
             <div class="installment__col installment__col--pending">
-              {{ pay.pending | formatAmount }}
+              {{ pay.pending | formatAmount }} {{ installment.currency }}
             </div>
             <div class="installment__col installment__col--paid">
             </div>
@@ -106,12 +106,6 @@
             </div>
           </div>
         </mat-expansion-panel>
-        <p class="installments-detail__disclaimer">
-          <i class="fas fa-info-circle mr-1"></i>
-          <span>
-            All the values of the instalment chart are expressed in {{ loan?.currency }}.
-          </span>
-        </p>
       </div>
       <div class="col-12 col-lg-4">
         <div class="next-installment">

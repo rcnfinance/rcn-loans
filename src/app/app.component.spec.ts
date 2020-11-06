@@ -7,7 +7,7 @@ import { CoreModule } from './core/core.module';
 import { RequestedLoanModule } from './views/requested-loan/requested-loan.module';
 import { ActiveLoansModule } from './views/active-loans/active-loans.module';
 import { AddressModule } from './views/address/address.module';
-import { LoanDetail2Module } from './views/loan-detail2/loan-detail2.module';
+import { LoanDetailModule } from './views/loan-detail/loan-detail.module';
 
 import { AppComponent } from './app.component';
 
@@ -25,7 +25,7 @@ describe('App component', () => {
         RequestedLoanModule,
         ActiveLoansModule,
         AddressModule,
-        LoanDetail2Module
+        LoanDetailModule
       ],
       declarations: [AppComponent],
       providers: [

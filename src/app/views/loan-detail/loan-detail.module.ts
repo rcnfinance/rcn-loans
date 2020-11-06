@@ -11,24 +11,26 @@ import { CommitsService } from './../../services/commits.service';
 import { CollateralService } from './../../services/collateral.service';
 import { InstallmentsService } from './../../services/installments.service';
 // App Component
-import { LoanDetail2Component } from './loan-detail2.component';
-import { DetailIdentityComponent } from './../loan-detail/detail-identity/detail-identity.component';
-import { DetailCosignerComponent } from './../loan-detail/detail-cosigner/detail-cosigner.component';
+import { LoanDetailComponent } from './loan-detail.component';
+import { DetailIdentityComponent } from './detail-identity/detail-identity.component';
+import { DetailCosignerComponent } from './detail-cosigner/detail-cosigner.component';
 import { DetailCollateralComponent } from './detail-collateral/detail-collateral.component';
 import { DetailInstallmentsComponent } from './detail-installments/detail-installments.component';
+import { DetailHistoryComponent } from './detail-history/detail-history.component';
 import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
-import { DecentralandMapComponent } from './../loan-detail/detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
-import { DecentralandCosignerComponent } from './../loan-detail/detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
-import { TransactionHistoryComponent } from './../loan-detail/transaction-history/transaction-history.component';
+import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
+import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
 import { TransferButtonComponent } from './../../shared/transfer-button/transfer-button.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
-import { ItemFeatureComponent } from './../loan-detail/item-feature/item-feature.component';
-import { LoanDoesNotExistComponent } from './../loan-detail/loan-does-not-exist/loan-does-not-exist.component';
+import { ItemFeatureComponent } from './item-feature/item-feature.component';
+import { LoanDoesNotExistComponent } from './loan-does-not-exist/loan-does-not-exist.component';
+// App Pipes
+import { FormatAmountPipe } from './../../pipes/format-amount.pipe';
 
 const routes: Routes = [
-  { path: '', component: LoanDetail2Component },
+  { path: '', component: LoanDetailComponent },
   { path: '404', component: LoanDoesNotExistComponent }
 ];
 
@@ -44,17 +46,18 @@ const routes: Routes = [
     CosignerService,
     CommitsService,
     CollateralService,
-    InstallmentsService
+    InstallmentsService,
+    FormatAmountPipe
   ],
   declarations: [
-    LoanDetail2Component,
+    LoanDetailComponent,
     DetailIdentityComponent,
     DetailCosignerComponent,
     DetailCollateralComponent,
     DetailInstallmentsComponent,
+    DetailHistoryComponent,
     DecentralandMapComponent,
     DecentralandCosignerComponent,
-    TransactionHistoryComponent,
     GobackButtonComponent,
     TransferButtonComponent,
     DialogLoanTransferComponent,
@@ -71,4 +74,4 @@ const routes: Routes = [
     DialogLoanPayComponent
   ]
 })
-export class LoanDetail2Module { }
+export class LoanDetailModule { }

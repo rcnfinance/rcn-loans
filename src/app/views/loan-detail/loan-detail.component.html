@@ -52,7 +52,7 @@
         Collateral
       </h2>
       <h2
-        *ngIf="[2, 3].includes(loanType)"
+        *ngIf="loanType === 2"
         class="page-title page-title--tab mr-3"
         [class.page-title--active]="isDetail('cosigner')"
         (click)="openDetail('cosigner')"
@@ -147,19 +147,50 @@
             <div class="col-12">
               <div class="page-overview__timeline">
                 <div
+                  *ngIf="timeline"
                   class="timeline"
                   [class.timeline--inactive]="isRequest"
                   [class.timeline--active]="isOngoing || isInDebt"
                   [class.timeline--completed]="isPaid"
                 >
+                  <div
+                    class="timeline__circle d-lg-none"
+                    [attr.data-progress]="paymentAverageAmount"
+                  >
+                    <div
+                      class="timeline__circle-status"
+                      [matTooltip]="timeline.tooltip"
+                    >
+                      <img
+                        *ngIf="timeline.iconType === 'image'"
+                        [src]="timeline.icon"
+                      />
+                      <i
+                        *ngIf="timeline.iconType === 'fontello'"
+                        class="fontello-icon"
+                        [ngClass]="timeline.icon"
+                      >
+                      </i>
+                      <mat-icon *ngIf="timeline.iconType === 'material'">
+                        {{ timeline.icon }}
+                      </mat-icon>
+                      <ng-container *ngIf="timeline.iconType === 'fontawesome'">
+                        <span [ngClass]="timeline.icon"></span>
+                      </ng-container>
+                    </div>
+                  </div>
+
                   <div class="timeline__bar">
                   </div>
-                  <div class="timeline__progress" [ngStyle]="{'width': paymentAverage}">
+                  <div
+                    class="timeline__progress"
+                    [ngStyle]="{'width': paymentAverage}"
+                  >
                   </div>
                   <div
                     class="timeline__indicator"
                     [ngStyle]="{'left': paymentAverage}"
-                    [matTooltip]="timelineTooltip"
+                    [matTooltip]="timeline?.tooltip"
                   >
                   </div>
                   <div class="timeline__steps">
@@ -269,13 +300,13 @@
               Payment status
             </div>
             <div class="page-overview__status-label">
-              Paid
+              Repaid
             </div>
             <div class="page-overview__status-value page-overview__status-value--paid">
               {{ paid }} {{ loan.currency }}
             </div>
             <div class="page-overview__status-label">
-              Debt
+              Outstanding
             </div>
             <div class="page-overview__status-value page-overview__status-value--debt">
               {{ pendingAmount }} {{ loan.currency }}
@@ -285,11 +316,11 @@
           <!-- paid case -->
           <div class="d-flex" *ngIf="isPaid">
             <div class="page-overview__status-icon">
-              <i class="fas fa-shield-alt"></i>
+              <i class="icon-verified-24px"></i>
             </div>
             <div>
               <div class="page-overview__status-label">
-                Fully Paid
+                Fully Repaid
               </div>
               <div class="page-overview__status-value">
                 {{ totalDebt }} {{ loan.currency }}
@@ -298,7 +329,10 @@
           </div>
 
         </div>
-        <div class="page-overview__cta">
+        <div
+          class="page-overview__cta"
+          *ngIf="canRedeem || canPay || canLend || canTransfer"
+        >
           <app-redeem-button
             [loan]="loan"
             (endRedeem)="onUserAction('redeem')"
@@ -342,7 +376,7 @@
           Collateral
         </h2>
         <h2
-          *ngIf="[2, 3].includes(loanType)"
+          *ngIf="loanType === 2"
           class="page-title page-title--tab mr-3"
           [class.page-title--active]="isDetail('cosigner')"
           (click)="openDetail('cosigner')"
@@ -415,7 +449,7 @@
       Loan history
     </h2>
     <div class="col-12" *ngIf="loan && hasHistory">
-      <app-transaction-history [loan]=loan></app-transaction-history>
+      <app-detail-history [loan]="loan"></app-detail-history>
     </div>
   </div>
 </section>

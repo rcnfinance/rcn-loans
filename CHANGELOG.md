@@ -1,5 +1,20 @@
 # Changelog
 
+## **0.2.7** Boggart 👻
+
+### Feature:
+- New empty state components
+- New transaction history component
+
+### Enhancement:
+- New loan status UI on mobile
+- Improves installments detail component
+- Improves collateral detail component
+- Improves navigation styles on mobile
+
+### Fix:
+- Fix go back button in loan detail
+
 ## **0.2.6** Boggart 👻
 
 ### Feature:

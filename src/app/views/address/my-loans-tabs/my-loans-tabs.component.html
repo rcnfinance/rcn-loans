@@ -1,18 +1,41 @@
-<a
-  class="button"
-  mat-button
-  [color]="activeTab == 'borrowed' ? 'primary' : ''"
-  routerLink="../borrowed"
->
-  <i class="fas fa-reply mr-2"></i>
-  <span class="button-style">BORROWED</span>
-</a>
-<a
-  class="button"
-  mat-button
-  [color]="activeTab == 'lent' ? 'primary' : ''"
-  routerLink="../lent"
->
-  <i class="fas fa-share mr-2"></i>
-  <span class="button-style">LENT</span>
-</a>
+<ng-container *ngIf="isMobile; else desktopTemplate">
+  <div class="row">
+    <div class="page-tabs d-flex">
+      <div
+        class="page-tab"
+        routerLink="../borrowed"
+        [class.page-tab--active]="activeTab == 'borrowed'"
+      >
+        Borrowed
+      </div>
+      <div
+        class="page-tab"
+        routerLink="../lent"
+        [class.page-tab--active]="activeTab == 'lent'"
+      >
+        Lent
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #desktopTemplate>
+  <a
+    class="button"
+    mat-button
+    [color]="activeTab == 'borrowed' ? 'primary' : ''"
+    routerLink="../borrowed"
+  >
+    <i class="fas fa-reply mr-2"></i>
+    <span class="button-style">BORROWED</span>
+  </a>
+  <a
+    class="button"
+    mat-button
+    [color]="activeTab == 'lent' ? 'primary' : ''"
+    routerLink="../lent"
+  >
+    <i class="fas fa-share mr-2"></i>
+    <span class="button-style">LENT</span>
+  </a>
+</ng-template>

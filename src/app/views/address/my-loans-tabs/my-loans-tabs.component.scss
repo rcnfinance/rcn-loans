@@ -1,5 +1,33 @@
+@import 'src/scss/fonts';
+
 .button {
   &:not(.mat-primary) {
     color: var(--app-color-gray-50);
+  }
+}
+
+.page-tabs {
+  width: 100vw;
+  background: var(--app-color-gray-500);
+  .page-tab {
+    width: 50%;
+    @include typography-body(2);
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 1.4px;
+    color: white;
+    margin: 0;
+    padding: 16px 6px;
+    transition: .3s;
+
+    cursor: pointer;
+    padding: 16px 20px;
+    &:not(.page-tab--active) {
+      color: #959595;
+      border-bottom: 1px solid transparent;
+    }
+    &--active {
+      border-bottom: 1px solid white;
+    }
   }
 }

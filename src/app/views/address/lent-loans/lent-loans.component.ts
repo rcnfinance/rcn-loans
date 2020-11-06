@@ -21,7 +21,7 @@ export class AddressComponent implements OnInit, OnDestroy {
   address: string;
   shortAddress: string;
   available: any;
-  loans = [];
+  loans: Loan[];
   availableLoans = true;
   myLoans: boolean;
   pageTitle: string;

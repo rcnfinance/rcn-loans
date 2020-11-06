@@ -1,0 +1,17 @@
+<div
+  class="app-empty-state justify-content-center align-items-center d-lg-flex"
+>
+  <div class="app-empty-state__image">
+    <img [src]="image" [alt]="title">
+  </div>
+  <div class="app-empty-state__content">
+    <h2 class="app-empty-state__content-title">
+      {{ title }}
+    </h2>
+    <p
+      *ngIf="description"
+      class="app-empty-state__content-description"
+      [innerHTML]="description"
+    ></p>
+  </div>
+</div>
