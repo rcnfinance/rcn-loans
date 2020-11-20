@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { environment } from '../../../environments/environment';
 import { Utils } from './../../utils/utils';
+import { Engine } from './../../models/loan.model';
 // App Component
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
@@ -38,6 +39,7 @@ enum ContractType {
   styleUrls: ['./dialog-approve-contract.component.scss']
 })
 export class DialogApproveContractComponent implements OnInit, OnDestroy {
+  engine: Engine = Engine.RcnEngine; // TODO: get engine as injected data
   onlyAddress: string;
   onlyToken: string;
   onlyAsset: string;
@@ -46,28 +48,8 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
   dialogDescription: string;
 
   tokens: Contract[];
-  tokenOperators: Operator[] = [
-    new Operator(
-      'Diaspore Loan Manager',
-      environment.contracts.diaspore.loanManager,
-      'lending'
-    ),
-    new Operator(
-      'Diaspore Debt Mananger',
-      environment.contracts.diaspore.debtEngine,
-      'payments'
-    ),
-    new Operator(
-      'Diaspore Converter Ramp',
-      environment.contracts.converter.converterRamp,
-      'transactions'
-    ),
-    new Operator(
-      'Collateral',
-      environment.contracts.collateral.collateral,
-      'collateralization'
-    )
-  ];
+  tokenOperators: Operator[];
+
   tokenApproves: Object[];
   assets: Contract[];
   assetOperators: Operator[] = []; // TODO: implement WETH manager
@@ -112,6 +94,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     this.spinner.show();
 
     try {
+      this.loadTokenOperators();
       await this.loadTokens();
       await this.loadAssets();
       this.setDialogDescription();
@@ -171,10 +154,11 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     }
 
     try {
+      const { engine } = this;
       this.eventsService.trackEvent(
         `click-${ actionCode }`,
         Category.Account,
-        environment.contracts.diaspore.loanManager
+        environment.contracts[engine].diaspore.loanManager
       );
 
       await action;
@@ -269,12 +253,13 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
    * @return ERC20 array
    */
   private async loadTokens() {
+    const { engine } = this;
     const currencies = this.currenciesService.getCurrencies(true);
     const tokens: Contract[] = [];
 
     // set tokens
     currencies.map(currency => {
-      if (currency.address !== environment.contracts.converter.ethAddress) {
+      if (currency.address !== environment.contracts[engine].converter.ethAddress) {
         tokens.push(
           new Contract(
             currency.symbol,
@@ -419,12 +404,13 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
    * @return Operators array
    */
   private filterTokenOperators(token: Contract): Operator[] {
-    if (token.address !== environment.contracts.rcnToken) {
+    const { engine } = this;
+    if (token.address !== environment.contracts[engine].token) {
       return this.tokenOperators.filter(
         contract => {
           switch (contract.address) {
-            case environment.contracts.converter.converterRamp:
-            case environment.contracts.collateral.collateral:
+            case environment.contracts[engine].converter.converterRamp:
+            case environment.contracts[engine].collateral.collateral:
               return true;
 
             default:
@@ -435,7 +421,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     }
 
     return this.tokenOperators.filter(
-      contract => contract.address !== environment.contracts.collateral.wethManager
+      contract => contract.address !== environment[engine].contracts.collateral.wethManager
     );
   }
 
@@ -474,5 +460,31 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
 
     this.dialogDescription = `To continue please enable ${ contract.name } ${ operator.action } on the Credit Marketplace.`;
     return this.dialogDescription;
+  }
+
+  private loadTokenOperators(): Operator[] {
+    const { engine } = this;
+    return [
+      new Operator(
+        'Diaspore Loan Manager',
+        environment.contracts[engine].diaspore.loanManager,
+        'lending'
+      ),
+      new Operator(
+        'Diaspore Debt Mananger',
+        environment.contracts[engine].diaspore.debtEngine,
+        'payments'
+      ),
+      new Operator(
+        'Diaspore Converter Ramp',
+        environment.contracts[engine].converter.converterRamp,
+        'transactions'
+      ),
+      new Operator(
+        'Collateral',
+        environment.contracts[engine].collateral.collateral,
+        'collateralization'
+      )
+    ];
   }
 }

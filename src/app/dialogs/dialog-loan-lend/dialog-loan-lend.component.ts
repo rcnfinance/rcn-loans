@@ -121,8 +121,9 @@ export class DialogLoanLendComponent implements OnInit {
     const rcnExpectedReturn: BN = rcnExpectedReturnInWei.div(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
 
     // set amount in selected currency
+    const { engine } = this.loan;
     const symbol: string = this.lendCurrency;
-    const fromToken: string = environment.contracts.rcnToken;
+    const fromToken: string = environment.contracts[engine].token;
     const toToken: string = await this.currenciesService.getCurrencyByKey('symbol', symbol).address;
     const lendCurrencyDecimals: number = await this.contractsService.getTokenDecimals(toToken);
     this.lendToken = toToken;
@@ -164,7 +165,8 @@ export class DialogLoanLendComponent implements OnInit {
     const loanCurrency: string = this.loan.currency.toString();
     const lendCurrency: string = this.lendCurrency;
     const oracle = this.loan.oracle.address;
-    const tokenConverter = environment.contracts.converter.uniswapConverter;
+    const { engine } = this.loan;
+    const tokenConverter = environment.contracts[engine].converter.uniswapConverter;
     const urlOracle = environment.network.explorer.address.replace('${address}', oracle);
     const urlTokenConverter = environment.network.explorer.address.replace('${address}', tokenConverter);
     this.exchangeTooltips = [];

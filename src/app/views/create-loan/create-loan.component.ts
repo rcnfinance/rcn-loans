@@ -174,7 +174,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     }
 
     // validate ERC20 approve
-    const contractAddress: string = environment.contracts.collateral.collateral;
+    const contractAddress: string = environment.contracts[loan.engine].collateral.collateral;
     const engineApproved = await this.contractsService.isApproved(contractAddress, collateral.token);
     if (!await engineApproved) {
       const approve = await this.showApproveDialog(contractAddress, collateral.token, 'onlyToken');
@@ -185,10 +185,10 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     }
 
     // validate ERC721 approve
-    const { ethAddress } = environment.contracts.converter;
+    const { ethAddress } = environment.contracts[loan.engine].converter;
     if (collateral.token === ethAddress) {
-      const collateralAddress = environment.contracts.collateral.collateral;
-      const operator = environment.contracts.collateral.wethManager;
+      const collateralAddress = environment.contracts[loan.engine].collateral.collateral;
+      const operator = environment.contracts[loan.engine].collateral.wethManager;
       const erc721approved = await this.contractsService.isApprovedERC721(
         collateralAddress,
         operator
@@ -215,7 +215,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     form: LoanRequest
   ) {
     try {
-      const engine: string = environment.contracts.diaspore.loanManager;
+      const engine: string = environment.contracts[loan.engine].diaspore.loanManager;
       const tx: string = await this.contractsService.requestLoan(
         form.amount,
         form.model,

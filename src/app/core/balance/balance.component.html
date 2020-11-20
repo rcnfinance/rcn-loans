@@ -1,9 +1,10 @@
+<!-- TODO: add USDC withdraw -->
 <div
   class="balance-withdraw"
-  [class.balance-withdraw--active]="canWithdraw"
-  (click)="clickWithdraw()"
+  [class.balance-withdraw--active]="rcnCanWithdraw"
+  (click)="clickWithdrawRcn()"
   [matTooltip]='
-    canWithdraw ?
+    rcnCanWithdraw ?
     "Click here to withdraw your RCN Balance" :
     "You dont have any funds to withdraw yet"
   '
@@ -16,7 +17,7 @@
       <i class="fas fa-arrow-down"></i>
     </div>
     <div class="balance-withdraw__amount">
-      {{ displayAvailable || 0 }}
+      {{ rcnDisplayAvailable || 0 }}
     </div>
     <div class="balance-withdraw__currency">
       RCN

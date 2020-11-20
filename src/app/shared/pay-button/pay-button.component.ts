@@ -192,7 +192,8 @@ export class PayButtonComponent implements OnInit, OnDestroy {
         }
 
         // approve validation
-        const debtEngineAddress = environment.contracts.diaspore.debtEngine;
+        const { engine } = this.loan;
+        const debtEngineAddress = environment.contracts[engine].diaspore.debtEngine;
         const engineApproved: boolean = await this.contractsService.isApproved(debtEngineAddress);
 
         if (!engineApproved) {
@@ -215,10 +216,10 @@ export class PayButtonComponent implements OnInit, OnDestroy {
           'loan ' + this.loan.id + ' of ' + amountInWei
         );
 
-        const engine: string = environment.contracts.diaspore.debtEngine;
+        const engineAddress: string = environment.contracts[engine].diaspore.debtEngine;
         this.txService.registerPayTx(
           tx,
-          engine,
+          engineAddress,
           this.loan,
           amountInWei as any
         );
@@ -269,8 +270,9 @@ export class PayButtonComponent implements OnInit, OnDestroy {
    * Show approve contract dialog
    */
   async showApproveDialog() {
-    const onlyToken: string = environment.contracts.rcnToken;
-    const onlyAddress = environment.contracts.diaspore.debtEngine;
+    const { engine } = this.loan;
+    const onlyToken: string = environment.contracts[engine].token;
+    const onlyAddress = environment.contracts[engine].diaspore.debtEngine;
 
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
       DialogApproveContractComponent, {

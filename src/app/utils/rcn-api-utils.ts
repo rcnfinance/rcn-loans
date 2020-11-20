@@ -1,12 +1,11 @@
-/* tslint:disable:no-unused */
-import { LoanApiDiaspore, LoanState, LoanConfig } from './../interfaces/loan-api-diaspore';
+import { LoanContentApi, LoanInstallments } from './../interfaces/loan-api-diaspore';
 
 export class RcnApiUtils {
-  static getDueTime(loan:  LoanApiDiaspore) {
-    const { config, state } = loan;
-    const lastPayment = parseInt(state.last_payment, 10);
-    const duration = parseInt(config.duration, 10);
-    const lentTime = parseInt(config.lent_time, 10);
+  static getDueTime(loan: LoanContentApi) {
+    const { installments } = loan;
+    const lastPayment = parseInt(installments.last_payment, 10);
+    const duration = parseInt(installments.duration, 10);
+    const lentTime = parseInt(installments.lent_time, 10);
     let last: number;
     if (lastPayment !== 0) {
       last = lastPayment;
@@ -17,30 +16,30 @@ export class RcnApiUtils {
     return dueTime;
   }
 
-  static getClosingObligation(loan: LoanApiDiaspore, now = null) {
+  static getClosingObligation(loan: LoanContentApi, now = null) {
     if (now === null) {
       now = new Date().getTime();
     }
 
-    const { state, config } = loan;
-    const { installments, cuota, lent_time: lentTime } = config;
+    const { installments: installmentsModel } = loan;
+    const { installments, cuota, lent_time: lentTime } = installmentsModel;
 
     const currentClock = now - parseInt(lentTime, 10);
-    const clock = parseInt(state.clock, 10);
+    const clock = parseInt(installmentsModel.clock, 10);
 
     let interest: number;
     if (clock >= currentClock) {
-      interest = parseInt(state.interest, 10);
+      interest = parseInt(installmentsModel.interest, 10);
     } else {
-      const { time_unit: timeUnit, duration, interest_rate: interestRate } = config;
+      const { time_unit: timeUnit, duration, interest_rate: interestRate } = installmentsModel;
       const { interest: newInterest } = this.runAdvanceClock(
           clock,
           timeUnit,
-          parseInt(state.interest, 10),
+          parseInt(installmentsModel.interest, 10),
           duration,
           cuota,
           installments,
-          parseInt(state.paid_base, 10),
+          parseInt(installmentsModel.paid_base, 10),
           interestRate,
           currentClock
       );
@@ -48,7 +47,7 @@ export class RcnApiUtils {
     }
 
     const debt = (cuota as any) * (installments as any) + interest;
-    const paid = parseInt(state.paid, 10);
+    const paid = parseInt(installmentsModel.paid, 10);
 
     let closingObligation;
     if (debt > paid) {
@@ -60,18 +59,18 @@ export class RcnApiUtils {
     return closingObligation;
   }
 
-  static getEstimateObligation(loan: LoanApiDiaspore, now = null) {
+  static getEstimateObligation(loan: LoanContentApi, now = null) {
     const clossingObligation = this.getClosingObligation(loan, now);
     return clossingObligation;
   }
 
-  static getObligation(loan: LoanApiDiaspore, timestamp) {
-    const { state, config } = loan;
+  static getObligation(loan: LoanContentApi, timestamp) {
+    const { installments: installmentsModel } = loan;
 
-    const lentTime = parseInt(config.lent_time, 10);
-    const duration = parseInt(config.duration, 10);
-    const installments = parseInt(config.installments, 10);
-    const cuota = parseInt(config.cuota, 10);
+    const lentTime = parseInt(installmentsModel.lent_time, 10);
+    const duration = parseInt(installmentsModel.duration, 10);
+    const installments = parseInt(installmentsModel.installments, 10);
+    const cuota = parseInt(installmentsModel.cuota, 10);
 
     if (timestamp < lentTime) {
       return { obligation: 0, defined: true };
@@ -85,8 +84,8 @@ export class RcnApiUtils {
         cuota
     );
 
-    const prevInterest = parseInt(state.interest, 10);
-    const clock = parseInt(state.clock, 10);
+    const prevInterest = parseInt(installmentsModel.interest, 10);
+    const clock = parseInt(installmentsModel.clock, 10);
 
     let interest;
     let defined;
@@ -98,8 +97,7 @@ export class RcnApiUtils {
         clock,
         currentClock,
         prevInterest,
-        config,
-        state
+        installmentsModel
       );
       interest = newInterest;
       currentClock = newClock;
@@ -107,7 +105,7 @@ export class RcnApiUtils {
     }
 
     const debt = base + interest;
-    const paid = parseInt(state.paid, 10);
+    const paid = parseInt(installmentsModel.paid, 10);
 
     let obligation;
     if (debt > paid) {
@@ -181,7 +179,7 @@ export class RcnApiUtils {
     return newInterest;
   }
 
-  protected static calcDelta(targetDelta, clock, duration, installments) {
+  protected static calcDelta(targetDelta, clock, duration, _) {
     const nextInstallmentDelta = duration - clock % duration;
 
     // duration < installments:
@@ -198,7 +196,7 @@ export class RcnApiUtils {
     return { delta, installmentCompleted };
   }
 
-  protected static baseDebt (clock, duration, installments, cuota) {
+  protected static baseDebt (clock, _, installments, cuota) {
     const installment = clock; // duration
 
     let base;
@@ -211,16 +209,16 @@ export class RcnApiUtils {
     return base;
   }
 
-  protected static simRunClock(clock, targetClock, prevInterest, config: LoanConfig, state: LoanState) {
+  protected static simRunClock(clock, targetClock, prevInterest, installmentsModel: LoanInstallments) {
     const { interest, clock: newClock } = this.runAdvanceClock(
         clock,
-        parseInt(config.time_unit, 10),
+        parseInt(installmentsModel.time_unit, 10),
         prevInterest,
-        parseInt(config.duration, 10),
-        parseInt(config.cuota, 10),
-        parseInt(config.installments, 10),
-        parseInt(state.paid_base, 10),
-        parseInt(config.interest_rate, 10),
+        parseInt(installmentsModel.duration, 10),
+        parseInt(installmentsModel.cuota, 10),
+        parseInt(installmentsModel.installments, 10),
+        parseInt(installmentsModel.paid_base, 10),
+        parseInt(installmentsModel.interest_rate, 10),
         targetClock
     );
     clock = newClock;

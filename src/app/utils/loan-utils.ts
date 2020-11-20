@@ -1,27 +1,9 @@
-import { Loan, Oracle, Descriptor, Debt, Config, Status, Model } from '../models/loan.model';
+import { Loan, Oracle, Descriptor, Debt, Engine, Config, Status, Model } from '../models/loan.model';
 import { Collateral } from '../models/collateral.model';
-import { LoanApiDiaspore } from './../interfaces/loan-api-diaspore';
+import { LoanContentApi } from './../interfaces/loan-api-diaspore';
+import { RcnApiUtils } from './rcn-api-utils';
 import { Utils } from './utils';
 import { environment, Agent } from './../../environments/environment';
-
-interface ModelDebtInfo {
-  paid: number;
-  due_time: number;
-  estimated_obligation: number;
-  next_obligation: number;
-  current_obligation: number;
-  debt_balance: number;
-  owner: string;
-}
-
-interface ModelConfig {
-  installments: number;
-  time_unit: number;
-  duration: number;
-  lent_time: number;
-  cuota: number;
-  interest_rate: number;
-}
 
 export class LoanUtils {
   static decodeInterest(raw: number): number {
@@ -43,31 +25,28 @@ export class LoanUtils {
   }
 
   /**
-   * Create diaspore loan model from the api response
+   * Build loan model from api response
    * @param loanData Loan data obtained from API
    * @return Loan
    */
-  static createDiasporeLoan(
-    loanData: LoanApiDiaspore,
-    debtInfo: ModelDebtInfo,
-    modelConfig: ModelConfig
-  ): Loan {
-    const engine = environment.contracts.diaspore.loanManager;
+  static buildLoan(loanContent: LoanContentApi): Loan {
+    const engine = environment.contracts[Engine.RcnEngine].diaspore.loanManager; // TODO: use real engine
+    const {
+      loan: loanData,
+      debt: debtData,
+      descriptor: descriptorData,
+      collateral: collateralData,
+      installments: installmentsData
+    } = loanContent;
 
     let oracle: Oracle;
     if (loanData.oracle !== Utils.address0x) {
-      const currency = loanData.currency ? Utils.hexToAscii(loanData.currency.replace(/^[0x]+|[0]+$/g, '')) : '';
-      oracle = new Oracle(
-        loanData.oracle,
-        currency,
-        loanData.currency
-      );
+      const currency = loanData.currency ?
+        Utils.hexToAscii(loanData.currency.replace(/^[0x]+|[0]+$/g, '')) :
+        '';
+      oracle = new Oracle(loanData.oracle, currency, loanData.currency);
     } else {
-      oracle = new Oracle(
-        loanData.oracle,
-        'RCN',
-        loanData.currency
-      );
+      oracle = new Oracle(loanData.oracle, 'RCN', loanData.currency);
     }
 
     let descriptor: Descriptor;
@@ -75,58 +54,58 @@ export class LoanUtils {
     let config: Config;
 
     descriptor = new Descriptor(
-      Number(loanData.descriptor.first_obligation),
-      loanData.descriptor.total_obligation,
-      Number(loanData.descriptor.duration),
-      Number(loanData.descriptor.interest_rate),
+      Number(descriptorData.first_obligation),
+      descriptorData.total_obligation,
+      Number(descriptorData.duration),
+      Number(descriptorData.interest_rate),
       LoanUtils.decodeInterest(
-        Number(loanData.descriptor.punitive_interest_rate)
+        Number(descriptorData.punitive_interest_rate)
       ),
-      Number(loanData.descriptor.frequency),
-      Number(loanData.descriptor.installments)
+      Number(descriptorData.frequency),
+      Number(descriptorData.installments)
     );
 
     // set debt model
-    if (debtInfo) {
-      const paid = debtInfo.paid;
-      const dueTime = debtInfo.due_time;
-      const estimatedObligation = debtInfo.estimated_obligation;
-      const nextObligation = debtInfo.next_obligation;
-      const currentObligation = debtInfo.current_obligation;
-      const debtBalance = debtInfo.debt_balance;
-      const owner = debtInfo.owner;
+    if (debtData) {
+      const paid = installmentsData.paid;
+      const now = new Date().getTime();
+      const dueTime = RcnApiUtils.getDueTime(loanContent);
+      const estimatedObligation = RcnApiUtils.getEstimateObligation(loanContent); // TODO: Test
+      const { obligation: nextObligation } = RcnApiUtils.getObligation(loanContent, dueTime); // TODO: Test
+      const { obligation: currentObligation } = RcnApiUtils.getObligation(loanContent, now); // TODO: Test
+      const debtBalance = debtData.balance;
+      const owner = debtData.owner;
       debt = new Debt(
-        loanData.id,
+        loanData.loan_id,
         new Model(
           loanData.model,
-          paid,
+          Number(paid),
           nextObligation,
           currentObligation,
           estimatedObligation,
           dueTime
         ),
-        debtBalance,
+        Number(debtBalance),
         engine,
         owner,
         oracle
       );
     }
-    const status = loanData.canceled ? Status.Destroyed : Number(loanData.status);
+    const status = loanData.canceled ? Status.Destroyed : loanData.status;
 
-    if (modelConfig) {
+    if (installmentsData) {
       config = new Config(
-        Number(modelConfig.installments),
-        Number(modelConfig.time_unit),
-        Number(modelConfig.duration),
-        Number(modelConfig.lent_time),
-        Number(modelConfig.cuota),
-        Number(modelConfig.interest_rate)
+        Number(installmentsData.installments),
+        Number(installmentsData.time_unit),
+        Number(installmentsData.duration),
+        Number(installmentsData.lent_time),
+        Number(installmentsData.cuota),
+        Number(installmentsData.interest_rate)
       );
     }
 
-    const { collaterals } = loanData;
     let collateral: Collateral;
-    if (collaterals && collaterals.length) {
+    if (collateralData) {
       const {
         id,
         debt_id,
@@ -136,28 +115,29 @@ export class LoanUtils {
         liquidation_ratio,
         balance_ratio,
         status: collateralStatus
-      } = collaterals[0];
+      } = collateralData;
 
       collateral = new Collateral(
         Number(id),
         debt_id,
         collateralOracle,
         token,
-        amount,
-        liquidation_ratio,
-        balance_ratio,
-        Number(collateralStatus)
+        Utils.scientificToDecimal(amount),
+        Utils.scientificToDecimal(liquidation_ratio),
+        Utils.scientificToDecimal(balance_ratio),
+        collateralStatus
       );
     }
 
     return new Loan(
-      loanData.id,
+      Engine.UsdcEngine, // TODO: use real engine
+      loanData.loan_id,
       engine,
       Number(loanData.amount),
       oracle,
       descriptor,
       loanData.borrower,
-      loanData.creator,
+      loanData.borrower,
       status,
       Number(loanData.expiration),
       loanData.model,
@@ -166,37 +146,5 @@ export class LoanUtils {
       config,
       collateral
     );
-  }
-
-  /**
-   * Assign collaterals to loans
-   * @param loans Loans array
-   * @param collaterals Collaterals array
-   * @return Loans with collaterals
-   */
-  static completeLoansCollateral(loans: Loan[] = [], collaterals: Collateral[] = []): Loan[] {
-    const loansObj: {[loanId: number]: Collateral[]} = {};
-
-    collaterals.map(
-      (collateral: Collateral) => {
-        if (!loansObj[collateral.debtId]) {
-          loansObj[collateral.debtId] = [];
-        }
-        loansObj[collateral.debtId].push(collateral);
-      }
-    );
-
-    loans.map((loan: Loan) => {
-      if (!loansObj[loan.id]) {
-        return loan;
-      }
-
-      loansObj[loan.id].map((collateral: Collateral) => {
-        const { id, debtId, oracle, token, amount, liquidationRatio, balanceRatio, status } = collateral;
-        loan.collateral = new Collateral(id, debtId, oracle, token, amount, liquidationRatio, balanceRatio, status);
-      });
-    });
-
-    return loans;
   }
 }

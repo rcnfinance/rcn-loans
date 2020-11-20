@@ -134,8 +134,9 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
    */
   async addCollateral(amount: BN) {
     // validate approve
+    const { engine } = this.loan;
     const token = this.collateral.token.toLowerCase();
-    const contract = environment.contracts.collateral.collateral;
+    const contract = environment.contracts[engine].collateral.collateral;
     const engineApproved = await this.contractsService.isApproved(contract, token);
 
     if (!await engineApproved) {
@@ -155,10 +156,11 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
    */
   async withdrawCollateral(amount: BN) {
     const token: string = this.collateral.token;
+    const { engine } = this.loan;
 
-    if (token === environment.contracts.converter.ethAddress) {
-      const collateral = environment.contracts.collateral.collateral;
-      const operator = environment.contracts.collateral.wethManager;
+    if (token === environment.contracts[engine].converter.ethAddress) {
+      const collateral = environment.contracts[engine].collateral.collateral;
+      const operator = environment.contracts[engine].collateral.wethManager;
       const operatorApproved = await this.contractsService.isApprovedERC721(
         collateral,
         operator

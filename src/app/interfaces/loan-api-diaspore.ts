@@ -1,6 +1,7 @@
 import { CollateralApi } from './collateral-api';
 
 export interface LoanDescriptor {
+  loan_id: string;
   first_obligation: number;
   total_obligation: number;
   duration: number;
@@ -20,12 +21,14 @@ export interface LoanConfig {
 }
 
 export interface LoanDebt {
-  balance: string;
-  created: string;
-  creator: string;
+  debt_id: string;
   error: boolean;
+  balance: string;
   model: string;
+  creator: string;
   oracle: string;
+  created: string;
+  owner: string;
 }
 
 export interface LoanState {
@@ -37,29 +40,43 @@ export interface LoanState {
   status: string;
 }
 
-export interface LoanApiDiaspore {
-  id: string;
+export interface LoanInstallments {
+  installments_id: string;
+  status: string;
+  clock: string;
+  last_payment: string;
+  paid: string;
+  paid_base: string;
+  installments: string;
+  time_unit: string;
+  duration: string;
+  lent_time: string;
+  cuota: string;
+  interest_rate: string;
+  interest: string;
+}
+
+export interface LoanData {
+  loan_id: string;
   open: boolean;
   approved: boolean;
-  position: string;
-  expiration: string;
-  amount: string;
+  expiration: number;
+  amount: number;
   cosigner: string;
   model: string;
-  creator: string;
   oracle: string;
   borrower: string;
-  callback: string;
-  salt: string;
   loanData: string;
-  created: string;
-  config: LoanConfig;
-  debt: LoanDebt;
-  descriptor: LoanDescriptor;
-  currency: string;
-  lender: string;
-  state: LoanState;
-  status: string;
+  created: number;
+  status: number;
   canceled: boolean;
-  collaterals?: CollateralApi[];
+  currency: string;
+}
+
+export interface LoanContentApi {
+  loan: LoanData;
+  debt: LoanDebt;
+  installments: LoanInstallments;
+  collateral: CollateralApi;
+  descriptor: LoanDescriptor;
 }

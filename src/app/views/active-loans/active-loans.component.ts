@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Loan, LoanType } from './../../models/loan.model';
+import { LoanContentApi } from './../../interfaces/loan-api-diaspore';
 import { LoanCurator } from './../../utils/loan-curator';
-import { ApiService } from '../../services/api.service';
+import { LoanUtils } from './../../utils/loan-utils';
+import { ProxyApiService } from '../../services/proxy-api.service';
 import { EventsService } from '../../services/events.service';
 import { TitleService } from '../../services/title.service';
 import { LoanTypeService } from '../../services/loan-type.service';
@@ -18,14 +20,15 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
   loans = [];
   // pagination
   page = 0;
-  sort: string;
+  sort: object;
+  filters: object;
   isLoading: boolean;
   isFullScrolled: boolean;
   isAvailableLoans = true;
 
   constructor(
     private spinner: NgxSpinnerService,
-    private apiService: ApiService,
+    private proxyApiService: ProxyApiService,
     private titleService: TitleService,
     private eventsService: EventsService,
     private loanTypeService: LoanTypeService,
@@ -33,7 +36,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.titleService.changeTitle('Activity explorer');
+    this.titleService.changeTitle('Activity Explorer');
     this.loadLoans();
   }
 
@@ -45,7 +48,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
    * Sort loans
    * @param sort Order by
    */
-  async sortLoans(sort: string) {
+  async sortLoans(sort: object) {
     this.sort = sort;
 
     // restore params
@@ -55,6 +58,22 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
 
     this.spinner.show(this.pageId);
     await this.loadLoans(this.page, sort);
+  }
+
+  /**
+   * Filter loans
+   * @param filters Filter by
+   */
+  async filterLoans(filters: object) {
+    this.filters = filters;
+
+    // restore params
+    this.page = 0;
+    this.isFullScrolled = false;
+    this.loans = [];
+
+    this.spinner.show(this.pageId);
+    await this.loadLoans(this.page, undefined, filters);
   }
 
   async onScroll(event: any) {
@@ -83,18 +102,21 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
    * Load active loans
    * @param page Page
    * @param sort Order by
+   * @param filters Filter by
    * @return Loans
    */
-  async loadLoans(
+  private async loadLoans(
     page: number = this.page,
-    sort: string = this.sort,
+    sort: object = this.sort,
+    filters: object = this.filters,
     currentLoadedLoans = 0
   ) {
     this.loading = true;
 
     try {
       const PAGE_SIZE = 20;
-      const loans: Loan[] = await this.apiService.getPaginatedActiveLoans(page, PAGE_SIZE, sort);
+      const { content } = await this.proxyApiService.getAcvivity(page, PAGE_SIZE, sort, filters);
+      const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
       const curatedLoans: Loan[] = LoanCurator.curateLoans(loans);
 
       const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
@@ -120,7 +142,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
 
       const MINIMUN_LOANS_TO_SHOW = 12;
       if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
-        await this.loadLoans(this.page, this.sort, currentLoadedLoans);
+        await this.loadLoans(this.page, this.sort, this.filters, currentLoadedLoans);
       }
     } catch (err) {
       this.eventsService.trackError(err);

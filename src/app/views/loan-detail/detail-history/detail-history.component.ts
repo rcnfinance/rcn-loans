@@ -219,6 +219,9 @@ export class DetailHistoryComponent implements OnInit {
   }
 
   ngOnInit() {
+    const { loan } = this;
+    if (!loan) return;
+
     this.loadCommits();
   }
 

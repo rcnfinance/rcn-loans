@@ -1,12 +1,9 @@
 export interface ApiResponse {
   content: any[];
   meta: {
-    lastBlockPulled: string;
-    next: string;
+    // lastBlockPulled: string; // TODO: add
+    count: number;
     page: number;
     page_size: number;
-    params: object;
-    prev: string;
-    resource_count: number;
   };
 }

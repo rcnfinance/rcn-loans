@@ -31,7 +31,7 @@ describe('BalanceComponent', () => {
 
   it('should display balance', () => {
     // set balance amount
-    component.diasporeLoansWithBalance = [3000];
+    component.rcnLoansWithBalance = [3000];
     component.rcnAvailable = 3000;
 
     // update template
@@ -39,8 +39,8 @@ describe('BalanceComponent', () => {
     fixture.detectChanges();
 
     // logic expect
-    expect(component.displayAvailable).toBe('3,000.00');
-    expect(component.canWithdraw).toBeTruthy();
+    expect(component.rcnDisplayAvailable).toBe('3,000.00');
+    expect(component.rcnCanWithdraw).toBeTruthy();
 
     // ui expect
     const withdrawPayments = readComponent(fixture, '.balance-withdraw__amount');

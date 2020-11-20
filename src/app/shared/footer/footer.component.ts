@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
-// App Components
+import { Engine } from './../../models/loan.model';
 import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
-// App Services
 import { environment } from '../../../environments/environment';
 import { SidebarService } from '../../services/sidebar.service';
 import { Web3Service } from './../../services/web3.service';
@@ -46,7 +45,7 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     const env = environment;
-    const contract = env.contracts.diaspore.loanManager;
+    const contract = env.contracts[Engine.RcnEngine].diaspore.loanManager;
     const linkContract = env.network.explorer.address.replace('${address}', contract);
     const version = env.version;
     const versionString = `${env.version}-${env.build} - ${env.versionName} ${env.versionEmoji}`;

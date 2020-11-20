@@ -5,15 +5,14 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
-// App Models
 import { Loan, Status, LoanType } from './../../models/loan.model';
+import { LoanContentApi } from './../../interfaces/loan-api-diaspore';
 import { Brand } from '../../models/brand.model';
 import { Collateral, Status as CollateralStatus } from '../../models/collateral.model';
-// App Utils
 import { Utils } from './../../utils/utils';
-// App Services
+import { LoanUtils } from './../../utils/loan-utils';
 import { TitleService } from '../../services/title.service';
-import { ContractsService } from './../../services/contracts.service';
+import { ProxyApiService } from './../../services/proxy-api.service';
 import { CurrenciesService } from './../../services/currencies.service';
 import { IdentityService } from '../../services/identity.service';
 import { Web3Service } from '../../services/web3.service';
@@ -97,7 +96,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private spinner: NgxSpinnerService,
     private titleService: TitleService,
-    private contractsService: ContractsService,
+    private proxyApiService: ProxyApiService,
     private currenciesService: CurrenciesService,
     private identityService: IdentityService,
     private web3Service: Web3Service,
@@ -261,8 +260,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
    * @param id Loan ID
    * @return Loan
    */
-  private async getLoan(id) {
-    const loan = await this.contractsService.getLoan(id);
+  private async getLoan(id: string) {
+    const loanData: LoanContentApi = await this.proxyApiService.getLoanById(id);
+    const loan: Loan = LoanUtils.buildLoan(loanData);
     this.loan = loan;
 
     return loan;
@@ -495,7 +495,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     this.paymentDate = installmentDays;
 
     // load installments average
-    const startDate = loan.status === Status.Request ? nowDate : loan.config.lentTime;
+    const startDate = [Status.Request, Status.Expired].includes(loan.status) ? nowDate : loan.config.lentTime;
     const endDate = startDate + (installments * frequency);
 
     const MAX_AVERAGE = 100;
@@ -556,10 +556,11 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     if ([Status.Paid, Status.Expired].includes(this.loan.status)) {
       const isBorrower = this.loan.borrower.toUpperCase() === account.toUpperCase();
       const { collateral } = this.loan;
+
       this.canRedeem =
         isBorrower &&
         collateral &&
-        collateral.status === CollateralStatus.ToWithdraw &&
+        [CollateralStatus.ToWithdraw, CollateralStatus.Created].includes(collateral.status) &&
         Number(collateral.amount) > 0;
     }
   }

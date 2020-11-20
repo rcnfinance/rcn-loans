@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subscription } from 'rxjs';
-// App Models
 import { Loan, LoanType } from './../../models/loan.model';
-// App Services
-import { Web3Service } from './../../services/web3.service';
+import { LoanContentApi } from './../../interfaces/loan-api-diaspore';
+import { LoanCurator } from './../../utils/loan-curator';
+import { LoanUtils } from './../../utils/loan-utils';
+import { ProxyApiService } from '../../services/proxy-api.service';
+import { EventsService } from '../../services/events.service';
 import { TitleService } from '../../services/title.service';
-import { ContractsService } from './../../services/contracts.service';
-import { AvailableLoansService } from '../../services/available-loans.service';
-import { FilterLoansService } from '../../services/filter-loans.service';
 import { LoanTypeService } from '../../services/loan-type.service';
+import { DeviceService } from '../../services/device.service';
 
 @Component({
   selector: 'app-requested-loan',
@@ -17,125 +16,159 @@ import { LoanTypeService } from '../../services/loan-type.service';
   styleUrls: ['./requested-loan.component.scss']
 })
 export class RequestedLoanComponent implements OnInit, OnDestroy {
-  pageId = 'requested-loan';
-  winHeight: number = window.innerHeight;
-  loading: boolean;
-  available: any;
-  loans: Loan[];
-  availableLoans = true;
-  pendingLend = [];
-  filters = {
-    currency: undefined,
-    amountStart: null,
-    amountEnd: null,
-    interest: null,
-    duration: null
-  };
-  filtersOpen = undefined;
-  account: string;
-
-  // subscriptions
-  subscriptionAvailable: Subscription;
-  subscriptionAccount: Subscription;
+  pageId = 'active-loans';
+  loans = [];
+  // pagination
+  page = 0;
+  sort: object;
+  filters: object;
+  isLoading: boolean;
+  isFullScrolled: boolean;
+  isAvailableLoans = true;
+  // filters component
+  filtersOpen: boolean;
 
   constructor(
     private spinner: NgxSpinnerService,
-    private web3Service: Web3Service,
+    private proxyApiService: ProxyApiService,
     private titleService: TitleService,
-    private availableLoansService: AvailableLoansService,
-    private contractsService: ContractsService,
-    private filterLoansService: FilterLoansService,
-    private loanTypeService: LoanTypeService
+    private eventsService: EventsService,
+    private loanTypeService: LoanTypeService,
+    private deviceService: DeviceService
   ) { }
 
   ngOnInit() {
     this.titleService.changeTitle('Lending Marketplace');
-    this.spinner.show(this.pageId);
     this.loadLoans();
-    this.loadAccount();
-    this.handleLoginEvents();
-
-    // Available Loans service
-    this.subscriptionAvailable = this.availableLoansService.currentAvailable.subscribe(
-      available => this.available = available
-    );
   }
 
   ngOnDestroy() {
-    this.spinner.hide(this.pageId);
-
-    try {
-      this.subscriptionAvailable.unsubscribe();
-      this.subscriptionAccount.unsubscribe();
-    } catch (e) { }
+    this.loading = false;
   }
 
   /**
-   * Listen and handle login events for account changes and logout
+   * Click on toggle filters button
    */
-  handleLoginEvents() {
-    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(() => this.loadAccount());
-  }
-
-  /**
-   * Toggle filter visibility
-   */
-  openFilters() {
-    this.filtersOpen = !this.filtersOpen;
-  }
-
-  /**
-   * Reload loans when the filter is applied
-   */
-  onFiltered() {
-    this.spinner.show(this.pageId);
-    this.loadLoans();
-  }
-
-  /**
-   * Update available loans number
-   */
-  upgradeAvaiblable() {
-    this.availableLoansService.updateAvailable(this.loans.length);
+  clickFilters() {
+    // TODO: add logic
   }
 
   /**
    * Sort loans
    * @param sort Order by
    */
-  async sortLoans(sort: string) {
+  async sortLoans(sort: object) {
+    this.sort = sort;
+
+    // restore params
+    this.page = 0;
+    this.isFullScrolled = false;
+    this.loans = [];
+
     this.spinner.show(this.pageId);
-    await this.loadLoans(sort);
+    await this.loadLoans(this.page, sort);
   }
 
   /**
-   * Load loans
-   * @param sort Order by
+   * Filter loans
+   * @param filters Filter by
    */
-  async loadLoans(sort?: string) {
-    const loans: Loan[] = await this.contractsService.getRequests(sort);
-    const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
-    const filteredLoans: Loan[] = this.loanTypeService.filterLoanByType(loans, ALLOWED_TYPES);
+  async filterLoans(filters: object) {
+    this.filters = filters;
 
-    const filterLoans = this.filterLoansService.filterLoans(filteredLoans, this.filters);
-    this.loans = filterLoans;
+    // restore params
+    this.page = 0;
+    this.isFullScrolled = false;
+    this.loans = [];
 
-    this.upgradeAvaiblable();
-    this.spinner.hide(this.pageId);
+    this.spinner.show(this.pageId);
+    await this.loadLoans(this.page, undefined, filters);
+  }
 
-    if (filteredLoans.length) {
-      this.availableLoans = true;
-    } else {
-      this.availableLoans = false;
+  async onScroll(event: any) {
+    if (this.loading || this.isFullScrolled) {
+      return;
+    }
+
+    const { offsetHeight, scrollTop, scrollHeight } = event.target;
+    const TOLERANCE_PX = this.deviceService.isMobile ? 440 : 52;
+    if (offsetHeight + scrollTop >= (scrollHeight - TOLERANCE_PX)) {
+      await this.loadLoans(this.page);
     }
   }
 
   /**
-   * Load user account
+   * TrackBy Loan ID
+   * @param _ Index
+   * @param loan Loan
+   * @return Loan ID
    */
-  async loadAccount() {
-    const web3 = this.web3Service.web3;
-    const account = await this.web3Service.getAccount();
-    this.account = web3.utils.toChecksumAddress(account);
+  trackByLoanId(_: number, { id }: Loan): string {
+    return id;
+  }
+
+  /**
+   * Load active loans
+   * @param page Page
+   * @param sort Order by
+   * @return Loans
+   */
+  private async loadLoans(
+    page: number = this.page,
+    sort: object = this.sort,
+    filters: object = this.filters,
+    currentLoadedLoans = 0
+  ) {
+    this.loading = true;
+
+    try {
+      const PAGE_SIZE = 20;
+      const { content } = await this.proxyApiService.getRequests(page, PAGE_SIZE, sort, filters);
+      const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
+      const curatedLoans: Loan[] = LoanCurator.curateLoans(loans);
+
+      const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
+      const filteredLoans: Loan[] = this.loanTypeService.filterLoanByType(curatedLoans, ALLOWED_TYPES);
+
+      // if there are no more loans
+      if (!loans.length) {
+        this.isFullScrolled = true;
+        this.isAvailableLoans = this.loans.length ? true : false;
+      }
+
+      // set loan index as positions
+      filteredLoans.map((loan: Loan, i: number) => loan.position = i);
+
+      // if there are more loans add them and continue
+      if (loans.length) {
+        this.loans = this.loans.concat(filteredLoans);
+        this.page++;
+      }
+
+      // incrase current paginator results
+      currentLoadedLoans = currentLoadedLoans + filteredLoans.length;
+
+      const MINIMUN_LOANS_TO_SHOW = 12;
+      if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
+        await this.loadLoans(this.page, this.sort, this.filters, currentLoadedLoans);
+      }
+    } catch (err) {
+      this.eventsService.trackError(err);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  private set loading(loading: boolean) {
+    this.isLoading = loading;
+    if (loading) {
+      this.spinner.show(this.pageId);
+    } else {
+      this.spinner.hide(this.pageId);
+    }
+  }
+
+  private get loading() {
+    return this.isLoading;
   }
 }

@@ -14,7 +14,7 @@ enum PageView {
 })
 export class LoanListHeaderComponent {
   @Input() view: PageView;
-  @Output() sort: EventEmitter<string>;
+  @Output() sort: EventEmitter<object>;
   stateSort = {};
 
   constructor() {
@@ -31,7 +31,11 @@ export class LoanListHeaderComponent {
         LoanSortValue.Desc
     };
 
-    const sort = `${key}__${value}`;
+    const sort = {
+      field: [key],
+      direction: value
+    };
+
     this.sort.emit(sort);
   }
 

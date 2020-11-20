@@ -1,8 +1,8 @@
 import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { Engine } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
-// App Services
 import { Web3Service } from '../../services/web3.service';
 import { EventsService } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
@@ -17,12 +17,11 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   @Input() account: string;
 
   rcnAvailable: number;
-  diasporeLoansWithBalance: number[] = [];
-  ongoingDiasporeWithdraw: Tx;
-
-  canWithdraw = false;
-  displayAvailable = '';
-  txSubscription: boolean;
+  rcnLoansWithBalance: number[] = [];
+  rcnOngoingWithdraw: Tx;
+  rcnCanWithdraw = false;
+  rcnDisplayAvailable = '';
+  rcnTxSubscription: boolean;
 
   // subscriptions
   subscriptionBalance: Subscription;
@@ -53,7 +52,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     if (this.subscriptionBalance) {
       this.subscriptionBalance.unsubscribe();
     }
-    if (this.txSubscription) {
+    if (this.rcnTxSubscription) {
       this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
     }
   }
@@ -72,15 +71,15 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    */
   updateDisplay() {
     if (this.rcnAvailable) {
-      this.displayAvailable = Utils.formatAmount(this.rcnAvailable);
+      this.rcnDisplayAvailable = Utils.formatAmount(this.rcnAvailable);
     } else {
-      this.displayAvailable = '0';
+      this.rcnDisplayAvailable = '0';
     }
 
-    this.canWithdraw =
-      this.diasporeLoansWithBalance !== undefined &&
-      this.diasporeLoansWithBalance.length > 0 &&
-      this.ongoingDiasporeWithdraw === undefined;
+    this.rcnCanWithdraw =
+      this.rcnLoansWithBalance !== undefined &&
+      this.rcnLoansWithBalance.length > 0 &&
+      this.rcnOngoingWithdraw === undefined;
   }
 
   /**
@@ -90,7 +89,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   async loadWithdrawBalance() {
     const pendingWithdraws = await this.contractService.getPendingWithdraws();
     this.rcnAvailable = pendingWithdraws[2] / 10 ** 18;
-    this.diasporeLoansWithBalance = pendingWithdraws[3];
+    this.rcnLoansWithBalance = pendingWithdraws[3];
     this.loadOngoingWithdraw();
     this.updateDisplay();
   }
@@ -99,18 +98,18 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Load the pending withdraw
    */
   loadOngoingWithdraw() {
-    this.ongoingDiasporeWithdraw = this.txService.getLastWithdraw(
-      environment.contracts.diaspore.debtEngine,
-      this.diasporeLoansWithBalance
+    this.rcnOngoingWithdraw = this.txService.getLastWithdraw(
+      environment.contracts[Engine.RcnEngine].diaspore.debtEngine,
+      this.rcnLoansWithBalance
     );
   }
 
   /**
-   * Handle click on withdraw
+   * Handle click on withdraw RCN
    */
-  async clickWithdraw() {
+  async clickWithdrawRcn() {
     try {
-      await this.withdraw();
+      await this.withdrawRcn();
     } catch (err) {
       if (err.stack.indexOf('User denied transaction signature') < 0) {
         this.eventsService.trackError(err);
@@ -121,11 +120,11 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Withdraw diaspore funds
    */
-  async withdraw() {
-    if (this.canWithdraw) {
-      if (this.diasporeLoansWithBalance.length > 0) {
-        const tx = await this.contractService.withdrawFundsDiaspore(this.diasporeLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, environment.contracts.diaspore.debtEngine, this.diasporeLoansWithBalance);
+  private async withdrawRcn() {
+    if (this.rcnCanWithdraw) {
+      if (this.rcnLoansWithBalance.length > 0) {
+        const tx = await this.contractService.withdrawFundsDiaspore(this.rcnLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, environment.contracts[Engine.RcnEngine].diaspore.debtEngine, this.rcnLoansWithBalance);
       }
       this.loadWithdrawBalance();
       this.retrievePendingTx();
@@ -135,9 +134,9 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Retrieve pending Tx
    */
-  retrievePendingTx() {
-    if (!this.txSubscription) {
-      this.txSubscription = true;
+  private retrievePendingTx() {
+    if (!this.rcnTxSubscription) {
+      this.rcnTxSubscription = true;
       this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
     }
   }
@@ -145,7 +144,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Track tx
    */
-  trackWithdrawTx(tx: Tx) {
+  private trackWithdrawTx(tx: Tx) {
     if (tx.type === Type.withdraw) {
       this.web3Service.updateBalanceEvent.emit();
     }
