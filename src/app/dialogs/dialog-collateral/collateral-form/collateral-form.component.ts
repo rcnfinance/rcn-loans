@@ -324,9 +324,10 @@ export class CollateralFormComponent implements OnInit {
    * @return Tx cost
    */
   private async getTxCost() {
-    const { collateral } = this.loan;
+    const { engine, collateral } = this.loan;
     const gasPrice = await this.web3Service.web3.eth.getGasPrice();
     const estimatedGas = await this.contractsService.addCollateral(
+      engine,
       collateral.id,
       collateral.token,
       collateral.amount.toString(),

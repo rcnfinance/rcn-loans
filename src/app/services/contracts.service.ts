@@ -27,14 +27,17 @@ const aggregatorProxyAbi = require('../contracts/chainlink/EACAggregatorProxy.js
 
 @Injectable()
 export class ContractsService {
-  private _loanManager: {[engine: string]: any};
-  private _debtEngine: {[engine: string]: any};
-  private _rcnConverterRamp: {[engine: string]: any};
-  private _uniswapConverter: {[engine: string]: any};
-  private _oracleFactory: {[engine: string]: any};
-  private _installmentsModel: {[engine: string]: any};
-  private _collateral: {[engine: string]: any};
-  private _collateralWethManager: {[engine: string]: any};
+  // multi-engine contracts
+  private _loanManager: {[engine: string]: any} = {};
+  private _debtEngine: {[engine: string]: any} = {};
+  private _rcnConverterRamp: {[engine: string]: any} = {};
+  private _uniswapConverter: {[engine: string]: any} = {};
+  private _oracleFactory: {[engine: string]: any} = {};
+  private _installmentsModel: {[engine: string]: any} = {};
+  private _collateral: {[engine: string]: any} = {};
+  private _collateralWethManager: {[engine: string]: any} = {};
+
+  // single-engine contracts
   private _aggregatorProxyEthUsdAddress: string =
     environment.contracts.chainlink.EACAggregatorProxy.ethUsd;
   private _aggregatorProxyEthUsd: any;
@@ -48,25 +51,26 @@ export class ContractsService {
     private eventsService: EventsService
   ) {
     Object.values(Engine).map((engine) => {
-      this._loanManager =
+      this._loanManager[engine] =
         this.makeContract(loanManagerAbi, environment.contracts[engine].diaspore.loanManager);
-      this._debtEngine =
+      this._debtEngine[engine] =
         this.makeContract(debtEngineAbi, environment.contracts[engine].diaspore.debtEngine);
-      this._rcnConverterRamp =
+      this._rcnConverterRamp[engine] =
         this.makeContract(converterRampAbi.abi, environment.contracts[engine].converter.converterRamp);
-      this._uniswapConverter =
+      this._uniswapConverter[engine] =
         this.makeContract(uniswapV2ConverterAbi.abi, environment.contracts[engine].converter.uniswapConverter);
-      this._oracleFactory =
+      this._oracleFactory[engine] =
         this.makeContract(oracleFactoryAbi.abi, environment.contracts[engine].oracleFactory);
-      this._installmentsModel =
+      this._installmentsModel[engine] =
         this.makeContract(installmentsModelAbi.abi, environment.contracts[engine].models.installments);
-      this._collateral =
+      this._collateral[engine] =
         this.makeContract(collateralAbi.abi, environment.contracts[engine].collateral.collateral);
-      this._collateralWethManager =
+      this._collateralWethManager[engine] =
         this.makeContract(collateralWethManagerAbi.abi, environment.contracts[engine].collateral.wethManager);
-      this._aggregatorProxyEthUsd =
-        this.makeContract(aggregatorProxyAbi.abi, this._aggregatorProxyEthUsdAddress);
     });
+
+    this._aggregatorProxyEthUsd =
+      this.makeContract(aggregatorProxyAbi.abi, this._aggregatorProxyEthUsdAddress);
   }
 
   /**
@@ -101,9 +105,7 @@ export class ContractsService {
    * @param tokenAddress Token address
    * @return Balance amount
    */
-  async getUserBalanceInToken(
-    tokenAddress: string = environment.contracts[Engine.RcnEngine].token
-  ): Promise<BN> {
+  async getUserBalanceInToken(tokenAddress: string): Promise<BN> {
     const account = await this.web3Service.getAccount();
 
     return new Promise(async (resolve, reject) => {
@@ -134,10 +136,7 @@ export class ContractsService {
    * @param tokenAddress Token address
    * @return Pending tx or boolean
    */
-  async isApproved(
-    contract: string,
-    tokenAddress: string = environment.contracts[Engine.RcnEngine].token
-  ): Promise<boolean> {
+  async isApproved(contract: string, tokenAddress: string): Promise<boolean> {
     const pending = this.txService.getLastPendingApprove(tokenAddress, contract);
     const ethAddress = environment.contracts.ethAddress;
 
@@ -170,10 +169,7 @@ export class ContractsService {
    * @param tokenAddress Token address
    * @return Tx hash
    */
-  async approve(
-    contract: string,
-    tokenAddress: string = environment.contracts[Engine.RcnEngine].token
-  ): Promise<string> {
+  async approve(contract: string, tokenAddress: string): Promise<string> {
     const account = await this.web3Service.getAccount();
     const web3 = this.web3Service.opsWeb3;
 
@@ -203,10 +199,7 @@ export class ContractsService {
    * @param tokenAddress Token address
    * @return Tx hash
    */
-  async disapprove(
-    contract: string,
-    tokenAddress: string = environment.contracts[Engine.RcnEngine].token
-  ): Promise<string> {
+  async disapprove(contract: string, tokenAddress: string): Promise<string> {
     const account = await this.web3Service.getAccount();
     const web3 = this.web3Service.opsWeb3;
 
@@ -311,10 +304,7 @@ export class ContractsService {
    * @param tokenAddress Amount in the selected token
    * @return Required amount
    */
-  async estimateLendAmount(
-    loan: Loan,
-    tokenAddress: string = environment.contracts[Engine.RcnEngine].token
-  ): Promise<BN> {
+  async estimateLendAmount(loan: Loan, tokenAddress: string): Promise<BN> {
     const loanAmount: BN = Utils.bn(loan.amount);
     const decimals: number = loan.currency.decimals;
     const rcnRate = await this.getRate(loan.oracle.address, decimals);
@@ -328,7 +318,9 @@ export class ContractsService {
     }
 
     // amount in currency
+    const { engine } = loan;
     const requiredInToken: string | BN = await this.getPriceConvertTo(
+      engine,
       tokenAddress,
       rcnToken,
       rcnAmount.toString()
@@ -341,6 +333,7 @@ export class ContractsService {
 
   /**
    * Lend loan using ConverterRamp
+   * @param engine Engine
    * @param payableAmount Ether amount
    * @param converter Converter address
    * @param fromToken From token address
@@ -355,6 +348,7 @@ export class ContractsService {
    * @return Tx hash
    */
   async converterRampLend(
+    engine: Engine,
     payableAmount: string,
     converter: string,
     fromToken: string,
@@ -375,14 +369,14 @@ export class ContractsService {
       { from: account };
 
     if (estimate) {
-      return await this.loadAltContract(web3, this._rcnConverterRamp)
+      return await this.loadAltContract(web3, this._rcnConverterRamp[engine])
           .methods
           .lend(converter, fromToken, maxSpend, cosigner, cosignerLimit, loanId, oracleData, cosignerData, callbackData)
           .estimateGas(payload);
     }
 
     return new Promise((resolve, reject) => {
-      this.loadAltContract(web3, this._rcnConverterRamp)
+      this.loadAltContract(web3, this._rcnConverterRamp[engine])
           .methods
           .lend(converter, fromToken, maxSpend, cosigner, cosignerLimit, loanId, oracleData, cosignerData, callbackData)
           .send(payload)
@@ -392,82 +386,20 @@ export class ContractsService {
   }
 
   /**
-   * Pay loan using ConverterRamp
-   * @param payableAmount Ether amount
-   * @param converter UniswapConverter address
-   * @param fromToken From token address
-   * @param loanManager Loan Manager address
-   * @param debtEngine Debt Engine address
-   * @param loanId Loan ID
-   * @param oracleData Oracle data
-   * @param account Account address
-   * @param estimate Estimate or send transaction
-   * @return Tx hash
-   */
-  async converterRampPay(
-    payableAmount: number,
-    converter: string,
-    fromToken: string,
-    loanManager: string,
-    debtEngine: string,
-    loanId: string,
-    oracleData: string,
-    account: string,
-    estimate?: boolean
-  ): Promise<string> {
-    const web3 = this.web3Service.opsWeb3;
-
-    const payload = { from: account };
-
-    if (estimate) {
-      return await this.loadAltContract(web3, this._rcnConverterRamp)
-          .methods
-          .pay(payableAmount, converter, fromToken, loanManager, debtEngine, account, loanId, oracleData)
-          .estimateGas(payload);
-    }
-
-    return new Promise((resolve, reject) => {
-      this.loadAltContract(web3, this._rcnConverterRamp)
-          .methods
-          .pay(payableAmount, converter, fromToken, loanManager, debtEngine, account, loanId, oracleData)
-          .send(payload)
-          .on('transactionHash', (hash: string) => resolve(hash))
-          .on('error', (err) => reject(err));
-    });
-  }
-
-  /**
    * Get the cost, in wei, of making a convertion using the value specified
-   * @param fromToken From token address
-   * @param toToken To token address
-   * @param fromAmount Amount to convert
-   * @return Receive amount
-   */
-  async getPriceConvertFrom(
-    fromToken: string,
-    toToken: string,
-    fromAmount: string | BN
-  ): Promise<string> {
-    return await this._uniswapConverter[Engine.RcnEngine].methods.getPriceConvertFrom(
-      fromToken,
-      toToken,
-      fromAmount
-    ).call();
-  }
-
-  /**
-   * Get the cost, in wei, of making a convertion using the value specified
+   * @param engine Engine
    * @param fromToken From token address
    * @param toToken To token address
    * @param amount Amount to convert
    * @return Spend amount
    */
   async getPriceConvertTo(
+    engine: Engine,
     fromToken: string,
     toToken: string,
     toAmount: string | BN
   ): Promise<string> {
-    return await this._uniswapConverter.methods.getPriceConvertTo(
+    return await this._uniswapConverter[engine].methods.getPriceConvertTo(
       fromToken,
       toToken,
       toAmount
@@ -476,6 +408,7 @@ export class ContractsService {
 
   /**
    * Lend loan using ConverterRamp
+   * @param engine Engine
    * @param payableAmount Ether amount
    * @param converter Converter address
    * @param fromToken From token address
@@ -489,6 +422,7 @@ export class ContractsService {
    * @return Tx hash
    */
   async lendLoan(
+    engine: Engine,
     cosigner: string,
     loanId: string,
     oracleData: string,
@@ -503,14 +437,14 @@ export class ContractsService {
     const payload = { from: account };
 
     if (estimate) {
-      return await this.loadAltContract(web3, this._loanManager)
+      return await this.loadAltContract(web3, this._loanManager[engine])
           .methods
           .lend(loanId, oracleData, cosigner, COSIGNER_LIMIT, cosignerData, callbackData)
           .estimateGas(payload);
     }
 
     return new Promise((resolve, reject) => {
-      this.loadAltContract(web3, this._loanManager)
+      this.loadAltContract(web3, this._loanManager[engine])
           .methods
           .lend(loanId, oracleData, cosigner, COSIGNER_LIMIT, cosignerData, callbackData)
           .send(payload)
@@ -572,16 +506,17 @@ export class ContractsService {
     const oracleData = await pOracleData;
     const web3 = this.web3Service.opsWeb3;
     const payload = { from: account };
+    const { engine } = loan;
 
     if (estimate) {
-      return await this.loadAltContract(web3, this._debtEngine)
+      return await this.loadAltContract(web3, this._debtEngine[engine])
           .methods
           .pay(loan.id, amount, account, oracleData)
           .estimateGas(payload);
     }
 
     return new Promise((resolve, reject) => {
-      this.loadAltContract(web3, this._debtEngine)
+      this.loadAltContract(web3, this._debtEngine[engine])
           .methods
           .pay(loan.id, amount, account, oracleData)
           .send(payload)
@@ -593,9 +528,10 @@ export class ContractsService {
   async transferLoan(loan: Loan, to: string): Promise<string> {
     const account = await this.web3Service.getAccount();
     const web3 = this.web3Service.opsWeb3;
+    const { engine } = loan;
 
     return new Promise((resolve, reject) => {
-      this.loadAltContract(web3, this._debtEngine).methods.safeTransferFrom(
+      this.loadAltContract(web3, this._debtEngine[engine]).methods.safeTransferFrom(
         account,
         to,
         loan.id
@@ -606,13 +542,13 @@ export class ContractsService {
     });
   }
 
-  async withdrawFundsDiaspore(diasporeIdLoans: number[]): Promise<string> {
+  async withdrawFundsDiaspore(engine: Engine, diasporeIdLoans: number[]): Promise<string> {
     const account = await this.web3Service.getAccount();
     const web3 = this.web3Service.opsWeb3;
 
     console.info('loans to withdraw diaspore', diasporeIdLoans);
     return new Promise((resolve, reject) => {
-      this.loadAltContract(web3, this._debtEngine).methods.withdrawBatch(
+      this.loadAltContract(web3, this._debtEngine[engine]).methods.withdrawBatch(
         diasporeIdLoans,
         account
       )
@@ -690,20 +626,22 @@ export class ContractsService {
 
   /**
    * Get oracle address from currency symbol
+   * @param engine Engine
    * @param symbol Currency symbol
    * @return Oracle address
    */
-  async symbolToOracle(symbol: string) {
-    return await this._oracleFactory.methods.symbolToOracle(symbol).call();
+  async symbolToOracle(engine: Engine, symbol: string) {
+    return await this._oracleFactory[engine].methods.symbolToOracle(symbol).call();
   }
 
   /**
    * Get currency symbol from oracle address
+   * @param engine Engine
    * @param oracle Oracle address
    * @return Currency symbol
    */
-  async oracleToSymbol(oracle: string) {
-    return await this._oracleFactory.methods.oracleToSymbol(oracle).call();
+  async oracleToSymbol(engine: Engine, oracle: string) {
+    return await this._oracleFactory[engine].methods.oracleToSymbol(oracle).call();
   }
 
   readPendingWithdraws(loans: Loan[]): [number, number[], number, number[]] {
@@ -728,6 +666,8 @@ export class ContractsService {
       const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
       resolve(this.readPendingWithdraws(loans));
     }) as Promise<[number, number[], number, number[]]>;
+
+    // TODO: optimize for iterate pages
   }
 
   /**
@@ -798,6 +738,7 @@ export class ContractsService {
 
   /**
    * Encode installments data
+   * @param engine Engine
    * @param cuota Installment amount
    * @param interestRate Interest rate
    * @param installments Number of installments
@@ -806,13 +747,14 @@ export class ContractsService {
    * @return Encoded installments data
    */
   async encodeInstallmentsData(
+    engine: Engine,
     cuota: string,
     interestRate: string,
     installments: string,
     duration: string,
     timeUnit: string
   ) {
-    return await this._installmentsModel.methods.encodeData(
+    return await this._installmentsModel[engine].methods.encodeData(
       cuota,
       interestRate,
       installments,
@@ -823,15 +765,17 @@ export class ContractsService {
 
   /**
    * Check encoded installments data
+   * @param engine Engine
    * @param encodedData Array of bytes
    * @return True if can validate the data
    */
-  async validateEncodedData(encodedData: string) {
-    return await this._installmentsModel.methods.validate(encodedData).call();
+  async validateEncodedData(engine: Engine, encodedData: string) {
+    return await this._installmentsModel[engine].methods.validate(encodedData).call();
   }
 
   /**
    * Calculate loan ID
+   * @param engine Engine
    * @param amount Total amount
    * @param borrower Borrower address
    * @param creator Creator address
@@ -844,6 +788,7 @@ export class ContractsService {
    * @return Loan ID
    */
   async calculateLoanId(
+    engine: Engine,
     amount: BN | string,
     borrower: string,
     creator: string,
@@ -854,7 +799,7 @@ export class ContractsService {
     expiration: number,
     data: any
   ) {
-    return await this._loanManager.methods.calcId(
+    return await this._loanManager[engine].methods.calcId(
       amount,
       borrower,
       creator,
@@ -869,6 +814,7 @@ export class ContractsService {
 
   /**
    * Request a loan
+   * @param engine Engine
    * @param amount Total amount
    * @param model Model address
    * @param oracle Oracle address
@@ -880,6 +826,7 @@ export class ContractsService {
    * @return Loan ID
    */
   async requestLoan(
+    engine: Engine,
     amount: BN | string,
     model: string,
     oracle: string,
@@ -891,7 +838,7 @@ export class ContractsService {
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
     return new Promise((resolve, reject) => {
-      this.loadAltContract(web3, this._loanManager).methods.requestLoan(
+      this.loadAltContract(web3, this._loanManager[engine]).methods.requestLoan(
         amount,
         model,
         oracle,
@@ -909,12 +856,13 @@ export class ContractsService {
 
   /**
    * Check if the loan was created
+   * @param engine Engine
    * @param loanId Loan ID
    * @return Boolean if the loan exist
    */
-  async loanWasCreated(loanId: string): Promise<boolean> {
+  async loanWasCreated(engine: Engine, loanId: string): Promise<boolean> {
     try {
-      const loan = await this._loanManager.methods.getLoanData(loanId).call();
+      const loan = await this._loanManager[engine].methods.getLoanData(loanId).call();
 
       if (Utils.isEmpty(loan)) {
         throw Error('Loan does not exist');
@@ -928,6 +876,7 @@ export class ContractsService {
 
   /**
    * Create loan collateral
+   * @param engine Engine
    * @param loanId Loan ID
    * @param oracle Oracle address
    * @param collateralToken Token address
@@ -940,6 +889,7 @@ export class ContractsService {
    * @return Loan ID
    */
   async createCollateral(
+    engine: Engine,
     debtId: string,
     oracle: string,
     amount: BN | string,
@@ -949,11 +899,11 @@ export class ContractsService {
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
     return new Promise(async (resolve, reject) => {
-      const symbol = await this.oracleToSymbol(oracle);
+      const symbol = await this.oracleToSymbol(engine, oracle);
       const ETH_SYMBOL = 'ETH';
 
       if (symbol === ETH_SYMBOL) {
-        this.loadAltContract(web3, this._collateralWethManager).methods.create(
+        this.loadAltContract(web3, this._collateralWethManager[engine]).methods.create(
           debtId,
           oracle,
           liquidationRatio,
@@ -963,7 +913,7 @@ export class ContractsService {
         .on('transactionHash', (hash: string) => resolve(hash))
         .on('error', (err) => reject(err));
       } else {
-        this.loadAltContract(web3, this._collateral).methods.create(
+        this.loadAltContract(web3, this._collateral[engine]).methods.create(
           account,
           debtId,
           oracle,
@@ -980,6 +930,7 @@ export class ContractsService {
 
   /**
    * Deposit tokens in collateral
+   * @param engine Engine
    * @param collateralId Collateral ID
    * @param tokenAddress Collateral token address
    * @param amount Amount to add in wei
@@ -988,6 +939,7 @@ export class ContractsService {
    * @return Tx hash
    */
   async addCollateral(
+    engine: Engine,
     collateralId: number,
     tokenAddress: string,
     amount: string,
@@ -995,20 +947,20 @@ export class ContractsService {
     estimate?: boolean
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
-    const isEth: boolean = tokenAddress === environment.contracts[Engine.RcnEngine].converter.ethAddress;
+    const isEth: boolean = tokenAddress === environment.contracts.ethAddress;
     const payload = isEth ?
       { from: account, value: amount } :
       { from: account };
 
     if (estimate) {
       if (isEth) {
-        return await this.loadAltContract(web3, this._collateralWethManager)
+        return await this.loadAltContract(web3, this._collateralWethManager[engine])
             .methods
             .deposit(collateralId)
             .estimateGas(payload);
       }
 
-      return await this.loadAltContract(web3, this._collateral)
+      return await this.loadAltContract(web3, this._collateral[engine])
           .methods
           .deposit(collateralId, amount)
           .estimateGas(payload);
@@ -1016,14 +968,14 @@ export class ContractsService {
 
     return new Promise((resolve, reject) => {
       if (isEth) {
-        this.loadAltContract(web3, this._collateralWethManager)
+        this.loadAltContract(web3, this._collateralWethManager[engine])
             .methods
             .deposit(collateralId)
             .send({ from: account, value: amount })
             .on('transactionHash', (hash: string) => resolve(hash))
             .on('error', (err) => reject(err));
       } else {
-        this.loadAltContract(web3, this._collateral)
+        this.loadAltContract(web3, this._collateral[engine])
             .methods
             .deposit(collateralId, amount)
             .send({ from: account })
@@ -1035,6 +987,7 @@ export class ContractsService {
 
   /**
    * Withdraw collateral
+   * @param engine Engine
    * @param collateralId Collateral ID
    * @param to Account address
    * @param amount Amount to add in wei
@@ -1044,6 +997,7 @@ export class ContractsService {
    * @return Tx hash
    */
   async withdrawCollateral(
+    engine: Engine,
     collateralId: number,
     tokenAddress: string,
     to: string,
@@ -1053,8 +1007,8 @@ export class ContractsService {
     estimate?: boolean
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
-    const isEth: boolean = tokenAddress === environment.contracts[Engine.RcnEngine].converter.ethAddress;
-    const contract: string = isEth ? this._collateralWethManager[Engine.RcnEngine] : this._collateral[Engine.RcnEngine];
+    const isEth: boolean = tokenAddress === environment.contracts.ethAddress;
+    const contract: string = isEth ? this._collateralWethManager[engine] : this._collateral[engine];
     const payload = { from: account };
 
     if (estimate) {
@@ -1072,15 +1026,6 @@ export class ContractsService {
           .on('transactionHash', (hash: string) => resolve(hash))
           .on('error', (err) => reject(err));
     });
-  }
-
-  /**
-   * Get loan debt amount value
-   * @param loanId Loan ID
-   * @return Debt amount
-   */
-  async getClosingObligation(loanId: string): Promise<string> {
-    return await this._loanManager[Engine.RcnEngine].methods.getClosingObligation(loanId).call();
   }
 
   /**

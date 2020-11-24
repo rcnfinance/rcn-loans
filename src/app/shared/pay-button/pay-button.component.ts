@@ -193,8 +193,9 @@ export class PayButtonComponent implements OnInit, OnDestroy {
 
         // approve validation
         const { engine } = this.loan;
+        const tokenAddress = environment.contracts[engine].token;
         const debtEngineAddress = environment.contracts[engine].diaspore.debtEngine;
-        const engineApproved: boolean = await this.contractsService.isApproved(debtEngineAddress);
+        const engineApproved: boolean = await this.contractsService.isApproved(debtEngineAddress, tokenAddress);
 
         if (!engineApproved) {
           await this.showApproveDialog();

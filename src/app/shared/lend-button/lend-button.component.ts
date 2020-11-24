@@ -276,6 +276,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
       if (lendToken === environment.contracts[engine].token) {
         tx = await this.contractsService.lendLoan(
+          engine,
           cosignerAddress,
           this.loan.id,
           oracleData,
@@ -285,6 +286,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         );
       } else {
         tx = await this.contractsService.converterRampLend(
+          engine,
           payableAmount,
           tokenConverter,
           lendToken,

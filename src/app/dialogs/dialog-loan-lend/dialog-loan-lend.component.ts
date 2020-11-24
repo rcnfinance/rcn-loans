@@ -251,8 +251,10 @@ export class DialogLoanLendComponent implements OnInit {
       callbackData,
       account
     } = await this.contractsService.getLendParams(this.loan, this.lendToken);
+    const { engine } = this.loan;
     const gasPrice = await this.web3Service.web3.eth.getGasPrice();
     const estimatedGas = await this.contractsService.converterRampLend(
+      engine,
       payableAmount,
       tokenConverter,
       lendToken,

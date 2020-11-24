@@ -140,12 +140,12 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
     this.startOperation();
 
     try {
-      const loan: Loan = this.loan;
-      const { collateral } = loan;
+      const { oracle, engine, collateral } = this.loan;
       const account: string = await this.web3Service.getAccount();
-      const oracleData = await this.contractsService.getOracleData(loan.oracle);
+      const oracleData = await this.contractsService.getOracleData(oracle);
       const collateralAmount = String(collateral.amount);
       const tx: string = await this.contractsService.withdrawCollateral(
+        engine,
         collateral.id,
         collateral.token,
         account,

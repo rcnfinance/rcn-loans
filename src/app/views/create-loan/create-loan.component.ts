@@ -217,6 +217,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     try {
       const engine: string = environment.contracts[loan.engine].diaspore.loanManager;
       const tx: string = await this.contractsService.requestLoan(
+        loan.engine,
         form.amount,
         form.model,
         form.oracle,
@@ -249,7 +250,9 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     const account = await this.web3Service.getAccount();
 
     try {
+      const { engine } = this.loan;
       const tx: string = await this.contractsService.createCollateral(
+        engine,
         form.debtId,
         form.oracle,
         form.amount,
@@ -311,7 +314,8 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
    * Finish loan creation and check status
    */
   private async finishLoanCreation() {
-    const loanWasCreated = await this.contractsService.loanWasCreated(this.loan.id);
+    const { id, engine } = this.loan;
+    const loanWasCreated = await this.contractsService.loanWasCreated(engine, id);
 
     if (loanWasCreated) {
       this.finishProgress = true;

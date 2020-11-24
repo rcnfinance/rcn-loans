@@ -123,7 +123,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   private async withdrawRcn() {
     if (this.rcnCanWithdraw) {
       if (this.rcnLoansWithBalance.length > 0) {
-        const tx = await this.contractService.withdrawFundsDiaspore(this.rcnLoansWithBalance);
+        const tx = await this.contractService.withdrawFundsDiaspore(Engine.RcnEngine, this.rcnLoansWithBalance);
         this.txService.registerWithdrawTx(tx, environment.contracts[Engine.RcnEngine].diaspore.debtEngine, this.rcnLoansWithBalance);
       }
       this.loadWithdrawBalance();

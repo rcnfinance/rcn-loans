@@ -96,7 +96,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
 
     // validate encoded data
     const { loanData } = formLoan;
-    const loanDataValid: boolean = await this.contractsService.validateEncodedData(loanData);
+    const loanDataValid: boolean = await this.contractsService.validateEncodedData(Engine.UsdcEngine, loanData);
     if (!loanDataValid) {
       return this.showMessage('Please check the instalments data.');
     }
@@ -110,6 +110,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     const account: string = this.account;
     const { amount, model, oracle, callback, salt, expiration } = formLoan;
     const calculatedId: string = await this.contractsService.calculateLoanId(
+      Engine.UsdcEngine,
       amount,
       account,
       account,
@@ -220,7 +221,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     // set oracle
     if (currency) {
       const oracle: string =
-        await this.contractsService.symbolToOracle(currency.symbol) ||
+        await this.contractsService.symbolToOracle(Engine.UsdcEngine, currency.symbol) ||
         Utils.address0x;
 
       this.form.controls.formLoan.patchValue({ oracle });
@@ -277,6 +278,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
         });
 
         const loanData: string = await this.contractsService.encodeInstallmentsData(
+          Engine.UsdcEngine,
           estimatedCuota.toString(),
           Utils.bn(interestRate).toString(),
           installments.toString(),

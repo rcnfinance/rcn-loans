@@ -182,9 +182,12 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
    * @param amount Amount to add in wei
    */
   async handleAdd(amount: BN) {
+    const { engine } = this.loan;
+    const { id, token } = this.collateral;
     const tx: string = await this.contractsService.addCollateral(
-      this.collateral.id,
-      this.collateral.token,
+      engine,
+      id,
+      token,
       amount.toString(),
       this.account
     );
@@ -198,12 +201,13 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
    * @param amount Amount to withdraw in wei
    */
   async handleWithdraw(amount: BN) {
-    const loan: Loan = this.loan;
-    const oracleData = await this.contractsService.getOracleData(loan.oracle);
-
+    const { engine, oracle } = this.loan;
+    const { id, token } = this.collateral;
+    const oracleData = await this.contractsService.getOracleData(oracle);
     const tx: string = await this.contractsService.withdrawCollateral(
-      this.collateral.id,
-      this.collateral.token,
+      engine,
+      id,
+      token,
       this.account,
       amount.toString(),
       oracleData,
