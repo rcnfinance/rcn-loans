@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { Engine } from './../models/loan.model';
 import { LoanContentApi } from './../interfaces/loan-api-diaspore';
 import { ApiResponse } from './../interfaces/api-response';
-export enum ApiEngine {
-  RcnEngine = 'rcnEngine',
-  UsdcEngine = 'usdcEngine'
-}
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +23,7 @@ export class ApiService {
    * @return Loans array
    */
   getRequests(
-    engine: ApiEngine,
+    engine: Engine,
     page = 0,
     pageSize = 20,
     sort?: object,
@@ -34,7 +32,9 @@ export class ApiService {
     const apiBase: string = environment.api[engine]['v6'];
     const uri = `requests?page_size=${pageSize}&page=${page}`;
     const payload = JSON.stringify({ sort, filters });
-    return this.http.post<ApiResponse>(apiBase.concat(uri), payload);
+    return this.http
+        .post<ApiResponse>(apiBase.concat(uri), payload)
+        .pipe(this.injectEngineMultiple(engine));
   }
 
   /**
@@ -47,7 +47,7 @@ export class ApiService {
    * @return Loans array
    */
   getBorrowed(
-    engine: ApiEngine,
+    engine: Engine,
     account: string,
     page = 0,
     pageSize = 20,
@@ -56,7 +56,9 @@ export class ApiService {
     const apiBase: string = environment.api[engine]['v6'];
     const uri = `borrowed/${account}?page_size=${pageSize}&page=${page}`;
     const payload = JSON.stringify({ sort });
-    return this.http.post<ApiResponse>(apiBase.concat(uri), payload);
+    return this.http
+        .post<ApiResponse>(apiBase.concat(uri), payload)
+        .pipe(this.injectEngineMultiple(engine));
   }
 
   /**
@@ -69,7 +71,7 @@ export class ApiService {
    * @return Loans array
    */
   getLent(
-    engine: ApiEngine,
+    engine: Engine,
     account: string,
     page = 0,
     pageSize = 200,
@@ -78,7 +80,9 @@ export class ApiService {
     const apiBase: string = environment.api[engine]['v6'];
     const uri = `lent/${account}?page_size=${pageSize}&page=${page}`;
     const payload = JSON.stringify({ sort });
-    return this.http.post<ApiResponse>(apiBase.concat(uri), payload);
+    return this.http
+        .post<ApiResponse>(apiBase.concat(uri), payload)
+        .pipe(this.injectEngineMultiple(engine));
   }
 
   /**
@@ -91,7 +95,7 @@ export class ApiService {
    * @return Loans array
    */
   getAcvivity(
-    engine: ApiEngine,
+    engine: Engine,
     page = 0,
     pageSize = 20,
     sort?: object,
@@ -100,7 +104,9 @@ export class ApiService {
     const apiBase: string = environment.api[engine]['v6'];
     const uri = `activity?page_size=${pageSize}&page=${page}`;
     const payload = JSON.stringify({ sort, filters });
-    return this.http.post<ApiResponse>(apiBase.concat(uri), payload);
+    return this.http
+        .post<ApiResponse>(apiBase.concat(uri), payload)
+        .pipe(this.injectEngineMultiple(engine));
   }
 
   /**
@@ -109,10 +115,12 @@ export class ApiService {
    * @param id Loan ID
    * @return Loan
    */
-  getLoanById(engine: ApiEngine, id: string): Observable<LoanContentApi> {
+  getLoanById(engine: Engine, id: string): Observable<LoanContentApi> {
     const apiBase: string = environment.api[engine]['v6'];
     const uri = `loans/${id}`;
-    return this.http.post<LoanContentApi>(apiBase.concat(uri), null);
+    return this.http
+        .post<LoanContentApi>(apiBase.concat(uri), null)
+        .pipe(this.injectEngine(engine));
   }
 
   /**
@@ -120,9 +128,38 @@ export class ApiService {
    * @param engine API Engine
    * @return Last and current block
    */
-  getApiStatus(engine: ApiEngine): Observable<{last_block: number, current_block: number}> {
+  getApiStatus(engine: Engine): Observable<{last_block: number, current_block: number}> {
     const apiBase: string = environment.api[engine]['v6'];
     const uri = 'status2';
     return this.http.get<{last_block: number, current_block: number}>(apiBase.concat(uri));
+  }
+
+  /**
+   * Inject engine for a single loan to use in the LoanContentApi
+   * @param loanContent API Loan Content
+   * @param engine API Engine
+   * @return Loan Content with engine
+   */
+  private injectEngine(engine: Engine) {
+    return map((loanContent: LoanContentApi) => {
+      loanContent.engine = engine;
+      return loanContent;
+    });
+  }
+
+  /**
+   * Inject engine for multiple loans to use in the LoanContentApi
+   * @param loanContent API Loan Content
+   * @param engine API Engine
+   * @return Loan Content with engine
+   */
+  private injectEngineMultiple(engine: Engine) {
+    return map((loanContent: ApiResponse) => {
+      loanContent.content.map((data: LoanContentApi) => {
+        data.engine = engine;
+        return data;
+      });
+      return loanContent;
+    });
   }
 }

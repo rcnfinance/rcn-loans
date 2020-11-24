@@ -1,4 +1,4 @@
-import { Loan, Oracle, Descriptor, Debt, Engine, Config, Status, Model } from '../models/loan.model';
+import { Loan, Oracle, Descriptor, Debt, Config, Status, Model } from '../models/loan.model';
 import { Collateral } from '../models/collateral.model';
 import { LoanContentApi } from './../interfaces/loan-api-diaspore';
 import { RcnApiUtils } from './rcn-api-utils';
@@ -30,13 +30,13 @@ export class LoanUtils {
    * @return Loan
    */
   static buildLoan(loanContent: LoanContentApi): Loan {
-    const engine = environment.contracts[Engine.RcnEngine].diaspore.loanManager; // TODO: use real engine
     const {
       loan: loanData,
       debt: debtData,
       descriptor: descriptorData,
       collateral: collateralData,
-      installments: installmentsData
+      installments: installmentsData,
+      engine
     } = loanContent;
 
     let oracle: Oracle;
@@ -48,6 +48,8 @@ export class LoanUtils {
     } else {
       oracle = new Oracle(loanData.oracle, 'RCN', loanData.currency);
     }
+
+    const engineAddress = environment.contracts[engine].diaspore.loanManager;
 
     let descriptor: Descriptor;
     let debt: Debt;
@@ -86,7 +88,7 @@ export class LoanUtils {
           dueTime
         ),
         Number(debtBalance),
-        engine,
+        engineAddress,
         owner,
         oracle
       );
@@ -130,9 +132,9 @@ export class LoanUtils {
     }
 
     return new Loan(
-      Engine.UsdcEngine, // TODO: use real engine
+      engine, // TODO: use real engine
       loanData.loan_id,
-      engine,
+      engineAddress,
       Number(loanData.amount),
       oracle,
       descriptor,

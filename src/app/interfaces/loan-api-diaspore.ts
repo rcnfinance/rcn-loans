@@ -1,3 +1,4 @@
+import { Engine } from './../models/loan.model';
 import { CollateralApi } from './collateral-api';
 
 export interface LoanDescriptor {
@@ -79,4 +80,5 @@ export interface LoanContentApi {
   installments: LoanInstallments;
   collateral: CollateralApi;
   descriptor: LoanDescriptor;
+  engine: Engine;
 }
