@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { timer } from 'rxjs';
 import * as BN from 'bn.js';
 import { environment } from '../../../environments/environment';
-import { Loan, Status } from '../../models/loan.model';
+import { Loan, Engine, Status } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
 import { Currency } from '../../utils/currencies';
 // App services
@@ -30,9 +30,10 @@ export class DialogLoanLendComponent implements OnInit {
   lendExpectedReturn: string;
   lendCurrency: string;
   lendToken: string;
-  exchangeRcn: string;
+  exchangeEngineToken: string;
   exchangeToken: string;
   exchangeTooltips: string[];
+  engineCurrency: Currency;
   txCost: string;
   // general
   account: string;
@@ -68,20 +69,24 @@ export class DialogLoanLendComponent implements OnInit {
     const account: string = await this.web3Service.getAccount();
     this.account = account;
 
+    // set engine token
+    const { engine } = this.loan;
+    const engineCurrencySymbol = engine === Engine.RcnEngine ? 'RCN' : 'USDC';
+    const engineCurrency = new Currency(engineCurrencySymbol);
+    this.engineCurrency = engineCurrency;
+
     // set loan amount and rate
-    const web3: any = this.web3Service.web3;
     const rate: BN = await this.getLoanRate();
     this.loanAmount = Utils.formatAmount(loanCurrency.fromUnit(loanAmount));
     this.loanExpectedReturn = Utils.formatAmount(loanCurrency.fromUnit(loanExpectedReturn));
-    this.exchangeRcn = Utils.formatAmount(web3.utils.fromWei(rate), 4);
+    this.exchangeEngineToken = Utils.formatAmount(rate as any / 10 ** engineCurrency.decimals, 4);
 
     // set loan status
     this.isCanceled = this.loan.status === Status.Destroyed;
     this.isRequest = this.loan.status === Status.Request;
 
     this.loadExchangeTooltip();
-    this.shortLoanId =
-      String(this.loan.id).startsWith('0x') ? Utils.shortAddress(this.loan.id) : this.loan.id;
+    this.shortLoanId = Utils.shortAddress(this.loan.id);
   }
 
   /**
@@ -107,34 +112,33 @@ export class DialogLoanLendComponent implements OnInit {
    * amount in token
    */
   async calculateAmounts() {
-    const web3: any = this.web3Service.web3;
     const loan: Loan = this.loan;
     const loanAmount: BN = Utils.bn(loan.amount);
     const loanExpectedReturn: BN = Utils.bn(loan.descriptor.totalObligation);
 
     // set rate values
-    const rcnRate: BN = await this.getLoanRate();
-    const rcnAmountInWei: BN = Utils.bn(loanAmount.mul(rcnRate));
-    const rcnExpectedReturnInWei: BN = Utils.bn(loanExpectedReturn.mul(rcnRate));
+    const engineTokenRate: BN = await this.getLoanRate();
+    const engineTokenAmountInWei: BN = Utils.bn(loanAmount.mul(engineTokenRate));
+    const engineTokenExpectedReturnInWei: BN = Utils.bn(loanExpectedReturn.mul(engineTokenRate));
     const loanCurrencyDecimals: number = loan.currency.decimals;
-    const rcnAmount: BN = rcnAmountInWei.div(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
-    const rcnExpectedReturn: BN = rcnExpectedReturnInWei.div(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
+    const engineTokenAmount: BN = engineTokenAmountInWei.div(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
+    const engineTokenExpectedReturn: BN = engineTokenExpectedReturnInWei.div(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
 
     // set amount in selected currency
     const { engine } = this.loan;
     const symbol: string = this.lendCurrency;
     const fromToken: string = environment.contracts[engine].token;
     const toToken: string = await this.currenciesService.getCurrencyByKey('symbol', symbol).address;
-    const lendCurrencyDecimals: number = await this.contractsService.getTokenDecimals(toToken);
+    const { decimals } = this.engineCurrency;
     this.lendToken = toToken;
 
     let lendAmount: BN | string;
     // let lendExpectedReturn: number;
 
     if (fromToken === toToken) {
-      // rcn -> rcn
-      lendAmount = rcnAmount;
-      // lendExpectedReturn = rcnExpectedReturn;
+      // engineToken -> engineToken
+      lendAmount = engineTokenAmount;
+      // lendExpectedReturn = engineTokenExpectedReturn;
     } else {
       lendAmount = await this.contractsService.estimateLendAmount(loan, toToken);
 
@@ -142,23 +146,25 @@ export class DialogLoanLendComponent implements OnInit {
       // lendExpectedReturn = await this.contractsService.getPriceConvertFrom(
       //   fromToken,
       //   toToken,
-      //   rcnExpectedReturn
+      //   engineTokenExpectedReturn
       // );
 
       // set lending currency rate
       const lendAmountInWei: BN = Utils.bn(lendAmount).mul(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
       const lendOverAmount: BN = Utils.bn(lendAmountInWei).div(Utils.bn(loanAmount));
-      const lendCurrencyRate: number = lendOverAmount.toString() as any / 10 ** lendCurrencyDecimals;
+      const lendCurrencyRate: number = lendOverAmount.toString() as any / 10 ** decimals;
       this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 4);
     }
 
     // set ui values
     this.lendAmount = Utils.formatAmount(
-      lendAmount.toString() as any / 10 ** lendCurrencyDecimals
+      lendAmount.toString() as any / 10 ** decimals
     );
     this.lendExpectedReturn = Utils.formatAmount(
-      web3.utils.fromWei(rcnExpectedReturn)
+      engineTokenExpectedReturn as any / 10 ** decimals
     );
+
+    // debugger
   }
 
   loadExchangeTooltip() {
@@ -169,26 +175,27 @@ export class DialogLoanLendComponent implements OnInit {
     const tokenConverter = environment.contracts[engine].converter.uniswapConverter;
     const urlOracle = environment.network.explorer.address.replace('${address}', oracle);
     const urlTokenConverter = environment.network.explorer.address.replace('${address}', tokenConverter);
+    const { symbol: engineCurrencySymbol } = this.engineCurrency;
     this.exchangeTooltips = [];
 
     if (!this.exchangeToken) {
-      if (loanCurrency !== 'RCN') {
-        this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">RCN/${ loanCurrency }</a> Oracle.`);
+      if (loanCurrency !== engineCurrencySymbol) {
+        this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">${ engineCurrencySymbol }/${ loanCurrency }</a> Oracle.`);
       }
       return;
     }
 
-    if (loanCurrency !== 'RCN' && lendCurrency !== 'RCN') {
-      this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">RCN/${ loanCurrency }</a> Oracle.`);
-      this.exchangeTooltips.push(`<a href="${ urlTokenConverter }" target="_blank">RCN/${ lendCurrency }</a> Token Converter.`);
+    if (loanCurrency !== engineCurrencySymbol && lendCurrency !== engineCurrencySymbol) {
+      this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">${ engineCurrencySymbol }/${ loanCurrency }</a> Oracle.`);
+      this.exchangeTooltips.push(`<a href="${ urlTokenConverter }" target="_blank">${ engineCurrencySymbol }/${ lendCurrency }</a> Token Converter.`);
       return;
     }
-    if (loanCurrency !== 'RCN') {
-      this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">RCN/${ loanCurrency }</a> Oracle.`);
+    if (loanCurrency !== engineCurrencySymbol) {
+      this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">${ engineCurrencySymbol }/${ loanCurrency }</a> Oracle.`);
       return;
     }
-    if (lendCurrency !== 'RCN') {
-      this.exchangeTooltips.push(`<a href="${ urlTokenConverter }" target="_blank">RCN/${ lendCurrency }</a> Token Converter.`);
+    if (lendCurrency !== engineCurrencySymbol) {
+      this.exchangeTooltips.push(`<a href="${ urlTokenConverter }" target="_blank">${ engineCurrencySymbol }/${ lendCurrency }</a> Token Converter.`);
       return;
     }
   }

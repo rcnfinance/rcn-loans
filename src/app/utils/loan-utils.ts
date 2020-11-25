@@ -1,4 +1,4 @@
-import { Loan, Oracle, Descriptor, Debt, Config, Status, Model } from '../models/loan.model';
+import { Loan, Engine, Oracle, Descriptor, Debt, Config, Status, Model } from '../models/loan.model';
 import { Collateral } from '../models/collateral.model';
 import { LoanContentApi } from './../interfaces/loan-api-diaspore';
 import { RcnApiUtils } from './rcn-api-utils';
@@ -46,7 +46,8 @@ export class LoanUtils {
         '';
       oracle = new Oracle(loanData.oracle, currency, loanData.currency);
     } else {
-      oracle = new Oracle(loanData.oracle, 'RCN', loanData.currency);
+      const DEFAULT_CURRENCY = engine === Engine.RcnEngine ? 'RCN' : 'USDC';
+      oracle = new Oracle(loanData.oracle, DEFAULT_CURRENCY, loanData.currency);
     }
 
     const engineAddress = environment.contracts[engine].diaspore.loanManager;
@@ -70,11 +71,11 @@ export class LoanUtils {
     // set debt model
     if (debtData) {
       const paid = installmentsData.paid;
-      const now = new Date().getTime();
+      const now = new Date().getTime() / 1000;
       const dueTime = RcnApiUtils.getDueTime(loanContent);
-      const estimatedObligation = RcnApiUtils.getEstimateObligation(loanContent); // TODO: Test
-      const { obligation: nextObligation } = RcnApiUtils.getObligation(loanContent, dueTime); // TODO: Test
-      const { obligation: currentObligation } = RcnApiUtils.getObligation(loanContent, now); // TODO: Test
+      const estimatedObligation = RcnApiUtils.getEstimateObligation(loanContent);
+      const { obligation: nextObligation } = RcnApiUtils.getObligation(loanContent, dueTime);
+      const { obligation: currentObligation } = RcnApiUtils.getObligation(loanContent, now);
       const debtBalance = debtData.balance;
       const owner = debtData.owner;
       debt = new Debt(

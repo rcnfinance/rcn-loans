@@ -6,8 +6,9 @@ import * as BN from 'bn.js';
 import * as moment from 'moment';
 import { environment } from './../../../environments/environment';
 import { Installment } from '../../interfaces/installment';
-import { Loan } from './../../models/loan.model';
+import { Loan, Engine } from './../../models/loan.model';
 import { Utils } from './../../utils/utils';
+import { Currency } from './../../utils/currencies';
 // App services
 import { ContractsService } from './../../services/contracts.service';
 import { InstallmentsService } from './../../services/installments.service';
@@ -29,11 +30,12 @@ export class DialogLoanPayComponent implements OnInit {
   shortAccount: string;
   pendingAmount: number;
   currency: any;
-  exchangeRcn: number;
-  exchangeRcnWei: BN | string;
+  engineCurrency: Currency;
+  exchangeEngineToken: number;
+  exchangeEngineTokenWei: BN | string;
   exchangeTooltip: string;
-  pendingAmountRcn: number;
-  payAmountRcn: number;
+  pendingAmountEngineToken: number;
+  payAmountEngineToken: number;
   txCost: string;
   installmentsExpanded: boolean;
   nextInstallment: {
@@ -100,20 +102,24 @@ export class DialogLoanPayComponent implements OnInit {
     this.currency = currency;
     this.pendingAmount = pendingAmont;
     this.form.controls.amount.setValidators([Validators.required]);
-    this.shortLoanId =
-      String(this.loan.id).startsWith('0x') ? Utils.shortAddress(loan.id) : loan.id;
+    this.shortLoanId = Utils.shortAddress(loan.id);
 
     // load installments
     this.loadInstallments();
 
     // set loan amount and rate
     const rate: BN = await this.getLoanRate();
-    this.exchangeRcnWei = rate;
+    this.exchangeEngineTokenWei = rate;
 
-    const RCN_DECIMALS = 18;
-    const exchangeRcn = Number(rate) / 10 ** RCN_DECIMALS;
-    this.exchangeRcn = exchangeRcn;
-    this.pendingAmountRcn = exchangeRcn * pendingAmont;
+    const { engine } = loan;
+    const engineCurrencySymbol = engine === Engine.RcnEngine ? 'RCN' : 'USDC';
+    const engineCurrency = new Currency(engineCurrencySymbol);
+    this.engineCurrency = engineCurrency;
+
+    const ENGINE_TOKEN_DECIMALS = engineCurrency.decimals;
+    const exchangeEngineToken = Number(rate) / 10 ** ENGINE_TOKEN_DECIMALS;
+    this.exchangeEngineToken = exchangeEngineToken;
+    this.pendingAmountEngineToken = exchangeEngineToken * pendingAmont;
 
     await this.loadTxCost();
   }
@@ -138,10 +144,10 @@ export class DialogLoanPayComponent implements OnInit {
   onAmountChange() {
     const { amount } = this.form.value;
     if (amount <= 0) {
-      return this.payAmountRcn = 0;
+      return this.payAmountEngineToken = 0;
     }
 
-    this.payAmountRcn = (amount * Number(this.pendingAmountRcn)) / Number(this.pendingAmount);
+    this.payAmountEngineToken = (amount * Number(this.pendingAmountEngineToken)) / Number(this.pendingAmount);
   }
 
   /**
@@ -191,7 +197,7 @@ export class DialogLoanPayComponent implements OnInit {
    * @return Tx cost
    */
   private async getTxCost() {
-    const amount = String(this.pendingAmountRcn).replace(/,/g, '');
+    const amount = String(this.pendingAmountEngineToken).replace(/,/g, '');
     if (!amount) {
       return;
     }

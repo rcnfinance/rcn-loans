@@ -119,7 +119,7 @@ export class ApiService {
     const apiBase: string = environment.api[engine]['v6'];
     const uri = `loans/${id}`;
     return this.http
-        .post<LoanContentApi>(apiBase.concat(uri), null)
+        .post<{loan: LoanContentApi, meta: any}>(apiBase.concat(uri), null)
         .pipe(this.injectEngine(engine));
   }
 
@@ -141,9 +141,9 @@ export class ApiService {
    * @return Loan Content with engine
    */
   private injectEngine(engine: Engine) {
-    return map((loanContent: LoanContentApi) => {
-      loanContent.engine = engine;
-      return loanContent;
+    return map((loanContent: {loan: LoanContentApi, meta: any}) => {
+      loanContent.loan.engine = engine;
+      return loanContent.loan;
     });
   }
 

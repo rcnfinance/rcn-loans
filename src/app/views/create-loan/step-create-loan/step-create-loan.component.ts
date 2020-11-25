@@ -472,7 +472,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     } = this.form.value.formModel;
     const address: string = await this.web3Service.getAccount() || Utils.address0x;
     const loanId: string = calculatedId || '0x';
-    const currencySymbol: string = currency ? currency.symbol : 'RCN';
+    const currencySymbol: string = currency ? currency.symbol : 'USDC';
     const oracleModel = new Oracle(
       oracle,
       currencySymbol,

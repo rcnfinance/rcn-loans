@@ -94,7 +94,8 @@ export class Loan {
   }
 
   get currency(): Currency {
-    return new Currency(this.oracle ? this.oracle.currency : 'RCN');
+    const DEFAULT_CURRENCY = this.engine === Engine.RcnEngine ? 'RCN' : 'USDC';
+    return new Currency(this.oracle ? this.oracle.currency : DEFAULT_CURRENCY);
   }
 
   get status(): Status {

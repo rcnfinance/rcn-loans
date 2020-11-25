@@ -39,7 +39,8 @@ enum ContractType {
   styleUrls: ['./dialog-approve-contract.component.scss']
 })
 export class DialogApproveContractComponent implements OnInit, OnDestroy {
-  engine: Engine = Engine.RcnEngine; // TODO: get engine as injected data
+  DEFAULT_ENGINE = Engine.UsdcEngine;
+  engine: Engine;
   onlyAddress: string;
   onlyToken: string;
   onlyAsset: string;
@@ -73,15 +74,25 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     private txService: TxService,
     private dialogRef: MatDialogRef<DialogApproveContractComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: {
+      engine: Engine;
+      onlyAddress: string;
+      onlyToken: string;
+      onlyAsset: string;
+    }
   ) {
+    const { DEFAULT_ENGINE } = this;
+    this.engine = DEFAULT_ENGINE;
+
     if (this.data) {
       const {
+        engine,
         onlyAddress,
         onlyToken,
         onlyAsset
       } = this.data;
 
+      this.engine = engine || DEFAULT_ENGINE;
       this.onlyAddress = onlyAddress;
       this.onlyToken = onlyToken;
       this.onlyAsset = onlyAsset;
@@ -253,13 +264,12 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
    * @return ERC20 array
    */
   private async loadTokens() {
-    const { engine } = this;
     const currencies = this.currenciesService.getCurrencies(true);
     const tokens: Contract[] = [];
 
     // set tokens
     currencies.map(currency => {
-      if (currency.address !== environment.contracts[engine].converter.ethAddress) {
+      if (currency.address !== environment.contracts.ethAddress) {
         tokens.push(
           new Contract(
             currency.symbol,
@@ -421,7 +431,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     }
 
     return this.tokenOperators.filter(
-      contract => contract.address !== environment[engine].contracts.collateral.wethManager
+      contract => contract.address !== environment.contracts[engine].collateral.wethManager
     );
   }
 
@@ -462,9 +472,9 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     return this.dialogDescription;
   }
 
-  private loadTokenOperators(): Operator[] {
+  private loadTokenOperators() {
     const { engine } = this;
-    return [
+    this.tokenOperators = [
       new Operator(
         'Diaspore Loan Manager',
         environment.contracts[engine].diaspore.loanManager,

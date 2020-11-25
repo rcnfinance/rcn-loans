@@ -168,7 +168,9 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     this.startOperation();
 
     try {
-      const balance = Number(await this.contractsService.getUserBalanceRCNWei());
+      const { engine } = this.loan;
+      const token = environment.contracts[engine].token;
+      const balance = Number(await this.contractsService.getUserBalanceInToken(token));
       const amount = this.amount;
 
       if (amount) {
@@ -186,13 +188,12 @@ export class PayButtonComponent implements OnInit, OnDestroy {
             requiredTokens
           );
 
-          const { symbol: rcnSymbol, decimals: rcnDecimals } = new Currency('RCN');
-          this.showInsufficientFundsDialog(requiredTokens, balance, rcnSymbol, rcnDecimals);
+          const { symbol: tokenSymbol, decimals: tokenDecimals } = new Currency(currency);
+          this.showInsufficientFundsDialog(requiredTokens, balance, tokenSymbol, tokenDecimals);
           return;
         }
 
         // approve validation
-        const { engine } = this.loan;
         const tokenAddress = environment.contracts[engine].token;
         const debtEngineAddress = environment.contracts[engine].diaspore.debtEngine;
         const engineApproved: boolean = await this.contractsService.isApproved(debtEngineAddress, tokenAddress);
@@ -278,6 +279,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
       DialogApproveContractComponent, {
         data: {
+          engine,
           onlyToken,
           onlyAddress
         }

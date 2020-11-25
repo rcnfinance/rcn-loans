@@ -18,7 +18,7 @@ export class RcnApiUtils {
 
   static getClosingObligation(loan: LoanContentApi, now = null) {
     if (now === null) {
-      now = new Date().getTime();
+      now = new Date().getTime() / 1000;
     }
 
     const { installments: installmentsModel } = loan;

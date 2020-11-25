@@ -209,9 +209,11 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
     token: string,
     type: 'onlyToken' | 'onlyAsset'
   ) {
+    const { engine } = this.loan;
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
       DialogApproveContractComponent, {
         data: {
+          engine,
           [type]: token,
           onlyAddress: contract
         }

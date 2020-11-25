@@ -307,23 +307,23 @@ export class ContractsService {
   async estimateLendAmount(loan: Loan, tokenAddress: string): Promise<BN> {
     const loanAmount: BN = Utils.bn(loan.amount);
     const decimals: number = loan.currency.decimals;
-    const rcnRate = await this.getRate(loan.oracle.address, decimals);
-    const rcnAmountInWei: BN = Utils.bn(loanAmount.mul(rcnRate));
-    const rcnAmount: BN = rcnAmountInWei.div(Utils.bn(10).pow(Utils.bn(decimals)));
-    const rcnToken: string = environment.contracts[Engine.RcnEngine].token;
+    const tokenRate = await this.getRate(loan.oracle.address, decimals);
+    const tokenAmountInWei: BN = Utils.bn(loanAmount.mul(tokenRate));
+    const tokenAmount: BN = tokenAmountInWei.div(Utils.bn(10).pow(Utils.bn(decimals)));
+    const { engine } = loan;
+    const engineToken: string = environment.contracts[engine].token;
 
     // amount in rcn
-    if (rcnToken === tokenAddress) {
-      return rcnAmount;
+    if (engineToken === tokenAddress) {
+      return tokenAmount;
     }
 
     // amount in currency
-    const { engine } = loan;
     const requiredInToken: string | BN = await this.getPriceConvertTo(
       engine,
       tokenAddress,
-      rcnToken,
-      rcnAmount.toString()
+      engineToken,
+      tokenAmount.toString()
     );
     const additionalSpend =
       Utils.bn(requiredInToken).mul(Utils.bn(1003)).div(Utils.bn(1000));
@@ -459,10 +459,9 @@ export class ContractsService {
    * @param decimals Currency decimals
    * @return Token equivalent in wei
    */
-  async getRate(oracleAddress: string, decimals = 18): Promise<any> {
-    const web3: any = this.web3Service.web3;
+  async getRate(oracleAddress: string, decimals: number): Promise<any> {
     if (oracleAddress === Utils.address0x) {
-      return web3.utils.toWei(Utils.bn(1));
+      return Utils.pow(10, decimals);
     }
 
     const oracle = this.makeContract(diasporeOracleAbi.abi, oracleAddress);
