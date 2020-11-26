@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Engine } from './../models/loan.model';
+import { Commit } from './../interfaces/commit.interface';
 import { LoanContentApi } from './../interfaces/loan-api-diaspore';
 import { ApiResponse } from './../interfaces/api-response';
 
@@ -121,6 +122,18 @@ export class ApiService {
     return this.http
         .post<{loan: LoanContentApi, meta: any}>(apiBase.concat(uri), null)
         .pipe(this.injectEngine(engine));
+  }
+
+  /**
+   * Get commits by loan IDs
+   * @param engine API Engine
+   * @param id Loan ID
+   * @return Loans array
+   */
+  getCommits(engine: Engine, id: string): Observable<{histories: Commit[]}> {
+    const apiBase: string = environment.api[engine]['v6'];
+    const uri = `histories_by_id/${id}`;
+    return this.http.get<{histories: Commit[]}>(apiBase.concat(uri));
   }
 
   /**

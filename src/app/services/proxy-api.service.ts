@@ -119,6 +119,22 @@ export class ProxyApiService {
   }
 
   /**
+   * Get commits by Loan ID.
+   * @param id Loan ID
+   * @return Loans array
+   */
+  async getCommits(id: string): Promise<ApiResponse> {
+    const usdcEngine = await this.apiService.getCommits(Engine.UsdcEngine, id).toPromise();
+    const rcnEngine = await this.apiService.getCommits(Engine.RcnEngine, id).toPromise();
+
+    const allResults: ApiResponse = {
+      content: usdcEngine.histories.concat(rcnEngine.histories),
+      meta: {}
+    };
+    return allResults;
+  }
+
+  /**
    * Check if the api is synchronized
    * @return Last and current block
    */

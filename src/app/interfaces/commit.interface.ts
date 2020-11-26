@@ -1,7 +1,8 @@
 export interface Commit {
+  nonce: number;
+  id_loan: string;
   opcode: string;
-  timestamp: number;
-  order: number;
-  proof: string;
+  timestamp: string;
+  tx_hash: string;
   data: any;
 }

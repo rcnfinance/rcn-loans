@@ -1,10 +1,10 @@
 export interface ApiResponse {
   content: any[];
   meta: {
-    // lastBlockPulled: string; // TODO: add
-    count: number;
-    page: number;
-    page_size: number;
+    last_block_processed?: number;
+    count?: number;
+    page?: number;
+    page_size?: number;
     engine_name?: ApiEngine;
   };
 }
