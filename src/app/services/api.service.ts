@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Engine } from './../models/loan.model';
-import { Commit } from './../interfaces/commit.interface';
 import { LoanContentApi } from './../interfaces/loan-api-diaspore';
 import { ApiResponse } from './../interfaces/api-response';
 
@@ -116,24 +115,24 @@ export class ApiService {
    * @param id Loan ID
    * @return Loan
    */
-  getLoanById(engine: Engine, id: string): Observable<LoanContentApi> {
+  getLoanById(engine: Engine, id: string): Observable<ApiResponse> {
     const apiBase: string = environment.api[engine]['v6'];
     const uri = `loans/${id}`;
     return this.http
-        .post<{loan: LoanContentApi, meta: any}>(apiBase.concat(uri), null)
+        .post<ApiResponse>(apiBase.concat(uri), null)
         .pipe(this.injectEngine(engine));
   }
 
   /**
-   * Get commits by loan IDs
+   * Get histories by loan IDs
    * @param engine API Engine
    * @param id Loan ID
-   * @return Loans array
+   * @return Histories array
    */
-  getCommits(engine: Engine, id: string): Observable<{histories: Commit[]}> {
+  getHistories(engine: Engine, id: string): Observable<ApiResponse> {
     const apiBase: string = environment.api[engine]['v6'];
     const uri = `histories_by_id/${id}`;
-    return this.http.get<{histories: Commit[]}>(apiBase.concat(uri));
+    return this.http.get<ApiResponse>(apiBase.concat(uri));
   }
 
   /**
@@ -154,9 +153,9 @@ export class ApiService {
    * @return Loan Content with engine
    */
   private injectEngine(engine: Engine) {
-    return map((loanContent: {loan: LoanContentApi, meta: any}) => {
-      loanContent.loan.engine = engine;
-      return loanContent.loan;
+    return map((loanContent: ApiResponse) => {
+      loanContent.content.loan.engine = engine;
+      return loanContent;
     });
   }
 

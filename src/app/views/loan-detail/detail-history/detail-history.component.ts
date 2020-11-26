@@ -2,7 +2,7 @@ import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { timer } from 'rxjs';
 import * as moment from 'moment';
 import { environment } from './../../../../environments/environment';
-import { ProxyApiService } from './../../../services/proxy-api.service';
+import { ApiService } from './../../../services/api.service';
 import { FormatAmountPipe } from './../../../pipes/format-amount.pipe';
 import { Loan } from './../../../models/loan.model';
 import { Commit } from './../../../interfaces/commit.interface';
@@ -57,7 +57,7 @@ export class DetailHistoryComponent implements OnInit {
 
   constructor(
     private formatAmountPipe: FormatAmountPipe,
-    private proxyApiService: ProxyApiService
+    private apiService: ApiService
   ) {
     this.commitProperties = {
       [CommitTypes.Requested]: {
@@ -198,8 +198,8 @@ export class DetailHistoryComponent implements OnInit {
   }
 
   private async loadCommits() {
-    const { id } = this.loan;
-    let { content: commits } = await this.proxyApiService.getCommits(id);
+    const { engine, id } = this.loan;
+    let { content: commits } = await this.apiService.getHistories(engine, id).toPromise();
     commits = this.sortByTimestamp(commits);
     commits = this.filterByType(commits);
     this.commits = commits;

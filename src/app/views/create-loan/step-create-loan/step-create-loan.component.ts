@@ -395,8 +395,8 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
    * @return Loan
    */
   private async getExistingLoan(id: string): Promise<Loan> {
-    const loanData = await this.proxyApiService.getLoanById(id);
-    const loan: Loan = LoanUtils.buildLoan(loanData);
+    const { content } = await this.proxyApiService.getLoanById(id);
+    const loan: Loan = LoanUtils.buildLoan(content);
     const isRequest = loan.status === Status.Request;
 
     if (!isRequest) {

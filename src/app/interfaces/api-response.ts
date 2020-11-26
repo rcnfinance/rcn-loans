@@ -1,5 +1,5 @@
 export interface ApiResponse {
-  content: any[];
+  content: any;
   meta: {
     last_block_processed?: number;
     count?: number;

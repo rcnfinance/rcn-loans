@@ -179,8 +179,8 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     }
     // front running validation
 
-    const loanData = await this.proxyApiService.getLoanById(this.loan.id);
-    const { status } = LoanUtils.buildLoan(loanData);
+    const { content } = await this.proxyApiService.getLoanById(this.loan.id);
+    const { status } = LoanUtils.buildLoan(content);
     if (status !== Status.Request) {
       this.closeDialog.emit();
       return this.dialog.open(DialogFrontRunningComponent);

@@ -6,7 +6,6 @@ import { MatDialog } from '@angular/material';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
 import { Loan, Status, LoanType } from './../../models/loan.model';
-import { LoanContentApi } from './../../interfaces/loan-api-diaspore';
 import { Brand } from '../../models/brand.model';
 import { Collateral, Status as CollateralStatus } from '../../models/collateral.model';
 import { Utils } from './../../utils/utils';
@@ -261,8 +260,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
    * @return Loan
    */
   private async getLoan(id: string) {
-    const loanData: LoanContentApi = await this.proxyApiService.getLoanById(id);
-    const loan: Loan = LoanUtils.buildLoan(loanData);
+    const { content } = await this.proxyApiService.getLoanById(id);
+    const loan: Loan = LoanUtils.buildLoan(content);
     this.loan = loan;
 
     return loan;

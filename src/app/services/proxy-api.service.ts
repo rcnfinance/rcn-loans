@@ -110,28 +110,12 @@ export class ProxyApiService {
    * @param id Loan ID
    * @return Loan
    */
-  async getLoanById(id: string): Promise<LoanContentApi> {
+  async getLoanById(id: string): Promise<ApiResponse> {
     try {
       return await this.apiService.getLoanById(Engine.UsdcEngine, id).toPromise();
     } catch {
       return await this.apiService.getLoanById(Engine.RcnEngine, id).toPromise();
     }
-  }
-
-  /**
-   * Get commits by Loan ID.
-   * @param id Loan ID
-   * @return Loans array
-   */
-  async getCommits(id: string): Promise<ApiResponse> {
-    const usdcEngine = await this.apiService.getCommits(Engine.UsdcEngine, id).toPromise();
-    const rcnEngine = await this.apiService.getCommits(Engine.RcnEngine, id).toPromise();
-
-    const allResults: ApiResponse = {
-      content: usdcEngine.histories.concat(rcnEngine.histories),
-      meta: {}
-    };
-    return allResults;
   }
 
   /**
