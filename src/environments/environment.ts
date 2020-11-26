@@ -84,20 +84,20 @@ export const environment = {
       token: USDC_TOKEN,
       oracleFactory: '0x8c6ec1b870a15f6156ba44841939ea4ed0f480fd',
       diaspore: {
-        debtEngine: '0x26a0b2dd7cb3cffb393a3e433e3173477b8cc2af',
-        loanManager: '0xbbe960d7d3723a2a553eb04b0967fc3717934325'
+        debtEngine: '0x6af435b2af16ce0c49bd4517a2c4d7863e19a371',
+        loanManager: '0x8ae19df1a7acb73c9aa93e0a9315056422136aee'
       },
       collateral: {
-        collateral: '0xf9b586a8266410326b0ecc523551965be00a6a3d',
-        wethManager: '0xd512e8cf7ed34f2c7a8f2d66d6922354a40985d3'
+        collateral: '0xb2d4d96323964ab4f3d7ea54b7534c1785d77253',
+        wethManager: '0x0b6ec301028c1372b0071f54bd292852dd3b593b'
       },
       converter: {
-        converterRamp: '0x2dacff527a3df50a4595d6ac6240139e97041222',
+        converterRamp: '0xf3031f26b842b60d92ac6cfb663b1e7db9963538',
         ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         uniswapConverter: '0x32657d6f2dcb32a5129d14db4a2e2e6fb198ce07'
       },
       models: {
-        installments: '0x88a3129a33fab34855442f10164b9598bdadc96a'
+        installments: '0x90af65dd637e5c4d8514eff223aa0311b6588c60'
       }
     },
     ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
