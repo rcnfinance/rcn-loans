@@ -45,7 +45,7 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     const env = environment;
-    const contract = env.contracts[Engine.RcnEngine].diaspore.loanManager;
+    const contract = env.contracts[Engine.UsdcEngine].diaspore.loanManager;
     const linkContract = env.network.explorer.address.replace('${address}', contract);
     const version = env.version;
     const versionString = `${env.version}-${env.build} - ${env.versionName} ${env.versionEmoji}`;

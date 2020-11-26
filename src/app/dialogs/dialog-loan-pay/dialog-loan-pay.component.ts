@@ -10,6 +10,7 @@ import { Loan, Engine } from './../../models/loan.model';
 import { Utils } from './../../utils/utils';
 import { Currency } from './../../utils/currencies';
 // App services
+import { CurrenciesService } from './../../services/currencies.service';
 import { ContractsService } from './../../services/contracts.service';
 import { InstallmentsService } from './../../services/installments.service';
 import { Web3Service } from './../../services/web3.service';
@@ -46,6 +47,7 @@ export class DialogLoanPayComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<any>,
+    private currenciesService: CurrenciesService,
     private contractsService: ContractsService,
     private installmentsService: InstallmentsService,
     private web3Service: Web3Service,
@@ -167,12 +169,13 @@ export class DialogLoanPayComponent implements OnInit {
   }
 
   private loadExchangeTooltip() {
-    const loanCurrency: string = this.loan.currency.toString();
+    const { engine, currency } = this.loan;
+    const engineCurrency = this.currenciesService.getCurrencyByKey('address', environment.contracts[engine].token);
     const oracle = this.loan.oracle.address;
     const urlOracle = environment.network.explorer.address.replace('${address}', oracle);
 
-    if (loanCurrency !== 'RCN') {
-      this.exchangeTooltip = `<a href="${ urlOracle }" target="_blank">RCN/${ loanCurrency }</a> Oracle.`;
+    if (currency.symbol !== engineCurrency.symbol) {
+      this.exchangeTooltip = `<a href="${ urlOracle }" target="_blank">${ engineCurrency.symbol }/${ currency.symbol }</a> Oracle.`;
       return;
     }
     this.exchangeTooltip = null;

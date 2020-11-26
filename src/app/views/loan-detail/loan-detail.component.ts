@@ -276,8 +276,12 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     this.hasHistory = true;
     this.brand = this.brandingService.getBrand(this.loan);
     this.oracle = this.loan.oracle ? this.loan.oracle.address : undefined;
-    this.currency = this.loan.oracle ? this.loan.oracle.currency : 'RCN';
-    this.availableOracle = this.loan.oracle.currency !== 'RCN';
+
+    const { engine } = this.loan;
+    const engineToken = environment.contracts[engine].token;
+    const engineCurrency = this.currenciesService.getCurrencyByKey('address', engineToken);
+    this.currency = this.loan.oracle ? this.loan.oracle.currency : engineCurrency.symbol;
+    this.availableOracle = this.loan.oracle.currency !== engineCurrency.symbol;
     this.loanType = this.loanTypeService.getLoanType(this.loan);
   }
 
