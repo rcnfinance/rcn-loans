@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Engine } from './../models/loan.model';
 import { ApiResponse } from './../interfaces/api-response';
-import { LoanContentApi } from './../interfaces/loan-api-diaspore';
 import { ApiService } from './api.service';
 
 @Injectable({
