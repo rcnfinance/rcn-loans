@@ -132,7 +132,7 @@ export class ApiService {
   getHistories(engine: Engine, id: string): Observable<ApiResponse> {
     const apiBase: string = environment.api[engine]['v6'];
     const uri = `histories_by_id/${id}`;
-    return this.http.get<ApiResponse>(apiBase.concat(uri));
+    return this.http.post<ApiResponse>(apiBase.concat(uri), null);
   }
 
   /**
