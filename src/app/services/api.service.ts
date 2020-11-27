@@ -154,7 +154,7 @@ export class ApiService {
    */
   private injectEngine(engine: Engine) {
     return map((loanContent: ApiResponse) => {
-      loanContent.content.loan.engine = engine;
+      loanContent.content.engine = engine;
       return loanContent;
     });
   }
