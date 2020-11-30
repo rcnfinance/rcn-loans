@@ -47,6 +47,10 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
   account: string;
   shortAccount: string;
   dialogDescription: string;
+  accordionStates = {
+    tokenApproves: {},
+    assetApproves: {}
+  };
 
   tokens: Contract[];
   tokenOperators: Operator[];
@@ -102,19 +106,8 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     await this.loadAccount();
     this.handleLoginEvents();
-    this.spinner.show();
 
-    try {
-      this.loadTokenOperators();
-      await this.loadTokens();
-      await this.loadAssets();
-      this.setDialogDescription();
-    } catch (e) {
-      this.eventsService.trackError(e);
-    } finally {
-      this.retrievePendingTx();
-      this.spinner.hide();
-    }
+    await this.loadApprovals();
   }
 
   ngOnDestroy() {
@@ -195,6 +188,67 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     this.loading = false;
 
     this.dialogRef.close(true);
+  }
+
+  /**
+   * Click on RCN/USDC engine
+   */
+  async clickEngine(engine: Engine) {
+    const { engine: currentEngine } = this;
+    if (engine === currentEngine) {
+      return;
+    }
+
+    this.engine = engine;
+    await this.loadApprovals();
+
+    this.restoreAccordionStates();
+  }
+
+  /**
+   * Toggle accordion state
+   * @param approves 'tokenApproves' or 'assetApproves'
+   * @param address Token address
+   */
+  clickToggleAccordion(approves: string, address: string): void {
+    this.accordionStates[approves][address] = !this.accordionStates[approves][address];
+  }
+
+  /**
+   * Check if accordion state is opened
+   * @param approves 'tokenApproves' or 'assetApproves'
+   * @param address Token address
+   * @return Is approved
+   */
+  isAccordionActive(approves: string, address: string): boolean {
+    return this.accordionStates[approves][address];
+  }
+
+  /**
+   * Close all accordions
+   */
+  private restoreAccordionStates(): void {
+    this.accordionStates.tokenApproves = {};
+    this.accordionStates.assetApproves = {};
+  }
+
+  /**
+   * Load all approvals and checks
+   */
+  private async loadApprovals() {
+    this.spinner.show();
+
+    try {
+      this.loadTokenOperators();
+      await this.loadTokens();
+      await this.loadAssets();
+      this.setDialogDescription();
+    } catch (e) {
+      this.eventsService.trackError(e);
+    } finally {
+      this.retrievePendingTx();
+      this.spinner.hide();
+    }
   }
 
   /**

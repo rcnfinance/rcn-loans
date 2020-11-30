@@ -1,94 +1,131 @@
 @import '../../../scss/variables';
 @import '../../../scss/fonts';
+@import './../dialog';
+
+.mat-dialog-content,
+.dialog-footer {
+  background: var(--app-color-gray-700); // TODO: inconsistency with the other dialogs
+}
+.mat-dialog-content {
+  border-radius: 3px;
+}
+.dialog-footer {
+  visibility: hidden;
+}
 
 .dialog-content {
-  .title {
-    font-size: 14px;
-  }
-}
-
-::ng-deep .mat-checkbox-label {
-  white-space: pre-wrap;
-}
-.checkbox {
-  margin-bottom: 12px;
-}
-.list-avatar {
-  height: 55px;
-  position: relative;
-  padding-left: 45px;
-  .avatar-container {
-    width: 30px;
-    height: 30px;
-    position: absolute;
-    overflow: hidden;
-    top: 0px;
-    left: 0px;
-    border-radius: 50%;
-    background-color: var(--app-color-primary);
-    box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
-    .title{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      font-size: 18px;
-      color: var(--app-color-secondary);
-      @extend %roboto-black;
-      @include transform(translate(-50%, -50%));
-    }
-    img,
-    canvas{
-      width: 50px;
-      border-radius: 50%;
-      box-shadow: 0 0 6px rgba(0,0,0,.16), 0 6px 12px rgba(0,0,0,.32);
-    }
-  }
-  .txt-container{
+  &__header {
     .title {
-      line-height: 1.4em;
-      @extend %roboto-medium;
-      @extend .font18;
+      @include typography-headline(5);
+      margin: 0 0 13px;
+      text-transform: uppercase;
     }
-    .subtitle {
-      line-height: 1em;
-      @extend %font-medium;
-      @extend .font14;
+    .description {
+      @include typography-body(1);
+      margin: 0;
     }
   }
-}
-.expansion-panel {
-  background: transparent;
+
+  &__tabs {
+    .tab {
+      @include typography-body(2);
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 16px 20px;
+      letter-spacing: 1.4px;
+      &:not(.tab--active) {
+        color: #959595;
+        border-bottom: 1px solid transparent;
+      }
+      &--active {
+        border-bottom: 1px solid white;
+        cursor: default;
+      }
+    }
+  }
+
+  &__content {
+    .expansion-panel {
+      @include typography-headline(7);
+      background: black;
+      margin-bottom: 15px;
+      border-radius: 3px;
+      transition: .3s;
+      .mat-expansion-panel-header-title {
+        @include typography-body(2);
+        color: #747474;
+      }
+      &::ng-deep {
+        .mat-content {
+          align-items: center;
+        }
+        .mat-slide-toggle {
+          .mat-slide-toggle-bar {
+            height: 18px;
+            background: #4F526E;
+          }
+          .mat-slide-toggle-thumb-container {
+            top: -1px;
+            .mat-slide-toggle-thumb {
+              background: #9DA2CC;
+              box-shadow: 0px 3px 6px #00000084;
+            }
+          }
+          &.mat-checked {
+            .mat-slide-toggle-bar {
+              background: #242F8B;
+            }
+            .mat-slide-toggle-thumb-container {
+              .mat-slide-toggle-thumb {
+                background: #4155FF;
+              }
+            }
+          }
+        }
+      }
+      &.mat-expanded {
+        background: var(--app-color-gray-400);
+        .mat-expansion-panel-header-title {
+          color: white;
+        }
+      }
+    }
+
+    .checkbox {
+      margin-bottom: 12px;
+    }
+    &::ng-deep {
+      .mat-checkbox-label {
+        white-space: pre-wrap;
+      }
+      .mat-checkbox-inner-container {
+        width: 12px;
+        height: 12px;
+      }
+    }
+  }
+
+
 }
 
-.dialog-footer {
-  align-items: center;
-  @extend %roboto-regular;
-
-  &__label {
-    text-align: center;
-    color: $gray2;
-  }
-  &__buttons {
-    text-align: right;
-    margin-top: 25px;
-  }
-}
 
 @media (min-width: 768px){
   .dialog-padding {
     padding: 30px 42px;
   }
-  .dialog-content {
-    .title {
-      font-size: 18px;
-    }
-  }
   .dialog-footer {
-    &__label {
-      text-align: left;
-    }
-    &__buttons {
-      margin-top: 0;
+    visibility: visible;
+  }
+}
+
+@media (min-width: 992px) {
+  .dialog-content {
+    &__tabs {
+      .tab {
+        padding-top: 14px;
+        padding-bottom: 14px;
+        flex-shrink: 0;
+      }
     }
   }
 }
