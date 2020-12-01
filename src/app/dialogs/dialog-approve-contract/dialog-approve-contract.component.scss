@@ -57,6 +57,7 @@
       }
       &::ng-deep {
         .mat-content {
+          overflow: visible;
           align-items: center;
         }
         .mat-slide-toggle {
