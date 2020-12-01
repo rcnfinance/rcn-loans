@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, HostListener } from '@angular/core';
 import { timer } from 'rxjs';
 import * as moment from 'moment';
 import { environment } from './../../../../environments/environment';
@@ -25,7 +25,7 @@ enum CommitProperties {
   templateUrl: './detail-history.component.html',
   styleUrls: ['./detail-history.component.scss']
 })
-export class DetailHistoryComponent implements OnInit {
+export class DetailHistoryComponent implements OnInit, OnChanges {
   @Input() loan: Loan;
   commits: Commit[];
   historyItems: {
@@ -176,11 +176,15 @@ export class DetailHistoryComponent implements OnInit {
     };
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     const { loan } = this;
     if (!loan) return;
 
-    this.loadCommits();
+    await this.loadCommits();
+  }
+
+  async ngOnChanges() {
+    await this.loadCommits();
   }
 
   @HostListener('document:click', ['$event'])

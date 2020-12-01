@@ -145,7 +145,7 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
    */
   private expectedInstallmentAmount() {
     const loan: Loan = this.loan;
-    const amountInWei = loan.descriptor.totalObligation;
+    const amountInWei = loan.descriptor.firstObligation;
     const decimals = loan.currency.decimals;
     const amount = amountInWei / 10 ** decimals;
 

@@ -111,6 +111,7 @@ export class DialogLoanLendComponent implements OnInit {
    * Calculate the exchange token rate, lend amount and expected return
    * amount in token
    */
+  // FIXME: review for loans RCN->RCN (with USDC Engine)
   async calculateAmounts() {
     const loan: Loan = this.loan;
     const loanAmount: BN = Utils.bn(loan.amount);
@@ -129,7 +130,8 @@ export class DialogLoanLendComponent implements OnInit {
     const symbol: string = this.lendCurrency;
     const fromToken: string = environment.contracts[engine].token;
     const toToken: string = await this.currenciesService.getCurrencyByKey('symbol', symbol).address;
-    const { decimals } = this.engineCurrency;
+    const { decimals: engineDecimals } = this.engineCurrency;
+    const { decimals: lendDecimals } = new Currency(symbol);
     this.lendToken = toToken;
 
     let lendAmount: BN | string;
@@ -152,19 +154,17 @@ export class DialogLoanLendComponent implements OnInit {
       // set lending currency rate
       const lendAmountInWei: BN = Utils.bn(lendAmount).mul(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
       const lendOverAmount: BN = Utils.bn(lendAmountInWei).div(Utils.bn(loanAmount));
-      const lendCurrencyRate: number = lendOverAmount.toString() as any / 10 ** decimals;
+      const lendCurrencyRate: number = lendOverAmount.toString() as any / 10 ** lendDecimals;
       this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 4);
     }
 
     // set ui values
     this.lendAmount = Utils.formatAmount(
-      lendAmount.toString() as any / 10 ** decimals
+      lendAmount.toString() as any / 10 ** lendDecimals
     );
     this.lendExpectedReturn = Utils.formatAmount(
-      engineTokenExpectedReturn as any / 10 ** decimals
+      engineTokenExpectedReturn as any / 10 ** engineDecimals
     );
-
-    // debugger
   }
 
   loadExchangeTooltip() {

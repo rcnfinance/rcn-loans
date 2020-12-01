@@ -478,9 +478,9 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
       currencySymbol,
       currencySymbol
     );
-    const descriptor: Descriptor = new Descriptor(
+    const descriptor = new Descriptor(
       cuota,
-      cuota,
+      cuota * installments,
       duration,
       annualInterestRate,
       LoanUtils.decodeInterest(interestRate),

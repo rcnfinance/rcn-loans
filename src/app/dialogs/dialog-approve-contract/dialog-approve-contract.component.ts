@@ -100,6 +100,13 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
       this.onlyAddress = onlyAddress;
       this.onlyToken = onlyToken;
       this.onlyAsset = onlyAsset;
+
+      if (onlyToken) {
+        this.accordionStates.tokenApproves[onlyToken.toLowerCase()] = true;
+      }
+      if (onlyAsset) {
+        this.accordionStates.assetApproves[onlyAsset.toLowerCase()] = true;
+      }
     }
   }
 
@@ -210,8 +217,14 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
    * @param approves 'tokenApproves' or 'assetApproves'
    * @param address Token address
    */
-  clickToggleAccordion(approves: string, address: string): void {
-    this.accordionStates[approves][address] = !this.accordionStates[approves][address];
+  clickToggleAccordion(event: any, approves: string, address: string) {
+    const { onlyToken, onlyAsset } = this;
+    if (onlyToken || onlyAsset) {
+      event.source.checked = !event.source.checked;
+      return;
+    }
+
+    this.accordionStates[approves][address.toLowerCase()] = !this.accordionStates[approves][address.toLowerCase()];
   }
 
   /**
@@ -221,7 +234,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
    * @return Is approved
    */
   isAccordionActive(approves: string, address: string): boolean {
-    return this.accordionStates[approves][address];
+    return this.accordionStates[approves][address.toLowerCase()];
   }
 
   /**

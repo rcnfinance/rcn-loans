@@ -53,10 +53,10 @@ export const environment = {
     [RCN_ENGINE]: {
       v4: `${ API_BASE }/v4/`,
       v5: `${ API_BASE }/v5/`,
-      v6: `http://listener-reorg.diaspore-mainnet-test.159.65.166.64.xip.io/`
+      v6: `https://old-api-ropsten-diaspore.rcn.loans/`
     },
     [USDC_ENGINE]: {
-      v6: `http://new.api-ropsten-diaspore-usdc.159.65.166.64.xip.io/`
+      v6: `https://new-api-ropsten-diaspore-usdc.rcn.loans/`
     }
   },
   contracts: {
@@ -84,20 +84,20 @@ export const environment = {
       token: USDC_TOKEN,
       oracleFactory: '0x8c6ec1b870a15f6156ba44841939ea4ed0f480fd',
       diaspore: {
-        debtEngine: '0x6af435b2af16ce0c49bd4517a2c4d7863e19a371',
-        loanManager: '0x8ae19df1a7acb73c9aa93e0a9315056422136aee'
+        debtEngine: '0x8412d235a7e4d9ba20ffa2e5585dae96a88ad0b5',
+        loanManager: '0x3938155d5782b83cbf23fc325a19746ad7d6ba43'
       },
       collateral: {
-        collateral: '0xb2d4d96323964ab4f3d7ea54b7534c1785d77253',
-        wethManager: '0x0b6ec301028c1372b0071f54bd292852dd3b593b'
+        collateral: '0xe404a7a3bf4b0ad2d18865de2064c78e255814d1',
+        wethManager: '0x0728610fd8034d08ea4c5848c4e4bbaa17f3c650'
       },
       converter: {
-        converterRamp: '0xf3031f26b842b60d92ac6cfb663b1e7db9963538',
+        converterRamp: '0x935b3a5bc4d41b8ac1632faac86e3ef1c556921e',
         ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         uniswapConverter: '0x32657d6f2dcb32a5129d14db4a2e2e6fb198ce07'
       },
       models: {
-        installments: '0x90af65dd637e5c4d8514eff223aa0311b6588c60'
+        installments: '0x1bec6de76544ab982c4a137136d15a0b6d9398a4'
       }
     },
     ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
