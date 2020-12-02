@@ -15,6 +15,11 @@ enum PageView {
 export class LoanListHeaderComponent {
   @Input() view: PageView;
   @Output() sort: EventEmitter<object>;
+  AVAILABLE_SORTS = {
+    [LoanSortKey.TotalObligation]: ['Descriptor', 'total_obligation'],
+    [LoanSortKey.InterestRate]: ['Descriptor', 'interest_rate'],
+    [LoanSortKey.PunitiveInterestRate]: ['Descriptor', 'punitive_interest_rate']
+  };
   stateSort = {};
 
   constructor() {
@@ -31,8 +36,9 @@ export class LoanListHeaderComponent {
         LoanSortValue.Desc
     };
 
+    const { AVAILABLE_SORTS } = this;
     const sort = {
-      field: [key],
+      field: AVAILABLE_SORTS[key],
       direction: value
     };
 
