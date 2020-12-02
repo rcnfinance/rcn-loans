@@ -36,9 +36,9 @@
         class="dialog-content__tabs row pt-md-2"
         *ngIf="!onlyToken && !onlyAsset"
       >
-        <div class="col-12 px-md-0">
+        <div class="col-12 px-0">
           <a
-            class="tab mr-3"
+            class="tab mr-md-3"
             [class.tab--active]="engine === 'usdcEngine'"
             (click)="clickEngine('usdcEngine')"
           >
@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <div class="dialog-content__content row mt-4">
+      <div class="dialog-content__content row mt-4 mt-md-0">
         <div class="col-sm-12 px-md-0">
 
           <ng-container *ngIf="tokens?.length && !onlyAsset">
