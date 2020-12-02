@@ -142,8 +142,8 @@ export class ApiService {
    */
   getApiStatus(engine: Engine): Observable<{last_block: number, current_block: number}> {
     const apiBase: string = environment.api[engine]['v6'];
-    const uri = 'status2';
-    return this.http.get<{last_block: number, current_block: number}>(apiBase.concat(uri));
+    const uri = 'status';
+    return this.http.post<{last_block: number, current_block: number}>(apiBase.concat(uri), null);
   }
 
   /**
