@@ -21,6 +21,8 @@ import { Web3Service } from './../../services/web3.service';
   styleUrls: ['./dialog-loan-pay.component.scss']
 })
 export class DialogLoanPayComponent implements OnInit {
+  FEE_AVERAGE = 0.15;
+
   loan: Loan;
   shortLoanId: string;
   loading: boolean;
@@ -39,6 +41,7 @@ export class DialogLoanPayComponent implements OnInit {
   payAmountEngineToken: number;
   txCost: string;
   installmentsExpanded: boolean;
+  hasFee: boolean;
   nextInstallment: {
     installment: Installment,
     payNumber: string,
@@ -70,7 +73,8 @@ export class DialogLoanPayComponent implements OnInit {
     this.form = new FormGroup({
       amount: new FormControl(null, [
         Validators.required
-      ])
+      ]),
+      feeAmount: new FormControl(null)
     });
   }
 
@@ -117,11 +121,16 @@ export class DialogLoanPayComponent implements OnInit {
     const engineCurrencySymbol = engine === Engine.RcnEngine ? 'RCN' : 'USDC';
     const engineCurrency = new Currency(engineCurrencySymbol);
     this.engineCurrency = engineCurrency;
+    this.hasFee = engine === Engine.UsdcEngine;
 
     const ENGINE_TOKEN_DECIMALS = engineCurrency.decimals;
     const exchangeEngineToken = Number(rate) / 10 ** ENGINE_TOKEN_DECIMALS;
     this.exchangeEngineToken = exchangeEngineToken;
-    this.pendingAmountEngineToken = exchangeEngineToken * pendingAmont;
+
+    // add fee
+    const pendingAmountEngineToken = exchangeEngineToken * pendingAmont;
+    const feeAmount = this.getFeeAmount(pendingAmountEngineToken);
+    this.pendingAmountEngineToken = pendingAmountEngineToken + feeAmount;
 
     await this.loadTxCost();
   }
@@ -135,10 +144,12 @@ export class DialogLoanPayComponent implements OnInit {
   }
 
   clickSetMaxAmount() {
-    const pendingAmont = this.calculatePendingAmount();
+    const pendingAmount = this.calculatePendingAmount();
+    const feeAmount = this.getFeeAmount(pendingAmount);
 
     this.form.patchValue({
-      amount: pendingAmont
+      amount: pendingAmount,
+      feeAmount
     });
     this.onAmountChange();
   }
@@ -257,5 +268,18 @@ export class DialogLoanPayComponent implements OnInit {
       dueDays,
       installment
     };
+  }
+
+  /**
+   * Return the engine fee amount
+   * @param amount Amount to pay
+   * @return Fee amount
+   */
+  private getFeeAmount(amount: number) {
+    const { FEE_AVERAGE, hasFee } = this;
+    if (hasFee) {
+      return FEE_AVERAGE * amount / 100;
+    }
+    return 0;
   }
 }
