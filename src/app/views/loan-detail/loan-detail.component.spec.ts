@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
 import { InstallmentsService } from './../../services/installments.service';
-import { CommitsService } from './../../services/commits.service';
 import { LoanDetailComponent } from './loan-detail.component';
 
 describe('LoanDetailComponent', () => {
@@ -21,7 +20,7 @@ describe('LoanDetailComponent', () => {
         NgxSpinnerModule,
         SharedModule
       ],
-      providers: [ InstallmentsService, CommitsService ],
+      providers: [ InstallmentsService ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
     .compileComponents();
