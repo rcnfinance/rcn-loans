@@ -8,13 +8,13 @@ import {
   Pay
 } from './../interfaces/installment';
 // App services
-import { CommitsService } from './commits.service';
+import { ApiService } from './api.service';
 
 @Injectable()
 export class InstallmentsService {
 
   constructor(
-    private commitsService: CommitsService
+    private apiService: ApiService
   ) { }
 
   /**
@@ -64,8 +64,12 @@ export class InstallmentsService {
     startDate?: string,
     endDate?: string
   ): Promise<Pay[]> {
-    const commits = await this.commitsService.getCommits(loan.id);
-    const payCommits = commits.filter(commit => commit.opcode === 'paid_debt_engine');
+    const { engine, id } = loan;
+    const { content } = await this.apiService.getHistories(engine, id).toPromise();
+
+    // FIXME: use new commits model
+
+    const payCommits = content.filter(commit => commit.opcode === 'paid_debt_engine');
     const pays: Pay[] = [];
     let pending = 0;
     let totalPaid = 0;
