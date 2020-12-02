@@ -1,13 +1,23 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Engine } from './../../models/loan.model';
 import { CurrenciesService } from './../../services/currencies.service';
+import { ContractsService } from './../../services/contracts.service';
+
+enum LoanFilterKey {
+  Currency = 'currency',
+  AmountStart = 'amountStart',
+  AmountEnd = 'amountEnd',
+  Duration = 'duration', // TODO: add to the API
+  Interest = 'interest' // TODO: add to the API
+}
 
 interface Filters {
-  currency: string;
-  amountStart: number;
-  amountEnd: number;
-  interest: number;
-  duration: number;
+  [LoanFilterKey.Currency]: string;
+  [LoanFilterKey.AmountStart]: number;
+  [LoanFilterKey.AmountEnd]: number;
+  [LoanFilterKey.Interest]: number;
+  [LoanFilterKey.Duration]: number;
 }
 
 @Component({
@@ -17,7 +27,12 @@ interface Filters {
 })
 export class FilterLoansComponent implements OnInit {
   @Input() filters: Filters;
-  @Output() filtered = new EventEmitter();
+  @Output() filtered = new EventEmitter(null);
+  AVAILABLE_FILTERS = {
+    [LoanFilterKey.AmountStart]: ['Loan', 'amount'],
+    [LoanFilterKey.AmountEnd]: ['Loan', 'amount'],
+    [LoanFilterKey.Currency]: ['Loan', 'oracle']
+  };
 
   formGroup = new FormGroup({
     currency: new FormControl(),
@@ -32,9 +47,12 @@ export class FilterLoansComponent implements OnInit {
   });
   currencies: string[];
   daySeconds = 24 * 60 * 60;
+  // state
+  filtersState = {};
 
   constructor(
-    private currencesService: CurrenciesService
+    private currencesService: CurrenciesService,
+    private contractsService: ContractsService
   ) { }
 
   ngOnInit() {
@@ -50,21 +68,21 @@ export class FilterLoansComponent implements OnInit {
     this.currency.valueChanges.subscribe(val => {
       if (this.filters.currency !== val && val !== null) {
         this.filters.currency = val;
-        this.filtered.emit();
+        this.updateFormState();
       }
     });
 
     this.amountStart.valueChanges.subscribe(val => {
       if (this.filters.amountStart !== val) {
         this.filters.amountStart = val;
-        this.filtered.emit();
+        this.updateFormState();
       }
     });
 
     this.amountEnd.valueChanges.subscribe(val => {
       if (this.filters.amountEnd !== val) {
         this.filters.amountEnd = val;
-        this.filtered.emit();
+        this.updateFormState();
       }
     });
 
@@ -83,14 +101,14 @@ export class FilterLoansComponent implements OnInit {
         this.filters.duration = val.days === null && val.months === null && val.years === null
           ? null : durationInSeconds;
 
-        this.filtered.emit();
+        this.updateFormState();
       }
     });
 
     this.annualInterest.valueChanges.subscribe(val => {
       if (this.filters.interest !== val) {
         this.filters.interest = val;
-        this.filtered.emit();
+        this.updateFormState();
       }
     });
   }
@@ -123,4 +141,39 @@ export class FilterLoansComponent implements OnInit {
     return this.formGroup.get('amountEnd');
   }
 
+  private async updateFormState() {
+    const { currency, amountStart, amountEnd, duration, interest } = this.filters;
+    const { AVAILABLE_FILTERS } = this;
+    const filters = [];
+
+    if (currency) {
+      const engine = Engine.UsdcEngine;
+      const oracle = await this.contractsService.symbolToOracle(engine, currency);
+
+      filters.push({
+        attr: AVAILABLE_FILTERS[LoanFilterKey.Currency],
+        op: '==',
+        value: [oracle]
+      });
+    }
+    if (amountStart) {
+      filters.push({
+        attr: AVAILABLE_FILTERS[LoanFilterKey.AmountStart],
+        op: '>=',
+        value: [amountStart]
+      });
+    }
+    if (amountEnd) {
+      filters.push({
+        attr: AVAILABLE_FILTERS[LoanFilterKey.AmountEnd],
+        op: '<=',
+        value: [amountEnd]
+      });
+    }
+
+    // TODO: add duration and interest
+    console.info({ duration, interest });
+
+    this.filtered.emit(filters);
+  }
 }

@@ -22,6 +22,13 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
   page = 0;
   sort: object;
   filters: object;
+  filtersState = {
+    currency: undefined,
+    amountStart: null,
+    amountEnd: null,
+    interest: null,
+    duration: null
+  };
   isLoading: boolean;
   isFullScrolled: boolean;
   isAvailableLoans = true;
@@ -50,7 +57,7 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
    * Click on toggle filters button
    */
   clickFilters() {
-    // TODO: add logic
+    this.filtersOpen = !this.filtersOpen;
   }
 
   /**
@@ -73,7 +80,7 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
    * Filter loans
    * @param filters Filter by
    */
-  async filterLoans(filters: object) {
+  async filterLoans(filters: any) {
     this.filters = filters;
 
     // restore params

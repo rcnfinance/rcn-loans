@@ -26,8 +26,10 @@
       </button>
     </div>
     <div class="filters anm-01">
-      <!-- FIXME: implemenet (filtered) event -->
-      <app-filter-loans [filters]="filters">
+      <app-filter-loans
+        [filters]="filtersState"
+        (filtered)="filterLoans($event)"
+      >
       </app-filter-loans>
     </div>
     <div class="loan-container">
