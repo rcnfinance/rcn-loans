@@ -61,7 +61,6 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
    * Track tx
    */
   trackTransferTx(tx: Tx) {
-    // FIXME: review data: { id }
     if (tx.type === Type.transfer) {
       this.endTransfer.emit();
       this.finishProgress = true;

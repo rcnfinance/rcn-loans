@@ -134,7 +134,7 @@ export class LoanUtils {
     }
 
     return new Loan(
-      engine, // TODO: use real engine
+      engine,
       loanData.loan_id,
       engineAddress,
       Number(loanData.amount),

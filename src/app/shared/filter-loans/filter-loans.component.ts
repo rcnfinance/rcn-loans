@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { Utils } from './../../utils/utils';
 import { Currency } from './../../utils/currencies';
 import { CurrenciesService } from './../../services/currencies.service';
@@ -9,8 +10,8 @@ enum LoanFilterKey {
   Currency = 'currency',
   AmountStart = 'amountStart',
   AmountEnd = 'amountEnd',
-  Duration = 'duration', // TODO: add to the API
-  Interest = 'interest' // TODO: add to the API
+  Duration = 'duration',
+  Interest = 'interest'
 }
 
 interface Filters {
@@ -26,7 +27,7 @@ interface Filters {
   templateUrl: './filter-loans.component.html',
   styleUrls: ['./filter-loans.component.scss']
 })
-export class FilterLoansComponent implements OnInit {
+export class FilterLoansComponent implements OnInit, OnDestroy {
   @Input() filters: Filters;
   @Output() filtered = new EventEmitter(null);
   AVAILABLE_FILTERS = {
@@ -50,8 +51,16 @@ export class FilterLoansComponent implements OnInit {
   });
   currencies: string[];
   daySeconds = 24 * 60 * 60;
+
   // state
   filtersState = {};
+
+  // subscriptions
+  subscriptionCurrency: Subscription;
+  subscriptionAmountStart: Subscription;
+  subscriptionAmountEnd: Subscription;
+  subscriptionDuration: Subscription;
+  subscriptionAnnualInterest: Subscription;
 
   constructor(
     private currencesService: CurrenciesService,
@@ -60,75 +69,17 @@ export class FilterLoansComponent implements OnInit {
 
   ngOnInit() {
     this.getCurrencies();
-    this.setControlsDisable();
-    this.onFilterChange();
+    this.listenForm();
   }
 
-  /**
-   * Form input subscriptions
-   */
-  onFilterChange(): void {
-    this.currency.valueChanges.subscribe(val => {
-      if (this.filters.currency !== val && val !== null) {
-        this.filters.currency = val;
-        this.updateFormState();
-      }
-    });
-
-    this.amountStart.valueChanges.subscribe(val => {
-      if (this.filters.amountStart !== val) {
-        this.filters.amountStart = val;
-        this.updateFormState();
-      }
-    });
-
-    this.amountEnd.valueChanges.subscribe(val => {
-      if (this.filters.amountEnd !== val) {
-        this.filters.amountEnd = val;
-        this.updateFormState();
-      }
-    });
-
-    this.formGroup.controls.duration.valueChanges.subscribe(val => {
-
-      const daysInSeconds = val.days * this.daySeconds;
-      const monthsInSeconds = val.months * 30 * this.daySeconds;
-      const yearsInSeconds = val.years * 12 * 30 * this.daySeconds;
-      let durationInSeconds = daysInSeconds + monthsInSeconds + yearsInSeconds;
-
-      if (durationInSeconds === 0) {
-        durationInSeconds = null;
-      }
-
-      if (durationInSeconds !== this.filters.duration) {
-        this.filters.duration = val.days === null && val.months === null && val.years === null
-          ? null : durationInSeconds;
-
-        this.updateFormState();
-      }
-    });
-
-    this.annualInterest.valueChanges.subscribe(val => {
-      if (this.filters.interest !== val) {
-        this.filters.interest = val;
-        this.updateFormState();
-      }
-    });
-  }
-
-  /**
-   * Get environment filter currencies
-   */
-  getCurrencies() {
-    this.currencies = this.currencesService.getFilterCurrencies();
-  }
-
-  setControlsDisable() {
-    // this.currency.disable();
-    // this.amountStart.disable();
-    // this.amountEnd.disable();
-    // this.formGroup.controls.duration.disable();
-    // this.annualInterest.disable();
+  ngOnDestroy() {
+    try {
+      this.subscriptionCurrency.unsubscribe();
+      this.subscriptionAmountStart.unsubscribe();
+      this.subscriptionAmountEnd.unsubscribe();
+      this.subscriptionDuration.unsubscribe();
+      this.subscriptionAnnualInterest.unsubscribe();
+    } catch { }
   }
 
   get annualInterest() {
@@ -144,6 +95,73 @@ export class FilterLoansComponent implements OnInit {
     return this.formGroup.get('amountEnd');
   }
 
+  /**
+   * Form input subscriptions
+   */
+  listenForm(): void {
+    this.subscriptionCurrency = this.currency.valueChanges.subscribe(val => {
+      if (this.filters.currency !== val && val !== null) {
+        this.filters.currency = val;
+        this.updateFormState();
+      }
+    });
+
+    this.subscriptionAmountStart =
+      this.amountStart.valueChanges.subscribe(val => {
+        if (this.filters.amountStart !== val) {
+          this.filters.amountStart = val;
+          this.updateFormState();
+        }
+      });
+
+    this.subscriptionAmountEnd =
+      this.amountEnd.valueChanges.subscribe(val => {
+        if (this.filters.amountEnd !== val) {
+          this.filters.amountEnd = val;
+          this.updateFormState();
+        }
+      });
+
+    this.subscriptionDuration =
+      this.formGroup.controls.duration.valueChanges.subscribe(val => {
+
+        const daysInSeconds = val.days * this.daySeconds;
+        const monthsInSeconds = val.months * 30 * this.daySeconds;
+        const yearsInSeconds = val.years * 12 * 30 * this.daySeconds;
+        let durationInSeconds = daysInSeconds + monthsInSeconds + yearsInSeconds;
+
+        if (durationInSeconds === 0) {
+          durationInSeconds = null;
+        }
+
+        if (durationInSeconds !== this.filters.duration) {
+          this.filters.duration = val.days === null && val.months === null && val.years === null
+            ? null : durationInSeconds;
+
+          this.updateFormState();
+        }
+      });
+
+    this.subscriptionAnnualInterest =
+      this.annualInterest.valueChanges.subscribe(val => {
+        if (this.filters.interest !== val) {
+          this.filters.interest = val;
+          this.updateFormState();
+        }
+      });
+  }
+
+  /**
+   * Get environment filter currencies
+   */
+  private getCurrencies() {
+    this.currencies = this.currencesService.getFilterCurrencies();
+  }
+
+  /**
+   * Update form state
+   * @fires filtered
+   */
   private async updateFormState() {
     const { currency, amountStart, amountEnd, duration, interest } = this.filters;
     const { AVAILABLE_FILTERS } = this;
@@ -189,9 +207,6 @@ export class FilterLoansComponent implements OnInit {
         value: [duration]
       });
     }
-
-    // TODO: add duration and interest
-    console.info({ duration, interest });
 
     this.filtered.emit(filters);
   }

@@ -267,7 +267,6 @@ export class Web3Service {
    */
   private async browserLogin(): Promise<boolean> {
     if (typeof window.web3 === 'undefined') {
-      // TODO: Open dialog for get metamask
       this.dialog.open(DialogClientAccountComponent);
       throw Error('Please get Metamask');
     }
