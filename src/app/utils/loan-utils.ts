@@ -1,6 +1,7 @@
 import { Loan, Engine, Oracle, Descriptor, Debt, Config, Status, Model } from '../models/loan.model';
 import { Collateral } from '../models/collateral.model';
 import { LoanContentApi } from './../interfaces/loan-api-diaspore';
+import { Commit, CommitTypes, CommitProperties } from './../interfaces/commit.interface';
 import { RcnApiUtils } from './rcn-api-utils';
 import { Utils } from './utils';
 import { environment, Agent } from './../../environments/environment';
@@ -149,5 +150,20 @@ export class LoanUtils {
       config,
       collateral
     );
+  }
+
+  /**
+   * Get paid amount
+   * @param commits Loan commits
+   * @param paidNonce Nonce of Paid event
+   * @return Paid amount
+   */
+  static getCommitPaidAmount(commits: Commit[], paidNonce: number): number {
+    const { data } = commits
+        .filter(({ nonce }) => nonce < paidNonce)
+        .reverse()
+        .find(({ opcode }) => opcode === CommitTypes.PaidBase);
+
+    return data[CommitProperties.PaidBase] - data[CommitProperties.Paid];
   }
 }

@@ -5,20 +5,8 @@ import { environment } from './../../../../environments/environment';
 import { ApiService } from './../../../services/api.service';
 import { FormatAmountPipe } from './../../../pipes/format-amount.pipe';
 import { Loan } from './../../../models/loan.model';
-import { Commit } from './../../../interfaces/commit.interface';
-
-enum CommitTypes {
-  Requested = 'LoanManager_Requested',
-  Lent = 'LoanManager_Lent',
-  Paid = 'DebtEngine_Paid',
-  FullyPaid = 'LoanManager_FullPayed',
-  Withdraw = 'DebtEngine_Withdrawn'
-}
-enum CommitProperties {
-  Balance = 'balance',
-  Creator = 'creator',
-  Lender = 'lender'
-}
+import { Commit, CommitTypes, CommitProperties } from './../../../interfaces/commit.interface';
+import { LoanUtils } from './../../../utils/loan-utils';
 
 @Component({
   selector: 'app-detail-history',
@@ -27,6 +15,7 @@ enum CommitProperties {
 })
 export class DetailHistoryComponent implements OnInit, OnChanges {
   @Input() loan: Loan;
+  allCommits: Commit[];
   commits: Commit[];
   historyItems: {
     commitProperties: object;
@@ -119,7 +108,8 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
         'display': [CommitProperties.Balance],
         handler: (commit: Commit) => {
           const { currency } = this.loan;
-          const amount = this.formatAmountPipe.transform(currency.fromUnit(commit.data.paid));
+          const payedAmount = LoanUtils.getCommitPaidAmount(this.allCommits, commit.nonce);
+          const amount = this.formatAmountPipe.transform(currency.fromUnit(payedAmount));
           return [{
             label: 'Date',
             value: moment(Number(commit.timestamp) * 1000).format('DD/MM/YYYY HH:mm')
@@ -203,7 +193,12 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
 
   private async loadCommits() {
     const { engine, id } = this.loan;
+
+    // load all commits
     let { content: commits } = await this.apiService.getHistories(engine, id).toPromise();
+    this.allCommits = commits;
+
+    // filter usable commits
     commits = this.sortByTimestamp(commits);
     commits = this.filterByType(commits);
     this.commits = commits;
@@ -242,7 +237,7 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
 
     // add pending events
     Object.values(CommitTypes)
-        .filter((commitType: CommitTypes) => this.commitProperties[commitType].show)
+        .filter((commitType: CommitTypes) => this.commitProperties[commitType] && this.commitProperties[commitType].show)
         .map((commitType: CommitTypes) => {
           if (!commitsByType[commitType]) {
             const { commitProperties: properties } = this;

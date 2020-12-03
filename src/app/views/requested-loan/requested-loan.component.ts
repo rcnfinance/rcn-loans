@@ -20,6 +20,7 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
   loans = [];
   // pagination
   page = 0;
+  count = 0;
   sort: object;
   filters: object;
   filtersState = {
@@ -130,7 +131,9 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
 
     try {
       const PAGE_SIZE = 20;
-      const { content } = await this.proxyApiService.getRequests(page, PAGE_SIZE, sort, filters);
+      const { content, meta } = await this.proxyApiService.getRequests(page, PAGE_SIZE, sort, filters);
+      this.count = meta.count;
+
       const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
       const curatedLoans: Loan[] = LoanCurator.curateLoans(loans);
 

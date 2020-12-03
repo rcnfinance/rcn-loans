@@ -7,6 +7,8 @@ import {
   InstallmentStatus,
   Pay
 } from './../interfaces/installment';
+import { Commit, CommitTypes } from './../interfaces/commit.interface';
+import { LoanUtils } from './../utils/loan-utils';
 // App services
 import { ApiService } from './api.service';
 
@@ -65,11 +67,8 @@ export class InstallmentsService {
     endDate?: string
   ): Promise<Pay[]> {
     const { engine, id } = loan;
-    const { content } = await this.apiService.getHistories(engine, id).toPromise();
-
-    // FIXME: use new commits model
-
-    const payCommits = content.filter(commit => commit.opcode === 'paid_debt_engine');
+    const { content: commits } = await this.apiService.getHistories(engine, id).toPromise();
+    const payCommits: Commit[] = commits.filter(({ opcode }) => opcode === CommitTypes.Paid);
     const pays: Pay[] = [];
     let pending = 0;
     let totalPaid = 0;
@@ -97,25 +96,26 @@ export class InstallmentsService {
     }
 
     payCommits.map(commit => {
-      const {
-        data,
-        timestamp
-      }: any = commit;
-      const { paid } = data;
+      const { timestamp, nonce } = commit;
+      const paid = LoanUtils.getCommitPaidAmount(commits, nonce);
       const amount = loan.currency.fromUnit(paid);
 
-      if (startDate && startDate > this.unixToDate(timestamp * 1000)) {
+      if (startDate && startDate > this.unixToDate(Number(timestamp) * 1000)) {
         return;
       }
-      if (endDate && endDate < this.unixToDate(timestamp * 1000)) {
+      if (endDate && endDate < this.unixToDate(Number(timestamp) * 1000)) {
         return;
       }
 
       totalPaid += Number(amount);
       pending -= Number(amount);
 
+      if (pending < 0) {
+        pending = 0;
+      }
+
       pays.push({
-        date: this.unixToDate(timestamp * 1000),
+        date: this.unixToDate(Number(timestamp) * 1000),
         punitory: 0, // TODO: add punitory
         pending,
         amount,
