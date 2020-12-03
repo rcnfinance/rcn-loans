@@ -3,7 +3,6 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Utils } from './../../utils/utils';
 import { Currency } from './../../utils/currencies';
 import { CurrenciesService } from './../../services/currencies.service';
-import { ContractsService } from './../../services/contracts.service';
 import { Web3Service } from './../../services/web3.service';
 
 enum LoanFilterKey {
@@ -56,7 +55,6 @@ export class FilterLoansComponent implements OnInit {
 
   constructor(
     private currencesService: CurrenciesService,
-    private contractsService: ContractsService,
     private web3Service: Web3Service
   ) { }
 
