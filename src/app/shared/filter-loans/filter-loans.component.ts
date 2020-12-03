@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Engine } from './../../models/loan.model';
+import { Utils } from './../../utils/utils';
+import { Currency } from './../../utils/currencies';
 import { CurrenciesService } from './../../services/currencies.service';
 import { ContractsService } from './../../services/contracts.service';
+import { Web3Service } from './../../services/web3.service';
 
 enum LoanFilterKey {
   Currency = 'currency',
@@ -31,7 +33,9 @@ export class FilterLoansComponent implements OnInit {
   AVAILABLE_FILTERS = {
     [LoanFilterKey.AmountStart]: ['Loan', 'amount'],
     [LoanFilterKey.AmountEnd]: ['Loan', 'amount'],
-    [LoanFilterKey.Currency]: ['Loan', 'oracle']
+    [LoanFilterKey.Currency]: ['Loan', 'currency'],
+    [LoanFilterKey.Interest]: ['Descriptor', 'interest_rate'],
+    [LoanFilterKey.Duration]: ['Descriptor', 'duration']
   };
 
   formGroup = new FormGroup({
@@ -52,7 +56,8 @@ export class FilterLoansComponent implements OnInit {
 
   constructor(
     private currencesService: CurrenciesService,
-    private contractsService: ContractsService
+    private contractsService: ContractsService,
+    private web3Service: Web3Service
   ) { }
 
   ngOnInit() {
@@ -121,11 +126,11 @@ export class FilterLoansComponent implements OnInit {
   }
 
   setControlsDisable() {
-    this.currency.disable();
-    this.amountStart.disable();
-    this.amountEnd.disable();
-    this.formGroup.controls.duration.disable();
-    this.annualInterest.disable();
+    // this.currency.disable();
+    // this.amountStart.disable();
+    // this.amountEnd.disable();
+    // this.formGroup.controls.duration.disable();
+    // this.annualInterest.disable();
   }
 
   get annualInterest() {
@@ -147,27 +152,43 @@ export class FilterLoansComponent implements OnInit {
     const filters = [];
 
     if (currency) {
-      const engine = Engine.UsdcEngine;
-      const oracle = await this.contractsService.symbolToOracle(engine, currency);
+      const { web3 } = this.web3Service;
+      const hex32Currency = Utils.toBytes32(web3.utils.toHex(currency), true);
 
       filters.push({
         attr: AVAILABLE_FILTERS[LoanFilterKey.Currency],
         op: '==',
-        value: [oracle]
+        value: [hex32Currency]
       });
+
+      const { decimals } = new Currency(currency);
+      if (amountStart) {
+        filters.push({
+          attr: AVAILABLE_FILTERS[LoanFilterKey.AmountStart],
+          op: '>=',
+          value: [amountStart * 10 ** decimals]
+        });
+      }
+      if (amountEnd) {
+        filters.push({
+          attr: AVAILABLE_FILTERS[LoanFilterKey.AmountEnd],
+          op: '<=',
+          value: [amountEnd * 10 ** decimals]
+        });
+      }
     }
-    if (amountStart) {
+    if (interest) {
       filters.push({
-        attr: AVAILABLE_FILTERS[LoanFilterKey.AmountStart],
+        attr: AVAILABLE_FILTERS[LoanFilterKey.Interest],
         op: '>=',
-        value: [amountStart]
+        value: [interest]
       });
     }
-    if (amountEnd) {
+    if (duration) {
       filters.push({
-        attr: AVAILABLE_FILTERS[LoanFilterKey.AmountEnd],
+        attr: AVAILABLE_FILTERS[LoanFilterKey.Duration],
         op: '<=',
-        value: [amountEnd]
+        value: [duration]
       });
     }
 
