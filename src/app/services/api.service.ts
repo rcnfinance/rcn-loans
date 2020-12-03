@@ -24,7 +24,7 @@ export class ApiService {
    */
   getRequests(
     engine: Engine,
-    page = 0,
+    page = 1,
     pageSize = 20,
     sort?: object,
     filters?: object
@@ -49,7 +49,7 @@ export class ApiService {
   getBorrowed(
     engine: Engine,
     account: string,
-    page = 0,
+    page = 1,
     pageSize = 20,
     sort?: object
   ): Observable<ApiResponse> {
@@ -73,7 +73,7 @@ export class ApiService {
   getLent(
     engine: Engine,
     account: string,
-    page = 0,
+    page = 1,
     pageSize = 200,
     sort?: object
   ): Observable<ApiResponse> {
@@ -96,7 +96,7 @@ export class ApiService {
    */
   getAcvivity(
     engine: Engine,
-    page = 0,
+    page = 1,
     pageSize = 20,
     sort?: object,
     filters?: object

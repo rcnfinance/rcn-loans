@@ -19,7 +19,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
   pageId = 'active-loans';
   loans = [];
   // pagination
-  page = 0;
+  page = 1;
   sort: object;
   filters: object;
   isLoading: boolean;
@@ -52,7 +52,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
     this.sort = sort;
 
     // restore params
-    this.page = 0;
+    this.page = 1;
     this.isFullScrolled = false;
     this.loans = [];
 
@@ -68,7 +68,7 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
     this.filters = filters;
 
     // restore params
-    this.page = 0;
+    this.page = 1;
     this.isFullScrolled = false;
     this.loans = [];
 

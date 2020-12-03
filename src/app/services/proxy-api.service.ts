@@ -20,7 +20,7 @@ export class ProxyApiService {
    * @param filters Filter by
    * @return Loans array
    */
-  async getRequests(page = 0, pageSize = 20, sort?: object, filters?: object): Promise<ApiResponse> {
+  async getRequests(page = 1, pageSize = 20, sort?: object, filters?: object): Promise<ApiResponse> {
     const usdcEngine = await this.apiService.getRequests(Engine.UsdcEngine, page, pageSize, sort, filters).toPromise();
     const rcnEngine = await this.apiService.getRequests(Engine.RcnEngine, page, pageSize, sort, filters).toPromise();
 
@@ -43,7 +43,7 @@ export class ProxyApiService {
    * @param sort Sort by
    * @return Loans array
    */
-  async getBorrowed(account: string, page = 0, pageSize = 20, sort?: object): Promise<ApiResponse> {
+  async getBorrowed(account: string, page = 1, pageSize = 20, sort?: object): Promise<ApiResponse> {
     const usdcEngine = await this.apiService.getBorrowed(Engine.UsdcEngine, account, page, pageSize, sort).toPromise();
     const rcnEngine = await this.apiService.getBorrowed(Engine.RcnEngine, account, page, pageSize, sort).toPromise();
 
@@ -66,7 +66,7 @@ export class ProxyApiService {
    * @param sort Sort by
    * @return Loans array
    */
-  async getLent(account: string, page = 0, pageSize = 200, sort?: object): Promise<ApiResponse> {
+  async getLent(account: string, page = 1, pageSize = 200, sort?: object): Promise<ApiResponse> {
     const usdcEngine = await this.apiService.getLent(Engine.UsdcEngine, account, page, pageSize, sort).toPromise();
     const rcnEngine = await this.apiService.getLent(Engine.RcnEngine, account, page, pageSize, sort).toPromise();
 
@@ -89,7 +89,7 @@ export class ProxyApiService {
    * @param filters Filter by
    * @return Loans array
    */
-  async getAcvivity(page = 0, pageSize = 20, sort?: object, filters?: object): Promise<ApiResponse> {
+  async getAcvivity(page = 1, pageSize = 20, sort?: object, filters?: object): Promise<ApiResponse> {
     const usdcEngine = await this.apiService.getAcvivity(Engine.UsdcEngine, page, pageSize, sort, filters).toPromise();
     const rcnEngine = await this.apiService.getAcvivity(Engine.RcnEngine, page, pageSize, sort, filters).toPromise();
 

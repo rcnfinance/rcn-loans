@@ -25,7 +25,7 @@ export class AddressComponent implements OnInit, OnDestroy {
   available: any;
   loans: Loan[] = [];
   // pagination
-  page = 0;
+  page = 1;
   sort: object;
   isLoading: boolean;
   isFullScrolled: boolean;
@@ -91,7 +91,7 @@ export class AddressComponent implements OnInit, OnDestroy {
     this.sort = sort;
 
     // restore params
-    this.page = 0;
+    this.page = 1;
     this.isFullScrolled = false;
     this.loans = [];
 
