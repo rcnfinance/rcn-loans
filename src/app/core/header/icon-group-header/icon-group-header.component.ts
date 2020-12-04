@@ -34,7 +34,10 @@ export class IconGroupHeaderComponent implements OnInit {
         }
         break;
       default:
-        this.headerPopoverService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event
+        const { previousSelection } = this;
+        if (previousSelection && previousSelection !== 'clickOutside') {
+          this.headerPopoverService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event
+        }
         break;
     }
   }

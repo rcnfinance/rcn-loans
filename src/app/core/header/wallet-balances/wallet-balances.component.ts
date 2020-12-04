@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import {
   trigger,
   state,
@@ -6,6 +6,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { Subscription } from 'rxjs';
 import * as BN from 'bn.js';
 import { Currency } from './../../../utils/currencies';
 import { HeaderPopoverService } from './../../../services/header-popover.service';
@@ -41,10 +42,13 @@ interface Balance {
     ])
   ]
 })
-export class WalletBalancesComponent implements OnInit {
+export class WalletBalancesComponent implements OnInit, OnDestroy {
   viewDetail: string;
   rcnBalance: string;
   balances: Balance[];
+
+  // subscriptions
+  subscriptionPopover: Subscription;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -54,13 +58,20 @@ export class WalletBalancesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.headerPopoverService.currentDetail.subscribe(async detail => {
-      this.viewDetail = detail;
-      this.cdRef.detectChanges();
-      await this.loadBalances();
-    });
+    this.subscriptionPopover =
+      this.headerPopoverService.currentDetail.subscribe(async detail => {
+        this.viewDetail = detail;
+        this.cdRef.detectChanges();
+        await this.loadBalances();
+      });
 
     this.loadBalances();
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptionPopover) {
+      this.subscriptionPopover.unsubscribe();
+    }
   }
 
   /**
