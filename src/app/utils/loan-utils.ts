@@ -4,7 +4,7 @@ import { LoanContentApi } from './../interfaces/loan-api-diaspore';
 import { Commit, CommitTypes, CommitProperties } from './../interfaces/commit.interface';
 import { RcnApiUtils } from './rcn-api-utils';
 import { Utils } from './utils';
-import { environment, Agent } from './../../environments/environment';
+import { environment } from './../../environments/environment';
 
 export class LoanUtils {
   static decodeInterest(raw: number): number {
@@ -12,17 +12,6 @@ export class LoanUtils {
   }
   static calculateInterest(_timeDelta: number, _interestRate: number, _amount: number): number {
     return (_amount * 100000 * _timeDelta) / _interestRate;
-  }
-
-  /**
-   * Get the cosigner address (and expected address for loans in request status)
-   * @param loan Loan
-   * @return Cosigner address
-   */
-  static getCosignerAddress(loan: Loan) {
-    const creator: Agent = environment.dir[loan.creator.toLowerCase()];
-    const cosignerAddress: string = loan.isRequest ? environment.cosigners[creator] : loan.cosigner;
-    return cosignerAddress;
   }
 
   /**

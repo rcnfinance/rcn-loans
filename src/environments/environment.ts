@@ -17,7 +17,6 @@ const p = require('../../package.json') as any;
 
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 const API_BASE = 'https://diaspore-ropsten-rnode.rcn.loans';
-const RIPIO_COSIGNER = '0x5afc9fd47a5e064a7d1407c942878c4c0e3784a6';
 const RCN_ENGINE = 'rcnEngine';
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const USDC_ENGINE = 'usdcEngine';
@@ -110,10 +109,6 @@ export const environment = {
         ethUsd: '0x30b5068156688f818cea0874b580206dfe081a03'
       }
     }
-  },
-  cosigners: {
-    [Agent.RipioArsCreator]: RIPIO_COSIGNER,
-    [Agent.RipioUsdCreator]: RIPIO_COSIGNER
   },
   blacklist: [
     {

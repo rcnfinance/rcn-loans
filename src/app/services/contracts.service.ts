@@ -4,7 +4,7 @@ import * as BN from 'bn.js';
 import { Loan, LoanType, Engine, Oracle } from '../models/loan.model';
 import { LoanContentApi } from './../interfaces/loan-api-diaspore';
 import { LoanUtils } from './../utils/loan-utils';
-import { environment, Agent } from '../../environments/environment';
+import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
 import { TxService } from '../services/tx.service';
 import { LoanTypeService } from './loan-type.service';
@@ -696,7 +696,6 @@ export class ContractsService {
     const payableAmount = lendToken === environment.contracts.ethAddress ? required : '';
 
     // set cosigner
-    const creator: Agent = environment.dir[loan.creator.toLowerCase()];
     const cosignerLimit = '0'; // TODO: implement cosigner limit
     let cosignerAddress: string;
     let cosignerData: string;
@@ -706,7 +705,7 @@ export class ContractsService {
       cosignerAddress = environment.contracts[loan.engine].collateral.collateral;
       cosignerData = Utils.toBytes32(web3.utils.toHex(collateral.id));
     } else {
-      cosignerAddress = environment.cosigners[creator] || Utils.address0x;
+      cosignerAddress = Utils.address0x;
       cosignerData = '0x';
     }
 

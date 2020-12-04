@@ -17,7 +17,6 @@ const p = require('../../package.json') as any;
 
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 const API_BASE = 'https://diaspore-rnode.rcn.loans';
-const RIPIO_COSIGNER = '0xfA7c953a07BCb4420253bFfBf586bDD64c37B670';
 const RCN_ENGINE = 'rcnEngine';
 const RCN_TOKEN = '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6';
 const USDC_ENGINE = 'usdcEngine';
@@ -110,10 +109,6 @@ export const environment = {
         ethUsd: '' // TODO: add
       }
     }
-  },
-  cosigners: {
-    [Agent.RipioArsCreator]: RIPIO_COSIGNER,
-    [Agent.RipioUsdCreator]: RIPIO_COSIGNER
   },
   blacklist: [],
   dir: {
