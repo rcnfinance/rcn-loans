@@ -42,7 +42,7 @@ export class IconGroupHeaderComponent implements OnInit, OnDestroy {
    * Check viewDetail state to open/close notifications Component
    * @param view ViewType
    */
-  isDetail(view: ViewType): Boolean {
+  isDetail(view: ViewType | string): Boolean {
     return view === this.viewDetail;
   }
 
@@ -50,7 +50,7 @@ export class IconGroupHeaderComponent implements OnInit, OnDestroy {
    * Change viewDetail state to open/close notifications Component
    * @param selection ViewType (icon clicked)
    */
-  openDetail(selection: ViewType | 'clickOutside') {
+  openDetail(selection: ViewType | string) {
     this.previousSelection = this.selection;
     this.selection = selection;
 
