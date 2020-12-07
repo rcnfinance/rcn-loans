@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
 import { Web3Service } from './web3.service';
 import { TxService } from '../services/tx.service';
 import { LoanTypeService } from './loan-type.service';
-import { ProxyApiService } from './proxy-api.service';
+import { ApiService } from './api.service';
 import { Utils } from './../utils/utils';
 import { EventsService } from './events.service';
 declare let require: any;
@@ -46,7 +46,7 @@ export class ContractsService {
     private http: HttpClient,
     private web3Service: Web3Service,
     private txService: TxService,
-    private proxyApiService: ProxyApiService,
+    private apiService: ApiService,
     private loanTypeService: LoanTypeService,
     private eventsService: EventsService
   ) {
@@ -643,25 +643,16 @@ export class ContractsService {
     return await this._oracleFactory[engine].methods.oracleToSymbol(oracle).call();
   }
 
-  readPendingWithdraws(loans: Loan[]): [number, number[], number, number[]] {
-    const pendingDiasporeLoans = [];
-    let totalDiaspore = 0;
-
-    loans.forEach(loan => {
-      if (loan.debt && loan.debt.balance > 0) {
-        totalDiaspore += loan.debt.balance;
-        pendingDiasporeLoans.push(loan.id);
-      }
-    });
-
-    return [0, [0], totalDiaspore, pendingDiasporeLoans];
-  }
-
-  async getPendingWithdraws(): Promise<[number, number[], number, number[]]> {
+  /**
+   * Get pending loans to withdraw
+   * @param engine Engine
+   * @return Loan IDs and amount to withdraw
+   */
+  async getPendingWithdraws(engine: Engine): Promise<[number, number[], number, number[]]> {
     const account = await this.web3Service.getAccount();
 
     return new Promise(async (resolve, _reject) => {
-      const { content } = await this.proxyApiService.getLent(account);
+      const { content } = await this.apiService.getLent(engine, account).toPromise();
       const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
       resolve(this.readPendingWithdraws(loans));
     }) as Promise<[number, number[], number, number[]]>;
@@ -1032,6 +1023,25 @@ export class ContractsService {
    */
   async latestAnswer() {
     return await this._aggregatorProxyEthUsd.methods.latestAnswer().call();
+  }
+
+  /**
+   * Read total amount to withdraw
+   * @param loan Loans to withdraw
+   * @return Loan IDs and amount to withdraw
+   */
+  private readPendingWithdraws(loans: Loan[]): [number, number[], number, number[]] {
+    const pendingDiasporeLoans = [];
+    let totalDiaspore = 0;
+
+    loans.forEach(loan => {
+      if (loan.debt && loan.debt.balance > 0) {
+        totalDiaspore += loan.debt.balance;
+        pendingDiasporeLoans.push(loan.id);
+      }
+    });
+
+    return [0, [0], totalDiaspore, pendingDiasporeLoans];
   }
 
   /**

@@ -1,0 +1,58 @@
+<div
+  class="notifications-container"
+  [@anmNotifications]="viewDetail === 'withdraw' ? 'open' : 'closed'"
+>
+  <ul>
+    <li>Withdrawable Balance</li>
+    <li class="item d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <img
+          class="item__image"
+          src="assets/rcn.png"
+        >
+        <div class="item__text">
+          <div class="item__text-amount">
+            {{ rcnDisplayAvailable || 0 }}
+          </div>
+          <div class="item__text-currency">
+            RCN
+          </div>
+        </div>
+      </div>
+      <div class="item__action">
+        <button
+          mat-raised-button
+          class="button button-primary"
+          (click)="clickWithdrawRcn()"
+        >
+          Withdraw
+        </button>
+      </div>
+    </li>
+    <li class="item d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <img
+          class="item__image"
+          src="assets/usdc.png"
+        >
+        <div class="item__text">
+          <div class="item__text-amount">
+            {{ usdcDisplayAvailable || 0 }}
+          </div>
+          <div class="item__text-currency">
+            USDC
+          </div>
+        </div>
+      </div>
+      <div class="item__action">
+        <button
+          mat-raised-button
+          class="button button-primary"
+          (click)="clickWithdrawUsdc()"
+        >
+          Withdraw
+        </button>
+      </div>
+    </li>
+  </ul>
+</div>

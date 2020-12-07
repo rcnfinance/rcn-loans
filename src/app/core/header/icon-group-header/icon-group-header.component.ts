@@ -1,5 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { HeaderPopoverService } from '../../../services/header-popover.service';
+
+enum ViewType {
+  Notifications = 'notifications',
+  WalletBalance = 'balance',
+  WalletWithdraw = 'withdraw'
+}
 
 @Component({
   selector: 'app-icon-group-header',
@@ -7,48 +14,71 @@ import { HeaderPopoverService } from '../../../services/header-popover.service';
   styleUrls: ['./icon-group-header.component.scss']
 })
 
-export class IconGroupHeaderComponent implements OnInit {
+export class IconGroupHeaderComponent implements OnInit, OnDestroy {
+  @Input() account: string;
   viewDetail: string;
   selection: string;
   previousSelection: string;
-
   notificationsCounter: number;
+  // subscriptions
+  subscriptionHeader: Subscription;
 
   constructor(
     public headerPopoverService: HeaderPopoverService
-  ) {}
+  ) { }
 
-  isDetail(view: string): Boolean { // Check viewDetail state to open/close notifications Component
-    return view === this.viewDetail;
+  ngOnInit() {
+    this.subscriptionHeader =
+      this.headerPopoverService.currentDetail.subscribe(detail => this.viewDetail = detail);
   }
-  openDetail(selection: 'clickOutside' | 'notifications' | 'balance') { // Change viewDetail state to open/close notifications Component
-    this.previousSelection = this.selection;
-    this.selection = selection;
-    switch (selection) {
-      case 'notifications':
-      case 'balance':
-        if (selection !== this.previousSelection || this.viewDetail === undefined) {
-          this.headerPopoverService.changeDetail(selection); // Change value of viewDetail from Notifications Service
-        } else {
-          this.headerPopoverService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event
-        }
-        break;
-      default:
-        const { previousSelection } = this;
-        if (previousSelection && previousSelection !== 'clickOutside') {
-          this.headerPopoverService.changeDetail(undefined); // Force to close notifications Component by ClickOutside Directive event
-        }
-        break;
+
+  ngOnDestroy() {
+    if (this.subscriptionHeader) {
+      this.subscriptionHeader.unsubscribe();
     }
   }
 
+  /**
+   * Check viewDetail state to open/close notifications Component
+   * @param view ViewType
+   */
+  isDetail(view: ViewType): Boolean {
+    return view === this.viewDetail;
+  }
+
+  /**
+   * Change viewDetail state to open/close notifications Component
+   * @param selection ViewType (icon clicked)
+   */
+  openDetail(selection: ViewType | 'clickOutside') {
+    this.previousSelection = this.selection;
+    this.selection = selection;
+
+    const { previousSelection, viewDetail } = this;
+    const isClickOutside = !Object.values(ViewType).includes(selection);
+
+    // case clickOutside
+    if (isClickOutside) {
+      const isPreviousClickOutside = previousSelection === 'clickOutside';
+      if (previousSelection && !isPreviousClickOutside) {
+        this.headerPopoverService.changeDetail(undefined);
+      }
+      return;
+    }
+
+    // case ViewType
+    if (selection !== previousSelection || viewDetail === undefined) {
+      this.headerPopoverService.changeDetail(selection);
+    } else {
+      this.headerPopoverService.changeDetail(undefined);
+    }
+  }
+
+  /**
+   * Updates the notification counter when the child component emits an event
+   * @param counter New notifications counter number
+   */
   updateCounter(counter: number) {
     this.notificationsCounter = counter;
   }
-
-  ngOnInit() {
-    // Subscribe to detail from Notifications Service
-    this.headerPopoverService.currentDetail.subscribe(detail => this.viewDetail = detail);
-  }
-
 }

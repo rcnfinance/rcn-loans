@@ -16,12 +16,12 @@ import { Tx, Type, TxService } from '../../services/tx.service';
 export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   @Input() account: string;
 
-  rcnAvailable: number;
-  rcnLoansWithBalance: number[] = [];
-  rcnOngoingWithdraw: Tx;
-  rcnCanWithdraw = false;
-  rcnDisplayAvailable = '';
-  rcnTxSubscription: boolean;
+  usdcAvailable: number;
+  usdcLoansWithBalance: number[] = [];
+  usdcOngoingWithdraw: Tx;
+  usdcCanWithdraw = false;
+  usdcDisplayAvailable = '';
+  usdcTxSubscription: boolean;
 
   // subscriptions
   subscriptionBalance: Subscription;
@@ -52,7 +52,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     if (this.subscriptionBalance) {
       this.subscriptionBalance.unsubscribe();
     }
-    if (this.rcnTxSubscription) {
+    if (this.usdcTxSubscription) {
       this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
     }
   }
@@ -70,16 +70,16 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Update balance and withdraw amount
    */
   updateDisplay() {
-    if (this.rcnAvailable) {
-      this.rcnDisplayAvailable = Utils.formatAmount(this.rcnAvailable);
+    if (this.usdcAvailable) {
+      this.usdcDisplayAvailable = Utils.formatAmount(this.usdcAvailable);
     } else {
-      this.rcnDisplayAvailable = '0';
+      this.usdcDisplayAvailable = '0';
     }
 
-    this.rcnCanWithdraw =
-      this.rcnLoansWithBalance !== undefined &&
-      this.rcnLoansWithBalance.length > 0 &&
-      this.rcnOngoingWithdraw === undefined;
+    this.usdcCanWithdraw =
+      this.usdcLoansWithBalance !== undefined &&
+      this.usdcLoansWithBalance.length > 0 &&
+      this.usdcOngoingWithdraw === undefined;
   }
 
   /**
@@ -87,9 +87,9 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * total available
    */
   async loadWithdrawBalance() {
-    const pendingWithdraws = await this.contractService.getPendingWithdraws();
-    this.rcnAvailable = pendingWithdraws[2] / 10 ** 18;
-    this.rcnLoansWithBalance = pendingWithdraws[3];
+    const pendingWithdraws = await this.contractService.getPendingWithdraws(Engine.UsdcEngine);
+    this.usdcAvailable = pendingWithdraws[2] / 10 ** 6;
+    this.usdcLoansWithBalance = pendingWithdraws[3];
     this.loadOngoingWithdraw();
     this.updateDisplay();
   }
@@ -98,18 +98,18 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Load the pending withdraw
    */
   loadOngoingWithdraw() {
-    this.rcnOngoingWithdraw = this.txService.getLastWithdraw(
-      environment.contracts[Engine.RcnEngine].diaspore.debtEngine,
-      this.rcnLoansWithBalance
+    this.usdcOngoingWithdraw = this.txService.getLastWithdraw(
+      environment.contracts[Engine.UsdcEngine].diaspore.debtEngine,
+      this.usdcLoansWithBalance
     );
   }
 
   /**
-   * Handle click on withdraw RCN
+   * Handle click on withdraw USDC
    */
-  async clickWithdrawRcn() {
+  async clickWithdrawUsdc() {
     try {
-      await this.withdrawRcn();
+      await this.withdrawUsdc();
     } catch (err) {
       if (err.stack.indexOf('User denied transaction signature') < 0) {
         this.eventsService.trackError(err);
@@ -120,11 +120,11 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Withdraw diaspore funds
    */
-  private async withdrawRcn() {
-    if (this.rcnCanWithdraw) {
-      if (this.rcnLoansWithBalance.length > 0) {
-        const tx = await this.contractService.withdrawFundsDiaspore(Engine.RcnEngine, this.rcnLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, environment.contracts[Engine.RcnEngine].diaspore.debtEngine, this.rcnLoansWithBalance);
+  private async withdrawUsdc() {
+    if (this.usdcCanWithdraw) {
+      if (this.usdcLoansWithBalance.length > 0) {
+        const tx = await this.contractService.withdrawFundsDiaspore(Engine.UsdcEngine, this.usdcLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, environment.contracts[Engine.UsdcEngine].diaspore.debtEngine, this.usdcLoansWithBalance);
       }
       this.loadWithdrawBalance();
       this.retrievePendingTx();
@@ -135,8 +135,8 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Retrieve pending Tx
    */
   private retrievePendingTx() {
-    if (!this.rcnTxSubscription) {
-      this.rcnTxSubscription = true;
+    if (!this.usdcTxSubscription) {
+      this.usdcTxSubscription = true;
       this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
     }
   }

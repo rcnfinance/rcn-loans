@@ -1,5 +1,5 @@
 <div
-  class="button-group d-flex mr-3"
+  class="button-group d-flex"
   appClickOutside
   (clickOutside)="openDetail('clickOutside')"
 >
@@ -23,7 +23,18 @@
   >
     <i class="fas fa-wallet"></i>
   </div>
+  <div class="mx-3"></div>
+  <div
+    class="button button--withdraw"
+    (click)="openDetail('withdraw')"
+    [ngClass]="{'active': isDetail('withdraw')}"
+    matTooltip="Withdraw"
+  >
+    <!-- FIXME: change icon -->
+    <i class="fas fa-piggy-bank"></i>
+  </div>
   <div class="ml-3"></div>
   <app-notifications (notificationsCounter)="updateCounter($event)"></app-notifications>
   <app-wallet-balances></app-wallet-balances>
+  <app-wallet-withdraw [account]="account"></app-wallet-withdraw>
 </div>

@@ -44,7 +44,6 @@ interface Balance {
 })
 export class WalletBalancesComponent implements OnInit, OnDestroy {
   viewDetail: string;
-  rcnBalance: string;
   balances: Balance[];
 
   // subscriptions

@@ -163,7 +163,7 @@ export class ContentWrapperComponent implements OnInit {
    * Load withdraw balance adding diaspore amount
    */
   private async loadWithdrawBalance() {
-    const pendingWithdraws = await this.contractService.getPendingWithdraws();
+    const pendingWithdraws = await this.contractService.getPendingWithdraws(Engine.RcnEngine);
     this.rcnAvailable = Utils.bn(pendingWithdraws[2] / 10 ** 18);
     this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadPendingWithdraw();

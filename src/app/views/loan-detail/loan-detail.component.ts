@@ -525,7 +525,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       const isDebtOwner = this.userAccount.toUpperCase() === this.loan.debt.owner.toUpperCase();
       this.canTransfer = isDebtOwner;
       this.canCancel = false;
-      this.canPay = !isDebtOwner;
+      this.canPay = isBorrower;
       this.canLend = false;
       this.canAdjustCollateral = isBorrower;
       this.canRedeem = false;
