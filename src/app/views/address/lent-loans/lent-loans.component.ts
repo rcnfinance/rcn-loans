@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Loan } from './../../../models/loan.model';
 import { LoanContentApi } from './../../../interfaces/loan-api-diaspore';
-import { LoanCurator } from './../../../utils/loan-curator';
 import { LoanUtils } from './../../../utils/loan-utils';
 import { ProxyApiService } from '../../../services/proxy-api.service';
 import { TitleService } from '../../../services/title.service';
@@ -139,7 +138,6 @@ export class AddressComponent implements OnInit, OnDestroy {
       const PAGE_SIZE = 20;
       const { content } = await this.proxyApiService.getLent(address, page, PAGE_SIZE, sort);
       const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
-      const curatedLoans: Loan[] = LoanCurator.curateLoans(loans);
 
       // if there are no more loans
       if (!loans.length) {
@@ -148,16 +146,16 @@ export class AddressComponent implements OnInit, OnDestroy {
       }
 
       // set loan index as positions
-      curatedLoans.map((loan: Loan, i: number) => loan.position = i);
+      loans.map((loan: Loan, i: number) => loan.position = i);
 
       // if there are more loans add them and continue
       if (loans.length) {
-        this.loans = this.loans.concat(curatedLoans);
+        this.loans = this.loans.concat(loans);
         this.page++;
       }
 
       // incrase current paginator results
-      currentLoadedLoans = currentLoadedLoans + curatedLoans.length;
+      currentLoadedLoans = currentLoadedLoans + loans.length;
 
       const MINIMUN_LOANS_TO_SHOW = 12;
       if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {

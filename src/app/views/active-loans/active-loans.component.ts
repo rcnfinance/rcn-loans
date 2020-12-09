@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Loan, LoanType } from './../../models/loan.model';
 import { LoanContentApi } from './../../interfaces/loan-api-diaspore';
-import { LoanCurator } from './../../utils/loan-curator';
 import { LoanUtils } from './../../utils/loan-utils';
 import { ProxyApiService } from '../../services/proxy-api.service';
 import { EventsService } from '../../services/events.service';
@@ -117,10 +116,9 @@ export class ActiveLoansComponent implements OnInit, OnDestroy {
       const PAGE_SIZE = 20;
       const { content } = await this.proxyApiService.getAcvivity(page, PAGE_SIZE, sort, filters);
       const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
-      const curatedLoans: Loan[] = LoanCurator.curateLoans(loans);
 
       const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
-      const filteredLoans: Loan[] = this.loanTypeService.filterLoanByType(curatedLoans, ALLOWED_TYPES);
+      const filteredLoans: Loan[] = this.loanTypeService.filterLoanByType(loans, ALLOWED_TYPES);
 
       // if there are no more loans
       if (!loans.length) {
