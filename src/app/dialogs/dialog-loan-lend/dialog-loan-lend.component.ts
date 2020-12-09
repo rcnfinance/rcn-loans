@@ -155,7 +155,11 @@ export class DialogLoanLendComponent implements OnInit {
       const lendAmountInWei: BN = Utils.bn(lendAmount).mul(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
       const lendOverAmount: BN = Utils.bn(lendAmountInWei).div(Utils.bn(loanAmount));
       const lendCurrencyRate: number = lendOverAmount.toString() as any / 10 ** lendDecimals;
-      this.exchangeToken = Utils.formatAmount(lendCurrencyRate, 4);
+      const formattedRate = Utils.formatAmount(lendCurrencyRate, 4);
+
+      // TODO: reuse this technique
+      // add one more decimal if the number is too small
+      this.exchangeToken = Number(formattedRate) ? formattedRate : Utils.formatAmount(lendCurrencyRate, 5);
     }
 
     // set ui values
