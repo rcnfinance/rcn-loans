@@ -164,10 +164,10 @@ export class DialogLoanLendComponent implements OnInit {
 
     // set ui values
     this.lendAmount = Utils.formatAmount(
-      lendAmount.toString() as any / 10 ** lendDecimals
+      lendAmount.toString() as any / 10 ** lendDecimals, 4
     );
     this.lendExpectedReturn = Utils.formatAmount(
-      engineTokenExpectedReturn as any / 10 ** engineDecimals
+      engineTokenExpectedReturn as any / 10 ** engineDecimals, 4
     );
   }
 
@@ -189,7 +189,7 @@ export class DialogLoanLendComponent implements OnInit {
       return;
     }
 
-    if (loanCurrency !== engineCurrencySymbol && lendCurrency !== engineCurrencySymbol) {
+    if (loanCurrency !== engineCurrencySymbol && lendCurrency !== engineCurrencySymbol && loanCurrency !== lendCurrency) {
       this.exchangeTooltips.push(`<a href="${ urlOracle }" target="_blank">${ engineCurrencySymbol }/${ loanCurrency }</a> Oracle.`);
       this.exchangeTooltips.push(`<a href="${ urlTokenConverter }" target="_blank">${ engineCurrencySymbol }/${ lendCurrency }</a> Token Converter.`);
       return;
@@ -213,7 +213,7 @@ export class DialogLoanLendComponent implements OnInit {
       const ethUsd = rawEthUsd / 10 ** 8;
       this.txCost = Utils.formatAmount(txCost * ethUsd) + ' USD';
     } catch (err) {
-      this.txCost = 'Insufficient funds';
+      this.txCost = '-';
     }
   }
 
