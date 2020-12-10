@@ -1,0 +1,53 @@
+@import './../../../../scss/variables';
+@import './../../../../scss/fonts';
+
+.notifications-container {
+  width: 212px;
+  max-height: 670px;
+  overflow: hidden;
+  position: absolute;
+  right: 14px;
+  @extend %roboto-regular;
+  @include transition();
+
+  ul {
+    li {
+      &:nth-child(1){
+        display: flex;
+        align-items: center;
+        height: 30px;
+        padding: 10px;
+        background-color: var(--app-color-gray-500);
+        border-bottom: 1px solid var(--app-color-gray-600);
+      }
+    }
+    .item {
+      padding: 11px 9px 11px 7px;
+      border-bottom: 1px solid var(--app-color-gray-600);
+      background-color: var(--app-color-gray-400);
+      color: white;
+      &__image {
+        width: 30px;
+        margin-right: 6px;
+      }
+      &__text {
+        &-amount {
+          @include typography-caption(1);
+        }
+        &-currency {
+          @include styled-font('Roboto', 700, 11px);
+          color: var(--app-color-gray-50);
+        }
+      }
+      &__action {
+        .button {
+          @include styled-font('Roboto', 400, 10px);
+          min-width: inherit;
+          padding: 6px 8px;
+          line-height: 1em;
+          margin: 0;
+        }
+      }
+    }
+  }
+}

@@ -8,7 +8,8 @@ import { EventsService } from './events.service';
   providedIn: 'root'
 })
 export class PreviousRouteService {
-  private previousUrl: any;
+  private previousUrl: string = window.location.host;
+  private currentUrl: string;
 
   constructor(
     private router: Router,
@@ -17,7 +18,8 @@ export class PreviousRouteService {
   ) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.previousUrl = window.location.host;
+        this.previousUrl = this.currentUrl;
+        this.currentUrl = event.url;
       }
     });
   }

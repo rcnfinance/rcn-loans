@@ -62,9 +62,7 @@
                 class="align-items-center px-0"
                 [ngClass]="hasAccount ? 'd-flex' : 'd-none'"
               >
-                <app-icon-group-header></app-icon-group-header>
-                <app-component-balance [account]="account">
-                </app-component-balance>
+                <app-icon-group-header [account]="account"></app-icon-group-header>
               </div>
               <ng-container *ngIf="hasAccount">
                 <div class="nav__item mx-3">

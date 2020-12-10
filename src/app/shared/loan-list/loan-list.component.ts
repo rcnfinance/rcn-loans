@@ -22,7 +22,6 @@ export class LoanListComponent implements OnInit, OnDestroy {
 
   brand: Brand;
   loanType: LoanType;
-  stateLoan: Loan;
   leftLabel: string;
   leftValue: string;
   rightLabel: string;
@@ -56,7 +55,6 @@ export class LoanListComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit() {
-    this.stateLoan = this.loan;
     await this.getLoanDetails();
 
     this.loadAccount();
@@ -94,8 +92,10 @@ export class LoanListComponent implements OnInit, OnDestroy {
    * Check if lend is available
    */
   checkCanLend() {
-    if (this.stateLoan.isRequest) {
-      const isBorrower = this.stateLoan.borrower.toUpperCase() === this.account.toUpperCase();
+    const { isRequest, borrower } = this.loan;
+    const { account } = this;
+    if (isRequest) {
+      const isBorrower = borrower.toUpperCase() === account.toUpperCase();
       this.canLend = !isBorrower;
     }
   }
@@ -104,17 +104,16 @@ export class LoanListComponent implements OnInit, OnDestroy {
    * Check if collateral can withdraw all
    */
   checkCanRedeem() {
+    const { status, borrower, collateral } = this.loan;
+    const { account } = this;
+
     try {
-      if ([Status.Paid, Status.Expired].includes(this.stateLoan.status)) {
-        const isBorrower = this.stateLoan.borrower.toUpperCase() === this.account.toUpperCase();
-        const { collateral } = this.stateLoan;
+      if ([Status.Paid, Status.Expired].includes(status)) {
+        const isBorrower = borrower.toUpperCase() === account.toUpperCase();
         this.canRedeem =
           isBorrower &&
           collateral &&
-          (
-            collateral.status === CollateralStatus.ToWithdraw ||
-            collateral.status === CollateralStatus.Created
-          ) &&
+          [CollateralStatus.ToWithdraw, CollateralStatus.Created].includes(collateral.status) &&
           Number(collateral.amount) > 0;
       }
     } catch { }
@@ -141,7 +140,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
    * Load loan details
    */
   private async getLoanDetails() {
-    const loan: Loan = this.stateLoan;
+    const { loan } = this;
     const { currency } = loan;
 
     if (loan.isRequest) {

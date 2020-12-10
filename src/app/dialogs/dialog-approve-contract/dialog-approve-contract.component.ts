@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { environment } from '../../../environments/environment';
 import { Utils } from './../../utils/utils';
+import { Engine } from './../../models/loan.model';
 // App Component
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
@@ -38,36 +39,22 @@ enum ContractType {
   styleUrls: ['./dialog-approve-contract.component.scss']
 })
 export class DialogApproveContractComponent implements OnInit, OnDestroy {
+  DEFAULT_ENGINE = Engine.UsdcEngine;
+  engine: Engine;
   onlyAddress: string;
   onlyToken: string;
   onlyAsset: string;
   account: string;
   shortAccount: string;
   dialogDescription: string;
+  accordionStates = {
+    tokenApproves: {},
+    assetApproves: {}
+  };
 
   tokens: Contract[];
-  tokenOperators: Operator[] = [
-    new Operator(
-      'Diaspore Loan Manager',
-      environment.contracts.diaspore.loanManager,
-      'lending'
-    ),
-    new Operator(
-      'Diaspore Debt Mananger',
-      environment.contracts.diaspore.debtEngine,
-      'payments'
-    ),
-    new Operator(
-      'Diaspore Converter Ramp',
-      environment.contracts.converter.converterRamp,
-      'transactions'
-    ),
-    new Operator(
-      'Collateral',
-      environment.contracts.collateral.collateral,
-      'collateralization'
-    )
-  ];
+  tokenOperators: Operator[];
+
   tokenApproves: Object[];
   assets: Contract[];
   assetOperators: Operator[] = []; // TODO: implement WETH manager
@@ -91,36 +78,43 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     private txService: TxService,
     private dialogRef: MatDialogRef<DialogApproveContractComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: {
+      engine: Engine;
+      onlyAddress: string;
+      onlyToken: string;
+      onlyAsset: string;
+    }
   ) {
+    const { DEFAULT_ENGINE } = this;
+    this.engine = DEFAULT_ENGINE;
+
     if (this.data) {
       const {
+        engine,
         onlyAddress,
         onlyToken,
         onlyAsset
       } = this.data;
 
+      this.engine = engine || DEFAULT_ENGINE;
       this.onlyAddress = onlyAddress;
       this.onlyToken = onlyToken;
       this.onlyAsset = onlyAsset;
+
+      if (onlyToken) {
+        this.accordionStates.tokenApproves[onlyToken.toLowerCase()] = true;
+      }
+      if (onlyAsset) {
+        this.accordionStates.assetApproves[onlyAsset.toLowerCase()] = true;
+      }
     }
   }
 
   async ngOnInit() {
     await this.loadAccount();
     this.handleLoginEvents();
-    this.spinner.show();
 
-    try {
-      await this.loadTokens();
-      await this.loadAssets();
-      this.setDialogDescription();
-    } catch (e) {
-      this.eventsService.trackError(e);
-    } finally {
-      this.retrievePendingTx();
-      this.spinner.hide();
-    }
+    await this.loadApprovals();
   }
 
   ngOnDestroy() {
@@ -171,10 +165,11 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     }
 
     try {
+      const { engine } = this;
       this.eventsService.trackEvent(
         `click-${ actionCode }`,
         Category.Account,
-        environment.contracts.diaspore.loanManager
+        environment.contracts[engine].diaspore.loanManager
       );
 
       await action;
@@ -200,6 +195,73 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     this.loading = false;
 
     this.dialogRef.close(true);
+  }
+
+  /**
+   * Click on RCN/USDC engine
+   */
+  async clickEngine(engine: Engine) {
+    const { engine: currentEngine } = this;
+    if (engine === currentEngine) {
+      return;
+    }
+
+    this.engine = engine;
+    await this.loadApprovals();
+
+    this.restoreAccordionStates();
+  }
+
+  /**
+   * Toggle accordion state
+   * @param approves 'tokenApproves' or 'assetApproves'
+   * @param address Token address
+   */
+  clickToggleAccordion(event: any, approves: string, address: string) {
+    const { onlyToken, onlyAsset } = this;
+    if (onlyToken || onlyAsset) {
+      event.source.checked = !event.source.checked;
+      return;
+    }
+
+    this.accordionStates[approves][address.toLowerCase()] = !this.accordionStates[approves][address.toLowerCase()];
+  }
+
+  /**
+   * Check if accordion state is opened
+   * @param approves 'tokenApproves' or 'assetApproves'
+   * @param address Token address
+   * @return Is approved
+   */
+  isAccordionActive(approves: string, address: string): boolean {
+    return this.accordionStates[approves][address.toLowerCase()];
+  }
+
+  /**
+   * Close all accordions
+   */
+  private restoreAccordionStates(): void {
+    this.accordionStates.tokenApproves = {};
+    this.accordionStates.assetApproves = {};
+  }
+
+  /**
+   * Load all approvals and checks
+   */
+  private async loadApprovals() {
+    this.spinner.show();
+
+    try {
+      this.loadTokenOperators();
+      await this.loadTokens();
+      await this.loadAssets();
+      this.setDialogDescription();
+    } catch (e) {
+      this.eventsService.trackError(e);
+    } finally {
+      this.retrievePendingTx();
+      this.spinner.hide();
+    }
   }
 
   /**
@@ -274,7 +336,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
 
     // set tokens
     currencies.map(currency => {
-      if (currency.address !== environment.contracts.converter.ethAddress) {
+      if (currency.address !== environment.contracts.ethAddress) {
         tokens.push(
           new Contract(
             currency.symbol,
@@ -419,12 +481,13 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
    * @return Operators array
    */
   private filterTokenOperators(token: Contract): Operator[] {
-    if (token.address !== environment.contracts.rcnToken) {
+    const { engine } = this;
+    if (token.address !== environment.contracts[engine].token) {
       return this.tokenOperators.filter(
         contract => {
           switch (contract.address) {
-            case environment.contracts.converter.converterRamp:
-            case environment.contracts.collateral.collateral:
+            case environment.contracts[engine].converter.converterRamp:
+            case environment.contracts[engine].collateral.collateral:
               return true;
 
             default:
@@ -435,7 +498,7 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
     }
 
     return this.tokenOperators.filter(
-      contract => contract.address !== environment.contracts.collateral.wethManager
+      contract => contract.address !== environment.contracts[engine].collateral.wethManager
     );
   }
 
@@ -474,5 +537,31 @@ export class DialogApproveContractComponent implements OnInit, OnDestroy {
 
     this.dialogDescription = `To continue please enable ${ contract.name } ${ operator.action } on the Credit Marketplace.`;
     return this.dialogDescription;
+  }
+
+  private loadTokenOperators() {
+    const { engine } = this;
+    this.tokenOperators = [
+      new Operator(
+        'Diaspore Loan Manager',
+        environment.contracts[engine].diaspore.loanManager,
+        'lending'
+      ),
+      new Operator(
+        'Diaspore Debt Mananger',
+        environment.contracts[engine].diaspore.debtEngine,
+        'payments'
+      ),
+      new Operator(
+        'Diaspore Converter Ramp',
+        environment.contracts[engine].converter.converterRamp,
+        'transactions'
+      ),
+      new Operator(
+        'Collateral',
+        environment.contracts[engine].collateral.collateral,
+        'collateralization'
+      )
+    ];
   }
 }

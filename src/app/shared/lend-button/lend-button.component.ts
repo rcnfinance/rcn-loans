@@ -16,12 +16,12 @@ import * as BN from 'bn.js';
 import { environment } from '../../../environments/environment';
 import { Loan, Status } from './../../models/loan.model';
 import { Utils } from '../../utils/utils';
+import { LoanUtils } from './../../utils/loan-utils';
 import { Currency } from '../../utils/currencies';
-
-// App Services
 import { ContractsService } from './../../services/contracts.service';
 import { TxService, Tx, Type } from './../../services/tx.service';
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { ProxyApiService } from '../../services/proxy-api.service';
 import { Web3Service } from '../../services/web3.service';
 import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { CountriesService } from '../../services/countries.service';
@@ -59,6 +59,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   constructor(
     private contractsService: ContractsService,
     private txService: TxService,
+    private proxyApiService: ProxyApiService,
     private web3Service: Web3Service,
     private countriesService: CountriesService,
     private eventsService: EventsService,
@@ -177,7 +178,9 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       return;
     }
     // front running validation
-    const { status } = await this.contractsService.getLoan(this.loan.id);
+
+    const { content } = await this.proxyApiService.getLoanById(this.loan.id);
+    const { status } = LoanUtils.buildLoan(content);
     if (status !== Status.Request) {
       this.closeDialog.emit();
       return this.dialog.open(DialogFrontRunningComponent);
@@ -246,18 +249,19 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         return;
       }
 
+      const { engine } = this.loan;
       let contractAddress: string;
 
       // set lend contract
       switch (lendToken) {
-        case environment.contracts.rcnToken:
+        case environment.contracts[engine].token:
           contractAddress = this.loan.address;
           break;
-        case environment.contracts.converter.ethAddress:
-          contractAddress = environment.contracts.converter.converterRamp;
+        case environment.contracts[engine].converter.ethAddress:
+          contractAddress = environment.contracts[engine].converter.converterRamp;
           break;
         default:
-          contractAddress = environment.contracts.converter.converterRamp;
+          contractAddress = environment.contracts[engine].converter.converterRamp;
           break;
       }
 
@@ -270,8 +274,9 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         return;
       }
 
-      if (lendToken === environment.contracts.rcnToken) {
+      if (lendToken === environment.contracts[engine].token) {
         tx = await this.contractsService.lendLoan(
+          engine,
           cosignerAddress,
           this.loan.id,
           oracleData,
@@ -281,6 +286,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         );
       } else {
         tx = await this.contractsService.converterRampLend(
+          engine,
           payableAmount,
           tokenConverter,
           lendToken,
@@ -295,7 +301,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         );
       }
 
-      this.txService.registerLendTx(tx, environment.contracts.diaspore.loanManager, this.loan);
+      this.txService.registerLendTx(tx, environment.contracts[engine].diaspore.loanManager, this.loan);
 
       this.eventsService.trackEvent(
         'lend',
@@ -348,7 +354,10 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    * @param contract Contract address
    * @param token Token address
    */
-  private showApproveDialog(contract: string, token: string = environment.contracts.rcnToken) {
+  private showApproveDialog(
+    contract: string,
+    token: string = environment.contracts[this.loan.engine].token
+  ) {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
     dialogRef.componentInstance.onlyAddress = contract;
     dialogRef.componentInstance.onlyToken = token;

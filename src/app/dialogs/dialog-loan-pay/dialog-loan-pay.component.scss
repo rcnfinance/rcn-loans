@@ -8,11 +8,21 @@
       @include typography-subtitle(2);
       color: var(--app-color-gray-50);
     }
+    &__disclaimer {
+      @include styled-font('Roboto', 400, 10px);
+      color: #898989;
+      margin: 5px 0 18px;
+    }
     &__actions {
       button {
         min-width: 0;
         line-height: 2.2em;
         margin-bottom: 15px;
+      }
+    }
+    &--entry {
+      .item__disclaimer {
+        margin-top: -13px;
       }
     }
     &--installments {

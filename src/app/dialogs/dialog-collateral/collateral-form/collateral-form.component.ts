@@ -315,7 +315,7 @@ export class CollateralFormComponent implements OnInit {
       const ethUsd = rawEthUsd / 10 ** 8;
       this.txCost = Utils.formatAmount(txCost * ethUsd) + ' USD';
     } catch (err) {
-      this.txCost = 'Insufficient funds';
+      this.txCost = '-';
     }
   }
 
@@ -324,9 +324,10 @@ export class CollateralFormComponent implements OnInit {
    * @return Tx cost
    */
   private async getTxCost() {
-    const { collateral } = this.loan;
+    const { engine, collateral } = this.loan;
     const gasPrice = await this.web3Service.web3.eth.getGasPrice();
     const estimatedGas = await this.contractsService.addCollateral(
+      engine,
       collateral.id,
       collateral.token,
       collateral.amount.toString(),

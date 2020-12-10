@@ -10,6 +10,11 @@ export enum LoanType {
   FintechOriginator
 }
 
+export enum Engine {
+  RcnEngine = 'rcnEngine',
+  UsdcEngine = 'usdcEngine'
+}
+
 export class Descriptor {
   constructor(
     public firstObligation: number,
@@ -66,6 +71,7 @@ export class Config {
 
 export class Loan {
   constructor(
+    public engine: Engine,
     public id: string,
     public address: string,
     public amount: number,
@@ -88,7 +94,8 @@ export class Loan {
   }
 
   get currency(): Currency {
-    return new Currency(this.oracle ? this.oracle.currency : 'RCN');
+    const DEFAULT_CURRENCY = this.engine === Engine.RcnEngine ? 'RCN' : 'USDC';
+    return new Currency(this.oracle ? this.oracle.currency : DEFAULT_CURRENCY);
   }
 
   get status(): Status {

@@ -7,6 +7,7 @@ import {
   transition
 } from '@angular/animations';
 import { environment } from '../../../../environments/environment';
+import { Engine } from '../../../models/loan.model';
 import { Notification, TxObject } from '../../../models/notification.model';
 import { HeaderPopoverService } from '../../../services/header-popover.service';
 import { TxService, Tx } from '../../../services/tx.service';
@@ -62,16 +63,20 @@ export class NotificationsComponent implements OnInit {
    */
   getContractName(contract: string) {
     switch (contract) {
-      case environment.contracts.diaspore.loanManager:
+      case environment.contracts[Engine.RcnEngine].diaspore.loanManager:
+      case environment.contracts[Engine.UsdcEngine].diaspore.loanManager:
         return 'Loan Manager Contract';
 
-      case environment.contracts.diaspore.debtEngine:
+      case environment.contracts[Engine.RcnEngine].diaspore.debtEngine:
+      case environment.contracts[Engine.UsdcEngine].diaspore.debtEngine:
         return 'Debt Engine Contract';
 
-      case environment.contracts.converter.converterRamp:
+      case environment.contracts[Engine.RcnEngine].converter.converterRamp:
+      case environment.contracts[Engine.UsdcEngine].converter.converterRamp:
         return 'Converter Ramp Contract';
 
-      case environment.contracts.collateral.collateral:
+      case environment.contracts[Engine.RcnEngine].collateral.collateral:
+      case environment.contracts[Engine.UsdcEngine].collateral.collateral:
         return 'Collateral Contract';
 
       default:

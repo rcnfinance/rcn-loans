@@ -1,12 +1,15 @@
 export interface ApiResponse {
-  content: any[];
+  content: any;
   meta: {
-    lastBlockPulled: string;
-    next: string;
-    page: number;
-    page_size: number;
-    params: object;
-    prev: string;
-    resource_count: number;
+    last_block_processed?: number;
+    count?: number;
+    page?: number;
+    page_size?: number;
+    engine_name?: ApiEngine;
   };
+}
+
+export enum ApiEngine {
+  RcnEngine = 'rcn_engine',
+  UsdcEngine = 'usdc_engine'
 }

@@ -3,7 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { environment } from '../environments/environment';
 // App services
-import { ApiService } from './services/api.service';
+import { ProxyApiService } from './services/proxy-api.service';
 import { EventsService } from './services/events.service';
 import { WalletConnectService } from './services/wallet-connect.service';
 // App component
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private dialog: MatDialog,
-    private apiService: ApiService,
+    private proxyApiService: ProxyApiService,
     private eventsService: EventsService,
     private walletConnectService: WalletConnectService
   ) {}
@@ -66,8 +66,12 @@ export class AppComponent implements OnInit {
   }
 
   private async checkApiHealth() {
-    const synchronized: boolean = await this.apiService.isSynchronized();
-    if (!synchronized) {
+    const { last_block: lastBlock, current_block: currentBlock } =
+      await this.proxyApiService.getApiStatus();
+    const ALLOWABLE_BLOCK_DIFFERENCE = 6;
+    const blockDiff = currentBlock - lastBlock;
+    const isSynchronized: boolean = blockDiff <= ALLOWABLE_BLOCK_DIFFERENCE;
+    if (!isSynchronized) {
       this.dialog.open(DialogApiSyncComponent);
     }
   }

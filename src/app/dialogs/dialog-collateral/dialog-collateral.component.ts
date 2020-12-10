@@ -134,8 +134,9 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
    */
   async addCollateral(amount: BN) {
     // validate approve
+    const { engine } = this.loan;
     const token = this.collateral.token.toLowerCase();
-    const contract = environment.contracts.collateral.collateral;
+    const contract = environment.contracts[engine].collateral.collateral;
     const engineApproved = await this.contractsService.isApproved(contract, token);
 
     if (!await engineApproved) {
@@ -155,10 +156,11 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
    */
   async withdrawCollateral(amount: BN) {
     const token: string = this.collateral.token;
+    const { engine } = this.loan;
 
-    if (token === environment.contracts.converter.ethAddress) {
-      const collateral = environment.contracts.collateral.collateral;
-      const operator = environment.contracts.collateral.wethManager;
+    if (token === environment.contracts[engine].converter.ethAddress) {
+      const collateral = environment.contracts[engine].collateral.collateral;
+      const operator = environment.contracts[engine].collateral.wethManager;
       const operatorApproved = await this.contractsService.isApprovedERC721(
         collateral,
         operator
@@ -180,9 +182,12 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
    * @param amount Amount to add in wei
    */
   async handleAdd(amount: BN) {
+    const { engine } = this.loan;
+    const { id, token } = this.collateral;
     const tx: string = await this.contractsService.addCollateral(
-      this.collateral.id,
-      this.collateral.token,
+      engine,
+      id,
+      token,
       amount.toString(),
       this.account
     );
@@ -196,12 +201,13 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
    * @param amount Amount to withdraw in wei
    */
   async handleWithdraw(amount: BN) {
-    const loan: Loan = this.loan;
-    const oracleData = await this.contractsService.getOracleData(loan.oracle);
-
+    const { engine, oracle } = this.loan;
+    const { id, token } = this.collateral;
+    const oracleData = await this.contractsService.getOracleData(oracle);
     const tx: string = await this.contractsService.withdrawCollateral(
-      this.collateral.id,
-      this.collateral.token,
+      engine,
+      id,
+      token,
       this.account,
       amount.toString(),
       oracleData,
@@ -253,9 +259,11 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     token: string,
     type: 'onlyToken' | 'onlyAsset'
   ) {
+    const { engine } = this.loan;
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
       DialogApproveContractComponent, {
         data: {
+          engine,
           [type]: token,
           onlyAddress: contract
         }

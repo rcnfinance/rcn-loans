@@ -19,15 +19,43 @@
 
   <div class="container">
     <div class="dialog-content dialog-padding">
-      <div class="row pb-3 mb-3 mt-4 mb-md-4 mt-md-0">
-        <div class="col col-12">
-          <div class="title main-h3">
+
+
+      <div class="dialog-content__header row pb-3 mb-3 mt-4 mb-md-4 mt-md-0">
+        <div class="col-12 px-md-0">
+          <h1 class="title">
+            Approvals
+          </h1>
+          <p class="description">
             {{ dialogDescription }}
-          </div>
+          </p>
         </div>
       </div>
-      <div class="row mt-4">
-        <div class="col-sm-12 px-0">
+
+      <div
+        class="dialog-content__tabs row pt-md-2"
+        *ngIf="!onlyToken && !onlyAsset"
+      >
+        <div class="col-12 px-0">
+          <a
+            class="tab mr-md-3"
+            [class.tab--active]="engine === 'usdcEngine'"
+            (click)="clickEngine('usdcEngine')"
+          >
+            USDC Engine
+          </a>
+          <a
+            class="tab"
+            [class.tab--active]="engine === 'rcnEngine'"
+            (click)="clickEngine('rcnEngine')"
+          >
+            RCN Engine
+          </a>
+        </div>
+      </div>
+
+      <div class="dialog-content__content row mt-4 mt-md-0">
+        <div class="col-sm-12 px-md-0">
 
           <ng-container *ngIf="tokens?.length && !onlyAsset">
             <!-- <div class="title main-h2 mb-3 px-3 mx-1">
@@ -37,12 +65,23 @@
               <mat-accordion *ngIf="!onlyToken || onlyToken == token.address">
                 <mat-expansion-panel
                   class="expansion-panel mat-elevation-z"
-                  [expanded]="onlyToken || i === 0"
+                  [expanded]="
+                    onlyToken ||
+                    accordionStates.tokenApproves[token.address]
+                  "
+                  [hideToggle]="true"
+                  [disabled]="true"
                 >
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       {{ token.name }}
                     </mat-panel-title>
+                    <mat-slide-toggle
+                      (change)="clickToggleAccordion($event, 'tokenApproves', token.address)"
+                      [checked]="onlyToken || onlyAsset"
+                      color="primary"
+                    >
+                    </mat-slide-toggle>
                   </mat-expansion-panel-header>
                   <div
                     class="checkbox"
@@ -56,7 +95,7 @@
                       matTooltip="This will authorize the {{ operator.name }} contract to operate with {{ token.name }} on your behalf."
                       matTooltipPosition="above"
                     >
-                      Enable <b>{{ token.name }} {{ operator.action }}</b> on the Credit Marketplace.
+                      Enable <b>{{ token.name }} {{ operator.action }}</b>.
                     </mat-checkbox>
                   </div>
                 </mat-expansion-panel>
@@ -91,7 +130,7 @@
                       matTooltip="This will authorize the {{ operator.name }} contract to operate with {{ asset.name }} on your behalf."
                       matTooltipPosition="above"
                     >
-                      Enable <b>{{ asset.name }} transactions</b> on the Credit Marketplace.
+                      Enable <b>{{ asset.name }} transactions</b>.
                     </mat-checkbox>
                   </div>
                 </mat-expansion-panel>
@@ -103,20 +142,9 @@
       </div>
     </div>
 
-    <div class="dialog-footer dialog-padding pt-4 pb-3 row pt-md-0">
-      <div class="dialog-footer__label col-sm-12 col-md-6">
-        <p>
-          Setting for the address <strong>{{ shortAccount }}</strong>.
-        </p>
-      </div>
-      <div class="dialog-footer__buttons col-sm-12 col-md-6 pb-1 px-md-0">
-        <div class="row justify-content-end">
-          <div class="col-md-12">
-            <app-close-button class="d-none d-md-inline"></app-close-button>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 </mat-dialog-content>
+
+<mat-dialog-actions class="dialog-footer d-flex justify-content-end">
+  <app-close-button class="d-none d-md-inline"></app-close-button>
+</mat-dialog-actions>
