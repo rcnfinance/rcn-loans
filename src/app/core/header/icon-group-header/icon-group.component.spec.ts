@@ -39,7 +39,7 @@ describe('IconGroupHeaderComponent', () => {
   });
 
   it('should return true', () => {
-    const view = 'notifications';
+    const view = 'notifications' as any;
     component.viewDetail = view;
     expect(component.isDetail(view)).toBeTruthy();
   });

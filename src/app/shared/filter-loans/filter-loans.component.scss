@@ -1,0 +1,9 @@
+.form-group {
+  &--readonly {
+    opacity: .25;
+    cursor: not-allowed;
+    mat-form-field {
+      pointer-events: none;
+    }
+  }
+}

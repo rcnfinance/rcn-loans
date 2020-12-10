@@ -7,7 +7,6 @@ import { SharedModule } from '../../shared/shared.module';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
 import { CosignerService } from './../../services/cosigner.service';
-import { CommitsService } from './../../services/commits.service';
 import { CollateralService } from './../../services/collateral.service';
 import { InstallmentsService } from './../../services/installments.service';
 // App Component
@@ -44,7 +43,6 @@ const routes: Routes = [
   providers: [
     ContractsService,
     CosignerService,
-    CommitsService,
     CollateralService,
     InstallmentsService,
     FormatAmountPipe

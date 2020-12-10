@@ -2,14 +2,15 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
-// App Models
 import { Loan } from './../../../models/loan.model';
-// App Services
+import { LoanContentApi } from './../../../interfaces/loan-api-diaspore';
+import { LoanUtils } from './../../../utils/loan-utils';
+import { ProxyApiService } from '../../../services/proxy-api.service';
 import { TitleService } from '../../../services/title.service';
-import { ContractsService } from './../../../services/contracts.service';
 import { AvailableLoansService } from '../../../services/available-loans.service';
 import { Web3Service } from '../../../services/web3.service';
 import { EventsService } from '../../../services/events.service';
+import { DeviceService } from '../../../services/device.service';
 
 @Component({
   selector: 'app-borrowed-loans',
@@ -17,16 +18,21 @@ import { EventsService } from '../../../services/events.service';
   styleUrls: ['./borrowed-loans.component.scss']
 })
 export class BorrowedLoansComponent implements OnInit, OnDestroy {
-  pageId = 'address';
+  pageId = 'borrowed';
   address: string;
   shortAddress: string;
   available: any;
-  loans: Loan[];
-  availableLoans = true;
+  loans: Loan[] = [];
+  // pagination
+  page = 1;
+  sort: object;
+  isLoading: boolean;
+  isFullScrolled: boolean;
+  isAvailableLoans = true;
+  // account
   myLoans: boolean;
   pageTitle: string;
   pageDescription: string;
-
   // subscriptions
   subscriptionAvailable: Subscription;
   subscriptionAccount: Subscription;
@@ -35,11 +41,12 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
+    private proxyApiService: ProxyApiService,
     private titleService: TitleService,
-    private contractsService: ContractsService,
     private availableLoansService: AvailableLoansService,
     private web3Service: Web3Service,
-    private eventsService: EventsService
+    private eventsService: EventsService,
+    private deviceService: DeviceService
   ) { }
 
   ngOnInit() {
@@ -79,35 +86,99 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
    * Sort loans
    * @param sort Order by
    */
-  async sortLoans(sort: string) {
+  async sortLoans(sort: object) {
+    this.sort = sort;
+
+    // restore params
+    this.page = 1;
+    this.isFullScrolled = false;
+    this.loans = [];
+
     this.spinner.show(this.pageId);
-    await this.loadLoans(this.address, sort);
+    await this.loadLoans(this.address, this.page, sort);
+  }
+
+  async onScroll(event: any) {
+    if (this.loading || this.isFullScrolled) {
+      return;
+    }
+
+    const { offsetHeight, scrollTop, scrollHeight } = event.target;
+    const TOLERANCE_PX = this.deviceService.isMobile ? 440 : 52;
+    if (offsetHeight + scrollTop >= (scrollHeight - TOLERANCE_PX)) {
+      await this.loadLoans(this.address, this.page);
+    }
   }
 
   /**
-   * Load address loans
-   * @param address Borrower address
-   * @param sort Order by
+   * TrackBy Loan ID
+   * @param _ Index
+   * @param loan Loan
+   * @return Loan ID
    */
-  private async loadLoans(address: string, sort?: string) {
+  trackByLoanId(_: number, { id }: Loan): string {
+    return id;
+  }
+
+  /**
+   * Load active loans
+   * @param page Page
+   * @param sort Order by
+   * @return Loans
+   */
+  private async loadLoans(
+    address: string = this.address,
+    page: number = this.page,
+    sort: object = this.sort,
+    currentLoadedLoans = 0
+  ) {
+    this.loading = true;
+
     try {
-      const loans: Loan[] = await this.contractsService.getLoansOfBorrower(address, sort);
-      this.loans = loans;
+      const PAGE_SIZE = 20;
+      const { content } = await this.proxyApiService.getBorrowed(address, page, PAGE_SIZE, sort);
+      const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
 
-      this.upgradeAvaiblable();
-      this.spinner.hide(this.pageId);
-
-      if (this.loans.length) {
-        this.availableLoans = true;
-      } else {
-        this.availableLoans = false;
+      // if there are no more loans
+      if (!loans.length) {
+        this.isFullScrolled = true;
+        this.isAvailableLoans = this.loans.length ? true : false;
       }
 
+      // set loan index as positions
+      loans.map((loan: Loan, i: number) => loan.position = i);
+
+      // if there are more loans add them and continue
+      if (loans.length) {
+        this.loans = this.loans.concat(loans);
+        this.page++;
+      }
+
+      // incrase current paginator results
+      currentLoadedLoans = currentLoadedLoans + loans.length;
+
+      const MINIMUN_LOANS_TO_SHOW = 12;
+      if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
+        await this.loadLoans(this.address, this.page, this.sort, currentLoadedLoans);
+      }
     } catch (err) {
-      this.spinner.hide(this.pageId);
-      this.availableLoans = false;
       this.eventsService.trackError(err);
+    } finally {
+      this.loading = false;
     }
+  }
+
+  private set loading(loading: boolean) {
+    this.isLoading = loading;
+    if (loading) {
+      this.spinner.show(this.pageId);
+    } else {
+      this.spinner.hide(this.pageId);
+    }
+  }
+
+  private get loading() {
+    return this.isLoading;
   }
 
   /**
@@ -156,12 +227,5 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
       title: this.pageTitle,
       description: this.pageDescription
     };
-  }
-
-  /**
-   * Update available loans number
-   */
-  private upgradeAvaiblable() {
-    this.availableLoansService.updateAvailable(this.loans.length);
   }
 }

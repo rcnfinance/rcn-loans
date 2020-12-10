@@ -12,7 +12,6 @@
       description="Check the Marketplace's active loans."
       chipLabel="ACTIVE"
     ></app-page-header>
-
     <div class="loan-container">
       <div class="text-center" *ngIf='!isAvailableLoans; else loanListHeader'>
         <div class="title main-h1">There are no active loans</div>
@@ -35,10 +34,8 @@
         </app-loan-list>
       </div>
       </virtual-scroller>
-
     </div>
   </div>
-
   <app-footer></app-footer>
 </div>
 

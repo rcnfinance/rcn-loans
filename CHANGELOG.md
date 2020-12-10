@@ -1,5 +1,20 @@
 # Changelog
 
+## **0.3.0** Boggart 👻
+
+### Feature:
+- USDC engine integration
+- New withdraw component
+
+### Enhancement:
+- Implements RCN API v6
+- Improves dialog approve UI
+- Estimate Fee amount
+
+### Fix:
+- Fix "go back" button behavior
+- Fix withdraw icon in loan history
+
 ## **0.2.7** Boggart 👻
 
 ### Feature:

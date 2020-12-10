@@ -31,7 +31,9 @@ export class CollateralService {
     if (!currency || !amount) {
       return;
     }
-    const loanOracle: string = await this.contractsService.symbolToOracle(loan.currency.toString());
+
+    const { engine } = loan;
+    const loanOracle: string = await this.contractsService.symbolToOracle(engine, loan.currency.toString());
     const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loan.currency.decimals);
     const loanAmount: number =
       loan.debt ? loan.debt.model.estimatedObligation : loan.descriptor.totalObligation;
@@ -39,7 +41,7 @@ export class CollateralService {
         .mul(Utils.bn(loanRate))
         .div(Utils.pow(10, loan.currency.decimals));
 
-    const collateralOracle: string = await this.contractsService.symbolToOracle(currency.symbol);
+    const collateralOracle: string = await this.contractsService.symbolToOracle(engine, currency.symbol);
     const collateralDecimals: number = new Currency(currency.symbol).decimals;
     const collateralRate: BN | string = await this.contractsService.getRate(collateralOracle, collateralDecimals);
     const collateralAmountInRcn: BN = Utils.bn(collateralRate)

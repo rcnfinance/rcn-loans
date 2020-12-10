@@ -31,13 +31,19 @@
               </span>
             </mat-form-field>
             <div class="d-flex justify-content-between d-md-block">
-              <p class="item__rate" *ngIf="loan?.currency.symbol !== 'RCN'">
+              <p
+                class="item__rate"
+                *ngIf="hasFee || loan?.currency.symbol !== engineCurrency?.toString()"
+              >
                 <span class="item__rate-amount">
-                  {{ (payAmountRcn | formatAmount: 4) || '0' }}
+                  {{ (payAmountEngineToken | formatAmount: 4) || '0' }}
                 </span>
                 <span class="item__rate-currency">
-                  RCN
+                  {{ engineCurrency?.toString() }}
                 </span>
+              </p>
+              <p class="item__disclaimer" *ngIf="hasFee">
+                This amount includes the 0,15% fee cost.
               </p>
               <div class="item__actions">
                 <button
@@ -64,16 +70,22 @@
                 {{ currency?.symbol }}
               </span>
             </p>
-            <p class="item__rate" *ngIf="loan?.currency.symbol !== 'RCN'">
+            <p
+              class="item__rate"
+              *ngIf="hasFee || loan?.currency.symbol !== engineCurrency?.toString()"
+            >
               <span class="item__rate-amount">
-                {{ (pendingAmountRcn | formatAmount: 4) || '0' }}
+                {{ (pendingAmountEngineToken | formatAmount: 4) || '0' }}
               </span>
               <span class="item__rate-currency">
-                RCN
+                {{ engineCurrency?.toString() }}
               </span>
             </p>
+            <p class="item__disclaimer" *ngIf="hasFee">
+              This amount includes the fee cost.
+            </p>
             <div
-              *ngIf="payAmountRcn && pendingAmountRcn"
+              *ngIf="payAmountEngineToken && pendingAmountEngineToken"
               class="item__message"
               [ngClass]="
                 sufficientPaymentAmount ?
@@ -167,7 +179,7 @@
             </mat-expansion-panel-header>
             <div
               class="accordion-details__item"
-              *ngIf="exchangeTooltip && loan.currency.toString() !== 'RCN'"
+              *ngIf="exchangeTooltip && loan.currency.toString() !== engineCurrency?.toString()"
             >
               <i
                 class="fas fa-exchange-alt"
@@ -176,14 +188,20 @@
               <span>
                 1 {{ loan.currency }}
               </span>
-              <span *ngIf="loan.currency.toString() !== 'RCN'">
-                = {{ exchangeRcn | formatAmount: 4 }} RCN
+              <span *ngIf="loan.currency.toString() !== engineCurrency?.toString()">
+                = {{ exchangeEngineToken | formatAmount: 4 }} {{ engineCurrency?.toString() }}
               </span>
             </div>
             <div class="accordion-details__item">
               <i class="fas fa-arrows-alt-h"></i>
               <span>
                 Tx Cost: {{ txCost || '-' }}
+              </span>
+            </div>
+            <div class="accordion-details__item">
+              <i class="fas fa-arrows-alt-h"></i>
+              <span>
+                Fee Amount: {{ feeCost ? (feeCost + ' ' + engineCurrency?.toString()) : '-' }}
               </span>
             </div>
             <div class="accordion-details__item" *ngIf="exchangeTooltip">
@@ -214,7 +232,7 @@
 <mat-dialog-actions class="dialog-footer d-flex justify-content-end">
   <app-pay-button
     [loan]="loan"
-    [amount]="form.value.amount"
+    [amount]="form.value.amount + form.value.feeAmount"
     [disabled]="loading || !form?.valid"
     (endPay)="endPay()"
   ></app-pay-button>

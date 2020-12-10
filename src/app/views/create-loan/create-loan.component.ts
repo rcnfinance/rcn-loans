@@ -174,7 +174,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     }
 
     // validate ERC20 approve
-    const contractAddress: string = environment.contracts.collateral.collateral;
+    const contractAddress: string = environment.contracts[loan.engine].collateral.collateral;
     const engineApproved = await this.contractsService.isApproved(contractAddress, collateral.token);
     if (!await engineApproved) {
       const approve = await this.showApproveDialog(contractAddress, collateral.token, 'onlyToken');
@@ -185,10 +185,10 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     }
 
     // validate ERC721 approve
-    const { ethAddress } = environment.contracts.converter;
+    const { ethAddress } = environment.contracts[loan.engine].converter;
     if (collateral.token === ethAddress) {
-      const collateralAddress = environment.contracts.collateral.collateral;
-      const operator = environment.contracts.collateral.wethManager;
+      const collateralAddress = environment.contracts[loan.engine].collateral.collateral;
+      const operator = environment.contracts[loan.engine].collateral.wethManager;
       const erc721approved = await this.contractsService.isApprovedERC721(
         collateralAddress,
         operator
@@ -215,8 +215,9 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     form: LoanRequest
   ) {
     try {
-      const engine: string = environment.contracts.diaspore.loanManager;
+      const engine: string = environment.contracts[loan.engine].diaspore.loanManager;
       const tx: string = await this.contractsService.requestLoan(
+        loan.engine,
         form.amount,
         form.model,
         form.oracle,
@@ -249,7 +250,9 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     const account = await this.web3Service.getAccount();
 
     try {
+      const { engine } = this.loan;
       const tx: string = await this.contractsService.createCollateral(
+        engine,
         form.debtId,
         form.oracle,
         form.amount,
@@ -311,7 +314,8 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
    * Finish loan creation and check status
    */
   private async finishLoanCreation() {
-    const loanWasCreated = await this.contractsService.loanWasCreated(this.loan.id);
+    const { id, engine } = this.loan;
+    const loanWasCreated = await this.contractsService.loanWasCreated(engine, id);
 
     if (loanWasCreated) {
       this.finishProgress = true;
@@ -343,7 +347,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
 
     this.spinner.show();
 
-    const TIME_MS = 8000;
+    const TIME_MS = 12000;
     await timer(TIME_MS).toPromise();
 
     this.spinner.hide();
@@ -377,9 +381,11 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     token: string,
     type: 'onlyToken' | 'onlyAsset'
   ) {
+    const { engine } = this.loan;
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
       DialogApproveContractComponent, {
         data: {
+          engine,
           [type]: token,
           onlyAddress: contract
         }

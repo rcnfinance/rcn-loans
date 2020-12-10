@@ -1,8 +1,8 @@
 import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { Engine } from '../../models/loan.model';
 import { Utils } from '../../utils/utils';
-// App Services
 import { Web3Service } from '../../services/web3.service';
 import { EventsService } from '../../services/events.service';
 import { ContractsService } from '../../services/contracts.service';
@@ -16,13 +16,12 @@ import { Tx, Type, TxService } from '../../services/tx.service';
 export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   @Input() account: string;
 
-  rcnAvailable: number;
-  diasporeLoansWithBalance: number[] = [];
-  ongoingDiasporeWithdraw: Tx;
-
-  canWithdraw = false;
-  displayAvailable = '';
-  txSubscription: boolean;
+  usdcAvailable: number;
+  usdcLoansWithBalance: number[] = [];
+  usdcOngoingWithdraw: Tx;
+  usdcCanWithdraw = false;
+  usdcDisplayAvailable = '';
+  usdcTxSubscription: boolean;
 
   // subscriptions
   subscriptionBalance: Subscription;
@@ -53,7 +52,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     if (this.subscriptionBalance) {
       this.subscriptionBalance.unsubscribe();
     }
-    if (this.txSubscription) {
+    if (this.usdcTxSubscription) {
       this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
     }
   }
@@ -71,16 +70,16 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Update balance and withdraw amount
    */
   updateDisplay() {
-    if (this.rcnAvailable) {
-      this.displayAvailable = Utils.formatAmount(this.rcnAvailable);
+    if (this.usdcAvailable) {
+      this.usdcDisplayAvailable = Utils.formatAmount(this.usdcAvailable);
     } else {
-      this.displayAvailable = '0';
+      this.usdcDisplayAvailable = '0';
     }
 
-    this.canWithdraw =
-      this.diasporeLoansWithBalance !== undefined &&
-      this.diasporeLoansWithBalance.length > 0 &&
-      this.ongoingDiasporeWithdraw === undefined;
+    this.usdcCanWithdraw =
+      this.usdcLoansWithBalance !== undefined &&
+      this.usdcLoansWithBalance.length > 0 &&
+      this.usdcOngoingWithdraw === undefined;
   }
 
   /**
@@ -88,9 +87,9 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * total available
    */
   async loadWithdrawBalance() {
-    const pendingWithdraws = await this.contractService.getPendingWithdraws();
-    this.rcnAvailable = pendingWithdraws[2] / 10 ** 18;
-    this.diasporeLoansWithBalance = pendingWithdraws[3];
+    const pendingWithdraws = await this.contractService.getPendingWithdraws(Engine.UsdcEngine);
+    this.usdcAvailable = pendingWithdraws[2] / 10 ** 6;
+    this.usdcLoansWithBalance = pendingWithdraws[3];
     this.loadOngoingWithdraw();
     this.updateDisplay();
   }
@@ -99,18 +98,18 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Load the pending withdraw
    */
   loadOngoingWithdraw() {
-    this.ongoingDiasporeWithdraw = this.txService.getLastWithdraw(
-      environment.contracts.diaspore.debtEngine,
-      this.diasporeLoansWithBalance
+    this.usdcOngoingWithdraw = this.txService.getLastWithdraw(
+      environment.contracts[Engine.UsdcEngine].diaspore.debtEngine,
+      this.usdcLoansWithBalance
     );
   }
 
   /**
-   * Handle click on withdraw
+   * Handle click on withdraw USDC
    */
-  async clickWithdraw() {
+  async clickWithdrawUsdc() {
     try {
-      await this.withdraw();
+      await this.withdrawUsdc();
     } catch (err) {
       if (err.stack.indexOf('User denied transaction signature') < 0) {
         this.eventsService.trackError(err);
@@ -121,11 +120,11 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Withdraw diaspore funds
    */
-  async withdraw() {
-    if (this.canWithdraw) {
-      if (this.diasporeLoansWithBalance.length > 0) {
-        const tx = await this.contractService.withdrawFundsDiaspore(this.diasporeLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, environment.contracts.diaspore.debtEngine, this.diasporeLoansWithBalance);
+  private async withdrawUsdc() {
+    if (this.usdcCanWithdraw) {
+      if (this.usdcLoansWithBalance.length > 0) {
+        const tx = await this.contractService.withdrawFundsDiaspore(Engine.UsdcEngine, this.usdcLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, environment.contracts[Engine.UsdcEngine].diaspore.debtEngine, this.usdcLoansWithBalance);
       }
       this.loadWithdrawBalance();
       this.retrievePendingTx();
@@ -135,9 +134,9 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Retrieve pending Tx
    */
-  retrievePendingTx() {
-    if (!this.txSubscription) {
-      this.txSubscription = true;
+  private retrievePendingTx() {
+    if (!this.usdcTxSubscription) {
+      this.usdcTxSubscription = true;
       this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
     }
   }
@@ -145,7 +144,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Track tx
    */
-  trackWithdrawTx(tx: Tx) {
+  private trackWithdrawTx(tx: Tx) {
     if (tx.type === Type.withdraw) {
       this.web3Service.updateBalanceEvent.emit();
     }

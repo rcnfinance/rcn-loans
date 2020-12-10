@@ -102,11 +102,11 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
       return;
     }
     // approve validation
-    const { collateral } = this.loan;
+    const { collateral, engine } = this.loan;
     const token: string = collateral.token;
-    if (token === environment.contracts.converter.ethAddress) {
-      const collateralAddress = environment.contracts.collateral.collateral;
-      const operator = environment.contracts.collateral.wethManager;
+    if (token === environment.contracts[engine].converter.ethAddress) {
+      const collateralAddress = environment.contracts[engine].collateral.collateral;
+      const operator = environment.contracts[engine].collateral.wethManager;
       const operatorApproved = await this.contractsService.isApprovedERC721(
         collateralAddress,
         operator
@@ -140,12 +140,12 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
     this.startOperation();
 
     try {
-      const loan: Loan = this.loan;
-      const { collateral } = loan;
+      const { oracle, engine, collateral } = this.loan;
       const account: string = await this.web3Service.getAccount();
-      const oracleData = await this.contractsService.getOracleData(loan.oracle);
+      const oracleData = await this.contractsService.getOracleData(oracle);
       const collateralAmount = String(collateral.amount);
       const tx: string = await this.contractsService.withdrawCollateral(
+        engine,
         collateral.id,
         collateral.token,
         account,
@@ -209,9 +209,11 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
     token: string,
     type: 'onlyToken' | 'onlyAsset'
   ) {
+    const { engine } = this.loan;
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
       DialogApproveContractComponent, {
         data: {
+          engine,
           [type]: token,
           onlyAddress: contract
         }

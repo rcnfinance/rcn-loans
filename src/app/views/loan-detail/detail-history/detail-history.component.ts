@@ -1,39 +1,21 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, HostListener } from '@angular/core';
 import { timer } from 'rxjs';
 import * as moment from 'moment';
 import { environment } from './../../../../environments/environment';
-import { CommitsService } from './../../../services/commits.service';
+import { ApiService } from './../../../services/api.service';
 import { FormatAmountPipe } from './../../../pipes/format-amount.pipe';
 import { Loan } from './../../../models/loan.model';
-import { Commit } from './../../../interfaces/commit.interface';
-
-enum CommitTypes {
-  Requested = 'requested_loan_manager',
-  Approved = 'approved_loan_manager',
-  Cancelled = 'canceled_loan_manager',
-  Lent = 'lent_loan_manager',
-  Paid = 'paid_debt_engine',
-  FullyPaid = 'full_payment_loan_manager',
-  Transfer = 'transfer',
-  Withdraw = 'withdrawn_debt_engine'
-}
-enum CommitProperties {
-  Amount = 'amount',
-  Creator = 'creator',
-  Approvator = 'approved_by',
-  Canceller = 'canceler',
-  Lender = 'lender',
-  From = 'from',
-  To = 'to'
-}
+import { Commit, CommitTypes, CommitProperties } from './../../../interfaces/commit.interface';
+import { LoanUtils } from './../../../utils/loan-utils';
 
 @Component({
   selector: 'app-detail-history',
   templateUrl: './detail-history.component.html',
   styleUrls: ['./detail-history.component.scss']
 })
-export class DetailHistoryComponent implements OnInit {
+export class DetailHistoryComponent implements OnInit, OnChanges {
   @Input() loan: Loan;
+  allCommits: Commit[];
   commits: Commit[];
   historyItems: {
     commitProperties: object;
@@ -64,7 +46,7 @@ export class DetailHistoryComponent implements OnInit {
 
   constructor(
     private formatAmountPipe: FormatAmountPipe,
-    private commitsService: CommitsService
+    private apiService: ApiService
   ) {
     this.commitProperties = {
       [CommitTypes.Requested]: {
@@ -79,44 +61,17 @@ export class DetailHistoryComponent implements OnInit {
         handler: (commit: Commit) => {
           return [{
             label: 'Date',
-            value: moment(commit.timestamp * 1000).format('DD/MM/YYYY HH:mm')
+            value: moment(Number(commit.timestamp) * 1000).format('DD/MM/YYYY HH:mm')
           }, {
             label: 'Creator',
             value: commit.data.creator,
             isAddress: true
           }, {
             label: 'Transaction',
-            value: commit.proof,
+            value: commit.tx_hash,
             isHash: true
           }];
         }
-      },
-      [CommitTypes.Approved]: {
-        'show': false,
-        'title': 'Approved',
-        'message': 'Approved',
-        'iconType': 'material',
-        'icon': 'check',
-        'background': 'white',
-        'color': 'black',
-        'display': [CommitProperties.Approvator],
-        handler: (commit: Commit) => {
-          return [{
-            label: 'Date',
-            value: moment(commit.timestamp * 1000).format('DD/MM/YYYY HH:mm')
-          }, {
-            label: 'Transaction',
-            value: commit.proof,
-            isHash: true
-          }];
-        }
-      },
-      [CommitTypes.Cancelled]: {
-        'show': false,
-        'title': 'Canceled',
-        'message': 'Canceled',
-        'display': [CommitProperties.Canceller],
-        handler: (_) => []
       },
       [CommitTypes.Lent]: {
         'show': true,
@@ -130,14 +85,14 @@ export class DetailHistoryComponent implements OnInit {
         handler: (commit: Commit) => {
           return [{
             label: 'Date',
-            value: moment(commit.timestamp * 1000).format('DD/MM/YYYY HH:mm')
+            value: moment(Number(commit.timestamp) * 1000).format('DD/MM/YYYY HH:mm')
           }, {
             label: 'Lender',
             value: commit.data.lender,
             isAddress: true
           }, {
             label: 'Transaction',
-            value: commit.proof,
+            value: commit.tx_hash,
             isHash: true
           }];
         }
@@ -150,19 +105,20 @@ export class DetailHistoryComponent implements OnInit {
         'icon': 'fas fa-donate',
         'background': '#59B159',
         'color': 'white',
-        'display': [CommitProperties.From, CommitProperties.Amount],
+        'display': [CommitProperties.Balance],
         handler: (commit: Commit) => {
           const { currency } = this.loan;
-          const amount = this.formatAmountPipe.transform(currency.fromUnit(commit.data.paid));
+          const payedAmount = LoanUtils.getCommitPaidAmount(this.allCommits, commit.nonce);
+          const amount = this.formatAmountPipe.transform(currency.fromUnit(payedAmount));
           return [{
             label: 'Date',
-            value: moment(commit.timestamp * 1000).format('DD/MM/YYYY HH:mm')
+            value: moment(Number(commit.timestamp) * 1000).format('DD/MM/YYYY HH:mm')
           }, {
             label: 'Amount',
             value: `${ amount } ${ currency.symbol }`
           }, {
             label: 'Transaction',
-            value: commit.proof,
+            value: commit.tx_hash,
             isHash: true
           }];
         }
@@ -179,38 +135,30 @@ export class DetailHistoryComponent implements OnInit {
         handler: (commit: Commit) => {
           return [{
             label: 'Date',
-            value: moment(commit.timestamp * 1000).format('DD/MM/YYYY HH:mm')
+            value: moment(Number(commit.timestamp) * 1000).format('DD/MM/YYYY HH:mm')
           }, {
             label: 'Transaction',
-            value: commit.proof,
+            value: commit.tx_hash,
             isHash: true
           }];
         }
-      },
-      [CommitTypes.Transfer]: {
-        'show': false,
-        'title': 'Transfer',
-        'message': 'Transfer',
-        'color': 'orange',
-        'display': [CommitProperties.From, CommitProperties.To],
-        handler: (_) => []
       },
       [CommitTypes.Withdraw]: {
         'show': true,
         'title': 'Withdraw',
         'message': 'Withdraw',
-        'iconType': 'material',
-        'icon': 'south_east',
+        'iconType': 'image',
+        'icon': './assets/icons/south_east.svg',
         'background': '#8D12AB',
         'color': 'white',
         'display': [],
         handler: (commit: Commit) => {
           return [{
             label: 'Date',
-            value: moment(commit.timestamp * 1000).format('DD/MM/YYYY HH:mm')
+            value: moment(Number(commit.timestamp) * 1000).format('DD/MM/YYYY HH:mm')
           }, {
             label: 'Transaction',
-            value: commit.proof,
+            value: commit.tx_hash,
             isHash: true
           }];
         }
@@ -218,8 +166,15 @@ export class DetailHistoryComponent implements OnInit {
     };
   }
 
-  ngOnInit() {
-    this.loadCommits();
+  async ngOnInit() {
+    const { loan } = this;
+    if (!loan) return;
+
+    await this.loadCommits();
+  }
+
+  async ngOnChanges() {
+    await this.loadCommits();
   }
 
   @HostListener('document:click', ['$event'])
@@ -237,8 +192,13 @@ export class DetailHistoryComponent implements OnInit {
   }
 
   private async loadCommits() {
-    const { id } = this.loan;
-    let commits: Commit[] = await this.commitsService.getCommits(id);
+    const { engine, id } = this.loan;
+
+    // load all commits
+    let { content: commits } = await this.apiService.getHistories(engine, id).toPromise();
+    this.allCommits = commits;
+
+    // filter usable commits
     commits = this.sortByTimestamp(commits);
     commits = this.filterByType(commits);
     this.commits = commits;
@@ -277,7 +237,7 @@ export class DetailHistoryComponent implements OnInit {
 
     // add pending events
     Object.values(CommitTypes)
-        .filter((commitType: CommitTypes) => this.commitProperties[commitType].show)
+        .filter((commitType: CommitTypes) => this.commitProperties[commitType] && this.commitProperties[commitType].show)
         .map((commitType: CommitTypes) => {
           if (!commitsByType[commitType]) {
             const { commitProperties: properties } = this;
@@ -293,7 +253,7 @@ export class DetailHistoryComponent implements OnInit {
   }
 
   private sortByTimestamp(commits: Commit[]) {
-    return commits.sort((commit, nextCommit) => commit.timestamp - nextCommit.timestamp);
+    return commits.sort((commit, nextCommit) => Number(commit.timestamp) - Number(nextCommit.timestamp));
   }
 
   private filterByType(commits: Commit[]) {

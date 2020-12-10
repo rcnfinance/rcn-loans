@@ -7,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../../shared/shared.module';
 import { Web3Service } from '../../services/web3.service';
 import { ContractsService } from '../../services/contracts.service';
-import { Loan, Status } from '../../models/loan.model';
+import { Loan, Engine, Status } from '../../models/loan.model';
 import { LoanListComponent } from './loan-list.component';
 import { readComponent } from '../../utils/utils.test';
 
@@ -45,6 +45,7 @@ describe('LoanListComponent', () => {
 
   it('should render a request loan', () => {
     const loan = new Loan(
+      Engine.RcnEngine,
       '0xd1c9866cbd3e57fdf025e7a2eef568d834a64f5f341a550e9b19714bfbcef27b',
       '0xc78a11c729275e656fa3decc1f15aebee69d08fc',
       8.48592e+22,
@@ -99,6 +100,7 @@ describe('LoanListComponent', () => {
 
   it('should render an ongoing loan', () => {
     const loan = new Loan(
+      Engine.RcnEngine,
       '0x212c362e33abf6e3e6354363e0634aa1300c3045a18c8c5a08f3bb2a17184768',
       '0xc78a11c729275e656fa3decc1f15aebee69d08fc',
       11000000000000000000,

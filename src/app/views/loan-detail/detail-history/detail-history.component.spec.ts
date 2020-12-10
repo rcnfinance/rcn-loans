@@ -3,7 +3,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { DetailHistoryComponent } from './detail-history.component';
 import { SharedModule } from './../../../shared/shared.module';
-import { CommitsService } from '../../../services/commits.service';
 import { FormatAmountPipe } from './../../../pipes/format-amount.pipe';
 
 describe('DetailHistoryComponent', () => {
@@ -15,7 +14,7 @@ describe('DetailHistoryComponent', () => {
       imports: [ HttpClientModule, SharedModule ],
       declarations: [ DetailHistoryComponent ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-      providers: [ FormatAmountPipe, CommitsService ]
+      providers: [ FormatAmountPipe ]
     })
     .compileComponents();
   }));

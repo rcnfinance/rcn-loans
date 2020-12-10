@@ -5,7 +5,6 @@ import { DetailInstallmentsComponent } from './detail-installments.component';
 import { SharedModule } from './../../../shared/shared.module';
 import { InstallmentsService } from './../../../services/installments.service';
 import { EventsService } from './../../../services/events.service';
-import { CommitsService } from './../../../services/commits.service';
 
 describe('DetailInstallmentsComponent', () => {
   let component: DetailInstallmentsComponent;
@@ -15,7 +14,7 @@ describe('DetailInstallmentsComponent', () => {
     TestBed.configureTestingModule({
       imports: [ HttpClientModule, SharedModule ],
       declarations: [ DetailInstallmentsComponent ],
-      providers: [ InstallmentsService, EventsService, CommitsService ],
+      providers: [ InstallmentsService, EventsService ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
     .compileComponents();
