@@ -40,6 +40,7 @@ export class DialogLoanPayComponent implements OnInit {
   pendingAmountEngineToken: number;
   payAmountEngineToken: number;
   txCost: string;
+  feeCost: string;
   installmentsExpanded: boolean;
   hasFee: boolean;
   nextInstallment: {
@@ -157,9 +158,12 @@ export class DialogLoanPayComponent implements OnInit {
   onAmountChange() {
     const { amount } = this.form.value;
     if (amount <= 0) {
+      this.feeCost = null;
       return this.payAmountEngineToken = 0;
     }
 
+    const feeCost = this.getFeeAmount(amount);
+    this.feeCost = feeCost ? Utils.formatAmount(feeCost, 4) : null;
     this.payAmountEngineToken = (amount * Number(this.pendingAmountEngineToken)) / Number(this.pendingAmount);
   }
 
@@ -202,7 +206,7 @@ export class DialogLoanPayComponent implements OnInit {
       const ethUsd = rawEthUsd / 10 ** 8;
       this.txCost = Utils.formatAmount(txCost * ethUsd) + ' USD';
     } catch (err) {
-      this.txCost = 'Insufficient funds';
+      this.txCost = '-';
     }
   }
 
