@@ -347,7 +347,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
 
     this.spinner.show();
 
-    const TIME_MS = 8000;
+    const TIME_MS = 12000;
     await timer(TIME_MS).toPromise();
 
     this.spinner.hide();
