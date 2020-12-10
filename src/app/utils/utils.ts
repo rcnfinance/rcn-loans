@@ -21,10 +21,12 @@ export class Utils {
     return hex.replace('0x000000000000000000000000', '0x');
   }
 
-  static toBytes32(hex: string): string {
+  static toBytes32(hex: string, inverse?: boolean): string {
     const raw = hex.replace('0x', '');
-    const result = hex.replace('0x', '0x' + '0'.repeat(64 - raw.length));
-    return result;
+    if (inverse) {
+      return hex.concat('0'.repeat(64 - raw.length));
+    }
+    return hex.replace('0x', '0x' + '0'.repeat(64 - raw.length));
   }
 
   static toBytes(hex: string): string {

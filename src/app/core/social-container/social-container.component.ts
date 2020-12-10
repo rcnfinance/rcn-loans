@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Engine } from '../../models/loan.model';
 import { environment } from '../../../environments/environment.prod';
 
 @Component({
@@ -12,6 +13,10 @@ export class SocialContainerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.linkContract = environment.network.explorer.address.replace('${address}', environment.contracts.diaspore.loanManager);
+    this.linkContract = environment
+        .network
+        .explorer
+        .address
+        .replace('${address}', environment.contracts[Engine.RcnEngine].diaspore.loanManager);
   }
 }

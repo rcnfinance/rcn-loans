@@ -15,10 +15,12 @@ declare let require: any;
 
 const p = require('../../package.json') as any;
 
-const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
-const RCN_API = 'https://diaspore-ropsten-rnode.rcn.loans';
-const RIPIO_COSIGNER = '0x5afc9fd47a5e064a7d1407c942878c4c0e3784a6';
+const API_BASE = 'https://diaspore-ropsten-rnode.rcn.loans';
+const RCN_ENGINE = 'rcnEngine';
+const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
+const USDC_ENGINE = 'usdcEngine';
+const USDC_TOKEN = '0x99c1c36dee5c3b62723dc4223f4352bbf1da0bff';
 
 export const environment = {
   version: p.version,
@@ -34,10 +36,6 @@ export const environment = {
   sentry: 'https://7082f6389c9b4d5ab9d7b2cde371da2a@sentry.io/1261533',
   gaTracking: 'UA-122615331-2',
   apiCountry: 'https://ipcountry-api.rcn.loans',
-  rcnApi: {
-    v4: `${ RCN_API }/v4/`,
-    v5: `${ RCN_API }/v5/`
-  },
   network: {
     id: 3,
     name: 'Ropsten',
@@ -50,25 +48,58 @@ export const environment = {
       url: `https://ropsten.infura.io/v3/${ INFURA_ID }`
     }
   },
+  api: {
+    [RCN_ENGINE]: {
+      v4: `${ API_BASE }/v4/`,
+      v5: `${ API_BASE }/v5/`,
+      v6: `https://old-api-ropsten-diaspore.rcn.loans/`
+    },
+    [USDC_ENGINE]: {
+      v6: `https://new-api-ropsten-diaspore-usdc.rcn.loans/`
+    }
+  },
   contracts: {
-    rcnToken: RCN_TOKEN,
-    oracleFactory: '0x94681ad00256a395ad21d67e557828cbd9c8f4e9',
-    diaspore: {
-      debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
-      loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'
+    [RCN_ENGINE]: {
+      token: RCN_TOKEN,
+      oracleFactory: '0x9778acc25e8355ddcd7f5c23ca259a5eafffbd29',
+      diaspore: {
+        debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
+        loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'
+      },
+      collateral: {
+        collateral: '0xe4fb51318cd67bfc48f294e46eb18ec0b5b2674c',
+        wethManager: '0xFcbFD18D28ff0FfB311e2dE179F3758531128449'
+      },
+      converter: {
+        converterRamp: '0x9ce962dfaa5cefcbe298c5a469487cead3a0640d',
+        ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+        uniswapConverter: '0x32657d6f2dcb32a5129d14db4a2e2e6fb198ce07'
+      },
+      models: {
+        installments: '0x41e9d0b6a8ce88989c2e7b3cae42ecfac44c9603'
+      }
     },
-    collateral: {
-      collateral: '0xe4fb51318cd67bfc48f294e46eb18ec0b5b2674c',
-      wethManager: '0xfcbfd18d28ff0ffb311e2de179f3758531128449'
+    [USDC_ENGINE]: {
+      token: USDC_TOKEN,
+      oracleFactory: '0x8c6ec1b870a15f6156ba44841939ea4ed0f480fd',
+      diaspore: {
+        debtEngine: '0x8412d235a7e4d9ba20ffa2e5585dae96a88ad0b5',
+        loanManager: '0x3938155d5782b83cbf23fc325a19746ad7d6ba43'
+      },
+      collateral: {
+        collateral: '0xe404a7a3bf4b0ad2d18865de2064c78e255814d1',
+        wethManager: '0x0728610fd8034d08ea4c5848c4e4bbaa17f3c650'
+      },
+      converter: {
+        converterRamp: '0x935b3a5bc4d41b8ac1632faac86e3ef1c556921e',
+        ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+        uniswapConverter: '0x32657d6f2dcb32a5129d14db4a2e2e6fb198ce07'
+      },
+      models: {
+        installments: '0x1bec6de76544ab982c4a137136d15a0b6d9398a4'
+      }
     },
-    converter: {
-      converterRamp: '0x9ce962dfaa5cefcbe298c5a469487cead3a0640d',
-      ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      uniswapConverter: '0x32657d6f2dcb32a5129d14db4a2e2e6fb198ce07'
-    },
-    models: {
-      installments: '0x41e9d0b6a8ce88989c2e7b3cae42ecfac44c9603'
-    },
+    ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     decentraland: {
       mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
       mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1'
@@ -78,10 +109,6 @@ export const environment = {
         ethUsd: '0x30b5068156688f818cea0874b580206dfe081a03'
       }
     }
-  },
-  cosigners: {
-    [Agent.RipioArsCreator]: RIPIO_COSIGNER,
-    [Agent.RipioUsdCreator]: RIPIO_COSIGNER
   },
   blacklist: [
     {
@@ -98,15 +125,9 @@ export const environment = {
       ]
     }
   ],
-  filters: {
-    openLoans: '0x3e703de416a62525c8653be11d71486550618ec8',
-    nonExpired: '0xe084b7cf7f6869a96cd72962047bf65e6d55e1e1',
-    validMortgage: '0x93b08a8a3cf148d62c20d3daa0b1bdf813bb7a21',
-    lenderIn: '0xe52eac8af912b8b3196b2921f12b66c91b39e025',
-    ongoing: '0xc247ba1b89af5f2654184f0c5a8e8f1ea48c55e3'
-  },
   dir: {
-    '0xf7c5e867e739f5508c63c8ab22f39c44b9cac0b5': Agent.RipioArsCreator
+    '0xf7c5e867e739f5508c63c8ab22f39c44b9cac0b5': Agent.RipioArsCreator,
+    '0xf42d11a0aff8f9a56853e4c41ee333b57658d096': Agent.RipioArsCreator
   },
   filterCurrencies: [
     'RCN',
@@ -140,7 +161,7 @@ export const environment = {
     {
       symbol: 'USDC',
       img: 'assets/usdc.png',
-      address: '0x00558fab062c212dac6bdd48a3b6542563d969aa'
+      address: USDC_TOKEN
     },
     {
       symbol: 'MANA',

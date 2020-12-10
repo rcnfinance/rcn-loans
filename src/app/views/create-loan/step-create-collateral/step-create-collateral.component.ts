@@ -6,7 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
 import { Utils } from '../../../utils/utils';
 import { Currency } from '../../../utils/currencies';
-import { Loan } from './../../../models/loan.model';
+import { Loan, Engine } from './../../../models/loan.model';
 import { Collateral, Status as CollateralStatus } from './../../../models/collateral.model';
 import { CollateralRequest } from './../../../interfaces/collateral-request';
 // App Services
@@ -193,7 +193,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     // set oracle
     if (currency) {
       const oracle: string =
-        await this.contractsService.symbolToOracle(currency.symbol) ||
+        await this.contractsService.symbolToOracle(Engine.UsdcEngine, currency.symbol) ||
         Utils.address0x;
 
       this.form.controls.formCollateral.patchValue({ oracle });
@@ -305,14 +305,15 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
       return;
     }
 
-    const loanOracle: string = await this.contractsService.symbolToOracle(loan.currency.toString());
+    const { engine } = loan;
+    const loanOracle: string = await this.contractsService.symbolToOracle(engine, loan.currency.toString());
     const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loan.currency.decimals);
     const loanAmount: number = loan.descriptor ? loan.descriptor.totalObligation : loan.amount;
     const loanAmountInRcn: BN = Utils.bn(loanAmount)
         .mul(Utils.bn(loanRate))
         .div(Utils.pow(10, loan.currency.decimals));
 
-    const collateralOracle: string = await this.contractsService.symbolToOracle(currency.symbol);
+    const collateralOracle: string = await this.contractsService.symbolToOracle(engine, currency.symbol);
     const collateralDecimals: number = new Currency(currency.symbol).decimals;
     const collateralRate: BN | string = await this.contractsService.getRate(collateralOracle, collateralDecimals);
     const collateralAmountInRcn: BN = Utils.bn(percentage)

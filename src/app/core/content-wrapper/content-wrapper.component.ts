@@ -2,13 +2,16 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import * as BN from 'bn.js';
 import { Utils } from '../../utils/utils';
-import { Loan } from './../../models/loan.model';
+import { Loan, Engine } from './../../models/loan.model';
 import { Status } from './../../models/collateral.model';
+import { LoanContentApi } from './../../interfaces/loan-api-diaspore';
+import { LoanUtils } from './../../utils/loan-utils';
 // App Components
 import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogNeedWithdrawComponent } from '../../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
 // App Service
 import { environment } from '../../../environments/environment';
+import { ProxyApiService } from '../../services/proxy-api.service';
 import { SidebarService } from '../../services/sidebar.service';
 import { ApplicationAdsService } from '../../services/application-ads.service';
 import { Web3Service } from '../../services/web3.service';
@@ -40,7 +43,7 @@ export class ContentWrapperComponent implements OnInit {
   get withdrawEnabled(): boolean {
     return this.diasporeLoansWithBalance !== undefined &&
       this.diasporeLoansWithBalance.length > 0 &&
-      this.pendingDiasporeWithdraw === undefined;
+      this.pendingRcnWithdraw === undefined;
   }
   winHeight: number = window.innerHeight;
   account: string;
@@ -52,7 +55,7 @@ export class ContentWrapperComponent implements OnInit {
   rcnAvailable: BN;
   loansWithBalance: number[];
   diasporeLoansWithBalance: number[];
-  pendingDiasporeWithdraw: Tx;
+  pendingRcnWithdraw: Tx;
 
   navToggle: boolean; // Navbar toggled
   navmobileToggled = false; // Nav Mobile toggled
@@ -62,6 +65,7 @@ export class ContentWrapperComponent implements OnInit {
   needWithdraw: boolean;
 
   constructor(
+    private proxyApiService: ProxyApiService,
     private sidebarService: SidebarService, // Navbar Service
     private applicationAdsService: ApplicationAdsService,
     private web3Service: Web3Service,
@@ -141,8 +145,8 @@ export class ContentWrapperComponent implements OnInit {
    * Load all pending withdraw
    */
   private loadPendingWithdraw() {
-    this.pendingDiasporeWithdraw = this.txService.getLastWithdraw(
-      environment.contracts.diaspore.debtEngine,
+    this.pendingRcnWithdraw = this.txService.getLastWithdraw(
+      environment.contracts[Engine.RcnEngine].diaspore.debtEngine,
       this.diasporeLoansWithBalance
     );
   }
@@ -159,7 +163,7 @@ export class ContentWrapperComponent implements OnInit {
    * Load withdraw balance adding diaspore amount
    */
   private async loadWithdrawBalance() {
-    const pendingWithdraws = await this.contractService.getPendingWithdraws();
+    const pendingWithdraws = await this.contractService.getPendingWithdraws(Engine.RcnEngine);
     this.rcnAvailable = Utils.bn(pendingWithdraws[2] / 10 ** 18);
     this.diasporeLoansWithBalance = pendingWithdraws[3];
     this.loadPendingWithdraw();
@@ -177,9 +181,10 @@ export class ContentWrapperComponent implements OnInit {
       return;
     }
 
+    const { content } = await this.proxyApiService.getLent(account);
+    const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
     const loansToWithdraw: Loan[] =
-      (await this.contractService.getLoansOfBorrower(account))
-      .filter(({ collateral }) => collateral && collateral.status === Status.ToWithdraw);
+      loans.filter(({ collateral }) => collateral && collateral.status === Status.ToWithdraw);
 
     if (loansToWithdraw.length) {
       this.needWithdraw = true;

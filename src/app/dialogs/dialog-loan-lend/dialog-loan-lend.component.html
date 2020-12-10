@@ -54,7 +54,7 @@
                 {{ lendExpectedReturn }}
               </span>
               <span class="data--currency-style">
-                {{ lendCurrency ? 'RCN' : '-' }}
+                {{ lendCurrency ? engineCurrency?.toString() : '-' }}
               </span>
               <div
                 class="d-inline"
@@ -111,8 +111,8 @@
             <span class="mr-1">
               Exchange Rate 1 {{ loan.currency }}
             </span>
-            <span class="mr-1" *ngIf="loan.currency.toString() !== 'RCN'">
-              = {{ exchangeRcn }} RCN
+            <span class="mr-1" *ngIf="loan.currency.toString() !== engineCurrency?.toString()">
+              = {{ exchangeEngineToken }} {{ engineCurrency?.toString() }}
             </span>
             <span *ngIf="exchangeToken && loan.currency.toString() !== lendCurrency">
               = {{ exchangeToken }} {{ lendCurrency }}

@@ -159,8 +159,6 @@ $rcn-theme: create-wonky-theme($rcn-theme-primary, $rcn-theme-accent, $rcn-theme
 
 @include angular-material-theme($rcn-theme);
 
-// TODO: Upgrade to Material 7.x for better css4 vars support.
-// Export theme colors
 :root {
   --app-color-primary: #4154FF;
   --app-color-primary-light: #7684FF;

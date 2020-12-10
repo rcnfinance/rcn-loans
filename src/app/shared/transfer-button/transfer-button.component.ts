@@ -61,7 +61,6 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
    * Track tx
    */
   trackTransferTx(tx: Tx) {
-    // FIXME: review data: { id }
     if (tx.type === Type.transfer) {
       this.endTransfer.emit();
       this.finishProgress = true;
@@ -73,8 +72,9 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
    * Retrieve pending Tx
    */
   retrievePendingTx() {
+    const { engine } = this.loan;
     this.pendingTx = this.txService.getLastPendingTransfer(
-      environment.contracts.diaspore.debtEngine,
+      environment.contracts[engine].diaspore.debtEngine,
       this.loan
     );
 
@@ -168,9 +168,10 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
         'loan ' + this.loan.id + ' to ' + to
       );
 
+      const { engine } = this.loan;
       this.txService.registerTransferTx(
         tx,
-        environment.contracts.diaspore.debtEngine,
+        environment.contracts[engine].diaspore.debtEngine,
         this.loan,
         to
       );
