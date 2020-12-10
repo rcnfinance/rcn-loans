@@ -315,7 +315,7 @@ export class CollateralFormComponent implements OnInit {
       const ethUsd = rawEthUsd / 10 ** 8;
       this.txCost = Utils.formatAmount(txCost * ethUsd) + ' USD';
     } catch (err) {
-      this.txCost = 'Insufficient funds';
+      this.txCost = '-';
     }
   }
 
