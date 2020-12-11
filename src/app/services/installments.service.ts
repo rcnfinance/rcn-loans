@@ -96,8 +96,8 @@ export class InstallmentsService {
     }
 
     payCommits.map(commit => {
-      const { timestamp, nonce } = commit;
-      const paid = LoanUtils.getCommitPaidAmount(commits, nonce);
+      const { timestamp } = commit;
+      const paid = LoanUtils.getCommitPaidAmount(commits, timestamp);
       const amount = loan.currency.fromUnit(paid);
 
       if (startDate && startDate > this.unixToDate(Number(timestamp) * 1000)) {

@@ -108,7 +108,7 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
         'display': [CommitProperties.Balance],
         handler: (commit: Commit) => {
           const { currency } = this.loan;
-          const payedAmount = LoanUtils.getCommitPaidAmount(this.allCommits, commit.nonce);
+          const payedAmount = LoanUtils.getCommitPaidAmount(this.allCommits, commit.timestamp);
           const amount = this.formatAmountPipe.transform(currency.fromUnit(payedAmount));
           return [{
             label: 'Date',
