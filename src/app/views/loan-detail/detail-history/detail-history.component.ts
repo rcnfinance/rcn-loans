@@ -34,6 +34,7 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
       icon?: string;
       background?: string;
       color?: string;
+      priority?: number;
       display: CommitProperties[];
       handler: (commit: Commit) => {
         label: string;
@@ -196,6 +197,7 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
 
     // load all commits
     let { content: commits } = await this.apiService.getHistories(engine, id).toPromise();
+    commits = this.setCommitPriorities(commits);
     this.allCommits = commits;
 
     // filter usable commits
@@ -253,7 +255,10 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
   }
 
   private sortByTimestamp(commits: Commit[]) {
-    return commits.sort((commit, nextCommit) => Number(commit.timestamp) - Number(nextCommit.timestamp));
+    return commits.sort((commit, nextCommit) => {
+      return Number(commit.timestamp) - Number(nextCommit.timestamp) &&
+        commit.data.priority - nextCommit.data.priority;
+    });
   }
 
   private filterByType(commits: Commit[]) {
@@ -264,5 +269,36 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
   private getCommitProperties({ opcode }: Commit) {
     const { commitProperties } = this;
     return commitProperties[opcode];
+  }
+
+  private setCommitPriorities(commits: Commit[]) {
+    return commits.map((commit) => {
+      if (!commit.data) {
+        commit.data = {};
+      }
+
+      switch (commit.opcode) {
+        case CommitTypes.Requested:
+          commit.data.priority = 100;
+          break;
+        case CommitTypes.Lent:
+          commit.data.priority = 200;
+          break;
+        case CommitTypes.Paid:
+          commit.data.priority = 300;
+          break;
+        case CommitTypes.FullyPaid:
+          commit.data.priority = 400;
+          break;
+        case CommitTypes.Withdraw:
+          commit.data.priority = 500;
+          break;
+        default:
+          commit.data.priority = 0;
+          break;
+      }
+
+      return commit;
+    });
   }
 }
