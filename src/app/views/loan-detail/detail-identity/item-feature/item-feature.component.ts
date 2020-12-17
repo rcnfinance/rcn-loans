@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Feature } from './../../../models/identity.model';
+import { Feature } from './../../../../models/identity.model';
 
 @Component({
   selector: 'app-item-feature',

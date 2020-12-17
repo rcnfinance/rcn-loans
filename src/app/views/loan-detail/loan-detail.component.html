@@ -245,22 +245,21 @@
                           </a>
                         </span>
                       </div>
-                      <div class="accordion-details__item-wrapper">
-                        <img class="accordion-details__item-icon" src="assets/crystal-ball.svg" />
+                      <div
+                        *ngIf="availableOracle"
+                        class="accordion-details__item-wrapper"
+                      >
+                        <img
+                          class="accordion-details__item-icon"
+                          src="assets/crystal-ball.svg"
+                        />
                         <span class="accordion-details__item-label">
                           Oracle:
                         </span>
                         <span class="accordion-details__item-value">
-                          <ng-container *ngIf="availableOracle; else nonOracleTemplate">
-                            <a (click)="openAddress(loan.oracle.address)">
-                              {{ loan.oracle.address | formatAddress }}
-                            </a>
-                          </ng-container>
-                          <ng-template #nonOracleTemplate>
-                            <strong>
-                              -
-                            </strong>
-                          </ng-template>
+                          <a (click)="openAddress(loan.oracle.address)">
+                            {{ loan.oracle.address | formatAddress }}
+                          </a>
                         </span>
                       </div>
                     </div>
