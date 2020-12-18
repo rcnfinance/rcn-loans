@@ -27,6 +27,7 @@ import { ItemFeatureComponent } from './detail-identity/item-feature/item-featur
 import { LoanDoesNotExistComponent } from './loan-does-not-exist/loan-does-not-exist.component';
 // App Pipes
 import { FormatAmountPipe } from './../../pipes/format-amount.pipe';
+import { LoanOverviewPanelComponent } from './loan-overview-panel/loan-overview-panel.component';
 
 const routes: Routes = [
   { path: '', component: LoanDetailComponent },
@@ -61,7 +62,8 @@ const routes: Routes = [
     DialogLoanTransferComponent,
     DialogLoanPayComponent,
     ItemFeatureComponent,
-    LoanDoesNotExistComponent
+    LoanDoesNotExistComponent,
+    LoanOverviewPanelComponent
   ],
   entryComponents: [
     DialogLoanTransferComponent,
