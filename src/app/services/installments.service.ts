@@ -156,7 +156,7 @@ export class InstallmentsService {
       );
       const currency = loan.currency.toString();
       const amount = loan.currency.fromUnit(loan.descriptor.firstObligation);
-      const punitory = loan.descriptor.punitiveInterestRateRate;
+      const punitory = loan.descriptor.punitiveInterestRate;
       const pendingAmount = amount;
       const totalPaid = 0;
       const pays = [];
@@ -212,7 +212,7 @@ export class InstallmentsService {
         startDateUnix + (loan.descriptor.frequency * 1000 * payNumber)
       );
       const currency = loan.currency.toString();
-      const punitory = loan.descriptor.punitiveInterestRateRate;
+      const punitory = loan.descriptor.punitiveInterestRate;
       const isLast = payNumber === loan.descriptor.installments;
       const isPrev = startDate < todayTimestamp;
       const isNext = startDate > todayTimestamp;
