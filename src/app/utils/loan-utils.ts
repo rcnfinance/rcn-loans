@@ -149,7 +149,7 @@ export class LoanUtils {
    */
   static getCommitPaidAmount(commits: Commit[], paidTimestamp: string): number {
     const { data } = commits
-        .filter(({ timestamp }) => timestamp < paidTimestamp)
+        .filter(({ timestamp }) => timestamp <= paidTimestamp)
         .reverse()
         .find(({ opcode }) => opcode === CommitTypes.PaidBase);
 
