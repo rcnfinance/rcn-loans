@@ -83,7 +83,7 @@ export class InstallmentsService {
     const installments: Installment[] = [];
 
     // set start date
-    const TODAY_DATE_UNIX = moment().add(3, 'd').unix() * 1000;
+    const TODAY_DATE_UNIX = new Date().getTime();
     startDateUnix = startDateUnix ? startDateUnix : TODAY_DATE_UNIX;
 
     // iterate installments
