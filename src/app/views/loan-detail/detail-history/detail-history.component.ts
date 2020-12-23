@@ -174,8 +174,8 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
     await this.loadCommits();
   }
 
-  async ngOnChanges() {
-    await this.loadCommits();
+  ngOnChanges() {
+    this.loadCommits();
   }
 
   @HostListener('document:click', ['$event'])

@@ -68,7 +68,7 @@
         Borrower
       </h2>
       <h2
-        *ngIf="[0, 1, 4, 5].includes(loan?.status) && loan?.descriptor.installments"
+        *ngIf="[0, 1, 2, 4, 5].includes(loan?.status) && loan?.descriptor.installments"
         class="page-title page-title--tab mr-3"
         [class.page-title--active]="isDetail('installments')"
         (click)="openDetail('installments')"
@@ -215,7 +215,7 @@
           Borrower
         </h2>
         <h2
-          *ngIf="[0, 1, 4, 5].includes(loan?.status) && loan?.descriptor.installments"
+          *ngIf="[0, 1, 2, 4, 5].includes(loan?.status) && loan?.descriptor.installments"
           class="page-title page-title--tab ml-3"
           [class.page-title--active]="isDetail('installments')"
           (click)="openDetail('installments')"

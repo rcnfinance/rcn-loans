@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { environment } from 'environments/environment';
 import { CurrenciesService } from 'app/services/currencies.service';
 import { Loan, Status, LoanType } from 'app/models/loan.model';
@@ -10,7 +10,7 @@ import { Utils } from 'app/utils/utils';
   templateUrl: './loan-overview-panel.component.html',
   styleUrls: ['./loan-overview-panel.component.scss']
 })
-export class LoanOverviewPanelComponent implements OnInit {
+export class LoanOverviewPanelComponent implements OnInit, OnChanges {
   @Input() loan: Loan;
   @Input() brand: Brand;
   @Input() loanType: LoanType;
@@ -41,7 +41,10 @@ export class LoanOverviewPanelComponent implements OnInit {
     this.loadInstallments();
   }
 
-  // TODO: loadDetail when loan is updatd (add OnChange hook)
+  ngOnChanges() {
+    this.loadLoanDetail();
+    this.loadInstallments();
+  }
 
   /**
    * Open an address in etherscan

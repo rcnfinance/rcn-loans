@@ -34,6 +34,7 @@ export class InstallmentsService {
 
       case Status.Ongoing:
       case Status.Indebt:
+      case Status.Paid:
         installments = await this.getCurrentInstallments(loan);
         break;
 
