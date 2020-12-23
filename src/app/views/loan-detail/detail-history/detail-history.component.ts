@@ -198,10 +198,10 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
     // load all commits
     let { content: commits } = await this.apiService.getHistories(engine, id).toPromise();
     commits = this.setCommitPriorities(commits);
+    commits = this.sortByTimestamp(commits);
     this.allCommits = commits;
 
     // filter usable commits
-    commits = this.sortByTimestamp(commits);
     commits = this.filterByType(commits);
     this.commits = commits;
 
@@ -285,6 +285,7 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
           commit.data.priority = 200;
           break;
         case CommitTypes.Paid:
+        case CommitTypes.PaidBase:
           commit.data.priority = 300;
           break;
         case CommitTypes.FullyPaid:
