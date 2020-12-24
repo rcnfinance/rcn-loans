@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ItemFeatureComponent } from './item-feature.component';
-import { VisualUrlPipe } from './../../../pipes/visual-url.pipe';
+import { VisualUrlPipe } from './../../../../pipes/visual-url.pipe';
 
 describe('ItemFeatureComponent', () => {
   let component: ItemFeatureComponent;

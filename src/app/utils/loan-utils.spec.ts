@@ -39,6 +39,6 @@ describe('Utils', () => {
       }
     ];
 
-    expect(LoanUtils.getCommitPaidAmount(commits, 340)).toEqual(64210771);
+    expect(LoanUtils.getCommitPaidAmount(commits, '340')).toEqual(64210771);
   });
 });
