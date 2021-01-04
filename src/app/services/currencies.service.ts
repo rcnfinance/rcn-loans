@@ -24,7 +24,7 @@ export class CurrenciesService {
     'RCN': { min: 5, max: 15, best: 10 },
     'DAI': { min: 10, max: 20, best: 15 },
     'USDC': { min: 5, max: 10, best: 7 },
-    'MANA': { min: 10, max: 20, best: 15 },
+    'ARS': { min: 40, max: 80, best: 60 },
     'ETH': { min: 0, max: 5, best: 1 },
     'TEST': { min: 0, max: 20, best: 10 },
     'DEST': { min: 10, max: 20, best: 15 }
@@ -65,7 +65,7 @@ export class CurrenciesService {
     const CRYPTO_CURRENCIES: string[] =
       this.currencies.map(({ symbol }) => symbol);
     const FIAT_CURRENCIES: string[] =
-      ['ARS', 'USD'];
+      ['USD'];
 
     return CRYPTO_CURRENCIES.concat(FIAT_CURRENCIES);
   }
