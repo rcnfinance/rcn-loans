@@ -286,7 +286,8 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     const loanCurrency = currency.symbol;
     const RESTRICTED_CURRENCES = ['TEST', 'DEST', 'ETH', 'MANA', 'DAI', loanCurrency];
     const currencies: CurrencyItem[] = this.currenciesService.getCurrenciesExcept('symbol', RESTRICTED_CURRENCES);
-    this.currencies = currencies;
+    const onlyTokens = currencies.filter(({ isToken }) => isToken);
+    this.currencies = onlyTokens;
   }
 
   /**
