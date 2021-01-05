@@ -118,7 +118,6 @@ export const environment = {
   filterCurrencies: [
     'RCN',
     'DAI',
-    'MANA',
     'ARS',
     'USD'
   ],
@@ -145,7 +144,7 @@ export const environment = {
     },
     {
       symbol: 'ARS',
-      img: 'assets/mana.png', // TODO: use ARS logo
+      img: 'assets/ars.png',
       address: '0x0000000000000000000000000000000000000000'
     }
   ]
