@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { Utils } from './../utils/utils';
 
 interface BestInterestRate {
   min: number;
@@ -42,7 +43,7 @@ export class CurrenciesService {
       const address = currency.address;
       const symbol = currency.symbol;
       const img = currency.img;
-      const isToken = currency.address ? true : false;
+      const isToken = currency.address && currency.address !== Utils.address0x;
       const bestInterestRate = this.getBestInterest(symbol);
       const formattedCurrency: CurrencyItem = {
         address,
