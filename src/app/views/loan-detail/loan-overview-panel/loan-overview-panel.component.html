@@ -1,0 +1,174 @@
+<div class="page-content" *ngIf="loan">
+  <div class="row">
+    <div class="col-12 col-lg-9">
+      <div class="row">
+        <div class="col-12 col-lg-6 pr-lg-0">
+          <h3 class="page-content__subtitle">
+            Borrow
+          </h3>
+          <p class="page-content__amount">
+            {{ amountBorrow | formatAmount }} {{ loan.currency }}
+          </p>
+        </div>
+        <div class="col-12 col-lg-6">
+          <h3 class="page-content__subtitle">
+            Repay
+          </h3>
+          <p class="page-content__amount">
+            {{ amountRepay | formatAmount }} {{ loan.currency }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="page-content__rates col-12 col-lg-3 d-flex justify-content-end">
+      <div class="card-rates d-flex d-lg-block">
+        <div class="card-rates__item">
+          <i class="card-rates__item-icon fas fa-calculator"></i>
+          <span class="card-rates__item-label">
+            Annual rate:
+          </span>
+          <span class="card-rates__item-value">
+            <strong>
+              {{ interestRate | formatAmount: 0 }} %
+            </strong>
+          </span>
+        </div>
+        <div class="card-rates__item" [matTooltip]="durationTooltip">
+          <i class="card-rates__item-icon far fa-calendar"></i>
+          <span class="card-rates__item-label">
+            Schedule:
+          </span>
+          <span class="card-rates__item-value">
+            <strong>
+              {{ duration }}
+            </strong>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="page-content__timeline">
+        <div
+          *ngIf="timelineTooltip"
+          class="timeline"
+          [class.timeline--inactive]="loan.status === 0"
+          [class.timeline--active]="[1, 5].includes(loan.status)"
+          [class.timeline--completed]="loan.status === 2"
+        >
+          <div
+            class="timeline__circle d-lg-none"
+            [attr.data-progress]="paymentAverageAmount"
+          >
+            <div
+              class="timeline__circle-status"
+              [matTooltip]="timelineTooltip"
+            >
+              <img
+                *ngIf="timelineIconType === 'image'"
+                [src]="timelineIcon"
+              />
+              <i
+                *ngIf="timelineIconType === 'fontello'"
+                class="fontello-icon"
+                [ngClass]="timelineIcon"
+              >
+              </i>
+              <mat-icon *ngIf="timelineIconType === 'material'">
+                {{ timelineIcon }}
+              </mat-icon>
+              <ng-container *ngIf="timelineIconType === 'fontawesome'">
+                <span [ngClass]="timelineIcon"></span>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="timeline__bar">
+          </div>
+          <div
+            class="timeline__progress"
+            [ngStyle]="{'width': paymentAverage}"
+          >
+          </div>
+          <div
+            class="timeline__indicator"
+            [ngStyle]="{'left': paymentAverage}"
+            [matTooltip]="timelineTooltip"
+          >
+          </div>
+          <div class="timeline__steps">
+            <div class="step" *ngFor="let date of paymentDate">
+              {{ date }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="page-content__accordion col-12">
+      <mat-accordion class="accordion-details">
+        <mat-expansion-panel class="mat-elevation-z">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              More details
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="accordion-details__item">
+            <div class="d-lg-flex justify-content-between">
+              <div class="accordion-details__item-wrapper">
+                <i class="accordion-details__item-icon fas fa-user"></i>
+                <span class="accordion-details__item-label">
+                  Borrower:
+                </span>
+                <span class="accordion-details__item-value">
+                  <a (click)="openAddress(loan.borrower)">
+                    {{ loan.borrower | formatAddress }}
+                    {{ loanType === 3 ? (' - ' + brand.headerTitle) : '' }}
+                  </a>
+                </span>
+              </div>
+              <div class="accordion-details__item-wrapper">
+                <i class="accordion-details__item-icon fa fa-percentage"></i>
+                <span class="accordion-details__item-label">
+                  Penalty rate:
+                </span>
+                <span class="accordion-details__item-value">
+                  <ng-container *ngIf="interestPunitory">
+                    {{ interestPunitory | formatAmount: 0 }}%
+                  </ng-container>
+                </span>
+              </div>
+              <div class="accordion-details__item-wrapper">
+                <i class="accordion-details__item-icon fas fa-link"></i>
+                <span class="accordion-details__item-label">
+                  Loan address:
+                </span>
+                <span class="accordion-details__item-value">
+                  <a>
+                    {{ loan.id | formatAddress }}
+                  </a>
+                </span>
+              </div>
+              <div *ngIf="hasOracle" class="accordion-details__item-wrapper">
+                <img
+                  class="accordion-details__item-icon"
+                  src="assets/crystal-ball.svg"
+                />
+                <span class="accordion-details__item-label">
+                  Oracle:
+                </span>
+                <span class="accordion-details__item-value">
+                  <a (click)="openAddress(loan.oracle.address)">
+                    {{ loan.oracle.address | formatAddress }}
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>

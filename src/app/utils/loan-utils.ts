@@ -147,9 +147,9 @@ export class LoanUtils {
    * @param paidNonce Nonce of Paid event
    * @return Paid amount
    */
-  static getCommitPaidAmount(commits: Commit[], paidNonce: number): number {
+  static getCommitPaidAmount(commits: Commit[], paidTimestamp: string): number {
     const { data } = commits
-        .filter(({ nonce }) => nonce < paidNonce)
+        .filter(({ timestamp }) => timestamp <= paidTimestamp)
         .reverse()
         .find(({ opcode }) => opcode === CommitTypes.PaidBase);
 

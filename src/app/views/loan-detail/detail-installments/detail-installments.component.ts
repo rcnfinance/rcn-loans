@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as moment from 'moment';
 import { Loan } from '../../../models/loan.model';
@@ -12,7 +12,7 @@ import { InstallmentsService } from './../../../services/installments.service';
   templateUrl: './detail-installments.component.html',
   styleUrls: ['./detail-installments.component.scss']
 })
-export class DetailInstallmentsComponent implements OnInit, OnDestroy {
+export class DetailInstallmentsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() loan: Loan;
   componentId = 'detail-installments';
 
@@ -38,6 +38,10 @@ export class DetailInstallmentsComponent implements OnInit, OnDestroy {
     } finally {
       this.spinner.hide(this.componentId);
     }
+  }
+
+  ngOnChanges() {
+    this.loadInstallments();
   }
 
   ngOnDestroy() {

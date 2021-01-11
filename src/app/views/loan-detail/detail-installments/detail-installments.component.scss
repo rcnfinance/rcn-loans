@@ -29,15 +29,24 @@
     &,
     &:hover {
       background: var(--app-color-gray-400) !important;
+      transition: .3s;
       .mat-expansion-panel-header {
         @include typography-overline(3);
         color: #939393;
+      }
+    }
+    &--prev {
+      .mat-expansion-panel-header {
+        color: white !important;
       }
     }
     &--current {
       .mat-expansion-panel-header {
         color: var(--app-color-primary-light) !important;
       }
+    }
+    &.mat-expanded {
+      background: var(--app-color-gray-300) !important;
     }
 
     &__col {
@@ -99,6 +108,9 @@
 
         }
       }
+    }
+    .mat-expansion-panel-body {
+      padding: 0 0 16px;
     }
   }
 

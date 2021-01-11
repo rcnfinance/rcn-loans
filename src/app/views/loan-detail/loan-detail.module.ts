@@ -23,10 +23,11 @@ import { TransferButtonComponent } from './../../shared/transfer-button/transfer
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
-import { ItemFeatureComponent } from './item-feature/item-feature.component';
+import { ItemFeatureComponent } from './detail-identity/item-feature/item-feature.component';
 import { LoanDoesNotExistComponent } from './loan-does-not-exist/loan-does-not-exist.component';
 // App Pipes
 import { FormatAmountPipe } from './../../pipes/format-amount.pipe';
+import { LoanOverviewPanelComponent } from './loan-overview-panel/loan-overview-panel.component';
 
 const routes: Routes = [
   { path: '', component: LoanDetailComponent },
@@ -61,7 +62,8 @@ const routes: Routes = [
     DialogLoanTransferComponent,
     DialogLoanPayComponent,
     ItemFeatureComponent,
-    LoanDoesNotExistComponent
+    LoanDoesNotExistComponent,
+    LoanOverviewPanelComponent
   ],
   entryComponents: [
     DialogLoanTransferComponent,

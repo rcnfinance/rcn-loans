@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
-import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
 import { Loan, Status, LoanType } from './../../models/loan.model';
 import { Brand } from '../../models/brand.model';
@@ -44,8 +43,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   isPaid: boolean;
   loanType: LoanType;
 
-  canTransfer = false;
-  canCancel: boolean;
   canPay: boolean;
   canLend: boolean;
   canRedeem: boolean;
@@ -58,34 +55,12 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
   totalDebt: string;
   pendingAmount: string;
-  expectedReturn: string;
   paid: string;
 
-  interest: string;
-  duration: string;
-  durationTooltip: string;
   expiresIn: string;
   collateral: Collateral;
   collateralAmount: string;
   collateralAsset: string;
-  lendDate: string;
-  dueDate: string;
-  liquidationRatio: string;
-  balanceRatio: string;
-  punitory: string;
-  paymentDate: string[] = [];
-  paymentAverage: string;
-  paymentAverageAmount: number;
-  timeline: {
-    tooltip: string;
-    icon: string;
-    iconType: 'material' | 'fontawesome' | 'fontello' | 'image';
-  };
-
-  // Loan Oracle
-  oracle: string;
-  availableOracle: boolean;
-  currency: string;
 
   // subscriptions
   subscriptionAccount: Subscription;
@@ -173,14 +148,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
   openDetail(view: string) {
     this.viewDetail = view;
-  }
-
-  /**
-   * Open an address in etherscan
-   * @param address Borrower address
-   */
-  openAddress(address: string) {
-    window.open(environment.network.explorer.address.replace('${address}', address));
   }
 
   isDetail(view: string): Boolean {
@@ -274,13 +241,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     // TODO: Replace with flags to display each section
     this.hasHistory = true;
     this.brand = this.brandingService.getBrand(this.loan);
-    this.oracle = this.loan.oracle ? this.loan.oracle.address : undefined;
-
-    const { engine } = this.loan;
-    const engineToken = environment.contracts[engine].token;
-    const engineCurrency = this.currenciesService.getCurrencyByKey('address', engineToken);
-    this.currency = this.loan.oracle ? this.loan.oracle.currency : engineCurrency.symbol;
-    this.availableOracle = this.loan.oracle.currency !== engineCurrency.symbol;
     this.loanType = this.loanTypeService.getLoanType(this.loan);
   }
 
@@ -347,7 +307,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       case Status.Request:
         // Load config data
         const interestRate = Utils.formatAmount(this.loan.descriptor.interestRate, 0);
-        const interestRatePunitive = Utils.formatAmount(this.loan.descriptor.punitiveInterestRateRate, 0);
+        const interestRatePunitive = Utils.formatAmount(this.loan.descriptor.punitiveInterestRate, 0);
         const duration: string = Utils.formatDelta(this.loan.descriptor.duration);
         this.loanConfigData = [
           ['Information', ''],
@@ -355,28 +315,10 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
           ['Duration', duration]
         ];
 
-        // Template data
-        this.interest = `${ interestRate }%`;
-        this.punitory = `${ interestRatePunitive }%`;
-        this.duration = duration;
-        this.durationTooltip = duration + ' Duration';
-        this.expectedReturn = Utils.formatAmount(this.loan.currency.fromUnit(this.loan.descriptor.totalObligation));
-
         if (this.loan.status === Status.Request) {
           const today = Math.floor(new Date().getTime() / 1000);
           const expiresIn = Utils.formatDelta(this.loan.expiration - today);
           this.expiresIn = expiresIn;
-          this.timeline = {
-            tooltip: '< > Requested',
-            icon: 'code',
-            iconType: 'material'
-          };
-        } else {
-          this.timeline = {
-            tooltip: 'Expired',
-            icon: 'delete',
-            iconType: 'material'
-          };
         }
         break;
       case Status.Indebt:
@@ -385,13 +327,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         const dueDate: string = this.formatTimestamp(this.loan.debt.model.dueTime);
         const lendDate: string = this.formatTimestamp(this.loan.config.lentTime);
         const deadline: string = this.formatTimestamp(this.loan.config.lentTime + this.loan.descriptor.duration);
-        const durationDynamic: string = this.loan.status !== Status.Paid ?
-          Utils.formatDelta(this.loan.debt.model.dueTime - (new Date().getTime() / 1000)) :
-          '-';
-        const currentInterestRate: string = Utils.formatAmount(
-          this.loan.status === Status.Indebt ? this.loan.descriptor.punitiveInterestRateRate : this.loan.descriptor.interestRate,
-          0
-        );
 
         // Show ongoing loan detail
         if (this.isPaid) {
@@ -409,44 +344,16 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
           ];
         }
 
-        // Template data
-        this.interest = currentInterestRate + ' %';
-        this.lendDate = lendDate;
-        this.dueDate = dueDate;
-
         // Load status data
         this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
         this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation));
         this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
-        this.expectedReturn = Utils.formatAmount(this.loan.currency.fromUnit(this.loan.descriptor.totalObligation));
-
-        this.duration = durationDynamic;
-        if (this.loan.status === Status.Indebt) {
-          this.durationTooltip = `Overdue for ${ durationDynamic }`;
-        } else {
-          this.durationTooltip = `Next payment in ${ durationDynamic }`;
-        }
-
-        if (this.loan.status === Status.Paid) {
-          this.timeline = {
-            tooltip: 'Fully Paid',
-            icon: 'icon-verified-24px',
-            iconType: 'fontello'
-          };
-        } else {
-          this.timeline = {
-            tooltip: 'Outstanding',
-            icon: 'trending_up',
-            iconType: 'material'
-          };
-        }
         break;
 
       default:
         break;
     }
 
-    this.loadInstallments();
     this.loadUserActions();
   }
 
@@ -481,40 +388,9 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Load next installment data
-   */
-  private async loadInstallments() {
-    const loan: Loan = this.loan;
-    const nowDate: number = Math.floor(new Date().getTime() / 1000);
-    const { installments = 1, frequency } = loan.descriptor;
-    const installmentDays = ['0'];
-
-    // load installments days
-    Array.from(Array(installments)).map((_: any, i: number) => {
-      const installmentNumber = i + 1;
-      installmentDays.push(Utils.formatDelta(frequency * installmentNumber));
-    });
-    this.paymentDate = installmentDays;
-
-    // load installments average
-    const startDate = [Status.Request, Status.Expired].includes(loan.status) ? nowDate : loan.config.lentTime;
-    const endDate = startDate + (installments * frequency);
-
-    const MAX_AVERAGE = 100;
-    const SECONDS_IN_DAY = 24 * 60 * 60;
-    const diffDays = (endDate - startDate) / SECONDS_IN_DAY;
-    const diffToNowDays = (endDate - nowDate) / SECONDS_IN_DAY;
-    const daysAverage = 100 - ((diffToNowDays * 100) / diffDays);
-    this.paymentAverage = `${ daysAverage > MAX_AVERAGE ? MAX_AVERAGE : daysAverage }%`;
-    this.paymentAverageAmount = Math.round(daysAverage > MAX_AVERAGE ? MAX_AVERAGE : daysAverage);
-  }
-
   private invalidActions() {
     this.canLend = false;
     this.canPay = false;
-    this.canTransfer = false;
-    this.canCancel = false;
     this.canAdjustCollateral = false;
     this.canRedeem = false;
   }
@@ -522,9 +398,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   private loanOnGoingorIndebt() {
     if (this.loan.debt !== undefined && this.userAccount) {
       const isBorrower = this.isBorrower();
-      const isDebtOwner = this.userAccount.toUpperCase() === this.loan.debt.owner.toUpperCase();
-      this.canTransfer = isDebtOwner;
-      this.canCancel = false;
       this.canPay = isBorrower;
       this.canLend = false;
       this.canAdjustCollateral = isBorrower;
@@ -537,8 +410,6 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       const isBorrower = this.isBorrower();
       this.canLend = !isBorrower;
       this.canPay = false;
-      this.canTransfer = false;
-      this.canCancel = isBorrower;
       this.canAdjustCollateral = isBorrower;
       this.canRedeem = false;
     } else {

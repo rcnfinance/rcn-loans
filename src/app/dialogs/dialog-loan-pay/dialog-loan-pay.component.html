@@ -145,7 +145,7 @@
                         Instalment amount
                       </p>
                       <p class="item__value">
-                        {{ nextInstallment.installment.amount | formatAmount: 4 }}
+                        {{ nextInstallment.installment.pendingAmount | formatAmount: 4 }}
                         {{ nextInstallment?.installment.currency }}
                       </p>
                     </div>
