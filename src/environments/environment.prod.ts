@@ -118,7 +118,6 @@ export const environment = {
   filterCurrencies: [
     'RCN',
     'DAI',
-    'MANA',
     'ARS',
     'USD'
   ],
@@ -144,9 +143,9 @@ export const environment = {
       address: USDC_TOKEN
     },
     {
-      symbol: 'MANA',
-      img: 'assets/mana.png',
-      address: '0x0f5d2fb29fb7d3cfee444a200298f468908cc942'
+      symbol: 'ARS',
+      img: 'assets/ars.png',
+      address: '0x0000000000000000000000000000000000000000'
     }
   ]
 };
