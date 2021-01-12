@@ -88,13 +88,11 @@ export class CurrenciesService {
    * @return Currency
    */
   getCurrencyByKey(key: 'symbol' | 'address', value: string): CurrencyItem {
-    const filteredCurrency: Array<CurrencyItem> = this.currencies.filter(
-      currency => currency[key].toLowerCase() === value.toLowerCase()
+    return this.currencies.find(
+      currency => currency[key] &&
+        value &&
+        currency[key].toLowerCase() === value.toLowerCase()
     );
-
-    if (filteredCurrency.length) {
-      return filteredCurrency[0];
-    }
   }
 
   /**

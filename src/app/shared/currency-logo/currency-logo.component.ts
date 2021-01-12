@@ -75,10 +75,15 @@ export class CurrencyLogoComponent implements OnInit {
   }
 
   private loadStaticUrl() {
-    const { symbol } = this.currency;
-    const staticUrl = `/assets/${ symbol.toLowerCase() }.png`;
-    this.staticUrl = staticUrl;
+    try {
+      const { symbol } = this.currency;
+      const staticUrl = `/assets/${ symbol.toLowerCase() }.png`;
+      this.staticUrl = staticUrl;
+    } catch {
+      const DEFAULT_CURRENCY_LOGO = '/assets/unavailable.png';
+      this.staticUrl = DEFAULT_CURRENCY_LOGO;
+    }
 
-    return staticUrl;
+    return this.staticUrl;
   }
 }
