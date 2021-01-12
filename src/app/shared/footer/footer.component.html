@@ -90,7 +90,12 @@
               matTooltipPosition="above"
               target="_blank"
             >
-              <i class="fa-lg" [ngClass]="icon.class"></i>
+              <i
+                *ngIf="icon.class"
+                class="fa-lg"
+                [ngClass]="icon.class"
+              ></i>
+              <img *ngIf="icon.img" [src]="icon.img">
               {{ icon.text }}
             </a>
           </div>

@@ -20,8 +20,9 @@ export class FooterComponent implements OnInit, OnDestroy {
   socialIcons: {
     url: string;
     label: string;
-    class: string;
+    class?: string;
     text?: string;
+    img?: string;
   }[];
 
   // Nav Mobile toggled
@@ -95,6 +96,11 @@ export class FooterComponent implements OnInit, OnDestroy {
         url: 'https://github.com/ripio/rcn.loans',
         label: 'Github',
         class: 'fab fa-github'
+      },
+      {
+        url: 'https://defipulse.com/',
+        label: 'DeFi Pulse',
+        img: '/assets/defi-pulse.svg'
       }
     ];
 
