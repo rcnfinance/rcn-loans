@@ -77,16 +77,19 @@ export class WalletBalancesComponent implements OnInit, OnDestroy {
    * Show the user balance in different tokens
    */
   private loadBalances() {
-    const currencies = this.currenciesService.getCurrenciesExcept('symbol', 'ETH');
+    const CURRENCIES_TO_REMOVE = ['ETH'];
+    const currencies = this.currenciesService.getCurrencies(true);
+    const filteredCurrencies = currencies.filter(({ symbol }) => !CURRENCIES_TO_REMOVE.includes(symbol));
+
     const MAX_DECIMALS = 2;
-    this.balances = currencies.map((currency) => {
+    this.balances = filteredCurrencies.map((currency) => {
       return {
         currency,
         balance: null
       };
     });
 
-    currencies.map(async (currency: CurrencyItem, index: number) => {
+    filteredCurrencies.map(async (currency: CurrencyItem, index: number) => {
       const weiBalance: BN = await this.contractsService.getUserBalanceInToken(currency.address.toLowerCase());
       const decimals = new Currency(currency.symbol).decimals;
       const balance: number = weiBalance as any / 10 ** decimals;

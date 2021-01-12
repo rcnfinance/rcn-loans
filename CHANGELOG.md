@@ -1,5 +1,18 @@
 # Changelog
 
+## **0.3.1** Boggart 👻
+
+### Feature:
+- Borrow loans in ARS
+
+### Enhancement:
+- New logic for Installments component
+- Add DeFi Pulse icon
+
+### Fix:
+- Fix duration label in borrow view
+- Fix payments calendar
+
 ## **0.3.0** Boggart 👻
 
 ### Feature:
