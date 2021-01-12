@@ -15,6 +15,8 @@ export class CurrencyLogoComponent implements OnInit {
   @Input() symbol;
   @Input() address;
   url: string;
+  staticUrl: string;
+  currency: CurrencyItem;
 
   constructor(
     private currenciesService: CurrenciesService,
@@ -22,6 +24,8 @@ export class CurrencyLogoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loadCurrency();
+    this.loadStaticUrl();
     try {
       if (!this.address) {
         const currency: CurrencyItem = this.currenciesService.getCurrencyByKey('symbol', this.symbol)[0];
@@ -49,7 +53,7 @@ export class CurrencyLogoComponent implements OnInit {
         break;
 
       case null:
-        url = this.defaultIcon();
+        url = this.loadStaticUrl();
         break;
 
       default:
@@ -62,12 +66,24 @@ export class CurrencyLogoComponent implements OnInit {
     return url;
   }
 
-  /**
-   * Return default icon URL
-   * @return Icon URL
-   */
-  defaultIcon() {
-    return `/assets/unavailable.png`;
+  private loadCurrency() {
+    const { symbol, address } = this;
+    const key = symbol ? 'symbol' : 'address';
+    const value = symbol || address;
+    const currency = this.currenciesService.getCurrencyByKey(key, value);
+    this.currency = currency;
   }
 
+  private loadStaticUrl() {
+    try {
+      const { symbol } = this.currency;
+      const staticUrl = `/assets/${ symbol.toLowerCase() }.png`;
+      this.staticUrl = staticUrl;
+    } catch {
+      const DEFAULT_CURRENCY_LOGO = '/assets/unavailable.png';
+      this.staticUrl = DEFAULT_CURRENCY_LOGO;
+    }
+
+    return this.staticUrl;
+  }
 }

@@ -18,7 +18,7 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() {}
+  constructor() { }
   handleError(error: any) {
     // handle chunk-error reloading the page
     const chunkFailedMessage = /Loading chunk [\d]+ failed/;

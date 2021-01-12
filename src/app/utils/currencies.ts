@@ -16,7 +16,6 @@ export class Currency {
       case 'USDC':
         return 6;
 
-      case 'MANA':
       case 'ETH':
       case 'RCN':
       case 'DAI':
