@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { Utils } from './../utils/utils';
 
 interface BestInterestRate {
   min: number;
@@ -24,7 +25,7 @@ export class CurrenciesService {
     'RCN': { min: 5, max: 15, best: 10 },
     'DAI': { min: 10, max: 20, best: 15 },
     'USDC': { min: 5, max: 10, best: 7 },
-    'MANA': { min: 10, max: 20, best: 15 },
+    'ARS': { min: 40, max: 80, best: 60 },
     'ETH': { min: 0, max: 5, best: 1 },
     'TEST': { min: 0, max: 20, best: 10 },
     'DEST': { min: 10, max: 20, best: 15 }
@@ -42,7 +43,7 @@ export class CurrenciesService {
       const address = currency.address;
       const symbol = currency.symbol;
       const img = currency.img;
-      const isToken = currency.address ? true : false;
+      const isToken = currency.address && currency.address !== Utils.address0x;
       const bestInterestRate = this.getBestInterest(symbol);
       const formattedCurrency: CurrencyItem = {
         address,
@@ -65,7 +66,7 @@ export class CurrenciesService {
     const CRYPTO_CURRENCIES: string[] =
       this.currencies.map(({ symbol }) => symbol);
     const FIAT_CURRENCIES: string[] =
-      ['ARS', 'USD'];
+      ['USD'];
 
     return CRYPTO_CURRENCIES.concat(FIAT_CURRENCIES);
   }
@@ -87,13 +88,11 @@ export class CurrenciesService {
    * @return Currency
    */
   getCurrencyByKey(key: 'symbol' | 'address', value: string): CurrencyItem {
-    const filteredCurrency: Array<CurrencyItem> = this.currencies.filter(
-      currency => currency[key].toLowerCase() === value.toLowerCase()
+    return this.currencies.find(
+      currency => currency[key] &&
+        value &&
+        currency[key].toLowerCase() === value.toLowerCase()
     );
-
-    if (filteredCurrency.length) {
-      return filteredCurrency[0];
-    }
   }
 
   /**

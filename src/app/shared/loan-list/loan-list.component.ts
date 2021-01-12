@@ -33,7 +33,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
   canRedeem: boolean;
   installments: number;
   interestRate: string;
-  punitiveInterestRateRate: string;
+  punitiveInterestRate: string;
   collateralAsset: string;
   collateralRatio: string;
 
@@ -174,7 +174,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
     this.loanType = this.loanTypeService.getLoanType(this.loan);
     this.shortAddress = Utils.shortAddress(loan.borrower);
     this.interestRate = Utils.formatAmount(loan.descriptor.interestRate, 0);
-    this.punitiveInterestRateRate = Utils.formatAmount(loan.descriptor.punitiveInterestRateRate, 0);
+    this.punitiveInterestRate = Utils.formatAmount(loan.descriptor.punitiveInterestRate, 0);
     this.installments = loan.descriptor.installments;
 
     switch (this.loanType) {

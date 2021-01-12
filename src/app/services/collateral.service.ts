@@ -128,7 +128,7 @@ export class CollateralService {
    * Get rate loan currency / collateral currency
    * @return Exchange rate
    */
-  async getCollateralRate(loan: Loan, collateral: Collateral): Promise<string> {
+  async getCollateralRate(loan: Loan, collateral: Collateral): Promise<number> {
     const loanRate: BN | string =
       await this.contractsService.getRate(loan.oracle.address, loan.currency.decimals);
 
@@ -136,7 +136,7 @@ export class CollateralService {
     const collateralDecimals: number = new Currency(collateralCurrency.symbol).decimals;
     const collateralRate: BN | string = await this.contractsService.getRate(collateral.oracle, collateralDecimals);
 
-    const rate = Utils.formatAmount((loanRate as any) / (collateralRate as any));
+    const rate = (loanRate as any) / (collateralRate as any);
     return rate;
   }
 

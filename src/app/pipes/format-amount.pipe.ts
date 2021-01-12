@@ -6,8 +6,8 @@ import { Utils } from './../utils/utils';
 })
 export class FormatAmountPipe implements PipeTransform {
 
-  transform(value: any): any {
-    return Utils.formatAmount(Number(value));
+  transform(value: any, decimals?: number): any {
+    return Utils.formatAmount(Number(value), decimals);
   }
 
 }

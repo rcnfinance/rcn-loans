@@ -59,7 +59,7 @@ describe('LoanListComponent', () => {
         'totalObligation': 1.0224e+23,
         'duration': 5854446,
         'interestRate': 108.31434467543319,
-        'punitiveInterestRateRate': 79.00017380038236,
+        'punitiveInterestRate': 79.00017380038236,
         'frequency': 1951482,
         'installments': 3
       },
@@ -114,7 +114,7 @@ describe('LoanListComponent', () => {
         'totalObligation': 12000000000000000000,
         'duration': 31104000,
         'interestRate': 9.048821548821541,
-        'punitiveInterestRateRate': 11.976896418944936,
+        'punitiveInterestRate': 11.976896418944936,
         'frequency': 2592000,
         'installments': 12
       },

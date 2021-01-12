@@ -21,7 +21,7 @@ export class Descriptor {
     public totalObligation: number,
     public duration: number,
     public interestRate: number,
-    public punitiveInterestRateRate: number,
+    public punitiveInterestRate: number,
     public frequency: number,
     public installments: number
   ) { }

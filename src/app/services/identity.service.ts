@@ -16,7 +16,7 @@ export class IdentityService {
       '--',
       `Ripio is one of Latin America's leading Blockchain service providers. Founded in 2013 with the mission of developing and
       strengthening the new digital economy in the region, Ripio offers storage, brokerage, exchange and OTC products to more
-      than 400,000 users across Argentina, Brazil and Mexico, with current expansion plans in Colombia, Chile, Uruguay, Paraguay and Peru.
+      than 950,000 users across Argentina, Brazil and Mexico, with current expansion plans in Colombia, Chile, Uruguay, Paraguay and Peru.
       As an industry pioneer, Ripio has been included in selective startup accelerator programs by Google and Visa, and recognized among the
       most innovative startups of 2018 by KPMG’s Fintech100 list.`,
       './assets/logos/ripio.png',
@@ -48,12 +48,12 @@ export class IdentityService {
         {
           icon: 'fas fa-user-circle',
           title: 'Total Users',
-          description: '400,000'
+          description: '950,000'
         },
         {
           icon: 'fas fa-users',
           title: 'Employees',
-          description: '100'
+          description: '130'
         },
         {
           icon: 'fas fa-coins',
@@ -67,7 +67,7 @@ export class IdentityService {
       '--',
       `Ripio is one of Latin America's leading Blockchain service providers. Founded in 2013 with the mission of developing and
       strengthening the new digital economy in the region, Ripio offers storage, brokerage, exchange and OTC products to more
-      than 400,000 users across Argentina, Brazil and Mexico, with current expansion plans in Colombia, Chile, Uruguay, Paraguay and Peru.
+      than 950,000 users across Argentina, Brazil and Mexico, with current expansion plans in Colombia, Chile, Uruguay, Paraguay and Peru.
       As an industry pioneer, Ripio has been included in selective startup accelerator programs by Google and Visa, and recognized among the
       most innovative startups of 2018 by KPMG’s Fintech100 list.`,
       './assets/logos/ripio.png',
@@ -99,12 +99,12 @@ export class IdentityService {
         {
           icon: 'fas fa-user-circle',
           title: 'Total Users',
-          description: '400,000'
+          description: '950,000'
         },
         {
           icon: 'fas fa-users',
           title: 'Employees',
-          description: '100'
+          description: '130'
         },
         {
           icon: 'fas fa-coins',
