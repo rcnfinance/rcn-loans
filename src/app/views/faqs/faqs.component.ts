@@ -31,7 +31,7 @@ export class FaqsComponent implements OnInit {
         answer: `RCN is powered by its own open-source blockchain lending and borrowing protocol, which in turn runs on the <a href="https://ethereum.org/en/" target="_blank">Ethereum network</a>. Composed by a modular set of smart-contracts, the protocol’s current version <a href="https://medium.com/rcnblog/rcn-protocol-v4-diaspore-7073739fbeda" target="_blank">RCN Protocol v4.0 “Diaspore"</a> allows its users to denominate, collateralize, receive, repay, fund, transfer and collect loans. In addition, it is compatible with a wide variety of Oracles, Loan Types and Backings.`
       }, {
         question: 'What is the RCN Token and how is it related to RCN?',
-        answer: 'The RCN Token is an ERC-20 token, Ethereum smart-contract, and one of the currencies that allow users to receive, repay and collect loans on the RCN protocol. The token is additionally related to the protocol through a mechanism that permanently removes RCN tokens from circulation proportionally to the protocol’s usage.'
+        answer: 'The RCN Token is an ERC-20 token, Ethereum smart-contract, and one of the currencies that allows users to receive, repay and collect loans on the RCN protocol.'
       }]
     }, {
       title: 'Credit Marketplace',
