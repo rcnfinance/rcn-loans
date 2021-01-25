@@ -91,7 +91,7 @@ export class WalletSettingsComponent implements OnInit, OnChanges, OnDestroy {
     document.execCommand('copy');
     document.body.removeChild(shadowElement);
 
-    this.snackBar.open('Address copied to clipboard' , null, {
+    this.snackBar.open('Address copied to clipboard!' , null, {
       duration: 4000,
       horizontalPosition: 'center'
     });
