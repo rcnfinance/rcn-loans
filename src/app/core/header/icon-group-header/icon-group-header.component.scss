@@ -5,12 +5,14 @@
   position: relative;
   .button {
     cursor: pointer;
+    @include transition();
     &.active,
     &:hover{
       color: var(--app-color-primary);
     };
+    &,
     i,
-    svg{ font-size: 22px; @include transition(); }
+    svg { font-size: 22px; }
     .available-notifications {
       display: flex;
       align-items: center;
