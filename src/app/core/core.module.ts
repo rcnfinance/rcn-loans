@@ -13,6 +13,7 @@ import { NotificationItemComponent } from './header/notifications/notification-i
 import { WalletBalancesComponent } from './header/wallet-balances/wallet-balances.component';
 import { WalletAvatarComponent } from './header/wallet-avatar/wallet-avatar.component';
 import { WalletWithdrawComponent } from './header/wallet-withdraw/wallet-withdraw.component';
+import { WalletSettingsComponent } from './header/wallet-settings/wallet-settings.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
 // App Directives
 import { ClickOutsideDirective } from '../directives/click-outside.directive';
@@ -36,6 +37,7 @@ import { OpenEtherscanDirective } from '../directives/open-etherscan.directive';
     WalletBalancesComponent,
     WalletAvatarComponent,
     WalletWithdrawComponent,
+    WalletSettingsComponent,
     SocialContainerComponent
   ],
   exports: [

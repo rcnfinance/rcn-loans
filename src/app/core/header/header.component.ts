@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router, ActivatedRoute, NavigationEnd, Event } from '@angular/router';
-import { Utils } from './../../utils/utils';
 import { WalletType } from './../../interfaces/wallet.interface';
 // App Component
 import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -20,7 +19,6 @@ import { TitleService } from '../../services/title.service';
 export class HeaderComponent implements OnInit {
   hasAccount: boolean;
   account: string;
-  shortAccount: string;
   makeRotate = false;
   title: string;
   hideMobileHeader: boolean;
@@ -62,10 +60,8 @@ export class HeaderComponent implements OnInit {
       if (loggedIn) {
         const account = await this.web3Service.getAccount();
         this.account = web3.utils.toChecksumAddress(account);
-        this.shortAccount = Utils.shortAddress(this.account);
       } else {
         this.account = undefined;
-        this.shortAccount = undefined;
       }
       this.hasAccount = loggedIn;
       this.cdRef.detectChanges();
@@ -73,18 +69,12 @@ export class HeaderComponent implements OnInit {
   }
 
   /**
-   * Open Approve Dialog
-   */
-  openDialogApprove() {
-    this.dialog.open(DialogApproveContractComponent, {});
-  }
-
-  /**
    * Open Client Dialog or connect with the dapp
    */
   async login() {
     if (this.hasAccount) {
-      return this.openDialogApprove();
+      this.dialog.open(DialogApproveContractComponent, {});
+      return;
     }
 
     const connected: boolean = await this.walletConnectService.connect();

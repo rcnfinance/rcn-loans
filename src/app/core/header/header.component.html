@@ -64,29 +64,6 @@
               >
                 <app-icon-group-header [account]="account"></app-icon-group-header>
               </div>
-              <ng-container *ngIf="hasAccount">
-                <div class="nav__item mx-3">
-                  <div class="flex-item">
-                    <div class="list-avatar">
-                      <div class="avatar-container">
-                        <app-wallet-avatar></app-wallet-avatar>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="nav__item nav__item--account"
-                  (click)="openDialogApprove()"
-                  matTooltip="General Settings"
-                >
-                  <div class="flex-container">
-                    <i class="fas fa-cog"></i>
-                    <div class="flex-item mr-2">
-                      {{ shortAccount }}
-                    </div>
-                  </div>
-                </div>
-              </ng-container>
             </div>
           </div>
         </div>

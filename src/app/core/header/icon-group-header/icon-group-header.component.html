@@ -32,8 +32,29 @@
   >
     <i class="fas fa-donate"></i>
   </div>
-  <div class="ml-3"></div>
+  <div class="mx-3"></div>
+  <div class="button button--avatar">
+    <app-wallet-avatar></app-wallet-avatar>
+  </div>
+  <div class="mx-3"></div>
+  <div
+    class="button button--account"
+    matTooltip="General Settings"
+    (click)="openDetail('settings')"
+    [ngClass]="{'active': isDetail('settings')}"
+  >
+    <i class="fas fa-cog"></i>
+    <span>
+      {{ shortAccount }}
+    </span>
+  </div>
+
+
+
+
+
   <app-notifications (notificationsCounter)="updateCounter($event)"></app-notifications>
   <app-wallet-balances></app-wallet-balances>
   <app-wallet-withdraw [account]="account"></app-wallet-withdraw>
+  <app-wallet-settings [account]="account"></app-wallet-settings>
 </div>
