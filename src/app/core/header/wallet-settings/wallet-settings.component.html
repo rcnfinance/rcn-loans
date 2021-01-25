@@ -1,0 +1,31 @@
+<div
+  class="wallet-settings"
+  [@anmNotifications]="viewDetail === 'settings' ? 'open' : 'closed'"
+>
+  <div class="wallet-settings__items">
+    <div class="item item--address" (click)="clickCopyAddress()">
+      <span class="item__icon">
+        <i class="far fa-user-circle"></i>
+      </span>
+      <span class="item__text">
+        {{ shortAddress }}
+      </span>
+      <div class="item__icon item__icon--copy">
+        <i class="far fa-copy"></i>
+      </div>
+    </div>
+    <div class="item" (click)="clickOpenEtherscan()">
+      <span class="item__text">
+        Open in Etherscan
+      </span>
+      <span class="item__icon">
+        <i class="fas fa-external-link-alt"></i>
+      </span>
+    </div>
+    <div class="item" (click)="clickOpenApprovals()">
+      <span class="item__text">
+        Approvals
+      </span>
+    </div>
+  </div>
+</div>

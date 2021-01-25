@@ -1,0 +1,53 @@
+@import './../../../../scss/variables';
+@import './../../../../scss/fonts';
+
+.wallet-settings {
+  position: absolute;
+  right: 14px;
+  width: 233px;
+  overflow: hidden;
+  background: var(--app-color-gray-700);
+  color: white;
+  border-radius: 3px;
+  padding: 10px 0;
+  @include transition();
+  &__items {
+    .item {
+      @include typography-headline(7);
+      padding: 10px 19px;
+      cursor: pointer;
+      &:hover {
+        .item__text,
+        .item__icon {
+          // TODO: add hover effect
+        }
+      }
+      &__text,
+      &__icon {
+        transition: .3s;
+      }
+      &__icon {
+        margin-left: 14px;
+        font-size: 12px;
+      }
+      &--address {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        @include styled-font('proxima-nova', 700, 19px);
+        padding: 6px 19px;
+        .item__icon {
+          margin: 0 10px 0 0;
+          font-size: 23px;
+          &--copy {
+            margin: 0 0 0 23px;
+            font-size: 14px;
+          }
+        }
+        .item__text {
+
+        }
+      }
+    }
+  }
+}
