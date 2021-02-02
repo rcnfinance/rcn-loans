@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatSnackBarModule, MatDialogModule } from '@angular/material';
+import { MatSnackBarModule, MatDialogModule, MatTooltipModule } from '@angular/material';
 import { WalletAvatarComponent } from './wallet-avatar.component';
 
 describe('WalletAvatarComponent', () => {
@@ -9,7 +9,7 @@ describe('WalletAvatarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ MatSnackBarModule, MatDialogModule ],
+      imports: [ MatSnackBarModule, MatDialogModule, MatTooltipModule ],
       declarations: [ WalletAvatarComponent ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })

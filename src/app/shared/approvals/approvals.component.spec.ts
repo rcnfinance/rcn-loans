@@ -1,5 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { SharedModule } from 'app/shared/shared.module';
 import { ApprovalsComponent } from './approvals.component';
 
 describe('ApprovalsComponent', () => {
@@ -8,7 +11,12 @@ describe('ApprovalsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ApprovalsComponent ]
+      imports: [
+        HttpClientModule,
+        RouterModule.forRoot([]),
+        SharedModule
+      ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
     .compileComponents();
   }));

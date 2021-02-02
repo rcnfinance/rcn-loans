@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NotificationWalletBalancesComponent } from './notification-wallet-balances.component';
 
 describe('NotificationWalletBalancesComponent', () => {
@@ -8,7 +9,9 @@ describe('NotificationWalletBalancesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NotificationWalletBalancesComponent ]
+      imports: [ BrowserAnimationsModule ],
+      declarations: [ NotificationWalletBalancesComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
     .compileComponents();
   }));
