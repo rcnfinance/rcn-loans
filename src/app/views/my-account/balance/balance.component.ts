@@ -1,12 +1,12 @@
 import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { Engine } from '../../models/loan.model';
-import { Utils } from '../../utils/utils';
-import { Web3Service } from '../../services/web3.service';
-import { EventsService } from '../../services/events.service';
-import { ContractsService } from '../../services/contracts.service';
-import { Tx, Type, TxService } from '../../services/tx.service';
+import { environment } from 'environments/environment';
+import { Engine } from 'app/models/loan.model';
+import { Utils } from 'app/utils/utils';
+import { Web3Service } from 'app/services/web3.service';
+import { EventsService } from 'app/services/events.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { Tx, Type, TxService } from 'app/services/tx.service';
 
 @Component({
   selector: 'app-component-balance',
@@ -90,6 +90,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     const pendingWithdraws = await this.contractService.getPendingWithdraws(Engine.UsdcEngine);
     this.usdcAvailable = pendingWithdraws[2] / 10 ** 6;
     this.usdcLoansWithBalance = pendingWithdraws[3];
+
     this.loadOngoingWithdraw();
     this.updateDisplay();
   }

@@ -8,8 +8,21 @@ footer {
   right: 0;
   left: 0;
   z-index: 1000;
-  padding: 15px 0;
+  padding: 6px 0;
   background: var(--app-color-gray-500);
+  .nav-mobile {
+    li {
+      @include styled-font('proxima-nova', 400, 12px);
+      &, svg {
+        color: #A3A5A6;
+      }
+      &.active {
+        &, svg {
+          color: white;
+        }
+      }
+    }
+  }
 }
 
 @media (min-width: 992px) {

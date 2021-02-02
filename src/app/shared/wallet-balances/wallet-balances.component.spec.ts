@@ -3,9 +3,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from '../../../shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
+import { HeaderPopoverService } from 'app/services/header-popover.service';
 import { WalletBalancesComponent } from './wallet-balances.component';
-import { HeaderPopoverService } from '../../../services/header-popover.service';
 
 describe('WalletBalancesComponent', () => {
   let component: WalletBalancesComponent;

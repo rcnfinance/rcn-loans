@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
+import { readComponent } from 'app/utils/utils.test';
 import { BalanceComponent } from './balance.component';
-import { readComponent } from '../../utils/utils.test';
 
 describe('BalanceComponent', () => {
   let component: BalanceComponent;

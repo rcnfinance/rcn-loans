@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Engine } from './../../models/loan.model';
-import { DialogClientAccountComponent } from '../../dialogs/dialog-client-account/dialog-client-account.component';
 import { environment } from '../../../environments/environment';
-import { SidebarService } from '../../services/sidebar.service';
 import { Web3Service } from './../../services/web3.service';
 import { TitleService } from '../../services/title.service';
 import { AvailableLoansService } from '../../services/available-loans.service';
@@ -25,9 +23,6 @@ export class FooterComponent implements OnInit, OnDestroy {
     img?: string;
   }[];
 
-  // Nav Mobile toggled
-  navmobileToggled = false;
-
   // subscriptions
   subscriptions = {
     account: null,
@@ -40,7 +35,6 @@ export class FooterComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private titleService: TitleService,
     private web3Service: Web3Service,
-    private sidebarService: SidebarService,
     private availableLoansService: AvailableLoansService
   ) {}
 
@@ -105,9 +99,6 @@ export class FooterComponent implements OnInit, OnDestroy {
     ];
 
     // Service subscriber
-    this.subscriptions.sidebar = this.sidebarService.currentNavmobile.subscribe(
-      navmobileToggled => this.navmobileToggled = navmobileToggled
-    );
     this.subscriptions.title = this.titleService.currentTitle.subscribe(
       title => this.title = title
     );
@@ -129,27 +120,6 @@ export class FooterComponent implements OnInit, OnDestroy {
       this.subscriptions.account.unsubscribe();
       this.subscriptions.available.unsubscribe();
     } catch (e) { }
-  }
-
-  /**
-   * Toggle navbar menu
-   */
-  navmobileToggle() {
-    this.sidebarService.navmobileService(this.navmobileToggled = !this.navmobileToggled);
-  }
-
-  /**
-   * Close navbar menu
-   */
-  navmobileClose() {
-    this.sidebarService.navmobileService(this.navmobileToggled = false);
-  }
-
-  /**
-   * Open Client Dialog
-   */
-  openDialogClient() {
-    this.dialog.open(DialogClientAccountComponent, {});
   }
 
   /**
