@@ -1,5 +1,19 @@
 # Changelog
 
+## **0.3.2** Boggart 👻
+
+### Feature:
+- New "My account" tab on mobile
+- Add collateral suggestions in Borrow
+
+### Enhancement:
+- Mobile navigation improvements
+- New collateral average bar
+
+### Fix:
+- Fix API implementation for collateral
+- Fix wallet connection on mobile
+
 ## **0.3.1** Boggart 👻
 
 ### Feature:
