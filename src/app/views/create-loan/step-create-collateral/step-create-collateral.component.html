@@ -58,7 +58,7 @@
               </ng-template>
             </div>
           </div>
-          <div class="col-sm-12 col-md-3 item item--amount">
+          <div class="col-sm-12 col-md-3 offset-md-2 item item--amount">
             <div class="item__title">
               Amount
               <mat-icon
@@ -91,11 +91,11 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="col-sm-12 col-md-6 pl-md-4 item item--ratios">
+          <div class="col-sm-12 col-md-3 offset-md-1 item item--ratios">
             <div class="row">
-              <div class="col-12 col-md-5 pl-md-0 mt-4 mb-2 my-md-0">
+              <div class="col-12 pl-md-0 mt-4 mb-2 my-md-0">
                 <div
-                  class="py-2 ratio ratio--collateral"
+                  class="ratio ratio--collateral"
                   [class.ratio--untouched]="!form?.value.formUi.amount"
                   [class.ratio--low]="form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_LOW"
                   [class.ratio--high]="form?.value.formUi.collateralAdjustment >= COLLATERAL_AVERAGE_LOW"
@@ -108,44 +108,95 @@
                     </span>
                   </div>
                   <div class="ratio__value mt-2">
-                    {{ form?.value.formUi.collateralAdjustment || 0 }}%
+                    {{ form?.value.formUi.collateralAdjustment || 0 }}%
+                  </div>
+                  <div class="ratio-divisor"></div>
+                  <div class="ratio-options">
+                    <div
+                      class="ratio-options__label"
+                      (click)="clickSuggestions()"
+                    >
+                      <span class="mr-1">
+                        Suggested options
+                      </span>
+                      <span *ngIf="showSuggestions">
+                        <i class="fas fa-chevron-up"></i>
+                      </span>
+                      <span *ngIf="!showSuggestions">
+                        <i class="fas fa-chevron-down"></i>
+                      </span>
+                    </div>
+                    <div *ngIf="showSuggestions" class="ratio-options__content">
+                      <div
+                        *ngFor="let suggestion of collateralSuggestions"
+                        class="suggested-ratio"
+                        [class.suggested-ratio--active]="form.value.formUi.collateralAdjustment === suggestion"
+                        (click)="clickCollateralSuggestion(suggestion)"
+                      >
+                        <ng-container *ngIf="suggestion === COLLATERAL_AVERAGE_LOW">
+                          Min
+                        </ng-container>
+                        <ng-container *ngIf="suggestion > COLLATERAL_AVERAGE_LOW">
+                          {{ suggestion }}%
+                        </ng-container>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-md-7 pl-md-0 mb-4 my-md-0">
-                <div class="row">
-                  <div class="col-12">
-                    <div
-                      class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--liquidation"
-                      matTooltip="If the Collateral Ratio reaches this value your collateral will get partially or fully liquidated."
-                    >
-                      <div class="ratio__title">
-                        <i class="fa fa-chart-line"></i>
-                        <span class="ml-2">
-                          Liquidation Ratio:
-                        </span>
-                      </div>
-                      <div class="ratio__value ml-2">
-                        {{ form?.value.formUi.liquidationRatio }}%
-                      </div>
-                    </div>
-                    <div class="ratio-divisor"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3 mt-lg-0 pt-4 mb-4 pb-2">
+          <div class="col col-lg-12 item item--slider">
+            <div class="item__title">
+              Adjust collateral
+            </div>
+            <div class="item__subtitle">
+              <!-- FIXME: review copy -->
+              Select the interest you want to collateralize
+            </div>
+            <div class="row mt-4 mt-lg-5 mb-3">
+              <div class="col col-sm-12 col-lg-8">
+                <div class="item__slider">
+                  <mat-slider
+                    class="percentage percentage--liquidation"
+                    color="primary"
+                    thumbLabel="true"
+                    [value]="150"
+                    [displayWith]="formatLiquidationRatio"
+                    [min]="form.value.formUi.liquidationRatio - 50"
+                    [max]="COLLATERAL_AVERAGE_HIGH"
+                  ></mat-slider>
+                  <mat-slider
+                    class="percentage percentage--balance"
+                    color="primary"
+                    thumbLabel="true"
+                    [value]="200"
+                    [displayWith]="formatSafetyRatio"
+                    [min]="form.value.formUi.liquidationRatio - 50"
+                    [max]="COLLATERAL_AVERAGE_HIGH"
+                  ></mat-slider>
+                  <mat-slider
+                    class="percentage percentage--collateral"
+                    step="1"
+                    tickInterval="25"
+                    color="primary"
+                    thumbLabel="true"
+                    formControlName="collateralAdjustment"
+                    [displayWith]="formatCollateralRatio"
+                    [disabled]="!form.value.formUi.currency"
+                    [min]="form.value.formUi.liquidationRatio - 50"
+                    [max]="COLLATERAL_AVERAGE_HIGH"
+                    (change)="onCollateralAdjustmentChange()"
+                  ></mat-slider>
+                </div>
+                <div class="item__percentage">
+                  <div class="item__percentage-amount">
+                    {{ form.value.formUi.liquidationRatio - 50 }} %
                   </div>
-                  <div class="col-12">
-                    <div
-                      class="d-flex justify-content-center align-items-center justify-content-md-start ratio ratio--balance"
-                      matTooltip="If a collateral liquidation gets triggered, your collateral will get liquidated until the Collateral Ratio reaches this value."
-                    >
-                      <div class="ratio__title">
-                        <i class="fa fa-chart-line"></i>
-                        <span class="ml-2">
-                          Safety Ratio:
-                        </span>
-                      </div>
-                      <div class="ratio__value ml-2">
-                        {{ form?.value.formUi.liquidationRatio + 50 }}%
-                      </div>
-                    </div>
+                  <div class="item__percentage-amount">
+                    {{ COLLATERAL_AVERAGE_HIGH }} %
                   </div>
                 </div>
               </div>
@@ -172,77 +223,6 @@
             </button>
           </div>
         </div>
-        <!--
-        <div class="row mt-3 mt-lg-5 pt-4">
-          <div class="col-lg-12 item">
-            <div class="item__title">
-              Liquidation Ratio
-            </div>
-            <div class="row mt-4 mb-3">
-              <div class="col col-sm-12 col-lg-8">
-                <mat-radio-group
-                  formControlName="liquidationRatio"
-                  aria-label="Select an option"
-                >
-                  <mat-radio-button color="primary" [value]="125">
-                    125%
-                  </mat-radio-button>
-                  <mat-radio-button color="primary" [value]="150" class="ml-4">
-                    150%
-                  </mat-radio-button>
-                </mat-radio-group>
-              </div>
-            </div>
-            <div class="item__message item__message--info">
-              <i class="fas fa-info-circle"></i>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </div>
-          </div>
-        </div>
-        -->
-        <!--
-        <div class="row mt-3 mt-lg-5 pt-4 mb-4 pb-2">
-          <div class="col col-lg-12 item item--slider">
-            <div class="item__title">
-              Balance ratio
-            </div>
-            <div class="item__subtitle">
-              Select the interest you want to pay
-            </div>
-            <div class="row mt-4 mb-3">
-              <div class="col col-sm-12 col-lg-7">
-                <mat-slider
-                  class="percentage"
-                  step="1"
-                  tickInterval="25"
-                  color="primary"
-                  thumbLabel="true"
-                  formControlName="collateralAdjustment"
-                  [displayWith]="formatPercentage"
-                  [disabled]="!form.value.formUi.currency"
-                  [min]="form.value.formUi.liquidationRatio"
-                  [max]="400"
-                  (change)="onCollateralAdjustmentChange()"
-                ></mat-slider>
-                <div class="item__percentage">
-                  <div class="item__percentage-amount">
-                    {{ form.value.formUi.liquidationRatio }} %
-                  </div>
-                  <div class="item__percentage-amount">
-                    400 %
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              *ngIf="form.value.formUi.currency"
-              class="item__message item__message--info"
-            >
-              <i class="fas fa-info-circle"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </div>
-          </div>
-        </div>
-        -->
       </div>
     </div>
   </div>
