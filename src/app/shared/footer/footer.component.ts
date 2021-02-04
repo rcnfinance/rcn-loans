@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { Engine } from './../../models/loan.model';
-import { environment } from '../../../environments/environment';
-import { Web3Service } from './../../services/web3.service';
-import { TitleService } from '../../services/title.service';
-import { AvailableLoansService } from '../../services/available-loans.service';
+import { Engine } from 'app/models/loan.model';
+import { environment } from 'environments/environment';
+import { Web3Service } from 'app/services/web3.service';
+import { TitleService } from 'app/services/title.service';
+import { AvailableLoansService } from 'app/services/available-loans.service';
+import { WalletConnectService } from 'app/services/wallet-connect.service';
+import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
 
 @Component({
   selector: 'app-footer',
@@ -35,6 +37,7 @@ export class FooterComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private titleService: TitleService,
     private web3Service: Web3Service,
+    private walletConnectService: WalletConnectService,
     private availableLoansService: AvailableLoansService
   ) {}
 
@@ -128,6 +131,18 @@ export class FooterComponent implements OnInit, OnDestroy {
    */
   get hasAccount(): boolean {
     return this.account !== undefined;
+  }
+
+  /**
+   * Open Client Dialog or connect with the dapp
+   */
+  async clickLogin() {
+    if (this.hasAccount) {
+      this.dialog.open(DialogApproveContractComponent, {});
+      return;
+    }
+
+    await this.walletConnectService.connect();
   }
 
   /**
