@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import * as BN from 'bn.js';
 import { Currency } from 'app/utils/currencies';
 import { ContractsService } from 'app/services/contracts.service';
@@ -14,6 +14,7 @@ interface Balance {
   styleUrls: ['./wallet-balances.component.scss']
 })
 export class WalletBalancesComponent implements OnInit, OnChanges {
+  @Input() account: string;
   balances: Balance[];
 
   constructor(
@@ -26,6 +27,7 @@ export class WalletBalancesComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    console.info('changes');
     this.loadBalances();
   }
 
