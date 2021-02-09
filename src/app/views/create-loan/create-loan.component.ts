@@ -186,7 +186,8 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
 
     // validate ERC721 approve
     const { ethAddress } = environment.contracts[loan.engine].converter;
-    if (collateral.token === ethAddress) {
+    const isEth: boolean = collateral.token === ethAddress;
+    if (isEth) {
       const collateralAddress = environment.contracts[loan.engine].collateral.collateral;
       const operator = environment.contracts[loan.engine].collateral.wethManager;
       const erc721approved = await this.contractsService.isApprovedERC721(
@@ -202,7 +203,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.handleCreateCollateral(form);
+    this.handleCreateCollateral(form, isEth);
   }
 
   /**
@@ -245,8 +246,9 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
   /**
    * If the validations were successful, manage the collateral creation
    * @param form Collateral request form data
+   * @param isEth ETH Collateral
    */
-  private async handleCreateCollateral(form: CollateralRequest) {
+  private async handleCreateCollateral(form: CollateralRequest, isEth: boolean) {
     const account = await this.web3Service.getAccount();
 
     try {
@@ -258,7 +260,8 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
         form.amount,
         form.liquidationRatio,
         form.balanceRatio,
-        account
+        account,
+        isEth
       );
       this.txService.registerCreateCollateralTx(tx, this.loan);
       this.retrievePendingTx();
