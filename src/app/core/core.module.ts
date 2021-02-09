@@ -6,15 +6,12 @@ import { SharedModule } from '../shared/shared.module';
 // App Component
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 import { HeaderComponent } from './header/header.component';
-import { BalanceComponent } from './balance/balance.component';
 import { IconGroupHeaderComponent } from './header/icon-group-header/icon-group-header.component';
 import { NotificationsComponent } from './header/notifications/notifications.component';
 import { NotificationItemComponent } from './header/notifications/notification-item/notification-item.component';
-import { WalletBalancesComponent } from './header/wallet-balances/wallet-balances.component';
-import { WalletAvatarComponent } from './header/wallet-avatar/wallet-avatar.component';
 import { WalletWithdrawComponent } from './header/wallet-withdraw/wallet-withdraw.component';
 import { WalletSettingsComponent } from './header/wallet-settings/wallet-settings.component';
-import { SocialContainerComponent } from './social-container/social-container.component';
+import { NotificationWalletBalancesComponent } from './header/notification-wallet-balances/notification-wallet-balances.component';
 // App Directives
 import { ClickOutsideDirective } from '../directives/click-outside.directive';
 import { OpenEtherscanDirective } from '../directives/open-etherscan.directive';
@@ -28,23 +25,18 @@ import { OpenEtherscanDirective } from '../directives/open-etherscan.directive';
   declarations: [
     ContentWrapperComponent,
     HeaderComponent,
-    BalanceComponent,
     IconGroupHeaderComponent,
     ClickOutsideDirective,
     OpenEtherscanDirective,
     NotificationsComponent,
     NotificationItemComponent,
-    WalletBalancesComponent,
-    WalletAvatarComponent,
     WalletWithdrawComponent,
     WalletSettingsComponent,
-    SocialContainerComponent
+    NotificationWalletBalancesComponent
   ],
   exports: [
     ContentWrapperComponent,
-    HeaderComponent,
-    BalanceComponent,
-    SocialContainerComponent
+    HeaderComponent
   ]
 })
 export class CoreModule { }

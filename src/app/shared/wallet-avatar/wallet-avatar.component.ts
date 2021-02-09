@@ -1,10 +1,10 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { WalletLogo, WalletConnection, WalletType } from './../../../interfaces/wallet.interface';
+import { WalletLogo, WalletConnection, WalletType } from 'app/interfaces/wallet.interface';
 // App Component
-import { DialogWalletSelectComponent } from './../../../dialogs/dialog-wallet-select/dialog-wallet-select.component';
+import { DialogWalletSelectComponent } from 'app/dialogs/dialog-wallet-select/dialog-wallet-select.component';
 // App services
-import { Web3Service } from './../../../services/web3.service';
+import { Web3Service } from 'app/services/web3.service';
 
 @Component({
   selector: 'app-wallet-avatar',
@@ -12,6 +12,7 @@ import { Web3Service } from './../../../services/web3.service';
   styleUrls: ['./wallet-avatar.component.scss']
 })
 export class WalletAvatarComponent implements OnInit, OnChanges {
+  @Input() size = 25;
   logo: string;
   label: string;
 
