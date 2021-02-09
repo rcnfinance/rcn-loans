@@ -68,7 +68,7 @@ export const environment = {
       },
       collateral: {
         collateral: '0xe4fb51318cd67bfc48f294e46eb18ec0b5b2674c',
-        wethManager: '0xFcbFD18D28ff0FfB311e2dE179F3758531128449'
+        wethManager: '0xfcbfd18d28ff0ffb311e2de179f3758531128449'
       },
       converter: {
         converterRamp: '0x9ce962dfaa5cefcbe298c5a469487cead3a0640d',
