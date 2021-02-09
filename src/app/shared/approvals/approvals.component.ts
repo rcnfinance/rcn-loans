@@ -51,7 +51,7 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
 
   tokenApproves: Object[];
   assets: Contract[];
-  assetOperators: Operator[] = []; // TODO: implement WETH manager
+  assetOperators: Operator[] = [];
   assetApproves: Object[];
 
   pendingTx: Tx = undefined;
@@ -231,6 +231,7 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
 
     try {
       this.loadTokenOperators();
+      this.loadAssetOperators();
       await this.loadTokens();
       await this.loadAssets();
       this.loadDialogDescription();
@@ -354,13 +355,10 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
    * @return ERC721 array
    */
   private async loadAssets(): Promise<Contract[]> {
-    return;
-
-    // TODO: implement method
-    /*
+    const { engine } = this;
     const assets: Contract[] = [];
     assets.push(
-      new Contract('Collateral', environment.contracts.collateral.collateral)
+      new Contract('Collateral', environment.contracts[engine].collateral.collateral)
     );
 
     // set operators
@@ -387,7 +385,6 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
 
     this.assets = assets;
     return assets;
-    */
   }
 
   /**
@@ -515,6 +512,17 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
 
     this.dialogDescription = `To continue please enable ${ contract.name } ${ operator.action } on the Credit Marketplace.`;
     this.setDialogDescription.emit(this.dialogDescription);
+  }
+
+  private loadAssetOperators() {
+    const { engine } = this;
+    this.assetOperators = [
+      new Operator(
+        'WETH Manager',
+        environment.contracts[engine].collateral.wethManager,
+        'collateralization'
+      )
+    ];
   }
 
   private loadTokenOperators() {
