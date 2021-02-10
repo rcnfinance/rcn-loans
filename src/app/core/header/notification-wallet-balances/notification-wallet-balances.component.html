@@ -1,0 +1,6 @@
+<div
+  class="notifications-container"
+  [@anmNotifications]="viewDetail === 'balance' ? 'open' : 'closed'"
+>
+  <app-wallet-balances *ngIf="viewDetail === 'balance'"></app-wallet-balances>
+</div>

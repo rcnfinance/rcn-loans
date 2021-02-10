@@ -69,7 +69,8 @@
       .separator{
         display: inline-block;
         width: 1px;
-        height: 13px;
+        height: 25px;
+        margin-top: -2px;
         background: var(--app-color-gray-50);
         cursor: default;
       }

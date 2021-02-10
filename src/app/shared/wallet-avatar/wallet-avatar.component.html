@@ -3,5 +3,8 @@
   (click)="openWalletSelect()"
   [matTooltip]="'Connected to ' + label"
 >
-  <img [src]="logo">
+  <img
+    [src]="logo"
+    [ngStyle]="{'width': size + 'px', 'height': size + 'px'}"
+  >
 </div>
