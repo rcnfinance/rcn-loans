@@ -1,11 +1,13 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Utils } from '../../../utils/utils';
 import { HeaderPopoverService } from '../../../services/header-popover.service';
 
 enum ViewType {
   Notifications = 'notifications',
   WalletBalance = 'balance',
-  WalletWithdraw = 'withdraw'
+  WalletWithdraw = 'withdraw',
+  WalletSettings = 'settings'
 }
 
 @Component({
@@ -14,8 +16,9 @@ enum ViewType {
   styleUrls: ['./icon-group-header.component.scss']
 })
 
-export class IconGroupHeaderComponent implements OnInit, OnDestroy {
+export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() account: string;
+  shortAccount: string;
   viewDetail: string;
   selection: string;
   previousSelection: string;
@@ -30,6 +33,11 @@ export class IconGroupHeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptionHeader =
       this.headerPopoverService.currentDetail.subscribe(detail => this.viewDetail = detail);
+  }
+
+  ngOnChanges() {
+    const { account } = this;
+    this.shortAccount = Utils.shortAddress(account);
   }
 
   ngOnDestroy() {

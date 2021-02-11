@@ -32,6 +32,10 @@ import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
 import { LoanListComponent } from './loan-list/loan-list.component';
 import { LoanListHeaderComponent } from './loan-list-header/loan-list-header.component';
 import { EmptyStateComponent } from './empty-state/empty-state.component';
+import { WalletAvatarComponent } from './wallet-avatar/wallet-avatar.component';
+import { WalletBalancesComponent } from './wallet-balances/wallet-balances.component';
+import { ApprovalsComponent } from './approvals/approvals.component';
+import { SocialContainerComponent } from './social-container/social-container.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -104,6 +108,10 @@ import { EventsService } from './../services/events.service';
     LoanListComponent,
     LoanListHeaderComponent,
     EmptyStateComponent,
+    WalletAvatarComponent,
+    WalletBalancesComponent,
+    ApprovalsComponent,
+    SocialContainerComponent,
 
     LendButtonComponent,
     DetailButtonComponent,
@@ -184,6 +192,10 @@ import { EventsService } from './../services/events.service';
     LoanListComponent,
     LoanListHeaderComponent,
     EmptyStateComponent,
+    WalletAvatarComponent,
+    WalletBalancesComponent,
+    ApprovalsComponent,
+    SocialContainerComponent,
     DialogWrongCountryComponent,
     BorrowFabButtonComponent,
     CollateralFormComponent,

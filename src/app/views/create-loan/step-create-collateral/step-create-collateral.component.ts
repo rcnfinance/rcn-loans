@@ -22,10 +22,11 @@ import { Tx } from './../../../services/tx.service';
   styleUrls: ['./step-create-collateral.component.scss']
 })
 export class StepCreateCollateralComponent implements OnInit, OnChanges {
-
   pageId = 'step-create-collateral';
   currencies: CurrencyItem[];
   form: FormGroup;
+  showSuggestions: boolean;
+  collateralSuggestions = [200, 250, 300, 350, 400];
   @Input() loan: Loan;
   @Input() account: string; // TODO implement
   @Input() createPendingTx: Tx;
@@ -36,9 +37,9 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
   }>();
   @Output() createCollateral = new EventEmitter();
   DEFAULT_LIQUIDATION_RATIO = 150;
-  DEFAULT_BALANCE_RATIO = 200;
+  DEFAULT_BALANCE_RATIO = 250;
   COLLATERAL_AVERAGE_LOW = 200;
-  COLLATERAL_AVERAGE_HIGH = 250;
+  COLLATERAL_AVERAGE_HIGH = 400;
 
   constructor(
     private route: ActivatedRoute,
@@ -73,12 +74,33 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
   }
 
   /**
-   * Return value with percentage symbol
+   * Return collateral ratio slider label
    * @param value Percentage
-   * @return Percentage %
+   * @return Label
    */
-  formatPercentage(value: number) {
-    return `${ value } %`;
+  formatCollateralRatio(value: number) {
+    return `Collateral Ratio
+${ value } %`;
+  }
+
+  /**
+   * Return safety ratio slider label
+   * @param value Percentage
+   * @return Label
+   */
+  formatSafetyRatio(value: number) {
+    return `Safety Ratio
+${ value } %`;
+  }
+
+  /**
+   * Return liquidation ratio slider label
+   * @param value Percentage
+   * @return Label
+   */
+  formatLiquidationRatio(value: number) {
+    return `Liquidation Ratio
+${ value } %`;
   }
 
   /**
@@ -141,6 +163,21 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
     }
 
     this.createCollateral.emit();
+  }
+
+  /**
+   * Click on 'see suggestions' button
+   */
+  clickSuggestions() {
+    this.showSuggestions = !this.showSuggestions;
+  }
+
+  /**
+   * Click on 'collateral suggestion' button
+   */
+  clickCollateralSuggestion(collateralAdjustment: number) {
+    this.form.controls.formUi.patchValue({ collateralAdjustment });
+    this.onCollateralAdjustmentChange();
   }
 
   /**

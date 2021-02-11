@@ -7,6 +7,7 @@ import { FooterComponent } from './footer.component';
 import { Web3Service } from './../../services/web3.service';
 import { SidebarService } from './../../services/sidebar.service';
 import { TitleService } from './../../services/title.service';
+import { EventsService } from './../../services/events.service';
 import { AvailableLoansService } from './../../services/available-loans.service';
 
 describe('FooterComponent', () => {
@@ -25,6 +26,7 @@ describe('FooterComponent', () => {
         Web3Service,
         SidebarService,
         TitleService,
+        EventsService,
         AvailableLoansService,
         {
           provide: APP_BASE_HREF, useValue: '/'

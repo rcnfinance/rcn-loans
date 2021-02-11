@@ -70,9 +70,9 @@ export class Web3Service {
     }
 
     const { selectedAddress } = this.ethereum;
-
-    this.account = selectedAddress;
-    return selectedAddress;
+    const { web3 } = this;
+    this.account = web3.utils.toChecksumAddress(selectedAddress);
+    return this.account;
   }
 
   async logout() {
@@ -196,10 +196,11 @@ export class Web3Service {
     }
 
     // set web3 account
+    const { web3 } = this;
     const accounts = await promisify(candWeb3.eth.getAccounts, []);
     if (accounts && accounts.length) {
       console.info('Logged in');
-      this.account = accounts[0];
+      this.account = web3.utils.toChecksumAddress(accounts[0]);
       this.web3account = candWeb3;
     }
 
@@ -250,9 +251,10 @@ export class Web3Service {
     //  Create Web3
     const candWeb3 = new Web3(provider);
     const accounts = await promisify(candWeb3.eth.getAccounts, []);
+    const { web3 } = this;
     if (accounts && accounts.length) {
       console.info('Logged in');
-      this.account = accounts[0];
+      this.account = web3.utils.toChecksumAddress(accounts[0]);
       this.web3account = candWeb3;
     }
 
@@ -320,9 +322,10 @@ export class Web3Service {
 
       if (accounts && accounts.length) {
         console.info('Accounts changed', accounts[0]);
+        const { web3 } = this;
         const loggedIn = this.loggedIn;
 
-        this.account = accounts[0];
+        this.account = web3.utils.toChecksumAddress(accounts[0]);
         this.loginEvent.emit(loggedIn);
         return;
       }

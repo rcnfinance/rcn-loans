@@ -1,0 +1,81 @@
+@import 'src/scss/fonts';
+
+.page-header {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 35px 0 0;
+  background: var(--app-color-gray-500);
+  &__tabs {
+    width: 100%;
+    display: flex;
+    margin-top: 10px;
+    .tab {
+      width: 33.33%;
+      @include typography-body(2);
+      text-transform: uppercase;
+      text-align: center;
+      letter-spacing: 1.4px;
+      color: white;
+      margin: 0;
+      padding: 16px 6px;
+      transition: .3s;
+      cursor: pointer;
+      &:not(.tab--active) {
+        color: #959595;
+        border-bottom: 1px solid transparent;
+      }
+      &.tab--active {
+        margin-bottom: -1px;
+        border-bottom: 2px solid white;
+      }
+    }
+  }
+}
+
+.page-content {
+  padding: 22px 2px 0;
+  &--tools {
+    .page-content__wallet {
+      padding: 30px 0 24px;
+      .wallet {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        &__avatar {
+          padding: 6px 0;
+        }
+        &__text {
+          margin-left: 27px;
+          color: white;
+          &-label {
+            @include typography-body(3);
+          }
+          &-address {
+            @include typography-subtitle(2);
+          }
+        }
+      }
+    }
+    .page-content__balance {
+      padding-top: 27px;
+    }
+  }
+  &--approvals {
+    .page-content__description {
+      @include typography-headline(7);
+      padding: 20px 0 26px;
+    }
+  }
+  &--info {
+    .page-content__social {
+      padding: 20px 0 16px;
+    }
+    .page-content__version {
+      @include typography-headline(7);
+      color: var(--app-color-gray-50);
+    }
+  }
+}
