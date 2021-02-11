@@ -165,8 +165,8 @@ input::-webkit-inner-spin-button {
           }
           .mat-slider-thumb-label {
             background: #99FE90 !important;
-            width: 100px;
-            margin-right: -36px;
+            width: 90px;
+            margin-right: -31px;
             &::before {
               border-top-color: #99FE90;
             }
@@ -186,7 +186,20 @@ input::-webkit-inner-spin-button {
           }
           .mat-slider-ticks {
             opacity: 1 !important;
-            background-size: 10% 2px !important;
+            background-size: 8.33333% 2px !important;
+          }
+        }
+        &.percentage--insufficient {
+          ::ng-deep {
+            .mat-slider-thumb-label {
+              background: var(--app-color-red) !important;
+              &::before {
+                border-top-color: var(--app-color-red);
+              }
+              &::after {
+                background: var(--app-color-red);
+              }
+            }
           }
         }
       }

@@ -111,13 +111,16 @@
                     {{ form?.value.formUi.collateralAdjustment || 0 }}%
                   </div>
                   <div class="ratio-divisor"></div>
-                  <div class="ratio-options">
+                  <div
+                    class="ratio-options"
+                    [class.ratio-options--open]="showSuggestions"
+                  >
                     <div
                       class="ratio-options__label"
                       (click)="clickSuggestions()"
                     >
                       <span class="mr-1">
-                        Suggested options
+                        Presets
                       </span>
                       <span *ngIf="showSuggestions">
                         <i class="fas fa-chevron-up"></i>
@@ -126,7 +129,7 @@
                         <i class="fas fa-chevron-down"></i>
                       </span>
                     </div>
-                    <div *ngIf="showSuggestions" class="ratio-options__content">
+                    <div class="ratio-options__content">
                       <div
                         *ngFor="let suggestion of collateralSuggestions"
                         class="suggested-ratio"
@@ -150,14 +153,22 @@
         <div class="row mt-3 mt-lg-0 pt-4 mb-4 pb-2">
           <div class="col col-lg-12 item item--slider">
             <div class="item__title">
-              Adjust collateral
+              Select your ratio
+              <mat-icon
+                class="ml-2"
+                matTooltip="
+                  Safety Ratio: If a collateral liquidation gets triggered, your collateral will get liquidated until the Collateral Ratio reaches this value.
+                  Liquidation Ratio: If the Collateral Ratio reaches this value your collateral will get partially or fully liquidated.
+                "
+              >
+                info
+              </mat-icon>
             </div>
             <div class="item__subtitle">
-              <!-- FIXME: review copy -->
-              Select the interest you want to collateralize
+              You can set your Collateral Ratio at or above the Safety Ratio.
             </div>
             <div class="row mt-4 mt-lg-5 mb-3">
-              <div class="col col-sm-12 col-lg-8">
+              <div class="col col-sm-12 col-lg-9 pr-lg-5">
                 <div class="item__slider">
                   <mat-slider
                     class="percentage percentage--liquidation"
@@ -179,6 +190,7 @@
                   ></mat-slider>
                   <mat-slider
                     class="percentage percentage--collateral"
+                    [class.percentage--insufficient]="form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_LOW"
                     step="1"
                     tickInterval="25"
                     color="primary"

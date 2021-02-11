@@ -26,7 +26,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
   currencies: CurrencyItem[];
   form: FormGroup;
   showSuggestions: boolean;
-  collateralSuggestions = [200, 225, 250, 300, 350];
+  collateralSuggestions = [200, 250, 300, 350, 400];
   @Input() loan: Loan;
   @Input() account: string; // TODO implement
   @Input() createPendingTx: Tx;
@@ -39,7 +39,7 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
   DEFAULT_LIQUIDATION_RATIO = 150;
   DEFAULT_BALANCE_RATIO = 250;
   COLLATERAL_AVERAGE_LOW = 200;
-  COLLATERAL_AVERAGE_HIGH = 350;
+  COLLATERAL_AVERAGE_HIGH = 400;
 
   constructor(
     private route: ActivatedRoute,
@@ -78,8 +78,9 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
    * @param value Percentage
    * @return Label
    */
-  formatCollateralRatio(_: number) {
-    return `% Collateral Ratio`;
+  formatCollateralRatio(value: number) {
+    return `Collateral Ratio
+${ value } %`;
   }
 
   /**

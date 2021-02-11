@@ -57,6 +57,7 @@
       background: var(--app-color-gray-400);
     }
     .ratio-options {
+      overflow: hidden;
       &__label {
         cursor: pointer;
         padding: 12px 0;
@@ -66,9 +67,12 @@
         }
       }
       &__content {
+        max-height: 0;
+        opacity: 0;
         display: flex;
         flex-wrap: wrap;
         padding: 0 6px 2px;
+        transition: .3s;
         .suggested-ratio {
           width: 27.5%;
           margin: 0 2.9% 10px;
@@ -84,6 +88,12 @@
             border-color: var(--app-color-primary);
             color: var(--app-color-primary);
           }
+        }
+      }
+      &--open {
+        .ratio-options__content {
+          max-height: 200px;
+          opacity: 1;
         }
       }
     }
