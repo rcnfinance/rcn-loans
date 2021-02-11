@@ -696,6 +696,10 @@ virtual-scroller {
       display: inline-block;
       svg,
       .fas{font-size: 1.4em; color: $gray6; @include transition();}
+      .material-icons {
+        font-size: 1.75em;
+        transform: translateY(4px);
+      }
       .nav-toggle {
         padding: 0;
         margin-right: 0;
