@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { environment } from 'environments/environment';
 import { Web3Service } from 'app/services/web3.service';
+import { TitleService } from 'app/services/title.service';
 import { Engine } from 'app/models/loan.model';
 import { Utils } from 'app/utils/utils';
 
@@ -26,6 +27,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   constructor(
     private cdRef: ChangeDetectorRef,
+    private titleService: TitleService,
     private web3Service: Web3Service
   ) { }
 
@@ -34,6 +36,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     this.defaultEngine = Engine.UsdcEngine;
     this.loadAccount();
     this.listenLoginEvents();
+    this.titleService.changeTitle('My Account');
   }
 
   ngOnDestroy() {
