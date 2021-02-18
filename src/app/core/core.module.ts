@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 // App Component
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 import { HeaderComponent } from './header/header.component';
+import { NavrailComponent } from './navrail/navrail.component';
 import { BalanceComponent } from './balance/balance.component';
 import { IconGroupHeaderComponent } from './header/icon-group-header/icon-group-header.component';
 import { NotificationsComponent } from './header/notifications/notifications.component';
@@ -28,6 +29,7 @@ import { OpenEtherscanDirective } from '../directives/open-etherscan.directive';
   declarations: [
     ContentWrapperComponent,
     HeaderComponent,
+    NavrailComponent,
     BalanceComponent,
     IconGroupHeaderComponent,
     ClickOutsideDirective,
