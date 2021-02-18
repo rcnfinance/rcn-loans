@@ -18,20 +18,19 @@
             </button>
 
             <a class="button-img" routerLink='/lend'>
-              <img src="assets/isologo.svg" alt="rcn-image">
-              <img src="assets/isologotypo.svg" alt="rcn-image">
+              <!-- <img src="assets/isologo.svg" alt="rcn-image">
+              <img src="assets/isologotypo.svg" alt="rcn-image"> -->
             </a>
             <div class="header-title">{{ title }}</div>
             <h1 class="hide">RCN / Ripio credit network</h1>
 
             <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
-              <a class="nav__item nav__item--borrow mr-4" routerLink="/borrow">
+              <!-- <a class="nav__item nav__item--borrow mr-4" routerLink="/borrow">
                 <span class="d-flex align-items-center">
                   <i class="material-icons mr-2 mt-0">add</i>
                   <span>Borrow</span>
                 </span>
               </a>
-              <!-- Menu section -->
               <a
                 class="nav__item mr-4"
                 routerLinkActive="nav__item--active"
@@ -53,8 +52,7 @@
                 *ngIf='hasAccount'
               >
                 My Loans
-              </a>
-              <div class="separator mr-3 p-0"></div>
+              </a> -->
               <div class="nav__item ml-2 mr-4" (click)="login()" *ngIf="!hasAccount">
                 Connect
               </div>
