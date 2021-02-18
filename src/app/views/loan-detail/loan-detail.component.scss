@@ -43,6 +43,7 @@
     font-size: 1.4em;
     line-height: 1em;
     margin-right: 23px;
+    cursor: pointer;
   }
   &__title {
     @include typography-headline(6);
