@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 // App Component
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 import { HeaderComponent } from './header/header.component';
+import { NavrailComponent } from './navrail/navrail.component';
 import { IconGroupHeaderComponent } from './header/icon-group-header/icon-group-header.component';
 import { NotificationsComponent } from './header/notifications/notifications.component';
 import { NotificationItemComponent } from './header/notifications/notification-item/notification-item.component';
@@ -25,6 +26,7 @@ import { OpenEtherscanDirective } from '../directives/open-etherscan.directive';
   declarations: [
     ContentWrapperComponent,
     HeaderComponent,
+    NavrailComponent,
     IconGroupHeaderComponent,
     ClickOutsideDirective,
     OpenEtherscanDirective,
