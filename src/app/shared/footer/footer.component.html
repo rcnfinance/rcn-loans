@@ -4,41 +4,60 @@
       <li
         routerLink='/lend'
         routerLinkActive="active"
-        (click)='navmobileClose();'
       >
         <i class="fas fa-coins"></i>
+        <p>
+          Lend
+        </p>
       </li>
       <li
         routerLink='/activity'
         routerLinkActive="active"
-        (click)='navmobileClose();'
       >
-        <i class="fas fa-wallet"></i>
+        <i class="material-icons">
+          timeline
+        </i>
+        <p>
+          Activity
+        </p>
       </li>
-      <li
-        routerLink='/address/{{ account }}/'
-        routerLinkActive="active"
-        (click)='navmobileClose();'
-        *ngIf="hasAccount"
-      >
-        <i class="fas fa-exchange-alt"></i>
-      </li>
-      <li
-        (click)='navmobileClose(); openDialogClient()'
-        *ngIf="!hasAccount"
-      >
-        <i class="fas fa-user-circle"></i>
-      </li>
-      <li [class.active]="navmobileToggled" (click)='navmobileToggle()'>
-        <button
-          type="button"
-          class="nav-toggle"
+
+      <ng-container *ngIf="hasAccount">
+        <li
+          routerLink='/address/{{ account }}/'
+          routerLinkActive="active"
         >
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-      </li>
+          <i class="fas fa-hand-holding-usd"></i>
+          <p>
+            My loans
+          </p>
+        </li>
+        <li
+          routerLink='/my-account'
+          routerLinkActive="active"
+        >
+          <i class="fas fa-user-circle"></i>
+          <p>
+            Account
+          </p>
+        </li>
+      </ng-container>
+
+      <ng-container *ngIf="!hasAccount">
+        <li (click)="clickLogin()">
+          <i class="fas fa-hand-holding-usd"></i>
+          <p>
+            My loans
+          </p>
+        </li>
+        <li (click)="clickLogin()">
+          <i class="fas fa-user-circle"></i>
+          <p>
+            Account
+          </p>
+        </li>
+      </ng-container>
+
     </ul>
   </div>
   <div class="container-fluid d-none d-lg-block">

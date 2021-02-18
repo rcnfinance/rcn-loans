@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
+import { readComponent } from 'app/utils/utils.test';
 import { BalanceComponent } from './balance.component';
-import { readComponent } from '../../utils/utils.test';
 
 describe('BalanceComponent', () => {
   let component: BalanceComponent;
@@ -12,6 +13,7 @@ describe('BalanceComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientModule,
+        BrowserAnimationsModule,
         SharedModule
       ],
       declarations: [ BalanceComponent ]
@@ -43,7 +45,7 @@ describe('BalanceComponent', () => {
     expect(component.usdcCanWithdraw).toBeTruthy();
 
     // ui expect
-    const withdrawPayments = readComponent(fixture, '.balance-withdraw__amount');
+    const withdrawPayments = readComponent(fixture, '.balance__cta');
     expect(withdrawPayments).toBeDefined();
   });
 });
