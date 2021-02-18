@@ -100,7 +100,7 @@ export class LoanUtils {
     let collateral: Collateral;
     if (collateralData) {
       const {
-        id,
+        collateral_id,
         debt_id,
         oracle: collateralOracle,
         token,
@@ -111,7 +111,7 @@ export class LoanUtils {
       } = collateralData;
 
       collateral = new Collateral(
-        Number(id),
+        Number(collateral_id),
         debt_id,
         collateralOracle,
         token,

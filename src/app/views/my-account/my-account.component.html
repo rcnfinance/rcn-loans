@@ -1,0 +1,84 @@
+<div class="activity-wrapper d-lg-none">
+  <div class="container pt-3 pt-lg-0">
+    <div class="page-header">
+      <div class="page-header__tabs">
+        <div
+          class="tab"
+          [class.tab--active]="isDetail('tools')"
+          (click)="openDetail('tools')"
+        >
+          Tools
+        </div>
+        <div
+          class="tab"
+          [class.tab--active]="isDetail('approvals')"
+          (click)="openDetail('approvals')"
+        >
+          Approvals
+        </div>
+        <div
+          class="tab"
+          [class.tab--active]="isDetail('info')"
+          (click)="openDetail('info')"
+        >
+          Info
+        </div>
+      </div>
+    </div>
+
+    <div class="page-content page-content--tools" *ngIf="isDetail('tools')">
+
+      <div class="page-content__wallet">
+        <div class="wallet">
+          <div class="wallet__avatar">
+            <app-wallet-avatar [size]="40"></app-wallet-avatar>
+          </div>
+          <div class="wallet__text">
+            <p class="wallet__text-label">
+              Wallet Address
+            </p>
+            <p class="wallet__text-address">
+              {{ shortAccount }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-content__withdraw">
+        <app-component-balance [account]="account">
+        </app-component-balance>
+      </div>
+
+      <div class="page-content__balance">
+        <app-wallet-balances [account]="account">
+        </app-wallet-balances>
+      </div>
+    </div>
+
+    <div
+      class="page-content page-content--approvals"
+      *ngIf="isDetail('approvals')"
+    >
+      <div class="page-content__description">
+        Please approve the features and currencies you would like to use on the
+        Credit Marketplace.
+      </div>
+      <div class="page-content__approvals">
+        <app-approvals [engine]="defaultEngine"></app-approvals>
+      </div>
+    </div>
+
+    <div class="page-content page-content--info" *ngIf="isDetail('info')">
+      <div class="page-content__social">
+        <app-social-container></app-social-container>
+      </div>
+      <div class="page-content__version d-flex align-items-center justify-content-center">
+        <i class="fas fa-code-branch fa-lg"></i>
+        <span class="ml-2">Version {{ version }}</span>
+      </div>
+      <!-- TODO: what must be placed here? -->
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

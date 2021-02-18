@@ -20,6 +20,10 @@ const routes: Routes = [
     }
   },
   {
+    path: 'my-account',
+    loadChildren: () => import('./views/my-account/my-account.module').then(m => m.MyAccountModule)
+  },
+  {
     path: 'lend',
     loadChildren: () => import('./views/requested-loan/requested-loan.module').then(m => m.RequestedLoanModule)
   },

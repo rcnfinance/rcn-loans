@@ -1,0 +1,30 @@
+@import 'src/scss/fonts';
+
+ul {
+  li {
+    &:nth-child(1){
+      display: flex;
+      align-items: center;
+      height: 30px;
+      padding: 10px;
+      background-color: var(--app-color-gray-500);
+      border-bottom: 1px solid var(--app-color-gray-600);
+    }
+  }
+  .item {
+    padding: 11px 18px 11px 7px;
+    border-bottom: 1px solid var(--app-color-gray-600);
+    background-color: var(--app-color-gray-400);
+    color: white;
+    &__currency {
+      img {
+        width: 30px;
+        margin-right: 6px;
+      }
+      @include typography-overline(3);
+    }
+    &__amount {
+      @include typography-caption(1);
+    }
+  }
+}
