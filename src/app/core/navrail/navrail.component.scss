@@ -10,7 +10,7 @@ $navrailWidth: 169px;
   width: $navrailWidth;
   height: 100%;
   background: var(--app-color-gray-800);
-  transition: .3s;
+  transition: .15s;
   &__logo {
     padding: 17px 0;
     .logo {
@@ -22,13 +22,13 @@ $navrailWidth: 169px;
       object-position: left;
       outline: none;
       cursor: pointer;
-      transition: .3s;
+      transition: .15s;
     }
   }
   &__menu,
   &__footer {
     width: $navrailWidth;
-    transition: .3s;
+    transition: .15s;
   }
   &__menu {
     padding: 27px 0 0;
@@ -48,7 +48,7 @@ $navrailWidth: 169px;
           font-size: 1.2em;
         }
         &-label {
-          transition: .3s;
+          transition: .15s;
         }
         &::before {
           content: '';
@@ -59,7 +59,7 @@ $navrailWidth: 169px;
           height: 100%;
           background: var(--app-color-primary);
           border-radius: 0 5px 5px 0;
-          transition: .3s;
+          transition: .15s;
         }
         &--active {
           color: white;
@@ -87,7 +87,7 @@ $navrailWidth: 169px;
             margin: 0 0 10px;
             @include styled-font('proxima-nova', 400, 13px);
             cursor: pointer;
-            transition: .3s;
+            transition: .15s;
             &-icon {
               margin-left: 12px;
               font-size: .8em;
@@ -114,11 +114,11 @@ $navrailWidth: 169px;
                 align-items: center;
                 padding: 0 6px 0 9px;
                 cursor: default;
-                transition: .3s;
+                transition: .15s;
                 .button {
                   margin: 0 9px;
                   cursor: pointer;
-                  transition: .3s;
+                  transition: .15s;
                   &__image {
                     height: 17px;
                     width: 17px;
@@ -177,6 +177,7 @@ $navrailWidth: 169px;
     }
     .navrail__footer {
       opacity: 0;
+      margin-left: calc(-#{$navrailWidth} / 4);
     }
   }
 }
