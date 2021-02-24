@@ -9,7 +9,6 @@ import {
 import { Subscription } from 'rxjs';
 import { Utils } from './../../../utils/utils';
 import { HeaderPopoverService } from './../../../services/header-popover.service';
-import { CurrenciesService } from './../../../services/currencies.service';
 import { ContractsService } from './../../../services/contracts.service';
 
 @Component({
@@ -52,7 +51,6 @@ export class OracleRatesComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     private headerPopoverService: HeaderPopoverService,
-    private currenciesService: CurrenciesService,
     private contractsService: ContractsService
   ) { }
 
