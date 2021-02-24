@@ -1,0 +1,16 @@
+<div
+  class="oracle-rates"
+  [@anmNotifications]="viewDetail === 'rates' ? 'open' : 'closed'"
+>
+  <ul>
+    <li>
+      Rates references
+    </li>
+    <li *ngFor="let rate of rates" class="item">
+      <div class="item__text">
+        {{ rate.equivalent }} {{ rate.currency }} =
+        {{ rate.value }} {{ engineCurrencySymbol }}
+      </div>
+    </li>
+  </ul>
+</div>
