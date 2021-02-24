@@ -1,0 +1,183 @@
+@import 'src/scss/fonts';
+
+$navrailWidth: 169px;
+
+.navrail {
+  position: fixed;
+  z-index: 910;
+  top: 0;
+  left: 0;
+  width: $navrailWidth;
+  height: 100%;
+  background: var(--app-color-gray-800);
+  transition: .15s;
+  &__logo {
+    padding: 17px 0;
+    .logo {
+      display: block;
+      width: 89.58px;
+      height: 35.75px;
+      margin: auto;
+      object-fit: cover;
+      object-position: left;
+      outline: none;
+      cursor: pointer;
+      transition: .15s;
+    }
+  }
+  &__menu,
+  &__footer {
+    width: $navrailWidth;
+    transition: .15s;
+  }
+  &__menu {
+    padding: 27px 0 0;
+    .menu {
+      &__item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        height: 45px;
+        margin: 0 0 15px;
+        padding: 0 28px;
+        @include styled-font('proxima-nova', 700, 13px);
+        color: var(--app-color-gray-50);
+        cursor: pointer;
+        &-icon {
+          margin-right: 13px;
+          font-size: 1.2em;
+        }
+        &-label {
+          transition: .15s;
+        }
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -5px;
+          width: 5px;
+          height: 100%;
+          background: var(--app-color-primary);
+          border-radius: 0 5px 5px 0;
+          transition: .15s;
+        }
+        &--active {
+          color: white;
+          &::before {
+            left: 0;
+          }
+        }
+        &:hover {
+          color: white;
+        }
+      }
+    }
+  }
+  &__footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 0 21px 30px;
+    .footer {
+      &__menu {
+        margin-bottom: 32px;
+        .menu {
+          &__item {
+            display: block;
+            margin: 0 0 10px;
+            @include styled-font('proxima-nova', 400, 13px);
+            cursor: pointer;
+            transition: .15s;
+            &-icon {
+              margin-left: 12px;
+              font-size: .8em;
+            }
+            &:hover {
+              color: var(--app-color-gray-50);
+            }
+            &--active {
+              color: var(--app-color-primary);
+            }
+            &--social-networks {
+              position: relative;
+              .social-networks {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: calc(#{$navrailWidth} - 4px);
+                margin: auto;
+                height: 45px;
+                border-radius: 6px;
+                background: var(--app-color-gray-700);
+                box-shadow: 0px 3px 6px rgba(black, .3);
+                display: flex;
+                align-items: center;
+                padding: 0 6px 0 9px;
+                cursor: default;
+                transition: .15s;
+                .button {
+                  margin: 0 9px;
+                  cursor: pointer;
+                  transition: .15s;
+                  &__image {
+                    height: 17px;
+                    width: 17px;
+                    min-width: 17px;
+                    margin: 0 0 1px;
+                  }
+                  &:hover {
+                    .button__icon {
+                      color: var(--app-color-primary);
+                    }
+                  }
+                }
+                &__touchable-track {
+                  position: absolute;
+                  bottom: 0;
+                  left: -72px;
+                  width: 72px;
+                  height: 100%;
+                }
+                &--closed {
+                  transform: scale(0);
+                  opacity: 0;
+                  left: 26px;
+                }
+              }
+            }
+          }
+        }
+      }
+      &__icons {
+        margin-bottom: 16px;
+        .icons {
+          &__item {
+            display: inline-block;
+            margin-right: 17px;
+          }
+        }
+      }
+    }
+  }
+  &--closed {
+    width: 72px;
+    .navrail__logo {
+      .logo {
+        width: 35.75px;
+      }
+    }
+    .navrail__menu {
+      .menu {
+        &__item {
+          &-label {
+            opacity: 0;
+          }
+        }
+      }
+    }
+    .navrail__footer {
+      opacity: 0;
+      margin-left: calc(-#{$navrailWidth} / 4);
+    }
+  }
+}
