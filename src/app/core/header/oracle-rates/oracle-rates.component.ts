@@ -7,8 +7,6 @@ import {
   transition
 } from '@angular/animations';
 import { Subscription } from 'rxjs';
-import { Engine } from './../../../models/loan.model';
-import { Currency } from './../../../utils/currencies';
 import { Utils } from './../../../utils/utils';
 import { HeaderPopoverService } from './../../../services/header-popover.service';
 import { CurrenciesService } from './../../../services/currencies.service';
@@ -43,11 +41,9 @@ export class OracleRatesComponent implements OnInit {
   viewDetail: string;
 
   // rates
-  engineCurrencySymbol: string;
   rates: {
     currency: string;
     value: number;
-    equivalent: number;
   }[];
 
   // subscriptions
@@ -73,32 +69,29 @@ export class OracleRatesComponent implements OnInit {
   }
 
   /**
-   * Load rates
+   * Load pair rates
    */
   private async loadOracleRates() {
-    const engine = Engine.UsdcEngine;
-    const ENGINE_DECIMALS = 6;
-    const ALLOWED_CURRENCIES = ['ETH', 'RCN'];
-    const currencies =
-        this.currenciesService.getCurrencies(true)
-        .filter(({ symbol }) => ALLOWED_CURRENCIES.includes(symbol));
+    const PAIR_RATES = {
+      'ETH': ['ETH', 'USDC'],
+      'BTC': ['BTC', 'ETH', 'USDC'],
+      'RCN': ['RCN', 'BTC', 'ETH', 'USDC'],
+      'ARS': ['ARS', 'BTC', 'ETH', 'USDC']
+    };
     const rates = [];
 
     await Promise.all(
-      currencies.map(async ({ symbol }) => {
-        const oracleAddress = await this.contractsService.symbolToOracle(engine, symbol);
-        const { decimals } = new Currency(symbol);
-        const rate = await this.contractsService.getRate(oracleAddress, decimals);
-        const value = rate / 10 ** ENGINE_DECIMALS;
-        rates.push({
-          currency: symbol,
-          value: Utils.formatAmount(value, 5),
-          equivalent: 1
-        });
+      Object.keys(PAIR_RATES).map(async (pair) => {
+        const currency = pair;
+        const { combinedRate, decimals } =
+          await this.contractsService.getPairRate(PAIR_RATES[pair]);
+        const rawValue = combinedRate / (10 ** decimals);
+        const value = Utils.formatAmount(rawValue, 4);
+
+        rates.push({ currency, value });
       })
     );
 
-    this.engineCurrencySymbol = 'USDC';
     this.rates = rates;
   }
 }
