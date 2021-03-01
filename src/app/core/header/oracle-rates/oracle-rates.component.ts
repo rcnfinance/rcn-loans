@@ -72,23 +72,31 @@ export class OracleRatesComponent implements OnInit {
   private async loadOracleRates() {
     const PAIR_RATES = {
       'ETH': ['ETH', 'USDC'],
-      'BTC': ['BTC', 'ETH', 'USDC'],
       'RCN': ['RCN', 'BTC', 'ETH', 'USDC'],
-      'ARS': ['ARS', 'BTC', 'ETH', 'USDC']
+      'ARS': ['ARS', 'BTC', 'ETH', 'USDC'],
+      'BTC': ['BTC', 'ETH', 'USDC']
     };
+    const rateValues = {};
     const rates = [];
 
+    // load rate values
     await Promise.all(
       Object.keys(PAIR_RATES).map(async (pair) => {
-        const currency = pair;
         const { combinedRate, decimals } =
           await this.contractsService.getPairRate(PAIR_RATES[pair]);
         const rawValue = combinedRate / (10 ** decimals);
         const value = Utils.formatAmount(rawValue, 4);
+        rateValues[pair] = value;
 
-        rates.push({ currency, value });
       })
     );
+
+    // load rate iterable objects
+    Object.keys(PAIR_RATES).map(async (pair) => {
+      const currency = pair;
+      const value = rateValues[pair];
+      rates.push({ currency, value });
+    });
 
     this.rates = rates;
   }
