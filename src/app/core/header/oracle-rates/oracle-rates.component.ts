@@ -92,7 +92,7 @@ export class OracleRatesComponent implements OnInit {
     );
 
     // load rate iterable objects
-    Object.keys(PAIR_RATES).map(async (pair) => {
+    Object.keys(PAIR_RATES).map((pair) => {
       const currency = pair;
       const value = rateValues[pair];
       rates.push({ currency, value });
