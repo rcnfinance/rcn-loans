@@ -1,0 +1,16 @@
+<div
+  class="oracle-rates"
+  [@anmNotifications]="viewDetail === 'rates' ? 'open' : 'closed'"
+>
+  <ul>
+    <li>
+      Current Exchange Rates
+    </li>
+    <li *ngFor="let rate of rates" class="item">
+      <div class="item__text">
+        1 {{ rate.currency }} =
+        {{ rate.value }} USDC
+      </div>
+    </li>
+  </ul>
+</div>

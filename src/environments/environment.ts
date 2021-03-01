@@ -107,7 +107,8 @@ export const environment = {
     chainlink: {
       EACAggregatorProxy: {
         ethUsd: '0x30b5068156688f818cea0874b580206dfe081a03'
-      }
+      },
+      chainlinkAdapterV3: '0x62e2d0a55f4d5f19546b32e0ecde19ef6d290962'
     }
   },
   blacklist: [

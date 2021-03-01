@@ -4,6 +4,7 @@ import { Utils } from '../../../utils/utils';
 import { HeaderPopoverService } from '../../../services/header-popover.service';
 
 enum ViewType {
+  OracleRates = 'rates',
   Notifications = 'notifications',
   WalletBalance = 'balance',
   WalletWithdraw = 'withdraw',
