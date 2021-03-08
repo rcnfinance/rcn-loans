@@ -14,16 +14,27 @@
       z-index: 10;
     }
     .section__background {
+      // position: absolute;
+      // top: -90px;
+      // right: 0;
+      // z-index: 5;
+      // width: calc(100vw - 75px);
+      // max-width: 1550px;
+      // height: 322px;
+      // background-image: url('assets/home/home-bg.svg');
+      // background-size: contain;
+      // background-repeat: no-repeat;
+
       position: absolute;
-      top: -90px;
+      top: -96px;
       right: 0;
       z-index: 5;
-      width: calc(100vw - 75px);
-      max-width: 1550px;
-      height: 322px;
+      width: 100%;
+      height: 372px;
       background-image: url('assets/home/home-bg.svg');
-      background-size: contain;
       background-repeat: no-repeat;
+      background-size: 412%;
+      background-position: bottom right;
     }
     .section__title {
       @include styled-font('proxima-nova', 800, 58px);
@@ -195,6 +206,14 @@
         .button {
           width: inherit;
         }
+      }
+      .section__background {
+        top: -90px;
+        width: calc(100vw - 75px);
+        max-width: 1550px;
+        height: 322px;
+        background-size: contain;
+        background-position: top right;
       }
     }
     &--lend,
