@@ -1,0 +1,280 @@
+{
+  "contract_name": "EACAggregatorProxy",
+  "abi": [
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "previousOwner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "_symbolA",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "_symbolB",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "_aggregator",
+                "type": "address"
+            }
+        ],
+        "name": "RemoveAggregator",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "_symbolA",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "_symbolB",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "_aggregator",
+                "type": "address"
+            }
+        ],
+        "name": "SetAggregator",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "name": "aggregators",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "_symbolA",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_symbolB",
+                "type": "bytes32"
+            }
+        ],
+        "name": "getLatestTimestamp",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "lastTimestamp",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "_symbolA",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_symbolB",
+                "type": "bytes32"
+            }
+        ],
+        "name": "getPairLastRate",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "answer",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "decimals",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32[]",
+                "name": "path",
+                "type": "bytes32[]"
+            }
+        ],
+        "name": "getRate",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "combinedRate",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "decimals",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32[]",
+                "name": "path",
+                "type": "bytes32[]"
+            }
+        ],
+        "name": "latestTimestamp",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "lastTimestamp",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "_symbolA",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_symbolB",
+                "type": "bytes32"
+            }
+        ],
+        "name": "removeAggregator",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "_symbolA",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_symbolB",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "address",
+                "name": "_aggregator",
+                "type": "address"
+            }
+        ],
+        "name": "setAggregator",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "_symbol",
+                "type": "string"
+            }
+        ],
+        "name": "symbolToBytes32",
+        "outputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+  ]
+}

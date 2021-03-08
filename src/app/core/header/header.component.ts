@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit {
   makeRotate = false;
   title: string;
   hideMobileHeader: boolean;
+  isHome: boolean;
 
   navToggle: boolean; // Navbar toggled
 
@@ -99,6 +100,9 @@ export class HeaderComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         const { hideMobileHeader } = this.route.snapshot.firstChild.data;
         this.hideMobileHeader = hideMobileHeader === true;
+
+        const { url } = event;
+        this.isHome = url === '/';
       }
     });
   }

@@ -1,0 +1,177 @@
+<div
+  class="navrail d-none d-lg-block"
+  [class.navrail--closed]="!isNavrailOpened"
+  [class.navrail--hidden]="isNavrailHidden"
+  (mouseover)="mouseOverNavrail()"
+  (mouseout)="mouseOutNavrail()"
+>
+  <div class="navrail__logo">
+    <a [routerLink]="['/']">
+      <img
+        src="./assets/isologotypo.svg"
+        alt="RCN"
+        class="logo"
+      >
+    </a>
+  </div>
+  <div class="navrail__menu">
+    <div class="menu">
+      <a
+        routerLink='/lend'
+        class="menu__item"
+        routerLinkActive="menu__item--active"
+      >
+        <span class="menu__item-icon">
+          <i class="fas fa-coins"></i>
+        </span>
+        <span class="menu__item-label">
+          Lend
+        </span>
+      </a>
+      <a
+        routerLink='/activity'
+        class="menu__item"
+        routerLinkActive="menu__item--active"
+      >
+        <span class="menu__item-icon">
+          <i class="fas fa-wallet"></i>
+        </span>
+        <span class="menu__item-label">
+          Activity
+        </span>
+      </a>
+      <ng-container *ngIf="hasAccount; else connectButtonTemplate">
+        <a
+          routerLink='/address/{{ account }}/'
+          class="menu__item"
+          routerLinkActive="menu__item--active"
+        >
+          <span class="menu__item-icon">
+            <i class="fas fa-hand-holding-usd"></i>
+          </span>
+          <span class="menu__item-label">
+            My loans
+          </span>
+        </a>
+      </ng-container>
+      <ng-template #connectButtonTemplate>
+        <a
+          (click)="clickConnect()"
+          class="menu__item"
+        >
+          <span class="menu__item-icon">
+            <i class="fas fa-hand-holding-usd"></i>
+          </span>
+          <span class="menu__item-label">
+            My loans
+          </span>
+        </a>
+      </ng-template>
+      <a
+        routerLink='/borrow'
+        class="menu__item"
+        routerLinkActive="menu__item--active"
+      >
+        <span class="menu__item-icon">
+          <i class="fas fa-plus-circle"></i>
+        </span>
+        <span class="menu__item-label">
+          Borrow
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="navrail__footer">
+    <div class="footer">
+      <div class="footer__menu">
+        <div class="menu">
+          <a
+            class="menu__item"
+            href="https://rcn.finance"
+            target="_blank"
+          >
+            Website
+          </a>
+          <a
+            class="menu__item"
+            href="https://medium.com/rcnblog"
+            target="_blank"
+          >
+            Blog
+          </a>
+          <a
+            class="menu__item"
+            routerLinkActive="menu__item--active"
+            [routerLink]="['/faq']"
+          >
+            FAQ's
+          </a>
+        </div>
+      </div>
+      <div class="footer__menu">
+        <a
+          class="menu__item menu__item--social-networks"
+          (mouseover)="mouseOverSocialNetworks()"
+          (mouseout)="mouseOutSocialNetworks()"
+        >
+          <span class="menu__item-label">
+            Contact
+          </span>
+          <span class="menu__item-icon">
+            <i class="fas fa-chevron-right"></i>
+          </span>
+          <div
+            class="social-networks"
+            [class.social-networks--closed]="!isSocialNetworkOpened"
+          >
+            <div
+              *ngFor="let button of socialNetworkButtons"
+              class="button"
+            >
+              <a
+                [href]="button.url"
+                [matTooltip]="button.label"
+                matTooltipPosition="above"
+                target="_blank"
+                class="button__href"
+              >
+                <i
+                  *ngIf="button.class"
+                  class="button__icon"
+                  [ngClass]="button.class"
+                ></i>
+                <img
+                  *ngIf="button.img"
+                  [src]="button.img"
+                  class="button__image"
+                >
+              </a>
+            </div>
+            <div class="social-networks__touchable-track">
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="footer__icons">
+        <div class="icons">
+          <a
+            *ngFor="let button of dappVersionButtons"
+            class="icons__item"
+            [href]="button.url"
+            target="_blank"
+          >
+            <i [class]="button.class"></i>
+            <span *ngIf="button.text">
+              {{ button.text }}
+            </span>
+          </a>
+        </div>
+      </div>
+      <div class="footer__copyright">
+        <span class="copyright">
+          © 2018 - 2021 RCN
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

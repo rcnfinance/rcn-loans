@@ -1,0 +1,32 @@
+@import './../../../../scss/variables';
+@import './../../../../scss/fonts';
+
+.oracle-rates {
+  width: 196px;
+  max-height: 670px;
+  overflow: hidden;
+  position: absolute;
+  right: 208px;
+  @extend %roboto-regular;
+  @include transition();
+
+  ul {
+    li {
+      &:nth-child(1){
+        display: flex;
+        align-items: center;
+        height: 30px;
+        padding: 10px;
+        background-color: var(--app-color-gray-500);
+        border-bottom: 1px solid var(--app-color-gray-600);
+      }
+    }
+    .item {
+      padding: 16px 10px;
+      border-bottom: 1px solid var(--app-color-gray-600);
+      background-color: var(--app-color-gray-400);
+      color: white;
+      @include typography-caption(1);
+    }
+  }
+}

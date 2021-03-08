@@ -3,6 +3,7 @@
     id="navbar"
     class="navbar"
     [class.navbar--hide-mobile]="hideMobileHeader"
+    [class.navbar--translucent]="isHome"
   >
     <div class="container-fluid">
       <div class="row">
@@ -25,13 +26,12 @@
             <h1 class="hide">RCN / Ripio credit network</h1>
 
             <div class="nav" [ngClass]="{'hasAccount': hasAccount }">
-              <a class="nav__item nav__item--borrow mr-4" routerLink="/borrow">
+              <!-- <a class="nav__item nav__item--borrow mr-4" routerLink="/borrow">
                 <span class="d-flex align-items-center">
                   <i class="material-icons mr-2 mt-0">add</i>
                   <span>Borrow</span>
                 </span>
               </a>
-              <!-- Menu section -->
               <a
                 class="nav__item mr-4"
                 routerLinkActive="nav__item--active"
@@ -53,16 +53,18 @@
                 *ngIf='hasAccount'
               >
                 My Loans
-              </a>
-              <div class="separator mr-3 p-0"></div>
-              <div class="nav__item ml-2 mr-4" (click)="login()" *ngIf="!hasAccount">
+              </a> -->
+              <div class="nav__item nav__item--connect ml-2 mr-4" (click)="login()" *ngIf="!hasAccount">
                 Connect
               </div>
               <div
                 class="align-items-center px-0"
                 [ngClass]="hasAccount ? 'd-flex' : 'd-none'"
               >
-                <app-icon-group-header [account]="account"></app-icon-group-header>
+                <app-icon-group-header
+                  [account]="account"
+                  [hideActions]="isHome"
+                ></app-icon-group-header>
               </div>
             </div>
           </div>

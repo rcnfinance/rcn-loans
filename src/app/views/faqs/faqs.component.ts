@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TitleService } from 'app/services/title.service';
 interface Faq {
   question: string;
   answer: string;
@@ -18,9 +19,12 @@ export class FaqsComponent implements OnInit {
   faqGroups: FaqGroup[];
   panelOpenState: {[id: number]: boolean} = {};
 
-  constructor() { }
+  constructor(
+    private titleService: TitleService
+  ) { }
 
   ngOnInit() {
+    this.titleService.changeTitle(`FAQ's`);
     this.faqGroups = [{
       title: 'General',
       faqs: [{

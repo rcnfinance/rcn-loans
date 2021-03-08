@@ -7,6 +7,7 @@
   [ngStyle]="{'min-height': winHeight + 'px'}"
 >
   <app-header></app-header>
+  <app-navrail></app-navrail>
   <div class="navmobile-menu">
     <div class="profile-container" *ngIf='hasAccount'>
       <div class="spacing-container-top" *ngIf='!hasAccount'></div>
@@ -109,7 +110,7 @@
       </div>
     </mat-sidenav>
     <mat-sidenav-content [ngStyle]="{'min-height': winHeight + 'px'}">
-      <div id="page-content-wrapper">
+      <div id="page-content-wrapper" [class.pb-0]="isHome">
         <router-outlet></router-outlet>
       </div>
       <app-fixed-application-ad

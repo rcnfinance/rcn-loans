@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { Router, NavigationEnd, Event } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import * as BN from 'bn.js';
 import { Utils } from '../../utils/utils';
@@ -45,6 +46,7 @@ export class ContentWrapperComponent implements OnInit {
       this.diasporeLoansWithBalance.length > 0 &&
       this.pendingRcnWithdraw === undefined;
   }
+  isHome: boolean;
   winHeight: number = window.innerHeight;
   account: string;
   version: string = environment.version;
@@ -65,6 +67,7 @@ export class ContentWrapperComponent implements OnInit {
   needWithdraw: boolean;
 
   constructor(
+    private router: Router,
     private proxyApiService: ProxyApiService,
     private sidebarService: SidebarService, // Navbar Service
     private applicationAdsService: ApplicationAdsService,
@@ -91,6 +94,7 @@ export class ContentWrapperComponent implements OnInit {
     await this.loadAccount();
     this.checkPendingWithdraw();
     this.canLend();
+    this.listenRouterEvents();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -194,5 +198,17 @@ export class ContentWrapperComponent implements OnInit {
         }
       });
     }
+  }
+
+  /**
+   * Track all router changes
+   */
+  private listenRouterEvents() {
+    this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationEnd) {
+        const { url } = event;
+        this.isHome = url === '/';
+      }
+    });
   }
 }
