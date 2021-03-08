@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { Web3Service } from 'app/services/web3.service';
 import { TitleService } from 'app/services/title.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
+import { WalletType } from 'app/interfaces/wallet.interface';
 import { DialogWalletSelectComponent } from 'app/dialogs/dialog-wallet-select/dialog-wallet-select.component';
 
 @Component({
@@ -44,9 +45,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     await this.walletConnectService.connect();
   }
 
-  clickWallet() {
+  clickWallet(walletType: WalletType) {
     this.dialog.open(DialogWalletSelectComponent, {
-      panelClass: 'dialog-wallet-select-wrapper'
+      panelClass: 'dialog-wallet-select-wrapper',
+      data: { walletType }
     });
   }
 
