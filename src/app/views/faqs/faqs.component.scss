@@ -63,11 +63,13 @@
 }
 
 @media (min-width: 992px) {
+  .page-content {
+    padding-left: 72px;
+  }
   .faqs {
     &__title {
       margin-top: 35px;
     }
-
     mat-accordion {
       mat-expansion-panel-header {
         padding: 0 0 0 23px;
@@ -84,11 +86,16 @@
         }
       }
     }
-
     .faq {
       &__description {
         padding-bottom: 16px;
       }
     }
+  }
+}
+
+@media (min-width: 1366px) {
+  .page-content {
+    padding-left: 57px;
   }
 }
