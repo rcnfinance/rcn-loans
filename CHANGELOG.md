@@ -1,5 +1,15 @@
 # Changelog
 
+## **0.3.3** Boggart 👻
+
+### Feature:
+- New home page
+- New oracle rates component
+- New navrail component
+
+### Enhancement:
+- Set titles on My Account and FAQs
+
 ## **0.3.2** Boggart 👻
 
 ### Feature:
