@@ -1,0 +1,281 @@
+@import 'src/scss/fonts';
+
+.app-home {
+  background: linear-gradient(0deg, #202223, #121315);
+}
+
+.section {
+  &--intro {
+    position: relative;
+    padding: 15vh 0 0;
+    text-align: center;
+    .section__content {
+      position: relative;
+      z-index: 10;
+    }
+    .section__background {
+      // position: absolute;
+      // top: -90px;
+      // right: 0;
+      // z-index: 5;
+      // width: calc(100vw - 75px);
+      // max-width: 1550px;
+      // height: 322px;
+      // background-image: url('assets/home/home-bg.svg');
+      // background-size: contain;
+      // background-repeat: no-repeat;
+
+      position: absolute;
+      top: -96px;
+      right: 0;
+      z-index: 5;
+      width: 100%;
+      height: 372px;
+      background-image: url('assets/home/home-bg.svg');
+      background-repeat: no-repeat;
+      background-size: 412%;
+      background-position: bottom right;
+    }
+    .section__title {
+      @include styled-font('proxima-nova', 800, 58px);
+      letter-spacing: -3px;
+      line-height: 49px;
+      margin: auto;
+    }
+    .section__subtitle {
+      @include styled-font('proxima-nova', 400, 17px);
+      line-height: 24px;
+      margin: 103px 0 46px;
+    }
+    .section__actions {
+      padding: 0 24px;
+      .button {
+        width: 100%;
+        min-width: 250px;
+        height: 50px;
+        border-radius: 5px;
+        box-shadow: none;
+        @include styled-font('proxima-nova', 600, 12px);
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+      }
+    }
+  }
+  &--lend,
+  &--borrow,
+  &--manage,
+  &--connect {
+    padding: 128px 0 0;
+    .section__title {
+      @include styled-font('proxima-nova', 800, 45px);
+      line-height: 54px;
+      margin: 0 0 12px;
+    }
+    .section__description {
+      @include styled-font('proxima-nova', 400, 18px);
+      line-height: 25px;
+      padding: 0 0 25px;
+      margin: 0 0 12px;
+    }
+    .section__image {
+      position: relative;
+      max-width: 95%;
+      margin-bottom: 28px;
+      .image {
+        &--desktop {
+          max-width: 95%;
+        }
+        &--mobile {
+          position: absolute;
+          bottom: -26px;
+          max-width: 76px;
+        }
+      }
+    }
+    .button {
+      min-width: 145px;
+      height: 50px;
+      border-radius: 3px;
+      box-shadow: none;
+      @include styled-font('proxima-nova', 600, 12px);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+  }
+  &--lend,
+  &--borrow {
+    .section__image {
+      .image {
+        &--mobile {
+          right: 0;
+        }
+      }
+    }
+  }
+  &--manage {
+    .section__image {
+      margin-bottom: 32px;
+      .image {
+        &--mobile {
+          left: -16px;
+        }
+      }
+    }
+  }
+  &--connect {
+    margin-top: 158px;
+    padding: 12px 12px 66px;
+    .container {
+      position: relative;
+      z-index: 10;
+      background: rgba(52, 52, 54, .7);
+      max-width: 1300px;
+      border-radius: 25px;
+      padding: 0 20px 32px;
+      box-shadow: 5px 10px 10px #00000041;
+    }
+    .section__background {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      z-index: 5;
+      width: 100%;
+      height: 322px;
+      background-image: url('assets/home/home-bg.svg');
+      background-repeat: no-repeat;
+      background-size: 412%;
+      background-position: bottom right;
+    }
+    .section__image {
+      .image {
+        max-width: 100%;
+        margin-top: -24px;
+      }
+    }
+    .section__title {
+      @include styled-font('proxima-nova', 800, 42px);
+    }
+    .section__description {
+      margin-bottom: 0;
+      @include styled-font('proxima-nova', 400, 17px);
+      line-height: 27px;
+    }
+    .section__actions {
+      width: 100%;
+      .button {
+        height: 67px;
+        padding: 0 23px 0 11px;
+        margin-right: 16px;
+        color: #BFBFBF;
+        background: rgba(34, 34, 34, 0);
+        box-shadow: none;
+        border-radius: 0;
+        transition: .3s;
+        &:last-child {
+          margin-right: 0;
+        }
+        &:hover {
+          background: rgba(34, 34, 34, 1);
+        }
+        &__image {
+          width: 32px;
+          margin-right: 15px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .section {
+    &--intro {
+      padding: 15vh 0;
+      .section__title {
+        max-width: 690px;
+        @include styled-font('proxima-nova', 800, 125px);
+        letter-spacing: -6.25px;
+        line-height: 120px;
+      }
+      .section__subtitle {
+        @include styled-font('proxima-nova', 400, 25px);
+        line-height: 27px;
+        margin: 35px 0 81px;
+      }
+      .section__actions {
+        padding: 0;
+        .button {
+          width: inherit;
+        }
+      }
+      .section__background {
+        top: -90px;
+        width: calc(100vw - 75px);
+        max-width: 1550px;
+        height: 322px;
+        background-size: contain;
+        background-position: top right;
+      }
+    }
+    &--lend,
+    &--borrow,
+    &--manage,
+    &--connect {
+      padding: 200px 0;
+      .section__image {
+        max-width: 600px;
+        margin-bottom: 0;
+        .image {
+          &--desktop {
+            max-width: 600px;
+          }
+          &--mobile {
+            max-width: 150px;
+          }
+        }
+      }
+    }
+    &--lend,
+    &--borrow {
+      .section__image {
+        .image {
+          &--mobile {
+            right: -60px;
+          }
+        }
+      }
+    }
+    &--manage {
+      .section__image {
+        .image {
+          &--mobile {
+            left: -76px;
+          }
+        }
+      }
+    }
+    &--connect {
+      margin-top: 0;
+      padding: 200px 0 149px;
+      .container {
+        border-radius: 45px;
+        padding: 50px 80px 34px;
+      }
+      .section__image {
+        .image {
+          max-width: 90%;
+          margin-top: -72px;
+        }
+      }
+      .section__description {
+        margin-bottom: 12px;
+        @include styled-font('proxima-nova', 400, 20px);
+        max-width: 512px;
+      }
+      .section__background {
+        width: calc(100vw - 75px);
+        max-width: 1550px;
+        background-size: contain;
+      }
+    }
+  }
+}

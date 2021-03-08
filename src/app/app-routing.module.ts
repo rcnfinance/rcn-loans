@@ -2,8 +2,10 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'lend', pathMatch: 'full' },
-  { path: 'requests', redirectTo: 'lend' }, // TODO: deprecate
+  {
+    path: '',
+    loadChildren: () => import('./views/home/home.module').then(m => m.HomeModule)
+  },
   {
     path: 'activity',
     loadChildren: () => import('./views/active-loans/active-loans.module').then(m => m.ActiveLoansModule)

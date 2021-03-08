@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { timer } from 'rxjs';
 import {
   WalletType,
@@ -25,8 +25,9 @@ export class DialogWalletSelectComponent implements OnInit {
   loggedIn: boolean;
 
   constructor(
-    private dialogRef: MatDialogRef<DialogWalletSelectComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { walletType: WalletType },
     public dialog: MatDialog,
+    private dialogRef: MatDialogRef<DialogWalletSelectComponent>,
     private walletConnectService: WalletConnectService,
     private web3Service: Web3Service
   ) { }
@@ -52,6 +53,11 @@ export class DialogWalletSelectComponent implements OnInit {
 
     this.loadActiveWallet();
     this.handleLoginEvents();
+
+    const { data } = this;
+    if (data && data.walletType) {
+      this.selectWallet(data.walletType, false);
+    }
   }
 
   /**

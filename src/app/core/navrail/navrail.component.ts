@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, Event, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { environment } from 'environments/environment';
 import { Engine } from 'app/models/loan.model';
@@ -23,10 +24,13 @@ export class NavrailComponent implements OnInit, OnDestroy {
   socialNetworkButtons: FooterButton[];
   dappVersionButtons: FooterButton[];
   private navrailOpened: boolean;
+  private navrailHidden: boolean;
   private socialNetworksOpened: boolean;
   private subscriptionAccount: Subscription;
+  private subscribtionRouter: Subscription;
 
   constructor(
+    private router: Router,
     private web3Service: Web3Service,
     private walletConnectService: WalletConnectService
   ) { }
@@ -35,10 +39,12 @@ export class NavrailComponent implements OnInit, OnDestroy {
     this.loadAccount();
     this.loadFooterButtons();
     this.handleLoginEvents();
+    this.listenRouter();
   }
 
   ngOnDestroy() {
     this.subscriptionAccount.unsubscribe();
+    this.subscribtionRouter.unsubscribe();
   }
 
   /**
@@ -90,6 +96,10 @@ export class NavrailComponent implements OnInit, OnDestroy {
     return this.navrailOpened;
   }
 
+  get isNavrailHidden() {
+    return this.navrailHidden;
+  }
+
   /**
    * User is logged in
    */
@@ -106,6 +116,21 @@ export class NavrailComponent implements OnInit, OnDestroy {
         .loginEvent
         .subscribe((_: boolean) => {
           this.loadAccount();
+        });
+  }
+
+  /**
+   * Listen router events to set navrail hide status
+   */
+  private listenRouter() {
+    this.subscribtionRouter = this
+        .router
+        .events
+        .subscribe((event: Event) => {
+          if (event instanceof NavigationEnd) {
+            const { url } = event;
+            this.navrailHidden = url === '/';
+          }
         });
   }
 
