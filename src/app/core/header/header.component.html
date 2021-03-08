@@ -3,6 +3,7 @@
     id="navbar"
     class="navbar"
     [class.navbar--hide-mobile]="hideMobileHeader"
+    [class.navbar--translucent]="isHome"
   >
     <div class="container-fluid">
       <div class="row">
@@ -18,8 +19,8 @@
             </button>
 
             <a class="button-img" routerLink='/lend'>
-              <!-- <img src="assets/isologo.svg" alt="rcn-image">
-              <img src="assets/isologotypo.svg" alt="rcn-image"> -->
+              <img src="assets/isologo.svg" alt="rcn-image">
+              <img src="assets/isologotypo.svg" alt="rcn-image">
             </a>
             <div class="header-title">{{ title }}</div>
             <h1 class="hide">RCN / Ripio credit network</h1>
@@ -53,14 +54,17 @@
               >
                 My Loans
               </a> -->
-              <div class="nav__item ml-2 mr-4" (click)="login()" *ngIf="!hasAccount">
+              <div class="nav__item nav__item--connect ml-2 mr-4" (click)="login()" *ngIf="!hasAccount">
                 Connect
               </div>
               <div
                 class="align-items-center px-0"
                 [ngClass]="hasAccount ? 'd-flex' : 'd-none'"
               >
-                <app-icon-group-header [account]="account"></app-icon-group-header>
+                <app-icon-group-header
+                  [account]="account"
+                  [hideActions]="isHome"
+                ></app-icon-group-header>
               </div>
             </div>
           </div>

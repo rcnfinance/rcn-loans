@@ -110,7 +110,7 @@
       </div>
     </mat-sidenav>
     <mat-sidenav-content [ngStyle]="{'min-height': winHeight + 'px'}">
-      <div id="page-content-wrapper">
+      <div id="page-content-wrapper" [class.pb-0]="isHome">
         <router-outlet></router-outlet>
       </div>
       <app-fixed-application-ad

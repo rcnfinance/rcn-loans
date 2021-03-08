@@ -1,6 +1,7 @@
 <div
   class="navrail d-none d-lg-block"
   [class.navrail--closed]="!isNavrailOpened"
+  [class.navrail--hidden]="isNavrailHidden"
   (mouseover)="mouseOverNavrail()"
   (mouseout)="mouseOutNavrail()"
 >

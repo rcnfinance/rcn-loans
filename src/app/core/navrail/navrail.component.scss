@@ -180,4 +180,8 @@ $navrailWidth: 169px;
       margin-left: calc(-#{$navrailWidth} / 4);
     }
   }
+  &--hidden {
+    left: -72px;
+    pointer-events: none;
+  }
 }

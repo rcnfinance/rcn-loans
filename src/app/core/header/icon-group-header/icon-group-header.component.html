@@ -3,45 +3,48 @@
   appClickOutside
   (clickOutside)="openDetail('clickOutside')"
 >
-  <div
-    class="button button--balance ml-2 pl-1"
-    (click)="openDetail('rates')"
-    [ngClass]="{'active': isDetail('rates')}"
-    matTooltip="Oracle Rates"
-  >
-    <i class="fas fa-exchange-alt"></i>
-  </div>
-  <div class="mx-3"></div>
-  <div
-    class="button button--notifications"
-    (click)="openDetail('notifications')"
-    [ngClass]="{'active': isDetail('notifications')}"
-    matTooltip="Notifications"
-  >
-    <i class="fas fa-clock"></i>
-    <div class="available-notifications" *ngIf='notificationsCounter'>
-      {{ notificationsCounter ? notificationsCounter : '0' }}
+  <ng-container *ngIf="!hideActions">
+    <div
+      class="button button--balance ml-2 pl-1"
+      (click)="openDetail('rates')"
+      [ngClass]="{'active': isDetail('rates')}"
+      matTooltip="Oracle Rates"
+    >
+      <i class="fas fa-exchange-alt"></i>
     </div>
-  </div>
-  <div class="mx-3"></div>
-  <div
-    class="button button--balance"
-    (click)="openDetail('balance')"
-    [ngClass]="{'active': isDetail('balance')}"
-    matTooltip="Wallet Balance"
-  >
-    <i class="fas fa-wallet"></i>
-  </div>
-  <div class="mx-3"></div>
-  <div
-    class="button button--withdraw"
-    (click)="openDetail('withdraw')"
-    [ngClass]="{'active': isDetail('withdraw')}"
-    matTooltip="Withdraw"
-  >
-    <i class="fas fa-donate"></i>
-  </div>
-  <div class="mx-3"></div>
+    <div class="mx-3"></div>
+    <div
+      class="button button--notifications"
+      (click)="openDetail('notifications')"
+      [ngClass]="{'active': isDetail('notifications')}"
+      matTooltip="Notifications"
+    >
+      <i class="fas fa-clock"></i>
+      <div class="available-notifications" *ngIf='notificationsCounter'>
+        {{ notificationsCounter ? notificationsCounter : '0' }}
+      </div>
+    </div>
+    <div class="mx-3"></div>
+    <div
+      class="button button--balance"
+      (click)="openDetail('balance')"
+      [ngClass]="{'active': isDetail('balance')}"
+      matTooltip="Wallet Balance"
+    >
+      <i class="fas fa-wallet"></i>
+    </div>
+    <div class="mx-3"></div>
+    <div
+      class="button button--withdraw"
+      (click)="openDetail('withdraw')"
+      [ngClass]="{'active': isDetail('withdraw')}"
+      matTooltip="Withdraw"
+    >
+      <i class="fas fa-donate"></i>
+    </div>
+    <div class="mx-3"></div>
+  </ng-container>
+
   <div class="button button--avatar">
     <app-wallet-avatar></app-wallet-avatar>
   </div>

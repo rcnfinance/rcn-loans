@@ -20,6 +20,9 @@
   // -webkit-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
   // -moz-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
   // box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
+  &--translucent {
+    background: var(--app-color-gray-900);
+  }
   .navbar-header{
     height: 40px;
     .button-img{
@@ -64,6 +67,11 @@
             height: 15px;
             margin-right: 8px;
           }
+        }
+        &--connect {
+          padding: 6px 28px !important;
+          border-radius: 6px;
+          border: 1px solid var(--app-color-primary);
         }
       }
       .separator{
@@ -208,6 +216,7 @@
       width: 100%;
       height: 45px;
       .button-img{
+        display: none;
         img{
           height: 45px;
         }
@@ -270,6 +279,14 @@
       }
       .icon-hamburguer{
         display: none;
+      }
+    }
+    &--translucent {
+      background: linear-gradient(180deg, #121315, transparent);
+      .navbar-header {
+        .button-img {
+          display: inline;
+        }
       }
     }
   }
