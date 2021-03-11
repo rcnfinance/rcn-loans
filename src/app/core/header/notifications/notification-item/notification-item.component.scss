@@ -91,6 +91,21 @@
     @extend %roboto-bold;
   }
 }
+.cancel-tx {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  padding: 6px;
+  cursor: pointer;
+  &__icon {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--app-color-gray-50);
+  }
+}
 mat-progress-bar.mat-progress-bar{
   height: 4px;
   position: absolute;
