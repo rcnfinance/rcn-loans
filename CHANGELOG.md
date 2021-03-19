@@ -1,5 +1,17 @@
 # Changelog
 
+## **0.3.4** Boggart 👻
+
+### Feature:
+- Integration with Proof of Humanity
+
+### Enhancement:
+- Navrail appears hidden by default
+
+### Fix:
+- Handle stucked TX's
+
+
 ## **0.3.3** Boggart 👻
 
 ### Feature:
