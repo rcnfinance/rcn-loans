@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatSnackBar } from '@angular/material';
+import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { environment } from 'environments/environment';
 import { PohProfile } from 'app/interfaces/poh-profile';
 import { ApiService } from 'app/services/api.service';
@@ -22,7 +22,6 @@ export class DialogPohComponent implements OnInit {
       address?: string;
       uri?: string;
     },
-    private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private apiService: ApiService,
     private pohService: PohService
