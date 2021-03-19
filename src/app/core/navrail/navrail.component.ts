@@ -33,7 +33,9 @@ export class NavrailComponent implements OnInit, OnDestroy {
     private router: Router,
     private web3Service: Web3Service,
     private walletConnectService: WalletConnectService
-  ) { }
+  ) {
+    this.navrailHidden = true;
+  }
 
   ngOnInit() {
     this.loadAccount();
