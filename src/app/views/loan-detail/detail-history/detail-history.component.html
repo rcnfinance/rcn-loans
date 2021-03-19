@@ -86,8 +86,7 @@
               <ng-template #addressTemplate>
                 <a
                   *ngIf="item.isAddress"
-                  [href]="explorerAddress.replace('${address}', item.value)"
-                  target="_blank"
+                  (click)="clickAddress(item.value, item.hasPoh)"
                 >
                   {{ item.value | formatAddress }}
                 </a>

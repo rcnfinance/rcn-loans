@@ -1,5 +1,6 @@
 import { Engine } from './../models/loan.model';
 import { CollateralApi } from './collateral-api';
+import { PohApi } from './poh-api';
 
 export interface LoanDescriptor {
   loan_id: string;
@@ -81,4 +82,5 @@ export interface LoanContentApi {
   collateral: CollateralApi;
   descriptor: LoanDescriptor;
   engine: Engine;
+  profile: PohApi;
 }

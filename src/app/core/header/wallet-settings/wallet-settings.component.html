@@ -3,18 +3,32 @@
   [@anmNotifications]="viewDetail === 'settings' ? 'open' : 'closed'"
 >
   <div class="wallet-settings__items">
-    <div class="item item--address" (click)="clickCopyAddress()">
+    <div
+      class="item item--address"
+      (click)="hasPoh ? clickOpenPoh() : clickCopyAddress()">
       <span class="item__icon">
-        <i class="far fa-user-circle"></i>
+        <span *ngIf="hasPoh">
+          <i class="fas fa-user-check"></i>
+        </span>
+        <span *ngIf="!hasPoh">
+          <i class="fas fa-user"></i>
+        </span>
       </span>
       <span class="item__text">
         {{ shortAddress }}
       </span>
-      <div class="item__icon item__icon--copy">
+      <div
+        class="item__icon item__icon--copy"
+        *ngIf="!hasPoh"
+      >
         <i class="far fa-copy"></i>
       </div>
     </div>
-    <div class="item" (click)="clickOpenEtherscan()">
+    <div
+      class="item"
+      (click)="clickOpenEtherscan()"
+      *ngIf="!hasPoh"
+    >
       <span class="item__text">
         Open in Etherscan
       </span>

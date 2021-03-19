@@ -86,7 +86,8 @@ export class Loan {
     public debt?: Debt,
     public config?: Config,
     public collateral?: Collateral,
-    public position?: number
+    public position?: number,
+    public poh?: string
   ) {}
 
   get isRequest(): boolean {

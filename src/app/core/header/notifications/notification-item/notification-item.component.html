@@ -26,4 +26,13 @@
   </div>
   <mat-progress-bar *ngIf='!notification.confirmedTx' [mode]="progressbarMode">
   </mat-progress-bar>
+  <div
+    *ngIf='!notification.confirmedTx'
+    class="cancel-tx"
+    (click)="clickCancelTx(notification)"
+  >
+    <mat-icon class="cancel-tx__icon">
+      close
+    </mat-icon>
+  </div>
 </div>

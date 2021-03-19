@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Engine } from './../models/loan.model';
 import { LoanContentApi } from './../interfaces/loan-api-diaspore';
+import { PohApi } from './../interfaces/poh-api';
 import { ApiResponse } from './../interfaces/api-response';
 
 @Injectable({
@@ -144,6 +145,17 @@ export class ApiService {
     const apiBase: string = environment.api[engine]['v6'];
     const uri = 'status';
     return this.http.post<{last_block: number, current_block: number}>(apiBase.concat(uri), null);
+  }
+
+  /**
+   * Check if the api is synchronized
+   * @param engine API Engine
+   * @return Last and current block
+   */
+  getAddressPoh(address: string): Observable<PohApi> {
+    const apiBase: string = environment.api[Engine.RcnEngine]['v6'];
+    const uri = `profile/${address}`;
+    return this.http.post<PohApi>(apiBase.concat(uri), null);
   }
 
   /**

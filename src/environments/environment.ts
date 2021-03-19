@@ -56,6 +56,9 @@ export const environment = {
     },
     [USDC_ENGINE]: {
       v6: `https://new-api-ropsten-diaspore-usdc.rcn.loans/`
+    },
+    poh: {
+      host: 'https://ipfs.kleros.io/'
     }
   },
   contracts: {
