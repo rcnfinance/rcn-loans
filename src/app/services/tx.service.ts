@@ -92,6 +92,16 @@ export class TxService {
     this.confirmedTxSubscribers = this.confirmedTxSubscribers.filter(c => c.toString() !== cb.toString());
   }
 
+  cancelTx(txHash: string) {
+    this.txMemory.map((tx) => {
+      if (tx.tx === txHash) {
+        tx.confirmed = true;
+        this.confirmedTxSubscribers.forEach(c => c(tx));
+      }
+    });
+    this.saveTxs();
+  }
+
   registerTx(tx: Tx) {
     this.txMemory.push(tx);
     this.newTxSubscribers.forEach(c => c(tx));
