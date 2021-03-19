@@ -145,7 +145,14 @@
       <div class="loan-list__column-label">
         Created by
       </div>
-      <span>
+      <span
+        class="address d-inline-flex align-items-center"
+        [class.address--touchable]="loan.poh"
+        (click)="clickBorrower(loan.borrower)"
+      >
+        <span class="address__icon" *ngIf="loan.poh">
+          <i class="fas fa-user-check"></i>
+        </span>
         {{ shortAddress }}
       </span>
     </div>

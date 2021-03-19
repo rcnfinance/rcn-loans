@@ -37,7 +37,13 @@
             <p class="wallet__text-label">
               Wallet Address
             </p>
-            <p class="wallet__text-address">
+            <p
+              class="wallet__text-address"
+              (click)="hasPoh ? clickOpenPoh() : false"
+            >
+              <span *ngIf="hasPoh">
+                <i class="fas fa-user-check mr-1"></i>
+              </span>
               {{ shortAccount }}
             </p>
           </div>

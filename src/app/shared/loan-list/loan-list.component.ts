@@ -1,15 +1,16 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { Loan, Status, LoanType } from '../../models/loan.model';
-import { Status as CollateralStatus } from '../../models/collateral.model';
-import { Utils } from '../../utils/utils';
-import { Brand } from '../../models/brand.model';
-import { Web3Service } from '../../services/web3.service';
-import { BrandingService } from './../../services/branding.service';
-import { LoanTypeService } from '../../services/loan-type.service';
-import { CollateralService } from '../../services/collateral.service';
-import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
+import { Loan, Status, LoanType } from 'app/models/loan.model';
+import { Status as CollateralStatus } from 'app/models/collateral.model';
+import { Utils } from 'app/utils/utils';
+import { Brand } from 'app/models/brand.model';
+import { Web3Service } from 'app/services/web3.service';
+import { BrandingService } from 'app/services/branding.service';
+import { LoanTypeService } from 'app/services/loan-type.service';
+import { CollateralService } from 'app/services/collateral.service';
+import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
+import { DialogPohComponent } from 'app/dialogs/dialog-poh/dialog-poh.component';
 
 @Component({
   selector: 'app-loan-list',
@@ -134,6 +135,22 @@ export class LoanListComponent implements OnInit, OnDestroy {
     console.info('user action detected', action);
 
     this.canLend = false;
+  }
+
+  /**
+   * Click on 'borrower' address to see PoH
+   * @param address Borrower address
+   */
+  clickBorrower(address: string) {
+    const { poh } = this.loan;
+    if (!poh) {
+      return;
+    }
+
+    this.dialog.open(DialogPohComponent, {
+      panelClass: 'dialog-poh-wrapper',
+      data: { address }
+    });
   }
 
   /**

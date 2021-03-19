@@ -90,6 +90,32 @@
       // height: 27px;
     }
 
+    &--borrower {
+      .address {
+        position: relative;
+        z-index: 500;
+        &,
+        &__icon {
+          transition: .3s;
+          color: white;
+          cursor: default;
+        }
+        &__icon {
+          margin-right: 6px;
+          font-size: 10px;
+        }
+        &--touchable {
+          &:hover {
+            &,
+            .address__icon {
+              cursor: pointer;
+              color: var(--app-color-primary);
+            }
+          }
+        }
+      }
+    }
+
     &--action {
       position: relative;
       z-index: 3;

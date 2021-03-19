@@ -118,12 +118,16 @@
           <div class="accordion-details__item">
             <div class="d-lg-flex justify-content-between">
               <div class="accordion-details__item-wrapper">
-                <i class="accordion-details__item-icon fas fa-user"></i>
+                <i
+                  class="accordion-details__item-icon fas"
+                  [ngClass]="loan.poh ? 'fa-user-check' : 'fa-user'"
+                >
+                </i>
                 <span class="accordion-details__item-label">
                   Borrower:
                 </span>
                 <span class="accordion-details__item-value">
-                  <a (click)="openAddress(loan.borrower)">
+                  <a (click)="clickBorrower(loan.borrower)">
                     {{ loan.borrower | formatAddress }}
                     {{ loanType === 3 ? (' - ' + brand.headerTitle) : '' }}
                   </a>
