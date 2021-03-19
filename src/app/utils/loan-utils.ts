@@ -26,7 +26,8 @@ export class LoanUtils {
       descriptor: descriptorData,
       collateral: collateralData,
       installments: installmentsData,
-      engine
+      engine,
+      profile
     } = loanContent;
 
     let oracle: Oracle;
@@ -122,6 +123,8 @@ export class LoanUtils {
       );
     }
 
+    const poh = profile ? profile.uri : null;
+
     return new Loan(
       engine,
       loanData.loan_id,
@@ -137,7 +140,9 @@ export class LoanUtils {
       loanData.cosigner,
       debt,
       config,
-      collateral
+      collateral,
+      null,
+      poh
     );
   }
 

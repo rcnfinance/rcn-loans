@@ -1,0 +1,70 @@
+<app-dialog-header title="Profile">
+</app-dialog-header>
+
+<mat-dialog-content class="dialog dialog--small">
+  <div class="dialog__content">
+    <div class="profile d-flex align-items-center">
+      <div class="profile__avatar">
+        <img
+          class="avatar"
+          [src]="pohHost + profile?.photo"
+        >
+      </div>
+      <div class="profile__account">
+        <div class="account">
+          <div class="account__name">
+            {{ profile?.name }}
+          </div>
+          <div class="account__bio">
+            {{ profile?.bio }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="address d-flex align-items-center" (click)="clickCopyAddress()">
+      <span class="address__icon fas fa-user-check">
+      </span>
+      <span class="address__id">
+        {{ address }}
+      </span>
+      <span class="address__copy far fa-copy d-none d-md-inline">
+      </span>
+    </div>
+    <div class="actions">
+      <a
+        class="action d-block d-md-inline"
+        [href]="urlEtherscan"
+        target="_blank"
+      >
+        View on Etherscan
+        <i class="action__icon fas fa-external-link-alt d-md-none"></i>
+      </a>
+      <span class="separator d-none d-md-inline-block">
+      </span>
+      <a
+        class="action d-block d-md-inline"
+        [href]="urlPoh"
+        target="_blank"
+      >
+        View on Proof of Humanity
+        <i class="action__icon fas fa-external-link-alt d-md-none"></i>
+      </a>
+      <a
+        class="action d-block d-md-none"
+        (click)="clickCopyAddress()"
+      >
+        Copy address
+        <i class="action__icon far fa-copy d-md-none"></i>
+      </a>
+    </div>
+    <div class="poh" *ngIf="profile">
+      <video class="poh__video" controls>
+        <source [src]="pohHost + profile?.video" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-footer d-flex justify-content-end">
+  <app-close-button class="d-none d-md-inline"></app-close-button>
+</mat-dialog-actions>

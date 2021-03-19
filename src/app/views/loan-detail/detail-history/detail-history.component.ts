@@ -1,12 +1,14 @@
 import { Component, OnInit, OnChanges, Input, HostListener } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { timer } from 'rxjs';
 import * as moment from 'moment';
-import { environment } from './../../../../environments/environment';
-import { ApiService } from './../../../services/api.service';
-import { FormatAmountPipe } from './../../../pipes/format-amount.pipe';
-import { Loan } from './../../../models/loan.model';
-import { Commit, CommitTypes, CommitProperties } from './../../../interfaces/commit.interface';
-import { LoanUtils } from './../../../utils/loan-utils';
+import { environment } from 'app/../environments/environment';
+import { ApiService } from 'app/services/api.service';
+import { FormatAmountPipe } from 'app/pipes/format-amount.pipe';
+import { Loan } from 'app/models/loan.model';
+import { Commit, CommitTypes, CommitProperties } from 'app/interfaces/commit.interface';
+import { LoanUtils } from 'app/utils/loan-utils';
+import { DialogPohComponent } from 'app/dialogs/dialog-poh/dialog-poh.component';
 
 @Component({
   selector: 'app-detail-history',
@@ -40,12 +42,14 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
         label: string;
         value: string;
         isAddress?: boolean;
-        isHash?: boolean
+        isHash?: boolean;
+        hasPoh?: boolean;
       }[];
     }
   };
 
   constructor(
+    private dialog: MatDialog,
     private formatAmountPipe: FormatAmountPipe,
     private apiService: ApiService
   ) {
@@ -66,7 +70,8 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
           }, {
             label: 'Creator',
             value: commit.data.creator,
-            isAddress: true
+            isAddress: true,
+            hasPoh: this.loan.poh ? true : false
           }, {
             label: 'Transaction',
             value: commit.tx_hash,
@@ -91,6 +96,8 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
             label: 'Lender',
             value: commit.data.lender,
             isAddress: true
+            // TODO: load by API the lender PoH status
+            // hasPoh: this.lenderHasPoh
           }, {
             label: 'Transaction',
             value: commit.tx_hash,
@@ -185,6 +192,22 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
     }
 
     this.historyItemSelected = null;
+  }
+
+  /**
+   * Click on an address
+   * @param address Borrower address
+   */
+  clickAddress(address: string, hasPoh: boolean) {
+    if (hasPoh) {
+      this.dialog.open(DialogPohComponent, {
+        panelClass: 'dialog-poh-wrapper',
+        data: { address }
+      });
+      return;
+    }
+
+    window.open(environment.network.explorer.address.replace('${address}', address));
   }
 
   async clickHistoryItemCircle(index?: number) {
