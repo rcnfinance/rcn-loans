@@ -122,6 +122,7 @@ $videoHeight: 240px;
         &__video {
           position: static;
           height: auto;
+          max-height: 310px;
         }
       }
     }
