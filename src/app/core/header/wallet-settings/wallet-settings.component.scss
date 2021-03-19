@@ -16,10 +16,11 @@
       @include typography-headline(7);
       padding: 10px 19px;
       cursor: pointer;
+      transition: .3s;
       &:hover {
         .item__text,
         .item__icon {
-          // TODO: add hover effect
+          color: var(--app-color-primary);
         }
       }
       &__text,
