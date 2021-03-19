@@ -1,0 +1,129 @@
+@import 'src/scss/dialogs';
+@import 'src/scss/fonts';
+
+$avatarSize: 56px;
+$videoHeight: 240px;
+
+.dialog {
+  &--small {
+    max-width: 585px;
+    padding: 25px 25px 5px;
+  }
+  &__content {
+    padding-top: $videoHeight;
+    color: white;
+    .profile {
+      &__avatar {
+        width: $avatarSize;
+        height: $avatarSize;
+        min-width: $avatarSize;
+        min-height: $avatarSize;
+        border: 2px solid var(--app-color-primary);
+        border-radius: 50%;
+        overflow: hidden;
+        .avatar {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      &__account {
+        padding-left: 15px;
+        .account {
+          &__name,
+          &__bio {
+            line-height: 20px;
+          }
+          &__name {
+            @include styled-font('proxima-nova', 700, 16px);
+            margin: 0 0 5px;
+          }
+          &__bio {
+            @include typography-body(1);
+          }
+        }
+      }
+    }
+    .address {
+      margin: 25px 0 18px;
+      cursor: pointer;
+      &__icon,
+      &__copy {
+        font-size: 13px;
+      }
+      &__icon {
+        margin-right: 8px;
+      }
+      &__id {
+        max-width: 75%;
+        display: inline-block;
+        @include styled-font('Roboto', 400, 16px);
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      &__copy {
+        margin-left: 28px;
+      }
+    }
+    .actions {
+      .action {
+        padding: 8px 0;
+        @include styled-font('proxima-nova', 700, 10px);
+        cursor: pointer;
+        transition: .3s;
+        &:hover {
+          color: var(--app-color-primary);
+        }
+        &__icon {
+          margin-left: 6px;
+        }
+      }
+      .separator {
+        width: 2px;
+        height: 10px;
+        background: white;
+        margin: 0 10px -2px;
+      }
+    }
+    .poh {
+      margin: 13px 0 0;
+      &__video {
+        position: fixed;
+        top: 50px;
+        left: 0;
+        width: 100%;
+        height: $videoHeight;
+        z-index: 10;
+        background: black;
+        width: 100%;
+        outline: none;
+      }
+    }
+  }
+}
+.mat-dialog-actions {
+  margin-bottom: 0;
+  padding: 5px 20px 10px;
+}
+
+@media (min-width: 992px) {
+  ::ng-deep .dialog-poh-wrapper .mat-dialog-container {
+    border-radius: 12px;
+  }
+  .dialog {
+    &__content {
+      padding-top: 0;
+      .actions {
+        .action {
+          padding: 0;
+        }
+      }
+      .poh {
+        &__video {
+          position: static;
+          height: auto;
+        }
+      }
+    }
+  }
+}

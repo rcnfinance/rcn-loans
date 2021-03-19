@@ -56,6 +56,7 @@ import { DialogApiSyncComponent } from '../dialogs/dialog-api-sync/dialog-api-sy
 import { DialogFrontRunningComponent } from '../dialogs/dialog-front-running/dialog-front-running.component';
 import { DialogCollateralComponent } from '../dialogs/dialog-collateral/dialog-collateral.component';
 import { DialogNeedWithdrawComponent } from '../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
+import { DialogPohComponent } from '../dialogs/dialog-poh/dialog-poh.component';
 
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
@@ -131,6 +132,7 @@ import { EventsService } from './../services/events.service';
     DialogFrontRunningComponent,
     DialogCollateralComponent,
     DialogNeedWithdrawComponent,
+    DialogPohComponent,
 
     VisualUrlPipe,
     FormatAmountPipe,
@@ -147,7 +149,8 @@ import { EventsService } from './../services/events.service';
     DialogApiSyncComponent,
     DialogFrontRunningComponent,
     DialogCollateralComponent,
-    DialogNeedWithdrawComponent
+    DialogNeedWithdrawComponent,
+    DialogPohComponent
   ],
   providers: [
     DecentralandCosignerProvider,
