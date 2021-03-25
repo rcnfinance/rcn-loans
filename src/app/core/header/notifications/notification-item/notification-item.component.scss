@@ -1,4 +1,4 @@
-@import './../../../../../scss/_variables.scss'; //variables
+@import './../../../../../scss/_mixins.scss'; //variables
 
 .notification-container{
   height: 64px;
@@ -50,7 +50,6 @@
   color: var(--app-color-secondary);
   outline: none; outline-offset: 0px;
   @include transition();
-  @extend %roboto-bold;
   &:hover{
     color: var(--app-color-primary);
   }
@@ -63,20 +62,12 @@
   color: var(--app-color-secondary);
   outline: none; outline-offset: 0px;
   @include transition();
-  @extend %roboto-light;
   &:hover{
     color: var(--app-color-primary);
   }
 }
-.time-event
-.supporter-txt{
-  @extend %roboto-light;
-}
 .leading-txt{
   cursor: pointer;
-}
-.starring-event{
-  @extend %roboto-bold;
 }
 .action-event{margin-left: 10px;}
 .separator{margin: 0 5px;}
@@ -88,7 +79,6 @@
     outline-offset: 0px;
     color: var(--app-color-secondary);
     @include transition();
-    @extend %roboto-bold;
   }
 }
 .cancel-tx {
