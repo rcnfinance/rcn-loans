@@ -14,8 +14,8 @@ import { DialogWalletSelectComponent } from 'app/dialogs/dialog-wallet-select/di
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  account: string;
-  subscriptionAccount: Subscription;
+  private account: string;
+  private subscriptionAccount: Subscription;
 
   constructor(
     private router: Router,
