@@ -41,6 +41,7 @@
                         type='number'
                         placeholder="Set min."
                         formControlName="amountStart"
+                        autocomplete="off"
                         pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
                         [readonly]="!currency?.value"
                       >
@@ -58,6 +59,7 @@
                         type='number'
                         placeholder="Set max."
                         formControlName="amountEnd"
+                        autocomplete="off"
                         pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
                         [readonly]="!currency?.value"
                       >
@@ -80,6 +82,7 @@
                         type='number'
                         placeholder="Days"
                         formControlName="days"
+                        autocomplete="off"
                         pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
                       >
                     </mat-form-field>
@@ -93,6 +96,7 @@
                         type='number'
                         placeholder="Months"
                         formControlName="months"
+                        autocomplete="off"
                         pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
                       >
                     </mat-form-field>
@@ -106,6 +110,7 @@
                         type='number'
                         placeholder="Years"
                         formControlName="years"
+                        autocomplete="off"
                         pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
                       >
                     </mat-form-field>
@@ -126,6 +131,7 @@
                     placeholder="Set min. rate"
                     max='200'
                     formControlName="annualInterest"
+                    autocomplete="off"
                     pattern='^(0*[1-9][0-9]*(\.[0-9]+)?|0+\.[0-9]*[1-9][0-9]*)$'
                   >
                   <span matSuffix>%</span>
