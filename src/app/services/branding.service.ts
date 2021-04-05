@@ -2,21 +2,10 @@ import { Injectable } from '@angular/core';
 import { Loan } from './../models/loan.model';
 import { Agent, environment } from '../../environments/environment';
 import { Brand } from './../models/brand.model';
-import { CosignerService } from './cosigner.service';
-import { DecentralandCosignerProvider } from '../providers/cosigners/decentraland-cosigner-provider';
 
 @Injectable()
 export class BrandingService {
   staticBrands = {
-    decentraland_mortgage: new Brand(
-      'Decentraland MC',
-      '#E59400',
-      'https://avatars1.githubusercontent.com/u/12685795?s=400&v=4',
-      '',
-      'Decentraland MC',
-      './assets/logos/decentraland-brand.svg',
-      undefined
-    ),
     ripio: new Brand(
       'Ripio',
       '#009BDE',
@@ -27,15 +16,9 @@ export class BrandingService {
       undefined
     )
   };
-  constructor(
-    private cosignerService: CosignerService
-  ) { }
+  constructor() { }
 
   getBrand(loan: Loan): Brand {
-    if (this.cosignerService.getCosigner(loan) instanceof DecentralandCosignerProvider) {
-      return this.staticBrands.decentraland_mortgage;
-    }
-
     switch (environment.dir[loan.creator.toLowerCase()]) {
       case Agent.RipioArsCreator:
       case Agent.RipioUsdCreator:

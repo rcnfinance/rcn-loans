@@ -24,6 +24,7 @@ const installmentsModelAbi = require('../contracts/InstallmentsModel.json');
 const collateralAbi = require('../contracts/Collateral.json');
 const collateralWethManagerAbi = require('../contracts/CollateralWETHManager.json');
 const aggregatorProxyAbi = require('../contracts/chainlink/EACAggregatorProxy.json');
+const chainlinkAdapterV3Abi = require('../contracts/chainlink/ChainlinkAdapterV3.json');
 
 @Injectable()
 export class ContractsService {
@@ -38,9 +39,8 @@ export class ContractsService {
   private _collateralWethManager: {[engine: string]: any} = {};
 
   // single-engine contracts
-  private _aggregatorProxyEthUsdAddress: string =
-    environment.contracts.chainlink.EACAggregatorProxy.ethUsd;
   private _aggregatorProxyEthUsd: any;
+  private _chainlinkAdapterV3Abi: any;
 
   constructor(
     private http: HttpClient,
@@ -70,7 +70,9 @@ export class ContractsService {
     });
 
     this._aggregatorProxyEthUsd =
-      this.makeContract(aggregatorProxyAbi.abi, this._aggregatorProxyEthUsdAddress);
+      this.makeContract(aggregatorProxyAbi.abi, environment.contracts.chainlink.EACAggregatorProxy.ethUsd);
+    this._chainlinkAdapterV3Abi =
+      this.makeContract(chainlinkAdapterV3Abi.abi, environment.contracts.chainlink.chainlinkAdapterV3);
   }
 
   /**
@@ -472,6 +474,17 @@ export class ContractsService {
     const rate = tokens.mul(amount).div(equivalent);
 
     return rate;
+  }
+
+  /**
+   * Get pair rate using Chainlink
+   * @param pair Ex: ['BTC', 'ETH']
+   * @return Pair rate
+   */
+  async getPairRate(pair: string[]) {
+    const { web3 } = this.web3Service;
+    const pairBytes32 = pair.map((currency) => web3.utils.toHex(currency));
+    return await this._chainlinkAdapterV3Abi.methods.getRate(pairBytes32).call();
   }
 
   async estimatePayAmount(loan: Loan, amount: number): Promise<number> {

@@ -1,13 +1,9 @@
-// Custom Custom Style
-$material-icons-font-path: '~material-icons/iconfont/'; // Material Icons
-@import '~material-icons/iconfont/material-icons.scss'; // Material Icons
-@import './scss/_spaces.scss', //spaces
-        './scss/_variables.scss', //variables
-        './scss/_type.scss', //type
-        './scss/_mixins.scss', //mixins
-        './scss/_colors.scss', //colors
-        './scss/_helpers.scss', //helpers
-        './scss/_fonts.scss'; //fonts
+// Custom Custom Style+
+$material-icons-font-path: '~material-icons/iconfont/';
+@import '~material-icons/iconfont/material-icons.scss';
+@import './scss/mixins',
+        './scss/helpers',
+        './scss/fonts';
 
 // General
 html { height: 0; }
@@ -102,7 +98,6 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
     &:visited,
     &:focus {
       color: var(--app-color-secondary);
-      background-color: $hover-primary;
     }
   }
   &.button-secondary{
@@ -120,7 +115,6 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
     background-color: var(--app-color-secondary);
     &:hover, &:active, &:visited, &:focus{
       color: var(--app-color-secondary);
-      background-color: $fifth;
     }
   }
   &.button-clear {
@@ -155,15 +149,11 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
     &:active,
     &:visited,
     &:focus {
-      color: $gray2;
+      color: var(--app-color-gray-50);
     }
   }
   &.button-transfer{
     color: var(--app-color-secondary);
-    background-color: $orange;
-    &:hover, &:active, &:visited, &:focus{
-      background-color: $orange-hover;
-    }
   }
   &.button-disabled {
     opacity: .8;
@@ -193,27 +183,21 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
 .primary{color: var(--app-color-primary);}
 .secondary{color: var(--app-color-secondary);}
 .tertiary{color: var(--app-color-tertiary);}
-.quaternary{color: $quaternary;}
-.fifth{color: $fifth;}
 
 // Typography
 .title{
-  &.main-h1{font-size: 34px; text-transform: uppercase; @extend %font-light; color: #FFF;}
-  &.main-h2{font-size: 18px; text-transform: uppercase; @extend %font-light;}
-  &.main-h3{font-size: 18px; @extend %font-bold;}
-  &.main-h4{font-size: 16px; @extend %font-regular;}
-  &.main-h5{font-size: 14px; @extend %font-thin;}
-  &.main-b1{font-size: 32px; @extend %font-extra-bold;}
-  &.main-p1{font-size: 14px; @extend %font-regular;}
-  &.main-m3{font-size: 14px; @extend %font-bold;}
-  &.main-title{line-height: 1.4; font-size: 16px; @extend %font-medium;}
-  &.main-subtitle{line-height: 1.4; font-size: 14px; @extend %font-medium;}
-  &.property{font-size: 13px; text-transform: uppercase; @extend %font-light;}
+  &.main-h1{font-size: 34px; text-transform: uppercase; color: #FFF;}
+  &.main-h2{font-size: 18px; text-transform: uppercase;}
+  &.main-h3{font-size: 18px;}
+  &.main-h4{font-size: 16px;}
+  &.main-h5{font-size: 14px;}
+  &.main-b1{font-size: 32px;}
+  &.main-p1{font-size: 14px;}
+  &.main-m3{font-size: 14px;}
+  &.main-title{line-height: 1.4; font-size: 16px; }
+  &.main-subtitle{line-height: 1.4; font-size: 14px; }
+  &.property{font-size: 13px; text-transform: uppercase;}
 }
-.font-light{@extend %font-light;}
-.font-regular{@extend %font-regular;}
-.font-bold{@extend %font-bold;}
-.font-black{@extend %font-extra-bold;}
 
 // Loader
 ngx-spinner .black-overlay.ng-star-inserted {
@@ -236,7 +220,6 @@ mat-tooltip-component .mat-tooltip {
       >th {
         border: 0px;
         background-color: var(--app-color-gray-400);
-        @extend %propiety-title;
         color: #EDEDED; // TODO: define in material
       }
     }
@@ -246,7 +229,6 @@ mat-tooltip-component .mat-tooltip {
       >td {
         text-align: left;
         border: 0px;
-        @extend %propiety-subtitle;
       }
     }
   }
@@ -279,7 +261,6 @@ mat-sidenav-container.mat-drawer-container {
   padding-top: 60px;
   color: inherit;
   z-index: 999;
-  background-color: $fifth;
 
   .animation-opacity{
     opacity: 0;
@@ -302,7 +283,7 @@ mat-sidenav-container.mat-drawer-container {
         // padding-left: 10px;
         @include transition();
         svg{font-size: 1.2em;}
-        &:hover {background-color: $gray7;}
+        &:hover {background-color: var(--app-color-gray-700)}
       }
       .txt{
         display: inline-block;
@@ -360,9 +341,8 @@ mat-sidenav-container.mat-drawer-container {
 // Chip
 // TODO: For specific cases of color only. Implement custom theme.
 mat-chip.mat-chip {
-  @extend %roboto-regular;
   &--gray {
-    background: $gray7 !important;
+    background: var(--app-color-gray-700) !important;
   }
 }
 
@@ -371,7 +351,7 @@ mat-chip.mat-chip {
   margin-top: 70px;
   border-top-right-radius: 0px !important;
   border-top-left-radius: 0px !important;
-  background-color: $gray7;
+  background-color: var(--app-color-gray-700);
   .mat-menu-content {
     padding-top: 2px;
     padding-bottom: 2px;
@@ -424,14 +404,14 @@ mat-form-field{
 }
 
 .mat-form-field-appearance-legacy.mat-form-field-disabled {
-  .mat-form-field-underline{background-color: $gray5 !important;}
+  .mat-form-field-underline{background-color: var(--app-color-gray-600) !important;}
   .mat-form-field-label,
-  .mat-form-field-suffix{color: $gray5;}
+  .mat-form-field-suffix{color: var(--app-color-gray-600);}
 }
 
 .mat-form-field-underline{ color: var(--app-color-secondary); }
 .mat-select-arrow{ color: var(--app-color-secondary); }
-.mat-select-placeholder, .mat-select-value-text { color: #EDEDED; @extend %font-bold;}
+.mat-select-placeholder, .mat-select-value-text { color: #EDEDED;}
 .mat-select-content{
   background-color: #101010;
   .mat-option{
@@ -556,7 +536,6 @@ mat-form-field{
   bottom: 50px;
   z-index: -1;
   opacity: 0;
-  background-color: $fifth;
   @include transition();
 }
 .spacing-container-top{
@@ -584,15 +563,12 @@ mat-form-field{
     padding: 10px 15px;
     .title{
       font-size: 14px;
-      @extend %font-light;
     }
     .value{
       font-size: 30px;
       font-family: 'Roboto', sans-serif;
-      @extend %font-bold;
       .currency{
         font-size: 24px;
-        @extend %font-regular;
         font-weight: 700;
       }
     }
@@ -614,11 +590,9 @@ mat-form-field{
     .title,
     .title-centered{
       display: inline-block;
-      @extend %font-bold;
     }
     .title-centered{
       margin-left: 15px;
-      @extend %absolute-center-top;
     }
   }
 }
@@ -641,7 +615,7 @@ mat-form-field{
 }
 .version-container{
   padding: 15px;
-  color: $gray4;
+  color: var(--app-color-gray-500);
 }
 .navmobile-toggled{
   margin: 0; height: 100%; overflow: hidden; // Prevent default scroll on menu open
@@ -695,7 +669,7 @@ virtual-scroller {
       text-align: center;
       display: inline-block;
       svg,
-      .fas{font-size: 1.4em; color: $gray6; @include transition();}
+      .fas{font-size: 1.4em; color: var(--app-color-gray-700); @include transition();}
       .material-icons {
         font-size: 1.75em;
         transform: translateY(4px);
@@ -706,7 +680,7 @@ virtual-scroller {
         min-height: 18px;
         float: inherit;
         span{
-          background-color: $gray6;
+          background-color: var(--app-color-gray-700);
         }
       }
       .available-loans {
@@ -717,9 +691,7 @@ virtual-scroller {
         border-radius: 30px;
         margin-left: 18px;
         margin-top: -10px;
-        background-color: $red;
         @include transition(all 0.1s ease-out);
-        @extend %absolute-center;
       }
       &.active{
         svg,
@@ -762,6 +734,7 @@ virtual-scroller {
   }
   .body-scrollable {
     padding-top: 115px;
+    padding-left: 72px;
   }
   virtual-scroller {
     height: calc(100vh - 120px);

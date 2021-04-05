@@ -56,6 +56,9 @@ export const environment = {
     },
     [USDC_ENGINE]: {
       v6: `https://new-api-ropsten-diaspore-usdc.rcn.loans/`
+    },
+    poh: {
+      host: 'https://ipfs.kleros.io/'
     }
   },
   contracts: {
@@ -100,14 +103,11 @@ export const environment = {
       }
     },
     ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    decentraland: {
-      mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
-      mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1'
-    },
     chainlink: {
       EACAggregatorProxy: {
         ethUsd: '0x30b5068156688f818cea0874b580206dfe081a03'
-      }
+      },
+      chainlinkAdapterV3: '0x62e2d0a55f4d5f19546b32e0ecde19ef6d290962'
     }
   },
   blacklist: [

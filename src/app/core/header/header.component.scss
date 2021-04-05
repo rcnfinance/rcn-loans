@@ -1,5 +1,5 @@
-@import '../../../scss/variables';
-@import '../../../scss/fonts';
+@import 'src/scss/mixins';
+@import 'src/scss/fonts';
 
 .navbar{
   height: 60px;
@@ -7,7 +7,7 @@
   left: 0px;
   top: 0px;
   right: 0px;
-  z-index: 1000;
+  z-index: 910;
   display: block;
   border-width: 0 0 1px;
   border: none;
@@ -20,6 +20,9 @@
   // -webkit-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
   // -moz-box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
   // box-shadow: 0 13px 18px 0 rgba(0,0,0,.5);
+  &--translucent {
+    background: var(--app-color-gray-900);
+  }
   .navbar-header{
     height: 40px;
     .button-img{
@@ -35,13 +38,10 @@
       font-size: 18px;
       padding: 5px 15px;
       text-transform: uppercase;
-      @extend %font-bold;
-      @extend %absolute-center-top;
     }
     .nav {
       display: none;
       &__item {
-        @extend %font-bold;
         color: white;
         position: relative;
         &::after {
@@ -64,6 +64,12 @@
             height: 15px;
             margin-right: 8px;
           }
+        }
+        &--connect {
+          padding: 6px 28px !important;
+          border-radius: 6px;
+          border: 1px solid var(--app-color-primary);
+          @include styled-font('proxima-nova', 700, 16px);
         }
       }
       .separator{
@@ -108,42 +114,6 @@
     }
   }
 }
-
-.navbar-extension {
-  height: 0px;
-  position: absolute;
-  top: 60px;
-  left: 0;
-  right: 0;
-  z-index: 9;
-  overflow: hidden;
-  padding: 0;
-  background-color: $gray7;
-  @include transition(all 0.2s ease);
-  ul{
-    li{
-      position: relative;
-      display: inline-block;
-      opacity: 0;
-      top: -15px;
-      margin-right: 15px;
-      &:last-child{
-        margin-right: 0px;
-      }
-      span{
-        display: none;
-        font-size: 12px;
-        @extend %font-light;
-      }
-    }
-  }
-  .title.main-h1{font-size: 16px; padding: 10px 0;}
-  .title.main-h2{font-size: 16px; padding: 10px 0; @extend %font-bold;}
-  .title.main-h2 {
-    font-family: 'Roboto', sans-serif;
-  }
-}
-
 .extension-closebox{
   position: absolute;
   top: 215px;
@@ -208,6 +178,7 @@
       width: 100%;
       height: 45px;
       .button-img{
+        display: none;
         img{
           height: 45px;
         }
@@ -270,6 +241,14 @@
       }
       .icon-hamburguer{
         display: none;
+      }
+    }
+    &--translucent {
+      background: linear-gradient(180deg, #121315, transparent);
+      .navbar-header {
+        .button-img {
+          display: inline;
+        }
       }
     }
   }

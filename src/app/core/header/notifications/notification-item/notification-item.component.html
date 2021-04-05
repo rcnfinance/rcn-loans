@@ -1,7 +1,10 @@
 <div class="notification-container"
 [ngClass]="{'progressOn': !notification.confirmedTx }" *ngIf="notification">
   <div class="status-container">
-    <div class="icon-event bg-{{ notification.txObject?.color }}">
+    <div
+      class="icon-event"
+      [ngStyle]="{'background-color': notification.txObject?.color}"
+    >
       <i
         class="{{ notification.txObject?.materialClass }} {{ notification.txObject?.awesomeClass }}"
       >
@@ -26,4 +29,13 @@
   </div>
   <mat-progress-bar *ngIf='!notification.confirmedTx' [mode]="progressbarMode">
   </mat-progress-bar>
+  <div
+    *ngIf='!notification.confirmedTx'
+    class="cancel-tx"
+    (click)="clickCancelTx(notification)"
+  >
+    <mat-icon class="cancel-tx__icon">
+      close
+    </mat-icon>
+  </div>
 </div>

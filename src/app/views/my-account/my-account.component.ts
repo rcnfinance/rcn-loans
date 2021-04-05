@@ -1,7 +1,11 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { environment } from 'environments/environment';
+import { DialogPohComponent } from 'app/dialogs/dialog-poh/dialog-poh.component';
+import { PohService } from 'app/services/poh.service';
 import { Web3Service } from 'app/services/web3.service';
+import { TitleService } from 'app/services/title.service';
 import { Engine } from 'app/models/loan.model';
 import { Utils } from 'app/utils/utils';
 
@@ -22,10 +26,14 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   shortAccount: string;
   defaultEngine: Engine;
   version: string = environment.version;
+  hasPoh: boolean;
   private subscriptionAccount: Subscription;
 
   constructor(
     private cdRef: ChangeDetectorRef,
+    private dialog: MatDialog,
+    private titleService: TitleService,
+    private pohService: PohService,
     private web3Service: Web3Service
   ) { }
 
@@ -34,6 +42,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     this.defaultEngine = Engine.UsdcEngine;
     this.loadAccount();
     this.listenLoginEvents();
+    this.titleService.changeTitle('My Account');
   }
 
   ngOnDestroy() {
@@ -59,6 +68,16 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Open dialog PoH
+   */
+  clickOpenPoh() {
+    const { account: address } = this;
+    this.dialog.open(DialogPohComponent, {
+      data: { address }
+    });
+  }
+
+  /**
    * Load connected account
    */
   private async loadAccount() {
@@ -67,6 +86,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
       const account = await this.web3Service.getAccount();
       this.account = web3.utils.toChecksumAddress(account);
       this.shortAccount = Utils.shortAddress(this.account);
+      this.hasPoh = await this.pohService.checkIfHasPoh(this.account);
     } catch {
       this.account = null;
       this.shortAccount = null;

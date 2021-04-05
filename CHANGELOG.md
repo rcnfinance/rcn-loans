@@ -1,5 +1,41 @@
 # Changelog
 
+## **0.3.4** Boggart 👻
+
+### Feature:
+- Integration with Proof of Humanity
+
+### Enhancement:
+- Navrail appears hidden by default
+
+### Fix:
+- Handle stucked TX's
+
+
+## **0.3.3** Boggart 👻
+
+### Feature:
+- New home page
+- New oracle rates component
+- New navrail component
+
+### Enhancement:
+- Set titles on My Account and FAQs
+
+## **0.3.2** Boggart 👻
+
+### Feature:
+- New "My account" tab on mobile
+- Add collateral suggestions in Borrow
+
+### Enhancement:
+- Mobile navigation improvements
+- New collateral average bar
+
+### Fix:
+- Fix API implementation for collateral
+- Fix wallet connection on mobile
+
 ## **0.3.1** Boggart 👻
 
 ### Feature:

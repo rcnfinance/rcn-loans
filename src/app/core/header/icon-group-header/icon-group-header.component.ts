@@ -4,6 +4,7 @@ import { Utils } from '../../../utils/utils';
 import { HeaderPopoverService } from '../../../services/header-popover.service';
 
 enum ViewType {
+  OracleRates = 'rates',
   Notifications = 'notifications',
   WalletBalance = 'balance',
   WalletWithdraw = 'withdraw',
@@ -18,6 +19,7 @@ enum ViewType {
 
 export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() account: string;
+  @Input() hideActions: string;
   shortAccount: string;
   viewDetail: string;
   selection: string;

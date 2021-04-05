@@ -1,4 +1,4 @@
-@import '../../../scss/variables';
+@import '../../../scss/mixins';
 
 .dialog-content {
   .title {
@@ -17,8 +17,7 @@
     font-size: 12px;
     padding-top: 10px;
     padding-bottom: 10px;
-    @extend %roboto-regular;
-    color: $gray2;
+    color: var(--app-color-gray-100);
     i {
       font-size: 1.5em;
     }
@@ -27,11 +26,10 @@
 
 .dialog-footer {
   align-items: center;
-  @extend %roboto-regular;
 
   &__label {
     text-align: center;
-    color: $gray2;
+    color: var(--app-color-gray-100);
   }
   &__buttons {
     text-align: right;

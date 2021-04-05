@@ -7,7 +7,6 @@ import { LoanContentApi } from './../../../interfaces/loan-api-diaspore';
 import { LoanUtils } from './../../../utils/loan-utils';
 import { ProxyApiService } from '../../../services/proxy-api.service';
 import { TitleService } from '../../../services/title.service';
-import { AvailableLoansService } from '../../../services/available-loans.service';
 import { Web3Service } from '../../../services/web3.service';
 import { EventsService } from '../../../services/events.service';
 import { DeviceService } from '../../../services/device.service';
@@ -21,7 +20,6 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
   pageId = 'borrowed';
   address: string;
   shortAddress: string;
-  available: any;
   loans: Loan[] = [];
   // pagination
   page = 1;
@@ -34,7 +32,6 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
   pageTitle: string;
   pageDescription: string;
   // subscriptions
-  subscriptionAvailable: Subscription;
   subscriptionAccount: Subscription;
 
   constructor(
@@ -43,7 +40,6 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private proxyApiService: ProxyApiService,
     private titleService: TitleService,
-    private availableLoansService: AvailableLoansService,
     private web3Service: Web3Service,
     private eventsService: EventsService,
     private deviceService: DeviceService
@@ -67,19 +63,10 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
       await this.checkMyLoans();
       this.setPageTitle();
     });
-
-    // Available Loans service
-    this.subscriptionAvailable = this.availableLoansService.currentAvailable.subscribe(
-      available => this.available = available
-    );
   }
 
   ngOnDestroy() {
     this.spinner.hide(this.pageId);
-
-    try {
-      this.subscriptionAvailable.unsubscribe();
-    } catch (e) { }
   }
 
   /**

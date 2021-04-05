@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './../../../shared/shared.module';
 import { WalletSettingsComponent } from './wallet-settings.component';
 
@@ -9,7 +10,7 @@ describe('WalletSettingsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ BrowserAnimationsModule, SharedModule ],
+      imports: [ BrowserAnimationsModule, HttpClientModule, SharedModule ],
       declarations: [ WalletSettingsComponent ]
     })
     .compileComponents();

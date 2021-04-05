@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Notification } from '../../../../models/notification.model';
 import { environment } from '../../../../../environments/environment';
 import { Utils } from '../../../../utils/utils';
+import { TxService } from '../../../../services/tx.service';
 
 @Component({
   selector: 'app-notification-item',
@@ -15,7 +16,9 @@ export class NotificationItemComponent implements OnInit {
 
   progressbarMode = 'query';
 
-  constructor() {}
+  constructor(
+    private txService: TxService
+  ) {}
 
   openTx() {
     window.open(environment.network.explorer.tx.replace(
@@ -35,6 +38,10 @@ export class NotificationItemComponent implements OnInit {
     const delta = Math.floor((new Date().getTime() - time) / 1000);
     if (delta <= 60) { return 'Just now'; }
     return Utils.formatDelta(delta, 2, false);
+  }
+
+  clickCancelTx({ hashTx }: Notification) {
+    this.txService.cancelTx(hashTx);
   }
 
   ngOnInit() {

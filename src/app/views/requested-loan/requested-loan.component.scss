@@ -1,4 +1,4 @@
-@import '../../../scss/_variables.scss'; //variables
+@import '../../../scss/mixins'; //variables
 
 $filterHeight: 630px;
 $filterHeightDesktop: 102px;
@@ -110,6 +110,6 @@ $filterHeightDesktop: 102px;
     animation-fill-mode: both;
   }
   virtual-scroller {
-    height: calc(100vh - 412px);
+    height: calc(100vh - 359px);
   }
 }

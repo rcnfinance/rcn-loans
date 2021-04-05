@@ -1,9 +1,11 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { environment } from 'environments/environment';
 import { CurrenciesService } from 'app/services/currencies.service';
 import { Loan, Status, LoanType } from 'app/models/loan.model';
 import { Brand } from 'app/models/brand.model';
 import { Utils } from 'app/utils/utils';
+import { DialogPohComponent } from 'app/dialogs/dialog-poh/dialog-poh.component';
 
 @Component({
   selector: 'app-loan-overview-panel',
@@ -29,6 +31,7 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
   timelineIconType: 'material' | 'fontawesome' | 'fontello' | 'image';
 
   constructor(
+    private dialog: MatDialog,
     private currenciesService: CurrenciesService
   ) { }
 
@@ -44,6 +47,23 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.loadLoanDetail();
     this.loadInstallments();
+  }
+
+  /**
+   * Click on 'borrower' address
+   * @param address Borrower address
+   */
+  clickBorrower(address: string) {
+    const { poh } = this.loan;
+    if (poh) {
+      this.dialog.open(DialogPohComponent, {
+        panelClass: 'dialog-poh-wrapper',
+        data: { address }
+      });
+      return;
+    }
+
+    this.openAddress(address);
   }
 
   /**
