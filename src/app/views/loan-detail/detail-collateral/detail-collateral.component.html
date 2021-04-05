@@ -12,7 +12,9 @@
                 Collateral Ratio:
               </span>
               <p class="item__value mt-1">
-                {{ currentLoanToValue }} %
+                <ng-container *ngIf="collateral?.amount > 0; else emptyValue">
+                  {{ currentLoanToValue }} %
+                </ng-container>
               </p>
             </div>
           </article>
@@ -28,7 +30,9 @@
                 Collateral Amount
               </span>
               <p class="item__value mt-1">
-                {{ collateralAmount }} {{ collateralAsset }}
+                <ng-container *ngIf="collateral?.amount > 0; else emptyValue">
+                  {{ collateralAmount }} {{ collateralAsset }}
+                </ng-container>
               </p>
             </div>
           </article>
@@ -41,7 +45,10 @@
                 Liquidation Price:
               </span>
               <p class="item__value mt-1">
-                {{ currentLiquidationPrice }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
+                <ng-container *ngIf="collateral?.amount > 0; else emptyValue">
+                  {{ currentLiquidationPrice }}
+                  {{ collateralAsset }}/{{ loanCurrency?.symbol }}
+                </ng-container>
               </p>
             </div>
           </article>
@@ -62,7 +69,9 @@
                       Liquidation Ratio
                     </span>
                     <span class="accordion-details__item-value">
-                      {{ liquidationRatio }} %
+                      <ng-container *ngIf="collateral?.amount > 0; else emptyValue">
+                        {{ liquidationRatio }} %
+                      </ng-container>
                     </span>
                   </div>
                   <div class="accordion-details__item-wrapper">
@@ -71,7 +80,9 @@
                       Safety Ratio:
                     </span>
                     <span class="accordion-details__item-value">
-                      {{ balanceRatio }} %
+                      <ng-container *ngIf="collateral?.amount > 0; else emptyValue">
+                        {{ balanceRatio }} %
+                      </ng-container>
                     </span>
                   </div>
                   <div class="accordion-details__item-wrapper">
@@ -80,7 +91,9 @@
                       Current Exchange Rate:
                     </span>
                     <span class="accordion-details__item-value">
-                      {{ currentExchangeRate }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
+                      <ng-container *ngIf="collateral?.amount > 0; else emptyValue">
+                        {{ currentExchangeRate }} {{ collateralAsset }}/{{ loanCurrency?.symbol }}
+                      </ng-container>
                     </span>
                   </div>
                 </div>
@@ -133,4 +146,8 @@
       <div class="title main-h4"></div>
     </div>
   </div>
+</ng-template>
+
+<ng-template #emptyValue>
+  -
 </ng-template>
