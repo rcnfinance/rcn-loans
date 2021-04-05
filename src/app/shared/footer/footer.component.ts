@@ -4,7 +4,6 @@ import { Engine } from 'app/models/loan.model';
 import { environment } from 'environments/environment';
 import { Web3Service } from 'app/services/web3.service';
 import { TitleService } from 'app/services/title.service';
-import { AvailableLoansService } from 'app/services/available-loans.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
 import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
 
@@ -16,7 +15,6 @@ import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contr
 export class FooterComponent implements OnInit, OnDestroy {
   account: string;
   title: string;
-  available: any;
   socialIcons: {
     url: string;
     label: string;
@@ -29,16 +27,14 @@ export class FooterComponent implements OnInit, OnDestroy {
   subscriptions = {
     account: null,
     sidebar: null,
-    title: null,
-    available: null
+    title: null
   };
 
   constructor(
     public dialog: MatDialog,
     private titleService: TitleService,
     private web3Service: Web3Service,
-    private walletConnectService: WalletConnectService,
-    private availableLoansService: AvailableLoansService
+    private walletConnectService: WalletConnectService
   ) {}
 
   async ngOnInit() {
@@ -108,9 +104,6 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.subscriptions.account = this.web3Service.loginEvent.subscribe(
       () => this.loadAccount()
     );
-    this.subscriptions.available = this.availableLoansService.currentAvailable.subscribe(
-      available => this.available = available
-    );
 
     // Initial account
     await this.loadAccount();
@@ -121,7 +114,6 @@ export class FooterComponent implements OnInit, OnDestroy {
       this.subscriptions.sidebar.unsubscribe();
       this.subscriptions.title.unsubscribe();
       this.subscriptions.account.unsubscribe();
-      this.subscriptions.available.unsubscribe();
     } catch (e) { }
   }
 

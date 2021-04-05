@@ -1,8 +1,4 @@
-// -------------------------
-// MIXINS
-// -------------------------
-
-// VARIABLES
+/*MIXINS*/
 // -------------------------
 
 // Default transition delay
@@ -16,13 +12,13 @@ $default-transition--delay: all 0.3s ease-out;
        -o-transition-delay: $delay;
           transition-delay: $delay;
 }
-// @mixin transform($transform) {
-//   -webkit-transform: $transform;
-//      -moz-transform: $transform;
-//       -ms-transform: $transform;
-//        -o-transform: $transform;
-//           transform: $transform;
-// }
+@mixin transform($transform) {
+  -webkit-transform: $transform;
+     -moz-transform: $transform;
+      -ms-transform: $transform;
+       -o-transform: $transform;
+          transform: $transform;
+}
 @mixin background-size($background-size) {
   -webkit-background-size: $background-size;
      -moz-background-size: $background-size;
@@ -66,26 +62,21 @@ $default-transition--delay: all 0.3s ease-out;
 }
 
 // Includes
-/**
- * Nota de Manuel: para que son estos. no funciona el sass en mi maquina por esto
- */
-/*
-@include background-size(cover);
-@include transform(translate(-50%, -50%));
-@include transform(rotate(360deg));
-@include transition(all 0.3s ease-out);
-@include border-radius(5px);
-@include box-shadow(0, 2px, 0px, rgba(0, 0, 0, 0.14), false);
-*/
+// @include background-size(cover);
+// @include transform(translate(-50%, -50%));
+// @include transform(rotate(360deg));
+// @include transition(all 0.3s ease-out);
+// @include border-radius(5px);
+// @include box-shadow(0, 2px, 0px, rgba(0, 0, 0, 0.14), false);
 
 
 // Animations CSS3
-@mixin animation($name, $duration, $ease, $delay, $direction) {
-  -webkit-animation: $name $duration $ease $delay $direction;
-  -moz-animation: $name $duration $ease $delay $direction;
-  -o-animation: $name $duration $ease $delay $direction;
-  -ms-animation: $name $duration $ease $delay $direction;
-  animation: $name $duration $ease $delay $direction;
+@mixin animation($name, $duration, $ease, $delay, $direction, $fill-mode) {
+  -webkit-animation: $name $duration $ease $delay $direction $fill-mode;
+  -moz-animation: $name $duration $ease $delay $direction $fill-mode;
+  -o-animation: $name $duration $ease $delay $direction $fill-mode;
+  -ms-animation: $name $duration $ease $delay $direction $fill-mode;
+  animation: $name $duration $ease $delay $direction $fill-mode;
 }
 @mixin keyframes($name) {
   @-webkit-keyframes #{$name} { @content; }
@@ -96,10 +87,10 @@ $default-transition--delay: all 0.3s ease-out;
 }
 
 .anm-fadeout{
-  @include animation(fadeout, 2s, ease-in-out, 1s, forwards);
+  @include animation(fadeout, 2s, ease-in-out, 1s, forwards, both);
 }
 .anm-rotate{
-  @include animation(rotate, 6s, ease-in-out, 1s, forwards);
+  @include animation(rotate, 6s, ease-in-out, 1s, forwards, both);
 }
 
 @include keyframes(fadeout) {
@@ -113,35 +104,4 @@ $default-transition--delay: all 0.3s ease-out;
 @include keyframes(rotate) {
   0% {@include transform(rotate(0deg));}
   100% {@include transform(rotate(720deg));}
-}
-
-
-// Extends
-%center-top-left{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  @include transform(translate(-50%, -50%));
-}
-%center-top{
-  position: absolute;
-  top: 50%;
-  @include transform(translate(0%, -50%));
-}
-%center-left{
-  position: absolute;
-  left: 50%;
-  @include transform(translate(-50%, 0%));
-}
-%icon {
-  transition: background-color ease .2s;
-  margin: 0 .5em;
-}
-.block-icon {
-  @extend %icon;
-  /* block specific styles... */
-}
-.info-icon {
-  @extend %icon;
-  /* info specific styles... */
 }

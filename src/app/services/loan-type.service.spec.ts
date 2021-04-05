@@ -6,7 +6,6 @@ import { Utils } from './../utils/utils';
 // App models
 import { Loan, Engine, Status, LoanType } from './../models/loan.model';
 // App services
-import { CosignerService } from './cosigner.service';
 import { LoanTypeService } from './loan-type.service';
 
 describe('LoanTypeService', () => {
@@ -22,7 +21,7 @@ describe('LoanTypeService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule, SharedModule],
-      providers: [LoanTypeService, CosignerService]
+      providers: [LoanTypeService]
     })
     .compileComponents();
   }));
