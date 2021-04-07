@@ -53,8 +53,10 @@ export class CollateralService {
 
     const DECIMALS_TO_SHOW = 2;
     const WITH_COMMAS = false;
+    const filteredCollateralPercentage =
+      isFinite(collateralPercentage) && !isNaN(collateralPercentage) ? collateralPercentage : 0;
     const collateralRatio: string =
-      Utils.formatAmount(collateralPercentage, DECIMALS_TO_SHOW, WITH_COMMAS);
+      Utils.formatAmount(filteredCollateralPercentage, DECIMALS_TO_SHOW, WITH_COMMAS);
 
     return collateralRatio;
   }

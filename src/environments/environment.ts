@@ -103,10 +103,6 @@ export const environment = {
       }
     },
     ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    decentraland: {
-      mortgageCreator: '0x0e4c24f71c8679b8af8e5a22aac3816e2b23f1cc',
-      mortgageManager: '0x31ebb4ffd5e34acfc87ea21a0c56157188f3f0e1'
-    },
     chainlink: {
       EACAggregatorProxy: {
         ethUsd: '0x30b5068156688f818cea0874b580206dfe081a03'

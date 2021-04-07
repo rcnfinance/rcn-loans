@@ -1,4 +1,4 @@
-@import './../../../../scss/variables';
+@import './../../../../scss/mixins';
 @import './../../../../scss/fonts';
 
 .notifications-container {
@@ -7,7 +7,6 @@
   overflow: hidden;
   position: absolute;
   right: 208px;
-  @extend %roboto-regular;
   @include transition();
 
   ul {

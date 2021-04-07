@@ -10,16 +10,9 @@ import { MaterialModule } from './../material.module';
 // App Component
 import { FooterComponent } from './footer/footer.component';
 import { CreatorContainerComponent } from './creator-container/creator-container.component';
-import { AvatarTitleComponent } from './avatar-title/avatar-title.component';
-import { AvatarComponent } from './avatar/avatar.component';
-import { IconAvatarComponent } from './avatar-title/icon-avatar/icon-avatar.component';
 import { LoanAvatarComponent } from './loan-avatar/loan-avatar.component';
-import { CosignerSelectorComponent } from './cosigner-selector/cosigner-selector.component';
 import { FilterLoansComponent } from './filter-loans/filter-loans.component';
 import { InfiniteProgressBarComponent } from './infinite-progress-bar/infinite-progress-bar.component';
-import { ConversionGraphicComponent } from './conversion-graphic/conversion-graphic.component';
-import { HeaderListComponent } from './conversion-graphic/header-list/header-list.component';
-import { BodyListComponent } from './conversion-graphic/body-list/body-list.component';
 import { DialogHeaderComponent } from './dialog-header/dialog-header.component';
 import { BorrowFabButtonComponent } from './borrow-fab-button/borrow-fab-button.component';
 import { CollateralFormComponent } from './../dialogs/dialog-collateral/collateral-form/collateral-form.component';
@@ -27,7 +20,6 @@ import { CollateralSliderDebtComponent } from './../dialogs/dialog-collateral/co
 import { ErrorDetailsComponent } from './error-details/error-details.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { ButtonGroupComponent } from './button-group/button-group.component';
-import { RiskIndicatorComponent } from './risk-indicator/risk-indicator.component';
 import { CurrencyLogoComponent } from './currency-logo/currency-logo.component';
 import { LoanListComponent } from './loan-list/loan-list.component';
 import { LoanListHeaderComponent } from './loan-list-header/loan-list-header.component';
@@ -41,7 +33,6 @@ import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
 import { PayButtonComponent } from './pay-button/pay-button.component';
 import { CloseButtonComponent } from './close-button/close-button.component';
-import { ClaimButtonComponent } from './claim-button/claim-button.component';
 import { FixedApplicationAdComponent } from './fixed-application-ad/fixed-application-ad.component';
 import { RedeemButtonComponent } from './redeem-button/redeem-button.component';
 // App Dialogs
@@ -63,12 +54,9 @@ import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 import { FormatAmountPipe } from './../pipes/format-amount.pipe';
 import { FormatAddressPipe } from './../pipes/format-address.pipe';
 // App Services
-import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
 import { ContractsService } from './../services/contracts.service';
 import { BrandingService } from './../services/branding.service';
-import { CosignerService } from './../services/cosigner.service';
 import { IdentityService } from './../services/identity.service';
-import { RiskService } from './../services/risk.service';
 import { CountriesService } from './../services/countries.service';
 import { CollateralService } from './../services/collateral.service';
 import { EventsService } from './../services/events.service';
@@ -86,17 +74,9 @@ import { EventsService } from './../services/events.service';
   declarations: [
     FooterComponent,
     CreatorContainerComponent,
-    AvatarComponent,
     LoanAvatarComponent,
-    CosignerSelectorComponent,
-    ConversionGraphicComponent,
-    HeaderListComponent,
-    BodyListComponent,
     DialogHeaderComponent,
-    AvatarTitleComponent,
-    IconAvatarComponent,
     ButtonGroupComponent,
-    RiskIndicatorComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
@@ -118,7 +98,6 @@ import { EventsService } from './../services/events.service';
     DetailButtonComponent,
     PayButtonComponent,
     CloseButtonComponent,
-    ClaimButtonComponent,
     RedeemButtonComponent,
 
     DialogInsufficientfundsComponent,
@@ -153,12 +132,9 @@ import { EventsService } from './../services/events.service';
     DialogPohComponent
   ],
   providers: [
-    DecentralandCosignerProvider,
     ContractsService,
     BrandingService,
-    CosignerService,
     IdentityService,
-    RiskService,
     CountriesService,
     CollateralService,
     EventsService
@@ -169,23 +145,14 @@ import { EventsService } from './../services/events.service';
     MaterialModule,
     FooterComponent,
     CreatorContainerComponent,
-    AvatarComponent,
     LoanAvatarComponent,
-    CosignerSelectorComponent,
-    ConversionGraphicComponent,
-    HeaderListComponent,
-    BodyListComponent,
     DialogHeaderComponent,
-    AvatarTitleComponent,
-    IconAvatarComponent,
     LendButtonComponent,
     DetailButtonComponent,
     PayButtonComponent,
     CloseButtonComponent,
-    ClaimButtonComponent,
     RedeemButtonComponent,
     ButtonGroupComponent,
-    RiskIndicatorComponent,
     FilterLoansComponent,
     InfiniteProgressBarComponent,
     CurrencyLogoComponent,
