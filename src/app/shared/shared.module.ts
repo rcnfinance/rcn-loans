@@ -60,6 +60,7 @@ import { IdentityService } from './../services/identity.service';
 import { CountriesService } from './../services/countries.service';
 import { CollateralService } from './../services/collateral.service';
 import { EventsService } from './../services/events.service';
+import { LoanListSkeletonComponent } from './loan-list-skeleton/loan-list-skeleton.component';
 
 @NgModule({
   imports: [
@@ -115,7 +116,8 @@ import { EventsService } from './../services/events.service';
 
     VisualUrlPipe,
     FormatAmountPipe,
-    FormatAddressPipe
+    FormatAddressPipe,
+    LoanListSkeletonComponent
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,
