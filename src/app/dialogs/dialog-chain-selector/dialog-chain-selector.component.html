@@ -1,0 +1,44 @@
+<mat-dialog-content class="dialog dialog--small">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-5 dialog__image mb-5 mb-md-0">
+        <img src="../../../assets/illustration-chains.svg">
+        <!-- TODO: add ALT text -->
+      </div>
+      <div class="col-12 col-md-6 dialog__content">
+        <!-- TODO: use real copy -->
+        <h1 class="dialog__content-title mt-0 mb-4">
+          TITULO DEL DIALOGUE
+        </h1>
+        <p class="dialog__content-description">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+        </p>
+        <div class="dialog__content-chains">
+          <div
+            *ngFor="let chain of chains"
+            class="chain d-flex align-items-center"
+            [class.chain--active]="chain.id === currentChain"
+          >
+            <img
+              [src]="chain.image"
+              [alt]="chain.fullname"
+              class="chain__image"
+            >
+            <span class="chain__name">
+              {{ chain.fullname }}
+            </span>
+          </div>
+        </div>
+        <div class="dialog__content-actions mt-5 mt-md-4">
+          <button
+            mat-raised-button
+            mat-dialog-close
+            class="button button-primary"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

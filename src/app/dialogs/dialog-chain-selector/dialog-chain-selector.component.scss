@@ -1,0 +1,24 @@
+@import 'src/scss/dialogs';
+@import 'src/scss/fonts';
+
+.dialog {
+  &__content {
+    &-chains {
+      padding: 16px 0 6px;
+      .chain {
+        margin-bottom: 12px;
+        &__image {
+          height: 18px;
+          margin-right: 5px;
+        }
+        &__name {
+          @include typography-headline(7);
+          line-height: 24px;
+        }
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
