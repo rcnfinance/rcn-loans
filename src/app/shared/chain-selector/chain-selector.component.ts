@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { ChainService } from 'app/services/chain.service';
+import { DialogChainSelectorComponent } from 'app/dialogs/dialog-chain-selector/dialog-chain-selector.component';
 
 @Component({
   selector: 'app-chain-selector',
@@ -8,6 +10,7 @@ import { ChainService } from 'app/services/chain.service';
 })
 export class ChainSelectorComponent {
   constructor(
+    private dialog: MatDialog,
     private chainService: ChainService
   ) { }
 
@@ -17,5 +20,12 @@ export class ChainSelectorComponent {
 
   get config() {
     return this.chainService.config;
+  }
+
+  /**
+   * Click on the selector to open an explanatory dialog
+   */
+  clickChainSelector() {
+    this.dialog.open(DialogChainSelectorComponent);
   }
 }

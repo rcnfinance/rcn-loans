@@ -7,6 +7,10 @@
   border: 1px solid white;
   border-radius: 17px;
   background: #FFFFFF26 0% 0% no-repeat padding-box;
+  &,
+  &__name {
+    transition: .3s;
+  }
   &__icon {
     .icon {
       height: 18px;
@@ -20,6 +24,7 @@
     transition: .3s;
   }
   &:hover {
+    border-color: var(--app-color-gray-50);
     .chain__name {
       color: var(--app-color-gray-50);
     }
