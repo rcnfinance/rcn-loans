@@ -13,6 +13,7 @@ export const chain = {
     name: 'Ropsten',
     ui: {
       name: 'Ropsten',
+      fullname: 'Ethereum Ropsten',
       image: 'assets/chain-ethereum.svg'
     },
     explorer: {

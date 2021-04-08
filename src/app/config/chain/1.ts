@@ -14,6 +14,7 @@ export const chain = {
     name: 'Main',
     ui: {
       name: 'Ethereum',
+      fullname: 'Ethereum Mainnet',
       image: 'assets/chain-ethereum.svg'
     },
     explorer: {
