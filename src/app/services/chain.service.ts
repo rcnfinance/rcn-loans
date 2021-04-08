@@ -15,6 +15,7 @@ export class ChainService {
   private KEY_LAST_CHAIN = 'lastChainSelected';
 
   constructor() {
+    this.loadAvailableChains();
     this.recoveryLastChain();
   }
 
@@ -38,7 +39,7 @@ export class ChainService {
    * Load the active (or default) chain
    * @param networkVersion Chain ID
    */
-  loadSelectedChain(networkVersion?: number, skipAttemp = false) {
+  loadSelectedChain(networkVersion?: number, skipAttemp = false): void {
     const { chainSelected: previousChainSelected } = this;
     try {
       const { availableChains } = environment;
@@ -72,17 +73,41 @@ export class ChainService {
     }
   }
 
-  changeChain() {
-    const { KEY_LAST_CHAIN } = this;
-    localStorage.removeItem(KEY_LAST_CHAIN);
+  /**
+   * Get chain config by chain ID
+   * @param chainId Chain ID (ex: ETH Mainnet = 3, Ropsten = 3)
+   * @return Chain config
+   */
+  getChainConfigById(chainId: AvailableChains): any {
+    // TODO: replace any by chain-config interface
+    try {
+      const { chain } = chains.default[chainId];
+      return chain;
+    } catch (err) {
+      return null;
+    }
   }
 
-  private saveLastChain() {
+  /**
+   * Load available chains to use
+   */
+  private loadAvailableChains() {
+    const { availableChains } = environment;
+    this.availableChains = availableChains;
+  }
+
+  /**
+   * Save the current chain as last used
+   */
+  private saveLastChain(): void {
     const { KEY_LAST_CHAIN, chainSelected } = this;
     localStorage.setItem(KEY_LAST_CHAIN, String(chainSelected));
   }
 
-  private recoveryLastChain() {
+  /**
+   * Recover the last used chain
+   */
+  private recoveryLastChain(): void {
     const { KEY_LAST_CHAIN } = this;
     const lastChainSelected = Number(localStorage.getItem(KEY_LAST_CHAIN));
     if (lastChainSelected) {
