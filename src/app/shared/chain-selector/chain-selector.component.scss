@@ -3,13 +3,13 @@
 .chain {
   display: flex;
   align-items: center;
-  padding: 9px 14px;
+  padding: 7px 14px 7px 10px;
   border: 1px solid white;
   border-radius: 17px;
   background: #FFFFFF26 0% 0% no-repeat padding-box;
   &__icon {
     .icon {
-      height: 17px;
+      height: 18px;
     }
   }
   &__name {
