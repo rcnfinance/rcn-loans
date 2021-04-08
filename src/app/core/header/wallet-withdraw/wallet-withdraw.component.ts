@@ -7,14 +7,14 @@ import {
   transition
 } from '@angular/animations';
 import { Subscription, timer } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { Engine } from './../../../models/loan.model';
-import { HeaderPopoverService } from './../../../services/header-popover.service';
-import { ContractsService } from './../../../services/contracts.service';
-import { Web3Service } from './../../../services/web3.service';
-import { EventsService } from './../../../services/events.service';
-import { Tx, Type, TxService } from './../../../services/tx.service';
-import { Utils } from './../../../utils/utils';
+import { Engine } from 'app/models/loan.model';
+import { HeaderPopoverService } from 'app/services/header-popover.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { Web3Service } from 'app/services/web3.service';
+import { EventsService } from 'app/services/events.service';
+import { Tx, Type, TxService } from 'app/services/tx.service';
+import { ChainService } from 'app/services/chain.service';
+import { Utils } from 'app/utils/utils';
 
 @Component({
   selector: 'app-wallet-withdraw',
@@ -68,6 +68,7 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
     private headerPopoverService: HeaderPopoverService,
     private txService: TxService,
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private eventsService: EventsService,
     private contractsService: ContractsService
   ) { }
@@ -168,12 +169,13 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
    * Load the pending withdraw
    */
   loadOngoingWithdraw() {
+    const { config } = this.chainService;
     this.rcnOngoingWithdraw = this.txService.getLastWithdraw(
-      environment.contracts[Engine.RcnEngine].diaspore.debtEngine,
+      config.contracts[Engine.RcnEngine].diaspore.debtEngine,
       this.rcnLoansWithBalance
     );
     this.usdcOngoingWithdraw = this.txService.getLastWithdraw(
-      environment.contracts[Engine.UsdcEngine].diaspore.debtEngine,
+      config.contracts[Engine.UsdcEngine].diaspore.debtEngine,
       this.usdcLoansWithBalance
     );
   }
@@ -210,8 +212,9 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
   private async withdrawRcn() {
     if (this.rcnCanWithdraw) {
       if (this.rcnLoansWithBalance.length > 0) {
+        const { config } = this.chainService;
         const tx = await this.contractsService.withdrawFundsDiaspore(Engine.RcnEngine, this.rcnLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, environment.contracts[Engine.RcnEngine].diaspore.debtEngine, this.rcnLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, config.contracts[Engine.RcnEngine].diaspore.debtEngine, this.rcnLoansWithBalance);
       }
       this.loadWithdrawBalance();
       this.retrievePendingTx();
@@ -224,8 +227,9 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
   private async withdrawUsdc() {
     if (this.usdcCanWithdraw) {
       if (this.usdcLoansWithBalance.length > 0) {
+        const { config } = this.chainService;
         const tx = await this.contractsService.withdrawFundsDiaspore(Engine.UsdcEngine, this.usdcLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, environment.contracts[Engine.UsdcEngine].diaspore.debtEngine, this.usdcLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, config.contracts[Engine.UsdcEngine].diaspore.debtEngine, this.usdcLoansWithBalance);
       }
       this.loadWithdrawBalance();
       this.retrievePendingTx();

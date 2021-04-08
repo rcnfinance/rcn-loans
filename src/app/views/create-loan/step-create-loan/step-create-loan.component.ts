@@ -5,18 +5,18 @@ import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
-import { environment } from './../../../../environments/environment';
-import { Utils } from '../../../utils/utils';
-import { LoanUtils } from '../../../utils/loan-utils';
-import { Currency } from '../../../utils/currencies';
-import { Loan, Status, Engine, Oracle, Descriptor } from './../../../models/loan.model';
-import { LoanRequest } from './../../../interfaces/loan-request';
-import { Web3Service } from './../../../services/web3.service';
-import { ProxyApiService } from './../../../services/proxy-api.service';
-import { ContractsService } from './../../../services/contracts.service';
-import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
-import { WalletConnectService } from './../../../services/wallet-connect.service';
-import { Tx } from './../../../services/tx.service';
+import { Utils } from 'app/utils/utils';
+import { LoanUtils } from 'app/utils/loan-utils';
+import { Currency } from 'app/utils/currencies';
+import { Loan, Status, Engine, Oracle, Descriptor } from 'app/models/loan.model';
+import { LoanRequest } from 'app/interfaces/loan-request';
+import { Web3Service } from 'app/services/web3.service';
+import { ProxyApiService } from 'app/services/proxy-api.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
+import { WalletConnectService } from 'app/services/wallet-connect.service';
+import { ChainService } from 'app/services/chain.service';
+import { Tx } from 'app/services/tx.service';
 
 @Component({
   selector: 'app-step-create-loan',
@@ -44,6 +44,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
     private location: Location,
     private spinner: NgxSpinnerService,
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private contractsService: ContractsService,
     private proxyApiService: ProxyApiService,
     private walletConnectService: WalletConnectService,
@@ -156,11 +157,12 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
    */
   private buildForm() {
     const web3: any = this.web3Service.web3;
+    const { config } = this.chainService;
 
     const DEFAULT_ENGINE = Engine.UsdcEngine;
     const DEFAULT_CALLBACK = Utils.address0x;
     const DEFAULT_SALT = web3.utils.randomHex(32);
-    const DEFAULT_MODEL = environment.contracts[DEFAULT_ENGINE].models.installments;
+    const DEFAULT_MODEL = config.contracts[DEFAULT_ENGINE].models.installments;
     const DEFAULT_INSTALLMENTS = 1;
     const DEFAULT_INSTALLMENTS_ACTIVATED = false;
     const DEFAULT_INSTALLMENTS_TIME_UNIT = 60 * 60 * 24;
@@ -396,7 +398,8 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
    */
   private async getExistingLoan(id: string): Promise<Loan> {
     const { content } = await this.proxyApiService.getLoanById(id);
-    const loan: Loan = LoanUtils.buildLoan(content);
+    const { config } = this.chainService;
+    const loan: Loan = LoanUtils.buildLoan(content, config);
     const isRequest = loan.status === Status.Request;
 
     if (!isRequest) {
@@ -457,9 +460,10 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
    * @return Loan
    */
   private async updateLoanMockup(): Promise<Loan> {
+    const { config } = this.chainService;
     const LOAN_ENGINE = Engine.UsdcEngine;
     const LOAN_STATUS = Status.Ongoing;
-    const LOAN_MODEL = environment.contracts[LOAN_ENGINE].models.installments;
+    const LOAN_MODEL = config.contracts[LOAN_ENGINE].models.installments;
     const LOAN_CREATOR = this.account || Utils.address0x;
 
     const { calculatedId, currency, annualInterestRate } = this.form.value.formUi;

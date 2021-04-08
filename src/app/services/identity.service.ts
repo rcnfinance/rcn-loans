@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Loan } from '../models/loan.model';
-import { Identity } from '../models/identity.model';
-import { environment, Agent } from '../../environments/environment';
-import { CompanyIdentity } from './../models/identity.model';
-import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
-
-import { CosignerService } from './../services/cosigner.service';
+import { Loan } from 'app/models/loan.model';
+import { Identity } from 'app/models/identity.model';
+import { Agent } from 'environments/environment';
+import { CompanyIdentity } from 'app/models/identity.model';
+import { DecentralandCosignerProvider } from 'app/providers/cosigners/decentraland-cosigner-provider';
+import { CosignerService } from 'app/services/cosigner.service';
+import { ChainService } from 'app/services/chain.service';
 
 @Injectable()
 export class IdentityService {
@@ -154,6 +154,7 @@ export class IdentityService {
   };
 
   constructor(
+    private chainService: ChainService,
     private cosignerService: CosignerService
   ) { }
 
@@ -164,7 +165,8 @@ export class IdentityService {
         resolve(this.companyIdentities[Agent.MortgageCreator]);
       }
 
-      resolve(this.companyIdentities[environment.dir[loan.borrower.toLowerCase()]]);
+      const { config } = this.chainService;
+      resolve(this.companyIdentities[config.dir[loan.borrower.toLowerCase()]]);
     }) as Promise<Identity>;
   }
 }

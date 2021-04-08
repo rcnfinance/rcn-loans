@@ -2,15 +2,16 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Loan } from './../../../models/loan.model';
-import { LoanContentApi } from './../../../interfaces/loan-api-diaspore';
-import { LoanUtils } from './../../../utils/loan-utils';
-import { ProxyApiService } from '../../../services/proxy-api.service';
-import { TitleService } from '../../../services/title.service';
-import { AvailableLoansService } from '../../../services/available-loans.service';
-import { Web3Service } from '../../../services/web3.service';
-import { EventsService } from '../../../services/events.service';
-import { DeviceService } from '../../../services/device.service';
+import { Loan } from 'app/models/loan.model';
+import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
+import { LoanUtils } from 'app/utils/loan-utils';
+import { ProxyApiService } from 'app/services/proxy-api.service';
+import { TitleService } from 'app/services/title.service';
+import { AvailableLoansService } from 'app/services/available-loans.service';
+import { Web3Service } from 'app/services/web3.service';
+import { EventsService } from 'app/services/events.service';
+import { DeviceService } from 'app/services/device.service';
+import { ChainService } from 'app/services/chain.service';
 
 @Component({
   selector: 'app-lent-loans',
@@ -46,7 +47,8 @@ export class AddressComponent implements OnInit, OnDestroy {
     private availableLoansService: AvailableLoansService,
     private web3Service: Web3Service,
     private eventsService: EventsService,
-    private deviceService: DeviceService
+    private deviceService: DeviceService,
+    private chainService: ChainService
   ) { }
 
   ngOnInit() {
@@ -137,7 +139,8 @@ export class AddressComponent implements OnInit, OnDestroy {
     try {
       const PAGE_SIZE = 20;
       const { content } = await this.proxyApiService.getLent(address, page, PAGE_SIZE, sort);
-      const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
+      const { config } = this.chainService;
+      const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData, config));
 
       // if there are no more loans
       if (!loans.length) {

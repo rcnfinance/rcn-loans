@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { District, Tag, DecentralandCosigner, Parcel } from '../../../../models/cosigners/decentraland-cosigner.model';
-import { Loan, Status } from '../../../../models/loan.model';
-import { DecentralandCosignerProvider } from '../../../../providers/cosigners/decentraland-cosigner-provider';
-import { Utils } from '../../../../utils/utils';
-import { environment } from '../../../../../environments/environment';
+import { District, Tag, DecentralandCosigner, Parcel } from 'app/models/cosigners/decentraland-cosigner.model';
+import { Loan, Status } from 'app/models/loan.model';
+import { DecentralandCosignerProvider } from 'app/providers/cosigners/decentraland-cosigner-provider';
+import { Utils } from 'app/utils/utils';
+import { ChainService } from 'app/services/chain.service';
 
 @Component({
   selector: 'app-decentraland-cosigner',
@@ -24,7 +24,8 @@ export class DecentralandCosignerComponent implements OnInit {
   displayPrice = '...';
   financiation = '...';
   highlights = [];
-  mortgageManager: string = environment.contracts.decentraland.mortgageManager;
+  mortgageManager: string =
+    this.chainService.config.contracts.decentraland.mortgageManager;
   status: string = undefined;
 
   // Decentraland Map DATA
@@ -32,7 +33,9 @@ export class DecentralandCosignerComponent implements OnInit {
   mapWidth: number = undefined;
   mapHeight: number = undefined;
 
-  constructor() { }
+  constructor(
+    private chainService: ChainService
+  ) { }
 
   winSize() {
     if (this.winWidth < 550) {

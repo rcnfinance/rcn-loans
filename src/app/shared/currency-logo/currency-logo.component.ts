@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-// App services
-import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
-import { Web3Service } from '../../services/web3.service';
-import { environment } from './../../../environments/environment';
+import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
+import { ChainService } from 'app/services/chain.service';
+import { Web3Service } from 'app/services/web3.service';
 
 @Component({
   selector: 'app-currency-logo',
@@ -20,6 +19,7 @@ export class CurrencyLogoComponent implements OnInit {
 
   constructor(
     private currenciesService: CurrenciesService,
+    private chainService: ChainService,
     private web3Service: Web3Service
   ) { }
 
@@ -45,10 +45,11 @@ export class CurrencyLogoComponent implements OnInit {
    * @return Icon URL
    */
   renderIcon(address?: string) {
+    const { config } = this.chainService;
     let url: string;
 
     switch (address) {
-      case environment.contracts.ethAddress:
+      case config.contracts.ethAddress:
         url = '/assets/eth.svg';
         break;
 

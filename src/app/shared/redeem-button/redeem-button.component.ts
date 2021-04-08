@@ -7,16 +7,15 @@ import {
   EventEmitter
 } from '@angular/core';
 import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
-import { environment } from './../../../environments/environment';
-import { Loan } from './../../models/loan.model';
-import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-// App Services
-import { Web3Service } from './../../services/web3.service';
-import { ContractsService } from './../../services/contracts.service';
-import { TxService, Tx, Type } from './../../services/tx.service';
-import { EventsService, Category } from '../../services/events.service';
-import { WalletConnectService } from './../../services/wallet-connect.service';
+import { Loan } from 'app//models/loan.model';
+import { DialogGenericErrorComponent } from 'app/dialogs/dialog-generic-error/dialog-generic-error.component';
+import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { Web3Service } from 'app/services/web3.service';
+import { ChainService } from 'app/services/chain.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { TxService, Tx, Type } from 'app/services/tx.service';
+import { EventsService, Category } from 'app/services/events.service';
+import { WalletConnectService } from 'app/services/wallet-connect.service';
 
 @Component({
   selector: 'app-redeem-button',
@@ -40,6 +39,7 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
     private web3Service: Web3Service,
     private contractsService: ContractsService,
     private eventsService: EventsService,
+    private chainService: ChainService,
     private txService: TxService,
     private walletConnectService: WalletConnectService,
     public snackBar: MatSnackBar
@@ -84,9 +84,10 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
   }
 
   async clickRedeem() {
+    const { config } = this.chainService;
     // pending tx validation
     if (this.pendingTx) {
-      window.open(environment.network.explorer.tx.replace(
+      window.open(config.network.explorer.tx.replace(
         '${tx}',
         this.pendingTx.tx
       ), '_blank');
@@ -104,9 +105,9 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
     // approve validation
     const { collateral, engine } = this.loan;
     const token: string = collateral.token;
-    if (token === environment.contracts[engine].converter.ethAddress) {
-      const collateralAddress = environment.contracts[engine].collateral.collateral;
-      const operator = environment.contracts[engine].collateral.wethManager;
+    if (token === config.contracts[engine].converter.ethAddress) {
+      const collateralAddress = config.contracts[engine].collateral.collateral;
+      const operator = config.contracts[engine].collateral.wethManager;
       const operatorApproved = await this.contractsService.isApprovedERC721(
         collateralAddress,
         operator

@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 
 import { Injectable } from '@angular/core';
-import { Loan } from './../models/loan.model';
-import { cosignerOptions } from '../../environments/cosigners';
-import { CosignerProvider } from '../providers/cosigner-provider';
-import { Web3Service } from './web3.service';
+import { cosignerOptions } from 'environments/cosigners';
+import { Loan } from 'app/models/loan.model';
+import { CosignerProvider } from 'app/providers/cosigner-provider';
+import { Web3Service } from 'app/services/web3.service';
 
 @Injectable()
 export class CosignerService {

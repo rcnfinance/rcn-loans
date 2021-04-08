@@ -13,26 +13,26 @@ import {
   MatSnackBarHorizontalPosition
 } from '@angular/material';
 import * as BN from 'bn.js';
-import { environment } from '../../../environments/environment';
-import { Loan, Status } from './../../models/loan.model';
-import { Utils } from '../../utils/utils';
-import { LoanUtils } from './../../utils/loan-utils';
-import { Currency } from '../../utils/currencies';
-import { ContractsService } from './../../services/contracts.service';
-import { TxService, Tx, Type } from './../../services/tx.service';
-import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { ProxyApiService } from '../../services/proxy-api.service';
-import { Web3Service } from '../../services/web3.service';
-import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
-import { CountriesService } from '../../services/countries.service';
-import { EventsService, Category } from '../../services/events.service';
-import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
-import { DialogLoanLendComponent } from '../../dialogs/dialog-loan-lend/dialog-loan-lend.component';
-import { DialogFrontRunningComponent } from '../../dialogs/dialog-front-running/dialog-front-running.component';
-import { CosignerService } from './../../services/cosigner.service';
-import { DecentralandCosignerProvider } from './../../providers/cosigners/decentraland-cosigner-provider';
-import { WalletConnectService } from './../../services/wallet-connect.service';
+import { Loan, Status } from 'app/models/loan.model';
+import { Utils } from 'app/utils/utils';
+import { LoanUtils } from 'app/utils/loan-utils';
+import { Currency } from 'app/utils/currencies';
+import { ContractsService } from 'app/services/contracts.service';
+import { TxService, Tx, Type } from 'app/services/tx.service';
+import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { ProxyApiService } from 'app/services/proxy-api.service';
+import { Web3Service } from 'app/services/web3.service';
+import { DialogInsufficientfundsComponent } from 'app/dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
+import { CountriesService } from 'app/services/countries.service';
+import { EventsService, Category } from 'app/services/events.service';
+import { DialogGenericErrorComponent } from 'app/dialogs/dialog-generic-error/dialog-generic-error.component';
+import { DialogWrongCountryComponent } from 'app/dialogs/dialog-wrong-country/dialog-wrong-country.component';
+import { DialogLoanLendComponent } from 'app/dialogs/dialog-loan-lend/dialog-loan-lend.component';
+import { DialogFrontRunningComponent } from 'app/dialogs/dialog-front-running/dialog-front-running.component';
+import { CosignerService } from 'app/services/cosigner.service';
+import { DecentralandCosignerProvider } from 'app/providers/cosigners/decentraland-cosigner-provider';
+import { ChainService } from 'app/services/chain.service';
+import { WalletConnectService } from 'app/services/wallet-connect.service';
 
 @Component({
   selector: 'app-lend-button',
@@ -63,6 +63,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     private web3Service: Web3Service,
     private countriesService: CountriesService,
     private eventsService: EventsService,
+    private chainService: ChainService,
     private walletConnectService: WalletConnectService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
@@ -116,6 +117,8 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    * Handle click on lend button
    */
   async clickLend() {
+    const { config } = this.chainService;
+
     // country validation
     if (!this.lendEnabled) {
       this.dialog.open(DialogWrongCountryComponent);
@@ -123,7 +126,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     }
     // pending tx validation
     if (this.pendingTx) {
-      window.open(environment.network.explorer.tx.replace(
+      window.open(config.network.explorer.tx.replace(
         '${tx}',
         this.pendingTx.tx
       ), '_blank');
@@ -180,7 +183,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     // front running validation
 
     const { content } = await this.proxyApiService.getLoanById(this.loan.id);
-    const { status } = LoanUtils.buildLoan(content);
+    const { status } = LoanUtils.buildLoan(content, config);
     if (status !== Status.Request) {
       this.closeDialog.emit();
       return this.dialog.open(DialogFrontRunningComponent);
@@ -231,6 +234,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         callbackData,
         account
       } = await this.contractsService.getLendParams(this.loan, this.lendToken);
+      const { config } = this.chainService;
 
       // set value in specified token
       const balance: BN = await this.contractsService.getUserBalanceInToken(lendToken);
@@ -243,7 +247,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
           'loan ' + loanId,
           Number(required)
         );
-        const currency = environment.usableCurrencies.filter(token => token.address === lendToken)[0];
+        const currency = config.usableCurrencies.filter(token => token.address === lendToken)[0];
         const decimals = Currency.getDecimals(currency.symbol);
         this.showInsufficientFundsDialog(required, balance, currency.symbol, decimals);
         return;
@@ -254,14 +258,14 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
       // set lend contract
       switch (lendToken) {
-        case environment.contracts[engine].token:
+        case config.contracts[engine].token:
           contractAddress = this.loan.address;
           break;
-        case environment.contracts[engine].converter.ethAddress:
-          contractAddress = environment.contracts[engine].converter.converterRamp;
+        case config.contracts[engine].converter.ethAddress:
+          contractAddress = config.contracts[engine].converter.converterRamp;
           break;
         default:
-          contractAddress = environment.contracts[engine].converter.converterRamp;
+          contractAddress = config.contracts[engine].converter.converterRamp;
           break;
       }
 
@@ -274,7 +278,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         return;
       }
 
-      if (lendToken === environment.contracts[engine].token) {
+      if (lendToken === config.contracts[engine].token) {
         tx = await this.contractsService.lendLoan(
           engine,
           cosignerAddress,
@@ -301,7 +305,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         );
       }
 
-      this.txService.registerLendTx(tx, environment.contracts[engine].diaspore.loanManager, this.loan);
+      this.txService.registerLendTx(tx, config.contracts[engine].diaspore.loanManager, this.loan);
 
       this.eventsService.trackEvent(
         'lend',
@@ -356,7 +360,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    */
   private showApproveDialog(
     contract: string,
-    token: string = environment.contracts[this.loan.engine].token
+    token: string = this.chainService.config.contracts[this.loan.engine].token
   ) {
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(DialogApproveContractComponent);
     dialogRef.componentInstance.onlyAddress = contract;

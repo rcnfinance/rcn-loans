@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Loan } from '../../models/loan.model';
-import { CosignerLiability } from '../../models/cosigner.model';
-import { TxService } from '../../services/tx.service';
-import { CosignerProvider } from '../../providers/cosigner-provider';
-import { environment } from '../../../environments/environment';
+import { Loan } from 'app/models/loan.model';
+import { CosignerLiability } from 'app/models/cosigner.model';
+import { CosignerProvider } from 'app/providers/cosigner-provider';
+import { ChainService } from 'app/services/chain.service';
+import { TxService } from 'app/services/tx.service';
 
 @Component({
   selector: 'app-claim-button',
@@ -17,7 +17,8 @@ export class ClaimButtonComponent implements OnInit {
   pendingTx: string = undefined;
   canClaim: Boolean;
   constructor(
-    private txService: TxService
+    private txService: TxService,
+    private chainService: ChainService
   ) { }
   ngOnInit() {
     this.liability = this.provider.liability(this.loan);
@@ -36,7 +37,8 @@ export class ClaimButtonComponent implements OnInit {
         });
       });
     } else {
-      window.open(environment.network.explorer.tx.replace('${tx}', this.pendingTx), '_blank');
+      const { config } = this.chainService;
+      window.open(config.network.explorer.tx.replace('${tx}', this.pendingTx), '_blank');
     }
   }
 }

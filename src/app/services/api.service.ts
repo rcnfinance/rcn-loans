@@ -2,17 +2,20 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
-import { Engine } from './../models/loan.model';
-import { LoanContentApi } from './../interfaces/loan-api-diaspore';
-import { PohApi } from './../interfaces/poh-api';
-import { ApiResponse } from './../interfaces/api-response';
+import { Engine } from 'app/models/loan.model';
+import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
+import { PohApi } from 'app/interfaces/poh-api';
+import { ApiResponse } from 'app/interfaces/api-response';
+import { ChainService } from 'app/services/chain.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private chainService: ChainService
+  ) { }
 
   /**
    * Get all loans request that are open, not canceled or expired.
@@ -30,7 +33,8 @@ export class ApiService {
     sort?: object,
     filters?: object
   ): Observable<ApiResponse> {
-    const apiBase: string = environment.api[engine]['v6'];
+    const { config } = this.chainService;
+    const apiBase: string = config.api[engine]['v6'];
     const uri = `requests?page_size=${pageSize}&page=${page}`;
     const payload = JSON.stringify({ sort, filters });
     return this.http
@@ -54,7 +58,8 @@ export class ApiService {
     pageSize = 20,
     sort?: object
   ): Observable<ApiResponse> {
-    const apiBase: string = environment.api[engine]['v6'];
+    const { config } = this.chainService;
+    const apiBase: string = config.api[engine]['v6'];
     const uri = `borrowed/${account}?page_size=${pageSize}&page=${page}`;
     const payload = JSON.stringify({ sort });
     return this.http
@@ -78,7 +83,8 @@ export class ApiService {
     pageSize = 200,
     sort?: object
   ): Observable<ApiResponse> {
-    const apiBase: string = environment.api[engine]['v6'];
+    const { config } = this.chainService;
+    const apiBase: string = config.api[engine]['v6'];
     const uri = `lent/${account}?page_size=${pageSize}&page=${page}`;
     const payload = JSON.stringify({ sort });
     return this.http
@@ -102,7 +108,8 @@ export class ApiService {
     sort?: object,
     filters?: object
   ): Observable<ApiResponse> {
-    const apiBase: string = environment.api[engine]['v6'];
+    const { config } = this.chainService;
+    const apiBase: string = config.api[engine]['v6'];
     const uri = `activity?page_size=${pageSize}&page=${page}`;
     const payload = JSON.stringify({ sort, filters });
     return this.http
@@ -117,7 +124,8 @@ export class ApiService {
    * @return Loan
    */
   getLoanById(engine: Engine, id: string): Observable<ApiResponse> {
-    const apiBase: string = environment.api[engine]['v6'];
+    const { config } = this.chainService;
+    const apiBase: string = config.api[engine]['v6'];
     const uri = `loans/${id}`;
     return this.http
         .post<ApiResponse>(apiBase.concat(uri), null)
@@ -131,7 +139,8 @@ export class ApiService {
    * @return Histories array
    */
   getHistories(engine: Engine, id: string): Observable<ApiResponse> {
-    const apiBase: string = environment.api[engine]['v6'];
+    const { config } = this.chainService;
+    const apiBase: string = config.api[engine]['v6'];
     const uri = `histories_by_id/${id}`;
     return this.http.post<ApiResponse>(apiBase.concat(uri), null);
   }
@@ -142,7 +151,8 @@ export class ApiService {
    * @return Last and current block
    */
   getApiStatus(engine: Engine): Observable<{last_block: number, current_block: number}> {
-    const apiBase: string = environment.api[engine]['v6'];
+    const { config } = this.chainService;
+    const apiBase: string = config.api[engine]['v6'];
     const uri = 'status';
     return this.http.post<{last_block: number, current_block: number}>(apiBase.concat(uri), null);
   }
@@ -153,7 +163,8 @@ export class ApiService {
    * @return Last and current block
    */
   getAddressPoh(address: string): Observable<PohApi> {
-    const apiBase: string = environment.api[Engine.RcnEngine]['v6'];
+    const { config } = this.chainService;
+    const apiBase: string = config.api[Engine.RcnEngine]['v6'];
     const uri = `profile/${address}`;
     return this.http.post<PohApi>(apiBase.concat(uri), null);
   }

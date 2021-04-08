@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Loan } from '../../../models/loan.model';
-import { environment } from '../../../../environments/environment';
-import { IdentityService } from '../../../services/identity.service';
-import { Identity, CompanyIdentity } from '../../../models/identity.model';
+import { Loan } from 'app/models/loan.model';
+import { ChainService } from 'app/services/chain.service';
+import { IdentityService } from 'app/services/identity.service';
+import { Identity, CompanyIdentity } from 'app/models/identity.model';
 
 @Component({
   selector: 'app-detail-identity',
@@ -13,6 +13,7 @@ export class DetailIdentityComponent implements OnInit {
   @Input() loan: Loan;
   identity: Identity;
   constructor(
+    private chainService: ChainService,
     private identityService: IdentityService
   ) { }
 
@@ -41,6 +42,7 @@ export class DetailIdentityComponent implements OnInit {
   }
 
   get borrowerLinkExplorer(): string {
-    return environment.network.explorer.address.replace('${address}', this.loan.borrower);
+    const { config } = this.chainService;
+    return config.network.explorer.address.replace('${address}', this.loan.borrower);
   }
 }

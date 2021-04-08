@@ -4,16 +4,16 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { timer } from 'rxjs';
 import * as BN from 'bn.js';
 import * as moment from 'moment';
-import { environment } from './../../../environments/environment';
-import { Installment } from '../../interfaces/installment';
-import { Loan, Engine } from './../../models/loan.model';
-import { Utils } from './../../utils/utils';
-import { Currency } from './../../utils/currencies';
+import { Installment } from 'app/interfaces/installment';
+import { Loan, Engine } from 'app/models/loan.model';
+import { Utils } from 'app/utils/utils';
+import { Currency } from 'app/utils/currencies';
 // App services
-import { CurrenciesService } from './../../services/currencies.service';
-import { ContractsService } from './../../services/contracts.service';
-import { InstallmentsService } from './../../services/installments.service';
-import { Web3Service } from './../../services/web3.service';
+import { CurrenciesService } from 'app/services/currencies.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { InstallmentsService } from 'app/services/installments.service';
+import { ChainService } from 'app/services/chain.service';
+import { Web3Service } from 'app/services/web3.service';
 
 @Component({
   selector: 'app-dialog-loan-pay',
@@ -27,7 +27,7 @@ export class DialogLoanPayComponent implements OnInit {
   shortLoanId: string;
   loading: boolean;
   form: FormGroup;
-  explorerAddress: string = environment.network.explorer.address;
+  explorerAddress: string = this.chainService.config.network.explorer.address;
 
   account: string;
   shortAccount: string;
@@ -51,11 +51,14 @@ export class DialogLoanPayComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<any>,
+    private chainService: ChainService,
     private currenciesService: CurrenciesService,
     private contractsService: ContractsService,
     private installmentsService: InstallmentsService,
     private web3Service: Web3Service,
-    @Inject(MAT_DIALOG_DATA) public data
+    @Inject(MAT_DIALOG_DATA) public data: {
+      loan: Loan
+    }
   ) {
     this.loan = this.data.loan;
   }
@@ -185,9 +188,10 @@ export class DialogLoanPayComponent implements OnInit {
 
   private loadExchangeTooltip() {
     const { engine, currency } = this.loan;
-    const engineCurrency = this.currenciesService.getCurrencyByKey('address', environment.contracts[engine].token);
+    const { config } = this.chainService;
+    const engineCurrency = this.currenciesService.getCurrencyByKey('address', config.contracts[engine].token);
     const oracle = this.loan.oracle.address;
-    const urlOracle = environment.network.explorer.address.replace('${address}', oracle);
+    const urlOracle = config.network.explorer.address.replace('${address}', oracle);
 
     if (currency.symbol !== engineCurrency.symbol) {
       this.exchangeTooltip = `<a href="${ urlOracle }" target="_blank">${ engineCurrency.symbol }/${ currency.symbol }</a> Oracle.`;

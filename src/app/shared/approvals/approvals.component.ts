@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { environment } from '../../../environments/environment';
-import { Utils } from './../../utils/utils';
-import { Engine } from './../../models/loan.model';
+import { Utils } from 'app/utils/utils';
+import { Engine } from 'app/models/loan.model';
 // App Component
-import { Web3Service } from '../../services/web3.service';
-import { ContractsService } from '../../services/contracts.service';
-import { CurrenciesService } from '../../services/currencies.service';
-import { EventsService, Category } from '../../services/events.service';
-import { TxService, Tx, Type } from '../../services/tx.service';
+import { Web3Service } from 'app/services/web3.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { CurrenciesService } from 'app/services/currencies.service';
+import { EventsService, Category } from 'app/services/events.service';
+import { TxService, Tx, Type } from 'app/services/tx.service';
+import { ChainService } from 'app/services/chain.service';
 
 class Operator {
   constructor(
@@ -76,7 +76,8 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
     private eventsService: EventsService,
-    private txService: TxService
+    private txService: TxService,
+    private chainService: ChainService
   ) {
     this.closeDialog = new EventEmitter();
     this.startProgress = new EventEmitter();
@@ -148,10 +149,11 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
 
     try {
       const { engine } = this;
+      const { config } = this.chainService;
       this.eventsService.trackEvent(
         `click-${ actionCode }`,
         Category.Account,
-        environment.contracts[engine].diaspore.loanManager
+        config.contracts[engine].diaspore.loanManager
       );
 
       await action;
@@ -312,8 +314,9 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
     const tokens: Contract[] = [];
 
     // set tokens
+    const { config } = this.chainService;
     currencies.map(currency => {
-      if (currency.address !== environment.contracts.ethAddress) {
+      if (currency.address !== config.contracts.ethAddress) {
         tokens.push(
           new Contract(
             currency.symbol,
@@ -459,12 +462,13 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
    */
   private filterTokenOperators(token: Contract): Operator[] {
     const { engine } = this;
-    if (token.address !== environment.contracts[engine].token) {
+    const { config } = this.chainService;
+    if (token.address !== config.contracts[engine].token) {
       return this.tokenOperators.filter(
         contract => {
           switch (contract.address) {
-            case environment.contracts[engine].converter.converterRamp:
-            case environment.contracts[engine].collateral.collateral:
+            case config.contracts[engine].converter.converterRamp:
+            case config.contracts[engine].collateral.collateral:
               return true;
 
             default:
@@ -475,7 +479,7 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
     }
 
     return this.tokenOperators.filter(
-      contract => contract.address !== environment.contracts[engine].collateral.wethManager
+      contract => contract.address !== config.contracts[engine].collateral.wethManager
     );
   }
 
@@ -519,25 +523,26 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
 
   private loadTokenOperators() {
     const { engine } = this;
+    const { config } = this.chainService;
     this.tokenOperators = [
       new Operator(
         'Diaspore Loan Manager',
-        environment.contracts[engine].diaspore.loanManager,
+        config.contracts[engine].diaspore.loanManager,
         'lending'
       ),
       new Operator(
         'Diaspore Debt Mananger',
-        environment.contracts[engine].diaspore.debtEngine,
+        config.contracts[engine].diaspore.debtEngine,
         'payments'
       ),
       new Operator(
         'Diaspore Converter Ramp',
-        environment.contracts[engine].converter.converterRamp,
+        config.contracts[engine].converter.converterRamp,
         'transactions'
       ),
       new Operator(
         'Collateral',
-        environment.contracts[engine].collateral.collateral,
+        config.contracts[engine].collateral.collateral,
         'collateralization'
       )
     ];

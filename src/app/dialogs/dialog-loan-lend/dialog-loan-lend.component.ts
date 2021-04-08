@@ -2,15 +2,15 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { timer } from 'rxjs';
 import * as BN from 'bn.js';
-import { environment } from '../../../environments/environment';
-import { Loan, Engine, Status } from '../../models/loan.model';
-import { Utils } from '../../utils/utils';
-import { Currency } from '../../utils/currencies';
+import { Loan, Engine, Status } from 'app/models/loan.model';
+import { Utils } from 'app/utils/utils';
+import { Currency } from 'app/utils/currencies';
 // App services
-import { ContractsService } from '../../services/contracts.service';
-import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
-import { Web3Service } from '../../services/web3.service';
-import { EventsService } from '../../services/events.service';
+import { ChainService } from 'app/services/chain.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
+import { Web3Service } from 'app/services/web3.service';
+import { EventsService } from 'app/services/events.service';
 
 @Component({
   selector: 'app-dialog-loan-lend',
@@ -39,7 +39,7 @@ export class DialogLoanLendComponent implements OnInit {
   account: string;
   canLend: boolean;
   availableCurrencies: CurrencyItem[];
-  explorerAddress: string = environment.network.explorer.address;
+  explorerAddress: string = this.chainService.config.network.explorer.address;
 
   loading: boolean;
 
@@ -47,6 +47,7 @@ export class DialogLoanLendComponent implements OnInit {
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private eventsService: EventsService,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) data: {loan: Loan}
@@ -128,7 +129,8 @@ export class DialogLoanLendComponent implements OnInit {
     // set amount in selected currency
     const { engine } = this.loan;
     const symbol: string = this.lendCurrency;
-    const fromToken: string = environment.contracts[engine].token;
+    const { config } = this.chainService;
+    const fromToken: string = config.contracts[engine].token;
     const toToken: string = await this.currenciesService.getCurrencyByKey('symbol', symbol).address;
     const { decimals: engineDecimals } = this.engineCurrency;
     const { decimals: lendDecimals } = new Currency(symbol);
@@ -176,9 +178,10 @@ export class DialogLoanLendComponent implements OnInit {
     const lendCurrency: string = this.lendCurrency;
     const oracle = this.loan.oracle.address;
     const { engine } = this.loan;
-    const tokenConverter = environment.contracts[engine].converter.uniswapConverter;
-    const urlOracle = environment.network.explorer.address.replace('${address}', oracle);
-    const urlTokenConverter = environment.network.explorer.address.replace('${address}', tokenConverter);
+    const { config } = this.chainService;
+    const tokenConverter = config.contracts[engine].converter.uniswapConverter;
+    const urlOracle = config.network.explorer.address.replace('${address}', oracle);
+    const urlTokenConverter = config.network.explorer.address.replace('${address}', tokenConverter);
     const { symbol: engineCurrencySymbol } = this.engineCurrency;
     this.exchangeTooltips = [];
 

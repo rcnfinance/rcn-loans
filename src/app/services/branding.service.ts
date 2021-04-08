@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Loan } from './../models/loan.model';
-import { Agent, environment } from '../../environments/environment';
-import { Brand } from './../models/brand.model';
+import { Loan } from 'app/models/loan.model';
+import { Agent } from 'environments/environment';
+import { Brand } from 'app/models/brand.model';
+import { DecentralandCosignerProvider } from 'app/providers/cosigners/decentraland-cosigner-provider';
+import { ChainService } from 'app/services/chain.service';
 import { CosignerService } from './cosigner.service';
-import { DecentralandCosignerProvider } from '../providers/cosigners/decentraland-cosigner-provider';
 
 @Injectable()
 export class BrandingService {
@@ -28,6 +29,7 @@ export class BrandingService {
     )
   };
   constructor(
+    private chainService: ChainService,
     private cosignerService: CosignerService
   ) { }
 
@@ -36,7 +38,8 @@ export class BrandingService {
       return this.staticBrands.decentraland_mortgage;
     }
 
-    switch (environment.dir[loan.creator.toLowerCase()]) {
+    const { config } = this.chainService;
+    switch (config.dir[loan.creator.toLowerCase()]) {
       case Agent.RipioArsCreator:
       case Agent.RipioUsdCreator:
         return this.staticBrands.ripio;

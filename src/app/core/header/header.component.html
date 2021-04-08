@@ -54,6 +54,9 @@
               >
                 My Loans
               </a> -->
+              <a href="#!">
+                Chain: {{ chainService.chain }}
+              </a>
               <div class="nav__item nav__item--connect ml-2 mr-4" (click)="login()" *ngIf="!hasAccount">
                 Connect
               </div>
