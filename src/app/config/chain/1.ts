@@ -12,6 +12,10 @@ export const chain = {
   network: {
     id: 1,
     name: 'Main',
+    ui: {
+      name: 'Ethereum',
+      image: 'assets/chain-ethereum.svg'
+    },
     explorer: {
       address: 'https://etherscan.io/address/${address}',
       tx: 'https://etherscan.io/tx/${tx}'
