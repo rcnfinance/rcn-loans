@@ -31,7 +31,6 @@ export const environment = {
     }
   },
   availableChains: [
-    AvailableChains.EthMainnet,
-    AvailableChains.BscMainnet
+    AvailableChains.EthMainnet
   ]
 };
