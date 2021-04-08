@@ -4,7 +4,6 @@ import { MatSnackBar, MatDialog } from '@angular/material';
 const Web3 = require('web3');
 const WalletLink = require('walletlink');
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import { environment } from 'environments/environment';
 import { promisify } from 'app/utils/utils';
 import {
   WalletType,
@@ -186,11 +185,11 @@ export class Web3Service {
     console.info('Web3 provider detected');
 
     // validate network id
-    const { availableChains } = environment;
+    const { chains } = this.chainService;
     const candWeb3 = new Web3(window.web3.currentProvider);
     const networkId = await promisify(candWeb3.eth.net.getId, []);
 
-    if (!availableChains.includes(networkId)) {
+    if (!chains.includes(networkId)) {
       console.info('Provider network ID not supported', networkId);
       return;
     }
@@ -276,11 +275,11 @@ export class Web3Service {
     }
 
     // validate network id
-    const { availableChains } = environment;
+    const { chains } = this.chainService;
     const candWeb3 = new Web3(this.ethereum);
     const networkId = await promisify(candWeb3.eth.net.getId, []);
 
-    if (!availableChains.includes(networkId)) {
+    if (!chains.includes(networkId)) {
       this.snackbar.open(`Please connect to a supported Network.`, null, {
         duration: 4000,
         horizontalPosition: 'center'
