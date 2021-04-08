@@ -10,7 +10,6 @@ import { ApplicationAdsService } from './../../services/application-ads.service'
 import { WalletConnectService } from './../../services/wallet-connect.service';
 import { SidebarService } from '../../services/sidebar.service';
 import { TitleService } from '../../services/title.service';
-import { ChainService } from '../../services/chain.service';
 
 @Component({
   selector: 'app-header',
@@ -36,8 +35,7 @@ export class HeaderComponent implements OnInit {
     private walletConnectService: WalletConnectService,
     private sidebarService: SidebarService,
     public dialog: MatDialog,
-    public titleService: TitleService,
-    public chainService: ChainService
+    public titleService: TitleService
   ) {}
 
   ngOnInit() {
