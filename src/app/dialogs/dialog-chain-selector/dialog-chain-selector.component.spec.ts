@@ -1,14 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { DialogChainSelectorComponent } from './dialog-chain-selector.component';
 
 describe('DialogChainSelectorComponent', () => {
+  const mockDialogRef = {
+    close: jasmine.createSpy('close')
+  };
+
   let component: DialogChainSelectorComponent;
   let fixture: ComponentFixture<DialogChainSelectorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DialogChainSelectorComponent ]
+      imports: [ MatDialogModule ],
+      declarations: [ DialogChainSelectorComponent ],
+      providers: [
+        {
+          provide: MatDialogRef,
+          useValue: mockDialogRef
+        }
+      ]
     })
     .compileComponents();
   }));

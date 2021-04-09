@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatDialogModule } from '@angular/material/dialog';
 import { ChainSelectorComponent } from './chain-selector.component';
 
 describe('ChainSelectorComponent', () => {
@@ -8,6 +8,7 @@ describe('ChainSelectorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ MatDialogModule ],
       declarations: [ ChainSelectorComponent ]
     })
     .compileComponents();
