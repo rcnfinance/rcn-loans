@@ -2,7 +2,6 @@ import { Agent } from 'environments/environment';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
-const API_BASE = 'https://diaspore-ropsten-rnode.rcn.loans';
 const RCN_ENGINE = 'rcnEngine';
 const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const USDC_ENGINE = 'usdcEngine';
@@ -29,8 +28,6 @@ export const chain = {
   },
   api: {
     [RCN_ENGINE]: {
-      v4: `${ API_BASE }/v4/`,
-      v5: `${ API_BASE }/v5/`,
       v6: `https://old-api-ropsten-diaspore.rcn.loans/`
     },
     [USDC_ENGINE]: {

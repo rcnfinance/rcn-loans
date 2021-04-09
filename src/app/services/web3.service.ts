@@ -157,7 +157,7 @@ export class Web3Service {
       this.listenAccountUpdates();
       this.listenNetworkChange();
 
-      const network = await promisify(this.web3.eth.net.getId, []);
+      const network = await promisify(candWeb3.eth.net.getId, []);
       this.chainService.loadSelectedChain(network);
 
       const connection: WalletConnection = { wallet, network };
