@@ -1,4 +1,5 @@
 import { Agent } from 'environments/environment';
+import { WalletType } from 'app/interfaces/wallet.interface';
 
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 const API_BASE = 'https://diaspore-rnode.rcn.loans';
@@ -125,5 +126,10 @@ export const chain = {
       img: 'assets/ars.png',
       address: '0x0000000000000000000000000000000000000000'
     }
+  ],
+  usableWallets: [
+    WalletType.Metamask,
+    WalletType.WalletConnect,
+    WalletType.WalletLink
   ]
 };

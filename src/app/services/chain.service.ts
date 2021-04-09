@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as chains from 'app/config/chain';
 import { environment } from 'environments/environment';
 import { AvailableChains } from 'app/interfaces/chain';
+import { WalletType } from 'app/interfaces/wallet.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ export class ChainService {
   private chainSelected: AvailableChains;
   private chainConfig: any; // TODO: mock interface
   private availableChains: AvailableChains[];
+  private availableWallets: WalletType[];
   private usingUnsupported: boolean;
   private DEFAULT_CHAIN = AvailableChains.EthMainnet;
   private KEY_LAST_CHAIN = 'lastChainSelected';
@@ -25,6 +27,10 @@ export class ChainService {
 
   get chains() {
     return this.availableChains;
+  }
+
+  get wallets() {
+    return this.availableWallets;
   }
 
   get config() {
@@ -62,6 +68,7 @@ export class ChainService {
       console.warn(err);
     }
 
+    this.loadAvailableWallets();
     this.saveLastChain();
     if (skipAttemp) {
       return;
@@ -94,6 +101,14 @@ export class ChainService {
   private loadAvailableChains() {
     const { availableChains } = environment;
     this.availableChains = availableChains;
+  }
+
+  /**
+   * Load available wallets to use
+   */
+  private loadAvailableWallets() {
+    const { usableWallets } = this.config;
+    this.availableWallets = usableWallets;
   }
 
   /**
