@@ -49,7 +49,7 @@ export class CurrencyLogoComponent implements OnInit {
     let url: string;
 
     switch (address) {
-      case config.contracts.ethAddress:
+      case config.contracts.chainCurrencyAddress:
         url = '/assets/eth.svg';
         break;
 

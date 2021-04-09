@@ -50,7 +50,6 @@ export const chain = {
       },
       converter: {
         converterRamp: '0x28827e6218b4b83197363945448b8869d604b2ed',
-        ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         uniswapConverter: '0x6a7f86c7c9dccba843287407c9db6615972c0a7d'
       },
       models: {
@@ -70,14 +69,13 @@ export const chain = {
       },
       converter: {
         converterRamp: '0x47c93d0c9bada31aee557de5dec5ad00ade6029f',
-        ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         uniswapConverter: '0x6a7f86c7c9dccba843287407c9db6615972c0a7d'
       },
       models: {
         installments: '0x4b441133e357512e4d970a6fafcec77c3f38c590'
       }
     },
-    ethAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     decentraland: {
       mortgageCreator: '0x90263ea5c57dc6603ca7202920735a6e31235bb9',
       mortgageManager: '0x9abf1295086afa0e49c60e95c437aa400c5333b8'

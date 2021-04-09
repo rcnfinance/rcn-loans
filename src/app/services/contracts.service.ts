@@ -101,7 +101,7 @@ export class ContractsService {
       if (!account) {
         resolve(Utils.bn(0));
       }
-      if (tokenAddress === config.contracts.ethAddress) {
+      if (tokenAddress === config.contracts.chainCurrencyAddress) {
         const ethBalance = await this.web3Service.web3.eth.getBalance(account);
         resolve(Utils.bn(ethBalance));
       }
@@ -123,7 +123,7 @@ export class ContractsService {
   async isApproved(contract: string, tokenAddress: string): Promise<boolean> {
     const pending = this.txService.getLastPendingApprove(tokenAddress, contract);
     const { config } = this.chainService;
-    const ethAddress = config.contracts.ethAddress;
+    const chainCurrencyAddress = config.contracts.chainCurrencyAddress;
 
     if (pending !== undefined) {
       return true;
@@ -131,7 +131,7 @@ export class ContractsService {
 
     switch (tokenAddress) {
       // eth does not require approve
-      case ethAddress:
+      case chainCurrencyAddress:
         return true;
 
       // check if token is valid and approved
@@ -608,8 +608,8 @@ export class ContractsService {
    */
   async getTokenDecimals(tokenAddress: string, loan?: Loan): Promise<number> {
     const { config } = this.chainService;
-    const { ethAddress } = config.contracts;
-    if (tokenAddress === ethAddress) {
+    const { chainCurrencyAddress } = config.contracts;
+    if (tokenAddress === chainCurrencyAddress) {
       return 18;
     }
     if (loan && loan.currency.decimals) {
@@ -684,7 +684,7 @@ export class ContractsService {
 
     // set value in specified token
     const required = String(await this.estimateLendAmount(loan, lendToken));
-    const payableAmount = lendToken === config.contracts.ethAddress ? required : '';
+    const payableAmount = lendToken === config.contracts.chainCurrencyAddress ? required : '';
 
     // set cosigner
     const cosignerLimit = '0'; // TODO: implement cosigner limit
@@ -937,7 +937,7 @@ export class ContractsService {
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
     const { config } = this.chainService;
-    const isEth: boolean = tokenAddress === config.contracts.ethAddress;
+    const isEth: boolean = tokenAddress === config.contracts.chainCurrencyAddress;
     const payload = isEth ?
       { from: account, value: amount } :
       { from: account };
@@ -998,7 +998,7 @@ export class ContractsService {
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
     const { config } = this.chainService;
-    const isEth: boolean = tokenAddress === config.contracts.ethAddress;
+    const isEth: boolean = tokenAddress === config.contracts.chainCurrencyAddress;
     const contract: string = isEth ? this._collateralWethManager[engine] : this._collateral[engine];
     const payload = { from: account };
 

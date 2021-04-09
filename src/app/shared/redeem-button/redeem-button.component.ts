@@ -105,7 +105,7 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
     // approve validation
     const { collateral, engine } = this.loan;
     const token: string = collateral.token;
-    if (token === config.contracts[engine].converter.ethAddress) {
+    if (token === config.contracts.chainCurrencyAddress) {
       const collateralAddress = config.contracts[engine].collateral.collateral;
       const operator = config.contracts[engine].collateral.wethManager;
       const operatorApproved = await this.contractsService.isApprovedERC721(

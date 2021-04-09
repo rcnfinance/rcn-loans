@@ -316,7 +316,7 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
     // set tokens
     const { config } = this.chainService;
     currencies.map(currency => {
-      if (currency.address !== config.contracts.ethAddress) {
+      if (currency.address !== config.contracts.chainCurrencyAddress) {
         tokens.push(
           new Contract(
             currency.symbol,

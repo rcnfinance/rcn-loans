@@ -161,7 +161,7 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     const { engine } = this.loan;
     const { config } = this.chainService;
 
-    if (token === config.contracts[engine].converter.ethAddress) {
+    if (token === config.contracts.chainCurrencyAddress) {
       const collateral = config.contracts[engine].collateral.collateral;
       const operator = config.contracts[engine].collateral.wethManager;
       const operatorApproved = await this.contractsService.isApprovedERC721(

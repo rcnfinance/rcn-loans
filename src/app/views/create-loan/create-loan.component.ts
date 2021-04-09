@@ -185,8 +185,8 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     }
 
     // validate ERC721 approve
-    const { ethAddress } = config.contracts[loan.engine].converter;
-    if (collateral.token === ethAddress) {
+    const { chainCurrencyAddress } = config.contracts;
+    if (collateral.token === chainCurrencyAddress) {
       const collateralAddress = config.contracts[loan.engine].collateral.collateral;
       const operator = config.contracts[loan.engine].collateral.wethManager;
       const erc721approved = await this.contractsService.isApprovedERC721(

@@ -261,7 +261,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
         case config.contracts[engine].token:
           contractAddress = this.loan.address;
           break;
-        case config.contracts[engine].converter.ethAddress:
+        case config.contracts.chainCurrencyAddress:
           contractAddress = config.contracts[engine].converter.converterRamp;
           break;
         default:
