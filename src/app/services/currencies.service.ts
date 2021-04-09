@@ -27,6 +27,7 @@ export class CurrenciesService {
     'USDC': { min: 5, max: 10, best: 7 },
     'ARS': { min: 40, max: 80, best: 60 },
     'ETH': { min: 0, max: 5, best: 1 },
+    'BNB': { min: 0, max: 5, best: 1 },
     'TEST': { min: 0, max: 20, best: 10 },
     'DEST': { min: 10, max: 20, best: 15 }
   };

@@ -39,7 +39,7 @@ export class ContractsService {
   private _collateralWethManager: {[engine: string]: any} = {};
 
   // single-engine contracts
-  private _aggregatorProxyEthUsd: any;
+  private _aggregatorProxyChainCurrencyToUsd: any;
   private _chainlinkAdapterV3Abi: any;
 
   constructor(
@@ -889,9 +889,9 @@ export class ContractsService {
     const web3 = this.web3Service.opsWeb3;
     return new Promise(async (resolve, reject) => {
       const symbol = await this.oracleToSymbol(engine, oracle);
-      const ETH_SYMBOL = 'ETH';
+      const { currency: chainCurrency } = this.chainService.config.network;
 
-      if (symbol === ETH_SYMBOL) {
+      if (symbol === chainCurrency) {
         this.loadAltContract(web3, this._collateralWethManager[engine]).methods.create(
           debtId,
           oracle,
@@ -1020,11 +1020,11 @@ export class ContractsService {
   }
 
   /**
-   * Get latest ETH/USD rate
-   * @return ETH/USD rate
+   * Get latest ChainCurrency/USD rate
+   * @return ChainCurrency/USD rate
    */
   async latestAnswer() {
-    return await this._aggregatorProxyEthUsd.methods.latestAnswer().call();
+    return await this._aggregatorProxyChainCurrencyToUsd.methods.latestAnswer().call();
   }
 
   /**
@@ -1051,8 +1051,8 @@ export class ContractsService {
         this.makeContract(collateralWethManagerAbi.abi, config.contracts[engine].collateral.wethManager);
     });
 
-    this._aggregatorProxyEthUsd =
-      this.makeContract(aggregatorProxyAbi.abi, config.contracts.chainlink.EACAggregatorProxy.ethUsd);
+    this._aggregatorProxyChainCurrencyToUsd =
+      this.makeContract(aggregatorProxyAbi.abi, config.contracts.chainlink.EACAggregatorProxy.chainCurrencyToUsd);
     this._chainlinkAdapterV3Abi =
       this.makeContract(chainlinkAdapterV3Abi.abi, config.contracts.chainlink.chainlinkAdapterV3);
   }

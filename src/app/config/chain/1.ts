@@ -12,6 +12,7 @@ export const chain = {
   network: {
     id: 1,
     name: 'Main',
+    currency: 'ETH',
     ui: {
       name: 'Ethereum',
       fullname: 'Ethereum Mainnet',
@@ -82,7 +83,7 @@ export const chain = {
     },
     chainlink: {
       EACAggregatorProxy: {
-        ethUsd: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419'
+        chainCurrencyToUsd: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419'
       },
       chainlinkAdapterV3: '0x6126b98bc1d522835ea7bab4038af012d1aef98c'
     }

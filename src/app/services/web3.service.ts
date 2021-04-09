@@ -214,7 +214,7 @@ export class Web3Service {
     const { config } = this.chainService;
     const APP_NAME = this.title.getTitle();
     const APP_LOGO_URL = 'https://rcn.loans/assets/rcn-logo.png';
-    const ETH_JSONRPC_URL = config.network.provider.url;
+    const CHAIN_JSONRPC_URL = config.network.provider.url;
     const CHAIN_ID = config.network.id;
 
     // Initialize WalletLink
@@ -224,7 +224,7 @@ export class Web3Service {
     });
 
     // Initialize a Web3 Provider object
-    const ethereum = walletLink.makeWeb3Provider(ETH_JSONRPC_URL, CHAIN_ID);
+    const ethereum = walletLink.makeWeb3Provider(CHAIN_JSONRPC_URL, CHAIN_ID);
 
     // set scoped ethereum
     this._ethereum = ethereum;

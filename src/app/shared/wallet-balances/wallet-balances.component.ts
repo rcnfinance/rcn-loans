@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import * as BN from 'bn.js';
 import { Currency } from 'app/utils/currencies';
+import { ChainService } from 'app/services/chain.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { CurrencyItem, CurrenciesService } from 'app/services/currencies.service';
 interface Balance {
@@ -19,7 +20,8 @@ export class WalletBalancesComponent implements OnInit, OnChanges {
 
   constructor(
     public contractsService: ContractsService,
-    private currenciesService: CurrenciesService
+    private currenciesService: CurrenciesService,
+    private chainService: ChainService
   ) { }
 
   ngOnInit() {
@@ -35,7 +37,8 @@ export class WalletBalancesComponent implements OnInit, OnChanges {
    * Show the user balance in different tokens
    */
   private loadBalances() {
-    const CURRENCIES_TO_REMOVE = ['ETH'];
+    const { currency: chainCurrency } = this.chainService.config.network;
+    const CURRENCIES_TO_REMOVE = [chainCurrency];
     const currencies = this.currenciesService.getCurrencies(true);
     const filteredCurrencies = currencies.filter(({ symbol }) => !CURRENCIES_TO_REMOVE.includes(symbol));
 
