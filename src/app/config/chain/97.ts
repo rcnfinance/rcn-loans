@@ -27,10 +27,10 @@ export const chain = {
   },
   api: {
     [RCN_ENGINE]: {
-      v6: `http://binance-test.binance-test.159.65.166.64.xip.io` // FIXME: use https
+      v6: null
     },
     [USDC_ENGINE]: {
-      v6: `http://binance-test.binance-test.159.65.166.64.xip.io` // FIXME: use https
+      v6: `https://bsc-testnet.rcn.loans/`
     }
   },
   contracts: {
