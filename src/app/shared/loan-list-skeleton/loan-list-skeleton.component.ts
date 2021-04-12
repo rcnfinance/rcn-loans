@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-loan-list-skeleton',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./loan-list-skeleton.component.scss']
 })
 export class LoanListSkeletonComponent implements OnInit {
+
+  @Input() items: number;
 
   constructor() { }
 

@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 // App Modules
 import { MaterialModule } from './../material.module';
 // App Component
@@ -28,6 +29,8 @@ import { WalletAvatarComponent } from './wallet-avatar/wallet-avatar.component';
 import { WalletBalancesComponent } from './wallet-balances/wallet-balances.component';
 import { ApprovalsComponent } from './approvals/approvals.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
+import { SkeletonComponent } from './skeleton/skeleton.component';
+import { LoanListSkeletonComponent } from './loan-list-skeleton/loan-list-skeleton.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -48,7 +51,6 @@ import { DialogFrontRunningComponent } from '../dialogs/dialog-front-running/dia
 import { DialogCollateralComponent } from '../dialogs/dialog-collateral/dialog-collateral.component';
 import { DialogNeedWithdrawComponent } from '../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
 import { DialogPohComponent } from '../dialogs/dialog-poh/dialog-poh.component';
-
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 import { FormatAmountPipe } from './../pipes/format-amount.pipe';
@@ -60,7 +62,6 @@ import { IdentityService } from './../services/identity.service';
 import { CountriesService } from './../services/countries.service';
 import { CollateralService } from './../services/collateral.service';
 import { EventsService } from './../services/events.service';
-import { LoanListSkeletonComponent } from './loan-list-skeleton/loan-list-skeleton.component';
 
 @NgModule({
   imports: [
@@ -70,7 +71,8 @@ import { LoanListSkeletonComponent } from './loan-list-skeleton/loan-list-skelet
     BlockiesModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    NgxSkeletonLoaderModule
   ],
   declarations: [
     FooterComponent,
@@ -94,6 +96,8 @@ import { LoanListSkeletonComponent } from './loan-list-skeleton/loan-list-skelet
     WalletBalancesComponent,
     ApprovalsComponent,
     SocialContainerComponent,
+    LoanListSkeletonComponent,
+    SkeletonComponent,
 
     LendButtonComponent,
     DetailButtonComponent,
@@ -116,8 +120,7 @@ import { LoanListSkeletonComponent } from './loan-list-skeleton/loan-list-skelet
 
     VisualUrlPipe,
     FormatAmountPipe,
-    FormatAddressPipe,
-    LoanListSkeletonComponent
+    FormatAddressPipe
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,
@@ -174,7 +177,9 @@ import { LoanListSkeletonComponent } from './loan-list-skeleton/loan-list-skelet
     CollateralSliderDebtComponent,
     VisualUrlPipe,
     FormatAmountPipe,
-    FormatAddressPipe
+    FormatAddressPipe,
+    SkeletonComponent,
+    LoanListSkeletonComponent
   ]
 })
 export class SharedModule { }

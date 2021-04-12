@@ -1,1 +1,57 @@
-<p>loan-list-skeleton works!</p>
+<div class="loan-list-wrapper" *ngFor="let dummy of ' '.repeat(items).split(''), let x = index">
+  <div class="loan-list d-lg-flex align-items-center" [class.loan-list--light]="x % 2">
+    <div class="loan-list__header d-flex align-items-center justify-content-center d-lg-none">
+    </div>
+    <div class="loan-list__column loan-list__column--amount">
+      <div class="loan-list__column-amount">
+          <app-skeleton></app-skeleton>
+      </div>
+    </div>
+    <div class="loan-list__column loan-list__column--currency">
+      <div class="loan-list__column-label">
+          <app-skeleton height="20px" width="225px" borderRadius="1px" color="#424345"></app-skeleton>
+          <app-skeleton height="20px" width="125px" borderRadius="1px" color="#424345"></app-skeleton>
+          <app-skeleton height="20px" width="225px" borderRadius="1px" color="#424345"></app-skeleton>
+      </div>
+      <app-skeleton width="75%"></app-skeleton>
+    </div>
+    <div class="loan-list__column loan-list__column--debt">
+      <app-skeleton width="75%"></app-skeleton>
+    </div>
+    <div class="loan-list__column loan-list__column--type">
+      <div class="loan-list__column-label"></div>
+      <app-skeleton width="60%" borderRadius="13px" height="30px"></app-skeleton>
+    </div>
+    <div class="loan-list__column loan-list__column--interest">
+      <div class="loan-list__column-label">
+        <app-skeleton borderRadius="1px" height="12px" width="200px"></app-skeleton>
+        <app-skeleton borderRadius="1px" height="12px" width="150px"></app-skeleton>
+        <app-skeleton borderRadius="1px" height="12px" width="150px"></app-skeleton>
+        <app-skeleton borderRadius="1px" height="12px" width="170px"></app-skeleton>
+        <app-skeleton borderRadius="1px" height="12px" width="162px"></app-skeleton>
+        <app-skeleton borderRadius="1px" height="12px" width="200px"></app-skeleton>
+      </div>
+      <app-skeleton width="40%" height="14px"></app-skeleton>
+    </div>
+    <div class="loan-list__column loan-list__column--punitory">
+      <div class="loan-list__column-label"></div>
+      <app-skeleton width="40%" height="14px"></app-skeleton>
+    </div>
+    <div class="loan-list__column loan-list__column--duration">
+      <div class="loan-list__column-label"></div>
+      <app-skeleton width="50%" height="14px"></app-skeleton>
+    </div>
+    <div class="loan-list__column loan-list__column--installments">
+      <app-skeleton width="50%" height="14px"></app-skeleton>
+    </div>
+    <div class="loan-list__column loan-list__column--borrower loan-list__column--borrower-mobile">
+      <app-skeleton width="70%" height="14px"></app-skeleton>
+    </div>
+    <div class="loan-list__column loan-list__column--borrower">
+        <div class="loan-list__column-label">
+            <app-skeleton borderRadius="3px" height="36px" width="89px" color="#565759"></app-skeleton>
+        </div>
+        <app-skeleton height="36px" borderRadius="3px" color="#565759"></app-skeleton>
+      </div>
+  </div>
+</div>

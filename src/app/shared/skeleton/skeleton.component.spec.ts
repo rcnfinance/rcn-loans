@@ -1,21 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { LoanListSkeletonComponent } from './loan-list-skeleton.component';
+import { SkeletonComponent } from './skeleton.component';
 
-describe('LoanListSkeletonComponent', () => {
-  let component: LoanListSkeletonComponent;
-  let fixture: ComponentFixture<LoanListSkeletonComponent>;
+describe('SkeletonComponent', () => {
+  let component: SkeletonComponent;
+  let fixture: ComponentFixture<SkeletonComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoanListSkeletonComponent ],
+      declarations: [ SkeletonComponent ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoanListSkeletonComponent);
+    fixture = TestBed.createComponent(SkeletonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

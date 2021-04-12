@@ -1,11 +1,4 @@
 <div class="body-scrollable activity-wrapper">
-  <ngx-spinner
-    bdColor="transparent"
-    size="medium"
-    color="#fff"
-    type="ball-clip-rotate-multiple"
-    [name]="pageId"
-  ></ngx-spinner>
   <div class="container">
     <app-page-header
       title="Activity explorer"
@@ -29,6 +22,7 @@
         [scrollThrottlingTime]="500"
         (scroll)="onScroll($event)"
       >
+      <app-loan-list-skeleton *ngIf="loading" items="20"></app-loan-list-skeleton>
       <div *ngFor="let loan of scroll.viewPortItems; trackBy:trackByLoanId">
         <app-loan-list [loan]="loan" [backgroundLighter]="loan.position % 2">
         </app-loan-list>

@@ -2,13 +2,13 @@
   class="body-scrollable requested-wrapper"
   [ngClass]="{ active: filtersOpen, disabled: filtersOpen === false }"
 >
-  <ngx-spinner
+  <!-- <ngx-spinner
     bdColor="transparent"
     size="medium"
     color="#fff"
     type="ball-clip-rotate-multiple"
     [name]="pageId"
-  ></ngx-spinner>
+  ></ngx-spinner> -->
   <div class="container">
     <div class="page-header">
       <app-page-header
@@ -38,12 +38,12 @@
         (sort)="sortLoans($event)"
       ></app-loan-list-header>
       <ng-container *ngIf="loans?.length === 0; else loansTemplate">
-        <app-empty-state
+        <!-- <app-empty-state
           *ngIf="isAvailableLoans"
           title="Sorry! There are no loans matching your search. Please try using different filters."
           image="./assets/empty-states/results.svg"
         >
-        </app-empty-state>
+        </app-empty-state> -->
         <app-empty-state
           *ngIf="!isAvailableLoans"
           title="Stay tuned! More loans are on their way."
@@ -51,6 +51,7 @@
           image="./assets/empty-states/results.svg"
         >
         </app-empty-state>
+        <app-loan-list-skeleton *ngIf="isAvailableLoans" items="20"></app-loan-list-skeleton>
       </ng-container>
       <ng-template #loansTemplate>
         <virtual-scroller
