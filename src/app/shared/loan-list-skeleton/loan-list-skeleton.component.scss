@@ -1,40 +1,48 @@
 @import '../loan-list/loan-list.component.scss';
 
-.loan-list__column--type .loan-list__column-amount{
-    text-align: center;
-}
-
-.loan-list__column{
-    padding: 15px 15px 0 15px;
+.loan-list {
+    &__column-amount, &__column--type {
+        text-align: center;
+    }
+    &__column {
+        padding: 15px 15px 0 15px;
+    }
 }
 
 @media (max-width: 992px) {
-    .loan-list__header span{
-        margin-top: 15px;
-        width:220px;
-    }
-    .loan-list__column.loan-list__column--currency{
-        text-align: center;
-        height: 60px;
-        .loan-list__column-label{
+    .loan-list {
+        &__header span {
+            margin-top: 15px;
+            width:220px;
+        }
+        &__column-label {
             margin: 0 auto;
             padding: 0;
+            padding-top: 0px;
             width: 280px;
             text-align: left;
             margin-left: 0px;
         }
-    }
-    .loan-list__column-label{
-        padding: 0px;
-        padding-top: 0px;
-    }
-    .loan-list__column--duration .loan-list__column-label{
-        display: flex;
-    }
-    .loan-list__column--duration .loan-list__column-label app-skeleton{
-        margin-right: 30px;
-    }
-    .loan-list__column--installments, .loan-list__column--borrower-mobile, .loan-list__column--punitory, .loan-list__column--type, .loan-list__column--duration{
-        display: none;
+        &__column {
+            &--duration {
+                .loan-list__column-label{
+                    display: flex;
+                }
+                .loan-list__column-label app-skeleton{
+                    margin-right: 30px;
+                }
+            }
+            &--installments, 
+            &--borrower-mobile, 
+            &--punitory, 
+            &--type, 
+            &--duration {
+                display: none;
+            }
+            &--currency {
+                text-align: center;
+                height: 60px;
+            }
+        }
     }
 }
