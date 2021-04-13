@@ -6,19 +6,15 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
 // App Services
 import { ContractsService } from './../../services/contracts.service';
-import { CosignerService } from './../../services/cosigner.service';
 import { CollateralService } from './../../services/collateral.service';
 import { InstallmentsService } from './../../services/installments.service';
 // App Component
 import { LoanDetailComponent } from './loan-detail.component';
 import { DetailIdentityComponent } from './detail-identity/detail-identity.component';
-import { DetailCosignerComponent } from './detail-cosigner/detail-cosigner.component';
 import { DetailCollateralComponent } from './detail-collateral/detail-collateral.component';
 import { DetailInstallmentsComponent } from './detail-installments/detail-installments.component';
 import { DetailHistoryComponent } from './detail-history/detail-history.component';
 import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
-import { DecentralandMapComponent } from './detail-cosigner/decentraland-cosigner/decentraland-map/decentraland-map.component';
-import { DecentralandCosignerComponent } from './detail-cosigner/decentraland-cosigner/decentraland-cosigner.component';
 import { TransferButtonComponent } from './../../shared/transfer-button/transfer-button.component';
 import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
@@ -43,7 +39,6 @@ const routes: Routes = [
   ],
   providers: [
     ContractsService,
-    CosignerService,
     CollateralService,
     InstallmentsService,
     FormatAmountPipe
@@ -51,12 +46,9 @@ const routes: Routes = [
   declarations: [
     LoanDetailComponent,
     DetailIdentityComponent,
-    DetailCosignerComponent,
     DetailCollateralComponent,
     DetailInstallmentsComponent,
     DetailHistoryComponent,
-    DecentralandMapComponent,
-    DecentralandCosignerComponent,
     GobackButtonComponent,
     TransferButtonComponent,
     DialogLoanTransferComponent,

@@ -7,7 +7,6 @@ import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
 import { LoanUtils } from 'app/utils/loan-utils';
 import { ProxyApiService } from 'app/services/proxy-api.service';
 import { TitleService } from 'app/services/title.service';
-import { AvailableLoansService } from 'app/services/available-loans.service';
 import { Web3Service } from 'app/services/web3.service';
 import { EventsService } from 'app/services/events.service';
 import { DeviceService } from 'app/services/device.service';
@@ -22,7 +21,6 @@ export class AddressComponent implements OnInit, OnDestroy {
   pageId = 'lent';
   address: string;
   shortAddress: string;
-  available: any;
   loans: Loan[] = [];
   // pagination
   page = 1;
@@ -35,7 +33,6 @@ export class AddressComponent implements OnInit, OnDestroy {
   pageTitle: string;
   pageDescription: string;
   // subscriptions
-  subscriptionAvailable: Subscription;
   subscriptionAccount: Subscription;
 
   constructor(
@@ -44,7 +41,6 @@ export class AddressComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private proxyApiService: ProxyApiService,
     private titleService: TitleService,
-    private availableLoansService: AvailableLoansService,
     private web3Service: Web3Service,
     private eventsService: EventsService,
     private deviceService: DeviceService,
@@ -69,19 +65,10 @@ export class AddressComponent implements OnInit, OnDestroy {
       await this.checkMyLoans();
       this.setPageTitle();
     });
-
-    // Available Loans service
-    this.subscriptionAvailable = this.availableLoansService.currentAvailable.subscribe(
-      available => this.available = available
-    );
   }
 
   ngOnDestroy() {
     this.spinner.hide(this.pageId);
-
-    try {
-      this.subscriptionAvailable.unsubscribe();
-    } catch (e) { }
   }
 
   /**

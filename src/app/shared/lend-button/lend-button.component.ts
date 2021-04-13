@@ -29,8 +29,6 @@ import { DialogGenericErrorComponent } from 'app/dialogs/dialog-generic-error/di
 import { DialogWrongCountryComponent } from 'app/dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogLoanLendComponent } from 'app/dialogs/dialog-loan-lend/dialog-loan-lend.component';
 import { DialogFrontRunningComponent } from 'app/dialogs/dialog-front-running/dialog-front-running.component';
-import { CosignerService } from 'app/services/cosigner.service';
-import { DecentralandCosignerProvider } from 'app/providers/cosigners/decentraland-cosigner-provider';
 import { ChainService } from 'app/services/chain.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
 
@@ -66,9 +64,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     private chainService: ChainService,
     private walletConnectService: WalletConnectService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,
-    public cosignerService: CosignerService,
-    public decentralandCosignerProvider: DecentralandCosignerProvider
+    public snackBar: MatSnackBar
   ) { }
 
   async ngOnInit() {
@@ -140,28 +136,6 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     if (this.loan.debt) {
       this.openSnackBar('The loan has already been lend');
       return;
-    }
-    // cosigner validation
-    const cosigner = this.cosignerService.getCosigner(this.loan);
-    if (cosigner instanceof DecentralandCosignerProvider) {
-      const isParcelStatusOpen = await cosigner.getStatusOfParcel(this.loan);
-      if (!isParcelStatusOpen) {
-        this.dialog.open(DialogGenericErrorComponent, {
-          data: {
-            error: new Error('The parcel linked to this loan has already been sold.')
-          }
-        });
-        return;
-      }
-      const isMortgageCancelled = await cosigner.isMortgageCancelled(this.loan);
-      if (isMortgageCancelled) {
-        this.dialog.open(DialogGenericErrorComponent, {
-          data: {
-            error: new Error('This mortgage loan has been cancelled.')
-          }
-        });
-        return;
-      }
     }
     // unlogged user
     const loggedIn = await this.walletConnectService.connect();

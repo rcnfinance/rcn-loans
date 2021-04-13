@@ -1,23 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Loan } from 'app/models/loan.model';
 import { Agent } from 'environments/environment';
-import { Brand } from 'app/models/brand.model';
-import { DecentralandCosignerProvider } from 'app/providers/cosigners/decentraland-cosigner-provider';
+import { Loan } from 'app/models/loan.model';
 import { ChainService } from 'app/services/chain.service';
-import { CosignerService } from './cosigner.service';
+import { Brand } from 'app/models/brand.model';
 
 @Injectable()
 export class BrandingService {
   staticBrands = {
-    decentraland_mortgage: new Brand(
-      'Decentraland MC',
-      '#E59400',
-      'https://avatars1.githubusercontent.com/u/12685795?s=400&v=4',
-      '',
-      'Decentraland MC',
-      './assets/logos/decentraland-brand.svg',
-      undefined
-    ),
     ripio: new Brand(
       'Ripio',
       '#009BDE',
@@ -29,15 +18,10 @@ export class BrandingService {
     )
   };
   constructor(
-    private chainService: ChainService,
-    private cosignerService: CosignerService
+    private chainService: ChainService
   ) { }
 
   getBrand(loan: Loan): Brand {
-    if (this.cosignerService.getCosigner(loan) instanceof DecentralandCosignerProvider) {
-      return this.staticBrands.decentraland_mortgage;
-    }
-
     const { config } = this.chainService;
     switch (config.dir[loan.creator.toLowerCase()]) {
       case Agent.RipioArsCreator:

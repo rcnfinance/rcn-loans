@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Agent } from 'environments/environment';
 import { Loan } from 'app/models/loan.model';
 import { Identity } from 'app/models/identity.model';
-import { Agent } from 'environments/environment';
 import { CompanyIdentity } from 'app/models/identity.model';
-import { DecentralandCosignerProvider } from 'app/providers/cosigners/decentraland-cosigner-provider';
-import { CosignerService } from 'app/services/cosigner.service';
 import { ChainService } from 'app/services/chain.service';
 
 @Injectable()
@@ -112,60 +110,16 @@ export class IdentityService {
           description: 'ARS & USDC'
         }
       ]
-    ),
-    [Agent.MortgageCreator]: new CompanyIdentity(
-      'Decentraland MC',
-      '--',
-      `Decentraland is an Ethereum blockchain-powered virtual world, created and owned by its users, who can create, experience, and
-      monetize content and applications. Thanks to RCN, Decentraland's users can now request loans in MANA to buy LAND parcels through
-      Decentraland's / the platform's Mortgage Creator (MC).`,
-      undefined,
-      './assets/logos/decentraland-brand.svg',
-      'Legal Disclaimer: this loan was requested by an unknown borrower using the Decentraland Mortgage Creator',
-      [
-        {
-          icon: 'fas fa-link',
-          title: 'Website',
-          description: null,
-          url: 'https://www.decentraland.org'
-        },
-        {
-          icon: 'fas fa-calendar-alt',
-          title: 'Founding date',
-          description: '2017'
-        },
-        {
-          icon: 'fas fa-map-marker-alt',
-          title: 'Country',
-          description: 'Cayman Islands'
-        },
-        {
-          icon: 'fas fa-users',
-          title: 'Employees',
-          description: '40'
-        },
-        {
-          icon: 'fas fa-coins',
-          title: 'Currency',
-          description: 'MANA'
-        }
-      ]
     )
   };
 
   constructor(
-    private chainService: ChainService,
-    private cosignerService: CosignerService
+    private chainService: ChainService
   ) { }
 
   getIdentity(loan: Loan): Promise<Identity> {
+    const { config } = this.chainService;
     return new Promise(async (resolve) => {
-      const cosigner = await this.cosignerService.getCosigner(loan);
-      if (cosigner instanceof DecentralandCosignerProvider) {
-        resolve(this.companyIdentities[Agent.MortgageCreator]);
-      }
-
-      const { config } = this.chainService;
       resolve(this.companyIdentities[config.dir[loan.borrower.toLowerCase()]]);
     }) as Promise<Identity>;
   }

@@ -73,10 +73,6 @@ export const chain = {
       }
     },
     chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    decentraland: {
-      mortgageCreator: '',
-      mortgageManager: ''
-    },
     chainlink: {
       EACAggregatorProxy: {
         chainCurrencyToUsd: '' // TODO: add BSC contract
