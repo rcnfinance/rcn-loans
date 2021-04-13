@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as BN from 'bn.js';
-import { Loan, LoanType, Engine, Oracle } from '../models/loan.model';
-import { LoanContentApi } from './../interfaces/loan-api-diaspore';
-import { LoanUtils } from './../utils/loan-utils';
-import { environment } from '../../environments/environment';
-import { Web3Service } from './web3.service';
-import { TxService } from '../services/tx.service';
-import { LoanTypeService } from './loan-type.service';
-import { ApiService } from './api.service';
-import { Utils } from './../utils/utils';
-import { EventsService } from './events.service';
+import { Loan, LoanType, Engine, Oracle } from 'app/models/loan.model';
+import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
+import { LoanUtils } from 'app/utils/loan-utils';
+import { Web3Service } from 'app/services/web3.service';
+import { TxService } from 'app/services/tx.service';
+import { LoanTypeService } from 'app/services/loan-type.service';
+import { ApiService } from 'app/services/api.service';
+import { ChainService } from 'app/services/chain.service';
+import { EventsService } from 'app/services/events.service';
+import { Utils } from 'app/utils/utils';
 declare let require: any;
 
 const tokenAbi = require('../contracts/Token.json');
@@ -39,7 +39,7 @@ export class ContractsService {
   private _collateralWethManager: {[engine: string]: any} = {};
 
   // single-engine contracts
-  private _aggregatorProxyEthUsd: any;
+  private _aggregatorProxyChainCurrencyToUsd: any;
   private _chainlinkAdapterV3Abi: any;
 
   constructor(
@@ -48,31 +48,10 @@ export class ContractsService {
     private txService: TxService,
     private apiService: ApiService,
     private loanTypeService: LoanTypeService,
+    private chainService: ChainService,
     private eventsService: EventsService
   ) {
-    Object.values(Engine).map((engine) => {
-      this._loanManager[engine] =
-        this.makeContract(loanManagerAbi, environment.contracts[engine].diaspore.loanManager);
-      this._debtEngine[engine] =
-        this.makeContract(debtEngineAbi, environment.contracts[engine].diaspore.debtEngine);
-      this._rcnConverterRamp[engine] =
-        this.makeContract(converterRampAbi.abi, environment.contracts[engine].converter.converterRamp);
-      this._uniswapConverter[engine] =
-        this.makeContract(uniswapV2ConverterAbi.abi, environment.contracts[engine].converter.uniswapConverter);
-      this._oracleFactory[engine] =
-        this.makeContract(oracleFactoryAbi.abi, environment.contracts[engine].oracleFactory);
-      this._installmentsModel[engine] =
-        this.makeContract(installmentsModelAbi.abi, environment.contracts[engine].models.installments);
-      this._collateral[engine] =
-        this.makeContract(collateralAbi.abi, environment.contracts[engine].collateral.collateral);
-      this._collateralWethManager[engine] =
-        this.makeContract(collateralWethManagerAbi.abi, environment.contracts[engine].collateral.wethManager);
-    });
-
-    this._aggregatorProxyEthUsd =
-      this.makeContract(aggregatorProxyAbi.abi, environment.contracts.chainlink.EACAggregatorProxy.ethUsd);
-    this._chainlinkAdapterV3Abi =
-      this.makeContract(chainlinkAdapterV3Abi.abi, environment.contracts.chainlink.chainlinkAdapterV3);
+    this.buildContracts();
   }
 
   /**
@@ -90,7 +69,8 @@ export class ContractsService {
    * @return Balance in wei
    */
   async getUserBalanceRCNWei(): Promise<BN> {
-    return await this.getUserBalanceInToken(environment.contracts[Engine.RcnEngine].token);
+    const { config } = this.chainService;
+    return await this.getUserBalanceInToken(config.contracts[Engine.RcnEngine].token);
   }
 
   /**
@@ -98,7 +78,8 @@ export class ContractsService {
    * @return Balance
    */
   async getUserBalanceRCN(): Promise<number> {
-    const balance = await this.getUserBalanceInToken(environment.contracts[Engine.RcnEngine].token);
+    const { config } = this.chainService;
+    const balance = await this.getUserBalanceInToken(config.contracts[Engine.RcnEngine].token);
     return this.web3Service.web3.utils.fromWei(balance);
   }
 
@@ -112,6 +93,7 @@ export class ContractsService {
 
     return new Promise(async (resolve, reject) => {
       const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+      const { config } = this.chainService;
 
       if (!this.tokenIsValid(tokenAddress)) {
         reject('The currency does not exist');
@@ -119,7 +101,7 @@ export class ContractsService {
       if (!account) {
         resolve(Utils.bn(0));
       }
-      if (tokenAddress === environment.contracts.ethAddress) {
+      if (tokenAddress === config.contracts.chainCurrencyAddress) {
         const ethBalance = await this.web3Service.web3.eth.getBalance(account);
         resolve(Utils.bn(ethBalance));
       }
@@ -140,7 +122,8 @@ export class ContractsService {
    */
   async isApproved(contract: string, tokenAddress: string): Promise<boolean> {
     const pending = this.txService.getLastPendingApprove(tokenAddress, contract);
-    const ethAddress = environment.contracts.ethAddress;
+    const { config } = this.chainService;
+    const chainCurrencyAddress = config.contracts.chainCurrencyAddress;
 
     if (pending !== undefined) {
       return true;
@@ -148,7 +131,7 @@ export class ContractsService {
 
     switch (tokenAddress) {
       // eth does not require approve
-      case ethAddress:
+      case chainCurrencyAddress:
         return true;
 
       // check if token is valid and approved
@@ -313,7 +296,8 @@ export class ContractsService {
     const tokenAmountInWei: BN = Utils.bn(loanAmount.mul(tokenRate));
     const tokenAmount: BN = tokenAmountInWei.div(Utils.bn(10).pow(Utils.bn(decimals)));
     const { engine } = loan;
-    const engineToken: string = environment.contracts[engine].token;
+    const { config } = this.chainService;
+    const engineToken: string = config.contracts[engine].token;
 
     // amount in rcn
     if (engineToken === tokenAddress) {
@@ -623,8 +607,9 @@ export class ContractsService {
    * @return Decimals
    */
   async getTokenDecimals(tokenAddress: string, loan?: Loan): Promise<number> {
-    const { ethAddress } = environment.contracts;
-    if (tokenAddress === ethAddress) {
+    const { config } = this.chainService;
+    const { chainCurrencyAddress } = config.contracts;
+    if (tokenAddress === chainCurrencyAddress) {
       return 18;
     }
     if (loan && loan.currency.decimals) {
@@ -663,10 +648,11 @@ export class ContractsService {
    */
   async getPendingWithdraws(engine: Engine): Promise<[number, number[], number, number[]]> {
     const account = await this.web3Service.getAccount();
+    const { config } = this.chainService;
 
     return new Promise(async (resolve, _reject) => {
       const { content } = await this.apiService.getLent(engine, account).toPromise();
-      const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
+      const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData, config));
       resolve(this.readPendingWithdraws(loans));
     }) as Promise<[number, number[], number, number[]]>;
 
@@ -694,10 +680,11 @@ export class ContractsService {
   }> {
     const oracleData = await this.getOracleData(loan.oracle);
     const web3: any = this.web3Service.web3;
+    const { config } = this.chainService;
 
     // set value in specified token
     const required = String(await this.estimateLendAmount(loan, lendToken));
-    const payableAmount = lendToken === environment.contracts.ethAddress ? required : '';
+    const payableAmount = lendToken === config.contracts.chainCurrencyAddress ? required : '';
 
     // set cosigner
     const cosignerLimit = '0'; // TODO: implement cosigner limit
@@ -706,7 +693,7 @@ export class ContractsService {
 
     if (this.loanTypeService.getLoanType(loan) === LoanType.UnknownWithCollateral) {
       const { collateral } = loan;
-      cosignerAddress = environment.contracts[loan.engine].collateral.collateral;
+      cosignerAddress = config.contracts[loan.engine].collateral.collateral;
       cosignerData = Utils.toBytes32(web3.utils.toHex(collateral.id));
     } else {
       cosignerAddress = Utils.address0x;
@@ -719,8 +706,8 @@ export class ContractsService {
     const loanId = loan.id;
     const callbackData = '0x';
     const tokenConverter =
-      lendToken !== environment.contracts[loan.engine].token ?
-      environment.contracts[loan.engine].converter.uniswapConverter :
+      lendToken !== config.contracts[loan.engine].token ?
+      config.contracts[loan.engine].converter.uniswapConverter :
       null;
 
     return {
@@ -902,9 +889,9 @@ export class ContractsService {
     const web3 = this.web3Service.opsWeb3;
     return new Promise(async (resolve, reject) => {
       const symbol = await this.oracleToSymbol(engine, oracle);
-      const ETH_SYMBOL = 'ETH';
+      const { currency: chainCurrency } = this.chainService.config.network;
 
-      if (symbol === ETH_SYMBOL) {
+      if (symbol === chainCurrency) {
         this.loadAltContract(web3, this._collateralWethManager[engine]).methods.create(
           debtId,
           oracle,
@@ -949,7 +936,8 @@ export class ContractsService {
     estimate?: boolean
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
-    const isEth: boolean = tokenAddress === environment.contracts.ethAddress;
+    const { config } = this.chainService;
+    const isEth: boolean = tokenAddress === config.contracts.chainCurrencyAddress;
     const payload = isEth ?
       { from: account, value: amount } :
       { from: account };
@@ -1009,7 +997,8 @@ export class ContractsService {
     estimate?: boolean
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
-    const isEth: boolean = tokenAddress === environment.contracts.ethAddress;
+    const { config } = this.chainService;
+    const isEth: boolean = tokenAddress === config.contracts.chainCurrencyAddress;
     const contract: string = isEth ? this._collateralWethManager[engine] : this._collateral[engine];
     const payload = { from: account };
 
@@ -1031,11 +1020,41 @@ export class ContractsService {
   }
 
   /**
-   * Get latest ETH/USD rate
-   * @return ETH/USD rate
+   * Get latest ChainCurrency/USD rate
+   * @return ChainCurrency/USD rate
    */
   async latestAnswer() {
-    return await this._aggregatorProxyEthUsd.methods.latestAnswer().call();
+    return await this._aggregatorProxyChainCurrencyToUsd.methods.latestAnswer().call();
+  }
+
+  /**
+   * Build contracts using the current chain config
+   */
+  private buildContracts() {
+    const { config } = this.chainService;
+    Object.values(Engine).map((engine) => {
+      this._loanManager[engine] =
+        this.makeContract(loanManagerAbi, config.contracts[engine].diaspore.loanManager);
+      this._debtEngine[engine] =
+        this.makeContract(debtEngineAbi, config.contracts[engine].diaspore.debtEngine);
+      this._rcnConverterRamp[engine] =
+        this.makeContract(converterRampAbi.abi, config.contracts[engine].converter.converterRamp);
+      this._uniswapConverter[engine] =
+        this.makeContract(uniswapV2ConverterAbi.abi, config.contracts[engine].converter.uniswapConverter);
+      this._oracleFactory[engine] =
+        this.makeContract(oracleFactoryAbi.abi, config.contracts[engine].oracleFactory);
+      this._installmentsModel[engine] =
+        this.makeContract(installmentsModelAbi.abi, config.contracts[engine].models.installments);
+      this._collateral[engine] =
+        this.makeContract(collateralAbi.abi, config.contracts[engine].collateral.collateral);
+      this._collateralWethManager[engine] =
+        this.makeContract(collateralWethManagerAbi.abi, config.contracts[engine].collateral.wethManager);
+    });
+
+    this._aggregatorProxyChainCurrencyToUsd =
+      this.makeContract(aggregatorProxyAbi.abi, config.contracts.chainlink.EACAggregatorProxy.chainCurrencyToUsd);
+    this._chainlinkAdapterV3Abi =
+      this.makeContract(chainlinkAdapterV3Abi.abi, config.contracts.chainlink.chainlinkAdapterV3);
   }
 
   /**
@@ -1063,7 +1082,8 @@ export class ContractsService {
    * @return Boolean
    */
   private tokenIsValid(tokenAddress): boolean {
-    const currencies = environment.usableCurrencies;
+    const { config } = this.chainService;
+    const currencies = config.usableCurrencies;
     const currency = currencies.filter(token => token.address === tokenAddress);
 
     if (currency.length) {

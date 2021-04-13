@@ -17,6 +17,7 @@ export class Currency {
         return 6;
 
       case 'ETH':
+      case 'BNB':
       case 'RCN':
       case 'DAI':
       case 'TEST':

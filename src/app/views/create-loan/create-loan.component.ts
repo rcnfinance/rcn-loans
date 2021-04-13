@@ -5,24 +5,22 @@ import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
 import { Subscription, timer } from 'rxjs';
-import { Loan } from './../../models/loan.model';
-import { Collateral } from './../../models/collateral.model';
-import { CollateralRequest } from './../../interfaces/collateral-request';
-import { LoanRequest } from './../../interfaces/loan-request';
-import { environment } from './../../../environments/environment';
-// App Components
-import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
-// App Services
-import { Web3Service } from '../../services/web3.service';
-import { WalletConnectService } from './../../services/wallet-connect.service';
-import { TitleService } from '../../services/title.service';
-import { ContractsService } from './../../services/contracts.service';
-import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
-import { TxService, Tx, Type } from './../../services/tx.service';
-import { Currency } from './../../utils/currencies';
-import { Utils } from './../../utils/utils';
+import { Loan } from 'app/models/loan.model';
+import { Collateral } from 'app/models/collateral.model';
+import { CollateralRequest } from 'app/interfaces/collateral-request';
+import { LoanRequest } from 'app/interfaces/loan-request';
+import { DialogGenericErrorComponent } from 'app/dialogs/dialog-generic-error/dialog-generic-error.component';
+import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DialogInsufficientfundsComponent } from 'app/dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
+import { Web3Service } from 'app/services/web3.service';
+import { WalletConnectService } from 'app/services/wallet-connect.service';
+import { TitleService } from 'app/services/title.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
+import { TxService, Tx, Type } from 'app/services/tx.service';
+import { ChainService } from 'app/services/chain.service';
+import { Currency } from 'app/utils/currencies';
+import { Utils } from 'app/utils/utils';
 
 @Component({
   selector: 'app-create-loan',
@@ -58,6 +56,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     private web3Service: Web3Service,
     private walletConnectService: WalletConnectService,
     private titleService: TitleService,
+    private chainService: ChainService,
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
     private txService: TxService
@@ -143,6 +142,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     const loan: Loan = this.loan;
     const collateral: Collateral = this.collateral;
     const form: CollateralRequest = this.collateralRequest;
+    const { config } = this.chainService;
 
     if (loanTx && !loanTx.confirmed) {
       this.showMessage('Please wait until your loan requesting transaction is completed to supply your collateral.', 'snackbar');
@@ -174,7 +174,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     }
 
     // validate ERC20 approve
-    const contractAddress: string = environment.contracts[loan.engine].collateral.collateral;
+    const contractAddress: string = config.contracts[loan.engine].collateral.collateral;
     const engineApproved = await this.contractsService.isApproved(contractAddress, collateral.token);
     if (!await engineApproved) {
       const approve = await this.showApproveDialog(contractAddress, collateral.token, 'onlyToken');
@@ -185,10 +185,10 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     }
 
     // validate ERC721 approve
-    const { ethAddress } = environment.contracts[loan.engine].converter;
-    if (collateral.token === ethAddress) {
-      const collateralAddress = environment.contracts[loan.engine].collateral.collateral;
-      const operator = environment.contracts[loan.engine].collateral.wethManager;
+    const { chainCurrencyAddress } = config.contracts;
+    if (collateral.token === chainCurrencyAddress) {
+      const collateralAddress = config.contracts[loan.engine].collateral.collateral;
+      const operator = config.contracts[loan.engine].collateral.wethManager;
       const erc721approved = await this.contractsService.isApprovedERC721(
         collateralAddress,
         operator
@@ -215,7 +215,8 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     form: LoanRequest
   ) {
     try {
-      const engine: string = environment.contracts[loan.engine].diaspore.loanManager;
+      const { config } = this.chainService;
+      const engine: string = config.contracts[loan.engine].diaspore.loanManager;
       const tx: string = await this.contractsService.requestLoan(
         loan.engine,
         form.amount,

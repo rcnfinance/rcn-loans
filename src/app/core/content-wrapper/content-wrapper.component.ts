@@ -2,23 +2,22 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import * as BN from 'bn.js';
-import { Utils } from '../../utils/utils';
-import { Loan, Engine } from './../../models/loan.model';
-import { Status } from './../../models/collateral.model';
-import { LoanContentApi } from './../../interfaces/loan-api-diaspore';
-import { LoanUtils } from './../../utils/loan-utils';
-// App Components
-import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
-import { DialogNeedWithdrawComponent } from '../../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
-// App Service
-import { environment } from '../../../environments/environment';
-import { ProxyApiService } from '../../services/proxy-api.service';
-import { SidebarService } from '../../services/sidebar.service';
-import { ApplicationAdsService } from '../../services/application-ads.service';
-import { Web3Service } from '../../services/web3.service';
-import { ContractsService } from '../../services/contracts.service';
-import { Tx, TxService } from '../../services/tx.service';
-import { CountriesService } from '../../services/countries.service';
+import { Utils } from 'app/utils/utils';
+import { Loan, Engine } from 'app/models/loan.model';
+import { Status } from 'app/models/collateral.model';
+import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
+import { LoanUtils } from 'app/utils/loan-utils';
+import { DialogWrongCountryComponent } from 'app/dialogs/dialog-wrong-country/dialog-wrong-country.component';
+import { DialogNeedWithdrawComponent } from 'app/dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
+import { environment } from 'app/../environments/environment';
+import { ProxyApiService } from 'app/services/proxy-api.service';
+import { SidebarService } from 'app/services/sidebar.service';
+import { ApplicationAdsService } from 'app/services/application-ads.service';
+import { Web3Service } from 'app/services/web3.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { Tx, TxService } from 'app/services/tx.service';
+import { ChainService } from 'app/services/chain.service';
+import { CountriesService } from 'app/services/countries.service';
 
 @Component({
   selector: 'app-content-wrapper',
@@ -72,6 +71,7 @@ export class ContentWrapperComponent implements OnInit {
     private sidebarService: SidebarService, // Navbar Service
     private applicationAdsService: ApplicationAdsService,
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private contractService: ContractsService,
     private txService: TxService,
     public dialog: MatDialog,
@@ -149,8 +149,9 @@ export class ContentWrapperComponent implements OnInit {
    * Load all pending withdraw
    */
   private loadPendingWithdraw() {
+    const { config } = this.chainService;
     this.pendingRcnWithdraw = this.txService.getLastWithdraw(
-      environment.contracts[Engine.RcnEngine].diaspore.debtEngine,
+      config.contracts[Engine.RcnEngine].diaspore.debtEngine,
       this.diasporeLoansWithBalance
     );
   }
@@ -185,8 +186,9 @@ export class ContentWrapperComponent implements OnInit {
       return;
     }
 
+    const { config } = this.chainService;
     const { content } = await this.proxyApiService.getLent(account);
-    const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
+    const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData, config));
     const loansToWithdraw: Loan[] =
       loans.filter(({ collateral }) => collateral && collateral.status === Status.ToWithdraw);
 

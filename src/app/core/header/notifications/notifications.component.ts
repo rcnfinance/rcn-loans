@@ -6,12 +6,12 @@ import {
   animate,
   transition
 } from '@angular/animations';
-import { environment } from '../../../../environments/environment';
-import { Engine } from '../../../models/loan.model';
-import { Notification, TxObject } from '../../../models/notification.model';
-import { HeaderPopoverService } from '../../../services/header-popover.service';
-import { TxService, Tx } from '../../../services/tx.service';
-import { Utils } from '../../../utils/utils';
+import { Engine } from 'app/models/loan.model';
+import { Notification, TxObject } from 'app/models/notification.model';
+import { HeaderPopoverService } from 'app/services/header-popover.service';
+import { ChainService } from 'app/services/chain.service';
+import { TxService, Tx } from 'app/services/tx.service';
+import { Utils } from 'app/utils/utils';
 
 @Component({
   selector: 'app-notifications',
@@ -53,6 +53,7 @@ export class NotificationsComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     private txService: TxService,
+    private chainService: ChainService,
     public headerPopoverService: HeaderPopoverService
   ) { }
 
@@ -62,21 +63,22 @@ export class NotificationsComponent implements OnInit {
    * @return Contract name
    */
   getContractName(contract: string) {
+    const { config } = this.chainService;
     switch (contract) {
-      case environment.contracts[Engine.RcnEngine].diaspore.loanManager:
-      case environment.contracts[Engine.UsdcEngine].diaspore.loanManager:
+      case config.contracts[Engine.RcnEngine].diaspore.loanManager:
+      case config.contracts[Engine.UsdcEngine].diaspore.loanManager:
         return 'Loan Manager Contract';
 
-      case environment.contracts[Engine.RcnEngine].diaspore.debtEngine:
-      case environment.contracts[Engine.UsdcEngine].diaspore.debtEngine:
+      case config.contracts[Engine.RcnEngine].diaspore.debtEngine:
+      case config.contracts[Engine.UsdcEngine].diaspore.debtEngine:
         return 'Debt Engine Contract';
 
-      case environment.contracts[Engine.RcnEngine].converter.converterRamp:
-      case environment.contracts[Engine.UsdcEngine].converter.converterRamp:
+      case config.contracts[Engine.RcnEngine].converter.converterRamp:
+      case config.contracts[Engine.UsdcEngine].converter.converterRamp:
         return 'Converter Ramp Contract';
 
-      case environment.contracts[Engine.RcnEngine].collateral.collateral:
-      case environment.contracts[Engine.UsdcEngine].collateral.collateral:
+      case config.contracts[Engine.RcnEngine].collateral.collateral:
+      case config.contracts[Engine.UsdcEngine].collateral.collateral:
         return 'Collateral Contract';
 
       default:

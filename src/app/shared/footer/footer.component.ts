@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material';
 import { Engine } from 'app/models/loan.model';
 import { environment } from 'environments/environment';
 import { Web3Service } from 'app/services/web3.service';
+import { ChainService } from 'app/services/chain.service';
 import { TitleService } from 'app/services/title.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
 import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -34,13 +35,15 @@ export class FooterComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private titleService: TitleService,
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private walletConnectService: WalletConnectService
   ) {}
 
   async ngOnInit() {
     const env = environment;
-    const contract = env.contracts[Engine.UsdcEngine].diaspore.loanManager;
-    const linkContract = env.network.explorer.address.replace('${address}', contract);
+    const { config } = this.chainService;
+    const contract = config.contracts[Engine.UsdcEngine].diaspore.loanManager;
+    const linkContract = config.network.explorer.address.replace('${address}', contract);
     const version = env.version;
     const versionString = `${env.version}-${env.build} - ${env.versionName} ${env.versionEmoji}`;
     this.socialIcons = [

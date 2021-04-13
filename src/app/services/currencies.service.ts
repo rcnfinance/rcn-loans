@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { Utils } from './../utils/utils';
+import { Utils } from 'app/utils/utils';
+import { ChainService } from 'app/services/chain.service';
 
 interface BestInterestRate {
   min: number;
@@ -27,35 +27,15 @@ export class CurrenciesService {
     'USDC': { min: 5, max: 10, best: 7 },
     'ARS': { min: 40, max: 80, best: 60 },
     'ETH': { min: 0, max: 5, best: 1 },
+    'BNB': { min: 0, max: 5, best: 1 },
     'TEST': { min: 0, max: 20, best: 10 },
     'DEST': { min: 10, max: 20, best: 15 }
   };
 
-  constructor() {
-    const envCurrencies = environment.usableCurrencies;
-    const currencies: CurrencyItem[] = [];
-
-    envCurrencies.map((currency: {
-      symbol: string;
-      address: string;
-      img: string;
-    }) => {
-      const address = currency.address;
-      const symbol = currency.symbol;
-      const img = currency.img;
-      const isToken = currency.address && currency.address !== Utils.address0x;
-      const bestInterestRate = this.getBestInterest(symbol);
-      const formattedCurrency: CurrencyItem = {
-        address,
-        symbol,
-        img,
-        isToken,
-        bestInterestRate
-      };
-      currencies.push(formattedCurrency);
-    });
-
-    this.currencies = currencies;
+  constructor(
+    private chainService: ChainService
+  ) {
+    this.buildCurrencies();
   }
 
   /**
@@ -132,4 +112,34 @@ export class CurrenciesService {
     };
   }
 
+  /**
+   * Build currencies using the current chain config
+   */
+  private buildCurrencies() {
+    const { config } = this.chainService;
+    const envCurrencies = config.usableCurrencies;
+    const currencies: CurrencyItem[] = [];
+
+    envCurrencies.map((currency: {
+      symbol: string;
+      address: string;
+      img: string;
+    }) => {
+      const address = currency.address;
+      const symbol = currency.symbol;
+      const img = currency.img;
+      const isToken = currency.address && currency.address !== Utils.address0x;
+      const bestInterestRate = this.getBestInterest(symbol);
+      const formattedCurrency: CurrencyItem = {
+        address,
+        symbol,
+        img,
+        isToken,
+        bestInterestRate
+      };
+      currencies.push(formattedCurrency);
+    });
+
+    this.currencies = currencies;
+  }
 }

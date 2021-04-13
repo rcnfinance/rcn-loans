@@ -4,18 +4,18 @@ import { MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { timer } from 'rxjs';
 import * as BN from 'bn.js';
-import { environment } from './../../../../environments/environment';
-import { Utils } from './../../../utils/utils';
-import { Currency } from './../../../utils/currencies';
+import { Utils } from 'app/utils/utils';
+import { Currency } from 'app/utils/currencies';
 // App models
-import { Loan } from './../../../models/loan.model';
-import { Collateral } from './../../../models/collateral.model';
+import { Loan } from 'app/models/loan.model';
+import { Collateral } from 'app/models/collateral.model';
 // App services
-import { Web3Service } from './../../../services/web3.service';
-import { EventsService } from './../../../services/events.service';
-import { ContractsService } from './../../../services/contracts.service';
-import { CollateralService } from './../../../services/collateral.service';
-import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
+import { Web3Service } from 'app/services/web3.service';
+import { ChainService } from 'app/services/chain.service';
+import { EventsService } from 'app/services/events.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { CollateralService } from 'app/services/collateral.service';
+import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
 
 enum DialogType {
   CollateralAdd = 'add',
@@ -38,7 +38,7 @@ export class CollateralFormComponent implements OnInit {
   @Output() submitAdd = new EventEmitter<BN>();
   @Output() submitWithdraw = new EventEmitter<BN>();
 
-  explorerAddress: string = environment.network.explorer.address;
+  explorerAddress: string = this.chainService.config.network.explorer.address;
   form: FormGroup;
   txCost: string;
   currentAmount: string;
@@ -47,6 +47,7 @@ export class CollateralFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private eventsService: EventsService,
     private contractsService: ContractsService,
     private collateralService: CollateralService,
@@ -311,9 +312,9 @@ export class CollateralFormComponent implements OnInit {
 
     try {
       const txCost = (await this.getTxCost()) / 10 ** 18;
-      const rawEthUsd = await this.contractsService.latestAnswer();
-      const ethUsd = rawEthUsd / 10 ** 8;
-      this.txCost = Utils.formatAmount(txCost * ethUsd) + ' USD';
+      const rawChainCurrencyToUsd = await this.contractsService.latestAnswer();
+      const chainCurrencyToUsd = rawChainCurrencyToUsd / 10 ** 8;
+      this.txCost = Utils.formatAmount(txCost * chainCurrencyToUsd) + ' USD';
     } catch (err) {
       this.txCost = '-';
     }
