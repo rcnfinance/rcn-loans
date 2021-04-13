@@ -15,7 +15,6 @@ import { WalletSettingsComponent } from './header/wallet-settings/wallet-setting
 import { NotificationWalletBalancesComponent } from './header/notification-wallet-balances/notification-wallet-balances.component';
 // App Directives
 import { ClickOutsideDirective } from '../directives/click-outside.directive';
-import { OpenEtherscanDirective } from '../directives/open-etherscan.directive';
 import { OracleRatesComponent } from './header/oracle-rates/oracle-rates.component';
 
 @NgModule({
@@ -30,7 +29,6 @@ import { OracleRatesComponent } from './header/oracle-rates/oracle-rates.compone
     NavrailComponent,
     IconGroupHeaderComponent,
     ClickOutsideDirective,
-    OpenEtherscanDirective,
     NotificationsComponent,
     NotificationItemComponent,
     WalletWithdrawComponent,

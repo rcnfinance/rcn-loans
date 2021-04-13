@@ -1,4 +1,4 @@
-@import './../../../../scss/variables';
+@import './../../../../scss/mixins';
 @import './../../../../scss/fonts';
 
 .oracle-rates {
@@ -7,7 +7,6 @@
   overflow: hidden;
   position: absolute;
   right: 352px;
-  @extend %roboto-regular;
   @include transition();
 
   ul {

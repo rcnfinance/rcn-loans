@@ -3,7 +3,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from 'app/shared/shared.module';
 import { Utils } from 'app/utils/utils';
 import { Loan, Engine, Status, LoanType } from 'app/models/loan.model';
-import { CosignerService } from 'app/services/cosigner.service';
 import { LoanTypeService } from 'app/services/loan-type.service';
 
 describe('LoanTypeService', () => {
@@ -19,7 +18,7 @@ describe('LoanTypeService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule, SharedModule],
-      providers: [LoanTypeService, CosignerService]
+      providers: [LoanTypeService]
     })
     .compileComponents();
   }));

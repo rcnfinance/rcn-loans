@@ -1,8 +1,4 @@
-@import '../../../../scss/variables';
-
-.main-h4 {
-  @extend %roboto-regular;
-}
+@import '../../../../scss/mixins';
 
 @media (min-width: 992px) {
   virtual-scroller {

@@ -75,10 +75,6 @@ export const chain = {
       }
     },
     chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    decentraland: {
-      mortgageCreator: '0x90263ea5c57dc6603ca7202920735a6e31235bb9',
-      mortgageManager: '0x9abf1295086afa0e49c60e95c437aa400c5333b8'
-    },
     chainlink: {
       EACAggregatorProxy: {
         chainCurrencyToUsd: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419'
