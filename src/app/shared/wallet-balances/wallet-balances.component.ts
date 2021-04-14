@@ -29,7 +29,6 @@ export class WalletBalancesComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.info('changes');
     this.loadBalances();
   }
 
