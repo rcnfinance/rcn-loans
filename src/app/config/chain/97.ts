@@ -2,9 +2,8 @@ import { Agent } from 'environments/environment';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
 const RCN_ENGINE = 'rcnEngine';
-const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const USDC_ENGINE = 'usdcEngine';
-const USDC_TOKEN = '0x99c1c36dee5c3b62723dc4223f4352bbf1da0bff';
+const USDC_TOKEN = '0x46f348579e2b93f65fbd0636ad9cee504fcf1e1c';
 
 export const chain = {
   network: {
@@ -27,7 +26,7 @@ export const chain = {
   },
   api: {
     [RCN_ENGINE]: {
-      v6: null
+      v6: ''
     },
     [USDC_ENGINE]: {
       v6: `https://bsc-testnet.rcn.loans/`
@@ -35,7 +34,7 @@ export const chain = {
   },
   contracts: {
     [RCN_ENGINE]: {
-      token: RCN_TOKEN,
+      token: '',
       oracleFactory: '',
       diaspore: {
         debtEngine: '',
@@ -55,7 +54,7 @@ export const chain = {
     },
     [USDC_ENGINE]: {
       token: USDC_TOKEN,
-      oracleFactory: '',
+      oracleFactory: '0xbb6dd5143d07ae9e8b766566f2c496394de051bf',
       diaspore: {
         debtEngine: '0xe8a7cd59aaa09a31af9c61e9c6da8d68a81cc198',
         loanManager: '0x4a921888cd77b5951390bc084f8dcbb3c1c3695a'
@@ -75,9 +74,9 @@ export const chain = {
     chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     chainlink: {
       EACAggregatorProxy: {
-        chainCurrencyToUsd: '' // TODO: add BSC contract
+        chainCurrencyToUsd: '0xc771cfbba406728e7d2415490b31e3b0d5d8a503'
       },
-      chainlinkAdapterV3: '' // TODO: add BSC contract
+      chainlinkAdapterV3: '0x774d446f17619c66d0feb5856f7a6bb93ac2b6c1'
     }
   },
   blacklist: [
@@ -100,32 +99,14 @@ export const chain = {
     '0xf42d11a0aff8f9a56853e4c41ee333b57658d096': Agent.RipioArsCreator
   },
   filterCurrencies: [
-    'RCN',
-    'DEST',
     'ARS',
-    'USD',
-    'DAI'
+    'USD'
   ],
   usableCurrencies: [
-    {
-      symbol: 'RCN',
-      img: 'assets/rcn.png',
-      address: RCN_TOKEN
-    },
-    {
-      symbol: 'DEST',
-      img: 'assets/dai.png',
-      address: '0x6710d597fd13127a5b64eebe384366b12e66fdb6'
-    },
     {
       symbol: 'BNB',
       img: 'assets/bnb.png',
       address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-    },
-    {
-      symbol: 'DAI',
-      img: 'assets/dai.png',
-      address: '0x57ac66399420f7c99f546a5a7c00e0d0ff2679e1'
     },
     {
       symbol: 'USDC',
