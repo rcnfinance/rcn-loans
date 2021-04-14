@@ -143,5 +143,7 @@ export const chain = {
     WalletType.Metamask,
     WalletType.WalletConnect,
     WalletType.WalletLink
-  ]
+  ],
+  createLoanCurrencies: ['RCN', 'USDC', 'ARS'],
+  createCollateralCurrencies: ['RCN', 'USDC']
 };

@@ -121,5 +121,7 @@ export const chain = {
   ],
   usableWallets: [
     WalletType.Metamask
-  ]
+  ],
+  createLoanCurrencies: ['ARS'],
+  createCollateralCurrencies: ['USDC']
 };

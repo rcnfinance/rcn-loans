@@ -76,6 +76,20 @@ export class CurrenciesService {
   }
 
   /**
+   * Return only this currencies
+   * @return Currencies
+   */
+  getCurrenciesByKey(key: 'symbol' | 'address', value: string | string[]): Array<CurrencyItem> {
+    let repulsedValues = typeof value === 'string' ? [value] : value;
+    repulsedValues = repulsedValues.map((item) => item.toLowerCase());
+
+    const filteredCurrency: Array<CurrencyItem> = this.currencies.filter(
+      currency => repulsedValues.includes(currency[key].toLowerCase())
+    );
+    return filteredCurrency;
+  }
+
+  /**
    * Return all currencies with a exception
    * @return Currencies
    */
