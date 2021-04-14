@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as BN from 'bn.js';
 import { Loan, LoanType, Engine, Oracle } from 'app/models/loan.model';
+import { AvailableChains } from 'app/interfaces/chain';
 import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
 import { LoanUtils } from 'app/utils/loan-utils';
 import { Web3Service } from 'app/services/web3.service';
@@ -1032,7 +1033,10 @@ export class ContractsService {
    */
   private buildContracts() {
     const { config } = this.chainService;
-    Object.values(Engine).map((engine) => {
+    const isEthereum = [AvailableChains.EthMainnet, AvailableChains.EthRopsten].includes(config.chain);
+    const engines: Engine[] = isEthereum ? [...Object.values(Engine)] : [Engine.UsdcEngine];
+
+    engines.map((engine) => {
       this._loanManager[engine] =
         this.makeContract(loanManagerAbi, config.contracts[engine].diaspore.loanManager);
       this._debtEngine[engine] =
