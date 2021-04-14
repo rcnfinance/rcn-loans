@@ -118,8 +118,6 @@ export class ProxyApiService {
       return await this.apiService.getAcvivity(Engine.UsdcEngine, page, pageSize, sort, filters).toPromise();
     }
 
-    debugger
-
     const usdcEngine = await this.apiService.getAcvivity(Engine.UsdcEngine, page, pageSize, sort, filters).toPromise();
     const rcnEngine = await this.apiService.getAcvivity(Engine.RcnEngine, page, pageSize, sort, filters).toPromise();
     const allResults: ApiResponse = {

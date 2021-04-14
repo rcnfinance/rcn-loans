@@ -1,6 +1,5 @@
 import { Agent } from 'environments/environment';
 import { WalletType } from 'app/interfaces/wallet.interface';
-import { Currency } from 'app/utils/currencies';
 
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
 const RCN_ENGINE = 'rcnEngine';
