@@ -8,7 +8,7 @@ import { LoanUtils } from 'app/utils/loan-utils';
 import { DialogWrongCountryComponent } from 'app/dialogs/dialog-wrong-country/dialog-wrong-country.component';
 import { DialogNeedWithdrawComponent } from 'app/dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
 import { ProxyApiService } from 'app/services/proxy-api.service';
-import { ApplicationAdsService } from 'app/services/application-ads.service';
+import { ApplicationAdsService, Ad } from 'app/services/application-ads.service';
 import { Web3Service } from 'app/services/web3.service';
 import { ChainService } from 'app/services/chain.service';
 import { CountriesService } from 'app/services/countries.service';
@@ -26,7 +26,7 @@ export class ContentWrapperComponent implements OnInit {
   winHeight: number = window.innerHeight;
   account: string;
   lendEnabled: Boolean;
-  showAd: string;
+  showAd: Ad;
   needWithdraw: boolean;
 
   constructor(
