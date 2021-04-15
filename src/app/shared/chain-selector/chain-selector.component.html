@@ -1,4 +1,8 @@
-<div class="chain" (click)="clickChainSelector()">
+<div
+  class="chain"
+  [matTooltip]="'Connected to ' + chainName"
+  (click)="clickChainSelector()"
+>
   <div class="chain__icon">
     <img
       class="icon"

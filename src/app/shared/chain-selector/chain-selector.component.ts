@@ -22,6 +22,10 @@ export class ChainSelectorComponent {
     return this.chainService.config;
   }
 
+  get chainName() {
+    return this.config.network.ui.fullname;
+  }
+
   /**
    * Click on the selector to open an explanatory dialog
    */
