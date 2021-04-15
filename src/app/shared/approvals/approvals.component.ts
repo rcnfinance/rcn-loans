@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Utils } from 'app/utils/utils';
 import { Engine } from 'app/models/loan.model';
+import { AvailableChains } from 'app/interfaces/chain';
 // App Component
 import { Web3Service } from 'app/services/web3.service';
 import { ContractsService } from 'app/services/contracts.service';
@@ -91,6 +92,11 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
     if (onlyAsset) {
       this.accordionStates.assetApproves[onlyAsset.toLowerCase()] = true;
     }
+  }
+
+  get showRcnEngine() {
+    const { chain } = this.chainService;
+    return [AvailableChains.EthMainnet, AvailableChains.EthRopsten].includes(chain);
   }
 
   async ngOnInit() {

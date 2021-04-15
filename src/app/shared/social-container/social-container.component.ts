@@ -20,6 +20,6 @@ export class SocialContainerComponent implements OnInit {
         .network
         .explorer
         .address
-        .replace('${address}', config.contracts[Engine.RcnEngine].diaspore.loanManager);
+        .replace('${address}', config.contracts[Engine.UsdcEngine].diaspore.loanManager);
   }
 }
