@@ -74,7 +74,7 @@ export const chain = {
     chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     chainlink: {
       EACAggregatorProxy: {
-        chainCurrencyToUsd: '0xc771cfbba406728e7d2415490b31e3b0d5d8a503'
+        chainCurrencyToUsd: '0x2514895c72f50d8bd4b4f9b1110f0d6bd2c97526'
       },
       chainlinkAdapterV3: '0x774d446f17619c66d0feb5856f7a6bb93ac2b6c1'
     }
