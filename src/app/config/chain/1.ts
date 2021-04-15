@@ -82,7 +82,6 @@ export const chain = {
       chainlinkAdapterV3: '0x6126b98bc1d522835ea7bab4038af012d1aef98c'
     }
   },
-  blacklist: [],
   dir: {
     '0xfbd5e54062619ef2b0323ad9ff874b39fd5a8d2c': Agent.RipioArsCreator,
     '0x520aefcaea7754e86c2a1c9367948d732607c47f': Agent.RipioUsdCreator

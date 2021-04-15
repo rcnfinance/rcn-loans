@@ -81,21 +81,6 @@ export const chain = {
       chainlinkAdapterV3: '0x62e2d0a55f4d5f19546b32e0ecde19ef6d290962'
     }
   },
-  blacklist: [
-    {
-      key: 'oracle',
-      forbidden: [
-        '0x0ac18b74b5616fdeaeff809713d07ed1486d0128',
-        '0x4931d0621360187199de494a1469165079b31bfc'
-      ]
-    },
-    {
-      key: 'oracleUrl',
-      forbidden: [
-        'http://ec2-54-233-188-146.sa-east-1.compute.amazonaws.com/rate/'
-      ]
-    }
-  ],
   dir: {
     '0xf7c5e867e739f5508c63c8ab22f39c44b9cac0b5': Agent.RipioArsCreator,
     '0xf42d11a0aff8f9a56853e4c41ee333b57658d096': Agent.RipioArsCreator
