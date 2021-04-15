@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Utils } from 'app/utils/utils';
 import { Engine } from 'app/models/loan.model';
-import { AvailableChains } from 'app/interfaces/chain';
 // App Component
 import { Web3Service } from 'app/services/web3.service';
 import { ContractsService } from 'app/services/contracts.service';

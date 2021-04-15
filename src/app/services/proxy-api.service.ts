@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Engine } from 'app/models/loan.model';
 import { ApiResponse } from 'app/interfaces/api-response';
-import { AvailableChains } from 'app/interfaces/chain';
 import { ChainService } from 'app/services/chain.service';
 import { ApiService } from 'app/services/api.service';
 

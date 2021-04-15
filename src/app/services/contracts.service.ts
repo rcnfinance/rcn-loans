@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as BN from 'bn.js';
 import { Loan, LoanType, Engine, Oracle } from 'app/models/loan.model';
-import { AvailableChains } from 'app/interfaces/chain';
 import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
 import { LoanUtils } from 'app/utils/loan-utils';
 import { Web3Service } from 'app/services/web3.service';
