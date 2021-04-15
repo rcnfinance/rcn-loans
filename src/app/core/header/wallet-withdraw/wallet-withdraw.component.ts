@@ -73,6 +73,10 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
     private contractsService: ContractsService
   ) { }
 
+  get showRcnEngine() {
+    return this.chainService.isEthereum;
+  }
+
   ngOnInit() {
     this.subscriptionPopover =
       this.headerPopoverService.currentDetail.subscribe(detail => {
@@ -151,15 +155,19 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
    * total available
    */
   async loadWithdrawBalance() {
-    // rcn engine
-    const rcnPendingWithdraws = await this.contractsService.getPendingWithdraws(Engine.RcnEngine);
-    this.rcnAvailable = rcnPendingWithdraws[2] / 10 ** 18;
-    this.rcnLoansWithBalance = rcnPendingWithdraws[3];
+    const { isEthereum } = this.chainService;
 
     // usdc engine
     const usdcPendingWithdraws = await this.contractsService.getPendingWithdraws(Engine.UsdcEngine);
     this.usdcAvailable = usdcPendingWithdraws[2] / 10 ** 6;
     this.usdcLoansWithBalance = usdcPendingWithdraws[3];
+
+    // rcn engine
+    if (isEthereum) {
+      const rcnPendingWithdraws = await this.contractsService.getPendingWithdraws(Engine.RcnEngine);
+      this.rcnAvailable = rcnPendingWithdraws[2] / 10 ** 18;
+      this.rcnLoansWithBalance = rcnPendingWithdraws[3];
+    }
 
     this.loadOngoingWithdraw();
     this.updateDisplay();
@@ -169,15 +177,17 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
    * Load the pending withdraw
    */
   loadOngoingWithdraw() {
-    const { config } = this.chainService;
-    this.rcnOngoingWithdraw = this.txService.getLastWithdraw(
-      config.contracts[Engine.RcnEngine].diaspore.debtEngine,
-      this.rcnLoansWithBalance
-    );
+    const { config, isEthereum } = this.chainService;
     this.usdcOngoingWithdraw = this.txService.getLastWithdraw(
       config.contracts[Engine.UsdcEngine].diaspore.debtEngine,
       this.usdcLoansWithBalance
     );
+    if (isEthereum) {
+      this.rcnOngoingWithdraw = this.txService.getLastWithdraw(
+        config.contracts[Engine.RcnEngine].diaspore.debtEngine,
+        this.rcnLoansWithBalance
+      );
+    }
   }
 
   /**
@@ -210,6 +220,11 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
    * Withdraw diaspore funds
    */
   private async withdrawRcn() {
+    const { isEthereum } = this.chainService;
+    if (!isEthereum) {
+      return;
+    }
+
     if (this.rcnCanWithdraw) {
       if (this.rcnLoansWithBalance.length > 0) {
         const { config } = this.chainService;

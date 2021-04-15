@@ -1032,8 +1032,7 @@ export class ContractsService {
    * Build contracts using the current chain config
    */
   private buildContracts() {
-    const { config } = this.chainService;
-    const isEthereum = [AvailableChains.EthMainnet, AvailableChains.EthRopsten].includes(config.chain);
+    const { config, isEthereum } = this.chainService;
     const engines: Engine[] = isEthereum ? [...Object.values(Engine)] : [Engine.UsdcEngine];
 
     engines.map((engine) => {

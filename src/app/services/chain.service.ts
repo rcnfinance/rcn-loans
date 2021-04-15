@@ -42,6 +42,14 @@ export class ChainService {
   }
 
   /**
+   * Check if the current chain is Ethereum
+   */
+  get isEthereum() {
+    const { chain } = this;
+    return [AvailableChains.EthMainnet, AvailableChains.EthRopsten].includes(chain);
+  }
+
+  /**
    * Load the active (or default) chain
    * @param networkVersion Chain ID
    */

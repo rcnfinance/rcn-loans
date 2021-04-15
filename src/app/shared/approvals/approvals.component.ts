@@ -95,8 +95,7 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
   }
 
   get showRcnEngine() {
-    const { chain } = this.chainService;
-    return [AvailableChains.EthMainnet, AvailableChains.EthRopsten].includes(chain);
+    return this.chainService.isEthereum;
   }
 
   async ngOnInit() {

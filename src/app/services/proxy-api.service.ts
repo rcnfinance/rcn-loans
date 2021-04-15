@@ -16,14 +16,6 @@ export class ProxyApiService {
   ) { }
 
   /**
-   * Check if the current chain is Ethereum
-   */
-  get isEthereum() {
-    const { chain } = this.chainService;
-    return [AvailableChains.EthMainnet, AvailableChains.EthRopsten].includes(chain);
-  }
-
-  /**
    * Get all loans request that are open, not canceled or expired.
    * @param page Page
    * @param pageSize Items per page
@@ -32,7 +24,7 @@ export class ProxyApiService {
    * @return Loans array
    */
   async getRequests(page = 1, pageSize = 20, sort?: object, filters?: object): Promise<ApiResponse> {
-    const { isEthereum } = this;
+    const { isEthereum } = this.chainService;
     if (!isEthereum) {
       return await this.apiService.getRequests(Engine.UsdcEngine, page, pageSize, sort, filters).toPromise();
     }
@@ -59,7 +51,7 @@ export class ProxyApiService {
    * @return Loans array
    */
   async getBorrowed(account: string, page = 1, pageSize = 20, sort?: object): Promise<ApiResponse> {
-    const { isEthereum } = this;
+    const { isEthereum } = this.chainService;
     if (!isEthereum) {
       return await this.apiService.getBorrowed(Engine.UsdcEngine, account, page, pageSize, sort).toPromise();
     }
@@ -86,7 +78,7 @@ export class ProxyApiService {
    * @return Loans array
    */
   async getLent(account: string, page = 1, pageSize = 200, sort?: object): Promise<ApiResponse> {
-    const { isEthereum } = this;
+    const { isEthereum } = this.chainService;
     if (!isEthereum) {
       return await this.apiService.getLent(Engine.UsdcEngine, account, page, pageSize, sort).toPromise();
     }
@@ -113,7 +105,7 @@ export class ProxyApiService {
    * @return Loans array
    */
   async getAcvivity(page = 1, pageSize = 20, sort?: object, filters?: object): Promise<ApiResponse> {
-    const { isEthereum } = this;
+    const { isEthereum } = this.chainService;
     if (!isEthereum) {
       return await this.apiService.getAcvivity(Engine.UsdcEngine, page, pageSize, sort, filters).toPromise();
     }
@@ -149,7 +141,7 @@ export class ProxyApiService {
    * @return Last and current block
    */
   async getApiStatus(): Promise<{last_block: number, current_block: number}> {
-    const { isEthereum } = this;
+    const { isEthereum } = this.chainService;
     if (!isEthereum) {
       return await this.apiService.getApiStatus(Engine.UsdcEngine).toPromise();
     }
