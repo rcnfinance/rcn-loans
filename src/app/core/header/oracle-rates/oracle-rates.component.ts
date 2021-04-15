@@ -70,6 +70,7 @@ export class OracleRatesComponent implements OnInit {
    * Load pair rates
    */
   private async loadOracleRates() {
+    // TODO: review it for BSC
     const PAIR_RATES = {
       'ETH': ['ETH', 'USDC'],
       'RCN': ['RCN', 'BTC', 'ETH', 'USDC'],
