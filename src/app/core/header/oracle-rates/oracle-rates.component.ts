@@ -7,9 +7,10 @@ import {
   transition
 } from '@angular/animations';
 import { Subscription } from 'rxjs';
-import { Utils } from './../../../utils/utils';
-import { HeaderPopoverService } from './../../../services/header-popover.service';
-import { ContractsService } from './../../../services/contracts.service';
+import { Utils } from 'app/utils/utils';
+import { HeaderPopoverService } from 'app/services/header-popover.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { ChainService } from 'app/services/chain.service';
 
 @Component({
   selector: 'app-oracle-rates',
@@ -51,7 +52,8 @@ export class OracleRatesComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     private headerPopoverService: HeaderPopoverService,
-    private contractsService: ContractsService
+    private contractsService: ContractsService,
+    private chainService: ChainService
   ) { }
 
   ngOnInit() {
@@ -70,21 +72,15 @@ export class OracleRatesComponent implements OnInit {
    * Load pair rates
    */
   private async loadOracleRates() {
-    // TODO: review it for BSC
-    const PAIR_RATES = {
-      'ETH': ['ETH', 'USDC'],
-      'RCN': ['RCN', 'BTC', 'ETH', 'USDC'],
-      'ARS': ['ARS', 'BTC', 'ETH', 'USDC'],
-      'BTC': ['BTC', 'ETH', 'USDC']
-    };
+    const { chainlinkPairs } = this.chainService.config;
     const rateValues = {};
     const rates = [];
 
     // load rate values
     await Promise.all(
-      Object.keys(PAIR_RATES).map(async (pair) => {
+      Object.keys(chainlinkPairs).map(async (pair) => {
         const { combinedRate, decimals } =
-          await this.contractsService.getPairRate(PAIR_RATES[pair]);
+          await this.contractsService.getPairRate(chainlinkPairs[pair]);
         const rawValue = combinedRate / (10 ** decimals);
         const value = Utils.formatAmount(rawValue, 4);
         rateValues[pair] = value;
@@ -93,7 +89,7 @@ export class OracleRatesComponent implements OnInit {
     );
 
     // load rate iterable objects
-    Object.keys(PAIR_RATES).map((pair) => {
+    Object.keys(chainlinkPairs).map((pair) => {
       const currency = pair;
       const value = rateValues[pair];
       rates.push({ currency, value });

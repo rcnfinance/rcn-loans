@@ -83,6 +83,12 @@ export const chain = {
     '0xf7c5e867e739f5508c63c8ab22f39c44b9cac0b5': Agent.RipioArsCreator,
     '0xf42d11a0aff8f9a56853e4c41ee333b57658d096': Agent.RipioArsCreator
   },
+  chainlinkPairs: {
+    'ETH': ['ETH', 'USD', 'USDC'],
+    'BNB': ['BNB', 'USD', 'USDC'],
+    'ARS': ['ARS', 'BTC', 'USD', 'USDC'],
+    'BTC': ['BTC', 'USD', 'USDC']
+  },
   filterCurrencies: [
     'ARS',
     'USD'
