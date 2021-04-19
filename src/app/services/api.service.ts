@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'environments/environment';
 import { Engine } from 'app/models/loan.model';
 import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
 import { PohApi } from 'app/interfaces/poh-api';
@@ -163,8 +164,7 @@ export class ApiService {
    * @return Last and current block
    */
   getAddressPoh(address: string): Observable<PohApi> {
-    const { config } = this.chainService;
-    const apiBase: string = config.api[Engine.RcnEngine]['v6'];
+    const { host: apiBase } = environment.api.poh;
     const uri = `profile/${address}`;
     return this.http.post<PohApi>(apiBase.concat(uri), null);
   }
