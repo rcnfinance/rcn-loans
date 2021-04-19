@@ -11,6 +11,7 @@ export class DialogChainSelectorComponent implements OnInit {
     id: number;
     fullname: string;
     image: string;
+    website: string;
   }[];
 
   constructor(
@@ -24,8 +25,8 @@ export class DialogChainSelectorComponent implements OnInit {
     chains.map((chainId) => {
       const { network } = this.chainService.getChainConfigById(chainId);
       const { id } = network;
-      const { fullname, image } = network.ui;
-      chainsData.push({ id, fullname, image });
+      const { fullname, image, website } = network.ui;
+      chainsData.push({ id, fullname, image, website });
     });
 
     this.chains = chainsData;

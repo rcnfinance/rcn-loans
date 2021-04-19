@@ -13,7 +13,8 @@ export const chain = {
     ui: {
       name: 'Binance',
       fullname: 'Binance Smart Chain Testnet',
-      image: 'assets/chain-binance.svg'
+      image: 'assets/chain-binance.svg',
+      website: 'https://academy.binance.com/en/articles/how-to-get-started-with-binance-smart-chain-bsc'
     },
     explorer: {
       address: 'https://testnet.bscscan.com/address/${address}',

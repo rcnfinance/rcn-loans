@@ -16,7 +16,8 @@ export const chain = {
     ui: {
       name: 'Ethereum',
       fullname: 'Ethereum Mainnet',
-      image: 'assets/chain-ethereum.svg'
+      image: 'assets/chain-ethereum.svg',
+      website: 'https://ethereum.org/en/'
     },
     explorer: {
       address: 'https://etherscan.io/address/${address}',

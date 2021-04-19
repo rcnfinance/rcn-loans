@@ -9,10 +9,10 @@
         margin-bottom: 12px;
         &__image {
           height: 18px;
-          margin-right: 5px;
+          margin-right: 11px;
         }
         &__name {
-          @include typography-headline(7);
+          @include typography-body(2);
           line-height: 24px;
         }
         &:last-child {

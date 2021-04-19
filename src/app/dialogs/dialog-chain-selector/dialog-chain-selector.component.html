@@ -17,10 +17,12 @@
           balances, loans and settings will vary between different networks.
         </p>
         <div class="dialog__content-chains">
-          <div
+          <a
             *ngFor="let chain of chains"
             class="chain d-flex align-items-center"
             [class.chain--active]="chain.id === currentChain"
+            [href]="chain.website"
+            target="_blank"
           >
             <img
               [src]="chain.image"
@@ -30,7 +32,7 @@
             <span class="chain__name">
               {{ chain.fullname }}
             </span>
-          </div>
+          </a>
         </div>
         <div class="dialog__content-actions mt-5 mt-md-4">
           <button

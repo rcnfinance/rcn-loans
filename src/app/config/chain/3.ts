@@ -15,7 +15,8 @@ export const chain = {
     ui: {
       name: 'Ropsten',
       fullname: 'Ethereum Ropsten',
-      image: 'assets/chain-ethereum.svg'
+      image: 'assets/chain-ethereum.svg',
+      website: 'https://ethereum.org/en/'
     },
     explorer: {
       address: 'https://ropsten.etherscan.io/address/${address}',
