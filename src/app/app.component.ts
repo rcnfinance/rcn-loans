@@ -91,9 +91,7 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    const GET_STARTED_URL = 'https://academy.binance.com/en/articles/connecting-metamask-to-binance-smart-chain';
-    // FIXME: that's ok?
-
+    const GET_STARTED_URL = 'https://academy.binance.com/en/articles/how-to-get-started-with-binance-smart-chain-bsc';
     this.applicationAdsService.toggleService({
       title: 'TIRED OF HIGH FEES?',
       description: `Enjoy lending and borrowing with low transaction costs on the new Binance Smart Chain (BSC)-powered Credit Marketplace! Get started <strong><a href="${GET_STARTED_URL}" target="_blank">here</a></strong>!`,
