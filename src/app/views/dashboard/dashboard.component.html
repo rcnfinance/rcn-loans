@@ -11,7 +11,24 @@
       </app-page-header>
     </div>
     <div class="dashboard">
-      <p class="dashboard__title">MY LOANS</p>
+      <div class="row">
+        <div class="col-md-9">
+          <p class="dashboard__title">MY LOANS</p>
+        </div>
+        <div class="col-md-3">
+          <p class="dashboard__link">SEE OLD LOANS <i class="fas fa-plus-circle"></i></p>
+        </div>
+      </div>
+      <div class="dashboard__content">
+        <div class="row">
+          <div class="col-md-6">
+            <app-dashboard-list title="CURRENT BORROWED"></app-dashboard-list>
+          </div>
+          <div class="col-md-6">
+            <app-dashboard-list title="CURRENT LENT"></app-dashboard-list>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <app-footer></app-footer>

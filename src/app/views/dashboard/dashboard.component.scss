@@ -13,8 +13,21 @@
     background-color: #212124;
     padding: 21px 25px;
     &__title {
-      @include styled-font('proxima-nova', 800, 18px);
+      @include styled-font('proxima-nova', 600, 18px);
+    }
+    &__link {
+      @include styled-font('proxima-nova', 800, 11px);
+      color: #7684FF;
+      margin-top: 4px;
+      cursor: pointer;
+      text-align: right;
+      svg {
+        margin-left: 4px;
+      }
+    }
+    &__content {
+      margin-top: 30px;
+      text-align: center;
     }
   }
-
 }

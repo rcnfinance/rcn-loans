@@ -60,6 +60,8 @@ import { IdentityService } from './../services/identity.service';
 import { CountriesService } from './../services/countries.service';
 import { CollateralService } from './../services/collateral.service';
 import { EventsService } from './../services/events.service';
+import { DashboardListComponent } from './dashboard-list/dashboard-list.component';
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 
 @NgModule({
   imports: [
@@ -115,7 +117,9 @@ import { EventsService } from './../services/events.service';
 
     VisualUrlPipe,
     FormatAmountPipe,
-    FormatAddressPipe
+    FormatAddressPipe,
+    DashboardListComponent,
+    ProgressBarComponent
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,
@@ -149,6 +153,8 @@ import { EventsService } from './../services/events.service';
     DialogHeaderComponent,
     LendButtonComponent,
     DetailButtonComponent,
+    DashboardListComponent,
+    ProgressBarComponent,
     PayButtonComponent,
     CloseButtonComponent,
     RedeemButtonComponent,
