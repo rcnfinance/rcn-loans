@@ -1,7 +1,6 @@
 import { Agent } from 'environments/environment';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
-const RCN_ENGINE = 'rcnEngine';
 const USDC_ENGINE = 'usdcEngine';
 const USDC_TOKEN = '0x46f348579e2b93f65fbd0636ad9cee504fcf1e1c';
 
@@ -26,33 +25,11 @@ export const chain = {
     }
   },
   api: {
-    [RCN_ENGINE]: {
-      v6: ''
-    },
     [USDC_ENGINE]: {
       v6: `https://bsc-testnet.rcn.loans/`
     }
   },
   contracts: {
-    [RCN_ENGINE]: {
-      token: '',
-      oracleFactory: '',
-      diaspore: {
-        debtEngine: '',
-        loanManager: ''
-      },
-      collateral: {
-        collateral: '',
-        wethManager: ''
-      },
-      converter: {
-        converterRamp: '',
-        uniswapConverter: ''
-      },
-      models: {
-        installments: ''
-      }
-    },
     [USDC_ENGINE]: {
       token: USDC_TOKEN,
       oracleFactory: '0xbb6dd5143d07ae9e8b766566f2c496394de051bf',
