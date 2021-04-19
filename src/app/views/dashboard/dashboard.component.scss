@@ -1,0 +1,20 @@
+@import 'src/scss/fonts';
+
+@media (min-width: 768px) {
+}
+
+@media (min-width: 992px) {
+
+  .page-header {
+    margin-bottom: 30px;
+  }
+
+  .dashboard {
+    background-color: #212124;
+    padding: 21px 25px;
+    &__title {
+      @include styled-font('proxima-nova', 800, 18px);
+    }
+  }
+
+}

@@ -1,0 +1,18 @@
+<div
+  class="body-scrollable requested-wrapper"
+  [ngClass]="{ active: filtersOpen, disabled: filtersOpen === false }"
+>
+  <div class="container">
+    <div class="page-header">
+      <app-page-header
+        title="MY DASHBOARD"
+        description="Check all your loans status and operations."
+      >
+      </app-page-header>
+    </div>
+    <div class="dashboard">
+      <p class="dashboard__title">MY LOANS</p>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>
