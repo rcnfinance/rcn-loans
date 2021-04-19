@@ -2,8 +2,6 @@ import { Agent } from 'environments/environment';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
-const RCN_ENGINE = 'rcnEngine';
-const RCN_TOKEN = '0x2f45b6fb2f28a73f110400386da31044b2e953d4';
 const USDC_ENGINE = 'usdcEngine';
 const USDC_TOKEN = '0x99c1c36dee5c3b62723dc4223f4352bbf1da0bff';
 
@@ -28,9 +26,6 @@ export const chain = {
     }
   },
   api: {
-    [RCN_ENGINE]: {
-      v6: `https://old-api-ropsten-diaspore.rcn.loans/`
-    },
     [USDC_ENGINE]: {
       v6: `https://new-api-ropsten-diaspore-usdc.rcn.loans/`
     }
@@ -84,7 +79,7 @@ export const chain = {
     {
       symbol: 'RCN',
       img: 'assets/rcn.png',
-      address: RCN_TOKEN
+      address: '0x2f45b6fb2f28a73f110400386da31044b2e953d4'
     },
     {
       symbol: 'DEST',
