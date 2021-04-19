@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, NavigationEnd, Event } from '@angular/router';
+import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material';
 import { Loan } from 'app/models/loan.model';
 import { Status } from 'app/models/collateral.model';
@@ -27,11 +28,13 @@ export class ContentWrapperComponent implements OnInit {
   account: string;
   lendEnabled: Boolean;
   showAd: Ad;
+  showedAd: boolean;
   needWithdraw: boolean;
 
   constructor(
     public dialog: MatDialog,
     private router: Router,
+    private location: Location,
     private proxyApiService: ProxyApiService,
     private applicationAdsService: ApplicationAdsService,
     private web3Service: Web3Service,
@@ -53,6 +56,8 @@ export class ContentWrapperComponent implements OnInit {
     await this.loadAccount();
     this.checkPendingWithdraw();
     this.canLend();
+    this.checkIfIsHome();
+    this.loadBscAd();
     this.listenRouterEvents();
   }
 
@@ -115,9 +120,44 @@ export class ContentWrapperComponent implements OnInit {
   private listenRouterEvents() {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
-        const { url } = event;
-        this.isHome = url === '/';
+        this.checkIfIsHome(event.url);
+        this.loadBscAd();
       }
+    });
+  }
+
+  /**
+   * Check if current (or passed) URL is equal to the home URL
+   * @param usableUrl URL to use (by default it takes the location path)
+   */
+  private checkIfIsHome(usableUrl?: string) {
+    const HOME_URL = '/';
+
+    if (usableUrl) {
+      this.isHome = usableUrl === HOME_URL;
+      return;
+    }
+
+    this.isHome = this.location.isCurrentPathEqualTo(HOME_URL);
+  }
+
+  /**
+   * Show BSC Tooltip
+   */
+  private loadBscAd() {
+    const { isEthereum } = this.chainService;
+    const { showedAd, isHome } = this;
+    if (!isEthereum || showedAd || isHome) {
+      return;
+    }
+
+    const GET_STARTED_URL = 'https://academy.binance.com/en/articles/how-to-get-started-with-binance-smart-chain-bsc';
+    this.showedAd = true;
+
+    this.applicationAdsService.toggleService({
+      title: 'TIRED OF HIGH FEES?',
+      description: `Enjoy lending and borrowing with low transaction costs on the new Binance Smart Chain (BSC)-powered Credit Marketplace! Get started <strong><a href="${GET_STARTED_URL}" target="_blank">here</a></strong>!`,
+      image: 'assets/bnb-big.png'
     });
   }
 }

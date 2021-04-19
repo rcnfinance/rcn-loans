@@ -4,10 +4,8 @@ import { MatDialog } from '@angular/material';
 import { environment } from '../environments/environment';
 // App services
 import { ProxyApiService } from './services/proxy-api.service';
-import { ChainService } from './services/chain.service';
 import { EventsService } from './services/events.service';
 import { WalletConnectService } from './services/wallet-connect.service';
-import { ApplicationAdsService } from './services/application-ads.service';
 // App component
 import { DialogWalletSelectComponent } from './dialogs/dialog-wallet-select/dialog-wallet-select.component';
 import { DialogApiSyncComponent } from './dialogs/dialog-api-sync/dialog-api-sync.component';
@@ -23,18 +21,14 @@ export class AppComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private proxyApiService: ProxyApiService,
-    private chainService: ChainService,
     private eventsService: EventsService,
-    private walletConnectService: WalletConnectService,
-    private applicationAdsService: ApplicationAdsService
+    private walletConnectService: WalletConnectService
   ) {}
 
   async ngOnInit() {
     this.setupGoogleAnalytics();
     this.listenWalletConnect();
     await this.checkApiHealth();
-
-    this.loadBscAd();
   }
 
   /**
@@ -80,22 +74,5 @@ export class AppComponent implements OnInit {
     if (!isSynchronized) {
       this.dialog.open(DialogApiSyncComponent);
     }
-  }
-
-  /**
-   * Show BSC Tooltip
-   */
-  private loadBscAd() {
-    const { isEthereum } = this.chainService;
-    if (!isEthereum) {
-      return;
-    }
-
-    const GET_STARTED_URL = 'https://academy.binance.com/en/articles/how-to-get-started-with-binance-smart-chain-bsc';
-    this.applicationAdsService.toggleService({
-      title: 'TIRED OF HIGH FEES?',
-      description: `Enjoy lending and borrowing with low transaction costs on the new Binance Smart Chain (BSC)-powered Credit Marketplace! Get started <strong><a href="${GET_STARTED_URL}" target="_blank">here</a></strong>!`,
-      image: 'assets/bnb-big.png'
-    });
   }
 }
