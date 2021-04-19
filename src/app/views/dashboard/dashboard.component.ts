@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private proxyApiService: ProxyApiService,
     private titleService: TitleService,
     private eventsService: EventsService,
-    private loanTypeService: LoanTypeService,
+    private loanTypeService: LoanTypeService
   ) { }
 
   ngOnInit() {
@@ -105,7 +105,4 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isLoading = loading;
   }
 
-  private get loading() {
-    return this.isLoading;
-  }
 }
