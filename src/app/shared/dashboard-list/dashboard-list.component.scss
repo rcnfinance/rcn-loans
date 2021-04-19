@@ -1,0 +1,52 @@
+@import 'src/scss/fonts';
+
+@media (min-width: 768px) {
+}
+
+@media (min-width: 992px) {
+
+  .list {
+      &__header {
+          text-align: center;
+          background-color: #262629;
+          border-radius: 5px;
+          padding: 13px 5px 15px;
+          &__title {
+            @include styled-font('proxima-nova', 700, 14px);
+            margin-bottom: 15px;
+          }
+          &__table p{
+            width: 20%;
+            display: inline-block;
+            color: #A09F9F;
+            @include styled-font('proxima-nova', 1000, 11px);
+          }
+      }
+      &__item {
+          margin-top: 10px;
+          background-color: #313134;
+          box-shadow: 0px 3px 6px #00000029;
+          border-radius: 5px;
+          height: 65px;
+          border-left: 6px solid #4155FF;
+          &__column {
+            @include styled-font('Roboto', 400, 15px);
+            display: inline-block;
+            width: 20%;
+            margin-top: 22px;
+            &__progress {
+                padding: 0 10px;
+            }
+            &__payment {
+                padding-left: 15px;
+            }
+            svg {
+                color: #A09F9F;
+                font-size: 22px;
+                cursor: pointer;
+            }
+          }
+      }
+  }
+
+}

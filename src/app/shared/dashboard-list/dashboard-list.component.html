@@ -1,0 +1,28 @@
+<div class="list">
+    <div class="list__header">
+        <p class="list__header__title">
+            {{ title }}
+        </p>
+        <div class="list__header__table">
+            <p>Borrowed</p>
+            <p>Repaid</p>
+            <p>Anual Rate</p>
+            <p>Time Progress</p>
+            <p>Payment Progress</p>
+        </div>
+    </div>
+    <div class="list__item">
+        <div class="list__item__column">8,000 ARS</div>
+        <div class="list__item__column">8,466.67</div>
+        <div class="list__item__column">70.00%</div>
+        <div class="list__item__column list__item__column__progress">
+            <app-progress-bar progress="50%" subprogress="70%"></app-progress-bar>
+        </div>
+        <div class="list__item__column list__item__column__payment">
+            <div class="row">
+                <div class="col-6">0%</div>
+                <div class="col-2"><i class="fas fa-ellipsis-v"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
