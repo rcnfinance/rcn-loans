@@ -36,25 +36,6 @@ export const chain = {
     }
   },
   contracts: {
-    [RCN_ENGINE]: {
-      token: RCN_TOKEN,
-      oracleFactory: '0x9778acc25e8355ddcd7f5c23ca259a5eafffbd29',
-      diaspore: {
-        debtEngine: '0xb2403dca04ab49492e1e05b29f26e6c01ac5d604',
-        loanManager: '0x39e67f667ed83c8a2db0b18189fe93f57081b9ae'
-      },
-      collateral: {
-        collateral: '0xe4fb51318cd67bfc48f294e46eb18ec0b5b2674c',
-        wethManager: '0xFcbFD18D28ff0FfB311e2dE179F3758531128449'
-      },
-      converter: {
-        converterRamp: '0x9ce962dfaa5cefcbe298c5a469487cead3a0640d',
-        uniswapConverter: '0x32657d6f2dcb32a5129d14db4a2e2e6fb198ce07'
-      },
-      models: {
-        installments: '0x41e9d0b6a8ce88989c2e7b3cae42ecfac44c9603'
-      }
-    },
     [USDC_ENGINE]: {
       token: USDC_TOKEN,
       oracleFactory: '0x8c6ec1b870a15f6156ba44841939ea4ed0f480fd',
