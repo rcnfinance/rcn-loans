@@ -132,13 +132,9 @@ export class ContentWrapperComponent implements OnInit {
    */
   private checkIfIsHome(usableUrl?: string) {
     const HOME_URL = '/';
-
-    if (usableUrl) {
-      this.isHome = usableUrl === HOME_URL;
-      return;
-    }
-
-    this.isHome = this.location.isCurrentPathEqualTo(HOME_URL);
+    this.isHome = usableUrl ?
+      usableUrl === HOME_URL :
+      this.location.isCurrentPathEqualTo(HOME_URL);
   }
 
   /**
