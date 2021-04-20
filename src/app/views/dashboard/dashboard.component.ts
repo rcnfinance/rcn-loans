@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Loan } from '../../models/loan.model';
 import { LoanContentApi } from '../../interfaces/loan-api-diaspore';
 import { LoanUtils } from '../../utils/loan-utils';
 import { ProxyApiService } from '../../services/proxy-api.service';
 import { EventsService } from '../../services/events.service';
 import { TitleService } from '../../services/title.service';
+import { Web3Service } from '../../services/web3.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,24 +36,42 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // filters component
   filtersOpen: boolean;
   isCurrentLoans = true;
+  private subscriptionAccount: Subscription;
 
   constructor(
     private proxyApiService: ProxyApiService,
     private titleService: TitleService,
-    private eventsService: EventsService
+    private eventsService: EventsService,
+    private web3Service: Web3Service
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.titleService.changeTitle('Dashboard');
+    await this.loadAccount();
+    this.handleLoginEvents();
     this.loadLoans();
   }
 
   ngOnDestroy() {
     this.loading = false;
+    this.subscriptionAccount.unsubscribe();
   }
 
+  /**
+   * Change status of active and inactive loans
+   * @param isCurrentLoans boolean
+   * @return Status active or inactive loans
+   */
   setCurrentLoans(isCurrentLoans: boolean) {
     this.isCurrentLoans = isCurrentLoans;
+  }
+
+  /**
+   * Load user account
+   */
+  private async loadAccount() {
+    const account = await this.web3Service.getAccount();
+    this.address = account;
   }
 
   /**
@@ -104,6 +124,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private set loading(loading: boolean) {
     this.isLoading = loading;
+  }
+
+  /**
+   * Listen and handle login events for account changes and logout
+   */
+  private handleLoginEvents() {
+    this.subscriptionAccount = this
+      .web3Service
+      .loginEvent
+      .subscribe((_: boolean) => {
+        this.loadAccount();
+      });
   }
 
 }

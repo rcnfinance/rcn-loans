@@ -11,7 +11,7 @@ const routes: Routes = [
     loadChildren: () => import('./views/active-loans/active-loans.module').then(m => m.ActiveLoansModule)
   },
   {
-    path: 'dashboard/:address',
+    path: 'dashboard',
     loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
   },
   {

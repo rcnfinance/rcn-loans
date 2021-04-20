@@ -13,11 +13,11 @@
     <div class="dashboard">
       <div class="row">
         <div class="col-md-9">
-          <p class="dashboard__title">MY LOANS</p>
+          <p class="dashboard__title">LOANS</p>
         </div>
         <div class="col-md-3">
-          <p *ngIf="isCurrentLoans" (click)="setCurrentLoans(false)" class="dashboard__link">SEE OLD LOANS <i class="fas fa-plus-circle"></i></p>
-          <p *ngIf="!isCurrentLoans" (click)="setCurrentLoans(true)" class="dashboard__link">SEE CURRENT LOANS <i class="fas fa-plus-circle"></i></p>
+          <p *ngIf="isCurrentLoans" (click)="setCurrentLoans(false)" class="dashboard__link">INACTIVES <i class="fas fa-plus-circle"></i></p>
+          <p *ngIf="!isCurrentLoans" (click)="setCurrentLoans(true)" class="dashboard__link">ACTIVES <i class="fas fa-plus-circle"></i></p>
         </div>
       </div>
       <div class="dashboard__content">
