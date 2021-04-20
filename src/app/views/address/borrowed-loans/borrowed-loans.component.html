@@ -20,18 +20,13 @@
         (sort)="sortLoans($event)"
       ></app-loan-list-header>
 
-      <ng-container *ngIf="loans?.length === 0; else loansTemplate">
+      <ng-container *ngIf="loans?.length === 0 && !isLoading; else loansTemplate">
         <app-empty-state
-          *ngIf="!isLoading"
           title="Hmm, it seems like you haven't requested any loans yet."
           description='If you want to become a borrower, check the <a href="/borrow">Borrow Section</a>.'
           image="./assets/empty-states/borrow.svg"
         >
         </app-empty-state>
-        <app-loan-list-skeleton
-          *ngIf="isLoading"
-          items="20"
-        ></app-loan-list-skeleton>
       </ng-container>
 
       <ng-template #loansTemplate>
@@ -46,6 +41,10 @@
             <app-loan-list [loan]="loan" [backgroundLighter]="loan.position % 2">
             </app-loan-list>
           </div>
+          <app-loan-list-skeleton
+            *ngIf="isLoading"
+            items="20"
+          ></app-loan-list-skeleton>
         </virtual-scroller>
       </ng-template>
 

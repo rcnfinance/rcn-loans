@@ -30,24 +30,20 @@
         view="requested-loans"
         (sort)="sortLoans($event)"
       ></app-loan-list-header>
-      <ng-container *ngIf="loans?.length === 0; else loansTemplate">
+      <ng-container *ngIf="loans?.length === 0 && !isLoading; else loansTemplate">
         <app-empty-state
-          *ngIf="!isLoading && isAvailableLoans"
+          *ngIf="isAvailableLoans"
           title="Sorry! There are no loans matching your search. Please try using different filters."
           image="./assets/empty-states/results.svg"
         >
         </app-empty-state>
         <app-empty-state
-          *ngIf="!isLoading && !isAvailableLoans"
+          *ngIf="!isAvailableLoans"
           title="Stay tuned! More loans are on their way."
           description='Meanwhile you can join the <a href="https://t.me/RCNchat" target="_blank">community</a> to get alerts every time they arrive!'
           image="./assets/empty-states/results.svg"
         >
         </app-empty-state>
-        <app-loan-list-skeleton
-          *ngIf="isLoading"
-          items="20"
-        ></app-loan-list-skeleton>
       </ng-container>
       <ng-template #loansTemplate>
         <virtual-scroller
@@ -61,6 +57,10 @@
             <app-loan-list [loan]="loan" [backgroundLighter]="loan.position % 2">
             </app-loan-list>
           </div>
+          <app-loan-list-skeleton
+            *ngIf="isLoading"
+            items="20"
+          ></app-loan-list-skeleton>
         </virtual-scroller>
       </ng-template>
     </div>
