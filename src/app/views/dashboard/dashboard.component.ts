@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Loan, LoanType } from '../../models/loan.model';
+import { Loan } from '../../models/loan.model';
 import { LoanContentApi } from '../../interfaces/loan-api-diaspore';
 import { LoanUtils } from '../../utils/loan-utils';
 import { ProxyApiService } from '../../services/proxy-api.service';
 import { EventsService } from '../../services/events.service';
 import { TitleService } from '../../services/title.service';
-import { LoanTypeService } from '../../services/loan-type.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,6 +13,8 @@ import { LoanTypeService } from '../../services/loan-type.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   pageId = 'active-loans';
+  address = '0x6b800281ca137fE073c662e34440420E91F43DeB';
+  // FIXME: Change var dynamic
   loans = [];
   // pagination
   page = 1;
@@ -32,12 +33,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isAvailableLoans = true;
   // filters component
   filtersOpen: boolean;
+  isCurrentLoans = true;
 
   constructor(
     private proxyApiService: ProxyApiService,
     private titleService: TitleService,
-    private eventsService: EventsService,
-    private loanTypeService: LoanTypeService
+    private eventsService: EventsService
   ) { }
 
   ngOnInit() {
@@ -49,6 +50,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.loading = false;
   }
 
+  setCurrentLoans(isCurrentLoans: boolean) {
+    this.isCurrentLoans = isCurrentLoans;
+  }
+
   /**
    * Load active loans
    * @param page Page
@@ -56,21 +61,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @return Loans
    */
   private async loadLoans(
+    address: string = this.address,
     page: number = this.page,
     sort: object = this.sort,
-    filters: object = this.filters,
     currentLoadedLoans = 0
   ) {
     this.loading = true;
 
     try {
-      const PAGE_SIZE = 20;
-      const { content, meta } = await this.proxyApiService.getRequests(page, PAGE_SIZE, sort, filters);
-      this.count = meta.count;
-
+      const PAGE_SIZE = 4;
+      const { content } = await this.proxyApiService.getBorrowed(address, page, PAGE_SIZE, sort);
       const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
-      const ALLOWED_TYPES = [LoanType.UnknownWithCollateral, LoanType.FintechOriginator, LoanType.NftCollateral];
-      const filteredLoans: Loan[] = this.loanTypeService.filterLoanByType(loans, ALLOWED_TYPES);
 
       // if there are no more loans
       if (!loans.length) {
@@ -79,20 +80,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
 
       // set loan index as positions
-      filteredLoans.map((loan: Loan, i: number) => loan.position = i);
+      loans.map((loan: Loan, i: number) => loan.position = i);
 
       // if there are more loans add them and continue
       if (loans.length) {
-        this.loans = this.loans.concat(filteredLoans);
+        this.loans = this.loans.concat(loans);
         this.page++;
       }
 
       // incrase current paginator results
-      currentLoadedLoans = currentLoadedLoans + filteredLoans.length;
+      currentLoadedLoans = currentLoadedLoans + loans.length;
 
-      const MINIMUN_LOANS_TO_SHOW = 12;
+      const MINIMUN_LOANS_TO_SHOW = 4;
       if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
-        await this.loadLoans(this.page, this.sort, this.filters, currentLoadedLoans);
+        await this.loadLoans(this.address, this.page, this.sort, currentLoadedLoans);
       }
     } catch (err) {
       this.eventsService.trackError(err);

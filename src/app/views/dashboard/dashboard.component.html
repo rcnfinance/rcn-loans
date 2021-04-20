@@ -16,16 +16,17 @@
           <p class="dashboard__title">MY LOANS</p>
         </div>
         <div class="col-md-3">
-          <p class="dashboard__link">SEE OLD LOANS <i class="fas fa-plus-circle"></i></p>
+          <p *ngIf="isCurrentLoans" (click)="setCurrentLoans(false)" class="dashboard__link">SEE OLD LOANS <i class="fas fa-plus-circle"></i></p>
+          <p *ngIf="!isCurrentLoans" (click)="setCurrentLoans(true)" class="dashboard__link">SEE CURRENT LOANS <i class="fas fa-plus-circle"></i></p>
         </div>
       </div>
       <div class="dashboard__content">
         <div class="row">
-          <div class="col-md-6">
-            <app-dashboard-list title="CURRENT BORROWED"></app-dashboard-list>
+          <div *ngIf="!isLoading" class="col-md-6">
+            <app-dashboard-list [isCurrentLoans]="isCurrentLoans" [loans]="loans" [showOptions]="true" title="CURRENT BORROWED"></app-dashboard-list>
           </div>
-          <div class="col-md-6">
-            <app-dashboard-list title="CURRENT LENT"></app-dashboard-list>
+          <div *ngIf="!isLoading" class="col-md-6">
+            <app-dashboard-list [isCurrentLoans]="isCurrentLoans" [loans]="[]" [showOptions]="false" title="CURRENT LENT"></app-dashboard-list>
           </div>
         </div>
       </div>

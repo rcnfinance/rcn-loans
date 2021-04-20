@@ -11,18 +11,44 @@
             <p>Payment Progress</p>
         </div>
     </div>
-    <div class="list__item">
-        <div class="list__item__column">8,000 ARS</div>
-        <div class="list__item__column">8,466.67</div>
-        <div class="list__item__column">70.00%</div>
-        <div class="list__item__column list__item__column__progress">
-            <app-progress-bar progress="50%" subprogress="70%"></app-progress-bar>
-        </div>
-        <div class="list__item__column list__item__column__payment">
-            <div class="row">
-                <div class="col-6">0%</div>
-                <div class="col-2"><i class="fas fa-ellipsis-v"></i></div>
+    <div class="list__item-container" *ngIf="loans.length">
+        <div *ngFor="let loan of loans" class="list__item">
+            <div class="list__item__column">8,000 ARS</div>
+            <div class="list__item__column">8,466.67</div>
+            <div class="list__item__column">70.00%</div>
+            <div class="list__item__column list__item__column__progress">
+                <app-progress-bar progress="50%" subprogress="70%"></app-progress-bar>
+            </div>
+            <div class="list__item__column list__item__column__payment">
+                <div class="row">
+                    <div class="col-6">0%</div>
+                    <div *ngIf="showOptions" class="col-2">
+                        <button mat-icon-button [matMenuTriggerFor]="appMenu">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                    <mat-menu #appMenu="matMenu" yPosition="below">
+                        <button class="list__item__button--separator" mat-menu-item>Pay</button>
+                        <button mat-menu-item>Withdraw Collateral</button>
+                        <button mat-menu-item>Add Collateral</button>
+                    </mat-menu>
+                </div>
             </div>
         </div>
     </div>
+    <ng-container *ngIf="!loans.length">
+        <div class="list__empty-state row justify-content-md-center">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="./assets/empty-states/lent.svg" alt="Not Found Lend">
+                    </div>
+                    <div class="col-md-9">
+                        <p class="list__empty-state__title">Hey! You don´t have any funded loans yet.</p>
+                        <p class="list__empty-state__subtitle">If you want to start lending, check the Lend section.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
 </div>

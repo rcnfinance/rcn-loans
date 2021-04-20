@@ -39,6 +39,10 @@
             }
             &__payment {
                 padding-left: 15px;
+                button {
+                    top: -10px;
+                    left: -10px;
+                }
             }
             svg {
                 color: #A09F9F;
@@ -46,6 +50,25 @@
                 cursor: pointer;
             }
           }
+          &__button--separator {
+              border-bottom: 1px solid #6a6a6b;
+          }
+      }
+      &__empty-state {
+          margin-top: 140px;
+          text-align: left;
+          &__title {
+            margin-top: 10px;
+            @include styled-font('proxima-nova', 400, 18px);
+          }
+          &__subtitle {
+            @include styled-font('proxima-nova', 400, 12px);
+            margin-top: 16px;
+          }
+      }
+      &__item-container {
+          overflow: scroll;
+          height: 405px;
       }
   }
 

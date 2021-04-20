@@ -12,6 +12,7 @@
   .dashboard {
     background-color: #212124;
     padding: 21px 25px;
+    height: 550px;
     &__title {
       @include styled-font('proxima-nova', 600, 18px);
     }

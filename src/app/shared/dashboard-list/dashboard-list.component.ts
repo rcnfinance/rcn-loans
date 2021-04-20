@@ -8,6 +8,9 @@ import { Component, Input, OnInit } from '@angular/core';
 export class DashboardListComponent implements OnInit {
 
   @Input() title: string;
+  @Input() isCurrentLoans: boolean;
+  @Input() showOptions: boolean;
+  @Input() loans: [];
 
   constructor() { }
 
