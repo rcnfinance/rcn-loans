@@ -37,18 +37,8 @@
         </div>
     </div>
     <ng-container *ngIf="!loans.length">
-        <div class="list__empty-state row justify-content-md-center">
-            <div class="col-md-10">
-                <div class="row">
-                    <div class="col-md-3">
-                        <img src="./assets/empty-states/lent.svg" alt="Not Found Lend">
-                    </div>
-                    <div class="col-md-9">
-                        <p class="list__empty-state__title">Hey! You don´t have any funded loans yet.</p>
-                        <p class="list__empty-state__subtitle">If you want to start lending, check the Lend section.</p>
-                    </div>
-                </div>
-            </div>
+        <div class="list__empty-state">
+            <app-empty-state title="Hey! You don´t have any funded loans yet." image="./assets/empty-states/lent.svg" description="If you want to start lending, check the Lend section."></app-empty-state>
         </div>
     </ng-container>
 </div>

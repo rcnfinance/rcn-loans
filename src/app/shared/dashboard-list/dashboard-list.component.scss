@@ -55,16 +55,7 @@
           }
       }
       &__empty-state {
-          margin-top: 140px;
-          text-align: left;
-          &__title {
-            margin-top: 10px;
-            @include styled-font('proxima-nova', 400, 18px);
-          }
-          &__subtitle {
-            @include styled-font('proxima-nova', 400, 12px);
-            margin-top: 16px;
-          }
+          padding: 0 40px;
       }
       &__item-container {
           overflow: scroll;
