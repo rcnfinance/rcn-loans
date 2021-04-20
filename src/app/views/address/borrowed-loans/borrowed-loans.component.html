@@ -1,11 +1,4 @@
 <div class="body-scrollable activity-wrapper">
-  <ngx-spinner
-    bdColor="transparent"
-    size="medium"
-    color="#fff"
-    type="ball-clip-rotate-multiple"
-    [name]="pageId"
-  ></ngx-spinner>
   <div class="container">
     <div class="full-width d-flex justify-content-center justify-content-lg-between align-items-center">
       <div>
@@ -29,11 +22,16 @@
 
       <ng-container *ngIf="loans?.length === 0; else loansTemplate">
         <app-empty-state
+          *ngIf="!isLoading"
           title="Hmm, it seems like you haven't requested any loans yet."
           description='If you want to become a borrower, check the <a href="/borrow">Borrow Section</a>.'
           image="./assets/empty-states/borrow.svg"
         >
         </app-empty-state>
+        <app-loan-list-skeleton
+          *ngIf="isLoading"
+          items="20"
+        ></app-loan-list-skeleton>
       </ng-container>
 
       <ng-template #loansTemplate>

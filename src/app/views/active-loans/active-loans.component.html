@@ -22,7 +22,10 @@
         [scrollThrottlingTime]="500"
         (scroll)="onScroll($event)"
       >
-      <app-loan-list-skeleton *ngIf="isLoading" items="20"></app-loan-list-skeleton>
+      <app-loan-list-skeleton
+        *ngIf="isLoading"
+        items="20"
+      ></app-loan-list-skeleton>
       <div *ngFor="let loan of scroll.viewPortItems; trackBy:trackByLoanId">
         <app-loan-list [loan]="loan" [backgroundLighter]="loan.position % 2">
         </app-loan-list>
