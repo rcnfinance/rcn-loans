@@ -22,11 +22,19 @@
       </div>
       <div class="dashboard__content">
         <div class="row">
-          <div *ngIf="!isLoading" class="col-md-6">
-            <app-dashboard-list [isCurrentLoans]="isCurrentLoans" [loans]="loans" [showOptions]="true" title="CURRENT BORROWED"></app-dashboard-list>
+          <div *ngIf="loansBorrowed.length" class="col-md-6">
+            <virtual-scroller
+              #scroll
+              [items]="loansBorrowed"
+              [bufferAmount]="12"
+              [scrollThrottlingTime]="500"
+              (scroll)="onScrollBorrowed($event)"
+            >
+            <app-dashboard-list [isCurrentLoans]="isCurrentLoans" [loans]="loansBorrowed" [showOptions]="true" title="CURRENT BORROWED"></app-dashboard-list>
+            </virtual-scroller>
           </div>
-          <div *ngIf="!isLoading" class="col-md-6">
-            <app-dashboard-list [isCurrentLoans]="isCurrentLoans" [loans]="[]" [showOptions]="false" title="CURRENT LENT"></app-dashboard-list>
+          <div *ngIf="loansBorrowed.length" class="col-md-6">
+            <app-dashboard-list [isCurrentLoans]="isCurrentLoans" [loans]="loansLent" [showOptions]="false" title="CURRENT LENT"></app-dashboard-list>
           </div>
         </div>
       </div>

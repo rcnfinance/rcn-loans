@@ -15,26 +15,16 @@ import { Web3Service } from '../../services/web3.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   pageId = 'active-loans';
-  address = '0x6b800281ca137fE073c662e34440420E91F43DeB';
-  // FIXME: Change var dynamic
-  loans = [];
-  // pagination
-  page = 1;
-  count = 0;
-  sort: object;
-  filters: object;
-  filtersState = {
-    currency: undefined,
-    amountStart: null,
-    amountEnd: null,
-    interest: null,
-    duration: null
-  };
+  address;
   isLoading: boolean;
-  isFullScrolled: boolean;
-  isAvailableLoans = true;
-  // filters component
-  filtersOpen: boolean;
+  loansBorrowed = [];
+  pageBorrowed = 1;
+  isFullScrolledBorrowed: boolean;
+  isAvailableLoansBorrowed = true;
+  loansLent = [];
+  pageLent = 1;
+  isFullScrolledLent: boolean;
+  isAvailableLoansLent = true;
   isCurrentLoans = true;
   private subscriptionAccount: Subscription;
 
@@ -43,13 +33,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private titleService: TitleService,
     private eventsService: EventsService,
     private web3Service: Web3Service
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.titleService.changeTitle('Dashboard');
     await this.loadAccount();
     this.handleLoginEvents();
-    this.loadLoans();
+    this.loadLoansBorrowed();
+    this.loadLoansLent();
   }
 
   ngOnDestroy() {
@@ -67,6 +58,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Event when loans borrowed scroll
+   * @param event Event
+   */
+  async onScrollBorrowed(event: any) {
+    if (this.loading || this.isFullScrolledBorrowed) {
+      return;
+    }
+
+    const { offsetHeight, scrollTop } = event.target;
+    if (offsetHeight + scrollTop >= 900) {
+      await this.loadLoansBorrowed(this.address, this.pageBorrowed);
+    }
+  }
+
+  /**
+   * Event when loans lent scroll
+   * @param event Event
+   */
+  async onScrollLent(event: any) {
+    if (this.loading || this.isFullScrolledLent) {
+      return;
+    }
+
+    const { offsetHeight, scrollTop } = event.target;
+    if (offsetHeight + scrollTop >= 900) {
+      await this.loadLoansBorrowed(this.address, this.pageLent);
+    }
+  }
+
+  /**
    * Load user account
    */
   private async loadAccount() {
@@ -75,37 +96,45 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load active loans
+   * Load loans borrowed
+   * @param address Address
    * @param page Page
-   * @param sort Order by
+   * @param currentLoadedLoans CurrentLoadedLoans
    * @return Loans
    */
-  private async loadLoans(
+  private async loadLoansBorrowed(
     address: string = this.address,
-    page: number = this.page,
-    sort: object = this.sort,
+    page: number = this.pageBorrowed,
     currentLoadedLoans = 0
   ) {
     this.loading = true;
 
     try {
-      const PAGE_SIZE = 4;
-      const { content } = await this.proxyApiService.getBorrowed(address, page, PAGE_SIZE, sort);
-      const loans: Loan[] = content.map((loanData: LoanContentApi) => LoanUtils.buildLoan(loanData));
+      const PAGE_SIZE = 20;
+      const { content } = await this.proxyApiService.getBorrowed(
+        address,
+        page,
+        PAGE_SIZE
+      );
+      const loans: Loan[] = content.map((loanData: LoanContentApi) =>
+        LoanUtils.buildLoan(loanData)
+      );
 
       // if there are no more loans
       if (!loans.length) {
-        this.isFullScrolled = true;
-        this.isAvailableLoans = this.loans.length ? true : false;
+        this.isFullScrolledBorrowed = true;
+        this.isAvailableLoansBorrowed = this.loansBorrowed.length
+          ? true
+          : false;
       }
 
       // set loan index as positions
-      loans.map((loan: Loan, i: number) => loan.position = i);
+      loans.map((loan: Loan, i: number) => (loan.position = i));
 
       // if there are more loans add them and continue
       if (loans.length) {
-        this.loans = this.loans.concat(loans);
-        this.page++;
+        this.loansBorrowed = this.loansBorrowed.concat(loans);
+        this.pageBorrowed++;
       }
 
       // incrase current paginator results
@@ -113,7 +142,69 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       const MINIMUN_LOANS_TO_SHOW = 4;
       if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
-        await this.loadLoans(this.address, this.page, this.sort, currentLoadedLoans);
+        await this.loadLoansBorrowed(
+          this.address,
+          this.pageBorrowed,
+          currentLoadedLoans
+        );
+      }
+    } catch (err) {
+      this.eventsService.trackError(err);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  /**
+   * Load loans lent
+   * @param address Address
+   * @param page Page
+   * @param currentLoadedLoans CurrentLoadedLoans
+   * @return Loans
+   */
+  private async loadLoansLent(
+    address: string = this.address,
+    page: number = this.pageLent,
+    currentLoadedLoans = 0
+  ) {
+    this.loading = true;
+
+    try {
+      const PAGE_SIZE = 20;
+      const { content } = await this.proxyApiService.getLent(
+        address,
+        page,
+        PAGE_SIZE
+      );
+      const loans: Loan[] = content.map((loanData: LoanContentApi) =>
+        LoanUtils.buildLoan(loanData)
+      );
+
+      // if there are no more loans
+      if (!loans.length) {
+        this.isFullScrolledLent = true;
+        this.isAvailableLoansLent = this.loansLent.length ? true : false;
+      }
+
+      // set loan index as positions
+      loans.map((loan: Loan, i: number) => (loan.position = i));
+
+      // if there are more loans add them and continue
+      if (loans.length) {
+        this.loansLent = this.loansLent.concat(loans);
+        this.pageLent++;
+      }
+
+      // incrase current paginator results
+      currentLoadedLoans = currentLoadedLoans + loans.length;
+
+      const MINIMUN_LOANS_TO_SHOW = 4;
+      if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
+        await this.loadLoansLent(
+          this.address,
+          this.pageLent,
+          currentLoadedLoans
+        );
       }
     } catch (err) {
       this.eventsService.trackError(err);
@@ -130,12 +221,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Listen and handle login events for account changes and logout
    */
   private handleLoginEvents() {
-    this.subscriptionAccount = this
-      .web3Service
-      .loginEvent
-      .subscribe((_: boolean) => {
+    this.subscriptionAccount = this.web3Service.loginEvent.subscribe(
+      (_: boolean) => {
         this.loadAccount();
-      });
+      }
+    );
   }
-
 }
