@@ -1,10 +1,9 @@
 import { Agent } from 'environments/environment';
+import { Engine } from 'app/models/loan.model';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
 const INFURA_ID = 'acf3c538f57040839369e7c1b023c3c6';
-const RCN_ENGINE = 'rcnEngine';
 const RCN_TOKEN = '0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6';
-const USDC_ENGINE = 'usdcEngine';
 const USDC_TOKEN = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
 
 export const chain = {
@@ -29,15 +28,15 @@ export const chain = {
     }
   },
   api: {
-    [RCN_ENGINE]: {
+    [Engine.RcnEngine]: {
       v6: `https://old-api-mainnet-diaspore.rcn.loans/`
     },
-    [USDC_ENGINE]: {
+    [Engine.UsdcEngine]: {
       v6: `https://new-api-mainnet-diaspore-usdc.rcn.loans/`
     }
   },
   contracts: {
-    [RCN_ENGINE]: {
+    [Engine.RcnEngine]: {
       token: RCN_TOKEN,
       oracleFactory: '0x1101c52fc25dc6d2691cec4b06569cef3c83933c',
       diaspore: {
@@ -56,7 +55,7 @@ export const chain = {
         installments: '0xb2c86bcda2b845e7c61eb5443bc9bb57d48e4bb6'
       }
     },
-    [USDC_ENGINE]: {
+    [Engine.UsdcEngine]: {
       token: USDC_TOKEN,
       oracleFactory: '0x2f0bf5040b82bfd8995fb902931ff9d5bfc53958',
       diaspore: {
@@ -130,6 +129,9 @@ export const chain = {
     WalletType.Metamask,
     WalletType.WalletConnect,
     WalletType.WalletLink
+  ],
+  usableEngines: [
+    Engine.RcnEngine, Engine.UsdcEngine
   ],
   createLoanCurrencies: ['RCN', 'USDC', 'ARS'],
   createCollateralCurrencies: ['RCN', 'USDC']

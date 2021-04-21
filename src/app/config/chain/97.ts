@@ -1,7 +1,7 @@
 import { Agent } from 'environments/environment';
+import { Engine } from 'app/models/loan.model';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
-const USDC_ENGINE = 'usdcEngine';
 const USDC_TOKEN = '0x46f348579e2b93f65fbd0636ad9cee504fcf1e1c';
 
 export const chain = {
@@ -25,21 +25,21 @@ export const chain = {
     }
   },
   api: {
-    [USDC_ENGINE]: {
+    [Engine.UsdcEngine]: {
       v6: `https://bsc-testnet.rcn.loans/`
     }
   },
   contracts: {
-    [USDC_ENGINE]: {
+    [Engine.UsdcEngine]: {
       token: USDC_TOKEN,
-      oracleFactory: '0xbb6dd5143d07ae9e8b766566f2c496394de051bf',
+      oracleFactory: '0x9546bb1a1af05717819e4bcb756ea95d5c9d17a4',
       diaspore: {
         debtEngine: '0xe8a7cd59aaa09a31af9c61e9c6da8d68a81cc198',
         loanManager: '0x4a921888cd77b5951390bc084f8dcbb3c1c3695a'
       },
       collateral: {
         collateral: '0xcdffb372f7fddd9b2d72c59951d55923424ef4e7',
-        wethManager: '' // TODO: add WETH Manager for BSC
+        wethManager: '0x87bd2e005781ed72592c3dd92b71aa9ada0bba5b'
       },
       converter: {
         converterRamp: '0x280fd3b6ff59e76297c874db7fe2b98175737041',
@@ -86,11 +86,19 @@ export const chain = {
       symbol: 'ARS',
       img: 'assets/ars.png',
       address: '0x0000000000000000000000000000000000000000'
+    },
+    {
+      symbol: 'ETH',
+      img: 'assets/eth.png',
+      address: '0xc1bd46297effa98c87b2f74ada2903ec0f804e1c'
     }
   ],
   usableWallets: [
     WalletType.Metamask
   ],
-  createLoanCurrencies: ['ARS'],
-  createCollateralCurrencies: ['USDC']
+  usableEngines: [
+    Engine.UsdcEngine
+  ],
+  createLoanCurrencies: ['USDC', 'ARS'],
+  createCollateralCurrencies: ['USDC', 'ETH']
 };
