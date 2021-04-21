@@ -64,26 +64,29 @@ export class NotificationsComponent implements OnInit {
    */
   getContractName(contract: string) {
     const { config } = this.chainService;
-    switch (contract) {
-      case config.contracts[Engine.RcnEngine].diaspore.loanManager:
-      case config.contracts[Engine.UsdcEngine].diaspore.loanManager:
-        return 'Loan Manager Contract';
+    const { usableEngines } = config;
+    let contractName = `${ Utils.shortAddress(contract) } Contract`;
 
-      case config.contracts[Engine.RcnEngine].diaspore.debtEngine:
-      case config.contracts[Engine.UsdcEngine].diaspore.debtEngine:
-        return 'Debt Engine Contract';
+    usableEngines.map((engine: Engine) => {
+      switch (contract) {
+        case config.contracts[engine].diaspore.loanManager:
+          contractName = 'Loan Manager Contract';
+          break;
+        case config.contracts[engine].diaspore.debtEngine:
+          contractName = 'Debt Engine Contract';
+          break;
+        case config.contracts[engine].converter.converterRamp:
+          contractName = 'Converter Ramp Contract';
+          break;
+        case config.contracts[engine].collateral.collateral:
+          contractName = 'Collateral Contract';
+          break;
+        default:
+          break;
+      }
+    });
 
-      case config.contracts[Engine.RcnEngine].converter.converterRamp:
-      case config.contracts[Engine.UsdcEngine].converter.converterRamp:
-        return 'Converter Ramp Contract';
-
-      case config.contracts[Engine.RcnEngine].collateral.collateral:
-      case config.contracts[Engine.UsdcEngine].collateral.collateral:
-        return 'Collateral Contract';
-
-      default:
-        return `${ Utils.shortAddress(contract) } Contract`;
-    }
+    return contractName;
   }
 
   /**
