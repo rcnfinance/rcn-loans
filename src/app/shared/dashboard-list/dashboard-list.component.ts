@@ -17,16 +17,28 @@ export class DashboardListComponent implements OnInit {
   ngOnInit() {}
 
   getBorderColorByStatus = (status: number) => {
-    if (status === Status.Request) return '#FFFFFF';
-    if (status === Status.Ongoing) return '#4155FF';
-    if (status === Status.Paid) return '#59B159';
-    if (status === Status.Indebt) return '#D97D3A';
-    return '#000000';
+    switch (status) {
+      case Status.Request:
+        return '#FFFFFF';
+      case Status.Ongoing:
+        return '#4155FF';
+      case Status.Paid:
+        return '#59B159';
+      case Status.Indebt:
+        return '#D97D3A';
+      default:
+        return '#000000';
+    }
   }
 
   getProgressBarColorByStatus = (status: number) => {
-    if (status === Status.Request) return '#FFFFFF';
-    if (status === Status.Paid) return '#59B159';
-    return '#4155FF';
+    switch (status) {
+      case Status.Request:
+        return '#FFFFFF';
+      case Status.Paid:
+        return '#59B159';
+      default:
+        return '#4155FF';
+    }
   }
 }
