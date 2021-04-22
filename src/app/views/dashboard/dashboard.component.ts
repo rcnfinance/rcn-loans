@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Loan } from '../../models/loan.model';
+import { Loan, Status } from '../../models/loan.model';
 import { LoanContentApi } from '../../interfaces/loan-api-diaspore';
 import { LoanUtils } from '../../utils/loan-utils';
 import { ProxyApiService } from '../../services/proxy-api.service';
@@ -55,6 +55,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   setCurrentLoans(isCurrentLoans: boolean) {
     this.isCurrentLoans = isCurrentLoans;
+    this.resetLoans();
   }
 
   /**
@@ -116,9 +117,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
         page,
         PAGE_SIZE
       );
-      const loans: Loan[] = content.map((loanData: LoanContentApi) =>
+      let loans: Loan[] = content.map((loanData: LoanContentApi) =>
         LoanUtils.buildLoan(loanData)
       );
+
+      // filter status destroyed, expired and paid
+      loans = loans.filter(
+        (l) => l.status !== Status.Expired && l.status !== Status.Destroyed
+      );
+      if (this.isCurrentLoans) {
+        loans = loans.filter((l) => l.status !== Status.Paid);
+      }
+      if (!this.isCurrentLoans) {
+        loans = loans.filter((l) => l.status === Status.Paid);
+      }
 
       // if there are no more loans
       if (!loans.length) {
@@ -176,9 +188,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
         page,
         PAGE_SIZE
       );
-      const loans: Loan[] = content.map((loanData: LoanContentApi) =>
+      let loans: Loan[] = content.map((loanData: LoanContentApi) =>
         LoanUtils.buildLoan(loanData)
       );
+
+      // filter status destroyed, expired and paid
+      loans = loans.filter(
+        (l) => l.status !== Status.Expired && l.status !== Status.Destroyed
+      );
+      if (this.isCurrentLoans) {
+        loans = loans.filter((l) => l.status !== Status.Paid);
+      }
+      if (!this.isCurrentLoans) {
+        loans = loans.filter((l) => l.status === Status.Paid);
+      }
 
       // if there are no more loans
       if (!loans.length) {
@@ -215,6 +238,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private set loading(loading: boolean) {
     this.isLoading = loading;
+  }
+
+  /**
+   * Reset and clean loans
+   */
+  private resetLoans() {
+    this.loansBorrowed = [];
+    this.loansLent = [];
+    this.pageBorrowed = 1;
+    this.pageLent = 1;
+    this.isFullScrolledBorrowed = false;
+    this.isFullScrolledLent = false;
+    this.loadLoansBorrowed();
+    this.loadLoansLent();
   }
 
   /**

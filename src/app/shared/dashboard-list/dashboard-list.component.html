@@ -12,16 +12,18 @@
         </div>
     </div>
     <div class="list__item-container" *ngIf="loans.length">
-        <div *ngFor="let loan of loans" class="list__item">
+        <div *ngFor="let loan of loans" class="list__item" [ngStyle]="{'border-color': getBorderColorByStatus(loan.status)}">
             <div class="list__item__column">8,000 ARS</div>
             <div class="list__item__column">8,466.67</div>
-            <div class="list__item__column">70.00%</div>
+            <div class="list__item__column" matTooltip="Effective rate: X.XX%">70.00%</div>
             <div class="list__item__column list__item__column__progress">
-                <app-progress-bar progress="50%" subprogress="70%"></app-progress-bar>
+                <app-progress-bar [color]="getProgressBarColorByStatus(loan.status)" progress="100%" subprogress="70%"></app-progress-bar>
             </div>
             <div class="list__item__column list__item__column__payment">
                 <div class="row">
-                    <div class="col-6">0%</div>
+                    <div class="col-6">
+                        <p matTooltip="Accrued interest: X.XX">0%</p>
+                    </div>
                     <div *ngIf="showOptions" class="col-2">
                         <button mat-icon-button [matMenuTriggerFor]="appMenu">
                             <i class="fas fa-ellipsis-v"></i>
