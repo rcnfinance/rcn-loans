@@ -11,7 +11,7 @@ export const chain = {
     currency: 'BNB',
     ui: {
       name: 'Binance',
-      fullname: 'Binance Smart Chain Testnet',
+      fullname: 'Binance Smart Chain (BSC) Testnet',
       image: 'assets/chain-binance.svg',
       website: 'https://academy.binance.com/en/articles/how-to-get-started-with-binance-smart-chain-bsc'
     },
@@ -89,7 +89,7 @@ export const chain = {
     },
     {
       symbol: 'ETH',
-      img: 'assets/eth.png',
+      img: 'assets/eth.svg',
       address: '0xc1bd46297effa98c87b2f74ada2903ec0f804e1c'
     }
   ],
@@ -99,6 +99,6 @@ export const chain = {
   usableEngines: [
     Engine.UsdcEngine
   ],
-  createLoanCurrencies: ['USDC', 'ARS'],
+  createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
   createCollateralCurrencies: ['USDC', 'ETH']
 };

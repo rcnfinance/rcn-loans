@@ -50,7 +50,7 @@ export class CurrencyLogoComponent implements OnInit {
 
     switch (address) {
       case config.contracts.chainCurrencyAddress:
-        url = '/assets/eth.svg';
+        url = config.contracts.ui.image;
         break;
 
       case null:
@@ -77,9 +77,8 @@ export class CurrencyLogoComponent implements OnInit {
 
   private loadStaticUrl() {
     try {
-      const { symbol } = this.currency;
-      const staticUrl = `/assets/${ symbol.toLowerCase() }.png`;
-      this.staticUrl = staticUrl;
+      const { img } = this.currency;
+      this.staticUrl = img;
     } catch {
       const DEFAULT_CURRENCY_LOGO = '/assets/unavailable.png';
       this.staticUrl = DEFAULT_CURRENCY_LOGO;
