@@ -1,4 +1,3 @@
-import { Agent } from 'environments/environment';
 import { Engine } from 'app/models/loan.model';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
