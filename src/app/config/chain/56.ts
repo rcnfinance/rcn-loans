@@ -25,7 +25,7 @@ export const chain = {
   },
   api: {
     [Engine.UsdcEngine]: {
-      v6: `https://bsc-testnet.rcn.loans/` // FIXME: use mainnet API
+      v6: `https://bsc-mainnet.rcn.loans/`
     }
   },
   contracts: {
