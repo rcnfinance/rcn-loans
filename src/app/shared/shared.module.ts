@@ -62,6 +62,7 @@ import { CollateralService } from './../services/collateral.service';
 import { EventsService } from './../services/events.service';
 import { DashboardListComponent } from './dashboard-list/dashboard-list.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+import { DashboardListItemComponent } from './dashboard-list-item/dashboard-list-item.component';
 
 @NgModule({
   imports: [
@@ -119,7 +120,8 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
     FormatAmountPipe,
     FormatAddressPipe,
     DashboardListComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    DashboardListItemComponent
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,

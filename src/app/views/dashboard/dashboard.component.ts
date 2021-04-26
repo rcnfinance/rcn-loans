@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Loan, Status } from '../../models/loan.model';
 import { LoanContentApi } from '../../interfaces/loan-api-diaspore';
@@ -19,13 +19,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   loansBorrowed = [];
   pageBorrowed = 1;
-  isFullScrolledBorrowed: boolean;
+  isFullScrolledBorrowed = false;
   isAvailableLoansBorrowed = true;
   loansLent = [];
   pageLent = 1;
-  isFullScrolledLent: boolean;
+  isFullScrolledLent = false;
   isAvailableLoansLent = true;
   isCurrentLoans = true;
+  isMobile: boolean;
+  isPageBorrow = true;
+
   private subscriptionAccount: Subscription;
 
   constructor(
@@ -38,6 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.titleService.changeTitle('Dashboard');
     await this.loadAccount();
+    this.checkIfIsMobile();
     this.handleLoginEvents();
     this.loadLoansBorrowed();
     this.loadLoansLent();
@@ -46,6 +50,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.loading = false;
     this.subscriptionAccount.unsubscribe();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkIfIsMobile();
   }
 
   /**
@@ -59,11 +68,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Change status of page mobile
+   * @param isCurrentLoans boolean
+   * @return Status of page mobile
+   */
+  setPageBorrow(status: boolean) {
+    this.isPageBorrow = status;
+  }
+
+  /**
    * Event when loans borrowed scroll
    * @param event Event
    */
   async onScrollBorrowed(event: any) {
-    if (this.loading || this.isFullScrolledBorrowed) {
+    if (this.isLoading || this.isFullScrolledBorrowed) {
       return;
     }
 
@@ -78,7 +96,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @param event Event
    */
   async onScrollLent(event: any) {
-    if (this.loading || this.isFullScrolledLent) {
+    if (this.isLoading || this.isFullScrolledLent) {
       return;
     }
 
@@ -86,14 +104,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (offsetHeight + scrollTop >= 900) {
       await this.loadLoansBorrowed(this.address, this.pageLent);
     }
-  }
-
-  /**
-   * Load user account
-   */
-  private async loadAccount() {
-    const account = await this.web3Service.getAccount();
-    this.address = account;
   }
 
   /**
@@ -152,7 +162,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // incrase current paginator results
       currentLoadedLoans = currentLoadedLoans + loans.length;
 
-      const MINIMUN_LOANS_TO_SHOW = 4;
+      const MINIMUN_LOANS_TO_SHOW = 6;
       if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
         await this.loadLoansBorrowed(
           this.address,
@@ -221,7 +231,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // incrase current paginator results
       currentLoadedLoans = currentLoadedLoans + loans.length;
 
-      const MINIMUN_LOANS_TO_SHOW = 4;
+      const MINIMUN_LOANS_TO_SHOW = 6;
       if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
         await this.loadLoansLent(
           this.address,
@@ -254,6 +264,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.loadLoansLent();
   }
 
+  private checkIfIsMobile(e?) {
+    const MOBILE_WIDTH_PX = 992;
+    const currentDeviceWidth = e ? e.target.innerWidth : window.innerWidth;
+    this.isMobile = currentDeviceWidth <= MOBILE_WIDTH_PX;
+  }
+
   /**
    * Listen and handle login events for account changes and logout
    */
@@ -263,5 +279,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.loadAccount();
       }
     );
+  }
+
+  /**
+   * Load user account
+   */
+  private async loadAccount() {
+    const account = await this.web3Service.getAccount();
+    this.address = account;
   }
 }

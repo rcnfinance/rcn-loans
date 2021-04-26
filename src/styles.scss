@@ -212,6 +212,24 @@ mat-tooltip-component .mat-tooltip {
   font-weight: 500;
   font-size: .85em;
 }
+mat-tooltip-component {
+  .dashboard-tooltip {
+    color: white;
+  }
+  .ongoing {
+    background-color: #4155FF;
+  }
+  .overdue {
+    background-color: #D97D3A;
+  }
+  .requested {
+    background-color: #FFFFFF;
+    color: #101010;
+  }
+  .fullyrepaid {
+    background-color: #59B159;
+  }
+}
 
 // Tables
 .table{

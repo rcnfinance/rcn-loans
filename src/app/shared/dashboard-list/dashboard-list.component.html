@@ -1,5 +1,5 @@
 <div class="list">
-    <div class="list__header">
+    <div class="list__header d-none d-sm-block">
         <p class="list__header__title">
             {{ title }}
         </p>
@@ -11,36 +11,16 @@
             <p>Payment Progress</p>
         </div>
     </div>
-    <div class="list__item-container" *ngIf="loans.length">
-        <div *ngFor="let loan of loans" class="list__item" [ngStyle]="{'border-color': getBorderColorByStatus(loan.status)}">
-            <div class="list__item__column">8,000 ARS</div>
-            <div class="list__item__column">8,466.67</div>
-            <div class="list__item__column" matTooltip="Effective rate: X.XX%">70.00%</div>
-            <div class="list__item__column list__item__column__progress">
-                <app-progress-bar [color]="getProgressBarColorByStatus(loan.status)" progress="100%" subprogress="70%"></app-progress-bar>
-            </div>
-            <div class="list__item__column list__item__column__payment">
-                <div class="row">
-                    <div class="col-6">
-                        <p matTooltip="Accrued interest: X.XX">0%</p>
-                    </div>
-                    <div *ngIf="showOptions" class="col-2">
-                        <button mat-icon-button [matMenuTriggerFor]="appMenu">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                    </div>
-                    <mat-menu #appMenu="matMenu" yPosition="below">
-                        <button class="list__item__button--separator" mat-menu-item>Pay</button>
-                        <button mat-menu-item>Withdraw Collateral</button>
-                        <button mat-menu-item>Add Collateral</button>
-                    </mat-menu>
-                </div>
-            </div>
+    <ng-container *ngIf="loans">
+        <div class="list__item-container" *ngIf="loans.length">
+            <ng-container *ngFor="let loan of loans">
+                <app-dashboard-list-item [showOptions]="showOptions" [loan]="loan"></app-dashboard-list-item>
+            </ng-container>
         </div>
-    </div>
-    <ng-container *ngIf="!loans.length">
-        <div class="list__empty-state">
-            <app-empty-state title="Hey! You don´t have any funded loans yet." image="./assets/empty-states/lent.svg" description="If you want to start lending, check the Lend section."></app-empty-state>
-        </div>
+        <ng-container *ngIf="!loans.length">
+            <div class="list__empty-state">
+                <app-empty-state title="Hey! You don´t have any funded loans yet." image="./assets/empty-states/lent.svg" description="If you want to start lending, check the Lend section."></app-empty-state>
+            </div>
+        </ng-container>
     </ng-container>
 </div>
