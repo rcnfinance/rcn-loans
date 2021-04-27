@@ -275,8 +275,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   private handleLoginEvents() {
     this.subscriptionAccount = this.web3Service.loginEvent.subscribe(
-      (_: boolean) => {
-        this.loadAccount();
+      async() => {
+        await this.loadAccount();
+        await this.resetLoans();
       }
     );
   }
