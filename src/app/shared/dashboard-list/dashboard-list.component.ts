@@ -10,6 +10,7 @@ export class DashboardListComponent {
   @Input() title: string;
   @Input() showOptions: boolean;
   @Input() loans: Loan[];
+  @Input() loading: boolean;
 
   constructor() {}
 }

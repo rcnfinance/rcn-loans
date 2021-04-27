@@ -63,6 +63,7 @@ import { EventsService } from './../services/events.service';
 import { DashboardListComponent } from './dashboard-list/dashboard-list.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { DashboardListItemComponent } from './dashboard-list-item/dashboard-list-item.component';
+import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashboard-list-skeleton.component';
 
 @NgModule({
   imports: [
@@ -121,7 +122,8 @@ import { DashboardListItemComponent } from './dashboard-list-item/dashboard-list
     FormatAddressPipe,
     DashboardListComponent,
     ProgressBarComponent,
-    DashboardListItemComponent
+    DashboardListItemComponent,
+    DashboardListSkeletonComponent
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,

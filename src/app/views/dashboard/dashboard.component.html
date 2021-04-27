@@ -27,7 +27,7 @@
       </div>
       <div class="dashboard__content">
         <div class="row">
-          <div *ngIf="(!isLoading || isAvailableLoansBorrowed) && (!isMobile || isPageBorrow)" class="col-md-6">
+          <div *ngIf="!isMobile || isPageBorrow" class="col-md-6">
             <virtual-scroller
               #scroll
               [items]="loansBorrowed"
@@ -35,10 +35,10 @@
               [scrollThrottlingTime]="500"
               (scroll)="onScrollBorrowed($event)"
             >
-              <app-dashboard-list [loans]="loansBorrowed" [showOptions]="true" title="CURRENT BORROWED"></app-dashboard-list>
+              <app-dashboard-list [loading]="isLoading" [loans]="loansBorrowed" [showOptions]="true" title="CURRENT BORROWED"></app-dashboard-list>
             </virtual-scroller>
           </div>
-          <div *ngIf="(!isLoading || isAvailableLoansBorrowed) && (!isMobile || !isPageBorrow)" class="col-md-6">
+          <div *ngIf="!isMobile || !isPageBorrow" class="col-md-6">
             <virtual-scroller
               #scroll
               [items]="loansLent"
@@ -46,7 +46,7 @@
               [scrollThrottlingTime]="500"
               (scroll)="onScrollLent($event)"
             >
-              <app-dashboard-list [loans]="loansLent" [showOptions]="false" title="CURRENT LENT"></app-dashboard-list>
+              <app-dashboard-list [loading]="isLoading" [loans]="loansLent" [showOptions]="false" title="CURRENT LENT"></app-dashboard-list>
             </virtual-scroller>
           </div>
         </div>

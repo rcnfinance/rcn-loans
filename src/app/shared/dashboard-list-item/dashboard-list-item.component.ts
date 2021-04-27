@@ -35,6 +35,8 @@ export class DashboardListItemComponent implements OnInit {
         return '#59B159';
       case Status.Indebt:
         return '#D97D3A';
+      case Status.Expired:
+        return '#A3A5A6';
       default:
         return '#000000';
     }
@@ -50,6 +52,8 @@ export class DashboardListItemComponent implements OnInit {
         return 'Fully Repaid';
       case Status.Indebt:
         return 'Overdue';
+      case Status.Expired:
+        return 'Expired';
       default:
         return '';
     }
@@ -65,6 +69,8 @@ export class DashboardListItemComponent implements OnInit {
         return 'check';
       case Status.Indebt:
         return 'exclamation';
+      case Status.Expired:
+        return 'times';
       default:
         return '';
     }
@@ -77,7 +83,7 @@ export class DashboardListItemComponent implements OnInit {
       Utils.formatAmount(amount / 10 ** currency.decimals, 2) +
       ' ' +
       currency.symbol;
-    if (status !== Status.Request) {
+    if (status !== Status.Request && status !== Status.Expired) {
       this.repaid =
         Utils.formatAmount(debt.model.paid / 10 ** currency.decimals, 2) +
         ' ' +

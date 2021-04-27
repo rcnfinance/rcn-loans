@@ -17,10 +17,12 @@
                 <app-dashboard-list-item [showOptions]="showOptions" [loan]="loan"></app-dashboard-list-item>
             </ng-container>
         </div>
-        <ng-container *ngIf="!loans.length">
-            <div class="list__empty-state">
-                <app-empty-state title="Hey! You don´t have any funded loans yet." image="./assets/empty-states/lent.svg" description="If you want to start lending, check the Lend section."></app-empty-state>
-            </div>
+        <div *ngIf="!loans.length && !loading" class="list__empty-state">
+            <app-empty-state title="Hey! You don´t have any funded loans yet." image="./assets/empty-states/lent.svg" description="If you want to start lending, check the Lend section."></app-empty-state>
+        </div>
+        <ng-container *ngIf="!loans.length && loading">
+            <app-empty-state title="Hey! You don´t have any funded loans yet." image="./assets/empty-states/lent.svg" description="If you want to start lending, check the Lend section."></app-empty-state>
+            <!-- <app-dashboard-list-skeleton></app-dashboard-list-skeleton> -->
         </ng-container>
     </ng-container>
 </div>

@@ -43,8 +43,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     await this.loadAccount();
     this.checkIfIsMobile();
     this.handleLoginEvents();
-    this.loadLoansBorrowed();
-    this.loadLoansLent();
+    await this.loadLoansBorrowed();
+    await this.loadLoansLent();
   }
 
   ngOnDestroy() {
@@ -133,13 +133,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       // filter status destroyed, expired and paid
       loans = loans.filter(
-        (l) => l.status !== Status.Expired && l.status !== Status.Destroyed
+        (l) => l.status !== Status.Destroyed
       );
       if (this.isCurrentLoans) {
-        loans = loans.filter((l) => l.status !== Status.Paid);
+        loans = loans.filter((l) => l.status !== Status.Paid && l.status !== Status.Expired);
       }
       if (!this.isCurrentLoans) {
-        loans = loans.filter((l) => l.status === Status.Paid);
+        loans = loans.filter((l) => l.status === Status.Paid || l.status === Status.Expired);
       }
 
       // if there are no more loans
@@ -162,7 +162,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // incrase current paginator results
       currentLoadedLoans = currentLoadedLoans + loans.length;
 
-      const MINIMUN_LOANS_TO_SHOW = 6;
+      const MINIMUN_LOANS_TO_SHOW = 20;
       if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
         await this.loadLoansBorrowed(
           this.address,
@@ -204,7 +204,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       // filter status destroyed, expired and paid
       loans = loans.filter(
-        (l) => l.status !== Status.Expired && l.status !== Status.Destroyed
+        (l) => l.status !== Status.Destroyed
       );
       if (this.isCurrentLoans) {
         loans = loans.filter((l) => l.status !== Status.Paid);
@@ -231,7 +231,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // incrase current paginator results
       currentLoadedLoans = currentLoadedLoans + loans.length;
 
-      const MINIMUN_LOANS_TO_SHOW = 6;
+      const MINIMUN_LOANS_TO_SHOW = 20;
       if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
         await this.loadLoansLent(
           this.address,
