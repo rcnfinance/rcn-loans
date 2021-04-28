@@ -21,8 +21,7 @@
             <app-empty-state title="Hey! You don´t have any funded loans yet." image="./assets/empty-states/lent.svg" description="If you want to start lending, check the Lend section."></app-empty-state>
         </div>
         <ng-container *ngIf="!loans.length && loading">
-            <app-empty-state title="Hey! You don´t have any funded loans yet." image="./assets/empty-states/lent.svg" description="If you want to start lending, check the Lend section."></app-empty-state>
-            <!-- <app-dashboard-list-skeleton></app-dashboard-list-skeleton> -->
+            <app-dashboard-list-skeleton items="5"></app-dashboard-list-skeleton>
         </ng-container>
     </ng-container>
 </div>

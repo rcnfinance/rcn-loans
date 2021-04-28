@@ -162,7 +162,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // incrase current paginator results
       currentLoadedLoans = currentLoadedLoans + loans.length;
 
-      const MINIMUN_LOANS_TO_SHOW = 20;
+      const MINIMUN_LOANS_TO_SHOW = 5;
       if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
         await this.loadLoansBorrowed(
           this.address,
@@ -231,7 +231,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // incrase current paginator results
       currentLoadedLoans = currentLoadedLoans + loans.length;
 
-      const MINIMUN_LOANS_TO_SHOW = 20;
+      const MINIMUN_LOANS_TO_SHOW = 5;
       if (loans.length && currentLoadedLoans < MINIMUN_LOANS_TO_SHOW) {
         await this.loadLoansLent(
           this.address,
@@ -276,8 +276,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private handleLoginEvents() {
     this.subscriptionAccount = this.web3Service.loginEvent.subscribe(
       async() => {
+        const prevAddress = this.address;
         await this.loadAccount();
-        await this.resetLoans();
+        if (prevAddress !== this.address) {
+          await this.resetLoans();
+        }
       }
     );
   }
