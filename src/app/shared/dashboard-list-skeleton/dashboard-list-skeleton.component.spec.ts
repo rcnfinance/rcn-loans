@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DashboardListSkeletonComponent } from './dashboard-list-skeleton.component';
 
 describe('DashboardListSkeletonComponent', () => {
@@ -8,7 +8,8 @@ describe('DashboardListSkeletonComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardListSkeletonComponent ]
+      declarations: [ DashboardListSkeletonComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));

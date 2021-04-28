@@ -9,18 +9,11 @@
     padding: 10px 15px;
     position: relative;
     &__title {
-      @include styled-font('proxima-nova', 700, 14px);
       margin-bottom: 16px;
-    }
-    &__title svg {
-      margin-right: 8px;
+      text-align: center;
     }
     &__column {
       margin-bottom: 10px;
-      @include styled-font('proxima-nova', 400, 13px);
-      &__title {
-        @include styled-font('proxima-nova', 650, 13px);
-      }
     }
   }
 }
@@ -32,7 +25,6 @@
       height: 65px;
       padding: 0;
       &__column {
-        @include styled-font('Roboto', 400, 15px);
         display: inline-block;
         width: 20%;
         margin-top: 22px;
