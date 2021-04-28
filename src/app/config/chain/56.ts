@@ -31,7 +31,7 @@ export const chain = {
   contracts: {
     [Engine.UsdcEngine]: {
       token: USDC_TOKEN,
-      oracleFactory: '0x65a6d06f4077c591d65b42220b193891f08997d1',
+      oracleFactory: '0xb6ffe509a571bbe8ff6dfe04eb757450909cdd2e',
       diaspore: {
         debtEngine: '0x89fffd110f6ab7079183159b499b744c6f252119',
         loanManager: '0x023377cc67625164420e69adf7e0d2e49f851760'

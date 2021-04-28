@@ -14,7 +14,7 @@ export class Currency {
         return 2;
 
       case 'USDC':
-        return 6;
+        return 18;
 
       case 'ETH':
       case 'BNB':
