@@ -72,7 +72,7 @@ export class OracleRatesComponent implements OnInit {
    * Load pair rates
    */
   private async loadOracleRates() {
-    const { chainlinkPairs } = this.chainService.config;
+    const { chainlinkPairs } = this.chainService.config.currencies;
     const rateValues = {};
     const rates = [];
 

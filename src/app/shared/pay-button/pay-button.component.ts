@@ -14,6 +14,7 @@ import { EventsService, Category } from 'app/services/events.service';
 import { Web3Service } from 'app/services/web3.service';
 import { ChainService } from 'app/services/chain.service';
 import { CountriesService } from 'app/services/countries.service';
+import { CurrenciesService } from 'app/services/currencies.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
 import { DialogLoanPayComponent } from 'app/dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogGenericErrorComponent } from 'app/dialogs/dialog-generic-error/dialog-generic-error.component';
@@ -50,6 +51,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     private eventsService: EventsService,
     private web3Service: Web3Service,
     private chainService: ChainService,
+    private currenciesService: CurrenciesService,
     private walletConnectService: WalletConnectService,
     public snackBar: MatSnackBar,
     private countriesService: CountriesService,
@@ -177,7 +179,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
 
       if (amount) {
         const currency = this.loan.oracle.currency;
-        const decimals = Currency.getDecimals(currency);
+        const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency);
         const amountInWei = Utils.getAmountInWei(amount, decimals).toString();
 
         // balance validation
@@ -190,7 +192,8 @@ export class PayButtonComponent implements OnInit, OnDestroy {
             requiredTokens
           );
 
-          const { symbol: tokenSymbol, decimals: tokenDecimals } = new Currency(currency);
+          const { symbol: tokenSymbol } = new Currency(currency);
+          const tokenDecimals = this.currenciesService.getCurrencyDecimals('symbol', tokenSymbol);
           this.showInsufficientFundsDialog(requiredTokens, balance, tokenSymbol, tokenDecimals);
           return;
         }

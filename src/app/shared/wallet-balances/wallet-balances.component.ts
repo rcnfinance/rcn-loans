@@ -1,6 +1,5 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import * as BN from 'bn.js';
-import { Currency } from 'app/utils/currencies';
 import { ChainService } from 'app/services/chain.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { CurrencyItem, CurrenciesService } from 'app/services/currencies.service';
@@ -55,7 +54,7 @@ export class WalletBalancesComponent implements OnInit, OnChanges {
 
     filteredCurrencies.map(async (currency: CurrencyItem, index: number) => {
       const weiBalance: BN = await this.contractsService.getUserBalanceInToken(currency.address.toLowerCase());
-      const decimals = new Currency(currency.symbol).decimals;
+      const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
       const balance: number = weiBalance as any / 10 ** decimals;
       const formattedBalance = Number(balance).toFixed(MAX_DECIMALS);
 

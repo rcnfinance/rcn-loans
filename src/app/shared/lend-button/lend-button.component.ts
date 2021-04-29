@@ -16,7 +16,6 @@ import * as BN from 'bn.js';
 import { Loan, Status } from 'app/models/loan.model';
 import { Utils } from 'app/utils/utils';
 import { LoanUtils } from 'app/utils/loan-utils';
-import { Currency } from 'app/utils/currencies';
 import { ContractsService } from 'app/services/contracts.service';
 import { TxService, Tx, Type } from 'app/services/tx.service';
 import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
@@ -30,6 +29,7 @@ import { DialogWrongCountryComponent } from 'app/dialogs/dialog-wrong-country/di
 import { DialogLoanLendComponent } from 'app/dialogs/dialog-loan-lend/dialog-loan-lend.component';
 import { DialogFrontRunningComponent } from 'app/dialogs/dialog-front-running/dialog-front-running.component';
 import { ChainService } from 'app/services/chain.service';
+import { CurrenciesService } from 'app/services/currencies.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
 
 @Component({
@@ -62,6 +62,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
     private countriesService: CountriesService,
     private eventsService: EventsService,
     private chainService: ChainService,
+    private currenciesService: CurrenciesService,
     private walletConnectService: WalletConnectService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar
@@ -221,8 +222,8 @@ export class LendButtonComponent implements OnInit, OnDestroy {
           'loan ' + loanId,
           Number(required)
         );
-        const currency = config.usableCurrencies.filter(token => token.address === lendToken)[0];
-        const decimals = Currency.getDecimals(currency.symbol);
+        const currency = config.currencies.usableCurrencies.find(token => token.address === lendToken);
+        const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
         this.showInsufficientFundsDialog(required, balance, currency.symbol, decimals);
         return;
       }

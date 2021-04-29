@@ -74,13 +74,14 @@ export class DialogLoanLendComponent implements OnInit {
     const { engine } = this.loan;
     const engineCurrencySymbol = engine === Engine.RcnEngine ? 'RCN' : 'USDC';
     const engineCurrency = new Currency(engineCurrencySymbol);
+    const engineCurrencyDecimals = this.currenciesService.getCurrencyDecimals('symbol', engineCurrencySymbol);
     this.engineCurrency = engineCurrency;
 
     // set loan amount and rate
     const rate: BN = await this.getLoanRate();
     this.loanAmount = Utils.formatAmount(loanCurrency.fromUnit(loanAmount));
     this.loanExpectedReturn = Utils.formatAmount(loanCurrency.fromUnit(loanExpectedReturn));
-    this.exchangeEngineToken = Utils.formatAmount(rate as any / 10 ** engineCurrency.decimals, 4);
+    this.exchangeEngineToken = Utils.formatAmount(rate as any / 10 ** engineCurrencyDecimals, 4);
 
     // set loan status
     this.isCanceled = this.loan.status === Status.Destroyed;
@@ -122,7 +123,7 @@ export class DialogLoanLendComponent implements OnInit {
     const engineTokenRate: BN = await this.getLoanRate();
     const engineTokenAmountInWei: BN = Utils.bn(loanAmount.mul(engineTokenRate));
     const engineTokenExpectedReturnInWei: BN = Utils.bn(loanExpectedReturn.mul(engineTokenRate));
-    const loanCurrencyDecimals: number = loan.currency.decimals;
+    const loanCurrencyDecimals = this.currenciesService.getCurrencyDecimals('symbol', loan.currency.symbol);
     const engineTokenAmount: BN = engineTokenAmountInWei.div(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
     const engineTokenExpectedReturn: BN = engineTokenExpectedReturnInWei.div(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
 
@@ -132,8 +133,8 @@ export class DialogLoanLendComponent implements OnInit {
     const { config } = this.chainService;
     const fromToken: string = config.contracts[engine].token;
     const toToken: string = await this.currenciesService.getCurrencyByKey('symbol', symbol).address;
-    const { decimals: engineDecimals } = this.engineCurrency;
-    const { decimals: lendDecimals } = new Currency(symbol);
+    const engineDecimals = this.currenciesService.getCurrencyDecimals('symbol', this.engineCurrency.symbol);
+    const lendDecimals = this.currenciesService.getCurrencyDecimals('symbol', symbol);
     this.lendToken = toToken;
 
     let lendAmount: BN | string;
@@ -243,7 +244,8 @@ export class DialogLoanLendComponent implements OnInit {
   async getLoanRate(): Promise<BN> {
     const currency: any = this.loan.currency;
     const oracle: string = this.loan.oracle.address;
-    const rate = await this.contractsService.getRate(oracle, currency.decimals);
+    const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
+    const rate = await this.contractsService.getRate(oracle, decimals);
     return rate;
   }
 

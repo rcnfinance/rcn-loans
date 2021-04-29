@@ -13,6 +13,7 @@ import { ContractsService } from 'app/services/contracts.service';
 import { Web3Service } from 'app/services/web3.service';
 import { EventsService } from 'app/services/events.service';
 import { Tx, Type, TxService } from 'app/services/tx.service';
+import { CurrenciesService } from 'app/services/currencies.service';
 import { ChainService } from 'app/services/chain.service';
 import { Utils } from 'app/utils/utils';
 
@@ -70,7 +71,8 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
     private web3Service: Web3Service,
     private chainService: ChainService,
     private eventsService: EventsService,
-    private contractsService: ContractsService
+    private contractsService: ContractsService,
+    private currenciesService: CurrenciesService
   ) { }
 
   get showRcnEngine() {
@@ -158,14 +160,18 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
     const { isEthereum } = this.chainService;
 
     // usdc engine
+    const USDC_SYMBOL = 'USDC';
+    const usdcDecimals = this.currenciesService.getCurrencyDecimals('symbol', USDC_SYMBOL);
     const usdcPendingWithdraws = await this.contractsService.getPendingWithdraws(Engine.UsdcEngine);
-    this.usdcAvailable = usdcPendingWithdraws[2] / 10 ** 6;
+    this.usdcAvailable = usdcPendingWithdraws[2] / 10 ** usdcDecimals;
     this.usdcLoansWithBalance = usdcPendingWithdraws[3];
 
     // rcn engine
     if (isEthereum) {
+      const RCN_SYMBOL = 'RCN';
+      const rcnDecimals = this.currenciesService.getCurrencyDecimals('symbol', RCN_SYMBOL);
       const rcnPendingWithdraws = await this.contractsService.getPendingWithdraws(Engine.RcnEngine);
-      this.rcnAvailable = rcnPendingWithdraws[2] / 10 ** 18;
+      this.rcnAvailable = rcnPendingWithdraws[2] / 10 ** rcnDecimals;
       this.rcnLoansWithBalance = rcnPendingWithdraws[3];
     }
 

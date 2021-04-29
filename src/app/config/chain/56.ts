@@ -57,44 +57,49 @@ export const chain = {
     }
   },
   dir: {},
-  chainlinkPairs: {
-    'ETH': ['ETH', 'USD', 'USDC'],
-    'BNB': ['BNB', 'USD', 'USDC'],
-    'ARS': ['ARS', 'BTC', 'USD', 'USDC'],
-    'BTC': ['BTC', 'USD', 'USDC']
+  currencies: {
+    chainlinkPairs: {
+      'ETH': ['ETH', 'USD', 'USDC'],
+      'BNB': ['BNB', 'USD', 'USDC'],
+      'ARS': ['ARS', 'BTC', 'USD', 'USDC'],
+      'BTC': ['BTC', 'USD', 'USDC']
+    },
+    filterCurrencies: [
+      'ARS',
+      'USD'
+    ],
+    usableCurrencies: [
+      {
+        symbol: 'BNB',
+        img: 'assets/bnb.png',
+        address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+      },
+      {
+        symbol: 'USDC',
+        img: 'assets/usdc.png',
+        address: USDC_TOKEN
+      },
+      {
+        symbol: 'ARS',
+        img: 'assets/ars.png',
+        address: '0x0000000000000000000000000000000000000000'
+      },
+      {
+        symbol: 'ETH',
+        img: 'assets/eth.svg',
+        address: '0x2170ed0880ac9a755fd29b2688956bd959f933f8'
+      }
+    ],
+    currencyDecimals: {
+      'USDC': 18
+    },
+    createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
+    createCollateralCurrencies: ['USDC', 'ETH']
   },
-  filterCurrencies: [
-    'ARS',
-    'USD'
-  ],
-  usableCurrencies: [
-    {
-      symbol: 'BNB',
-      img: 'assets/bnb.png',
-      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-    },
-    {
-      symbol: 'USDC',
-      img: 'assets/usdc.png',
-      address: USDC_TOKEN
-    },
-    {
-      symbol: 'ARS',
-      img: 'assets/ars.png',
-      address: '0x0000000000000000000000000000000000000000'
-    },
-    {
-      symbol: 'ETH',
-      img: 'assets/eth.svg',
-      address: '0x2170ed0880ac9a755fd29b2688956bd959f933f8'
-    }
-  ],
   usableWallets: [
     WalletType.Metamask
   ],
   usableEngines: [
     Engine.UsdcEngine
-  ],
-  createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
-  createCollateralCurrencies: ['USDC', 'ETH']
+  ]
 };

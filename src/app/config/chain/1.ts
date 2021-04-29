@@ -86,45 +86,50 @@ export const chain = {
     '0xfbd5e54062619ef2b0323ad9ff874b39fd5a8d2c': Agent.RipioArsCreator,
     '0x520aefcaea7754e86c2a1c9367948d732607c47f': Agent.RipioUsdCreator
   },
-  chainlinkPairs: {
-    'ETH': ['ETH', 'USDC'],
-    'RCN': ['RCN', 'BTC', 'ETH', 'USDC'],
-    'ARS': ['ARS', 'BTC', 'ETH', 'USDC'],
-    'BTC': ['BTC', 'ETH', 'USDC']
+  currencies: {
+    chainlinkPairs: {
+      'ETH': ['ETH', 'USDC'],
+      'RCN': ['RCN', 'BTC', 'ETH', 'USDC'],
+      'ARS': ['ARS', 'BTC', 'ETH', 'USDC'],
+      'BTC': ['BTC', 'ETH', 'USDC']
+    },
+    filterCurrencies: [
+      'RCN',
+      'DAI',
+      'ARS',
+      'USD'
+    ],
+    usableCurrencies: [
+      {
+        symbol: 'RCN',
+        img: 'assets/rcn.png',
+        address: RCN_TOKEN
+      },
+      {
+        symbol: 'ETH',
+        img: 'assets/eth.png',
+        address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+      },
+      {
+        symbol: 'DAI',
+        img: 'assets/dai.png',
+        address: '0x6b175474e89094c44da98b954eedeac495271d0f'
+      },
+      {
+        symbol: 'USDC',
+        img: 'assets/usdc.png',
+        address: USDC_TOKEN
+      },
+      {
+        symbol: 'ARS',
+        img: 'assets/ars.png',
+        address: '0x0000000000000000000000000000000000000000'
+      }
+    ],
+    currencyDecimals: {},
+    createLoanCurrencies: ['RCN', 'USDC', 'ARS'],
+    createCollateralCurrencies: ['RCN', 'USDC']
   },
-  filterCurrencies: [
-    'RCN',
-    'DAI',
-    'ARS',
-    'USD'
-  ],
-  usableCurrencies: [
-    {
-      symbol: 'RCN',
-      img: 'assets/rcn.png',
-      address: RCN_TOKEN
-    },
-    {
-      symbol: 'ETH',
-      img: 'assets/eth.png',
-      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-    },
-    {
-      symbol: 'DAI',
-      img: 'assets/dai.png',
-      address: '0x6b175474e89094c44da98b954eedeac495271d0f'
-    },
-    {
-      symbol: 'USDC',
-      img: 'assets/usdc.png',
-      address: USDC_TOKEN
-    },
-    {
-      symbol: 'ARS',
-      img: 'assets/ars.png',
-      address: '0x0000000000000000000000000000000000000000'
-    }
-  ],
   usableWallets: [
     WalletType.Metamask,
     WalletType.WalletConnect,
@@ -132,7 +137,5 @@ export const chain = {
   ],
   usableEngines: [
     Engine.RcnEngine, Engine.UsdcEngine
-  ],
-  createLoanCurrencies: ['RCN', 'USDC', 'ARS'],
-  createCollateralCurrencies: ['RCN', 'USDC']
+  ]
 };

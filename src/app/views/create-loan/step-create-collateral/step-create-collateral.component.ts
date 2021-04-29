@@ -5,7 +5,6 @@ import { MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
 import { Utils } from 'app/utils/utils';
-import { Currency } from 'app/utils/currencies';
 import { Loan, Engine } from 'app/models/loan.model';
 import { Collateral, Status as CollateralStatus } from 'app/models/collateral.model';
 import { CollateralRequest } from 'app/interfaces/collateral-request';
@@ -242,7 +241,7 @@ ${ value } %`;
 
     // set amount
     if (currency && amount > 0) {
-      const { decimals } = new Currency(currency.symbol);
+      const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
       const amountInWei: BN = Utils.getAmountInWei(amount, decimals);
 
       this.form.controls.formCollateral.patchValue({
@@ -323,7 +322,7 @@ ${ value } %`;
     }
 
     const { config } = this.chainService;
-    const { createCollateralCurrencies } = config;
+    const { createCollateralCurrencies } = config.currencies;
     const currencies: CurrencyItem[] = this.currenciesService.getCurrenciesByKey('symbol', createCollateralCurrencies);
 
     // filter loan currency
@@ -352,14 +351,15 @@ ${ value } %`;
 
     const { engine } = loan;
     const loanOracle: string = await this.contractsService.symbolToOracle(engine, loan.currency.toString());
-    const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loan.currency.decimals);
+    const loanDecimals = this.currenciesService.getCurrencyDecimals('symbol', loan.currency.symbol);
+    const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loanDecimals);
     const loanAmount: number = loan.descriptor ? loan.descriptor.totalObligation : loan.amount;
     const loanAmountInRcn: BN = Utils.bn(loanAmount)
         .mul(Utils.bn(loanRate))
-        .div(Utils.pow(10, loan.currency.decimals));
+        .div(Utils.pow(10, loanDecimals));
 
     const collateralOracle: string = await this.contractsService.symbolToOracle(engine, currency.symbol);
-    const collateralDecimals: number = new Currency(currency.symbol).decimals;
+    const collateralDecimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
     const collateralRate: BN | string = await this.contractsService.getRate(collateralOracle, collateralDecimals);
     const collateralAmountInRcn: BN = Utils.bn(percentage)
         .mul(Utils.bn(loanAmountInRcn))
@@ -391,7 +391,7 @@ ${ value } %`;
       });
     }
 
-    const collateralDecimals: number = new Currency(currency.symbol).decimals;
+    const collateralDecimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
     const collateralAmountInWei: BN = Utils.getAmountInWei(amount, collateralDecimals);
     const collateralPercentage = await this.collateralService.calculateCollateralPercentage(
       loan,

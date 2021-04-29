@@ -19,7 +19,6 @@ import { ContractsService } from 'app/services/contracts.service';
 import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
 import { TxService, Tx, Type } from 'app/services/tx.service';
 import { ChainService } from 'app/services/chain.service';
-import { Currency } from 'app/utils/currencies';
 import { Utils } from 'app/utils/utils';
 
 @Component({
@@ -169,7 +168,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
         'address',
         collateral.token
       );
-      const decimals = Currency.getDecimals(currency.symbol);
+      const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
       return this.showInsufficientFundsDialog(required, balance, currency.symbol, decimals);
     }
 

@@ -80,7 +80,7 @@ export class CollateralFormComponent implements OnInit {
       const form: FormGroup = this.form;
       const { collateralRatio, balanceRatio, currency } = form.value.formRatios;
       const { entryAmount } = form.value.formUi;
-      const { decimals } = new Currency(currency.symbol);
+      const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
 
       if (this.loading) {
         return;
@@ -114,7 +114,7 @@ export class CollateralFormComponent implements OnInit {
    */
   clickMaxWithdraw() {
     const { currency } = this.form.value.formRatios;
-    const decimals: number = new Currency(currency.symbol).decimals;
+    const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
     const maxWithdraw = this.calculateMaxWithdraw();
     const entryAmount = this.formatAmount(maxWithdraw, decimals);
 
@@ -158,7 +158,7 @@ export class CollateralFormComponent implements OnInit {
     const collateralPercentage =
       await this.collateralService.calculateCollateralPercentage(loan, currency, amount);
 
-    const decimals: number = new Currency(currency.symbol).decimals;
+    const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
     const formattedAmount: string = Utils.formatAmount(this.formatAmount(amount, decimals));
 
     // set liquidation price
@@ -214,7 +214,7 @@ export class CollateralFormComponent implements OnInit {
     const dialogType = this.dialogType;
 
     if (entryAmount && entryAmount > 0) {
-      const decimals: number = new Currency(currency.symbol).decimals;
+      const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
 
       let newAmount: string;
 

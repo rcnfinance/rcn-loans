@@ -7,7 +7,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
 import { Utils } from 'app/utils/utils';
 import { LoanUtils } from 'app/utils/loan-utils';
-import { Currency } from 'app/utils/currencies';
 import { Loan, Status, Engine, Oracle, Descriptor } from 'app/models/loan.model';
 import { LoanRequest } from 'app/interfaces/loan-request';
 import { Web3Service } from 'app/services/web3.service';
@@ -233,7 +232,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
 
     // set amount
     if (currency && amount > 0) {
-      const { decimals } = new Currency(currency.symbol);
+      const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
       const amountInWei: BN = Utils.getAmountInWei(amount, decimals);
 
       this.form.controls.formLoan.patchValue({
@@ -255,7 +254,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
       // set available installemtns and replace duration by frequency
       if (currency && amount && annualInterestRate) {
         const availableInstallments: BN = Utils.bn(duration).div(INSTALLMENTS_FREQUENCY);
-        const { decimals } = new Currency(currency.symbol);
+        const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
         const amountInWei: BN = Utils.getAmountInWei(amount, decimals);
         const interestRate: number = Utils.toInterestRate(annualInterestRate);
 
@@ -362,7 +361,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
       const calculatedId: string = existingLoan.id;
       const currency: CurrencyItem = this.currenciesService.getCurrencyByKey('symbol', existingLoan.currency.toString());
       const annualInterestRate = existingLoan.descriptor.interestRate;
-      const decimals: number = existingLoan.currency.decimals;
+      const decimals = this.currenciesService.getCurrencyDecimals('symbol', existingLoan.currency.symbol);
       const amount: number = existingLoan.amount / 10 ** decimals;
       const duration: number = existingLoan.descriptor.duration / DAY_SECONDS.toNumber();
       const installmentsActivated: boolean = existingLoan.descriptor.installments > 1;
@@ -414,7 +413,7 @@ export class StepCreateLoanComponent implements OnInit, OnChanges {
    */
   private getCurrencies() {
     const { config } = this.chainService;
-    const { createLoanCurrencies } = config;
+    const { createLoanCurrencies } = config.currencies;
     const currencies: CurrencyItem[] = this.currenciesService.getCurrenciesByKey('symbol', createLoanCurrencies);
     this.currencies = currencies;
   }

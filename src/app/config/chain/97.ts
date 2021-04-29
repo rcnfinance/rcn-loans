@@ -61,44 +61,49 @@ export const chain = {
     '0xf7c5e867e739f5508c63c8ab22f39c44b9cac0b5': Agent.RipioArsCreator,
     '0xf42d11a0aff8f9a56853e4c41ee333b57658d096': Agent.RipioArsCreator
   },
-  chainlinkPairs: {
-    'ETH': ['ETH', 'USD', 'USDC'],
-    'BNB': ['BNB', 'USD', 'USDC'],
-    'ARS': ['ARS', 'BTC', 'USD', 'USDC'],
-    'BTC': ['BTC', 'USD', 'USDC']
+  currencies: {
+    chainlinkPairs: {
+      'ETH': ['ETH', 'USD', 'USDC'],
+      'BNB': ['BNB', 'USD', 'USDC'],
+      'ARS': ['ARS', 'BTC', 'USD', 'USDC'],
+      'BTC': ['BTC', 'USD', 'USDC']
+    },
+    filterCurrencies: [
+      'ARS',
+      'USD'
+    ],
+    usableCurrencies: [
+      {
+        symbol: 'BNB',
+        img: 'assets/bnb.png',
+        address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+      },
+      {
+        symbol: 'USDC',
+        img: 'assets/usdc.png',
+        address: USDC_TOKEN
+      },
+      {
+        symbol: 'ARS',
+        img: 'assets/ars.png',
+        address: '0x0000000000000000000000000000000000000000'
+      },
+      {
+        symbol: 'ETH',
+        img: 'assets/eth.svg',
+        address: '0xc1bd46297effa98c87b2f74ada2903ec0f804e1c'
+      }
+    ],
+    currencyDecimals: {
+      'USDC': 18
+    },
+    createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
+    createCollateralCurrencies: ['USDC', 'ETH']
   },
-  filterCurrencies: [
-    'ARS',
-    'USD'
-  ],
-  usableCurrencies: [
-    {
-      symbol: 'BNB',
-      img: 'assets/bnb.png',
-      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-    },
-    {
-      symbol: 'USDC',
-      img: 'assets/usdc.png',
-      address: USDC_TOKEN
-    },
-    {
-      symbol: 'ARS',
-      img: 'assets/ars.png',
-      address: '0x0000000000000000000000000000000000000000'
-    },
-    {
-      symbol: 'ETH',
-      img: 'assets/eth.svg',
-      address: '0xc1bd46297effa98c87b2f74ada2903ec0f804e1c'
-    }
-  ],
   usableWallets: [
     WalletType.Metamask
   ],
   usableEngines: [
     Engine.UsdcEngine
-  ],
-  createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
-  createCollateralCurrencies: ['USDC', 'ETH']
+  ]
 };

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Utils } from 'app/utils/utils';
+import { Currency } from 'app/utils/currencies';
 import { ChainService } from 'app/services/chain.service';
 
 interface BestInterestRate {
@@ -127,11 +128,25 @@ export class CurrenciesService {
   }
 
   /**
+   * Get currency decimals
+   * @param key CurrencyItem key
+   * @param value Symbol or token address
+   * @return Decimals
+   */
+  getCurrencyDecimals(key: 'symbol' | 'address', value: string): number {
+    const { symbol } = this.getCurrencyByKey(key, value);
+    const { decimals: expectedDecimals } = new Currency(symbol);
+    const { config } = this.chainService;
+    const decimals = config.currencies.currencyDecimals[symbol] || expectedDecimals;
+    return decimals;
+  }
+
+  /**
    * Build currencies using the current chain config
    */
   private buildCurrencies() {
     const { config } = this.chainService;
-    const envCurrencies = config.usableCurrencies;
+    const envCurrencies = config.currencies.usableCurrencies;
     const currencies: CurrencyItem[] = [];
 
     envCurrencies.map((currency: {

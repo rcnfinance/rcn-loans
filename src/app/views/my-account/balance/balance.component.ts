@@ -6,6 +6,7 @@ import { Web3Service } from 'app/services/web3.service';
 import { EventsService } from 'app/services/events.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { ChainService } from 'app/services/chain.service';
+import { CurrenciesService } from 'app/services/currencies.service';
 import { Tx, Type, TxService } from 'app/services/tx.service';
 
 @Component({
@@ -31,6 +32,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     private eventsService: EventsService,
     private contractService: ContractsService,
     private chainService: ChainService,
+    private currenciesService: CurrenciesService,
     private txService: TxService
   ) { }
 
@@ -88,8 +90,10 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * total available
    */
   async loadWithdrawBalance() {
+    const USDC_SYMBOL = 'USDC';
+    const decimals = this.currenciesService.getCurrencyDecimals('symbol', USDC_SYMBOL);
     const pendingWithdraws = await this.contractService.getPendingWithdraws(Engine.UsdcEngine);
-    this.usdcAvailable = pendingWithdraws[2] / 10 ** 6;
+    this.usdcAvailable = pendingWithdraws[2] / 10 ** decimals;
     this.usdcLoansWithBalance = pendingWithdraws[3];
 
     this.loadOngoingWithdraw();

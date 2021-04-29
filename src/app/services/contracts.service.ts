@@ -10,6 +10,7 @@ import { LoanTypeService } from 'app/services/loan-type.service';
 import { ApiService } from 'app/services/api.service';
 import { ChainService } from 'app/services/chain.service';
 import { EventsService } from 'app/services/events.service';
+import { CurrenciesService } from 'app/services/currencies.service';
 import { Utils } from 'app/utils/utils';
 declare let require: any;
 
@@ -49,7 +50,8 @@ export class ContractsService {
     private apiService: ApiService,
     private loanTypeService: LoanTypeService,
     private chainService: ChainService,
-    private eventsService: EventsService
+    private eventsService: EventsService,
+    private currenciesService: CurrenciesService
   ) {
     this.buildContracts();
   }
@@ -291,7 +293,7 @@ export class ContractsService {
    */
   async estimateLendAmount(loan: Loan, tokenAddress: string): Promise<BN> {
     const loanAmount: BN = Utils.bn(loan.amount);
-    const decimals: number = loan.currency.decimals;
+    const decimals = this.currenciesService.getCurrencyDecimals('symbol', loan.currency.symbol);
     const tokenRate = await this.getRate(loan.oracle.address, decimals);
     const tokenAmountInWei: BN = Utils.bn(loanAmount.mul(tokenRate));
     const tokenAmount: BN = tokenAmountInWei.div(Utils.bn(10).pow(Utils.bn(decimals)));
@@ -613,7 +615,7 @@ export class ContractsService {
       return 18;
     }
     if (loan && loan.currency.decimals) {
-      return loan.currency.decimals;
+      return this.currenciesService.getCurrencyDecimals('symbol', loan.currency.symbol);
     }
 
     const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
@@ -1085,7 +1087,7 @@ export class ContractsService {
    */
   private tokenIsValid(tokenAddress): boolean {
     const { config } = this.chainService;
-    const currencies = config.usableCurrencies;
+    const currencies = config.currencies.usableCurrencies;
     const currency = currencies.filter(token => token.address === tokenAddress);
 
     if (currency.length) {

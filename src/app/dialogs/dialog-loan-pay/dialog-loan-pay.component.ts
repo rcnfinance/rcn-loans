@@ -127,7 +127,7 @@ export class DialogLoanPayComponent implements OnInit {
     this.engineCurrency = engineCurrency;
     this.hasFee = engine === Engine.UsdcEngine;
 
-    const ENGINE_TOKEN_DECIMALS = engineCurrency.decimals;
+    const ENGINE_TOKEN_DECIMALS = this.currenciesService.getCurrencyDecimals('symbol', engineCurrency.symbol);
     const exchangeEngineToken = Number(rate) / 10 ** ENGINE_TOKEN_DECIMALS;
     this.exchangeEngineToken = exchangeEngineToken;
 
@@ -241,7 +241,8 @@ export class DialogLoanPayComponent implements OnInit {
   private async getLoanRate(): Promise<BN> {
     const currency: any = this.loan.currency;
     const oracle: string = this.loan.oracle.address;
-    const rate = await this.contractsService.getRate(oracle, currency.decimals);
+    const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
+    const rate = await this.contractsService.getRate(oracle, decimals);
     return rate;
   }
 
