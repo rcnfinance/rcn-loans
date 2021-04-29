@@ -42,7 +42,7 @@ export const chain = {
       },
       converter: {
         converterRamp: '0x90642c78cf0e7b4839cc00738466a770fd0104f9',
-        uniswapConverter: '0xb694a54d962014ee4476577eb6749027e5f8198f'
+        uniswapConverter: '0x45c27efb90e3256181e0e1c1eed1ccbf976537a8'
       },
       models: {
         installments: '0xe557f1519a3513afcd41c5a383386537eda09cb1'
