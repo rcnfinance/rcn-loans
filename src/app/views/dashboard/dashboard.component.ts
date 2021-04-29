@@ -137,9 +137,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       );
       if (this.isCurrentLoans) {
         loans = loans.filter((l) => l.status !== Status.Paid && l.status !== Status.Expired);
+        loans = loans.filter((l) => l.collateral);
       }
       if (!this.isCurrentLoans) {
-        loans = loans.filter((l) => l.status === Status.Paid || l.status === Status.Expired);
+        loans = loans.filter((l) => l.status === Status.Paid || l.status === Status.Expired || l.status === Status.Request);
+        loans = loans.filter((l) => !l.collateral);
       }
 
       // if there are no more loans
@@ -208,9 +210,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       );
       if (this.isCurrentLoans) {
         loans = loans.filter((l) => l.status !== Status.Paid);
+        loans = loans.filter((l) => l.collateral);
       }
       if (!this.isCurrentLoans) {
-        loans = loans.filter((l) => l.status === Status.Paid);
+        loans = loans.filter((l) => l.status === Status.Paid || l.status === Status.Expired || l.status === Status.Request);
+        loans = loans.filter((l) => !l.collateral);
       }
 
       // if there are no more loans

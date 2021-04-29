@@ -217,7 +217,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
     }
 
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
-    this.collateralAsset = collateralCurrency.symbol;
+    if (collateralCurrency) this.collateralAsset = collateralCurrency.symbol;
 
     const collateralRatio = await this.calculateCollateralRatio();
     this.collateralRatio = Utils.formatAmount(collateralRatio, 0);

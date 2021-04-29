@@ -14,7 +14,7 @@
     <ng-container *ngIf="loans">
         <div class="list__item-container" *ngIf="loans.length">
             <ng-container *ngFor="let loan of loans">
-                <app-dashboard-list-item [showOptions]="showOptions" [loan]="loan"></app-dashboard-list-item>
+                <app-dashboard-list-item [isCurrentLoans]="isCurrentLoans" [showOptions]="showOptions" [loan]="loan"></app-dashboard-list-item>
             </ng-container>
         </div>
         <div *ngIf="!loans.length && !loading" class="list__empty-state">

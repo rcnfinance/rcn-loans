@@ -10,6 +10,7 @@ import { Utils } from 'app/utils/utils';
 export class DashboardListItemComponent implements OnInit {
   @Input() loan: Loan;
   @Input() showOptions: boolean;
+  @Input() isCurrentLoans: boolean;
 
   borrowed = '-';
   repaid = '-';
@@ -28,7 +29,8 @@ export class DashboardListItemComponent implements OnInit {
   getBorderColorByStatus = () => {
     switch (this.loan.status) {
       case Status.Request:
-        return '#FFFFFF';
+        if (this.isCurrentLoans) return '#FFFFFF';
+        return '#565759';
       case Status.Ongoing:
         return '#4155FF';
       case Status.Paid:
@@ -45,7 +47,8 @@ export class DashboardListItemComponent implements OnInit {
   getStatusTextByStatus = () => {
     switch (this.loan.status) {
       case Status.Request:
-        return 'Requested';
+        if (this.isCurrentLoans) return 'Requested';
+        return 'Collateral Pending';
       case Status.Ongoing:
         return 'Ongoing';
       case Status.Paid:
@@ -62,7 +65,8 @@ export class DashboardListItemComponent implements OnInit {
   getIconByStatus = () => {
     switch (this.loan.status) {
       case Status.Request:
-        return 'calendar';
+        if (this.isCurrentLoans) return 'calendar';
+        return 'exclamation';
       case Status.Ongoing:
         return 'angle-double-up';
       case Status.Paid:

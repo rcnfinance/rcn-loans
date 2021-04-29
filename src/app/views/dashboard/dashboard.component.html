@@ -35,7 +35,7 @@
               [scrollThrottlingTime]="500"
               (scroll)="onScrollBorrowed($event)"
             >
-              <app-dashboard-list [loading]="isLoading" [loans]="loansBorrowed" [showOptions]="true" title="CURRENT BORROWED"></app-dashboard-list>
+              <app-dashboard-list [isCurrentLoans]="isCurrentLoans" [loading]="isLoading" [loans]="loansBorrowed" [showOptions]="true" title="CURRENT BORROWED"></app-dashboard-list>
             </virtual-scroller>
           </div>
           <div *ngIf="!isMobile || !isPageBorrow" class="col-md-6">

@@ -1,6 +1,8 @@
 <div class="list__item" [ngStyle]="{'border-color': getBorderColorByStatus()}">
     <div class="list__item__title d-sm-none">
-        <p><i class="fas" [ngClass]="'fa-'+getIconByStatus()"></i> {{ getStatusTextByStatus() }}</p>
+        <p [ngClass]="getStatusTextByStatus() === 'Collateral Pending' ? 'list__item__title--warning' : ''"><i class="fas" [ngClass]="'fa-'+getIconByStatus()"></i> 
+            {{ getStatusTextByStatus() }}
+        </p>
     </div>
     <div class="list__item__column">
         <div class="row">

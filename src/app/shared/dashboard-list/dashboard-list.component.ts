@@ -11,6 +11,7 @@ export class DashboardListComponent {
   @Input() showOptions: boolean;
   @Input() loans: Loan[];
   @Input() loading: boolean;
+  @Input() isCurrentLoans: boolean;
 
   constructor() {}
 }

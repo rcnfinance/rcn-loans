@@ -24,9 +24,12 @@
     &__title {
       @include styled-font('proxima-nova', 700, 14px);
       margin-bottom: 16px;
-    }
-    &__title svg {
-      margin-right: 8px;
+      &--warning {
+        color: #EAA219;
+      }
+      svg {
+        margin-right: 8px;
+      }
     }
     &__column {
       margin-bottom: 10px;
