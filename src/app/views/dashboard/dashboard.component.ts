@@ -132,16 +132,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
       );
 
       // filter status destroyed, expired and paid
-      loans = loans.filter(
-        (l) => l.status !== Status.Destroyed
-      );
+      loans = loans.filter((l) => l.status !== Status.Destroyed);
       if (this.isCurrentLoans) {
-        loans = loans.filter((l) => l.status !== Status.Paid && l.status !== Status.Expired);
+        loans = loans.filter(
+          (l) =>
+            l.status === Status.Ongoing ||
+            l.status === Status.Indebt ||
+            l.status === Status.Request
+        );
         loans = loans.filter((l) => l.collateral);
       }
       if (!this.isCurrentLoans) {
-        loans = loans.filter((l) => l.status === Status.Paid || l.status === Status.Expired || l.status === Status.Request);
-        loans = loans.filter((l) => !l.collateral);
+        loans = loans.filter(
+          (l) =>
+            l.status === Status.Paid ||
+            l.status === Status.Expired ||
+            (l.status === Status.Request && !l.collateral)
+        );
       }
 
       // if there are no more loans
@@ -205,16 +212,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
       );
 
       // filter status destroyed, expired and paid
-      loans = loans.filter(
-        (l) => l.status !== Status.Destroyed
-      );
+      loans = loans.filter((l) => l.status !== Status.Destroyed);
       if (this.isCurrentLoans) {
-        loans = loans.filter((l) => l.status !== Status.Paid);
+        loans = loans.filter(
+          (l) =>
+            l.status === Status.Ongoing ||
+            l.status === Status.Indebt ||
+            l.status === Status.Request
+        );
         loans = loans.filter((l) => l.collateral);
       }
       if (!this.isCurrentLoans) {
-        loans = loans.filter((l) => l.status === Status.Paid || l.status === Status.Expired || l.status === Status.Request);
-        loans = loans.filter((l) => !l.collateral);
+        loans = loans.filter(
+          (l) =>
+            l.status === Status.Paid ||
+            l.status === Status.Expired ||
+            (l.status === Status.Request && !l.collateral)
+        );
       }
 
       // if there are no more loans
@@ -279,7 +293,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   private handleLoginEvents() {
     this.subscriptionAccount = this.web3Service.loginEvent.subscribe(
-      async() => {
+      async () => {
         const prevAddress = this.address;
         await this.loadAccount();
         if (prevAddress !== this.address) {

@@ -1,6 +1,7 @@
 <div class="list__item" [ngStyle]="{'border-color': getBorderColorByStatus()}">
     <div class="list__item__title d-sm-none">
-        <p [ngClass]="getStatusTextByStatus() === 'Collateral Pending' ? 'list__item__title--warning' : ''"><i class="fas" [ngClass]="'fa-'+getIconByStatus()"></i> 
+        <p [ngClass]="{'list__item__title--warning': getStatusTextByStatus() === 'Collateral Pending', 'list__item__title--expired' : getStatusTextByStatus() === 'Expired' }">
+            <i class="fas" [ngClass]="'fa-'+getIconByStatus()"></i> 
             {{ getStatusTextByStatus() }}
         </p>
     </div>

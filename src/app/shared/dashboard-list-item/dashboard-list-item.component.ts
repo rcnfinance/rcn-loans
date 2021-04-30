@@ -30,7 +30,7 @@ export class DashboardListItemComponent implements OnInit {
     switch (this.loan.status) {
       case Status.Request:
         if (this.isCurrentLoans) return '#FFFFFF';
-        return '#565759';
+        return '#A3A5A6';
       case Status.Ongoing:
         return '#4155FF';
       case Status.Paid:
