@@ -32,21 +32,21 @@ export const chain = {
   contracts: {
     [Engine.UsdcEngine]: {
       token: USDC_TOKEN,
-      oracleFactory: '0x9546bb1a1af05717819e4bcb756ea95d5c9d17a4',
+      oracleFactory: '0x30750fcd94cdf0ab77bfeefe0f9f4ad1de50acf8',
       diaspore: {
-        debtEngine: '0xe8a7cd59aaa09a31af9c61e9c6da8d68a81cc198',
-        loanManager: '0x4a921888cd77b5951390bc084f8dcbb3c1c3695a'
+        debtEngine: '0xca0913369415f2b05de24e824cfa7b3f2de92e54',
+        loanManager: '0xd19f01537d64716d60884bcd4dbfb1d38df7d593'
       },
       collateral: {
-        collateral: '0xcdffb372f7fddd9b2d72c59951d55923424ef4e7',
-        wethManager: '0x87bd2e005781ed72592c3dd92b71aa9ada0bba5b'
+        collateral: '0x5af05b9d79227677fe52a78d493f5703a030c2cc',
+        wethManager: '0x98f0f55ffdaa90ac1a4a57854d15b66960912254'
       },
       converter: {
-        converterRamp: '0x280fd3b6ff59e76297c874db7fe2b98175737041',
-        uniswapConverter: '0xdba056aba9735cb3ad54f822a7d7fbe6c5ca31f5'
+        converterRamp: '0x9c3d6ef4e6a6419376ec9b5d6cbb1eb3c2722578',
+        uniswapConverter: '0xf7f80fc2a94fbaf08a82fe764a6be10765c8b1f0'
       },
       models: {
-        installments: '0x99aca996ebbf0fe42c45379277dc34fd9d83d4fc'
+        installments: '0x5af05b9d79227677fe52a78d493f5703a030c2cc'
       }
     },
     chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
