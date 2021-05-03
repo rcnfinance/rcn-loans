@@ -37,6 +37,10 @@
 
 .page-content {
   padding: 22px 2px 0;
+  &__chain {
+    display: flex;
+    padding-bottom: 26px;
+  }
   &--tools {
     .page-content__wallet {
       padding: 30px 0 24px;

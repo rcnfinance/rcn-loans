@@ -1,9 +1,9 @@
-@import './../../../../scss/variables';
+@import './../../../../scss/mixins';
 @import './../../../../scss/fonts';
 
 .wallet-settings {
   position: absolute;
-  right: 14px;
+  right: 0;
   width: 233px;
   overflow: hidden;
   background: var(--app-color-gray-700);

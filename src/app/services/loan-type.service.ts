@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core';
-import { environment, Agent } from './../../environments/environment';
-import { Loan, LoanType } from './../models/loan.model';
-// App services
-import { CosignerService } from './cosigner.service';
-import { DecentralandCosignerProvider } from './../providers/cosigners/decentraland-cosigner-provider';
+import { Agent } from 'environments/environment';
+import { Loan, LoanType } from 'app/models/loan.model';
+import { ChainService } from 'app/services/chain.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoanTypeService {
-
   constructor(
-    private cosignerService: CosignerService
+    private chainService: ChainService
   ) { }
 
   /**
@@ -20,17 +17,12 @@ export class LoanTypeService {
    * @return Loan type
    */
   getLoanType(loan: Loan): LoanType {
+    const { config } = this.chainService;
     const creatorAddress: string = loan.creator.toLowerCase();
-    const creatorAgent: Agent = environment.dir[creatorAddress];
+    const creatorAgent: Agent = config.dir[creatorAddress];
     if (creatorAgent) {
       return LoanType.FintechOriginator;
     }
-
-    const cosigner = this.cosignerService.getCosigner(loan);
-    if (cosigner instanceof DecentralandCosignerProvider) {
-      return LoanType.NftCollateral;
-    }
-
     if (loan.collateral) {
       return LoanType.UnknownWithCollateral;
     }

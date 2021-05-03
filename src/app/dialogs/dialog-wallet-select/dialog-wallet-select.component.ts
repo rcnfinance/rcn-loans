@@ -8,6 +8,7 @@ import {
 } from './../../interfaces/wallet.interface';
 // App services
 import { WalletConnectService } from './../../services/wallet-connect.service';
+import { ChainService } from './../../services/chain.service';
 import { Web3Service } from './../../services/web3.service';
 
 @Component({
@@ -29,11 +30,12 @@ export class DialogWalletSelectComponent implements OnInit {
     public dialog: MatDialog,
     private dialogRef: MatDialogRef<DialogWalletSelectComponent>,
     private walletConnectService: WalletConnectService,
+    private chainService: ChainService,
     private web3Service: Web3Service
   ) { }
 
   ngOnInit() {
-    this.wallets = [
+    const wallets = [
       {
         image: WalletLogo[WalletType.Metamask],
         title: 'MetaMask',
@@ -50,6 +52,14 @@ export class DialogWalletSelectComponent implements OnInit {
         type: WalletType.WalletConnect
       }
     ];
+
+    const { wallets: availableWallets } = this.chainService;
+    const filteredWallets = wallets.filter(({ type }) => {
+      if (availableWallets.includes(type)) {
+        return true;
+      }
+    });
+    this.wallets = filteredWallets;
 
     this.loadActiveWallet();
     this.handleLoginEvents();

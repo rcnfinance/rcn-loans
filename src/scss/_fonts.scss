@@ -1,34 +1,4 @@
-@import './variables';
-
-// -------------------------
-// FONTS
-// -------------------------
-
-.light{ @extend %font-light; }
-.regular{ @extend %font-regular; }
-.medium{ @extend %font-medium; }
-.bold{ @extend %font-bold; }
-.black{ @extend %font-extra-bold; }
-
-.font12{font-size: 12px;}
-.font13{font-size: 13px;}
-.font14{font-size: 14px;}
-.font15{font-size: 15px;}
-.font16{font-size: 16px;}
-.font17{font-size: 17px;}
-.font18{font-size: 18px;}
-.font19{font-size: 19px;}
-.font20{font-size: 20px;}
-.font21{font-size: 21px;}
-.font22{font-size: 22px;}
-.font23{font-size: 23px;}
-.font24{font-size: 24px;}
-.font25{font-size: 25px;}
-.font26{font-size: 26px;}
-.font27{font-size: 27px;}
-.font28{font-size: 28px;}
-.font29{font-size: 29px;}
-.font30{font-size: 30px;}
+@import './mixins';
 
 @mixin styled-font ($family, $weight, $size, $style: normal) {
   font-family: $family, sans-serif;

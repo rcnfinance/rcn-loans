@@ -1,4 +1,4 @@
-@import './../../../scss/variables';
+@import './../../../scss/mixins';
 @import './../../../scss/fonts';
 @import './../dialog';
 
@@ -7,6 +7,9 @@
     &__select-label {
       @include styled-font('Roboto', 400, 12px);
       color: #989898;
+    }
+    &__select-value {
+      @include typography-headline(6);
     }
   }
   .accordion-details {

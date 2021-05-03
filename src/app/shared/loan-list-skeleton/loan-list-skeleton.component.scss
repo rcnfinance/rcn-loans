@@ -1,0 +1,48 @@
+@import '../loan-list/loan-list.component.scss';
+
+.loan-list {
+    &__column-amount, &__column--type {
+        text-align: center;
+    }
+    &__column {
+        padding: 15px 15px 0 15px;
+    }
+}
+
+@media (max-width: 992px) {
+    .loan-list {
+        &__header span {
+            margin-top: 15px;
+            width:220px;
+        }
+        &__column-label {
+            margin: 0 auto;
+            padding: 0;
+            padding-top: 0px;
+            width: 280px;
+            text-align: left;
+            margin-left: 0px;
+        }
+        &__column {
+            &--duration {
+                .loan-list__column-label{
+                    display: flex;
+                }
+                .loan-list__column-label app-skeleton{
+                    margin-right: 30px;
+                }
+            }
+            &--installments, 
+            &--borrower-mobile, 
+            &--punitory, 
+            &--type, 
+            &--duration {
+                display: none;
+            }
+            &--currency {
+                text-align: center;
+                height: 60px;
+            }
+        }
+    }
+}

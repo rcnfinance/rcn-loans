@@ -1,32 +1,50 @@
-@import './../../../scss/fonts';
+@import 'src/scss/fonts';
 
 .fixed-application-ad {
   z-index: 5000;
   position: fixed;
-  bottom: 54px;
+  bottom: 56px;
   left: 0;
   right: 0;
   width: 95%;
-  max-width: 1270px;
+  max-width: 762px;
   margin: auto;
-  text-align: center;
-  background: var(--app-color-primary);
+  background: white;
   padding: 10px 0;
   border-radius: 5px 5px 0 0;
+  overflow: hidden;
   &--hidden {
     display: none;
   }
-  &__text {
+  &__image {
+    padding-right: 25px;
+    .image {
+      width: 66px;
+      min-width: 66px;
+      height: 66px;
+      min-height: 66px;
+    }
+  }
+  &__title,
+  &__description {
     padding-right: 16px;
-    @include typography-headline(6);
-    color: white;
+    &, &::ng-deep a {
+      color: var(--app-color-gray-900);
+    }
+  }
+  &__title {
+    @include styled-font('proxima-nova', 700, 23px);
+    margin-bottom: 6px;
+  }
+  &__description {
+    @include styled-font('proxima-nova', 400, 18px);
   }
   &__close {
     position: absolute;
     top: 0;
     right: 0;
-    margin: 16px 0 0;
-    padding: 0 16px;
+    margin: 14px 16px 0;
+    padding: 10px;
     color: black;
     cursor: pointer;
   }
@@ -34,13 +52,21 @@
 
 @media (min-width: 992px) {
   .fixed-application-ad {
-    padding: 10px 26px;
-    &__text {
+    bottom: 0;
+    padding: 30px 25px;
+    .container {
+      padding: 0;
+    }
+    &__title,
+    &__description {
       padding-right: 0;
+    }
+    &__description {
+      line-height: 25px;
     }
     &__close {
       bottom: 0;
-      margin: auto 0;
+      margin: 10px 15px 0 0;
     }
   }
 }

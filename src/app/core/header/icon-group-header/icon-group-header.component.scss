@@ -1,4 +1,4 @@
-@import 'src/scss/variables';
+@import 'src/scss/mixins';
 @import 'src/scss/fonts';
 
 .button-group{
@@ -24,8 +24,7 @@
       font-size: 11px;
       border-radius: 2px;
       color: white;
-      background-color: $red;
-      @extend %roboto-regular;
+      background-color: var(--app-color-red);
       @include transition(all 0.1s ease-out);
     }
     &--avatar {
@@ -41,6 +40,9 @@
         height: 15px;
         margin-right: 8px;
       }
+    }
+    &--chain {
+      padding: 0 23px 0 16px;
     }
   }
 }

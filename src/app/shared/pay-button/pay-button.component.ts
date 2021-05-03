@@ -5,22 +5,22 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
-// App Services
-import { environment } from '../../../environments/environment';
-import { TxService, Tx, Type } from '../../services/tx.service';
-import { ContractsService } from '../../services/contracts.service';
-import { Loan } from '../../models/loan.model';
-import { Currency } from '../../utils/currencies';
-import { Utils } from '../../utils/utils';
-import { EventsService, Category } from '../../services/events.service';
-import { Web3Service } from '../../services/web3.service';
-import { CountriesService } from '../../services/countries.service';
-import { WalletConnectService } from './../../services/wallet-connect.service';
-import { DialogLoanPayComponent } from '../../dialogs/dialog-loan-pay/dialog-loan-pay.component';
-import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogInsufficientfundsComponent } from '../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
-import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
-import { DialogWrongCountryComponent } from '../../dialogs/dialog-wrong-country/dialog-wrong-country.component';
+import { TxService, Tx, Type } from 'app/services/tx.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { Loan } from 'app/models/loan.model';
+import { Currency } from 'app/utils/currencies';
+import { Utils } from 'app/utils/utils';
+import { EventsService, Category } from 'app/services/events.service';
+import { Web3Service } from 'app/services/web3.service';
+import { ChainService } from 'app/services/chain.service';
+import { CountriesService } from 'app/services/countries.service';
+import { CurrenciesService } from 'app/services/currencies.service';
+import { WalletConnectService } from 'app/services/wallet-connect.service';
+import { DialogLoanPayComponent } from 'app/dialogs/dialog-loan-pay/dialog-loan-pay.component';
+import { DialogGenericErrorComponent } from 'app/dialogs/dialog-generic-error/dialog-generic-error.component';
+import { DialogInsufficientfundsComponent } from 'app/dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
+import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DialogWrongCountryComponent } from 'app/dialogs/dialog-wrong-country/dialog-wrong-country.component';
 
 @Component({
   selector: 'app-pay-button',
@@ -50,6 +50,8 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     private txService: TxService,
     private eventsService: EventsService,
     private web3Service: Web3Service,
+    private chainService: ChainService,
+    private currenciesService: CurrenciesService,
     private walletConnectService: WalletConnectService,
     public snackBar: MatSnackBar,
     private countriesService: CountriesService,
@@ -109,7 +111,8 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     }
     // pending tx validation
     if (this.pendingTx) {
-      window.open(environment.network.explorer.tx.replace(
+      const { config } = this.chainService;
+      window.open(config.network.explorer.tx.replace(
         '${tx}',
         this.pendingTx.tx
       ), '_blank');
@@ -169,13 +172,14 @@ export class PayButtonComponent implements OnInit, OnDestroy {
 
     try {
       const { engine } = this.loan;
-      const token = environment.contracts[engine].token;
+      const { config } = this.chainService;
+      const token = config.contracts[engine].token;
       const balance = Number(await this.contractsService.getUserBalanceInToken(token));
       const amount = this.amount;
 
       if (amount) {
         const currency = this.loan.oracle.currency;
-        const decimals = Currency.getDecimals(currency);
+        const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency);
         const amountInWei = Utils.getAmountInWei(amount, decimals).toString();
 
         // balance validation
@@ -188,14 +192,15 @@ export class PayButtonComponent implements OnInit, OnDestroy {
             requiredTokens
           );
 
-          const { symbol: tokenSymbol, decimals: tokenDecimals } = new Currency(currency);
+          const { symbol: tokenSymbol } = new Currency(currency);
+          const tokenDecimals = this.currenciesService.getCurrencyDecimals('symbol', tokenSymbol);
           this.showInsufficientFundsDialog(requiredTokens, balance, tokenSymbol, tokenDecimals);
           return;
         }
 
         // approve validation
-        const tokenAddress = environment.contracts[engine].token;
-        const debtEngineAddress = environment.contracts[engine].diaspore.debtEngine;
+        const tokenAddress = config.contracts[engine].token;
+        const debtEngineAddress = config.contracts[engine].diaspore.debtEngine;
         const engineApproved: boolean = await this.contractsService.isApproved(debtEngineAddress, tokenAddress);
 
         if (!engineApproved) {
@@ -218,7 +223,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
           'loan ' + this.loan.id + ' of ' + amountInWei
         );
 
-        const engineAddress: string = environment.contracts[engine].diaspore.debtEngine;
+        const engineAddress: string = config.contracts[engine].diaspore.debtEngine;
         this.txService.registerPayTx(
           tx,
           engineAddress,
@@ -273,8 +278,9 @@ export class PayButtonComponent implements OnInit, OnDestroy {
    */
   async showApproveDialog() {
     const { engine } = this.loan;
-    const onlyToken: string = environment.contracts[engine].token;
-    const onlyAddress = environment.contracts[engine].diaspore.debtEngine;
+    const { config } = this.chainService;
+    const onlyToken: string = config.contracts[engine].token;
+    const onlyAddress = config.contracts[engine].diaspore.debtEngine;
 
     const dialogRef: MatDialogRef<DialogApproveContractComponent> = this.dialog.open(
       DialogApproveContractComponent, {

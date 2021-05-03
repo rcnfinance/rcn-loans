@@ -2,15 +2,15 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { timer } from 'rxjs';
 import * as BN from 'bn.js';
-import { environment } from '../../../environments/environment';
-import { Loan, Engine, Status } from '../../models/loan.model';
-import { Utils } from '../../utils/utils';
-import { Currency } from '../../utils/currencies';
+import { Loan, Engine, Status } from 'app/models/loan.model';
+import { Utils } from 'app/utils/utils';
+import { Currency } from 'app/utils/currencies';
 // App services
-import { ContractsService } from '../../services/contracts.service';
-import { CurrenciesService, CurrencyItem } from '../../services/currencies.service';
-import { Web3Service } from '../../services/web3.service';
-import { EventsService } from '../../services/events.service';
+import { ChainService } from 'app/services/chain.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
+import { Web3Service } from 'app/services/web3.service';
+import { EventsService } from 'app/services/events.service';
 
 @Component({
   selector: 'app-dialog-loan-lend',
@@ -39,7 +39,7 @@ export class DialogLoanLendComponent implements OnInit {
   account: string;
   canLend: boolean;
   availableCurrencies: CurrencyItem[];
-  explorerAddress: string = environment.network.explorer.address;
+  explorerAddress: string = this.chainService.config.network.explorer.address;
 
   loading: boolean;
 
@@ -47,6 +47,7 @@ export class DialogLoanLendComponent implements OnInit {
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private eventsService: EventsService,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) data: {loan: Loan}
@@ -73,13 +74,14 @@ export class DialogLoanLendComponent implements OnInit {
     const { engine } = this.loan;
     const engineCurrencySymbol = engine === Engine.RcnEngine ? 'RCN' : 'USDC';
     const engineCurrency = new Currency(engineCurrencySymbol);
+    const engineCurrencyDecimals = this.currenciesService.getCurrencyDecimals('symbol', engineCurrencySymbol);
     this.engineCurrency = engineCurrency;
 
     // set loan amount and rate
     const rate: BN = await this.getLoanRate();
     this.loanAmount = Utils.formatAmount(loanCurrency.fromUnit(loanAmount));
     this.loanExpectedReturn = Utils.formatAmount(loanCurrency.fromUnit(loanExpectedReturn));
-    this.exchangeEngineToken = Utils.formatAmount(rate as any / 10 ** engineCurrency.decimals, 4);
+    this.exchangeEngineToken = Utils.formatAmount(rate as any / 10 ** engineCurrencyDecimals, 4);
 
     // set loan status
     this.isCanceled = this.loan.status === Status.Destroyed;
@@ -121,17 +123,18 @@ export class DialogLoanLendComponent implements OnInit {
     const engineTokenRate: BN = await this.getLoanRate();
     const engineTokenAmountInWei: BN = Utils.bn(loanAmount.mul(engineTokenRate));
     const engineTokenExpectedReturnInWei: BN = Utils.bn(loanExpectedReturn.mul(engineTokenRate));
-    const loanCurrencyDecimals: number = loan.currency.decimals;
+    const loanCurrencyDecimals = this.currenciesService.getCurrencyDecimals('symbol', loan.currency.symbol);
     const engineTokenAmount: BN = engineTokenAmountInWei.div(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
     const engineTokenExpectedReturn: BN = engineTokenExpectedReturnInWei.div(Utils.bn(10).pow(Utils.bn(loanCurrencyDecimals)));
 
     // set amount in selected currency
     const { engine } = this.loan;
     const symbol: string = this.lendCurrency;
-    const fromToken: string = environment.contracts[engine].token;
+    const { config } = this.chainService;
+    const fromToken: string = config.contracts[engine].token;
     const toToken: string = await this.currenciesService.getCurrencyByKey('symbol', symbol).address;
-    const { decimals: engineDecimals } = this.engineCurrency;
-    const { decimals: lendDecimals } = new Currency(symbol);
+    const engineDecimals = this.currenciesService.getCurrencyDecimals('symbol', this.engineCurrency.symbol);
+    const lendDecimals = this.currenciesService.getCurrencyDecimals('symbol', symbol);
     this.lendToken = toToken;
 
     let lendAmount: BN | string;
@@ -176,9 +179,10 @@ export class DialogLoanLendComponent implements OnInit {
     const lendCurrency: string = this.lendCurrency;
     const oracle = this.loan.oracle.address;
     const { engine } = this.loan;
-    const tokenConverter = environment.contracts[engine].converter.uniswapConverter;
-    const urlOracle = environment.network.explorer.address.replace('${address}', oracle);
-    const urlTokenConverter = environment.network.explorer.address.replace('${address}', tokenConverter);
+    const { config } = this.chainService;
+    const tokenConverter = config.contracts[engine].converter.uniswapConverter;
+    const urlOracle = config.network.explorer.address.replace('${address}', oracle);
+    const urlTokenConverter = config.network.explorer.address.replace('${address}', tokenConverter);
     const { symbol: engineCurrencySymbol } = this.engineCurrency;
     this.exchangeTooltips = [];
 
@@ -209,9 +213,9 @@ export class DialogLoanLendComponent implements OnInit {
 
     try {
       const txCost = (await this.getTxCost()) / 10 ** 18;
-      const rawEthUsd = await this.contractsService.latestAnswer();
-      const ethUsd = rawEthUsd / 10 ** 8;
-      this.txCost = Utils.formatAmount(txCost * ethUsd) + ' USD';
+      const rawChainCurrencyToUsd = await this.contractsService.latestAnswer();
+      const chainCurrencyToUsd = rawChainCurrencyToUsd / 10 ** 8;
+      this.txCost = Utils.formatAmount(txCost * chainCurrencyToUsd) + ' USD';
     } catch (err) {
       this.txCost = '-';
     }
@@ -240,7 +244,8 @@ export class DialogLoanLendComponent implements OnInit {
   async getLoanRate(): Promise<BN> {
     const currency: any = this.loan.currency;
     const oracle: string = this.loan.oracle.address;
-    const rate = await this.contractsService.getRate(oracle, currency.decimals);
+    const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
+    const rate = await this.contractsService.getRate(oracle, decimals);
     return rate;
   }
 

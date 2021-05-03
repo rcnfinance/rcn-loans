@@ -1,4 +1,4 @@
-@import './../../../../scss/variables';
+@import './../../../../scss/mixins';
 @import './../../../../scss/fonts';
 
 .oracle-rates {
@@ -6,8 +6,7 @@
   max-height: 670px;
   overflow: hidden;
   position: absolute;
-  right: 208px;
-  @extend %roboto-regular;
+  right: 352px;
   @include transition();
 
   ul {

@@ -1,11 +1,10 @@
-@import 'src/scss/variables';
+@import 'src/scss/mixins';
 
 .notifications-container {
   width: 182px;
   max-height: 670px;
   overflow: hidden;
   position: absolute;
-  right: 208px;
-  @extend %roboto-regular;
+  right: 352px;
   @include transition();
 }

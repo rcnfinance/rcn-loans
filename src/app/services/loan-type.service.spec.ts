@@ -1,13 +1,9 @@
 import { async, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
-import { SharedModule } from './../shared/shared.module';
-import { environment } from './../../environments/environment';
-import { Utils } from './../utils/utils';
-// App models
-import { Loan, Engine, Status, LoanType } from './../models/loan.model';
-// App services
-import { CosignerService } from './cosigner.service';
-import { LoanTypeService } from './loan-type.service';
+import { SharedModule } from 'app/shared/shared.module';
+import { Utils } from 'app/utils/utils';
+import { Loan, Engine, Status, LoanType } from 'app/models/loan.model';
+import { LoanTypeService } from 'app/services/loan-type.service';
 
 describe('LoanTypeService', () => {
   let service: LoanTypeService;
@@ -22,7 +18,7 @@ describe('LoanTypeService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule, SharedModule],
-      providers: [LoanTypeService, CosignerService]
+      providers: [LoanTypeService]
     })
     .compileComponents();
   }));
@@ -36,7 +32,7 @@ describe('LoanTypeService', () => {
   });
 
   it('should return fintech originator type', () => {
-    const creator: string = Object.keys(environment.dir)[0];
+    const creator = '0xfbd5e54062619ef2b0323ad9ff874b39fd5a8d2c';
     const loan = new Loan(
       LOAN_ENGINE,
       LOAN_ID,
