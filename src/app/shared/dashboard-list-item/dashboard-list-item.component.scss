@@ -7,7 +7,7 @@
     padding-top: 0px !important;
     padding-bottom: 0px !important;
   }
-  .cdk-overlay-pane {
+  .cdk-overlay-connected-position-bounding-box {
     height: 144px !important;
   }
 }
@@ -99,7 +99,7 @@
     }
   }
   ::ng-deep {
-    .cdk-overlay-pane {
+    .cdk-overlay-connected-position-bounding-box {
       height: 127px !important;
     }
   }
