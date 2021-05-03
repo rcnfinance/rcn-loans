@@ -8,6 +8,9 @@
       @include styled-font('Roboto', 400, 12px);
       color: #989898;
     }
+    &__select-value {
+      @include typography-headline(6);
+    }
   }
   .accordion-details {
     mat-expansion-panel {

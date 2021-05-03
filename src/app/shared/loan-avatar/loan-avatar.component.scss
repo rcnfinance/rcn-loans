@@ -30,9 +30,11 @@
   }
   .txt-container {
     .title {
+      @include styled-font('Roboto', 500, 18px);
       line-height: 1.4em;
     }
     .subtitle {
+      @include styled-font('proxima-nova', 500, 14px);
       line-height: 1.2em;
     }
   }
