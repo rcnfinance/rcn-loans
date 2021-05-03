@@ -1,4 +1,4 @@
-@import '../../../../scss/variables';
+@import '../../../../scss/mixins';
 @import '../../../../scss/fonts';
 
 $sliderHeight: 3px;
@@ -81,7 +81,6 @@ $sliderHeight: 3px;
       text-align: center;
       position: relative;
       user-select: none;
-      @extend %roboto-regular;
 
       &::after {
         content: '';

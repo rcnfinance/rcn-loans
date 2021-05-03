@@ -53,14 +53,6 @@
           Collateral
         </h2>
         <h2
-          *ngIf="loanType === 2"
-          class="page-title page-title--tab mr-3"
-          [class.page-title--active]="isDetail('cosigner')"
-          (click)="openDetail('cosigner')"
-        >
-          Cosigner
-        </h2>
-        <h2
           *ngIf="identityName !== 'Unknown'"
           class="page-title page-title--tab mr-3"
           [class.page-title--active]="isDetail('identity')"
@@ -200,14 +192,6 @@
             Collateral
           </h2>
           <h2
-            *ngIf="loanType === 2"
-            class="page-title page-title--tab mr-3"
-            [class.page-title--active]="isDetail('cosigner')"
-            (click)="openDetail('cosigner')"
-          >
-            Cosigner
-          </h2>
-          <h2
             *ngIf="identityName !== 'Unknown'"
             class="page-title page-title--tab ml-3"
             [class.page-title--active]="isDetail('identity')"
@@ -233,7 +217,6 @@
               isDesktop ||
               (
                 isDetail('collateral') ||
-                isDetail('cosigner') ||
                 isDetail('identity') ||
                 isDetail('installments')
               )
@@ -243,10 +226,6 @@
               *ngIf="isDetail('identity')"
               [loan]="loan"
             ></app-detail-identity>
-            <app-detail-cosigner
-              *ngIf="isDetail('cosigner')"
-              [loan]="loan"
-            ></app-detail-cosigner>
             <app-detail-collateral
               *ngIf="isDetail('collateral')"
               [loan]="loan"

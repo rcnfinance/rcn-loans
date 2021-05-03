@@ -1,4 +1,4 @@
-@import '../../../scss/variables';
+@import '../../../scss/mixins';
 @import '../../../scss/fonts';
 
 .list-avatar {
@@ -21,7 +21,6 @@
       left: 50%;
       font-size: 18px;
       color: var(--app-color-secondary);
-      @extend %font-extra-bold;
       @include transform(translate(-50%, -50%));
     }
     img{
@@ -31,14 +30,12 @@
   }
   .txt-container {
     .title {
+      @include styled-font('Roboto', 500, 18px);
       line-height: 1.4em;
-      @extend %roboto-medium;
-      @extend .font18;
     }
     .subtitle {
+      @include styled-font('proxima-nova', 500, 14px);
       line-height: 1.2em;
-      @extend %font-medium;
-      @extend .font14;
     }
   }
 }

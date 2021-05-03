@@ -2,13 +2,6 @@
   class="body-scrollable requested-wrapper"
   [ngClass]="{ active: filtersOpen, disabled: filtersOpen === false }"
 >
-  <ngx-spinner
-    bdColor="transparent"
-    size="medium"
-    color="#fff"
-    type="ball-clip-rotate-multiple"
-    [name]="pageId"
-  ></ngx-spinner>
   <div class="container">
     <div class="page-header">
       <app-page-header
@@ -19,8 +12,10 @@
         chipLabel="REQUESTED"
       >
       </app-page-header>
-      <button mat-button class="paddingright30" (click)="clickFilters()">
-        FILTER BY
+      <button mat-button class="pr-4" (click)="clickFilters()">
+        <span class="mr-1">
+          FILTER BY
+        </span>
         <mat-icon class="icon-active">filter_list</mat-icon>
         <mat-icon class="icon-disabled">expand_more</mat-icon>
       </button>
@@ -37,7 +32,7 @@
         view="requested-loans"
         (sort)="sortLoans($event)"
       ></app-loan-list-header>
-      <ng-container *ngIf="loans?.length === 0; else loansTemplate">
+      <ng-container *ngIf="loans?.length === 0 && !isLoading; else loansTemplate">
         <app-empty-state
           *ngIf="isAvailableLoans"
           title="Sorry! There are no loans matching your search. Please try using different filters."
@@ -64,6 +59,10 @@
             <app-loan-list [loan]="loan" [backgroundLighter]="loan.position % 2">
             </app-loan-list>
           </div>
+          <app-loan-list-skeleton
+            *ngIf="isLoading"
+            items="20"
+          ></app-loan-list-skeleton>
         </virtual-scroller>
       </ng-template>
     </div>

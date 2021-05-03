@@ -1,13 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Loan } from './../../../models/loan.model';
 import { LoanContentApi } from './../../../interfaces/loan-api-diaspore';
 import { LoanUtils } from './../../../utils/loan-utils';
 import { ProxyApiService } from '../../../services/proxy-api.service';
 import { TitleService } from '../../../services/title.service';
-import { AvailableLoansService } from '../../../services/available-loans.service';
 import { Web3Service } from '../../../services/web3.service';
 import { EventsService } from '../../../services/events.service';
 import { DeviceService } from '../../../services/device.service';
@@ -17,11 +15,10 @@ import { DeviceService } from '../../../services/device.service';
   templateUrl: './borrowed-loans.component.html',
   styleUrls: ['./borrowed-loans.component.scss']
 })
-export class BorrowedLoansComponent implements OnInit, OnDestroy {
+export class BorrowedLoansComponent implements OnInit {
   pageId = 'borrowed';
   address: string;
   shortAddress: string;
-  available: any;
   loans: Loan[] = [];
   // pagination
   page = 1;
@@ -34,16 +31,13 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
   pageTitle: string;
   pageDescription: string;
   // subscriptions
-  subscriptionAvailable: Subscription;
   subscriptionAccount: Subscription;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private spinner: NgxSpinnerService,
     private proxyApiService: ProxyApiService,
     private titleService: TitleService,
-    private availableLoansService: AvailableLoansService,
     private web3Service: Web3Service,
     private eventsService: EventsService,
     private deviceService: DeviceService
@@ -51,7 +45,6 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.changeTitle('Activity explorer');
-    this.spinner.show(this.pageId);
     this.handleLoginEvents();
 
     this.route.params.subscribe(async params => {
@@ -67,19 +60,6 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
       await this.checkMyLoans();
       this.setPageTitle();
     });
-
-    // Available Loans service
-    this.subscriptionAvailable = this.availableLoansService.currentAvailable.subscribe(
-      available => this.available = available
-    );
-  }
-
-  ngOnDestroy() {
-    this.spinner.hide(this.pageId);
-
-    try {
-      this.subscriptionAvailable.unsubscribe();
-    } catch (e) { }
   }
 
   /**
@@ -94,7 +74,6 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
     this.isFullScrolled = false;
     this.loans = [];
 
-    this.spinner.show(this.pageId);
     await this.loadLoans(this.address, this.page, sort);
   }
 
@@ -170,11 +149,6 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
 
   private set loading(loading: boolean) {
     this.isLoading = loading;
-    if (loading) {
-      this.spinner.show(this.pageId);
-    } else {
-      this.spinner.hide(this.pageId);
-    }
   }
 
   private get loading() {

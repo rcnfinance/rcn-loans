@@ -13,7 +13,7 @@
             <mat-label class="item__select-label" *ngIf="!lendCurrency" id="label">
               Select Currency
             </mat-label>
-            <mat-select [(value)]="lendCurrency" (selectionChange)="onChangeCurrency()">
+            <mat-select class="item__select-value" [(value)]="lendCurrency" (selectionChange)="onChangeCurrency()">
               <mat-option *ngFor="let item of availableCurrencies" [value]="item.symbol">
                 <div class="row align-items-center">
                   <div class="icon-box item">
@@ -38,7 +38,7 @@
               Receive
             </div>
           </div>
-          <div class="margintop15"></div>
+          <div class="mt-3"></div>
           <div class="small-table-row --highlight">
             <div class="col --auto no-pad-left --data-margin data-style">
               <span>
@@ -65,7 +65,7 @@
               </div>
             </div>
           </div>
-          <div class="margintop10"></div>
+          <div class="mt-2"></div>
           <div class="small-table-row d-flex">
             <div class="col title-2 --auto no-pad-left --data-margin baseline">
               <div class="--auto">
