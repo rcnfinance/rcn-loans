@@ -40,6 +40,7 @@ export class Web3Service {
     this._web3 = this.buildWeb3();
     this._ethereum = window.ethereum;
     this.listenNetworkChange();
+    this.loadCurrentChain();
   }
 
   get ethereum(): any {
@@ -350,6 +351,18 @@ export class Web3Service {
       this.chainService.loadSelectedChain(chainId);
       this.logout();
     });
+  }
+
+  /**
+   * Load the current web3 provider network
+   */
+  private async loadCurrentChain() {
+    const { ethereum } = this;
+    if (ethereum) {
+      const candWeb3 = new Web3(this.ethereum);
+      const network = await promisify(candWeb3.eth.net.getId, []);
+      await this.chainService.loadSelectedChain(network);
+    }
   }
 
   private buildWeb3(): any {
