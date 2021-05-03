@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { BlockiesModule } from 'angular-blockies';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 // App Modules
 import { MaterialModule } from './../material.module';
 // App Component
@@ -29,6 +30,8 @@ import { WalletBalancesComponent } from './wallet-balances/wallet-balances.compo
 import { ApprovalsComponent } from './approvals/approvals.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
 import { ChainSelectorComponent } from './chain-selector/chain-selector.component';
+import { SkeletonComponent } from './skeleton/skeleton.component';
+import { LoanListSkeletonComponent } from './loan-list-skeleton/loan-list-skeleton.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -70,7 +73,8 @@ import { EventsService } from './../services/events.service';
     BlockiesModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    NgxSkeletonLoaderModule
   ],
   declarations: [
     FooterComponent,
@@ -95,6 +99,8 @@ import { EventsService } from './../services/events.service';
     ApprovalsComponent,
     SocialContainerComponent,
     ChainSelectorComponent,
+    LoanListSkeletonComponent,
+    SkeletonComponent,
 
     LendButtonComponent,
     DetailButtonComponent,
@@ -177,7 +183,9 @@ import { EventsService } from './../services/events.service';
     CollateralSliderDebtComponent,
     VisualUrlPipe,
     FormatAmountPipe,
-    FormatAddressPipe
+    FormatAddressPipe,
+    SkeletonComponent,
+    LoanListSkeletonComponent
   ]
 })
 export class SharedModule { }

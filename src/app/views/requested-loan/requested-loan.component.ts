@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Loan, LoanType } from 'app/models/loan.model';
 import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
 import { LoanUtils } from 'app/utils/loan-utils';
@@ -37,7 +36,6 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
   filtersOpen: boolean;
 
   constructor(
-    private spinner: NgxSpinnerService,
     private proxyApiService: ProxyApiService,
     private titleService: TitleService,
     private eventsService: EventsService,
@@ -74,7 +72,6 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
     this.isFullScrolled = false;
     this.loans = [];
 
-    this.spinner.show(this.pageId);
     await this.loadLoans(this.page, sort);
   }
 
@@ -90,7 +87,6 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
     this.isFullScrolled = false;
     this.loans = [];
 
-    this.spinner.show(this.pageId);
     await this.loadLoans(this.page, undefined, filters);
   }
 
@@ -171,11 +167,6 @@ export class RequestedLoanComponent implements OnInit, OnDestroy {
 
   private set loading(loading: boolean) {
     this.isLoading = loading;
-    if (loading) {
-      this.spinner.show(this.pageId);
-    } else {
-      this.spinner.hide(this.pageId);
-    }
   }
 
   private get loading() {

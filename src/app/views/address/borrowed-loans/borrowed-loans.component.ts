@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Loan } from 'app/models/loan.model';
 import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
 import { LoanUtils } from 'app/utils/loan-utils';
@@ -17,7 +16,7 @@ import { ChainService } from 'app/services/chain.service';
   templateUrl: './borrowed-loans.component.html',
   styleUrls: ['./borrowed-loans.component.scss']
 })
-export class BorrowedLoansComponent implements OnInit, OnDestroy {
+export class BorrowedLoansComponent implements OnInit {
   pageId = 'borrowed';
   address: string;
   shortAddress: string;
@@ -38,7 +37,6 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private spinner: NgxSpinnerService,
     private proxyApiService: ProxyApiService,
     private titleService: TitleService,
     private web3Service: Web3Service,
@@ -49,7 +47,6 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.changeTitle('Activity explorer');
-    this.spinner.show(this.pageId);
     this.handleLoginEvents();
 
     this.route.params.subscribe(async params => {
@@ -67,10 +64,6 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.spinner.hide(this.pageId);
-  }
-
   /**
    * Sort loans
    * @param sort Order by
@@ -83,7 +76,6 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
     this.isFullScrolled = false;
     this.loans = [];
 
-    this.spinner.show(this.pageId);
     await this.loadLoans(this.address, this.page, sort);
   }
 
@@ -160,11 +152,6 @@ export class BorrowedLoansComponent implements OnInit, OnDestroy {
 
   private set loading(loading: boolean) {
     this.isLoading = loading;
-    if (loading) {
-      this.spinner.show(this.pageId);
-    } else {
-      this.spinner.hide(this.pageId);
-    }
   }
 
   private get loading() {
