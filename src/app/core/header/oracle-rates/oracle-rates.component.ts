@@ -85,6 +85,10 @@ export class OracleRatesComponent implements OnInit {
         const value = Utils.formatAmount(rawValue, 4);
         rateValues[pair] = value;
 
+        // FIXME: optimize this
+        if (pair === 'ARS') {
+          rateValues[pair] = Utils.formatAmount(1 / (rawValue as any), 4);
+        }
       })
     );
 

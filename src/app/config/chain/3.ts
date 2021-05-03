@@ -89,7 +89,7 @@ export const chain = {
     chainlinkPairs: {
       'ETH': ['ETH', 'USDC'],
       'RCN': ['RCN', 'BTC', 'ETH', 'USDC'],
-      'ARS': ['ARS', 'BTC', 'ETH', 'USDC'],
+      'ARS': ['USDC', 'ETH', 'BTC', 'ARS'],
       'BTC': ['BTC', 'ETH', 'USDC']
     },
     filterCurrencies: [
