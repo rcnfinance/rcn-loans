@@ -3,7 +3,6 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DialogCollateralComponent } from '../../../dialogs/dialog-collateral/dialog-collateral.component';
 // App Models
 import { Utils } from './../../../utils/utils';
-import { Currency } from '../../../utils/currencies';
 import { Loan } from './../../../models/loan.model';
 import { Collateral } from './../../../models/collateral.model';
 // App Services
@@ -68,7 +67,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   async setCollateralPanel() {
     const collateral: Collateral = this.collateral;
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
-    const collateralDecimals = new Currency(collateralCurrency.symbol).decimals;
+    const collateralDecimals = this.currenciesService.getCurrencyDecimals('symbol', collateralCurrency.symbol);
     this.collateralAsset = collateralCurrency.symbol;
     this.collateralAmount = Utils.formatAmount(collateral.amount as any / 10 ** collateralDecimals);
 

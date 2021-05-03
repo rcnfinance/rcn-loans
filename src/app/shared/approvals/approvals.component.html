@@ -11,6 +11,7 @@
       USDC Engine
     </a>
     <a
+      *ngIf="showRcnEngine"
       class="tab"
       [class.tab--active]="engine === 'rcnEngine'"
       (click)="clickEngine('rcnEngine')"

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Engine } from '../../models/loan.model';
-import { environment } from '../../../environments/environment.prod';
+import { Engine } from 'app/models/loan.model';
+import { ChainService } from 'app/services/chain.service';
 
 @Component({
   selector: 'app-social-container',
@@ -10,13 +10,16 @@ import { environment } from '../../../environments/environment.prod';
 export class SocialContainerComponent implements OnInit {
   linkContract: string;
 
-  constructor() { }
+  constructor(
+    private chainService: ChainService
+  ) { }
 
   ngOnInit() {
-    this.linkContract = environment
+    const { config } = this.chainService;
+    this.linkContract = config
         .network
         .explorer
         .address
-        .replace('${address}', environment.contracts[Engine.RcnEngine].diaspore.loanManager);
+        .replace('${address}', config.contracts[Engine.UsdcEngine].diaspore.loanManager);
   }
 }

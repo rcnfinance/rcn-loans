@@ -2,8 +2,8 @@ import { Component, OnInit, OnChanges, Input, HostListener } from '@angular/core
 import { MatDialog } from '@angular/material';
 import { timer } from 'rxjs';
 import * as moment from 'moment';
-import { environment } from 'app/../environments/environment';
 import { ApiService } from 'app/services/api.service';
+import { ChainService } from 'app/services/chain.service';
 import { FormatAmountPipe } from 'app/pipes/format-amount.pipe';
 import { Loan } from 'app/models/loan.model';
 import { Commit, CommitTypes, CommitProperties } from 'app/interfaces/commit.interface';
@@ -24,8 +24,8 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
     commits: Commit[];
   }[];
   historyItemSelected: number;
-  explorerTx = environment.network.explorer.tx;
-  explorerAddress = environment.network.explorer.address;
+  explorerTx = this.chainService.config.network.explorer.tx;
+  explorerAddress = this.chainService.config.network.explorer.address;
 
   private commitProperties: {
     [commitType: string]: {
@@ -51,7 +51,8 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
   constructor(
     private dialog: MatDialog,
     private formatAmountPipe: FormatAmountPipe,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private chainService: ChainService
   ) {
     this.commitProperties = {
       [CommitTypes.Requested]: {
@@ -207,7 +208,8 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
       return;
     }
 
-    window.open(environment.network.explorer.address.replace('${address}', address));
+    const { config } = this.chainService;
+    window.open(config.network.explorer.address.replace('${address}', address));
   }
 
   async clickHistoryItemCircle(index?: number) {

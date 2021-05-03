@@ -4,7 +4,10 @@
 >
   <ul>
     <li>Withdrawable Balance</li>
-    <li class="item d-flex justify-content-between align-items-center">
+    <li
+      *ngIf="showRcnEngine"
+      class="item d-flex justify-content-between align-items-center"
+    >
       <div class="d-flex align-items-center">
         <img
           class="item__image"
