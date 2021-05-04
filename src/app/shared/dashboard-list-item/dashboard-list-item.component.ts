@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { DialogCollateralComponent } from 'app/dialogs/dialog-collateral/dialog-collateral.component';
 import { Loan, Status } from 'app/models/loan.model';
 import { Utils } from 'app/utils/utils';
+import { Installment } from 'app/interfaces/installment';
+import { InstallmentsService } from 'app/services/installments.service';
 
 @Component({
   selector: 'app-dashboard-list-item',
@@ -17,13 +21,20 @@ export class DashboardListItemComponent implements OnInit {
   anualRate = '-';
   paymentProgress = '-';
   timeProgress = '0%';
+  scheduleTooltip: string;
+  installmentTooltip: string;
 
-  constructor() {}
+  constructor(
+    private dialog: MatDialog,
+    private installmentsService: InstallmentsService
+  ) {}
 
   ngOnInit() {
     this.loadBasicData();
     this.loadPaymentProgress();
     this.loadTimeProgress();
+    this.loadDuration();
+    this.loadInstallments();
   }
 
   getBorderColorByStatus = () => {
@@ -78,6 +89,18 @@ export class DashboardListItemComponent implements OnInit {
       default:
         return '';
     }
+  }
+
+  async openDialog(action: 'add' | 'withdraw') {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        loan: this.loan,
+        collateral: this.loan.collateral,
+        action
+      }
+    };
+
+    this.dialog.open(DialogCollateralComponent, dialogConfig);
   }
 
   private loadBasicData() {
@@ -140,4 +163,33 @@ export class DashboardListItemComponent implements OnInit {
       daysAverage > MAX_AVERAGE ? MAX_AVERAGE : daysAverage
     }%`;
   }
+
+  private loadDuration() {
+    const loan: Loan = this.loan;
+    if (loan.status === Status.Ongoing || loan.status === Status.Indebt) {
+      const durationDynamic = Utils.formatDelta(
+        loan.debt.model.dueTime - new Date().getTime() / 1000
+      );
+      this.scheduleTooltip =
+        loan.status === Status.Indebt
+          ? `Overdue for ${durationDynamic}`
+          : `Next payment in ${durationDynamic}`;
+    }
+  }
+
+  private async loadInstallments() {
+    const loan: Loan = this.loan;
+    if (loan.status === Status.Ongoing || loan.status === Status.Indebt) {
+      const installment: Installment = await this.installmentsService.getCurrentInstallment(
+        loan
+      );
+      if (!installment) {
+        return;
+      }
+
+      const payNumber = installment.payNumber;
+      this.installmentTooltip = `Instalments: ${payNumber} of ${loan.config.installments}`;
+    }
+  }
+
 }

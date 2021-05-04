@@ -7,6 +7,7 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { SharedModule } from '../../shared/shared.module';
 // App Services
 import { ContractsService } from '../../services/contracts.service';
+import { InstallmentsService } from '../../services/installments.service';
 // App Component
 import { DashboardComponent } from './dashboard.component';
 
@@ -27,7 +28,8 @@ const routes: Routes = [
     DashboardComponent
   ],
   providers: [
-    ContractsService
+    ContractsService,
+    InstallmentsService
   ],
   exports: [
     DashboardComponent

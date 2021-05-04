@@ -26,7 +26,7 @@
     <div class="list__item__column">
         <div class="row">
             <div class="list__item__column__title col-md-12 col-6 d-sm-none">SCHEDULE PROGRESS</div>
-            <div class="list__item__column__progress col-md-12 col-6">
+            <div class="list__item__column__progress col-md-12 col-6" [matTooltip]="(scheduleTooltip && installmentTooltip) ? scheduleTooltip + ' ' + installmentTooltip : ''" matTooltipPosition="below">
                 <app-progress-bar [color]="getBorderColorByStatus()" [progress]="timeProgress"></app-progress-bar>
             </div>
         </div>
@@ -35,7 +35,7 @@
         <div class="row">
             <div class="list__item__column__title col-md-12 col-6 d-sm-none">REPAYMENT PROGRESS</div>
             <div class="col-6">
-                <p matTooltip="Accrued interest: X.XX">{{ paymentProgress }}</p>
+                <p matTooltip="Accrued interest: X.XX" matTooltipPosition="below">{{ paymentProgress }}</p>
             </div>
             <div *ngIf="showOptions" class="col-2 list__item__column__payment__button">
                 <button mat-icon-button [matMenuTriggerFor]="appMenu">
@@ -43,8 +43,8 @@
                 </button>
                 <mat-menu #appMenu="matMenu" yPosition="below">
                     <button class="list__item__button--separator" mat-menu-item>Pay</button>
-                    <button mat-menu-item>Withdraw Collateral</button>
-                    <button mat-menu-item>Add Collateral</button>
+                    <button (click)="openDialog('withdraw')" mat-menu-item>Withdraw Collateral</button>
+                    <button (click)="openDialog('add')" mat-menu-item>Add Collateral</button>
                 </mat-menu>
             </div>
         </div>
