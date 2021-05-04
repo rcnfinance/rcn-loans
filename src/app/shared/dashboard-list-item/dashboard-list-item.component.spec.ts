@@ -1,8 +1,10 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 import { DashboardListItemComponent } from './dashboard-list-item.component';
 import { MaterialModule } from '../..//material.module';
 import { Engine, Loan, Status } from '../..//models/loan.model';
+import { InstallmentsService } from '../../services/installments.service';
 
 describe('DashboardListItemComponent', () => {
   let component: DashboardListItemComponent;
@@ -10,9 +12,10 @@ describe('DashboardListItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MaterialModule],
+      imports: [MaterialModule, HttpClientModule],
       declarations: [DashboardListItemComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      providers: [InstallmentsService]
     }).compileComponents();
   }));
 
