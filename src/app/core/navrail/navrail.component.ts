@@ -5,6 +5,7 @@ import { environment } from 'environments/environment';
 import { Engine } from 'app/models/loan.model';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
 import { Web3Service } from 'app/services/web3.service';
+import { ChainService } from 'app/services/chain.service';
 
 interface FooterButton {
   url: string;
@@ -32,6 +33,7 @@ export class NavrailComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private walletConnectService: WalletConnectService
   ) {
     this.navrailHidden = true;
@@ -149,8 +151,9 @@ export class NavrailComponent implements OnInit, OnDestroy {
    */
   private loadFooterButtons() {
     const env = environment;
-    const contract = env.contracts[Engine.UsdcEngine].diaspore.loanManager;
-    const linkContract = env.network.explorer.address.replace('${address}', contract);
+    const { config } = this.chainService;
+    const contract = config.contracts[Engine.UsdcEngine].diaspore.loanManager;
+    const linkContract = config.network.explorer.address.replace('${address}', contract);
     const version = env.version;
     const versionString = `${env.version}-${env.build} - ${env.versionName} ${env.versionEmoji}`;
     this.dappVersionButtons = [

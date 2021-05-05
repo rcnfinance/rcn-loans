@@ -30,3 +30,15 @@
     max-height: 277px;
   }
 }
+
+@media (min-width: 992px) {
+  .page-content {
+    padding-left: 72px;
+  }
+}
+
+@media (min-width: 1366px) {
+  .page-content {
+    padding-left: 57px;
+  }
+}

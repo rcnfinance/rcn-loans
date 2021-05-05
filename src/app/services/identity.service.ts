@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Loan } from '../models/loan.model';
-import { Identity } from '../models/identity.model';
-import { environment, Agent } from '../../environments/environment';
-import { CompanyIdentity } from './../models/identity.model';
+import { Agent } from 'environments/environment';
+import { Loan } from 'app/models/loan.model';
+import { Identity } from 'app/models/identity.model';
+import { CompanyIdentity } from 'app/models/identity.model';
+import { ChainService } from 'app/services/chain.service';
 
 @Injectable()
 export class IdentityService {
@@ -112,11 +113,14 @@ export class IdentityService {
     )
   };
 
-  constructor() { }
+  constructor(
+    private chainService: ChainService
+  ) { }
 
   getIdentity(loan: Loan): Promise<Identity> {
+    const { config } = this.chainService;
     return new Promise(async (resolve) => {
-      resolve(this.companyIdentities[environment.dir[loan.borrower.toLowerCase()]]);
+      resolve(this.companyIdentities[config.dir[loan.borrower.toLowerCase()]]);
     }) as Promise<Identity>;
   }
 }

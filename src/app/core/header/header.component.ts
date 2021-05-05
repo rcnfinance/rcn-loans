@@ -85,10 +85,12 @@ export class HeaderComponent implements OnInit {
 
     const { wallet } = this.walletConnectService.walletConnected;
     if (wallet === WalletType.WalletConnect) {
-      this.applicationAdsService.toggleService(
-          `Oh oh! Some Argent users are having difficulties interacting with the platform.
-          Until this is fixed, please log in using the other available wallets.`
-      );
+      this.applicationAdsService.toggleService({
+        title: `Oh oh! Some Argent users are having difficulties interacting with the platform.
+        Until this is fixed, please log in using the other available wallets.`,
+        description: '',
+        image: ''
+      });
     }
   }
 

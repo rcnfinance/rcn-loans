@@ -4,15 +4,14 @@ import { MatSnackBar, MatDialog } from '@angular/material';
 const Web3 = require('web3');
 const WalletLink = require('walletlink');
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import { environment } from './../../environments/environment';
-import { promisify } from './../utils/utils';
+import { promisify } from 'app/utils/utils';
 import {
   WalletType,
   WalletConnection,
   WalletStorage
-} from './../interfaces/wallet.interface';
-// App Component
-import { DialogClientAccountComponent } from './../dialogs/dialog-client-account/dialog-client-account.component';
+} from 'app/interfaces/wallet.interface';
+import { ChainService } from 'app/services/chain.service';
+import { DialogClientAccountComponent } from 'app/dialogs/dialog-client-account/dialog-client-account.component';
 
 declare let window: any;
 
@@ -23,7 +22,6 @@ export class Web3Service {
   loginEvent = new EventEmitter<boolean>(true);
   updateBalanceEvent = new EventEmitter();
   private localStorage: any;
-
   private _web3: any;
   private _ethereum: any;
 
@@ -35,10 +33,14 @@ export class Web3Service {
   constructor(
     private title: Title,
     private snackbar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private chainService: ChainService
   ) {
     this.localStorage = window.localStorage;
     this._web3 = this.buildWeb3();
+    this._ethereum = window.ethereum;
+    this.listenNetworkChange();
+    this.loadCurrentChain();
   }
 
   get ethereum(): any {
@@ -156,12 +158,10 @@ export class Web3Service {
       this.listenAccountUpdates();
       this.listenNetworkChange();
 
-      const network = await promisify(this.web3.eth.net.getId, []);
-      const connection: WalletConnection = {
-        wallet,
-        network
-      };
+      const network = await promisify(candWeb3.eth.net.getId, []);
+      this.chainService.loadSelectedChain(network);
 
+      const connection: WalletConnection = { wallet, network };
       this.localStorage.setItem('walletConnected', JSON.stringify(connection));
       this.loginEvent.emit(successfulLogin);
       return true;
@@ -186,12 +186,12 @@ export class Web3Service {
     console.info('Web3 provider detected');
 
     // validate network id
+    const { chains } = this.chainService;
     const candWeb3 = new Web3(window.web3.currentProvider);
-    const expectedNetworkId = environment.network.id;
     const networkId = await promisify(candWeb3.eth.net.getId, []);
 
-    if (networkId !== expectedNetworkId) {
-      console.info('Mismatch provider network ID', networkId, expectedNetworkId);
+    if (!chains.includes(networkId)) {
+      console.info('Provider network ID not supported', networkId);
       return;
     }
 
@@ -212,10 +212,11 @@ export class Web3Service {
    * @return Wallet provider
    */
   private async loadWalletlinkWallet() {
+    const { config } = this.chainService;
     const APP_NAME = this.title.getTitle();
     const APP_LOGO_URL = 'https://rcn.loans/assets/rcn-logo.png';
-    const ETH_JSONRPC_URL = environment.network.provider.url;
-    const CHAIN_ID = environment.network.id;
+    const CHAIN_JSONRPC_URL = config.network.provider.url;
+    const CHAIN_ID = config.network.id;
 
     // Initialize WalletLink
     const walletLink = new WalletLink.WalletLink({
@@ -224,7 +225,7 @@ export class Web3Service {
     });
 
     // Initialize a Web3 Provider object
-    const ethereum = walletLink.makeWeb3Provider(ETH_JSONRPC_URL, CHAIN_ID);
+    const ethereum = walletLink.makeWeb3Provider(CHAIN_JSONRPC_URL, CHAIN_ID);
 
     // set scoped ethereum
     this._ethereum = ethereum;
@@ -236,8 +237,9 @@ export class Web3Service {
    * @return Wallet provider
    */
   private async loadWalletconnectWallet() {
-    const INFURA_ID = environment.network.provider.id;
-    const CHAIN_ID = environment.network.id;
+    const { config } = this.chainService;
+    const INFURA_ID = config.network.provider.id;
+    const CHAIN_ID = config.network.id;
 
     //  Create WalletConnect Provider
     const provider = new WalletConnectProvider({
@@ -274,13 +276,12 @@ export class Web3Service {
     }
 
     // validate network id
+    const { chains } = this.chainService;
     const candWeb3 = new Web3(this.ethereum);
-    const expectedNetworkId = environment.network.id;
-    const expectedNetworkName = environment.network.name;
     const networkId = await promisify(candWeb3.eth.net.getId, []);
 
-    if (networkId !== expectedNetworkId) {
-      this.snackbar.open(`Please connect to the ${ expectedNetworkName } Network.`, null, {
+    if (!chains.includes(networkId)) {
+      this.snackbar.open(`Please connect to a supported Network.`, null, {
         duration: 4000,
         horizontalPosition: 'center'
       });
@@ -341,13 +342,31 @@ export class Web3Service {
    * Refresh dApp when the network is changed
    */
   private listenNetworkChange() {
-    this.ethereum.autoRefreshOnNetworkChange = false;
-    this.ethereum.on('networkChanged', () => {
+    const { ethereum } = this;
+    if (!ethereum) {
+      return;
+    }
+
+    this.ethereum.on('networkChanged', (chainId) => {
+      this.chainService.loadSelectedChain(chainId);
       this.logout();
     });
   }
 
+  /**
+   * Load the current web3 provider network
+   */
+  private async loadCurrentChain() {
+    const { ethereum } = this;
+    if (ethereum) {
+      const candWeb3 = new Web3(this.ethereum);
+      const network = await promisify(candWeb3.eth.net.getId, []);
+      await this.chainService.loadSelectedChain(network);
+    }
+  }
+
   private buildWeb3(): any {
-    return new Web3(new Web3.providers.HttpProvider(environment.network.provider.url));
+    const { config } = this.chainService;
+    return new Web3(new Web3.providers.HttpProvider(config.network.provider.url));
   }
 }

@@ -7,6 +7,7 @@ import { ProxyApiService } from '../../services/proxy-api.service';
 import { EventsService } from '../../services/events.service';
 import { TitleService } from '../../services/title.service';
 import { Web3Service } from '../../services/web3.service';
+import { ChainService } from '../../services/chain.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,7 +36,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private proxyApiService: ProxyApiService,
     private titleService: TitleService,
     private eventsService: EventsService,
-    private web3Service: Web3Service
+    private web3Service: Web3Service,
+    private chainService: ChainService
   ) {}
 
   async ngOnInit() {
@@ -127,8 +129,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         page,
         PAGE_SIZE
       );
+      const { config } = this.chainService;
       let loans: Loan[] = content.map((loanData: LoanContentApi) =>
-        LoanUtils.buildLoan(loanData)
+        LoanUtils.buildLoan(loanData, config)
       );
 
       // filter status destroyed, expired and paid
@@ -207,8 +210,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         page,
         PAGE_SIZE
       );
+      const { config } = this.chainService;
       let loans: Loan[] = content.map((loanData: LoanContentApi) =>
-        LoanUtils.buildLoan(loanData)
+        LoanUtils.buildLoan(loanData, config)
       );
 
       // filter status destroyed, expired and paid

@@ -7,14 +7,15 @@ import {
   transition
 } from '@angular/animations';
 import { Subscription, timer } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { Engine } from './../../../models/loan.model';
-import { HeaderPopoverService } from './../../../services/header-popover.service';
-import { ContractsService } from './../../../services/contracts.service';
-import { Web3Service } from './../../../services/web3.service';
-import { EventsService } from './../../../services/events.service';
-import { Tx, Type, TxService } from './../../../services/tx.service';
-import { Utils } from './../../../utils/utils';
+import { Engine } from 'app/models/loan.model';
+import { HeaderPopoverService } from 'app/services/header-popover.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { Web3Service } from 'app/services/web3.service';
+import { EventsService } from 'app/services/events.service';
+import { Tx, Type, TxService } from 'app/services/tx.service';
+import { CurrenciesService } from 'app/services/currencies.service';
+import { ChainService } from 'app/services/chain.service';
+import { Utils } from 'app/utils/utils';
 
 @Component({
   selector: 'app-wallet-withdraw',
@@ -68,9 +69,15 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
     private headerPopoverService: HeaderPopoverService,
     private txService: TxService,
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private eventsService: EventsService,
-    private contractsService: ContractsService
+    private contractsService: ContractsService,
+    private currenciesService: CurrenciesService
   ) { }
+
+  get showRcnEngine() {
+    return this.chainService.isEthereum;
+  }
 
   ngOnInit() {
     this.subscriptionPopover =
@@ -150,15 +157,23 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
    * total available
    */
   async loadWithdrawBalance() {
-    // rcn engine
-    const rcnPendingWithdraws = await this.contractsService.getPendingWithdraws(Engine.RcnEngine);
-    this.rcnAvailable = rcnPendingWithdraws[2] / 10 ** 18;
-    this.rcnLoansWithBalance = rcnPendingWithdraws[3];
+    const { isEthereum } = this.chainService;
 
     // usdc engine
+    const USDC_SYMBOL = 'USDC';
+    const usdcDecimals = this.currenciesService.getCurrencyDecimals('symbol', USDC_SYMBOL);
     const usdcPendingWithdraws = await this.contractsService.getPendingWithdraws(Engine.UsdcEngine);
-    this.usdcAvailable = usdcPendingWithdraws[2] / 10 ** 6;
+    this.usdcAvailable = usdcPendingWithdraws[2] / 10 ** usdcDecimals;
     this.usdcLoansWithBalance = usdcPendingWithdraws[3];
+
+    // rcn engine
+    if (isEthereum) {
+      const RCN_SYMBOL = 'RCN';
+      const rcnDecimals = this.currenciesService.getCurrencyDecimals('symbol', RCN_SYMBOL);
+      const rcnPendingWithdraws = await this.contractsService.getPendingWithdraws(Engine.RcnEngine);
+      this.rcnAvailable = rcnPendingWithdraws[2] / 10 ** rcnDecimals;
+      this.rcnLoansWithBalance = rcnPendingWithdraws[3];
+    }
 
     this.loadOngoingWithdraw();
     this.updateDisplay();
@@ -168,14 +183,17 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
    * Load the pending withdraw
    */
   loadOngoingWithdraw() {
-    this.rcnOngoingWithdraw = this.txService.getLastWithdraw(
-      environment.contracts[Engine.RcnEngine].diaspore.debtEngine,
-      this.rcnLoansWithBalance
-    );
+    const { config, isEthereum } = this.chainService;
     this.usdcOngoingWithdraw = this.txService.getLastWithdraw(
-      environment.contracts[Engine.UsdcEngine].diaspore.debtEngine,
+      config.contracts[Engine.UsdcEngine].diaspore.debtEngine,
       this.usdcLoansWithBalance
     );
+    if (isEthereum) {
+      this.rcnOngoingWithdraw = this.txService.getLastWithdraw(
+        config.contracts[Engine.RcnEngine].diaspore.debtEngine,
+        this.rcnLoansWithBalance
+      );
+    }
   }
 
   /**
@@ -208,10 +226,16 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
    * Withdraw diaspore funds
    */
   private async withdrawRcn() {
+    const { isEthereum } = this.chainService;
+    if (!isEthereum) {
+      return;
+    }
+
     if (this.rcnCanWithdraw) {
       if (this.rcnLoansWithBalance.length > 0) {
+        const { config } = this.chainService;
         const tx = await this.contractsService.withdrawFundsDiaspore(Engine.RcnEngine, this.rcnLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, environment.contracts[Engine.RcnEngine].diaspore.debtEngine, this.rcnLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, config.contracts[Engine.RcnEngine].diaspore.debtEngine, this.rcnLoansWithBalance);
       }
       this.loadWithdrawBalance();
       this.retrievePendingTx();
@@ -224,8 +248,9 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
   private async withdrawUsdc() {
     if (this.usdcCanWithdraw) {
       if (this.usdcLoansWithBalance.length > 0) {
+        const { config } = this.chainService;
         const tx = await this.contractsService.withdrawFundsDiaspore(Engine.UsdcEngine, this.usdcLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, environment.contracts[Engine.UsdcEngine].diaspore.debtEngine, this.usdcLoansWithBalance);
+        this.txService.registerWithdrawTx(tx, config.contracts[Engine.UsdcEngine].diaspore.debtEngine, this.usdcLoansWithBalance);
       }
       this.loadWithdrawBalance();
       this.retrievePendingTx();

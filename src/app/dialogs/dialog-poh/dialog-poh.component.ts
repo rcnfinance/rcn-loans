@@ -4,6 +4,7 @@ import { environment } from 'environments/environment';
 import { PohProfile } from 'app/interfaces/poh-profile';
 import { ApiService } from 'app/services/api.service';
 import { PohService } from 'app/services/poh.service';
+import { ChainService } from 'app/services/chain.service';
 
 @Component({
   selector: 'app-dialog-poh',
@@ -24,7 +25,8 @@ export class DialogPohComponent implements OnInit {
     },
     private snackBar: MatSnackBar,
     private apiService: ApiService,
-    private pohService: PohService
+    private pohService: PohService,
+    private chainService: ChainService
   ) { }
 
   ngOnInit() {
@@ -95,7 +97,8 @@ export class DialogPohComponent implements OnInit {
 
   private loadUrls() {
     const { address } = this;
-    const urlEtherscan = environment.network.explorer.address.replace('${address}', address);
+    const { config } = this.chainService;
+    const urlEtherscan = config.network.explorer.address.replace('${address}', address);
     const urlPoh = `https://app.proofofhumanity.id/profile/${ address }?network=mainnet`;
     this.urlEtherscan = urlEtherscan;
     this.urlPoh = urlPoh;

@@ -29,6 +29,7 @@ import { WalletAvatarComponent } from './wallet-avatar/wallet-avatar.component';
 import { WalletBalancesComponent } from './wallet-balances/wallet-balances.component';
 import { ApprovalsComponent } from './approvals/approvals.component';
 import { SocialContainerComponent } from './social-container/social-container.component';
+import { ChainSelectorComponent } from './chain-selector/chain-selector.component';
 import { SkeletonComponent } from './skeleton/skeleton.component';
 import { LoanListSkeletonComponent } from './loan-list-skeleton/loan-list-skeleton.component';
 // App Buttons
@@ -52,7 +53,7 @@ import { DialogCollateralComponent } from '../dialogs/dialog-collateral/dialog-c
 import { DialogNeedWithdrawComponent } from '../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
 import { DialogPohComponent } from '../dialogs/dialog-poh/dialog-poh.component';
 import { DialogLoanPayComponent } from '../dialogs/dialog-loan-pay/dialog-loan-pay.component';
-
+import { DialogChainSelectorComponent } from '../dialogs/dialog-chain-selector/dialog-chain-selector.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 import { FormatAmountPipe } from './../pipes/format-amount.pipe';
@@ -102,6 +103,7 @@ import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashbo
     WalletBalancesComponent,
     ApprovalsComponent,
     SocialContainerComponent,
+    ChainSelectorComponent,
     LoanListSkeletonComponent,
     SkeletonComponent,
 
@@ -124,6 +126,7 @@ import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashbo
     DialogNeedWithdrawComponent,
     DialogPohComponent,
     DialogLoanPayComponent,
+    DialogChainSelectorComponent,
 
     VisualUrlPipe,
     FormatAmountPipe,
@@ -146,7 +149,8 @@ import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashbo
     DialogCollateralComponent,
     DialogNeedWithdrawComponent,
     DialogPohComponent,
-    DialogLoanPayComponent
+    DialogLoanPayComponent,
+    DialogChainSelectorComponent
   ],
   providers: [
     ContractsService,
@@ -185,6 +189,7 @@ import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashbo
     WalletBalancesComponent,
     ApprovalsComponent,
     SocialContainerComponent,
+    ChainSelectorComponent,
     DialogWrongCountryComponent,
     BorrowFabButtonComponent,
     CollateralFormComponent,
