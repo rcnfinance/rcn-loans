@@ -4,7 +4,6 @@ import { LoanContentApi } from './../interfaces/loan-api-diaspore';
 import { Commit, CommitTypes, CommitProperties } from './../interfaces/commit.interface';
 import { RcnApiUtils } from './rcn-api-utils';
 import { Utils } from './utils';
-import { environment } from './../../environments/environment';
 
 export class LoanUtils {
   static decodeInterest(raw: number): number {
@@ -17,9 +16,10 @@ export class LoanUtils {
   /**
    * Build loan model from api response
    * @param loanData Loan data obtained from API
+   * @param chainConfig Chain config
    * @return Loan
    */
-  static buildLoan(loanContent: LoanContentApi): Loan {
+  static buildLoan(loanContent: LoanContentApi, chainConfig): Loan {
     const {
       loan: loanData,
       debt: debtData,
@@ -41,7 +41,7 @@ export class LoanUtils {
       oracle = new Oracle(loanData.oracle, DEFAULT_CURRENCY, loanData.currency);
     }
 
-    const engineAddress = environment.contracts[engine].diaspore.loanManager;
+    const engineAddress = chainConfig.contracts[engine].diaspore.loanManager;
 
     let descriptor: Descriptor;
     let debt: Debt;

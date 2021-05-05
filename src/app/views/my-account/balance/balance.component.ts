@@ -1,11 +1,12 @@
 import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { environment } from 'environments/environment';
 import { Engine } from 'app/models/loan.model';
 import { Utils } from 'app/utils/utils';
 import { Web3Service } from 'app/services/web3.service';
 import { EventsService } from 'app/services/events.service';
 import { ContractsService } from 'app/services/contracts.service';
+import { ChainService } from 'app/services/chain.service';
+import { CurrenciesService } from 'app/services/currencies.service';
 import { Tx, Type, TxService } from 'app/services/tx.service';
 
 @Component({
@@ -30,6 +31,8 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     private web3Service: Web3Service,
     private eventsService: EventsService,
     private contractService: ContractsService,
+    private chainService: ChainService,
+    private currenciesService: CurrenciesService,
     private txService: TxService
   ) { }
 
@@ -87,8 +90,10 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * total available
    */
   async loadWithdrawBalance() {
+    const USDC_SYMBOL = 'USDC';
+    const decimals = this.currenciesService.getCurrencyDecimals('symbol', USDC_SYMBOL);
     const pendingWithdraws = await this.contractService.getPendingWithdraws(Engine.UsdcEngine);
-    this.usdcAvailable = pendingWithdraws[2] / 10 ** 6;
+    this.usdcAvailable = pendingWithdraws[2] / 10 ** decimals;
     this.usdcLoansWithBalance = pendingWithdraws[3];
 
     this.loadOngoingWithdraw();
@@ -99,8 +104,9 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Load the pending withdraw
    */
   loadOngoingWithdraw() {
+    const { config } = this.chainService;
     this.usdcOngoingWithdraw = this.txService.getLastWithdraw(
-      environment.contracts[Engine.UsdcEngine].diaspore.debtEngine,
+      config.contracts[Engine.UsdcEngine].diaspore.debtEngine,
       this.usdcLoansWithBalance
     );
   }
@@ -125,7 +131,8 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     if (this.usdcCanWithdraw) {
       if (this.usdcLoansWithBalance.length > 0) {
         const tx = await this.contractService.withdrawFundsDiaspore(Engine.UsdcEngine, this.usdcLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, environment.contracts[Engine.UsdcEngine].diaspore.debtEngine, this.usdcLoansWithBalance);
+        const { config } = this.chainService;
+        this.txService.registerWithdrawTx(tx, config.contracts[Engine.UsdcEngine].diaspore.debtEngine, this.usdcLoansWithBalance);
       }
       this.loadWithdrawBalance();
       this.retrievePendingTx();

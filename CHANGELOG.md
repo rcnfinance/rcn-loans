@@ -1,5 +1,20 @@
 # Changelog
 
+## **0.4.0** Boggart 👻
+
+### Feature:
+- Implement support for multiple chains
+- Add Binance Smart Chain
+- New loan list skeleton component
+
+### Enhancement:
+- Clean code
+- Improves performance
+
+### Fix:
+- Oracle rate for ARS
+
+
 ## **0.3.4** Boggart 👻
 
 ### Feature:

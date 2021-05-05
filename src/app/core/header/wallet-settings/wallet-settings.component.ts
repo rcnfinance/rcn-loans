@@ -8,13 +8,13 @@ import {
 } from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { MatSnackBar, MatDialog } from '@angular/material';
-import { environment } from 'app/../environments/environment';
 import { Utils } from 'app/utils/utils';
 import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogPohComponent } from 'app/dialogs/dialog-poh/dialog-poh.component';
 import { HeaderPopoverService } from 'app/services/header-popover.service';
 import { PohService } from 'app/services/poh.service';
 import { Web3Service } from 'app/services/web3.service';
+import { ChainService } from 'app/services/chain.service';
 
 @Component({
   selector: 'app-wallet-settings',
@@ -56,7 +56,8 @@ export class WalletSettingsComponent implements OnInit, OnChanges, OnDestroy {
     private dialog: MatDialog,
     private pohService: PohService,
     private headerPopoverService: HeaderPopoverService,
-    private web3Service: Web3Service
+    private web3Service: Web3Service,
+    private chainService: ChainService
   ) { }
 
   ngOnInit() {
@@ -104,7 +105,8 @@ export class WalletSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
   clickOpenEtherscan() {
     const { account } = this;
-    window.open(environment.network.explorer.address.replace('${address}', account));
+    const { config } = this.chainService;
+    window.open(config.network.explorer.address.replace('${address}', account));
   }
 
   clickOpenApprovals() {

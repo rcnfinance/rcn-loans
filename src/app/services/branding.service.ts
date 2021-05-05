@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Loan } from './../models/loan.model';
-import { Agent, environment } from '../../environments/environment';
-import { Brand } from './../models/brand.model';
+import { Agent } from 'environments/environment';
+import { Loan } from 'app/models/loan.model';
+import { ChainService } from 'app/services/chain.service';
+import { Brand } from 'app/models/brand.model';
 
 @Injectable()
 export class BrandingService {
@@ -16,10 +17,13 @@ export class BrandingService {
       undefined
     )
   };
-  constructor() { }
+  constructor(
+    private chainService: ChainService
+  ) { }
 
   getBrand(loan: Loan): Brand {
-    switch (environment.dir[loan.creator.toLowerCase()]) {
+    const { config } = this.chainService;
+    switch (config.dir[loan.creator.toLowerCase()]) {
       case Agent.RipioArsCreator:
       case Agent.RipioUsdCreator:
         return this.staticBrands.ripio;

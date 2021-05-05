@@ -54,9 +54,17 @@
               >
                 My Loans
               </a> -->
-              <div class="nav__item nav__item--connect ml-2 mr-4" (click)="login()" *ngIf="!hasAccount">
-                Connect
-              </div>
+              <ng-container *ngIf="!hasAccount">
+                <div class="nav__item nav__item--chain mr-2">
+                  <app-chain-selector></app-chain-selector>
+                </div>
+                <div
+                  class="nav__item nav__item--connect ml-2 mr-4"
+                  (click)="login()"
+                >
+                  Connect
+                </div>
+              </ng-container>
               <div
                 class="align-items-center px-0"
                 [ngClass]="hasAccount ? 'd-flex' : 'd-none'"

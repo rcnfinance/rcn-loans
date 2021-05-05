@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { environment, Agent } from './../../environments/environment';
-import { Loan, LoanType } from './../models/loan.model';
+import { Agent } from 'environments/environment';
+import { Loan, LoanType } from 'app/models/loan.model';
+import { ChainService } from 'app/services/chain.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoanTypeService {
-
-  constructor() { }
+  constructor(
+    private chainService: ChainService
+  ) { }
 
   /**
    * Get loan type
@@ -15,8 +17,9 @@ export class LoanTypeService {
    * @return Loan type
    */
   getLoanType(loan: Loan): LoanType {
+    const { config } = this.chainService;
     const creatorAddress: string = loan.creator.toLowerCase();
-    const creatorAgent: Agent = environment.dir[creatorAddress];
+    const creatorAgent: Agent = config.dir[creatorAddress];
     if (creatorAgent) {
       return LoanType.FintechOriginator;
     }
