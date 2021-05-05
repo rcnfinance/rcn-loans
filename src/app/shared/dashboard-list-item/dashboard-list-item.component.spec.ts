@@ -1,4 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardListItemComponent } from './dashboard-list-item.component';
@@ -12,7 +13,7 @@ describe('DashboardListItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MaterialModule, HttpClientModule],
+      imports: [MaterialModule, HttpClientModule, RouterModule.forRoot([])],
       declarations: [DashboardListItemComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [InstallmentsService]

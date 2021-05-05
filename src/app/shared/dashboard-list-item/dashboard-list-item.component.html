@@ -38,13 +38,13 @@
                 <p matTooltip="Accrued interest: X.XX" matTooltipPosition="below">{{ paymentProgress }}</p>
             </div>
             <div *ngIf="showOptions" class="col-2 list__item__column__payment__button">
-                <button mat-icon-button [matMenuTriggerFor]="appMenu">
+                <button *ngIf="canPay || canRedeem || canAdjustCollateral" mat-icon-button [matMenuTriggerFor]="appMenu">
                     <i class="fas fa-ellipsis-v"></i>
                 </button>
                 <mat-menu #appMenu="matMenu" yPosition="below">
-                    <button class="list__item__button--separator" mat-menu-item>Pay</button>
-                    <button (click)="openDialog('withdraw')" mat-menu-item>Withdraw Collateral</button>
-                    <button (click)="openDialog('add')" mat-menu-item>Add Collateral</button>
+                    <button *ngIf="canPay" (click)="openDialog('pay')" mat-menu-item>Pay</button>
+                    <button *ngIf="canRedeem" (click)="openDialog('withdraw')" mat-menu-item>Withdraw Collateral</button>
+                    <button *ngIf="canAdjustCollateral" (click)="openDialog('add')" mat-menu-item>Add Collateral</button>
                 </mat-menu>
             </div>
         </div>

@@ -10,6 +10,12 @@
   .cdk-overlay-connected-position-bounding-box {
     height: 144px !important;
   }
+  .mat-menu-panel {
+    min-height: 0px !important;
+  }
+  .cdk-overlay-pane{
+    height: auto !important;
+  }
 }
 
 .list {
@@ -84,9 +90,6 @@
       }
       &__button {
         display: none;
-      }
-      &__button--separator {
-        border-bottom: 1px solid #6a6a6b;
       }
       &__tooltip {
         position: absolute;

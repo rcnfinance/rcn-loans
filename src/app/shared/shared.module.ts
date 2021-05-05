@@ -51,6 +51,8 @@ import { DialogFrontRunningComponent } from '../dialogs/dialog-front-running/dia
 import { DialogCollateralComponent } from '../dialogs/dialog-collateral/dialog-collateral.component';
 import { DialogNeedWithdrawComponent } from '../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
 import { DialogPohComponent } from '../dialogs/dialog-poh/dialog-poh.component';
+import { DialogLoanPayComponent } from '../dialogs/dialog-loan-pay/dialog-loan-pay.component';
+
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 import { FormatAmountPipe } from './../pipes/format-amount.pipe';
@@ -121,6 +123,7 @@ import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashbo
     DialogCollateralComponent,
     DialogNeedWithdrawComponent,
     DialogPohComponent,
+    DialogLoanPayComponent,
 
     VisualUrlPipe,
     FormatAmountPipe,
@@ -142,7 +145,8 @@ import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashbo
     DialogFrontRunningComponent,
     DialogCollateralComponent,
     DialogNeedWithdrawComponent,
-    DialogPohComponent
+    DialogPohComponent,
+    DialogLoanPayComponent
   ],
   providers: [
     ContractsService,
@@ -189,7 +193,8 @@ import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashbo
     FormatAmountPipe,
     FormatAddressPipe,
     SkeletonComponent,
-    LoanListSkeletonComponent
+    LoanListSkeletonComponent,
+    DialogLoanPayComponent
   ]
 })
 export class SharedModule { }

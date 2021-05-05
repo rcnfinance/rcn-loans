@@ -1,10 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+import { Router } from '@angular/router';
 import { DialogCollateralComponent } from 'app/dialogs/dialog-collateral/dialog-collateral.component';
 import { Loan, Status } from 'app/models/loan.model';
+import { Status as CollateralStatus } from 'app/models/collateral.model';
 import { Utils } from 'app/utils/utils';
 import { Installment } from 'app/interfaces/installment';
 import { InstallmentsService } from 'app/services/installments.service';
+import { Web3Service } from 'app/services/web3.service';
+import { DialogLoanPayComponent } from 'app/dialogs/dialog-loan-pay/dialog-loan-pay.component';
 
 @Component({
   selector: 'app-dashboard-list-item',
@@ -24,9 +28,15 @@ export class DashboardListItemComponent implements OnInit {
   scheduleTooltip: string;
   installmentTooltip: string;
 
+  canRedeem: boolean;
+  canPay: boolean;
+  canAdjustCollateral: boolean;
+
   constructor(
     private dialog: MatDialog,
-    private installmentsService: InstallmentsService
+    private installmentsService: InstallmentsService,
+    private web3Service: Web3Service,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -35,6 +45,7 @@ export class DashboardListItemComponent implements OnInit {
     this.loadTimeProgress();
     this.loadDuration();
     this.loadInstallments();
+    this.checkValidations();
   }
 
   getBorderColorByStatus = () => {
@@ -91,16 +102,28 @@ export class DashboardListItemComponent implements OnInit {
     }
   }
 
-  async openDialog(action: 'add' | 'withdraw') {
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        loan: this.loan,
-        collateral: this.loan.collateral,
-        action
-      }
-    };
+  async openDialog(action: 'add' | 'withdraw' | 'pay') {
+    if (action === 'pay') {
+      const dialog = this.dialog.open(DialogLoanPayComponent, {
+        data: {
+          loan: this.loan
+        }
+      });
+      dialog.afterClosed().subscribe(() => {
 
-    this.dialog.open(DialogCollateralComponent, dialogConfig);
+      });
+    } else if (action === 'add') {
+      this.router.navigate(['/borrow', this.loan.id]);
+    } else {
+      const dialogConfig: MatDialogConfig = {
+        data: {
+          loan: this.loan,
+          collateral: this.loan.collateral,
+          action
+        }
+      };
+      this.dialog.open(DialogCollateralComponent, dialogConfig);
+    }
   }
 
   private loadBasicData() {
@@ -189,6 +212,30 @@ export class DashboardListItemComponent implements OnInit {
 
       const payNumber = installment.payNumber;
       this.installmentTooltip = `Instalments: ${payNumber} of ${loan.config.installments}`;
+    }
+  }
+
+  /**
+   * Check if collateral can withdraw all
+   */
+  private async checkValidations() {
+    const account: string = await this.web3Service.getAccount();
+
+    if ([Status.Paid, Status.Expired].includes(this.loan.status)) {
+      const isBorrower = this.loan.borrower.toUpperCase() === account.toUpperCase();
+      const { collateral } = this.loan;
+
+      this.canRedeem =
+        isBorrower &&
+        collateral &&
+        [CollateralStatus.ToWithdraw, CollateralStatus.Created].includes(collateral.status) &&
+        Number(collateral.amount) > 0;
+    }
+    if (this.loan.status === Status.Ongoing || this.loan.status === Status.Indebt && this.loan.debt && this.loan.debt.balance) {
+      this.canPay = true;
+    }
+    if (!this.loan.collateral && this.loan.status === Status.Request) {
+      this.canAdjustCollateral = true;
     }
   }
 
