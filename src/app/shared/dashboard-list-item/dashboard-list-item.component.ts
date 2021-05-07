@@ -9,6 +9,7 @@ import { Installment } from 'app/interfaces/installment';
 import { InstallmentsService } from 'app/services/installments.service';
 import { Web3Service } from 'app/services/web3.service';
 import { DialogLoanPayComponent } from 'app/dialogs/dialog-loan-pay/dialog-loan-pay.component';
+import { CurrenciesService } from 'app/services/currencies.service';
 
 @Component({
   selector: 'app-dashboard-list-item',
@@ -35,6 +36,7 @@ export class DashboardListItemComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private installmentsService: InstallmentsService,
+    private currenciesService: CurrenciesService,
     private web3Service: Web3Service,
     private router: Router
   ) {}
@@ -129,13 +131,14 @@ export class DashboardListItemComponent implements OnInit {
   private loadBasicData() {
     const { amount, currency, debt, descriptor, status } = this.loan;
 
+    const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
     this.borrowed =
-      Utils.formatAmount(amount / 10 ** currency.decimals, 2) +
+      Utils.formatAmount(amount / 10 ** decimals, 2) +
       ' ' +
       currency.symbol;
     if (status !== Status.Request && status !== Status.Expired) {
       this.repaid =
-        Utils.formatAmount(debt.model.paid / 10 ** currency.decimals, 2) +
+        Utils.formatAmount(debt.model.paid / 10 ** decimals, 2) +
         ' ' +
         currency.symbol;
     }
