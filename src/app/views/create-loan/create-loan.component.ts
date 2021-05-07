@@ -15,6 +15,7 @@ import { DialogInsufficientfundsComponent } from 'app/dialogs/dialog-insufficien
 import { Web3Service } from 'app/services/web3.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
 import { TitleService } from 'app/services/title.service';
+import { NavrailService } from 'app/services/navrail.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
 import { TxService, Tx, Type } from 'app/services/tx.service';
@@ -56,6 +57,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     private walletConnectService: WalletConnectService,
     private titleService: TitleService,
     private chainService: ChainService,
+    private navrailService: NavrailService,
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
     private txService: TxService
@@ -233,6 +235,9 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
       this.location.replaceState(`/borrow/${ id }`);
       this.retrievePendingTx();
       this.loanWasCreated = true;
+
+      // TODO: call navrailService and set showBulletMyLoans to true
+      this.navrailService.showBulletMyLoans = true;
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.stack.indexOf('User denied transaction signature') < 0) {
@@ -333,6 +338,9 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
         this.startProgress = false;
         this.createPendingTx = undefined;
       }, 1000);
+
+      // TODO: call navrailService and set showBulletMyLoans to true
+      // this.navrailService.showBulletMyLoans = false;
     }
   }
 
@@ -352,6 +360,8 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
 
     this.spinner.hide();
     this.router.navigate(['/', 'loan', loan.id]);
+
+    // TODO: call navrailService and refresh showBulletMyLoans
   }
 
   /**
