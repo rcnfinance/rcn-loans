@@ -1,36 +1,38 @@
 <div class="list__item" [ngStyle]="{'border-color': getBorderColorByStatus()}">
-    <div class="list__item__title d-sm-none">
-        <p [ngClass]="{'list__item__title--warning': getStatusTextByStatus() === 'Collateral Pending', 'list__item__title--expired' : getStatusTextByStatus() === 'Expired' }">
-            <i class="fas" [ngClass]="'fa-'+getIconByStatus()"></i> 
-            {{ getStatusTextByStatus() }}
-        </p>
-    </div>
-    <div class="list__item__column">
-        <div class="row">
-            <div class="list__item__column__title col-md-12 col-6 d-sm-none">BORROWED</div>
-            <div class="col-md-12 col-6">{{ borrowed }}</div>
+    <a [routerLink]="'/loan/'+loan.id">
+        <div class="list__item__title d-sm-none">
+            <p [ngClass]="{'list__item__title--warning': getStatusTextByStatus() === 'Collateral Pending', 'list__item__title--expired' : getStatusTextByStatus() === 'Expired' }">
+                <i class="fas" [ngClass]="'fa-'+getIconByStatus()"></i> 
+                {{ getStatusTextByStatus() }}
+            </p>
         </div>
-    </div>
-    <div class="list__item__column">
-        <div class="row">
-            <div class="list__item__column__title col-md-12 col-6 d-sm-none">REPAID</div>
-            <div class="col-md-12 col-6">{{ repaid }}</div>
-        </div>
-    </div>
-    <div class="list__item__column" matTooltip="Effective rate: X.XX%">
-        <div class="row">
-            <div class="list__item__column__title col-md-12 col-6 d-sm-none">ANNUAL RATE</div>
-            <div class="col-md-12 col-6">{{ anualRate }}</div>
-        </div>
-    </div>
-    <div class="list__item__column">
-        <div class="row">
-            <div class="list__item__column__title col-md-12 col-6 d-sm-none">SCHEDULE PROGRESS</div>
-            <div class="list__item__column__progress col-md-12 col-6" [matTooltip]="(scheduleTooltip && installmentTooltip) ? scheduleTooltip + ' ' + installmentTooltip : ''" matTooltipPosition="below">
-                <app-progress-bar [color]="getBorderColorByStatus()" [progress]="timeProgress"></app-progress-bar>
+        <div class="list__item__column">
+            <div class="row">
+                <div class="list__item__column__title col-md-12 col-6 d-sm-none">BORROWED</div>
+                <div id="label-borrowed" class="col-md-12 col-6">{{ borrowed }}</div>
             </div>
         </div>
-    </div>
+        <div class="list__item__column">
+            <div class="row">
+                <div class="list__item__column__title col-md-12 col-6 d-sm-none">REPAID</div>
+                <div class="col-md-12 col-6">{{ repaid }}</div>
+            </div>
+        </div>
+        <div class="list__item__column" matTooltip="Effective rate: X.XX%">
+            <div class="row">
+                <div class="list__item__column__title col-md-12 col-6 d-sm-none">ANNUAL RATE</div>
+                <div class="col-md-12 col-6">{{ anualRate }}</div>
+            </div>
+        </div>
+        <div class="list__item__column">
+            <div class="row">
+                <div class="list__item__column__title col-md-12 col-6 d-sm-none">SCHEDULE PROGRESS</div>
+                <div class="list__item__column__progress col-md-12 col-6" [matTooltip]="(scheduleTooltip && installmentTooltip) ? scheduleTooltip + ' ' + installmentTooltip : ''" matTooltipPosition="below">
+                    <app-progress-bar [color]="getBorderColorByStatus()" [progress]="timeProgress"></app-progress-bar>
+                </div>
+            </div>
+        </div>
+    </a>
     <div class="list__item__column list__item__column__payment">
         <div class="row">
             <div class="list__item__column__title col-md-12 col-6 d-sm-none">REPAYMENT PROGRESS</div>
