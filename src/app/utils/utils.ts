@@ -42,7 +42,11 @@ export class Utils {
   }
 
   static shortAddress(address: string): string {
-    return address.substr(0, 4) + '...' + address.substr(-4);
+    try {
+      return address.substr(0, 4) + '...' + address.substr(-4);
+    } catch {
+      return address;
+    }
   }
 
   static capFirstLetter(str: string) {

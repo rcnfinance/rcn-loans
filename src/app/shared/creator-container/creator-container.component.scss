@@ -1,4 +1,5 @@
-@import '../../../scss/_mixins.scss'; //variables
+@import 'src/scss/fonts'; //variables
+@import 'scss/_mixins.scss'; //variables
 
 .creator-container {
     height: 70px;
@@ -17,7 +18,7 @@
       width: 100%;
       text-align: center;
       color: var(--app-color-gray-100);
-      font-size: 36px;
+      @include typography-headline(2);
     }
     .creator-image {
       width: 100%;

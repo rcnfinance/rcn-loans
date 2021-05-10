@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { environment } from 'environments/environment';
+import { ChainService } from 'app/services/chain.service';
 import { CurrenciesService } from 'app/services/currencies.service';
 import { Loan, Status, LoanType } from 'app/models/loan.model';
 import { Brand } from 'app/models/brand.model';
@@ -32,6 +32,7 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
 
   constructor(
     private dialog: MatDialog,
+    private chainService: ChainService,
     private currenciesService: CurrenciesService
   ) { }
 
@@ -71,7 +72,8 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
    * @param address Borrower address
    */
   openAddress(address: string) {
-    window.open(environment.network.explorer.address.replace('${address}', address));
+    const { config } = this.chainService;
+    window.open(config.network.explorer.address.replace('${address}', address));
   }
 
   /**
@@ -79,7 +81,8 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
    */
   private loadOracle() {
     const { engine, currency } = this.loan;
-    const engineToken = environment.contracts[engine].token;
+    const { config } = this.chainService;
+    const engineToken = config.contracts[engine].token;
     const engineCurrency = this.currenciesService.getCurrencyByKey('address', engineToken);
     this.hasOracle = currency.toString() !== engineCurrency.symbol;
   }

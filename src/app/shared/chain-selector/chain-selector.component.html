@@ -1,0 +1,15 @@
+<div
+  class="chain"
+  [matTooltip]="'Connected to ' + chainName"
+  (click)="clickChainSelector()"
+>
+  <div class="chain__icon">
+    <img
+      class="icon"
+      [src]="config?.network.ui.image"
+    >
+  </div>
+  <div class="chain__name">
+    {{ config?.network.ui.name }}
+  </div>
+</div>

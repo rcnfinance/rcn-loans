@@ -1,20 +1,22 @@
-<app-error-details
-  label="ERROR 404"
-  title="This page doesn´t exist."
-  image="assets/errors/error_404.svg"
-  [buttons]="[
-    {
-      text: 'Go to Lend',
-      url: '/',
-      class: 'button-primary'
-    },
-    {
-      text: account ? 'Go to My Loans' : 'Go to Activity',
-      url: account ? ('/address/' + account) : '/activity',
-      class: 'button-clear'
-    }
-  ]"
->
-</app-error-details>
+<div class="page-content">
+  <app-error-details
+    label="ERROR 404"
+    title="This page doesn´t exist."
+    image="assets/errors/error_404.svg"
+    [buttons]="[
+      {
+        text: 'Go to Lend',
+        url: '/',
+        class: 'button-primary'
+      },
+      {
+        text: account ? 'Go to My Loans' : 'Go to Activity',
+        url: account ? ('/address/' + account) : '/activity',
+        class: 'button-clear'
+      }
+    ]"
+  >
+  </app-error-details>
+</div>
 
 <app-footer></app-footer>

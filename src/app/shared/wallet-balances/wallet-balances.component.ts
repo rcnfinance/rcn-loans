@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import * as BN from 'bn.js';
-import { Currency } from 'app/utils/currencies';
+import { ChainService } from 'app/services/chain.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { CurrencyItem, CurrenciesService } from 'app/services/currencies.service';
 interface Balance {
@@ -19,15 +19,19 @@ export class WalletBalancesComponent implements OnInit, OnChanges {
 
   constructor(
     public contractsService: ContractsService,
-    private currenciesService: CurrenciesService
+    private currenciesService: CurrenciesService,
+    private chainService: ChainService
   ) { }
+
+  get isEthereum() {
+    return this.chainService.isEthereum;
+  }
 
   ngOnInit() {
     this.loadBalances();
   }
 
   ngOnChanges() {
-    console.info('changes');
     this.loadBalances();
   }
 
@@ -35,7 +39,8 @@ export class WalletBalancesComponent implements OnInit, OnChanges {
    * Show the user balance in different tokens
    */
   private loadBalances() {
-    const CURRENCIES_TO_REMOVE = ['ETH'];
+    const { currency: chainCurrency } = this.chainService.config.network;
+    const CURRENCIES_TO_REMOVE = [chainCurrency];
     const currencies = this.currenciesService.getCurrencies(true);
     const filteredCurrencies = currencies.filter(({ symbol }) => !CURRENCIES_TO_REMOVE.includes(symbol));
 
@@ -49,7 +54,7 @@ export class WalletBalancesComponent implements OnInit, OnChanges {
 
     filteredCurrencies.map(async (currency: CurrencyItem, index: number) => {
       const weiBalance: BN = await this.contractsService.getUserBalanceInToken(currency.address.toLowerCase());
-      const decimals = new Currency(currency.symbol).decimals;
+      const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
       const balance: number = weiBalance as any / 10 ** decimals;
       const formattedBalance = Number(balance).toFixed(MAX_DECIMALS);
 

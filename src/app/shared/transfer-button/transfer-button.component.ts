@@ -4,17 +4,15 @@ import {
   MatDialog,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
-// App Service
-import { EventsService, Category } from '../../services/events.service';
-import { ContractsService } from '../../services/contracts.service';
-import { TxService, Tx, Type } from '../../services/tx.service';
-import { Web3Service } from '../../services/web3.service';
-import { WalletConnectService } from './../../services/wallet-connect.service';
-// App Component
-import { environment } from '../../../environments/environment';
-import { Loan } from '../../models/loan.model';
-import { DialogGenericErrorComponent } from '../../dialogs/dialog-generic-error/dialog-generic-error.component';
-import { DialogLoanTransferComponent } from '../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
+import { EventsService, Category } from 'app/services/events.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { TxService, Tx, Type } from 'app/services/tx.service';
+import { Web3Service } from 'app/services/web3.service';
+import { ChainService } from 'app/services/chain.service';
+import { WalletConnectService } from 'app/services/wallet-connect.service';
+import { Loan } from 'app/models/loan.model';
+import { DialogGenericErrorComponent } from 'app/dialogs/dialog-generic-error/dialog-generic-error.component';
+import { DialogLoanTransferComponent } from 'app/dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 
 @Component({
   selector: 'app-transfer-button',
@@ -42,6 +40,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     private txService: TxService,
     private eventsService: EventsService,
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private walletConnectService: WalletConnectService,
     public snackBar: MatSnackBar,
     public dialog: MatDialog
@@ -73,8 +72,9 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
    */
   retrievePendingTx() {
     const { engine } = this.loan;
+    const { config } = this.chainService;
     this.pendingTx = this.txService.getLastPendingTransfer(
-      environment.contracts[engine].diaspore.debtEngine,
+      config.contracts[engine].diaspore.debtEngine,
       this.loan
     );
 
@@ -100,7 +100,8 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
     // pending tx validation
     if (this.pendingTx) {
       if (this.pendingTx.confirmed) {
-        window.open(environment.network.explorer.tx.replace(
+        const { config } = this.chainService;
+        window.open(config.network.explorer.tx.replace(
           '${tx}',
           this.pendingTx.tx
         ), '_blank');
@@ -169,9 +170,10 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
       );
 
       const { engine } = this.loan;
+      const { config } = this.chainService;
       this.txService.registerTransferTx(
         tx,
-        environment.contracts[engine].diaspore.debtEngine,
+        config.contracts[engine].diaspore.debtEngine,
         this.loan,
         to
       );
