@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { Web3Service } from 'app/services/web3.service';
 import { TitleService } from 'app/services/title.service';
@@ -11,7 +12,39 @@ import { DialogWalletSelectComponent } from 'app/dialogs/dialog-wallet-select/di
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  animations: [
+    trigger('fadeInSlow', [
+      transition('void => *', [
+        style({ opacity: 0 }),
+        animate(2000, style({ opacity: 1 }))
+      ])
+    ]),
+    trigger('fadeInFast', [
+      transition('void => *', [
+        style({ opacity: 0 }),
+        animate(1000, style({ opacity: 1 }))
+      ])
+    ]),
+    trigger('fadeInRight', [
+      transition('void => *', [
+        style({ opacity: 1, transform: 'translateX(100%)' }),
+        animate(1500, style({ transform: 'translateX(0%)' }))
+      ])
+    ]),
+    trigger('fadeInLeft', [
+      transition('void => *', [
+        style({ opacity: 1, transform: 'translateX(-100%)' }),
+        animate(1500, style({ transform: 'translateX(0%)' }))
+      ])
+    ]),
+    trigger('fadeInBottom', [
+      transition('void => *', [
+        style({ opacity: 1, transform: 'translateY(100%)' }),
+        animate(1500, style({ transform: 'translateY(0%)' }))
+      ])
+    ])
+  ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
   private account: string;
