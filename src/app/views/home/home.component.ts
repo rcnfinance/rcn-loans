@@ -27,21 +27,24 @@ import { DialogWalletSelectComponent } from 'app/dialogs/dialog-wallet-select/di
       ])
     ]),
     trigger('fadeInRight', [
-      transition('void => *', [
-        style({ opacity: 1, transform: 'translateX(100%)' }),
-        animate(1500, style({ transform: 'translateX(0%)' }))
+      transition('* => *', [
+        style({ opacity: .3, transform: 'translateX(100%)' }),
+        animate(1000, style({ transform: 'translateX(0%)' })),
+        animate(2000, style({ opacity: 1 }))
       ])
     ]),
     trigger('fadeInLeft', [
-      transition('void => *', [
-        style({ opacity: 1, transform: 'translateX(-100%)' }),
-        animate(1500, style({ transform: 'translateX(0%)' }))
+      transition('* => *', [
+        style({ opacity: .3, transform: 'translateX(-100%)' }),
+        animate(1000, style({ transform: 'translateX(0%)' })),
+        animate(2000, style({ opacity: 1 }))
       ])
     ]),
     trigger('fadeInBottom', [
-      transition('void => *', [
-        style({ opacity: 1, transform: 'translateY(100%)' }),
-        animate(1500, style({ transform: 'translateY(0%)' }))
+      transition('* => *', [
+        style({ opacity: .3, transform: 'translateY(-100%)' }),
+        animate(1000, style({ transform: 'translateY(0%)' })),
+        animate(2000, style({ opacity: 1 }))
       ])
     ])
   ]
