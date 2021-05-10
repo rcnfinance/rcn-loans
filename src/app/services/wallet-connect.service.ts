@@ -1,9 +1,9 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs';
-import { environment } from './../../environments/environment';
-import { Web3Service } from './web3.service';
-import { EventsService } from './events.service';
-import { WalletConnection } from './../interfaces/wallet.interface';
+import { Web3Service } from 'app/services/web3.service';
+import { ChainService } from 'app/services/chain.service';
+import { EventsService } from 'app/services/events.service';
+import { WalletConnection } from 'app/interfaces/wallet.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,7 @@ export class WalletConnectService {
 
   constructor(
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private eventsService: EventsService
   ) {
     this.requestConnect$ = new Subject();
@@ -83,7 +84,8 @@ export class WalletConnectService {
   private tryRestoreConnection() {
     const lastConnection: WalletConnection = this.walletConnected;
     try {
-      const { id } = environment.network;
+      const { config } = this.chainService;
+      const { id } = config.network;
       const { network, wallet } = lastConnection;
       if (network !== id) {
         return this.web3Service.logout();

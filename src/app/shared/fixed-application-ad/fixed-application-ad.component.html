@@ -1,14 +1,31 @@
 <div
   class="fixed-application-ad"
   [class.fixed-application-ad--hidden]="hidden"
-  (click)="hidden = true"
 >
   <div class="container">
-    <p class="fixed-application-ad__text">
-      {{ message }}
-    </p>
-    <div class="fixed-application-ad__close d-flex align-items-center">
-      <i class="fas fa-times"></i>
+    <div class="d-flex align-items-center">
+      <div *ngIf="ad.image">
+        <div class="fixed-application-ad__image">
+          <img class="image" [src]="ad.image" [alt]="ad.title">
+        </div>
+      </div>
+      <div>
+        <p class="fixed-application-ad__title">
+          {{ ad.title }}
+        </p>
+        <p
+          *ngIf="ad.description"
+          class="fixed-application-ad__description"
+          [innerHTML]="ad.description"
+        >
+        </p>
+        <div
+          class="fixed-application-ad__close"
+          (click)="hidden = true"
+        >
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
     </div>
   </div>
 </div>

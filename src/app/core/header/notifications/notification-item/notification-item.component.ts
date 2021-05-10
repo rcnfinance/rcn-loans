@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Notification } from '../../../../models/notification.model';
-import { environment } from '../../../../../environments/environment';
-import { Utils } from '../../../../utils/utils';
-import { TxService } from '../../../../services/tx.service';
+import { Notification } from 'app/models/notification.model';
+import { Utils } from 'app/utils/utils';
+import { ChainService } from 'app/services/chain.service';
+import { TxService } from 'app/services/tx.service';
 
 @Component({
   selector: 'app-notification-item',
@@ -17,18 +17,21 @@ export class NotificationItemComponent implements OnInit {
   progressbarMode = 'query';
 
   constructor(
+    private chainService: ChainService,
     private txService: TxService
   ) {}
 
   openTx() {
-    window.open(environment.network.explorer.tx.replace(
+    const { config } = this.chainService;
+    window.open(config.network.explorer.tx.replace(
       '${tx}',
       this.notification.hashTx
     ), '_blank');
   }
 
   openAddress() {
-    window.open(environment.network.explorer.address.replace(
+    const { config } = this.chainService;
+    window.open(config.network.explorer.address.replace(
       '${address}',
       this.notification.starringEvent.toString()
     ), '_blank');

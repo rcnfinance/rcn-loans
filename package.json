@@ -1,6 +1,6 @@
 {
   "name": "rcn-angular-dapp",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "version_name": "Boggart",
   "license": "MIT",
   "scripts": {
@@ -51,6 +51,7 @@
     "material-design-icons": "^3.0.1",
     "material-icons": "^0.2.3",
     "moment": "^2.29.0",
+    "ngx-skeleton-loader": "^2.9.1",
     "ngx-spinner": "^8.0.3",
     "ngx-virtual-scroller": "^3.0.2",
     "node-sass": "^4.13.1",

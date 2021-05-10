@@ -2,4 +2,7 @@
   border-radius: 50%;
   overflow: hidden;
   background: white;
+  &__image {
+    object-fit: contain;
+  }
 }

@@ -3,17 +3,17 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription, timer } from 'rxjs';
 import * as BN from 'bn.js';
-import { Loan } from '../../models/loan.model';
-import { Collateral } from '../../models/collateral.model';
-import { Utils } from '../../utils/utils';
-import { environment } from './../../../environments/environment';
+import { Loan } from 'app/models/loan.model';
+import { Collateral } from 'app/models/collateral.model';
+import { Utils } from 'app/utils/utils';
 // App components
-import { DialogApproveContractComponent } from '../../dialogs/dialog-approve-contract/dialog-approve-contract.component';
+import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
 // App services
-import { Web3Service } from './../../services/web3.service';
-import { ContractsService } from './../../services/contracts.service';
-import { CollateralService } from './../../services/collateral.service';
-import { TxService, Tx } from './../../services/tx.service';
+import { Web3Service } from 'app/services/web3.service';
+import { ContractsService } from 'app/services/contracts.service';
+import { CollateralService } from 'app/services/collateral.service';
+import { ChainService } from 'app/services/chain.service';
+import { TxService, Tx } from 'app/services/tx.service';
 
 @Component({
   selector: 'app-dialog-collateral',
@@ -43,6 +43,7 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<any>,
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private contractsService: ContractsService,
     private collateralService: CollateralService,
     private txService: TxService,
@@ -136,7 +137,8 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     // validate approve
     const { engine } = this.loan;
     const token = this.collateral.token.toLowerCase();
-    const contract = environment.contracts[engine].collateral.collateral;
+    const { config } = this.chainService;
+    const contract = config.contracts[engine].collateral.collateral;
     const engineApproved = await this.contractsService.isApproved(contract, token);
 
     if (!await engineApproved) {
@@ -157,10 +159,11 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
   async withdrawCollateral(amount: BN) {
     const token: string = this.collateral.token;
     const { engine } = this.loan;
+    const { config } = this.chainService;
 
-    if (token === environment.contracts[engine].converter.ethAddress) {
-      const collateral = environment.contracts[engine].collateral.collateral;
-      const operator = environment.contracts[engine].collateral.wethManager;
+    if (token === config.contracts.chainCurrencyAddress) {
+      const collateral = config.contracts[engine].collateral.collateral;
+      const operator = config.contracts[engine].collateral.wethManager;
       const operatorApproved = await this.contractsService.isApprovedERC721(
         collateral,
         operator

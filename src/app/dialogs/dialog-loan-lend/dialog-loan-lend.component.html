@@ -13,7 +13,7 @@
             <mat-label class="item__select-label" *ngIf="!lendCurrency" id="label">
               Select Currency
             </mat-label>
-            <mat-select [(value)]="lendCurrency" (selectionChange)="onChangeCurrency()">
+            <mat-select class="item__select-value" [(value)]="lendCurrency" (selectionChange)="onChangeCurrency()">
               <mat-option *ngFor="let item of availableCurrencies" [value]="item.symbol">
                 <div class="row align-items-center">
                   <div class="icon-box item">

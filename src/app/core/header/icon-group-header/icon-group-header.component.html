@@ -1,5 +1,5 @@
 <div
-  class="button-group d-flex"
+  class="button-group d-flex align-items-center"
   appClickOutside
   (clickOutside)="openDetail('clickOutside')"
 >
@@ -44,6 +44,10 @@
     </div>
     <div class="mx-3"></div>
   </ng-container>
+
+  <div class="button button--chain">
+    <app-chain-selector></app-chain-selector>
+  </div>
 
   <div class="button button--avatar">
     <app-wallet-avatar></app-wallet-avatar>

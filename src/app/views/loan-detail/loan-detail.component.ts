@@ -4,21 +4,22 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { Loan, Status, LoanType } from './../../models/loan.model';
-import { Brand } from '../../models/brand.model';
-import { Collateral, Status as CollateralStatus } from '../../models/collateral.model';
-import { Utils } from './../../utils/utils';
-import { LoanUtils } from './../../utils/loan-utils';
-import { TitleService } from '../../services/title.service';
-import { ProxyApiService } from './../../services/proxy-api.service';
-import { CurrenciesService } from './../../services/currencies.service';
-import { IdentityService } from '../../services/identity.service';
-import { Web3Service } from '../../services/web3.service';
-import { BrandingService } from './../../services/branding.service';
-import { Type } from './../../services/tx.service';
-import { EventsService } from './../../services/events.service';
-import { LoanTypeService } from './../../services/loan-type.service';
-import { PreviousRouteService } from '../../services/previousRoute.service';
+import { Loan, Status, LoanType } from 'app/models/loan.model';
+import { Brand } from 'app/models/brand.model';
+import { Collateral, Status as CollateralStatus } from 'app/models/collateral.model';
+import { Utils } from 'app/utils/utils';
+import { LoanUtils } from 'app/utils/loan-utils';
+import { TitleService } from 'app/services/title.service';
+import { ProxyApiService } from 'app/services/proxy-api.service';
+import { CurrenciesService } from 'app/services/currencies.service';
+import { IdentityService } from 'app/services/identity.service';
+import { Web3Service } from 'app/services/web3.service';
+import { BrandingService } from 'app/services/branding.service';
+import { Type } from 'app/services/tx.service';
+import { EventsService } from 'app/services/events.service';
+import { ChainService } from 'app/services/chain.service';
+import { LoanTypeService } from 'app/services/loan-type.service';
+import { PreviousRouteService } from 'app/services/previousRoute.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -74,6 +75,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private currenciesService: CurrenciesService,
     private identityService: IdentityService,
     private web3Service: Web3Service,
+    private chainService: ChainService,
     private brandingService: BrandingService,
     private eventsService: EventsService,
     private loanTypeService: LoanTypeService,
@@ -228,7 +230,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
    */
   private async getLoan(id: string) {
     const { content } = await this.proxyApiService.getLoanById(id);
-    const loan: Loan = LoanUtils.buildLoan(content);
+    const { config } = this.chainService;
+    const loan: Loan = LoanUtils.buildLoan(content, config);
     this.loan = loan;
 
     return loan;
