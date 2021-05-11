@@ -236,8 +236,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
       this.retrievePendingTx();
       this.loanWasCreated = true;
 
-      // TODO: call navrailService and set showBulletMyLoans to true
-      this.navrailService.showBulletMyLoans = true;
+      await this.navrailService.refreshNavrail();
     } catch (e) {
       // Don't show 'User denied transaction signature' error
       if (e.stack.indexOf('User denied transaction signature') < 0) {
@@ -338,10 +337,9 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
         this.startProgress = false;
         this.createPendingTx = undefined;
       }, 1000);
-
-      // TODO: call navrailService and set showBulletMyLoans to true
-      // this.navrailService.showBulletMyLoans = false;
     }
+
+    await this.navrailService.refreshNavrail();
   }
 
   /**
@@ -361,7 +359,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     this.spinner.hide();
     this.router.navigate(['/', 'loan', loan.id]);
 
-    // TODO: call navrailService and refresh showBulletMyLoans
+    await this.navrailService.refreshNavrail();
   }
 
   /**
