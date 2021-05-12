@@ -111,8 +111,11 @@ export class DashboardListItemComponent implements OnInit {
           loan: this.loan
         }
       });
-      dialog.afterClosed().subscribe(() => {
-
+      dialog.afterClosed().subscribe((update: boolean) => {
+        if (update) {
+          window.location.reload();
+          // FIXME: use better methods
+        }
       });
     } else if (action === 'add') {
       this.router.navigate(['/borrow', this.loan.id]);
