@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Loan, Status } from '../../models/loan.model';
-import { LoanContentApi } from '../../interfaces/loan-api-diaspore';
-import { LoanUtils } from '../../utils/loan-utils';
-import { ProxyApiService } from '../../services/proxy-api.service';
-import { EventsService } from '../../services/events.service';
-import { TitleService } from '../../services/title.service';
-import { Web3Service } from '../../services/web3.service';
-import { ChainService } from '../../services/chain.service';
+import { Loan, Status } from 'app/models/loan.model';
+import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
+import { LoanUtils } from 'app/utils/loan-utils';
+import { ProxyApiService } from 'app/services/proxy-api.service';
+import { EventsService } from 'app/services/events.service';
+import { TitleService } from 'app/services/title.service';
+import { Web3Service } from 'app/services/web3.service';
+import { ChainService } from 'app/services/chain.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +16,7 @@ import { ChainService } from '../../services/chain.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   pageId = 'active-loans';
-  address;
+  address: string;
   isLoading: boolean;
   loansBorrowed = [];
   pageBorrowed = 1;

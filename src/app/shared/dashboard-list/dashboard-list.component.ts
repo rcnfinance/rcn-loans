@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Loan } from '../../models/loan.model';
+import { Loan } from 'app/models/loan.model';
 
 @Component({
   selector: 'app-dashboard-list',

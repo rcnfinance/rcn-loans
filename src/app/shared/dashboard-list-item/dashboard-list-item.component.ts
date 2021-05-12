@@ -28,6 +28,9 @@ export class DashboardListItemComponent implements OnInit {
   timeProgress = '0%';
   scheduleTooltip: string;
   installmentTooltip: string;
+  statusText: string;
+  statusIcon: string;
+  statusColor: string;
 
   canRedeem: boolean;
   canPay: boolean;
@@ -48,60 +51,57 @@ export class DashboardListItemComponent implements OnInit {
     this.loadDuration();
     this.loadInstallments();
     this.checkValidations();
+    this.loadStatus();
   }
 
-  getBorderColorByStatus = () => {
-    switch (this.loan.status) {
-      case Status.Request:
-        if (this.isCurrentLoans) return '#FFFFFF';
-        return '#A3A5A6';
-      case Status.Ongoing:
-        return '#4155FF';
-      case Status.Paid:
-        return '#59B159';
-      case Status.Indebt:
-        return '#D97D3A';
-      case Status.Expired:
-        return '#A3A5A6';
-      default:
-        return '#000000';
-    }
-  }
+  /**
+   * Load loan status text, icon and color
+   */
+  loadStatus() {
+    let statusText: string;
+    let statusIcon: string;
+    let statusColor: string;
 
-  getStatusTextByStatus = () => {
-    switch (this.loan.status) {
+    const { status } = this.loan;
+    switch (status) {
       case Status.Request:
-        if (this.isCurrentLoans) return 'Requested';
-        return 'Collateral Pending';
+        if (this.isCurrentLoans) {
+          statusText = 'Requested';
+          statusIcon = 'calendar';
+          statusColor = '#FFFFFF';
+        } else {
+          statusText = 'Collateral Pending';
+          statusIcon = 'exclamation';
+          statusColor = '#A3A5A6';
+        }
+        break;
       case Status.Ongoing:
-        return 'Ongoing';
+        statusText = 'Ongoing';
+        statusIcon = 'angle-double-up';
+        statusColor = '#4155FF';
+        break;
       case Status.Paid:
-        return 'Fully Repaid';
+        statusText = 'Fully Repaid';
+        statusIcon = 'check';
+        statusColor = '#59B159';
+        break;
       case Status.Indebt:
-        return 'Overdue';
+        statusText = 'Overdue';
+        statusIcon = 'exclamation';
+        statusColor = '#D97D3A';
+        break;
       case Status.Expired:
-        return 'Expired';
+        statusText = 'Expired';
+        statusIcon = 'times';
+        statusColor = '#A3A5A6';
+        break;
       default:
-        return '';
+        break;
     }
-  }
 
-  getIconByStatus = () => {
-    switch (this.loan.status) {
-      case Status.Request:
-        if (this.isCurrentLoans) return 'calendar';
-        return 'exclamation';
-      case Status.Ongoing:
-        return 'angle-double-up';
-      case Status.Paid:
-        return 'check';
-      case Status.Indebt:
-        return 'exclamation';
-      case Status.Expired:
-        return 'times';
-      default:
-        return '';
-    }
+    this.statusText = statusText;
+    this.statusIcon = statusIcon;
+    this.statusColor = statusColor;
   }
 
   async openDialog(action: 'add' | 'withdraw' | 'pay') {

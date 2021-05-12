@@ -78,11 +78,11 @@ describe('DashboardListItemComponent', () => {
   });
 
   it('should return correct status text', () => {
-    expect(component.getStatusTextByStatus()).toEqual('Collateral Pending');
+    expect(component.statusText).toEqual('Collateral Pending');
   });
 
   it('should return correct color', () => {
-    expect(component.getBorderColorByStatus()).toEqual('#A3A5A6');
+    expect(component.statusColor).toEqual('#A3A5A6');
   });
 
   it('should display borrowed label', () => {
