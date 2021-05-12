@@ -131,7 +131,9 @@ export const chain = {
         address: '0x0000000000000000000000000000000000000000'
       }
     ],
-    currencyDecimals: {},
+    currencyDecimals: {
+      'USDC': 6
+    },
     createLoanCurrencies: ['RCN', 'USDC', 'ARS'],
     createCollateralCurrencies: ['RCN', 'USDC']
   },

@@ -1,0 +1,57 @@
+<div
+  class="body-scrollable requested-wrapper"
+>
+  <div class="container">
+    <div class="page-header">
+      <app-page-header
+        title="MY DASHBOARD"
+        description="Check all your loans status and operations."
+      >
+      </app-page-header>
+    </div>
+    <div class="dashboard">
+      <div class="row">
+        <div class="col-12 col-md-9">
+          <p class="dashboard__title">LOANS</p>
+        </div>
+        <div class="col-6 d-sm-none">
+          <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+            <mat-button-toggle (click)="setPageBorrow(true)" [checked]="isPageBorrow">BORROW</mat-button-toggle>
+            <mat-button-toggle (click)="setPageBorrow(false)" [checked]="!isPageBorrow">LENT</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <div class="col-6 col-md-3">
+          <p *ngIf="isCurrentLoans" (click)="setCurrentLoans(false)" class="dashboard__link">INACTIVES LOANS <i class="fas fa-plus-circle"></i></p>
+          <p *ngIf="!isCurrentLoans" (click)="setCurrentLoans(true)" class="dashboard__link">ACTIVES LOANS <i class="fas fa-plus-circle"></i></p>
+        </div>
+      </div>
+      <div class="dashboard__content">
+        <div class="row">
+          <div *ngIf="!isMobile || isPageBorrow" class="col-md-6">
+            <virtual-scroller
+              #scroll
+              [items]="loansBorrowed"
+              [bufferAmount]="12"
+              [scrollThrottlingTime]="500"
+              (scroll)="onScrollBorrowed($event)"
+            >
+              <app-dashboard-list [isCurrentLoans]="isCurrentLoans" [loading]="isLoading" [loans]="loansBorrowed" [showOptions]="true" title="CURRENT BORROWED"></app-dashboard-list>
+            </virtual-scroller>
+          </div>
+          <div *ngIf="!isMobile || !isPageBorrow" class="col-md-6">
+            <virtual-scroller
+              #scroll
+              [items]="loansLent"
+              [bufferAmount]="12"
+              [scrollThrottlingTime]="500"
+              (scroll)="onScrollLent($event)"
+            >
+              <app-dashboard-list [loading]="isLoading" [loans]="loansLent" [showOptions]="false" title="CURRENT LENT"></app-dashboard-list>
+            </virtual-scroller>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

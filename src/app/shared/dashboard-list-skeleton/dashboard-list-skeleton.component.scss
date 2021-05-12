@@ -1,0 +1,36 @@
+@import 'src/scss/fonts';
+
+.list {
+  &__item {
+    margin-top: 15px;
+    border-radius: 5px;
+    background-color: #313134;
+    box-shadow: 0px 3px 6px #00000029;
+    padding: 10px 15px;
+    position: relative;
+    &__title {
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    &__column {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .list {
+    &__item {
+      margin-top: 10px;
+      height: 65px;
+      padding: 0;
+      &__column {
+        display: inline-block;
+        width: 20%;
+        margin-top: 22px;
+        margin-bottom: 0;
+        padding: 0 10px;
+      }
+    }
+  }
+}
