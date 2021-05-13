@@ -157,6 +157,11 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
       this.showMessage('Please wait until your collateral supplying transaction is completed.', 'snackbar');
       return;
     }
+    const loanWasCreated = await this.contractsService.loanWasCreated(loan.engine, loan.id);
+    if (!loanWasCreated) {
+      this.showMessage('A problem occurred during loan creation. Please try again.', 'snackbar');
+      return;
+    }
     // unlogged user
     if (!this.web3Service.loggedIn) {
       await this.walletConnectService.connect();
