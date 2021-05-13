@@ -855,7 +855,7 @@ export class ContractsService {
     try {
       const loan = await this._loanManager[engine].methods.getLoanData(loanId).call();
 
-      if (Utils.isEmpty(loan)) {
+      if (!loan || Utils.isEmpty(loan)) {
         throw Error('Loan does not exist');
       }
 
