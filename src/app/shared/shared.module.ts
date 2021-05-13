@@ -69,6 +69,7 @@ import { DashboardListComponent } from './dashboard-list/dashboard-list.componen
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { DashboardListItemComponent } from './dashboard-list-item/dashboard-list-item.component';
 import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashboard-list-skeleton.component';
+import { DashboardListHeaderComponent } from './dashboard-list-header/dashboard-list-header.component';
 
 @NgModule({
   imports: [
@@ -134,7 +135,8 @@ import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashbo
     DashboardListComponent,
     ProgressBarComponent,
     DashboardListItemComponent,
-    DashboardListSkeletonComponent
+    DashboardListSkeletonComponent,
+    DashboardListHeaderComponent
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,
@@ -199,7 +201,8 @@ import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashbo
     FormatAddressPipe,
     SkeletonComponent,
     LoanListSkeletonComponent,
-    DialogLoanPayComponent
+    DialogLoanPayComponent,
+    DashboardListHeaderComponent
   ]
 })
 export class SharedModule { }

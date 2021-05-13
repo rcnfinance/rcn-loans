@@ -2,22 +2,6 @@
 
 @media (min-width: 992px) {
   .list {
-    &__header {
-      text-align: center;
-      background-color: #262629;
-      border-radius: 5px;
-      padding: 13px 5px 15px;
-      &__title {
-        @include styled-font('proxima-nova', 800, 14px);
-        margin-bottom: 15px;
-      }
-      &__table p {
-        width: 20%;
-        display: inline-block;
-        color: #a09f9f;
-        @include styled-font('proxima-nova', 1000, 11px);
-      }
-    }
     &__empty-state {
       padding: 0 40px;
     }

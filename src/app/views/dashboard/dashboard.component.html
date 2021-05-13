@@ -52,6 +52,7 @@
       <div class="dashboard__content">
         <div class="row">
           <div *ngIf="!isMobile || isPageBorrow" class="col-md-6">
+            <app-dashboard-list-header name="Current Borrowed"></app-dashboard-list-header>
             <virtual-scroller
               #scroll
               [items]="loansBorrowed"
@@ -64,11 +65,11 @@
                 [loading]="isLoading"
                 [loans]="loansBorrowed"
                 [showOptions]="true"
-                title="CURRENT BORROWED"
               ></app-dashboard-list>
             </virtual-scroller>
           </div>
           <div *ngIf="!isMobile || !isPageBorrow" class="col-md-6">
+            <app-dashboard-list-header name="Current Lent"></app-dashboard-list-header>
             <virtual-scroller
               #scroll
               [items]="loansLent"
@@ -80,7 +81,6 @@
                 [loading]="isLoading"
                 [loans]="loansLent"
                 [showOptions]="false"
-                title="CURRENT LENT"
               ></app-dashboard-list>
             </virtual-scroller>
           </div>

@@ -1,16 +1,4 @@
 <div class="list">
-  <div class="list__header d-none d-sm-block">
-    <p class="list__header__title">
-      {{ title }}
-    </p>
-    <div class="list__header__table">
-      <p>Borrowed</p>
-      <p>Repaid</p>
-      <p>Anual Rate</p>
-      <p>Time Progress</p>
-      <p>Payment Progress</p>
-    </div>
-  </div>
   <ng-container *ngIf="loans">
     <div class="list__item-container" *ngIf="loans.length">
       <ng-container *ngFor="let loan of loans">
