@@ -7,14 +7,12 @@
   <a [routerLink]="['/loan', loan.id]">
     <div class="list__item__title d-sm-none">
       <p
-        [class.list__item__title--warning]="loan.status === 0 && !loan.collateral"
+        [class.list__item__title--warning]="
+          loan.status === 0 && !loan.collateral
+        "
         [class.list__item__title--expired]="loan.status === 4"
       >
-        <i
-          class="fas"
-          [ngClass]="'fa-' + statusIcon"
-        >
-        </i>
+        <i class="fas" [ngClass]="'fa-' + statusIcon"> </i>
         {{ statusText }}
       </p>
     </div>
@@ -24,10 +22,7 @@
         <div class="list__item__column__title col-md-12 col-6 d-sm-none">
           BORROWED
         </div>
-        <div
-          id="label-borrowed"
-          class="col-md-12 col-6"
-        >
+        <div id="label-borrowed" class="col-md-12 col-6">
           {{ borrowed }}
         </div>
       </div>
@@ -66,16 +61,13 @@
         <div
           class="list__item__column__progress col-md-12 col-6"
           [matTooltip]="
-            (scheduleTooltip && installmentTooltip) ?
-            scheduleTooltip + ' ' + installmentTooltip :
-            ''
+            scheduleTooltip && installmentTooltip
+              ? scheduleTooltip + ' ' + installmentTooltip
+              : ''
           "
           matTooltipPosition="below"
         >
-          <app-progress-bar
-            [color]="statusColor"
-            [progress]="timeProgress"
-          >
+          <app-progress-bar [color]="statusColor" [progress]="timeProgress">
           </app-progress-bar>
         </div>
       </div>
@@ -109,26 +101,18 @@
           <i class="fas fa-ellipsis-v"></i>
         </button>
 
-        <mat-menu
-          #appMenu="matMenu"
-          yPosition="below"
-        >
-          <button
-            *ngIf="canPay"
-            (click)="openDialog('pay')"
-            mat-menu-item
-          >
+        <mat-menu #appMenu="matMenu" yPosition="below">
+          <button *ngIf="canPay" (click)="openDialog('pay')" mat-menu-item>
             Pay
           </button>
-
-          <button
+          <app-redeem-button
+            (startRedeem)="startRedeem()"
+            [loan]="loan"
             *ngIf="canRedeem"
-            (click)="openDialog('withdraw')"
-            mat-menu-item
+            name="Withdraw Collateral"
+            className="dashboard"
           >
-            Withdraw Collateral
-          </button>
-
+          </app-redeem-button>
           <button
             *ngIf="canAdjustCollateral"
             (click)="openDialog('add')"
@@ -148,6 +132,5 @@
     "
     [matTooltip]="statusText"
     matTooltiPosition="before"
-  >
-  </div>
+  ></div>
 </div>

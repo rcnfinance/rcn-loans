@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-import { DialogCollateralComponent } from 'app/dialogs/dialog-collateral/dialog-collateral.component';
 import { Loan, Status } from 'app/models/loan.model';
 import { Status as CollateralStatus } from 'app/models/collateral.model';
 import { Utils } from 'app/utils/utils';
@@ -104,7 +103,11 @@ export class DashboardListItemComponent implements OnInit {
     this.statusColor = statusColor;
   }
 
-  async openDialog(action: 'add' | 'withdraw' | 'pay') {
+  /**
+   * Open dialog on material menu for pay or add collateral
+   * @param action can be 'pay' or 'add'
+   */
+  openDialog(action: 'add' | 'pay') {
     if (action === 'pay') {
       const dialog = this.dialog.open(DialogLoanPayComponent, {
         data: {
@@ -119,18 +122,19 @@ export class DashboardListItemComponent implements OnInit {
       });
     } else if (action === 'add') {
       this.router.navigate(['/borrow', this.loan.id]);
-    } else {
-      const dialogConfig: MatDialogConfig = {
-        data: {
-          loan: this.loan,
-          collateral: this.loan.collateral,
-          action
-        }
-      };
-      this.dialog.open(DialogCollateralComponent, dialogConfig);
     }
   }
 
+  /**
+   * Set can't redeem
+   */
+  startRedeem() {
+    this.canRedeem = false;
+  }
+
+  /**
+   * Load loan's basic data
+   */
   private loadBasicData() {
     const { amount, currency, debt, descriptor, status } = this.loan;
 
@@ -148,6 +152,9 @@ export class DashboardListItemComponent implements OnInit {
     this.anualRate = descriptor.interestRate + '%';
   }
 
+  /**
+   * Load loan's payment progress to show time
+   */
   private loadPaymentProgress() {
     const { descriptor, debt, status } = this.loan;
 
@@ -165,6 +172,9 @@ export class DashboardListItemComponent implements OnInit {
     }
   }
 
+  /**
+   * Load loan's time progress
+   */
   private loadTimeProgress() {
     const loan: Loan = this.loan;
     const nowDate: number = Math.floor(new Date().getTime() / 1000);
@@ -193,6 +203,9 @@ export class DashboardListItemComponent implements OnInit {
     }%`;
   }
 
+  /**
+   * Load loan's duration for the tooltip
+   */
   private loadDuration() {
     const loan: Loan = this.loan;
     if (loan.status === Status.Ongoing || loan.status === Status.Indebt) {
@@ -206,6 +219,9 @@ export class DashboardListItemComponent implements OnInit {
     }
   }
 
+  /**
+   * Load loan's installmanets
+   */
   private async loadInstallments() {
     const loan: Loan = this.loan;
     if (loan.status === Status.Ongoing || loan.status === Status.Indebt) {
