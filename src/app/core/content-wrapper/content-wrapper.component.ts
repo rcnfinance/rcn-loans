@@ -12,6 +12,7 @@ import { ProxyApiService } from 'app/services/proxy-api.service';
 import { ApplicationAdsService, Ad } from 'app/services/application-ads.service';
 import { Web3Service } from 'app/services/web3.service';
 import { ChainService } from 'app/services/chain.service';
+import { NavrailService } from 'app/services/navrail.service';
 import { CountriesService } from 'app/services/countries.service';
 
 @Component({
@@ -39,6 +40,7 @@ export class ContentWrapperComponent implements OnInit {
     private applicationAdsService: ApplicationAdsService,
     private web3Service: Web3Service,
     private chainService: ChainService,
+    private navrailService: NavrailService,
     private countriesService: CountriesService
   ) {}
 
@@ -50,11 +52,13 @@ export class ContentWrapperComponent implements OnInit {
         if (isLogged) {
           await this.loadAccount();
           this.checkPendingWithdraw();
+          this.loadNavrailBullets();
         }
       }
     );
     await this.loadAccount();
     this.checkPendingWithdraw();
+    this.loadNavrailBullets();
     this.canLend();
     this.checkIfIsHome();
     this.loadBscAd();
@@ -155,5 +159,12 @@ export class ContentWrapperComponent implements OnInit {
       description: `Enjoy lending and borrowing with low transaction costs on the new Binance Smart Chain (BSC)-powered Credit Marketplace! Get started <strong><a href="${GET_STARTED_URL}" target="_blank">here</a></strong>!`,
       image: 'assets/bnb-big.png'
     });
+  }
+
+  /**
+   * Check for Navrail bullets
+   */
+  private async loadNavrailBullets() {
+    await this.navrailService.refreshNavrail();
   }
 }
