@@ -4,6 +4,7 @@ import { timer } from 'rxjs';
 import * as moment from 'moment';
 import { ApiService } from 'app/services/api.service';
 import { ChainService } from 'app/services/chain.service';
+import { CurrenciesService } from 'app/services/currencies.service';
 import { FormatAmountPipe } from 'app/pipes/format-amount.pipe';
 import { Loan } from 'app/models/loan.model';
 import { Commit, CommitTypes, CommitProperties } from 'app/interfaces/commit.interface';
@@ -62,7 +63,8 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
     private dialog: MatDialog,
     private formatAmountPipe: FormatAmountPipe,
     private apiService: ApiService,
-    private chainService: ChainService
+    private chainService: ChainService,
+    private currenciesService: CurrenciesService
   ) { }
 
   async ngOnInit() {
@@ -177,7 +179,9 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
         handler: (commit: Commit) => {
           const { currency } = this.loan;
           const payedAmount = LoanUtils.getCommitPaidAmount(this.allCommits, commit.timestamp);
-          const amount = this.formatAmountPipe.transform(currency.fromUnit(payedAmount));
+          const amount = this.formatAmountPipe.transform(
+            this.currenciesService.getAmountFromDecimals(payedAmount, currency.symbol)
+          );
           return [{
             label: 'Date',
             value: moment(Number(commit.timestamp) * 1000).format('DD/MM/YYYY HH:mm')

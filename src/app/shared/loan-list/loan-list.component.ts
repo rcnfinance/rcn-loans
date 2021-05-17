@@ -163,22 +163,30 @@ export class LoanListComponent implements OnInit, OnDestroy {
     if (loan.isRequest) {
       // requested case
       this.leftLabel = 'Lend';
-      this.leftValue = Utils.formatAmount(currency.fromUnit(loan.amount));
+      this.leftValue = Utils.formatAmount(
+        this.currenciesService.getAmountFromDecimals(loan.amount, currency.symbol)
+      );
       this.rightLabel = 'Receive';
-      this.rightValue = Utils.formatAmount(currency.fromUnit(loan.descriptor.totalObligation));
+      this.rightValue = Utils.formatAmount(
+        this.currenciesService.getAmountFromDecimals(loan.descriptor.totalObligation, currency.symbol)
+      );
       this.durationLabel = 'Duration';
       this.durationValue = Utils.formatDelta(loan.descriptor.duration);
       this.durationTooltip = this.durationValue + ' Duration';
     } else {
       // ongoing/overdue/paid/expired case
       this.leftLabel = 'Repaid';
-      this.leftValue = Utils.formatAmount(currency.fromUnit(loan.debt.model.paid));
+      this.leftValue = Utils.formatAmount(
+        this.currenciesService.getAmountFromDecimals(loan.debt.model.paid, currency.symbol)
+      );
       this.durationLabel = 'Next payment in';
       this.durationValue = loan.status !== Status.Paid ?
         Utils.formatDelta(loan.debt.model.dueTime - (new Date().getTime() / 1000)) :
         '-';
       this.rightLabel = 'Due';
-      this.rightValue = Utils.formatAmount(currency.fromUnit(loan.debt.model.estimatedObligation));
+      this.rightValue = Utils.formatAmount(
+        this.currenciesService.getAmountFromDecimals(loan.debt.model.estimatedObligation, currency.symbol)
+      );
       this.canLend = false;
       if (loan.status === Status.Indebt) {
         this.durationLabel = 'Overdue for';

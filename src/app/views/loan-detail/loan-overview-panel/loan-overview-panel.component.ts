@@ -95,8 +95,8 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
     const { currency } = this.loan;
 
     // set amounts
-    this.amountBorrow = currency.fromUnit(amount);
-    this.amountRepay = currency.fromUnit(totalObligation);
+    this.amountBorrow = this.currenciesService.getAmountFromDecimals(amount, currency.symbol);
+    this.amountRepay = this.currenciesService.getAmountFromDecimals(totalObligation, currency.symbol);
 
     switch (this.loan.status) {
       case Status.Expired:
