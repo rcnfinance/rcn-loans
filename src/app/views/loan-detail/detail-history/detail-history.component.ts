@@ -10,6 +10,16 @@ import { Commit, CommitTypes, CommitProperties } from 'app/interfaces/commit.int
 import { LoanUtils } from 'app/utils/loan-utils';
 import { DialogPohComponent } from 'app/dialogs/dialog-poh/dialog-poh.component';
 
+interface CommitWithProperties extends Commit {
+  properties?: [{
+    label: string;
+    value: string;
+    isAddress?: boolean;
+    isHash?: boolean;
+    hasPoh?: boolean;
+  }];
+}
+
 @Component({
   selector: 'app-detail-history',
   templateUrl: './detail-history.component.html',
@@ -21,7 +31,7 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
   commits: Commit[];
   historyItems: {
     commitProperties: object;
-    commits: Commit[];
+    commits: CommitWithProperties[];
   }[];
   historyItemSelected: number;
   explorerTx = this.chainService.config.network.explorer.tx;
@@ -53,7 +63,56 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
     private formatAmountPipe: FormatAmountPipe,
     private apiService: ApiService,
     private chainService: ChainService
-  ) {
+  ) { }
+
+  async ngOnInit() {
+    const { loan } = this;
+    if (!loan) return;
+
+    this.loadCommitsProperties();
+    await this.loadCommits();
+    await this.completeCommitProperties();
+  }
+
+  ngOnChanges() {
+    this.loadCommits();
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(_: any) {
+    if (!this.historyItemSelected) {
+      return;
+    }
+
+    this.historyItemSelected = null;
+  }
+
+  /**
+   * Click on an address
+   * @param address Borrower address
+   */
+  clickAddress(address: string, hasPoh: boolean) {
+    if (hasPoh) {
+      this.dialog.open(DialogPohComponent, {
+        panelClass: 'dialog-poh-wrapper',
+        data: { address }
+      });
+      return;
+    }
+
+    const { config } = this.chainService;
+    window.open(config.network.explorer.address.replace('${address}', address));
+  }
+
+  async clickHistoryItemCircle(index?: number) {
+    await timer(50).toPromise();
+    this.historyItemSelected = index;
+  }
+
+  /**
+   * Load commit properties
+   */
+  private loadCommitsProperties() {
     this.commitProperties = {
       [CommitTypes.Requested]: {
         'show': true,
@@ -175,48 +234,6 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
     };
   }
 
-  async ngOnInit() {
-    const { loan } = this;
-    if (!loan) return;
-
-    await this.loadCommits();
-  }
-
-  ngOnChanges() {
-    this.loadCommits();
-  }
-
-  @HostListener('document:click', ['$event'])
-  clickOutside(_: any) {
-    if (!this.historyItemSelected) {
-      return;
-    }
-
-    this.historyItemSelected = null;
-  }
-
-  /**
-   * Click on an address
-   * @param address Borrower address
-   */
-  clickAddress(address: string, hasPoh: boolean) {
-    if (hasPoh) {
-      this.dialog.open(DialogPohComponent, {
-        panelClass: 'dialog-poh-wrapper',
-        data: { address }
-      });
-      return;
-    }
-
-    const { config } = this.chainService;
-    window.open(config.network.explorer.address.replace('${address}', address));
-  }
-
-  async clickHistoryItemCircle(index?: number) {
-    await timer(50).toPromise();
-    this.historyItemSelected = index;
-  }
-
   private async loadCommits() {
     const { engine, id } = this.loan;
 
@@ -281,8 +298,7 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
 
   private sortByTimestamp(commits: Commit[]) {
     return commits.sort((commit, nextCommit) => {
-      return Number(commit.timestamp) - Number(nextCommit.timestamp) &&
-        commit.data.priority - nextCommit.data.priority;
+      return commit.data.priority - nextCommit.data.priority;
     });
   }
 
@@ -325,6 +341,22 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
       }
 
       return commit;
+    });
+  }
+
+  /**
+   * Load properties for each commit
+   */
+  private async completeCommitProperties() {
+    const { historyItems } = this;
+
+    this.historyItems = historyItems.map((historyItem) => {
+      historyItem.commits.map((commit) => {
+        const properties = (historyItem.commitProperties as any).handler(commit);
+        commit.properties = properties;
+        return commit;
+      });
+      return historyItem;
     });
   }
 }

@@ -20,7 +20,6 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
   amountBorrow: number;
   amountRepay: number;
   interestRate: number;
-  interestPunitory: number;
   duration: string;
   durationTooltip: string;
   paymentDate: string[] = [];
@@ -107,7 +106,6 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
         const { duration } = this.loan.descriptor;
         const formattedDduration: string = Utils.formatDelta(duration);
         this.interestRate = interestRate;
-        this.interestPunitory = punitiveInterestRate;
 
         // set duration
         this.duration = formattedDduration;

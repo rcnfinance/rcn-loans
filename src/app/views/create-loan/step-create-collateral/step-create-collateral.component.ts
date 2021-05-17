@@ -366,7 +366,12 @@ ${ value } %`;
         .div(Utils.bn(100));
 
     const rawAmount: number = Number(collateralAmountInRcn) / Number(collateralRate);
-    const amount = Math.ceil((rawAmount + Number.EPSILON) * 100) / 100;
+
+    // if currency is eth, use 6 decimals instead of 4
+    const showFourDecimals = currency.symbol === 'ETH';
+    const n = showFourDecimals ? 100000 : 10000;
+    const amount = Math.ceil((rawAmount + Number.EPSILON) * n) / n;
+
     this.form.controls.formUi.patchValue({ amount });
 
     return amount;

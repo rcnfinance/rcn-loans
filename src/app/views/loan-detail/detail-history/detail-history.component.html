@@ -74,7 +74,7 @@
           </div>
           <div
             class="message__details"
-            *ngFor="let item of historyItem.commitProperties.handler(commit)"
+            *ngFor="let item of commit.properties"
           >
             <span class="message__details-label">
               {{ item.label }}:
