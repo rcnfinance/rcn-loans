@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { SharedModule } from 'app/shared/shared.module';
@@ -10,7 +11,7 @@ describe('NavrailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterModule.forRoot([]), SharedModule ],
+      imports: [ RouterModule.forRoot([]), HttpClientModule, SharedModule ],
       declarations: [ NavrailComponent ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
