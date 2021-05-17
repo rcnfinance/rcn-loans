@@ -5,7 +5,6 @@ import { Tx, Type } from '../services/tx.service';
 import { Loan } from './../models/loan.model';
 import { Collateral } from './../models/collateral.model';
 import { Utils } from './../utils/utils';
-import { Currency } from './../utils/currencies';
 import { CurrenciesService, CurrencyItem } from './../services/currencies.service';
 
 @Injectable()
@@ -91,14 +90,15 @@ export class CollateralService {
    */
   async calculateLiquidationPrice(loan: Loan, collateral: Collateral): Promise<number> {
     const { liquidationRatio, amount, token } = collateral;
-    const currency: CurrencyItem =
+    const { symbol }: CurrencyItem =
       this.currenciesService.getCurrencyByKey('address', token.toLowerCase());
     const liquidationPercentage: string =
       this.rawToPercentage(liquidationRatio).toString();
 
     const loanDebt =
       loan.debt ? loan.debt.model.estimatedObligation : loan.descriptor.totalObligation;
-    const collateralAmount = new Currency(currency.symbol).fromUnit(amount);
+    const collateralAmount = this.currenciesService.getAmountFromDecimals(amount, symbol);
+
     const liquidationPrice = (Number(liquidationPercentage) / 100 * loanDebt) / collateralAmount;
     const loanCurrencyDecimals = this.currenciesService.getCurrencyDecimals('symbol', loan.currency.symbol);
     const formattedLiquidationPrice: number =
@@ -120,7 +120,7 @@ export class CollateralService {
 
     const loanDebt =
       loan.debt ? loan.debt.model.estimatedObligation : loan.descriptor.totalObligation;
-    const collateralAmount = new Currency(currency.symbol).fromUnit(amount);
+    const collateralAmount = this.currenciesService.getAmountFromDecimals(amount, currency.symbol);
     const currentPrice = (Number(collateralPercentage) / 100 * loanDebt) / collateralAmount;
     const loanCurrencyDecimals = this.currenciesService.getCurrencyDecimals('symbol', loan.currency.symbol);
     const formattedCurrentPrice: number =

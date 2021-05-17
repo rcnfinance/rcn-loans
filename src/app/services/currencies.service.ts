@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as BN from 'bn.js';
 import { Utils } from 'app/utils/utils';
 import { Currency } from 'app/utils/currencies';
 import { ChainService } from 'app/services/chain.service';
@@ -125,6 +126,17 @@ export class CurrenciesService {
       max,
       best
     };
+  }
+
+  /**
+   * Raw amount to readable amount
+   * @param amount Raw amount
+   * @param symbol Currency symbol
+   * @return Formatted amount
+   */
+  getAmountFromDecimals(amount: number | string | BN, symbol: string): number {
+    const decimals = this.getCurrencyDecimals('symbol', symbol);
+    return Number(amount) / 10 ** decimals;
   }
 
   /**

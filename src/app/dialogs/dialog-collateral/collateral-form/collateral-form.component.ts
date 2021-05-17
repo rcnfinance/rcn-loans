@@ -5,7 +5,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { timer } from 'rxjs';
 import * as BN from 'bn.js';
 import { Utils } from 'app/utils/utils';
-import { Currency } from 'app/utils/currencies';
 // App models
 import { Loan } from 'app/models/loan.model';
 import { Collateral } from 'app/models/collateral.model';
@@ -246,7 +245,7 @@ export class CollateralFormComponent implements OnInit {
       });
 
       const originalAmount = Utils.formatAmount(
-        new Currency(currency.symbol).fromUnit(amount),
+        this.currenciesService.getAmountFromDecimals(amount, currency.symbol),
         4
       );
       const originalCollateralRatio: string =
@@ -287,7 +286,7 @@ export class CollateralFormComponent implements OnInit {
   private calculateMaxWithdraw() {
     const { amount } = this.form.value.formCollateral;
     const { currency, collateralRatio, balanceRatio } = this.form.value.formRatios;
-    const decimals: number = new Currency(currency.symbol).decimals;
+    const decimals: number = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
 
     const collateralAdjustment: number = Math.floor(Number(collateralRatio));
     const balanceAmount = Utils.bn(balanceRatio)
