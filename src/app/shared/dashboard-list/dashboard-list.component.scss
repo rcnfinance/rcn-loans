@@ -4,6 +4,11 @@
   .list {
     &__empty-state {
       padding: 0 40px;
+      app-empty-state::ng-deep {
+        .app-empty-state {
+          padding: 64px 0;
+        }
+      }
     }
     &__item-container {
       overflow: scroll;

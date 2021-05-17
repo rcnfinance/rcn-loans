@@ -11,9 +11,17 @@
     </div>
     <div *ngIf="!loans.length && !loading" class="list__empty-state">
       <app-empty-state
-        title="Hey! You don´t have any funded loans yet."
+        *ngIf="isBorrowed"
+        title="Hmm, it seems like you haven't requested any loans yet."
+        description='If you want to become a borrower, check the <a href="/borrow">Borrow Section</a>.'
+        image="./assets/empty-states/borrow.svg"
+      >
+      </app-empty-state>
+      <app-empty-state
+        *ngIf="isLent"
+        title="Hmm, it seems like you haven't funded any loans yet."
+        description='If you want to become a lender, check the <a href="/">Lend Section</a>.'
         image="./assets/empty-states/lent.svg"
-        description="If you want to start lending, check the Lend section."
       >
       </app-empty-state>
     </div>

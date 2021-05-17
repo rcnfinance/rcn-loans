@@ -4,8 +4,8 @@
   <div class="container">
     <div class="page-header">
       <app-page-header
-        title="MY DASHBOARD"
-        description="Check all your loans status and operations."
+        title="DASHBOARD"
+        description="Check your total repayments, loans’ status and more."
       >
       </app-page-header>
     </div>
@@ -52,7 +52,7 @@
       <div class="dashboard__content">
         <div class="row">
           <div *ngIf="!isMobile || isPageBorrow" class="col-md-6">
-            <app-dashboard-list-header name="Current Borrowed"></app-dashboard-list-header>
+            <app-dashboard-list-header name="Borrowed"></app-dashboard-list-header>
             <virtual-scroller
               #scroll
               [items]="loansBorrowed"
@@ -62,6 +62,7 @@
             >
               <app-dashboard-list
                 [isCurrentLoans]="isCurrentLoans"
+                [isBorrowed]="true"
                 [loading]="isLoading"
                 [loans]="loansBorrowed"
                 [showOptions]="true"
@@ -69,7 +70,7 @@
             </virtual-scroller>
           </div>
           <div *ngIf="!isMobile || !isPageBorrow" class="col-md-6">
-            <app-dashboard-list-header name="Current Lent"></app-dashboard-list-header>
+            <app-dashboard-list-header name="Lent"></app-dashboard-list-header>
             <virtual-scroller
               #scroll
               [items]="loansLent"
@@ -78,6 +79,7 @@
               (scroll)="onScrollLent($event)"
             >
               <app-dashboard-list
+                [isLent]="true"
                 [loading]="isLoading"
                 [loans]="loansLent"
                 [showOptions]="false"
