@@ -72,7 +72,7 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
   private loadDetail() {
     const loan: Loan = this.loan;
 
-    const amount = loan.currency.fromUnit(loan.amount);
+    const amount = this.currenciesService.getAmountFromDecimals(loan.amount, loan.currency.symbol);
     this.amount = amount ? Utils.formatAmount(amount) : null;
 
     if (loan.descriptor) {
@@ -184,7 +184,9 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
       }
 
       const time = pay * 15;
-      const amount = Utils.formatAmount(loan.currency.fromUnit(paymentAmount));
+      const amount = Utils.formatAmount(
+        this.currenciesService.getAmountFromDecimals(paymentAmount, loan.currency.symbol)
+      );
       const currency = loan.currency.toString();
       const payData = {
         pay: pay + payLabel,
