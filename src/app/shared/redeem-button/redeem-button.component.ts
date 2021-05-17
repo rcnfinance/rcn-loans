@@ -51,7 +51,7 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     if (this.txSubscription) {
-      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackLendTx(tx));
+      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackRedeemTx(tx));
     }
   }
 
@@ -59,7 +59,7 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
    * Retrieve pending Tx
    */
   retrievePendingTx() {
-    this.pendingTx = this.txService.getLastPendingLend(this.loan);
+    this.pendingTx = this.txService.getLastPendingRedeemCollateral(this.loan);
 
     if (this.pendingTx) {
       this.startRedeem.emit();
@@ -68,15 +68,16 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
 
     if (!this.txSubscription) {
       this.txSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackLendTx(tx));
+      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackRedeemTx(tx));
     }
   }
 
   /**
    * Track tx
    */
-  trackLendTx(tx: Tx) {
-    if (tx.type === Type.withdrawCollateral && tx.data.id === this.loan.id) {
+  trackRedeemTx(tx: Tx) {
+    const { id } = this.loan.collateral;
+    if (tx.type === Type.redeemCollateral && tx.data.id === id) {
       this.endRedeem.emit();
       this.txSubscription = false;
       this.finishProgress = true;
@@ -155,7 +156,7 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
         account
       );
 
-      this.txService.registerWithdrawCollateralTx(tx, this.loan, collateral, collateralAmount as any);
+      this.txService.registerRedeemCollateralTx(tx, this.loan);
       this.retrievePendingTx();
     } catch (err) {
       // Don't show 'User denied transaction signature' error
