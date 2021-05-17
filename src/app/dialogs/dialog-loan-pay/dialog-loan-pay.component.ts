@@ -176,8 +176,9 @@ export class DialogLoanPayComponent implements OnInit {
    */
   private calculatePendingAmount() {
     const loan: Loan = this.loan;
-    const currency = loan.currency;
-    const pendingAmount = currency.fromUnit(loan.debt.model.estimatedObligation);
+    const { symbol } = loan.currency;
+    const { estimatedObligation } = loan.debt.model;
+    const pendingAmount = this.currenciesService.getAmountFromDecimals(estimatedObligation, symbol);
 
     // adds 0,001% to the amount for prevent a small due
     const additional = (0.001 * pendingAmount) / 100;

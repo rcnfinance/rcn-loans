@@ -36,7 +36,7 @@ describe('InstallmentsService', () => {
     firstInstallment.startDate = moment().format();
     firstInstallment.dueDate = moment().format();
 
-    const { descriptor, currency } = LOAN_EXAMPLE_REQUESTED;
+    const { descriptor } = LOAN_EXAMPLE_REQUESTED;
     expect(firstInstallment).toEqual(jasmine.objectContaining({
       isCurrent: true,
       isLast: false,
@@ -46,9 +46,9 @@ describe('InstallmentsService', () => {
       startDate: moment().format(),
       dueDate: moment().format(),
       currency: 'RCN',
-      amount: currency.fromUnit(descriptor.firstObligation),
+      amount: descriptor.firstObligation / 10 ** 18,
       punitory: descriptor.punitiveInterestRate,
-      pendingAmount: currency.fromUnit(descriptor.firstObligation),
+      pendingAmount: descriptor.firstObligation / 10 ** 18,
       totalPaid: 0,
       pays: [],
       status: InstallmentStatus.OnTime
