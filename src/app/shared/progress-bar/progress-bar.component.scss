@@ -1,0 +1,25 @@
+.container-progress-bar{
+    position: relative;
+}
+
+.progress-bar {
+    height: 5px;
+    border-radius: 5px;
+    &--default {
+        width: 100%;
+        background-color: #3B3B3B;
+    }
+    &--primary, &--secondary {
+        position: absolute;
+        top: 0%;
+    }
+    &--primary {
+        z-index: 2;
+        background-color: #4155FF;
+    }
+    &--secondary {
+        z-index: 1;
+        width: 0%;
+        background-color: #D97D3A;
+    }
+}

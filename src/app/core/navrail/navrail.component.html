@@ -42,7 +42,7 @@
       </a>
       <ng-container *ngIf="hasAccount; else connectButtonTemplate">
         <a
-          routerLink='/address/{{ account }}/'
+          routerLink='/dashboard'
           class="menu__item"
           routerLinkActive="menu__item--active"
         >
@@ -50,7 +50,7 @@
             <i class="fas fa-hand-holding-usd"></i>
           </span>
           <span class="menu__item-label">
-            My loans
+            Dashboard
           </span>
           <span *ngIf="isBulletMyLoans" class="menu__item-bullet"></span>
         </a>
@@ -64,7 +64,7 @@
             <i class="fas fa-hand-holding-usd"></i>
           </span>
           <span class="menu__item-label">
-            My loans
+            Dashboard
           </span>
         </a>
       </ng-template>

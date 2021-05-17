@@ -1,0 +1,109 @@
+@import 'src/scss/fonts';
+
+::ng-deep {
+  .mat-menu-content:not(:empty) {
+    background-color: #565759;
+    width: 215px;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
+  .cdk-overlay-connected-position-bounding-box {
+    height: 144px !important;
+  }
+  .mat-menu-panel {
+    min-height: 0px !important;
+  }
+  .cdk-overlay-pane{
+    height: auto !important;
+  }
+}
+
+.list {
+  &__item {
+    margin-top: 15px;
+    border-left: 6px solid #4155ff;
+    border-radius: 5px;
+    background-color: #313134;
+    box-shadow: 0px 3px 6px #00000029;
+    padding: 10px 15px;
+    position: relative;
+    &__title {
+      @include styled-font('proxima-nova', 700, 14px);
+      margin-bottom: 16px;
+      &--warning {
+        color: #EAA219;
+      }
+      &--expired {
+        color: #A3A5A6;
+      }
+      svg {
+        margin-right: 8px;
+      }
+    }
+    &__column {
+      margin-bottom: 10px;
+      @include styled-font('proxima-nova', 400, 13px);
+      &__title {
+        @include styled-font('proxima-nova', 650, 13px);
+      }
+      &__progress {
+        margin-top: 5px;
+      }
+      &__payment {
+        &__button {
+          position: absolute;
+          top: 4px;
+          right: 6px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .list {
+    &__item {
+      margin-top: 10px;
+      height: 65px;
+      padding: 0;
+      &__column {
+        @include styled-font('Roboto', 400, 15px);
+        display: inline-block;
+        width: 20%;
+        margin-top: 22px;
+        margin-bottom: 0;
+        &__progress {
+          padding: 0 25px 4px 25px;
+        }
+        &__payment {
+          padding-left: 15px;
+          &__button {
+            top: 10px;
+            right: -20px;
+          }
+        }
+        svg {
+          color: #a09f9f;
+          font-size: 22px;
+          cursor: pointer;
+        }
+      }
+      &__button {
+        display: none;
+      }
+      &__tooltip {
+        position: absolute;
+        left: -6px;
+        top: 0%;
+        width: 12px;
+        height: 66px;
+        background: transparent;
+      }
+    }
+  }
+  ::ng-deep {
+    .cdk-overlay-connected-position-bounding-box {
+      height: 127px !important;
+    }
+  }
+}

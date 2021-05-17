@@ -23,6 +23,8 @@ import { WalletConnectService } from 'app/services/wallet-connect.service';
   styleUrls: ['./redeem-button.component.scss']
 })
 export class RedeemButtonComponent implements OnInit, OnDestroy {
+  @Input() name = 'Withdraw';
+  @Input() className = '';
   @Input() loan: Loan;
   @Input() disabled: boolean;
   @Output() startRedeem = new EventEmitter();

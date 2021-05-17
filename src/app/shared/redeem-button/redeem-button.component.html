@@ -2,9 +2,10 @@
   mat-raised-button
   (click)='clickRedeem()'
   class="button button-primary"
+  [ngClass]="className"
   [class.button-disabled]="disabled"
 >
-  Withdraw
+  {{ name }}
   <div
     style="display: inline; margin-left: 5px; vertical-align: baseline;"
     *ngIf='opPending'

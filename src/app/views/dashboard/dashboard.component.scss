@@ -1,0 +1,51 @@
+@import 'src/scss/fonts';
+
+.dashboard {
+  margin-top: 20px;
+  &__title {
+    @include styled-font('proxima-nova', 600, 18px);
+    margin-bottom: 16px;
+  }
+  &__link {
+    @include styled-font('proxima-nova', 800, 11px);
+    color: #7684FF;
+    text-align: right;
+    margin-top: 8px;
+  }
+  ::ng-deep {
+    .mat-button-toggle-group {
+      height: 35px;
+      @include styled-font('proxima-nova', 600, 13px);
+    }
+    .mat-button-toggle-label-content {
+      line-height: 36px;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .page-header {
+    margin-bottom: 30px;
+  }
+  .dashboard {
+    background-color: #212124;
+    padding: 21px 25px;
+    height: 550px;
+    margin-top: 0px;
+    &__title {
+      margin-bottom: 0px;
+    }
+    &__link {
+      margin-top: 4px;
+      cursor: pointer;
+      text-align: right;
+      svg {
+        margin-left: 4px;
+      }
+    }
+    &__content {
+      margin-top: 30px;
+      text-align: center;
+    }
+  }
+}
