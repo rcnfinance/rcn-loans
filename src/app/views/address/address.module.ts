@@ -15,7 +15,7 @@ import { MyLoansTabsComponent } from './my-loans-tabs/my-loans-tabs.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'lent'
+    redirectTo: 'borrowed'
   },
   {
     path: 'lent',

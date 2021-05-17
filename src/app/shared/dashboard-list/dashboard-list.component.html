@@ -1,0 +1,33 @@
+<div class="list">
+  <ng-container *ngIf="loans">
+    <div class="list__item-container" *ngIf="loans.length">
+      <ng-container *ngFor="let loan of loans">
+        <app-dashboard-list-item
+          [isCurrentLoans]="isCurrentLoans"
+          [showOptions]="showOptions"
+          [loan]="loan"
+        ></app-dashboard-list-item>
+      </ng-container>
+    </div>
+    <div *ngIf="!loans.length && !loading" class="list__empty-state">
+      <app-empty-state
+        *ngIf="isBorrowed"
+        title="Hmm, it seems like you haven't requested any loans yet."
+        description='If you want to become a borrower, check the <a href="/borrow">Borrow Section</a>.'
+        image="./assets/empty-states/borrow.svg"
+      >
+      </app-empty-state>
+      <app-empty-state
+        *ngIf="isLent"
+        title="Hmm, it seems like you haven't funded any loans yet."
+        description='If you want to become a lender, check the <a href="/">Lend Section</a>.'
+        image="./assets/empty-states/lent.svg"
+      >
+      </app-empty-state>
+    </div>
+    <ng-container *ngIf="!loans.length && loading">
+      <app-dashboard-list-skeleton items="5">
+      </app-dashboard-list-skeleton>
+    </ng-container>
+  </ng-container>
+</div>

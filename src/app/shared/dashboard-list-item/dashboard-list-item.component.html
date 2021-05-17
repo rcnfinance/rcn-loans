@@ -1,0 +1,138 @@
+<div
+  class="list__item"
+  [ngStyle]="{
+    'border-color': statusColor
+  }"
+>
+  <a [routerLink]="['/loan', loan.id]">
+    <div class="list__item__title d-sm-none">
+      <p
+        [class.list__item__title--warning]="
+          loan.status === 0 && !loan.collateral
+        "
+        [class.list__item__title--expired]="loan.status === 4"
+      >
+        <i class="fas" [ngClass]="'fa-' + statusIcon"> </i>
+        {{ statusText }}
+      </p>
+    </div>
+
+    <div class="list__item__column">
+      <div class="row">
+        <div class="list__item__column__title col-md-12 col-6 d-sm-none">
+          BORROWED
+        </div>
+        <div id="label-borrowed" class="col-md-12 col-6">
+          {{ borrowed }}
+        </div>
+      </div>
+    </div>
+
+    <div class="list__item__column">
+      <div class="row">
+        <div class="list__item__column__title col-md-12 col-6 d-sm-none">
+          REPAID
+        </div>
+        <div class="col-md-12 col-6">
+          {{ repaid }}
+        </div>
+      </div>
+    </div>
+
+    <!-- TODO: check tooltip logic -->
+    <!-- [matTooltip]="'Effective rate: ' + anualRate" -->
+    <div
+      class="list__item__column"
+    >
+      <div class="row">
+        <div class="list__item__column__title col-md-12 col-6 d-sm-none">
+          ANNUAL RATE
+        </div>
+        <div class="col-md-12 col-6">
+          {{ anualRate }}
+        </div>
+      </div>
+    </div>
+
+    <div class="list__item__column">
+      <div class="row">
+        <div class="list__item__column__title col-md-12 col-6 d-sm-none">
+          SCHEDULE PROGRESS
+        </div>
+        <div
+          class="list__item__column__progress col-md-12 col-6"
+          [matTooltip]="
+            scheduleTooltip && installmentTooltip
+              ? scheduleTooltip + ' ' + installmentTooltip
+              : ''
+          "
+          matTooltipPosition="below"
+        >
+          <app-progress-bar [color]="statusColor" [progress]="timeProgress">
+          </app-progress-bar>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <div class="list__item__column list__item__column__payment">
+    <div class="row">
+      <div class="list__item__column__title col-md-12 col-6 d-sm-none">
+        REPAYMENT PROGRESS
+      </div>
+
+      <div class="col-6">
+        <!-- TODO: check tooltip logic -->
+        <!-- [matTooltip]="'Accrued interest: ' + paymentProgress + ' ' + loan?.currency" -->
+        <p
+          matTooltipPosition="below"
+        >
+          {{ paymentProgress }}
+        </p>
+      </div>
+
+      <div
+        class="col-2 list__item__column__payment__button"
+        *ngIf="showOptions"
+      >
+        <button
+          *ngIf="canPay || canRedeem || canAdjustCollateral"
+          mat-icon-button
+          [matMenuTriggerFor]="appMenu"
+        >
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+
+        <mat-menu #appMenu="matMenu" yPosition="below">
+          <button *ngIf="canPay" (click)="openDialog('pay')" mat-menu-item>
+            Pay
+          </button>
+          <app-redeem-button
+            (startRedeem)="startRedeem()"
+            [loan]="loan"
+            *ngIf="canRedeem"
+            name="Withdraw Collateral"
+            className="dashboard"
+          >
+          </app-redeem-button>
+          <button
+            *ngIf="canAdjustCollateral"
+            (click)="openDialog('add')"
+            mat-menu-item
+          >
+            Add Collateral
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="list__item__tooltip d-none d-sm-block"
+    [matTooltipClass]="
+      'dashboard-tooltip' + ' ' + statusText.toLowerCase().split(' ').join('')
+    "
+    [matTooltip]="statusText"
+    matTooltiPosition="before"
+  ></div>
+</div>

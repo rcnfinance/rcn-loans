@@ -39,7 +39,7 @@ export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges() {
     const { account } = this;
-    this.shortAccount = Utils.shortAddress(account);
+    if (account) this.shortAccount = Utils.shortAddress(account);
   }
 
   ngOnDestroy() {
