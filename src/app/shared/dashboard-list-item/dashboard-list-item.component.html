@@ -108,7 +108,7 @@
           <button *ngIf="canPay" (click)="openDialog('pay')" mat-menu-item>
             Pay
           </button>
-          <app-redeem-button [loan]="loan" *ngIf="canRedeem" name="Withdraw Collateral">
+          <app-redeem-button [loan]="loan" *ngIf="canRedeem" name="Withdraw Collateral" className="dashboard" (startRedeem)="startRedeem()">
           </app-redeem-button>
           <button
             *ngIf="canAdjustCollateral"
