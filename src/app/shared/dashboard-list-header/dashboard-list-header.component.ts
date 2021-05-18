@@ -6,8 +6,9 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./dashboard-list-header.component.scss']
 })
 export class DashboardListHeaderComponent implements OnInit {
-
   @Input() name: string;
+  @Input() isBorrowed: boolean;
+  @Input() isLent: boolean;
 
   constructor() { }
 

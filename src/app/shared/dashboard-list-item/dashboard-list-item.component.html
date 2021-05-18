@@ -20,10 +20,10 @@
     <div class="list__item__column">
       <div class="row">
         <div class="list__item__column__title col-md-12 col-6 d-sm-none">
-          BORROWED
+          {{ isBorrowed ? 'BORROWED' : 'LENT' }}
         </div>
         <div id="label-borrowed" class="col-md-12 col-6">
-          {{ borrowed }}
+          {{ isBorrowed ? borrowed : lent }}
         </div>
       </div>
     </div>
@@ -31,10 +31,10 @@
     <div class="list__item__column">
       <div class="row">
         <div class="list__item__column__title col-md-12 col-6 d-sm-none">
-          REPAID
+          {{ isBorrowed ? 'REPAID' : 'INTEREST' }}
         </div>
         <div class="col-md-12 col-6">
-          {{ repaid }}
+          {{ isBorrowed ? repaid : interest }}
         </div>
       </div>
     </div>
