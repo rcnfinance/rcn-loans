@@ -73,7 +73,6 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
 
     this.loadCommitsProperties();
     await this.loadCommits();
-    await this.completeCommitProperties();
   }
 
   ngOnChanges() {
@@ -266,7 +265,7 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
     // prepare history
     const historyItems: {
       commitProperties: object,
-      commits: Commit[]
+      commits: CommitWithProperties[]
     }[] = [];
     Object.keys(commitsByType).map((opcode: CommitTypes, index: number) => {
       commitsByType[opcode].map((commitIndex) => {
@@ -296,6 +295,16 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
             });
           }
         });
+
+    // complete commits properties
+    historyItems.map((historyItem) => {
+      historyItem.commits.map((commit) => {
+        const properties = (historyItem.commitProperties as any).handler(commit);
+        commit.properties = properties;
+        return commit;
+      });
+      return historyItem;
+    });
 
     this.historyItems = historyItems;
   }
@@ -345,22 +354,6 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
       }
 
       return commit;
-    });
-  }
-
-  /**
-   * Load properties for each commit
-   */
-  private async completeCommitProperties() {
-    const { historyItems } = this;
-
-    this.historyItems = historyItems.map((historyItem) => {
-      historyItem.commits.map((commit) => {
-        const properties = (historyItem.commitProperties as any).handler(commit);
-        commit.properties = properties;
-        return commit;
-      });
-      return historyItem;
     });
   }
 }
