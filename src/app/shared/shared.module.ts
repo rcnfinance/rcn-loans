@@ -52,6 +52,7 @@ import { DialogFrontRunningComponent } from '../dialogs/dialog-front-running/dia
 import { DialogCollateralComponent } from '../dialogs/dialog-collateral/dialog-collateral.component';
 import { DialogNeedWithdrawComponent } from '../dialogs/dialog-need-withdraw/dialog-need-withdraw.component';
 import { DialogPohComponent } from '../dialogs/dialog-poh/dialog-poh.component';
+import { DialogLoanPayComponent } from '../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogChainSelectorComponent } from '../dialogs/dialog-chain-selector/dialog-chain-selector.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
@@ -64,6 +65,11 @@ import { IdentityService } from './../services/identity.service';
 import { CountriesService } from './../services/countries.service';
 import { CollateralService } from './../services/collateral.service';
 import { EventsService } from './../services/events.service';
+import { DashboardListComponent } from './dashboard-list/dashboard-list.component';
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+import { DashboardListItemComponent } from './dashboard-list-item/dashboard-list-item.component';
+import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashboard-list-skeleton.component';
+import { DashboardListHeaderComponent } from './dashboard-list-header/dashboard-list-header.component';
 
 @NgModule({
   imports: [
@@ -120,11 +126,17 @@ import { EventsService } from './../services/events.service';
     DialogCollateralComponent,
     DialogNeedWithdrawComponent,
     DialogPohComponent,
+    DialogLoanPayComponent,
     DialogChainSelectorComponent,
 
     VisualUrlPipe,
     FormatAmountPipe,
-    FormatAddressPipe
+    FormatAddressPipe,
+    DashboardListComponent,
+    ProgressBarComponent,
+    DashboardListItemComponent,
+    DashboardListSkeletonComponent,
+    DashboardListHeaderComponent
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,
@@ -139,6 +151,7 @@ import { EventsService } from './../services/events.service';
     DialogCollateralComponent,
     DialogNeedWithdrawComponent,
     DialogPohComponent,
+    DialogLoanPayComponent,
     DialogChainSelectorComponent
   ],
   providers: [
@@ -159,6 +172,8 @@ import { EventsService } from './../services/events.service';
     DialogHeaderComponent,
     LendButtonComponent,
     DetailButtonComponent,
+    DashboardListComponent,
+    ProgressBarComponent,
     PayButtonComponent,
     CloseButtonComponent,
     RedeemButtonComponent,
@@ -185,7 +200,9 @@ import { EventsService } from './../services/events.service';
     FormatAmountPipe,
     FormatAddressPipe,
     SkeletonComponent,
-    LoanListSkeletonComponent
+    LoanListSkeletonComponent,
+    DialogLoanPayComponent,
+    DashboardListHeaderComponent
   ]
 })
 export class SharedModule { }

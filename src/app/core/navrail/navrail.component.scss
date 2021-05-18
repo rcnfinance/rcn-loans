@@ -50,6 +50,15 @@ $navrailWidth: 169px;
         &-label {
           transition: .15s;
         }
+        &-bullet {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: var(--app-color-red);
+          position: absolute;
+          top: 13px;
+          left: 45px;
+        }
         &::before {
           content: '';
           position: absolute;

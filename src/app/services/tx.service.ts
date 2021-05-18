@@ -17,7 +17,8 @@ export enum Type {
   create = 'create',
   createCollateral = 'createCollateral',
   addCollateral = 'addCollateral',
-  withdrawCollateral = 'withdrawCollateral'
+  withdrawCollateral = 'withdrawCollateral',
+  redeemCollateral = 'redeemCollateral'
 }
 
 export class Tx {
@@ -239,6 +240,22 @@ export class TxService {
         !tx.confirmed &&
         tx.type === Type.createCollateral &&
         tx.data.id === loan.id)
+      .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
+  }
+
+  registerRedeemCollateralTx(tx: string, loan: Loan) {
+    const { address } = loan;
+    const { id } = loan.collateral;
+    const data = { engine: address, id };
+    this.registerTx(new Tx(tx, data.engine, false, Type.redeemCollateral, data));
+  }
+
+  getLastPendingRedeemCollateral(loan: Loan) {
+    return this.txMemory
+      .filter(tx =>
+        !tx.confirmed &&
+        tx.type === Type.redeemCollateral &&
+        tx.data.id === loan.collateral.id)
       .sort((tx1, tx2) => tx2.timestamp - tx1.timestamp)[0];
   }
 

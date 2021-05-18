@@ -348,9 +348,15 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         }
 
         // Load status data
-        this.totalDebt = Utils.formatAmount(currency.fromUnit(this.loan.descriptor.totalObligation));
-        this.pendingAmount = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.estimatedObligation));
-        this.paid = Utils.formatAmount(currency.fromUnit(this.loan.debt.model.paid));
+        this.totalDebt = Utils.formatAmount(
+          this.currenciesService.getAmountFromDecimals(this.loan.descriptor.totalObligation, currency.symbol)
+        );
+        this.pendingAmount = Utils.formatAmount(
+          this.currenciesService.getAmountFromDecimals(this.loan.debt.model.estimatedObligation, currency.symbol)
+        );
+        this.paid = Utils.formatAmount(
+          this.currenciesService.getAmountFromDecimals(this.loan.debt.model.paid, currency.symbol)
+        );
         break;
 
       default:

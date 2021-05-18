@@ -20,7 +20,6 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
   amountBorrow: number;
   amountRepay: number;
   interestRate: number;
-  interestPunitory: number;
   duration: string;
   durationTooltip: string;
   paymentDate: string[] = [];
@@ -96,8 +95,8 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
     const { currency } = this.loan;
 
     // set amounts
-    this.amountBorrow = currency.fromUnit(amount);
-    this.amountRepay = currency.fromUnit(totalObligation);
+    this.amountBorrow = this.currenciesService.getAmountFromDecimals(amount, currency.symbol);
+    this.amountRepay = this.currenciesService.getAmountFromDecimals(totalObligation, currency.symbol);
 
     switch (this.loan.status) {
       case Status.Expired:
@@ -107,7 +106,6 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
         const { duration } = this.loan.descriptor;
         const formattedDduration: string = Utils.formatDelta(duration);
         this.interestRate = interestRate;
-        this.interestPunitory = punitiveInterestRate;
 
         // set duration
         this.duration = formattedDduration;

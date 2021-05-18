@@ -1,0 +1,19 @@
+@import 'src/scss/fonts';
+
+@media (min-width: 992px) {
+  .list {
+    &__empty-state {
+      padding: 0 40px;
+      app-empty-state::ng-deep {
+        .app-empty-state {
+          padding: 64px 0;
+        }
+      }
+    }
+    &__item-container {
+      overflow-y: scroll;
+      overflow-x: hidden;
+      height: 375px;
+    }
+  }
+}
