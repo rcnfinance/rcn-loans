@@ -71,7 +71,7 @@ export class DashboardListItemComponent implements OnInit {
         } else {
           statusText = 'Collateral Pending';
           statusIcon = 'exclamation';
-          statusColor = '#A3A5A6';
+          statusColor = '#EAA219';
         }
         break;
       case Status.Ongoing:

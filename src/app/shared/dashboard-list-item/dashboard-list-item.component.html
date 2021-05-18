@@ -4,7 +4,7 @@
     'border-color': statusColor
   }"
 >
-  <a [routerLink]="['/loan', loan.id]">
+  <a [routerLink]="[statusText === 'Collateral Pending' ? '/borrow' : '/loan', loan.id]">
     <div class="list__item__title d-lg-none">
       <p
         [class.list__item__title--warning]="
@@ -85,6 +85,7 @@
         <!-- TODO: check tooltip logic -->
         <!-- [matTooltip]="'Accrued interest: ' + paymentProgress + ' ' + loan?.currency" -->
         <p
+          [matTooltip]="'Accrued interest: ' + paymentProgress"
           matTooltipPosition="below"
         >
           {{ paymentProgress }}
@@ -107,7 +108,7 @@
           <button *ngIf="canPay" (click)="openDialog('pay')" mat-menu-item>
             Pay
           </button>
-          <app-redeem-button [loan]="loan" *ngIf="canRedeem" name="Withdraw Collateral">
+          <app-redeem-button [loan]="loan" *ngIf="canRedeem" name="Withdraw Collateral" className="dashboard" (startRedeem)="startRedeem()">
           </app-redeem-button>
           <button
             *ngIf="canAdjustCollateral"
