@@ -19,11 +19,16 @@ export class DashboardListItemComponent implements OnInit {
   @Input() loan: Loan;
   @Input() showOptions: boolean;
   @Input() isCurrentLoans: boolean;
+  @Input() isBorrowed: boolean;
+  @Input() isLent: boolean;
 
   borrowed = '-';
+  lent = '-';
   repaid = '-';
+  interest = '-';
   anualRate = '-';
   paymentProgress = '-';
+  accruedInterest = '-';
   timeProgress = '0%';
   scheduleTooltip: string;
   installmentTooltip: string;
@@ -46,6 +51,7 @@ export class DashboardListItemComponent implements OnInit {
   ngOnInit() {
     this.loadBasicData();
     this.loadPaymentProgress();
+    this.loadAccruedInterest();
     this.loadTimeProgress();
     this.loadDuration();
     this.loadInstallments();
@@ -138,16 +144,18 @@ export class DashboardListItemComponent implements OnInit {
   private loadBasicData() {
     const { amount, currency, debt, descriptor, status } = this.loan;
 
-    const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
-    this.borrowed =
-      Utils.formatAmount(amount / 10 ** decimals, 2) +
-      ' ' +
-      currency.symbol;
+    const formattedAmount = this.currenciesService.getAmountFromDecimals(amount, currency.symbol);
+    const borrowedAndLent = `${ Utils.formatAmount(formattedAmount) } ${ currency.symbol }`;
+    this.borrowed = borrowedAndLent;
+    this.lent = borrowedAndLent;
+
     if (status !== Status.Request && status !== Status.Expired) {
-      this.repaid =
-        Utils.formatAmount(debt.model.paid / 10 ** decimals, 2) +
-        ' ' +
-        currency.symbol;
+      const formattedRepaid = this.currenciesService.getAmountFromDecimals(debt.model.paid, currency.symbol);
+      this.repaid = `${ Utils.formatAmount(formattedRepaid) } ${ currency.symbol }`;
+
+      const interest = descriptor.totalObligation - amount;
+      const formattedInterest = this.currenciesService.getAmountFromDecimals(interest, currency.symbol);
+      this.interest = `${ Utils.formatAmount(formattedInterest, 4) } ${ currency.symbol }`;
     }
     this.anualRate = descriptor.interestRate + '%';
   }
@@ -169,6 +177,19 @@ export class DashboardListItemComponent implements OnInit {
     }
     if (status === Status.Paid) {
       this.paymentProgress = 100 + '%';
+    }
+  }
+
+  private loadAccruedInterest() {
+    const { paymentProgress, interest } = this;
+    const { debt, currency } = this.loan;
+    const interestAmount = String(interest).split(' ')[0];
+    const paymentAverage = String(paymentProgress).split('%')[0];
+
+    if (paymentAverage && interestAmount && debt) {
+      const accruedInterest = (Number(paymentAverage) * Number(interestAmount)) / 100;
+      const formattedAccruedInterest = Utils.formatAmount(accruedInterest, 2);
+      this.accruedInterest = `${ formattedAccruedInterest } ${ currency.symbol }`;
     }
   }
 
