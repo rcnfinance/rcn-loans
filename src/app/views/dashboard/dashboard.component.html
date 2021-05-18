@@ -16,7 +16,7 @@
             LOANS
           </p>
         </div>
-        <div class="col-6 d-sm-none">
+        <div class="col-6 d-lg-none">
           <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
             <mat-button-toggle
               [checked]="isPageBorrow"
@@ -38,21 +38,24 @@
             (click)="setCurrentLoans(false)"
             class="dashboard__link"
           >
-            INACTIVES LOANS <i class="fas fa-plus-circle"></i>
+            INACTIVE LOANS <i class="fas fa-plus-circle"></i>
           </p>
           <p
             *ngIf="!isCurrentLoans"
             (click)="setCurrentLoans(true)"
             class="dashboard__link"
           >
-            ACTIVES LOANS <i class="fas fa-plus-circle"></i>
+            ACTIVE LOANS <i class="fas fa-plus-circle"></i>
           </p>
         </div>
       </div>
       <div class="dashboard__content">
         <div class="row">
           <div *ngIf="!isMobile || isPageBorrow" class="col-md-6">
-            <app-dashboard-list-header name="Borrowed"></app-dashboard-list-header>
+            <app-dashboard-list-header
+              name="Borrowed"
+              [isBorrowed]="true"
+            ></app-dashboard-list-header>
             <virtual-scroller
               #scroll
               [items]="loansBorrowed"
@@ -70,7 +73,10 @@
             </virtual-scroller>
           </div>
           <div *ngIf="!isMobile || !isPageBorrow" class="col-md-6">
-            <app-dashboard-list-header name="Lent"></app-dashboard-list-header>
+            <app-dashboard-list-header
+              name="Lent"
+              [isLent]="true"
+            ></app-dashboard-list-header>
             <virtual-scroller
               #scroll
               [items]="loansLent"

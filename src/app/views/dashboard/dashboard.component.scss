@@ -7,7 +7,7 @@
     margin-bottom: 16px;
   }
   &__link {
-    @include styled-font('proxima-nova', 800, 11px);
+    @include styled-font('proxima-nova', 700, 11px);
     color: #7684FF;
     text-align: right;
     margin-top: 8px;
@@ -30,8 +30,10 @@
   .dashboard {
     background-color: #212124;
     padding: 21px 25px;
+    margin-top: 0;
+    margin-bottom: 56px;
     height: 550px;
-    margin-top: 0px;
+    overflow: hidden;
     &__title {
       margin-bottom: 0px;
     }

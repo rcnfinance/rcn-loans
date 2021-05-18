@@ -70,8 +70,9 @@
         @include styled-font('Roboto', 400, 15px);
         display: inline-block;
         width: 20%;
-        margin-top: 22px;
+        padding-top: 22px;
         margin-bottom: 0;
+        height: 65px;
         &__progress {
           padding: 0 25px 4px 25px;
         }
