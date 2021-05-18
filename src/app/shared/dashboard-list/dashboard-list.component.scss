@@ -12,7 +12,8 @@
     }
     &__item-container {
       overflow: scroll;
-      height: 405px;
+      overflow-x: hidden;
+      height: 375px;
     }
   }
 }
