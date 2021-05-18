@@ -28,6 +28,7 @@ export class DashboardListItemComponent implements OnInit {
   interest = '-';
   anualRate = '-';
   paymentProgress = '-';
+  accruedInterest = '-';
   timeProgress = '0%';
   scheduleTooltip: string;
   installmentTooltip: string;
@@ -50,6 +51,7 @@ export class DashboardListItemComponent implements OnInit {
   ngOnInit() {
     this.loadBasicData();
     this.loadPaymentProgress();
+    this.loadAccruedInterest();
     this.loadTimeProgress();
     this.loadDuration();
     this.loadInstallments();
@@ -153,7 +155,7 @@ export class DashboardListItemComponent implements OnInit {
 
       const interest = descriptor.totalObligation - amount;
       const formattedInterest = this.currenciesService.getAmountFromDecimals(interest, currency.symbol);
-      this.interest = `${ Utils.formatAmount(formattedInterest) } ${ currency.symbol }`;
+      this.interest = `${ Utils.formatAmount(formattedInterest, 4) } ${ currency.symbol }`;
     }
     this.anualRate = descriptor.interestRate + '%';
   }
@@ -175,6 +177,19 @@ export class DashboardListItemComponent implements OnInit {
     }
     if (status === Status.Paid) {
       this.paymentProgress = 100 + '%';
+    }
+  }
+
+  private loadAccruedInterest() {
+    const { paymentProgress, interest } = this;
+    const { debt, currency } = this.loan;
+    const interestAmount = String(interest).split(' ')[0];
+    const paymentAverage = String(paymentProgress).split('%')[0];
+
+    if (paymentAverage && interestAmount && debt) {
+      const accruedInterest = (Number(paymentAverage) * Number(interestAmount)) / 100;
+      const formattedAccruedInterest = Utils.formatAmount(accruedInterest, 2);
+      this.accruedInterest = `${ formattedAccruedInterest } ${ currency.symbol }`;
     }
   }
 

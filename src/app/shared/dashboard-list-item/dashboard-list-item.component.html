@@ -39,10 +39,9 @@
       </div>
     </div>
 
-    <!-- TODO: check tooltip logic -->
-    <!-- [matTooltip]="'Effective rate: ' + anualRate" -->
     <div
       class="list__item__column"
+      [matTooltip]="'Effective rate: ' + anualRate"
     >
       <div class="row">
         <div class="list__item__column__title col-md-12 col-6 d-lg-none">
@@ -63,7 +62,7 @@
           class="list__item__column__progress col-md-12 col-6"
           [matTooltip]="
             scheduleTooltip && installmentTooltip
-              ? scheduleTooltip + ' ' + installmentTooltip
+              ? scheduleTooltip + '. ' + installmentTooltip
               : ''
           "
           matTooltipPosition="below"
@@ -82,10 +81,8 @@
       </div>
 
       <div class="col-6">
-        <!-- TODO: check tooltip logic -->
-        <!-- [matTooltip]="'Accrued interest: ' + paymentProgress + ' ' + loan?.currency" -->
         <p
-          [matTooltip]="'Accrued interest: ' + paymentProgress"
+          [matTooltip]="'Accrued interest: ' + accruedInterest"
           matTooltipPosition="below"
         >
           {{ paymentProgress }}
