@@ -161,6 +161,9 @@ export class NotificationsComponent implements OnInit {
       case 'withdrawCollateral':
         message = `Withdrawing the ${ tx.data.collateralId } collateral`;
         break;
+      case 'redeemCollateral':
+        message = `Withdrawing the ${ tx.data.id } collateral`;
+        break;
       default:
         break;
     }
@@ -204,6 +207,7 @@ export class NotificationsComponent implements OnInit {
         return 'Deposited';
 
       case 'withdrawCollateral':
+      case 'redeemCollateral':
         return 'Withdrawn';
 
       default:
@@ -263,6 +267,9 @@ export class NotificationsComponent implements OnInit {
         break;
       case 'withdrawCollateral':
         message = `You've withdrawn the ${ tx.data.collateralId } collateral`;
+        break;
+      case 'redeemCollateral':
+        message = `You've withdrawn the ${ tx.data.id } collateral`;
         break;
       default:
         break;
@@ -324,6 +331,7 @@ export class NotificationsComponent implements OnInit {
         txObject = new TxObject(id, 'Depositing', message, 'material-icons', 'add', '', 'violet');
         break;
       case 'withdrawCollateral':
+      case 'redeemCollateral':
         txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'remove_circle_outline', '', 'violet');
         break;
       default:

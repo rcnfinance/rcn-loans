@@ -4,6 +4,8 @@
       <ng-container *ngFor="let loan of loans">
         <app-dashboard-list-item
           [isCurrentLoans]="isCurrentLoans"
+          [isBorrowed]="isBorrowed"
+          [isLent]="isLent"
           [showOptions]="showOptions"
           [loan]="loan"
         ></app-dashboard-list-item>

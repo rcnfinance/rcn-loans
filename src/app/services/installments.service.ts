@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
-import { Loan, Status } from './../models/loan.model';
-import { Installment, InstallmentStatus } from './../interfaces/installment';
-import { Commit, CommitTypes } from './../interfaces/commit.interface';
-import { LoanUtils } from './../utils/loan-utils';
-// App services
-import { ApiService } from './api.service';
+import { Loan, Status } from 'app/models/loan.model';
+import { Installment, InstallmentStatus } from 'app/interfaces/installment';
+import { Commit, CommitTypes } from 'app/interfaces/commit.interface';
+import { LoanUtils } from 'app/utils/loan-utils';
+import { CurrenciesService } from 'app/services/currencies.service';
+import { ApiService } from 'app/services/api.service';
 
 @Injectable()
 export class InstallmentsService {
 
   constructor(
+    private currenciesService: CurrenciesService,
     private apiService: ApiService
   ) { }
 
@@ -103,7 +104,7 @@ export class InstallmentsService {
         this.unixToDate(TODAY_DATE_UNIX) <= dueDate;
 
       const currency = loan.currency.toString();
-      const amount = loan.currency.fromUnit(loan.descriptor.firstObligation);
+      const amount = this.currenciesService.getAmountFromDecimals(loan.descriptor.firstObligation, currency);
       const punitory = loan.descriptor.punitiveInterestRate;
       const pendingAmount = amount;
       const totalPaid = 0;
@@ -243,6 +244,7 @@ export class InstallmentsService {
 
     // get estimated installments calendar
     const { lentTime } = loan.config;
+    const { symbol } = loan.currency;
     const estimatedInstallments = this.getEstimatedInstallments(loan, lentTime * 1000);
 
     // assign calculated payments to the estimated installments
@@ -262,16 +264,16 @@ export class InstallmentsService {
         installment.pays.push({
           date: new DatePipe('en-US').transform(timestamp as any * 1000, `yyyy-MM-dd'T'HH:mm:ssZ`),
           punitory: 0,
-          pending: loan.currency.fromUnit(amountRequiredByInstallment - accumulatorLocaleTotalPaid),
-          amount: loan.currency.fromUnit(amountUsed),
-          totalPaid: loan.currency.fromUnit(accumulatorTotalPaid)
+          pending: this.currenciesService.getAmountFromDecimals(amountRequiredByInstallment - accumulatorLocaleTotalPaid, symbol),
+          amount: this.currenciesService.getAmountFromDecimals(amountUsed, symbol),
+          totalPaid: this.currenciesService.getAmountFromDecimals(accumulatorTotalPaid, symbol)
         });
       });
 
       // set installment paid
       const paid = accumulatorLocaleTotalPaid;
-      installment.totalPaid = loan.currency.fromUnit(paid);
-      installment.pendingAmount = loan.currency.fromUnit(amountRequiredByInstallment - paid);
+      installment.totalPaid = this.currenciesService.getAmountFromDecimals(paid, symbol);
+      installment.pendingAmount = this.currenciesService.getAmountFromDecimals(amountRequiredByInstallment - paid, symbol);
 
       // set installment status
       let status: InstallmentStatus;

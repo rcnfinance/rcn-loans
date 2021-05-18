@@ -82,7 +82,7 @@ describe('DashboardListItemComponent', () => {
   });
 
   it('should return correct color', () => {
-    expect(component.statusColor).toEqual('#A3A5A6');
+    expect(component.statusColor).toEqual('#EAA219');
   });
 
   it('should display borrowed label', () => {

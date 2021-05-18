@@ -244,9 +244,9 @@ export class TxService {
   }
 
   registerRedeemCollateralTx(tx: string, loan: Loan) {
-    const { engine } = loan;
+    const { address } = loan;
     const { id } = loan.collateral;
-    const data = { engine, id };
+    const data = { engine: address, id };
     this.registerTx(new Tx(tx, data.engine, false, Type.redeemCollateral, data));
   }
 
