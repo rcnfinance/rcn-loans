@@ -363,9 +363,10 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
    */
   private async loadAssets(): Promise<Contract[]> {
     const { engine } = this;
+    const { config } = this.chainService;
     const assets: Contract[] = [];
     assets.push(
-      new Contract('Collateral', environment.contracts[engine].collateral.collateral)
+      new Contract('Collateral', config.contracts[engine].collateral.collateral)
     );
 
     // set operators
@@ -524,10 +525,11 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
 
   private loadAssetOperators() {
     const { engine } = this;
+    const { config } = this.chainService;
     this.assetOperators = [
       new Operator(
         'WETH Manager',
-        environment.contracts[engine].collateral.wethManager,
+        config.contracts[engine].collateral.wethManager,
         'collateralization'
       )
     ];
