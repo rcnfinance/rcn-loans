@@ -38,7 +38,7 @@ export const chain = {
         loanManager: '0xd19f01537d64716d60884bcd4dbfb1d38df7d593'
       },
       collateral: {
-        collateral: '0x5af05b9d79227677fe52a78d493f5703a030c2cc',
+        collateral: '0x5f65ac4a8824c1b155228b248812ecda312dd5f5',
         wethManager: '0x98f0f55ffdaa90ac1a4a57854d15b66960912254'
       },
       converter: {
