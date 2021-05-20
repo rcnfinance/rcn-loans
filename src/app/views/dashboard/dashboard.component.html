@@ -1,6 +1,4 @@
-<div
-  class="body-scrollable requested-wrapper"
->
+<div class="body-scrollable requested-wrapper">
   <div class="container">
     <div class="page-header">
       <app-page-header
@@ -12,9 +10,7 @@
     <div class="dashboard">
       <div class="row">
         <div class="col-12 col-md-9">
-          <p class="dashboard__title">
-            LOANS
-          </p>
+          <p class="dashboard__title">LOANS</p>
         </div>
         <div class="col-6 d-lg-none">
           <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
@@ -33,19 +29,19 @@
           </mat-button-toggle-group>
         </div>
         <div class="col-6 col-md-3">
-          <p
-            *ngIf="isCurrentLoans"
-            (click)="setCurrentLoans(false)"
-            class="dashboard__link"
-          >
-            INACTIVE LOANS <i class="fas fa-plus-circle"></i>
-          </p>
-          <p
-            *ngIf="!isCurrentLoans"
-            (click)="setCurrentLoans(true)"
-            class="dashboard__link"
-          >
-            ACTIVE LOANS <i class="fas fa-plus-circle"></i>
+          <p class="dashboard__link">
+            <span
+              (click)="setCurrentLoans(true)"
+              [ngClass]="{ 'dashboard__link--active': isCurrentLoans }"
+            >
+              ACTIVE LOANS
+            </span>
+            <span
+              (click)="setCurrentLoans(false)"
+              [ngClass]="{ 'dashboard__link--active': !isCurrentLoans }"
+            >
+              INACTIVE LOANS
+            </span>
           </p>
         </div>
       </div>

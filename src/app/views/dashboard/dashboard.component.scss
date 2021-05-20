@@ -8,9 +8,15 @@
   }
   &__link {
     @include styled-font('proxima-nova', 700, 11px);
-    color: #7684FF;
+    color: #a09f9f;
     text-align: right;
     margin-top: 8px;
+    &--active {
+      color: #7684FF;
+    }
+    span {
+      margin-right: 20px;
+    }
   }
   ::ng-deep {
     .mat-button-toggle-group {
