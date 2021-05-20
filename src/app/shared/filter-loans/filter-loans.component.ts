@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Utils } from './../../utils/utils';
-import { Currency } from './../../utils/currencies';
 import { CurrenciesService } from './../../services/currencies.service';
 import { Web3Service } from './../../services/web3.service';
 
@@ -63,7 +62,7 @@ export class FilterLoansComponent implements OnInit, OnDestroy {
   subscriptionAnnualInterest: Subscription;
 
   constructor(
-    private currencesService: CurrenciesService,
+    private currenciesService: CurrenciesService,
     private web3Service: Web3Service
   ) { }
 
@@ -155,7 +154,7 @@ export class FilterLoansComponent implements OnInit, OnDestroy {
    * Get environment filter currencies
    */
   private getCurrencies() {
-    this.currencies = this.currencesService.getFilterCurrencies();
+    this.currencies = this.currenciesService.getFilterCurrencies();
   }
 
   /**
@@ -177,7 +176,7 @@ export class FilterLoansComponent implements OnInit, OnDestroy {
         value: [hex32Currency]
       });
 
-      const { decimals } = new Currency(currency);
+      const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency);
       if (amountStart) {
         filters.push({
           attr: AVAILABLE_FILTERS[LoanFilterKey.AmountStart],

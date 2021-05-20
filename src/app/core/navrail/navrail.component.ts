@@ -3,8 +3,10 @@ import { Router, Event, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { environment } from 'environments/environment';
 import { Engine } from 'app/models/loan.model';
-import { WalletConnectService } from 'app/services/wallet-connect.service';
 import { Web3Service } from 'app/services/web3.service';
+import { ChainService } from 'app/services/chain.service';
+import { NavrailService } from 'app/services/navrail.service';
+import { WalletConnectService } from 'app/services/wallet-connect.service';
 
 interface FooterButton {
   url: string;
@@ -26,12 +28,16 @@ export class NavrailComponent implements OnInit, OnDestroy {
   private navrailOpened: boolean;
   private navrailHidden: boolean;
   private socialNetworksOpened: boolean;
+  private bulletMyLoans: boolean;
   private subscriptionAccount: Subscription;
   private subscribtionRouter: Subscription;
+  private subscriptionRefreshNavrail: Subscription;
 
   constructor(
     private router: Router,
     private web3Service: Web3Service,
+    private chainService: ChainService,
+    private navrailService: NavrailService,
     private walletConnectService: WalletConnectService
   ) {
     this.navrailHidden = true;
@@ -40,13 +46,16 @@ export class NavrailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadAccount();
     this.loadFooterButtons();
+    this.loadNavrailBullets();
     this.handleLoginEvents();
     this.listenRouter();
+    this.listenRefreshNavrail();
   }
 
   ngOnDestroy() {
     this.subscriptionAccount.unsubscribe();
     this.subscribtionRouter.unsubscribe();
+    this.subscriptionRefreshNavrail.unsubscribe();
   }
 
   /**
@@ -92,14 +101,24 @@ export class NavrailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Navrail is opened
+   * Is Navrail opened
    */
   get isNavrailOpened() {
     return this.navrailOpened;
   }
 
+  /**
+   * Is Navrail hidden
+   */
   get isNavrailHidden() {
     return this.navrailHidden;
+  }
+
+  /**
+   * Show bullet on 'My Loans' button
+   */
+  get isBulletMyLoans() {
+    return this.bulletMyLoans;
   }
 
   /**
@@ -137,6 +156,16 @@ export class NavrailComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Listen navrail refresh event
+   */
+  private listenRefreshNavrail() {
+    this.subscriptionRefreshNavrail = this
+        .navrailService
+        .refreshNavrailEvent
+        .subscribe(() => this.loadNavrailBullets());
+  }
+
+  /**
    * Load user account
    */
   private async loadAccount() {
@@ -145,12 +174,21 @@ export class NavrailComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Load navrail bullets
+   */
+  private loadNavrailBullets() {
+    const { showBulletMyLoans } = this.navrailService;
+    this.bulletMyLoans = showBulletMyLoans;
+  }
+
+  /**
    * Load social network and dApp version icons
    */
   private loadFooterButtons() {
     const env = environment;
-    const contract = env.contracts[Engine.UsdcEngine].diaspore.loanManager;
-    const linkContract = env.network.explorer.address.replace('${address}', contract);
+    const { config } = this.chainService;
+    const contract = config.contracts[Engine.UsdcEngine].diaspore.loanManager;
+    const linkContract = config.network.explorer.address.replace('${address}', contract);
     const version = env.version;
     const versionString = `${env.version}-${env.build} - ${env.versionName} ${env.versionEmoji}`;
     this.dappVersionButtons = [

@@ -6,12 +6,12 @@ import {
   animate,
   transition
 } from '@angular/animations';
-import { environment } from '../../../../environments/environment';
-import { Engine } from '../../../models/loan.model';
-import { Notification, TxObject } from '../../../models/notification.model';
-import { HeaderPopoverService } from '../../../services/header-popover.service';
-import { TxService, Tx } from '../../../services/tx.service';
-import { Utils } from '../../../utils/utils';
+import { Engine } from 'app/models/loan.model';
+import { Notification, TxObject } from 'app/models/notification.model';
+import { HeaderPopoverService } from 'app/services/header-popover.service';
+import { ChainService } from 'app/services/chain.service';
+import { TxService, Tx } from 'app/services/tx.service';
+import { Utils } from 'app/utils/utils';
 
 @Component({
   selector: 'app-notifications',
@@ -53,6 +53,7 @@ export class NotificationsComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     private txService: TxService,
+    private chainService: ChainService,
     public headerPopoverService: HeaderPopoverService
   ) { }
 
@@ -62,26 +63,30 @@ export class NotificationsComponent implements OnInit {
    * @return Contract name
    */
   getContractName(contract: string) {
-    switch (contract) {
-      case environment.contracts[Engine.RcnEngine].diaspore.loanManager:
-      case environment.contracts[Engine.UsdcEngine].diaspore.loanManager:
-        return 'Loan Manager Contract';
+    const { config } = this.chainService;
+    const { usableEngines } = config;
+    let contractName = `${ Utils.shortAddress(contract) } Contract`;
 
-      case environment.contracts[Engine.RcnEngine].diaspore.debtEngine:
-      case environment.contracts[Engine.UsdcEngine].diaspore.debtEngine:
-        return 'Debt Engine Contract';
+    usableEngines.map((engine: Engine) => {
+      switch (contract) {
+        case config.contracts[engine].diaspore.loanManager:
+          contractName = 'Loan Manager Contract';
+          break;
+        case config.contracts[engine].diaspore.debtEngine:
+          contractName = 'Debt Engine Contract';
+          break;
+        case config.contracts[engine].converter.converterRamp:
+          contractName = 'Converter Ramp Contract';
+          break;
+        case config.contracts[engine].collateral.collateral:
+          contractName = 'Collateral Contract';
+          break;
+        default:
+          break;
+      }
+    });
 
-      case environment.contracts[Engine.RcnEngine].converter.converterRamp:
-      case environment.contracts[Engine.UsdcEngine].converter.converterRamp:
-        return 'Converter Ramp Contract';
-
-      case environment.contracts[Engine.RcnEngine].collateral.collateral:
-      case environment.contracts[Engine.UsdcEngine].collateral.collateral:
-        return 'Collateral Contract';
-
-      default:
-        return `${ Utils.shortAddress(contract) } Contract`;
-    }
+    return contractName;
   }
 
   /**
@@ -156,6 +161,9 @@ export class NotificationsComponent implements OnInit {
       case 'withdrawCollateral':
         message = `Withdrawing the ${ tx.data.collateralId } collateral`;
         break;
+      case 'redeemCollateral':
+        message = `Withdrawing the ${ tx.data.id } collateral`;
+        break;
       default:
         break;
     }
@@ -199,6 +207,7 @@ export class NotificationsComponent implements OnInit {
         return 'Deposited';
 
       case 'withdrawCollateral':
+      case 'redeemCollateral':
         return 'Withdrawn';
 
       default:
@@ -258,6 +267,9 @@ export class NotificationsComponent implements OnInit {
         break;
       case 'withdrawCollateral':
         message = `You've withdrawn the ${ tx.data.collateralId } collateral`;
+        break;
+      case 'redeemCollateral':
+        message = `You've withdrawn the ${ tx.data.id } collateral`;
         break;
       default:
         break;
@@ -319,6 +331,7 @@ export class NotificationsComponent implements OnInit {
         txObject = new TxObject(id, 'Depositing', message, 'material-icons', 'add', '', 'violet');
         break;
       case 'withdrawCollateral':
+      case 'redeemCollateral':
         txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'remove_circle_outline', '', 'violet');
         break;
       default:

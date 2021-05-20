@@ -1,5 +1,39 @@
 # Changelog
 
+## **0.4.1** Boggart 👻
+
+### Feature:
+- New dashboard component
+- New navrail bullets component
+
+### Enhancement:
+- New animations
+- Upgrade dependencies
+- Shows more decimal when creating ETH collateral
+- Improves performance in the loan detail view
+
+### Fix:
+- Fix USDC decimals on Ethereum chains
+- Fix penalty rate display
+- Fix Etherscan/BSC scan links in the loan history component
+- Fix Withdraw Collateral TX tracking
+- Fix the verification of whether a loan was created
+
+## **0.4.0** Boggart 👻
+
+### Feature:
+- Implement support for multiple chains
+- Add Binance Smart Chain
+- New loan list skeleton component
+
+### Enhancement:
+- Clean code
+- Improves performance
+
+### Fix:
+- Oracle rate for ARS
+
+
 ## **0.3.4** Boggart 👻
 
 ### Feature:

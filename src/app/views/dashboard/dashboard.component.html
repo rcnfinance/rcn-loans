@@ -1,0 +1,100 @@
+<div
+  class="body-scrollable requested-wrapper"
+>
+  <div class="container">
+    <div class="page-header">
+      <app-page-header
+        title="DASHBOARD"
+        description="Check your total repayments, loans’ status and more."
+      >
+      </app-page-header>
+    </div>
+    <div class="dashboard">
+      <div class="row">
+        <div class="col-12 col-md-9">
+          <p class="dashboard__title">
+            LOANS
+          </p>
+        </div>
+        <div class="col-6 d-lg-none">
+          <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+            <mat-button-toggle
+              [checked]="isPageBorrow"
+              (click)="setPageBorrow(true)"
+            >
+              BORROW
+            </mat-button-toggle>
+            <mat-button-toggle
+              [checked]="!isPageBorrow"
+              (click)="setPageBorrow(false)"
+            >
+              LENT
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <div class="col-6 col-md-3">
+          <p
+            *ngIf="isCurrentLoans"
+            (click)="setCurrentLoans(false)"
+            class="dashboard__link"
+          >
+            INACTIVE LOANS <i class="fas fa-plus-circle"></i>
+          </p>
+          <p
+            *ngIf="!isCurrentLoans"
+            (click)="setCurrentLoans(true)"
+            class="dashboard__link"
+          >
+            ACTIVE LOANS <i class="fas fa-plus-circle"></i>
+          </p>
+        </div>
+      </div>
+      <div class="dashboard__content">
+        <div class="row">
+          <div *ngIf="!isMobile || isPageBorrow" class="col-md-6">
+            <app-dashboard-list-header
+              name="Borrowed"
+              [isBorrowed]="true"
+            ></app-dashboard-list-header>
+            <virtual-scroller
+              #scroll
+              [items]="loansBorrowed"
+              [bufferAmount]="12"
+              [scrollThrottlingTime]="500"
+              (scroll)="onScrollBorrowed($event)"
+            >
+              <app-dashboard-list
+                [isCurrentLoans]="isCurrentLoans"
+                [isBorrowed]="true"
+                [loading]="isLoading"
+                [loans]="loansBorrowed"
+                [showOptions]="true"
+              ></app-dashboard-list>
+            </virtual-scroller>
+          </div>
+          <div *ngIf="!isMobile || !isPageBorrow" class="col-md-6">
+            <app-dashboard-list-header
+              name="Lent"
+              [isLent]="true"
+            ></app-dashboard-list-header>
+            <virtual-scroller
+              #scroll
+              [items]="loansLent"
+              [bufferAmount]="12"
+              [scrollThrottlingTime]="500"
+              (scroll)="onScrollLent($event)"
+            >
+              <app-dashboard-list
+                [isLent]="true"
+                [loading]="isLoading"
+                [loans]="loansLent"
+                [showOptions]="false"
+              ></app-dashboard-list>
+            </virtual-scroller>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

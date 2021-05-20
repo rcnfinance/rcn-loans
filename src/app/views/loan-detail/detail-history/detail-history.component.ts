@@ -2,13 +2,24 @@ import { Component, OnInit, OnChanges, Input, HostListener } from '@angular/core
 import { MatDialog } from '@angular/material';
 import { timer } from 'rxjs';
 import * as moment from 'moment';
-import { environment } from 'app/../environments/environment';
 import { ApiService } from 'app/services/api.service';
+import { ChainService } from 'app/services/chain.service';
+import { CurrenciesService } from 'app/services/currencies.service';
 import { FormatAmountPipe } from 'app/pipes/format-amount.pipe';
 import { Loan } from 'app/models/loan.model';
 import { Commit, CommitTypes, CommitProperties } from 'app/interfaces/commit.interface';
 import { LoanUtils } from 'app/utils/loan-utils';
 import { DialogPohComponent } from 'app/dialogs/dialog-poh/dialog-poh.component';
+
+interface CommitWithProperties extends Commit {
+  properties?: [{
+    label: string;
+    value: string;
+    isAddress?: boolean;
+    isHash?: boolean;
+    hasPoh?: boolean;
+  }];
+}
 
 @Component({
   selector: 'app-detail-history',
@@ -21,11 +32,11 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
   commits: Commit[];
   historyItems: {
     commitProperties: object;
-    commits: Commit[];
+    commits: CommitWithProperties[];
   }[];
   historyItemSelected: number;
-  explorerTx = environment.network.explorer.tx;
-  explorerAddress = environment.network.explorer.address;
+  explorerTx = this.chainService.config.network.explorer.tx;
+  explorerAddress = this.chainService.config.network.explorer.address;
 
   private commitProperties: {
     [commitType: string]: {
@@ -51,8 +62,58 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
   constructor(
     private dialog: MatDialog,
     private formatAmountPipe: FormatAmountPipe,
-    private apiService: ApiService
-  ) {
+    private apiService: ApiService,
+    private chainService: ChainService,
+    private currenciesService: CurrenciesService
+  ) { }
+
+  async ngOnInit() {
+    const { loan } = this;
+    if (!loan) return;
+
+    this.loadCommitsProperties();
+    await this.loadCommits();
+  }
+
+  ngOnChanges() {
+    this.loadCommits();
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(_: any) {
+    if (!this.historyItemSelected) {
+      return;
+    }
+
+    this.historyItemSelected = null;
+  }
+
+  /**
+   * Click on an address
+   * @param address Borrower address
+   */
+  clickAddress(address: string, hasPoh: boolean) {
+    if (hasPoh) {
+      this.dialog.open(DialogPohComponent, {
+        panelClass: 'dialog-poh-wrapper',
+        data: { address }
+      });
+      return;
+    }
+
+    const { config } = this.chainService;
+    window.open(config.network.explorer.address.replace('${address}', address));
+  }
+
+  async clickHistoryItemCircle(index?: number) {
+    await timer(50).toPromise();
+    this.historyItemSelected = index;
+  }
+
+  /**
+   * Load commit properties
+   */
+  private loadCommitsProperties() {
     this.commitProperties = {
       [CommitTypes.Requested]: {
         'show': true,
@@ -117,7 +178,9 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
         handler: (commit: Commit) => {
           const { currency } = this.loan;
           const payedAmount = LoanUtils.getCommitPaidAmount(this.allCommits, commit.timestamp);
-          const amount = this.formatAmountPipe.transform(currency.fromUnit(payedAmount));
+          const amount = this.formatAmountPipe.transform(
+            this.currenciesService.getAmountFromDecimals(payedAmount, currency.symbol)
+          );
           return [{
             label: 'Date',
             value: moment(Number(commit.timestamp) * 1000).format('DD/MM/YYYY HH:mm')
@@ -174,47 +237,6 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
     };
   }
 
-  async ngOnInit() {
-    const { loan } = this;
-    if (!loan) return;
-
-    await this.loadCommits();
-  }
-
-  ngOnChanges() {
-    this.loadCommits();
-  }
-
-  @HostListener('document:click', ['$event'])
-  clickOutside(_: any) {
-    if (!this.historyItemSelected) {
-      return;
-    }
-
-    this.historyItemSelected = null;
-  }
-
-  /**
-   * Click on an address
-   * @param address Borrower address
-   */
-  clickAddress(address: string, hasPoh: boolean) {
-    if (hasPoh) {
-      this.dialog.open(DialogPohComponent, {
-        panelClass: 'dialog-poh-wrapper',
-        data: { address }
-      });
-      return;
-    }
-
-    window.open(environment.network.explorer.address.replace('${address}', address));
-  }
-
-  async clickHistoryItemCircle(index?: number) {
-    await timer(50).toPromise();
-    this.historyItemSelected = index;
-  }
-
   private async loadCommits() {
     const { engine, id } = this.loan;
 
@@ -243,7 +265,7 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
     // prepare history
     const historyItems: {
       commitProperties: object,
-      commits: Commit[]
+      commits: CommitWithProperties[]
     }[] = [];
     Object.keys(commitsByType).map((opcode: CommitTypes, index: number) => {
       commitsByType[opcode].map((commitIndex) => {
@@ -274,13 +296,22 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
           }
         });
 
+    // complete commits properties
+    historyItems.map((historyItem) => {
+      historyItem.commits.map((commit) => {
+        const properties = (historyItem.commitProperties as any).handler(commit);
+        commit.properties = properties;
+        return commit;
+      });
+      return historyItem;
+    });
+
     this.historyItems = historyItems;
   }
 
   private sortByTimestamp(commits: Commit[]) {
     return commits.sort((commit, nextCommit) => {
-      return Number(commit.timestamp) - Number(nextCommit.timestamp) &&
-        commit.data.priority - nextCommit.data.priority;
+      return commit.data.priority - nextCommit.data.priority;
     });
   }
 

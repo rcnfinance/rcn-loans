@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, OnChanges, Input } from '@angular/core';
 import * as BN from 'bn.js';
 import { Utils } from './../../../utils/utils';
-import { Currency } from './../../../utils/currencies';
 import { Loan } from './../../../models/loan.model';
 import { Collateral } from './../../../models/collateral.model';
 // App Services
@@ -73,7 +72,7 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
   private loadDetail() {
     const loan: Loan = this.loan;
 
-    const amount = loan.currency.fromUnit(loan.amount);
+    const amount = this.currenciesService.getAmountFromDecimals(loan.amount, loan.currency.symbol);
     this.amount = amount ? Utils.formatAmount(amount) : null;
 
     if (loan.descriptor) {
@@ -107,7 +106,7 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
     this.balanceRatio = `${ Utils.formatAmount(balanceRatio) } %`;
 
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
-    const collateralDecimals = new Currency(collateralCurrency.symbol).decimals;
+    const collateralDecimals = this.currenciesService.getCurrencyDecimals('symbol', collateralCurrency.symbol);
     this.collateralAmount = Utils.formatAmount(collateral.amount as any / 10 ** collateralDecimals);
     this.collateralAsset = collateralCurrency.symbol;
   }
@@ -146,7 +145,7 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
   private expectedInstallmentAmount() {
     const loan: Loan = this.loan;
     const amountInWei = loan.descriptor.firstObligation;
-    const decimals = loan.currency.decimals;
+    const decimals = this.currenciesService.getCurrencyDecimals('symbol', loan.currency.symbol);
     const amount = amountInWei / 10 ** decimals;
 
     this.updateInstallmentsDetails();
@@ -185,7 +184,9 @@ export class CreateLoanCardComponent implements OnInit, OnChanges {
       }
 
       const time = pay * 15;
-      const amount = Utils.formatAmount(loan.currency.fromUnit(paymentAmount));
+      const amount = Utils.formatAmount(
+        this.currenciesService.getAmountFromDecimals(paymentAmount, loan.currency.symbol)
+      );
       const currency = loan.currency.toString();
       const payData = {
         pay: pay + payLabel,

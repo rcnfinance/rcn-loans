@@ -1,9 +1,5 @@
 <div
   class="wrapper"
-  [ngClass]="{
-    'sidebar-toggled': navToggle,
-    'navmobile-toggled': navmobileToggled
-  }"
   [ngStyle]="{'min-height': winHeight + 'px'}"
 >
   <app-header></app-header>
@@ -15,7 +11,7 @@
       </div>
       <app-fixed-application-ad
         *ngIf="showAd"
-        [message]="showAd"
+        [ad]="showAd"
       ></app-fixed-application-ad>
     </mat-sidenav-content>
   </mat-sidenav-container>

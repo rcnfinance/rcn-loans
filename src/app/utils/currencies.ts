@@ -1,5 +1,3 @@
-import * as BN from 'bn.js';
-
 export class Currency {
   decimals: number;
   constructor(
@@ -14,9 +12,10 @@ export class Currency {
         return 2;
 
       case 'USDC':
-        return 6;
+        return 18;
 
       case 'ETH':
+      case 'BNB':
       case 'RCN':
       case 'DAI':
       case 'TEST':
@@ -26,13 +25,6 @@ export class Currency {
       default:
         return 0;
     }
-  }
-  fromUnit(n: number | string | BN): number {
-    if (typeof n !== 'number') {
-      n = Number(n);
-    }
-
-    return n / 10 ** this.decimals;
   }
   toString = (): string => this.symbol;
 }

@@ -5,7 +5,6 @@ import { Tx, Type } from '../services/tx.service';
 import { Loan } from './../models/loan.model';
 import { Collateral } from './../models/collateral.model';
 import { Utils } from './../utils/utils';
-import { Currency } from './../utils/currencies';
 import { CurrenciesService, CurrencyItem } from './../services/currencies.service';
 
 @Injectable()
@@ -34,15 +33,16 @@ export class CollateralService {
 
     const { engine } = loan;
     const loanOracle: string = await this.contractsService.symbolToOracle(engine, loan.currency.toString());
-    const loanRate: BN | string = await this.contractsService.getRate(loanOracle, loan.currency.decimals);
+    const decimals = this.currenciesService.getCurrencyDecimals('symbol', loan.currency.symbol);
+    const loanRate: BN | string = await this.contractsService.getRate(loanOracle, decimals);
     const loanAmount: number =
       loan.debt ? loan.debt.model.estimatedObligation : loan.descriptor.totalObligation;
     const loanAmountInRcn: BN = Utils.bn(loanAmount)
         .mul(Utils.bn(loanRate))
-        .div(Utils.pow(10, loan.currency.decimals));
+        .div(Utils.pow(10, decimals));
 
     const collateralOracle: string = await this.contractsService.symbolToOracle(engine, currency.symbol);
-    const collateralDecimals: number = new Currency(currency.symbol).decimals;
+    const collateralDecimals: number = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
     const collateralRate: BN | string = await this.contractsService.getRate(collateralOracle, collateralDecimals);
     const collateralAmountInRcn: BN = Utils.bn(collateralRate)
         .mul(Utils.bn(amount))
@@ -90,17 +90,19 @@ export class CollateralService {
    */
   async calculateLiquidationPrice(loan: Loan, collateral: Collateral): Promise<number> {
     const { liquidationRatio, amount, token } = collateral;
-    const currency: CurrencyItem =
+    const { symbol }: CurrencyItem =
       this.currenciesService.getCurrencyByKey('address', token.toLowerCase());
     const liquidationPercentage: string =
       this.rawToPercentage(liquidationRatio).toString();
 
     const loanDebt =
       loan.debt ? loan.debt.model.estimatedObligation : loan.descriptor.totalObligation;
-    const collateralAmount = new Currency(currency.symbol).fromUnit(amount);
+    const collateralAmount = this.currenciesService.getAmountFromDecimals(amount, symbol);
+
     const liquidationPrice = (Number(liquidationPercentage) / 100 * loanDebt) / collateralAmount;
+    const loanCurrencyDecimals = this.currenciesService.getCurrencyDecimals('symbol', loan.currency.symbol);
     const formattedLiquidationPrice: number =
-      (liquidationPrice as any / 10 ** loan.currency.decimals);
+      (liquidationPrice as any / 10 ** loanCurrencyDecimals);
 
     return formattedLiquidationPrice;
   }
@@ -118,10 +120,11 @@ export class CollateralService {
 
     const loanDebt =
       loan.debt ? loan.debt.model.estimatedObligation : loan.descriptor.totalObligation;
-    const collateralAmount = new Currency(currency.symbol).fromUnit(amount);
+    const collateralAmount = this.currenciesService.getAmountFromDecimals(amount, currency.symbol);
     const currentPrice = (Number(collateralPercentage) / 100 * loanDebt) / collateralAmount;
+    const loanCurrencyDecimals = this.currenciesService.getCurrencyDecimals('symbol', loan.currency.symbol);
     const formattedCurrentPrice: number =
-      (currentPrice as any / 10 ** loan.currency.decimals);
+      (currentPrice as any / 10 ** loanCurrencyDecimals);
 
     return formattedCurrentPrice;
   }
@@ -131,11 +134,12 @@ export class CollateralService {
    * @return Exchange rate
    */
   async getCollateralRate(loan: Loan, collateral: Collateral): Promise<number> {
+    const loanCurrencyDecimals = this.currenciesService.getCurrencyDecimals('symbol', loan.currency.symbol);
     const loanRate: BN | string =
-      await this.contractsService.getRate(loan.oracle.address, loan.currency.decimals);
+      await this.contractsService.getRate(loan.oracle.address, loanCurrencyDecimals);
 
     const collateralCurrency = this.currenciesService.getCurrencyByKey('address', collateral.token);
-    const collateralDecimals: number = new Currency(collateralCurrency.symbol).decimals;
+    const collateralDecimals = this.currenciesService.getCurrencyDecimals('symbol', collateralCurrency.symbol);
     const collateralRate: BN | string = await this.contractsService.getRate(collateral.oracle, collateralDecimals);
 
     const rate = (loanRate as any) / (collateralRate as any);
