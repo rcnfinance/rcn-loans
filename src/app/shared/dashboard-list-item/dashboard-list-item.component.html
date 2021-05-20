@@ -33,7 +33,7 @@
         <div class="list__item__column__title col-md-12 col-6 d-lg-none">
           {{ isBorrowed ? 'REPAID' : 'INTEREST' }}
         </div>
-        <div class="col-md-12 col-6">
+        <div id="label-repaid" class="col-md-12 col-6">
           {{ isBorrowed ? repaid : interest }}
         </div>
       </div>
@@ -47,7 +47,7 @@
         <div class="list__item__column__title col-md-12 col-6 d-lg-none">
           ANNUAL RATE
         </div>
-        <div class="col-md-12 col-6">
+        <div id="label-annualrate" class="col-md-12 col-6">
           {{ anualRate }}
         </div>
       </div>

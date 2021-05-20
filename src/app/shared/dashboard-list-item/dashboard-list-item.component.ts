@@ -60,9 +60,38 @@ export class DashboardListItemComponent implements OnInit {
   }
 
   /**
+   * Open dialog on material menu for pay or add collateral
+   * @param action can be 'pay' or 'add'
+   */
+  openDialog(action: 'add' | 'pay') {
+    if (action === 'pay') {
+      const dialog = this.dialog.open(DialogLoanPayComponent, {
+        data: {
+          loan: this.loan
+        }
+      });
+      dialog.afterClosed().subscribe((update: boolean) => {
+        if (update) {
+          window.location.reload();
+          // FIXME: use better methods
+        }
+      });
+    } else if (action === 'add') {
+      this.router.navigate(['/borrow', this.loan.id]);
+    }
+  }
+
+  /**
+   * Set can't redeem
+   */
+  startRedeem() {
+    this.canRedeem = false;
+  }
+
+  /**
    * Load loan status text, icon and color
    */
-  loadStatus() {
+  private loadStatus() {
     let statusText: string;
     let statusIcon: string;
     let statusColor: string;
@@ -110,35 +139,6 @@ export class DashboardListItemComponent implements OnInit {
   }
 
   /**
-   * Open dialog on material menu for pay or add collateral
-   * @param action can be 'pay' or 'add'
-   */
-  openDialog(action: 'add' | 'pay') {
-    if (action === 'pay') {
-      const dialog = this.dialog.open(DialogLoanPayComponent, {
-        data: {
-          loan: this.loan
-        }
-      });
-      dialog.afterClosed().subscribe((update: boolean) => {
-        if (update) {
-          window.location.reload();
-          // FIXME: use better methods
-        }
-      });
-    } else if (action === 'add') {
-      this.router.navigate(['/borrow', this.loan.id]);
-    }
-  }
-
-  /**
-   * Set can't redeem
-   */
-  startRedeem() {
-    this.canRedeem = false;
-  }
-
-  /**
    * Load loan's basic data
    */
   private loadBasicData() {
@@ -180,6 +180,9 @@ export class DashboardListItemComponent implements OnInit {
     }
   }
 
+  /**
+   * Load loan's accrued interest
+   */
   private loadAccruedInterest() {
     const { paymentProgress, interest } = this;
     const { debt, currency } = this.loan;
