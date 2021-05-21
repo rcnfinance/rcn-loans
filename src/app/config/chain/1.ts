@@ -111,6 +111,11 @@ export const chain = {
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
       },
       {
+        symbol: 'WETH',
+        img: 'assets/eth.png',
+        address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+      },
+      {
         symbol: 'DAI',
         img: 'assets/dai.png',
         address: '0x6b175474e89094c44da98b954eedeac495271d0f'

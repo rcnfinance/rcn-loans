@@ -79,6 +79,11 @@ export const chain = {
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
       },
       {
+        symbol: 'WBNB',
+        img: 'assets/bnb.png',
+        address: '' // TOOD: add WBNB address
+      },
+      {
         symbol: 'USDC',
         img: 'assets/usdc.png',
         address: USDC_TOKEN

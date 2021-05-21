@@ -12,10 +12,10 @@ export class Currency {
         return 2;
 
       case 'USDC':
-        return 18;
-
       case 'ETH':
+      case 'WETH':
       case 'BNB':
+      case 'WBNB':
       case 'RCN':
       case 'DAI':
       case 'TEST':

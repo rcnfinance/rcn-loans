@@ -6,9 +6,12 @@ describe('Currency', () => {
     expect(Currency.getDecimals('USD')).toBe(2);
     expect(Currency.getDecimals('USDC')).toBe(18);
     expect(Currency.getDecimals('ETH')).toBe(18);
+    expect(Currency.getDecimals('WETH')).toBe(18);
     expect(Currency.getDecimals('RCN')).toBe(18);
     expect(Currency.getDecimals('TEST')).toBe(18);
     expect(Currency.getDecimals('DEST')).toBe(18);
+    expect(Currency.getDecimals('BNB')).toBe(18);
+    expect(Currency.getDecimals('WBNB')).toBe(18);
     expect(Currency.getDecimals('X')).toBe(0);
   });
 });
