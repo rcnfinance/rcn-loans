@@ -65,6 +65,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @return Status active or inactive loans
    */
   setCurrentLoans(isCurrentLoans: boolean) {
+    const { isLoading } = this;
+    if (isLoading) {
+      return;
+    }
+
     this.isCurrentLoans = isCurrentLoans;
     this.resetLoans();
   }
