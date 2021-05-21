@@ -387,7 +387,7 @@ describe('DashboardListItemComponent', () => {
     component.isBorrowed = true;
     component.ngOnInit();
     fixture.detectChanges();
-    const label = readComponent(fixture, '#label-borrowed');
+    const label = readComponent(fixture, '.test-label-borrowed');
     expect(label.innerText).toBe(component.borrowed);
   });
 
@@ -396,7 +396,7 @@ describe('DashboardListItemComponent', () => {
     component.isBorrowed = true;
     component.ngOnInit();
     fixture.detectChanges();
-    const label = readComponent(fixture, '#label-repaid');
+    const label = readComponent(fixture, '.test-label-repaid');
     expect(label.innerText).toBe(component.repaid);
   });
 
@@ -405,7 +405,7 @@ describe('DashboardListItemComponent', () => {
     component.isBorrowed = true;
     component.ngOnInit();
     fixture.detectChanges();
-    const label = readComponent(fixture, '#label-annualrate');
+    const label = readComponent(fixture, '.test-label-annualrate');
     expect(label.innerText).toBe(component.anualRate);
   });
 });
