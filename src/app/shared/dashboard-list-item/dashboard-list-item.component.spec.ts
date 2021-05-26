@@ -91,7 +91,7 @@ describe('DashboardListItemComponent', () => {
         nextObligation: 10058333,
         currentObligation: 10058333,
         estimatedObligation: 10058333,
-        dueTime: 1621619076
+        dueTime: 1000000000000000000
       },
       balance: 0,
       creator: '0x3938155d5782b83cbf23fc325a19746ad7d6ba43',
@@ -147,7 +147,7 @@ describe('DashboardListItemComponent', () => {
     '0xFbf6f39e0a7FA22aB5706dBA401633237134BCDD',
     '0xFbf6f39e0a7FA22aB5706dBA401633237134BCDD',
     Status.Request,
-    1621949670,
+    1000000000000000000,
     '0x1BeC6dE76544Ab982C4A137136d15a0b6D9398A4',
     '0x0000000000000000000000000000000000000000',
     null,
