@@ -60,6 +60,7 @@
               (scroll)="onScrollBorrowed($event)"
             >
               <app-dashboard-list
+                (reset)="resetLoans()"
                 [isCurrentLoans]="isCurrentLoans"
                 [isBorrowed]="true"
                 [loading]="isLoading"

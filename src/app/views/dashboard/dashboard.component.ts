@@ -109,6 +109,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Reset and clean loans
+   */
+  resetLoans() {
+    this.loansBorrowed = [];
+    this.loansLent = [];
+    this.pageBorrowed = 1;
+    this.pageLent = 1;
+    this.isFullScrolledBorrowed = false;
+    this.isFullScrolledLent = false;
+    this.loadLoansBorrowed();
+    this.loadLoansLent();
+  }
+
+  /**
    * Load loans borrowed
    * @param address Address
    * @param page Page
@@ -270,20 +284,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private set loading(loading: boolean) {
     this.isLoading = loading;
-  }
-
-  /**
-   * Reset and clean loans
-   */
-  private resetLoans() {
-    this.loansBorrowed = [];
-    this.loansLent = [];
-    this.pageBorrowed = 1;
-    this.pageLent = 1;
-    this.isFullScrolledBorrowed = false;
-    this.isFullScrolledLent = false;
-    this.loadLoansBorrowed();
-    this.loadLoansLent();
   }
 
   private checkIfIsMobile(e?) {

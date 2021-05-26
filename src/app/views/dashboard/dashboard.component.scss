@@ -10,12 +10,11 @@
     @include styled-font('proxima-nova', 700, 11px);
     color: #a09f9f;
     text-align: right;
-    margin-top: 8px;
     &--active {
       color: #7684FF;
     }
     span {
-      margin-right: 20px;
+      display: block;
     }
   }
   ::ng-deep {
@@ -44,11 +43,17 @@
       margin-bottom: 0px;
     }
     &__link {
-      margin-top: 4px;
       cursor: pointer;
       text-align: right;
       svg {
         margin-left: 4px;
+      }
+      span {
+        display: inline-block;
+        margin-right: 15px;
+      }
+      span:first-child {
+        margin-right: 24px;
       }
     }
     &__content {
