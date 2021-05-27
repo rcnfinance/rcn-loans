@@ -8,6 +8,7 @@ import { EventsService } from 'app/services/events.service';
 import { TitleService } from 'app/services/title.service';
 import { Web3Service } from 'app/services/web3.service';
 import { ChainService } from 'app/services/chain.service';
+import { DeviceService } from 'app/services/device.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -37,14 +38,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private titleService: TitleService,
     private eventsService: EventsService,
     private web3Service: Web3Service,
-    private chainService: ChainService
+    private chainService: ChainService,
+    private deviceService: DeviceService
   ) {}
 
   async ngOnInit() {
     this.titleService.changeTitle('Dashboard');
     await this.loadAccount();
-    this.checkIfIsMobile();
     this.handleLoginEvents();
+
+    this.isMobile = this.deviceService.isMobile();
     await this.loadLoansBorrowed();
     await this.loadLoansLent();
   }
@@ -56,7 +59,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.checkIfIsMobile();
+    this.isMobile = this.deviceService.isMobile();
   }
 
   /**
@@ -65,6 +68,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @return Status active or inactive loans
    */
   setCurrentLoans(isCurrentLoans: boolean) {
+    const { isLoading } = this;
+    if (isLoading) {
+      return;
+    }
+
     this.isCurrentLoans = isCurrentLoans;
     this.resetLoans();
   }
@@ -106,6 +114,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (offsetHeight + scrollTop >= 900) {
       await this.loadLoansBorrowed(this.address, this.pageLent);
     }
+  }
+
+  /**
+   * Reset and clean loans
+   */
+  resetLoans() {
+    this.loansBorrowed = [];
+    this.loansLent = [];
+    this.pageBorrowed = 1;
+    this.pageLent = 1;
+    this.isFullScrolledBorrowed = false;
+    this.isFullScrolledLent = false;
+    this.loadLoansBorrowed();
+    this.loadLoansLent();
   }
 
   /**
@@ -270,26 +292,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private set loading(loading: boolean) {
     this.isLoading = loading;
-  }
-
-  /**
-   * Reset and clean loans
-   */
-  private resetLoans() {
-    this.loansBorrowed = [];
-    this.loansLent = [];
-    this.pageBorrowed = 1;
-    this.pageLent = 1;
-    this.isFullScrolledBorrowed = false;
-    this.isFullScrolledLent = false;
-    this.loadLoansBorrowed();
-    this.loadLoansLent();
-  }
-
-  private checkIfIsMobile(e?) {
-    const MOBILE_WIDTH_PX = 992;
-    const currentDeviceWidth = e ? e.target.innerWidth : window.innerWidth;
-    this.isMobile = currentDeviceWidth <= MOBILE_WIDTH_PX;
   }
 
   /**
