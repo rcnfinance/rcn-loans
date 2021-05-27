@@ -63,6 +63,34 @@ export class DashboardListItemComponent implements OnInit {
   }
 
   /**
+   * Open dialog on material menu for pay or add collateral
+   * @param action can be 'pay' or 'add'
+   */
+  openDialog(action: 'add' | 'pay') {
+    if (action === 'pay') {
+      const dialog = this.dialog.open(DialogLoanPayComponent, {
+        data: {
+          loan: this.loan
+        }
+      });
+      dialog.afterClosed().subscribe((update: boolean) => {
+        if (update) {
+          this.reset.emit();
+        }
+      });
+    } else if (action === 'add') {
+      this.router.navigate(['/borrow', this.loan.id]);
+    }
+  }
+
+  /**
+   * Set can't redeem
+   */
+  startRedeem() {
+    this.canRedeem = false;
+  }
+
+  /**
    * Load loan status text, icon and color
    */
   private loadStatus() {
@@ -110,34 +138,6 @@ export class DashboardListItemComponent implements OnInit {
     this.statusText = statusText;
     this.statusIcon = statusIcon;
     this.statusColor = statusColor;
-  }
-
-  /**
-   * Open dialog on material menu for pay or add collateral
-   * @param action can be 'pay' or 'add'
-   */
-  openDialog(action: 'add' | 'pay') {
-    if (action === 'pay') {
-      const dialog = this.dialog.open(DialogLoanPayComponent, {
-        data: {
-          loan: this.loan
-        }
-      });
-      dialog.afterClosed().subscribe((update: boolean) => {
-        if (update) {
-          this.reset.emit();
-        }
-      });
-    } else if (action === 'add') {
-      this.router.navigate(['/borrow', this.loan.id]);
-    }
-  }
-
-  /**
-   * Set can't redeem
-   */
-  startRedeem() {
-    this.canRedeem = false;
   }
 
   /**
