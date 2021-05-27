@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { Loan, Status } from 'app/models/loan.model';
@@ -21,6 +21,7 @@ export class DashboardListItemComponent implements OnInit {
   @Input() isCurrentLoans: boolean;
   @Input() isBorrowed: boolean;
   @Input() isLent: boolean;
+  @Output() reset: EventEmitter<any>;
 
   borrowed = '-';
   lent = '-';
@@ -46,7 +47,9 @@ export class DashboardListItemComponent implements OnInit {
     private currenciesService: CurrenciesService,
     private web3Service: Web3Service,
     private router: Router
-  ) {}
+  ) {
+    this.reset = new EventEmitter();
+  }
 
   ngOnInit() {
     this.loadBasicData();
@@ -57,35 +60,6 @@ export class DashboardListItemComponent implements OnInit {
     this.loadInstallments();
     this.checkValidations();
     this.loadStatus();
-  }
-
-  /**
-   * Open dialog on material menu for pay or add collateral
-   * @param action can be 'pay' or 'add'
-   */
-  openDialog(action: 'add' | 'pay') {
-    if (action === 'pay') {
-      const dialog = this.dialog.open(DialogLoanPayComponent, {
-        data: {
-          loan: this.loan
-        }
-      });
-      dialog.afterClosed().subscribe((update: boolean) => {
-        if (update) {
-          window.location.reload();
-          // FIXME: use better methods
-        }
-      });
-    } else if (action === 'add') {
-      this.router.navigate(['/borrow', this.loan.id]);
-    }
-  }
-
-  /**
-   * Set can't redeem
-   */
-  startRedeem() {
-    this.canRedeem = false;
   }
 
   /**
@@ -136,6 +110,34 @@ export class DashboardListItemComponent implements OnInit {
     this.statusText = statusText;
     this.statusIcon = statusIcon;
     this.statusColor = statusColor;
+  }
+
+  /**
+   * Open dialog on material menu for pay or add collateral
+   * @param action can be 'pay' or 'add'
+   */
+  openDialog(action: 'add' | 'pay') {
+    if (action === 'pay') {
+      const dialog = this.dialog.open(DialogLoanPayComponent, {
+        data: {
+          loan: this.loan
+        }
+      });
+      dialog.afterClosed().subscribe((update: boolean) => {
+        if (update) {
+          this.reset.emit();
+        }
+      });
+    } else if (action === 'add') {
+      this.router.navigate(['/borrow', this.loan.id]);
+    }
+  }
+
+  /**
+   * Set can't redeem
+   */
+  startRedeem() {
+    this.canRedeem = false;
   }
 
   /**
