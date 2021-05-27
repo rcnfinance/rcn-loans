@@ -6,6 +6,7 @@
     <div class="profile d-flex align-items-center">
       <div class="profile__avatar">
         <img
+          *ngIf="profile"
           class="avatar"
           [src]="pohHost + profile?.photo"
         >

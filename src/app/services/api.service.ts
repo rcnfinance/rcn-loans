@@ -164,9 +164,9 @@ export class ApiService {
    * @return Last and current block
    */
   getAddressPoh(address: string): Observable<PohApi> {
-    const { host: apiBase } = environment.api.poh;
-    const uri = `profile/${address}`;
-    return this.http.post<PohApi>(apiBase.concat(uri), null);
+    const { hapi: apiBase } = environment.api.poh;
+    const uri = `is_registered/${address}`;
+    return this.http.get<PohApi>(apiBase.concat(uri));
   }
 
   /**
