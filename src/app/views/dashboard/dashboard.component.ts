@@ -16,7 +16,6 @@ import { DeviceService } from 'app/services/device.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  pageId = 'active-loans';
   address: string;
   isLoading: boolean;
   loansBorrowed = [];
@@ -156,23 +155,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
         LoanUtils.buildLoan(loanData, config)
       );
 
-      // filter status destroyed, expired and paid
-      loans = loans.filter((l) => l.status !== Status.Destroyed);
-      if (this.isCurrentLoans) {
+      // filter status according to business definiton
+      const { isCurrentLoans } = this;
+      if (isCurrentLoans) {
         loans = loans.filter(
-          (l) =>
-            l.status === Status.Ongoing ||
-            l.status === Status.Indebt ||
-            l.status === Status.Request
+          ({ status, collateral }) =>
+            [Status.Request, Status.Ongoing, Status.Indebt].includes(status) ||
+            (status === Status.Expired && collateral && collateral.amount) ||
+            (status === Status.Paid && collateral && collateral.amount)
         );
-        loans = loans.filter((l) => l.collateral);
-      }
-      if (!this.isCurrentLoans) {
+      } else {
         loans = loans.filter(
-          (l) =>
-            l.status === Status.Paid ||
-            l.status === Status.Expired ||
-            (l.status === Status.Request && !l.collateral)
+          ({ status, collateral  }) =>
+            (status === Status.Paid && (!collateral || !collateral.amount)) ||
+            (status === Status.Expired && (!collateral || !collateral.amount)) ||
+            (status === Status.Request && (!collateral || !collateral.amount))
         );
       }
 
@@ -237,24 +234,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
         LoanUtils.buildLoan(loanData, config)
       );
 
-      // filter status destroyed, expired and paid
-      loans = loans.filter((l) => l.status !== Status.Destroyed);
-      if (this.isCurrentLoans) {
+      // filter status according to business definiton
+      const { isCurrentLoans } = this;
+      if (isCurrentLoans) {
         loans = loans.filter(
-          (l) =>
-            l.status === Status.Ongoing ||
-            l.status === Status.Indebt ||
-            l.status === Status.Request
+          ({ status }) =>
+            status === Status.Ongoing ||
+            status === Status.Indebt
         );
-        loans = loans.filter((l) => l.collateral);
-      }
-      if (!this.isCurrentLoans) {
-        loans = loans.filter(
-          (l) =>
-            l.status === Status.Paid ||
-            l.status === Status.Expired ||
-            (l.status === Status.Request && !l.collateral)
-        );
+      } else {
+        loans = loans.filter(({ status }) => status === Status.Paid);
       }
 
       // if there are no more loans
