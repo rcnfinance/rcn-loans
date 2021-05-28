@@ -26,6 +26,9 @@ $videoHeight: 240px;
           height: 100%;
           object-fit: cover;
         }
+        &--skeleton {
+          border: none;
+        }
       }
       &__account {
         padding-left: 15px;
@@ -37,6 +40,10 @@ $videoHeight: 240px;
           &__name {
             @include styled-font('proxima-nova', 700, 16px);
             margin: 0 0 5px;
+            &--skeleton {
+              padding-top: 15px;
+              margin-bottom: 0px;
+            }
           }
           &__bio {
             @include typography-body(1);
@@ -83,6 +90,9 @@ $videoHeight: 240px;
         height: 10px;
         background: white;
         margin: 0 10px -2px;
+        &--skeleton {
+          opacity: 0;
+        }
       }
     }
     .poh {
