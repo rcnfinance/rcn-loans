@@ -630,11 +630,6 @@ export class ContractsService {
    * @return Oracle address
    */
   async symbolToOracle(engine: Engine, symbol: string) {
-    // FIXME: remove from here. add this address to the MultiOracle
-    if (symbol === 'ETH') {
-      const ETH_ORACLE_ROPSTEN = '0x62F3890E7d9b66C45964d64EFdc346D5Aa698C6E';
-      return ETH_ORACLE_ROPSTEN;
-    }
     return await this._oracleFactory[engine].methods.symbolToOracle(symbol).call();
   }
 
@@ -645,11 +640,6 @@ export class ContractsService {
    * @return Currency symbol
    */
   async oracleToSymbol(engine: Engine, oracle: string) {
-    // FIXME: remove from here. add this address to the MultiOracle
-    const ETH_ORACLE_ROPSTEN = '0x62F3890E7d9b66C45964d64EFdc346D5Aa698C6E';
-    if (String(oracle).toLowerCase() === ETH_ORACLE_ROPSTEN.toLowerCase()) {
-      return 'ETH';
-    }
     return await this._oracleFactory[engine].methods.oracleToSymbol(oracle).call();
   }
 
@@ -896,11 +886,9 @@ export class ContractsService {
     amount: BN | string,
     liquidationRatio: BN | string,
     balanceRatio: BN | string,
-    account: string,
-    isEth: boolean
+    account: string
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
-    console.info({ isEth });
     return new Promise(async (resolve, reject) => {
       const symbol = await this.oracleToSymbol(engine, oracle);
       const { currency: chainCurrency } = this.chainService.config.network;

@@ -70,7 +70,6 @@
       </ng-container>
     </ng-container>
 
-    <!-- FIXME: improve UI -->
     <ng-container *ngIf="assets?.length && !onlyToken">
       <ng-container *ngFor="let asset of assets">
         <mat-accordion *ngIf="!onlyAsset || onlyAsset == asset.address">
