@@ -161,15 +161,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         loans = loans.filter(
           ({ status, collateral }) =>
             [Status.Request, Status.Ongoing, Status.Indebt].includes(status) ||
-            (status === Status.Expired && collateral && collateral.amount) ||
-            (status === Status.Paid && collateral && collateral.amount)
+            ([Status.Expired, Status.Paid].includes(status) && collateral && collateral.amount)
         );
       } else {
         loans = loans.filter(
           ({ status, collateral  }) =>
-            (status === Status.Paid && (!collateral || !collateral.amount)) ||
-            (status === Status.Expired && (!collateral || !collateral.amount)) ||
-            (status === Status.Request && (!collateral || !collateral.amount))
+            [Status.Paid, Status.Expired, Status.Request].includes(status) &&
+            (!collateral || !collateral.amount)
         );
       }
 
