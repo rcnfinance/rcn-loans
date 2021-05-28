@@ -166,7 +166,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       } else {
         loans = loans.filter(
           ({ status, collateral  }) =>
-            [Status.Paid, Status.Expired, Status.Request].includes(status) &&
+            [Status.Paid, Status.Expired].includes(status) &&
             (!collateral || !collateral.amount)
         );
       }
