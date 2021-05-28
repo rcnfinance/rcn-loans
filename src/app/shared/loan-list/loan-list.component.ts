@@ -11,6 +11,7 @@ import { LoanTypeService } from 'app/services/loan-type.service';
 import { CollateralService } from 'app/services/collateral.service';
 import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
 import { DialogPohComponent } from 'app/dialogs/dialog-poh/dialog-poh.component';
+import { PohService } from 'app/services/poh.service';
 
 @Component({
   selector: 'app-loan-list',
@@ -42,6 +43,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
   shortAddress: string;
   myLoan: boolean;
   isIncomplete: boolean;
+  hasPoh: boolean;
 
   // subscriptions
   subscriptionAccount: Subscription;
@@ -52,7 +54,8 @@ export class LoanListComponent implements OnInit, OnDestroy {
     private brandingService: BrandingService,
     private loanTypeService: LoanTypeService,
     private collateralService: CollateralService,
-    private currenciesService: CurrenciesService
+    private currenciesService: CurrenciesService,
+    private pohService: PohService
   ) { }
 
   async ngOnInit() {
@@ -142,8 +145,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
    * @param address Borrower address
    */
   clickBorrower(address: string) {
-    const { poh } = this.loan;
-    if (!poh) {
+    if (!this.hasPoh) {
       return;
     }
 
@@ -213,6 +215,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
       default:
         return;
     }
+    this.hasPoh = await this.pohService.checkIfHasPoh(this.loan.borrower);
   }
 
   /**

@@ -28,6 +28,7 @@ interface CommitWithProperties extends Commit {
 })
 export class DetailHistoryComponent implements OnInit, OnChanges {
   @Input() loan: Loan;
+  @Input() hasPoh: boolean;
   allCommits: Commit[];
   commits: Commit[];
   historyItems: {
@@ -132,7 +133,7 @@ export class DetailHistoryComponent implements OnInit, OnChanges {
             label: 'Creator',
             value: commit.data.creator,
             isAddress: true,
-            hasPoh: this.loan.poh ? true : false
+            hasPoh: this.hasPoh ? true : false
           }, {
             label: 'Transaction',
             value: commit.tx_hash,
