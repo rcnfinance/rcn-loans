@@ -215,7 +215,7 @@ export class LoanListComponent implements OnInit, OnDestroy {
       default:
         return;
     }
-    this.hasPoh = await this.pohService.checkIfHasPoh(this.loan.borrower);
+    this.pohService.checkIfHasPoh(this.loan.borrower).then(poh => this.hasPoh = poh);
   }
 
   /**
