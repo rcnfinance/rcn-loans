@@ -2,9 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
-import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
-import { Subscription, timer } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Loan } from 'app/models/loan.model';
 import { Collateral } from 'app/models/collateral.model';
 import { CollateralRequest } from 'app/interfaces/collateral-request';
@@ -12,13 +11,14 @@ import { LoanRequest } from 'app/interfaces/loan-request';
 import { DialogGenericErrorComponent } from 'app/dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogInsufficientfundsComponent } from 'app/dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
+import { DialogBorrowComponent } from 'app/dialogs/dialog-borrow/dialog-borrow.component';
 import { Web3Service } from 'app/services/web3.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
 import { TitleService } from 'app/services/title.service';
 import { NavrailService } from 'app/services/navrail.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
-import { TxService, Tx, Type } from 'app/services/tx.service';
+import { Tx } from 'app/services/tx.service';
 import { ChainService } from 'app/services/chain.service';
 import { Utils } from 'app/utils/utils';
 
@@ -31,6 +31,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
 
   loan: Loan;
   loanWasCreated: boolean;
+  loanRequest: LoanRequest;
   createPendingTx: Tx = undefined;
   collateral: Collateral;
   collateralRequest: CollateralRequest;
@@ -44,7 +45,6 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
   cancelProgress: boolean;
 
   // subscriptions
-  txSubscription: boolean;
   subscriptionAccount: Subscription;
 
   constructor(
@@ -52,15 +52,13 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private spinner: NgxSpinnerService,
     private web3Service: Web3Service,
     private walletConnectService: WalletConnectService,
     private titleService: TitleService,
     private chainService: ChainService,
     private navrailService: NavrailService,
     private contractsService: ContractsService,
-    private currenciesService: CurrenciesService,
-    private txService: TxService
+    private currenciesService: CurrenciesService
   ) { }
 
   async ngOnInit() {
@@ -157,11 +155,12 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
       this.showMessage('Please wait until your collateral supplying transaction is completed.', 'snackbar');
       return;
     }
-    const loanWasCreated = await this.contractsService.loanWasCreated(loan.engine, loan.id);
-    if (!loanWasCreated) {
-      this.showMessage('A problem occurred during loan creation. Please try again.', 'snackbar');
-      return;
-    }
+    // const loanWasCreated = await this.contractsService.loanWasCreated(loan.engine, loan.id);
+    // if (!loanWasCreated) {
+    //   this.showMessage('A problem occurred during loan creation. Please try again.', 'snackbar');
+    //   return;
+    // }
+
     // unlogged user
     if (!this.web3Service.loggedIn) {
       await this.walletConnectService.connect();
@@ -220,35 +219,13 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     loan: Loan,
     form: LoanRequest
   ) {
-    try {
-      const { config } = this.chainService;
-      const engine: string = config.contracts[loan.engine].diaspore.loanManager;
-      const tx: string = await this.contractsService.requestLoan(
-        loan.engine,
-        form.amount,
-        form.model,
-        form.oracle,
-        form.account,
-        form.callback,
-        form.salt,
-        form.expiration,
-        form.encodedData
-      );
+    this.loanRequest = form;
 
-      const { id, amount } = loan;
-      this.txService.registerCreateTx(tx, { engine, id, amount });
-      this.location.replaceState(`/borrow/${ id }`);
-      this.retrievePendingTx();
-      this.loanWasCreated = true;
+    const { id } = loan;
+    this.location.replaceState(`/borrow/${ id }`);
 
-      await this.navrailService.refreshNavrail();
-    } catch (e) {
-      // Don't show 'User denied transaction signature' error
-      if (e.stack.indexOf('User denied transaction signature') < 0) {
-        this.showMessage('A problem occurred during loan creation', 'snackbar');
-        throw Error(e);
-      }
-    }
+    this.loanWasCreated = true;
+    this.finishLoanCreation();
   }
 
   /**
@@ -257,114 +234,17 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
    * @param isEth ETH Collateral
    */
   private async handleCreateCollateral(form: CollateralRequest) {
-    const account = await this.web3Service.getAccount();
-
-    try {
-      const { engine } = this.loan;
-      const tx: string = await this.contractsService.createCollateral(
-        engine,
-        form.debtId,
-        form.oracle,
-        form.amount,
-        form.liquidationRatio,
-        form.balanceRatio,
-        account
-      );
-      this.txService.registerCreateCollateralTx(tx, this.loan);
-      this.retrievePendingTx();
-    } catch (e) {
-      // Don't show 'User denied transaction signature' error
-      if (e.stack.indexOf('User denied transaction signature') < 0) {
-        this.showMessage('A problem occurred during collateral creation', 'snackbar');
-        throw Error(e);
-      }
-    }
-  }
-
-  /**
-   * Retrieve pending Tx
-   */
-  private retrievePendingTx() {
-    this.createPendingTx = this.txService.getLastPendingCreate(this.loan);
-    this.collateralPendingTx = this.txService.getLastPendingCreateCollateral(this.loan);
-    const loanId: string = this.loan.id;
-
-    if (this.createPendingTx !== undefined) {
-      this.location.replaceState(`/borrow/${ loanId }`);
-      this.startProgress = true;
-      this.trackProgressbar();
-      return;
-    }
-    if (this.collateralPendingTx !== undefined) {
-      this.startProgress = true;
-      this.trackProgressbar();
-    }
-  }
-
-  /**
-   * Track progressbar value
-   */
-  private trackProgressbar() {
-    if (!this.txSubscription) {
-      this.txSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => {
-        if (tx.type === Type.create && tx.tx === this.createPendingTx.tx) {
-          this.finishLoanCreation();
-          return;
-        }
-        if (tx.type === Type.createCollateral && tx.tx === this.collateralPendingTx.tx) {
-          this.finishCollateralCreation();
-          return;
-        }
-      });
-    }
+    this.collateralRequest = form;
+    this.showDialogBorrow();
   }
 
   /**
    * Finish loan creation and check status
    */
   private async finishLoanCreation() {
-    const { id, engine } = this.loan;
-    const loanWasCreated = await this.contractsService.loanWasCreated(engine, id);
-
-    if (loanWasCreated) {
-      this.finishProgress = true;
-      this.loanWasCreated = true;
-      this.startProgress = false;
-      this.showMessage(
-        'Your loan request has been created. Please supply your collateral to continue.',
-        'snackbar'
-      );
-    } else {
-      this.cancelProgress = true;
-      this.loanWasCreated = false;
-      setTimeout(() => {
-        this.showMessage('The loan could not be created', 'dialog');
-        this.startProgress = false;
-        this.createPendingTx = undefined;
-      }, 1000);
-    }
-
-    await this.navrailService.refreshNavrail();
-  }
-
-  /**
-   * Finish collateral creation and redirect to the loan detail
-   */
-  private async finishCollateralCreation() {
-    const loan: Loan = this.loan;
     this.finishProgress = true;
     this.loanWasCreated = true;
-    this.showMessage(`Congratulations! You've successfully requested a loan.`, 'snackbar');
-
-    this.spinner.show();
-
-    const TIME_MS = 12000;
-    await timer(TIME_MS).toPromise();
-
-    this.spinner.hide();
-    this.router.navigate(['/', 'loan', loan.id]);
-
+    this.startProgress = false;
     await this.navrailService.refreshNavrail();
   }
 
@@ -382,6 +262,14 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
     const web3: any = this.web3Service.web3;
     const account: string = await this.web3Service.getAccount();
     this.account = web3.utils.toChecksumAddress(account);
+  }
+
+  private showDialogBorrow() {
+    const { loanRequest, collateralRequest, loan, collateral } = this;
+    this.dialog.open(DialogBorrowComponent, {
+      panelClass: 'dialog-borrow-wrapper',
+      data: { loanRequest, collateralRequest, loan, collateral }
+    });
   }
 
   /**
