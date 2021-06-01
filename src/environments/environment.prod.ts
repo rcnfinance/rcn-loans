@@ -30,5 +30,5 @@ export const environment = {
       host: 'https://ipfs.kleros.io/'
     }
   },
-  availableChains: [AvailableChains.EthMainnet, AvailableChains.BscMainnet]
+  availableChains: [AvailableChains.EthMainnet, AvailableChains.BscMainnet, AvailableChains.MaticMainnet]
 };

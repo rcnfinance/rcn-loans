@@ -34,6 +34,8 @@ export const environment = {
     AvailableChains.EthMainnet,
     AvailableChains.EthRopsten,
     AvailableChains.BscMainnet,
-    AvailableChains.BscTestnet
+    AvailableChains.BscTestnet,
+    AvailableChains.MaticMainnet,
+    AvailableChains.MaticTestnet
   ]
 };
