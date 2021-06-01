@@ -27,6 +27,8 @@ export class StepCreateCollateralComponent implements OnInit, OnChanges {
   form: FormGroup;
   showSuggestions: boolean;
   collateralSuggestions = [200, 250, 300, 350, 400];
+  balance: number;
+  formattedBalance: string;
   @Input() loan: Loan;
   @Input() account: string; // TODO implement
   @Input() createPendingTx: Tx;
@@ -128,6 +130,7 @@ ${ value } %`;
    * Estimate the new collateral amount (when the rate changes)
    */
   async onCurrencyChange() {
+    this.loadCurrencyBalance();
     await this.onCollateralAdjustmentChange();
   }
 
@@ -419,6 +422,7 @@ ${ value } %`;
     this.form.controls.formUi.patchValue({
       currency
     });
+    this.loadCurrencyBalance();
 
     const { DEFAULT_BALANCE_RATIO } = this;
     this.form.controls.formUi.patchValue({
@@ -426,6 +430,13 @@ ${ value } %`;
     });
 
     await this.onCollateralAdjustmentChange();
+  }
+
+  private async loadCurrencyBalance() {
+    const { address, symbol }: CurrencyItem = this.form.value.formUi.currency;
+    const balance = await this.contractsService.getUserBalanceInToken(address);
+    this.balance = this.currenciesService.getAmountFromDecimals(balance, symbol);
+    this.formattedBalance = Utils.formatAmount(this.balance);
   }
 
   /**
