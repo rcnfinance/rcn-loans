@@ -163,7 +163,7 @@ export class DialogBorrowComponent implements OnInit {
       return 'Creating';
     }
     if (step === Steps.Finish) {
-      return 'Created';
+      return 'Close';
     }
   }
 
