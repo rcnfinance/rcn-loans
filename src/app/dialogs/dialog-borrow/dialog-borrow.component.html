@@ -3,8 +3,7 @@
     <div class="row">
       <div class="col-12 dialog__content">
         <p class="dialog__content-description">
-          <!-- FIXME: change copy -->
-          Por favor aproba las transacciones de MetaMask para finalizar el proceso.
+          Please approve all transactions to complete the borrowing process.
         </p>
         <div class="dialog__content-timeline">
           <div class="timeline">
@@ -19,7 +18,6 @@
                   1
                 </div>
                 <div class="step__label">
-                  <!-- FIXME: change copy -->
                   Create Loan
                 </div>
               </div>
@@ -35,7 +33,6 @@
                   2
                 </div>
                 <div class="step__label">
-                  <!-- FIXME: change copy -->
                   Create Collateral
                 </div>
               </div>
@@ -52,8 +49,7 @@
                   </span>
                 </div>
                 <div class="step__label">
-                  <!-- FIXME: change copy -->
-                  Loan Completo
+                  Loan Completed
                 </div>
               </div>
             </div>
@@ -84,7 +80,9 @@
 
         <div class="created" *ngIf="step === 4">
           <div class="created__card">
-            <span class="created__highlighted">The loan was created successfully!</span>
+            <span class="created__highlighted">
+              The loan was created successfully!
+            </span>
             Go to the
             <a
               [routerLink]="['/loans', loan?.id]"
@@ -97,8 +95,7 @@
 
         <div class="dialog__content-actions">
           <p class="disclaimer">
-            <!-- FIXME: change copy -->
-            El costo de ambas transacciones es XX.xx USD
+            Total Tx Cost: XX.xx USD
           </p>
           <button
             mat-raised-button
