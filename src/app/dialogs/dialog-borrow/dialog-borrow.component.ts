@@ -1,11 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatSnackBar, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { CollateralRequest } from 'app/interfaces/collateral-request';
 import { LoanRequest } from 'app/interfaces/loan-request';
 import { Loan } from 'app/models/loan.model';
 import { ContractsService } from 'app/services/contracts.service';
-import { CollateralService } from 'app/services/collateral.service';
 import { NavrailService } from 'app/services/navrail.service';
 import { ChainService } from 'app/services/chain.service';
 import { Web3Service } from 'app/services/web3.service';
@@ -39,10 +38,8 @@ export class DialogBorrowComponent implements OnInit {
   constructor(
     private router: Router,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog,
     private dialogRef: MatDialogRef<DialogBorrowComponent>,
     private contractsService: ContractsService,
-    private collateralService: CollateralService,
     private navrailService: NavrailService,
     private chainService: ChainService,
     private web3Service: Web3Service,
