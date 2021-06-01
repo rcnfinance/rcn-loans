@@ -11,6 +11,9 @@ input::-webkit-inner-spin-button {
 .mat-option {
   height: auto !important;
 }
+.red {
+  color: var(--app-color-red);
+}
 
 @mixin mat-slider-primary() {
   ::ng-deep {
