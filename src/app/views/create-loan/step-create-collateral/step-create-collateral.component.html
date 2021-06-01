@@ -89,6 +89,14 @@
                     Please increase the amount until the Collateral Ratio is {{ COLLATERAL_AVERAGE_LOW }}% or higher.
                   </span>
                 </mat-hint>
+                <mat-hint
+                  *ngIf="form?.value.formUi.amount > balance"
+                >
+                  <span class="red">
+                    <i class="fas fa-exclamation-triangle mr-1"></i>
+                    You don´t have enough balance to set that Collateral Ratio. Please reduce the amount or select one of the suggested options.
+                  </span>
+                </mat-hint>
               </mat-form-field>
             </div>
           </div>
@@ -98,8 +106,14 @@
                 <div
                   class="ratio ratio--collateral"
                   [class.ratio--untouched]="!form?.value.formUi.amount"
-                  [class.ratio--low]="form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_LOW"
-                  [class.ratio--high]="form?.value.formUi.collateralAdjustment >= COLLATERAL_AVERAGE_LOW"
+                  [class.ratio--low]="
+                    form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_LOW ||
+                    form?.value.formUi.amount > balance
+                  "
+                  [class.ratio--high]="
+                    form?.value.formUi.collateralAdjustment >= COLLATERAL_AVERAGE_LOW &&
+                    form?.value.formUi.amount <= balance
+                  "
                   matTooltip="This is the proportion between the value of your collateral and the value of your borrowed funds. Selecting a higher value will decrease your chances of facing a collateral liquidation."
                 >
                   <div class="ratio__title">
@@ -191,7 +205,10 @@
                   ></mat-slider>
                   <mat-slider
                     class="percentage percentage--collateral"
-                    [class.percentage--insufficient]="form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_LOW"
+                    [class.percentage--insufficient]="
+                      form?.value.formUi.collateralAdjustment < COLLATERAL_AVERAGE_LOW ||
+                      form?.value.formUi.amount > balance
+                    "
                     step="1"
                     tickInterval="25"
                     color="primary"

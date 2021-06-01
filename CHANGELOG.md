@@ -1,5 +1,17 @@
 # Changelog
 
+## **0.4.2** Boggart 👻
+
+### Enhancement:
+- Redeem loading progressbar
+- New borrowing process
+- Add dashboard unit tests
+- Update buisness logic for dashboard component
+
+### Fix:
+- Fix dashboard layout on mobile
+
+
 ## **0.4.1** Boggart 👻
 
 ### Feature:
@@ -18,6 +30,7 @@
 - Fix Etherscan/BSC scan links in the loan history component
 - Fix Withdraw Collateral TX tracking
 - Fix the verification of whether a loan was created
+
 
 ## **0.4.0** Boggart 👻
 

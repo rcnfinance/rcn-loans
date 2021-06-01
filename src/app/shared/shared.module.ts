@@ -54,6 +54,7 @@ import { DialogNeedWithdrawComponent } from '../dialogs/dialog-need-withdraw/dia
 import { DialogPohComponent } from '../dialogs/dialog-poh/dialog-poh.component';
 import { DialogLoanPayComponent } from '../dialogs/dialog-loan-pay/dialog-loan-pay.component';
 import { DialogChainSelectorComponent } from '../dialogs/dialog-chain-selector/dialog-chain-selector.component';
+import { DialogBorrowComponent } from '../dialogs/dialog-borrow/dialog-borrow.component';
 // Pipes
 import { VisualUrlPipe } from './../pipes/visual-url.pipe';
 import { FormatAmountPipe } from './../pipes/format-amount.pipe';
@@ -128,6 +129,7 @@ import { DashboardListHeaderComponent } from './dashboard-list-header/dashboard-
     DialogPohComponent,
     DialogLoanPayComponent,
     DialogChainSelectorComponent,
+    DialogBorrowComponent,
 
     VisualUrlPipe,
     FormatAmountPipe,
@@ -152,7 +154,8 @@ import { DashboardListHeaderComponent } from './dashboard-list-header/dashboard-
     DialogNeedWithdrawComponent,
     DialogPohComponent,
     DialogLoanPayComponent,
-    DialogChainSelectorComponent
+    DialogChainSelectorComponent,
+    DialogBorrowComponent
   ],
   providers: [
     ContractsService,
