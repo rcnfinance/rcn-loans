@@ -2,7 +2,7 @@ import { Agent } from 'environments/environment';
 import { Engine } from 'app/models/loan.model';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
-const USDC_TOKEN = '0x46f348579e2b93f65fbd0636ad9cee504fcf1e1c';
+const USDC_TOKEN = '0x3afb01ba821f8edb626384acdb8e2216b2ce65a7';
 
 export const chain = {
   network: {
@@ -10,7 +10,7 @@ export const chain = {
     name: 'Matic',
     currency: 'Matic',
     ui: {
-      name: 'Matic Testnet Mumbai',
+      name: 'Matic',
       fullname: 'Matic Testnet Mumbai (Polygon)',
       image: 'assets/polygon-matic_20.svg',
       website: 'https://docs.matic.today/docs/getting-started'
@@ -26,7 +26,7 @@ export const chain = {
   },
   api: {
     [Engine.UsdcEngine]: {
-      v6: `https://bsc-testnet.rcn.loans/`
+      v6: `https://matic-testnet.rcn.loans/`
     }
   },
   contracts: {
@@ -52,9 +52,9 @@ export const chain = {
     chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     chainlink: {
       EACAggregatorProxy: {
-        chainCurrencyToUsd: '0x0567f2323251f0aab15c8dfb1967e4e8a7d42aee'
+        chainCurrencyToUsd: '0xd0D5e3DB44DE05E9F294BB0a3bEEaF030DE24Ada'
       },
-      chainlinkAdapterV3: '' // FIXME: add contract address
+      chainlinkAdapterV3: '0x774d446f17619c66d0feb5856f7a6bb93ac2b6c1'
     }
   },
   dir: {
@@ -95,7 +95,8 @@ export const chain = {
       }
     ],
     currencyDecimals: {
-      'USDC': 18
+      'USDC': 6,
+      'ETH': 6
     },
     createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
     createCollateralCurrencies: ['USDC', 'ETH']

@@ -1,7 +1,7 @@
 import { Engine } from 'app/models/loan.model';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
-const USDC_TOKEN = '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d';
+const USDC_TOKEN = '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174';
 
 export const chain = {
   network: {
@@ -9,7 +9,7 @@ export const chain = {
     name: 'Matic',
     currency: 'Matic',
     ui: {
-      name: 'Matic Mainnet',
+      name: 'Matic',
       fullname: 'Matic Mainnet (Polygon)',
       image: 'assets/polygon-matic_20.svg',
       website: 'https://docs.matic.today/docs/getting-started'
@@ -25,7 +25,7 @@ export const chain = {
   },
   api: {
     [Engine.UsdcEngine]: {
-      v6: `https://bsc-mainnet.rcn.loans/`
+      v6: `https://matic-mainnet.rcn.loans/`
     }
   },
   contracts: {
@@ -91,7 +91,8 @@ export const chain = {
       }
     ],
     currencyDecimals: {
-      'USDC': 18
+      'USDC': 6,
+      'ETH': 6
     },
     createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
     createCollateralCurrencies: ['USDC', 'ETH']
