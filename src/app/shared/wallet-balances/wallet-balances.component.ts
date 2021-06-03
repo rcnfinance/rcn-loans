@@ -54,7 +54,11 @@ export class WalletBalancesComponent implements OnInit, OnChanges {
 
     filteredCurrencies.map(async (currency: CurrencyItem, index: number) => {
       const weiBalance: BN = await this.contractsService.getUserBalanceInToken(currency.address.toLowerCase());
-      const decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
+      let decimals = this.currenciesService.getCurrencyDecimals('symbol', currency.symbol);
+      // FIXME: Check if it's correct
+      if (this.chainService.isMatic) {
+        decimals = 18;
+      }
       const balance: number = weiBalance as any / 10 ** decimals;
       const formattedBalance = Number(balance).toFixed(MAX_DECIMALS);
 

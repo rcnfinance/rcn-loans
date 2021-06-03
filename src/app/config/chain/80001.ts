@@ -8,11 +8,11 @@ export const chain = {
   network: {
     id: 80001,
     name: 'Matic',
-    currency: 'Matic',
+    currency: 'MATIC',
     ui: {
       name: 'Matic',
       fullname: 'Matic Testnet Mumbai (Polygon)',
-      image: 'assets/polygon-matic_20.svg',
+      image: 'assets/polygon.svg',
       website: 'https://docs.matic.today/docs/getting-started'
     },
     explorer: {
@@ -39,11 +39,11 @@ export const chain = {
       },
       collateral: {
         collateral: '0x299e2ef286632bc72dfa3c2d945330e9462da288',
-        wethManager: '' // FIXME: add contract address
+        wethManager: '0xb0d54e62e8df7cee6769b19f5deb06f10680d476'
       },
       converter: {
-        converterRamp: '', // FIXME: add contract address,
-        uniswapConverter: '' // FIXME: add contract address
+        converterRamp: '0xc7c2faa9b3cbdb80d015d1a328c1bedac646b03e',
+        uniswapConverter: '0x15b90e0a14177d50bd9fef12ee4c39927cf8bfc3'
       },
       models: {
         installments: '0x6ea0c09cbdd6e6eb3cf570d402a747422d8fec0e'
@@ -52,7 +52,7 @@ export const chain = {
     chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     chainlink: {
       EACAggregatorProxy: {
-        chainCurrencyToUsd: '0xd0D5e3DB44DE05E9F294BB0a3bEEaF030DE24Ada'
+        chainCurrencyToUsd: '0xd0d5e3db44de05e9f294bb0a3beeaf030de24ada'
       },
       chainlinkAdapterV3: '0x774d446f17619c66d0feb5856f7a6bb93ac2b6c1'
     }
@@ -64,7 +64,7 @@ export const chain = {
   currencies: {
     chainlinkPairs: {
       'ETH': ['ETH', 'USD', 'USDC'],
-      'BNB': ['BNB', 'USD', 'USDC'],
+      'MATIC': ['MATIC', 'USD', 'USDC'],
       'ARS': ['USDC', 'USD', 'BTC', 'ARS'],
       'BTC': ['BTC', 'USD', 'USDC']
     },
@@ -74,8 +74,8 @@ export const chain = {
     ],
     usableCurrencies: [
       {
-        symbol: 'BNB',
-        img: 'assets/bnb.png',
+        symbol: 'MATIC',
+        img: 'assets/polygon.svg',
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
       },
       {
@@ -91,7 +91,7 @@ export const chain = {
       {
         symbol: 'ETH',
         img: 'assets/eth.svg',
-        address: '0xc1bd46297effa98c87b2f74ada2903ec0f804e1c'
+        address: '0x22d421c7bbbd54cc50c985965afec372c21fd1a1'
       }
     ],
     currencyDecimals: {

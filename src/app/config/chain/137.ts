@@ -1,17 +1,17 @@
 import { Engine } from 'app/models/loan.model';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
-const USDC_TOKEN = '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174';
+const USDC_TOKEN = '0x2791bca1f2de4661ed88a30c99a7a9449aa84174';
 
 export const chain = {
   network: {
     id: 137,
     name: 'Matic',
-    currency: 'Matic',
+    currency: 'MATIC',
     ui: {
       name: 'Matic',
       fullname: 'Matic Mainnet (Polygon)',
-      image: 'assets/polygon-matic_20.svg',
+      image: 'assets/polygon.svg',
       website: 'https://docs.matic.today/docs/getting-started'
     },
     explorer: {
@@ -60,7 +60,7 @@ export const chain = {
   currencies: {
     chainlinkPairs: {
       'ETH': ['ETH', 'USD', 'USDC'],
-      'BNB': ['BNB', 'USD', 'USDC'],
+      'MATIC': ['MATIC', 'USD', 'USDC'],
       'ARS': ['USDC', 'USD', 'BTC', 'ARS'],
       'BTC': ['BTC', 'USD', 'USDC']
     },
@@ -70,8 +70,8 @@ export const chain = {
     ],
     usableCurrencies: [
       {
-        symbol: 'BNB',
-        img: 'assets/bnb.png',
+        symbol: 'MATIC',
+        img: 'assets/polygon.svg',
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
       },
       {
@@ -87,7 +87,7 @@ export const chain = {
       {
         symbol: 'ETH',
         img: 'assets/eth.svg',
-        address: '0x2170ed0880ac9a755fd29b2688956bd959f933f8'
+        address: '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619'
       }
     ],
     currencyDecimals: {
