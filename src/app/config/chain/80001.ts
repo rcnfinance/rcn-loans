@@ -2,7 +2,7 @@ import { Agent } from 'environments/environment';
 import { Engine } from 'app/models/loan.model';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
-const USDC_TOKEN = '0x3afb01ba821f8edb626384acdb8e2216b2ce65a7';
+const USDC_TOKEN = '0xf3ca289d0d94ae04ef599165c14407ba743093ae';
 
 export const chain = {
   network: {
@@ -34,19 +34,19 @@ export const chain = {
       token: USDC_TOKEN,
       oracleFactory: '0x831571d93a9912830df872e3d2fc3d0ab5cbbe98',
       diaspore: {
-        debtEngine: '0xbe9ab1e0fb3bd625835971cfc7bf25b493eee38b',
-        loanManager: '0xb550f51b64d66dfbd4404d39c7fafd414b134de2'
+        debtEngine: '0xae781085595762d339293063f10eff2d9565eafb',
+        loanManager: '0x1ae480cf2edfd194ea63dab451b39c9b0472ba0b'
       },
       collateral: {
-        collateral: '0x299e2ef286632bc72dfa3c2d945330e9462da288',
-        wethManager: '0xb0d54e62e8df7cee6769b19f5deb06f10680d476'
+        collateral: '0xe1aca51136dbe564a86f3c93648c6bec84df3fe7',
+        wethManager: '0xecc47a8344822a541b0e7b181dbf2897fae24f88'
       },
       converter: {
-        converterRamp: '0xc7c2faa9b3cbdb80d015d1a328c1bedac646b03e',
-        uniswapConverter: '0x15b90e0a14177d50bd9fef12ee4c39927cf8bfc3'
+        converterRamp: '0xd2c4dd1481375fc5333619a11ec96f173904cd83',
+        uniswapConverter: '0x5e92cce35f1301f823fd01921f8052b51ec231b0'
       },
       models: {
-        installments: '0x6ea0c09cbdd6e6eb3cf570d402a747422d8fec0e'
+        installments: '0x304cc99e29abf844d814bbc84c7f7fc4e753d266'
       }
     },
     chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
