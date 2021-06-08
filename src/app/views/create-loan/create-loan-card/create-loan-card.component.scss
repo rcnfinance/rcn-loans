@@ -72,13 +72,12 @@
         @include typography-body(2);
       }
       .loan-card__property-description {
-        @include typography-headline(5);
+        @include styled-font('Roboto', 600, 22px);
       }
     }
     &--primary {
       .loan-card__property-description {
-        font-size: 30px;
-        font-weight: 600;
+        @include styled-font('Roboto', 600, 30px);
       }
     }
     &--installments {
