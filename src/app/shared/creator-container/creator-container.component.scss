@@ -7,6 +7,7 @@
     background-color: var(--app-color-gray-400);
     margin-left: -20px;
     margin-right: -20px;
+    border-radius: 10px 10px 0 0;
     .creator-title,
     .creator-image {
       position: absolute;
@@ -31,10 +32,3 @@
       }
     }
   }
-
-
-@media (min-width: 768px){
-  .creator-container {
-    height: 100px;
-  }
-}
