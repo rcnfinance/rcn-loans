@@ -2,7 +2,7 @@
 
 .loan-card {
   position: relative;
-  border-radius: 2px;
+  border-radius: 10px;
   background-color: var(--app-color-gray-700);
   -webkit-transition: box-shadow 150ms cubic-bezier(0,0,.2,1);
 
@@ -13,8 +13,16 @@
     padding-right: 20px;
   }
 
+  &__amounts {
+    background-color: #1B1B1D;
+  }
+
+  &__content {
+    background-color: #212124;
+  }
+
   &__creator {
-    padding-top: 15px;
+    border-radius: 10px 10px 0 0;
   }
 
   &__content {
@@ -64,12 +72,12 @@
         @include typography-body(2);
       }
       .loan-card__property-description {
-        @include typography-subtitle(1);
+        @include styled-font('Roboto', 600, 22px);
       }
     }
     &--primary {
       .loan-card__property-description {
-        color: var(--app-color-primary);
+        @include styled-font('Roboto', 600, 30px);
       }
     }
     &--installments {
@@ -147,11 +155,12 @@
 
 @media (max-width: 992px) {
   $cardHeaderHeight: 40px;
-  $cardHeight: 80vh;
+  $cardHeight: 66vh;
 
   .loan-card {
     position: fixed;
     z-index: 2;
+    border-radius: 0px;
     bottom: - $cardHeight;
     left: 0;
     width: 100%;
@@ -159,7 +168,6 @@
     overflow-y: scroll;
     padding-top: $cardHeaderHeight;
     padding-top: 0;
-    padding-bottom: 60px;
     background: var(--app-color-gray-600);
     transition: .3s;
 
@@ -175,6 +183,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
+      z-index: 50;
       height: $cardHeaderHeight;
       display: flex;
       align-items: center;
@@ -187,6 +196,7 @@
 
     &--expanded {
       bottom: 0;
+      z-index: 50;
       .loan-card__header {
         bottom: $cardHeight;
       }
