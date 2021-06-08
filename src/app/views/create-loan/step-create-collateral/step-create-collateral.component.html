@@ -233,23 +233,18 @@
             </div>
           </div>
         </div>
-        <div class="row my-3 pt-lg-4 d-none d-md-block">
+        <div class="row my-3 pt-lg-4">
           <div class="col-12">
             <button
               mat-raised-button
-              class="button button-primary"
+              type="submit"
+              class="button button-clear button--submit mat-elevation-z mr-4"
               [class.button-disabled]="collateralPendingTx"
               [disabled]="!form?.valid"
               (click)="submit()"
             >
-              <span class="d-flex align-items-center">
-                <span class="mr-2">
-                  {{ confirmButtonText }}
-                </span>
-                <div *ngIf="form?.valid">
-                  <i class="fas fa-check-circle"></i>
-                </div>
-              </span>
+              {{ confirmButtonText }}
+              <i *ngIf="form?.valid" class="fas fa-arrow-circle-right"></i>
             </button>
           </div>
         </div>
