@@ -152,9 +152,10 @@
 
     .created {
       text-align: center;
-      margin: 36px 0 -7px;
+      margin: 0;
       &__card {
         display: inline-block;
+        width: 100%;
         background: var(--app-color-gray-300);
         border-radius: 4px;
         padding: 10px 18px;
@@ -164,6 +165,7 @@
       &__highlighted {
         @include typography-body(2);
         color: #99FE90;
+        display: block;
       }
       a {
         text-decoration: underline !important;
@@ -237,6 +239,16 @@
         justify-content: space-between;
         .disclaimer {
           margin: 0;
+        }
+      }
+      
+      .created {
+        margin: 36px 0 -7px;
+        &__card {
+          width: initial;
+        }
+        &__highlighted {
+          display: inline;
         }
       }
     }
