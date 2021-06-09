@@ -1,5 +1,27 @@
 @import 'src/scss/fonts';
 
+.list {
+  &__item-container {
+    background-color: #212124;
+    padding: 10px;
+    border-radius: 3px;
+  }
+  &__button-mobile {
+    @include styled-font('proxima-nova', 500, 11px);
+    color: #808080;
+    border: 1px solid #424345;
+    border-radius: 5px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 10px;
+    &--active {
+      font-weight: bold;
+      background-color: #262629;
+      color: #FFFFFF;
+    }
+  }
+}
+
 @media (min-width: 992px) {
   .list {
     &__empty-state {
@@ -14,6 +36,8 @@
       overflow-y: scroll;
       overflow-x: hidden;
       height: 375px;
+      padding: 0;
+      border-radius: 0px;
     }
   }
 }
