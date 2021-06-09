@@ -14,9 +14,11 @@ export class DashboardListComponent {
   @Input() isBorrowed: boolean;
   @Input() isLent: boolean;
   @Output() reset: EventEmitter<any>;
+  @Output() setPage: EventEmitter<any>;
 
   constructor() {
     this.reset = new EventEmitter();
+    this.setPage = new EventEmitter();
   }
 
   /**
@@ -24,5 +26,12 @@ export class DashboardListComponent {
    */
   resetLoans() {
     this.reset.emit();
+  }
+
+  /**
+   * Set Page Borrow/Lent
+   */
+  setPageBorrow() {
+    this.setPage.emit();
   }
 }
