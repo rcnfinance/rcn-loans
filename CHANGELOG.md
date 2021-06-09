@@ -1,5 +1,14 @@
 # Changelog
 
+## **0.4.3** Boggart :fantasma:
+### Enhancement:
+- Borrowing process
+- Dashboard tabs mobile
+- Improve tests
+### Fix:
+- Dashboard performance
+
+
 ## **0.4.2** Boggart 👻
 
 ### Enhancement:
