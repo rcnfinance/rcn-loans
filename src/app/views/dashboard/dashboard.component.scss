@@ -13,6 +13,11 @@
     &--active {
       color: #7684FF;
     }
+    &--active-mobile {
+      color: #7684FF;
+      margin-top: 5px;
+      text-decoration: underline;
+    }
     span {
       display: block;
     }
