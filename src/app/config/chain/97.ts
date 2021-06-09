@@ -79,6 +79,11 @@ export const chain = {
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
       },
       {
+        symbol: 'WBNB',
+        img: 'assets/bnb.png',
+        address: '' // TOOD: add WBNB address
+      },
+      {
         symbol: 'USDC',
         img: 'assets/usdc.png',
         address: USDC_TOKEN
@@ -98,7 +103,7 @@ export const chain = {
       'USDC': 18
     },
     createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
-    createCollateralCurrencies: ['USDC', 'ETH']
+    createCollateralCurrencies: ['BNB', 'USDC', 'ETH']
   },
   usableWallets: [
     WalletType.Metamask

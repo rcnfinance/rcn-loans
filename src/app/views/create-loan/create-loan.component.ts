@@ -231,6 +231,7 @@ export class CreateLoanComponent implements OnInit, OnDestroy {
   /**
    * If the validations were successful, manage the collateral creation
    * @param form Collateral request form data
+   * @param isEth ETH Collateral
    */
   private async handleCreateCollateral(form: CollateralRequest) {
     this.collateralRequest = form;

@@ -71,19 +71,27 @@
     </ng-container>
 
     <ng-container *ngIf="assets?.length && !onlyToken">
-      <div class="title main-h2 mt-4 mb-3 px-3 mx-1">
-        ERC 721
-      </div>
       <ng-container *ngFor="let asset of assets">
         <mat-accordion *ngIf="!onlyAsset || onlyAsset == asset.address">
           <mat-expansion-panel
             class="expansion-panel mat-elevation-z"
-            [expanded]="onlyAsset"
+            [expanded]="
+              onlyAsset ||
+              accordionStates.assetApproves[asset.address]
+            "
+            [hideToggle]="true"
+            [disabled]="true"
           >
             <mat-expansion-panel-header>
               <mat-panel-title>
                 {{ asset.name }}
               </mat-panel-title>
+              <mat-slide-toggle
+                (change)="clickToggleAccordion($event, 'assetApproves', asset.address)"
+                [checked]="onlyAsset"
+                color="primary"
+              >
+              </mat-slide-toggle>
             </mat-expansion-panel-header>
             <div
               class="checkbox"
