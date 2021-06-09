@@ -4,58 +4,19 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardListItemComponent } from './dashboard-list-item.component';
 import { MaterialModule } from '../..//material.module';
-import { Engine, Loan, Status } from '../..//models/loan.model';
 import { InstallmentsService } from '../../services/installments.service';
-import { readComponent } from '../../utils/utils.test';
+import {
+  readComponent,
+  LOAN_EXAMPLE_COLLATERAL_PENDING,
+  LOAN_EXAMPLE_REQUESTED,
+  LOAN_EXAMPLE_ONGOING,
+  LOAN_EXAMPLE_PAID,
+  LOAN_EXAMPLE_EXPIRED
+} from '../../utils/utils.test';
 
 describe('DashboardListItemComponent', () => {
   let component: DashboardListItemComponent;
   let fixture: ComponentFixture<DashboardListItemComponent>;
-  const loan = new Loan(
-    Engine.RcnEngine,
-    '0x212c362e33abf6e3e6354363e0634aa1300c3045a18c8c5a08f3bb2a17184768',
-    '0xc78a11c729275e656fa3decc1f15aebee69d08fc',
-    11000000000000000000,
-    {
-      'address': '0x0000000000000000000000000000000000000000',
-      'currency': 'RCN',
-      'code': '0x0000000000000000000000000000000000000000000000000000000000000000'
-    },
-    {
-      'firstObligation': 1000000000000000000,
-      'totalObligation': 12000000000000000000,
-      'duration': 31104000,
-      'interestRate': 9.048821548821541,
-      'punitiveInterestRate': 11.976896418944936,
-      'frequency': 2592000,
-      'installments': 12
-    },
-    '0x06779a9848e5Df60ce0F5f63F88c5310C4c7289C',
-    '0x06779a9848e5Df60ce0F5f63F88c5310C4c7289C',
-    Status.Request,
-    1677953062,
-    '0x97d0300281C55DC6BE27Cf57343184Ab5C8dcdFF',
-    '0x0000000000000000000000000000000000000000',
-    {
-      'id' : '0x212c362e33abf6e3e6354363e0634aa1300c3045a18c8c5a08f3bb2a17184768',
-      'model' : {
-        'address' : '0x97d0300281C55DC6BE27Cf57343184Ab5C8dcdFF',
-        'paid' : 10000000000000000000,
-        'nextObligation' : 1000000000000000000,
-        'currentObligation' : 0,
-        'estimatedObligation' : 2000000000000000000,
-        'dueTime' : 1580148440
-      },
-      'balance' : 6000000000000000000,
-      'creator' : '0xc78a11c729275e656fa3decc1f15aebee69d08fc',
-      'owner' : '0xA5823617776f816e4AD1a26cb51Df2eF9458D0EA',
-      'oracle' : {
-        'address' : '0x0000000000000000000000000000000000000000',
-        'currency' : 'RCN',
-        'code' : '0x0000000000000000000000000000000000000000000000000000000000000000'
-      }
-    }
-  );
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -64,33 +25,139 @@ describe('DashboardListItemComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [InstallmentsService]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(DashboardListItemComponent);
     component = fixture.componentInstance;
-    component.loan = loan;
+    component.loan = LOAN_EXAMPLE_COLLATERAL_PENDING;
     fixture.detectChanges();
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should return correct status text', () => {
-    expect(component.statusText).toEqual('Collateral Pending');
+  it('should be return the correct status of a ongoing loan', () => {
+    component.loan = LOAN_EXAMPLE_ONGOING;
+    component.ngOnInit();
+    expect(component.statusText).toEqual('Ongoing');
+    expect(component.statusIcon).toEqual('angle-double-up');
+    expect(component.statusColor).toEqual('#4155FF');
   });
 
-  it('should return correct color', () => {
+  it('should be return the correct basic data of a ongoing loan', () => {
+    component.loan = LOAN_EXAMPLE_ONGOING;
+    component.ngOnInit();
+    expect(component.lent).toEqual('10.00 USDC');
+    expect(component.borrowed).toEqual('10.00 USDC');
+    expect(component.repaid).toEqual('0.00 USDC');
+    expect(component.interest).toEqual('0.0583 USDC');
+    expect(component.anualRate).toEqual('7%');
+    expect(component.accruedInterest).toEqual('0.00 USDC');
+  });
+
+  it('should be return the correct status of a requested loan without collateral', () => {
+    component.loan = LOAN_EXAMPLE_COLLATERAL_PENDING;
+    component.ngOnInit();
+    expect(component.statusText).toEqual('Collateral Pending');
+    expect(component.statusIcon).toEqual('exclamation');
     expect(component.statusColor).toEqual('#EAA219');
   });
 
-  it('should display borrowed label', () => {
-    const expectedValue = component.borrowed;
-    fixture.detectChanges();
-
-    const value = readComponent(fixture, '#label-borrowed');
-    expect(value.innerText).toBe(expectedValue);
+  it('should be return the correct basic data of a requested loan without collateral', () => {
+    component.loan = LOAN_EXAMPLE_COLLATERAL_PENDING;
+    component.ngOnInit();
+    expect(component.lent).toEqual('11.00 RCN');
+    expect(component.borrowed).toEqual('11.00 RCN');
+    expect(component.repaid).toEqual('-');
+    expect(component.interest).toEqual('-');
+    expect(component.anualRate).toEqual('9.048821548821541%');
+    expect(component.accruedInterest).toEqual('0.00 RCN');
   });
 
+  it('should be return the correct status of a requested loan', () => {
+    component.loan = LOAN_EXAMPLE_REQUESTED;
+    component.isCurrentLoans = true;
+    component.ngOnInit();
+    expect(component.statusText).toEqual('Requested');
+    expect(component.statusIcon).toEqual('calendar');
+    expect(component.statusColor).toEqual('#FFFFFF');
+  });
+
+  it('should be return the correct basic data of a requested loan', () => {
+    component.loan = LOAN_EXAMPLE_REQUESTED;
+    component.ngOnInit();
+    expect(component.lent).toEqual('11.00 RCN');
+    expect(component.borrowed).toEqual('11.00 RCN');
+    expect(component.repaid).toEqual('-');
+    expect(component.interest).toEqual('-');
+    expect(component.anualRate).toEqual('9.048821548821541%');
+    expect(component.accruedInterest).toEqual('0.00 RCN');
+  });
+
+  it('should be return the correct status of a expired loan', () => {
+    component.loan = LOAN_EXAMPLE_EXPIRED;
+    component.isCurrentLoans = true;
+    component.ngOnInit();
+    expect(component.statusText).toEqual('Expired');
+    expect(component.statusIcon).toEqual('times');
+    expect(component.statusColor).toEqual('#A3A5A6');
+  });
+
+  it('should be return the correct basic data of a expired loan', () => {
+    component.loan = LOAN_EXAMPLE_EXPIRED;
+    component.ngOnInit();
+    expect(component.lent).toEqual('2.00 RCN');
+    expect(component.borrowed).toEqual('2.00 RCN');
+    expect(component.repaid).toEqual('-');
+    expect(component.interest).toEqual('-');
+    expect(component.anualRate).toEqual('10%');
+    expect(component.accruedInterest).toEqual('0.00 RCN');
+  });
+
+  it('should be return the correct status of a payed loan', () => {
+    component.loan = LOAN_EXAMPLE_PAID;
+    component.isCurrentLoans = true;
+    component.ngOnInit();
+    expect(component.statusText).toEqual('Fully Repaid');
+    expect(component.statusIcon).toEqual('check');
+    expect(component.statusColor).toEqual('#59B159');
+  });
+
+  it('should be return the correct basic data of a payed loan', () => {
+    component.loan = LOAN_EXAMPLE_PAID;
+    component.ngOnInit();
+    expect(component.lent).toEqual('7.00 RCN');
+    expect(component.borrowed).toEqual('7.00 RCN');
+    expect(component.repaid).toEqual('7.10 RCN');
+    expect(component.interest).toEqual('0.1024 RCN');
+    expect(component.anualRate).toEqual('10%');
+    expect(component.accruedInterest).toEqual('0.10 RCN');
+  });
+
+  it('should display borrowed label', () => {
+    component.loan = LOAN_EXAMPLE_PAID;
+    component.isBorrowed = true;
+    component.ngOnInit();
+    fixture.detectChanges();
+    const label = readComponent(fixture, '.test-label-borrowed');
+    expect(label.innerText).toBe(component.borrowed);
+  });
+
+  it('should display repaid label', () => {
+    component.loan = LOAN_EXAMPLE_PAID;
+    component.isBorrowed = true;
+    component.ngOnInit();
+    fixture.detectChanges();
+    const label = readComponent(fixture, '.test-label-repaid');
+    expect(label.innerText).toBe(component.repaid);
+  });
+
+  it('should display annual rate label', () => {
+    component.loan = LOAN_EXAMPLE_PAID;
+    component.isBorrowed = true;
+    component.ngOnInit();
+    fixture.detectChanges();
+    const label = readComponent(fixture, '.test-label-annualrate');
+    expect(label.innerText).toBe(component.anualRate);
+  });
 });

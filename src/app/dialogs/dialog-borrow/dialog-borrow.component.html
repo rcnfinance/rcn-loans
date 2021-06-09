@@ -1,0 +1,112 @@
+<mat-dialog-content class="dialog dialog--small">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 dialog__content">
+        <p class="dialog__content-description">
+          Please approve all Metamask transactions to complete the borrowing process.
+        </p>
+        <div class="dialog__content-timeline">
+          <div class="timeline">
+
+            <div class="timeline__step">
+              <div
+                class="step"
+                [class.step--current]="step === 0"
+                [class.step--active]="step > 0"
+              >
+                <div class="step__number">
+                  1
+                </div>
+                <div class="step__label">
+                  Create Loan
+                </div>
+              </div>
+            </div>
+            <div class="timeline__step">
+              <div
+                class="step"
+                [class.step--inactive]="step < 2"
+                [class.step--current]="step === 2"
+                [class.step--active]="step > 2"
+              >
+                <div class="step__number">
+                  2
+                </div>
+                <div class="step__label">
+                  Create Collateral
+                </div>
+              </div>
+            </div>
+            <div class="timeline__step">
+              <div
+                class="step"
+                [class.step--inactive]="step < 4"
+                [class.step--active]="step === 4"
+              >
+                <div class="step__number">
+                  <span class="step__icon">
+                    <i class="fas fa-check"></i>
+                  </span>
+                </div>
+                <div class="step__label">
+                  Loan Completed
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline__line">
+            </div>
+
+            <div class="timeline__progressbar timeline__progressbar--loan">
+              <app-infinite-progress-bar
+                type="bar"
+                [start]="step > 0"
+                [end]="step > 1"
+              >
+              </app-infinite-progress-bar>
+            </div>
+
+            <div class="timeline__progressbar timeline__progressbar--collateral">
+              <app-infinite-progress-bar
+                type="bar"
+                [start]="step > 2"
+                [end]="step > 3"
+              >
+              </app-infinite-progress-bar>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="created" *ngIf="step === 4">
+          <div class="created__card">
+            <span class="created__highlighted">
+              The loan was created successfully!
+            </span>
+            Go to the
+            <a
+              [routerLink]="['/loan', loan?.id]"
+              mat-dialog-close
+            >
+              loan detail
+            </a>
+          </div>
+        </div>
+
+        <div class="dialog__content-actions">
+          <p class="disclaimer">
+            <!-- Total Tx Cost: {{ txCost }} -->
+          </p>
+          <button
+            mat-raised-button
+            class="button button-primary"
+            [class.button-disabled]="step !== 0 && step !== 2 && step !== 4"
+            (click)="clickConfirm()"
+          >
+            {{ confirmButtonText }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

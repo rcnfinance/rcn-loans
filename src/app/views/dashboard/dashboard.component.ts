@@ -8,6 +8,7 @@ import { EventsService } from 'app/services/events.service';
 import { TitleService } from 'app/services/title.service';
 import { Web3Service } from 'app/services/web3.service';
 import { ChainService } from 'app/services/chain.service';
+import { DeviceService } from 'app/services/device.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +16,6 @@ import { ChainService } from 'app/services/chain.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  pageId = 'active-loans';
   address: string;
   isLoading: boolean;
   loansBorrowed = [];
@@ -37,14 +37,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private titleService: TitleService,
     private eventsService: EventsService,
     private web3Service: Web3Service,
-    private chainService: ChainService
+    private chainService: ChainService,
+    private deviceService: DeviceService
   ) {}
 
   async ngOnInit() {
     this.titleService.changeTitle('Dashboard');
     await this.loadAccount();
-    this.checkIfIsMobile();
     this.handleLoginEvents();
+
+    this.isMobile = this.deviceService.isMobile();
     await this.loadLoansBorrowed();
     await this.loadLoansLent();
   }
@@ -56,7 +58,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.checkIfIsMobile();
+    this.isMobile = this.deviceService.isMobile();
   }
 
   /**
@@ -65,6 +67,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * @return Status active or inactive loans
    */
   setCurrentLoans(isCurrentLoans: boolean) {
+    const { isLoading } = this;
+    if (isLoading) {
+      return;
+    }
+
     this.isCurrentLoans = isCurrentLoans;
     this.resetLoans();
   }
@@ -109,6 +116,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Reset and clean loans
+   */
+  resetLoans() {
+    this.loansBorrowed = [];
+    this.loansLent = [];
+    this.pageBorrowed = 1;
+    this.pageLent = 1;
+    this.isFullScrolledBorrowed = false;
+    this.isFullScrolledLent = false;
+    this.loadLoansBorrowed();
+    this.loadLoansLent();
+  }
+
+  /**
    * Load loans borrowed
    * @param address Address
    * @param page Page
@@ -134,23 +155,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
         LoanUtils.buildLoan(loanData, config)
       );
 
-      // filter status destroyed, expired and paid
-      loans = loans.filter((l) => l.status !== Status.Destroyed);
-      if (this.isCurrentLoans) {
+      // filter status according to business definiton
+      const { isCurrentLoans } = this;
+      if (isCurrentLoans) {
         loans = loans.filter(
-          (l) =>
-            l.status === Status.Ongoing ||
-            l.status === Status.Indebt ||
-            l.status === Status.Request
+          ({ status, collateral }) =>
+            [Status.Request, Status.Ongoing, Status.Indebt].includes(status) ||
+            ([Status.Expired, Status.Paid].includes(status) && collateral && collateral.amount)
         );
-        loans = loans.filter((l) => l.collateral);
-      }
-      if (!this.isCurrentLoans) {
+      } else {
         loans = loans.filter(
-          (l) =>
-            l.status === Status.Paid ||
-            l.status === Status.Expired ||
-            (l.status === Status.Request && !l.collateral)
+          ({ status, collateral  }) =>
+            [Status.Paid, Status.Expired].includes(status) &&
+            (!collateral || !collateral.amount)
         );
       }
 
@@ -215,24 +232,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
         LoanUtils.buildLoan(loanData, config)
       );
 
-      // filter status destroyed, expired and paid
-      loans = loans.filter((l) => l.status !== Status.Destroyed);
-      if (this.isCurrentLoans) {
+      // filter status according to business definiton
+      const { isCurrentLoans } = this;
+      if (isCurrentLoans) {
         loans = loans.filter(
-          (l) =>
-            l.status === Status.Ongoing ||
-            l.status === Status.Indebt ||
-            l.status === Status.Request
+          ({ status }) =>
+            status === Status.Ongoing ||
+            status === Status.Indebt
         );
-        loans = loans.filter((l) => l.collateral);
-      }
-      if (!this.isCurrentLoans) {
-        loans = loans.filter(
-          (l) =>
-            l.status === Status.Paid ||
-            l.status === Status.Expired ||
-            (l.status === Status.Request && !l.collateral)
-        );
+      } else {
+        loans = loans.filter(({ status }) => status === Status.Paid);
       }
 
       // if there are no more loans
@@ -270,26 +279,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private set loading(loading: boolean) {
     this.isLoading = loading;
-  }
-
-  /**
-   * Reset and clean loans
-   */
-  private resetLoans() {
-    this.loansBorrowed = [];
-    this.loansLent = [];
-    this.pageBorrowed = 1;
-    this.pageLent = 1;
-    this.isFullScrolledBorrowed = false;
-    this.isFullScrolledLent = false;
-    this.loadLoansBorrowed();
-    this.loadLoansLent();
-  }
-
-  private checkIfIsMobile(e?) {
-    const MOBILE_WIDTH_PX = 992;
-    const currentDeviceWidth = e ? e.target.innerWidth : window.innerWidth;
-    this.isMobile = currentDeviceWidth <= MOBILE_WIDTH_PX;
   }
 
   /**

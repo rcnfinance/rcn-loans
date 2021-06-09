@@ -1,0 +1,256 @@
+@import 'src/scss/dialogs';
+@import 'src/scss/fonts';
+
+::ng-deep .dialog-borrow-wrapper {
+  height: auto !important;
+  margin: 15px;
+  .mat-dialog-container {
+    border-radius: 10px;
+  }
+}
+
+.dialog {
+  &--small {
+    padding: 24px 16px;
+  }
+  &__content {
+    .timeline {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin: 32px 0 0;
+
+      &__step {
+        position: relative;
+        z-index: 10;
+        .step {
+          display: flex;
+          align-items: center;
+          margin: 0 0 35px;
+          &,
+          &__number,
+          &__icon,
+          &__label {
+            transition: .3s;
+          }
+          &__number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include typography-headline(6);
+            border-radius: 50%;
+            border: 3px solid;
+            line-height: 0;
+          }
+          &__label {
+            @include typography-body(1);
+            color: #98989A;
+            padding-left: 16px;
+          }
+          &--inactive {
+            .step__number {
+              width: 20px;
+              height: 20px;
+              background: var(--app-color-gray-400);
+              border-color: #98989A;
+              font-size: 0;
+              margin: 0 12px 0 8px;
+            }
+            .step__icon {
+              font-size: 0;
+            }
+          }
+          &--current,
+          &--active {
+            .step__number {
+              width: 40px;
+              height: 40px;
+            }
+            .step__label {
+              color: #FFFFFF;
+            }
+            .step__icon {
+              font-size: 15px;
+            }
+          }
+          &--current {
+            .step__number {
+              color: #000000;
+              background: #FFFFFF;
+              border-color: #FFFFFF;
+            }
+            .step__label {
+              font-weight: 700;
+            }
+          }
+          &--active {
+            .step__number {
+              color: #FFFFFF;
+              background: #4155FF;
+              border-color: #4155FF;
+            }
+          }
+        }
+      }
+
+      &__line,
+      &__progressbar {
+        position: absolute;
+        top: 18px;
+        height: 3px;
+      }
+
+      &__line {
+        z-index: 5;
+        margin: auto;
+        background: #98989A;
+        width: 3px;
+        height: 70%;
+        left: 17px;
+      }
+
+      &__progressbar {
+        z-index: 7;
+        width: 37%;
+        app-infinite-progress-bar {
+          ::ng-deep {
+            mat-progress-bar {
+              .mat-progress-bar-buffer {
+                background: #98989A;
+              }
+            }
+          }
+        }
+        &--loan {
+          // is a bit bigger because the step__number will always be active
+          // TODO: improve this
+          top: 56px;
+          left: 0;
+          width: 36px;
+          transform: rotate(90deg);
+        }
+        &--collateral {
+          top: 132px;
+          left: 0;
+          width: 36px;
+          transform: rotate(90deg);
+        }
+      }
+    }
+
+    &-actions {
+      width: 100%;
+      margin-top: 49px;
+      .disclaimer {
+        @include styled-font('Roboto', 400, 12px);
+        color: #BABABA;
+        margin: 0 0 15px;
+      }
+    }
+
+    .created {
+      text-align: center;
+      margin: 0;
+      &__card {
+        display: inline-block;
+        width: 100%;
+        background: var(--app-color-gray-300);
+        border-radius: 4px;
+        padding: 10px 18px;
+        color: #B5B5B5;
+        @include typography-headline(7);
+      }
+      &__highlighted {
+        @include typography-body(2);
+        color: #99FE90;
+        display: block;
+      }
+      a {
+        text-decoration: underline !important;
+        color: inherit;
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  ::ng-deep .dialog-borrow-wrapper {
+    margin: 0;
+  }
+
+  .dialog {
+    &--small {
+      padding: 35px 42px 24px;
+    }
+    &__content {
+      .timeline {
+        width: 560px; // 544px
+        margin: auto;
+        flex-direction: row;
+        align-items: center;
+        margin: 0;
+        &__step {
+          width: 125px;
+          .step {
+            flex-direction: column;
+            margin: 0;
+            &__label {
+              margin: 14px 0 0;
+              padding: 0;
+            }
+            &--inactive {
+              .step__number {
+                margin: 0;
+              }
+              .step__label {
+                transform: translateY(10px);
+              }
+            }
+          }
+        }
+        &__progressbar {
+          &--loan {
+            top: 18px;
+            left: 14.5%;
+            width: 32%;
+            transform: none;
+          }
+          &--collateral {
+            top: 18px;
+            left: auto;
+            right: 14.5%;
+            width: 32%;
+            transform: none;
+          }
+        }
+        &__line {
+          left: 0;
+          right: 0;
+          width: 80%;
+          height: 3px;
+        }
+      }
+
+      &-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .disclaimer {
+          margin: 0;
+        }
+      }
+      
+      .created {
+        margin: 36px 0 -7px;
+        &__card {
+          width: initial;
+        }
+        &__highlighted {
+          display: inline;
+        }
+      }
+    }
+  }
+}

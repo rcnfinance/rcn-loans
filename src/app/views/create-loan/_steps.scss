@@ -11,6 +11,9 @@ input::-webkit-inner-spin-button {
 .mat-option {
   height: auto !important;
 }
+.red {
+  color: var(--app-color-red);
+}
 
 @mixin mat-slider-primary() {
   ::ng-deep {
@@ -75,9 +78,6 @@ input::-webkit-inner-spin-button {
     &--info {
       font-style: italic;
     }
-    &--warning {
-
-    }
   }
   &--amount {
     input {
@@ -97,6 +97,8 @@ input::-webkit-inner-spin-button {
   &--slider {
     .item__slider {
       position: relative;
+      z-index: 1;
+      margin-top: 20px;
     }
     .item__percentage {
       width: 100%;
@@ -193,12 +195,27 @@ input::-webkit-inner-spin-button {
           ::ng-deep {
             .mat-slider-thumb-label {
               background: var(--app-color-red) !important;
+              span {
+                color: white;
+              }
               &::before {
                 border-top-color: var(--app-color-red);
               }
               &::after {
                 background: var(--app-color-red);
               }
+            }
+          }
+        }
+      }
+      &--collateral:hover {
+        ::ng-deep {
+          .mat-slider-thumb-label {
+            width: 110px;
+            height: 42px;
+            margin-top: -16px;
+            span {
+              font-size: 13px;
             }
           }
         }
@@ -283,6 +300,11 @@ input::-webkit-inner-spin-button {
     &--submit {
       .item__message {
         max-width: 320px;
+      }
+    }
+    &--slider {
+      .item__slider {
+        margin-top: 0px;
       }
     }
   }

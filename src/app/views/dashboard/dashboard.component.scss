@@ -8,9 +8,19 @@
   }
   &__link {
     @include styled-font('proxima-nova', 700, 11px);
-    color: #7684FF;
+    color: #a09f9f;
     text-align: right;
-    margin-top: 8px;
+    &--active {
+      color: #7684FF;
+    }
+    &--active-mobile {
+      color: #7684FF;
+      margin-top: 5px;
+      text-decoration: underline;
+    }
+    span {
+      display: block;
+    }
   }
   ::ng-deep {
     .mat-button-toggle-group {
@@ -38,11 +48,17 @@
       margin-bottom: 0px;
     }
     &__link {
-      margin-top: 4px;
       cursor: pointer;
       text-align: right;
       svg {
         margin-left: 4px;
+      }
+      span {
+        display: inline-block;
+        margin-right: 15px;
+      }
+      span:first-child {
+        margin-right: 24px;
       }
     }
     &__content {

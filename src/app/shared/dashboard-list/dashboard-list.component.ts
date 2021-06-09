@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Loan } from 'app/models/loan.model';
 
 @Component({
@@ -13,6 +13,25 @@ export class DashboardListComponent {
   @Input() isCurrentLoans: boolean;
   @Input() isBorrowed: boolean;
   @Input() isLent: boolean;
+  @Output() reset: EventEmitter<any>;
+  @Output() setPage: EventEmitter<any>;
 
-  constructor() {}
+  constructor() {
+    this.reset = new EventEmitter();
+    this.setPage = new EventEmitter();
+  }
+
+  /**
+   * Reset and clean loans
+   */
+  resetLoans() {
+    this.reset.emit();
+  }
+
+  /**
+   * Set Page Borrow/Lent
+   */
+  setPageBorrow() {
+    this.setPage.emit();
+  }
 }
