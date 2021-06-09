@@ -9,36 +9,32 @@
     </div>
     <div class="dashboard">
       <div class="row">
-        <div class="col-12 col-md-9">
-          <p class="dashboard__title">LOANS</p>
-        </div>
-        <div class="col-6 d-lg-none">
-          <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle
-              [checked]="isPageBorrow"
-              (click)="setPageBorrow(true)"
-            >
-              BORROW
-            </mat-button-toggle>
-            <mat-button-toggle
-              [checked]="!isPageBorrow"
-              (click)="setPageBorrow(false)"
-            >
-              LENT
-            </mat-button-toggle>
-          </mat-button-toggle-group>
+        <div class="col-6 col-md-9">
+          <p class="dashboard__title">
+            {{ isMobile && isCurrentLoans ? 'ACTIVE' : '' }}
+            {{ isMobile && !isCurrentLoans ? 'INACTIVE' : '' }}
+            LOANS
+          </p>
         </div>
         <div class="col-6 col-md-3">
           <p class="dashboard__link">
             <span
+              *ngIf="!isMobile || (isMobile && !isCurrentLoans)"
               (click)="setCurrentLoans(true)"
-              [ngClass]="{ 'dashboard__link--active': isCurrentLoans }"
+              [ngClass]="{
+                'dashboard__link--active': isCurrentLoans,
+                'dashboard__link--active-mobile': isMobile && !isCurrentLoans
+              }"
             >
               ACTIVE LOANS
             </span>
             <span
+              *ngIf="!isMobile || (isMobile && isCurrentLoans)"
               (click)="setCurrentLoans(false)"
-              [ngClass]="{ 'dashboard__link--active': !isCurrentLoans }"
+              [ngClass]="{
+                'dashboard__link--active': !isCurrentLoans,
+                'dashboard__link--active-mobile': isMobile && isCurrentLoans
+              }"
             >
               INACTIVE LOANS
             </span>
@@ -61,6 +57,7 @@
             >
               <app-dashboard-list
                 (reset)="resetLoans()"
+                (setPage)="setPageBorrow(false)"
                 [isCurrentLoans]="isCurrentLoans"
                 [isBorrowed]="true"
                 [loading]="isLoading"
@@ -82,6 +79,7 @@
               (scroll)="onScrollLent($event)"
             >
               <app-dashboard-list
+                (setPage)="setPageBorrow(true)"
                 [isLent]="true"
                 [loading]="isLoading"
                 [loans]="loansLent"

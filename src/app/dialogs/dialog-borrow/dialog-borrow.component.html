@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12 dialog__content">
         <p class="dialog__content-description">
-          Please approve all transactions to complete the borrowing process.
+          Please approve all Metamask transactions to complete the borrowing process.
         </p>
         <div class="dialog__content-timeline">
           <div class="timeline">
@@ -85,7 +85,7 @@
             </span>
             Go to the
             <a
-              [routerLink]="['/loans', loan?.id]"
+              [routerLink]="['/loan', loan?.id]"
               mat-dialog-close
             >
               loan detail
@@ -94,11 +94,9 @@
         </div>
 
         <div class="dialog__content-actions">
-          <!-- TODO: uncomment
-            <p class="disclaimer">
-              Total Tx Cost: XX.xx USD
-            </p>
-          -->
+          <p class="disclaimer">
+            <!-- Total Tx Cost: {{ txCost }} -->
+          </p>
           <button
             mat-raised-button
             class="button button-primary"
