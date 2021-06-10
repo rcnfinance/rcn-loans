@@ -91,7 +91,7 @@ export const chain = {
       {
         symbol: 'ETH',
         img: 'assets/eth.svg',
-        address: '0x22d421c7bbbd54cc50c985965afec372c21fd1a1'
+        address: '0xd54dbbb55cc55d87a92f25f1c883b296de75cdcb'
       }
     ],
     currencyDecimals: {
