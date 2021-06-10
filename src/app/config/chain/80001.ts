@@ -39,11 +39,11 @@ export const chain = {
       },
       collateral: {
         collateral: '0xe1aca51136dbe564a86f3c93648c6bec84df3fe7',
-        wethManager: '0xecc47a8344822a541b0e7b181dbf2897fae24f88'
+        wethManager: '0xf2bdbe466415cfdafc1f0e45578ecb62b56d99ad'
       },
       converter: {
-        converterRamp: '0xd2c4dd1481375fc5333619a11ec96f173904cd83',
-        uniswapConverter: '0x5e92cce35f1301f823fd01921f8052b51ec231b0'
+        converterRamp: '0xd99cdb40f36975c33768a23794b542dfd7cb4537',
+        uniswapConverter: '0x236cde7d670ca811330c7cd7e7b21fef56e25798'
       },
       models: {
         installments: '0x304cc99e29abf844d814bbc84c7f7fc4e753d266'
@@ -95,9 +95,7 @@ export const chain = {
       }
     ],
     currencyDecimals: {
-      'USDC': 6,
-      'ETH': 6,
-      'MATIC': 6
+      'USDC': 6
     },
     createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
     createCollateralCurrencies: ['USDC', 'ETH']
