@@ -9,6 +9,7 @@ import { NavrailService } from 'app/services/navrail.service';
 import { ChainService } from 'app/services/chain.service';
 import { Web3Service } from 'app/services/web3.service';
 import { TxService, Tx, Type } from 'app/services/tx.service';
+import { Utils } from 'app/utils/utils';
 
 enum Steps {
   PendingCreateLoan,
@@ -30,6 +31,7 @@ export class DialogBorrowComponent implements OnInit {
   step: Steps;
   createPendingTx: Tx = undefined;
   collateralPendingTx: Tx = undefined;
+  txCost: string;
   private loading: boolean;
 
   // subscriptions
@@ -68,6 +70,7 @@ export class DialogBorrowComponent implements OnInit {
     } catch { } finally {
       this.loading = false;
     }
+    this.loadTxCost();
   }
 
   clickConfirm() {
@@ -82,8 +85,7 @@ export class DialogBorrowComponent implements OnInit {
       return this.clickCreateCollateral();
     }
     if (step === Steps.Finish) {
-      const { id } = this.loan;
-      this.router.navigate(['/loan', id]);
+      this.router.navigate(['/dashboard']);
       return this.dialogRef.close();
     }
   }
@@ -165,6 +167,41 @@ export class DialogBorrowComponent implements OnInit {
     if (step === Steps.Finish) {
       return 'Close';
     }
+  }
+
+  /**
+   * Load txCost
+   */
+  private async loadTxCost() {
+    this.txCost = null;
+    try {
+      const txCost = (await this.getTxCost()) / 10 ** 18;
+      const rawChainCurrencyToUsd = await this.contractsService.latestAnswer();
+      const chainCurrencyToUsd = rawChainCurrencyToUsd / 10 ** 8;
+      this.txCost = Utils.formatAmount(txCost * chainCurrencyToUsd) + ' USD';
+    } catch (err) {
+      this.txCost = '-';
+    }
+  }
+
+  /**
+   * Calculate gas price * estimated gas
+   * @return Tx cost
+   */
+  private async getTxCost() {
+    const { engine, address, collateral: { id, token, amount } } = this.loan;
+    const gasPrice = await this.web3Service.web3.eth.getGasPrice();
+    const estimatedGas = await this.contractsService.addCollateral(
+      engine,
+      id,
+      token,
+      amount.toString(),
+      address,
+      true
+    );
+    const gasLimit = Number(estimatedGas) * 110 / 100;
+    const txCost = gasLimit * gasPrice;
+    return txCost;
   }
 
   /**
