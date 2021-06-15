@@ -15,8 +15,8 @@ export const chain = {
       website: 'https://docs.matic.today/docs/getting-started'
     },
     explorer: {
-      address: 'https://explorer-mainnet.maticvigil.com/address/${address}/transactions',
-      tx: 'https://explorer-mainnet.maticvigil.com/tx/${tx}/internal-transactions'
+      address: 'https://polygonscan.com/address/${address}',
+      tx: 'https://polygonscan.com/tx/${address}'
     },
     provider: {
       id: null,
@@ -91,8 +91,7 @@ export const chain = {
       }
     ],
     currencyDecimals: {
-      'USDC': 6,
-      'ETH': 6
+      'USDC': 6
     },
     createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
     createCollateralCurrencies: ['USDC', 'ETH']
