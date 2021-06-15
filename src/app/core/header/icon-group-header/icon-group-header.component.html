@@ -46,7 +46,15 @@
   </ng-container>
 
   <div class="button button--chain">
-    <app-chain-selector></app-chain-selector>
+    <div *ngIf="!isEthereum" class="row">
+      <div class="col-6 pr-2">
+        <app-chain-selector></app-chain-selector>
+      </div>
+      <div class="col-6 pl-2">
+        <app-chain-selector [isBridge]="true"></app-chain-selector>
+      </div>
+    </div>
+    <app-chain-selector *ngIf="isEthereum"></app-chain-selector>
   </div>
 
   <div class="button button--avatar">

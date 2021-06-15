@@ -23,10 +23,6 @@ export class WalletBalancesComponent implements OnInit, OnChanges {
     private chainService: ChainService
   ) { }
 
-  get isEthereum() {
-    return this.chainService.isEthereum;
-  }
-
   ngOnInit() {
     this.loadBalances();
   }
