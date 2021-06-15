@@ -50,14 +50,6 @@ export class ChainService {
   }
 
   /**
-   * Check if the current chain is Ethereum
-   */
-  get isMatic() {
-    const { chain } = this;
-    return [AvailableChains.MaticMainnet, AvailableChains.MaticTestnet].includes(chain);
-  }
-
-  /**
    * Load the active (or default) chain
    * @param networkVersion Chain ID
    */

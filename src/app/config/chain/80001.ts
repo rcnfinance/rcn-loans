@@ -97,7 +97,7 @@ export const chain = {
     currencyDecimals: {
       'USDC': 6
     },
-    createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
+    createLoanCurrencies: ['USDC', 'ETH', 'MATIC', 'ARS'],
     createCollateralCurrencies: ['USDC', 'ETH']
   },
   usableWallets: [
