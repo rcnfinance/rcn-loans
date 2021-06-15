@@ -12,11 +12,12 @@ export const chain = {
       name: 'Matic',
       fullname: 'Matic Mainnet (Polygon)',
       image: 'assets/polygon.svg',
-      website: 'https://docs.matic.today/docs/getting-started'
+      website: 'https://docs.matic.today/docs/getting-started',
+      bridge: 'https://wallet.matic.network/bridge'
     },
     explorer: {
       address: 'https://polygonscan.com/address/${address}',
-      tx: 'https://polygonscan.com/tx/${address}'
+      tx: 'https://polygonscan.com/tx/${tx}'
     },
     provider: {
       id: null,
@@ -51,7 +52,7 @@ export const chain = {
     chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     chainlink: {
       EACAggregatorProxy: {
-        chainCurrencyToUsd: '' // FIXME: add contract address
+        chainCurrencyToUsd: '0xab594600376ec9fd91f8e885dadf0ce036862de0'
       },
       chainlinkAdapterV3: '0xb44407224ae1e43cb0f419e74dd54825da27902a'
     }
