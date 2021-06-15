@@ -51,7 +51,7 @@ export const chain = {
     chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     chainlink: {
       EACAggregatorProxy: {
-        chainCurrencyToUsd: '' // FIXME: add contract address
+        chainCurrencyToUsd: '0xab594600376ec9fd91f8e885dadf0ce036862de0'
       },
       chainlinkAdapterV3: '0xb44407224ae1e43cb0f419e74dd54825da27902a'
     }
@@ -60,7 +60,7 @@ export const chain = {
   currencies: {
     chainlinkPairs: {
       'ETH': ['ETH', 'USD', 'USDC'],
-      'MATIC': ['MATIC', 'USD', 'USDC'],
+      // 'MATIC': ['MATIC', 'USD'], // FIXME: doesn't work
       'ARS': ['USDC', 'USD', 'BTC', 'ARS'],
       'BTC': ['BTC', 'USD', 'USDC']
     },
