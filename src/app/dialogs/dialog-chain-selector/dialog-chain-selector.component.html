@@ -20,9 +20,9 @@
         *ngFor="let chain of chains"
         mat-raised-button
         class="button-connect"
+        [class.button-connect--active]="chain.active"
+        (click)="selectChain(chain, chain.active)"
       >
-        <!-- [class.button-connect--active]="chain.active" -->
-        <!-- (click)="selectChain(wallet.type, wallet.active)" -->
         <div class="d-flex align-items-center">
           <img [src]="chain.image" [alt]="chain.image">
           <span>{{ chain.name }}</span>
