@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MaterialModule } from './../../material.module';
 import { DialogChainSelectorComponent } from './dialog-chain-selector.component';
 
 describe('DialogChainSelectorComponent', () => {
@@ -12,7 +13,7 @@ describe('DialogChainSelectorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ MatDialogModule ],
+      imports: [ MaterialModule, MatDialogModule ],
       declarations: [ DialogChainSelectorComponent ],
       providers: [
         {
