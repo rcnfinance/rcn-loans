@@ -9,7 +9,7 @@ import { ChainService } from 'app/services/chain.service';
 export class DialogChainSelectorComponent implements OnInit {
   chains: {
     id: number;
-    fullname: string;
+    name: string;
     image: string;
     website: string;
   }[];
@@ -25,8 +25,8 @@ export class DialogChainSelectorComponent implements OnInit {
     chains.map((chainId) => {
       const { network } = this.chainService.getChainConfigById(chainId);
       const { id } = network;
-      const { fullname, image, website } = network.ui;
-      chainsData.push({ id, fullname, image, website });
+      const { name, image, website } = network.ui;
+      chainsData.push({ id, name, image, website });
     });
 
     this.chains = chainsData;
