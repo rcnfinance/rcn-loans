@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { ChainService } from 'app/services/chain.service';
 import { Web3Service } from 'app/services/web3.service';
+import { DialogClientAccountComponent } from 'app/dialogs/dialog-client-account/dialog-client-account.component';
 
 @Component({
   selector: 'app-dialog-chain-selector',
@@ -17,6 +19,7 @@ export class DialogChainSelectorComponent implements OnInit {
   }[];
 
   constructor(
+    private dialog: MatDialog,
     private web3Service: Web3Service,
     private chainService: ChainService
   ) { }
@@ -63,8 +66,13 @@ export class DialogChainSelectorComponent implements OnInit {
       rpcUrls: [network.provider.url]
     };
 
+    const { ethereum } = window as any;
+    if (!ethereum) {
+      return this.dialog.open(DialogClientAccountComponent);
+    }
+
     try {
-      await (window as any).ethereum.request({
+      await ethereum.request({
         method: 'wallet_addEthereumChain',
         params: [addEthereumChain]
       });
