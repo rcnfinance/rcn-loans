@@ -30,6 +30,8 @@ export class ChainSelectorComponent {
    * Click on the selector to open an explanatory dialog
    */
   clickChainSelector() {
-    this.dialog.open(DialogChainSelectorComponent);
+    this.dialog.open(DialogChainSelectorComponent, {
+      panelClass: 'dialog-selector-wrapper'
+    });
   }
 }
