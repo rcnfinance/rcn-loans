@@ -165,13 +165,14 @@ export class ContractsService {
     }
 
     const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+    const gasPrice: number = await this.getGasPrice();
 
     return new Promise((resolve, reject) => {
       this.loadAltContract(web3, tokenContract).methods.approve(
         contract,
         web3.utils.toTwosComplement('-1')
       )
-      .send({ from: account })
+      .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => {
         this.txService.registerApproveTx(hash, tokenAddress, contract, true);
         resolve(hash);
@@ -195,13 +196,14 @@ export class ContractsService {
     }
 
     const tokenContract = this.makeContract(tokenAbi.abi, tokenAddress);
+    const gasPrice: number = await this.getGasPrice();
 
     return new Promise((resolve, reject) => {
       return this.loadAltContract(web3, tokenContract).methods.approve(
         contract,
         0
       )
-      .send({ from: account })
+      .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => {
         this.txService.registerApproveTx(hash, tokenAddress, contract, false);
         resolve(hash);
@@ -244,13 +246,14 @@ export class ContractsService {
     const account = await this.web3Service.getAccount();
     const erc721abi: any = collateralAbi.abi;
     const erc721: any = this.makeContract(erc721abi, contractAddress);
+    const gasPrice: number = await this.getGasPrice();
 
     return new Promise((resolve, reject) => {
       this.loadAltContract(web3, erc721).methods.setApprovalForAll(
         operatorAddress,
         true
       )
-      .send({ from: account })
+      .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => {
         this.txService.registerApproveTx(hash, contractAddress, operatorAddress, true);
         resolve(hash);
@@ -270,13 +273,14 @@ export class ContractsService {
     const account = await this.web3Service.getAccount();
     const erc721abi: any = collateralAbi.abi;
     const erc721: any = this.makeContract(erc721abi, contractAddress);
+    const gasPrice: number = await this.getGasPrice();
 
     return new Promise((resolve, reject) => {
       this.loadAltContract(web3, erc721).methods.setApprovalForAll(
         operatorAddress,
         false
       )
-      .send({ from: account })
+      .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => {
         this.txService.registerApproveTx(hash, contractAddress, operatorAddress, false);
         resolve(hash);
@@ -351,10 +355,10 @@ export class ContractsService {
     estimate?: boolean
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
-
+    const gasPrice: number = await this.getGasPrice();
     const payload = payableAmount ?
-      { from: account, value: payableAmount } :
-      { from: account };
+      { from: account, value: payableAmount, gasPrice } :
+      { from: account, gasPrice };
 
     if (estimate) {
       return await this.loadAltContract(web3, this._rcnConverterRamp[engine])
@@ -422,7 +426,8 @@ export class ContractsService {
     const web3 = this.web3Service.opsWeb3;
     const COSIGNER_LIMIT = 0;
 
-    const payload = { from: account };
+    const gasPrice: number = await this.getGasPrice();
+    const payload = { from: account, gasPrice };
 
     if (estimate) {
       return await this.loadAltContract(web3, this._loanManager[engine])
@@ -503,7 +508,8 @@ export class ContractsService {
     const pOracleData = this.getOracleData(loan.oracle);
     const oracleData = await pOracleData;
     const web3 = this.web3Service.opsWeb3;
-    const payload = { from: account };
+    const gasPrice: number = await this.getGasPrice();
+    const payload = { from: account, gasPrice };
     const { engine } = loan;
 
     if (estimate) {
@@ -526,6 +532,7 @@ export class ContractsService {
   async transferLoan(loan: Loan, to: string): Promise<string> {
     const account = await this.web3Service.getAccount();
     const web3 = this.web3Service.opsWeb3;
+    const gasPrice: number = await this.getGasPrice();
     const { engine } = loan;
 
     return new Promise((resolve, reject) => {
@@ -534,7 +541,7 @@ export class ContractsService {
         to,
         loan.id
       )
-      .send({ from: account })
+      .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => resolve(hash))
       .on('error', (err) => reject(err));
     });
@@ -543,14 +550,14 @@ export class ContractsService {
   async withdrawFundsDiaspore(engine: Engine, diasporeIdLoans: number[]): Promise<string> {
     const account = await this.web3Service.getAccount();
     const web3 = this.web3Service.opsWeb3;
+    const gasPrice: number = await this.getGasPrice();
 
-    console.info('loans to withdraw diaspore', diasporeIdLoans);
     return new Promise((resolve, reject) => {
       this.loadAltContract(web3, this._debtEngine[engine]).methods.withdrawBatch(
         diasporeIdLoans,
         account
       )
-      .send({ from: account })
+      .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => resolve(hash))
       .on('error', (err) => reject(err));
     });
@@ -828,6 +835,8 @@ export class ContractsService {
     loanData: any
   ): Promise<string> {
     const web3 = this.web3Service.opsWeb3;
+    const gasPrice: number = await this.getGasPrice();
+
     return new Promise((resolve, reject) => {
       this.loadAltContract(web3, this._loanManager[engine]).methods.requestLoan(
         amount,
@@ -839,7 +848,7 @@ export class ContractsService {
         expiration,
         loanData
       )
-      .send({ from: borrower })
+      .send({ from: borrower, gasPrice })
       .on('transactionHash', (hash: string) => resolve(hash))
       .on('error', (err) => reject(err));
     });
@@ -891,6 +900,7 @@ export class ContractsService {
     const web3 = this.web3Service.opsWeb3;
     return new Promise(async (resolve, reject) => {
       const symbol = await this.oracleToSymbol(engine, oracle);
+      const gasPrice: number = await this.getGasPrice();
       const { currency: chainCurrency } = this.chainService.config.network;
 
       if (symbol === chainCurrency) {
@@ -900,7 +910,7 @@ export class ContractsService {
           liquidationRatio,
           balanceRatio
         )
-        .send({ from: account, value: amount })
+        .send({ from: account, value: amount, gasPrice })
         .on('transactionHash', (hash: string) => resolve(hash))
         .on('error', (err) => reject(err));
       } else {
@@ -912,7 +922,7 @@ export class ContractsService {
           liquidationRatio,
           balanceRatio
         )
-        .send({ from: account })
+        .send({ from: account, gasPrice })
         .on('transactionHash', (hash: string) => resolve(hash))
         .on('error', (err) => reject(err));
       }
@@ -940,9 +950,10 @@ export class ContractsService {
     const web3 = this.web3Service.opsWeb3;
     const { config } = this.chainService;
     const isEth: boolean = tokenAddress === config.contracts.chainCurrencyAddress;
+    const gasPrice: number = await this.getGasPrice();
     const payload = isEth ?
-      { from: account, value: amount } :
-      { from: account };
+      { from: account, value: amount, gasPrice } :
+      { from: account, gasPrice };
 
     if (estimate) {
       if (isEth) {
@@ -963,14 +974,14 @@ export class ContractsService {
         this.loadAltContract(web3, this._collateralWethManager[engine])
             .methods
             .deposit(collateralId)
-            .send({ from: account, value: amount })
+            .send({ from: account, value: amount, gasPrice })
             .on('transactionHash', (hash: string) => resolve(hash))
             .on('error', (err) => reject(err));
       } else {
         this.loadAltContract(web3, this._collateral[engine])
             .methods
             .deposit(collateralId, amount)
-            .send({ from: account })
+            .send({ from: account, gasPrice })
             .on('transactionHash', (hash: string) => resolve(hash))
             .on('error', (err) => reject(err));
       }
@@ -1002,7 +1013,8 @@ export class ContractsService {
     const { config } = this.chainService;
     const isEth: boolean = tokenAddress === config.contracts.chainCurrencyAddress;
     const contract: string = isEth ? this._collateralWethManager[engine] : this._collateral[engine];
-    const payload = { from: account };
+    const gasPrice: number = await this.getGasPrice();
+    const payload = { from: account, gasPrice };
 
     if (estimate) {
       return await this.loadAltContract(web3, contract)
@@ -1107,5 +1119,20 @@ export class ContractsService {
    */
   private loanOracleAbi() {
     return diasporeOracleAbi.abi;
+  }
+
+  /**
+   * Get custom Gas Price according to the selected chain
+   * @return gasPrice
+   */
+  private async getGasPrice() {
+    const { web3 } = this.web3Service;
+    const gasPrice = await web3.eth.getGasPrice();
+    const additionalSpend = Utils.pow(10, 8);
+
+    const { isEthereum } = this.chainService;
+    return isEthereum ?
+      gasPrice :
+      Utils.bn(gasPrice).add(additionalSpend);
   }
 }

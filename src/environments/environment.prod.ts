@@ -31,5 +31,5 @@ export const environment = {
       hapi: 'https://hapi.rcn.loans/'
     }
   },
-  availableChains: [AvailableChains.EthMainnet, AvailableChains.BscMainnet]
+  availableChains: [AvailableChains.EthMainnet, AvailableChains.BscMainnet, AvailableChains.MaticMainnet]
 };

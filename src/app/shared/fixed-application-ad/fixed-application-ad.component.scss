@@ -28,8 +28,10 @@
   &__title,
   &__description {
     padding-right: 16px;
-    &, &::ng-deep a {
+    &, &::ng-deep span {
       color: var(--app-color-gray-900);
+      font-weight: bold;
+      cursor: pointer;
     }
   }
   &__title {

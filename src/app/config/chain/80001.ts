@@ -2,58 +2,58 @@ import { Agent } from 'environments/environment';
 import { Engine } from 'app/models/loan.model';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
-const USDC_TOKEN = '0x46f348579e2b93f65fbd0636ad9cee504fcf1e1c';
+const USDC_TOKEN = '0xf3ca289d0d94ae04ef599165c14407ba743093ae';
 
 export const chain = {
   network: {
-    id: 97,
-    name: 'Binance',
-    currency: 'BNB',
+    id: 80001,
+    name: 'Polygon',
+    currency: 'MATIC',
     ui: {
-      name: 'BSC Testnet',
-      fullname: 'Binance Smart Chain (BSC) Testnet',
-      image: 'assets/chain-binance.svg',
-      website: 'https://academy.binance.com/en/articles/how-to-get-started-with-binance-smart-chain-bsc',
-      bridge: 'https://www.binance.org/en/bridge'
+      name: 'Polygon Testnet',
+      fullname: 'Polygon Testnet Mumbai',
+      image: 'assets/polygon.svg',
+      website: 'https://docs.matic.today/docs/getting-started',
+      bridge: 'https://wallet.matic.network/bridge'
     },
     explorer: {
-      address: 'https://testnet.bscscan.com/address/${address}',
-      tx: 'https://testnet.bscscan.com/tx/${tx}'
+      address: 'https://explorer-mumbai.maticvigil.com/address/${address}/transactions',
+      tx: 'https://explorer-mumbai.maticvigil.com/tx/${tx}/internal-transactions'
     },
     provider: {
       id: null,
-      url: `https://data-seed-prebsc-1-s1.binance.org:8545/`
+      url: `https://rpc-mumbai.matic.today`
     }
   },
   api: {
     [Engine.UsdcEngine]: {
-      v6: `https://bsc-testnet.rcn.loans/`
+      v6: `https://matic-testnet.rcn.loans/`
     }
   },
   contracts: {
     [Engine.UsdcEngine]: {
       token: USDC_TOKEN,
-      oracleFactory: '0x30750fcd94cdf0ab77bfeefe0f9f4ad1de50acf8',
+      oracleFactory: '0x831571d93a9912830df872e3d2fc3d0ab5cbbe98',
       diaspore: {
-        debtEngine: '0xca0913369415f2b05de24e824cfa7b3f2de92e54',
-        loanManager: '0xd19f01537d64716d60884bcd4dbfb1d38df7d593'
+        debtEngine: '0xae781085595762d339293063f10eff2d9565eafb',
+        loanManager: '0x1ae480cf2edfd194ea63dab451b39c9b0472ba0b'
       },
       collateral: {
-        collateral: '0x5af05b9d79227677fe52a78d493f5703a030c2cc',
-        wethManager: '0x98f0f55ffdaa90ac1a4a57854d15b66960912254'
+        collateral: '0xe1aca51136dbe564a86f3c93648c6bec84df3fe7',
+        wethManager: '0xf2bdbe466415cfdafc1f0e45578ecb62b56d99ad'
       },
       converter: {
-        converterRamp: '0x9c3d6ef4e6a6419376ec9b5d6cbb1eb3c2722578',
-        uniswapConverter: '0xf7f80fc2a94fbaf08a82fe764a6be10765c8b1f0'
+        converterRamp: '0xd99cdb40f36975c33768a23794b542dfd7cb4537',
+        uniswapConverter: '0x236cde7d670ca811330c7cd7e7b21fef56e25798'
       },
       models: {
-        installments: '0x5af05b9d79227677fe52a78d493f5703a030c2cc'
+        installments: '0x304cc99e29abf844d814bbc84c7f7fc4e753d266'
       }
     },
     chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     chainlink: {
       EACAggregatorProxy: {
-        chainCurrencyToUsd: '0x2514895c72f50d8bd4b4f9b1110f0d6bd2c97526'
+        chainCurrencyToUsd: '0xd0d5e3db44de05e9f294bb0a3beeaf030de24ada'
       },
       chainlinkAdapterV3: '0x774d446f17619c66d0feb5856f7a6bb93ac2b6c1'
     }
@@ -65,7 +65,7 @@ export const chain = {
   currencies: {
     chainlinkPairs: {
       'ETH': ['ETH', 'USD', 'USDC'],
-      'BNB': ['BNB', 'USD', 'USDC'],
+      'MATIC': ['MATIC', 'USD', 'USDC'],
       'ARS': ['USDC', 'USD', 'BTC', 'ARS'],
       'BTC': ['BTC', 'USD', 'USDC']
     },
@@ -75,8 +75,8 @@ export const chain = {
     ],
     usableCurrencies: [
       {
-        symbol: 'BNB',
-        img: 'assets/bnb.png',
+        symbol: 'MATIC',
+        img: 'assets/polygon.svg',
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
       },
       {
@@ -92,13 +92,13 @@ export const chain = {
       {
         symbol: 'ETH',
         img: 'assets/eth.svg',
-        address: '0xc1bd46297effa98c87b2f74ada2903ec0f804e1c'
+        address: '0xd54dbbb55cc55d87a92f25f1c883b296de75cdcb'
       }
     ],
     currencyDecimals: {
-      'USDC': 18
+      'USDC': 6
     },
-    createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
+    createLoanCurrencies: ['USDC', 'ETH', 'MATIC', 'ARS'],
     createCollateralCurrencies: ['USDC', 'ETH']
   },
   usableWallets: [

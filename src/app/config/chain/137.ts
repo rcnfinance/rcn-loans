@@ -1,67 +1,67 @@
 import { Engine } from 'app/models/loan.model';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
-const USDC_TOKEN = '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d';
+const USDC_TOKEN = '0x2791bca1f2de4661ed88a30c99a7a9449aa84174';
 
 export const chain = {
   network: {
-    id: 56,
-    name: 'Binance',
-    currency: 'BNB',
+    id: 137,
+    name: 'Polygon',
+    currency: 'MATIC',
     ui: {
-      name: 'BSC',
-      fullname: 'Binance Smart Chain (BSC)',
-      image: 'assets/chain-binance.svg',
-      website: 'https://academy.binance.com/en/articles/how-to-get-started-with-binance-smart-chain-bsc',
-      bridge: 'https://www.binance.org/en/bridge'
+      name: 'Polygon',
+      fullname: 'Polygon Mainnet',
+      image: 'assets/polygon.svg',
+      website: 'https://docs.matic.today/docs/getting-started',
+      bridge: 'https://wallet.matic.network/bridge'
     },
     explorer: {
-      address: 'https://bscscan.com/address/${address}',
-      tx: 'https://bscscan.com/tx/${tx}'
+      address: 'https://polygonscan.com/address/${address}',
+      tx: 'https://polygonscan.com/tx/${tx}'
     },
     provider: {
       id: null,
-      url: `https://bsc-dataseed1.binance.org/`
+      url: `https://rpc-mainnet.matic.network`
     }
   },
   api: {
     [Engine.UsdcEngine]: {
-      v6: `https://bsc-mainnet.rcn.loans/`
+      v6: `https://matic-mainnet.rcn.loans/`
     }
   },
   contracts: {
     [Engine.UsdcEngine]: {
       token: USDC_TOKEN,
-      oracleFactory: '0xb6ffe509a571bbe8ff6dfe04eb757450909cdd2e',
+      oracleFactory: '0xb6d018d483fa11f98c1d67d33ac07b7979841f37',
       diaspore: {
-        debtEngine: '0x89fffd110f6ab7079183159b499b744c6f252119',
-        loanManager: '0x023377cc67625164420e69adf7e0d2e49f851760'
+        debtEngine: '0x94bf06aa46680c7fe266fc2ec120971e05e190d1',
+        loanManager: '0xfdb4850a9925489f7f60f23218d10f41c5692b64'
       },
       collateral: {
-        collateral: '0xb44407224ae1e43cb0f419e74dd54825da27902a',
+        collateral: '0xf914a3f94ec3fea637c19c76a59062b38b014db5',
         wethManager: '' // FIXME: add contract address
       },
       converter: {
         converterRamp: '0x90642c78cf0e7b4839cc00738466a770fd0104f9',
-        uniswapConverter: '0x45c27efb90e3256181e0e1c1eed1ccbf976537a8'
+        uniswapConverter: '0x054efaa3beca78fb102684ce942434241c1f3ac6'
       },
       models: {
-        installments: '0xe557f1519a3513afcd41c5a383386537eda09cb1'
+        installments: '0x89fffd110f6ab7079183159b499b744c6f252119'
       }
     },
     chainCurrencyAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     chainlink: {
       EACAggregatorProxy: {
-        chainCurrencyToUsd: '0x0567f2323251f0aab15c8dfb1967e4e8a7d42aee'
+        chainCurrencyToUsd: '0xab594600376ec9fd91f8e885dadf0ce036862de0'
       },
-      chainlinkAdapterV3: '0x4b3230d1aec5ac7a7750df23f11eba01d47cedb0'
+      chainlinkAdapterV3: '0xb44407224ae1e43cb0f419e74dd54825da27902a'
     }
   },
   dir: {},
   currencies: {
     chainlinkPairs: {
       'ETH': ['ETH', 'USD', 'USDC'],
-      'BNB': ['BNB', 'USD', 'USDC'],
+      'MATIC': ['MATIC', 'USD', 'USDC'],
       'ARS': ['USDC', 'USD', 'BTC', 'ARS'],
       'BTC': ['BTC', 'USD', 'USDC']
     },
@@ -71,8 +71,8 @@ export const chain = {
     ],
     usableCurrencies: [
       {
-        symbol: 'BNB',
-        img: 'assets/bnb.png',
+        symbol: 'MATIC',
+        img: 'assets/polygon.svg',
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
       },
       {
@@ -88,11 +88,11 @@ export const chain = {
       {
         symbol: 'ETH',
         img: 'assets/eth.svg',
-        address: '0x2170ed0880ac9a755fd29b2688956bd959f933f8'
+        address: '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619'
       }
     ],
     currencyDecimals: {
-      'USDC': 18
+      'USDC': 6
     },
     createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
     createCollateralCurrencies: ['USDC', 'ETH']

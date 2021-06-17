@@ -3,7 +3,7 @@
 .chain {
   display: flex;
   align-items: center;
-  padding: 7px 14px 7px 10px;
+  padding: 7px 10px 7px 10px;
   border: 1px solid white;
   border-radius: 17px;
   background: #FFFFFF26 0% 0% no-repeat padding-box;
@@ -20,13 +20,27 @@
     @include typography-headline(7);
     line-height: 1em;
     padding-left: 9px;
+    padding-right: 4px;
     color: white;
     transition: .3s;
+  }
+  &__bridge {
+    @include typography-headline(7);
+    line-height: 1em;
+    color: white;
+    transition: .3s;
+    a {
+      padding: 10px 0;
+    }
   }
   &:hover {
     border-color: var(--app-color-gray-50);
     .chain__name {
       color: var(--app-color-gray-50);
     }
+  }
+  &--bridge {
+    height: 34px;
+    width: 107px;
   }
 }

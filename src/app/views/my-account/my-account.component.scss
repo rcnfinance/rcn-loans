@@ -40,6 +40,9 @@
   &__chain {
     display: flex;
     padding-bottom: 26px;
+    app-chain-selector {
+      margin-right: 15px;
+    }
   }
   &--tools {
     .page-content__wallet {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { ChainService } from 'app/services/chain.service';
 import { Web3Service } from 'app/services/web3.service';
 import { DialogClientAccountComponent } from 'app/dialogs/dialog-client-account/dialog-client-account.component';
@@ -20,6 +20,7 @@ export class DialogChainSelectorComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
+    private snackBar: MatSnackBar,
     private web3Service: Web3Service,
     private chainService: ChainService
   ) { }
@@ -83,7 +84,10 @@ export class DialogChainSelectorComponent implements OnInit {
       });
     } catch ({ code }) {
       if (code === -32602) {
-        // TODO: must manually change the network (default networks aren't supported)
+        this.snackBar.open('Please use Metamask to switch back to the Ethereum network.' , null, {
+          duration: 4000,
+          horizontalPosition: 'center'
+        });
       }
     }
   }

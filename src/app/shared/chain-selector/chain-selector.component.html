@@ -1,15 +1,20 @@
 <div
   class="chain"
   [matTooltip]="'Connected to ' + chainName"
+  [matTooltipDisabled]="isBridge"
   (click)="clickChainSelector()"
+  [ngClass]="{'chain--bridge': isBridge}"
 >
-  <div class="chain__icon">
+  <div *ngIf="!isBridge" class="chain__icon">
     <img
       class="icon"
       [src]="config?.network.ui.image"
     >
   </div>
-  <div class="chain__name">
+  <div *ngIf="!isBridge" class="chain__name">
     {{ config?.network.ui.name }}
+  </div>
+  <div *ngIf="isBridge" class="chain__bridge">
+    <a target="_blank" [href]="config?.network.ui.bridge"> Bridge Assets </a>
   </div>
 </div>
