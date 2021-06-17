@@ -7,11 +7,11 @@ const USDC_TOKEN = '0xf3ca289d0d94ae04ef599165c14407ba743093ae';
 export const chain = {
   network: {
     id: 80001,
-    name: 'Matic',
+    name: 'Polygon',
     currency: 'MATIC',
     ui: {
-      name: 'Matic',
-      fullname: 'Matic Testnet Mumbai (Polygon)',
+      name: 'Polygon Testnet',
+      fullname: 'Polygon Testnet Mumbai',
       image: 'assets/polygon.svg',
       website: 'https://docs.matic.today/docs/getting-started',
       bridge: 'https://wallet.matic.network/bridge'
