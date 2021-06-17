@@ -1,0 +1,113 @@
+.dialog {
+  position: relative;
+  &__dismiss {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: auto;
+    padding: 14px 24px;
+    color: #b4b4b4;
+  }
+}
+.dialog-content {
+  text-align: center;
+  &__logo {
+    img {
+      width: 62px;
+      margin: 50px auto 25px;
+    }
+  }
+  &__title {
+    h2 {
+      @include typography-body(2);
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      margin: 0;
+    }
+  }
+  &__description {
+    p {
+      @include typography-body(1);
+      margin: 12px 0 40px;
+    }
+  }
+  &__actions {
+    .button-connect,
+    .button-logout {
+      display: block;
+      width: 230px;
+      height: 66px;
+      margin: 20px auto;
+      text-align: left;
+      border-radius: 10px;
+    }
+    .button-connect {
+      @include styled-font('proxima-nova', 700, 17px);
+      padding: 0 18px;
+      box-shadow: 0px 3px 6px #00000029;
+      border: 1px solid transparent;
+      transition: .3s;
+      img {
+        position: relative;
+        z-index: 5;
+        width: 45px;
+        margin-right: 14px;
+        &::after {
+          content: '';
+          position: absolute;
+          z-index: 20;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          box-shadow: 0 0 10px red;
+        }
+      }
+      &--active {
+        background: #292929;
+        span::after {
+          content: '';
+          display: inline-block;
+          width: 6px;
+          height: 6px;
+          background: var(--app-color-green);
+          margin: 0 0 2px 15px;
+          border-radius: 50%;
+        }
+      }
+      &:not(.button-connect--active) {
+        background: none;
+        border-color: #4A4A4A;
+        &:hover {
+          border-color: var(--app-color-primary);
+        }
+      }
+    }
+    .button-logout {
+      @include typography-body(2);
+      background: none;
+      box-shadow: none;
+      &:hover {
+        transition: .3s;
+        opacity: .7;
+      }
+      &--hidden {
+        visibility: hidden;
+        height: 24px;
+      }
+      svg {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  ::ng-deep .dialog-selector-wrapper .mat-dialog-container {
+    border-radius: 12px;
+  }
+  .dialog {
+    width: auto;
+    min-width: 485px;
+  }
+}

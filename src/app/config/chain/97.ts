@@ -10,7 +10,7 @@ export const chain = {
     name: 'Binance',
     currency: 'BNB',
     ui: {
-      name: 'Binance',
+      name: 'BSC Testnet',
       fullname: 'Binance Smart Chain (BSC) Testnet',
       image: 'assets/chain-binance.svg',
       website: 'https://academy.binance.com/en/articles/how-to-get-started-with-binance-smart-chain-bsc'
