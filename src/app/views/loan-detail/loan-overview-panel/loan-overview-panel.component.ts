@@ -16,6 +16,7 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
   @Input() loan: Loan;
   @Input() brand: Brand;
   @Input() loanType: LoanType;
+  @Input() hasPoh: boolean;
   hasOracle: boolean;
   amountBorrow: number;
   amountRepay: number;
@@ -54,8 +55,7 @@ export class LoanOverviewPanelComponent implements OnInit, OnChanges {
    * @param address Borrower address
    */
   clickBorrower(address: string) {
-    const { poh } = this.loan;
-    if (poh) {
+    if (this.hasPoh) {
       this.dialog.open(DialogPohComponent, {
         panelClass: 'dialog-poh-wrapper',
         data: { address }

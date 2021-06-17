@@ -27,7 +27,8 @@ export const environment = {
   apiCountry : 'https://ipcountry-api.rcn.loans',
   api: {
     poh: {
-      host: 'https://ipfs.kleros.io/'
+      host: 'https://ipfs.kleros.io/',
+      hapi: 'https://hapi.rcn.loans/'
     }
   },
   availableChains: [AvailableChains.EthMainnet, AvailableChains.BscMainnet]

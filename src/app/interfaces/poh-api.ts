@@ -1,5 +1,4 @@
 export interface PohApi {
-  account: string;
-  submission: boolean;
+  registered: boolean;
   uri: string;
 }
