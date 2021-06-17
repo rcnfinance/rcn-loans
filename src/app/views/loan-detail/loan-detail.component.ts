@@ -20,6 +20,7 @@ import { EventsService } from 'app/services/events.service';
 import { ChainService } from 'app/services/chain.service';
 import { LoanTypeService } from 'app/services/loan-type.service';
 import { PreviousRouteService } from 'app/services/previousRoute.service';
+import { PohService } from 'app/services/poh.service';
 
 @Component({
   selector: 'app-loan-detail',
@@ -63,6 +64,8 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   collateralAmount: string;
   collateralAsset: string;
 
+  hasPoh: boolean;
+
   // subscriptions
   subscriptionAccount: Subscription;
 
@@ -80,6 +83,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     private eventsService: EventsService,
     private loanTypeService: LoanTypeService,
     private previousRouteService: PreviousRouteService,
+    private pohService: PohService,
     public dialog: MatDialog
   ) { }
 
@@ -103,6 +107,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         this.loadDetail();
         this.loadAccount();
         this.loadCollateral();
+        this.loadPoh();
 
         // state
         this.viewDetail = this.defaultDetail();
@@ -266,6 +271,13 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     const account = await this.web3Service.getAccount();
     this.userAccount = account;
     this.loadUserActions();
+  }
+
+  /**
+   * Load poh loan
+   */
+  private async loadPoh() {
+    this.hasPoh = await this.pohService.checkIfHasPoh(this.loan.borrower);
   }
 
   /**

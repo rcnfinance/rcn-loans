@@ -147,10 +147,10 @@
       </div>
       <span
         class="address d-inline-flex align-items-center"
-        [class.address--touchable]="loan.poh"
+        [class.address--touchable]="hasPoh"
         (click)="clickBorrower(loan.borrower)"
       >
-        <span class="address__icon" *ngIf="loan.poh">
+        <span class="address__icon" *ngIf="hasPoh">
           <i class="fas fa-user-check"></i>
         </span>
         {{ shortAddress }}

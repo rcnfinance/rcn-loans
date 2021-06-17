@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { environment } from 'environments/environment';
 import { PohProfile } from 'app/interfaces/poh-profile';
-import { ApiService } from 'app/services/api.service';
 import { PohService } from 'app/services/poh.service';
 import { ChainService } from 'app/services/chain.service';
 
@@ -24,7 +23,6 @@ export class DialogPohComponent implements OnInit {
       uri?: string;
     },
     private snackBar: MatSnackBar,
-    private apiService: ApiService,
     private pohService: PohService,
     private chainService: ChainService
   ) { }
@@ -33,14 +31,9 @@ export class DialogPohComponent implements OnInit {
     const { host } = environment.api.poh;
     this.pohHost = host;
 
-    const { address, uri } = this.data;
+    const { address } = this.data;
     this.address = address;
-
-    if (uri) {
-      this.loadPohUsingUri(uri);
-    } else {
-      this.loadPohUsingAddress(address);
-    }
+    this.loadPohProfile(address);
 
     this.loadUrls();
   }
@@ -67,31 +60,11 @@ export class DialogPohComponent implements OnInit {
   }
 
   /**
-   * Load PoH using an address
-   * @param address Address
-   */
-  private async loadPohUsingAddress(address: string) {
-    const { uri } =
-      await this.apiService.getAddressPoh(address).toPromise();
-    await this.loadPohUsingUri(uri);
-  }
-
-  /**
-   * Load PoH using an Registration URI
-   * @param uri Registration URI
-   */
-  private async loadPohUsingUri(uri: string) {
-    const { fileURI } =
-      await this.pohService.getRegistrationUri(uri).toPromise();
-    await this.loadPohProfile(fileURI);
-  }
-
-  /**
    * Load PoH profile
    * @param profileUrl File URI
    */
-  private async loadPohProfile(profileUrl: string) {
-    const profile = await this.pohService.getFileUri(profileUrl).toPromise();
+  private async loadPohProfile(address: string) {
+    const profile = await this.pohService.getProfile(address).toPromise();
     this.profile = profile;
   }
 

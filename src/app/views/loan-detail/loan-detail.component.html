@@ -90,6 +90,7 @@
             [loan]="loan"
             [brand]="brand"
             [loanType]="loanType"
+            [hasPoh]="hasPoh"
           >
           </app-loan-overview-panel>
         </div>
@@ -252,7 +253,7 @@
         Loan history
       </h2>
       <div class="col-12" *ngIf="loan && hasHistory">
-        <app-detail-history [loan]="loan"></app-detail-history>
+        <app-detail-history [loan]="loan" [hasPoh]="hasPoh"></app-detail-history>
       </div>
     </div>
   </section>
