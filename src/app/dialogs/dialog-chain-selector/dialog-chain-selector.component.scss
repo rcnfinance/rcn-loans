@@ -1,23 +1,14 @@
-@import 'src/scss/dialogs';
 @import 'src/scss/fonts';
+@import './../dialog-selector';
 
-.dialog {
-  &__content {
-    &-chains {
-      padding: 16px 0 6px;
-      .chain {
-        margin-bottom: 12px;
-        &__image {
-          height: 18px;
-          margin-right: 11px;
-        }
-        &__name {
-          @include typography-body(2);
-          line-height: 24px;
-        }
-        &:last-child {
-          margin-bottom: 0;
-        }
+.dialog-content {
+  &__title {
+    margin-top: 60px;
+  }
+  &__actions {
+    .button-connect {
+      &:last-child {
+        margin-bottom: 60px;
       }
     }
   }
