@@ -104,22 +104,47 @@ export class Utils {
     decimals = 2,
     withCommas = true
   ): string {
-    if (typeof amount !== 'number') {
-      amount = Number(amount);
-    }
-    if (!amount) {
-      amount = 0;
-    }
-
-    const fixedAmount: any = (amount as Number).toFixed(decimals);
-    const fixedAmountWithoutRounding =
-      fixedAmount <= amount ? fixedAmount : (fixedAmount - Math.pow(0.1, decimals)).toFixed(decimals);
+    const parse = (rawAmount: number | string | BN, minimumFractionDigits = decimals) => {
+      if (typeof rawAmount !== 'number') {
+        rawAmount = Number(rawAmount);
+      }
+      if (!rawAmount) {
+        rawAmount = 0;
+      }
+      const fixedAmount: any = (rawAmount as Number).toFixed(minimumFractionDigits);
+      const fixedAmountWithoutRounding =
+        fixedAmount <= rawAmount ? fixedAmount : (fixedAmount - Math.pow(0.1, minimumFractionDigits)).toFixed(minimumFractionDigits);
+      return !withCommas ?
+        fixedAmountWithoutRounding :
+        Number(fixedAmountWithoutRounding).toLocaleString('en-US', { minimumFractionDigits });
+    };
 
     if (!withCommas) {
-      return Number(fixedAmountWithoutRounding).toString();
+      return parse(amount);
     }
 
-    return Number(fixedAmountWithoutRounding).toLocaleString('en-US', { minimumFractionDigits: decimals });
+    // if amount >= 0, return it
+    const formattedValue = parse(amount);
+    if (Number(formattedValue) as any !== 0) {
+      return formattedValue;
+    }
+
+    // else, try adding more decimals (with an established limit)
+    const decimalsLimit = 8;
+    if (decimals >= decimalsLimit) {
+      return formattedValue;
+    }
+
+    // recursively search for an amount that is allowed
+    let updatedFormattedValue: string;
+    for (let i = decimals; i <= decimalsLimit; i++) {
+      const newFormattedValue = parse(amount, i);
+      if (!updatedFormattedValue && Number(newFormattedValue) as any !== 0) {
+        updatedFormattedValue = newFormattedValue;
+      }
+    }
+
+    return updatedFormattedValue || formattedValue;
   }
 
   static removeTrailingZeros(value: string): string {
