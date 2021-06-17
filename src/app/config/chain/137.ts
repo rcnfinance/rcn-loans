@@ -61,7 +61,7 @@ export const chain = {
   currencies: {
     chainlinkPairs: {
       'ETH': ['ETH', 'USD', 'USDC'],
-      // 'MATIC': ['MATIC', 'USD'], // FIXME: doesn't work
+      'MATIC': ['MATIC', 'USD', 'USDC'],
       'ARS': ['USDC', 'USD', 'BTC', 'ARS'],
       'BTC': ['BTC', 'USD', 'USDC']
     },
