@@ -1,5 +1,29 @@
 # Changelog
 
+## **0.4.4** Boggart 👻
+
+### Feature:
+- Add Polygon network
+- Add shortcut to Bridge Assets
+- Integrate PoH with all networks
+
+### Enhancement:
+- Add new skeletons
+- Improves amounts with many decimals
+- Improve gas price calculation in some networks
+
+
+## **0.4.3** Boggart 👻
+
+### Enhancement:
+- Borrowing process
+- Dashboard tabs mobile
+- Improve tests
+
+### Fix:
+- Dashboard performance
+
+
 ## **0.4.2** Boggart 👻
 
 ### Enhancement:
