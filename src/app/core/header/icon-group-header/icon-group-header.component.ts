@@ -2,6 +2,7 @@ import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Utils } from '../../../utils/utils';
 import { HeaderPopoverService } from '../../../services/header-popover.service';
+import { ChainService } from '../../../services/chain.service';
 
 enum ViewType {
   OracleRates = 'rates',
@@ -29,7 +30,7 @@ export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
   subscriptionHeader: Subscription;
 
   constructor(
-    public headerPopoverService: HeaderPopoverService
+    public headerPopoverService: HeaderPopoverService, private chainService: ChainService
   ) { }
 
   ngOnInit() {
@@ -90,5 +91,12 @@ export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
    */
   updateCounter(counter: number) {
     this.notificationsCounter = counter;
+  }
+
+  /**
+   * Getter is ethereum chain
+   */
+  get isEthereum() {
+    return this.chainService.isEthereum;
   }
 }

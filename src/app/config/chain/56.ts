@@ -9,10 +9,11 @@ export const chain = {
     name: 'Binance',
     currency: 'BNB',
     ui: {
-      name: 'Binance',
+      name: 'BSC',
       fullname: 'Binance Smart Chain (BSC)',
       image: 'assets/chain-binance.svg',
-      website: 'https://academy.binance.com/en/articles/how-to-get-started-with-binance-smart-chain-bsc'
+      website: 'https://academy.binance.com/en/articles/how-to-get-started-with-binance-smart-chain-bsc',
+      bridge: 'https://www.binance.org/en/bridge'
     },
     explorer: {
       address: 'https://bscscan.com/address/${address}',

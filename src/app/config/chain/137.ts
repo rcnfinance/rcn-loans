@@ -12,11 +12,12 @@ export const chain = {
       name: 'Matic',
       fullname: 'Matic Mainnet (Polygon)',
       image: 'assets/polygon.svg',
-      website: 'https://docs.matic.today/docs/getting-started'
+      website: 'https://docs.matic.today/docs/getting-started',
+      bridge: 'https://wallet.matic.network/bridge'
     },
     explorer: {
       address: 'https://polygonscan.com/address/${address}',
-      tx: 'https://polygonscan.com/tx/${address}'
+      tx: 'https://polygonscan.com/tx/${tx}'
     },
     provider: {
       id: null,

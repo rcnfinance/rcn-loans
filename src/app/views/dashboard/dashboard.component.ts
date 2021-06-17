@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Loan, Status } from 'app/models/loan.model';
+import { Status as CollateralStatus } from 'app/models/collateral.model';
 import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
 import { LoanUtils } from 'app/utils/loan-utils';
 import { ProxyApiService } from 'app/services/proxy-api.service';
@@ -161,13 +162,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
         loans = loans.filter(
           ({ status, collateral }) =>
             [Status.Request, Status.Ongoing, Status.Indebt].includes(status) ||
-            ([Status.Expired, Status.Paid].includes(status) && collateral && collateral.amount)
+            ([Status.Expired, Status.Paid].includes(status) &&
+              collateral &&
+              collateral.amount &&
+              collateral.status !== CollateralStatus.Finish)
         );
       } else {
         loans = loans.filter(
-          ({ status, collateral  }) =>
+          ({ status, collateral }) =>
             [Status.Paid, Status.Expired].includes(status) &&
-            (!collateral || !collateral.amount)
+            (!collateral || !collateral.amount || collateral.status === CollateralStatus.Finish)
         );
       }
 
@@ -236,9 +240,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       const { isCurrentLoans } = this;
       if (isCurrentLoans) {
         loans = loans.filter(
-          ({ status }) =>
-            status === Status.Ongoing ||
-            status === Status.Indebt
+          ({ status }) => status === Status.Ongoing || status === Status.Indebt
         );
       } else {
         loans = loans.filter(({ status }) => status === Status.Paid);
