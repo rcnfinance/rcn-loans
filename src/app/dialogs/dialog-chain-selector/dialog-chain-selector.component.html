@@ -1,49 +1,33 @@
-<mat-dialog-content class="dialog dialog--small">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 col-md-5 dialog__image mb-5 mb-md-0">
-        <img
-          src="../../../assets/illustration-chains.svg"
-          alt="CHECK THE NETWORKS"
-        >
-      </div>
-      <div class="col-12 col-md-6 dialog__content">
-        <h1 class="dialog__content-title mt-0 mb-4">
-          CHECK THE NETWORKS
-        </h1>
-        <p class="dialog__content-description">
-          The Credit Marketplace supports multiple networks. Select the one you
-          want to use on your Metamask wallet dialog. Bear in mind that your
-          balances, loans and settings will vary between different networks.
-        </p>
-        <div class="dialog__content-chains">
-          <a
-            *ngFor="let chain of chains"
-            class="chain d-flex align-items-center"
-            [class.chain--active]="chain.id === currentChain"
-            [href]="chain.website"
-            target="_blank"
-          >
-            <img
-              [src]="chain.image"
-              [alt]="chain.fullname"
-              class="chain__image"
-            >
-            <span class="chain__name">
-              {{ chain.fullname }}
-            </span>
-          </a>
+<mat-dialog-content class="dialog">
+  <button matDialogClose mat-button class="dialog__dismiss">
+    <mat-icon>
+      close
+    </mat-icon>
+  </button>
+  <div class="dialog-content">
+    <div class="dialog-content__title">
+      <h2>
+        Choose a network
+      </h2>
+    </div>
+    <div class="dialog-content__description">
+      <p>
+        Select the one you want to use on the Credit Marketplace.
+      </p>
+    </div>
+    <div class="dialog-content__actions">
+      <button
+        *ngFor="let chain of chains"
+        mat-raised-button
+        class="button-connect"
+        [class.button-connect--active]="chain.active"
+        (click)="selectChain(chain, chain.active)"
+      >
+        <div class="d-flex align-items-center">
+          <img [src]="chain.image" [alt]="chain.image">
+          <span>{{ chain.name }}</span>
         </div>
-        <div class="dialog__content-actions mt-5 mt-md-4">
-          <button
-            mat-raised-button
-            mat-dialog-close
-            class="button button-primary"
-          >
-            Close
-          </button>
-        </div>
-      </div>
+      </button>
     </div>
   </div>
 </mat-dialog-content>

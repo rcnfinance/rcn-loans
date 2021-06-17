@@ -43,6 +43,9 @@ export class ChainSelectorComponent {
    */
   clickChainSelector() {
     if (this.isBridge) return;
-    this.dialog.open(DialogChainSelectorComponent);
+
+    this.dialog.open(DialogChainSelectorComponent, {
+      panelClass: 'dialog-selector-wrapper'
+    });
   }
 }
