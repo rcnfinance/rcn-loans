@@ -151,12 +151,11 @@ export class ContentWrapperComponent implements OnInit {
       return;
     }
 
-    const GET_STARTED_URL = 'https://academy.binance.com/en/articles/how-to-get-started-with-binance-smart-chain-bsc';
     this.showedAd = true;
 
     this.applicationAdsService.toggleService({
       title: 'CHECK THE NETWORKS',
-      description: `Enjoy lending and borrowing with the multiple networks the Credit Marketplace supports. Get started by selecting one <strong><a href="${GET_STARTED_URL}" target="_blank">here</a></strong>!`,
+      description: `Enjoy lending and borrowing with the multiple networks the Credit Marketplace supports. Get started by selecting one <span class="bind-action">here</span>!`,
       image: 'assets/illustration-chains.svg'
     });
   }
