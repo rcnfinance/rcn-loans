@@ -14,21 +14,12 @@ export class PohService {
   ) { }
 
   /**
-   * Get PoH registration URI using an address
-   * @param address Address
-   */
-  getRegistrationUri(uri: string) {
-    const { host: apiBase } = environment.api.poh;
-    return this.http.get<{fileURI: string; name: string}>(apiBase.concat(uri));
-  }
-
-  /**
-   * Get PoH file URI using an registration URI
+   * Get PoH profile
    * @param registrationUri Registration URI
    */
-  getFileUri(registrationUri: string) {
-    const { host: apiBase } = environment.api.poh;
-    return this.http.get<PohProfile>(apiBase.concat(registrationUri));
+  getProfile(address: string) {
+    const { hapi: apiBase } = environment.api.poh;
+    return this.http.get<PohProfile>(apiBase.concat(`get_data/${address}`));
   }
 
   /**
@@ -38,8 +29,8 @@ export class PohService {
    */
   async checkIfHasPoh(address: string): Promise<boolean> {
     try {
-      await this.apiService.getAddressPoh(address).toPromise();
-      return true;
+      const hasPoh = await this.apiService.getAddressPoh(address).toPromise();
+      return hasPoh.registered;
     } catch {
       return false;
     }

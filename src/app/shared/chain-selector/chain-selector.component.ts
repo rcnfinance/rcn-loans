@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ChainService } from 'app/services/chain.service';
 import { DialogChainSelectorComponent } from 'app/dialogs/dialog-chain-selector/dialog-chain-selector.component';
@@ -9,19 +9,31 @@ import { DialogChainSelectorComponent } from 'app/dialogs/dialog-chain-selector/
   styleUrls: ['./chain-selector.component.scss']
 })
 export class ChainSelectorComponent {
+
+  @Input() isBridge = false;
+
   constructor(
     private dialog: MatDialog,
     private chainService: ChainService
   ) { }
 
+  /**
+   * Getter chain object
+   */
   get chain() {
     return this.chainService.chain;
   }
 
+  /**
+   * Getter chain config
+   */
   get config() {
     return this.chainService.config;
   }
 
+  /**
+   * Getter chainname
+   */
   get chainName() {
     return this.config.network.ui.fullname;
   }
@@ -30,6 +42,10 @@ export class ChainSelectorComponent {
    * Click on the selector to open an explanatory dialog
    */
   clickChainSelector() {
-    this.dialog.open(DialogChainSelectorComponent);
+    if (this.isBridge) return;
+
+    this.dialog.open(DialogChainSelectorComponent, {
+      panelClass: 'dialog-selector-wrapper'
+    });
   }
 }

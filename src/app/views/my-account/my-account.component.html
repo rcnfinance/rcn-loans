@@ -52,6 +52,7 @@
 
       <div class="page-content__chain">
         <app-chain-selector></app-chain-selector>
+        <app-chain-selector *ngIf="!isEthereum" [isBridge]="true"></app-chain-selector>
       </div>
 
       <div class="page-content__withdraw">

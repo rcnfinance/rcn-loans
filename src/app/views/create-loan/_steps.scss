@@ -169,6 +169,10 @@ input::-webkit-inner-spin-button {
             background: #99FE90 !important;
             width: 90px;
             margin-right: -31px;
+            &,
+            span {
+              transition: .1s;
+            }
             &::before {
               border-top-color: #99FE90;
             }
@@ -214,6 +218,7 @@ input::-webkit-inner-spin-button {
             width: 110px;
             height: 42px;
             margin-top: -16px;
+            margin-right: -41px;
             span {
               font-size: 13px;
             }
@@ -280,9 +285,10 @@ input::-webkit-inner-spin-button {
   &--submit {
     background: none;
     color: var(--app-color-primary);
-    font-size: 1.2em;
+    @include styled-font('Roboto', 600, 14px);
     svg {
       margin-left: 10px;
+      margin-bottom: 3px;
     }
   }
 }

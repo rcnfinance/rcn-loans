@@ -2,10 +2,11 @@
 </app-dialog-header>
 
 <mat-dialog-content class="dialog dialog--small">
-  <div class="dialog__content">
+  <div *ngIf="profile" class="dialog__content">
     <div class="profile d-flex align-items-center">
       <div class="profile__avatar">
         <img
+          *ngIf="profile"
           class="avatar"
           [src]="pohHost + profile?.photo"
         >
@@ -61,6 +62,37 @@
       <video class="poh__video" controls>
         <source [src]="pohHost + profile?.video" type="video/mp4">
       </video>
+    </div>
+  </div>
+  <div *ngIf="!profile" class="dialog__content">
+    <div class="profile d-flex align-items-center">
+      <div class="profile__avatar profile__avatar--skeleton">
+        <app-skeleton width="55px" height="55px" borderRadius="50px"></app-skeleton>
+      </div>
+      <div class="profile__account">
+        <div class="account">
+          <div class="account__name account__name--skeleton">
+            <app-skeleton height="15px" width="200px" borderRadius="15px"></app-skeleton>
+          </div>
+          <div class="account__bio">
+            <app-skeleton height="15px" width="125px" borderRadius="15px"></app-skeleton>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="address d-flex align-items-center">
+      <span class="address__id d-none d-md-inline-block">
+        <app-skeleton width="400px" borderRadius="15px"></app-skeleton>
+      </span>
+    </div>
+    <div class="actions">
+      <app-skeleton height="10px" width="75px" borderRadius="15px"></app-skeleton>
+      <span class="separator separator--skeleton d-none d-md-inline-block">
+      </span>
+      <app-skeleton height="10px" width="75px" borderRadius="15px"></app-skeleton>
+    </div>
+    <div class="poh">
+      <app-skeleton height="300px" width="530px" borderRadius="3px"></app-skeleton>
     </div>
   </div>
 </mat-dialog-content>
