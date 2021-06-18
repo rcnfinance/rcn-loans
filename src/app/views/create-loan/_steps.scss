@@ -169,6 +169,10 @@ input::-webkit-inner-spin-button {
             background: #99FE90 !important;
             width: 90px;
             margin-right: -31px;
+            &,
+            span {
+              transition: .1s;
+            }
             &::before {
               border-top-color: #99FE90;
             }
