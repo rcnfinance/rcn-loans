@@ -52,6 +52,8 @@ describe('Utils', () => {
     expect(Utils.formatAmount(-1)).toEqual('-1.00');
     expect(Utils.formatAmount(new BN(500))).toEqual('500.00');
     expect(Utils.formatAmount('500')).toEqual('500.00');
+    expect(Utils.formatAmount(0.0000006)).toEqual('0.0000006');
+    expect(Utils.formatAmount(0.0000006, 2)).toEqual('0.0000006');
     expect(Utils.formatAmount(null)).toEqual('0.00');
     expect(Utils.formatAmount(undefined)).toEqual('0.00');
     expect(Utils.formatAmount(NaN)).toEqual('0.00');

@@ -123,7 +123,7 @@ export class LoanUtils {
       );
     }
 
-    const poh = profile ? profile.uri : null;
+    const poh = profile ? (profile.registered || profile.uri) : null;
 
     return new Loan(
       engine,

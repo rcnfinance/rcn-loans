@@ -8,6 +8,7 @@ import { Web3Service } from 'app/services/web3.service';
 import { TitleService } from 'app/services/title.service';
 import { Engine } from 'app/models/loan.model';
 import { Utils } from 'app/utils/utils';
+import { ChainService } from 'app/services/chain.service';
 
 enum ViewDetails {
   Tools = 'tools',
@@ -34,7 +35,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private titleService: TitleService,
     private pohService: PohService,
-    private web3Service: Web3Service
+    private web3Service: Web3Service,
+    private chainService: ChainService
   ) { }
 
   ngOnInit() {
@@ -75,6 +77,13 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     this.dialog.open(DialogPohComponent, {
       data: { address }
     });
+  }
+
+  /**
+   * Getter is ethereum chain
+   */
+  get isEthereum() {
+    return this.chainService.isEthereum;
   }
 
   /**

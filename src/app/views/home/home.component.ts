@@ -124,7 +124,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   clickWallet(walletType: WalletType) {
     this.dialog.open(DialogWalletSelectComponent, {
-      panelClass: 'dialog-wallet-select-wrapper',
+      panelClass: 'dialog-selector-wrapper',
       data: { walletType }
     });
   }

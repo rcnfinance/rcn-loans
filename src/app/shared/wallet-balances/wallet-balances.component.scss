@@ -26,17 +26,5 @@ ul {
     &__amount {
       @include typography-caption(1);
     }
-    &--move-assets {
-      padding: 0;
-      @include styled-font('Roboto', 400, 10px);
-      text-align: center;
-      cursor: pointer;
-      a {
-        display: block;
-        padding: 8px 0;
-        color: inherit;
-        text-decoration: none;
-      }
-    }
   }
 }
