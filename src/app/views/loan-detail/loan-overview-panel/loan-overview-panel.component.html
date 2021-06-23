@@ -6,7 +6,7 @@
           <h3 class="page-content__subtitle">
             Borrow
           </h3>
-          <p class="page-content__amount">
+          <p class="page-content__amount page-content__borrow">
             {{ amountBorrow | formatAmount }} {{ loan.currency }}
           </p>
         </div>
@@ -14,7 +14,7 @@
           <h3 class="page-content__subtitle">
             Repay
           </h3>
-          <p class="page-content__amount">
+          <p class="page-content__amount page-content__repay">
             {{ amountRepay | formatAmount }} {{ loan.currency }}
           </p>
         </div>
@@ -28,7 +28,7 @@
             Annual rate:
           </span>
           <span class="card-rates__item-value">
-            <strong>
+            <strong class="page-content__interestrate">
               {{ interestRate | formatAmount: 0 }} %
             </strong>
           </span>
@@ -39,7 +39,7 @@
             Schedule:
           </span>
           <span class="card-rates__item-value">
-            <strong>
+            <strong class="page-content__duration">
               {{ duration }}
             </strong>
           </span>
@@ -138,7 +138,7 @@
                 <span class="accordion-details__item-label">
                   Penalty rate:
                 </span>
-                <span class="accordion-details__item-value">
+                <span class="accordion-details__item-value page-content__duration">
                   <ng-container *ngIf="interestRate">
                     {{ interestRate | formatAmount: 0 }}%
                   </ng-container>
