@@ -27,22 +27,22 @@
         display: flex;
         align-items: center;
       }
+      &__table-content:first-child {
+        padding-left: 8px;
+      }
       &__table-content {
         @include typography-subtitle(2);
         color: #989898;
-        flex-basis: 0;
-        flex-grow: 1;
-        max-width: 100%;
+        padding-left: 17px;
       }
       &__table-footer {
         display: flex;
         align-items: center;
-        flex-basis: 0;
-        flex-grow: 1;
         max-width: 100%;
         width: auto;
         svg {
           color: #6eb548;
+          margin-top: 3px;
         }
       }
       &__icon-warning {
@@ -50,14 +50,14 @@
         color: #eaa219;
         cursor: pointer;
       }
-      &__table-separator,
       &__icon-arrow {
-        margin-right: 0;
-        margin-left: 0;
         padding: 0;
         display: flex;
         align-items: center;
         width: auto;
+      }
+      &__icon-arrow {
+        margin-top: 4px;
       }
       &__text-currency {
         &--title,
@@ -104,6 +104,9 @@
             @include styled-font("Roboto", 700, 18px);
           }
         }
+        &__icon-arrow {
+          margin-top: 12px;
+        }
       }
       .accordion-details {
         mat-expansion-panel {
@@ -111,5 +114,11 @@
         }
       }
     }
+  }
+}
+
+::ng-deep {
+  mat-label.item__select-label {
+    font-size: 12px !important;
   }
 }
