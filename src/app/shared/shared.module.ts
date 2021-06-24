@@ -71,6 +71,7 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { DashboardListItemComponent } from './dashboard-list-item/dashboard-list-item.component';
 import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashboard-list-skeleton.component';
 import { DashboardListHeaderComponent } from './dashboard-list-header/dashboard-list-header.component';
+import { OnboardingTourComponent } from './onboarding-tour/onboarding-tour.component';
 
 @NgModule({
   imports: [
@@ -138,7 +139,8 @@ import { DashboardListHeaderComponent } from './dashboard-list-header/dashboard-
     ProgressBarComponent,
     DashboardListItemComponent,
     DashboardListSkeletonComponent,
-    DashboardListHeaderComponent
+    DashboardListHeaderComponent,
+    OnboardingTourComponent
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,
