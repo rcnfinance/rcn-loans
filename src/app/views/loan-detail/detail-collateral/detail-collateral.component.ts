@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogCollateralComponent } from '../../../dialogs/dialog-collateral/dialog-collateral.component';
 // App Models
 import { Utils } from './../../../utils/utils';

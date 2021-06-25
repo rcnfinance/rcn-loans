@@ -6,12 +6,8 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
-import {
-  MatDialog,
-  MatDialogRef,
-  MatSnackBar,
-  MatSnackBarHorizontalPosition
-} from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarHorizontalPosition } from '@angular/material/snack-bar';
 import * as BN from 'bn.js';
 import { Loan, Status } from 'app/models/loan.model';
 import { Utils } from 'app/utils/utils';

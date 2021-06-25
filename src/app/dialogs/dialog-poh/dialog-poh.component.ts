@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from 'environments/environment';
 import { PohProfile } from 'app/interfaces/poh-profile';
 import { PohService } from 'app/services/poh.service';

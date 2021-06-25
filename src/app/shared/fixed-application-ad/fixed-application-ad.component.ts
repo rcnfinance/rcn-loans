@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
 import { Ad } from 'app/services/application-ads.service';
 import { DialogChainSelectorComponent } from 'app/dialogs/dialog-chain-selector/dialog-chain-selector.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-fixed-application-ad',

@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSnackBar, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CollateralRequest } from 'app/interfaces/collateral-request';
 import { LoanRequest } from 'app/interfaces/loan-request';
 import { Loan } from 'app/models/loan.model';

@@ -1,7 +1,7 @@
 declare let window: any;
 
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Loan } from './../models/loan.model';
 import { Collateral } from './../models/collateral.model';
 import { Web3Service } from './web3.service';

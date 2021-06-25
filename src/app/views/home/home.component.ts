@@ -7,7 +7,7 @@ import {
   ElementRef
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { Web3Service } from 'app/services/web3.service';

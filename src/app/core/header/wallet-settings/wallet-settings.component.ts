@@ -7,7 +7,8 @@ import {
   transition
 } from '@angular/animations';
 import { Subscription } from 'rxjs';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Utils } from 'app/utils/utils';
 import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { DialogPohComponent } from 'app/dialogs/dialog-poh/dialog-poh.component';

@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as BN from 'bn.js';
 import { Subscription } from 'rxjs';
 import { Loan } from 'app/models/loan.model';

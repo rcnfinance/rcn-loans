@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { timer } from 'rxjs';
 import * as BN from 'bn.js';
 import { Loan, Engine, Status } from 'app/models/loan.model';

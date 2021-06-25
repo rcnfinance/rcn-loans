@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { Location } from '@angular/common';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Loan } from 'app/models/loan.model';
 import { Status } from 'app/models/collateral.model';
 import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';

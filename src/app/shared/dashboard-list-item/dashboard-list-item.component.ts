@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Loan, Status } from 'app/models/loan.model';
 import { Status as CollateralStatus } from 'app/models/collateral.model';

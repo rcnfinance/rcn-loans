@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { Loan, Status, LoanType } from 'app/models/loan.model';
 import { Status as CollateralStatus } from 'app/models/collateral.model';

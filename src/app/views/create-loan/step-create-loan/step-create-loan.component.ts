@@ -2,7 +2,7 @@ import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angu
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
 import { Utils } from 'app/utils/utils';
