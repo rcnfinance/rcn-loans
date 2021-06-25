@@ -64,10 +64,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   animationSectionLend = false;
   animationSectionBorrow = false;
 
-  @ViewChild('sectionConnect', { static: false }) sectionConnect: ElementRef;
-  @ViewChild('sectionManage', { static: false }) sectionManage: ElementRef;
-  @ViewChild('sectionLend', { static: false }) sectionLend: ElementRef;
-  @ViewChild('sectionBorrow', { static: false }) sectionBorrow: ElementRef;
+  @ViewChild('sectionConnect') sectionConnect: ElementRef;
+  @ViewChild('sectionManage') sectionManage: ElementRef;
+  @ViewChild('sectionLend') sectionLend: ElementRef;
+  @ViewChild('sectionBorrow') sectionBorrow: ElementRef;
 
   constructor(
     private router: Router,
