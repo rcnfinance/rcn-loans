@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MAT_LABEL_GLOBAL_OPTIONS, MatNativeDateModule, MatRippleModule } from '@angular/material';
+import { MAT_LABEL_GLOBAL_OPTIONS, MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_DIALOG_DEFAULT_OPTIONS, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
