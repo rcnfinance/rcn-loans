@@ -42,7 +42,8 @@ export class ContentWrapperComponent implements OnInit {
     private chainService: ChainService,
     private navrailService: NavrailService,
     private countriesService: CountriesService
-  ) {}
+  ) {
+  }
 
   async ngOnInit() {
     // Navbar toggled

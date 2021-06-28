@@ -32,6 +32,11 @@ import { SocialContainerComponent } from './social-container/social-container.co
 import { ChainSelectorComponent } from './chain-selector/chain-selector.component';
 import { SkeletonComponent } from './skeleton/skeleton.component';
 import { LoanListSkeletonComponent } from './loan-list-skeleton/loan-list-skeleton.component';
+import { DashboardListComponent } from './dashboard-list/dashboard-list.component';
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+import { DashboardListItemComponent } from './dashboard-list-item/dashboard-list-item.component';
+import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashboard-list-skeleton.component';
+import { DashboardListHeaderComponent } from './dashboard-list-header/dashboard-list-header.component';
 // App Buttons
 import { LendButtonComponent } from './lend-button/lend-button.component';
 import { DetailButtonComponent } from './detail-button/detail-button.component';
@@ -66,12 +71,7 @@ import { IdentityService } from './../services/identity.service';
 import { CountriesService } from './../services/countries.service';
 import { CollateralService } from './../services/collateral.service';
 import { EventsService } from './../services/events.service';
-import { DashboardListComponent } from './dashboard-list/dashboard-list.component';
-import { ProgressBarComponent } from './progress-bar/progress-bar.component';
-import { DashboardListItemComponent } from './dashboard-list-item/dashboard-list-item.component';
-import { DashboardListSkeletonComponent } from './dashboard-list-skeleton/dashboard-list-skeleton.component';
-import { DashboardListHeaderComponent } from './dashboard-list-header/dashboard-list-header.component';
-import { OnboardingTourComponent } from './onboarding-tour/onboarding-tour.component';
+import { OnboardingService } from './../services/onboarding.service';
 
 @NgModule({
   imports: [
@@ -139,8 +139,7 @@ import { OnboardingTourComponent } from './onboarding-tour/onboarding-tour.compo
     ProgressBarComponent,
     DashboardListItemComponent,
     DashboardListSkeletonComponent,
-    DashboardListHeaderComponent,
-    OnboardingTourComponent
+    DashboardListHeaderComponent
   ],
   entryComponents: [
     DialogInsufficientfundsComponent,
@@ -165,7 +164,8 @@ import { OnboardingTourComponent } from './onboarding-tour/onboarding-tour.compo
     IdentityService,
     CountriesService,
     CollateralService,
-    EventsService
+    EventsService,
+    OnboardingService
   ],
   exports: [
     FormsModule,

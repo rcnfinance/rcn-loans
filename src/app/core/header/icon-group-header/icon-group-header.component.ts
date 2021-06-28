@@ -1,8 +1,11 @@
-import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { setTimeout } from 'timers';
 import { Utils } from '../../../utils/utils';
 import { HeaderPopoverService } from '../../../services/header-popover.service';
 import { ChainService } from '../../../services/chain.service';
+import { OnboardingService } from '../../../services/onboarding.service';
+import { TooltipDataDisplay } from '../../../models/onboarding-tooltip.model';
 
 enum ViewType {
   OracleRates = 'rates',
@@ -21,6 +24,7 @@ enum ViewType {
 export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() account: string;
   @Input() hideActions: string;
+  @ViewChild('test', { static: false }) testComponent: ElementRef<HTMLInputElement>;
   shortAccount: string;
   viewDetail: string;
   selection: string;
@@ -30,7 +34,7 @@ export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
   subscriptionHeader: Subscription;
 
   constructor(
-    public headerPopoverService: HeaderPopoverService, private chainService: ChainService
+    public headerPopoverService: HeaderPopoverService, private chainService: ChainService, private onboardingService: OnboardingService
   ) { }
 
   ngOnInit() {
@@ -40,7 +44,10 @@ export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges() {
     const { account } = this;
-    if (account) this.shortAccount = Utils.shortAddress(account);
+    if (account) {
+      this.shortAccount = Utils.shortAddress(account);
+      setTimeout(() => this.testOnboardingTooltip(this.testComponent, TooltipDataDisplay.Bottom), 1);
+    }
   }
 
   ngOnDestroy() {
@@ -61,7 +68,7 @@ export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
    * Change viewDetail state to open/close notifications Component
    * @param selection ViewType (icon clicked)
    */
-  openDetail(selection: ViewType | string) {
+  openDetail(selection: ViewType | string | any) {
     this.previousSelection = this.selection;
     this.selection = selection;
 
@@ -98,5 +105,24 @@ export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
    */
   get isEthereum() {
     return this.chainService.isEthereum;
+  }
+
+  testOnboardingTooltip(component: ElementRef<HTMLInputElement>, display: TooltipDataDisplay) {
+    if (component) {
+      this.onboardingService.createTooltip(component.nativeElement,
+        {
+          title: 'NEW FEATURE',
+          subtitle: 'Now you can Create Loans and borrow some crypto on our platform. You just have to click here.',
+          display,
+          actions: [
+            { title: 'Left', method: () => this.testOnboardingTooltip(component, TooltipDataDisplay.Left) },
+            { title: 'Right', method: () => this.testOnboardingTooltip(component, TooltipDataDisplay.Right) },
+            { title: 'Bottom', method: () => this.testOnboardingTooltip(component, TooltipDataDisplay.Bottom) },
+            { title: 'Top', method: () => this.testOnboardingTooltip(component, TooltipDataDisplay.Top) }
+          ]
+        },
+        { width: 300, background: '#7ADDB5', color: '#121315' }
+      );
+    }
   }
 }

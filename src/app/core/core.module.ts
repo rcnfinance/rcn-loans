@@ -7,6 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 import { HeaderComponent } from './header/header.component';
 import { NavrailComponent } from './navrail/navrail.component';
+import { OnboardingTooltipComponent } from './onboarding-tooltip/onboarding-tooltip.component';
 import { IconGroupHeaderComponent } from './header/icon-group-header/icon-group-header.component';
 import { NotificationsComponent } from './header/notifications/notifications.component';
 import { NotificationItemComponent } from './header/notifications/notification-item/notification-item.component';
@@ -34,7 +35,8 @@ import { OracleRatesComponent } from './header/oracle-rates/oracle-rates.compone
     WalletWithdrawComponent,
     WalletSettingsComponent,
     NotificationWalletBalancesComponent,
-    OracleRatesComponent
+    OracleRatesComponent,
+    OnboardingTooltipComponent
   ],
   exports: [
     ContentWrapperComponent,

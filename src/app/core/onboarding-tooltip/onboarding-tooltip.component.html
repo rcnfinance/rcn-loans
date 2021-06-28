@@ -1,0 +1,31 @@
+<div
+  *ngIf="visible"
+  [@fadeIn]="visible"
+  class="tooltip"
+  [ngStyle]="{
+    'background-color': background,
+    color: color,
+    width: width+'px',
+    top: top+'px',
+    left: left+'px'
+  }"
+>
+  <div class="tooltip__content">
+    <p class="tooltip__title">{{ title }}</p>
+    <p class="tooltip__subtitle">{{ subtitle }}</p>
+    <div class="tooltip__button-container">
+      <button
+        *ngFor="let action of actions"
+        (click)="clickAction(action)"
+        mat-button
+      >
+        {{ action.title }}
+      </button>
+    </div>
+    <div
+      class="tooltip__triangle"
+      [ngClass]="'tooltip__triangle-'+display"
+      [ngStyle]="{ 'border-bottom-color': background }"
+    ></div>
+  </div>
+</div>

@@ -5,6 +5,7 @@
 >
   <ng-container *ngIf="!hideActions">
     <div
+      #test
       class="button button--balance ml-2 pl-1"
       (click)="openDetail('rates')"
       [ngClass]="{'active': isDetail('rates')}"

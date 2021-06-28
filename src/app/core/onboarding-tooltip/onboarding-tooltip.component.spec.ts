@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OnboardingTourComponent } from './onboarding-tour.component';
+import { OnboardingTooltipComponent } from './onboarding-tooltip.component';
 
 describe('OnboardingTourComponent', () => {
-  let component: OnboardingTourComponent;
-  let fixture: ComponentFixture<OnboardingTourComponent>;
+  let component: OnboardingTooltipComponent;
+  let fixture: ComponentFixture<OnboardingTooltipComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OnboardingTourComponent ]
+      declarations: [ OnboardingTooltipComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OnboardingTourComponent);
+    fixture = TestBed.createComponent(OnboardingTooltipComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
