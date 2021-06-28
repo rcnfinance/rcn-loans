@@ -8,7 +8,7 @@ import { Web3Service } from 'app/services/web3.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { CurrenciesService } from 'app/services/currencies.service';
 import { EventsService, Category } from 'app/services/events.service';
-import { TxService, Tx, Type } from 'app/services/tx.service';
+import { TxLegacyService, Tx, Type } from 'app/services/tx-legacy.service';
 import { ChainService } from 'app/services/chain.service';
 
 class Operator {
@@ -76,7 +76,7 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
     private eventsService: EventsService,
-    private txService: TxService,
+    private txService: TxLegacyService,
     private chainService: ChainService
   ) {
     this.closeDialog = new EventEmitter();

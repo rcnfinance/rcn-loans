@@ -15,7 +15,7 @@ import { ContractsService } from 'app/services/contracts.service';
 import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
 import { ChainService } from 'app/services/chain.service';
-import { Tx } from 'app/services/tx.service';
+import { Tx } from 'app/services/tx-legacy.service';
 
 @Component({
   selector: 'app-step-create-loan',

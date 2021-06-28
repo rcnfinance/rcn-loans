@@ -5,7 +5,7 @@ import { Loan } from './../../../models/loan.model';
 import { Collateral } from './../../../models/collateral.model';
 // App Services
 import { CurrenciesService } from './../../../services/currencies.service';
-import { Tx } from './../../../services/tx.service';
+import { Tx } from './../../../services/tx-legacy.service';
 
 @Component({
   selector: 'app-create-loan-card',

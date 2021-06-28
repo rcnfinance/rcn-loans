@@ -14,7 +14,7 @@ import { CollateralService } from 'app/services/collateral.service';
 import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
 import { EventsService } from 'app/services/events.service';
 import { ChainService } from 'app/services/chain.service';
-import { Tx } from 'app/services/tx.service';
+import { Tx } from 'app/services/tx-legacy.service';
 
 @Component({
   selector: 'app-step-create-collateral',

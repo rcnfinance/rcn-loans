@@ -8,7 +8,7 @@ import { Collateral } from './../../../models/collateral.model';
 // App Services
 import { CollateralService } from './../../../services/collateral.service';
 import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
-import { Tx, TxService } from './../../../services/tx.service';
+import { Tx, TxLegacyService } from './../../../services/tx-legacy.service';
 
 @Component({
   selector: 'app-detail-collateral',
@@ -41,7 +41,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
     private dialog: MatDialog,
     private collateralService: CollateralService,
     private currenciesService: CurrenciesService,
-    private txService: TxService
+    private txService: TxLegacyService
   ) { }
 
   ngOnInit() {

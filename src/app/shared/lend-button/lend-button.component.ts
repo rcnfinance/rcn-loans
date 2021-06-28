@@ -17,7 +17,7 @@ import { Loan, Status } from 'app/models/loan.model';
 import { Utils } from 'app/utils/utils';
 import { LoanUtils } from 'app/utils/loan-utils';
 import { ContractsService } from 'app/services/contracts.service';
-import { TxService, Tx, Type } from 'app/services/tx.service';
+import { TxLegacyService, Tx, Type } from 'app/services/tx-legacy.service';
 import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { ProxyApiService } from 'app/services/proxy-api.service';
 import { Web3Service } from 'app/services/web3.service';
@@ -56,7 +56,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
 
   constructor(
     private contractsService: ContractsService,
-    private txService: TxService,
+    private txService: TxLegacyService,
     private proxyApiService: ProxyApiService,
     private web3Service: Web3Service,
     private countriesService: CountriesService,

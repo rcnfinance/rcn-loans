@@ -12,7 +12,7 @@ import { HeaderPopoverService } from 'app/services/header-popover.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { Web3Service } from 'app/services/web3.service';
 import { EventsService } from 'app/services/events.service';
-import { Tx, Type, TxService } from 'app/services/tx.service';
+import { Tx, Type, TxLegacyService } from 'app/services/tx-legacy.service';
 import { CurrenciesService } from 'app/services/currencies.service';
 import { ChainService } from 'app/services/chain.service';
 import { Utils } from 'app/utils/utils';
@@ -67,7 +67,7 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
   constructor(
     private cdRef: ChangeDetectorRef,
     private headerPopoverService: HeaderPopoverService,
-    private txService: TxService,
+    private txService: TxLegacyService,
     private web3Service: Web3Service,
     private chainService: ChainService,
     private eventsService: EventsService,

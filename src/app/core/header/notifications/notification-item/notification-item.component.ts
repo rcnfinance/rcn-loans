@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Notification } from 'app/models/notification.model';
 import { Utils } from 'app/utils/utils';
 import { ChainService } from 'app/services/chain.service';
-import { TxService } from 'app/services/tx.service';
+import { TxLegacyService } from 'app/services/tx-legacy.service';
 
 @Component({
   selector: 'app-notification-item',
@@ -18,7 +18,7 @@ export class NotificationItemComponent implements OnInit {
 
   constructor(
     private chainService: ChainService,
-    private txService: TxService
+    private txService: TxLegacyService
   ) {}
 
   openTx() {

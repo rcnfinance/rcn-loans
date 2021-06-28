@@ -8,7 +8,7 @@ import { ContractsService } from 'app/services/contracts.service';
 import { NavrailService } from 'app/services/navrail.service';
 import { ChainService } from 'app/services/chain.service';
 import { Web3Service } from 'app/services/web3.service';
-import { TxService, Tx, Type } from 'app/services/tx.service';
+import { TxLegacyService, Tx, Type } from 'app/services/tx-legacy.service';
 import { Utils } from 'app/utils/utils';
 
 enum Steps {
@@ -45,7 +45,7 @@ export class DialogBorrowComponent implements OnInit {
     private navrailService: NavrailService,
     private chainService: ChainService,
     private web3Service: Web3Service,
-    private txService: TxService,
+    private txService: TxLegacyService,
     @Inject(MAT_DIALOG_DATA) private data: {
       loan: Loan,
       loanRequest: LoanRequest,

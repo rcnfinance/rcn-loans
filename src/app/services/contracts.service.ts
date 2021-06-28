@@ -5,7 +5,7 @@ import { Loan, LoanType, Engine, Oracle } from 'app/models/loan.model';
 import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
 import { LoanUtils } from 'app/utils/loan-utils';
 import { Web3Service } from 'app/services/web3.service';
-import { TxService } from 'app/services/tx.service';
+import { TxLegacyService } from 'app/services/tx-legacy.service';
 import { LoanTypeService } from 'app/services/loan-type.service';
 import { ApiService } from 'app/services/api.service';
 import { ChainService } from 'app/services/chain.service';
@@ -46,7 +46,7 @@ export class ContractsService {
   constructor(
     private http: HttpClient,
     private web3Service: Web3Service,
-    private txService: TxService,
+    private txService: TxLegacyService,
     private apiService: ApiService,
     private loanTypeService: LoanTypeService,
     private chainService: ChainService,

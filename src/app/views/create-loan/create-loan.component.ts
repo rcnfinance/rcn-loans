@@ -18,7 +18,7 @@ import { TitleService } from 'app/services/title.service';
 import { NavrailService } from 'app/services/navrail.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
-import { Tx } from 'app/services/tx.service';
+import { Tx } from 'app/services/tx-legacy.service';
 import { ChainService } from 'app/services/chain.service';
 import { Utils } from 'app/utils/utils';
 

@@ -13,7 +13,7 @@ import { Web3Service } from 'app/services/web3.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { CollateralService } from 'app/services/collateral.service';
 import { ChainService } from 'app/services/chain.service';
-import { TxService, Tx } from 'app/services/tx.service';
+import { TxLegacyService, Tx } from 'app/services/tx-legacy.service';
 
 @Component({
   selector: 'app-dialog-collateral',
@@ -46,7 +46,7 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     private chainService: ChainService,
     private contractsService: ContractsService,
     private collateralService: CollateralService,
-    private txService: TxService,
+    private txService: TxLegacyService,
     @Inject(MAT_DIALOG_DATA) public data: {
       loan: Loan,
       collateral: Collateral,

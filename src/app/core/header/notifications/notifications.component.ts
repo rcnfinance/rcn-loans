@@ -10,7 +10,7 @@ import { Engine } from 'app/models/loan.model';
 import { Notification, TxObject } from 'app/models/notification.model';
 import { HeaderPopoverService } from 'app/services/header-popover.service';
 import { ChainService } from 'app/services/chain.service';
-import { TxService, Tx } from 'app/services/tx.service';
+import { TxLegacyService, Tx } from 'app/services/tx-legacy.service';
 import { Utils } from 'app/utils/utils';
 
 @Component({
@@ -52,7 +52,7 @@ export class NotificationsComponent implements OnInit {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private txService: TxService,
+    private txService: TxLegacyService,
     private chainService: ChainService,
     public headerPopoverService: HeaderPopoverService
   ) { }

@@ -6,7 +6,7 @@ import {
 } from '@angular/material';
 import { EventsService, Category } from 'app/services/events.service';
 import { ContractsService } from 'app/services/contracts.service';
-import { TxService, Tx, Type } from 'app/services/tx.service';
+import { TxLegacyService, Tx, Type } from 'app/services/tx-legacy.service';
 import { Web3Service } from 'app/services/web3.service';
 import { ChainService } from 'app/services/chain.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
@@ -37,7 +37,7 @@ export class TransferButtonComponent implements OnInit, OnDestroy {
 
   constructor(
     private contractService: ContractsService,
-    private txService: TxService,
+    private txService: TxLegacyService,
     private eventsService: EventsService,
     private web3Service: Web3Service,
     private chainService: ChainService,

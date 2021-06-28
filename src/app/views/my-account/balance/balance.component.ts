@@ -7,7 +7,7 @@ import { EventsService } from 'app/services/events.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { ChainService } from 'app/services/chain.service';
 import { CurrenciesService } from 'app/services/currencies.service';
-import { Tx, Type, TxService } from 'app/services/tx.service';
+import { Tx, Type, TxLegacyService } from 'app/services/tx-legacy.service';
 
 @Component({
   selector: 'app-component-balance',
@@ -33,7 +33,7 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
     private contractService: ContractsService,
     private chainService: ChainService,
     private currenciesService: CurrenciesService,
-    private txService: TxService
+    private txService: TxLegacyService
   ) { }
 
   ngOnInit() {

@@ -15,7 +15,7 @@ import { CurrenciesService } from 'app/services/currencies.service';
 import { IdentityService } from 'app/services/identity.service';
 import { Web3Service } from 'app/services/web3.service';
 import { BrandingService } from 'app/services/branding.service';
-import { Type } from 'app/services/tx.service';
+import { Type } from 'app/services/tx-legacy.service';
 import { EventsService } from 'app/services/events.service';
 import { ChainService } from 'app/services/chain.service';
 import { LoanTypeService } from 'app/services/loan-type.service';

@@ -13,7 +13,7 @@ import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contr
 import { Web3Service } from 'app/services/web3.service';
 import { ChainService } from 'app/services/chain.service';
 import { ContractsService } from 'app/services/contracts.service';
-import { TxService, Tx, Type } from 'app/services/tx.service';
+import { TxLegacyService, Tx, Type } from 'app/services/tx-legacy.service';
 import { EventsService, Category } from 'app/services/events.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
 
@@ -42,7 +42,7 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
     private contractsService: ContractsService,
     private eventsService: EventsService,
     private chainService: ChainService,
-    private txService: TxService,
+    private txService: TxLegacyService,
     private walletConnectService: WalletConnectService,
     public snackBar: MatSnackBar
   ) { }

@@ -5,7 +5,7 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
-import { TxService, Tx, Type } from 'app/services/tx.service';
+import { TxLegacyService, Tx, Type } from 'app/services/tx-legacy.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { Loan } from 'app/models/loan.model';
 import { Currency } from 'app/utils/currencies';
@@ -47,7 +47,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
 
   constructor(
     private contractsService: ContractsService,
-    private txService: TxService,
+    private txService: TxLegacyService,
     private eventsService: EventsService,
     private web3Service: Web3Service,
     private chainService: ChainService,

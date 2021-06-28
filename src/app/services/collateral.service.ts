@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as BN from 'bn.js';
 import { ContractsService } from './contracts.service';
-import { Tx, Type } from '../services/tx.service';
+import { Tx, Type } from '../services/tx-legacy.service';
 import { Loan } from './../models/loan.model';
 import { Collateral } from './../models/collateral.model';
 import { Utils } from './../utils/utils';

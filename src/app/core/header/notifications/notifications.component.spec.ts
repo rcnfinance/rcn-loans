@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from '../../../shared/shared.module';
 import { NotificationsComponent } from './notifications.component';
 import { HeaderPopoverService } from '../../../services/header-popover.service';
-import { Tx } from '../../../services/tx.service';
+import { Tx } from '../../../services/tx-legacy.service';
 import { readComponent } from '../../../utils/utils.test';
 
 describe('NotificationsComponent', () => {
