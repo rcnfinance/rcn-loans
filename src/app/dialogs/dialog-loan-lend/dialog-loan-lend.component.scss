@@ -10,7 +10,7 @@
   .dialog-content {
     .item {
       &__select-label {
-        @include styled-font("Roboto", 400, 14px);
+        @include typography-body(3);
         color: #989898;
       }
       &__select-value,
@@ -38,7 +38,6 @@
       &__table-footer {
         display: flex;
         align-items: center;
-        max-width: 100%;
         width: auto;
         svg {
           color: #6eb548;
@@ -62,7 +61,8 @@
       &__text-currency {
         &--title,
         &--subtitle {
-          @include styled-font("Roboto", 700, 16px);
+          @include typography-body(1);
+          font-weight: 700;
         }
       }
     }
@@ -98,10 +98,10 @@
       .item {
         &__text-currency {
           &--title {
-            @include styled-font("Roboto", 700, 26px);
+            @include typography-headline(4);
           }
           &--subtitle {
-            @include styled-font("Roboto", 700, 18px);
+            @include typography-subtitle(2);
           }
         }
         &__icon-arrow {
