@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute, NavigationEnd, Event } from '@angular/router';
 import { WalletType } from './../../interfaces/wallet.interface';
 // App Component

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { environment } from 'environments/environment';
 import { DialogPohComponent } from 'app/dialogs/dialog-poh/dialog-poh.component';

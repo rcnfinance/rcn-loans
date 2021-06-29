@@ -1,9 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import {
-  MatSnackBar,
-  MatDialog,
-  MatSnackBarHorizontalPosition
-} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarHorizontalPosition } from '@angular/material/snack-bar';
 import { EventsService, Category } from 'app/services/events.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { TxService, Tx, Type } from 'app/services/tx.service';

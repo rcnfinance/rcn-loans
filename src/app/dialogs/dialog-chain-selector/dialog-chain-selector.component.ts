@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ChainService } from 'app/services/chain.service';
 import { Web3Service } from 'app/services/web3.service';
 import { DialogClientAccountComponent } from 'app/dialogs/dialog-client-account/dialog-client-account.component';

@@ -9,7 +9,7 @@ describe('NavrailService', () => {
   }));
 
   it('should be created', () => {
-    const service: NavrailService = TestBed.get(NavrailService);
+    const service: NavrailService = TestBed.inject(NavrailService);
     expect(service).toBeTruthy();
   });
 });

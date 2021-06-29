@@ -8,7 +8,7 @@ describe('PohService', () => {
   }));
 
   it('should be created', () => {
-    const service: PohService = TestBed.get(PohService);
+    const service: PohService = TestBed.inject(PohService);
     expect(service).toBeTruthy();
   });
 });

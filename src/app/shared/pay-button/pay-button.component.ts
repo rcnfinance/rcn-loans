@@ -1,10 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import {
-  MatDialog,
-  MatDialogRef,
-  MatSnackBar,
-  MatSnackBarHorizontalPosition
-} from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarHorizontalPosition } from '@angular/material/snack-bar';
 import { TxService, Tx, Type } from 'app/services/tx.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { Loan } from 'app/models/loan.model';

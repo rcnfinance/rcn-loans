@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Engine } from 'app/models/loan.model';
 import { environment } from 'environments/environment';
 import { Web3Service } from 'app/services/web3.service';

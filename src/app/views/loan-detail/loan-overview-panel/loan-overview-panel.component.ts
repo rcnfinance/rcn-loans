@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ChainService } from 'app/services/chain.service';
 import { CurrenciesService } from 'app/services/currencies.service';
 import { Loan, Status, LoanType } from 'app/models/loan.model';

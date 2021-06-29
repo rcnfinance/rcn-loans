@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { WalletLogo, WalletConnection, WalletType } from 'app/interfaces/wallet.interface';
 // App Component
 import { DialogWalletSelectComponent } from 'app/dialogs/dialog-wallet-select/dialog-wallet-select.component';

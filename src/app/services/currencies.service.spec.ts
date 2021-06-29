@@ -12,7 +12,7 @@ describe('CurrenciesService', () => {
   }));
 
   beforeEach(() => {
-    service = TestBed.get(CurrenciesService);
+    service = TestBed.inject(CurrenciesService);
   });
 
   it('should be created', () => {

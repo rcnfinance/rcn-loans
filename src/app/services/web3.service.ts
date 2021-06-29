@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 const Web3 = require('web3');
 const WalletLink = require('walletlink');
 import WalletConnectProvider from '@walletconnect/web3-provider';

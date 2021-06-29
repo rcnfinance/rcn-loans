@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Input, HostListener } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { timer } from 'rxjs';
 import * as moment from 'moment';
 import { ApiService } from 'app/services/api.service';
