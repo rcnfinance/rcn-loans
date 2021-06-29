@@ -54,7 +54,7 @@
               >
                 My Loans
               </a> -->
-              <ng-container *ngIf="!hasAccount">
+              <ng-container *ngIf="!hasAccount && !loading">
                 <div class="nav__item nav__item--chain mr-2">
                   <app-chain-selector></app-chain-selector>
                 </div>
@@ -64,6 +64,9 @@
                 >
                   Connect
                 </div>
+              </ng-container>
+              <ng-container *ngIf="loading">
+                <app-header-skeleton></app-header-skeleton>
               </ng-container>
               <div
                 class="align-items-center px-0"

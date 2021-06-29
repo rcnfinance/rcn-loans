@@ -16,6 +16,7 @@ import { NotificationWalletBalancesComponent } from './header/notification-walle
 // App Directives
 import { ClickOutsideDirective } from '../directives/click-outside.directive';
 import { OracleRatesComponent } from './header/oracle-rates/oracle-rates.component';
+import { HeaderSkeletonComponent } from './header-skeleton/header-skeleton.component';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { OracleRatesComponent } from './header/oracle-rates/oracle-rates.compone
     WalletWithdrawComponent,
     WalletSettingsComponent,
     NotificationWalletBalancesComponent,
-    OracleRatesComponent
+    OracleRatesComponent,
+    HeaderSkeletonComponent
   ],
   exports: [
     ContentWrapperComponent,

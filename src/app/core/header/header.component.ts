@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
   title: string;
   hideMobileHeader: boolean;
   isHome: boolean;
+  loading = false;
 
   navToggle: boolean; // Navbar toggled
 
@@ -39,10 +40,12 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loading = true;
     this.sidebarService.currentToggle.subscribe(navToggle => this.navToggle = navToggle);
     this.titleService.currentTitle.subscribe(title => this.title = title);
     this.handleLoginEvents();
     this.listenRouterEvents();
+    if (!window.localStorage.getItem('walletConnected')) this.loading = false;
   }
 
   /**
@@ -57,6 +60,7 @@ export class HeaderComponent implements OnInit {
    */
   handleLoginEvents() {
     this.web3Service.loginEvent.subscribe(async (loggedIn) => {
+      this.loading = false;
       const web3 = this.web3Service.web3;
       if (loggedIn) {
         const account = await this.web3Service.getAccount();
