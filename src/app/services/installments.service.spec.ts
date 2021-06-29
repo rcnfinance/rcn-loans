@@ -16,7 +16,7 @@ describe('InstallmentsService', () => {
     })
     .compileComponents();
 
-    service = TestBed.get(InstallmentsService);
+    service = TestBed.inject(InstallmentsService);
   }));
 
   it('should be created', () => {

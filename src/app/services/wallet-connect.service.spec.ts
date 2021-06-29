@@ -15,7 +15,7 @@ describe('WalletConnectService', () => {
   }));
 
   beforeEach(() => {
-    service = TestBed.get(WalletConnectService);
+    service = TestBed.inject(WalletConnectService);
   });
 
   it('should be created', () => {

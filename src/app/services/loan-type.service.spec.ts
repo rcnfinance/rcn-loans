@@ -24,7 +24,7 @@ describe('LoanTypeService', () => {
   }));
 
   beforeEach(() => {
-    service = TestBed.get(LoanTypeService);
+    service = TestBed.inject(LoanTypeService);
   });
 
   it('should be created', () => {

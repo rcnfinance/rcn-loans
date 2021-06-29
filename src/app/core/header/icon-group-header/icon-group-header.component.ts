@@ -61,7 +61,7 @@ export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
    * Change viewDetail state to open/close notifications Component
    * @param selection ViewType (icon clicked)
    */
-  openDetail(selection: ViewType | string) {
+  openDetail(selection: ViewType | any) {
     this.previousSelection = this.selection;
     this.selection = selection;
 
