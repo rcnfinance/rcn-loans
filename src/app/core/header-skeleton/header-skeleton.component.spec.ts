@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HeaderSkeletonComponent } from './header-skeleton.component';
 
 describe('HeaderSkeletonComponent', () => {
@@ -8,7 +8,8 @@ describe('HeaderSkeletonComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HeaderSkeletonComponent ]
+      declarations: [ HeaderSkeletonComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));
