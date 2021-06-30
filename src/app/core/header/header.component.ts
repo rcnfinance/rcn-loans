@@ -45,7 +45,7 @@ export class HeaderComponent implements OnInit {
     this.titleService.currentTitle.subscribe(title => this.title = title);
     this.handleLoginEvents();
     this.listenRouterEvents();
-    if (!window.localStorage.getItem('walletConnected')) this.loading = false;
+    this.validateLoading();
   }
 
   /**
@@ -111,5 +111,15 @@ export class HeaderComponent implements OnInit {
         this.isHome = url === '/';
       }
     });
+  }
+
+  private validateLoading() {
+    const walletConnected = window.localStorage.getItem('walletConnected');
+    const lastChainSelected = window.localStorage.getItem('lastChainSelected');
+    if (!walletConnected) this.loading = false;
+    else {
+      const chainConnected = '' + JSON.parse(walletConnected).network;
+      if (chainConnected !== lastChainSelected) this.loading = false;
+    }
   }
 }
