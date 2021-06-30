@@ -17,6 +17,7 @@ import { NotificationWalletBalancesComponent } from './header/notification-walle
 import { ClickOutsideDirective } from '../directives/click-outside.directive';
 import { OracleRatesComponent } from './header/oracle-rates/oracle-rates.component';
 import { HeaderSkeletonComponent } from './header-skeleton/header-skeleton.component';
+import { NavrailSkeletonComponent } from './navrail-skeleton/navrail-skeleton.component';
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { HeaderSkeletonComponent } from './header-skeleton/header-skeleton.compo
     WalletSettingsComponent,
     NotificationWalletBalancesComponent,
     OracleRatesComponent,
-    HeaderSkeletonComponent
+    HeaderSkeletonComponent,
+    NavrailSkeletonComponent
   ],
   exports: [
     ContentWrapperComponent,

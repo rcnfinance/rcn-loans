@@ -1,0 +1,47 @@
+<div class="navrail d-none d-lg-block">
+  <div class="navrail__logo">
+    <img src="./assets/isologotypo.svg" alt="RCN" class="logo">
+  </div>
+  <div class="navrail__menu">
+    <div class="menu">
+      <a *ngFor="let number of [0,1,2,3]" class="menu__item">
+        <span class="menu__item-label">
+          <div class="row">
+              <div class="col-3">
+                <app-skeleton width="19px" height="19px" borderRadius="19px"></app-skeleton>
+              </div>
+              <div class="col-8 mt-1">
+                <app-skeleton width="54px" height="12px" borderRadius="2px"></app-skeleton>
+              </div>
+          </div>
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="navrail__footer">
+    <div class="footer">
+      <div class="footer__menu">
+        <div class="menu">
+          <a *ngFor="let number of [0,1,2]"  class="menu__item">
+            <app-skeleton width="55px" height="12px" borderRadius="2px"></app-skeleton>
+          </a>
+        </div>
+      </div>
+      <div class="footer__menu">
+        <a class="menu__item menu__item--social-networks">
+            <app-skeleton width="100px" height="12px" borderRadius="2px"></app-skeleton>
+        </a>
+      </div>
+      <div class="footer__icons">
+        <div class="icons">
+          <a class="icons__item">
+            <app-skeleton width="55px" height="12px" borderRadius="2px"></app-skeleton>
+          </a>
+        </div>
+      </div>
+      <div class="footer__copyright">
+        <app-skeleton width="100px" height="12px" borderRadius="2px"></app-skeleton>
+      </div>
+    </div>
+  </div>
+</div>
