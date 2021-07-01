@@ -7,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavrailSkeletonComponent implements OnInit {
 
-  constructor() { }
+  visible = true;
+
+  constructor() {
+    if (window.location.pathname === '/') this.visible = false;
+  }
 
   ngOnInit() {
   }
