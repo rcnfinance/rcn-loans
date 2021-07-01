@@ -1,11 +1,4 @@
-<ngx-spinner
-  bdColor="rgba(18,19,21,0.2)"
-  size="medium"
-  color="#fff"
-  type="ball-clip-rotate-multiple"
-  [name]="pageId"
-></ngx-spinner>
-
+<app-loan-detail-skeletons *ngIf="!loan"></app-loan-detail-skeletons>
 <div class="loan-detail">
   <section
     *ngIf="loan"
@@ -193,7 +186,7 @@
             Collateral
           </h2>
           <h2
-            *ngIf="identityName !== 'Unknown'"
+            *ngIf="loan && (identityName !== 'Unknown')"
             class="page-title page-title--tab ml-3"
             [class.page-title--active]="isDetail('identity')"
             (click)="openDetail('identity')"
@@ -256,5 +249,6 @@
         <app-detail-history [loan]="loan" [hasPoh]="hasPoh"></app-detail-history>
       </div>
     </div>
+    
   </section>
 </div>

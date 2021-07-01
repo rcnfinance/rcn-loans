@@ -1,0 +1,31 @@
+.skeleton-primary {
+    background: #262629;
+    &__box {
+        background: #313134;
+        border-radius: 4px;
+    }
+    &__circle {
+        position: absolute;
+        top: 170px;
+        width: 23px;
+        height: 23px;
+        border-radius: 23px;
+        background: #313134;
+    }
+}
+.skeleton-secondary {
+    background: #212124;
+    &__text-margin {
+        margin-top: -10px;
+    }
+}
+.skeleton-footer {
+    background: #212124;
+    &__box {
+        background: #313134;
+        border: 4px;
+    }
+    &__text-margin {
+        margin-top: -8px;
+    }
+}
