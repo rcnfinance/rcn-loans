@@ -29,3 +29,82 @@
         margin-top: -8px;
     }
 }
+.skeleton-mobile {
+    background: #121315;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    top: 0%;
+    &__background-1 {
+        background: #262629;
+    }
+    &__background-2 {
+        background: #212124;
+        border-radius: 3px;
+    }
+    &__background-3 {
+        background: #313134;
+        border-radius: 6px;
+    }
+    &__circle-container {
+        margin: 50px auto;
+        position: relative;
+        height: 189px;
+        width: 189px;
+    }
+    &__circle-1 {
+        width: 189px;
+        height: 189px;
+        border-radius: 189px;
+        top: 0%;
+        left: 0%;
+        position: absolute;
+        background: #212124;
+        border: 13px solid #424345;
+        z-index: 1;
+    }
+    &__circle-2 {
+        width: 55px;
+        height: 55px;
+        border-radius: 55px;
+        top: 66px;
+        left: 66px;
+        position: absolute;
+        z-index: 2;
+    }
+    &__minicircle {
+        width: 4px;
+        height: 4px;
+        border-radius: 4px;
+        position: absolute;
+        background: #424345;
+        &--1 {
+            top: -15px;
+            left: 90px;
+        }
+        &--2 {
+            top: 15px;
+            right: 15px
+        }
+        &--3 {
+            top: 90px;
+            right: -12px;
+        }
+        &--4 {
+            bottom: 15px;
+            right: 15px;
+        }
+        &--5 {
+            bottom: 15px;
+            left: 15px;
+        }
+        &--6 {
+            top: 90px;
+            left: -12px;
+        }
+        &--7 {
+            left: 15px;
+            top: 15px;
+        }
+    }
+}
