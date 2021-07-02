@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, interval } from 'rxjs';
-import { find } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { Tx } from 'app/models/tx.model';
+import { Engine } from 'app/models/loan.model';
+import { Type } from 'app/interfaces/tx';
+import { ChainService } from 'app/services/chain.service';
 import { Web3Service } from 'app/services/web3.service';
 import { promisify } from 'app/utils/utils';
 
@@ -16,6 +19,7 @@ export class TxService {
   private TX_KEY = 'txMemory';
 
   constructor(
+    private chainService: ChainService,
     private web3service: Web3Service
   ) {
     this.recoveryTx();
@@ -23,7 +27,8 @@ export class TxService {
   }
 
   get tx(): Tx[] {
-    return this.txMemory;
+    const { chain } = this.chainService;
+    return this.txMemory.filter((tx) => tx.chain === chain);
   }
 
   set tx(tx: Tx[]) {
@@ -36,8 +41,75 @@ export class TxService {
    * @return TX Object
    */
   getTx(hash: string): Tx {
+    const { tx: txMemory } = this;
+    const { chain } = this.chainService;
+    return txMemory.find((tx) => hash === tx.hash && chain === tx.chain);
+  }
+
+  /**
+   * Submit a TX
+   * @param tx TX
+   */
+  addTx(tx: Tx): void {
+    const { tx: txMemory } = this;
+    txMemory.push(tx);
+
+    this.tx = txMemory;
+
+    // save new TX memory on storage
+    const { TX_KEY } = this;
+    localStorage.setItem(TX_KEY, JSON.stringify(txMemory));
+  }
+
+  /**
+   * Build a TX
+   * @param hash TX hash
+   * @param engine TX engine
+   * @param from From address
+   * @param to To address
+   * @param type TX type
+   * @param data TX data (optional)
+   * @return Built TX
+   */
+  async buildTx(
+    hash: string,
+    engine: Engine,
+    to: string,
+    type: Type,
+    data?: any
+  ) {
+    const { chain } = this.chainService;
+    const from = await this.web3service.getAccount();
+    return new Tx(chain, engine, hash, from, to, false, false, false, type, data);
+  }
+
+  /**
+   * Get the last TX active by type
+   * @param type TX type
+   * @param key TX data key to filter
+   * @param value TX data value to filter
+   * @return TX Object
+   */
+  getLastTxByType(type: Type, key?: string, value?: any): Tx {
     const { tx } = this;
-    return tx.find(({ hash: txHash }) => hash === txHash);
+    const { chain } = this.chainService;
+    return tx.find((filteredTx) => {
+      const isPending = !filteredTx.cancelled && !filteredTx.confirmed;
+
+      // return a TX only by type
+      if (!key || !value) {
+        return isPending &&
+          chain === filteredTx.chain &&
+          type === filteredTx.type;
+      }
+
+      // return a TX by type and data input (key/value, ex: use loan ID)
+      return isPending &&
+        chain === filteredTx.chain &&
+        filteredTx.data &&
+        filteredTx.data[key] === value &&
+        filteredTx.type === type;
+    });
   }
 
   /**
@@ -51,9 +123,13 @@ export class TxService {
     }
     if (!this.txListeners[hash]) {
       this.txListeners[hash] = this
-        .txUpdated
+        .txUpdated$
         .pipe(
-          find(({ hash: txHash }) => txHash === hash)
+          filter((tx) => {
+            if (tx && tx.hash === hash) {
+              return true;
+            }
+          })
         );
     }
 
@@ -128,8 +204,7 @@ export class TxService {
    */
   private updateTx(newTxState: Tx) {
     const { tx: txMemory } = this;
-
-    txMemory.map((tx) => {
+    const updatedTxMemory = txMemory.map((tx) => {
       const { hash } = tx;
       if (hash !== newTxState.hash) {
         return tx;
@@ -137,12 +212,15 @@ export class TxService {
       return newTxState;
     });
 
+    // update TX array
+    this.tx = updatedTxMemory;
+
     // emit TX updated event
     this.txUpdated$.next(newTxState);
 
     // save new TX memory on storage
     const { TX_KEY } = this;
-    localStorage.setItem(TX_KEY, JSON.stringify(txMemory));
+    localStorage.setItem(TX_KEY, JSON.stringify(updatedTxMemory));
   }
 
   /**
