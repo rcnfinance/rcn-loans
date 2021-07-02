@@ -1,11 +1,8 @@
 import { Component, OnInit, OnChanges, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { setTimeout } from 'timers';
 import { Utils } from '../../../utils/utils';
 import { HeaderPopoverService } from '../../../services/header-popover.service';
 import { ChainService } from '../../../services/chain.service';
-import { OnboardingService } from '../../../services/onboarding.service';
-import { TooltipDataDisplay } from '../../../models/onboarding-tooltip.model';
 
 enum ViewType {
   OracleRates = 'rates',
@@ -34,7 +31,7 @@ export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
   subscriptionHeader: Subscription;
 
   constructor(
-    public headerPopoverService: HeaderPopoverService, private chainService: ChainService, private onboardingService: OnboardingService
+    public headerPopoverService: HeaderPopoverService, private chainService: ChainService
   ) { }
 
   ngOnInit() {
@@ -46,7 +43,6 @@ export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
     const { account } = this;
     if (account) {
       this.shortAccount = Utils.shortAddress(account);
-      setTimeout(() => this.testOnboardingTooltip(this.testComponent, TooltipDataDisplay.Bottom), 1);
     }
   }
 
@@ -107,22 +103,22 @@ export class IconGroupHeaderComponent implements OnInit, OnChanges, OnDestroy {
     return this.chainService.isEthereum;
   }
 
-  testOnboardingTooltip(component: ElementRef<HTMLInputElement>, display: TooltipDataDisplay) {
-    if (component) {
-      this.onboardingService.createTooltip(component.nativeElement,
-        {
-          title: 'NEW FEATURE',
-          subtitle: 'Now you can Create Loans and borrow some crypto on our platform. You just have to click here.',
-          display,
-          actions: [
-            { title: 'Left', method: () => this.testOnboardingTooltip(component, TooltipDataDisplay.Left) },
-            { title: 'Right', method: () => this.testOnboardingTooltip(component, TooltipDataDisplay.Right) },
-            { title: 'Bottom', method: () => this.testOnboardingTooltip(component, TooltipDataDisplay.Bottom) },
-            { title: 'Top', method: () => this.testOnboardingTooltip(component, TooltipDataDisplay.Top) }
-          ]
-        },
-        { width: 300, background: '#7ADDB5', color: '#121315' }
-      );
-    }
-  }
+  // testOnboardingTooltip(component: ElementRef<HTMLInputElement>, display: TooltipDataDisplay) {
+  //   if (component) {
+  //     this.onboardingService.createTooltip(component.nativeElement,
+  //       {
+  //         title: 'NEW FEATURE',
+  //         subtitle: 'Now you can Create Loans and borrow some crypto on our platform. You just have to click here.',
+  //         display,
+  //         actions: [
+  //           { title: 'Left', method: () => this.testOnboardingTooltip(component, TooltipDataDisplay.Left) },
+  //           { title: 'Right', method: () => this.testOnboardingTooltip(component, TooltipDataDisplay.Right) },
+  //           { title: 'Bottom', method: () => this.testOnboardingTooltip(component, TooltipDataDisplay.Bottom) },
+  //           { title: 'Top', method: () => this.testOnboardingTooltip(component, TooltipDataDisplay.Top) }
+  //         ]
+  //       },
+  //       { width: 300, background: '#7ADDB5', color: '#121315' }
+  //     );
+  //   }
+  // }
 }
