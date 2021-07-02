@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { Loan, Status, LoanType } from 'app/models/loan.model';
@@ -66,13 +65,14 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
   hasPoh: boolean;
 
+  loading: boolean;
+
   // subscriptions
   subscriptionAccount: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private spinner: NgxSpinnerService,
     private titleService: TitleService,
     private proxyApiService: ProxyApiService,
     private currenciesService: CurrenciesService,
@@ -89,7 +89,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.changeTitle('Loan detail');
-    this.spinner.show(this.pageId);
+    this.loading = true;
     this.checkIfIsMobile();
 
     this.route.params.subscribe(async params => {
@@ -116,7 +116,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
         // verify loan integrity
         this.verifyIntegrity();
 
-        this.spinner.hide(this.pageId);
+        this.loading = false;
       } catch (err) {
         this.router.navigate(['/loan', params.id, '404'], { skipLocationChange: true });
       }
@@ -124,7 +124,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.spinner.hide(this.pageId);
+    this.loading = false;
 
     if (this.subscriptionAccount) {
       try {
@@ -170,7 +170,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
    */
   onUserAction(action: 'lend' | 'pay' | 'transfer' | 'redeem' | 'collateral') {
     const miliseconds = 12000;
-    this.spinner.show(this.pageId);
+    this.loading = true;
 
     // TODO: update specific values according to the action taken
     console.info('user action detected', action);
@@ -186,7 +186,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       } catch (err) {
         this.eventsService.trackError(err);
       } finally {
-        this.spinner.hide(this.pageId);
+        this.loading = false;
       }
     }, miliseconds);
   }
