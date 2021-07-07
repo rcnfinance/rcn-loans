@@ -539,24 +539,6 @@ export class ContractsService {
     });
   }
 
-  async transferLoan(loan: Loan, to: string): Promise<string> {
-    const account = await this.web3Service.getAccount();
-    const web3 = this.web3Service.opsWeb3;
-    const gasPrice: number = await this.getGasPrice();
-    const { engine } = loan;
-
-    return new Promise((resolve, reject) => {
-      this.loadAltContract(web3, this._debtEngine[engine]).methods.safeTransferFrom(
-        account,
-        to,
-        loan.id
-      )
-      .send({ from: account, gasPrice })
-      .on('transactionHash', (hash: string) => resolve(hash))
-      .on('error', (err) => reject(err));
-    });
-  }
-
   async withdrawFundsDiaspore(engine: Engine, diasporeIdLoans: number[]): Promise<string> {
     const account = await this.web3Service.getAccount();
     const web3 = this.web3Service.opsWeb3;

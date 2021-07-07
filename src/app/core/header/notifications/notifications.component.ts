@@ -135,9 +135,6 @@ export class NotificationsComponent implements OnInit {
       case Type.withdraw:
         message = `Withdrawing your Available Balance`;
         break;
-      case Type.transfer:
-        message = `Transferring the ${ loanId } loan`;
-        break;
       case Type.pay:
         message = `Repaying the ${ loanId } loan`;
         break;
@@ -185,9 +182,6 @@ export class NotificationsComponent implements OnInit {
 
       case Type.withdraw:
         return 'Withdrawn';
-
-      case Type.transfer:
-        return 'Transferred';
 
       case Type.pay:
         return 'Repaid';
@@ -241,9 +235,6 @@ export class NotificationsComponent implements OnInit {
         break;
       case Type.withdraw:
         message = `You've withdrawn your Available Balance`;
-        break;
-      case Type.transfer:
-        message = `You've transferred the ${ loanId } loan`;
         break;
       case Type.pay:
         message = `You've made a repayment to the ${ loanId } loan`;
@@ -306,9 +297,6 @@ export class NotificationsComponent implements OnInit {
         break;
       case Type.withdraw:
         txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'call_made', '', 'white');
-        break;
-      case Type.transfer:
-        txObject = new TxObject(id, 'Transferring', message, '', '', 'fas fa-exchange-alt', 'orange');
         break;
       case Type.pay:
         txObject = new TxObject(id, 'Repaying', message, '', '', 'fas fa-coins', 'green');

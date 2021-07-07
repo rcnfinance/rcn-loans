@@ -168,7 +168,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   /**
    * Refresh loan when payment or lending status is updated
    */
-  onUserAction(action: 'lend' | 'pay' | 'transfer' | 'redeem' | 'collateral') {
+  onUserAction(action: 'lend' | 'pay' | 'redeem' | 'collateral') {
     const miliseconds = 12000;
     this.spinner.show(this.pageId);
 

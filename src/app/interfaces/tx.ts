@@ -2,7 +2,6 @@ export enum Type {
   lend = 'lend',
   approve = 'approve',
   withdraw = 'withdraw',
-  transfer = 'transfer',
   claim = 'claim',
   pay = 'pay',
   create = 'create',
