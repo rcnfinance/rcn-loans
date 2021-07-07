@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import * as BN from 'bn.js';
 import { Subscription } from 'rxjs';
+import { Tx } from 'app/models/tx.model';
 import { Loan } from 'app/models/loan.model';
 import { Collateral } from 'app/models/collateral.model';
 import { CollateralRequest } from 'app/interfaces/collateral-request';
@@ -18,7 +19,6 @@ import { TitleService } from 'app/services/title.service';
 import { NavrailService } from 'app/services/navrail.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
-import { Tx } from 'app/services/tx-legacy.service';
 import { ChainService } from 'app/services/chain.service';
 import { Utils } from 'app/utils/utils';
 

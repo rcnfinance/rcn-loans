@@ -6,11 +6,13 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { Type } from 'app/interfaces/tx';
+import { Tx } from 'app/models/tx.model';
 import { Engine } from 'app/models/loan.model';
 import { Notification, TxObject } from 'app/models/notification.model';
 import { HeaderPopoverService } from 'app/services/header-popover.service';
 import { ChainService } from 'app/services/chain.service';
-import { TxLegacyService, Tx } from 'app/services/tx-legacy.service';
+import { TxService } from 'app/services/tx.service';
 import { Utils } from 'app/utils/utils';
 
 @Component({
@@ -52,7 +54,7 @@ export class NotificationsComponent implements OnInit {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private txService: TxLegacyService,
+    private txService: TxService,
     private chainService: ChainService,
     public headerPopoverService: HeaderPopoverService
   ) { }
@@ -125,44 +127,44 @@ export class NotificationsComponent implements OnInit {
 
     // make complete message
     let message: string;
-    const loanId = this.getFormattedLoanId(tx.data.id);
+    const loanId = this.getFormattedLoanId(tx.data.loanId);
     switch (tx.type) {
-      case 'lend':
+      case Type.lend:
         message = `Funding the ${ loanId } loan request`;
         break;
-      case 'withdraw':
+      case Type.withdraw:
         message = `Withdrawing your Available Balance`;
         break;
-      case 'transfer':
+      case Type.transfer:
         message = `Transferring the ${ loanId } loan`;
         break;
-      case 'pay':
+      case Type.pay:
         message = `Repaying the ${ loanId } loan`;
         break;
-      case 'claim':
+      case Type.claim:
         message = `Claiming the repayment of the ${ loanId } loan`;
         break;
-      case 'approve':
+      case Type.approve:
         if (tx.data.action) {
           message = `Enabling the ${ contractName }`;
         } else {
           message = `Disabling the ${ contractName }`;
         }
         break;
-      case 'create':
+      case Type.create:
         message = `Requesting the ${ loanId } loan`;
         break;
-      case 'createCollateral':
+      case Type.createCollateral:
         message = `Creating a collateral`;
         break;
-      case 'addCollateral':
-        message = `Depositing the ${ tx.data.collateralId } collateral`;
+      case Type.addCollateral:
+        message = `Depositing collateral`;
         break;
-      case 'withdrawCollateral':
-        message = `Withdrawing the ${ tx.data.collateralId } collateral`;
+      case Type.withdrawCollateral:
+        message = `Withdrawing collateral`;
         break;
-      case 'redeemCollateral':
-        message = `Withdrawing the ${ tx.data.id } collateral`;
+      case Type.redeemCollateral:
+        message = `Withdrawing collateral`;
         break;
       default:
         break;
@@ -178,36 +180,36 @@ export class NotificationsComponent implements OnInit {
    */
   getTxTitleConfirmed(tx: Tx): String {
     switch (tx.type) {
-      case 'lend':
+      case Type.lend:
         return 'Lent';
 
-      case 'withdraw':
+      case Type.withdraw:
         return 'Withdrawn';
 
-      case 'transfer':
+      case Type.transfer:
         return 'Transferred';
 
-      case 'pay':
+      case Type.pay:
         return 'Repaid';
 
-      case 'claim':
+      case Type.claim:
         return 'Claimed';
 
-      case 'approve':
+      case Type.approve:
         if (tx.data.action) {
           return 'Enabled';
         }
         return 'Disabled';
 
-      case 'create':
-      case 'createCollateral':
+      case Type.create:
+      case Type.createCollateral:
         return 'Created';
 
-      case 'addCollateral':
+      case Type.addCollateral:
         return 'Deposited';
 
-      case 'withdrawCollateral':
-      case 'redeemCollateral':
+      case Type.withdrawCollateral:
+      case Type.redeemCollateral:
         return 'Withdrawn';
 
       default:
@@ -231,45 +233,45 @@ export class NotificationsComponent implements OnInit {
     /*
 <span routerLink='loan/{{ notification.txObject.id }}' class="supporter-txt" *ngIf='notification.txObject.id'>{{ shortAddress }}</span>
     */
-    const loanId = this.getFormattedLoanId(tx.data.id);
+    const loanId = this.getFormattedLoanId(tx.data.loanId);
     let message: string;
     switch (tx.type) {
-      case 'lend':
+      case Type.lend:
         message = `You've funded the ${ loanId } loan`;
         break;
-      case 'withdraw':
+      case Type.withdraw:
         message = `You've withdrawn your Available Balance`;
         break;
-      case 'transfer':
+      case Type.transfer:
         message = `You've transferred the ${ loanId } loan`;
         break;
-      case 'pay':
+      case Type.pay:
         message = `You've made a repayment to the ${ loanId } loan`;
         break;
-      case 'claim':
+      case Type.claim:
         message = `You've claimed a repayment of the ${ loanId } loan`;
         break;
-      case 'approve':
+      case Type.approve:
         if (tx.data.action) {
           message = `The ${ contractName } have been enabled`;
         } else {
           message = `The ${ contractName } have been disabled`;
         }
         break;
-      case 'create':
+      case Type.create:
         message = `You've requested the ${ loanId } loan`;
         break;
-      case 'createCollateral':
+      case Type.createCollateral:
         message = `You've created a collateral`;
         break;
-      case 'addCollateral':
-        message = `You've deposited the ${ tx.data.collateralId } collateral`;
+      case Type.addCollateral:
+        message = `You've deposited a collateral`;
         break;
-      case 'withdrawCollateral':
-        message = `You've withdrawn the ${ tx.data.collateralId } collateral`;
+      case Type.withdrawCollateral:
+        message = `You've withdrawn a collateral`;
         break;
-      case 'redeemCollateral':
-        message = `You've withdrawn the ${ tx.data.id } collateral`;
+      case Type.redeemCollateral:
+        message = `You've withdrawn a collateral`;
         break;
       default:
         break;
@@ -299,39 +301,39 @@ export class NotificationsComponent implements OnInit {
     const id: String = this.getTxId(tx);
     const message: string = this.getTxMessage(tx);
     switch (tx.type) {
-      case 'lend':
+      case Type.lend:
         txObject = new TxObject(id, 'Lending', message, 'material-icons', 'trending_up', '', 'blue');
         break;
-      case 'withdraw':
+      case Type.withdraw:
         txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'call_made', '', 'white');
         break;
-      case 'transfer':
+      case Type.transfer:
         txObject = new TxObject(id, 'Transferring', message, '', '', 'fas fa-exchange-alt', 'orange');
         break;
-      case 'pay':
+      case Type.pay:
         txObject = new TxObject(id, 'Repaying', message, '', '', 'fas fa-coins', 'green');
         break;
-      case 'claim':
+      case Type.claim:
         txObject = new TxObject(id, 'Claiming', message, 'material-icons', 'call_made', '', 'white');
         break;
-      case 'approve':
+      case Type.approve:
         if (tx.data.action) {
           txObject = new TxObject(id, 'Enabling', message, '', '', 'fas fa-lock-open', 'green');
         } else {
           txObject = new TxObject(id, 'Disabling', message, '', '', 'fas fa-lock', 'red');
         }
         break;
-      case 'create':
+      case Type.create:
         txObject = new TxObject(id, 'Borrowing', message, '', '', 'fas fa-file-invoice-dollar', 'turquoise');
         break;
-      case 'createCollateral':
+      case Type.createCollateral:
         txObject = new TxObject(id, 'Creating', message, '', '', 'fas fa-coins', 'violet');
         break;
-      case 'addCollateral':
+      case Type.addCollateral:
         txObject = new TxObject(id, 'Depositing', message, 'material-icons', 'add', '', 'violet');
         break;
-      case 'withdrawCollateral':
-      case 'redeemCollateral':
+      case Type.withdrawCollateral:
+      case Type.redeemCollateral:
         txObject = new TxObject(id, 'Withdrawing', message, 'material-icons', 'remove_circle_outline', '', 'violet');
         break;
       default:
@@ -348,13 +350,14 @@ export class NotificationsComponent implements OnInit {
   }
   renderLastestTx(txMemory: Tx[]) { // Render the last 8 Txs
     const lastestTx: Tx[] = this.getLastestTx(txMemory);
-    lastestTx.forEach(c => this.addNewNotification(c));
-    const confirmedTxOnly = lastestTx.filter(c => c.confirmed);
-    confirmedTxOnly.forEach(c => this.setTxFinished(c));
+    lastestTx.forEach(tx => this.addNewNotification(tx));
+
+    const finishedTxOnly = lastestTx.filter(tx => tx.confirmed || tx.cancelled);
+    finishedTxOnly.forEach(tx => this.setTxFinished(tx));
   }
 
   emitCounter() { // Set the notificationsCounter on new Notifications
-    this.notificationsCounter.emit(this.oNotifications.filter(c => !c.confirmedTx).length);
+    this.notificationsCounter.emit(this.oNotifications.filter(c => !c.confirmedTx && !c.cancelledTx).length);
   }
 
   ngOnInit() {
@@ -362,26 +365,38 @@ export class NotificationsComponent implements OnInit {
       this.viewDetail = detail;
       this.cdRef.detectChanges();
     }); // Subscribe to detail from Notifications Service
-    this.txService.subscribeNewTx((tx: Tx) => { this.addNewNotification(tx); });
-    this.txService.subscribeConfirmedTx((tx: Tx) => { this.setTxFinished(tx); });
-    this.renderLastestTx(this.txService.txMemory);
+
+    this.txService.listenAllTxEvents().subscribe((tx: Tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed || tx.cancelled) {
+        this.setTxFinished(tx);
+      } else {
+        this.addNewNotification(tx);
+      }
+    });
+
+    this.renderLastestTx(this.txService.tx);
   }
 
   private addNewNotification(tx: Tx) {
     this.oNotifications.unshift(new Notification(
-      tx.tx,                      // This is the Notification hashTx
+      tx.hash,                    // This is the Notification hashTx
       tx.to,                      // This is the Notification starringEvent
       Utils.shortAddress(tx.to),  // This is the Notification starringEventShort
       tx.timestamp,               // This is the Notification timeEvent
       tx.confirmed,               // This is the Notification confirmedTx
+      tx.cancelled,               // This is the Notification confirmedTx
       this.getTxObject(tx)        // This is the Notification txObject
     ));
     this.emitCounter();
   }
 
   private setTxFinished(tx: Tx) {
-    const notification = this.oNotifications.find(c => c.hashTx === tx.tx);
+    const notification = this.oNotifications.find(c => c.hashTx === tx.hash);
     notification.confirmedTx = tx.confirmed;
+    notification.cancelledTx = tx.cancelled;
     notification.txObject.title = this.getTxTitleConfirmed(tx);
     notification.txObject.message = this.getTxMessageConfirmed(tx);
     this.emitCounter();

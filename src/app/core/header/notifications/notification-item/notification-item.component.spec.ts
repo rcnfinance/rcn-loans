@@ -15,6 +15,7 @@ describe('NotificationItemComponent', () => {
     'starringEventShort': '0xc7...08fc',
     'time': 1562970021337,
     'confirmedTx': true,
+    'cancelledTx': true,
     'txObject': {
       'id': '0x6a360f4f8d247543789c3ca447a5ef7a5a8c7b386a95774da2551e5385bfe131',
       'title': 'Lent',

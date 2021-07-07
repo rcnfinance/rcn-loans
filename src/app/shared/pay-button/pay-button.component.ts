@@ -5,11 +5,14 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
-import { TxLegacyService, Tx, Type } from 'app/services/tx-legacy.service';
+import { Subscription } from 'rxjs';
+import { TxService } from 'app/services/tx.service';
 import { ContractsService } from 'app/services/contracts.service';
+import { Tx } from 'app/models/tx.model';
 import { Loan } from 'app/models/loan.model';
 import { Currency } from 'app/utils/currencies';
 import { Utils } from 'app/utils/utils';
+import { Type } from 'app/interfaces/tx';
 import { EventsService, Category } from 'app/services/events.service';
 import { Web3Service } from 'app/services/web3.service';
 import { ChainService } from 'app/services/chain.service';
@@ -36,18 +39,18 @@ export class PayButtonComponent implements OnInit, OnDestroy {
   @Output() startPay = new EventEmitter();
   @Output() endPay = new EventEmitter();
 
-  pendingTx: Tx = undefined;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   opPending = false;
   lendEnabled: Boolean;
   startProgress: boolean;
   finishProgress: boolean;
 
-  txSubscription: boolean;
+  private txSubscription: Subscription;
+  private tx: Tx;
 
   constructor(
     private contractsService: ContractsService,
-    private txService: TxLegacyService,
+    private txService: TxService,
     private eventsService: EventsService,
     private web3Service: Web3Service,
     private chainService: ChainService,
@@ -66,8 +69,10 @@ export class PayButtonComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.txSubscription && this.showPayDialog) {
-      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackPayTx(tx));
+    const { tx, txSubscription, showPayDialog } = this;
+    if (txSubscription && showPayDialog && tx) {
+      this.txSubscription.unsubscribe();
+      this.txService.untrackTx(tx.hash);
     }
   }
 
@@ -75,29 +80,39 @@ export class PayButtonComponent implements OnInit, OnDestroy {
    * Retrieve pending Tx
    */
   retrievePendingTx() {
-    this.pendingTx = this.txService.getLastPendingPay(this.loan);
+    const { id } = this.loan;
+    this.tx = this.txService.getLastTxByType(Type.pay, 'loanId', id);
 
-    if (this.pendingTx) {
+    if (this.tx) {
       this.startPay.emit();
       this.startProgress = true;
-    }
-
-    if (!this.txSubscription) {
-      this.txSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackPayTx(tx));
+      this.trackTx();
     }
   }
 
   /**
-   * Track tx
+   * Track TX
    */
-  trackPayTx(tx: Tx) {
-    if (tx.type === Type.pay && tx.data.id === this.loan.id) {
-      this.endPay.emit();
-      this.web3Service.updateBalanceEvent.emit();
-      this.txSubscription = false;
-      this.finishProgress = true;
+  trackTx() {
+    if (this.txSubscription) {
+      this.txSubscription.unsubscribe();
     }
+
+    const { hash } = this.tx;
+    this.txSubscription = this.txService.trackTx(hash).subscribe((tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed) {
+        this.endPay.emit();
+        this.web3Service.updateBalanceEvent.emit();
+        this.finishProgress = true;
+        this.txSubscription.unsubscribe();
+      } else if (tx.cancelled) {
+        this.startProgress = false;
+        this.txSubscription.unsubscribe();
+      }
+    });
   }
 
   /**
@@ -110,11 +125,11 @@ export class PayButtonComponent implements OnInit, OnDestroy {
       return;
     }
     // pending tx validation
-    if (this.pendingTx) {
+    if (this.tx) {
       const { config } = this.chainService;
       window.open(config.network.explorer.tx.replace(
         '${tx}',
-        this.pendingTx.tx
+        this.tx.hash
       ), '_blank');
       return;
     }
@@ -124,7 +139,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     }
     // debt validation
     if (!this.loan.debt) {
-      this.openSnackBar('You can´t pay this loan because it hasn´t been funded yet.', '');
+      this.openSnackBar(`You can't pay this loan because it hasn't been funded yet.`, '');
       return;
     }
     // unlogged user
@@ -135,7 +150,7 @@ export class PayButtonComponent implements OnInit, OnDestroy {
     // lender validation
     const account: string = await this.web3Service.getAccount();
     if (this.loan.debt.owner.toLowerCase() === account.toLowerCase()) {
-      this.openSnackBar('You can´t pay a loan that you have funded.', '');
+      this.openSnackBar(`You can't pay a loan that you have funded.`, '');
       return;
     }
 
@@ -215,20 +230,16 @@ export class PayButtonComponent implements OnInit, OnDestroy {
           'loan ' + this.loan.id + ' of ' + amountInWei
         );
 
-        const tx = await this.contractsService.payLoan(this.loan, amountInWei);
+        const hash = await this.contractsService.payLoan(this.loan, amountInWei);
+        const to: string = config.contracts[engine].diaspore.debtEngine;
+        const { loan } = this;
+        const tx = await this.txService.buildTx(hash, engine, to, Type.pay, { loanId: loan.id, loan });
+        this.txService.addTx(tx);
 
         this.eventsService.trackEvent(
           'pay-loan',
           Category.Loan,
           'loan ' + this.loan.id + ' of ' + amountInWei
-        );
-
-        const engineAddress: string = config.contracts[engine].diaspore.debtEngine;
-        this.txService.registerPayTx(
-          tx,
-          engineAddress,
-          this.loan,
-          amountInWei as any
         );
 
         this.startPay.emit();
@@ -343,12 +354,15 @@ export class PayButtonComponent implements OnInit, OnDestroy {
    * @return Button text
    */
   get buttonText(): string {
-    const tx = this.pendingTx;
+    const { tx } = this;
     if (tx === undefined) {
       return 'Repay';
     }
     if (tx.confirmed) {
       return 'Repaid';
+    }
+    if (tx.cancelled) {
+      return 'Failed';
     }
     return 'Repaying';
   }

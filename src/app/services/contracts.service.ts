@@ -5,7 +5,7 @@ import { Loan, LoanType, Engine, Oracle } from 'app/models/loan.model';
 import { LoanContentApi } from 'app/interfaces/loan-api-diaspore';
 import { LoanUtils } from 'app/utils/loan-utils';
 import { Web3Service } from 'app/services/web3.service';
-import { TxLegacyService } from 'app/services/tx-legacy.service';
+import { TxService } from 'app/services/tx.service';
 import { LoanTypeService } from 'app/services/loan-type.service';
 import { ApiService } from 'app/services/api.service';
 import { ChainService } from 'app/services/chain.service';
@@ -46,7 +46,7 @@ export class ContractsService {
   constructor(
     private http: HttpClient,
     private web3Service: Web3Service,
-    private txService: TxLegacyService,
+    private txService: TxService,
     private apiService: ApiService,
     private loanTypeService: LoanTypeService,
     private chainService: ChainService,
@@ -123,7 +123,11 @@ export class ContractsService {
    * @return Pending tx or boolean
    */
   async isApproved(contract: string, tokenAddress: string): Promise<boolean> {
-    const pending = this.txService.getLastPendingApprove(tokenAddress, contract);
+    // const pending = this.txService.getLastPendingApprove(tokenAddress, contract);
+    // TODO: implement isApproved TX service
+    console.info(this.txService.tx);
+
+    const pending = undefined;
     const { config } = this.chainService;
     const chainCurrencyAddress = config.contracts.chainCurrencyAddress;
 
@@ -174,7 +178,8 @@ export class ContractsService {
       )
       .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => {
-        this.txService.registerApproveTx(hash, tokenAddress, contract, true);
+        // TODO: implement isApproved TX service
+        // this.txService.registerApproveTx(hash, tokenAddress, contract, true);
         resolve(hash);
       })
       .on('error', (err) => reject(err));
@@ -205,7 +210,8 @@ export class ContractsService {
       )
       .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => {
-        this.txService.registerApproveTx(hash, tokenAddress, contract, false);
+        // TODO: implement isApproved TX service
+        // this.txService.registerApproveTx(hash, tokenAddress, contract, false);
         resolve(hash);
       })
       .on('error', (err) => reject(err));
@@ -219,7 +225,9 @@ export class ContractsService {
    * @return Boolean
    */
   async isApprovedERC721(contractAddress: string, operatorAddress: string) {
-    const pending = this.txService.getLastPendingApprove(contractAddress, operatorAddress);
+    // TODO: implement isApproved TX service
+    // const pending = this.txService.getLastPendingApprove(contractAddress, operatorAddress);
+    const pending = undefined;
 
     if (pending !== undefined) {
       return true;
@@ -255,7 +263,8 @@ export class ContractsService {
       )
       .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => {
-        this.txService.registerApproveTx(hash, contractAddress, operatorAddress, true);
+        // TODO: implement isApproved TX service
+        // this.txService.registerApproveTx(hash, contractAddress, operatorAddress, true);
         resolve(hash);
       })
       .on('error', (err) => reject(err));
@@ -282,7 +291,8 @@ export class ContractsService {
       )
       .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => {
-        this.txService.registerApproveTx(hash, contractAddress, operatorAddress, false);
+        // TODO: implement isApproved TX service
+        // this.txService.registerApproveTx(hash, contractAddress, operatorAddress, false);
         resolve(hash);
       })
       .on('error', (err) => reject(err));

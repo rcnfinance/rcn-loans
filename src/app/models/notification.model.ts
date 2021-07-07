@@ -5,6 +5,7 @@ export class Notification {
     public starringEventShort: String,    // This is the Notification starringEventShort
     public time: number,                  // This is the Notification timeEvent
     public confirmedTx: Boolean,          // This is the Notification confirmedTx
+    public cancelledTx: Boolean,          // This is the Notification cancelledTx
     public txObject: TxObject             // This is the Notification txObject
   ) {}
 }

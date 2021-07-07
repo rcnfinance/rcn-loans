@@ -12,12 +12,15 @@ import {
   MatSnackBar,
   MatSnackBarHorizontalPosition
 } from '@angular/material';
+import { Subscription } from 'rxjs';
 import * as BN from 'bn.js';
+import { Type } from 'app/interfaces/tx';
 import { Loan, Status } from 'app/models/loan.model';
+import { Tx } from 'app/models/tx.model';
 import { Utils } from 'app/utils/utils';
 import { LoanUtils } from 'app/utils/loan-utils';
 import { ContractsService } from 'app/services/contracts.service';
-import { TxLegacyService, Tx, Type } from 'app/services/tx-legacy.service';
+import { TxService } from 'app/services/tx.service';
 import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { ProxyApiService } from 'app/services/proxy-api.service';
 import { Web3Service } from 'app/services/web3.service';
@@ -45,18 +48,18 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   @Output() startLend = new EventEmitter();
   @Output() endLend = new EventEmitter();
   @Output() closeDialog = new EventEmitter();
-  pendingTx: Tx = undefined;
   lendEnabled: Boolean;
   opPending = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   startProgress: boolean;
   finishProgress: boolean;
 
-  txSubscription: boolean;
+  private txSubscription: Subscription;
+  private tx: Tx;
 
   constructor(
     private contractsService: ContractsService,
-    private txService: TxLegacyService,
+    private txService: TxService,
     private proxyApiService: ProxyApiService,
     private web3Service: Web3Service,
     private countriesService: CountriesService,
@@ -76,8 +79,10 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.txSubscription && this.showLendDialog) {
-      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackLendTx(tx));
+    const { tx, txSubscription, showLendDialog } = this;
+    if (txSubscription && showLendDialog && tx) {
+      this.txSubscription.unsubscribe();
+      this.txService.untrackTx(tx.hash);
     }
   }
 
@@ -85,29 +90,39 @@ export class LendButtonComponent implements OnInit, OnDestroy {
    * Retrieve pending Tx
    */
   retrievePendingTx() {
-    this.pendingTx = this.txService.getLastPendingLend(this.loan);
+    const { id } = this.loan;
+    this.tx = this.txService.getLastTxByType(Type.lend, 'loanId', id);
 
-    if (this.pendingTx) {
+    if (this.tx) {
       this.startLend.emit();
       this.startProgress = true;
-    }
-
-    if (!this.txSubscription) {
-      this.txSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackLendTx(tx));
+      this.trackTx();
     }
   }
 
   /**
-   * Track tx
+   * Track TX
    */
-  trackLendTx(tx: Tx) {
-    if (tx.type === Type.lend && tx.data.id === this.loan.id) {
-      this.endLend.emit();
-      this.web3Service.updateBalanceEvent.emit();
-      this.txSubscription = false;
-      this.finishProgress = true;
+  trackTx() {
+    if (this.txSubscription) {
+      this.txSubscription.unsubscribe();
     }
+
+    const { hash } = this.tx;
+    this.txSubscription = this.txService.trackTx(hash).subscribe((tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed) {
+        this.endLend.emit();
+        this.web3Service.updateBalanceEvent.emit();
+        this.finishProgress = true;
+        this.txSubscription.unsubscribe();
+      } else if (tx.cancelled) {
+        this.startProgress = false;
+        this.txSubscription.unsubscribe();
+      }
+    });
   }
 
   /**
@@ -122,11 +137,9 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       return;
     }
     // pending tx validation
-    if (this.pendingTx) {
-      window.open(config.network.explorer.tx.replace(
-        '${tx}',
-        this.pendingTx.tx
-      ), '_blank');
+    if (this.tx) {
+      const { hash } = this.tx;
+      window.open(config.network.explorer.tx.replace('${tx}', hash), '_blank');
       return;
     }
     // disabled button validation
@@ -244,7 +257,8 @@ export class LendButtonComponent implements OnInit, OnDestroy {
           break;
       }
 
-      let tx: string;
+      let hash: string;
+      let to: string;
 
       // validate approve
       const engineApproved = await this.contractsService.isApproved(contractAddress, lendToken);
@@ -254,7 +268,7 @@ export class LendButtonComponent implements OnInit, OnDestroy {
       }
 
       if (lendToken === config.contracts[engine].token) {
-        tx = await this.contractsService.lendLoan(
+        hash = await this.contractsService.lendLoan(
           engine,
           cosignerAddress,
           this.loan.id,
@@ -263,8 +277,9 @@ export class LendButtonComponent implements OnInit, OnDestroy {
           callbackData,
           account
         );
+        to = config.contracts[engine].diaspore.loanManager;
       } else {
-        tx = await this.contractsService.converterRampLend(
+        hash = await this.contractsService.converterRampLend(
           engine,
           payableAmount,
           tokenConverter,
@@ -278,9 +293,14 @@ export class LendButtonComponent implements OnInit, OnDestroy {
           callbackData,
           account
         );
+        to = config.contracts[engine].converter.converterRamp;
       }
 
-      this.txService.registerLendTx(tx, config.contracts[engine].diaspore.loanManager, this.loan);
+      const { loan } = this;
+      const tx = await this.txService.buildTx(hash, engine, to, Type.lend, { loanId: loan.id, loan });
+      this.txService.addTx(tx);
+
+      // this.txService.registerLendTx(tx, config.contracts[engine].diaspore.loanManager, this.loan);
 
       this.eventsService.trackEvent(
         'lend',
@@ -388,12 +408,13 @@ export class LendButtonComponent implements OnInit, OnDestroy {
   }
 
   get enabled(): Boolean {
-    return this.txService.getLastPendingLend(this.loan) === undefined;
+    const { id } = this.loan;
+    return !this.txService.getLastTxByType(Type.lend, 'loanId', id);
   }
 
   get buttonText(): string {
-    const tx = this.pendingTx;
-    if (tx === undefined) {
+    const tx = this.tx;
+    if (!tx) {
       return 'Lend';
     }
     if (tx.confirmed) {

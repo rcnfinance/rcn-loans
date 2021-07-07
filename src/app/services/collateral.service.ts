@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import * as BN from 'bn.js';
-import { ContractsService } from './contracts.service';
-import { Tx, Type } from '../services/tx-legacy.service';
-import { Loan } from './../models/loan.model';
-import { Collateral } from './../models/collateral.model';
-import { Utils } from './../utils/utils';
-import { CurrenciesService, CurrencyItem } from './../services/currencies.service';
+import { Type } from 'app/interfaces/tx';
+import { Tx } from 'app/models/tx.model';
+import { Loan } from 'app/models/loan.model';
+import { Collateral } from 'app/models/collateral.model';
+import { Utils } from 'app/utils/utils';
+import { ContractsService } from 'app/services/contracts.service';
+import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
 
 @Injectable()
 export class CollateralService {

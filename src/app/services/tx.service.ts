@@ -54,11 +54,25 @@ export class TxService {
     const { tx: txMemory } = this;
     txMemory.push(tx);
 
+    // update TX array
     this.tx = txMemory;
+
+    // emit TX updated event
+    this.txUpdated$.next(tx);
 
     // save new TX memory on storage
     const { TX_KEY } = this;
     localStorage.setItem(TX_KEY, JSON.stringify(txMemory));
+  }
+
+  /**
+   * Cancel a TX
+   * @param tx TX
+   */
+  cancelTx(hash: string): void {
+    const tx = this.getTx(hash);
+    const newTxState = { ...tx, cancelled: true };
+    this.updateTx(newTxState);
   }
 
   /**

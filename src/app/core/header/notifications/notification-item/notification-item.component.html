@@ -1,5 +1,5 @@
 <div class="notification-container"
-[ngClass]="{'progressOn': !notification.confirmedTx }" *ngIf="notification">
+[ngClass]="{'progressOn': !notification.confirmedTx && !notification.cancelledTx }" *ngIf="notification">
   <div class="status-container">
     <div
       class="icon-event"
@@ -27,10 +27,10 @@
     <div class="supporter-txt" [innerHTML]="notification.txObject?.message">
     </div>
   </div>
-  <mat-progress-bar *ngIf='!notification.confirmedTx' [mode]="progressbarMode">
+  <mat-progress-bar *ngIf='!notification.confirmedTx && !notification.cancelledTx' [mode]="progressbarMode">
   </mat-progress-bar>
   <div
-    *ngIf='!notification.confirmedTx'
+    *ngIf='!notification.confirmedTx && !notification.cancelledTx'
     class="cancel-tx"
     (click)="clickCancelTx(notification)"
   >

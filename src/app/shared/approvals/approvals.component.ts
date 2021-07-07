@@ -2,13 +2,14 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Utils } from 'app/utils/utils';
+import { Type } from 'app/interfaces/tx';
+import { Tx } from 'app/models/tx.model';
 import { Engine } from 'app/models/loan.model';
-// App Component
+import { TxService } from 'app/services/tx.service';
 import { Web3Service } from 'app/services/web3.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { CurrenciesService } from 'app/services/currencies.service';
 import { EventsService, Category } from 'app/services/events.service';
-import { TxLegacyService, Tx, Type } from 'app/services/tx-legacy.service';
 import { ChainService } from 'app/services/chain.service';
 
 class Operator {
@@ -54,11 +55,10 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
   assetOperators: Operator[] = []; // TODO: implement WETH manager
   assetApproves: Object[];
 
-  pendingTx: Tx = undefined;
-  txSubscription: boolean;
-
   // subscriptions
   subscriptionAccount: Subscription;
+  private txSubscription: Subscription;
+  private tx: Tx;
 
   @Input() engine: Engine;
   @Input() onlyAddress: string;
@@ -76,7 +76,7 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
     private contractsService: ContractsService,
     private currenciesService: CurrenciesService,
     private eventsService: EventsService,
-    private txService: TxLegacyService,
+    private txService: TxService,
     private chainService: ChainService
   ) {
     this.closeDialog = new EventEmitter();
@@ -105,7 +105,12 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subscriptionAccount) {
+    const { subscriptionAccount, txSubscription, tx } = this;
+    if (txSubscription && tx) {
+      this.txSubscription.unsubscribe();
+      this.txService.untrackTx(tx.hash);
+    }
+    if (subscriptionAccount) {
       this.subscriptionAccount.unsubscribe();
     }
   }
@@ -268,38 +273,33 @@ export class ApprovalsComponent implements OnInit, OnDestroy {
    * Retrieve pending Tx
    */
   private retrievePendingTx() {
-    const pendingApproveTx: Tx = this.txService.getLastPendingApprove(
-      (this.onlyToken || this.onlyAsset), this.onlyAddress
-    );
+    this.tx = this.txService.getLastTxByType(Type.approve);
 
-    if (!pendingApproveTx) {
-      this.pendingTx = undefined;
-    } else {
-      this.pendingTx = pendingApproveTx;
-    }
-
-    if (
-      !this.txSubscription &&
-      (this.onlyToken || this.onlyAsset) &&
-      this.onlyAddress
-    ) {
-      this.txSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackApproveTx(tx));
+    if (this.tx) {
+      this.trackTx();
     }
   }
 
   /**
-   * Track tx
+   * Track TX
    */
-  private trackApproveTx(tx: Tx) {
-    const to: string = this.onlyToken || this.onlyAsset;
-    if (
-      tx.type === Type.approve &&
-      (tx.to === to) &&
-      tx.data.contract === this.onlyAddress
-    ) {
-      this.endProgress.emit();
+  private trackTx() {
+    if (this.txSubscription) {
+      this.txSubscription.unsubscribe();
     }
+
+    const { hash } = this.tx;
+    this.txSubscription = this.txService.trackTx(hash).subscribe((tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed) {
+        this.endProgress.emit();
+        this.txSubscription.unsubscribe();
+      } else if (tx.cancelled) {
+        this.txSubscription.unsubscribe();
+      }
+    });
   }
 
   /**

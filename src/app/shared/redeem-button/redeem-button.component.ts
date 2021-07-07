@@ -7,13 +7,16 @@ import {
   EventEmitter
 } from '@angular/core';
 import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
+import { Subscription } from 'rxjs';
+import { Type } from 'app/interfaces/tx';
 import { Loan } from 'app//models/loan.model';
+import { Tx } from 'app/models/tx.model';
 import { DialogGenericErrorComponent } from 'app/dialogs/dialog-generic-error/dialog-generic-error.component';
 import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
 import { Web3Service } from 'app/services/web3.service';
 import { ChainService } from 'app/services/chain.service';
 import { ContractsService } from 'app/services/contracts.service';
-import { TxLegacyService, Tx, Type } from 'app/services/tx-legacy.service';
+import { TxService } from 'app/services/tx.service';
 import { EventsService, Category } from 'app/services/events.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
 
@@ -29,12 +32,12 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
   @Input() disabled: boolean;
   @Output() startRedeem = new EventEmitter();
   @Output() endRedeem = new EventEmitter();
-  pendingTx: Tx = undefined;
   opPending = false;
   startProgress: boolean;
   finishProgress: boolean;
 
-  txSubscription: boolean;
+  private txSubscription: Subscription;
+  private tx: Tx;
 
   constructor(
     private dialog: MatDialog,
@@ -42,7 +45,7 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
     private contractsService: ContractsService,
     private eventsService: EventsService,
     private chainService: ChainService,
-    private txService: TxLegacyService,
+    private txService: TxService,
     private walletConnectService: WalletConnectService,
     public snackBar: MatSnackBar
   ) { }
@@ -52,48 +55,19 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.txSubscription) {
-      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackRedeemTx(tx));
-    }
-  }
-
-  /**
-   * Retrieve pending Tx
-   */
-  retrievePendingTx() {
-    this.pendingTx = this.txService.getLastPendingRedeemCollateral(this.loan);
-
-    if (this.pendingTx) {
-      this.startRedeem.emit();
-      this.startProgress = true;
-    }
-
-    if (!this.txSubscription) {
-      this.txSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackRedeemTx(tx));
-    }
-  }
-
-  /**
-   * Track tx
-   */
-  trackRedeemTx(tx: Tx) {
-    const { id } = this.loan.collateral;
-    if (tx.type === Type.redeemCollateral && tx.data.id === id) {
-      this.endRedeem.emit();
-      this.txSubscription = false;
-      this.finishProgress = true;
+    const { txSubscription, tx } = this;
+    if (txSubscription && tx) {
+      this.txSubscription.unsubscribe();
+      this.txService.untrackTx(tx.hash);
     }
   }
 
   async clickRedeem() {
     const { config } = this.chainService;
     // pending tx validation
-    if (this.pendingTx) {
-      window.open(config.network.explorer.tx.replace(
-        '${tx}',
-        this.pendingTx.tx
-      ), '_blank');
+    if (this.tx) {
+      const { hash } = this.tx;
+      window.open(config.network.explorer.tx.replace('${tx}', hash), '_blank');
       return;
     }
     // disabled button validation
@@ -148,7 +122,7 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
       const account: string = await this.web3Service.getAccount();
       const oracleData = await this.contractsService.getOracleData(oracle);
       const collateralAmount = String(collateral.amount);
-      const tx: string = await this.contractsService.withdrawCollateral(
+      const hash: string = await this.contractsService.withdrawCollateral(
         engine,
         collateral.id,
         collateral.token,
@@ -158,7 +132,14 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
         account
       );
 
-      this.txService.registerRedeemCollateralTx(tx, this.loan);
+      const { config } = this.chainService;
+      const isChainCurrency = collateral.token === config.contracts.chainCurrencyAddress;
+      const to: string = isChainCurrency ?
+        config.contracts[engine].collateral.wethManager :
+        config.contracts[engine].collateral.collateral;
+      const { loan } = this;
+      const tx = await this.txService.buildTx(hash, engine, to, Type.pay, { collateralId: collateral.id, loan });
+      this.txService.addTx(tx);
       this.retrievePendingTx();
     } catch (err) {
       // Don't show 'User denied transaction signature' error
@@ -188,6 +169,41 @@ export class RedeemButtonComponent implements OnInit, OnDestroy {
     console.info('Started redeem');
     this.showMessage('Your transaction is being processed. This might take a few second');
     this.opPending = true;
+  }
+
+  /**
+   * Retrieve pending Tx
+   */
+  private retrievePendingTx() {
+    const { id } = this.loan;
+    this.tx = this.txService.getLastTxByType(Type.redeemCollateral, 'collateralId', id);
+
+    if (this.tx) {
+      this.startRedeem.emit();
+      this.startProgress = true;
+      this.trackTx();
+    }
+  }
+
+  private trackTx() {
+    if (this.txSubscription) {
+      this.txSubscription.unsubscribe();
+    }
+
+    const { hash } = this.tx;
+    this.txSubscription = this.txService.trackTx(hash).subscribe((tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed) {
+        this.endRedeem.emit();
+        this.finishProgress = true;
+        this.txSubscription.unsubscribe();
+      } else if (tx.cancelled) {
+        this.startProgress = false;
+        this.txSubscription.unsubscribe();
+      }
+    });
   }
 
   /**
