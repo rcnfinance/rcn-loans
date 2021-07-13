@@ -17,15 +17,15 @@ jobs:
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
-                - v4-dependencies-{{ checksum "package.json" }}
-                - v4-dependencies-
+                - v5-dependencies-{{ checksum "package.json" }}
+                - v5-dependencies-
             # Install project dependencies
             - run:
                 name: Install local dependencies
                 command: npm install
             # Cache local dependencies if they don't exist
             - save_cache:
-                key: v4-dependencies-{{ checksum "package.json" }}
+                key: v5-dependencies-{{ checksum "package.json" }}
                 paths:
                     - node_modules
 
@@ -44,8 +44,8 @@ jobs:
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
-                - v4-dependencies-{{ checksum "package.json" }}
-                - v4-dependencies-
+                - v5-dependencies-{{ checksum "package.json" }}
+                - v5-dependencies-
             # Run lint
             - run:
                 name: Lint
@@ -66,8 +66,8 @@ jobs:
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
-                - v4-dependencies-{{ checksum "package.json" }}
-                - v4-dependencies-
+                - v5-dependencies-{{ checksum "package.json" }}
+                - v5-dependencies-
             # Build the project
             - run:
                 name: Build
@@ -101,8 +101,8 @@ jobs:
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
-                - v4-dependencies-{{ checksum "package.json" }}
-                - v4-dependencies-
+                - v5-dependencies-{{ checksum "package.json" }}
+                - v5-dependencies-
 
             # Build the project
             - run:
@@ -141,8 +141,8 @@ jobs:
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
-                - v4-dependencies-{{ checksum "package.json" }}
-                - v4-dependencies-
+                - v5-dependencies-{{ checksum "package.json" }}
+                - v5-dependencies-
             # Start web server
             - run:
                 name: Start server
@@ -177,8 +177,8 @@ jobs:
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
-                - v4-dependencies-{{ checksum "package.json" }}
-                - v4-dependencies-
+                - v5-dependencies-{{ checksum "package.json" }}
+                - v5-dependencies-
             # Stamp version
             - run:
                 name: Read version
