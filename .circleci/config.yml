@@ -23,6 +23,10 @@ jobs:
             - run:
                 name: Install local dependencies
                 command: npm install
+            # Install browserify
+            - run:
+                name: Install browserify
+                command: npm install -g browserify
             # Cache local dependencies if they don't exist
             - save_cache:
                 key: v4-dependencies-{{ checksum "package.json" }}
