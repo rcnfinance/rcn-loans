@@ -19,6 +19,8 @@
     "baseUrl": "./src/",
     "paths": {
       "@angular/*": ["../node_modules/@angular/*"]
+      "crypto": ["node_modules/crypto-browserify"],
+      "stream": ["node_modules/stream-browserify"]
     }
   }
 }
