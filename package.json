@@ -6,8 +6,8 @@
   "scripts": {
     "ng": "npx ng",
     "start": "ng serve --proxy-config proxy.conf.json",
-    "build": "ng build --prod",
-    "build-ropsten": "ng build --aot",
+    "build": "node patch-crypto.js && ng build --prod",
+    "build-ropsten": "node patch-crypto.js && ng build --aot",
     "test": "ng test",
     "lint": "ng lint",
     "prebuild": "node version.js; npm run documentation",
