@@ -20,7 +20,7 @@ function removeComments(path) {
   }
 }
 
-const browserConfigPath = 'node_modules/@angular-devkit/build-angular/src/webpack/configs/browser.js';
+const browserConfigPath = 'node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js';
 
 fs.readFile(browserConfigPath, 'utf8', function (err, data) {
   if (err) {
