@@ -102,5 +102,8 @@
     "tslint-rxjs-subject-restrictions-rule": "^1.0.4",
     "typescript": "~3.5.3",
     "webpack": "^4.41.2"
+  },
+  "browser": {
+    "crypto": false
   }
 }
