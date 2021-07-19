@@ -1,25 +1,29 @@
-<app-dialog-header title="Lending Checkout">
-</app-dialog-header>
+<app-dialog-header title="Lending Checkout"> </app-dialog-header>
 
 <mat-dialog-content class="dialog">
   <div class="container">
     <div class="dialog-content">
       <div class="row">
-        <div class="item col-sm-12 col-md-3 title main-h6">
-          <div class="item__subtitle">
-            Lending currency
-          </div>
+        <div class="col-sm-12 col-md-3 mt-2">
+          <div class="item__subtitle">Lending currency</div>
           <mat-form-field>
-            <mat-label class="item__select-label" *ngIf="!lendCurrency" id="label">
+            <mat-label class="item__select-label" *ngIf="!lendCurrency">
               Select Currency
             </mat-label>
-            <mat-select class="item__select-value" [(value)]="lendCurrency" (selectionChange)="onChangeCurrency()">
-              <mat-option *ngFor="let item of availableCurrencies" [value]="item.symbol">
-                <div class="row align-items-center">
-                  <div class="icon-box item">
-                    <img matPrefix class="input-icon" [src]="item.img">
+            <mat-select
+              class="item__select-value"
+              [(value)]="lendCurrency"
+              (selectionChange)="onChangeCurrency()"
+            >
+              <mat-option
+                *ngFor="let item of availableCurrencies"
+                [value]="item.symbol"
+              >
+                <div class="row">
+                  <div class="wrapper-icons">
+                    <img matPrefix [src]="item.img" />
                   </div>
-                  <div class="currency">
+                  <div class="item__text-currency">
                     {{ item.symbol }}
                   </div>
                 </div>
@@ -28,72 +32,74 @@
           </mat-form-field>
         </div>
         <div class="col-sm-1"></div>
-        <div class="col-sm-8 item">
-          <div class="small-table-row d-flex">
-            <div class="item__subtitle col --auto pl-0">
-              Lend
-            </div>
-            <div class="col-sm-1 no-gutters --auto"></div>
-            <div class="item__subtitle col --auto">
-              Receive
-            </div>
+        <div class="col-sm-8 mt-2">
+          <div class="row">
+            <div class="col-6 col-sm-5 pl-3 item__subtitle">Lend</div>
+            <div class="col-2 d-none d-sm-block"></div>
+            <div class="col-6 col-sm-5 item__subtitle pl-4 pl-sm-0">Receive</div>
           </div>
-          <div class="mt-3"></div>
-          <div class="small-table-row --highlight">
-            <div class="col --auto no-pad-left --data-margin data-style">
+          <div class="item__background mt-3">
+            <div class="item__table-content col-6 col-sm-5">
               <span>
                 {{ lendAmount }}
               </span>
-              <span class="data--currency-style">
-                {{ lendCurrency || '-' }}
+              <span class="item__currency-style">
+                {{ lendCurrency || "-" }}
               </span>
             </div>
-            <div class="col-sm-1 no-gutters --auto"></div>
-            <div class="col --auto --data-margin data-style">
+            <div class="col-2 d-none d-sm-block"></div>
+            <div class="item__table-content col-6 col-sm-5 pl-4 pl-sm-1">
               <span>
                 {{ lendExpectedReturn }}
               </span>
-              <span class="data--currency-style">
-                {{ lendCurrency ? engineCurrency?.toString() : '-' }}
+              <span class="item__currency-style">
+                {{ lendCurrency ? engineCurrency?.toString() : "-" }}
               </span>
               <div
                 class="d-inline"
                 matTooltip="This return is calculated using current exchange rates and may vary as a result of their fluctuations."
                 *ngIf="lendCurrency"
               >
-                <i class="fas fa-exclamation-triangle margin-left triangle"></i>
+                <i
+                  class="fas fa-exclamation-triangle ml-1 item__icon-warning"
+                ></i>
               </div>
             </div>
           </div>
-          <div class="mt-2"></div>
-          <div class="small-table-row d-flex">
-            <div class="col title-2 --auto no-pad-left --data-margin baseline">
-              <div class="--auto">
-                <span class="--lend-amount mr-2" [innerHTML]="loanAmount">
-                </span>
-                <span class="--lend-currency" [innerHTML]="loan.currency">
-                </span>
+          <div class="row mt-2">
+            <div class="col-5 pl-4 item__table-footer">
+              <span
+                class="item__text-currency--title mr-2"
+                [innerHTML]="loanAmount"
+              >
+              </span>
+              <span
+                class="item__text-currency--subtitle"
+                [innerHTML]="loan.currency"
+              >
+              </span>
+            </div>
+            <div class="col-2">
+              <div class="item__icon-arrow pl-sm-3">
+                <i class="fas fa-arrow-right"></i>
               </div>
             </div>
-            <div class="col-sm-1 no-gutters --auto vertical-center">
-              <i class="fas fa-arrow-right"></i>
-            </div>
-            <div class="col title-2 --auto --data-margin wrap baseline">
-              <div class="--auto wrap end">
-                <span
-                  id="label"
-                  class="--return-amount mr-2"
-                  [innerHTML]="loanExpectedReturn"
-                >
-                </span>
-                <span class="--return-currency" [innerHTML]="loan.currency">
-                </span>
-                <div
-                  class="d-inline"
-                  matTooltip="This return is not affected by exchange rate fluctuations."
-                >
-                  <i class="fas fa-check-circle check margin-left"></i>
-                </div>
+            <div class="col-5 pl-0 item__table-footer">
+              <span
+                class="item__text-currency--title mr-2"
+                [innerHTML]="loanExpectedReturn"
+              >
+              </span>
+              <span
+                class="item__text-currency--subtitle"
+                [innerHTML]="loan.currency"
+              >
+              </span>
+              <div
+                class="d-inline"
+                matTooltip="This return is not affected by exchange rate fluctuations."
+              >
+                <i class="fas fa-check-circle check ml-1"></i>
               </div>
             </div>
           </div>
@@ -102,27 +108,26 @@
       <mat-accordion class="accordion-details">
         <mat-expansion-panel class="mat-elevation-z">
           <mat-expansion-panel-header>
-            <mat-panel-title>
-              More details
-            </mat-panel-title>
+            <mat-panel-title> More details </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="accordion-details__item" *ngIf="exchangeTooltips?.length">
             <i class="fas fa-exchange-alt"></i>
-            <span class="mr-1">
-              Exchange Rate 1 {{ loan.currency }}
+            <span class="mr-1"> Exchange Rate 1 {{ loan.currency }} </span>
+            <span
+              class="mr-1"
+              *ngIf="loan.currency.toString() !== engineCurrency?.toString()"
+            >
+              = {{ exchangeEngineToken }} {{ engineCurrency?.toString() }}
             </span>
-            <span class="mr-1" *ngIf="loan.currency.toString() !== engineCurrency?.toString()">
-              = {{ exchangeEngineToken }} {{ engineCurrency?.toString() }}
-            </span>
-            <span *ngIf="exchangeToken && loan.currency.toString() !== lendCurrency">
+            <span
+              *ngIf="exchangeToken && loan.currency.toString() !== lendCurrency"
+            >
               = {{ exchangeToken }} {{ lendCurrency }}
             </span>
           </div>
           <div class="accordion-details__item">
             <i class="fas fa-arrows-alt-h"></i>
-            <span>
-              Tx Cost: {{ txCost || '-' }}
-            </span>
+            <span> Tx Cost: {{ txCost || "-" }} </span>
           </div>
           <div
             class="accordion-details__item"
