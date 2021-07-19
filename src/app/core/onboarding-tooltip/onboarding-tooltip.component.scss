@@ -1,0 +1,48 @@
+@import '../../../scss/fonts';
+
+.tooltip {
+    z-index: 1000;
+    position: absolute;
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 6px;
+    &__content {
+        padding: 14px 14px 8px 14px;
+    }
+    &__title {
+        @include styled-font('proxima-nova', 700, 15px);
+    }
+    &__subtitle {
+        @include styled-font('proxima-nova', 400, 14px);
+        margin-top: 3px;
+    }
+    &__button-container {
+        margin-top: 5px;
+        text-align: right;
+        button {
+            padding: 0 8px;
+        }
+    }
+    &__triangle {
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid #FFFFFF;
+        position: absolute;
+    }
+    &__triangle-0 {
+        transform: rotate(180deg);
+        bottom: -10px;
+    }
+    &__triangle-1 {
+        transform: rotate(270deg);
+        left: -15px;
+        top: 18px;
+    }
+    &__triangle-2 {
+        top: -10px;
+    }
+    &__triangle-3 {
+        transform: rotate(90deg);
+        right: -15px;
+        top: 18px;
+    }
+}
