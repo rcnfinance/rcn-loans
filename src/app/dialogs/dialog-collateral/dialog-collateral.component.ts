@@ -3,17 +3,16 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription, timer } from 'rxjs';
 import * as BN from 'bn.js';
+import { Type } from 'app/interfaces/tx';
 import { Loan } from 'app/models/loan.model';
 import { Collateral } from 'app/models/collateral.model';
+import { Tx } from 'app/models/tx.model';
 import { Utils } from 'app/utils/utils';
-// App components
 import { DialogApproveContractComponent } from 'app/dialogs/dialog-approve-contract/dialog-approve-contract.component';
-// App services
+import { TxService } from 'app/services/tx.service';
 import { Web3Service } from 'app/services/web3.service';
 import { ContractsService } from 'app/services/contracts.service';
-import { CollateralService } from 'app/services/collateral.service';
 import { ChainService } from 'app/services/chain.service';
-import { TxService, Tx } from 'app/services/tx.service';
 
 @Component({
   selector: 'app-dialog-collateral',
@@ -25,8 +24,6 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
   shortLoanId: string;
   collateral: Collateral;
   action: string;
-  addPendingTx: Tx;
-  withdrawPendingTx: Tx;
 
   form: FormGroup;
   account: string;
@@ -34,8 +31,11 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
   finishProgress: boolean;
 
   // subscriptions
-  txSubscription: boolean;
   subscriptionAccount: Subscription;
+  private addTx: Tx;
+  private addTxSubscription: Subscription;
+  private withdrawTx: Tx;
+  private withdrawTxSubscription: Subscription;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -45,7 +45,6 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     private web3Service: Web3Service,
     private chainService: ChainService,
     private contractsService: ContractsService,
-    private collateralService: CollateralService,
     private txService: TxService,
     @Inject(MAT_DIALOG_DATA) public data: {
       loan: Loan,
@@ -70,13 +69,17 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subscriptionAccount) {
-      try {
-        this.subscriptionAccount.unsubscribe();
-      } catch (e) { }
+    const { subscriptionAccount, addTx, addTxSubscription, withdrawTx, withdrawTxSubscription } = this;
+    if (addTxSubscription && addTx) {
+      this.addTxSubscription.unsubscribe();
+      this.txService.untrackTx(addTx.hash);
     }
-    if (this.txSubscription) {
-      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackCollateralTx(tx));
+    if (withdrawTxSubscription && withdrawTx) {
+      this.withdrawTxSubscription.unsubscribe();
+      this.txService.untrackTx(withdrawTx.hash);
+    }
+    if (subscriptionAccount) {
+      this.subscriptionAccount.unsubscribe();
     }
   }
 
@@ -105,28 +108,6 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     const web3: any = this.web3Service.web3;
     const account = await this.web3Service.getAccount();
     this.account = web3.utils.toChecksumAddress(account);
-  }
-
-  /**
-   * Retrieve pending Tx
-   */
-  retrievePendingTx() {
-    this.addPendingTx = this.txService.getLastPendingAddCollateral(this.collateral);
-    this.withdrawPendingTx = this.txService.getLastPendingWithdrawCollateral(this.collateral);
-
-    if (!this.txSubscription) {
-      this.txSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackCollateralTx(tx));
-    }
-  }
-
-  /**
-   * Track tx
-   */
-  trackCollateralTx(tx: Tx) {
-    if (this.collateralService.isCurrentCollateralTx(tx, this.collateral.id)) {
-      this.endCollateral();
-    }
   }
 
   /**
@@ -187,15 +168,15 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
   async handleAdd(amount: BN) {
     const { engine } = this.loan;
     const { id, token } = this.collateral;
-    const tx: string = await this.contractsService.addCollateral(
+    const hash: string = await this.contractsService.addCollateral(
       engine,
       id,
       token,
       amount.toString(),
       this.account
     );
+    await this.registerTx(hash, Type.addCollateral, amount);
 
-    this.txService.registerAddCollateralTx(tx, this.loan, this.collateral, amount as any);
     this.showProgressbar();
   }
 
@@ -207,7 +188,7 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
     const { engine, oracle } = this.loan;
     const { id, token } = this.collateral;
     const oracleData = await this.contractsService.getOracleData(oracle);
-    const tx: string = await this.contractsService.withdrawCollateral(
+    const hash: string = await this.contractsService.withdrawCollateral(
       engine,
       id,
       token,
@@ -216,8 +197,8 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
       oracleData,
       this.account
     );
+    await this.registerTx(hash, Type.withdrawCollateral, amount);
 
-    this.txService.registerWithdrawCollateralTx(tx, this.loan, this.collateral, amount.toString() as any);
     this.showProgressbar();
   }
 
@@ -285,6 +266,84 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Register add/withdraw TX
+   * @param hash TX hash
+   * @param type TX type
+   * @param amount New collateral amount
+   */
+  private async registerTx(hash: string, type: Type, amount: any) {
+    const { collateral, loan } = this;
+    const { engine } = loan;
+    const { config } = this.chainService;
+    const isChainCurrency = collateral.token === config.contracts.chainCurrencyAddress;
+    const to: string = isChainCurrency ?
+      config.contracts[engine].collateral.wethManager :
+      config.contracts[engine].collateral.collateral;
+    const tx = await this.txService.buildTx(hash, engine, to, type, { collateralId: collateral.id, amount });
+    this.txService.addTx(tx);
+  }
+
+  /**
+   * Retrieve pending Tx
+   */
+  private retrievePendingTx() {
+    const { id } = this.collateral;
+    this.addTx = this.txService.getLastTxByType(Type.addCollateral, 'collateralId', id);
+    this.withdrawTx = this.txService.getLastTxByType(Type.withdrawCollateral, 'collateralId', id);
+
+    if (this.addTx) {
+      this.trackAddTx();
+    }
+    if (this.withdrawTx) {
+      this.trackWithdrawTx();
+    }
+  }
+
+  /**
+   * Track collateral add TX
+   */
+  private trackAddTx() {
+    if (this.addTxSubscription) {
+      this.addTxSubscription.unsubscribe();
+    }
+
+    const { hash } = this.addTx;
+    this.addTxSubscription = this.txService.trackTx(hash).subscribe((tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed) {
+        this.endCollateral();
+        this.addTxSubscription.unsubscribe();
+      } else if (tx.cancelled) {
+        this.addTxSubscription.unsubscribe();
+      }
+    });
+  }
+
+  /**
+   * Track collateral withdraw TX
+   */
+  private trackWithdrawTx() {
+    if (this.withdrawTxSubscription) {
+      this.withdrawTxSubscription.unsubscribe();
+    }
+
+    const { hash } = this.withdrawTx;
+    this.withdrawTxSubscription = this.txService.trackTx(hash).subscribe((tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed) {
+        this.endCollateral();
+        this.addTxSubscription.unsubscribe();
+      } else if (tx.cancelled) {
+        this.addTxSubscription.unsubscribe();
+      }
+    });
+  }
+
+  /**
    * Show snackbar with a message
    * @param message The message to show in the snackbar
    */
@@ -293,5 +352,21 @@ export class DialogCollateralComponent implements OnInit, OnDestroy {
       duration: 4000,
       horizontalPosition: 'center'
     });
+  }
+
+  /**
+   * Get collateral TX
+   * @return TX
+   */
+  get addPendingTx() {
+    return this.addTx;
+  }
+
+  /**
+   * Get collateral TX
+   * @return TX
+   */
+  get withdrawPendingTx() {
+    return this.withdrawTx;
   }
 }

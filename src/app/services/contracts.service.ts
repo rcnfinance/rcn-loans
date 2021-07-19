@@ -123,7 +123,11 @@ export class ContractsService {
    * @return Pending tx or boolean
    */
   async isApproved(contract: string, tokenAddress: string): Promise<boolean> {
-    const pending = this.txService.getLastPendingApprove(tokenAddress, contract);
+    // const pending = this.txService.getLastPendingApprove(tokenAddress, contract);
+    // TODO: implement isApproved TX service
+    console.info(this.txService.tx);
+
+    const pending = undefined;
     const { config } = this.chainService;
     const chainCurrencyAddress = config.contracts.chainCurrencyAddress;
 
@@ -174,7 +178,8 @@ export class ContractsService {
       )
       .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => {
-        this.txService.registerApproveTx(hash, tokenAddress, contract, true);
+        // TODO: implement isApproved TX service
+        // this.txService.registerApproveTx(hash, tokenAddress, contract, true);
         resolve(hash);
       })
       .on('error', (err) => reject(err));
@@ -205,7 +210,8 @@ export class ContractsService {
       )
       .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => {
-        this.txService.registerApproveTx(hash, tokenAddress, contract, false);
+        // TODO: implement isApproved TX service
+        // this.txService.registerApproveTx(hash, tokenAddress, contract, false);
         resolve(hash);
       })
       .on('error', (err) => reject(err));
@@ -219,7 +225,9 @@ export class ContractsService {
    * @return Boolean
    */
   async isApprovedERC721(contractAddress: string, operatorAddress: string) {
-    const pending = this.txService.getLastPendingApprove(contractAddress, operatorAddress);
+    // TODO: implement isApproved TX service
+    // const pending = this.txService.getLastPendingApprove(contractAddress, operatorAddress);
+    const pending = undefined;
 
     if (pending !== undefined) {
       return true;
@@ -255,7 +263,8 @@ export class ContractsService {
       )
       .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => {
-        this.txService.registerApproveTx(hash, contractAddress, operatorAddress, true);
+        // TODO: implement isApproved TX service
+        // this.txService.registerApproveTx(hash, contractAddress, operatorAddress, true);
         resolve(hash);
       })
       .on('error', (err) => reject(err));
@@ -282,7 +291,8 @@ export class ContractsService {
       )
       .send({ from: account, gasPrice })
       .on('transactionHash', (hash: string) => {
-        this.txService.registerApproveTx(hash, contractAddress, operatorAddress, false);
+        // TODO: implement isApproved TX service
+        // this.txService.registerApproveTx(hash, contractAddress, operatorAddress, false);
         resolve(hash);
       })
       .on('error', (err) => reject(err));
@@ -526,24 +536,6 @@ export class ContractsService {
           .send(payload)
           .on('transactionHash', (hash: string) => resolve(hash))
           .on('error', (err) => reject(err));
-    });
-  }
-
-  async transferLoan(loan: Loan, to: string): Promise<string> {
-    const account = await this.web3Service.getAccount();
-    const web3 = this.web3Service.opsWeb3;
-    const gasPrice: number = await this.getGasPrice();
-    const { engine } = loan;
-
-    return new Promise((resolve, reject) => {
-      this.loadAltContract(web3, this._debtEngine[engine]).methods.safeTransferFrom(
-        account,
-        to,
-        loan.id
-      )
-      .send({ from: account, gasPrice })
-      .on('transactionHash', (hash: string) => resolve(hash))
-      .on('error', (err) => reject(err));
     });
   }
 

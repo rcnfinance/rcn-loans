@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as BN from 'bn.js';
 import { Utils } from 'app/utils/utils';
+import { Tx } from 'app/models/tx.model';
 import { Loan, Engine } from 'app/models/loan.model';
 import { Collateral, Status as CollateralStatus } from 'app/models/collateral.model';
 import { CollateralRequest } from 'app/interfaces/collateral-request';
@@ -14,7 +15,6 @@ import { CollateralService } from 'app/services/collateral.service';
 import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
 import { EventsService } from 'app/services/events.service';
 import { ChainService } from 'app/services/chain.service';
-import { Tx } from 'app/services/tx.service';
 
 @Component({
   selector: 'app-step-create-collateral',

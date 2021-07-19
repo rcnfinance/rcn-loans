@@ -8,6 +8,7 @@ import * as BN from 'bn.js';
 import { Utils } from 'app/utils/utils';
 import { LoanUtils } from 'app/utils/loan-utils';
 import { Loan, Status, Engine, Oracle, Descriptor } from 'app/models/loan.model';
+import { Tx } from 'app/models/tx.model';
 import { LoanRequest } from 'app/interfaces/loan-request';
 import { Web3Service } from 'app/services/web3.service';
 import { ProxyApiService } from 'app/services/proxy-api.service';
@@ -15,7 +16,6 @@ import { ContractsService } from 'app/services/contracts.service';
 import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
 import { WalletConnectService } from 'app/services/wallet-connect.service';
 import { ChainService } from 'app/services/chain.service';
-import { Tx } from 'app/services/tx.service';
 
 @Component({
   selector: 'app-step-create-loan',

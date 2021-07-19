@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
+import { Type } from 'app/interfaces/tx';
 import { Loan, Status, LoanType } from 'app/models/loan.model';
 import { Brand } from 'app/models/brand.model';
 import { Collateral, Status as CollateralStatus } from 'app/models/collateral.model';
@@ -15,7 +16,6 @@ import { CurrenciesService } from 'app/services/currencies.service';
 import { IdentityService } from 'app/services/identity.service';
 import { Web3Service } from 'app/services/web3.service';
 import { BrandingService } from 'app/services/branding.service';
-import { Type } from 'app/services/tx.service';
 import { EventsService } from 'app/services/events.service';
 import { ChainService } from 'app/services/chain.service';
 import { LoanTypeService } from 'app/services/loan-type.service';
@@ -168,7 +168,7 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
   /**
    * Refresh loan when payment or lending status is updated
    */
-  onUserAction(action: 'lend' | 'pay' | 'transfer' | 'redeem' | 'collateral') {
+  onUserAction(action: 'lend' | 'pay' | 'redeem' | 'collateral') {
     const miliseconds = 12000;
     this.spinner.show(this.pageId);
 

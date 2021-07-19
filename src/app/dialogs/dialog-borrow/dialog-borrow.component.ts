@@ -1,14 +1,17 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { CollateralRequest } from 'app/interfaces/collateral-request';
 import { LoanRequest } from 'app/interfaces/loan-request';
+import { Type } from 'app/interfaces/tx';
+import { Tx } from 'app/models/tx.model';
 import { Loan } from 'app/models/loan.model';
+import { TxService } from 'app/services/tx.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { NavrailService } from 'app/services/navrail.service';
 import { ChainService } from 'app/services/chain.service';
 import { Web3Service } from 'app/services/web3.service';
-import { TxService, Tx, Type } from 'app/services/tx.service';
 import { Utils } from 'app/utils/utils';
 
 enum Steps {
@@ -24,18 +27,19 @@ enum Steps {
   templateUrl: './dialog-borrow.component.html',
   styleUrls: ['./dialog-borrow.component.scss']
 })
-export class DialogBorrowComponent implements OnInit {
+export class DialogBorrowComponent implements OnInit, OnDestroy {
   loan: Loan;
   loanRequest: LoanRequest;
   collateralRequest: CollateralRequest;
   step: Steps;
-  createPendingTx: Tx = undefined;
-  collateralPendingTx: Tx = undefined;
   txCost: string;
   private loading: boolean;
 
   // subscriptions
-  private txSubscription: boolean;
+  private createTx: Tx;
+  private createTxSubscription: Subscription;
+  private collateralTx: Tx;
+  private collateralTxSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -73,6 +77,18 @@ export class DialogBorrowComponent implements OnInit {
     this.loadTxCost();
   }
 
+  ngOnDestroy() {
+    const { createTx, createTxSubscription, collateralTx, collateralTxSubscription } = this;
+    if (createTx && createTxSubscription) {
+      this.createTxSubscription.unsubscribe();
+      this.txService.untrackTx(createTx.hash);
+    }
+    if (collateralTx && collateralTxSubscription) {
+      this.collateralTxSubscription.unsubscribe();
+      this.txService.untrackTx(collateralTx.hash);
+    }
+  }
+
   clickConfirm() {
     const { step, loading } = this;
     if (loading) {
@@ -94,8 +110,7 @@ export class DialogBorrowComponent implements OnInit {
     try {
       const { loanRequest, loan } = this;
       const { config } = this.chainService;
-      const engine: string = config.contracts[loan.engine].diaspore.loanManager;
-      const tx: string = await this.contractsService.requestLoan(
+      const hash: string = await this.contractsService.requestLoan(
         loan.engine,
         loanRequest.amount,
         loanRequest.model,
@@ -107,8 +122,11 @@ export class DialogBorrowComponent implements OnInit {
         loanRequest.encodedData
       );
 
-      const { id, amount } = loan;
-      this.txService.registerCreateTx(tx, { engine, id, amount });
+      const { engine } = loan;
+      const to: string = config.contracts[engine].diaspore.loanManager;
+      const tx = await this.txService.buildTx(hash, engine, to, Type.create, { loanId: loan.id, loan });
+      this.txService.addTx(tx);
+
       this.retrievePendingTx();
 
       await this.navrailService.refreshNavrail();
@@ -125,7 +143,7 @@ export class DialogBorrowComponent implements OnInit {
     try {
       const account = await this.web3Service.getAccount();
       const { loan, collateralRequest } = this;
-      const tx: string = await this.contractsService.createCollateral(
+      const hash: string = await this.contractsService.createCollateral(
         loan.engine,
         collateralRequest.debtId,
         collateralRequest.oracle,
@@ -134,7 +152,13 @@ export class DialogBorrowComponent implements OnInit {
         collateralRequest.balanceRatio,
         account
       );
-      this.txService.registerCreateCollateralTx(tx, this.loan);
+
+      const { config } = this.chainService;
+      const { engine } = loan;
+      const to: string = config.contracts[engine].collateral.collateral;
+      const tx = await this.txService.buildTx(hash, engine, to, Type.createCollateral, { loanId: loan.id, loan });
+      this.txService.addTx(tx);
+
       this.retrievePendingTx();
     } catch (e) {
       // Don't show 'User denied transaction signature' error
@@ -149,7 +173,6 @@ export class DialogBorrowComponent implements OnInit {
    * Get submit button text according to the borrowing process status
    * @return Button text
    */
-  // FIXME: change copy
   get confirmButtonText(): string {
     const { step } = this;
     if (step === Steps.PendingCreateLoan) {
@@ -208,37 +231,61 @@ export class DialogBorrowComponent implements OnInit {
    * Retrieve pending Tx
    */
   private retrievePendingTx() {
-    this.createPendingTx = this.txService.getLastPendingCreate(this.loan);
-    this.collateralPendingTx = this.txService.getLastPendingCreateCollateral(this.loan);
+    this.createTx = this.txService.getLastTxByType(Type.create);
+    this.collateralTx = this.txService.getLastTxByType(Type.createCollateral);
 
-    if (this.createPendingTx !== undefined) {
+    if (this.createTx) {
       this.step = Steps.CreatingLoan;
-      this.trackProgressbar();
-      return;
+      this.trackLoanTx();
     }
-    if (this.collateralPendingTx !== undefined) {
+    if (this.collateralTx) {
       this.step = Steps.CreatingCollateral;
-      this.trackProgressbar();
+      this.trackCollateralTx();
     }
   }
 
   /**
-   * Track progressbar value
+   * Track create loan TX
    */
-  private trackProgressbar() {
-    if (!this.txSubscription) {
-      this.txSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => {
-        if (tx.type === Type.create && tx.tx === this.createPendingTx.tx) {
-          this.finishLoanCreation();
-          return;
-        }
-        if (tx.type === Type.createCollateral && tx.tx === this.collateralPendingTx.tx) {
-          this.finishCollateralCreation();
-          return;
-        }
-      });
+  private trackLoanTx() {
+    if (this.createTxSubscription) {
+      this.createTxSubscription.unsubscribe();
     }
+
+    const { hash } = this.createTx;
+    this.createTxSubscription = this.txService.trackTx(hash).subscribe((tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed) {
+        this.finishLoanCreation();
+        this.createTxSubscription.unsubscribe();
+      } else if (tx.cancelled) {
+        this.step = Steps.PendingCreateLoan;
+      }
+    });
+  }
+
+  /**
+   * Track create collateral TX
+   */
+  private trackCollateralTx() {
+    if (this.collateralTxSubscription) {
+      this.collateralTxSubscription.unsubscribe();
+    }
+
+    const { hash } = this.collateralTx;
+    this.collateralTxSubscription = this.txService.trackTx(hash).subscribe((tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed) {
+        this.finishCollateralCreation();
+        this.collateralTxSubscription.unsubscribe();
+      } else if (tx.cancelled) {
+        this.step = Steps.PendingCreateCollateral;
+      }
+    });
   }
 
   private async finishLoanCreation() {

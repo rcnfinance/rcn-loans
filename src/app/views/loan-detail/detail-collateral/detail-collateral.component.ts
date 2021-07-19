@@ -1,14 +1,16 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { DialogCollateralComponent } from '../../../dialogs/dialog-collateral/dialog-collateral.component';
-// App Models
-import { Utils } from './../../../utils/utils';
-import { Loan } from './../../../models/loan.model';
-import { Collateral } from './../../../models/collateral.model';
+import { Subscription } from 'rxjs';
+import { DialogCollateralComponent } from 'app/dialogs/dialog-collateral/dialog-collateral.component';
+import { Type } from 'app/interfaces/tx';
+import { Tx } from 'app/models/tx.model';
+import { Utils } from 'app/utils/utils';
+import { Loan } from 'app/models/loan.model';
+import { Collateral } from 'app/models/collateral.model';
 // App Services
-import { CollateralService } from './../../../services/collateral.service';
-import { CurrenciesService, CurrencyItem } from './../../../services/currencies.service';
-import { Tx, TxService } from './../../../services/tx.service';
+import { TxService } from 'app/services/tx.service';
+import { CollateralService } from 'app/services/collateral.service';
+import { CurrenciesService, CurrencyItem } from 'app/services/currencies.service';
 
 @Component({
   selector: 'app-detail-collateral',
@@ -34,8 +36,10 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   currentExchangeRate: string;
   currentLiquidationPrice: string;
 
-  addPendingTx: Tx;
-  withdrawPendingTx: Tx;
+  private addTxSubscription: Subscription;
+  private addTx: Tx;
+  private withdrawTxSubscription: Subscription;
+  private withdrawTx: Tx;
 
   constructor(
     private dialog: MatDialog,
@@ -45,7 +49,7 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    this.trackCollateralTx();
+    this.retrievePendingTx();
   }
 
   async ngOnChanges(changes) {
@@ -121,7 +125,8 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    * @param action Add or Withdraw
    */
   async openDialog(action: 'add' | 'withdraw') {
-    if (this.addPendingTx || this.withdrawPendingTx) {
+    const { addTx, withdrawTx } = this;
+    if (addTx || withdrawTx) {
       return;
     }
 
@@ -142,26 +147,78 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
   }
 
   /**
-   * Track confirmed add or withdraw collateral tx
+   * Retrieve pending Tx
    */
-  trackCollateralTx() {
-    this.txService.subscribeConfirmedTx(async (tx: Tx) => {
-      if (this.collateralService.isCurrentCollateralTx(tx, this.collateral.id)) {
-        this.updateCollateral.emit({
-          type: tx.type,
-          amount: tx.data.collateralAmount
-        });
-        this.retrievePendingTx();
+  retrievePendingTx() {
+    if (!this.collateral) {
+      return;
+    }
+
+    const { id } = this.collateral;
+    this.addTx = this.txService.getLastTxByType(Type.addCollateral, 'collateralId', id);
+    this.withdrawTx = this.txService.getLastTxByType(Type.withdrawCollateral, 'collateralId', id);
+
+    if (this.addTx) {
+      this.trackAddTx();
+    }
+    if (this.withdrawTx) {
+      this.trackWithdrawTx();
+    }
+  }
+
+  /**
+   * Track collateral add TX
+   */
+  private trackAddTx() {
+    if (this.addTxSubscription) {
+      this.addTxSubscription.unsubscribe();
+    }
+
+    const { hash } = this.addTx;
+    this.addTxSubscription = this.txService.trackTx(hash).subscribe((tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed) {
+        this.handleConfirmedTx(tx);
+        this.addTxSubscription.unsubscribe();
+      } else if (tx.cancelled) {
+        this.addTxSubscription.unsubscribe();
       }
     });
   }
 
   /**
-   * Retrieve pending Tx
+   * Track collateral withdraw TX
    */
-  retrievePendingTx() {
-    this.addPendingTx = this.txService.getLastPendingAddCollateral(this.collateral);
-    this.withdrawPendingTx = this.txService.getLastPendingWithdrawCollateral(this.collateral);
+  private trackWithdrawTx() {
+    if (this.withdrawTxSubscription) {
+      this.withdrawTxSubscription.unsubscribe();
+    }
+
+    const { hash } = this.withdrawTx;
+    this.withdrawTxSubscription = this.txService.trackTx(hash).subscribe((tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed) {
+        this.handleConfirmedTx(tx);
+        this.addTxSubscription.unsubscribe();
+      } else if (tx.cancelled) {
+        this.addTxSubscription.unsubscribe();
+      }
+    });
+  }
+
+  /**
+   * Handle TX confirmed
+   * @param tx TX
+   * @fires updateCollateral New collateral amount and action
+   */
+  private handleConfirmedTx(tx: Tx) {
+    const { type, data } = tx;
+    const { collateralAmount } = data;
+    this.updateCollateral.emit({ type, amount: collateralAmount });
   }
 
   /**
@@ -178,5 +235,21 @@ export class DetailCollateralComponent implements OnInit, OnChanges {
    */
   get withdrawButtonText(): string {
     return 'Withdraw';
+  }
+
+  /**
+   * Get collateral TX
+   * @return TX
+   */
+  get addPendingTx() {
+    return this.addTx;
+  }
+
+  /**
+   * Get collateral TX
+   * @return TX
+   */
+  get withdrawPendingTx() {
+    return this.withdrawTx;
   }
 }

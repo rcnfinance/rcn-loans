@@ -83,8 +83,7 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
   &.button-secondary,
   &.button-tertiary,
   &.button-clear,
-  &.button-clear-dark,
-  &.button-transfer {
+  &.button-clear-dark {
     min-width: 88px;
     border-radius: 3px;
   }
@@ -151,9 +150,6 @@ label{&:focus { outline: -webkit-focus-ring-color auto 0px; }}
     &:focus {
       color: var(--app-color-gray-50);
     }
-  }
-  &.button-transfer{
-    color: var(--app-color-secondary);
   }
   &.button-disabled {
     opacity: .8;

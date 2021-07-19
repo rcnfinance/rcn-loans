@@ -15,8 +15,6 @@ import { DetailCollateralComponent } from './detail-collateral/detail-collateral
 import { DetailInstallmentsComponent } from './detail-installments/detail-installments.component';
 import { DetailHistoryComponent } from './detail-history/detail-history.component';
 import { GobackButtonComponent } from '../../shared/goback-button/goback-button.component';
-import { TransferButtonComponent } from './../../shared/transfer-button/transfer-button.component';
-import { DialogLoanTransferComponent } from './../../dialogs/dialog-loan-transfer/dialog-loan-transfer.component';
 import { DialogInsufficientfundsComponent } from './../../dialogs/dialog-insufficient-funds/dialog-insufficient-funds.component';
 import { ItemFeatureComponent } from './detail-identity/item-feature/item-feature.component';
 import { LoanDoesNotExistComponent } from './loan-does-not-exist/loan-does-not-exist.component';
@@ -49,14 +47,11 @@ const routes: Routes = [
     DetailInstallmentsComponent,
     DetailHistoryComponent,
     GobackButtonComponent,
-    TransferButtonComponent,
-    DialogLoanTransferComponent,
     ItemFeatureComponent,
     LoanDoesNotExistComponent,
     LoanOverviewPanelComponent
   ],
   entryComponents: [
-    DialogLoanTransferComponent,
     DialogInsufficientfundsComponent
   ],
   exports: []

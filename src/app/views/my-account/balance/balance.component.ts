@@ -1,13 +1,15 @@
 import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Type } from 'app/interfaces/tx';
 import { Engine } from 'app/models/loan.model';
+import { Tx } from 'app/models/tx.model';
 import { Utils } from 'app/utils/utils';
 import { Web3Service } from 'app/services/web3.service';
 import { EventsService } from 'app/services/events.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { ChainService } from 'app/services/chain.service';
 import { CurrenciesService } from 'app/services/currencies.service';
-import { Tx, Type, TxService } from 'app/services/tx.service';
+import { TxService } from 'app/services/tx.service';
 
 @Component({
   selector: 'app-component-balance',
@@ -22,10 +24,12 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   usdcOngoingWithdraw: Tx;
   usdcCanWithdraw = false;
   usdcDisplayAvailable = '';
-  usdcTxSubscription: boolean;
 
   // subscriptions
   subscriptionBalance: Subscription;
+  usdcTxSubscription: Subscription;
+
+  private tx: Tx;
 
   constructor(
     private web3Service: Web3Service,
@@ -52,11 +56,13 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subscriptionBalance) {
-      this.subscriptionBalance.unsubscribe();
+    const { usdcTxSubscription, usdcOngoingWithdraw, subscriptionBalance } = this;
+    if (usdcTxSubscription && usdcOngoingWithdraw) {
+      this.usdcTxSubscription.unsubscribe();
+      this.txService.untrackTx(usdcOngoingWithdraw.hash);
     }
-    if (this.usdcTxSubscription) {
-      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
+    if (subscriptionBalance) {
+      this.subscriptionBalance.unsubscribe();
     }
   }
 
@@ -105,7 +111,8 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    */
   loadOngoingWithdraw() {
     const { config } = this.chainService;
-    this.usdcOngoingWithdraw = this.txService.getLastWithdraw(
+    this.usdcOngoingWithdraw = this.txService.getLastTxByType(
+      Type.withdraw,
       config.contracts[Engine.UsdcEngine].diaspore.debtEngine,
       this.usdcLoansWithBalance
     );
@@ -130,9 +137,12 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
   private async withdrawUsdc() {
     if (this.usdcCanWithdraw) {
       if (this.usdcLoansWithBalance.length > 0) {
-        const tx = await this.contractService.withdrawFundsDiaspore(Engine.UsdcEngine, this.usdcLoansWithBalance);
+        const engine = Engine.UsdcEngine;
+        const hash = await this.contractService.withdrawFundsDiaspore(engine, this.usdcLoansWithBalance);
         const { config } = this.chainService;
-        this.txService.registerWithdrawTx(tx, config.contracts[Engine.UsdcEngine].diaspore.debtEngine, this.usdcLoansWithBalance);
+        const to = config.contracts[engine].diaspore.debtEngine;
+        const tx = await this.txService.buildTx(hash, engine, to, Type.withdraw, this.usdcOngoingWithdraw);
+        this.txService.addTx(tx);
       }
       this.loadWithdrawBalance();
       this.retrievePendingTx();
@@ -143,18 +153,32 @@ export class BalanceComponent implements OnInit, OnChanges, OnDestroy {
    * Retrieve pending Tx
    */
   private retrievePendingTx() {
-    if (!this.usdcTxSubscription) {
-      this.usdcTxSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
+    this.tx = this.txService.getLastTxByType(Type.withdraw);
+
+    if (this.tx) {
+      this.trackTx();
     }
   }
 
   /**
    * Track tx
    */
-  private trackWithdrawTx(tx: Tx) {
-    if (tx.type === Type.withdraw) {
-      this.web3Service.updateBalanceEvent.emit();
+  private trackTx() {
+    if (this.usdcTxSubscription) {
+      this.usdcTxSubscription.unsubscribe();
     }
+
+    const { hash } = this.tx;
+    this.usdcTxSubscription = this.txService.trackTx(hash).subscribe((tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed) {
+        this.web3Service.updateBalanceEvent.emit();
+        this.usdcTxSubscription.unsubscribe();
+      } else if (tx.cancelled) {
+        this.usdcTxSubscription.unsubscribe();
+      }
+    });
   }
 }

@@ -44,7 +44,7 @@ export class InfiniteProgressBarComponent implements OnInit, OnChanges {
       this.finishProgress();
     }
 
-    if (cancel && end.currentValue) {
+    if (cancel && cancel.currentValue) {
       this.cancelProgress();
     }
   }

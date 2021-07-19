@@ -1,11 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, OnChanges, Input } from '@angular/core';
 import * as BN from 'bn.js';
-import { Utils } from './../../../utils/utils';
-import { Loan } from './../../../models/loan.model';
-import { Collateral } from './../../../models/collateral.model';
+import { Utils } from 'app/utils/utils';
+import { Tx } from 'app/models/tx.model';
+import { Loan } from 'app/models/loan.model';
+import { Collateral } from 'app/models/collateral.model';
 // App Services
-import { CurrenciesService } from './../../../services/currencies.service';
-import { Tx } from './../../../services/tx.service';
+import { CurrenciesService } from 'app/services/currencies.service';
 
 @Component({
   selector: 'app-create-loan-card',

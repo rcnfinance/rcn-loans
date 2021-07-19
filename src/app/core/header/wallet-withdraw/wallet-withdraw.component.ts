@@ -7,12 +7,14 @@ import {
   transition
 } from '@angular/animations';
 import { Subscription, timer } from 'rxjs';
+import { Type } from 'app/interfaces/tx';
 import { Engine } from 'app/models/loan.model';
+import { Tx } from 'app/models/tx.model';
 import { HeaderPopoverService } from 'app/services/header-popover.service';
 import { ContractsService } from 'app/services/contracts.service';
 import { Web3Service } from 'app/services/web3.service';
 import { EventsService } from 'app/services/events.service';
-import { Tx, Type, TxService } from 'app/services/tx.service';
+import { TxService } from 'app/services/tx.service';
 import { CurrenciesService } from 'app/services/currencies.service';
 import { ChainService } from 'app/services/chain.service';
 import { Utils } from 'app/utils/utils';
@@ -48,17 +50,17 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
 
   rcnAvailable: number;
   rcnLoansWithBalance: number[] = [];
-  rcnOngoingWithdraw: Tx;
   rcnCanWithdraw = false;
-  rcnTxSubscription: boolean;
   rcnDisplayAvailable = '';
+  private rcnOngoingWithdraw: Tx;
+  private rcnTxSubscription: Subscription;
 
   usdcAvailable: number;
   usdcLoansWithBalance: number[] = [];
-  usdcOngoingWithdraw: Tx;
   usdcCanWithdraw = false;
-  usdcTxSubscription: boolean;
   usdcDisplayAvailable = '';
+  private usdcOngoingWithdraw: Tx;
+  private usdcTxSubscription: Subscription;
 
   // subscriptions
   subscriptionPopover: Subscription;
@@ -102,17 +104,26 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
-    if (this.subscriptionPopover) {
+    const {
+      subscriptionPopover,
+      subscriptionBalance,
+      rcnTxSubscription,
+      rcnOngoingWithdraw,
+      usdcTxSubscription,
+      usdcOngoingWithdraw
+    } = this;
+    if (subscriptionPopover) {
       this.subscriptionPopover.unsubscribe();
     }
-    if (this.subscriptionBalance) {
+    if (subscriptionBalance) {
       this.subscriptionBalance.unsubscribe();
     }
-    if (this.rcnTxSubscription) {
-      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
+    if (rcnTxSubscription) {
+      this.rcnTxSubscription.unsubscribe();
+      this.txService.untrackTx(rcnOngoingWithdraw.hash);
     }
-    if (this.usdcTxSubscription) {
-      this.txService.unsubscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
+    if (usdcTxSubscription) {
+      this.txService.untrackTx(usdcOngoingWithdraw.hash);
     }
   }
 
@@ -175,25 +186,8 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
       this.rcnLoansWithBalance = rcnPendingWithdraws[3];
     }
 
-    this.loadOngoingWithdraw();
+    this.retrievePendingTx();
     this.updateDisplay();
-  }
-
-  /**
-   * Load the pending withdraw
-   */
-  loadOngoingWithdraw() {
-    const { config, isEthereum } = this.chainService;
-    this.usdcOngoingWithdraw = this.txService.getLastWithdraw(
-      config.contracts[Engine.UsdcEngine].diaspore.debtEngine,
-      this.usdcLoansWithBalance
-    );
-    if (isEthereum) {
-      this.rcnOngoingWithdraw = this.txService.getLastWithdraw(
-        config.contracts[Engine.RcnEngine].diaspore.debtEngine,
-        this.rcnLoansWithBalance
-      );
-    }
   }
 
   /**
@@ -233,9 +227,9 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
 
     if (this.rcnCanWithdraw) {
       if (this.rcnLoansWithBalance.length > 0) {
-        const { config } = this.chainService;
-        const tx = await this.contractsService.withdrawFundsDiaspore(Engine.RcnEngine, this.rcnLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, config.contracts[Engine.RcnEngine].diaspore.debtEngine, this.rcnLoansWithBalance);
+        await this.contractsService.withdrawFundsDiaspore(Engine.RcnEngine, this.rcnLoansWithBalance);
+        // TODO: integrate new TX serviceº
+        // this.txService.registerWithdrawTx(tx, config.contracts[Engine.RcnEngine].diaspore.debtEngine, this.rcnLoansWithBalance);
       }
       this.loadWithdrawBalance();
       this.retrievePendingTx();
@@ -249,8 +243,11 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
     if (this.usdcCanWithdraw) {
       if (this.usdcLoansWithBalance.length > 0) {
         const { config } = this.chainService;
-        const tx = await this.contractsService.withdrawFundsDiaspore(Engine.UsdcEngine, this.usdcLoansWithBalance);
-        this.txService.registerWithdrawTx(tx, config.contracts[Engine.UsdcEngine].diaspore.debtEngine, this.usdcLoansWithBalance);
+        const engine = Engine.UsdcEngine;
+        const hash = await this.contractsService.withdrawFundsDiaspore(engine, this.usdcLoansWithBalance);
+        const to: string = config.contracts[Engine.UsdcEngine].diaspore.debtEngine;
+        const tx = await this.txService.buildTx(hash, engine, to, Type.pay, this.usdcLoansWithBalance);
+        this.txService.addTx(tx);
       }
       this.loadWithdrawBalance();
       this.retrievePendingTx();
@@ -261,23 +258,33 @@ export class WalletWithdrawComponent implements OnInit, OnDestroy, OnChanges {
    * Retrieve pending Tx
    */
   private retrievePendingTx() {
-    if (!this.rcnTxSubscription) {
-      this.rcnTxSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
-    }
-    if (!this.usdcTxSubscription) {
-      this.usdcTxSubscription = true;
-      this.txService.subscribeConfirmedTx(async (tx: Tx) => this.trackWithdrawTx(tx));
+    this.usdcOngoingWithdraw = this.txService.getLastTxByType(Type.withdraw);
+
+    if (this.usdcOngoingWithdraw) {
+      this.trackTx();
     }
   }
 
   /**
    * Track tx
    */
-  private async trackWithdrawTx(tx: Tx) {
-    if (tx.type === Type.withdraw) {
-      await timer(12000).toPromise();
-      this.loadWithdrawBalance();
+  private async trackTx() {
+    if (this.usdcTxSubscription) {
+      this.usdcTxSubscription.unsubscribe();
     }
+
+    const { hash } = this.usdcOngoingWithdraw;
+    this.usdcTxSubscription = this.txService.trackTx(hash).subscribe(async (tx) => {
+      if (!tx) {
+        return;
+      }
+      if (tx.confirmed) {
+        await timer(12000).toPromise();
+        this.loadWithdrawBalance();
+        this.usdcTxSubscription.unsubscribe();
+      } else if (tx.cancelled) {
+        this.usdcTxSubscription.unsubscribe();
+      }
+    });
   }
 }
