@@ -13,7 +13,7 @@ export class TermsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.titleService.changeTitle(`Terms of Use`);
+    this.titleService.changeTitle(`Disclaimer`);
   }
 
 }
