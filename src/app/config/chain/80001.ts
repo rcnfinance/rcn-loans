@@ -66,6 +66,7 @@ export const chain = {
     chainlinkPairs: {
       'ETH': ['ETH', 'USD', 'USDC'],
       'MATIC': ['MATIC', 'USD', 'USDC'],
+      'ARS': ['USDC', 'USD', 'BTC', 'ARS'],
       'BTC': ['BTC', 'USD', 'USDC']
     },
     filterCurrencies: [
@@ -97,7 +98,7 @@ export const chain = {
     currencyDecimals: {
       'USDC': 6
     },
-    createLoanCurrencies: ['USDC', 'ETH', 'MATIC'],
+    createLoanCurrencies: ['USDC', 'ETH', 'MATIC', 'ARS'],
     createCollateralCurrencies: ['USDC', 'ETH']
   },
   usableWallets: [
