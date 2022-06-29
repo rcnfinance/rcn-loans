@@ -99,7 +99,8 @@ export const chain = {
       'USDC': 6
     },
     createLoanCurrencies: ['USDC', 'ETH', 'MATIC', 'ARS'],
-    createCollateralCurrencies: ['USDC', 'ETH']
+    createCollateralCurrencies: ['USDC', 'ETH'],
+    lendCurrencies: ['MATIC', 'ETH', 'USDC']
   },
   usableWallets: [
     WalletType.Metamask

@@ -99,6 +99,11 @@ export const chain = {
     ],
     usableCurrencies: [
       {
+        symbol: 'RCN',
+        img: 'assets/rcn.png',
+        address: RCN_TOKEN
+      },
+      {
         symbol: 'ETH',
         img: 'assets/eth.png',
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
@@ -112,13 +117,19 @@ export const chain = {
         symbol: 'USDC',
         img: 'assets/usdc.png',
         address: USDC_TOKEN
+      },
+      {
+        symbol: 'ARS',
+        img: 'assets/ars.png',
+        address: '0x0000000000000000000000000000000000000000'
       }
     ],
     currencyDecimals: {
       'USDC': 6
     },
     createLoanCurrencies: ['USDC'],
-    createCollateralCurrencies: ['USDC']
+    createCollateralCurrencies: ['USDC'],
+    lendCurrencies: ['ETH', 'USDC', 'DAI']
   },
   usableWallets: [
     WalletType.Metamask,
