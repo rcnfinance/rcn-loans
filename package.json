@@ -38,7 +38,7 @@
     "@fortawesome/fontawesome-free-brands": "^5.0.13",
     "@sentry/browser": "^5.11.1",
     "@walletconnect/web3-provider": "^1.0.0-beta.46",
-    "angular": "^1.7.3",
+    "angular": "^1.8.3",
     "angular-blockies": "^1.2.0",
     "axios": "^0.21.1",
     "bootstrap": "^4.1.3",
