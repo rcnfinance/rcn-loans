@@ -38,6 +38,10 @@ const routes: Routes = [
     loadChildren: () => import('./views/create-loan/create-loan.module').then(m => m.CreateLoanModule)
   },
   {
+    path: 'disclaimer',
+    loadChildren: () => import('./views/terms/terms.module').then(m => m.TermsModule)
+  },
+  {
     path: 'faq',
     loadChildren: () => import('./views/faqs/faqs.module').then(m => m.FaqsModule)
   },
