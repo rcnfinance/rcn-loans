@@ -56,7 +56,11 @@ export class DialogLoanLendComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.availableCurrencies = await this.currenciesService.getCurrencies(true);
+    const { config } = this.chainService;
+    const { lendCurrencies } = config.currencies;
+    const currencies: CurrencyItem[] = this.currenciesService.getCurrenciesByKey('symbol', lendCurrencies);
+    this.availableCurrencies = currencies;
+
     if (this.loan.isRequest) {
       this.canLend = true;
     }
