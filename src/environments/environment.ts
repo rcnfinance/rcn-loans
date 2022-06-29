@@ -38,5 +38,6 @@ export const environment = {
     AvailableChains.BscTestnet,
     AvailableChains.MaticMainnet,
     AvailableChains.MaticTestnet
-  ]
+  ],
+  defaultChain: AvailableChains.EthRopsten
 };

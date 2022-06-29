@@ -134,8 +134,9 @@ export const chain = {
     currencyDecimals: {
       'USDC': 6
     },
-    createLoanCurrencies: ['RCN', 'USDC', 'ARS'],
-    createCollateralCurrencies: ['RCN', 'USDC']
+    createLoanCurrencies: ['USDC'],
+    createCollateralCurrencies: ['USDC'],
+    lendCurrencies: ['ETH', 'USDC', 'DEST', 'DAI']
   },
   usableWallets: [
     WalletType.Metamask,

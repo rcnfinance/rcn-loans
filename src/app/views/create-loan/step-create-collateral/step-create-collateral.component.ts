@@ -327,13 +327,17 @@ ${ value } %`;
     const { config } = this.chainService;
     const { createCollateralCurrencies } = config.currencies;
     const currencies: CurrencyItem[] = this.currenciesService.getCurrenciesByKey('symbol', createCollateralCurrencies);
+    this.currencies = currencies;
 
     // filter loan currency
+    // FIXME: disabled because in Mainnet we have only 1 currency. Ideally this
+    // should be active, it allows the loan and collateral currency to be different.
+    /*
     const { currency } = this.loan;
     const loanCurrency = currency.symbol;
     const filteredCurrencies = currencies.filter(({ symbol }) => symbol !== loanCurrency);
-
     this.currencies = filteredCurrencies;
+    */
   }
 
   /**
