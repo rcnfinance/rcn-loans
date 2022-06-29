@@ -54,7 +54,7 @@
     "ngx-skeleton-loader": "^2.9.1",
     "ngx-spinner": "^8.0.3",
     "ngx-virtual-scroller": "^3.0.2",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "package.json": "^2.0.1",
     "recursive-fs": "^1.1.2",
     "rxjs": "^6.2.2",
