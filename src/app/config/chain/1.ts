@@ -89,8 +89,6 @@ export const chain = {
   currencies: {
     chainlinkPairs: {
       'ETH': ['ETH', 'USDC'],
-      'RCN': ['RCN', 'BTC', 'ETH', 'USDC'],
-      'ARS': ['USDC', 'ETH', 'BTC', 'ARS'],
       'BTC': ['BTC', 'ETH', 'USDC']
     },
     filterCurrencies: [
@@ -129,8 +127,9 @@ export const chain = {
     currencyDecimals: {
       'USDC': 6
     },
-    createLoanCurrencies: ['RCN', 'USDC', 'ARS'],
-    createCollateralCurrencies: ['RCN', 'USDC']
+    createLoanCurrencies: ['USDC'],
+    createCollateralCurrencies: ['USDC'],
+    lendCurrencies: ['ETH', 'USDC', 'DAI']
   },
   usableWallets: [
     WalletType.Metamask,

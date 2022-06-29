@@ -1,5 +1,13 @@
 # Changelog
 
+## **0.4.5** Boggart 👻
+
+### Changes:
+- Remove ARS oracles  
+
+### Enhancement:
+- Filter lend currencies from the config file
+
 ## **0.4.4** Boggart 👻
 
 ### Feature:

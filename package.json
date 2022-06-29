@@ -1,6 +1,6 @@
 {
   "name": "rcn-angular-dapp",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "version_name": "Boggart",
   "license": "MIT",
   "scripts": {
@@ -10,8 +10,8 @@
     "build-ropsten": "ng build --aot",
     "test": "ng test",
     "lint": "ng lint",
-    "prebuild": "node version.js; npm run documentation",
-    "prebuild-ropsten": "node version.js; npm run documentation",
+    "prebuild": "node patch-crypto.js; node version.js; npm run documentation",
+    "prebuild-ropsten": "node patch-crypto.js; node version.js; npm run documentation",
     "prestart": "node version.js",
     "preinstall": "npm rebuild node-sass",
     "postinstall": "node patch-crypto.js",

@@ -32,7 +32,7 @@ describe('LoanTypeService', () => {
   });
 
   it('should return fintech originator type', () => {
-    const creator = '0xfbd5e54062619ef2b0323ad9ff874b39fd5a8d2c';
+    const creator = '0xf7c5e867e739f5508c63c8ab22f39c44b9cac0b5';
     const loan = new Loan(
       LOAN_ENGINE,
       LOAN_ID,

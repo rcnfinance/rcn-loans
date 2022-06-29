@@ -13,7 +13,6 @@ export class ChainService {
   private availableChains: AvailableChains[];
   private availableWallets: WalletType[];
   private usingUnsupported: boolean;
-  private DEFAULT_CHAIN = AvailableChains.EthMainnet;
   private KEY_LAST_CHAIN = 'lastChainSelected';
 
   constructor() {
@@ -67,10 +66,10 @@ export class ChainService {
       this.chainConfig = chain;
       this.usingUnsupported = false;
     } catch (err) {
-      const { DEFAULT_CHAIN } = this;
-      const { chain } = chains.default[DEFAULT_CHAIN];
+      const { defaultChain } = environment;
+      const { chain } = chains.default[defaultChain];
       const { ethereum: usingWallet } = window as any;
-      this.chainSelected = DEFAULT_CHAIN;
+      this.chainSelected = defaultChain;
       this.chainConfig = chain;
       this.usingUnsupported = usingWallet ? true : false;
       console.warn(err);
