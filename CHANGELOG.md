@@ -3,7 +3,7 @@
 ## **0.4.5** Boggart 👻
 
 ### Changes:
-- Remove ARS oracles
+- Remove ARS oracles  
 
 ### Enhancement:
 - Filter lend currencies from the config file
