@@ -2,7 +2,7 @@ import { Engine } from 'app/models/loan.model';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
 const USDC_TOKEN = '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d';
-// Test circle.
+// Test circle
 
 export const chain = {
   network: {
