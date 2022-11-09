@@ -1,4 +1,4 @@
-import { Engine } from 'app/models/loan.model';
+import { Engine } from 'app/models/loan.model';
 import { WalletType } from 'app/interfaces/wallet.interface';
 
 const USDC_TOKEN = '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d';
@@ -62,7 +62,7 @@ export const chain = {
     chainlinkPairs: {
       'ETH': ['ETH', 'USD', 'USDC'],
       'BNB': ['BNB', 'USD', 'USDC'],
-      'ARS': ['USDC', 'USD', 'BTC', 'ARS'],
+      // 'ARS': ['USDC', 'USD', 'BTC', 'ARS'],
       'BTC': ['BTC', 'USD', 'USDC']
     },
     filterCurrencies: [
@@ -94,7 +94,7 @@ export const chain = {
     currencyDecimals: {
       'USDC': 18
     },
-    createLoanCurrencies: ['USDC', 'ETH', 'ARS'],
+    createLoanCurrencies: ['USDC', 'ETH'],
     createCollateralCurrencies: ['USDC', 'ETH'],
     lendCurrencies: ['BNB', 'ETH', 'USDC']
   },
