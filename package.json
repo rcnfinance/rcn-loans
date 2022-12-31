@@ -65,7 +65,7 @@
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.803.14",
+    "@angular-devkit/build-angular": "^15.0.4",
     "@angular/cli": "^8.3.14",
     "@angular/compiler-cli": "^8.2.12",
     "@angular/language-service": "^8.2.12",
@@ -81,7 +81,7 @@
     "dappeteer": "^0.2.1",
     "jasmine-core": "^3.2.0",
     "jasmine-spec-reporter": "^4.2.1",
-    "jest": "^23.6.0",
+    "jest": "^29.3.1",
     "jest-circus": "^23.6.0",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -101,6 +101,6 @@
     "tslint-origin-ordered-imports-rule": "^1.1.2",
     "tslint-rxjs-subject-restrictions-rule": "^1.0.4",
     "typescript": "~3.5.3",
-    "webpack": "^4.41.2"
+    "webpack": "^5.75.0"
   }
 }
